@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -10,19 +12,28 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AlphaRatio : GazelleTracker
     {
-        public AlphaRatio(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public AlphaRatio(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "alpharatio",
                    name: "AlphaRatio",
                    description: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL",
                    link: "https://alpharatio.cc/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    imdbInTags: true)
         {
@@ -47,13 +58,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.TVAnime, "AnimeSD");
             AddCategoryMapping(17, TorznabCatType.TVAnime, "AnimeHD");
             AddCategoryMapping(18, TorznabCatType.PCGames, "GamesPC");
-            AddCategoryMapping(19, TorznabCatType.ConsoleXbox, "GamesxBox");
+            AddCategoryMapping(19, TorznabCatType.ConsoleXBox, "GamesxBox");
             AddCategoryMapping(20, TorznabCatType.ConsolePS4, "GamesPS");
             AddCategoryMapping(21, TorznabCatType.ConsoleWii, "GamesNin");
             AddCategoryMapping(22, TorznabCatType.PC0day, "AppsWindows");
             AddCategoryMapping(23, TorznabCatType.PCMac, "AppsMAC");
             AddCategoryMapping(24, TorznabCatType.PC0day, "AppsLinux");
-            AddCategoryMapping(25, TorznabCatType.PCPhoneOther, "AppsMobile");
+            AddCategoryMapping(25, TorznabCatType.PCMobileOther, "AppsMobile");
             AddCategoryMapping(26, TorznabCatType.XXX, "0dayXXX");
             AddCategoryMapping(27, TorznabCatType.Books, "eBook");
             AddCategoryMapping(28, TorznabCatType.AudioAudiobook, "AudioBook");
@@ -70,6 +81,17 @@ namespace Jackett.Common.Indexers
 
             // Alpharatio can't handle dots in the searchstr
             return searchTerm.Replace(".", " ");
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = await base.PerformQuery(query);
+            foreach (var release in releases)
+            {
+                release.MinimumRatio = 1;
+                release.MinimumSeedTime = 259200;
+            }
+            return releases;
         }
     }
 }

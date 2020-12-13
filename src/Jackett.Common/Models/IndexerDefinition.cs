@@ -76,7 +76,6 @@ namespace Jackett.Common.Models
     {
         public string Type { get; set; }
         public string Selector { get; set; }
-        public string Image { get => throw new Exception("Deprecated, please use Login.Captcha.Selector instead"); set => throw new Exception("Deprecated, please use login/captcha/selector instead of image"); }
         public string Input { get; set; }
     }
 

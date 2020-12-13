@@ -52,7 +52,7 @@ namespace Jackett.Common.Services
                 throw new Exception("Could not create settings directory. " + ex.Message);
             }
 
-            if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+            if (Environment.OSVersion.Platform != PlatformID.Unix)
             {
                 try
                 {
@@ -69,9 +69,7 @@ namespace Jackett.Common.Services
                         {
                             try
                             {
-                                // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-                                // https://stackoverflow.com/questions/896572
-                                processService.StartProcessAndLog(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath, "--MigrateSettings", true);
+                                processService.StartProcessAndLog(EnvironmentUtil.JackettExecutablePath(), "--MigrateSettings", true);
                             }
                             catch
                             {
@@ -87,9 +85,9 @@ namespace Jackett.Common.Services
                     }
 
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    logger.Error("ERROR could not migrate settings directory " + ex);
+                    logger.Error($"ERROR could not migrate settings directory\n{e}");
                 }
             }
         }
@@ -144,7 +142,7 @@ namespace Jackett.Common.Services
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error reading config file " + fullPath);
+                logger.Error($"Error reading config file {fullPath}\n{e}");
                 return default;
             }
         }
@@ -162,13 +160,11 @@ namespace Jackett.Common.Services
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error writing config file " + fullPath);
+                logger.Error($"Error writing config file {fullPath}\n{e}");
             }
         }
 
-        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-        // https://stackoverflow.com/questions/896572
-        public string ApplicationFolder() => Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
+        public string ApplicationFolder() => EnvironmentUtil.JackettInstallationPath();
 
         public string GetContentFolder()
         {
@@ -224,7 +220,7 @@ namespace Jackett.Common.Services
 
         public string GetSonarrConfigFile() => Path.Combine(GetAppDataFolder(), "sonarr_api.json");
 
-        public string GetVersion() => EnvironmentUtil.JackettVersion;
+        public string GetVersion() => EnvironmentUtil.JackettVersion();
 
         public ServerConfig BuildServerConfig(RuntimeSettings runtimeSettings)
         {

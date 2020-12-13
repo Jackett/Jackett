@@ -29,20 +29,32 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
             (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
-        public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "xspeeds",
                    name: "XSpeeds",
                    description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://www.xspeeds.eu/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
@@ -62,7 +74,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(65, TorznabCatType.TVDocumentary, "Documentaries");
             AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
             AddCategoryMapping(72, TorznabCatType.MoviesForeign, "Foreign");
-            AddCategoryMapping(74, TorznabCatType.TVOTHER, "Kids");
+            AddCategoryMapping(74, TorznabCatType.TVOther, "Kids");
             AddCategoryMapping(44, TorznabCatType.TVSport, "MMA");
             AddCategoryMapping(11, TorznabCatType.Movies, "Movie Boxsets");
             AddCategoryMapping(12, TorznabCatType.Movies, "Movies");
@@ -70,6 +82,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
             AddCategoryMapping(32, TorznabCatType.ConsoleNDS, "NDS Games");
             AddCategoryMapping(9, TorznabCatType.Other, "Other");
+            AddCategoryMapping(95, TorznabCatType.PCMac, "Mac Games");
             AddCategoryMapping(6, TorznabCatType.PCGames, "PC Games");
             AddCategoryMapping(45, TorznabCatType.Other, "Pictures");
             AddCategoryMapping(31, TorznabCatType.ConsolePS4, "Playstation");
@@ -86,7 +99,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.TVSD, "TV-SD");
             AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Wii Games");
             AddCategoryMapping(43, TorznabCatType.TVSport, "Wrestling");
-            AddCategoryMapping(8, TorznabCatType.ConsoleXbox, "Xbox Games");
+            AddCategoryMapping(8, TorznabCatType.ConsoleXBox, "Xbox Games");
 
             // RSS Textual categories
             AddCategoryMapping("4K Movies", TorznabCatType.MoviesUHD);
@@ -102,7 +115,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("Documentaries", TorznabCatType.TVDocumentary);
             AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD);
             AddCategoryMapping("Foreign", TorznabCatType.MoviesForeign);
-            AddCategoryMapping("Kids", TorznabCatType.TVOTHER);
+            AddCategoryMapping("Kids", TorznabCatType.TVOther);
             AddCategoryMapping("MMA", TorznabCatType.TVSport);
             AddCategoryMapping("Movie Boxsets", TorznabCatType.Movies);
             AddCategoryMapping("Movies", TorznabCatType.Movies);
@@ -126,22 +139,22 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("TV-SD", TorznabCatType.TVSD);
             AddCategoryMapping("Wii Games", TorznabCatType.ConsoleWii);
             AddCategoryMapping("Wrestling", TorznabCatType.TVSport);
-            AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXbox);
+            AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXBox);
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LandingUrl);
+            var loginPage = await RequestWithCookiesAsync(LandingUrl);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
+            var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
                 var captchaUrl = qCaptchaImg.GetAttribute("src");
-                var captchaImageResponse = await RequestBytesWithCookies(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
+                var captchaImageResponse = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
                 var captchaText = new StringItem { Name = "Captcha Text" };
-                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.Content};
+                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.ContentBytes};
 
                 configData.AddDynamic("CaptchaText", captchaText);
                 configData.AddDynamic("CaptchaImage", captchaImage);
@@ -168,11 +181,11 @@ namespace Jackett.Common.Indexers
 
             //var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true,
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true,
                 () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var errorMessage = dom.QuerySelector(".left_side table:nth-of-type(1) tr:nth-of-type(2)")?.TextContent.Trim().Replace("\n\t", " ");
                     if (string.IsNullOrWhiteSpace(errorMessage))
                         errorMessage = dom.QuerySelector("div.notification-body").TextContent.Trim().Replace("\n\t", " ");
@@ -188,8 +201,9 @@ namespace Jackett.Common.Indexers
                                     {"timezone", "0"},
                                     {"showrows", "50"}
                                 };
-                var rssPage = await PostDataWithCookies(GetRSSKeyUrl, rssParams, result.Cookies);
-                var match = Regex.Match(rssPage.Content, "(?<=secret_key\\=)([a-zA-z0-9]*)");
+                var rssPage = await RequestWithCookiesAsync(
+                    GetRSSKeyUrl, result.Cookies, RequestType.POST, data: rssParams);
+                var match = Regex.Match(rssPage.ContentString, "(?<=secret_key\\=)([a-zA-z0-9]*)");
                 configData.RSSKey.Value = match.Success ? match.Value : string.Empty;
                 if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
                     throw new Exception("Failed to get RSS Key");
@@ -226,18 +240,20 @@ namespace Jackett.Common.Indexers
                 searchParams.Add("search_type", "t_name");
             }
 
-            var searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+            var searchPage = await RequestWithCookiesAndRetryAsync(
+                SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await PostDataWithCookiesAndRetry(SearchUrl, searchParams, CookieHeader);
+                searchPage = await RequestWithCookiesAndRetryAsync(
+                    SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(searchPage.Content);
+                var dom = parser.ParseDocument(searchPage.ContentString);
                 var rows = dom.QuerySelectorAll("table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {
@@ -250,7 +266,7 @@ namespace Jackett.Common.Indexers
 
                     release.Guid = new Uri(row.QuerySelector("td:nth-of-type(3) a").GetAttribute("href"));
                     release.Link = release.Guid;
-                    release.Comments = new Uri(qDetails.GetAttribute("href"));
+                    release.Details = new Uri(qDetails.GetAttribute("href"));
                     //08-08-2015 12:51
                     release.PublishDate = DateTime.ParseExact(
                         row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",
@@ -259,9 +275,9 @@ namespace Jackett.Common.Indexers
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
                     release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
 
-                    var qBanner = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
-                    if (qBanner != null)
-                        release.BannerUrl = new Uri(qBanner.GetAttribute("src"));
+                    var qPoster = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
+                    if (qPoster != null)
+                        release.Poster = new Uri(qPoster.GetAttribute("src"));
 
                     var cat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var catSplit = cat.LastIndexOf('=');
@@ -284,12 +300,14 @@ namespace Jackett.Common.Indexers
                     else
                         release.UploadVolumeFactor = 1;
 
+                    release.MinimumRatio = 0.8;
+
                     releases.Add(release);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(searchPage.Content, ex);
+                OnParseError(searchPage.ContentString, ex);
             }
 
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))

@@ -13,39 +13,40 @@ legacylinks:
   - https://ibit.ws/ # this is the ibit blog site not the search engine
 
 caps:
-  categories:
-    Movies: Movies
-    TV: TV
-    Music: Audio
-    Games: PC/Games
-    Software: PC
-    Anime: TV/Anime
-    Books: Books
-    Other: Other
-    Tutorials: Other
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: Movies}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: Games, cat: PC/Games, desc: Games}
+    - {id: Software, cat: PC, desc: Software}
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: Books, cat: Books, desc: Books}
+    - {id: Other, cat: Other, desc: Other}
+    - {id: Tutorials, cat: Other, desc: Tutorials}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sortby
     type: select
     label: Sort requested from site (applies only to Keyword searches)
-    default: "uploaded_at"
+    default: uploaded_at
     options:
-      "uploaded_at": "created"
-      "seeders": "seeders"
-      "size": "size"
+      uploaded_at: created
+      seeders: seeders
+      size: size
   - name: order
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 download:
   selector: script:contains("magnet:?xt=")
@@ -62,7 +63,7 @@ download:
 search:
   paths:
     # https://ibit.to/torrent-search/2020/all/uploaded_at:desc/1/
-    - path: "torrent-search/{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}/all/{{ .Config.sortby }}:{{ .Config.order }}/1/"
+    - path: "torrent-search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/all/{{ .Config.sortby }}:{{ .Config.order }}/1/"
 
   rows:
     selector: table.striped > tbody > tr

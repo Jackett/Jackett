@@ -37,7 +37,7 @@ caps:
     - {id: 35, cat: PC/0day, desc: "Software - Linux"}
     - {id: 36, cat: PC/Mac, desc: "Software - Mac"}
     - {id: 37, cat: PC/0day, desc: "Software - Windows"}
-    - {id: 89, cat: PC/Phone-Android, desc: "Software - Android"}
+    - {id: 89, cat: PC/Mobile-Android, desc: "Software - Android"}
     - {id: 52, cat: Movies/HD, desc: "HDrip DVDrip - Peliculas"}
     - {id: 53, cat: TV, desc: "HDrip DVDrip - Series"}
     - {id: 62, cat: Audio/Video, desc: "HDrip DVDrip - Musica"}
@@ -51,14 +51,14 @@ caps:
     - {id: 103, cat: Movies/HD, desc: "MicroHD - Peliculas"}
     - {id: 54, cat: XXX, desc: "XXX - xxx (Hetero)"}
     - {id: 74, cat: XXX, desc: "XXX - xxxy (Gay)"}
-    - {id: 76, cat: XXX/Imageset, desc: "XXX - xxx (Imagenes)"}
+    - {id: 76, cat: XXX/ImageSet, desc: "XXX - xxx (Imagenes)"}
     - {id: 85, cat: XXX, desc: "XXX - xxx Hentai"}
-    - {id: 55, cat: Books/Ebook, desc: "Ebooks - LIBROS"}
-    - {id: 63, cat: Books/Magazines, desc: "Ebooks - Publicacion Semanal"}
-    - {id: 64, cat: Books/Magazines, desc: "Ebooks - Prensa Diaria"}
+    - {id: 55, cat: Books/EBook, desc: "Ebooks - LIBROS"}
+    - {id: 63, cat: Books/Mags, desc: "Ebooks - Publicacion Semanal"}
+    - {id: 64, cat: Books/Mags, desc: "Ebooks - Prensa Diaria"}
     - {id: 79, cat: Books/Other, desc: "Ebooks - Adultos Ebooks"}
-    - {id: 83, cat: Books/Magazines, desc: "Ebooks - Publicacion Quincena"}
-    - {id: 88, cat: Books/Magazines, desc: "Ebooks - Publicacion Mensual"}
+    - {id: 83, cat: Books/Mags, desc: "Ebooks - Publicacion Quincena"}
+    - {id: 88, cat: Books/Mags, desc: "Ebooks - Publicacion Mensual"}
     - {id: 97, cat: Books/Comics, desc: "Ebooks - Comic eBooks"}
     # not listed / unknown
     - {id: 50, cat: Other, desc: "Desconocida"}
@@ -72,6 +72,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -80,22 +81,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: vip
+    type: checkbox
+    label: Show VIP torrent? (Enable if you're VIP)
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -123,7 +128,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "#Mcol > div > div.block-content > div > div > div > table > tbody > tr:nth-child(3) > td > table tr:not(:first-child)"
+    selector: "#Mcol > div > div.block-content > div > div > div > table > tbody > tr:nth-child(3) > td > table tr:not(:first-child){{ if .Config.vip  }}{{ else }}:not(:has(a[href*=\"category=107\"])){{ end }}"
 
   fields:
     category:
@@ -137,8 +142,10 @@ search:
     details:
       selector: td[valign="middle"] a
       attribute: href
-    banner:
-      optional: true
+    download:
+      selector: a[href^="download.php"]
+      attribute: href
+    poster:
       selector: td[valign="middle"] a
       attribute: onmouseover
       filters:
@@ -158,11 +165,10 @@ search:
     date:
       selector: td:nth-child(4)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006"
-    download:
-      selector: a[href^="download.php"]
-      attribute: href
+          args: "02/01/2006 -07:00"
     downloadvolumefactor:
       case:
         img[src$="gold.gif"]: 0.05

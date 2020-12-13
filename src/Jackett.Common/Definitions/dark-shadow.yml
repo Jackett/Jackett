@@ -13,8 +13,8 @@ legacylinks:
 caps:
   categorymappings:
     # Film
-    - {id: 32, cat: Movies/HD, desc: "Film HD"}
-    - {id: 28, cat: Movies/SD, desc: "Film SD"}
+    - {id: 32, cat: Movies/HD, desc: "Film 720p/1080p"}
+    - {id: 28, cat: Movies/SD, desc: "Film XviD/x264"}
     - {id: 119, cat: Movies/DVD, desc: "Film DVD"}
     - {id: 114, cat: Movies/UHD, desc: "Film 4K/2160p"}
     - {id: 26, cat: Movies/3D, desc: "Film 3D"}
@@ -40,7 +40,7 @@ caps:
     # App
     - {id: 12, cat: PC/0day, desc: "App PC"}
     - {id: 125, cat: PC/Mac, desc: "App MacOS"}
-    - {id: 11, cat: PC/Phone-Other, desc: "App Mobil"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "App Mobil"}
     # Sport
     - {id: 61, cat: TV/Sport, desc: "Sport HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport SD"}
@@ -52,20 +52,22 @@ caps:
     - {id: 132, cat: Other, desc: "Internal Sonstiges"}
     # Sonstiges
     - {id: 64, cat: TV/Anime, desc: "Anime"}
-    - {id: 96, cat: Books/Ebook, desc: "e-Book"}
+    - {id: 96, cat: Books/EBook, desc: "e-Book"}
     - {id: 63, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 71, cat: Other, desc: "Anderes"}
     # XXX
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 75, cat: XXX/Packs, desc: "XXX Pack"}
+    - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
     - {id: 76, cat: XXX/XviD, desc: "XXX SD"}
     - {id: 124, cat: XXX/Other, desc: "XXX Clips"}
+    - {id: 133, cat: XXX/Other, desc: "XXX A/E-book"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -81,22 +83,26 @@ settings:
   - name: pin
     type: text
     label: Pin
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeds: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -119,25 +125,25 @@ login:
 download:
   before:
     path: ajax_det_poll.php
-    method: "post"
+    method: post
     inputs:
-      set_thanks: "thanks"
+      set_thanks: thanks
       det_id: "{{ .DownloadUri.Query.torrent }}"
-      ajax: "yes"
+      ajax: yes
 
 search:
   paths:
     - path: selection.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 name 1 descr 2 both 4 imdb
-    blah: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 name, 1 descr, 2 both, 4 imdb
+    blah: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: div.selection_wrap
+    selector: "div.selection_wrap{{ if .Config.freeleech }}:root:has(div.onlyup){{ else }}{{ end }}"
 
   fields:
     category:
@@ -146,8 +152,8 @@ search:
         # Movies
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": "119"
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"4K/2160p\"))": "114"
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "28"
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "32"
+        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"x264\"))": "28"
+        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"1080p\"))": "32"
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"3D\"))": "26"
         # Serien
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "57"
@@ -185,6 +191,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "75"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "76"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Clips\"))": "124"
+        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"book\"))": "133"
         # Internal
         ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film HD\"))": "128"
         ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film SD\"))": "129"
@@ -202,14 +209,12 @@ search:
       filters:
         - name: replace
           args: ["details.php?id=", "download.php?torrent="]
-    banner:
+    poster:
       selector: div[id^="details"] img
       attribute: src
-      optional: true
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
     size:
       selector: div.selection_unter_ad
       filters:
@@ -236,6 +241,8 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
+        - name: append
+          args: " +01:00" # CET
     date:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
@@ -243,8 +250,10 @@ search:
       filters:
         - name: replace
           args: [" um", ""]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "02.01.2006 15:04:05 -07:00"
     description:
       selector: selection_unter_af
       optional: true
@@ -271,5 +280,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      text: 172800 # 2 day (48h)
-# Engine tbd
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# Engine n/a

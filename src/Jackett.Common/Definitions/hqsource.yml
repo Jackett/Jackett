@@ -64,13 +64,15 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
     incldead: 1
     polish: 0
     blah: 0
+
   rows:
     selector: table#line > tbody > tr:has(a[href^="details.php?id="])
+
   fields:
     title:
       selector: a[href^="details.php?id="]
@@ -103,7 +105,6 @@ search:
         - name: prepend
           args: "{{ .Result.description }}"
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
     grabs:
       selector: td:nth-child(6)
@@ -116,7 +117,7 @@ search:
       selector: tr, br
       filters:
         - name: append
-          args: " +00:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     seeders:
@@ -131,3 +132,9 @@ search:
       case:
         "img[src=\"pic/double.png\"]": 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine tbd

@@ -94,6 +94,8 @@ caps:
 
   modes:
     search: [q]
+    movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -105,19 +107,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
   path: /
@@ -138,7 +140,7 @@ search:
     - path: tracker.php
       method: post
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     nm: "{{ .Keywords }}"
     allw: 1
     o: "{{ .Config.sort }}"

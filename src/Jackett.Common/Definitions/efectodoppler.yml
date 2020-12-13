@@ -14,7 +14,7 @@ caps:
 
   modes:
     search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, album, artist]
 
 settings:
   - name: username
@@ -23,21 +23,25 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "time"
+    default: time
     options:
-      "time": "created"
-      "seeders": "seeders"
-      "size": "size"
+      time: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -52,10 +56,6 @@ login:
     path: index.php
     selector: a[href^="logout.php?auth="]
 
-ratio:
-  path: index.php
-  selector: li#stats_ratio span.stat span
-
 search:
   paths:
     - path: torrents.php
@@ -65,6 +65,8 @@ search:
     groupname: "{{ .Query.Album }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
+    # 1 gold, 2 neutral, 3 other, 0 normal
+    freetorrent: "{{ if .Config.freeleech }}3{{ else }}{{ end }}"
 
   rows:
     selector: tr.torrent
@@ -75,19 +77,17 @@ search:
     category:
       text: 1
     artist:
-      text: "Varios artistas"
-    artist:
       selector: a[href^="artist.php?id="]
       optional: true
     title:
       selector: a[href^="torrents.php?id="]
       filters:
         - name: prepend
-          args: "{{.Result.artist}} - "
+          args: "{{ if .Result.artist }}{{ .Result.artist }}{{ else }}Varios artistas{{ end }} - "
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: div.group_image img
       attribute: src
     download:
@@ -101,8 +101,10 @@ search:
       selector: td:nth-child(4) span
       attribute: title
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "Jan 02 2006, 15:04"
+          args: "Jan 02 2006, 15:04 -07:00"
     size:
       selector: td:nth-child(5)
     grabs:
@@ -120,4 +122,9 @@ search:
       case:
         strong.torrent_label[title*="Neutral"]: 0
         "*": 1
+    minimumratio:
+      text: 0.6
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # engine n/a

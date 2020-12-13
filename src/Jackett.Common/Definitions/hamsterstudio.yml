@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 23, cat: Movies, desc: "Кино"}
     - {id: 18, cat: TV/WEB-DL, desc: "Веб-сериалы"}
-    - {id: 19, cat: TV/OTHER, desc: "Разные сериалы"}
+    - {id: 19, cat: TV/Other, desc: "Разные сериалы"}
     - {id: 10, cat: Audio, desc: "Музыка"}
     - {id: 29, cat: TV, desc: "Лечение (Пациенты)"}
     - {id: 37, cat: TV, desc: "Сериалы с ТВ"}
@@ -274,22 +274,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -309,8 +313,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active 1 incdead 2 onlydead 3 gold 4 seedfree
-    incldead: "1"
+    # 0 active, 1 incdead, 2 onlydead, 3 gold, 4 seedfree
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -350,8 +354,10 @@ search:
     date:
       selector: i
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     seeders:
       selector: td:nth-child(6)
       filters:
@@ -373,4 +379,5 @@ search:
       case:
         img[src="pic/diamond.png"]: 2
         "*": 1
+# minimumratio: ratioless
 # TBDev v2.1.12

@@ -54,15 +54,17 @@ search:
     - name: diacritics
       args: replace
     - name: re_replace # remove SXXEYY from research
-      args: ["(S\\d{1,2}E\\d{1,2})", ""]
+      args: ["(?i)(S\\d{1,2}E\\d{1,2})", ""]
     - name: re_replace # remove SXX from research
-      args: ["(S\\d{1,2})", ""]
+      args: ["(?i)(S\\d{1,2})", ""]
   inputs:
     ajax: false
     search: "{{ .Keywords }}"
     incldead: 0
+
   rows:
     selector: tbody#highlighted tr
+
   fields:
     title:
       selector: td:nth-child(2) a:nth-child(1)
@@ -121,7 +123,7 @@ search:
     details:
       selector: td:nth-child(2) a:nth-child(1)
       attribute: href
-    banner:
+    poster:
       selector: td:nth-child(2)[onmousemove]
       attribute: onmousemove
       filters:
@@ -152,7 +154,7 @@ search:
       selector: td:nth-child(2) i
       filters:
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     category:
@@ -161,7 +163,8 @@ search:
         "*": 2040 # default to Movies/HD
     downloadvolumefactor:
       case:
-        img[src="pic/freedownload.gif"]: "0"
-        "*": "1"
+        img[src="pic/freedownload.gif"]: 0
+        "*": 1
     uploadvolumefactor:
-      text: "1"
+      text: 1
+# engine tbd

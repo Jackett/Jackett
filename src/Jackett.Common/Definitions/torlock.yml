@@ -10,13 +10,18 @@ links:
   - https://www.torlock.com/
   - https://www.torlock2.com/
   - https://www.torlock.icu/
-  - https://torlock.unblockit.id/
+  - https://torlock.unblockit.dev/
 legacylinks:
   - https://torlock.com/
   - https://torlock.unblockit.pro/
   - https://torlock.unblockit.one/
   - https://torlock.unblockit.me/
   - https://torlock.unblockit.pw/
+  - https://torlock.unblockit.id/
+  - https://torlock.unblockit.win/
+  - https://torlock.unblockit.top/
+  - https://torlock.unblockit.lat/
+  - https://torlock.unblockit.app/
 
 caps:
   categorymappings:
@@ -26,7 +31,7 @@ caps:
     - {id: GAMES, cat: PC/Games, desc: "Games"}
     - {id: SOFTWARE, cat: PC, desc: "Software"}
     - {id: ANIME, cat: TV/Anime, desc: "Anime"}
-    - {id: EBOOKS, cat: Books/Ebook, desc: "Books"}
+    - {id: EBOOKS, cat: Books/EBook, desc: "Books"}
     - {id: OTHER, cat: Other, desc: "Other"}
     - {id: ADULT, cat: XXX, desc: "Adult"}
     - {id: AUDIOBOOK, cat: Audio/Audiobook, desc: "Audiobook"}
@@ -37,27 +42,28 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site (only works for search with keywords)
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
+      added: created
+      seeds: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   paths:
-    - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
+    - path: "{{ if .Keywords }}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{ else }}/fresh.html{{ end }}"
   keywordsfilters:
     - name: tolower
     - name: re_replace
@@ -85,7 +91,7 @@ search:
         span.tv9: IMAGES
         span.tv10: EBOOKS
         span.tv12: AUDIOBOOK
-        "*": "OTHER" # some torrents have invalid categories
+        "*": OTHER # some torrents have invalid categories
     title:
       selector: td:nth-child(1) > div > a
     details:
@@ -105,8 +111,10 @@ search:
       selector: td:nth-child(2):contains("/")
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "1/2/2006"
+          args: "1/2/2006 -07:00"
     date:
       selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
       optional: true
@@ -129,4 +137,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# Engine n/a
+# engine n/a

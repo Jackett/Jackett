@@ -31,19 +31,39 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "toloka",
                    name: "Toloka.to",
                    description: "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community",
                    link: "https://toloka.to/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataToloka())
         {
-            Encoding = Encoding.GetEncoding("utf-8");
+            Encoding = Encoding.UTF8;
             Language = "uk-ua";
             Type = "semi-private";
 
@@ -82,9 +102,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(229, TorznabCatType.TVDocumentary, "|-History Channel");
             AddCategoryMapping(230, TorznabCatType.TVDocumentary, "|-Інші іноземні документальні фільми");
 
-            AddCategoryMapping(119, TorznabCatType.TVOTHER, "Телепередачі українською");
-            AddCategoryMapping(18, TorznabCatType.TVOTHER, "|-Музичне відео");
-            AddCategoryMapping(132, TorznabCatType.TVOTHER, "|-Телевізійні шоу та програми");
+            AddCategoryMapping(119, TorznabCatType.TVOther, "Телепередачі українською");
+            AddCategoryMapping(18, TorznabCatType.TVOther, "|-Музичне відео");
+            AddCategoryMapping(132, TorznabCatType.TVOther, "|-Телевізійні шоу та програми");
 
             AddCategoryMapping(157, TorznabCatType.TVSport, "Український спорт");
             AddCategoryMapping(235, TorznabCatType.TVSport, "|-Олімпіада");
@@ -142,7 +162,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(179, TorznabCatType.Books, "|-Наукова література (гуманітарні дисципліни)");
             AddCategoryMapping(180, TorznabCatType.Books, "|-Наукова література (природничі дисципліни)");
             AddCategoryMapping(183, TorznabCatType.Books, "|-Навчальна та довідкова");
-            AddCategoryMapping(181, TorznabCatType.BooksMagazines, "|-Періодика");
+            AddCategoryMapping(181, TorznabCatType.BooksMags, "|-Періодика");
             AddCategoryMapping(182, TorznabCatType.Books, "|-Батькам та малятам");
             AddCategoryMapping(184, TorznabCatType.BooksComics, "|-Графіка (комікси, манґа, BD та інше)");
 
@@ -162,9 +182,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(26, TorznabCatType.PC, "|-Linux");
             AddCategoryMapping(27, TorznabCatType.PCMac, "|-Mac OS");
             // AddCategoryMapping(240, TorznabCatType.PC, "Інші OS");
-            AddCategoryMapping(211, TorznabCatType.PCPhoneAndroid, "|-Android");
-            AddCategoryMapping(122, TorznabCatType.PCPhoneIOS, "|-iOS");
-            AddCategoryMapping(40, TorznabCatType.PCPhoneOther, "|-Інші мобільні платформи");
+            AddCategoryMapping(211, TorznabCatType.PCMobileAndroid, "|-Android");
+            AddCategoryMapping(122, TorznabCatType.PCMobileiOS, "|-iOS");
+            AddCategoryMapping(40, TorznabCatType.PCMobileOther, "|-Інші мобільні платформи");
 
             // AddCategoryMapping(241, TorznabCatType.Other, "Інше");
             // AddCategoryMapping(203, TorznabCatType.Other, "|-Інфодиски, електронні підручники, відеоуроки");
@@ -175,8 +195,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(259, TorznabCatType.PCGames, "|-Mac ігри");
             AddCategoryMapping(29, TorznabCatType.PCGames, "|-Українізації, доповнення, патчі...");
             AddCategoryMapping(30, TorznabCatType.PCGames, "|-Мобільні та консольні ігри");
-            AddCategoryMapping(41, TorznabCatType.PCPhoneIOS, "|-iOS");
-            AddCategoryMapping(212, TorznabCatType.PCPhoneAndroid, "|-Android");
+            AddCategoryMapping(41, TorznabCatType.PCMobileiOS, "|-iOS");
+            AddCategoryMapping(212, TorznabCatType.PCMobileAndroid, "|-Android");
             AddCategoryMapping(205, TorznabCatType.PCGames, "Переклад ігор українською");
         }
 
@@ -194,12 +214,12 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout=true"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout=true"), () =>
             {
-                logger.Debug(result.Content);
+                logger.Debug(result.ContentString);
                 var errorMessage = "Unknown error message, please report";
                 var LoginResultParser = new HtmlParser();
-                var LoginResultDocument = LoginResultParser.ParseDocument(result.Content);
+                var LoginResultDocument = LoginResultParser.ParseDocument(result.ContentString);
                 var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
@@ -232,19 +252,19 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
-            if (!results.Content.Contains("logout=true"))
+            var results = await RequestWithCookiesAsync(searchUrl);
+            if (!results.ContentString.Contains("logout=true"))
             {
                 // re login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await RequestWithCookiesAsync(searchUrl);
             }
             try
             {
                 var RowsSelector = "table.forumline > tbody > tr[class*=prow]";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -261,7 +281,7 @@ namespace Jackett.Common.Indexers
                         var timestr = Row.QuerySelector("td:nth-child(13)").TextContent;
                         var forum = Row.QuerySelector("td:nth-child(2) > a");
                         var forumid = forum.GetAttribute("href").Split('=')[1];
-                        var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(qSize.TextContent);
                         var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(11) > b").TextContent);
@@ -271,9 +291,9 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0,
                             Title = qDetailsLink.TextContent,
-                            Comments = comments,
+                            Details = details,
                             Link = link,
-                            Guid = comments,
+                            Guid = details,
                             Size = size,
                             Seeders = seeders,
                             Peers = leechers + seeders,
@@ -313,7 +333,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

@@ -10,10 +10,9 @@ links:
   - http://zamunda.se/ # Bulgarian IP address filtering
 
 caps:
-  categories:
   categorymappings:
     - {id: 42, cat: Movies/BluRay, desc: "Blu-ray"}
-    - {id: 36, cat: PC/Phone-Other, desc: "Mobile/GSM"}
+    - {id: 36, cat: PC/Mobile-Other, desc: "Mobile/GSM"}
     - {id: 50, cat: TV, desc: "TV"}
     - {id: 9, cat: XXX, desc: "XXX"}
     - {id: 48, cat: XXX, desc: "XXX/3D"}
@@ -25,7 +24,7 @@ caps:
     - {id: 4, cat: PC/Games, desc: "Games/PC ISO"}
     - {id: 21, cat: PC/Games, desc: "Games/PC Rip"}
     - {id: 17, cat: Console/PS3, desc: "Games/PS"}
-    - {id: 40, cat: Console/Xbox, desc: "Games/Xbox"}
+    - {id: 40, cat: Console/XBox, desc: "Games/Xbox"}
     - {id: 12, cat: Console/Other, desc: "Games/Console"}
     - {id: 23, cat: Audio/Video, desc: "Clips/Concerts"}
     - {id: 32, cat: Books/Comics, desc: "Books/Comics"}
@@ -59,6 +58,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -87,11 +87,13 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}cat{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
     incldead: 1
+
   rows:
     selector: .test > tbody > tr:has(a[href^="browse.php"])
+
   fields:
     title:
       selector: a:has(img[src$="/pic/download.gif"])
@@ -123,15 +125,18 @@ search:
     size:
       selector: td:nth-child(6)
     date:
+      # 2020-10-2411:18:30
       selector: td:nth-child(5)
       filters:
-        - name: regexp
-          args: ([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
     seeders:
       selector: td:nth-child(8)
     leechers:
       selector: td:nth-child(9)
-    banner:
+    poster:
       selector: td:nth-child(2) > a:nth-child(1)
       attribute: onmouseover
       filters:
@@ -139,7 +144,8 @@ search:
           args: src=([^\s]+)
     downloadvolumefactor:
       case:
-        "a[style=\"color: #b9a100;\"][href^=\"details.php?\"]": "0"
-        "*": "1"
+        "a[style=\"color: #b9a100;\"][href^=\"details.php?\"]": 0
+        "*": 1
     uploadvolumefactor:
-      text: "1"
+      text: 1
+# engine tbd

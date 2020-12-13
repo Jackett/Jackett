@@ -14,8 +14,6 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings:
   - name: username
@@ -27,19 +25,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "nameSort": "title"
+      added: created
+      seeders: seeders
+      size: size
+      nameSort: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: user/account/login/
@@ -85,8 +83,10 @@ search:
       filters:
         - name: replace
           args: ["Added on ", ""]
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: td:nth-last-child(5)
     grabs:

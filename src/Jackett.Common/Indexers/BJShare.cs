@@ -60,19 +60,36 @@ namespace Jackett.Common.Indexers
             {"greys anatomy", "grey's anatomy"}
         };
 
-        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             :  base(id: "bjshare",
                     name: "BJ-Share",
                     description: "A brazilian tracker.",
                     link: "https://bj-share.info/",
                     caps: new TorznabCapabilities
                     {
-                        SupportsImdbMovieSearch = true
+                        TvSearchParams = new List<TvSearchParam>
+                        {
+                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                        },
+                        MovieSearchParams = new List<MovieSearchParam>
+                        {
+                            MovieSearchParam.Q, MovieSearchParam.ImdbId
+                        },
+                        MusicSearchParams = new List<MusicSearchParam>
+                        {
+                            MusicSearchParam.Q
+                        },
+                        BookSearchParams = new List<BookSearchParam>
+                        {
+                            BookSearchParam.Q
+                        }
                     },
                     configService: configService,
                     client: wc,
                     logger: l,
                     p: ps,
+                    cacheService: cs,
                     configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
@@ -83,7 +100,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");
             AddCategoryMapping(8, TorznabCatType.Other, "Apostilas/Tutoriais");
             AddCategoryMapping(19, TorznabCatType.AudioAudiobook, "Audiobook");
-            AddCategoryMapping(16, TorznabCatType.TVOTHER, "Desenho Animado");
+            AddCategoryMapping(16, TorznabCatType.TVOther, "Desenho Animado");
             AddCategoryMapping(18, TorznabCatType.TVDocumentary, "Documentários");
             AddCategoryMapping(10, TorznabCatType.Books, "E-Books");
             AddCategoryMapping(20, TorznabCatType.TVSport, "Esportes");
@@ -91,7 +108,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(12, TorznabCatType.MoviesOther, "Histórias em Quadrinhos");
             AddCategoryMapping(5, TorznabCatType.Audio, "Músicas");
             AddCategoryMapping(7, TorznabCatType.Other, "Outros");
-            AddCategoryMapping(9, TorznabCatType.BooksMagazines, "Revistas");
+            AddCategoryMapping(9, TorznabCatType.BooksMags, "Revistas");
             AddCategoryMapping(2, TorznabCatType.TV, "Seriados");
             AddCategoryMapping(17, TorznabCatType.TV, "Shows");
             AddCategoryMapping(13, TorznabCatType.TV, "Stand Up Comedy");
@@ -100,7 +117,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(4, TorznabCatType.PCGames, "Jogos");
             AddCategoryMapping(199, TorznabCatType.XXX, "Filmes Adultos");
             AddCategoryMapping(200, TorznabCatType.XXX, "Jogos Adultos");
-            AddCategoryMapping(201, TorznabCatType.XXXImageset, "Fotos Adultas");
+            AddCategoryMapping(201, TorznabCatType.XXXImageSet, "Fotos Adultas");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -114,9 +131,9 @@ namespace Jackett.Common.Indexers
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+                result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
                 {
-                    var errorMessage = result.Content;
+                    var errorMessage = result.ContentString;
                     throw new ExceptionWithConfigData(errorMessage, ConfigData);
                 });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -177,7 +194,6 @@ namespace Jackett.Common.Indexers
             return false;
         }
 
-
         private string FixNovelNumber(string title)
         {
 
@@ -214,7 +230,7 @@ namespace Jackett.Common.Indexers
             return title;
         }
 
-        private bool IsSessionIsClosed(WebClientStringResult result)
+        private bool IsSessionIsClosed(WebResult result)
         {
             return result.IsRedirect && result.RedirectingTo.Contains("login.php");
         }
@@ -252,19 +268,19 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await RequestWithCookiesAsync(searchUrl);
             if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await RequestWithCookiesAsync(searchUrl);
             }
 
             try
             {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
                 var searchResultParser = new HtmlParser();
-                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 ICollection<int> groupCategory = null;
                 string groupTitle = null;
@@ -276,9 +292,30 @@ namespace Jackett.Common.Indexers
                         // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
                         if (row.QuerySelector(".edition_info") != null)
                             continue;
-                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+
+                        // some torrents has more than one link, and the one with .tooltip is the wrong one in that case,
+                        // so let's try to pick up first without the .tooltip class,
+                        // if nothing is found, then we try again without that filter
+                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
+                        if (qDetailsLink == null) {
+                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
+                            // if still can't find the right link, skip it
+                            if (qDetailsLink == null) {
+                                logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
+                                continue;
+                            }
+                        }
                         var title = StripSearchString(qDetailsLink.TextContent, false);
-                        var seasonEp = _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
+
+                        var seasonEl = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
+                        string seasonEp = null;
+                        if (seasonEl != null)
+                        {
+                            var seasonMatch = _EpisodeRegex.Match(seasonEl.TextContent);
+                            seasonEp = seasonMatch.Success ? seasonMatch.Value : null;
+                        }
+                        seasonEp ??= _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
+
                         ICollection<int> category = null;
                         string yearStr = null;
                         if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
@@ -286,7 +323,15 @@ namespace Jackett.Common.Indexers
                             var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
                             categoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
                             category = MapTrackerCatToNewznab(categoryStr);
-                            yearStr = qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+
+                            var torrentInfoEl = row.QuerySelector("div.torrent_info");
+                            if (torrentInfoEl != null)
+                            {
+                                // valid for torrent grouped but that has only 1 episode yet
+                                yearStr = torrentInfoEl.GetAttribute("data-year");
+                            }
+                            yearStr ??= qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+
                             if (row.ClassList.Contains("group")) // group headers
                             {
                                 groupCategory = category;
@@ -359,7 +404,7 @@ namespace Jackett.Common.Indexers
                         var size = qSize.TextContent;
                         release.Size = ReleaseInfo.GetBytes(size);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Guid = release.Link;
                         release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
@@ -375,7 +420,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -384,19 +429,19 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> ParseLast24HoursAsync()
         {
             var releases = new List<ReleaseInfo>();
-            var results = await RequestStringWithCookies(TodayUrl);
+            var results = await RequestWithCookiesAsync(TodayUrl);
             if (IsSessionIsClosed(results))
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(TodayUrl);
+                results = await RequestWithCookiesAsync(TodayUrl);
             }
 
             try
             {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
                 var searchResultParser = new HtmlParser();
-                var searchResultDocument = searchResultParser.ParseDocument(results.Content);
+                var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 foreach (var row in rows)
                     try
@@ -487,7 +532,7 @@ namespace Jackett.Common.Indexers
                         release.Title += " " + extraInfo.TrimEnd();
                         release.Category = MapTrackerCatToNewznab(catStr);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                        release.Comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                        release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Guid = release.Link;
                         release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
                         release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
@@ -502,7 +547,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

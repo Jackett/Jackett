@@ -9,7 +9,6 @@ using System.Xml;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -20,32 +19,45 @@ namespace Jackett.Common.Indexers
     public class ShowRSS : BaseWebIndexer
     {
         private string SearchAllUrl => SiteLink + "other/all.rss";
+        private string BrowseUrl => SiteLink + "browse/";
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "http://showrss.info/",
+            "http://showrss.info/"
         };
 
         private new ConfigurationData configData => base.configData;
 
-        public ShowRSS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public ShowRSS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "showrss",
                    name: "ShowRSS",
                    description: "showRSS is a service that allows you to keep track of your favorite TV shows",
                    link: "https://showrss.info/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
+
+            AddCategoryMapping(1, TorznabCatType.TV);
+            AddCategoryMapping(2, TorznabCatType.TVSD);
+            AddCategoryMapping(3, TorznabCatType.TVHD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(),
@@ -54,44 +66,40 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
-        public override Task<byte[]> Download(Uri link) => throw new NotImplementedException();
-
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = string.Format(SearchAllUrl);
-            var result = await RequestStringWithCookiesAndRetry(episodeSearchUrl);
+            var result = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
             var xmlDoc = new XmlDocument();
 
             try
             {
-                xmlDoc.LoadXml(result.Content);
+                xmlDoc.LoadXml(result.ContentString);
                 foreach (XmlNode node in xmlDoc.GetElementsByTagName("item"))
                 {
-                    //TODO revisit for refactoring
                     var title = node.SelectSingleNode(".//*[local-name()='raw_title']").InnerText;
-                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) &&
-                        !query.MatchQueryStringAND(title))
+                    if (!query.MatchQueryStringAND(title))
                         continue;
 
-                    // Try to guess the category... I'm not proud of myself...
-                    var category = title.Contains("720p") ? TorznabCatType.TVHD.ID : TorznabCatType.TVSD.ID;
-                    var test = node.SelectSingleNode("enclosure");
-                    var magnetUri = new Uri(node.SelectSingleNode("link").InnerText);
+                    // TODO: use Jackett.Common.Utils.TvCategoryParser.ParseTvShowQuality
+                    // guess category from title
+                    var category = title.Contains("720p") || title.Contains("1080p") ?
+                        TorznabCatType.TVHD.ID :
+                        TorznabCatType.TVSD.ID;
+
+                    var magnetUri = new Uri(node.SelectSingleNode("link")?.InnerText);
                     var publishDate = DateTime.Parse(node.SelectSingleNode("pubDate").InnerText, CultureInfo.InvariantCulture);
-                    var infoHash = node.SelectSingleNode("description").InnerText;
-                    //TODO Maybe use magnetUri instead? https://github.com/Jackett/Jackett/pull/7342#discussion_r397552678
-                    var guid = new Uri(test.Attributes["url"].Value);
+                    var infoHash = node.SelectSingleNode(".//*[local-name()='info_hash']").InnerText;
+                    var details = new Uri(BrowseUrl + node.SelectSingleNode(".//*[local-name()='show_id']").InnerText);
+
                     var release = new ReleaseInfo
                     {
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
                         Title = title,
-                        Comments = magnetUri,
+                        Details = details,
                         Category = new List<int> { category },
-                        Guid = guid,
+                        Guid = magnetUri,
                         PublishDate = publishDate,
-                        Description = infoHash,
                         InfoHash = infoHash,
                         MagnetUri = magnetUri,
                         Size = 0,
@@ -103,9 +111,9 @@ namespace Jackett.Common.Indexers
                     releases.Add(release);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                OnParseError(result.Content, ex);
+                OnParseError(result.ContentString, e);
             }
 
             return releases;

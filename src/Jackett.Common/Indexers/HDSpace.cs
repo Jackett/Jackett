@@ -25,59 +25,63 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "hdspace",
                    name: "HD-Space",
                    description: "Sharing The Universe",
                    link: "https://hd-space.org/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            // TorznabCaps.SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
 
-            AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
-            AddMultiCategoryMapping(TorznabCatType.MoviesHD,
-                                    19, // Movie / 1080p
-                                    18, // Movie / 720p
-                                    40, // Movie / Remux
-                                    16 // Movie / HD-DVD
-                );
-            AddMultiCategoryMapping(TorznabCatType.TVHD,
-                                    21, // TV Show / 720p HDTV
-                                    22 // TV Show / 1080p HDTV
-                );
-            AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
-                                    24, // Documentary / 720p
-                                    25 // Documentary / 1080p
-                );
-            AddMultiCategoryMapping(TorznabCatType.TVAnime,
-                                    27, // Animation / 720p
-                                    28 // Animation / 1080p
-                );
-            AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / HQ Audio
-            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
-            AddMultiCategoryMapping(TorznabCatType.XXX,
-                                    33, // XXX / 720p
-                                    34 // XXX / 1080p
-                );
-            AddCategoryMapping(36, TorznabCatType.MoviesOther); // Trailers
-            AddCategoryMapping(37, TorznabCatType.PC); // Software
-            AddCategoryMapping(38, TorznabCatType.Other); // Others
-            AddCategoryMapping(41, TorznabCatType.MoviesUHD); // Movie / 4K UHD
+            AddCategoryMapping(15, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
+            AddCategoryMapping(19, TorznabCatType.MoviesHD, "Movie / 1080p");
+            AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movie / 720p");
+            AddCategoryMapping(40, TorznabCatType.MoviesHD, "Movie / Remux");
+            AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie / HD-DVD");
+            AddCategoryMapping(41, TorznabCatType.MoviesUHD, "Movie / 4K UHD");
+            AddCategoryMapping(21, TorznabCatType.TVHD, "TV Show / 720p HDTV");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "TV Show / 1080p HDTV");
+            AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Documentary / 720p");
+            AddCategoryMapping(25, TorznabCatType.TVDocumentary, "Documentary / 1080p");
+            AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation / 720p");
+            AddCategoryMapping(28, TorznabCatType.TVAnime, "Animation / 1080p");
+            AddCategoryMapping(30, TorznabCatType.AudioLossless, "Music / HQ Audio");
+            AddCategoryMapping(31, TorznabCatType.AudioVideo, "Music / Videos");
+            AddCategoryMapping(33, TorznabCatType.XXX, "XXX / 720p");
+            AddCategoryMapping(34, TorznabCatType.XXX, "XXX / 1080p");
+            AddCategoryMapping(36, TorznabCatType.MoviesOther, "Trailers");
+            AddCategoryMapping(37, TorznabCatType.PC, "Software");
+            AddCategoryMapping(38, TorznabCatType.Other, "Others");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var pairs = new Dictionary<string, string>
             {
                 {"uid", configData.Username.Value},
@@ -87,11 +91,11 @@ namespace Jackett.Common.Indexers
             // Send Post
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: LoginUrl);
 
-            await ConfigureIfOK(response.Cookies, response.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true, () =>
             {
                 var errorStr = "You have {0} remaining login attempts";
                 var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)"))
-                                           .Match(loginPage.Content).Groups[1].ToString();
+                                           .Match(loginPage.ContentString).Groups[1].ToString();
                 var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", string.Empty);
                 var errorMessage = string.Format(errorStr, attempts);
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -119,12 +123,12 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", query.GetQueryString());
             }
 
-            var response = await RequestStringWithCookiesAndRetry(SearchUrl + queryCollection.GetQueryString());
+            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString());
 
             try
             {
                 var resultParser = new HtmlParser();
-                var searchResultDocument = resultParser.ParseDocument(response.Content);
+                var searchResultDocument = resultParser.ParseDocument(response.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll("table.lista > tbody > tr");
 
                 foreach (var row in rows)
@@ -136,12 +140,12 @@ namespace Jackett.Common.Indexers
 
                     var release = new ReleaseInfo();
                     release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    release.MinimumSeedTime = 86400; // 24 hours
 
                     var qLink = row.Children[1].FirstElementChild;
                     release.Title = qLink.TextContent.Trim();
-                    release.Comments = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    release.Guid = release.Comments;
+                    release.Details = new Uri(SiteLink + qLink.GetAttribute("href"));
+                    release.Guid = release.Details;
 
                     var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
                     if (imdbLink != null)
@@ -177,7 +181,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

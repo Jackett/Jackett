@@ -13,7 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 24, cat: PC/0day, desc: "DJ Applications"}
-    - {id: 3, cat: Books/Ebook, desc: "Ebooks"}
+    - {id: 3, cat: Books/EBook, desc: "Ebooks"}
     - {id: 4, cat: PC, desc: "Expansions & Addons"}
     - {id: 5, cat: PC, desc: "HYBRID PC/MAC"}
     - {id: 26, cat: Other, desc: "Independent"}
@@ -37,41 +37,37 @@ caps:
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "down"
+    default: down
     options:
-      "down": "desc"
-      "up": "asc"
+      down: desc
+      up: asc
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  submitpath: takelogin.php
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: table tr td.text
+    cookie: "{{ .Config.cookie }}"
   test:
     path: my.php
 
@@ -82,7 +78,10 @@ search:
     # does not appear to support multi category searches
     cat: 0
     search: "{{ .Keywords }}"
+    # 0 name, 1 descr, 2 both
     searchin: 0
+    # note: using incldead=3 causes `Unknown column 'free' in 'where clause'` at web site
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
     incldead: 1
     sort: "{{ .Config.sort }}"
     d: "{{ .Config.type }}"
@@ -131,4 +130,9 @@ search:
         - name: replace
           args: ["Uploaded ", ""]
         - name: timeago
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # engine n/a

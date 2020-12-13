@@ -21,8 +21,8 @@ legacylinks:
   - https://cpasbiens.ind-unblock.xyz/
 
 caps:
-  categorymappings:
-    - {id: other, cat: Other, desc: "Movies/TV/Other"}
+  categories:
+    Other: Other
 
   modes:
     search: [q]
@@ -30,23 +30,42 @@ caps:
     movie-search: [q]
 
 settings:
+  - name: info_8000
+    type: info
+    label: About cpasbienclone Categories
+    default: cpasbienclone does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
   - name: sort
     type: select
     label: Sort requested from site (Only works for searches with Keywords)
-    default: "?trie-date-d"
+    default: ?trie-date-d
     options:
-      "?trie-date-d": "created desc"
-      "?trie-date-a": "created asc"
-      "?trie-seeds-d": "seeders desc"
-      "?trie-seeds-a": "seeders asc"
-      "?trie-poid-d": "size desc"
-      "?trie-poid-a": "size asc"
-      "?trie-nom-d": "title desc"
-      "?trie-nom-a": "title asc"
-  - name: info_categories
-    type: info
-    label: "About categories"
-    default: "cpasbien clone does not show <b>Categories</b> in its Search Results.<br />To use this indexer with Sonarr/Radarr set your indexer category to <b>7000</b>."
+      ?trie-date-d: created desc
+      ?trie-date-a: created asc
+      ?trie-seeds-d: seeders desc
+      ?trie-seeds-a: seeders asc
+      ?trie-poid-d: size desc
+      ?trie-poid-a: size asc
+      ?trie-nom-d: title desc
+      ?trie-nom-a: title asc
 
 download:
   selector: a[href^="magnet:"]
@@ -54,35 +73,53 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}{{else}}home/{{end}}"
+    - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}home/{{ end }}"
 
   rows:
     selector: table.table-corps > tbody > tr:has(a)
 
   fields:
     category:
-      text: other
+      text: Other
     site_date:
       selector: a
       filters:
         # year can be at the end of the title, so we get it and name it site_date
         - name: regexp
-          args: "(\\d{4})$"
-    title:
+          args: "(19|20\\d{2})$"
+    title_phase1:
       selector: a
       filters:
         # now we put the date at the right place according scene naming rules using .Result.site_date
-        - name: replace
-          args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
-        - name: replace
-          args: ["MULTI", "{{ .Result.site_date }} MULTI"]
-        - name: replace
-          args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
-        - name: replace
-          args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+        - name: re_replace
+          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+        - name: re_replace
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+        - name: re_replace
+          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
-          args: ["(\\d{4})$", ""]
+          args: ["(19|20\\d{2})$", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a
       attribute: href

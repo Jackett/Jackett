@@ -1,33 +1,12 @@
 ---
 id: beyond-hd-oneurl
 name: Beyond-HD (OneURL)
-description: "Without BeyondHD, your HDTV is just a TV"
+description: "This is BeyondHD using OneURL (for those that have enabled 2FA)"
 language: en-us
 type: private
 encoding: UTF-8
 links:
   - https://beyond-hd.me/
-
-settings:
-  - name: oneurl
-    type: text
-    label: OneURL
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: "created_at"
-    options:
-      "created_at": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
-  - name: type
-    type: select
-    label: Order requested from site
-    default: "desc"
-    options:
-      "desc": "desc"
-      "asc": "asc"
 
 caps:
   categorymappings:
@@ -35,9 +14,34 @@ caps:
     - {id: 2, cat: TV, desc: "TV"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    movie-search: [q, imdbid, tmdbid]
+
+settings:
+  - name: oneurl
+    type: text
+    label: OneURL
+  - name: info_oid
+    type: info
+    label: "About One-URL"
+    default: "<li>OneURL is found by accessing your Beyond-HD web site,</li><li>hovering over the <b>user icon</b></li><li>and going to <b>My Security</b></li><li>then going to the <b>One URL (OID)</b> tab,</li><li>and if it's not already active, you need to hit <b>Reset One URL</b> to activate it.</li><li>Then use that link here.</li>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   method: oneurl
@@ -51,18 +55,16 @@ search:
     - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    description: ""
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tmdb: ""
+    tmdb: "{{ .Query.TMDBID }}"
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
 
   rows:
-    selector: table > tbody > tr
-    after: 1
+    selector: div.table-torrents > table > tbody > tr[id^="torrentposter"]
 
   fields:
     _category:
@@ -73,22 +75,15 @@ search:
         - name: regexp
           args: "/categories/.*?\\.(\\d+)"
     category:
-      text: "{{if .Result._category}}{{.Result._category}}{{else}}1{{end}}"
+      text: "{{ if .Result._category }}{{ .Result._category }}{{ else }}1{{ end }}"
     title:
       selector: a.torrent-name
-    download:
-      selector: a[href*="/download/"]
-      attribute: href
     details:
       selector: a.torrent-name
       attribute: href
-    banner:
-      optional: true
-      selector: div.torrent-poster img
-      attribute: src
-      filters:
-        - name: replace
-          args: ["/img/person.png", ""]
+    download:
+      selector: a[href*="/download/"]
+      attribute: href
     date:
       selector: td:not(a[href$="/history"]) span.text-orange
       filters:
@@ -102,8 +97,10 @@ search:
     grabs:
       selector: a[href$="/history"]
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     downloadvolumefactor:
       case:
@@ -115,4 +112,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-# UNIT3D
+# UNIT3D (custom)

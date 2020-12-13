@@ -32,18 +32,23 @@ namespace Jackett.Common.Indexers
         private string input_username = null;
         private string input_password = null;
 
-        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
+        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+            IProtectionService ps, ICacheService cs)
             : base(id: "pixelhd",
                    name: "PiXELHD",
                    description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
                    link: "https://pixelhd.me/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       }
                    },
                    configService: configService,
                    logger: logger,
-                   p: protectionService,
+                   p: ps,
+                   cacheService: cs,
                    client: webClient,
                    configData: new ConfigurationDataCaptchaLogin()
                 )
@@ -57,9 +62,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
         {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var LoginParser = new HtmlParser();
-            var LoginDocument = LoginParser.ParseDocument(loginPage.Content);
+            var LoginDocument = LoginParser.ParseDocument(loginPage.ContentString);
 
             configData.CaptchaCookie.Value = loginPage.Cookies;
 
@@ -69,8 +74,8 @@ namespace Jackett.Common.Indexers
                 var catchaInput = LoginDocument.QuerySelector("input[maxlength=\"6\"]");
                 input_captcha = catchaInput.GetAttribute("name");
 
-                var captchaImage = await RequestBytesWithCookies(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
-                configData.CaptchaImage.Value = captchaImage.Content;
+                var captchaImage = await RequestWithCookiesAsync(SiteLink + catchaImg.GetAttribute("src"), loginPage.Cookies, RequestType.GET, LoginUrl);
+                configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
             else
             {
@@ -89,7 +94,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string>
             {
@@ -103,10 +108,10 @@ namespace Jackett.Common.Indexers
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CaptchaCookie.Value, true);
 
-            await ConfigureIfOK(result.Cookies, result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString.Contains("logout.php"), () =>
            {
                var LoginParser = new HtmlParser();
-               var LoginDocument = LoginParser.ParseDocument(result.Content);
+               var LoginDocument = LoginParser.ParseDocument(result.ContentString);
                var errorMessage = LoginDocument.QuerySelector("span.warning[id!=\"no-cookies\"]:has(br)").TextContent;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
@@ -137,18 +142,18 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = BrowseUrl + "?" + queryCollection.GetQueryString();
 
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await RequestWithCookiesAsync(searchUrl);
             if (results.IsRedirect)
             {
                 // re login
                 await GetConfigurationForSetup();
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookies(searchUrl);
+                results = await RequestWithCookiesAsync(searchUrl);
             }
 
             var IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var hParser = new HtmlParser();
-            var ResultDocument = hParser.ParseDocument(results.Content);
+            var ResultDocument = hParser.ParseDocument(results.ContentString);
             try
             {
                 var Groups = ResultDocument.QuerySelectorAll("div.browsePoster");
@@ -156,7 +161,7 @@ namespace Jackett.Common.Indexers
                 foreach (var Group in Groups)
                 {
                     var groupPoster = Group.QuerySelector("img.classBrowsePoster");
-                    var bannerURL = new Uri(SiteLink + groupPoster.GetAttribute("src"));
+                    var poster = new Uri(SiteLink + groupPoster.GetAttribute("src"));
 
                     long? IMDBId = null;
                     var imdbLink = Group.QuerySelector("a[href*=\"www.imdb.com/title/tt\"]");
@@ -179,11 +184,12 @@ namespace Jackett.Common.Indexers
                         var Leechers = Row.QuerySelector("td:nth-child(8)");
                         var link = new Uri(SiteLink + Row.QuerySelector("a[href^=\"torrents.php?action=download\"]").GetAttribute("href"));
                         var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
-                        var comments = new Uri(SiteLink + title.GetAttribute("href"));
+                        var details = new Uri(SiteLink + title.GetAttribute("href"));
                         var size = ReleaseInfo.GetBytes(Size.TextContent);
                         var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
                         var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
                         var publishDate = DateTimeUtil.FromTimeAgo(added.TextContent);
+
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
@@ -191,14 +197,14 @@ namespace Jackett.Common.Indexers
                             Title = group + " " + title.TextContent,
                             Category = new List<int> { TorznabCatType.MoviesHD.ID },
                             Link = link,
-                            Comments = comments,
+                            Details = details,
                             Guid = link,
                             Size = size,
                             Seeders = seeders,
                             Peers = leechers + seeders,
                             Grabs = grabs,
                             PublishDate = publishDate,
-                            BannerUrl = bannerURL,
+                            Poster = poster,
                             Imdb = IMDBId
                         };
                         releases.Add(release);
@@ -207,7 +213,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

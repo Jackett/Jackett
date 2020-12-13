@@ -28,7 +28,7 @@ caps:
     - {id: 16, cat: Audio/Video, desc: "Live"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
@@ -39,7 +39,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    timeout: "1"
+    timeout: 1
   error:
     - selector: div#error-text
   test:
@@ -50,7 +50,7 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    searchstr: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
   rows:
     selector: table#torrent_table > tbody > tr.torrent
   fields:
@@ -85,7 +85,7 @@ search:
       selector: td.time_col > .time
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "Jan 02 2006, 15:04 -07:00"
     size:

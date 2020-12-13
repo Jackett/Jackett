@@ -35,30 +35,21 @@ login:
   test:
     path: torrents.php
 
-ratio:
-  path: torrents.php
-  selector: li#stats_ratio > span
-
 search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ .Query.Keywords }}"
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ .Keywords }}"
     order_by: time
     order_way: desc
     action: basic
     searchsubmit: 1
+
   rows:
     selector: table#torrent_table > tbody > tr.torrent
+
   fields:
-    download:
-      selector: a[href^="torrents.php?action=download&id="]
-      attribute: href
-    description:
-      selector: div.group_info div.tags
-    title:
-      selector: div.group_info a[href^="torrents.php?id="]
     category:
       selector: td.cats_col
       case:
@@ -67,16 +58,21 @@ search:
         div.cats_tvseries: 3
         div.cats_applications: 4
         div.cats_xxx: 5
-    comments:
+    title:
+      selector: div.group_info a[href^="torrents.php?id="]
+    details:
       selector: a[href^="torrents.php?id="]
       attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    description:
+      selector: div.group_info div.tags
     imdb:
       selector: a[href*="imdb.com/title/tt"]
-      optional: true
       attribute: href
-    banner:
+    poster:
       selector: img[alt="Cover"]
-      optional: true
       attribute: src
     files:
       selector: td:nth-child(3)
@@ -92,8 +88,8 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "div.freeleech:contains('Freeleech!')": "0"
-        "*": "1"
+        "div.freeleech:contains('Freeleech!')": 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

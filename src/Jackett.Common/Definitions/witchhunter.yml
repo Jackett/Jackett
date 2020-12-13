@@ -36,7 +36,7 @@ caps:
     - {id: 22, cat: Books, desc: "Könyv/Hun"}
     - {id: 35, cat: TV/Anime, desc: "Mese/Eng"}
     - {id: 36, cat: TV/Anime, desc: "Mese/Hun"}
-    - {id: 25, cat: PC/Phone-Other, desc: "Mobil"}
+    - {id: 25, cat: PC/Mobile-Other, desc: "Mobil"}
     - {id: 30, cat: PC/ISO, desc: "Programok/ISO"}
     - {id: 31, cat: PC/0day, desc: "Programok/RIP"}
     - {id: 33, cat: TV, desc: "Sorozat/Eng"}
@@ -53,6 +53,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -61,21 +62,25 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
+      4: created
+      7: seeders
+      5: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -101,7 +106,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # 0 active, 1 both, 2 onlydead, 3 onlyfree, 4 x2 torrents, 6 mytorrents
-    incldead: 1
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not support imdbid searches
@@ -130,11 +135,9 @@ search:
     download:
       text: "download.php?id={{ .Result.id }}"
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: a[onmouseover]
       attribute: onmouseover
       filters:
@@ -147,7 +150,7 @@ search:
         - name: replace
           args: ["\u00a0", " "]
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     files:
@@ -162,11 +165,11 @@ search:
       selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
-        font:contains("x0"): 0
+        "font:contains(\"x0\")": 0
         "*": 1
     uploadvolumefactor:
       case:
-        font:contains("x2"): 2
+        "font:contains(\"x2\")": 2
         "*": 1
     minimumratio:
       text: 1.0

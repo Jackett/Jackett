@@ -47,12 +47,12 @@ caps:
     - {id: 17, cat: Console/PS3, desc: "Games - PS2/PS3"}
     - {id: 29, cat: Console/NDS, desc: "Games - NDS/3DS"}
     - {id: 15, cat: Console/Wii, desc: "Games - Wii"}
-    - {id: 8, cat: Console/Xbox, desc: "Games - XboX "}
+    - {id: 8, cat: Console/XBox, desc: "Games - XboX "}
     # Appz
     - {id: 30, cat: PC/0day, desc: "Appz - Windows"}
     - {id: 31, cat: PC/0day, desc: "Appz - Linux"}
     - {id: 32, cat: PC/Mac, desc: "Appz - Mac"}
-    - {id: 106, cat: PC/Phone-Android, desc: "Appz - Android"}
+    - {id: 106, cat: PC/Mobile-Android, desc: "Appz - Android"}
     # Sport
     - {id: 43, cat: TV/Sport, desc: "Sport - SD"}
     - {id: 50, cat: TV/Sport, desc: "Sport - HD"}
@@ -74,6 +74,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -108,11 +109,11 @@ login:
 download:
   before:
     path: ajax_det_poll.php
-    method: "post"
+    method: post
     inputs:
-      set_thanks: "thanks"
+      set_thanks: thanks
       det_id: "{{ .DownloadUri.Query.torrent }}"
-      ajax: "yes"
+      ajax: yes
 
 search:
   paths:
@@ -125,17 +126,17 @@ search:
   rows:
     selector: div.selection_wrap
   fields:
+    title:
+      selector: a.selection_a
+    details:
+      selector: a.selection_a
+      attribute: href
     download:
       selector: a.selection_a
       attribute: href
       filters:
         - name: replace
           args: ["details.php?id=", "download.php?torrent="]
-    title:
-      selector: a.selection_a
-    details:
-      selector: a.selection_a
-      attribute: href
     category:
       selector: div.kat_cat_pic
       case:
@@ -197,7 +198,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Hentai Serie\"))": "110"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Hentai Movie\"))": "111"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SexBooks\"))": "116"
-    banner:
+    poster:
       selector: div[id^="details"] img
       attribute: src
     size:
@@ -230,13 +231,6 @@ search:
           args: [".", ""]
         - name: replace
           args: [",", "."]
-    downloadvolumefactor:
-      case:
-        ":root:has(div.onlyup)": "0"
-        "*": "1"
-    uploadvolumefactor:
-      case:
-        "*": "1"
     date:
       # Heute 13:30:04
       # Gestern 09:10:10
@@ -254,8 +248,22 @@ search:
       filters:
         - name: replace
           args: [" um", ""]
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "02.01.2006 15:04:05 -07:00"
     description:
       selector: selection_unter_af
       optional: true
+    downloadvolumefactor:
+      case:
+        ":root:has(div.onlyup)": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 12 hours (as seconds = 12 x 60 x 60)
+      text: 43200
+# engine tbd

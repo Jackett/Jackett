@@ -23,16 +23,36 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
-        public Milkie(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Milkie(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "milkie",
                    name: "Milkie",
                    description: "Milkie.cc (ME) is private torrent tracker for 0day / general",
                    link: "https://milkie.cc/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
@@ -76,8 +96,8 @@ namespace Jackett.Common.Indexers
                 { "ps", "100" }
             };
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-                qc.Add("query", query.SearchTerm);
+            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+                qc.Add("query", query.GetQueryString());
 
             if (query.HasSpecifiedCategories)
                 qc.Add("categories", string.Join(",", MapTorznabCapsToTrackers(query)));
@@ -87,13 +107,13 @@ namespace Jackett.Common.Indexers
             {
                 { "x-milkie-auth", configData.Key.Value }
             };
-            var jsonResponse = await RequestStringWithCookies(endpoint, headers: headers);
+            var jsonResponse = await RequestWithCookiesAsync(endpoint, headers: headers);
 
             var releases = new List<ReleaseInfo>();
 
             try
             {
-                var response = JsonConvert.DeserializeObject<MilkieResponse>(jsonResponse.Content);
+                var response = JsonConvert.DeserializeObject<MilkieResponse>(jsonResponse.ContentString);
 
                 var dlQueryParams = new NameValueCollection
                 {
@@ -103,15 +123,15 @@ namespace Jackett.Common.Indexers
                 foreach (var torrent in response.Torrents)
                 {
                     var link = new Uri($"{TorrentsEndpoint}/{torrent.Id}/torrent?{dlQueryParams.GetQueryString()}");
-                    var comments = new Uri($"{SiteLink}browse/{torrent.Id}");
+                    var details = new Uri($"{SiteLink}browse/{torrent.Id}");
                     var publishDate = DateTimeUtil.FromUnknown(torrent.CreatedAt);
 
-                    var release = new ReleaseInfo()
+                    var release = new ReleaseInfo
                     {
                         Title = torrent.ReleaseName,
                         Link = link,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
                         Size = torrent.Size,
@@ -129,7 +149,7 @@ namespace Jackett.Common.Indexers
             }
             catch(Exception ex)
             {
-                OnParseError(jsonResponse.Content, ex);
+                OnParseError(jsonResponse.ContentString, ex);
             }
 
             return releases;

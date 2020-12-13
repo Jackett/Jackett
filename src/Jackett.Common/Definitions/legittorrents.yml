@@ -27,24 +27,25 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 search:
   paths:
@@ -55,7 +56,7 @@ search:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
     # 0 all 1 active 2 deadonly
-    active: 1
+    active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
@@ -81,8 +82,10 @@ search:
       selector: td time
       attribute: datetime
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     seeders:
       selector: td:nth-of-type(5)
     leechers:

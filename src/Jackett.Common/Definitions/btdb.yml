@@ -8,10 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://btdb.eu/
-  - https://btdb.unblocked.bar/
-  - https://btdb.proxyportal.pw/
-  - https://btdb.uk-unblock.pro/
-  - https://btdb.unblockit.id/
+  - https://btdb.unblockit.dev/
 legacylinks:
   - https://btdb.to/
   - https://btdb.unblocked.app/
@@ -25,44 +22,54 @@ legacylinks:
   - https://btdb.io/ # ERR_NAME_NOT_RESOLVED
   - https://btdb.unblockit.me/
   - https://btdb.unblockit.pw/
+  - https://btdb.unblockit.id/
+  - https://btdb.unblockit.win/
+  - https://btdb.unblocked.bar/
+  - https://btdb.proxyportal.pw/
+  - https://btdb.uk-unblock.pro/
+  - https://btdb.unblockit.top/
+  - https://btdb.unblockit.lat/
+  - https://btdb.unblockit.app/
 
 caps:
-  categorymappings:
-    - {id: 1, cat: Other, desc: "Other"}
+  categories:
+    Other: Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: info
+  - name: info_8000
     type: info
-    label: Category for Sonarr and Radarr
-    default: BTDB does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
+    label: About BTDB Categories
+    default: BTDB does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
-    default: "time"
+    default: time
     options:
-      "time": "created"
-      "length": "size"
-      "seeders": "seeders"
+      time: created
+      length: size
+      seeders: seeders
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}"
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=2"
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=3"
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=4"
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{else}}recent{{end}}?sort={{ .Config.sort }}&page=5"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{ else }}recent{{ end }}?sort={{ .Config.sort }}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{ else }}recent{{ end }}?sort={{ .Config.sort }}&page=2"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{ else }}recent{{ end }}?sort={{ .Config.sort }}&page=3"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{ else }}recent{{ end }}?sort={{ .Config.sort }}&page=4"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{ else }}recent{{ end }}?sort={{ .Config.sort }}&page=5"
 
   rows:
     selector: div.media
 
   fields:
     category:
-      text: 1
+      text: Other
     title:
       selector: a[href*="/torrent/"]
       attribute: title
@@ -77,12 +84,16 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
-    banner:
+    poster:
       selector: a.img-thumbnail img
       attribute: src
       filters:
         - name: replace
           args: ["https://btdb.io/assets/img/placeholder.png", ""]
+    date:
+      selector: small:nth-of-type(5) strong
+      filters:
+        - name: timeago
     size:
       selector: small:nth-of-type(1) strong
     files:
@@ -97,10 +108,6 @@ search:
       filters:
         - name: replace
           args: [",", ""]
-    date:
-      selector: small:nth-of-type(5) strong
-      filters:
-        - name: timeago
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

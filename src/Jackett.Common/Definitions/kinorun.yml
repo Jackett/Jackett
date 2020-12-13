@@ -66,22 +66,26 @@ settings:
     type: info
     label: "IP Filtering"
     default: "Kinorun allows only certain IP addressess. The error <b>403 Forbidden: Parse error</b> means your IP was not accepted."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin1.php
@@ -102,8 +106,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead 3 gold 4 noseeds 5 notverfied
-    incldead: 1
+    # 0 active, 1 incldead, 2 onlydead, 3 gold, 4 noseeds, 5 notverified
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -134,18 +138,19 @@ search:
       selector: a[href^="browse.php?cat="] img
       attribute: alt
       optional: true
-    banner:
+    poster:
       selector: td[onmouseover]
       attribute: onmouseover
-      optional: true
       filters:
         - name: regexp
           args: "src=(.+?) width"
     date:
       selector: td:nth-child(2) i
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     files:
       selector: td:nth-child(3)
     size:

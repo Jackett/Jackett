@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 14, cat: PC, desc: "-- Appz --"}
     - {id: 15, cat: Books/Comics, desc: "-- Comics --"}
-    - {id: 17, cat: Books/Ebook, desc: "-- E-books --"}
+    - {id: 17, cat: Books/EBook, desc: "-- E-books --"}
     - {id: 16, cat: PC/Games, desc: "-- Games --"}
     - {id: 19, cat: Audio, desc: "-- Music --"}
     - {id: 82, cat: Other, desc: "-- Other --"}
@@ -91,10 +91,11 @@ caps:
     - {id: 48, cat: Movies, desc: "Zombie"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -103,22 +104,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: loginto.php
@@ -135,25 +140,14 @@ login:
   test:
     path: usercp.php
 
-ratio:
-  path: my.php
-  selector: td.navi_top:contains("Deine Ratio:")
-  filters:
-    - name: replace
-      args: ["Deine Ratio: ", ""]
-    - name: replace
-      args: [".", ""]
-    - name: replace
-      args: [",", "."]
-
 search:
   paths:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 active 1 incldead 2 onlydead 3 free
-    incldead: 1
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -177,24 +171,35 @@ search:
     details:
       selector: a[onmouseover][href^="details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover][href^="details.php?id="]
-      optional: true
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=\\\\'(.*?)\\\\'"
-    comments:
-      selector: td:nth-child(7) a
-      attribute: href
-      optional: true
     download:
       selector: a[href^="download.php"]
       attribute: href
     files:
       selector: td:nth-child(6)
     date:
-      selector: td:nth-child(8)
+      # Yesterday<br /> 11:29 PM
+      # Today<br /> 05:23 PM
+      selector: td:nth-child(8):contains("day")
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
+    date:
+      # Oct 17 2020<br /> 02:55 PM
+      selector: td:nth-child(8):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 02 2006 03:04 PM -07:00"
     size:
       selector: td:nth-child(9)
     grabs:
@@ -215,4 +220,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.65
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # Btdev,U232

@@ -70,12 +70,13 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Keywords }}"
   rows:
     selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
     filters:
       - name: andmatch
+
   fields:
     category:
       selector: a[href^="browse.php?cat="]
@@ -98,7 +99,7 @@ search:
         - name: replace
           args: ["Never", "0"]
         - name: regexp
-          args: ([\d,]+)
+          args: (\d+)
     files:
       selector: td:nth-child(4)
     size:
@@ -114,10 +115,11 @@ search:
           args: (\d{4}-\d{2}-\d{2})
     downloadvolumefactor:
       case:
-        "font[color=\"green\"]": "0"
-        "font[color=\"blue\"]": "0"
-        "*": "1"
+        "font[color=\"green\"]": 0
+        "font[color=\"blue\"]": 0
+        "*": 1
     uploadvolumefactor:
       case:
-        "font[color=\"green\"]": "0"
-        "*": "1"
+        "font[color=\"green\"]": 0
+        "*": 1
+# engine tbd

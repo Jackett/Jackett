@@ -21,9 +21,9 @@ caps:
     - {id: 31, cat: Console/Other, desc: "Games Other"}
     - {id: 30, cat: Console/PS4, desc: "Games PSx"}
     - {id: 20, cat: PC/Games, desc: "Games Windows"}
-    - {id: 29, cat: Console/Xbox, desc: "Games XBOX"}
+    - {id: 29, cat: Console/XBox, desc: "Games XBOX"}
     - {id: 11, cat: Other, desc: "Misc"}
-    - {id: 47, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 47, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 27, cat: Movies/DVD, desc: "Movies DVD-R"}
     - {id: 53, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 15, cat: Movies/UHD, desc: "Movies 4K"}
@@ -69,6 +69,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: login.php
@@ -121,7 +122,7 @@ search:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td > nobr
       filters:
         - name: append
-          args: " +02:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:

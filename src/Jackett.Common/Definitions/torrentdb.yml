@@ -18,9 +18,9 @@ caps:
     - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
-    search: [q, imdbid]
-    tv-search: [q, imdbid]
-    movie-search: [q, imdbid]
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
 
 settings:
@@ -30,22 +30,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created_at"
+    default: created_at
     options:
-      "created_at": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login
@@ -65,23 +69,24 @@ login:
 #      path: /
 #      selector: a[href$="/logout"]
 
-ratio:
-  path: /
-  selector: span[title="Ratio"]
-
 search:
   paths:
-    # https://torrentdb.net/filter/torrents?&search=ring&categories[]=1&freeleech=1&doubleupload=1&sorting=created_at&direction=desc&qty=100
+    # https://torrentdb.net/filter/torrents?search=&tags=&freeleech=1&sorting=created_at&direction=desc&qty=25
     - path: filter/torrents
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}"
+    # note: dashboard only supports imdbid (tt12345678). Since tvdbid and tmdbid are just numbers the dashboard sends them as keywords
+    # which will fail title matching because we need the andmatch to filter the web sites title missmatches (it searches in descriptions too)
+    search: "{{ if or .Query.IMDBID .Query.TVDBID .Query.TMDBID }}{{ or .Query.IMDBIDShort .Query.TVDBID .Query.TMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    tags: ""
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
 
   rows:
     selector: table > tbody > tr
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -113,8 +118,10 @@ search:
     leechers:
       selector: td:nth-child(10)
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     downloadvolumefactor:
       case:
@@ -126,4 +133,9 @@ search:
         i.fa-certificate: 2 # Featured
         i.fa-gem: 2 # Double Upload
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # UNIT3D

@@ -95,6 +95,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -121,15 +122,15 @@ settings:
     label: Catégorie
     default: all
     options:
-      all: "Tous"
-      2145: "Film/Vidéo"
-      2139: "Audio"
-      2144: "Application"
-      2142: "Jeu vidéo"
-      2140: "eBook"
-      2141: "Emulation"
-      2143: "GPS"
-      2188: "XXX"
+      all: Tous
+      2145: Film/Vidéo
+      2139: Audio
+      2144: Application
+      2142: Jeu vidéo
+      2140: eBook
+      2141: Emulation
+      2143: GPS
+      2188: XXX
   - name: filter_title
     type: checkbox
     label: Try to normalize releases names by moving year after the title
@@ -143,12 +144,12 @@ settings:
     label: Replace MULTI by this language
     default: FRENCH
     options:
-      FRENCH: "FRENCH"
-      MULTI.FRENCH: "MULTI.FRENCH"
-      ENGLISH: "ENGLISH"
-      MULTI.ENGLISH: "MULTI.ENGLISH"
-      VOSTFR: "VOSTFR"
-      MULTI.VOSTFR: "MULTI.VOSTFR"
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR with ENGLISH
@@ -164,19 +165,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "publish_date"
+    default: publish_date
     options:
-      "publish_date": "created"
-      "seed": "seeders"
-      "size": "size"
-      "name": "title"
+      publish_date: created
+      seed: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -209,10 +210,10 @@ search:
       args: ["  ", " "]
     - name: trim
   paths:
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{else}}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{end}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
     # Saison Word
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{else}}engine{{end}}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
 
   rows:
@@ -268,7 +269,7 @@ search:
         - name: re_replace
           args: ["(?i)[\\.\\s\\[\\-]multi[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title_phase2:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{else}}{{ .Result.title_phase1 }}{{end}}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase2 }}"
       filters:
@@ -277,7 +278,7 @@ search:
         - name: re_replace
           args: ["(?i)[\\.\\s\\[\\-]subfrench[\\.\\s\\]\\-]", ".ENGLISH."]
     title_phase3:
-      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{else}}{{ .Result.title_phase2 }}{{end}}"
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     title_anime:
       text: "{{ .Result.title_phase3 }}"
       filters:
@@ -286,17 +287,13 @@ search:
         - name: re_replace
           args: ["(.*)(\\.| |\\-)(\\d{2,3})(\\.| |\\-)(.*)", "$1 E$3 $5"]
     title:
-      text: "{{ if .Config.enhancedAnime }}{{ .Result.title_anime }}{{else}}{{ .Result.title_phase3 }}{{end}}"
+      text: "{{ if .Config.enhancedAnime }}{{ .Result.title_anime }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
     details:
       selector: td:nth-child(2) > a
       attribute: href
     category:
       # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
-    comments:
-      optional: true
-      selector: td:nth-child(1) > a[href$="#comments"]
-      attribute: href
     download:
       text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
     date:

@@ -17,6 +17,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
 {
@@ -25,13 +26,12 @@ namespace Jackett.Common.Indexers
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://xthor.bz/",
-            "https://xthor.to",
+            "https://xthor.to"
         };
 
-        private string TorrentCommentUrl => TorrentDescriptionUrl;
-        private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
         private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
         private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -40,16 +40,36 @@ namespace Jackett.Common.Indexers
         public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
-        public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
+        public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "xthor",
                    name: "Xthor",
                    description: "General French Private Tracker",
                    link: "https://xthor.tk/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    downloadBase: "https://xthor.tk/download.php?torrent=",
                    configData: new ConfigurationDataXthor())
         {
@@ -57,74 +77,74 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Type = "private";
 
-            // Movies
-            AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "UHD FULL BLURAY");
-            AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "UHD BLURAY REMUX");
-            AddCategoryMapping(107, TorznabCatType.MoviesUHD, "UHD 2160P X265");
-            AddCategoryMapping(1, TorznabCatType.MoviesBluRay, "FULL BLURAY");
-            AddCategoryMapping(2, TorznabCatType.MoviesBluRay, "BLURAY REMUX");
-            AddCategoryMapping(100, TorznabCatType.MoviesHD, "HD 1080P X265");
-            AddCategoryMapping(4, TorznabCatType.MoviesHD, "HD 1080P X264");
-            AddCategoryMapping(5, TorznabCatType.MoviesHD, "HD 720P X264");
-            AddCategoryMapping(7, TorznabCatType.MoviesSD, "SD X264");
-            AddCategoryMapping(8, TorznabCatType.MoviesDVD, "FULL DVD");
-            AddCategoryMapping(3, TorznabCatType.Movies3D, "3D");
-            AddCategoryMapping(6, TorznabCatType.MoviesSD, "XVID");
-            AddCategoryMapping(122, TorznabCatType.MoviesHD, "HDTV");
-            AddCategoryMapping(94, TorznabCatType.MoviesWEBDL, "WEBDL");
-            AddCategoryMapping(95, TorznabCatType.MoviesWEBDL, "WEBRIP");
-            AddCategoryMapping(12, TorznabCatType.TVDocumentary, "DOCS");
-            AddCategoryMapping(33, TorznabCatType.MoviesOther, "SPECTACLE");
-            AddCategoryMapping(31, TorznabCatType.MoviesOther, "ANIMATION");
-            AddCategoryMapping(9, TorznabCatType.MoviesOther, "VOSTFR");
+            // Movies / Films
+            AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "Films 2160p/Bluray");
+            AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "Films 2160p/Remux");
+            AddCategoryMapping(107, TorznabCatType.MoviesUHD, "Films 2160p/x265");
+            AddCategoryMapping(1, TorznabCatType.MoviesBluRay, "Films 1080p/BluRay");
+            AddCategoryMapping(2, TorznabCatType.MoviesBluRay, "Films 1080p/Remux");
+            AddCategoryMapping(100, TorznabCatType.MoviesHD, "Films 1080p/x265");
+            AddCategoryMapping(4, TorznabCatType.MoviesHD, "Films 1080p/x264");
+            AddCategoryMapping(5, TorznabCatType.MoviesHD, "Films 720p/x264");
+            AddCategoryMapping(7, TorznabCatType.MoviesSD, "Films SD/x264");
+            AddCategoryMapping(3, TorznabCatType.Movies3D, "Films 3D");
+            AddCategoryMapping(6, TorznabCatType.MoviesSD, "Films XviD");
+            AddCategoryMapping(8, TorznabCatType.MoviesDVD, "Films DVD");
+            AddCategoryMapping(122, TorznabCatType.MoviesHD, "Films HDTV");
+            AddCategoryMapping(94, TorznabCatType.MoviesWEBDL, "Films WEBDL");
+            AddCategoryMapping(95, TorznabCatType.MoviesWEBDL, "Films WEBRiP");
+            AddCategoryMapping(12, TorznabCatType.TVDocumentary, "Films Documentaire");
+            AddCategoryMapping(31, TorznabCatType.MoviesOther, "Films Animation");
+            AddCategoryMapping(33, TorznabCatType.MoviesOther, "Films Spectacle");
+            AddCategoryMapping(125, TorznabCatType.TVSport, "Films Sports");
+            AddCategoryMapping(20, TorznabCatType.AudioVideo, "Films Concerts, Clips");
+            AddCategoryMapping(9, TorznabCatType.MoviesOther, "Films VOSTFR");
 
-            // Series
-            AddCategoryMapping(104, TorznabCatType.TVOTHER, "BLURAY");
-            AddCategoryMapping(13, TorznabCatType.TVOTHER, "PACK VF");
-            AddCategoryMapping(15, TorznabCatType.TVHD, "HD VF");
-            AddCategoryMapping(14, TorznabCatType.TVSD, "SD VF");
-            AddCategoryMapping(98, TorznabCatType.TVOTHER, "PACK VOSTFR");
-            AddCategoryMapping(17, TorznabCatType.TVHD, "HD VF VOSTFR");
-            AddCategoryMapping(16, TorznabCatType.TVSD, "SD VF VOSTFR");
-            AddCategoryMapping(101, TorznabCatType.TVAnime, "PACK ANIME");
-            AddCategoryMapping(32, TorznabCatType.TVAnime, "ANIME VF");
-            AddCategoryMapping(110, TorznabCatType.TVAnime, "ANIME VOSTFR");
-            AddCategoryMapping(123, TorznabCatType.TVOTHER, "ANIMATION");
-            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "DOCS");
-            AddCategoryMapping(30, TorznabCatType.TVOTHER, "EMISSIONS");
-            AddCategoryMapping(34, TorznabCatType.TVOTHER, "SPORT");
+            // TV / Series
+            AddCategoryMapping(104, TorznabCatType.TVOther, "Series BluRay");
+            AddCategoryMapping(13, TorznabCatType.TVOther, "Series Pack VF");
+            AddCategoryMapping(15, TorznabCatType.TVHD, "Series HD VF");
+            AddCategoryMapping(14, TorznabCatType.TVSD, "Series SD VF");
+            AddCategoryMapping(98, TorznabCatType.TVOther, "Series Pack VOSTFR");
+            AddCategoryMapping(17, TorznabCatType.TVHD, "Series HD VOSTFR");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "Series SD VOSTFR");
+            AddCategoryMapping(101, TorznabCatType.TVAnime, "Series Packs Anime");
+            AddCategoryMapping(32, TorznabCatType.TVAnime, "Series Animes");
+            AddCategoryMapping(110, TorznabCatType.TVAnime, "Series Anime VOSTFR");
+            AddCategoryMapping(123, TorznabCatType.TVOther, "Series Animation");
+            AddCategoryMapping(109, TorznabCatType.TVDocumentary, "Series DOC");
+            AddCategoryMapping(34, TorznabCatType.TVOther, "Series Sport");
+            AddCategoryMapping(30, TorznabCatType.TVOther, "Series Emission TV");
 
-            // Music
-            AddCategoryMapping(20, TorznabCatType.AudioVideo, "CONCERT");
+            // XxX / MISC
+            AddCategoryMapping(36, TorznabCatType.XXX, "MISC XxX/Films");
+            AddCategoryMapping(105, TorznabCatType.XXX, "MISC XxX/Séries");
+            AddCategoryMapping(114, TorznabCatType.XXX, "MISC XxX/Lesbiennes");
+            AddCategoryMapping(115, TorznabCatType.XXX, "MISC XxX/Gays");
+            AddCategoryMapping(113, TorznabCatType.XXX, "MISC XxX/Hentai");
+            AddCategoryMapping(120, TorznabCatType.XXX, "MISC XxX/Magazines");
 
-            // Books
-            AddCategoryMapping(24, TorznabCatType.BooksEbook, "ENOOKS NOVEL");
-            AddCategoryMapping(96, TorznabCatType.BooksMagazines, "EBOOKS MAGAZINES");
-            AddCategoryMapping(116, TorznabCatType.BooksEbook, "EBOOKS NOVEL JUNIOR");
-            AddCategoryMapping(99, TorznabCatType.BooksOther, "EBOOKS BD");
-            AddCategoryMapping(102, TorznabCatType.BooksComics, "EBOOKS COMICS");
-            AddCategoryMapping(103, TorznabCatType.BooksOther, "EBOOKS MANGA");
+            // Books / Livres
+            AddCategoryMapping(24, TorznabCatType.BooksEBook, "Livres Romans");
+            AddCategoryMapping(124, TorznabCatType.AudioAudiobook, "Livres Audio Books");
+            AddCategoryMapping(96, TorznabCatType.BooksMags, "Livres  Magazines");
+            AddCategoryMapping(99, TorznabCatType.BooksOther, "Livres Bandes dessinées");
+            AddCategoryMapping(116, TorznabCatType.BooksEBook, "Livres Romans Jeunesse");
+            AddCategoryMapping(102, TorznabCatType.BooksComics, "Livres Comics");
+            AddCategoryMapping(103, TorznabCatType.BooksOther, "Livres Mangas");
 
-            // SOFTWARE
-            AddCategoryMapping(25, TorznabCatType.PCGames, "PC GAMES");
-            AddCategoryMapping(27, TorznabCatType.ConsolePS3, "PS GAMES");
-            AddCategoryMapping(111, TorznabCatType.PCMac, "MAC GAMES");
-            AddCategoryMapping(112, TorznabCatType.PC, "LINUX GAMES");
-            AddCategoryMapping(26, TorznabCatType.ConsoleXbox360, "XBOX GAMES");
-            AddCategoryMapping(28, TorznabCatType.ConsoleWii, "WII GAMES");
-            AddCategoryMapping(29, TorznabCatType.ConsoleNDS, "NDS GAMES");
-            AddCategoryMapping(117, TorznabCatType.PC, "ROM");
-            AddCategoryMapping(21, TorznabCatType.PC, "PC SOFTWARE");
-            AddCategoryMapping(22, TorznabCatType.PCMac, "MAC SOFTWARE");
-            AddCategoryMapping(23, TorznabCatType.PCPhoneAndroid, "ANDROID");
-
-            // XxX
-            AddCategoryMapping(36, TorznabCatType.XXX, "XxX / Films");
-            AddCategoryMapping(105, TorznabCatType.XXX, "XxX / Séries");
-            AddCategoryMapping(114, TorznabCatType.XXX, "XxX / Lesbiennes");
-            AddCategoryMapping(115, TorznabCatType.XXX, "XxX / Gays");
-            AddCategoryMapping(113, TorznabCatType.XXX, "XxX / Hentai");
-            AddCategoryMapping(120, TorznabCatType.XXX, "XxX / Magazines");
+            // SOFTWARE / Logiciels
+            AddCategoryMapping(25, TorznabCatType.PCGames, "Logiciels Jeux PC");
+            AddCategoryMapping(27, TorznabCatType.ConsolePS3, "Logiciels Playstation");
+            AddCategoryMapping(111, TorznabCatType.PCMac, "Logiciels Jeux MAC");
+            AddCategoryMapping(26, TorznabCatType.ConsoleXBox360, "Logiciels XboX");
+            AddCategoryMapping(112, TorznabCatType.PC, "Logiciels Jeux Linux");
+            AddCategoryMapping(28, TorznabCatType.ConsoleWii, "Logiciels Nintendo");
+            AddCategoryMapping(29, TorznabCatType.ConsoleNDS, "Logiciels NDS");
+            AddCategoryMapping(117, TorznabCatType.PC, "Logiciels ROM");
+            AddCategoryMapping(21, TorznabCatType.PC, "Logiciels Applis PC");
+            AddCategoryMapping(22, TorznabCatType.PCMac, "Logiciels Applis Mac");
+            AddCategoryMapping(23, TorznabCatType.PCMobileAndroid, "Logiciels Smartphone");
         }
 
         /// <summary>
@@ -235,8 +255,8 @@ namespace Jackett.Common.Indexers
 
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
                         //TODO replace with download link?
-                        var guid = new Uri(TorrentDescriptionUrl.Replace("{id}", torrent.id.ToString()));
-                        var comments = new Uri(TorrentCommentUrl.Replace("{id}", torrent.id.ToString()));
+                        var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
+                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
                         var link = new Uri(torrent.download_link);
                         var release = new ReleaseInfo
                         {
@@ -254,7 +274,7 @@ namespace Jackett.Common.Indexers
                             UploadVolumeFactor = 1,
                             DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
                             Guid = guid,
-                            Comments = comments,
+                            Details = details,
                             Link = link,
                             TMDb = torrent.tmdb_id
                         };
@@ -479,7 +499,7 @@ namespace Jackett.Common.Indexers
             Output("\nQuerying tracker for results....");
 
             // Build WebRequest for index
-            var myIndexRequest = new Utils.Clients.WebRequest()
+            var myIndexRequest = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = request,
@@ -488,12 +508,12 @@ namespace Jackett.Common.Indexers
             };
 
             // Request our first page
-            var results = await webclient.GetString(myIndexRequest);
+            var results = await webclient.GetResultAsync(myIndexRequest);
             if (results.Status == HttpStatusCode.InternalServerError) // See issue #2110
-                throw new Exception("Internal Server Error (" + results.Content + "), probably you reached the API limits, please reduce the number of queries");
+                throw new Exception("Internal Server Error (" + results.ContentString + "), probably you reached the API limits, please reduce the number of queries");
 
             // Return results from tracker
-            return results.Content;
+            return results.ContentString;
         }
 
         /// <summary>

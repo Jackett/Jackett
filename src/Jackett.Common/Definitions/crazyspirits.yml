@@ -14,35 +14,36 @@ caps:
     - {id: 96, cat: TV/Documentary, desc: "Docus TV"}
     - {id: 124, cat: TV/Documentary, desc: "Docus Formation Video"}
     # Films
-    - {id: 49, cat: Movies/3D, desc: "Films 3D"}
     - {id: 1, cat: XXX, desc: "3X"}
-    - {id: 48, cat: XXX, desc: "3X  HD1080p"}
     - {id: 47, cat: XXX, desc: "3X  HD720p"}
+    - {id: 48, cat: XXX, desc: "3X  HD1080p"}
+    - {id: 49, cat: Movies/3D, desc: "Films 3D"}
     - {id: 50, cat: Movies/UHD, desc: "Films 4K"}
     - {id: 51, cat: TV/UHD, desc: "Films 4K UHDTV"}
-    - {id: 57, cat: Movies/BluRay, desc: "Films BDRip"}
     - {id: 56, cat: Movies/BluRay, desc: "Films Blu-Ray"}
-    - {id: 58, cat: Movies/BluRay, desc: "Films BRRip"}
-    - {id: 66, cat: Movies, desc: "Films CamTS"}
+    - {id: 53, cat: Movies/HD, desc: "Films HD1080p"}
+    - {id: 52, cat: Movies/HD, desc: "Films HD 720p"}
+    - {id: 61, cat: Movies/HD, desc: "Films HDRip"}
     - {id: 59, cat: Movies/DVD, desc: "Films DVDR"}
     - {id: 60, cat: Movies/DVD, desc: "Films DVDRip"}
-    - {id: 98, cat: TV/Anime, desc: "Films Film Animées"}
-    - {id: 65, cat: Movies, desc: "Films FSCR"}
-    - {id: 52, cat: Movies/HD, desc: "Films HD 720p"}
-    - {id: 53, cat: Movies/HD, desc: "Films HD1080p"}
-    - {id: 61, cat: Movies/HD, desc: "Films HDRip"}
+    - {id: 57, cat: Movies/BluRay, desc: "Films BDRip"}
+    - {id: 58, cat: Movies/BluRay, desc: "Films BRRip"}
     - {id: 63, cat: Movies/HD, desc: "Films MHD"}
-    - {id: 67, cat: Movies, desc: "Films Pack Films"}
     - {id: 64, cat: Movies, desc: "Films R5"}
-    - {id: 99, cat: Movies, desc: "Films Remux"}
-    - {id: 69, cat: Movies, desc: "Films VO"}
+    - {id: 65, cat: Movies, desc: "Films FSCR"}
+    - {id: 66, cat: Movies, desc: "Films CamTS"}
+    - {id: 67, cat: Movies, desc: "Films Pack Films"}
     - {id: 68, cat: Movies, desc: "Films VostFR"}
-    - {id: 72, cat: Movies/WEBDL, desc: "Films WEB DL"}
-    - {id: 122, cat: Movies/WEBDL, desc: "Films Web-DL 1080P"}
-    - {id: 123, cat: Movies/WEBDL, desc: "Films WEB-DL 720p"}
-    - {id: 73, cat: Movies/WEBDL, desc: "Films Webrip"}
-    - {id: 70, cat: Movies/WEBDL, desc: "Films WebRip 1080p"}
-    - {id: 71, cat: Movies/WEBDL, desc: "Films WebRip 720p"}
+    - {id: 69, cat: Movies, desc: "Films VO"}
+    - {id: 70, cat: Movies/WEB-DL, desc: "Films WebRip 1080p"}
+    - {id: 71, cat: Movies/WEB-DL, desc: "Films WebRip 720p"}
+    - {id: 73, cat: Movies/WEB-DL, desc: "Films Webrip"}
+    - {id: 72, cat: Movies/WEB-DL, desc: "Films WEB DL"}
+    - {id: 99, cat: Movies, desc: "Films Remux"}
+    - {id: 98, cat: TV/Anime, desc: "Films Film Animées"}
+    - {id: 122, cat: Movies/WEB-DL, desc: "Films Web-DL 1080P"}
+    - {id: 123, cat: Movies/WEB-DL, desc: "Films WEB-DL 720p"}
+    - {id: 126, cat: Movies, desc: "Films HDTV"}
     # Jeux
     - {id: 114, cat: PC/Games, desc: "Jeux PC"}
     - {id: 115, cat: Console/PS3, desc: "Jeux PS3"}
@@ -51,56 +52,59 @@ caps:
     - {id: 118, cat: Console, desc: "Jeux Switch"}
     - {id: 119, cat: Console/Wii, desc: "Jeux Wii"}
     - {id: 120, cat: Console/WiiU, desc: "Jeux WiiU"}
-    - {id: 121, cat: Console/Xbox, desc: "Jeux Xbox"}
+    - {id: 121, cat: Console/XBox, desc: "Jeux Xbox"}
     # Livre
     - {id: 100, cat: Audio/Audiobook, desc: "Livre Audio"}
-    - {id: 101, cat: Books/Ebook, desc: "Livre Epub"}
+    - {id: 101, cat: Books/EBook, desc: "Livre Epub"}
     - {id: 102, cat: Books, desc: "Livre Mangas"}
     - {id: 103, cat: Books, desc: "Livres BD"}
     - {id: 104, cat: Books/Comics, desc: "Livres Comics"}
-    - {id: 105, cat: Books/Magazines, desc: "Livres Press"}
+    - {id: 105, cat: Books/Mags, desc: "Livres Press"}
     - {id: 106, cat: Books, desc: "Livres Romans"}
     # Logiciel
-    - {id: 113, cat: PC/Phone-IOS, desc: "Logiciel Apple"}
-    - {id: 111, cat: PC, desc: "Logiciel Linux"}
-    - {id: 112, cat: PC/Phone-Other, desc: "Logiciel Smart Phone"}
     - {id: 110, cat: PC/0day, desc: "Logiciel Windows"}
+    - {id: 111, cat: PC, desc: "Logiciel Linux"}
+    - {id: 113, cat: PC/Mobile-iOS, desc: "Logiciel Apple"}
+    - {id: 112, cat: PC/Mobile-Other, desc: "Logiciel Smart Phone"}
     # Musiques
-    - {id: 108, cat: Audio/Lossless, desc: "Musiques FLAC"}
+    - {id: 125, cat: Audio/Video, desc: "Musiques Videos Pack"}
     - {id: 107, cat: Audio/MP3, desc: "Musiques MP3"}
+    - {id: 108, cat: Audio/Lossless, desc: "Musiques FLAC"}
     - {id: 109, cat: Audio, desc: "Musiques WMA"}
     # Séries
+    - {id: 76, cat: TV/HD, desc: "Series Blu-Ray"}
+    - {id: 77, cat: TV/HD, desc: "Series HDTV"}
     - {id: 78, cat: TV/HD, desc: "Series 1080p"}
     - {id: 79, cat: TV/HD, desc: "Series 720p"}
-    - {id: 97, cat: TV/Anime, desc: "Series Animée"}
-    - {id: 76, cat: TV/HD, desc: "Series Blu-Ray"}
     - {id: 80, cat: TV/SD, desc: "Series DvDR"}
     - {id: 81, cat: TV/SD, desc: "Series DVDrip"}
-    - {id: 77, cat: TV/HD, desc: "Series HDTV"}
     - {id: 82, cat: TV/HD, desc: "Series MHD"}
-    - {id: 88, cat: TV, desc: "Series Pack"}
-    - {id: 87, cat: TV, desc: "Series VO"}
-    - {id: 86, cat: TV, desc: "Series VosFR"}
-    - {id: 89, cat: TV, desc: "Series VOSTA"}
-    - {id: 85, cat: TV/WEB-DL, desc: "Series WEB"}
     - {id: 83, cat: TV/WEB-DL, desc: "Series WebDL1080p"}
-    - {id: 84, cat: TV/WEB-DL, desc: "Series WebDL720p"}
+    - {id: 84, cat: TV/HD, desc: "Series Épisodes HD"}
+    - {id: 85, cat: TV/SD, desc: "Series Épisodes SD"}
+    - {id: 86, cat: TV, desc: "Series VosFR"}
+    - {id: 87, cat: TV, desc: "Series VO"}
+    - {id: 89, cat: TV, desc: "Series VOSTA"}
+    - {id: 97, cat: TV/Anime, desc: "Series Animée"}
+    - {id: 88, cat: TV, desc: "Series Pack HD"}
+    - {id: 128, cat: TV, desc: "Series Pack SD"}
     # Spéctacle
-    - {id: 90, cat: TV/Other, desc: "Spectacle 1080p"}
     - {id: 91, cat: TV/Other, desc: "Spectacle 720p"}
+    - {id: 90, cat: TV/Other, desc: "Spectacle 1080p"}
     # Télévision
-    - {id: 94, cat: TV, desc: "TV Animation"}
-    - {id: 93, cat: TV/Documentary, desc: "TV Documentaires"}
-    - {id: 92, cat: TV/Other, desc: "TV Spectacles"}
-    - {id: 95, cat: TV/Sport, desc: "TV Sports"}
     - {id: 74, cat: TV/HD, desc: "TV TVHD"}
     - {id: 75, cat: TV, desc: "TV TVRip"}
+    - {id: 92, cat: TV/Other, desc: "TV Spectacles"}
+    - {id: 93, cat: TV/Documentary, desc: "TV Documentaires"}
+    - {id: 94, cat: TV, desc: "TV Animation"}
+    - {id: 95, cat: TV/Sport, desc: "TV Sports"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -110,23 +114,45 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -139,12 +165,12 @@ login:
 download:
   before:
     path: thanks.php
-    method: "get"
+    method: get
     inputs:
       id: "{{ .DownloadUri.Query.id }}"
-      to: "give"
+      to: give
       torrent: "{{ .DownloadUri.Query.id }}"
-  selector: a:contains("Télécharger ce torrent")
+  selector: "a[href^=\"/{{ .DownloadUri.Query.id }}/\"]"
   attribute: href
 
 search:
@@ -154,10 +180,10 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-    # 0 all 1 inclfree 2 onlyfree
-    freeleech: 0
+    # 0 all, 1 nofree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 all 1 french 2 english etc
     lang: 0
     sort: "{{ .Config.sort }}"
@@ -168,8 +194,35 @@ search:
     selector: table.border_table > tbody > tr.t-row
 
   fields:
-    title:
+    title_phase0:
+      # title can be abbreviated
       selector: a[href^="torrents-details.php?id="] b
+    title_phase1:
+      # if available, the youtube link has a full title
+      selector: a[rel="prettyPhoto"] img
+      attribute: alt
+      optional: true
+      filters:
+        - name: replace
+          args: ["-NoTag", ""]
+    title_phase2:
+      text: "{{ if .Result.title_phase1 }}{{ .Result.title_phase1 }}{{ else }}{{ .Result.title_phase0 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase3:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase3 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
     category:
       selector: a[href^="torrents.php?cat="]
       attribute: href
@@ -182,18 +235,18 @@ search:
     download:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover][href^="torrents-details.php?id="]
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=(.*?)><"
     grabs:
-      selector: td:nth-last-child(5)
-    seeders:
       selector: td:nth-last-child(4)
-    leechers:
+    seeders:
       selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
     size:
       selector: a[onmouseover][href^="torrents-details.php?id="]
       attribute: onmouseover
@@ -206,12 +259,19 @@ search:
       filters:
         - name: regexp
           args: "Partagé Voilà : </b>(.*?)<br"
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "01-02-2006"
+          args: "01-02-2006 -07:00"
     downloadvolumefactor:
       case:
         img[src="images/Torrents/free.png"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
+    minimumseedtime:
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TT3.0

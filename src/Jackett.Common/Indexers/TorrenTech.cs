@@ -31,16 +31,24 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public TorrenTech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public TorrenTech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "torrentech",
                    name: "Torrentech",
                    description: "Torrentech (TTH) is a Private Torrent Tracker for ELECTRONIC MUSIC",
                    link: "https://www.torrentech.org/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
@@ -63,9 +71,9 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("Logged in as: "), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("Logged in as: "), () =>
             {
-                var errorMessage = result.Content;
+                var errorMessage = result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -76,7 +84,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            WebClientStringResult results = null;
+            WebResult results = null;
             var queryCollection = new NameValueCollection
             {
                 { "act", "search" },
@@ -100,17 +108,17 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = IndexUrl + "?" + queryCollection.GetQueryString();
-            results = await RequestStringWithCookies(searchUrl);
+            results = await RequestWithCookiesAsync(searchUrl);
             if (results.IsRedirect && results.RedirectingTo.Contains("CODE=show"))
             {
-                results = await RequestStringWithCookies(results.RedirectingTo);
+                results = await RequestWithCookiesAsync(results.RedirectingTo);
             }
             try
             {
                 var RowsSelector = "div.borderwrap:has(div.maintitle) > table > tbody > tr:has(a[href*=\"index.php?showtopic=\"])";
 
                 var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.Content);
+                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
                 var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
                 foreach (var Row in Rows)
                 {
@@ -133,14 +141,14 @@ namespace Jackett.Common.Indexers
 
                         var qDetailsLink = Row.QuerySelector("a[onmouseover][href*=\"index.php?showtopic=\"]");
                         release.Title = qDetailsLink.TextContent;
-                        release.Comments = new Uri(qDetailsLink.GetAttribute("href"));
-                        release.Link = release.Comments;
+                        release.Details = new Uri(qDetailsLink.GetAttribute("href"));
+                        release.Link = release.Details;
                         release.Guid = release.Link;
 
                         release.DownloadVolumeFactor = 1;
                         release.UploadVolumeFactor = 1;
 
-                        var id = QueryHelpers.ParseQuery(release.Comments.Query)["showtopic"].FirstOrDefault();
+                        var id = QueryHelpers.ParseQuery(release.Details.Query)["showtopic"].FirstOrDefault();
 
                         var desc = Row.QuerySelector("span.desc");
                         var forange = desc.QuerySelector("font.forange");
@@ -195,7 +203,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
@@ -203,8 +211,8 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var response = await RequestStringWithCookies(link.ToString());
-            var results = response.Content;
+            var response = await RequestWithCookiesAsync(link.ToString());
+            var results = response.ContentString;
             var SearchResultParser = new HtmlParser();
             var SearchResultDocument = SearchResultParser.ParseDocument(results);
             var downloadSelector = "a[title=\"Download attachment\"]";

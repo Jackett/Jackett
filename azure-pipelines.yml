@@ -2,12 +2,12 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 16
+  minorVersion: 17
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
-  netCoreFramework: netcoreapp3.1
-  netCoreSdkVersion: 3.1.x
+  netCoreFramework: net5.0
+  netCoreSdkVersion: 5.0.x
   # system.debug: true
 
 trigger:
@@ -110,7 +110,7 @@ stages:
               projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Service (Windows only)
@@ -120,7 +120,7 @@ stages:
               projects: 'src/Jackett.Service/Jackett.Service.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: CopyFiles@2
             displayName: Copy Jackett Server
@@ -163,6 +163,14 @@ stages:
             inputs:
               SourceFolder: $(Build.BinariesDirectory)/Jackett.Service
               contents: JackettService*
+              targetFolder: $(Build.BinariesDirectory)/Jackett
+
+          - task: CopyFiles@2
+            displayName: Copy Windows Specific Scripts (Windows only)
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+            inputs:
+              SourceFolder: $(Build.SourcesDirectory)
+              contents: jackett_launcher.bat
               targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2

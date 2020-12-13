@@ -13,19 +13,24 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DICMusic : GazelleTracker
     {
-        public DICMusic(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public DICMusic(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "dicmusic",
                    name: "DICMusic",
                    description: "DICMusic is a CHINESE Private Torrent Tracker for MUSIC",
                    link: "https://dicmusic.club/",
                    caps: new TorznabCapabilities
                    {
-                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    has2Fa: true)
         {
