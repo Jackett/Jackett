@@ -113,6 +113,13 @@ namespace Jackett.Server.Controllers
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);
 
+            if (config.flaresolverrurl != serverConfig.FlareSolverrUrl)
+            {
+                serverConfig.FlareSolverrUrl = config.flaresolverrurl;
+                configService.SaveConfig(serverConfig);
+                webHostRestartNeeded = true;
+            }
+
             if (omdbApiKey != serverConfig.OmdbApiKey || omdbApiUrl != serverConfig.OmdbApiUrl)
             {
                 serverConfig.OmdbApiKey = omdbApiKey;
