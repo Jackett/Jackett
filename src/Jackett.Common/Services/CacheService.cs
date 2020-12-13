@@ -97,12 +97,17 @@ namespace Jackett.Common.Services
  
                 var trackerCache = _cache[indexer.Id];
                 var queryHash = GetQueryHash(query);
-                if (!trackerCache.Queries.ContainsKey(queryHash))
+                var cacheHit = trackerCache.Queries.ContainsKey(queryHash);
+
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug($"CACHE Search / Indexer: {trackerCache.TrackerId} / CacheHit: {cacheHit} / Query: {GetSerializedQuery(query)}");
+
+                if (!cacheHit)
                     return null;
 
                 var releases = trackerCache.Queries[queryHash].Results;
-                _logger.Debug($"CACHE Search / Indexer: {trackerCache.TrackerId} / Found: {releases.Count} releases");
- 
+                _logger.Debug($"CACHE Search Hit / Indexer: {trackerCache.TrackerId} / Found: {releases.Count} releases");
+
                 return releases;
             }
         }
@@ -232,13 +237,20 @@ namespace Jackett.Common.Services
 
         private string GetQueryHash(TorznabQuery query)
         {
+            var json = GetSerializedQuery(query);
+            // Compute the hash
+            return BitConverter.ToString(_sha256.ComputeHash(Encoding.ASCII.GetBytes(json)));
+        }
+
+        private static string GetSerializedQuery(TorznabQuery query)
+        {
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(query);
-            _logger.Debug($"CACHE Request query: {json}");
+
             // Changes in the query to improve cache hits
             // Both request must return the same results, if not we are breaking Jackett search
             json = json.Replace("\"SearchTerm\":null", "\"SearchTerm\":\"\"");
-            // Compute the hash
-            return BitConverter.ToString(_sha256.ComputeHash(Encoding.ASCII.GetBytes(json)));
+
+            return json;
         }
 
         private void PrintCacheStatus()
