@@ -42,6 +42,7 @@ namespace Jackett.Common.Models.Config
         public bool CacheEnabled { get; set; }
         public long CacheTtl { get; set; }
         public long CacheMaxResultsPerIndexer { get; set; }
+        public string FlareSolverrUrl { get; set; }
         public string OmdbApiKey { get; set; }
         public string OmdbApiUrl { get; set; }
 

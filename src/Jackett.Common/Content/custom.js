@@ -106,6 +106,7 @@ function loadJackettSettings() {
             $("#jackett-show-releases").attr("disabled", true);
         }
 
+        $("#jackett-flaresolverrurl").val(data.flaresolverrurl);
         $("#jackett-omdbkey").val(data.omdbkey);
         $("#jackett-omdburl").val(data.omdburl);
         var password = data.password;
@@ -1137,6 +1138,7 @@ function bindUIButtons() {
         var jackett_cache_enabled = $("#jackett-cache-enabled").is(':checked');
         var jackett_cache_ttl = $("#jackett-cache-ttl").val();
         var jackett_cache_max_results_per_indexer = $("#jackett-cache-max-results-per-indexer").val();
+        var jackett_flaresolverr_url = $("#jackett-flaresolverrurl").val();
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();
 
@@ -1158,6 +1160,7 @@ function bindUIButtons() {
             cache_enabled: jackett_cache_enabled,
             cache_ttl: jackett_cache_ttl,
             cache_max_results_per_indexer: jackett_cache_max_results_per_indexer,
+            flaresolverrurl: jackett_flaresolverr_url,
             omdbkey: jackett_omdb_key,
             omdburl: jackett_omdb_url,
             proxy_type: jackett_proxy_type,
