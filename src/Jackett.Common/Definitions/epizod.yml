@@ -58,32 +58,34 @@ search:
     s: "{{ .Keywords }}"
 
   rows:
-    selector: li[class^="ilovewp-post"]
+    selector: li[class^="ilovewp-post"]:not(:has(a[title="DMCA"]))
 
   fields:
-    category:
-      text: other
-    category|noappend:
+    category1:
       selector: a[href*="/category/"]
       attribute: href
       optional: true
       filters:
         - name: split
           args: ["/", 4]
-    category|noappend:
+    category2:
       selector: li[class^="ilovewp-post"]
       attribute: class
       optional: true
       filters:
         - name: regexp
           args: "category-(.+?) "
-    category|noappend:
+    category3:
       selector: img[src*="img"]
       attribute: src
       optional: true
       filters:
         - name: regexp
           args: "img/(.+?)_"
+    category:
+      text: "{{ if or .Result.category1 .Result.category2 .Result.category3 }}{{ or .Result.category1 .Result.category2 .Result.category3 }}{{ else }}other{{ end }}"
+    sizecat:
+      text: "{{ if or .Result.category1 .Result.category2 .Result.category3 }}{{ or .Result.category1 .Result.category2 .Result.category3 }}{{ else }}other{{ end }}"
     site_date:
       selector: time > a
       filters:
@@ -141,17 +143,8 @@ search:
           args: ["T", " "]
         - name: dateparse
           args: "2006-01-02 15:04:05-07:00"
-    cat:
-      selector: li[class^="ilovewp-post"]
-      attribute: class
-      optional: true
-      filters:
-        - name: regexp
-          args: "category-(.+?) "
-    cat:
-      text: "{{ if .Result.cat }}{{ .Result.cat }}{{ else }}other{{ end }}"
     size:
-      text: "{{ if eq .Result.cat \"ebook\" }}1 MB{{ else }}{{ end }}{{ if eq .Result.cat \"musique\" }}128 MB{{ else }}{{ end }}{{ if or (eq .Result.cat \"series\") (eq .Result.cat \"other\") }}512 MB{{ else }}{{ end }}{{ if eq .Result.cat \"films\" }}2 GB{{ else }}{{ end }}"
+      text: "{{ if eq .Result.sizecat \"ebook\" }}1 MB{{ else }}{{ end }}{{ if eq .Result.sizecat \"musique\" }}128 MB{{ else }}{{ end }}{{ if or (eq .Result.sizecat \"series\") (eq .Result.sizecat \"other\") }}512 MB{{ else }}{{ end }}{{ if eq .Result.sizecat \"films\" }}2 GB{{ else }}{{ end }}"
     seeders:
       text: 1
     leechers:
