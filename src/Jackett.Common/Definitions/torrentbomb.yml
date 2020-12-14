@@ -41,7 +41,11 @@ caps:
     movie-search: [q]
     music-search: [q]
 
-settings: []
+settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 download:
   # https://lngui.xyz/magnetgo.php?magnet:?xt=urn:btih:6d9551ec2c62c4ae8eef6709adc6be9b3fd7a709
