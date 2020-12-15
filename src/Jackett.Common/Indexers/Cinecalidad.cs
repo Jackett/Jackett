@@ -25,10 +25,14 @@ namespace Jackett.Common.Indexers
         private const int MaxSearchPageLimit = 6; // 15 items per page * 6 pages = 90
         private string _language;
 
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.cinecalidad.is/",
-            "https://www.cinecalidad.to/",
-            "https://www.cinecalidad.eu/"
+            "https://www.cinecalidad.eu/",
+            "https://www.cinecalidad.im/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.cinecalidad.to/"
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -36,7 +40,7 @@ namespace Jackett.Common.Indexers
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
                    description: "Películas Full HD en Castellano y Latino Dual.",
-                   link: "https://www.cinecalidad.im/",
+                   link: "https://www.cinecalidad.is/",
                    caps: new TorznabCapabilities {
                        MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
                    },
