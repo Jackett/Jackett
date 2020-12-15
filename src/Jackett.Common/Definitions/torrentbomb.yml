@@ -6,9 +6,10 @@ language: ko-KR
 type: public
 encoding: UTF-8
 links:
-  - https://torrent.movie/
+  - https://torrentb.site/
 legacylinks:
   - https://torrent.vet/
+  - https://torrent.movie/
 
 caps:
   categorymappings:
