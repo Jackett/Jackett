@@ -378,6 +378,7 @@ namespace Jackett.Updater
                 "Definitions/speed-share.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
+                "Definitions/takeabyte.yml",
                 "Definitions/tazmaniaden.yml",
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
