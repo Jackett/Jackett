@@ -39,6 +39,7 @@ namespace Jackett.Common.Services
             {"broadcastthenet", "broadcasthenet"},
             {"cili180", "cilipro"},
             {"icetorrent", "speedapp"},
+            {"leaguehd", "lemonhd"},
             {"liaorencili", "cilipro"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
