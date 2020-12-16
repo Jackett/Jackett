@@ -78,7 +78,7 @@ search:
     keyword: "{{ if .Keywords }}{{ .Keywords }}{{ else }}-{{ end }}"
 
   rows:
-    selector: section.sch_res_list > ul > li:has(span.sch_datetime:contains(":"))
+    selector: section.sch_res_list > ul > li:has(span.sch_datetime:contains(":")):not(:has(a[href^="bbs/./board.php?bo_table=out_"]))
 
   fields:
     category:
