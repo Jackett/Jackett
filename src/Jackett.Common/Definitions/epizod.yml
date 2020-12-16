@@ -61,6 +61,10 @@ search:
   inputs:
     s: "{{ .Keywords }}"
 
+  headers:
+    # Windows User-Agent is required, Linux is blocked
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"]
+
   rows:
     selector: li[class^="ilovewp-post"]:not(:has(a[title="DMCA"]))
 
