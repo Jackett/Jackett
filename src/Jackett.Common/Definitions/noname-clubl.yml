@@ -826,7 +826,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
-      selector: td:nth-child(10)
+      selector: td:nth-child(11)
       filters:
         - name: re_replace
           args: [".*(\\d{2}-\\d{2}-\\d{4})(\\d{2}:\\d{2})", "$1 $2"]
