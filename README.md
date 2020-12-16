@@ -393,7 +393,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * LatinoP2P
  * Le Saloon
  * LeChaudron
- * LeagueHD
+ * LemonHD
  * LearnFlakes
  * LegacyHD (HD4Free)
  * Libble

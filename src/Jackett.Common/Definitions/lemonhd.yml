@@ -1,11 +1,13 @@
 ---
-id: leaguehd
-name: LeagueHD
-description: "LeagueHD is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+id: lemonhd
+name: LemonHD
+description: "LemonHD is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
 language: zh-cn
 type: private
 encoding: UTF-8
 links:
+  - https://lemonhd.org/
+legacylinks:
   - https://leaguehd.com/
 
 caps:
