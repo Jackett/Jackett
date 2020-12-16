@@ -90,8 +90,6 @@ search:
       filters:
         - name: regexp
           args: "img/(.+?)_"
-        - name: replace
-          args: ["ebooks", "ebook"]
     category:
       text: "{{ if or .Result.category1 .Result.category2 .Result.category3 }}{{ or .Result.category1 .Result.category2 .Result.category3 }}{{ else }}other{{ end }}"
     sizecat:
