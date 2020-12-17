@@ -80,7 +80,7 @@ search:
       args: replace
 
   rows:
-    selector: table.lista > tbody > tr > td:has(a[href^="details.php?name="])
+    selector: table.lista > tbody > tr > td > table.lista > tbody > tr > td:has(a[href^="details.php?name="])
 
   fields:
     category:
