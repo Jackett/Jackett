@@ -113,10 +113,8 @@ search:
     size:
       selector: div > div
       filters:
-        - name: split
-          args: ["|", 0]
         - name: regexp
-          args: "Velkost (.+?) ?$"
+          args: "Velkost (.+?) \\|"
     date:
       selector: div > div
       filters:
