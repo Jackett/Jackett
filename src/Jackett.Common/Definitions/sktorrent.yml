@@ -93,20 +93,78 @@ search:
       selector: a[href^="details.php?name="]
       filters:
         - name: re_replace
-          args: [".*? / ", ""]
+          args: ["^VA \\|", "VA -"]
+        - name: re_replace
+          args: ["^.*? / |^.*? \\| ", ""]
         - name: diacritics
           args: replace
         - name: re_replace
+          args: ["(\\| \\d+\\% CSFD.cz/)", ""]
+        - name: re_replace
           args: ["( = CSFD \\d+\\%)", ""]
         - name: re_replace
-          args: ["(?i)serie", ""]
+          args: ["( CSFD \\d+\\%)", ""]
         - name: re_replace
-          args: ["(\\d{2})\\.", "S$1"]
+          args: ["(\\d+)az (\\d+)\\ (?i)serie", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d{1})\\.", "S0$1"]
+          args: ["(\\d+) az (\\d+)\\ (?i)serie", "S0$1-S$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\.\\-(\\d{2})\\. (?i)serie", "S0$1-S$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\.\\-(\\d{1})\\. (?i)serie", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\.\\-(\\d{2})\\.(?i)serie", "S0$1-S$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\.\\-(\\d{1})\\.(?i)serie", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\-(\\d{2})\\.(?i)serie", "S0$1-S$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\-(\\d{1})\\.(?i)serie", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\,(\\d{1}) (?i)serie", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\+(\\d{1}) (?i)serie", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\,(\\d{1}) (?i)seria", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\+(\\d{1}) (?i)seria", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{1})\\,\\d{1},(\\d{1}),(?i)seria", "S0$1-S0$2"]
+        - name: re_replace
+          args: ["(\\d{2}) (?i)season", "S$1"]
+        - name: re_replace
+          args: ["(\\d{1}) (?i)season", "S0$1"]
+        - name: re_replace
+          args: ["(\\d{2})\\. (?i)serie", "S$1"]
+        - name: re_replace
+          args: ["(\\d{1})\\. (?i)serie", "S0$1"]
+        - name: re_replace
+          args: ["(\\d{2})\\.(?i)serie", "S$1"]
+        - name: re_replace
+          args: ["(\\d{1})\\.(?i)serie", "S0$1"]
+        - name: re_replace
+          args: ["(\\d{2})\\.(?i)seria", "S$1"]
+        - name: re_replace
+          args: ["(\\d{1})\\.(?i)seria", "S0$1"]
+        - name: re_replace
+          args: ["(\\d{2}) (?i)serii", "S01-S$1"]
+        - name: re_replace
+          args: ["(\\d{1}) (?i)serii", "S01-S0$1"]
+        - name: re_replace
+          args: ["(\\d{1}) (?i)seria", "S0$1"]
+        - name: re_replace
+          args: ["(?i)serial", "Series"]
+        - name: re_replace
+          args: ["(?i)kompletni|(?i)komplet", "Complete"]
     details:
       selector: a[href^="details.php?name="]
       attribute: href
+    poster:
+      selector: img[class="lozad"]
+      attribute: data-src
+    poster:
+      selector: img[src="//cdn.sktorrent.eu/obrazky/xXx.jpg"]
+      attribute: src
     download:
       selector: a[href^="details.php?name="]
       attribute: href
