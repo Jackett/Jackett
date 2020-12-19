@@ -142,8 +142,7 @@ namespace Jackett.Common.Indexers
         private static string InternationalTitle(string title)
         {
             var match = Regex.Match(title, @".* \[(.*\/?)\]");
-            string[] results = match.Groups[1].Value.Split('/');
-            return match.Success ? results[0] : title;
+            return match.Success ? match.Groups[1].Value.Split('/')[0] : title;
         }
 
         private static string StripSearchString(string term, bool isAnime)
