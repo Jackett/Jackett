@@ -197,7 +197,8 @@ search:
         i[class*="fa-star text-bold"]: 0 # Freeleech From Token
         i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
         i[class*="fa-globe text-blue"]: 0 # Global Freeleech
-        i[class*="fa-star text-gold"]: 0 # Freeleech
+        i[class*="fas fa-star text-gold"]: 0 # Freeleech
+        i[class*="fal fa-star text-gold"]: 0.5 # 50% Freeleech
         i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
         "*": 1
     uploadvolumefactor:
@@ -206,4 +207,7 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # UNIT3D 2.4.0

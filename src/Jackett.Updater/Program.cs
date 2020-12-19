@@ -331,6 +331,7 @@ namespace Jackett.Updater
                 "Definitions/kikibt.yml",
                 "Definitions/korsar.yml",
                 "Definitions/lapausetorrents.yml",
+                "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
@@ -378,6 +379,7 @@ namespace Jackett.Updater
                 "Definitions/speed-share.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
+                "Definitions/takeabyte.yml",
                 "Definitions/tazmaniaden.yml",
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",

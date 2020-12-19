@@ -75,6 +75,7 @@ caps:
     - {id: 1518, cat: Movies/3D, desc: " |- 3D Мультфильмы"}
     - {id: 1683, cat: Movies/3D, desc: " |- Документальные фильмы 3D"}
     - {id: 9, cat: Movies, desc: "Наши фильмы, Советское кино (DVDrip, WEB-DLRip, HDrip)"}
+    - {id: 1858, cat: Movies, desc: " |- Наши новые фильмы 2020 - 2021"}
     - {id: 1846, cat: Movies, desc: " |- Наши фильмы (мультфильмы) cо спонсором показа (Новинки AVI/M.."}
     - {id: 1847, cat: Movies, desc: " |- Наши новые фильмы 2018-2019"}
     - {id: 1840, cat: Movies, desc: " |- Наши новые фильмы 2017"}

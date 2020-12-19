@@ -36,6 +36,7 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "secciones.php";
 
         public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.mejortorrentt.net/",
             "http://www.mejortorrent.org/",
             "http://www.mejortorrent.tv/",
             "http://www.mejortorrentt.com/",
@@ -48,7 +49,7 @@ namespace Jackett.Common.Indexers
             : base(id: "mejortorrent",
                    name: "MejorTorrent",
                    description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
-                   link: "https://www.mejortorrentt.net/",
+                   link: "https://www.mejortorrents.net/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -77,6 +78,8 @@ namespace Jackett.Common.Indexers
 
             var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
+
+            configData.AddDynamic("flaresolverr", new DisplayItem("This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."){ Name = "FlareSolverr"});
 
             AddCategoryMapping(MejorTorrentCatType.Pelicula, TorznabCatType.Movies, "Pelicula");
             AddCategoryMapping(MejorTorrentCatType.Serie, TorznabCatType.TVSD, "Serie");

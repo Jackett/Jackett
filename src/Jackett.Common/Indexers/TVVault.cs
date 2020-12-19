@@ -57,6 +57,9 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.TV);
             AddCategoryMapping(2, TorznabCatType.Movies);
+            // as returned by TvCategoryParser.ParseTvShowQuality these two TV cats are required
+            AddCategoryMapping(3, TorznabCatType.TVHD);
+            AddCategoryMapping(4, TorznabCatType.TVSD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -168,7 +171,7 @@ namespace Jackett.Common.Indexers
         private string StripSearchString(string term)
         {
             // Search does not support searching with episode numbers so strip it if we have one
-            // Ww AND filter the result later to archive the proper result
+            // AND filter the result later to achieve the proper result
             term = Regex.Replace(term, @"[S|E]\d\d", string.Empty);
             return term.Trim();
         }

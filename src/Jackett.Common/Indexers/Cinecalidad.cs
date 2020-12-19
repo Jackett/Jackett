@@ -27,8 +27,12 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.cinecalidad.is/",
-            "https://www.cinecalidad.to/",
-            "https://www.cinecalidad.eu/"
+            "https://www.cinecalidad.eu/",
+            "https://www.cinecalidad.im/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.cinecalidad.to/"
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
