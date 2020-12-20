@@ -109,6 +109,8 @@ search:
         - name: re_replace
           args: ["(?i)serie\\s*(\\d{1})\\s*\\.*\\s*az*\\s*(\\d{1})\\s*\\.*", "S0$1-S$2"]
         - name: re_replace
+          args: ["(?i)season\\,*\\s*(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{2,})", "S0$1-S$2"]
+        - name: re_replace
           args: ["(?i)season\\,*\\s*(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{1})", "S0$1-S0$2"]
         - name: re_replace
           args: ["(?i)season\\s*(\\d{2,})\\.*", "S$1"]
@@ -127,6 +129,8 @@ search:
         - name: re_replace
           args: ["(\\d{1})\\.*\\s*(?i)season", "S0$1"]
         - name: re_replace
+          args: ["(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{2,})\\,*\\s*(?i)serie", "S0$1-S$2"]
+        - name: re_replace
           args: ["(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{1})\\,*\\s*(?i)serie", "S0$1-S0$2"]
         - name: re_replace
           args: ["(\\d{2,})\\.*\\s*(?i)serie", "S$1"]
@@ -136,6 +140,8 @@ search:
           args: ["(\\d{1})\\.*\\-*\\,*\\+*(\\d{1})\\.*\\s(?i)serie", "S0$1-S0$2"]
         - name: re_replace
           args: ["(\\d{1})\\.*\\s*(?i)serie", "S0$1"]
+        - name: re_replace
+          args: ["(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{2,})\\,*\\s*(?i)seria", "S0$1-S$2"]
         - name: re_replace
           args: ["(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{1})\\,*\\s*(?i)seria", "S0$1-S0$2"]
         - name: re_replace
