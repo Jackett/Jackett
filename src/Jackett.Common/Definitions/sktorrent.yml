@@ -93,69 +93,75 @@ search:
       selector: a[href^="details.php?name="]
       filters:
         - name: re_replace
-          args: ["^VA \\|", "VA -"]
+          args: ["^VA\\s*\\|", "VA -"]
         - name: re_replace
-          args: ["^.*? / |^.*? \\| ", ""]
+          args: ["^.*? \\/\\s*|^.*? \\|\\s*", ""]
         - name: diacritics
           args: replace
         - name: re_replace
-          args: ["(\\| \\d+\\% CSFD.cz/)", ""]
+          args: ["\\|\\s*\\d+\\% CSFD\\.cz\\/|\\s*=*\\s*CSFD\\s*\\d+\\%|\\s*CSFD\\s*=*\\s*\\d+\\%|\\s*CSFD", ""]
         - name: re_replace
-          args: ["( = CSFD \\d+\\%)", ""]
+          args: ["(\\d{1})\\s*\\.*\\s*az*\\s*(\\d{2,})\\s*\\.*\\s(?i)serie\\.*", "S0$1-S$2"]
         - name: re_replace
-          args: ["( CSFD \\d+\\%)", ""]
+          args: ["(\\d{1})\\s*\\.*\\s*az*\\s*(\\d{1})\\s*\\.*\\s(?i)serie\\.*", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d+)az (\\d+)\\ (?i)serie", "S0$1-S$2"]
+          args: ["(?i)serie\\s*(\\d{1})\\s*\\.*\\s*az*\\s*(\\d{2,})\\s*\\.*", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d+) az (\\d+)\\ (?i)serie", "S0$1-S$2"]
+          args: ["(?i)serie\\s*(\\d{1})\\s*\\.*\\s*az*\\s*(\\d{1})\\s*\\.*", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d{1})\\.\\-(\\d{2})\\. (?i)serie", "S0$1-S$2"]
+          args: ["(?i)season\\,*\\s*(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{1})", "S0$1-S0$2"]
         - name: re_replace
-          args: ["(\\d{1})\\.\\-(\\d{1})\\. (?i)serie", "S0$1-S0$2"]
+          args: ["(?i)season\\s*(\\d{2,})\\.*", "S$1"]
         - name: re_replace
-          args: ["(\\d{1})\\.\\-(\\d{2})\\.(?i)serie", "S0$1-S$2"]
+          args: ["(?i)season\\s*(\\d{1})\\.*\\-*\\,*\\+*(\\d{2,})\\s*\\.*", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d{1})\\.\\-(\\d{1})\\.(?i)serie", "S0$1-S0$2"]
+          args: ["(?i)season\\s*(\\d{1})\\.*\\-*\\,*\\+*(\\d{1})\\s*\\.*", "S0$1-S0$2"]
         - name: re_replace
-          args: ["(\\d{1})\\-(\\d{2})\\.(?i)serie", "S0$1-S$2"]
+          args: ["(?i)season\\s*(\\d{1})\\.*", "S0$1"]
         - name: re_replace
-          args: ["(\\d{1})\\-(\\d{1})\\.(?i)serie", "S0$1-S0$2"]
+          args: ["(\\d{2,})\\.*\\s*(?i)season", "S$1"]
         - name: re_replace
-          args: ["(\\d{1})\\,(\\d{1}) (?i)serie", "S0$1-S0$2"]
+          args: ["(\\d{1})\\.*\\-*\\,*\\+*(\\d{2,})\\.*\\s(?i)season", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d{1})\\+(\\d{1}) (?i)serie", "S0$1-S0$2"]
+          args: ["(\\d{1})\\.*\\-*\\,*\\+*(\\d{1})\\.*\\s(?i)season", "S0$1-S0$2"]
         - name: re_replace
-          args: ["(\\d{1})\\,(\\d{1}) (?i)seria", "S0$1-S0$2"]
+          args: ["(\\d{1})\\.*\\s*(?i)season", "S0$1"]
         - name: re_replace
-          args: ["(\\d{1})\\+(\\d{1}) (?i)seria", "S0$1-S0$2"]
+          args: ["(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{1})\\,*\\s*(?i)serie", "S0$1-S0$2"]
         - name: re_replace
-          args: ["(\\d{1})\\,\\d{1},(\\d{1}),(?i)seria", "S0$1-S0$2"]
+          args: ["(\\d{2,})\\.*\\s*(?i)serie", "S$1"]
         - name: re_replace
-          args: ["(\\d{2}) (?i)season", "S$1"]
+          args: ["(\\d{1})\\.*\\-*\\,*\\+*(\\d{2,})\\.*\\s(?i)serie", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d{1}) (?i)season", "S0$1"]
+          args: ["(\\d{1})\\.*\\-*\\,*\\+*(\\d{1})\\.*\\s(?i)serie", "S0$1-S0$2"]
         - name: re_replace
-          args: ["(\\d{2})\\. (?i)serie", "S$1"]
+          args: ["(\\d{1})\\.*\\s*(?i)serie", "S0$1"]
         - name: re_replace
-          args: ["(\\d{1})\\. (?i)serie", "S0$1"]
+          args: ["(\\d{1})\\,\\s*\\d{1}\\,\\s*(\\d{1})\\,*\\s*(?i)seria", "S0$1-S0$2"]
         - name: re_replace
-          args: ["(\\d{2})\\.(?i)serie", "S$1"]
+          args: ["\\d{2,}\\.*\\s*(?i)seria\\s*\\((?i)s(\\d{2,})", "(S$1"]
         - name: re_replace
-          args: ["(\\d{1})\\.(?i)serie", "S0$1"]
+          args: ["(\\d{2,})\\.*\\s*(?i)seria", "S$1"]
         - name: re_replace
-          args: ["(\\d{2})\\.(?i)seria", "S$1"]
+          args: ["(\\d{1})\\.*\\-*\\,*\\+*(\\d{2,})\\.*\\s(?i)seria", "S0$1-S$2"]
         - name: re_replace
-          args: ["(\\d{1})\\.(?i)seria", "S0$1"]
+          args: ["(\\d{1})\\.*\\-*\\,*\\+*(\\d{1})\\.*\\s(?i)seria", "S0$1-S0$2"]
         - name: re_replace
-          args: ["(\\d{2}) (?i)serii", "S01-S$1"]
+          args: ["(\\d{1})\\.*\\s*(?i)seria", "S0$1"]
         - name: re_replace
-          args: ["(\\d{1}) (?i)serii", "S01-S0$1"]
+          args: ["\\d{1}\\.*\\s*(?i)seria\\s*\\((?i)s(\\d{1})", "(S0$1"]
         - name: re_replace
-          args: ["(\\d{1}) (?i)seria", "S0$1"]
+          args: ["(\\d{2,})\\.*\\s*(?i)serii", "S01-S$1"]
         - name: re_replace
-          args: ["(?i)serial", "Series"]
+          args: ["(\\d{1})\\.*\\s*(?i)serii", "S01-S0$1"]
         - name: re_replace
-          args: ["(?i)kompletni|(?i)komplet", "Complete"]
+          args: ["(?i)pouze (\\d{1})\\-(\\d{2,})", "pouze S0$1-S$2"]
+        - name: re_replace
+          args: ["(?i)pouze (\\d{1})\\-(\\d{1})", "pouze S0$1-S0$2"]
+        - name: re_replace
+          args: ["(?i)komplet (\\d{1})\\-(\\d{2,})", "komplet S0$1-S$2"]
+        - name: re_replace
+          args: ["(?i)komplet (\\d{1})\\-(\\d{1})", "komplet S0$1-S0$2"]
     details:
       selector: a[href^="details.php?name="]
       attribute: href
