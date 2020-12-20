@@ -1,11 +1,14 @@
 ---
+id: animeworld
 id: ast4u
-name: AST4u
-description: "AST4u is a GERMAN Private site for TV / MOVIES / ANIME / HENTAI"
+name: AnimeWorld
+description: "AnimeWorld (AST4u) is a GERMAN Private site for TV / MOVIES / ANIME / HENTAI"
 language: de-de
 type: private
 encoding: iso-8859-1
 links:
+  - https://animeworld.cx/
+legacylinks:
   - https://www.ast4u.me/
 
 caps:
