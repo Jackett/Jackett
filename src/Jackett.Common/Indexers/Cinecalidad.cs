@@ -142,6 +142,8 @@ namespace Jackett.Common.Indexers
                     var linkParts = protectedLink.Split('=');
                     protectedLink = protectedLink.Replace(linkParts[0] + "=", "");
                 }
+                if (protectedLink.StartsWith("/"))
+                    protectedLink = SiteLink + protectedLink.TrimStart('/');
 
                 results = await RequestWithCookiesAsync(protectedLink);
                 dom = parser.ParseDocument(results.ContentString);
