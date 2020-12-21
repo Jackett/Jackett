@@ -382,6 +382,7 @@ namespace Jackett.Updater
                 "Definitions/t411v2.yml",
                 "Definitions/takeabyte.yml",
                 "Definitions/tazmaniaden.yml",
+                "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
                 "Definitions/tfile.yml",
