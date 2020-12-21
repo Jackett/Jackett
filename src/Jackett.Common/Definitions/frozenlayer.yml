@@ -7,6 +7,8 @@ type: public
 encoding: UTF-8
 links:
   - https://www.frozen-layer.com/
+certificates:
+  - ba7fb6290a9d7d821e73efb0eac4ed95a7fd2d11 # expired 20 December 2020
 
 settings:
   - name: category
