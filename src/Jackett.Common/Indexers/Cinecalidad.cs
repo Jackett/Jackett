@@ -179,9 +179,9 @@ namespace Jackett.Common.Indexers
                     title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
                     title += " 1080p BDRip x264";
 
-                    var poster = new Uri(qImg.GetAttribute("src"));
-                    var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
-
+                    var poster = GetAbosluteUri(qImg.GetAttribute("src"));
+                    var link = GetAbosluteUri(row.QuerySelector("a").GetAttribute("href"));
+                    
                     var release = new ReleaseInfo
                     {
                         Title = title,
@@ -226,6 +226,16 @@ namespace Jackett.Common.Indexers
 
             return queryWords.All(word => titleWords.Contains(word));
         }
-    }
 
+        private Uri GetAbosluteUri(string urlInput)
+        {
+            Uri.TryCreate(urlInput, UriKind.RelativeOrAbsolute, out var uri);
+            if (!uri.IsAbsoluteUri)
+            {
+                var baseUri = new Uri(SiteLink);
+                Uri.TryCreate(baseUri, uri, out uri);
+            }
+            return uri;
+        }
+    }
 }
