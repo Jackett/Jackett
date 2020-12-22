@@ -737,9 +737,6 @@ To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/a
 -   `-c, --UseClient`          Override web client selection.
                             [automatic(Default)/httpclient/httpclient2]
 
--   `-j, --ProxyConnection`    use proxy - e.g. 127.0.0.1:8888
-
-
 -   `-x, --ListenPublic`       Listen publicly
 
 -   `-z, --ListenPrivate`      Only allow local access
