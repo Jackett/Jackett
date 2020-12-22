@@ -142,8 +142,7 @@ namespace Jackett.Common.Indexers
                     var linkParts = protectedLink.Split('=');
                     protectedLink = protectedLink.Replace(linkParts[0] + "=", "");
                 }
-                if (protectedLink.StartsWith("/"))
-                    protectedLink = SiteLink + protectedLink.TrimStart('/');
+                protectedLink = GetAbsoluteUrl(protectedLink);
 
                 results = await RequestWithCookiesAsync(protectedLink);
                 dom = parser.ParseDocument(results.ContentString);
@@ -179,8 +178,8 @@ namespace Jackett.Common.Indexers
                     title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
                     title += " 1080p BDRip x264";
 
-                    var poster = new Uri(qImg.GetAttribute("src"));
-                    var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
+                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
+                    var link = new Uri(GetAbsoluteUrl(row.QuerySelector("a").GetAttribute("href")));
 
                     var release = new ReleaseInfo
                     {
@@ -225,6 +224,14 @@ namespace Jackett.Common.Indexers
             titleWords = titleWords.ToArray();
 
             return queryWords.All(word => titleWords.Contains(word));
+        }
+
+        private string GetAbsoluteUrl(string url)
+        {
+            url = url.Trim();
+            if (!url.StartsWith("http"))
+                return SiteLink + url.TrimStart('/');
+            return url;
         }
     }
 
