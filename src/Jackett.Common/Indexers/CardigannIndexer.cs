@@ -1382,8 +1382,6 @@ namespace Jackett.Common.Indexers
                                             var magnetUri = new Uri(value);
                                             release.MagnetUri = magnetUri;
                                             value = magnetUri.ToString();
-                                            if (release.Guid == null)
-                                                release.Guid = magnetUri;
                                             break;
                                         case "infohash":
                                             release.InfoHash = value;
@@ -1391,8 +1389,6 @@ namespace Jackett.Common.Indexers
                                         case "details":
                                             var url = resolvePath(value, searchUrlUri);
                                             release.Details = url;
-                                            if (release.Guid == null)
-                                                release.Guid = url;
                                             value = url.ToString();
                                             break;
                                         case "title":
