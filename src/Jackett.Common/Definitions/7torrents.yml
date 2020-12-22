@@ -20,6 +20,14 @@ caps:
     book-search: [q]
 
 settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created
+    options:
+      created: created
+      length: size
+      seeders: seeders
   - name: flaresolverr
     type: info
     label: FlareSolverr
