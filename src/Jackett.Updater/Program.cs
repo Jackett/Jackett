@@ -372,6 +372,7 @@ namespace Jackett.Updater
                 "Definitions/seedpeer.yml",
                 "Definitions/sharespacedb.yml",
                 "Definitions/sharingue.yml",
+                "Definitions/shareuniversity.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/solidtorrents.yml", // migrated to C#
                 "Definitions/soundpark.yml", // to be migrated to C#
