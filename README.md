@@ -472,7 +472,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SDBits [![(invite needed)][inviteneeded]](#)
  * Secret Cinema
  * SeedFile (SF)
- * ShareUniversity
  * Shareisland
  * Shazbat
  * Shellife (SL) [![(invite needed)][inviteneeded]](#)
