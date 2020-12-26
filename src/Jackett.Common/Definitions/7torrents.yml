@@ -20,10 +20,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: info_8000
-    type: info
-    label: About 7torrents Categories
-    default: 7torrents does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
@@ -32,6 +28,14 @@ settings:
       created: created
       length: size
       seeders: seeders
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+  - name: info_8000
+    type: info
+    label: About 7torrents Categories
+    default: 7torrents does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 search:
   # https://www.7torrents.cc/search?query=2020&sort=created
