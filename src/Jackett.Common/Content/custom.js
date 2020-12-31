@@ -24,8 +24,6 @@ $.fn.focusWithoutScrolling = function () {
 
 $(document).ready(function () {
     $.ajaxSetup({ cache: false });
-    //window.jackettIsLocal = window.location.hostname === '127.0.0.1';
-    window.jackettIsLocal = false; // reCaptcha can't be solved via 127.0.0.1 anymore. This loophold was fixed by google around 2.10.2017
 
     Handlebars.registerHelper('if_eq', function(a, b, opts) {
 	    if (a == b)
@@ -85,6 +83,7 @@ function loadJackettSettings() {
         $("#jackett-proxy-port").val(data.proxy_port);
         $("#jackett-proxy-username").val(data.proxy_username);
         $("#jackett-proxy-password").val(data.proxy_password);
+        proxyWarning(data.proxy_type);
 
         $("#jackett-basepathoverride").val(data.basepathoverride);
         basePath = data.basepathoverride;
@@ -100,6 +99,17 @@ function loadJackettSettings() {
         $("#jackett-prerelease").attr('checked', data.prerelease);
         $("#jackett-logging").attr('checked', data.logging);
         $("#jackett-loadonlyconfiguredindexers").attr('checked', data.loadonlyconfiguredindexers);
+
+
+        $("#jackett-cache-enabled").attr('checked', data.cache_enabled);
+        $("#jackett-cache-ttl").val(data.cache_ttl);
+        $("#jackett-cache-max-results-per-indexer").val(data.cache_max_results_per_indexer);
+        if (!data.cache_enabled) {
+            $("#jackett-show-releases").attr("disabled", true);
+        }
+
+        $("#jackett-flaresolverrurl").val(data.flaresolverrurl);
+
         $("#jackett-omdbkey").val(data.omdbkey);
         $("#jackett-omdburl").val(data.omdburl);
         var password = data.password;
@@ -115,10 +125,9 @@ function loadJackettSettings() {
         $.each(data.notices, function (index, value) {
             console.log(value);
             doNotify(value, "danger", "glyphicon glyphicon-alert", false);
-        })
+        });
 
         reloadIndexers();
-        proxyWarning(data.proxy_url);
     });
 }
 
@@ -512,79 +521,13 @@ function populateConfigItems(configForm, config) {
     var $formItemContainer = configForm.find(".config-setup-form");
     $formItemContainer.empty();
 
-    $('.jackettrecaptcha').remove();
-
-    var hasReacaptcha = false;
-    var captchaItem = null;
-    for (var i = 0; i < config.length; i++) {
-        if (config[i].type === 'recaptcha') {
-            hasReacaptcha = true;
-            captchaItem = config[i];
-        }
-        else if (config[i].id === 'cookieheader' && hasReacaptcha) { // inject cookie into captcha item
-            captchaItem.cookieheader = config[i].value;
-            console.log(captchaItem);
-        }
-    }
-
     var setupItemTemplate = Handlebars.compile($("#setup-item").html());
-    if (hasReacaptcha && !window.jackettIsLocal && false) { // disable this for now, use inline cookie (below)
-        var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
-        captchaItem.value_element = setupValueTemplate(captchaItem);
-        var template = setupItemTemplate(captchaItem);
+    for (var i = 0; i < config.length; i++) {
+        var item = config[i];
+        var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
+        item.value_element = setupValueTemplate(item);
+        var template = setupItemTemplate(item);
         $formItemContainer.append(template);
-    } else {
-
-        for (var i = 0; i < config.length; i++) {
-            var item = config[i];
-            if ((item.id === 'username' || item.id === 'password') && hasReacaptcha) {
-                continue; // skip username/password if there's a recaptcha
-            }
-            if (item.type != 'recaptcha') {
-                var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
-                item.value_element = setupValueTemplate(item);
-                var template = setupItemTemplate(item);
-                $formItemContainer.append(template);
-            }
-            if (item.type === 'recaptcha') {
-                // inject cookie dialog until recaptcha can be solved again
-                var setupValueTemplate = Handlebars.compile($("#setup-item-nonlocalrecaptcha").html());
-                captchaItem.value_element = setupValueTemplate(captchaItem);
-                var template = setupItemTemplate(captchaItem);
-                $formItemContainer.append(template);
-                /*
-                var jackettrecaptcha = $('.jackettrecaptcha');
-                jackettrecaptcha.data("version", item.version);
-                switch (item.version) {
-                    case "1":
-                        // The v1 reCAPTCHA code uses document.write() calls to write the CAPTCHA to the location where the script was loaded.
-                        // As it's loaded async this doesn't work.
-                        // We use an iframe to work around this problem.
-                        var html = '<script type="text/javascript" src="https://www.google.com/recaptcha/api/challenge?k='+encodeURIComponent(item.sitekey)+'"></script>';
-                        var frame = document.createElement('iframe');
-                        frame.id = "jackettrecaptchaiframe";
-                        frame.style.height = "145px";
-                        frame.style.weight = "326px";
-                        frame.style.border = "none";
-                        frame.onload = function () {
-                            // auto resize iframe to content
-                            frame.style.height = frame.contentWindow.document.body.scrollHeight + 'px';
-                            frame.style.width = frame.contentWindow.document.body.scrollWidth + 'px';
-                        }
-                        jackettrecaptcha.append(frame);
-                        frame.contentDocument.open();
-                        frame.contentDocument.write(html);
-                        frame.contentDocument.close();
-                        break;
-                    case "2":
-                        grecaptcha.render(jackettrecaptcha[0], {
-                            'sitekey': item.sitekey
-                        });
-                        break;
-                }
-                */
-            }
-        }
     }
 }
 
@@ -631,24 +574,6 @@ function getConfigModalJson(configForm) {
                 });
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
-                break;
-            case "recaptcha":
-                if (window.jackettIsLocal) {
-                    var version = $el.find('.jackettrecaptcha').data("version");
-                    switch (version) {
-                        case "1":
-                            var frameDoc = $("#jackettrecaptchaiframe")[0].contentDocument;
-                            itemEntry.version = version;
-                            itemEntry.challenge = $("#recaptcha_challenge_field", frameDoc).val()
-                            itemEntry.value = $("#recaptcha_response_field", frameDoc).val()
-                            break;
-                        case "2":
-                            itemEntry.value = $('.g-recaptcha-response').val();
-                            break;
-                    }
-                } else {
-                    itemEntry.cookie = $el.find(".setup-item-recaptcha input").val();
-                }
                 break;
         }
         configJson.push(itemEntry)
@@ -738,14 +663,14 @@ function updateReleasesRow(row)
     var labels = $(row).find("span.release-labels");
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
-    var Banner = $(row).data("banner");
+    var Poster = $(row).data("poster");
     var Description = $(row).data("description");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
     var UploadVolumeFactor = parseFloat($(row).find("td.UploadVolumeFactor").html());
 
     var TitleTooltip = "";
-    if (Banner)
-        TitleTooltip += "<img src='" + Banner + "' /><br />";
+    if (Poster)
+        TitleTooltip += "<img src='" + Poster + "' /><br />";
     if (Description)
         TitleTooltip += Description;
 
@@ -1214,6 +1139,10 @@ function bindUIButtons() {
         var jackett_prerelease = $("#jackett-prerelease").is(':checked');
         var jackett_logging = $("#jackett-logging").is(':checked');
         var jackett_loadonlyconfiguredindexers = $("#jackett-loadonlyconfiguredindexers").is(':checked');
+        var jackett_cache_enabled = $("#jackett-cache-enabled").is(':checked');
+        var jackett_cache_ttl = $("#jackett-cache-ttl").val();
+        var jackett_cache_max_results_per_indexer = $("#jackett-cache-max-results-per-indexer").val();
+        var jackett_flaresolverr_url = $("#jackett-flaresolverrurl").val();
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();
 
@@ -1232,6 +1161,11 @@ function bindUIButtons() {
             logging: jackett_logging,
             loadonlyconfiguredindexers:jackett_loadonlyconfiguredindexers,
             basepathoverride: jackett_basepathoverride,
+            logging: jackett_logging,
+            cache_enabled: jackett_cache_enabled,
+            cache_ttl: jackett_cache_ttl,
+            cache_max_results_per_indexer: jackett_cache_max_results_per_indexer,
+            flaresolverrurl: jackett_flaresolverr_url,
             omdbkey: jackett_omdb_key,
             omdburl: jackett_omdb_url,
             proxy_type: jackett_proxy_type,
@@ -1244,7 +1178,7 @@ function bindUIButtons() {
             doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
             window.setTimeout(function () {
                 window.location.reload(true);
-            }, 3000);
+            }, 5000);
         }).fail(function (data) {
             if (data.responseJSON !== undefined && data.responseJSON.result == "error") {
                 doNotify("Error: " + data.responseJSON.error, "danger", "glyphicon glyphicon-alert");
@@ -1287,13 +1221,13 @@ function bindUIButtons() {
         });
     });
 
-    $('#jackett-proxy-url').on('input', function () {
+    $('#jackett-proxy-type').on('input', function () {
         proxyWarning($(this).val());
     });
 }
 
 function proxyWarning(input) {
-    if (input != null && input.trim() !== "") {
+    if (input != null && input.toString().trim() !== "-1") { // disabled = -1
         $('#proxy-warning').show();
     }
     else

@@ -13,7 +13,7 @@ namespace Jackett.Common.Models
         public string Title { get; set; }
         public Uri Guid { get; set; }
         public Uri Link { get; set; }
-        public Uri Comments { get; set; }
+        public Uri Details { get; set; }
         public DateTime PublishDate { get; set; }
         public ICollection<int> Category { get; set; }
         public long? Size { get; set; }
@@ -24,16 +24,18 @@ namespace Jackett.Common.Models
         public long? TVDBId { get; set; }
         public long? Imdb { get; set; }
         public long? TMDb { get; set; }
-        public int? Seeders { get; set; }
-        public int? Peers { get; set; }
-        public Uri BannerUrl { get; set; }
+        public string Author { get; set; }
+        public string BookTitle { get; set; }
+        public long? Seeders { get; set; }
+        public long? Peers { get; set; }
+        public Uri Poster { get; set; }
         public string InfoHash { get; set; }
         public Uri MagnetUri { get; set; }
         public double? MinimumRatio { get; set; }
         public long? MinimumSeedTime { get; set; }
         public double? DownloadVolumeFactor { get; set; }
         public double? UploadVolumeFactor { get; set; }
-        [JsonIgnore] // don't export the Origin to the manul search API, otherwise each result line contains a full recursive indexer JSON structure
+        [JsonIgnore] // don't export the Origin to the manual search API, otherwise each result line contains a full recursive indexer JSON structure
         public IIndexer Origin;
 
 
@@ -49,7 +51,7 @@ namespace Jackett.Common.Models
             Title = copyFrom.Title;
             Guid = copyFrom.Guid;
             Link = copyFrom.Link;
-            Comments = copyFrom.Comments;
+            Details = copyFrom.Details;
             PublishDate = copyFrom.PublishDate;
             Category = copyFrom.Category;
             Size = copyFrom.Size;
@@ -59,9 +61,11 @@ namespace Jackett.Common.Models
             RageID = copyFrom.RageID;
             Imdb = copyFrom.Imdb;
             TMDb = copyFrom.TMDb;
+            Author = copyFrom.Author;
+            BookTitle = copyFrom.BookTitle;
             Seeders = copyFrom.Seeders;
             Peers = copyFrom.Peers;
-            BannerUrl = copyFrom.BannerUrl;
+            Poster = copyFrom.Poster;
             InfoHash = copyFrom.InfoHash;
             MagnetUri = copyFrom.MagnetUri;
             MinimumRatio = copyFrom.MinimumRatio;
@@ -104,6 +108,6 @@ namespace Jackett.Common.Models
         public static long BytesFromKB(float kb) => (long)(kb * 1024f);
 
         public override string ToString() =>
-            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Comments={Comments}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, Seeders={Seeders}, Peers={Peers}, BannerUrl={BannerUrl}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
+            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }
 }

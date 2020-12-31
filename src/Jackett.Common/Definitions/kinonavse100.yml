@@ -77,19 +77,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "t"
+    default: t
     options:
-      "t": "created"
-      "ts": "seeders"
-      "sz": "size"
-      "i": "title"
+      t: created
+      ts: seeders
+      sz: size
+      i: title
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 login:
   path: ucp.php?mode=login
@@ -111,7 +111,7 @@ search:
     - path: search.php
   inputs:
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     terms: all
     author: ""
     sc: 1
@@ -123,7 +123,7 @@ search:
     ch: 300
     t: 0
     submit: Search
-    $raw: "{{range .Categories}}&fid[]={{.}}{{end}}"
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
 
   rows:
     selector: table.tablebg > tbody > tr:has(a[href^="./download/file.php?id="])
@@ -200,8 +200,10 @@ search:
           args: ["ноя", "Nov"]
         - name: replace
           args: ["дек", "Dec"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 2006, 15:04"
+          args: "02 Jan 2006, 15:04 -07:00"
     downloadvolumefactor:
       case:
         img[src="./images/tracker/3_bookmark.gif"]: 0 # gold 100% free

@@ -32,14 +32,13 @@ caps:
     - {id: 129, cat: Audio/Lossless, desc: "Audio FLAC"}
     - {id: 175, cat: Audio/Video, desc: "Audio Musikvideos"}
     - {id: 172, cat: Audio, desc: "Audio Charts"}
-    - {id: 154, cat: Audio, desc: "Audio Hoerbuch"}
+    - {id: 154, cat: Audio/Audiobook, desc: "Audio Hoerbuch"}
     - {id: 29, cat: PC/Games, desc: "Games PC"}
     - {id: 13, cat: Console, desc: "Games Konsole"}
     - {id: 150, cat: Console/Other, desc: "Games Android"}
     - {id: 49, cat: PC/0day, desc: "APPZ Windows"}
     - {id: 130, cat: PC/Mac, desc: "APPZ Mac/Linux"}
-    - {id: 152, cat: PC/Phone-Other, desc: "APPZ Navi"}
-    - {id: 153, cat: PC/Phone-Android, desc: "APPZ Android"}
+    - {id: 153, cat: PC/Mobile-Android, desc: "APPZ Android"}
     - {id: 132, cat: Books, desc: "E-Book Epub"}
     - {id: 131, cat: Books, desc: "E-Book PDF"}
     - {id: 173, cat: TV/Documentary, desc: "Dokus Packs"}
@@ -51,10 +50,11 @@ caps:
     - {id: 177, cat: Other, desc: "Sonstiges Alles andere"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -66,19 +66,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeds: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: haustuer.php
@@ -108,10 +108,10 @@ search:
   paths:
     - path: selection.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{else}}{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 name 1 descr 2 both 4 imdb
-    blah: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{ else }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 name, 1 descr, 2 both, 3 imdb
+    blah: "{{ if .Query.IMDBID }}3{{ else }}0{{ end }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
@@ -136,11 +136,9 @@ search:
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
-    banner:
+    poster:
       selector: div[id^="details-"] div div img
       attribute: src
-      optional: true
     description:
       selector: div[class^="flag_pic_"]
       attribute: onmouseover
@@ -181,7 +179,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: replace
           args: ["um ", ""]
         - name: dateparse

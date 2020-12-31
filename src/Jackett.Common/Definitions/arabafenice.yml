@@ -19,7 +19,6 @@ caps:
     - {id: 36, cat: Movies/SD, desc: "DVDRip HRS"}
     - {id: 41, cat: Movies/SD, desc: "BDRip 576p HRS"}
     - {id: 39, cat: Movies/HD, desc: "1080p HRS x265 HEVC"}
-
     # VIDEO
     - {id: 1, cat: Movies, desc: "News Cinema"}
     - {id: 2, cat: Movies/SD, desc: "BD-DVDRip"}
@@ -41,34 +40,31 @@ caps:
     - {id: 40, cat: TV/UHD, desc: "2160p 4K UltraHD"}
     - {id: 38, cat: XXX, desc: "xXx"}
     - {id: 43, cat: Other, desc: "Arabic for social"}
-
     # MUSICA
     - {id: 17, cat: Audio, desc: "Italian music"}
     - {id: 45, cat: Audio, desc: "Discography"}
     - {id: 18, cat: Audio, desc: "MusicaInternazionale"}
     - {id: 19, cat: Audio, desc: "Compilation"}
-
     # PDF
     - {id: 21, cat: Books, desc: "Ebook"}
     - {id: 22, cat: Books/Comics, desc: "Comics"}
     - {id: 23, cat: Books, desc: "Newsstand"}
-
     # GAMES
     - {id: 25, cat: Console/PS4, desc: "Sony Games"}
-    - {id: 26, cat: Console/Xbox, desc: "XboX Games"}
+    - {id: 26, cat: Console/XBox, desc: "XboX Games"}
     - {id: 27, cat: Console/Other, desc: "Nintendo Games"}
     - {id: 28, cat: PC/Games, desc: "PC Games"}
-
     # SOFTWARE
     - {id: 30, cat: PC/ISO, desc: "Windows APP"}
-    - {id: 31, cat: PC/Phone-IOS, desc: "Apple APP"}
-    - {id: 32, cat: PC/Phone-Android, desc: "Android APP"}
+    - {id: 31, cat: PC/Mobile-iOS, desc: "Apple APP"}
+    - {id: 32, cat: PC/Mobile-Android, desc: "Android APP"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -80,19 +76,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -139,10 +135,10 @@ search:
     - name: re_replace # S01E01 to 1 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
   inputs:
-    search: "{{if .Query.IMDBID}}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
     page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
-    options: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    options: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -171,7 +167,7 @@ search:
           args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
         - name: re_replace # Episodi 4 5 to E04-05
           args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
-    banner:
+    poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:
@@ -192,7 +188,7 @@ search:
       selector: td:nth-last-child(9)
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "02/01/2006 -07:00"
     grabs:

@@ -27,7 +27,7 @@ caps:
     - {id: "Erotyka", cat: XXX, desc: "Erotyka"}
     - {id: "Muzyka", cat: Audio, desc: "Muzyka"}
     - {id: "Programy", cat: PC, desc: "Programy"}
-    - {id: "GSM", cat: PC/Phone-Other, desc: "GSM/PDA"}
+    - {id: "GSM", cat: PC/Mobile-Other, desc: "GSM/PDA"}
     - {id: "Konsole", cat: Console, desc: "Konsole"}
     - {id: "Gry PC", cat: PC/Games, desc: "Gry PC"}
     - {id: "Dla Dzieci", cat: Movies, desc: "Dla Dzieci"}
@@ -43,6 +43,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -95,8 +96,7 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: img.browse_poster
       attribute: src
     date:
@@ -106,7 +106,7 @@ search:
         - name: regexp
           args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
         - name: append
-          args: " +00:00"
+          args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     size:

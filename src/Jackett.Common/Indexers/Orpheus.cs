@@ -11,19 +11,36 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Orpheus : GazelleTracker
     {
-        public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "orpheus",
                    name: "Orpheus",
                    description: "A music tracker",
                    link: "https://orpheus.network/",
                    caps: new TorznabCapabilities
                    {
-                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    has2Fa: true)
         {

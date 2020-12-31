@@ -21,6 +21,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
@@ -33,9 +34,7 @@ namespace Jackett.Common.Indexers
     {
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php";
-        private string TorrentCommentUrl => TorrentDescriptionUrl;
-        private string TorrentDescriptionUrl => SiteLink + "torrents.php?id=";
-        private string TorrentDownloadUrl => SiteLink + "torrents.php?action=download&id={id}&authkey={auth_key}&torrent_pass={torrent_pass}";
+        private string DetailsUrl => SiteLink + "torrents.php?id=";
         private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
         private bool Latency => ConfigData.Latency.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -47,60 +46,62 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataAbnormal ConfigData
         {
             get => (ConfigurationDataAbnormal)configData;
-            set => base.configData = value;
+            set => configData = value;
         }
 
-        public Abnormal(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
+        public Abnormal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "abnormal",
                    name: "Abnormal",
                    description: "General French Private Tracker",
                    link: "https://abnormal.ws/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    downloadBase: "https://abnormal.ws/torrents.php?action=download&id=",
                    configData: new ConfigurationDataAbnormal())
         {
             Language = "fr-fr";
             Encoding = Encoding.UTF8;
             Type = "private";
+            // NET::ERR_CERT_DATE_INVALID expired ‎29 ‎July ‎2020
+            w.AddTrustedCertificate(new Uri(SiteLink).Host, "9cb32582b564256146616afddbdb8e7c94c428ed");
 
-            // Movies
-            AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD);             // DVDR
-            AddCategoryMapping("MOVIE|DVDRIP", TorznabCatType.MoviesSD);            // DVDRIP
-            AddCategoryMapping("MOVIE|BDRIP", TorznabCatType.MoviesSD);             // BDRIP
-            AddCategoryMapping("MOVIE|VOSTFR", TorznabCatType.MoviesOther);         // VOSTFR
-            AddCategoryMapping("MOVIE|HD|720p", TorznabCatType.MoviesHD);           // HD 720P
-            AddCategoryMapping("MOVIE|HD|1080p", TorznabCatType.MoviesHD);          // HD 1080P
-            AddCategoryMapping("MOVIE|REMUXBR", TorznabCatType.MoviesBluRay);       // REMUX BLURAY
-            AddCategoryMapping("MOVIE|FULLBR", TorznabCatType.MoviesBluRay);        // FULL BLURAY
-
-            // Series
-            AddCategoryMapping("TV|SD|VOSTFR", TorznabCatType.TV);                  // SD VOSTFR
-            AddCategoryMapping("TV|HD|VOSTFR", TorznabCatType.TVHD);                // HD VOSTFR
-            AddCategoryMapping("TV|SD|VF", TorznabCatType.TVSD);                    // SD VF
-            AddCategoryMapping("TV|HD|VF", TorznabCatType.TVHD);                    // HD VF
-            AddCategoryMapping("TV|PACK|FR", TorznabCatType.TVOTHER);               // PACK FR
-            AddCategoryMapping("TV|PACK|VOSTFR", TorznabCatType.TVOTHER);           // PACK VOSTFR
-            AddCategoryMapping("TV|EMISSIONS", TorznabCatType.TVOTHER);             // EMISSIONS
-
-            // Anime
-            AddCategoryMapping("ANIME", TorznabCatType.TVAnime);                    // ANIME
-
-            // Documentaries
-            AddCategoryMapping("DOCS", TorznabCatType.TVDocumentary);               // DOCS
-
-            // Music
-            AddCategoryMapping("MUSIC|FLAC", TorznabCatType.AudioLossless);         // FLAC
-            AddCategoryMapping("MUSIC|MP3", TorznabCatType.AudioMP3);               // MP3
-            AddCategoryMapping("MUSIC|CONCERT", TorznabCatType.AudioVideo);         // CONCERT
-
-            // Other
-            AddCategoryMapping("PC|APP", TorznabCatType.PC);                        // PC
-            AddCategoryMapping("PC|GAMES", TorznabCatType.PCGames);                 // GAMES
-            AddCategoryMapping("EBOOKS", TorznabCatType.BooksEbook);                // EBOOKS
+            AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD, "DVDR");
+            AddCategoryMapping("MOVIE|DVDRIP", TorznabCatType.MoviesSD, "DVDRIP");
+            AddCategoryMapping("MOVIE|BDRIP", TorznabCatType.MoviesSD, "BDRIP");
+            AddCategoryMapping("MOVIE|VOSTFR", TorznabCatType.MoviesOther, "VOSTFR");
+            AddCategoryMapping("MOVIE|HD|720p", TorznabCatType.MoviesHD, "HD 720P");
+            AddCategoryMapping("MOVIE|HD|1080p", TorznabCatType.MoviesHD, "HD 1080P");
+            AddCategoryMapping("MOVIE|REMUXBR", TorznabCatType.MoviesBluRay, "REMUX BLURAY");
+            AddCategoryMapping("MOVIE|FULLBR", TorznabCatType.MoviesBluRay, "FULL BLURAY");
+            AddCategoryMapping("TV|SD|VOSTFR", TorznabCatType.TV, "TV SD VOSTFR");
+            AddCategoryMapping("TV|HD|VOSTFR", TorznabCatType.TVHD, "TV HD VOSTFR");
+            AddCategoryMapping("TV|SD|VF", TorznabCatType.TVSD, "TV SD VF");
+            AddCategoryMapping("TV|HD|VF", TorznabCatType.TVHD, "TV HD VF");
+            AddCategoryMapping("TV|PACK|FR", TorznabCatType.TVOther, "TV PACK FR");
+            AddCategoryMapping("TV|PACK|VOSTFR", TorznabCatType.TVOther, "TV PACK VOSTFR");
+            AddCategoryMapping("TV|EMISSIONS", TorznabCatType.TVOther, "TV EMISSIONS");
+            AddCategoryMapping("ANIME", TorznabCatType.TVAnime, "ANIME");
+            AddCategoryMapping("DOCS", TorznabCatType.TVDocumentary, "TV DOCS");
+            AddCategoryMapping("MUSIC|FLAC", TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping("MUSIC|MP3", TorznabCatType.AudioMP3, "MP3");
+            AddCategoryMapping("MUSIC|CONCERT", TorznabCatType.AudioVideo, "CONCERT");
+            AddCategoryMapping("PC|APP", TorznabCatType.PC, "PC");
+            AddCategoryMapping("PC|GAMES", TorznabCatType.PCGames, "GAMES");
+            AddCategoryMapping("EBOOKS", TorznabCatType.BooksEBook, "EBOOKS");
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Getting login form to retrieve CSRF token
-            var myRequest = new Utils.Clients.WebRequest()
+            var myRequest = new Utils.Clients.WebRequest
             {
                 Url = LoginUrl
             };
@@ -152,7 +153,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Do the login
-            var request = new Utils.Clients.WebRequest()
+            var request = new Utils.Clients.WebRequest
             {
                 PostData = pairs,
                 Referer = LoginUrl,
@@ -164,14 +165,14 @@ namespace Jackett.Common.Indexers
             // Perform loggin
             latencyNow();
             output("\nPerform loggin.. with " + LoginUrl);
-            var response = await webclient.GetString(request);
+            var response = await webclient.GetResultAsync(request);
 
             // Test if we are logged in
             await ConfigureIfOK(response.Cookies, response.Cookies.Contains("session="), () =>
             {
                 // Parse error page
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var message = dom.QuerySelector(".warning").TextContent.Split('.').Reverse().Skip(1).First();
 
                 // Try left
@@ -341,12 +342,8 @@ namespace Jackett.Common.Indexers
                     output("Released on: " + date);
 
                     // Torrent Details URL
-                    var detailsLink = new Uri(TorrentDescriptionUrl + id);
-                    output("Details: " + detailsLink.AbsoluteUri);
-
-                    // Torrent Comments URL
-                    var commentsLink = new Uri(TorrentCommentUrl + id);
-                    output("Comments Link: " + commentsLink.AbsoluteUri);
+                    var details = new Uri(DetailsUrl + id);
+                    output("Details: " + details.AbsoluteUri);
 
                     // Torrent Download URL
                     Uri downloadLink = null;
@@ -381,8 +378,8 @@ namespace Jackett.Common.Indexers
                         Peers = seeders + leechers,
                         PublishDate = date,
                         Size = size,
-                        Guid = detailsLink,
-                        Comments = commentsLink,
+                        Guid = details,
+                        Details = details,
                         Link = downloadLink,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
@@ -546,17 +543,15 @@ namespace Jackett.Common.Indexers
         /// <returns>Results from query</returns>
         private async Task<string> queryTracker(string request)
         {
-            WebClientStringResult results = null;
-
             // Cache mode not enabled or cached file didn't exist for our query
             output("\nQuerying tracker for results....");
 
             // Request our first page
             latencyNow();
-            results = await RequestStringWithCookiesAndRetry(request, null, null, emulatedBrowserHeaders);
+            var results = await RequestWithCookiesAndRetryAsync(request, headers: emulatedBrowserHeaders);
 
             // Return results from tracker
-            return results.Content;
+            return results.ContentString;
         }
 
         /// <summary>

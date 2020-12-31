@@ -6,9 +6,10 @@ language: ko-KR
 type: public
 encoding: UTF-8
 links:
-  - https://torrent.movie/
+  - https://torrentb.site/
 legacylinks:
   - https://torrent.vet/
+  - https://torrent.movie/
 
 caps:
   categorymappings:
@@ -41,7 +42,11 @@ caps:
     movie-search: [q]
     music-search: [q]
 
-settings: []
+settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 download:
   # https://lngui.xyz/magnetgo.php?magnet:?xt=urn:btih:6d9551ec2c62c4ae8eef6709adc6be9b3fd7a709
@@ -70,10 +75,10 @@ search:
       inputs:
         page: 5
   inputs:
-    keyword: "{{ if .Keywords }}{{ .Keywords }}{{else}}-{{end}}"
+    keyword: "{{ if .Keywords }}{{ .Keywords }}{{ else }}-{{ end }}"
 
   rows:
-    selector: section.sch_res_list > ul > li:has(span.sch_datetime:contains(":"))
+    selector: section.sch_res_list > ul > li:has(span.sch_datetime:contains(":")):not(:has(a[href^="bbs/./board.php?bo_table=out_"]))
 
   fields:
     category:
@@ -93,8 +98,10 @@ search:
     date:
       selector: span.sch_datetime
       filters:
+        - name: append
+          args: " +09:00" # KST
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     cat:
       selector: a[href^="bbs/./board.php?"]
       attribute: href
@@ -102,7 +109,7 @@ search:
         - name: querystring
           args: bo_table
     size:
-      text: "{{ if or eq .Result.cat \"torrent_movie\" (or eq .Result.cat \"torrent_movie_etc\" eq .Result.cat \"torrent_movie_eng\") }}2 GB{{else}}512 MB{{end}}"
+      text: "{{ if or eq .Result.cat \"torrent_movie\" (or eq .Result.cat \"torrent_movie_etc\" eq .Result.cat \"torrent_movie_eng\") }}2 GB{{ else }}512 MB{{ end }}"
     seeders:
       text: 1
     leechers:

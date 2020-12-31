@@ -10,24 +10,28 @@ links:
 
 caps:
   categories:
-    1: Other
+    Other: Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: info
+  - name: info_8000
     type: info
-    default: BTDigg does not use categories. In your software Indexer settings, set the category to 7000.
+    label: About BTDigg Categories
+    default: BTDigg does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
-    default: "2"
+    default: 0
     options:
-      "2": "created"
-      "3": "size"
+      0: relevance
+      2: created
+      3: size
 
 search:
   # https://btdig.com/search?q=test&order=2
@@ -35,7 +39,7 @@ search:
   paths:
     - path: search
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{else}}test{{end}}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}test{{ end }}"
     # 0 relevance 2 age 3 size 4 files
     order: "{{ .Config.sort }}"
 
@@ -45,10 +49,10 @@ search:
       - name: andmatch
 
   fields:
+    category:
+      text: Other
     title:
       selector: div.torrent_name a
-    category:
-      text: 1
     details:
       selector: div.torrent_name a
       attribute: href

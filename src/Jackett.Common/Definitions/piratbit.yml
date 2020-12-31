@@ -6,12 +6,12 @@ language: ru-ru
 type: public
 encoding: UTF-8
 links:
-  - http://piratbit.top/ # site forces http, https is not supported
+  - https://piratbit.top/ # site forces https, http is not supported
 legacylinks:
   - https://pb.wtf/
   - https://piratbit.pw/
   - https://piratbit.ml/
-  - https://piratbit.top/
+  - http://piratbit.top/
 
 caps:
   categorymappings:
@@ -75,6 +75,7 @@ caps:
     - {id: 1518, cat: Movies/3D, desc: " |- 3D Мультфильмы"}
     - {id: 1683, cat: Movies/3D, desc: " |- Документальные фильмы 3D"}
     - {id: 9, cat: Movies, desc: "Наши фильмы, Советское кино (DVDrip, WEB-DLRip, HDrip)"}
+    - {id: 1858, cat: Movies, desc: " |- Наши новые фильмы 2020 - 2021"}
     - {id: 1846, cat: Movies, desc: " |- Наши фильмы (мультфильмы) cо спонсором показа (Новинки AVI/M.."}
     - {id: 1847, cat: Movies, desc: " |- Наши новые фильмы 2018-2019"}
     - {id: 1840, cat: Movies, desc: " |- Наши новые фильмы 2017"}
@@ -327,12 +328,12 @@ caps:
     - {id: 1362, cat: TV, desc: " |- Компьютерные видеоуроки и обучающие интерактивные диски"}
     - {id: 1361, cat: TV, desc: " |- Боевые искусства (Видеоуроки)"}
     # Games for consoles
-    - {id: 50, cat: Console/Xbox, desc: "XBox"}
-    - {id: 1363, cat: Console/Xbox 360, desc: " |- XBox360"}
-    - {id: 1420, cat: Console/Xbox 360, desc: " |- Xbox360 - Live"}
-    - {id: 1396, cat: Console/Xbox 360, desc: " |- XBox360 - FreeBoot / JTAG"}
-    - {id: 1364, cat: Console/Xbox 360, desc: " |- XBox360 - Демоверсии"}
-    - {id: 1323, cat: Console/Xbox 360, desc: " |- XBox360 - Программы / Прошивки"}
+    - {id: 50, cat: Console/XBox, desc: "XBox"}
+    - {id: 1363, cat: Console/XBox 360, desc: " |- XBox360"}
+    - {id: 1420, cat: Console/XBox 360, desc: " |- Xbox360 - Live"}
+    - {id: 1396, cat: Console/XBox 360, desc: " |- XBox360 - FreeBoot / JTAG"}
+    - {id: 1364, cat: Console/XBox 360, desc: " |- XBox360 - Демоверсии"}
+    - {id: 1323, cat: Console/XBox 360, desc: " |- XBox360 - Программы / Прошивки"}
     - {id: 49, cat: Console/PSP, desc: "PlayStation"}
     - {id: 303, cat: Console/PSP, desc: " |- PSX-PSP - Игры"}
     - {id: 1365, cat: Console/PSP, desc: " |- PlayStation 2 (PS2) - Игры"}
@@ -555,43 +556,43 @@ caps:
     - {id: 792, cat: Books, desc: " |- Художественная литература"}
     - {id: 1407, cat: Books, desc: "Комиксы"}
     # Mobile Devices
-    - {id: 641, cat: PC/Phone-Other, desc: "Всё для мобильных телефонов и КПК"}
-    - {id: 651, cat: PC/Phone-Other, desc: " |- Видео для КПК и Смартфонов"}
-    - {id: 650, cat: PC/Phone-Other, desc: " |- Приложения для КПК"}
-    - {id: 649, cat: PC/Phone-Other, desc: " |- Игры для КПК"}
-    - {id: 648, cat: PC/Phone-Other, desc: " |- Видео для мобильных (3GP, MP4,AVI)"}
-    - {id: 647, cat: PC/Phone-Other, desc: " |- Софт для работы с телефоном"}
-    - {id: 646, cat: PC/Phone-Other, desc: " |- Приложения для мобильных"}
-    - {id: 645, cat: PC/Phone-Other, desc: " |- Игры для мобильных"}
-    - {id: 644, cat: PC/Phone-Other, desc: " |- Аудио/видео конвертеры в мобильные форматы"}
-    - {id: 643, cat: PC/Phone-Other, desc: " |- Мелодии"}
-    - {id: 642, cat: PC/Phone-Other, desc: " |- Сборники"}
-    - {id: 1832, cat: PC/Phone-Other, desc: " |- Игры android"}
-    - {id: 1833, cat: PC/Phone-Other, desc: " |- Программы android"}
-    - {id: 656, cat: PC/Phone-Other, desc: "iPhone, iPod, iPod Touch"}
-    - {id: 676, cat: PC/Phone-Other, desc: " |- Архив (iPhone, iPod, iPod Touch)"}
-    - {id: 675, cat: PC/Phone-Other, desc: " |- Аудиокниги (iPhone, iPod, iPod Touch)"}
-    - {id: 674, cat: PC/Phone-Other, desc: " |- Разное (iPhone, iPod, iPod Touch)"}
-    - {id: 673, cat: PC/Phone-Other, desc: " |- Программы (iPhone, iPod, iPod Touch)"}
-    - {id: 672, cat: PC/Phone-Other, desc: " |- Игры (iPhone, iPod, iPod Touch)"}
-    - {id: 671, cat: PC/Phone-Other, desc: " |- Видео (iPhone, iPod Touch)"}
-    - {id: 670, cat: PC/Phone-Other, desc: " |- Видео (iPod Classic, Video, Nano)"}
-    - {id: 669, cat: PC/Phone-Other, desc: " |- Видео (Apple TV)"}
-    - {id: 668, cat: PC/Phone-Other, desc: " |- Музыка lossless (iPod, iPod Touch, iPhone)"}
-    - {id: 625, cat: PC/Phone-Other, desc: "ГИС, системы навигации и карты"}
-    - {id: 640, cat: PC/Phone-Other, desc: " |- Архив (ГИС, системы навигации и карты)"}
-    - {id: 639, cat: PC/Phone-Other, desc: " |- Ищу и предлагаю (ГИС, системы навигации и карты)"}
-    - {id: 638, cat: PC/Phone-Other, desc: " |- Общение (ГИС, системы навигации и карты)"}
-    - {id: 637, cat: PC/Phone-Other, desc: " |- ГИС (Геоинформационные системы)"}
-    - {id: 636, cat: PC/Phone-Other, desc: " |- Карты, снабженные программной оболочкой"}
-    - {id: 633, cat: PC/Phone-Other, desc: " |- Карты прочие (астрономические, исторические, тематические)"}
-    - {id: 632, cat: PC/Phone-Other, desc: " |- Встроенная автомобильная навигация"}
-    - {id: 631, cat: PC/Phone-Other, desc: " |- Garmin"}
-    - {id: 630, cat: PC/Phone-Other, desc: " |- Ozi"}
-    - {id: 629, cat: PC/Phone-Other, desc: " |- TomTom"}
-    - {id: 628, cat: PC/Phone-Other, desc: " |- Navigon / Navitel"}
-    - {id: 627, cat: PC/Phone-Other, desc: " |- Igo"}
-    - {id: 626, cat: PC/Phone-Other, desc: " |- Разное - системы навигации и карты"}
+    - {id: 641, cat: PC/Mobile-Other, desc: "Всё для мобильных телефонов и КПК"}
+    - {id: 651, cat: PC/Mobile-Other, desc: " |- Видео для КПК и Смартфонов"}
+    - {id: 650, cat: PC/Mobile-Other, desc: " |- Приложения для КПК"}
+    - {id: 649, cat: PC/Mobile-Other, desc: " |- Игры для КПК"}
+    - {id: 648, cat: PC/Mobile-Other, desc: " |- Видео для мобильных (3GP, MP4,AVI)"}
+    - {id: 647, cat: PC/Mobile-Other, desc: " |- Софт для работы с телефоном"}
+    - {id: 646, cat: PC/Mobile-Other, desc: " |- Приложения для мобильных"}
+    - {id: 645, cat: PC/Mobile-Other, desc: " |- Игры для мобильных"}
+    - {id: 644, cat: PC/Mobile-Other, desc: " |- Аудио/видео конвертеры в мобильные форматы"}
+    - {id: 643, cat: PC/Mobile-Other, desc: " |- Мелодии"}
+    - {id: 642, cat: PC/Mobile-Other, desc: " |- Сборники"}
+    - {id: 1832, cat: PC/Mobile-Other, desc: " |- Игры android"}
+    - {id: 1833, cat: PC/Mobile-Other, desc: " |- Программы android"}
+    - {id: 656, cat: PC/Mobile-Other, desc: "iPhone, iPod, iPod Touch"}
+    - {id: 676, cat: PC/Mobile-Other, desc: " |- Архив (iPhone, iPod, iPod Touch)"}
+    - {id: 675, cat: PC/Mobile-Other, desc: " |- Аудиокниги (iPhone, iPod, iPod Touch)"}
+    - {id: 674, cat: PC/Mobile-Other, desc: " |- Разное (iPhone, iPod, iPod Touch)"}
+    - {id: 673, cat: PC/Mobile-Other, desc: " |- Программы (iPhone, iPod, iPod Touch)"}
+    - {id: 672, cat: PC/Mobile-Other, desc: " |- Игры (iPhone, iPod, iPod Touch)"}
+    - {id: 671, cat: PC/Mobile-Other, desc: " |- Видео (iPhone, iPod Touch)"}
+    - {id: 670, cat: PC/Mobile-Other, desc: " |- Видео (iPod Classic, Video, Nano)"}
+    - {id: 669, cat: PC/Mobile-Other, desc: " |- Видео (Apple TV)"}
+    - {id: 668, cat: PC/Mobile-Other, desc: " |- Музыка lossless (iPod, iPod Touch, iPhone)"}
+    - {id: 625, cat: PC/Mobile-Other, desc: "ГИС, системы навигации и карты"}
+    - {id: 640, cat: PC/Mobile-Other, desc: " |- Архив (ГИС, системы навигации и карты)"}
+    - {id: 639, cat: PC/Mobile-Other, desc: " |- Ищу и предлагаю (ГИС, системы навигации и карты)"}
+    - {id: 638, cat: PC/Mobile-Other, desc: " |- Общение (ГИС, системы навигации и карты)"}
+    - {id: 637, cat: PC/Mobile-Other, desc: " |- ГИС (Геоинформационные системы)"}
+    - {id: 636, cat: PC/Mobile-Other, desc: " |- Карты, снабженные программной оболочкой"}
+    - {id: 633, cat: PC/Mobile-Other, desc: " |- Карты прочие (астрономические, исторические, тематические)"}
+    - {id: 632, cat: PC/Mobile-Other, desc: " |- Встроенная автомобильная навигация"}
+    - {id: 631, cat: PC/Mobile-Other, desc: " |- Garmin"}
+    - {id: 630, cat: PC/Mobile-Other, desc: " |- Ozi"}
+    - {id: 629, cat: PC/Mobile-Other, desc: " |- TomTom"}
+    - {id: 628, cat: PC/Mobile-Other, desc: " |- Navigon / Navitel"}
+    - {id: 627, cat: PC/Mobile-Other, desc: " |- Igo"}
+    - {id: 626, cat: PC/Mobile-Other, desc: " |- Разное - системы навигации и карты"}
     # All by car and moto
     - {id: 1457, cat: PC, desc: " |- Ремонт и эксплуатация транспортных средств"}
     - {id: 1458, cat: PC, desc: " |- Ищу / Предлагаю (Ремонт и эксплуатация ТС)"}
@@ -618,23 +619,24 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
+      1: created
+      10: seeders
+      7: size
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: striprussian
     type: checkbox
     label: Strip Russian Letters
@@ -657,7 +659,7 @@ search:
     - name: re_replace # S01E01 to Сезон 1 Серии 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "Сезон $1 Серии $2"]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_a: 0
     prev_gold: 0
     prev_silver: 0
@@ -718,15 +720,19 @@ search:
       optional: true
       selector: td[title="Добавлен"] p:first-of-type:not(:contains("-")), td[title="Доданий"] p:first-of-type:not(:contains("-")), td[title="Added"] p:first-of-type:not(:contains("-"))
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "15:04"
+          args: "15:04 -07:00"
     date:
       # 15:04 24-02-19
       optional: true
       selector: td[title="Добавлен"] p:first-of-type:contains("-"), td[title="Доданий"] p:first-of-type:contains("-"), td[title="Added"] p:first-of-type:contains("-")
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "15:04 2-01-06"
+          args: "15:04 2-01-06 -07:00"
     # Russian and Ukranian and English languages are supported
     grabs:
       selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]

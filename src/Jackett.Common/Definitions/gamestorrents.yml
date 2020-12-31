@@ -12,16 +12,16 @@ legacylinks:
   - https://www.gamestorrents.tv/
 
 caps:
-  categories:
-    "juegos-pc": PC/Games
-    "juegos-psp": Console/PSP
-    "juegos-ps3": Console/PS3
-    "juegos-ps4": Console/PS4
-    "juegos-ps2": Console/PS Vita
-    "juegos-mac": PC/Mac
-    "juegos-xbox360": Console/Xbox 360
-    "juegos-wii": Console/Wii
-    "juegos-nds": Console/NDS
+  categorymappings:
+    - {id: juegos-pc, cat: PC/Games, desc: "Games PC"}
+    - {id: juegos-psp, cat: Console/PSP, desc: "Games PSP"}
+    - {id: juegos-ps3, cat: Console/PS3, desc: "Games PS3"}
+    - {id: juegos-ps4, cat: Console/PS4, desc: "Games PS4"}
+    - {id: juegos-ps2, cat: Console/PS Vita, desc: "Games PS2"}
+    - {id: juegos-mac, cat: PC/Mac, desc: "Games Mac"}
+    - {id: juegos-xbox360, cat: Console/XBox 360, desc: "Games Xbox 360"}
+    - {id: juegos-wii, cat: Console/Wii, desc: "Games Wii"}
+    - {id: juegos-nds, cat: Console/NDS, desc: "Games NDS"}
 
   modes:
     search: [q]
@@ -61,8 +61,10 @@ search:
     date:
       selector: td:nth-child(2)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02-01-2006"
+          args: "02-01-2006 -07:00"
     size:
       selector: td:nth-child(3)
       filters:

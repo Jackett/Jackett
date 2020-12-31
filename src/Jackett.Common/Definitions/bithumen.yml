@@ -38,14 +38,15 @@ caps:
     - {id: 38, cat: Audio/Lossless, desc: "Lossless/Eng"}
     - {id: 22, cat: PC, desc: "Programok/egyéb"}
     - {id: 21, cat: PC, desc: "Játékok/Rip/Dox"}
-    - {id: 32, cat: Console/Xbox360, desc: "Játékok/Xbox360"}
+    - {id: 32, cat: Console/XBox 360, desc: "Játékok/Xbox360"}
     - {id: 27, cat: Other, desc: "Klipek"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: takelogin.php
@@ -63,7 +64,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     incldead: 1
 
   rows:
@@ -96,7 +97,7 @@ search:
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    banner:
+    poster:
       selector: a[onmouseover^="bithumen.UI.images.coverShow"]
       attribute: onmouseover
       filters:
@@ -122,7 +123,7 @@ search:
     size:
       selector: td:nth-child(6) > u
     downloadvolumefactor:
-      text: "1"
+      text: 1
     downloadvolumefactor:
       optional: true
       selector: td:nth-child(6) > nobr > font:contains(" × ")
@@ -130,7 +131,7 @@ search:
         - name: replace
           args: ["×", ""]
     uploadvolumefactor:
-      text: "1"
+      text: 1
     uploadvolumefactor:
       optional: true
       selector: td:nth-child(5) > nobr > font:contains(" × ")

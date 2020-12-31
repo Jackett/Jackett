@@ -7,13 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentz2.is/
-  - https://torrentsmirror.com/
-  - https://torrentz.pl/
-  - https://torrentz.unblockit.id/
-  - https://torrentz2.unblocked.bar/
-  - https://torrentz2.proxyportal.pw/
-  - https://torrentz2.uk-unblock.pro/
+  - https://torrentzwealmisr.onion.ly/
+  - https://torrentz.unblockit.dev/
 legacylinks:
   - https://torrentz.unblockit.pro/
   - https://torrentz.unblockit.one/
@@ -25,54 +20,66 @@ legacylinks:
   - https://torrentz.unblockit.me/
   - https://torrentz.unblockit.pw/
   - https://torrentz2.eu/ # domain suspended by registry
-  - https://torrentz2.unblockninja.com/ # only supports search?f=
+  - https://torrentz.unblockit.id/
+  - https://torrentz.unblockit.win/
+  - https://torrentz2.unblocked.bar/
+  - https://torrentz2.proxyportal.pw/
+  - https://torrentz2.uk-unblock.pro/
+  - https://torrentz.unblockit.top/
+  - https://torrentz.unblockit.lat/
+  - https://torrentz2.is/ # Error: 503 Service Unavailable
+  - https://torrentsmirror.com/ # Error: 503 Service Unavailable
+  - https://torrentz.pl/ # Error: 503 Service Unavailable
+  - https://torrentz2.unblockninja.com/ # Error: 503 Service Unavailable
+  - https://torrentz.unblockit.app/ # -> *.dev
+  - https://torrentz2.unblocked.rest/ # Error: 503 Service Unavailable
 
 caps:
-  categories:
-    "video tv": TV
-    "video anime": TV/Anime
-    "video": Movies
-    "movies divx xvid": Movies
-    "video movie dvd": Movies
-    "video movie dvdrip": Movies
-    "video movie hd": Movies/HD
-    "ebook": Books/Ebook
-    "ebook comics": Books/Comics
-    "ebook magazine": Books/Magazines
-    "ebook tutorial": Books/Technical
-    "ebook audio book": Audio/Audiobook
-    "audio": Audio
-    "audio music lossless": Audio/Lossless
-    "audio music mp3": Audio/MP3
-    "application": PC/0day
-    "game": PC/Games
-    "game pc": PC/Games
-    "game xbox": Console/Xbox
-    "game nintendo": Console/NDS
-    "adult": XXX
-    "adult amateur": XXX
-    "adult anal": XXX
-    "adult asian": XXX
-    "adult blowjobs": XXX
-    "adult creampie": XXX
-    "adult double p": XXX
-    "adult fisting": XXX
-    "adult hairy": XXX
-    "adult hentai": XXX
-    "adult interracial": XXX
-    "adult lesbian": XXX
-    "adult milf": XXX
-    "adult squirting": XXX
-    "adult tattoo": XXX
-    "other": Other
-    "images": Other
-
+  categorymappings:
+    - {id: "video tv", cat: TV, desc: "video tv"}
+    - {id: "video anime", cat: TV/Anime, desc: "video anime"}
+    - {id: video, cat: Movies, desc: video}
+    - {id: "movies divx xvid", cat: Movies, desc: "movies divx xvid"}
+    - {id: "video movie dvd", cat: Movies, desc: "video movie dvd"}
+    - {id: "video movie dvdrip", cat: Movies, desc: "video movie dvdrip"}
+    - {id: "video movie hd", cat: Movies/HD, desc: "video movie hd"}
+    - {id: ebook, cat: Books/EBook, desc: ebook}
+    - {id: "ebook comics", cat: Books/Comics, desc: "ebook comics"}
+    - {id: "ebook magazine", cat: Books/Mags, desc: "ebook magazine"}
+    - {id: "ebook tutorial", cat: Books/Technical, desc: "ebook tutorial"}
+    - {id: "ebook audio book", cat: Audio/Audiobook, desc: "ebook audio book"}
+    - {id: audio, cat: Audio, desc: audio}
+    - {id: "audio music lossless", cat: Audio/Lossless, desc: "audio music lossless"}
+    - {id: "audio music mp3", cat: Audio/MP3, desc: "audio music mp3"}
+    - {id: application, cat: PC/0day, desc: application}
+    - {id: game, cat: PC/Games, desc: game}
+    - {id: "game pc", cat: PC/Games, desc: "game pc"}
+    - {id: "game xbox", cat: Console/XBox, desc: "game xbox"}
+    - {id: "game nintendo", cat: Console/NDS, desc: game nintendo"}
+    - {id: adult, cat: XXX, desc: adult}
+    - {id: "adult amateur", cat: XXX, desc: "adult amateur"}
+    - {id: "adult anal", cat: XXX, desc: "adult anal"}
+    - {id: "adult asian", cat: XXX, desc: "adult asian"}
+    - {id: "adult blowjobs", cat: XXX, desc: "adult blowjobs"}
+    - {id: "adult creampie", cat: XXX, desc: "adult creampie"}
+    - {id: "adult double p", cat: XXX, desc: "adult double p"}
+    - {id: "adult fisting", cat: XXX, desc: "adult fisting"}
+    - {id: "adult hairy", cat: XXX, desc: "adult hairy"}
+    - {id: "adult hentai", cat: XXX, desc: "adult hentai"}
+    - {id: "adult interracial", cat: XXX, desc: "adult interracial"}
+    - {id: "adult lesbian", cat: XXX, desc: "adult lesbian"}
+    - {id: "adult milf", cat: XXX, desc: "adult milf"}
+    - {id: "adult squirting", cat: XXX, desc: "adult squirting"}
+    - {id: "adult tattoo", cat: XXX, desc: "adult tattoo"}
+    - {id: other, cat: Other, desc: other}
+    - {id: images, cat: Other, desc: images}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: itorrents-links
@@ -90,19 +97,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "A"
+    default: A
     options:
-      "_": "peers"
-      "N": "rating"
-      "A": "created"
-      "S": "size"
+      _: peers
+      N: rating
+      A: created
+      S: size
 
 search:
   paths:
-    - path: "{{if .Config.filter-verified }}verified{{else}}search{{end}}{{ re_replace .Config.sort \"_\" \"\" }}"
+    - path: "{{ if .Config.filter-verified }}verified{{ else }}search{{ end }}{{ re_replace .Config.sort \"_\" \"\" }}"
   inputs:
-    f: "{{ if .Keywords }}title: {{ .Keywords }}{{else}}{{end}}"
-    safe: "{{ if .Config.filter-safe }}1{{else}}0{{end}}"
+    f: "{{ if .Keywords }}title: {{ .Keywords }}{{ else }}{{ end }}"
+    safe: "{{ if .Config.filter-safe }}1{{ else }}0{{ end }}"
 
   rows:
     selector: "html body #wrap .results dl:has(a)"
@@ -126,22 +133,13 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
-    magfile:
-      text: "{{ .Result.title }}"
-      filters:
-        - name: validfilename
-        - name: urlencode
-    magnet:
+      text: "{{ if .Config.itorrents-links }}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
+    infohash:
       selector: dt a
       attribute: href
       filters:
         - name: regexp
           args: "/(\\w+)"
-        - name: prepend
-          args: "magnet:?xt=urn:btih:"
-        - name: append
-          args: "&dn={{ .Result.magfile }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
     category:
       text: other
     category|noappend:

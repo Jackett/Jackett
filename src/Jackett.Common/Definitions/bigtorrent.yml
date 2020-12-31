@@ -25,11 +25,11 @@ caps:
     - {id: 24534, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 65, cat: Other, desc: "Picture"}
     - {id: 64, cat: Other, desc: "Video"}
-    - {id: 68, cat: Console/Xbox360, desc: "Video Game Console"}
+    - {id: 68, cat: Console/XBox 360, desc: "Video Game Console"}
     - {id: 63, cat: Books, desc: "English Books"}
     - {id: 62, cat: Books, desc: "Hungarian Books"}
     - {id: 74, cat: Audio/Lossless, desc: "Lossless"}
-    - {id: 56, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 56, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 57, cat: PC, desc: "Programs"}
     - {id: 24545, cat: TV/HD, desc: "English HD Series"}
     - {id: 24544, cat: TV/HD, desc: "Hungarian HD Series"}
@@ -44,6 +44,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: login.php
@@ -51,8 +52,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    sent: "yes"
-    returnto: "/"
+    sent: yes
+    returnto: /
   error:
     - selector: div.error
   test:
@@ -66,10 +67,12 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{if .Keywords}}{{ .Keywords }}{{else}}  {{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}  {{ end }}"
+
   rows:
     selector: table#torrent_table > tbody > tr:has(a[href^="browse.php?cat="])
+
   fields:
     category:
       selector: a[href^="browse.php?cat="]
@@ -97,8 +100,7 @@ search:
     date:
       selector: td:nth-child(4)
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

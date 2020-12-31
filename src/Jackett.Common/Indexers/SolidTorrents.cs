@@ -21,9 +21,9 @@ namespace Jackett.Common.Indexers
     {
         private string SearchUrl => SiteLink + "api/v1/search";
 
-        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>
         {
-            {"Accept", "application/json, text/plain, */*"},
+            {"Accept", "application/json, text/plain, */*"}
         };
 
         private readonly int MAX_RESULTS_PER_PAGE = 20;
@@ -35,34 +35,54 @@ namespace Jackett.Common.Indexers
             set => configData = value;
         }
 
-        public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public SolidTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "solidtorrents",
                    name: "Solid Torrents",
                    description: "Solid Torrents is a Public torrent meta-search engine",
                    link: "https://solidtorrents.net/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
 
-            AddCategoryMapping("Audio", TorznabCatType.Audio);
-            AddCategoryMapping("Video", TorznabCatType.Movies);
-            AddCategoryMapping("Image", TorznabCatType.OtherMisc);
-            AddCategoryMapping("Document", TorznabCatType.BooksComics);
-            AddCategoryMapping("eBook", TorznabCatType.BooksEbook);
-            AddCategoryMapping("Program", TorznabCatType.PC0day);
-            AddCategoryMapping("Android", TorznabCatType.PCPhoneAndroid);
-            AddCategoryMapping("Archive", TorznabCatType.Other);
-            AddCategoryMapping("Diskimage", TorznabCatType.PCISO);
-            AddCategoryMapping("Sourcecode", TorznabCatType.MoviesOther);
-            AddCategoryMapping("Database", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("Unknown", TorznabCatType.Other);
+            AddCategoryMapping("Audio", TorznabCatType.Audio, "Audio");
+            AddCategoryMapping("Video", TorznabCatType.Movies, "Video");
+            AddCategoryMapping("Image", TorznabCatType.OtherMisc, "Image");
+            AddCategoryMapping("Document", TorznabCatType.BooksComics, "Document");
+            AddCategoryMapping("eBook", TorznabCatType.BooksEBook, "eBook");
+            AddCategoryMapping("Program", TorznabCatType.PC0day, "Program");
+            AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid, "Android");
+            AddCategoryMapping("Archive", TorznabCatType.Other, "Archive");
+            AddCategoryMapping("Diskimage", TorznabCatType.PCISO, "Diskimage");
+            AddCategoryMapping("Sourcecode", TorznabCatType.MoviesOther, "Sourcecode");
+            AddCategoryMapping("Database", TorznabCatType.MoviesDVD, "Database");
+            AddCategoryMapping("Unknown", TorznabCatType.Other, "Unknown");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -76,20 +96,21 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        private JArray CheckResponse(WebClientStringResult result)
+        private JArray CheckResponse(WebResult result)
         {
+            var results = result.ContentString;
             try
             {
-                var json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+                var json = JsonConvert.DeserializeObject<dynamic>(results);
                 if (!(json is JObject) || !(json["results"] is JArray) || json["results"] == null)
                     throw new Exception("Server error");
                 return (JArray)json["results"];
             }
             catch (Exception e)
             {
-                logger.Error("CheckResponse() Error: ", e.Message);
-                throw new ExceptionWithConfigData(result.Content, ConfigData);
+                OnParseError(results, e);
             }
+            return null;
         }
 
         private async Task<JArray> SendSearchRequest(string searchString, string category, int page)
@@ -103,7 +124,7 @@ namespace Jackett.Common.Indexers
                 {"fuv", "no"}
             };
             var fullSearchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var result = await RequestStringWithCookies(fullSearchUrl, null, null, APIHeaders);
+            var result = await RequestWithCookiesAsync(fullSearchUrl, headers: APIHeaders);
             return CheckResponse(result);
         }
 
@@ -145,16 +166,17 @@ namespace Jackett.Common.Indexers
         private ReleaseInfo MakeRelease(JToken torrent)
         {
             // https://solidtorrents.net/view/5e10885d651df640a70ee826
-            var comments = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
+            var details = new Uri(SiteLink + "view/" + (string)torrent["_id"]);
             var swarm = torrent["swarm"];
             var seeders = (int)swarm["seeders"];
             var publishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now;
             var magnetUri = new Uri((string)torrent["magnet"]);
+
             return new ReleaseInfo
             {
                 Title = (string)torrent["title"],
-                Comments = comments,
-                Guid = comments,
+                Details = details,
+                Guid = details,
                 PublishDate = publishDate,
                 Category = MapTrackerCatToNewznab((string)torrent["category"]),
                 Size = (long)torrent["size"],
@@ -163,8 +185,6 @@ namespace Jackett.Common.Indexers
                 Grabs = (long)swarm["downloads"],
                 InfoHash = (string)torrent["infohash"],
                 MagnetUri = magnetUri,
-                MinimumRatio = 1,
-                MinimumSeedTime = 172800, // 48 hours
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };

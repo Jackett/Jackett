@@ -1,7 +1,7 @@
 ---
 id: cinemamovies
-name: CinemaMovies
-description: "CinemaMovies is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+name: CinemaMovieS_ZT
+description: "CinemaMovieS_ZT is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: pl-pl
 type: private
 encoding: ISO-8859-2
@@ -25,16 +25,17 @@ caps:
     - {id: 25, cat: TV/SD, desc: "TV SD"}
     - {id: 1, cat: PC, desc: "Aplikacje"}
     - {id: 15, cat: PC/Games, desc: "Gry"}
-    - {id: 16, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 16, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 17, cat: Other, desc: "Inne"}
     - {id: 19, cat: Audio, desc: "Muzyka"}
     - {id: 21, cat: Books, desc: "Book"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -44,7 +45,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: drop_polish_prefix
     type: checkbox
     label: Drop the Polish title prefix
@@ -52,19 +56,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "created"
-      "5": "seeders"
-      "3": "size"
-      "1": "title"
+      2: created
+      5: seeders
+      3: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -79,11 +83,11 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 onlyactive 1 all 4 requests 5 onlydead 6 polish 8 free 10 doubleup 11 premier 13 VOD
-    incldead: 1
-    # 0 title 1 descr
-    blah: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 all, 4 requests, 5 onlydead, 6 polish, 8 free, 10 doubleup, 11 premier, 13 VOD
+    incldead: "{{ if .Config.freeleech }}8{{ else }}1{{ end }}"
+    # 0 title, 1 descr
+    blah: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     gatunek: 0
     quality: none
     sort: "{{ .Config.sort }}"
@@ -114,14 +118,13 @@ search:
     download:
       selector: a[href^="download.php/"]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=(.+?) "
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
@@ -135,7 +138,7 @@ search:
       selector: td[width="66%"] > span > span
       filters:
         - name: append
-          args: " +00:00"
+          args: " +02:00" # EET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     size:
@@ -154,4 +157,9 @@ search:
       case:
         img[src="pic/double.png"]: 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # engine n/a

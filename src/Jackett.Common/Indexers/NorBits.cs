@@ -30,8 +30,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string LoginCheckUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
-        private string TorrentCommentUrl => SiteLink + "details.php?id={id}&comonly=1#page1";
-        private string TorrentDescriptionUrl => SiteLink + "details.php?id={id}";
+        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
         private string TorrentDownloadUrl => SiteLink + "download.php?id={id}&passkey={passkey}";
         private bool Latency => ConfigData.Latency.Value;
         private bool DevMode => ConfigData.DevMode.Value;
@@ -42,19 +41,36 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationDataNorbits ConfigData => (ConfigurationDataNorbits)configData;
 
-        public NorBits(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
+        public NorBits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "norbits",
                    name: "NorBits",
                    description: "NorBits is a Norwegian Private site for MOVIES / TV / GENERAL",
                    link: "https://norbits.net/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataNorbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
@@ -126,7 +142,7 @@ namespace Jackett.Common.Indexers
         private async Task DoLogin()
         {
             // Build WebRequest for index
-            var myIndexRequest = new Utils.Clients.WebRequest()
+            var myIndexRequest = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = SiteLink,
@@ -136,7 +152,7 @@ namespace Jackett.Common.Indexers
 
             // Get index page for cookies
             Output("\nGetting index page (for cookies).. with " + SiteLink);
-            var indexPage = await webclient.GetString(myIndexRequest);
+            var indexPage = await webclient.GetResultAsync(myIndexRequest);
 
             // Building login form data
             var pairs = new Dictionary<string, string> {
@@ -145,7 +161,7 @@ namespace Jackett.Common.Indexers
             };
 
             // Build WebRequest for login
-            var myRequestLogin = new Utils.Clients.WebRequest()
+            var myRequestLogin = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = LoginUrl,
@@ -158,10 +174,10 @@ namespace Jackett.Common.Indexers
             // Get login page -- (not used, but simulation needed by tracker security's checks)
             LatencyNow();
             Output("\nGetting login page (user simulation).. with " + LoginUrl);
-            await webclient.GetString(myRequestLogin);
+            await webclient.GetResultAsync(myRequestLogin);
 
             // Build WebRequest for submitting authentification
-            var request = new Utils.Clients.WebRequest()
+            var request = new WebRequest
             {
                 PostData = pairs,
                 Referer = LoginUrl,
@@ -175,7 +191,7 @@ namespace Jackett.Common.Indexers
             // Perform loggin
             LatencyNow();
             Output("\nPerform loggin.. with " + LoginCheckUrl);
-            var response = await webclient.GetString(request);
+            var response = await webclient.GetResultAsync(request);
 
             // Test if we are logged in
             await ConfigureIfOK(response.Cookies, response.Cookies != null && response.Cookies.Contains("uid="), () =>
@@ -204,8 +220,8 @@ namespace Jackett.Common.Indexers
         {
             // Checking ...
             Output("\n-> Checking logged-in state....");
-            var loggedInCheck = await RequestStringWithCookies(SearchUrl);
-            if (!loggedInCheck.Content.Contains("logout.php"))
+            var loggedInCheck = await RequestWithCookiesAsync(SearchUrl);
+            if (!loggedInCheck.ContentString.Contains("logout.php"))
             {
                 // Cookie expired, renew session on provider
                 Output("-> Not logged, login now...\n");
@@ -261,9 +277,9 @@ namespace Jackett.Common.Indexers
                 var request = BuildQuery(searchTerm, query, searchUrl);
 
                 // Getting results & Store content
-                var response = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value);
+                var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
 
                 try
                 {
@@ -344,12 +360,8 @@ namespace Jackett.Common.Indexers
                         Output("Released on: " + date);
 
                         // Torrent Details URL
-                        var detailsLink = new Uri(TorrentDescriptionUrl.Replace("{id}", id.ToString()));
-                        Output("Details: " + detailsLink.AbsoluteUri);
-
-                        // Torrent Comments URL
-                        var commentsLink = new Uri(TorrentCommentUrl.Replace("{id}", id.ToString()));
-                        Output("Comments Link: " + commentsLink.AbsoluteUri);
+                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", id.ToString()));
+                        Output("Details: " + details.AbsoluteUri);
 
                         // Torrent Download URL
                         var passkey = row.QuerySelector("td:nth-of-type(2) > a:nth-of-type(2)").GetAttribute("href");
@@ -368,8 +380,8 @@ namespace Jackett.Common.Indexers
                             Size = size,
                             Files = files,
                             Grabs = completed,
-                            Guid = detailsLink,
-                            Comments = commentsLink,
+                            Guid = details,
+                            Details = details,
                             Link = downloadLink,
                             MinimumRatio = 1,
                             MinimumSeedTime = 172800 // 48 hours
@@ -459,9 +471,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryExec(string request)
+        private async Task<WebResult> QueryExec(string request)
         {
-            WebClientStringResult results;
+            WebResult results;
 
             // Switch in we are in DEV mode with Hard Drive Cache or not
             if (DevMode && CacheMode)
@@ -482,9 +494,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryCache(string request)
+        private async Task<WebResult> QueryCache(string request)
         {
-            WebClientStringResult results;
+            WebResult results;
 
             // Create Directory if not exist
             System.IO.Directory.CreateDirectory(Directory);
@@ -496,11 +508,11 @@ namespace Jackett.Common.Indexers
             var file = Directory + request.GetHashCode() + ".json";
 
             // Checking modes states
-            if (System.IO.File.Exists(file))
+            if (File.Exists(file))
             {
                 // File exist... loading it right now !
                 Output("Loading results from hard drive cache ..." + request.GetHashCode() + ".json");
-                results = JsonConvert.DeserializeObject<WebClientStringResult>(System.IO.File.ReadAllText(file));
+                results = JsonConvert.DeserializeObject<WebResult>(File.ReadAllText(file));
             }
             else
             {
@@ -509,7 +521,7 @@ namespace Jackett.Common.Indexers
 
                 // Cached file didn't exist for our query, writing it right now !
                 Output("Writing results to hard drive cache ..." + request.GetHashCode() + ".json");
-                System.IO.File.WriteAllText(file, JsonConvert.SerializeObject(results));
+                File.WriteAllText(file, JsonConvert.SerializeObject(results));
             }
             return results;
         }
@@ -519,14 +531,14 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<WebClientStringResult> QueryTracker(string request)
+        private async Task<WebResult> QueryTracker(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
             Output("\nQuerying tracker for results....");
 
             // Request our first page
             LatencyNow();
-            var results = await RequestStringWithCookiesAndRetry(request, ConfigData.CookieHeader.Value, SearchUrl, _emulatedBrowserHeaders);
+            var results = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value, RequestType.GET, SearchUrl, null, _emulatedBrowserHeaders);
 
             // Return results from tracker
             return results;
@@ -563,7 +575,7 @@ namespace Jackett.Common.Indexers
                 // Check if there is file older than ... and delete them
                 Output("\nCleaning Provider Storage folder... in progress.");
                 System.IO.Directory.GetFiles(Directory)
-                .Select(f => new System.IO.FileInfo(f))
+                .Select(f => new FileInfo(f))
                 .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
                 .ToList()
                 .ForEach(f =>

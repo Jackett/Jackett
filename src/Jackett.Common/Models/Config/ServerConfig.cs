@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Jackett.Common.Models.Config
@@ -12,9 +13,21 @@ namespace Jackett.Common.Models.Config
         public ServerConfig(RuntimeSettings runtimeSettings)
         {
             observers = new List<IObserver<ServerConfig>>();
+            // Default values
             Port = 9117;
-            AllowExternal = System.Environment.OSVersion.Platform == PlatformID.Unix;
+            AllowExternal = Environment.OSVersion.Platform == PlatformID.Unix;
+            CacheEnabled = true;
+            // Sonarr 15min, Radarr 60min, LazyLibrarian 20min, Readarr 15min, Lidarr = 15min
+            CacheTtl = 2100; // 35 minutes is a reasonable value for all of them and to avoid race conditions
+            CacheMaxResultsPerIndexer = 1000;
             RuntimeSettings = runtimeSettings;
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            if (string.IsNullOrWhiteSpace(ProxyUrl))
+                ProxyType = ProxyType.Disabled;
         }
 
         public int Port { get; set; }
@@ -26,6 +39,10 @@ namespace Jackett.Common.Models.Config
         public bool UpdateDisabled { get; set; }
         public bool UpdatePrerelease { get; set; }
         public string BasePathOverride { get; set; }
+        public bool CacheEnabled { get; set; }
+        public long CacheTtl { get; set; }
+        public long CacheMaxResultsPerIndexer { get; set; }
+        public string FlareSolverrUrl { get; set; }
         public string OmdbApiKey { get; set; }
         public string OmdbApiUrl { get; set; }
 
@@ -36,8 +53,8 @@ namespace Jackett.Common.Models.Config
         [JsonIgnore]
         public RuntimeSettings RuntimeSettings { get; set; }
 
-        public string ProxyUrl { get; set; }
         public ProxyType ProxyType { get; set; }
+        public string ProxyUrl { get; set; }
         public int? ProxyPort { get; set; }
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
@@ -51,34 +68,33 @@ namespace Jackett.Common.Models.Config
                 ? $"{ProxyUsername}:{ProxyPassword}"
                 : null;
 
-        public string GetProxyUrl(bool withCreds = false)
+        public string GetProxyUrl(bool withCreds = true)
         {
             var url = ProxyUrl;
-            if (string.IsNullOrWhiteSpace(url))
-            {
+
+            // if disabled
+            if (ProxyType == ProxyType.Disabled || string.IsNullOrWhiteSpace(url))
                 return null;
-            }
-            //remove protocol from url
-            var index = url.IndexOf("://");
+
+            // remove protocol from url
+            var index = url.IndexOf("://", StringComparison.Ordinal);
             if (index > -1)
-            {
                 url = url.Substring(index + 3);
-            }
+
+            // add port
             url = ProxyPort.HasValue ? $"{url}:{ProxyPort}" : url;
 
+            // add credentials
             var authString = GetProxyAuthString();
             if (withCreds && authString != null)
-            {
                 url = $"{authString}@{url}";
-            }
 
-            if (ProxyType != ProxyType.Http)
+            // add protocol
+            if (ProxyType == ProxyType.Socks4 || ProxyType == ProxyType.Socks5)
             {
                 var protocol = (Enum.GetName(typeof(ProxyType), ProxyType) ?? "").ToLower();
                 if (!string.IsNullOrEmpty(protocol))
-                {
                     url = $"{protocol}://{url}";
-                }
             }
             return url;
         }

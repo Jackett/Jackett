@@ -7,13 +7,10 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.ettvdl.com/
-  - https://ettv.unblockit.id/
+  - https://www.ettvcentral.com/
   - https://ettv.unblockninja.com/
-  - https://ettv.root.yt/
-  - https://ettv.unblocked.bar/
-  - https://ettv.proxyportal.pw/
-  - https://ettv.uk-unblock.pro/
+  - https://ettv.unblockit.dev/
+  - https://ettv.unblocked.rest/
 legacylinks:
   - https://www.ettv.tv/
   - https://www.ettv.to/
@@ -26,6 +23,17 @@ legacylinks:
   - https://ettv.ind-unblock.xyz/
   - https://ettv.unblockit.me/
   - https://ettv.unblockit.pw/
+  - https://ettv.unblockit.id/
+  - https://ettv.unblockit.win/
+  - https://www.ettvdl.com/
+  - https://ettv.unblocked.bar/
+  - https://ettv.proxyportal.pw/
+  - https://ettv.uk-unblock.pro/
+  - https://ettv.root.yt/ # currently redirects to ettvcentral.com
+  - https://www.ettv.be/
+  - https://ettv.unblockit.top/
+  - https://ettv.unblockit.lat/
+  - https://ettv.unblockit.app/
 
 caps:
   categorymappings:
@@ -42,8 +50,8 @@ caps:
     - {id: 75, cat: TV/Anime, desc: "Anime - Others"}
     - {id: 56, cat: Audio/Audiobook, desc: "Books - Audio"}
     - {id: 55, cat: Books/Comics, desc: "Books - Comics"}
-    - {id: 53, cat: Books/Ebook, desc: "Books - Ebooks"}
-    - {id: 54, cat: Books/Magazines, desc: "Books - Magazines"}
+    - {id: 53, cat: Books/EBook, desc: "Books - Ebooks"}
+    - {id: 54, cat: Books/Mags, desc: "Books - Magazines"}
     - {id: 68, cat: Books/Other, desc: "Books - Others"}
     - {id: 90, cat: Books/Other, desc: "Books - Others"}
     - {id: 58, cat: PC/Games, desc: "Games - Android"}
@@ -52,7 +60,7 @@ caps:
     - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
     - {id: 66, cat: Movies/BluRay, desc: "Movies - BluRay Disc/Remux"}
     - {id: 91, cat: Movies, desc: "Movies - Bollywood"}
-    - {id: 65, cat: Movies, desc: "Movies - CAM/TS"}
+    - {id: 65, cat: Movies/SD, desc: "Movies - CAM/TS"}
     - {id: 80, cat: TV/Documentary, desc: "Documentary"}
     - {id: 51, cat: Movies, desc: "Movies - Dubs/Dual Audio"}
     - {id: 67, cat: Movies/DVD, desc: "Movies - DVDR"}
@@ -68,15 +76,15 @@ caps:
     - {id: 69, cat: Audio/Other, desc: "Music - Others"}
     - {id: 95, cat: Other/Misc, desc: "Others - Misc"}
     - {id: 78, cat: Other, desc: "Others - Unsorted"}
-    - {id: 63, cat: PC/Phone-Android, desc: "Software - Android"}
+    - {id: 63, cat: PC/Mobile-Android, desc: "Software - Android"}
     - {id: 64, cat: PC/Mac, desc: "Software - Mac"}
     - {id: 70, cat: PC, desc: "Software - Others"}
-    - {id: 62, cat: PC/0Day, desc: "Software - Windows"}
+    - {id: 62, cat: PC/0day, desc: "Software - Windows"}
     - {id: 94, cat: Books, desc: "Tutorials - Tutorials"}
     - {id: 79, cat: TV/Documentary, desc: "Documentary"}
     - {id: 41, cat: TV/HD, desc: "TV - HD/X264/H264"}
     - {id: 77, cat: TV/HD, desc: "TV - HEVC/x265"}
-    - {id: 5, cat: TV/HD, desc: "TV - SD/X264/H264"}
+    - {id: 5, cat: TV/SD, desc: "TV - SD/X264/H264"}
     - {id: 50, cat: TV/SD, desc: "TV - SD/XVID"}
     - {id: 72, cat: TV/Sport, desc: "TV - Sport"}
     - {id: 7, cat: TV, desc: "TV - TV Packs"}
@@ -87,31 +95,32 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 download:
   selector: a[href^="magnet:?xt="]
   attribute: href
 
 search:
-  path: "{{ if .Keywords }}torrents-search.php{{else}}torrents.php{{end}}"
+  path: "{{ if .Keywords }}torrents-search.php{{ else }}torrents.php{{ end }}"
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"

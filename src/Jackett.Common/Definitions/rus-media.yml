@@ -29,13 +29,13 @@ caps:
     - {id: 992, cat: Movies/3D, desc: "3D Документальные фильмы"}
     - {id: 993, cat: Movies/3D, desc: "3D Спорт"}
     - {id: 994, cat: Movies/3D, desc: "3D Ролики, музыкальное видео, трейлеры к фильмам"}
-    - {id: 33, cat: TV/OTHER, desc: "Сериалы"}
-    - {id: 31, cat: TV/OTHER, desc: "Мультфильмы и мультсериалы"}
+    - {id: 33, cat: TV/Other, desc: "Сериалы"}
+    - {id: 31, cat: TV/Other, desc: "Мультфильмы и мультсериалы"}
     - {id: 201, cat: TV/Anime, desc: "Аниме"}
-    - {id: 32, cat: TV/OTHER, desc: "TV, развлекательные телепередачи и шоу"}
+    - {id: 32, cat: TV/Other, desc: "TV, развлекательные телепередачи и шоу"}
     - {id: 344, cat: TV/Sport, desc: "Спорт"}
     - {id: 542, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
-    - {id: 757, cat: TV/OTHER, desc: "Обучающие видео и видеоуроки"}
+    - {id: 757, cat: TV/Other, desc: "Обучающие видео и видеоуроки"}
     - {id: 34, cat: Audio, desc: "Музыка"}
     - {id: 36, cat: Audio/Other, desc: "Поп музыка"}
     - {id: 222, cat: Audio/Other, desc: "Зарубежный рок"}
@@ -53,20 +53,19 @@ caps:
     - {id: 802, cat: PC, desc: "Операционные системы"}
     - {id: 1009, cat: PC, desc: "Софт"}
     - {id: 479, cat: PC, desc: "Разное"}
-    - {id: 511, cat: PC/Phone-Other, desc: "Всё для мобильных телефонов, КПК и Iphone"}
-    - {id: 983, cat: PC/Phone-Other, desc: "Мобильное видео"}
+    - {id: 511, cat: PC/Mobile-Other, desc: "Всё для мобильных телефонов, КПК и Iphone"}
+    - {id: 983, cat: PC/Mobile-Other, desc: "Мобильное видео"}
     - {id: 606, cat: Other, desc: "Книги, аудиокниги, журналы"}
     - {id: 607, cat: Books, desc: "Книги"}
     - {id: 629, cat: Audio/Audiobook, desc: "Аудиокниги"}
-    - {id: 662, cat: Books/Magazines, desc: "Журналы"}
+    - {id: 662, cat: Books/Mags, desc: "Журналы"}
     - {id: 312, cat: XXX, desc: "Э[ротика] и Pr[o]n"}
     - {id: 536, cat: XXX, desc: "Pr[o]n"}
-    - {id: 782, cat: XXX/Imageset, desc: "Фотографии, картинки, обои"}
+    - {id: 782, cat: XXX/ImageSet, desc: "Фотографии, картинки, обои"}
     - {id: 363, cat: XXX, desc: "Э[ротика]"}
     - {id: 182, cat: Other, desc: "Разное"}
     - {id: 789, cat: Other, desc: "Автомобильный раздел"}
     - {id: 797, cat: Other, desc: "Караоке Онлайн"}
-
     - {id: 137, cat: Other, desc: "Форумы"}
     - {id: 138, cat: Other, desc: "О нашем сайте"}
     - {id: 140, cat: Other, desc: "Новости трекера"}
@@ -277,6 +276,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
@@ -284,17 +284,17 @@ settings:
     label: Sort requested from site
     default: "t"
     options:
-      "t": "created"
-      "ts": "seeders"
-      "sz": "size"
-      "i": "title"
+      t: created
+      ts: seeders
+      sz: size
+      i: title
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 download:
   selector: a[href^="./download/file.php?id="]
@@ -309,7 +309,7 @@ search:
     sf: titleonly
     fp: 1
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sk: "{{ .Config.sort }}"
     sd: "{{ .Config.type }}"
     $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
@@ -398,8 +398,10 @@ search:
           args: ["дек", "Dec"]
         - name: replace
           args: [",", ""]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 2006 15:04"
+          args: "02 Jan 2006 15:04 -07:00"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

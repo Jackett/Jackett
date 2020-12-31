@@ -11,37 +11,36 @@ links:
 caps:
   categorymappings:
     - {id: 186, cat: Books, desc: "E-book"}
-    - {id: 194, cat: Movies/SD, desc: "Film/CAM/Hun"}
+    - {id: 199, cat: Movies/SD, desc: "Film/Bluray/Hun"}
+    - {id: 194, cat: Movies/SD, desc: "Film/CAM"}
     - {id: 60, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
     - {id: 10, cat: Movies/DVD, desc: "Film/DVD-R/Hun"}
     - {id: 20, cat: Movies/DVD, desc: "Film/DVD9/Hun"}
     - {id: 181, cat: Movies/HD, desc: "Film/HD/Eng"}
     - {id: 183, cat: Movies/HD, desc: "Film/HD/Hun"}
+    - {id: 200, cat: Movies/HD, desc: "Film/UHD/Hun"}
     - {id: 192, cat: Movies/HD, desc: "Film/x264/Eng"}
     - {id: 190, cat: Movies/HD, desc: "Film/x264/Hun"}
     - {id: 70, cat: Movies/SD, desc: "Film/XviD/Eng"}
     - {id: 30, cat: Movies/SD, desc: "Film/XviD/Hun"}
-    - {id: 140, cat: PC/Games, desc: "Játék/DOX"}
-    - {id: 130, cat: PC/Games, desc: "Játék/PCiso"}
-    - {id: 160, cat: Console/PS3, desc: "Játék/PS2-PS3"}
-    - {id: 189, cat: Console/PSP, desc: "Játék/PSP"}
-    - {id: 184, cat: Console/Wii, desc: "Játék/Wii"}
-    - {id: 150, cat: Console/Xbox, desc: "Játék/XBOX (XBOX360)"}
+    - {id: 150, cat: Console, desc: "Játék/Konzol"}
+    - {id: 130, cat: PC/Games, desc: "Játék/PC"}
     - {id: 182, cat: Audio/Lossless, desc: "Lossless"}
     - {id: 90, cat: Audio/MP3, desc: "Mp3/Eng"}
     - {id: 50, cat: Audio/MP3, desc: "Mp3/Hun"}
     - {id: 100, cat: Audio/Video, desc: "Music-Video"}
-    - {id: 180, cat: PC/Phone-Other, desc: "Program/Mobil"}
+    - {id: 180, cat: PC/Mobile-Other, desc: "Program/Mobil"}
     - {id: 170, cat: PC/0day, desc: "Program/PC"}
     - {id: 80, cat: TV, desc: "Sorozat/Eng"}
     - {id: 40, cat: TV, desc: "Sorozat/Hun"}
     - {id: 110, cat: XXX, desc: "XXX"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -53,19 +52,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "5"
+    default: 5
     options:
-      "5": "created"
-      "8": "seeders"
-      "6": "size"
-      "2": "title"
+      5: created
+      8: seeders
+      6: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -81,8 +80,8 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}https://www.imdb.com/title/{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 both 1 only active 2 only dead
+    search: "{{ if .Query.IMDBID }}https://www.imdb.com/title/{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    # 0 both, 1 only active, 2 only dead
     incldead: 0
     onlyname: 1
     onlyname2: true
@@ -115,11 +114,9 @@ search:
       attribute: href
     imdb:
       selector: a[href*="imdb.com/title/tt"]
-      optional: true
       attribute: href
-    banner:
+    poster:
       selector: a[rel^="prettyPhoto["]
-      optional: true
       attribute: href
     files:
       selector: td:nth-child(4)
@@ -159,4 +156,9 @@ search:
         img[src="pic/double.png"]: 2
         img[src="pic/doubledouble2.png"]: 4
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TBDev & XBTT

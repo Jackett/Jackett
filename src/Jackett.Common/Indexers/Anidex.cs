@@ -23,16 +23,24 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Anidex : BaseWebIndexer
     {
-        public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "anidex",
                    name: "Anidex",
                    description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
                    link: "https://anidex.info/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
@@ -58,8 +66,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
 
             // Configure the language select option
-            var languageSelect = new SelectItem(new Dictionary<string, string>()
-            {
+            var languageSelect = new SelectItem(new Dictionary<string, string>
+                {
                 {"1", "English"},
                 {"2", "Japanese"},
                 {"3", "Polish"},
@@ -96,8 +104,8 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("languageid", languageSelect);
 
             // Configure the sort selects
-            var sortBySelect = new SelectItem(new Dictionary<string, string>()
-            {
+            var sortBySelect = new SelectItem(new Dictionary<string, string>
+                {
                 {"upload_timestamp", "created"},
                 {"seeders", "seeders"},
                 {"size", "size"},
@@ -106,7 +114,7 @@ namespace Jackett.Common.Indexers
             { Name = "Sort by", Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
-            var orderSelect = new SelectItem(new Dictionary<string, string>()
+            var orderSelect = new SelectItem(new Dictionary<string, string>
                 {
                     {"desc", "Descending"},
                     {"asc", "Ascending"}
@@ -140,30 +148,32 @@ namespace Jackett.Common.Indexers
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "group", "0" }, // No group
+                { "group", "0" } // No group
             };
 
             // Get specified categories
+            // AniDex throws errors when categories are url encoded. See issue #9727
             var searchCategories = MapTorznabCapsToTrackers(query);
+            var catString = "";
             if (searchCategories.Count > 0)
-                queryParameters.Add("id", string.Join(",", searchCategories));
+                catString = "&id=" + string.Join(",", searchCategories);
 
             // Make search request
-            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
-            var response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString);
+            var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
-            if (response.Status == System.Net.HttpStatusCode.Forbidden)
+            if (response.Status == HttpStatusCode.Forbidden)
             {
                 await ConfigureDDoSGuardCookie();
-                response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
+                response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
             }
 
-            if (response.Status != System.Net.HttpStatusCode.OK)
+            if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             // Search seems to have been a success so parse it
-            return ParseResult(response.Content);
+            return ParseResult(response.ContentString);
         }
 
         private IEnumerable<ReleaseInfo> ParseResult(string response)
@@ -191,10 +201,8 @@ namespace Jackett.Common.Indexers
                         release.Seeders = ParseIntValueFromRow(r, nameof(release.Seeders), "td:nth-child(9)");
                         release.Peers = ParseIntValueFromRow(r, nameof(release.Peers), "td:nth-child(10)") + release.Seeders;
                         release.Grabs = ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
-                        release.Comments = ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
-                        release.Guid = release.Comments;
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
+                        release.Details = ParseValueFromRow(r, nameof(release.Details), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
+                        release.Guid = release.Details;
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
@@ -216,8 +224,8 @@ namespace Jackett.Common.Indexers
         private async Task ConfigureDDoSGuardCookie()
         {
             const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
-            var response = await RequestStringWithCookies(ddosPostUrl, string.Empty);
-            if (response.Status != System.Net.HttpStatusCode.OK)
+            var response = await RequestWithCookiesAsync(ddosPostUrl, string.Empty);
+            if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"Unexpected DDOS Guard response: Status: {response.Status}", WebExceptionStatus.ProtocolError);
             if (response.IsRedirect)
                 throw new WebException($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}", WebExceptionStatus.UnknownError);

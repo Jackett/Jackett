@@ -27,20 +27,28 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.cinecalidad.is/",
-            "https://www.cinecalidad.to/",
-            "https://www.cinecalidad.eu/"
+            "https://www.cinecalidad.eu/",
+            "https://www.cinecalidad.im/"
         };
 
-        public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.cinecalidad.to/"
+        };
+
+        public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
                    description: "Películas Full HD en Castellano y Latino Dual.",
                    link: "https://www.cinecalidad.is/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
@@ -49,13 +57,13 @@ namespace Jackett.Common.Indexers
 
             var language = new SelectItem(new Dictionary<string, string>
                 {
-                    {"castellano", "Spanish Castellano"},
-                    {"latino", "Spanish Latino"}
+                    {"castellano", "Castilian Spanish"},
+                    {"latino", "Latin American Spanish"}
                 })
-                {
-                    Name = "Select language",
-                    Value = "castellano"
-                };
+            {
+                Name = "Select language",
+                Value = "castellano"
+            };
             configData.AddDynamic("language", language);
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
@@ -100,11 +108,11 @@ namespace Jackett.Common.Indexers
             {
                 var pageParam = page > 1 ? $"page/{page}/" : "";
                 var searchUrl = string.Format(templateUrl, pageParam);
-                var response = await RequestStringWithCookiesAndRetry(searchUrl);
+                var response = await RequestWithCookiesAndRetryAsync(searchUrl);
                 var pageReleases = ParseReleases(response, query);
 
                 // publish date is not available in the torrent list, but we add a relative date so we can sort
-                foreach(var release in pageReleases)
+                foreach (var release in pageReleases)
                 {
                     release.PublishDate = lastPublishDate;
                     lastPublishDate = lastPublishDate.AddMinutes(-1);
@@ -120,36 +128,43 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var results = await RequestStringWithCookies(link.ToString());
+            var results = await RequestWithCookiesAsync(link.ToString());
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
-                var preotectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
-                preotectedLink = SiteLink + preotectedLink.TrimStart('/');
+                var dom = parser.ParseDocument(results.ContentString);
+                var protectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
+                if (protectedLink.Contains("/ouo.io/"))
+                {
+                    // protected link =>
+                    // https://ouo.io/qs/qsW6rCh4?s=https://www.cinecalidad.is/protect/v2.php?i=A8--9InL&title=High+Life+%282018%29
+                    var linkParts = protectedLink.Split('=');
+                    protectedLink = protectedLink.Replace(linkParts[0] + "=", "");
+                }
+                protectedLink = GetAbsoluteUrl(protectedLink);
 
-                results = await RequestStringWithCookies(preotectedLink);
-                dom = parser.ParseDocument(results.Content);
+                results = await RequestWithCookiesAsync(protectedLink);
+                dom = parser.ParseDocument(results.ContentString);
                 var magnetUrl = dom.QuerySelector("a[href^=magnet]").GetAttribute("href");
                 return await base.Download(new Uri(magnetUrl));
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return null;
         }
 
-        private List<ReleaseInfo> ParseReleases(WebClientStringResult response, TorznabQuery query)
+        private List<ReleaseInfo> ParseReleases(WebResult response, TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
 
                 var rows = dom.QuerySelectorAll("div.home_post_cont");
                 foreach (var row in rows)
@@ -160,26 +175,24 @@ namespace Jackett.Common.Indexers
                     var title = qImg.GetAttribute("title");
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
-                    title += _language.Equals("castellano") ? " SPANiSH" : " LATiN-SPANiSH";
-                    title += " DUAL 1080p BDRip x264";
+                    title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
+                    title += " 1080p BDRip x264";
 
-                    var banner = new Uri(qImg.GetAttribute("src"));
-                    var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
+                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
+                    var link = new Uri(GetAbsoluteUrl(row.QuerySelector("a").GetAttribute("href")));
 
                     var release = new ReleaseInfo
                     {
                         Title = title,
                         Link = link,
-                        Comments = link,
+                        Details = link,
                         Guid = link,
-                        Category = new List<int> {TorznabCatType.MoviesHD.ID},
-                        BannerUrl = banner,
+                        Category = new List<int> { TorznabCatType.MoviesHD.ID },
+                        Poster = poster,
                         Size = 2147483648, // 2 GB
                         Files = 1,
                         Seeders = 1,
                         Peers = 2,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1
                     };
@@ -189,7 +202,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -211,6 +224,14 @@ namespace Jackett.Common.Indexers
             titleWords = titleWords.ToArray();
 
             return queryWords.All(word => titleWords.Contains(word));
+        }
+
+        private string GetAbsoluteUrl(string url)
+        {
+            url = url.Trim();
+            if (!url.StartsWith("http"))
+                return SiteLink + url.TrimStart('/');
+            return url;
         }
     }
 

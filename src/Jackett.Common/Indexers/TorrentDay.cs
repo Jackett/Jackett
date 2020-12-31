@@ -46,20 +46,36 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "torrentday",
                    name: "TorrentDay",
                    description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
                    link: "https://tday.love/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie(
                        "Make sure you get the cookies from the same torrent day domain as configured above."))
         {
@@ -101,7 +117,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
             AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
             AddCategoryMapping(10, TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping(9, TorznabCatType.ConsoleXbox360, "Xbox-360");
+            AddCategoryMapping(9, TorznabCatType.ConsoleXBox360, "Xbox-360");
 
             AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
@@ -115,7 +131,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
 
             AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
-            AddCategoryMapping(15, TorznabCatType.XXXPacks, "XXX/Packs");
+            AddCategoryMapping(15, TorznabCatType.XXXPack, "XXX/Packs");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -155,7 +171,7 @@ namespace Jackett.Common.Indexers
             else
                 searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding);
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Check for being logged out
             if (results.IsRedirect)
@@ -166,15 +182,15 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var rows = JsonConvert.DeserializeObject<dynamic>(results.Content);
+                var rows = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
 
                 foreach (var row in rows)
                 {
                     var title = (string)row.name;
-                    if ((!query.IsImdbQuery || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(title))
+                    if ((!query.IsImdbQuery || !TorznabCaps.MovieSearchImdbAvailable) && !query.MatchQueryStringAND(title))
                         continue;
                     var torrentId = (long)row.t;
-                    var comments = new Uri(SiteLink + "details.php?id=" + torrentId);
+                    var details = new Uri(SiteLink + "details.php?id=" + torrentId);
                     var seeders = (int)row.seeders;
                     var imdbId = (string)row["imdb-id"];
                     var downloadMultiplier = (double?)row["download-multiplier"] ?? 1;
@@ -185,8 +201,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(row.c.ToString()),
@@ -207,7 +223,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
             return releases;
         }

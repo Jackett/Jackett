@@ -6,7 +6,9 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentv.org/
+  - http://torrentv.org/
+legacylinks:
+  - https://torrentv.org/ # invalid certificate
 
 caps:
   categories:
@@ -20,11 +22,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site (Applies only to Keyword searches)
-    default: "td-1"
+    default: td-1
     options:
-      "td-1": "created"
-      "s-1": "seeders"
-      "na-1": "title"
+      td-1: created
+      s-1: seeders
+      na-1: title
 
 download:
   selector: a[href^="magnet:?xt="]
@@ -32,7 +34,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{ .Config.sort }}/{{else}}new.html{{end}}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/{{ .Config.sort }}/{{ else }}new.html{{ end }}"
 
   rows:
     selector: div.grid_4
@@ -48,7 +50,7 @@ search:
     download:
       selector: h3 a
       attribute: href
-    banner:
+    poster:
       selector: img[src^="/pic/"]
       attribute: src
     subcat:

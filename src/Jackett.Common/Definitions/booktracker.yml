@@ -10,10 +10,11 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Books/Ebook, desc: "Ebooks"}
+    - {id: 1, cat: Books/EBook, desc: "Ebooks"}
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -25,19 +26,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -70,8 +71,12 @@ search:
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
+    filters:
+      - name: andmatch
 
   fields:
+    category:
+      text: 1
     title:
       selector: a.tLink
     details:
@@ -80,8 +85,6 @@ search:
     download:
       selector: a[href^="./download.php?id="]
       attribute: href
-    category:
-      text: 1
     size:
       selector: td:nth-child(6) > u
     seeders:

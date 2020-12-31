@@ -19,7 +19,7 @@ caps:
     - {id: 24, cat: Movies/SD, desc: "Movies/XVID"}
     - {id: 16, cat: Movies, desc: "Old Movies"}
     - {id: 15, cat: Movies, desc: "Movies Mobile"}
-    - {id: 54, cat: Movies/WEBDL, desc: "Movies/WEB-DL"}
+    - {id: 54, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
     - {id: 56, cat: TV/Documentary, desc: "Documentary"}
     - {id: 18, cat: Movies, desc: "Movie Packs"}
     - {id: 32, cat: Movies/UHD, desc: "Movies/4K-RO"}
@@ -31,7 +31,7 @@ caps:
     - {id: 59, cat: Movies/SD, desc: "Movies/Cam-Ro"}
     - {id: 25, cat: Movies/SD, desc: "Movies/XVID-Ro"}
     - {id: 17, cat: Movies, desc: "Old Movies Ro"}
-    - {id: 55, cat: Movies/WEBDL, desc: "Movies/WEB-DL Ro"}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies/WEB-DL Ro"}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro"}
     - {id: 62, cat: Movies/3D, desc: "Movies/3D-RO"}
     - {id: 19, cat: Movies, desc: "Movie Packs Ro"}
@@ -40,7 +40,7 @@ caps:
     - {id: 13, cat: TV/HD, desc: "HDTV"}
     - {id: 14, cat: TV/HD, desc: "HDTV-Ro"}
     - {id: 28, cat: Audio, desc: "Music"}
-    - {id: 51, cat: PC/Phone-Android, desc: "Android Apps & Games"}
+    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps & Games"}
     - {id: 26, cat: PC/0day, desc: "Software"}
     - {id: 30, cat: PC/ISO, desc: "Games PC-ISO"}
     - {id: 33, cat: PC/Games, desc: "Game Packs"}
@@ -55,10 +55,11 @@ caps:
     - {id: 27, cat: XXX, desc: "XXX"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -67,22 +68,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -95,20 +100,16 @@ login:
   test:
     path: browse.php
 
-ratio:
-  path: browse.php
-  selector: font:contains("Ratio:") ~ font
-
 search:
   paths:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 name 1 genre 2 descr
-    genre: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
-    # 0 active 1 incldead 2 onlydead 3 free 4 double
-    incldead: 1
+    genre: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 double
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -127,7 +128,7 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
       filters:
@@ -139,8 +140,10 @@ search:
     date:
       selector: td:nth-child(3)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-200615:04:05"
+          args: "02-01-200615:04:05 -07:00"
     size:
       selector: td:nth-child(4)
     grabs:
@@ -161,4 +164,9 @@ search:
       case:
         "span:contains(\"2XUP\")": 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 36 hours (as seconds = 36 x 60 x 60)
+      text: 129600
 # engine n/a

@@ -8,6 +8,27 @@ encoding: UTF-8
 links:
   - http://www.totallykids.tv/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
 
+caps:
+  categorymappings:
+    - {id: 1, cat: TV, desc: "TV Kids"}
+    - {id: 24, cat: TV, desc: "TV Teens"}
+    - {id: 2, cat: TV, desc: "TV Family"}
+    - {id: 15, cat: TV, desc: "TV Educational"}
+    - {id: 16, cat: Movies, desc: "Movies Family"}
+    - {id: 23, cat: Movies, desc: "Movies Teen"}
+    - {id: 5, cat: Audio, desc: "Music"}
+    - {id: 6, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 4, cat: Books/Comics, desc: "Comics"}
+    - {id: 7, cat: Books/EBook, desc: "E-Books"}
+    - {id: 8, cat: PC/Games, desc: "Games"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
 settings:
   - name: username
     type: text
@@ -19,42 +40,26 @@ settings:
     type: info
     label: "Search results"
     default: "Only the <b>xBtit_Default</b> style is supported with this indexer.<br />For best results, increase the torrents number in your profile to 100.<br />Default is 15."
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "data"
+    default: data
     options:
-      "data": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "filename": "title"
+      data: created
+      seeds: seeders
+      size: size
+      filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
-
-caps:
-  categorymappings:
-    - {id: 5, cat: Audio, desc: "Music"}
-    - {id: 6, cat: Audio/Audiobook, desc: "Audiobooks"}
-    - {id: 4, cat: Books/Comics, desc: "Comics"}
-    - {id: 7, cat: Books/EBook, desc: "E-Books"}
-    - {id: 16, cat: Movies, desc: "Family Movies"}
-    - {id: 23, cat: Movies, desc: "Teen Movies"}
-    - {id: 8, cat: PC/Games, desc: "Games"}
-    - {id: 1, cat: TV, desc: "Kids"}
-    - {id: 2, cat: TV, desc: "Family"}
-    - {id: 15, cat: TV, desc: "Educational"}
-    - {id: 24, cat: TV, desc: "Teens"}
-
-  modes:
-    search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
-    music-search: [q]
+      DESC: desc
+      ASC: asc
 
 login:
   path: index.php?page=login
@@ -75,35 +80,34 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     # 0=title, 1=title&descr, 2=descr
-    options: "{{ if .Query.IMDBID }}2{{else}}0{{end}}"
-    # 0 all 1 activeonly 2 deadonly
+    options: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table.lista tr td table.lista tr:has(a[href^="index.php?page=torrent-details"])
+    selector: "table.lista tr td table.lista tr:has(a[href^=\"index.php?page=torrent-details\"]){{ if .Config.freeleech }}:has(img[src=\"gold/gold.gif\"]){{ else }}{{ end }}"
 
   fields:
-    title:
-      selector: td a[href^="index.php?page=torrent-details"]
-    details:
-      selector: td a[href^="index.php?page=torrent-details"]
-      attribute: href
     category:
       selector: td a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
         - name: querystring
           args: category
+    title:
+      selector: td a[href^="index.php?page=torrent-details"]
+    details:
+      selector: td a[href^="index.php?page=torrent-details"]
+      attribute: href
     download:
       selector: td a[href^="download.php"]
       attribute: href
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
       filters:
@@ -112,7 +116,7 @@ search:
           args: [" http://anonym.to?javascript:popdetails('", ""]
         - name: replace
           args: ["');", ""]
-    banner:
+    poster:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: onmouseover
       filters:
@@ -137,8 +141,10 @@ search:
       filters:
         - name: re_replace
           args: ["[,]|[\\s+]|[//\xa0],\\/g", " "]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "January 02  2006  03:04:05 PM"
+          args: "January 02  2006  03:04:05 PM -07:00"
     seeders:
       selector: td:nth-child(6)
     leechers:
@@ -151,4 +157,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # xbtit

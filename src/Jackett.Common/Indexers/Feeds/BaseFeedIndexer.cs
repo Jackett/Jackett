@@ -18,8 +18,8 @@ namespace Jackett.Common.Indexers.Feeds
 
         protected BaseFeedIndexer(string link, string id, string name, string description,
                                   IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                  ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
-                                  string downloadBase = null)
+                                  ConfigurationData configData, IProtectionService p, ICacheService cs,
+                                  TorznabCapabilities caps = null, string downloadBase = null)
             : base(id: id,
                    name: name,
                    description: description,
@@ -29,6 +29,7 @@ namespace Jackett.Common.Indexers.Feeds
                    client: client,
                    logger: logger,
                    p: p,
+                   cacheService: cs,
                    configData: configData,
                    downloadBase: downloadBase)
         {
@@ -55,9 +56,9 @@ namespace Jackett.Common.Indexers.Feeds
                 Type = RequestType.GET,
                 Encoding = Encoding
             };
-            var result = await webclient.GetString(request);
+            var result = await webclient.GetResultAsync(request);
 
-            var results = ParseFeedForResults(result.Content);
+            var results = ParseFeedForResults(result.ContentString);
 
             return results;
         }

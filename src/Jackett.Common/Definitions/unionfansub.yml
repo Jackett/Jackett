@@ -28,7 +28,7 @@ caps:
     - {id: 7, cat: TV/Anime, desc: "Manga"}
     - {id: 8, cat: TV/Anime, desc: "Manga/Hentai"}
     - {id: 17, cat: Books, desc: "Novelas"}
-    - {id: 12, cat: TV/OTHER, desc: "Otros"}
+    - {id: 12, cat: TV/Other, desc: "Otros"}
     - {id: 11, cat: TV, desc: "Programas"}
 
   modes:
@@ -36,6 +36,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -47,19 +48,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: http://foro.unionfansub.com/member.php
@@ -81,7 +82,7 @@ search:
   path: browse.php
   inputs:
     $raw: "{{ range .Categories }}&c{{.}}=1{{end}}"
-    # 0 active 1 incldead 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -91,17 +92,17 @@ search:
     selector: .tlist tr:not(:first-child)
 
   fields:
-    title:
-      selector: td:nth-child(2) a
-    details:
-      selector: td:nth-child(2) a
-      attribute: href
     category:
       selector: td:nth-child(1) a
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: td:nth-child(2) a
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
     download:
       selector: td:nth-child(2) a
       attribute: href

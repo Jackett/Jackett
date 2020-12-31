@@ -29,52 +29,73 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public GimmePeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public GimmePeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "gimmepeers",
                    name: "GimmePeers",
                    description: "Formerly ILT",
                    link: "https://www.gimmepeers.com/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.TVAnime);
-            AddCategoryMapping(5, TorznabCatType.BooksEbook);
-            AddCategoryMapping(10, TorznabCatType.PCGames);
-            AddCategoryMapping(11, TorznabCatType.ConsolePS3);
-            AddCategoryMapping(11, TorznabCatType.ConsolePS4);
-            AddCategoryMapping(11, TorznabCatType.ConsolePSP);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXBOX360DLC);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXbox);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXbox360);
-            AddCategoryMapping(12, TorznabCatType.ConsoleXboxOne);
-            AddCategoryMapping(6, TorznabCatType.Audio);
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(3, TorznabCatType.BooksOther, "Tutorials");
+            AddCategoryMapping(5, TorznabCatType.BooksEBook, "Ebooks");
+            AddCategoryMapping(29, TorznabCatType.AudioAudiobook, "Abooks");
+            AddCategoryMapping(9, TorznabCatType.ConsoleNDS, "Game-NIN");
+            AddCategoryMapping(10, TorznabCatType.PCGames, "Game-WIN");
+            AddCategoryMapping(11, TorznabCatType.ConsolePS3, "Game-PS");
+            AddCategoryMapping(12, TorznabCatType.ConsoleXBox, "Game-XBOX");
+            AddCategoryMapping(7, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(2, TorznabCatType.PCMac, "App-MAC");
+            AddCategoryMapping(4, TorznabCatType.PC0day, "App-WIN");
+            AddCategoryMapping(27, TorznabCatType.PC, "App-LINUX");
+            AddCategoryMapping(6, TorznabCatType.PCMobileOther, "Mobile");
+            AddCategoryMapping(8, TorznabCatType.Other, "Other");
 
-            AddCategoryMapping(21, TorznabCatType.TV);
-            AddCategoryMapping(20, TorznabCatType.TVSD);
-            AddCategoryMapping(21, TorznabCatType.TVHD);
-            AddCategoryMapping(22, TorznabCatType.TV);
-            AddCategoryMapping(24, TorznabCatType.TVSD);
-            AddCategoryMapping(25, TorznabCatType.TVHD);
+            AddCategoryMapping(20, TorznabCatType.TVHD, "TV-HD");
+            AddCategoryMapping(21, TorznabCatType.TVSD, "TV-SD");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "TV-x265");
+            AddCategoryMapping(23, TorznabCatType.TV, "TV-Packs");
+            AddCategoryMapping(24, TorznabCatType.TVSD, "TV-Retail-SD");
+            AddCategoryMapping(25, TorznabCatType.TVHD, "TV-Retail-HD");
+            AddCategoryMapping(28, TorznabCatType.TVSport, "TV-Sports");
 
-            AddCategoryMapping(50, TorznabCatType.XXX);
-            AddCategoryMapping(49, TorznabCatType.XXXDVD);
-            AddCategoryMapping(50, TorznabCatType.XXXx264);
-
-            AddCategoryMapping(13, TorznabCatType.Movies3D);
-            AddCategoryMapping(14, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(15, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(16, TorznabCatType.MoviesHD);
-            AddCategoryMapping(17, TorznabCatType.Movies);
-            AddCategoryMapping(19, TorznabCatType.Movies);
-            AddCategoryMapping(26, TorznabCatType.MoviesUHD);
+            AddCategoryMapping(13, TorznabCatType.Movies3D, "Movie-3D");
+            AddCategoryMapping(14, TorznabCatType.MoviesBluRay, "Movie-Bluray");
+            AddCategoryMapping(15, TorznabCatType.MoviesDVD, "Movie-DVDR");
+            AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie-x264");
+            AddCategoryMapping(17, TorznabCatType.MoviesHD, "Movie-x265");
+            AddCategoryMapping(18, TorznabCatType.Movies, "Movie-Packs");
+            AddCategoryMapping(19, TorznabCatType.MoviesSD, "Movie-XVID");
+            AddCategoryMapping(26, TorznabCatType.MoviesUHD, "Movie-4K");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -87,13 +108,13 @@ namespace Jackett.Common.Indexers
                 { "login", "Log in!" }
             };
 
-            var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(SiteLink, string.Empty);
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var messageEl = dom.QuerySelector("body > div");
                 var errorMessage = messageEl.TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -122,15 +143,15 @@ namespace Jackett.Common.Indexers
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: BrowseUrl);
             if (response.IsRedirect)
             {
                 // re login
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl, null, BrowseUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: BrowseUrl);
             }
 
-            var results = response.Content;
+            var results = response.ContentString;
             try
             {
                 var parser = new HtmlParser();
@@ -145,7 +166,7 @@ namespace Jackett.Common.Indexers
 
                     var link = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(1)");
                     release.Guid = new Uri(SiteLink + link.GetAttribute("href"));
-                    release.Comments = release.Guid;
+                    release.Details = release.Guid;
                     release.Title = link.TextContent.Trim();
                     release.Description = release.Title;
 

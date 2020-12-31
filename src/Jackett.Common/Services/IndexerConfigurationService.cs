@@ -41,46 +41,39 @@ namespace Jackett.Common.Services
             File.Delete(configFilePath);
             var configFilePathBak = configFilePath + ".bak";
             if (File.Exists(configFilePathBak))
-            {
                 File.Delete(configFilePathBak);
-            }
         }
 
         public void Load(IIndexer indexer)
         {
             var configFilePath = GetIndexerConfigFilePath(indexer.Id);
-            if (File.Exists(configFilePath))
+            if (!File.Exists(configFilePath))
+                return;
+            try
             {
-                try
-                {
-                    var fileStr = File.ReadAllText(configFilePath);
-                    var jsonString = JToken.Parse(fileStr);
-                    indexer.LoadFromSavedConfiguration(jsonString);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex, "Failed loading configuration for {0}, trying backup", indexer.DisplayName);
-                    var configFilePathBak = configFilePath + ".bak";
-                    if (File.Exists(configFilePathBak))
+                var fileStr = File.ReadAllText(configFilePath);
+                var jsonString = JToken.Parse(fileStr);
+                indexer.LoadFromSavedConfiguration(jsonString);
+            }
+            catch (Exception e)
+            {
+                logger.Error($"Failed loading configuration for {indexer.DisplayName}, trying backup\n{e}");
+                var configFilePathBak = configFilePath + ".bak";
+                if (File.Exists(configFilePathBak))
+                    try
                     {
-                        try
-                        {
-                            var fileStrBak = File.ReadAllText(configFilePathBak);
-                            var jsonStringBak = JToken.Parse(fileStrBak);
-                            indexer.LoadFromSavedConfiguration(jsonStringBak);
-                            logger.Info("Successfully loaded backup config for {0}", indexer.DisplayName);
-                            indexer.SaveConfig();
-                        }
-                        catch (Exception exbak)
-                        {
-                            logger.Error(exbak, "Failed loading backup configuration for {0}, you must reconfigure this indexer", indexer.DisplayName);
-                        }
+                        var fileStrBak = File.ReadAllText(configFilePathBak);
+                        var jsonStringBak = JToken.Parse(fileStrBak);
+                        indexer.LoadFromSavedConfiguration(jsonStringBak);
+                        logger.Info($"Successfully loaded backup config for {indexer.DisplayName}");
+                        indexer.SaveConfig();
                     }
-                    else
+                    catch (Exception e2)
                     {
-                        logger.Error(ex, "Failed loading backup configuration for {0} (no backup available), you must reconfigure this indexer", indexer.DisplayName);
+                        logger.Error($"Failed loading backup configuration for {indexer.DisplayName}, you must reconfigure this indexer\n{e2}");
                     }
-                }
+                else
+                    logger.Error($"Failed loading backup configuration for {indexer.DisplayName} (no backup available), you must reconfigure this indexer\n{e}");
             }
         }
 
@@ -88,23 +81,19 @@ namespace Jackett.Common.Services
         {
             lock (configWriteLock)
             {
-                var uID = Guid.NewGuid().ToString("N");
+                var uId = Guid.NewGuid().ToString("N");
                 var configFilePath = GetIndexerConfigFilePath(indexer.Id);
                 var configFilePathBak = configFilePath + ".bak";
-                var configFilePathTmp = configFilePath + "." + uID + ".tmp";
+                var configFilePathTmp = configFilePath + "." + uId + ".tmp";
                 var content = obj.ToString();
 
-                logger.Debug(string.Format("Saving new config file: {0}", configFilePathTmp));
+                logger.Debug($"Saving new config file: {configFilePathTmp}");
 
                 if (string.IsNullOrWhiteSpace(content))
-                {
-                    throw new Exception(string.Format("New config content for {0} is empty, please report this bug.", indexer.Id));
-                }
+                    throw new Exception($"New config content for {indexer.Id} is empty, please report this bug.");
 
                 if (content.Contains("\x00"))
-                {
-                    throw new Exception(string.Format("New config content for {0} contains 0x00, please report this bug. Content: {1}", indexer.Id, content));
-                }
+                    throw new Exception($"New config content for {indexer.Id} contains 0x00, please report this bug. Content: {content}");
 
                 // make sure the config directory exists
                 if (!Directory.Exists(configService.GetIndexerConfigDir()))
@@ -114,23 +103,19 @@ namespace Jackett.Common.Services
                 File.WriteAllText(configFilePathTmp, content);
                 var fileInfo = new FileInfo(configFilePathTmp);
                 if (fileInfo.Length == 0)
-                {
-                    throw new Exception(string.Format("New config file {0} is empty, please report this bug.", configFilePathTmp));
-                }
+                    throw new Exception($"New config file {configFilePathTmp} is empty, please report this bug.");
 
                 // create backup file
                 File.Delete(configFilePathBak);
                 if (File.Exists(configFilePath))
-                {
                     try
                     {
                         File.Move(configFilePath, configFilePathBak);
                     }
-                    catch (IOException ex)
+                    catch (IOException e)
                     {
-                        logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePath, configFilePathBak, ex.ToString()));
+                        logger.Error($"Error while moving {configFilePath} to {configFilePathBak}\n{e}");
                     }
-                }
 
                 // replace the actual config file
                 File.Delete(configFilePath);
@@ -138,9 +123,9 @@ namespace Jackett.Common.Services
                 {
                     File.Move(configFilePathTmp, configFilePath);
                 }
-                catch (IOException ex)
+                catch (IOException e)
                 {
-                    logger.Error(string.Format("Error while moving {0} to {1}: {2}", configFilePathTmp, configFilePath, ex.ToString()));
+                    logger.Error($"Error while moving {configFilePathTmp} to {configFilePath}\n{e}");
                 }
             }
         }

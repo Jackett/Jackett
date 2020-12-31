@@ -41,14 +41,6 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: incldead
-    type: select
-    label: "Search Torrents that are:"
-    default: "0"
-    options:
-      "0": "Active"
-      "1": "Including Dead"
-      "2": "Only Dead"
   - name: onlyfree
     type: checkbox
     label: Show only Free torrents
@@ -79,12 +71,12 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # title descr genre all
     searchin: title
-    incldead: "{{ .Config.incldead }}"
-    only_free: "{{ if .Config.onlyfree }}1{{else}}0{{end}}"
+    incldead: 1
+    only_free: "{{ if .Config.onlyfree }}1{{ else }}0{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
@@ -92,6 +84,7 @@ search:
   rows:
     selector: tr.highlight, tr.browse_color, tr.freeleech_color, tr[id^="kdescr"]
     after: 1
+
   fields:
     category:
       selector: a[href^="browse.php?cat="]
@@ -107,9 +100,8 @@ search:
           args: [">", "1"]
         - name: replace
           args: ["</b", ""]
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
-      optional: true
       attribute: onmouseover
       filters:
         - name: regexp
@@ -129,8 +121,10 @@ search:
       selector: td:nth-of-type(7):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-of-type(8)
     grabs:
@@ -153,3 +147,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# engine tbd

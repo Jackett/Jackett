@@ -16,16 +16,16 @@ caps:
     - {id: 14, cat: Movies/HD, desc: "HD Видео"}
     - {id: 7, cat: Other, desc: "Images"}
     - {id: 15, cat: PC/Mac, desc: "Mac"}
-    - {id: 26, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 26, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 24, cat: TV, desc: "TV Show"}
     - {id: 1, cat: PC, desc: "WaReZ"}
     - {id: 10, cat: XXX, desc: "XXX"}
     - {id: 9, cat: Audio/Audiobook, desc: "Аудиокниги"}
     - {id: 3, cat: PC/Games, desc: "Игры/GameZ"}
     - {id: 2, cat: Audio/Video, desc: "Клипы/Концерты"}
-    - {id: 8, cat: Books/Magazines, desc: "Книги/Журналы"}
+    - {id: 8, cat: Books/Mags, desc: "Книги/Журналы"}
     - {id: 20, cat: Audio/Lossless, desc: "Музыка/Lossless"}
-    - {id: 11, cat: Audio/Mp3, desc: "Музыка/Mp3"}
+    - {id: 11, cat: Audio/MP3, desc: "Музыка/Mp3"}
     - {id: 13, cat: TV, desc: "Мультфильмы"}
     - {id: 12, cat: Other, desc: "Разное/Miscellaneous"}
     - {id: 4, cat: Movies/DVD, desc: "Фильмы DVD"}
@@ -36,6 +36,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -44,22 +45,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -80,8 +85,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0=active 1=incl dead 2=only dead 3=FREE
-    incldead: 1
+    # 0=active, 1=incl dead, 2=only dead, 3=FREE
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -138,8 +143,10 @@ search:
           args: ["ноя", "Nov"]
         - name: replace
           args: ["дек", "Dec"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "15:04:0502 Jan 2006"
+          args: "15:04:0502 Jan 2006 -07:00"
     seeders:
       selector: td:nth-child(8)
     leechers:
@@ -153,4 +160,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.5
 # engine n/a

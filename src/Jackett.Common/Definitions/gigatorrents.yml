@@ -33,7 +33,7 @@ caps:
     - {id: 52, cat: Books, desc: "Könyvek/Hun"}
     - {id: 33, cat: Console, desc: "Konzol"}
     - {id: 1, cat: Audio/Lossless, desc: "Lossless"}
-    - {id: 55, cat: PC/Phone-Other, desc: "Mobil/PDA"}
+    - {id: 55, cat: PC/Mobile-Other, desc: "Mobil/PDA"}
     - {id: 77, cat: PC/ISO, desc: "PC/ISO"}
     - {id: 78, cat: PC/0day, desc: "PC/Rip"}
     - {id: 85, cat: TV/HD, desc: "Sorozat HD/Eng"}
@@ -50,6 +50,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -61,19 +62,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -120,12 +121,10 @@ search:
       selector: a[href^="/details.php?id="]
       attribute: href
     imdb:
-      selector: a[href^="http://anonym.to/?http://imdb.com/title/"]
-      optional: true
+      selector: a[href^="imdb.com/title/tt"]
       attribute: href
-    banner:
+    poster:
       selector: img.imdb-info
-      optional: true
       attribute: data-url
     category:
       selector: a[href^="/torrentek.php?cat="]
@@ -166,6 +165,11 @@ search:
       filters:
         - name: trim
           args: "x"
+    minimumratio:
+      text: 0.5
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     date:
       selector: td:nth-child(2)
       remove: a

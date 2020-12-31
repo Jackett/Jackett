@@ -11,8 +11,8 @@ links:
 caps:
   categorymappings:
     # LIBREDICOLA
-    - {id: 13, cat: Books/Magazines, desc: "Giornali e Riviste"}
-    - {id: 15, cat: Books/Ebook, desc: "E-Book"}
+    - {id: 13, cat: Books/Mags, desc: "Giornali e Riviste"}
+    - {id: 15, cat: Books/EBook, desc: "E-Book"}
     - {id: 16, cat: Books/Comics, desc: "Fumetti"}
     - {id: 70, cat: Books, desc: "Manuali e Guide"}
     - {id: 72, cat: Audio/Audiobook, desc: "Audio Libri"}
@@ -61,7 +61,7 @@ caps:
     - {id: 47, cat: PC/Games, desc: "PC Games"}
     - {id: 48, cat: Console/PS3, desc: "PC Giochi PS2-PS3"}
     - {id: 49, cat: Console/Wii, desc: "PC Giochi Nintendo Wii"}
-    - {id: 50, cat: Console/Xbox, desc: "PC Giochi Xbox"}
+    - {id: 50, cat: Console/XBox, desc: "PC Giochi Xbox"}
     - {id: 51, cat: Console/PSP, desc: "PC Giochi PSP"}
     - {id: 52, cat: Console/3DS, desc: "PC Giochi DS-DS3"}
     # SOFTWARE
@@ -70,8 +70,8 @@ caps:
     - {id: 69, cat: PC, desc: "PC Portable"}
     - {id: 56, cat: PC, desc: "PC Linux"}
     # CELLULARI-PALMARI
-    - {id: 68, cat: PC/Phone-IOS, desc: "IPhone-IPad"}
-    - {id: 71, cat: PC/Phone-Android, desc: "Android APP"}
+    - {id: 68, cat: PC/Mobile-iOS, desc: "IPhone-IPad"}
+    - {id: 71, cat: PC/Mobile-Android, desc: "Android APP"}
     - {id: 74, cat: Other, desc: "Varie"}
     - {id: 75, cat: Other, desc: "Immagini Wallpaper"}
 
@@ -80,6 +80,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -88,22 +89,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -117,6 +122,7 @@ login:
     pwd: "{{ .Config.password }}"
   error:
     - selector: div.error
+    - selector: span[style="color:#FF0000;"]
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -140,10 +146,10 @@ search:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
     page: torrents
-    # 0 all 1 activeonly 2 deadonly
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 name 1 name&descr 2 descr 3 uploader 5 gold 6 silver 7 bronze
-    options: 0
+    # 0 name, 1 name&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
   keywordsfilters:
@@ -199,8 +205,7 @@ search:
     download:
       selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:
@@ -209,8 +214,10 @@ search:
     date:
       selector: td:nth-last-child(8)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     seeders:
       selector: td:nth-last-child(7)
     leechers:
@@ -238,4 +245,6 @@ search:
       filters:
         - name: replace
           args: ["x Upload Multiplier", ""]
+    minimumratio:
+      text: 0.5
 # xbtitFM 3.0.00

@@ -12,7 +12,7 @@ legacylinks:
 
 caps:
   categories:
-    1: Other
+    Other: Other
 
   modes:
     search: [q]
@@ -20,18 +20,19 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info
+  - name: info_8000
     type: info
-    default: Torrent4You does not use categories. In your software Indexer settings, set the category to 7000.
+    label: About Torrent4You Categories
+    default: Torrent4You does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created"
+    default: created
     options:
-      "created": "created"
-      "seed": "seeders"
-      "size": "size"
-      "title": "name"
+      created: created
+      seed: seeders
+      size: size
+      title: name
 
 download:
   selector: form[action^="../torrents/"]
@@ -39,14 +40,14 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{else}}browse.php?sort={{ .Config.sort }}{{end}}"
+    - path: "{{ if .Keywords }}search.php?s={{ .Keywords }}&sort={{ .Config.sort }}{{ else }}browse.php?sort={{ .Config.sort }}{{ end }}"
 
   rows:
     selector: table.tb4 > tbody > tr:has(form)
 
   fields:
     category:
-      text: 1
+      text: Other
     title:
       selector: td:nth-child(1) a
     details:

@@ -35,10 +35,12 @@ search:
   paths:
     - path: torrents-search.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{if .Keywords}}\"{{.Keywords}}\"{{else}}{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ if .Keywords }}\"{{ .Keywords }}\"{{ else }}{{ end }}"
+
   rows:
     selector: table > tbody > tr:has(a[href^="torrents.php?cat="])
+
   fields:
     category:
       text: 1
@@ -60,8 +62,7 @@ search:
     leechers:
       selector: td:nth-child(9)
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

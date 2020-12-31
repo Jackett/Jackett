@@ -23,7 +23,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: div.moviefilm
@@ -43,7 +43,7 @@ search:
       selector: a > span
       attribute: class
       optional: true
-    banner:
+    poster:
       selector: img
       attribute: src
     date:

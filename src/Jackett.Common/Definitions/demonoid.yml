@@ -8,9 +8,11 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.demonoid.is/
-  - https://demonoid.unblockit.id/
-legacylinks:
   - https://www.dnoid.to/
+  - https://www.dnoid.pw/
+  - https://demonoid.unblockit.dev/
+  - https://demonoid.torrentbay.to/
+legacylinks:
   - https://demonoid.unblockit.pro/
   - https://demonoid.unblockit.one/
   - https://demonoid.unblockit.me/
@@ -20,16 +22,21 @@ legacylinks:
   - https://dnoid.uk-unblock.xyz/
   - https://dnoid.ind-unblock.xyz/
   - https://demonoid.unblockit.pw/
+  - https://demonoid.unblockit.id/
+  - https://demonoid.unblockit.win/
+  - https://demonoid.unblockit.top/
+  - https://demonoid.unblockit.lat/
+  - https://demonoid.unblockit.app/
 
 caps:
   categorymappings:
     # fetch these from https://www.demonoid.is/cached/torrent_categories_script.js?v5
     # Applications
-    - {id: 1, cat: PC/Phone-Android, desc: "Applications Android"}
-    - {id: 2, cat: PC/Phone-IOS, desc: "Applications Iphone / Ipod touch"}
+    - {id: 1, cat: PC/Mobile-Android, desc: "Applications Android"}
+    - {id: 2, cat: PC/Mobile-iOS, desc: "Applications Iphone / Ipod touch"}
     - {id: 3, cat: PC, desc: "Applications Linux"}
     - {id: 4, cat: PC/Mac, desc: "Applications Mac"}
-    - {id: 5, cat: PC/Phone-Other, desc: "Applications Mobile phone"}
+    - {id: 5, cat: PC/Mobile-Other, desc: "Applications Mobile phone"}
     - {id: 6, cat: PC, desc: "Applications PocketPC"}
     - {id: 7, cat: PC/0day, desc: "Applications Windows"}
     # Audio Books
@@ -68,39 +75,39 @@ caps:
     - {id: 40, cat: Audio/Audiobook, desc: "Audio Books Western"}
     - {id: 41, cat: Audio/Audiobook, desc: "Audio Books Young Adult"}
     # Books
-    - {id: 42, cat: Books/Ebook, desc: "Books Action and Adventure"}
-    - {id: 43, cat: Books/Ebook, desc: "Books Biography"}
-    - {id: 44, cat: Books/Ebook, desc: "Books Childrens"}
-    - {id: 45, cat: Books/Ebook, desc: "Books Computers and Technology"}
-    - {id: 46, cat: Books/Ebook, desc: "Books Contemporary"}
-    - {id: 47, cat: Books/Ebook, desc: "Books Cooking"}
-    - {id: 48, cat: Books/Ebook, desc: "Books Crafts and Hobbies"}
-    - {id: 49, cat: Books/Ebook, desc: "Books Educational"}
-    - {id: 50, cat: Books/Ebook, desc: "Books Fantasy"}
-    - {id: 51, cat: Books/Ebook, desc: "Books Fiction"}
-    - {id: 52, cat: Books/Ebook, desc: "Books General"}
-    - {id: 53, cat: Books/Ebook, desc: "Books History"}
-    - {id: 54, cat: Books/Ebook, desc: "Books Horror"}
-    - {id: 55, cat: Books/Ebook, desc: "Books Humor"}
-    - {id: 56, cat: Books/Ebook, desc: "Books Literary"}
-    - {id: 57, cat: Books/Magazines, desc: "Books Magazine"}
-    - {id: 58, cat: Books/Ebook, desc: "Books Mainstream"}
-    - {id: 59, cat: Books/Ebook, desc: "Books Medicine and Health"}
-    - {id: 60, cat: Books/Ebook, desc: "Books Mystery and Suspense"}
-    - {id: 61, cat: Books/Ebook, desc: "Books Newspaper"}
-    - {id: 62, cat: Books/Ebook, desc: "Books Nonfiction"}
-    - {id: 63, cat: Books/Ebook, desc: "Books Other"}
-    - {id: 64, cat: Books/Ebook, desc: "Books Paranormal"}
-    - {id: 65, cat: Books/Ebook, desc: "Books Religion"}
-    - {id: 66, cat: Books/Ebook, desc: "Books Romance"}
-    - {id: 67, cat: Books/Ebook, desc: "Books RPG"}
-    - {id: 68, cat: Books/Ebook, desc: "Books Sci-Fi"}
-    - {id: 69, cat: Books/Ebook, desc: "Books Self-help"}
-    - {id: 70, cat: Books/Ebook, desc: "Books Suspense"}
-    - {id: 71, cat: Books/Ebook, desc: "Books Textbook"}
-    - {id: 72, cat: Books/Ebook, desc: "Books Thriller"}
-    - {id: 73, cat: Books/Ebook, desc: "Books Western"}
-    - {id: 74, cat: Books/Ebook, desc: "Books Young Adult"}
+    - {id: 42, cat: Books/EBook, desc: "Books Action and Adventure"}
+    - {id: 43, cat: Books/EBook, desc: "Books Biography"}
+    - {id: 44, cat: Books/EBook, desc: "Books Childrens"}
+    - {id: 45, cat: Books/EBook, desc: "Books Computers and Technology"}
+    - {id: 46, cat: Books/EBook, desc: "Books Contemporary"}
+    - {id: 47, cat: Books/EBook, desc: "Books Cooking"}
+    - {id: 48, cat: Books/EBook, desc: "Books Crafts and Hobbies"}
+    - {id: 49, cat: Books/EBook, desc: "Books Educational"}
+    - {id: 50, cat: Books/EBook, desc: "Books Fantasy"}
+    - {id: 51, cat: Books/EBook, desc: "Books Fiction"}
+    - {id: 52, cat: Books/EBook, desc: "Books General"}
+    - {id: 53, cat: Books/EBook, desc: "Books History"}
+    - {id: 54, cat: Books/EBook, desc: "Books Horror"}
+    - {id: 55, cat: Books/EBook, desc: "Books Humor"}
+    - {id: 56, cat: Books/EBook, desc: "Books Literary"}
+    - {id: 57, cat: Books/Mags, desc: "Books Magazine"}
+    - {id: 58, cat: Books/EBook, desc: "Books Mainstream"}
+    - {id: 59, cat: Books/EBook, desc: "Books Medicine and Health"}
+    - {id: 60, cat: Books/EBook, desc: "Books Mystery and Suspense"}
+    - {id: 61, cat: Books/EBook, desc: "Books Newspaper"}
+    - {id: 62, cat: Books/EBook, desc: "Books Nonfiction"}
+    - {id: 63, cat: Books/EBook, desc: "Books Other"}
+    - {id: 64, cat: Books/EBook, desc: "Books Paranormal"}
+    - {id: 65, cat: Books/EBook, desc: "Books Religion"}
+    - {id: 66, cat: Books/EBook, desc: "Books Romance"}
+    - {id: 67, cat: Books/EBook, desc: "Books RPG"}
+    - {id: 68, cat: Books/EBook, desc: "Books Sci-Fi"}
+    - {id: 69, cat: Books/EBook, desc: "Books Self-help"}
+    - {id: 70, cat: Books/EBook, desc: "Books Suspense"}
+    - {id: 71, cat: Books/EBook, desc: "Books Textbook"}
+    - {id: 72, cat: Books/EBook, desc: "Books Thriller"}
+    - {id: 73, cat: Books/EBook, desc: "Books Western"}
+    - {id: 74, cat: Books/EBook, desc: "Books Young Adult"}
     # Comics
     - {id: 75, cat: Books/Comics, desc: "Comics Action / Adventure"}
     - {id: 76, cat: Books/Comics, desc: "Comics Crime"}
@@ -122,7 +129,7 @@ caps:
     - {id: 91, cat: Console/Other, desc: "Games GameCube"}
     - {id: 92, cat: PC, desc: "Games Linux"}
     - {id: 93, cat: PC/Mac, desc: "Games Mac"}
-    - {id: 94, cat: PC/Phone-Other, desc: "Games Mobile phone"}
+    - {id: 94, cat: PC/Mobile-Other, desc: "Games Mobile phone"}
     - {id: 95, cat: Console/NDS, desc: "Games Nintendo DS"}
     - {id: 96, cat: Console/Other, desc: "Games Palm"}
     - {id: 97, cat: Console/PS3, desc: "Games Playstation"}
@@ -130,7 +137,7 @@ caps:
     - {id: 99, cat: Console/PSP, desc: "Games PSP"}
     - {id: 100, cat: Console/Wii, desc: "Games Wii / Wii U"}
     - {id: 101, cat: PC/Games, desc: "Games Windows"}
-    - {id: 102, cat: Console/Xbox, desc: "Games XBox"}
+    - {id: 102, cat: Console/XBox, desc: "Games XBox"}
     # Anime
     - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
     - {id: 103, cat: TV/Anime, desc: "Anime Action"}
@@ -273,10 +280,11 @@ caps:
     # cat 7 misc has no subcats
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -289,13 +297,13 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: _
     options:
-      "_": "created"
-      "S": "seeders desc"
-      "s": "seeders asc"
-      "B": "size desc"
-      "b": "size asc"
+      _: created
+      S: seeders desc
+      s: seeders asc
+      B: size desc
+      b: size asc
 
 login:
   method: cookie
@@ -314,15 +322,15 @@ search:
     - path: files/
   inputs:
     $raw: "{{ range .Categories }}c{{.}}&{{end}}"
-    # 0 seeded 1 unseeded 2 both
+    # 0 seeded, 1 unseeded, 2 both
     seeded: 2
     # 0 all
     quality: 0
-    # 0 Demonoid 1 External 2 Both
+    # 0 Demonoid, 1 External, 2 Both
     external: 2
     # search in titles only
-    to: "{{ if .Query.IMDBID }}{{else}}1{{end}}"
-    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    to: "{{ if .Query.IMDBID }}{{ else }}1{{ end }}"
+    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
     # does not return imdb link in results
 

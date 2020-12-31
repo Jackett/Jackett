@@ -1,6 +1,6 @@
 ---
 id: RockBox
-name: RockBox Rock/Metal Tracker
+name: RockBox
 description: "RockBox Semi-Private site dedicated to HEAVY METAL/ROCK MUSIC. This definition is for the English site."
 language: en-us
 type: semi-private
@@ -10,11 +10,11 @@ links:
 
 caps:
   categories:
-    "Music": Audio
+    Music: Audio
 
   modes:
     search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, album, artist]
 
 settings:
   - name: username
@@ -26,19 +26,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "data"
+    default: data
     options:
-      "data": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "filename": "title"
+      data: created
+      seeds: seeders
+      size: size
+      filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: login.php
@@ -48,9 +48,7 @@ login:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
   error:
-    - selector: div.errorSummary
-      message:
-        selector: div.errorSummary ul li
+    - selector: div > font[color="#FF0000"]
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -59,10 +57,10 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 all 1 active 2 dead 3 seedwanted
+    search: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 all, 1 active, 2 dead, 3 seedwanted
     active: 0
-    # 0 title 1 title+descr 2 title+subgen
+    # 0 title, 1 title+descr, 2 title+subgen
     options: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -71,12 +69,11 @@ search:
     selector: table.lista[width="100%"] tbody tr:has(a[href^="download.php?id="])
 
   fields:
+    category:
+      text: Music
     title:
       selector: td a[href^="details.php?id="]
     details:
-      selector: td a[href^="details.php?id="]
-      attribute: href
-    comments:
       selector: td a[href^="details.php?id="]
       attribute: href
     download:
@@ -88,8 +85,10 @@ search:
       selector: td:nth-child(6):contains("/")
       optional: true
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     date:
       # 1 hour ago, 2 days ago, 3 weeks ago etc
       selector: td:nth-child(6):not(:contains("/"))
@@ -104,10 +103,13 @@ search:
       selector: td:nth-child(10)
     grabs:
       selector: td:nth-child(11)
-    category:
-      text: Music
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
       text: 1
-# BtitTracker (customised)
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# BtitTracker 1.3.1 customised

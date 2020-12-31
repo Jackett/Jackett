@@ -45,7 +45,7 @@ namespace Jackett.Server.Controllers
 
                 if (!indexer.IsConfigured)
                 {
-                    logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
+                    logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
                     return Forbid("This indexer is not configured.");
                 }
 
@@ -91,7 +91,7 @@ namespace Jackett.Server.Controllers
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error downloading " + indexerID + " " + path);
+                logger.Error($"Error downloading. indexer: {indexerID} path: {path}\n{e}");
                 return NotFound();
             }
         }

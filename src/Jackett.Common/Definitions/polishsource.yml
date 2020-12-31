@@ -23,10 +23,11 @@ caps:
     - {id: 13, cat: XXX, desc: "XXX"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -38,19 +39,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -77,17 +78,17 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 onlyactive 1 all 2 onlydead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    # 0 onlyactive, 1 all, 2 onlydead
     incldead: 1
-    # 0 all 1 scene 2 notscene 3 internal
+    # 0 all, 1 scene, 2 notscene, 3 internal
     scene: 0
-    # 0 all 1 Polish 2 non-Polish 4 subtitled
+    # 0 all, 1 Polish, 2 non-Polish, 4 subtitled
     pl: 0
     # subcat blank=all
     sub: ""
-    # title both nfo
-    search_in: "{{ if .Query.IMDBID }}nfo{{else}}title{{end}}"
+    # title, both, nfo
+    search_in: "{{ if .Query.IMDBID }}nfo{{ else }}title{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -134,13 +135,12 @@ search:
         - name: prepend
           args: "{{ .Result.description }}"
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
     date:
       selector: td:nth-child(4)
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
@@ -158,4 +158,7 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a

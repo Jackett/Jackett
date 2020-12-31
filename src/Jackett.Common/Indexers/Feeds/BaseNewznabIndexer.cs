@@ -17,8 +17,8 @@ namespace Jackett.Common.Indexers.Feeds
     {
         protected BaseNewznabIndexer(string link, string id, string name, string description,
                                      IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                     ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null,
-                                     string downloadBase = null)
+                                     ConfigurationData configData, IProtectionService p, ICacheService cs,
+                                     TorznabCapabilities caps = null, string downloadBase = null)
             : base(id: id,
                    name: name,
                    description: description,
@@ -28,6 +28,7 @@ namespace Jackett.Common.Indexers.Feeds
                    client: client,
                    logger: logger,
                    p: p,
+                   cs: cs,
                    configData: configData,
                    downloadBase: downloadBase)
         {
@@ -54,7 +55,7 @@ namespace Jackett.Common.Indexers.Feeds
                 Title = item.FirstValue("title"),
                 Guid = new Uri(item.FirstValue("guid")),
                 Link = new Uri(item.FirstValue("link")),
-                Comments = new Uri(item.FirstValue("comments")),
+                Details = new Uri(item.FirstValue("comments")),
                 PublishDate = DateTime.Parse(item.FirstValue("pubDate")),
                 Category = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
                 Size = size,
@@ -63,7 +64,7 @@ namespace Jackett.Common.Indexers.Feeds
                 Seeders = seeders,
                 Peers = peers,
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
-                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value),
+                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value)
             };
             return release;
         }

@@ -54,6 +54,19 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
 
 login:
   path: login.php
@@ -78,14 +91,17 @@ search:
     searchin: title
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
   keywordsfilters:
     # by default the search returns unordered resuts of an OR query making the results useless in many cases, adding + to the keywords improves the situation (Issue #1859)
     - name: re_replace # replace special characters with " +"
       args: ["[^\\w\\d]+", " +"]
     - name: prepend
       args: "+"
+
   rows:
     selector: table > tbody > tr.tt
+
   fields:
     title:
       selector: a[href^="details.php?id="]
@@ -101,8 +117,7 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
       filters:
@@ -124,7 +139,23 @@ search:
     leechers:
       selector: td:nth-child(10)
     date:
-      selector: td:nth-child(6)
+      # Today<br/>06:07 AM
+      # Yesterday<br/>12:47 AM
+      selector: td:nth-child(6):contains("day")
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
+    date:
+      # Oct 1 2020<br/>07:56 AM
+      selector: td:nth-child(6):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM -07:00"
     downloadvolumefactor:
       case:
         "a.info > b:contains(\"Free\")": 0

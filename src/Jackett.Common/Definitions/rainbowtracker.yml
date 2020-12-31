@@ -49,7 +49,7 @@ caps:
     - {id: 26, cat: TV, desc: "Сериалы - Маленькая Британия / Little Britain "}
     - {id: 21, cat: TV, desc: "Сериалы - Молокососы / Skins. season "}
     - {id: 15, cat: TV, desc: "Сериалы - Близкие друзья / Queer as folk "}
-    - {id: 25, cat: XXX/Imageset, desc: "Фото, Картинки"}
+    - {id: 25, cat: XXX/ImageSet, desc: "Фото, Картинки"}
     - {id: 10, cat: XXX, desc: "Pron "}
     - {id: 16, cat: XXX, desc: "Pron - Pron-Фильмы"}
     - {id: 86, cat: XXX, desc: "Pron - Pron-Фильмы (азиатские)"}
@@ -89,19 +89,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
   path: forum/profile.php?mode=register
@@ -121,7 +121,7 @@ search:
   paths:
     - path: forum/tracker.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 1
     prev_a: 0
     prev_vote: 0
@@ -224,10 +224,17 @@ search:
           args: ["Ноя", "Nov"]
         - name: replace
           args: ["Дек", "Dec"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "15:04 2-Jan-06"
+          args: "15:04 2-Jan-06 -07:00"
     downloadvolumefactor:
-      text: 0
+      case:
+        img[src="images/tor_gold.gif"]: 0
+        img[src="images/tor_silver.gif"]: 0.5
+        "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.3
 # TorrentPier

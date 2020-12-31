@@ -10,6 +10,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -79,8 +80,6 @@ namespace Jackett.Common.Indexers.Abstract
             switch(row.Value<string>("type"))
             {
                 case "Movie":
-                    if (query.Categories.Contains(TorznabCatType.Movies.ID))
-                        cats.Add(TorznabCatType.Movies.ID);
                     cats.Add(resolution switch
                     {
                         var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
@@ -89,8 +88,6 @@ namespace Jackett.Common.Indexers.Abstract
                     });
                     break;
                 case "TV-Show":
-                    if (query.Categories.Contains(TorznabCatType.TV.ID))
-                        cats.Add(TorznabCatType.TV.ID);
                     cats.Add(resolution switch
                     {
                         var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
@@ -109,7 +106,7 @@ namespace Jackett.Common.Indexers.Abstract
 
         protected AvistazTracker(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 IProtectionService p, TorznabCapabilities caps)
+                                 IProtectionService p, ICacheService cs, TorznabCapabilities caps)
             : base(id: id,
                    name: name,
                    description: description,
@@ -119,6 +116,7 @@ namespace Jackett.Common.Indexers.Abstract
                    client: client,
                    logger: logger,
                    p: p,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithPID(@"You have to check 'Enable RSS Feed' in 'My Account',
 without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
         {
@@ -148,8 +146,8 @@ without this configuration the torrent download does not work.<br/>You can find 
                 { "password", configData.Password.Value.Trim() },
                 { "pid", configData.Pid.Value.Trim() }
             };
-            var result = await PostDataWithCookies(AuthUrl, body, headers: AuthHeaders);
-            var json = JObject.Parse(result.Content);
+            var result = await RequestWithCookiesAsync(AuthUrl, method: RequestType.POST, data: body, headers: AuthHeaders);
+            var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
             if (_token == null)
                 throw new Exception(json.Value<string>("message"));
@@ -161,21 +159,21 @@ without this configuration the torrent download does not work.<br/>You can find 
 
             var qc = GetSearchQueryParameters(query);
             var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
+            var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
             {
                 await RenewalTokenAsync();
-                response = await RequestStringWithCookiesAndRetry(episodeSearchUrl, headers: GetSearchHeaders());
+                response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error: {response.Content}");
+                throw new Exception($"Unknown error: {response.ContentString}");
 
             try
             {
-                var jsonContent = JToken.Parse(response.Content);
+                var jsonContent = JToken.Parse(response.ContentString);
                 foreach (var row in jsonContent.Value<JArray>("data"))
                 {
-                    var comments = new Uri(row.Value<string>("url"));
+                    var details = new Uri(row.Value<string>("url"));
                     var link = new Uri(row.Value<string>("download"));
                     var publishDate = DateTime.ParseExact(row.Value<string>("created_at"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
@@ -213,8 +211,8 @@ without this configuration the torrent download does not work.<br/>You can find 
                         Title = row.Value<string>("file_name"),
                         Link = link,
                         InfoHash = row.Value<string>("info_hash"),
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Category = cats,
                         PublishDate = publishDate,
                         Description = description,
@@ -237,7 +235,7 @@ without this configuration the torrent download does not work.<br/>You can find 
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
             return releases;
         }
