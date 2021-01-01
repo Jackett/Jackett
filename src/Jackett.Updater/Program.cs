@@ -373,8 +373,8 @@ namespace Jackett.Updater
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/seedpeer.yml",
                 "Definitions/sharespacedb.yml",
-                "Definitions/sharingue.yml",
                 "Definitions/shareuniversity.yml",
+                "Definitions/sharingue.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/solidtorrents.yml", // migrated to C#
                 "Definitions/soundpark.yml", // to be migrated to C#
