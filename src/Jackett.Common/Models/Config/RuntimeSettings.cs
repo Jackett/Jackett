@@ -11,8 +11,6 @@ namespace Jackett.Common.Models.Config
 
         public string ClientOverride { get; set; }
 
-        public string ProxyConnection { get; set; }
-
         public bool? IgnoreSslErrors { get; set; }
 
         public string CustomDataFolder { get; set; }
