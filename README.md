@@ -170,7 +170,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BookTracker
  * BootyTape
  * CasStudioTV
- * cool-torrent
  * Darmowe torrenty
  * Deildu
  * DimeADozen (EzTorrent)
@@ -238,7 +237,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Anthelion
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
- * Asgaard (AG)
  * AsianCinema
  * Asylum Share
  * AudioNews (AN)

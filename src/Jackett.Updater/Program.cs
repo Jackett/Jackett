@@ -263,6 +263,7 @@ namespace Jackett.Updater
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
                 "Definitions/archetorrent.yml",
+                "Definitions/asgaard.yml",
                 "Definitions/asiandvdclub.yml",
                 "Definitions/ast4u.yml", // renamed to animeworld #10578
                 "Definitions/avg.yml",
@@ -282,6 +283,7 @@ namespace Jackett.Updater
                 "Definitions/btxpress.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cinefilhd.yml",
+                "Definitions/cooltorrent.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
@@ -372,6 +374,7 @@ namespace Jackett.Updater
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/seedpeer.yml",
                 "Definitions/sharespacedb.yml",
+                "Definitions/shareuniversity.yml",
                 "Definitions/sharingue.yml",
                 "Definitions/shareuniversity.yml",
                 "Definitions/skytorrents.yml",
