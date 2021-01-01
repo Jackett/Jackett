@@ -31,8 +31,8 @@ caps:
     - {id: 74, cat: Movies, desc: "Saga Crepúsculo"}
     - {id: 75, cat: Movies, desc: "Saga The Purge"}
     - {id: 79, cat: Movies, desc: "Saga Star Wars"}
-    - {id: 18, cat: Movies/BluRay, desc: "Video Full & Remux"}
     - {id: 76, cat: Movies, desc: "x-men saga"}
+    - {id: 85, cat: Movies, desc: "Sean Connery"}
     - {id: 6, cat: Books/EBook, desc: "EBooks"}
     - {id: 58, cat: Books/EBook, desc: "Kiosko"}
     - {id: 24, cat: TV/Documentary, desc: "Documentales"}

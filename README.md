@@ -170,7 +170,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BookTracker
  * BootyTape
  * CasStudioTV
- * cool-torrent
  * Darmowe torrenty
  * Deildu
  * DimeADozen (EzTorrent)
@@ -234,11 +233,11 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AmigosShareClub
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
+ * AnimeWorld (AST4u) [![(invite needed)][inviteneeded]](#)
  * Anthelion
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
  * AsianCinema
- * AST4u [![(invite needed)][inviteneeded]](#)
  * Asylum Share
  * AudioNews (AN)
  * Audiobook Torrents (ABT + RNS)
@@ -471,7 +470,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SDBits [![(invite needed)][inviteneeded]](#)
  * Secret Cinema
  * SeedFile (SF)
- * ShareUniversity
  * Shareisland
  * Shazbat
  * Shellife (SL) [![(invite needed)][inviteneeded]](#)
@@ -493,7 +491,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * TellyTorrent
- * TenYardTorrents (TYT) [![(invite needed)][inviteneeded]](#)
  * The Falling Angels (TFA)
  * The Geeks [![(invite needed)][inviteneeded]](#)
  * The Horror Charnel (THC)
@@ -736,9 +733,6 @@ To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/a
 
 -   `-c, --UseClient`          Override web client selection.
                             [automatic(Default)/httpclient/httpclient2]
-
--   `-j, --ProxyConnection`    use proxy - e.g. 127.0.0.1:8888
-
 
 -   `-x, --ListenPublic`       Listen publicly
 

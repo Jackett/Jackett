@@ -284,6 +284,17 @@ namespace Jackett.Common.Indexers
                 if (r.MagnetUri != null && string.IsNullOrWhiteSpace(r.InfoHash))
                     r.InfoHash = MagnetUtil.MagnetToInfoHash(r.MagnetUri);
 
+                // set guid
+                if (r.Guid == null)
+                {
+                    if (r.Details != null)
+                        r.Guid = r.Details;
+                    else if (r.Link != null)
+                        r.Guid = r.Link;
+                    else if (r.MagnetUri != null)
+                        r.Guid = r.MagnetUri;
+                }
+
                 return r;
             });
             return fixedResults;

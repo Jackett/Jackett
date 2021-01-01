@@ -28,9 +28,6 @@ namespace Jackett.Server
 
             if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
                 logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
-
-            if (runtimeSettings.ProxyConnection != null)
-                logger.Info("Proxy enabled: " + runtimeSettings.ProxyConnection);
         }
 
         public static void ProcessWindowsSpecificArgs(ConsoleOptions consoleOptions, IProcessService processService, ServerConfig serverConfig, Logger logger)
