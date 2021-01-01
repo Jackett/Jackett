@@ -127,7 +127,7 @@ namespace Jackett.Common.Indexers
                             title = title.Remove(title.LastIndexOf(".", StringComparison.Ordinal));
                     }
 
-                    var posterStr = row.QuerySelector("img")?.GetAttribute("src");
+                    var posterStr = row.QuerySelector("img:nth-child(2)")?.GetAttribute("src");
                     var poster = !string.IsNullOrWhiteSpace(posterStr) ? new Uri(posterStr) : null;
 
                     var details = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
