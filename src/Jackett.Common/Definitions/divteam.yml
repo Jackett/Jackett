@@ -20,6 +20,10 @@ caps:
     - {id: 82, cat: Movies/WEB-DL, desc: "Pelis Web-DL 1080"}
     - {id: 83, cat: Movies/WEB-DL, desc: "Pelis Web-DL 720"}
     - {id: 84, cat: Movies/UHD, desc: "UHD Remux x265"}
+    - {id: 91, cat: Movies/HD, desc: "BDRip x264"}
+    - {id: 89, cat: Movies/HD, desc: "BDRemux"}
+    - {id: 88, cat: Movies/HD, desc: "Full HD"}
+    - {id: 90, cat: Movies/UHD, desc: "UHD Full"}
     - {id: 23, cat: TV/Sport, desc: "Deportes"}
     - {id: 20, cat: TV/HD, desc: "Series"}
     - {id: 31, cat: TV/HD, desc: "Series VOSE"}
@@ -38,18 +42,8 @@ caps:
     - {id: 24, cat: TV/Documentary, desc: "Documentales"}
     - {id: 32, cat: TV/Documentary, desc: "Documentales VOSE"}
     - {id: 49, cat: Books/EBook, desc: "eLearning"}
-    - {id: 68, cat: TV, desc: "eLearning Multimedia"}
-    - {id: 16, cat: Movies/DVD, desc: "DVD-Rip"}
-    - {id: 48, cat: Movies/BluRay, desc: "BR-Rip/HD-Rip"}
-    - {id: 17, cat: Movies/BluRay, desc: "BD-Rip"}
-    - {id: 5, cat: TV/Anime, desc: "Anime"}
-    - {id: 34, cat: PC/Games, desc: "Juegos PC"}
-    - {id: 7, cat: PC/0day, desc: "Software PC"}
-    - {id: 35, cat: Console, desc: "Juegos Sony"}
-    - {id: 36, cat: PC/Games, desc: "Juegos Microsoft"}
-    - {id: 37, cat: Console/NDS, desc: "Juegos Nintendo"}
-    - {id: 45, cat: Audio/MP3, desc: "Music MP3"}
-    - {id: 44, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 68, cat: Books/EBook, desc: "eLearning Multimedia"}
+    - {id: 87, cat: Audio/Audiobook, desc: "Audiolibros"}
 
   modes:
     search: [q]
