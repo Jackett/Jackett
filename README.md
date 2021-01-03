@@ -270,7 +270,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BroadCity [![(invite needed)][inviteneeded]](#)
  * BroadcasTheNet (BTN)
  * BrokenStones [![(invite needed)][inviteneeded]](#)
- * BTGigs (TG) [![(invite needed)][inviteneeded]](#)
  * BTNext (BTNT)
  * BTSCHOOL
  * BWTorrents
