@@ -222,10 +222,15 @@ search:
       args: ["  ", " "]
     - name: trim
   paths:
+    #Normal Search
     - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
-    # Saison Word
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}&page=50"
+      followredirect: true
+    #Search with Saison word instead of Sxx
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=100{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+      followredirect: true
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}&page=50{{ else }}&page=150{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
 
   rows:
