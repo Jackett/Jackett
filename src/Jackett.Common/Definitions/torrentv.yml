@@ -7,6 +7,8 @@ type: public
 encoding: UTF-8
 links:
   - https://torrentv.org/
+legacylinks:
+  - http://torrentv.org/ # site forces https
 
 caps:
   categories:

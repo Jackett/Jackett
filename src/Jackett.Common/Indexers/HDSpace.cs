@@ -25,7 +25,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "hdspace",
                    name: "HD-Space",
                    description: "Sharing The Universe",
@@ -49,6 +50,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;

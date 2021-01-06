@@ -128,7 +128,7 @@ namespace Jackett.Updater
 
         private void ProcessUpdate(UpdaterConsoleOptions options)
         {
-            var updateLocation = GetUpdateLocation();
+            var updateLocation = EnvironmentUtil.JackettInstallationPath();
             if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
                 updateLocation += Path.DirectorySeparatorChar;
 
@@ -263,7 +263,9 @@ namespace Jackett.Updater
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
                 "Definitions/archetorrent.yml",
+                "Definitions/asgaard.yml",
                 "Definitions/asiandvdclub.yml",
+                "Definitions/ast4u.yml", // renamed to animeworld #10578
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
@@ -276,11 +278,13 @@ namespace Jackett.Updater
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
                 "Definitions/bteye.yml",
+                "Definitions/btgigs.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cinefilhd.yml",
+                "Definitions/cooltorrent.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
@@ -331,6 +335,7 @@ namespace Jackett.Updater
                 "Definitions/kikibt.yml",
                 "Definitions/korsar.yml",
                 "Definitions/lapausetorrents.yml",
+                "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
@@ -370,7 +375,9 @@ namespace Jackett.Updater
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/seedpeer.yml",
                 "Definitions/sharespacedb.yml",
+                "Definitions/shareuniversity.yml",
                 "Definitions/sharingue.yml",
+                "Definitions/shareuniversity.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/solidtorrents.yml", // migrated to C#
                 "Definitions/soundpark.yml", // to be migrated to C#
@@ -378,7 +385,9 @@ namespace Jackett.Updater
                 "Definitions/speed-share.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
+                "Definitions/takeabyte.yml",
                 "Definitions/tazmaniaden.yml",
+                "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
                 "Definitions/tfile.yml",
@@ -516,7 +525,7 @@ namespace Jackett.Updater
                     if (isWindows)
                     {
                         //User didn't initiate the update from Windows service and wasn't running Jackett via the tray, must have started from the console
-                        startInfo.Arguments = $"/K {startInfo.FileName} {startInfo.Arguments}";
+                        startInfo.Arguments = $"/K \"{startInfo.FileName}\" {startInfo.Arguments}";
                         startInfo.FileName = "cmd.exe";
                         startInfo.CreateNoWindow = false;
                         startInfo.WindowStyle = ProcessWindowStyle.Normal;
@@ -524,7 +533,7 @@ namespace Jackett.Updater
 
                     if (variant == Variants.JackettVariant.Mono)
                     {
-                        startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
+                        startInfo.Arguments = $"\"{startInfo.FileName}\" {startInfo.Arguments}";
                         startInfo.FileName = "mono";
                     }
 
@@ -535,7 +544,7 @@ namespace Jackett.Updater
                         startInfo.CreateNoWindow = true;
                     }
 
-                    logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
+                    logger.Info($"Starting Jackett: \"{startInfo.FileName }\" {startInfo.Arguments}");
                     Process.Start(startInfo);
                 }
             }
@@ -606,15 +615,6 @@ namespace Jackett.Updater
             }
 
             return success;
-        }
-
-        private string GetUpdateLocation()
-        {
-            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-            // https://stackoverflow.com/questions/896572
-            var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
-            // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
-            return new FileInfo(location.LocalPath).DirectoryName;
         }
 
         private string GetJackettConsolePath(string directoryPath)

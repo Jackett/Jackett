@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "hebits",
                    name: "Hebits",
                    description: "The Israeli Tracker",
@@ -57,6 +58,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    downloadBase: "https://hebits.net/",
                    configData: new ConfigurationDataBasicLogin())
         {

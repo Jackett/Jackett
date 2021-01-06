@@ -15,7 +15,8 @@ namespace Jackett.Common.Indexers
     {
         protected override string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
 
-        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "redacted",
                    name: "Redacted",
                    description: "A music tracker",
@@ -43,6 +44,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    has2Fa: true,
                    useApiKey: false

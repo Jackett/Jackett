@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
+        public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "passthepopcorn",
                    name: "PassThePopcorn",
                    description: "PassThePopcorn is a Private site for MOVIES / TV",
@@ -50,6 +51,7 @@ namespace Jackett.Common.Indexers
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))

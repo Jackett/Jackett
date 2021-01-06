@@ -20,7 +20,8 @@ namespace Jackett.Test.Common.Models
                    configService: null,
                    logger: null,
                    configData: null,
-                   p: null)
+                   p: null,
+                   cs: null)
         {
         }
 

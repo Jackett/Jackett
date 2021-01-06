@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://pirateiro.com/
   - https://pirateiro.eu/
-  - https://pirateiro.unblockit.app/
+  - https://pirateiro.unblockit.dev/
 legacylinks:
   - http://pirateiro.com/
   - https://pirateiro.unblockit.pro/
@@ -20,6 +20,7 @@ legacylinks:
   - https://pirateiro.unblockit.win/
   - https://pirateiro.unblockit.top/
   - https://pirateiro.unblockit.lat/
+  - https://pirateiro.unblockit.app/
 
 caps:
   categorymappings:
@@ -47,6 +48,10 @@ settings:
       enviado: created
       seeders: seeders
       tamanho: size
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 search:
   paths:

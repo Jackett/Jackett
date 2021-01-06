@@ -116,7 +116,8 @@ namespace Jackett.Common.Indexers
             "https://pctnew.org/"
         };
 
-        public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
@@ -135,6 +136,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");

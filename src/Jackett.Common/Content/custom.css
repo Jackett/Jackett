@@ -134,8 +134,8 @@ hr {
     }
 
 .input-header {
-    font-size: 18px;
-    width: 160px;
+    font-size: 16px;
+    width: 250px;
     display: inline-block;
 }
 
@@ -165,7 +165,7 @@ hr {
     text-align: center;
 }
 
-#jackett-allowext, #jackett-allowupdate, #jackett-logging, #jackett-prerelease {
+#jackett-allowext, #jackett-allowupdate, #jackett-logging, #jackett-prerelease, #jackett-cache-enabled {
     width: 25px;
 }
 

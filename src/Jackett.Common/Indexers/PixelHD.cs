@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
         private string input_username = null;
         private string input_password = null;
 
-        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
+        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+            IProtectionService ps, ICacheService cs)
             : base(id: "pixelhd",
                    name: "PiXELHD",
                    description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
@@ -46,7 +47,8 @@ namespace Jackett.Common.Indexers
                    },
                    configService: configService,
                    logger: logger,
-                   p: protectionService,
+                   p: ps,
+                   cacheService: cs,
                    client: webClient,
                    configData: new ConfigurationDataCaptchaLogin()
                 )
@@ -92,7 +94,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string>
             {

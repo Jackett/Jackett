@@ -107,7 +107,7 @@ search:
     # does not return imdb link in results
 
   rows:
-    selector: "table.sortable tr:has(a[href*=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table.sortable tr:has(a[href*=\"/details.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -117,15 +117,10 @@ search:
         - name: querystring
           args: category
     title:
-      # abbreviated title
       selector: a[href*="/details.php?id="]
-    title:
-      selector: div.tooltip-content > div
-      optional: true
     details:
       selector: a[href*="/details.php?id="]
       attribute: href
-    # rows have download but site requires thanks so we use dl from details
     download:
       selector: a[href*="/details.php?id="]
       attribute: href

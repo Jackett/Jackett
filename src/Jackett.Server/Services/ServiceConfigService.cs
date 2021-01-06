@@ -6,10 +6,13 @@ using System.Reflection;
 using System.ServiceProcess;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using NLog;
 
 namespace Jackett.Server.Services
 {
+// This code is Windows specific but we are already doing the checks our way
+#pragma warning disable CA1416
     public class ServiceConfigService : IServiceConfigService
     {
         private const string NAME = "Jackett";
@@ -47,10 +50,7 @@ namespace Jackett.Server.Services
             }
             else
             {
-                // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-                // https://stackoverflow.com/questions/896572
-                var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
-
+                var applicationFolder = EnvironmentUtil.JackettInstallationPath();
                 var exePath = Path.Combine(applicationFolder, SERVICEEXE);
                 if (!File.Exists(exePath) && Debugger.IsAttached)
                 {
@@ -103,4 +103,5 @@ namespace Jackett.Server.Services
             }
         }
     }
+#pragma warning restore CA1416
 }

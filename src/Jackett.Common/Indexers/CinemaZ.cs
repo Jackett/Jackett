@@ -11,7 +11,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class CinemaZ : AvistazTracker
     {
-        public CinemaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public CinemaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "cinemaz",
                    name: "CinemaZ",
                    description: "Part of the Avistaz network.",
@@ -30,7 +31,9 @@ namespace Jackett.Common.Indexers
                    configService: configService,
                    client: wc,
                    logger: l,
-                   p: ps)
+                   p: ps,
+                   cs: cs
+                   )
         {
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(1, TorznabCatType.MoviesUHD);

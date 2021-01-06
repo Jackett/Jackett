@@ -36,9 +36,11 @@ namespace Jackett.Common.Services
         // use: {"<old id>", "<new id>"}
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
+            {"ast4u", "animeworld"},
             {"broadcastthenet", "broadcasthenet"},
             {"cili180", "cilipro"},
             {"icetorrent", "speedapp"},
+            {"leaguehd", "lemonhd"},
             {"liaorencili", "cilipro"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
@@ -114,14 +116,14 @@ namespace Jackett.Common.Services
             var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
             var nativeIndexers = indexerTypes.Select(type =>
             {
-                var constructorArgumentTypes = new [] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService) };
+                var constructorArgumentTypes = new [] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService), typeof(ICacheService) };
                 var constructor = type.GetConstructor(constructorArgumentTypes);
                 if (constructor != null)
                 {
                     // create own webClient instance for each indexer (separate cookies stores, etc.)
                     var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService, serverConfig);
 
-                    var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService };
+                    var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService, cacheService };
                     var indexer = (IIndexer)constructor.Invoke(arguments);
                     return indexer;
                 }
@@ -135,7 +137,7 @@ namespace Jackett.Common.Services
                 indexers.Add(indexer.Id, indexer);
                 configService.Load(indexer);
             }
- 
+
             logger.Info($"Loaded {nativeIndexers.Count} Native indexers: {string.Join(", ", nativeIndexers.Select(i => i.Id))}");
         }
 
@@ -176,7 +178,7 @@ namespace Jackett.Common.Services
                         // create own webClient instance for each indexer (seperate cookies stores, etc.)
                         var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService, serverConfig);
 
-                        IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, definition);
+                        IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, cacheService, definition);
                         configService.Load(indexer);
                         return indexer;
                     }
@@ -229,7 +231,7 @@ namespace Jackett.Common.Services
             }
 
             logger.Info("Adding aggregate indexer ('all' indexer) ...");
-            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService)
+            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService, cacheService)
             {
                 Indexers = indexers.Values
             };
@@ -291,17 +293,18 @@ namespace Jackett.Common.Services
         public async Task TestIndexer(string name)
         {
             var indexer = GetIndexer(name);
-            var browseQuery = new TorznabQuery
+            var query = new TorznabQuery
             {
                 QueryType = "search",
                 SearchTerm = "",
                 IsTest = true
             };
-            var result = await indexer.ResultsForQuery(browseQuery);
-            logger.Info($"Found {result.Releases.Count()} releases from {indexer.DisplayName}");
+            var result = await indexer.ResultsForQuery(query);
+
+            logger.Info($"Test search in {indexer.DisplayName} => Found {result.Releases.Count()} releases");
+
             if (!result.Releases.Any())
                 throw new Exception("Found no results while trying to browse this tracker");
-            cacheService.CacheRssResults(indexer, result.Releases);
         }
 
         public void DeleteIndexer(string name)

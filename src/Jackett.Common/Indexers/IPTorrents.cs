@@ -49,7 +49,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "iptorrents",
                    name: "IPTorrents",
                    description: "Always a step ahead.",
@@ -77,6 +78,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
         {
             Encoding = Encoding.UTF8;

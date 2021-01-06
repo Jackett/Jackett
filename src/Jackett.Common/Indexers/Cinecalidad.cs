@@ -27,11 +27,16 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.cinecalidad.is/",
-            "https://www.cinecalidad.to/",
-            "https://www.cinecalidad.eu/"
+            "https://www.cinecalidad.eu/",
+            "https://www.cinecalidad.im/"
         };
 
-        public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.cinecalidad.to/"
+        };
+
+        public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
                    description: "Películas Full HD en Castellano y Latino Dual.",
@@ -43,6 +48,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
@@ -136,6 +142,7 @@ namespace Jackett.Common.Indexers
                     var linkParts = protectedLink.Split('=');
                     protectedLink = protectedLink.Replace(linkParts[0] + "=", "");
                 }
+                protectedLink = GetAbsoluteUrl(protectedLink);
 
                 results = await RequestWithCookiesAsync(protectedLink);
                 dom = parser.ParseDocument(results.ContentString);
@@ -171,8 +178,8 @@ namespace Jackett.Common.Indexers
                     title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
                     title += " 1080p BDRip x264";
 
-                    var poster = new Uri(qImg.GetAttribute("src"));
-                    var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
+                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
+                    var link = new Uri(GetAbsoluteUrl(row.QuerySelector("a").GetAttribute("href")));
 
                     var release = new ReleaseInfo
                     {
@@ -217,6 +224,14 @@ namespace Jackett.Common.Indexers
             titleWords = titleWords.ToArray();
 
             return queryWords.All(word => titleWords.Contains(word));
+        }
+
+        private string GetAbsoluteUrl(string url)
+        {
+            url = url.Trim();
+            if (!url.StartsWith("http"))
+                return SiteLink + url.TrimStart('/');
+            return url;
         }
     }
 

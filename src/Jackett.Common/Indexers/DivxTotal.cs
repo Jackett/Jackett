@@ -49,7 +49,8 @@ namespace Jackett.Common.Indexers
             "https://www.divxtotal.la/"
         };
 
-        public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "divxtotal",
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
@@ -68,6 +69,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
@@ -76,6 +78,8 @@ namespace Jackett.Common.Indexers
 
             var matchWords = new BoolItem { Name = "Match words in title", Value = true };
             configData.AddDynamic("MatchWords", matchWords);
+
+            configData.AddDynamic("flaresolverr", new DisplayItem("This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."){ Name = "FlareSolverr"});
 
             AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD, "Peliculas");
             AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesHD, "Peliculas HD");
@@ -88,7 +92,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>

@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public ZonaQ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public ZonaQ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "zonaq",
                    name: "ZonaQ",
                    description: "ZonaQ is a SPANISH Private Torrent Tracker for MOVIES / TV",
@@ -52,6 +53,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents por página' option to 100 in 'Mi Panel' page."))
 
         {

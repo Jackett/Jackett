@@ -46,15 +46,6 @@ namespace Jackett.Common.Services
             variant = new Variants().GetVariant();
         }
 
-        private string ExePath()
-        {
-            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-            // https://stackoverflow.com/questions/896572
-            var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
-            // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
-            return new FileInfo(location.LocalPath).FullName;
-        }
-
         public void StartUpdateChecker() => Task.Factory.StartNew(UpdateWorkerThread);
 
         public void CheckForUpdatesNow()
@@ -138,7 +129,7 @@ namespace Jackett.Common.Services
                         {
                             var tempDir = await DownloadRelease(latestRelease.Assets, isWindows, latestRelease.Name);
                             // Copy updater
-                            var installDir = Path.GetDirectoryName(ExePath());
+                            var installDir = EnvironmentUtil.JackettInstallationPath();
                             var updaterPath = GetUpdaterPath(tempDir);
                             if (updaterPath != null)
                                 StartUpdate(updaterPath, installDir, isWindows, serverConfig.RuntimeSettings.NoRestart, trayIsRunning);
@@ -211,7 +202,7 @@ namespace Jackett.Common.Services
         public void CheckUpdaterLock()
         {
             // check .lock file to detect errors in the update process
-            var lockFilePath = Path.Combine(Path.GetDirectoryName(ExePath()), ".lock");
+            var lockFilePath = Path.Combine(EnvironmentUtil.JackettInstallationPath(), ".lock");
             if (File.Exists(lockFilePath))
             {
                 logger.Error("An error occurred during the last update. If this error occurs again, you need to reinstall " +
@@ -313,7 +304,6 @@ namespace Jackett.Common.Services
             if (isWindows && windowsService.ServiceExists() && windowsService.ServiceRunning())
                 appType = "WindowsService";
 
-            var exe = Path.GetFileName(ExePath());
             var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(" ") ? "\"" + a + "\"" : a)).Replace("\"", "\\\"");
 
             var startInfo = new ProcessStartInfo
@@ -326,7 +316,7 @@ namespace Jackett.Common.Services
             if (variant == Variants.JackettVariant.Mono)
             {
                 // Wrap mono
-                args = exe + " " + args;
+                args = Path.GetFileName(EnvironmentUtil.JackettExecutablePath()) + " " + args;
 
                 startInfo.Arguments = $"{Path.Combine(updaterExePath)} --Path \"{installLocation}\" --Type \"{appType}\" --Args \" {args}\"";
                 startInfo.FileName = "mono";

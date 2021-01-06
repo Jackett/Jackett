@@ -6,12 +6,12 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.cc/
+  - https://torrentparadise.la/
 legacylinks:
   - https://torrentparadise.org/
   - https://torrentparadise.cl/
   - https://torrentparadise.to/
-  - https://torrentparadise.la/
+  - https://torrentparadise.cc/
 
 caps:
   categories:
@@ -25,6 +25,7 @@ caps:
     ANDROID: PC
     ANIME: TV/Anime
     ANIMEDUBBEDSUBBED: TV/Anime
+    ANIMEOTHERS: TV/Anime
     APPLICATIONS: PC
     APPLICATIONSANDROID: PC
     APPLICATIONSHANDHELD: PC/Mobile-Other

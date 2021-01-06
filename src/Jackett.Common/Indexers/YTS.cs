@@ -19,10 +19,18 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class YTS : BaseWebIndexer
     {
+
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://yts.mx/",
+            "https://yts.unblockit.dev/",
+            "https://yts.unblockninja.com/"
+        };
+
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://yts.ag/",
             "https://yts.am/",
-            "https://yts.lt/"
+            "https://yts.lt/",
+            "https://yts.root.yt/"
         };
 
         private string ApiEndpoint => SiteLink + "api/v2/list_movies.json";
@@ -33,7 +41,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "yts",
                    name: "YTS",
                    description: "YTS is a Public torrent site specialising in HD movies of small size",
@@ -46,6 +55,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
@@ -64,7 +74,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0,

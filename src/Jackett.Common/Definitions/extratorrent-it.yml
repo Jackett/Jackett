@@ -7,10 +7,11 @@ type: public
 encoding: UTF-8
 links:
   - https://extratorrents.it/
-  - https://extratorrent.unblockit.app/
+  - https://extratorrent.unblockit.dev/
   - https://extratorrent2.unblockninja.com/
 legacylinks:
   - https://extratorrent.ag/
+  - https://extratorrent.unblockit.app/
 
 caps:
   categorymappings:

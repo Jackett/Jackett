@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
 
         private ConfigurationDataAnimeBytes ConfigData => (ConfigurationDataAnimeBytes)configData;
 
-        public AnimeBytes(IIndexerConfigurationService configService, WebClient client, Logger l, IProtectionService ps)
+        public AnimeBytes(IIndexerConfigurationService configService, WebClient client, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "animebytes",
                    name: "AnimeBytes",
                    description: "Powered by Tentacles",
@@ -59,6 +60,7 @@ namespace Jackett.Common.Indexers
                    },
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             Encoding = Encoding.UTF8;

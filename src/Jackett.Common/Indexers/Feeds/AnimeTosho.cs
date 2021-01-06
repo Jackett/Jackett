@@ -16,7 +16,8 @@ namespace Jackett.Common.Indexers.Feeds
     [ExcludeFromCodeCoverage]
     public class AnimeTosho : BaseNewznabIndexer
     {
-        public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService ps)
+        public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger,
+            IProtectionService ps, ICacheService cs)
             : base(id: "animetosho",
                    name: "Anime Tosho",
                    description: "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases",
@@ -32,6 +33,7 @@ namespace Jackett.Common.Indexers.Feeds
                    client: client,
                    logger: logger,
                    p: ps,
+                   cs: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;

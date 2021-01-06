@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TVVault(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "tvvault",
                    name: "TV-Vault",
                    description: "A TV tracker for old shows",
@@ -47,6 +48,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
@@ -55,6 +57,9 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.TV);
             AddCategoryMapping(2, TorznabCatType.Movies);
+            // as returned by TvCategoryParser.ParseTvShowQuality these two TV cats are required
+            AddCategoryMapping(3, TorznabCatType.TVHD);
+            AddCategoryMapping(4, TorznabCatType.TVSD);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -166,7 +171,7 @@ namespace Jackett.Common.Indexers
         private string StripSearchString(string term)
         {
             // Search does not support searching with episode numbers so strip it if we have one
-            // Ww AND filter the result later to archive the proper result
+            // AND filter the result later to achieve the proper result
             term = Regex.Replace(term, @"[S|E]\d\d", string.Empty);
             return term.Trim();
         }

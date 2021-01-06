@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "toloka",
                    name: "Toloka.to",
                    description: "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community",
@@ -59,6 +60,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataToloka())
         {
             Encoding = Encoding.UTF8;

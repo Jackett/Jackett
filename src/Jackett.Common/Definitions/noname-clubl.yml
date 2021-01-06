@@ -1,9 +1,9 @@
 ---
-id: noname-club
-name: NoNaMe Club
-description: "NoNaMe Club (NNM-Club) is a RUSSIAN Public Tracker for TV / MOVIES / MUSIC"
+id: noname-clubl
+name: NoNaMe ClubL
+description: "This is the NoNaMe Club indexer with Login enabled in the config."
 language: ru-ru
-type: public
+type: semi-private
 encoding: windows-1251
 links:
   - https://nnmclub.to/
@@ -13,6 +13,12 @@ legacylinks:
   - http://nnmclub.to/
 
 settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: striprussian
     type: checkbox
     label: Strip Russian Letters
@@ -752,6 +758,21 @@ caps:
     music-search: [q]
     book-search: [q]
 
+login:
+  path: forum/login.php
+  method: form
+  form: form#loginFrm
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    autologin: 1
+    redirect: index.php
+  error:
+    - selector: span.gen:contains("Вы ввели")
+  test:
+    path: forum/index.php
+    selector: table.menutable a.mainmenu:contains("Выход")
+
 search:
   paths:
     - path: forum/tracker.php
@@ -817,7 +838,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
-      selector: td:nth-child(10)
+      selector: td:nth-child(11)
       filters:
         - name: re_replace
           args: [".*(\\d{2}-\\d{2}-\\d{4})(\\d{2}:\\d{2})", "$1 $2"]
@@ -830,7 +851,12 @@ search:
     leechers:
       selector: td.leechmed > b
     downloadvolumefactor:
-      text: 0
+      case:
+        img[src$="/gold.gif"]: 0
+        img[src$="/silver.gif"]: 0.5
+        img[src$="/bronze.gif"]: 0.75
+        img[src$="/platinum.gif"]: 0
+        "*": 1
     uploadvolumefactor:
       text: 1
 # engine n/a

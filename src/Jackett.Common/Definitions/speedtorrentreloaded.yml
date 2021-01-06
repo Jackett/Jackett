@@ -95,7 +95,7 @@ login:
     password: "{{ .Config.password }}"
     secure_code: "{{ .Config.secure_code }}"
   test:
-    path: sessioncheck.php
+    path: index.php
 
 search:
   paths:

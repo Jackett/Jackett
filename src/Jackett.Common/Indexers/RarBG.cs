@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationData configData => base.configData;
 
-        public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "rarbg",
                    name: "RARBG",
                    description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
@@ -58,6 +59,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");

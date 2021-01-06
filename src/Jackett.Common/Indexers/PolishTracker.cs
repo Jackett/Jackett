@@ -12,6 +12,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -27,7 +28,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "polishtracker",
                    name: "PolishTracker",
                    description: "Polish Tracker is a POLISH Private site for 0DAY / MOVIES / GENERAL",
@@ -55,11 +57,14 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "pl-pl";
             Type = "private";
+
+            configData.AddDynamic("LanguageTitle", new BoolItem { Name = "Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr", Value = false });
 
             AddCategoryMapping(1, TorznabCatType.PC0day, "0-Day");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Apps");
@@ -150,17 +155,23 @@ namespace Jackett.Common.Indexers
                             poster = new Uri(CdnUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
                     }
 
+                    var title = torrent.name.ToString();
+
                     var descriptions = new List<string>();
                     var language = (string)torrent.language;
                     if (!string.IsNullOrEmpty(language))
                         descriptions.Add("Language: " + language);
                     else if ((bool?)torrent.polish == true)
                         descriptions.Add("Language: pl");
+
+                    if (language == "pl" && (((BoolItem) configData.GetDynamic("LanguageTitle")).Value))
+                        title += " POLISH";
+
                     var description = descriptions.Any() ? string.Join("<br />\n", descriptions) : null;
 
                     var release = new ReleaseInfo
                     {
-                        Title = torrent.name.ToString(),
+                        Title = title,
                         Details = details,
                         Guid = details,
                         Link = link,

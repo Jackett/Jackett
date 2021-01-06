@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public Fuzer(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public Fuzer(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "fuzer",
                    name: "Fuzer",
                    description: "Fuzer is a private torrent website with israeli torrents.",
@@ -58,6 +59,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
