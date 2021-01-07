@@ -20,7 +20,7 @@ caps:
     - {id: 446, cat: Audio, desc: "音乐(Music)"}
     - {id: 447, cat: PC/Games, desc: "游戏 (Game)"}
     - {id: 448, cat: PC/0day, desc: "软件 (Software)"}
-    - {id: 449, cat: Books/Other, desc: "资料（E-Learning）"}
+    - {id: 449, cat: Other/Misc, desc: "资料（E-Learning）"}
     - {id: 450, cat: Other, desc: "其它 (Other)"}
 
   modes:
