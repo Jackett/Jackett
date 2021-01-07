@@ -7,49 +7,67 @@ type: public
 encoding: UTF-8
 links:
   - https://www.tokyotosho.info/
-  - https://tokyotosho.unblocked.bar/
-  - https://tokyotosho.proxyportal.pw/
-  - https://tokyotosho.uk-unblock.pro/
+  - https://tokyotosho.unblocked.rest/
 legacylinks:
   - https://tokyotosho.black-mirror.xyz/
   - https://tokyotosho.unblocked.casa/
   - https://tokyotosho.proxyportal.fun/
   - https://tokyotosho.uk-unblock.xyz/
   - https://tokyotosho.ind-unblock.xyz/
+  - https://tokyotosho.unblocked.bar/
+  - https://tokyotosho.proxyportal.pw/
+  - https://tokyotosho.uk-unblock.pro/
 
 settings:
-  - name: type-id
-    type: text
-    label: Type Id
+  - name: cat
+    type: select
+    label: Category
+    default: 0
+    options:
+      0: All
+      1: Anime
+      10: Non-English
+      3: Manga
+      8: Drama
+      2: Music
+      9: "Music Video"
+      7: Raws
+      4: Hentai
+      12: "Hentai (Anime)"
+      13: "Hentai (Manga)"
+      14: "Hentai (Games)"
+      11: Batch
+      15: JAV
+      5: Other
 
 caps:
-  categories:
-    1: TV/Anime  # Anime
-    10: TV/Anime # Non-English Anime
-    3: Books     # Manga
-    8: TV/Anime  # Drama
-    2: Audio     # Anime Music
-    9: TV/Anime  # Anime Music Videos
-    7: TV/Anime  # Raw Anime
-    4: XXX       # Hentai
-    12: XXX      # Hentai (Anime)
-    13: XXX      # Hentai (Manga)
-    14: XXX      # Hentai (Games)
-    11: TV/Anime # Batch
-    15: XXX      # JAV
-    5: Other     # Other
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "Anime"}
+    - {id: 10, cat: TV/Anime, desc: "Non-English Anime"}
+    - {id: 3, cat: Books, desc: "Manga"}
+    - {id: 8, cat: TV/Anime, desc: "Drama"}
+    - {id: 2, cat: Audio, desc: "Anime Music"}
+    - {id: 9, cat: TV/Anime, desc: "Anime Music Videos"}
+    - {id: 7, cat: TV/Anime, desc: "Raw Anime"}
+    - {id: 4, cat: XXX, desc: "Hentai"}
+    - {id: 12, cat: XXX, desc: "Hentai (Anime)"}
+    - {id: 13, cat: XXX, desc: "Hentai (Manga)"}
+    - {id: 14, cat: XXX, desc: "Hentai (Games)"}
+    - {id: 11, cat: TV/Anime, desc: "Batch"}
+    - {id: 15, cat: XXX, desc: "JAV"}
+    - {id: 5, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    book-search: [q]
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php{{else}}index.php{{end}}"
+    - path: "{{ if .Keywords }}search.php{{ else }}index.php{{ end }}"
   inputs:
     terms: "{{ .Keywords }}"
-    type: "{{ .Config.type-id }}"
-    cat: "{{ .Config.type-id }}"
+    cat: "{{ .Config.cat }}"
 
   rows:
     selector: "table.listing tr.category_0"
@@ -91,9 +109,9 @@ search:
         - name: regexp
           args: "Date: (.+?) ?$"
         - name: replace
-          args: ["UTC", "-00"]
+          args: ["UTC", "+00:00"]
         - name: dateparse
-          args: "2006-01-02 15:04 -07"
+          args: "2006-01-02 15:04 -07:00"
     seeders:
       selector: td.stats > span:nth-child(1)
     leechers:

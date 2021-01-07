@@ -11,13 +11,13 @@ links:
 caps:
   categorymappings:
     # Зарубежныепорнофильмы|Pornofilms
+    - {id: 71, cat: XXX, desc: "Фильмы UHD | 4K UHD (2160p) Movies"}
     - {id: 26, cat: XXX, desc: "HD порнофильмы | HD Porn Movies"}
     - {id: 20, cat: XXX, desc: "Гонзо Фильмы | Gonzo &  All Sex"}
     - {id: 22, cat: XXX, desc: "Лесбо Фильмы | Lesbo Movies"}
-    - {id: 23, cat: XXX, desc: "Этнические фильмы | Ethnic"}
+    - {id: 23, cat: XXX, desc: "Этнические фильмы | Ethnic Movies"}
     - {id: 21, cat: XXX, desc: "Фильмы с сюжетом | Feature"}
-    - {id: 24, cat: XXX, desc: "Эротические фильмы (с переводом Rus)"}
-    - {id: 64, cat: XXX, desc: "Эротические фильмы в оригинале | Original Erotic Films"}
+    - {id: 64, cat: XXX, desc: "Эротические фильмы | Erotic Films"}
     - {id: 25, cat: XXX, desc: "Классика | Classic Porn"}
     # Порноролики|Porn Clips ">
     - {id: 65, cat: XXX, desc: "Инцест и Табу (Инсценировка) | Incest and Taboo..."}
@@ -73,19 +73,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "1"
+    default: 1
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
   path: login.php
@@ -143,7 +143,10 @@ search:
     pn: ""
     # despite the all words flag the search engine returns anywords matching.
     allw: 1
-    $raw: "{{ if .Categories }}{{range .Categories}}&f[]={{.}}{{end}}{{else}}&f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}&f[]={{.}}{{end}}{{ else }}&f[]=-1{{ end }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
     selector: tr[id^="tor_"]
@@ -175,6 +178,7 @@ search:
     leechers:
       selector: td.leechmed
     date:
+      # unix
       selector: td:nth-child(10) u
     downloadvolumefactor:
       text: 0

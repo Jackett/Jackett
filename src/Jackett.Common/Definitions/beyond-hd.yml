@@ -14,11 +14,15 @@ caps:
     - {id: 2, cat: TV, desc: "TV"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    movie-search: [q, imdbid, tmdbid]
 
 settings:
+  - name: info_oid
+    type: info
+    label: "About 2FA"
+    default: "If you want to enable 2FA then use the Beyond-HD (OneURL) indexer instead."
   - name: username
     type: text
     label: Username
@@ -28,19 +32,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created_at"
+    default: created_at
     options:
-      "created_at": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login
@@ -71,18 +75,16 @@ search:
     - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    description: ""
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tmdb: ""
+    tmdb: "{{ .Query.TMDBID }}"
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
 
   rows:
-    selector: table > tbody > tr
-    after: 1
+    selector: div.table-torrents > table > tbody > tr[id^="torrentposter"]
 
   fields:
     _category:
@@ -93,22 +95,15 @@ search:
         - name: regexp
           args: "/categories/.*?\\.(\\d+)"
     category:
-      text: "{{if .Result._category}}{{.Result._category}}{{else}}1{{end}}"
+      text: "{{ if .Result._category }}{{ .Result._category }}{{ else }}1{{ end }}"
     title:
       selector: a.torrent-name
-    download:
-      selector: a[href*="/download/"]
-      attribute: href
     details:
       selector: a.torrent-name
       attribute: href
-    banner:
-      optional: true
-      selector: div.torrent-poster img
-      attribute: src
-      filters:
-        - name: replace
-          args: ["/img/person.png", ""]
+    download:
+      selector: a[href*="/download/"]
+      attribute: href
     date:
       selector: td:not(a[href$="/history"]) span.text-orange
       filters:
@@ -122,8 +117,10 @@ search:
     grabs:
       selector: a[href$="/history"]
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"]
       attribute: href
     downloadvolumefactor:
       case:
@@ -135,4 +132,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-# UNIT3D
+# UNIT3D (custom)

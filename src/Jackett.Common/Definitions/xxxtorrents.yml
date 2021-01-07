@@ -11,15 +11,16 @@ links:
 caps:
   categorymappings:
     - {id: 170, cat: XXX, desc: "Temp"}
-    - {id: 19, cat: XXX, desc: "Эротическое видео / Erotic&Softcore"}
+    - {id: 19, cat: XXX, desc: "Эротическое видео / Erotic & Softcore"}
     - {id: 123, cat: XXX, desc: " |- Эротические фильмы (с переводом Rus)"}
     - {id: 147, cat: XXX, desc: " |- Эротические фильмы с «родной» озвучкой"}
-    - {id: 122, cat: XXX, desc: " |- Документальные фильмы / Documentary&Reality"}
+    - {id: 122, cat: XXX, desc: " |- Документальные фильмы / Documentary & Reality"}
     - {id: 121, cat: XXX, desc: " |- Нудизм-Натуризм / Nudity"}
     - {id: 20, cat: XXX, desc: "Зарубежные порнофильмы / Full Length Movies"}
     - {id: 118, cat: XXX, desc: " |- Классика и ретро порно / Classic (Retro)"}
     - {id: 117, cat: XXX, desc: " |- Фильмы с сюжетом / Movies with a plot"}
     - {id: 162, cat: XXX, desc: " |- Фильмы студии Marc Dorcel (франция)"}
+    - {id: 176, cat: XXX, desc: " |- Фильмы без сюжета 2021 года / Films without a plot in 2021"}
     - {id: 171, cat: XXX, desc: " |- Фильмы без сюжета 2020 года / Films without a plot in 2020"}
     - {id: 114, cat: XXX, desc: " |- Фильмы без сюжета 2011-2019 / Movies without plot of..."}
     - {id: 150, cat: XXX, desc: " |- Фильмы без сюжета до 2010 / Movies without plot till 2010"}
@@ -27,17 +28,19 @@ caps:
     - {id: 131, cat: XXX, desc: " |- Порно пародии / Parody porn"}
     - {id: 116, cat: XXX, desc: " |- Гонзо-фильмы / Gonzo"}
     - {id: 112, cat: XXX, desc: " |- Этнические фильмы / Ethnic-Themed"}
-    - {id: 113, cat: XXX, desc: " |- Лесбо-фильмы / All Girl&Solo"}
+    - {id: 113, cat: XXX, desc: " |- Лесбо-фильмы / All Girl & Solo"}
     - {id: 119, cat: XXX, desc: " |- Паки полных фильмов / Full Length Movies Packs"}
     - {id: 22, cat: XXX, desc: "Зарубежные фильмы в высоком качестве (HD Video)"}
     - {id: 107, cat: XXX, desc: " |- Фильмы с сюжетом (HD Video)"}
     - {id: 163, cat: XXX, desc: " |- Фильмы студии Marc Dorcel (франция) HD video"}
     - {id: 106, cat: XXX, desc: " |- Гонзо и Фильмы без сюжета (HD Video)"}
-    - {id: 142, cat: XXX, desc: " |- 3D video&Virtual Reality Videos (VR"}
+    - {id: 142, cat: XXX, desc: " |- 3D video & Virtual Reality Videos (VR"}
     - {id: 24, cat: XXX, desc: "Зарубежные порноролики / Clips"}
+    - {id: 177, cat: XXX, desc: " |- Сайтрипы 2021 (HD Video"}
     - {id: 172, cat: XXX, desc: " |- Сайтрипы 2020 (HD Video"}
     - {id: 168, cat: XXX, desc: " |- Сайтрипы 2019 (HD Video"}
     - {id: 94, cat: XXX, desc: " |- Сайтрипы 2010-2018 (HD Video"}
+    - {id: 178, cat: XXX, desc: " |- Сайтрипы 2021 (480p, 540p"}
     - {id: 173, cat: XXX, desc: " |- Сайтрипы 2020 (480p, 540p"}
     - {id: 167, cat: XXX, desc: " |- Сайтрипы 2019 (480p, 540p"}
     - {id: 89, cat: XXX, desc: " |- Сайтрипы 2010-2018 (480p, 540p"}
@@ -55,56 +58,54 @@ caps:
     - {id: 82, cat: XXX, desc: " |- Японские фильмы и сайтрипы (HD Video 720p, 1080p"}
     - {id: 81, cat: XXX, desc: " |- Японские фильмы и сайтрипы (Definition 480p-540p"}
     - {id: 83, cat: XXX, desc: " |- Паки японских фильмов и сайтрипов / Japanese Packs"}
-    - {id: 30, cat: XXX, desc: "Нетрадиционное порно / Special Interest Movies&Clips"}
+    - {id: 30, cat: XXX, desc: "Нетрадиционное порно / Special Interest Movies & Clips"}
     - {id: 48, cat: XXX, desc: " |- Буккаке, Камшот / Bukkake, Glory Hole, Cumshot Compilation"}
-    - {id: 52, cat: XXX, desc: " |- Женское доминирование и страпон / Femdom&Strapon"}
+    - {id: 52, cat: XXX, desc: " |- Женское доминирование и страпон / Femdom & Strapon"}
     - {id: 53, cat: XXX, desc: " |- BDSM ≪бандаж, дисциплина, садизм, мазохизм≫"}
     - {id: 152, cat: XXX, desc: " |- Порно с животными / Porn with animals"}
     - {id: 133, cat: XXX, desc: " |- Фетиш, медосмотры / Medical Fetish"}
     - {id: 136, cat: XXX, desc: " |- Переодевание, униформа / Uniform"}
-    - {id: 50, cat: XXX, desc: " |- Фистинг и дилдо / Fisting&Dildo"}
+    - {id: 50, cat: XXX, desc: " |- Фистинг и дилдо / Fisting & Dildo"}
     - {id: 54, cat: XXX, desc: " |- Транссексуалы / Transsexual"}
     - {id: 47, cat: XXX, desc: " |- Мочеиспускание / Peeing"}
     - {id: 51, cat: XXX, desc: " |- Подглядывание / Voyeur"}
     - {id: 49, cat: XXX, desc: " |- Беременные / Pregnant"}
     - {id: 55, cat: XXX, desc: " |- Бисексуалы / Bisexual"}
-    - {id: 28, cat: XXX, desc: "Мультфильмы, Игры, Фото / Games&Picture Gallery"}
-    - {id: 77, cat: XXX, desc: " |- Мультфильмы&Хентай / Cartoons&Hentai"}
+    - {id: 28, cat: XXX, desc: "Мультфильмы, Игры, Фото / Games & Picture Gallery"}
+    - {id: 77, cat: XXX, desc: " |- Мультфильмы & Хентай / Cartoons & Hentai"}
     - {id: 75, cat: XXX, desc: " |- Любительское фото / Amateur Picture Gallery"}
     - {id: 74, cat: XXX, desc: " |- Подборки фото сайтрипов / SiteRip's Picture Packs"}
-    - {id: 73, cat: XXX, desc: " |- Тематическое и нетрадиционное фото / Misc&Special..."}
+    - {id: 73, cat: XXX, desc: " |- Тематическое и нетрадиционное фото / Misc & Special..."}
     - {id: 139, cat: XXX, desc: " |- Игры / Games"}
     - {id: 166, cat: XXX, desc: " |- Временный раздел"}
     - {id: 33, cat: XXX, desc: " |- ✂ Недооформленное ✂"}
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 search:
   paths:
     - path: tracker.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 1
     prev_a: 0
     prev_dla: 0
@@ -171,6 +172,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
+      # unix
       selector: td:last-child > u
     downloadvolumefactor:
       text: 0

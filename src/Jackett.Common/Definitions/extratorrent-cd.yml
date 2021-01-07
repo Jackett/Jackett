@@ -14,17 +14,20 @@ legacylinks:
 
 caps:
   categories:
-    other: Other
+    Other: Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: info
+  - name: info_8000
     type: info
-    default: ExtraTorrent-cd does not use categories. In your software Indexer settings, set the category to 7000.
+    label: About ExtraTorrent Categories
+    default: ExtraTorrent does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 search:
   paths:
@@ -41,7 +44,7 @@ search:
 
   fields:
     category:
-      text: other # issue #8228
+      text: Other
     title:
       selector: a[href*="/torrent/"][title^="view"]
     details:
@@ -54,31 +57,39 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
     date:
-      selector: td:nth-last-of-type(5):contains("Y-day-"), td:nth-last-of-type(5):contains("Today-")
+      # Y-day-2020 (seriously!?!, like there's a Y-day-2019 ?)
+      # Today-22:03
+      selector: td:nth-last-of-type(5):contains("day")
       optional: true
       filters:
         - name: replace
           args: ["\xA0", " "]
         - name: re_replace
-          args: ["(Today-.*)", "Today"]
+          args: ["(Today-)", "Today "]
         - name: re_replace
           args: ["(Y-day-.*)", "Yesterday"]
         - name: fuzzytime
     date:
-      selector: td:nth-last-of-type(5):contains(":"):not(:contains("Y-day-")):not(:contains("Today-"))
-      optional: true
-      filters:
-        - name: replace
-          args: ["\xA0", " "]
-        - name: fuzzytime
-    date:
-      selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("Y-day-")):not(:contains("Today-"))
+      # 12-27-2019
+      selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("day")):not(:contains("ago"))
       optional: true
       filters:
         - name: replace
           args: ["\xA0", "-"]
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "01-02-2006"
+          args: "01-02-2006 -07:00"
+    date:
+      # 4-mins-ago
+      selector: td:nth-last-of-type(5):contains("ago")
+      optional: true
+      filters:
+        - name: replace
+          args: ["\xA0", "-"]
+        - name: replace
+          args: ["-", " "]
+        - name: timeago
     size:
       selector: td:nth-last-of-type(4)
     seeders:

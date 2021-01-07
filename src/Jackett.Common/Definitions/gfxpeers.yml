@@ -27,7 +27,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    keeplogged: "1"
+    keeplogged: 1
   error:
     - selector: .auth_form > .warning
   test:
@@ -37,52 +37,53 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ .Query.Keywords }}"
-    order_by: "time"
-    order_way: "desc"
-    action: "advanced"
-    searchsubmit: "1"
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ .Keywords }}"
+    order_by: time
+    order_way: desc
+    action: advanced
+    searchsubmit: 1
 
   rows:
     selector: table#torrent_table > tbody > tr.torrent
+
   fields:
-    download:
-      selector: a[href^="torrents.php?action=download&id="]
-      attribute: href
-    title:
-      selector: a[href^="torrents.php?id="]
-    downloadvolumefactor:
-      case:
-        "*": "1"
-    uploadvolumefactor:
-      case:
-        "*": "1"
     category:
       selector: a[href^="torrents.php?filter_cat"]
       attribute: href
       filters:
         - name: regexp
           args: "\\[(\\d+?)\\]"
+    title:
+      selector: a[href^="torrents.php?id="]
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    files:
+      selector: td:nth-child(3)
+    date:
+      # timeago
+      selector: td:nth-child(4)
     size:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-    files:
-      selector: td:nth-child(3)
     seeders:
       selector: td:nth-child(7)
     leechers:
       selector: td:nth-child(8)
-    date:
-      selector: td:nth-child(4)
     downloadvolumefactor:
       case:
-        "strong.tl_free": "0"
-        "*": "1"
+        "strong.tl_free": 0
+        "*": 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+    minimumratio:
+      text: 0.6
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a

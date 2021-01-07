@@ -25,10 +25,10 @@ caps:
     - {id: 11, cat: Audio, desc: "Koncerti/Spotovi"}
     - {id: 28, cat: Console/Wii, desc: "Igre/Wii"}
     - {id: 30, cat: Books/Comics, desc: "Stripovi"}
-    - {id: 38, cat: PC/Phone-Other, desc: "Smartphone"}
+    - {id: 38, cat: PC/Mobile-Other, desc: "Smartphone"}
     - {id: 40, cat: Movies/BluRay, desc: "Filmovi/BD"}
     - {id: 3, cat: Audio/MP3, desc: "Glazba/MP3"}
-    - {id: 26, cat: Console/Xbox, desc: "Igre/Xbox"}
+    - {id: 26, cat: Console/XBox, desc: "Igre/Xbox"}
     - {id: 10, cat: XXX, desc: "XXX/SD"}
     - {id: 16, cat: TV, desc: "THR Packs"}
     - {id: 15, cat: TV/Sport, desc: "Sport"}
@@ -41,6 +41,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: takelogin.php
@@ -48,7 +49,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    ssl: "yes"
+    ssl: yes
   error:
     - selector: div.glavni:has(div.glavni_naslov:contains("Greška"))
   test:
@@ -58,14 +59,22 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
-    search: "{{ .Query.Keywords }}"
-    incldead: "1"
-    sort: "4"
-    type: "desc"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    incldead: 1
+    sort: 4
+    type: desc
+
   rows:
     selector: div.glavni_txt table > tbody > tr[id^="record-"]
+
   fields:
+    category:
+      selector: td.kategorije > a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
       selector: a[href^="details.php?id="]
     title:
@@ -82,12 +91,6 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    category:
-      selector: td.kategorije > a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     download:
       selector: a[href^="download.php?id="]
       attribute: href
@@ -103,35 +106,35 @@ search:
     grabs:
       selector: td:nth-child(7)
       filters:
-        - name: regexp
-          args: ([\d,]+)
         - name: replace
           args: [",", ""]
+        - name: regexp
+          args: (\d+)
     seeders:
       selector: td:nth-child(9)
     leechers:
       selector: td:nth-child(10)
-    banner:
-      optional: true
+    poster:
       selector: a[href^="details.php?id="][onmousemove]
       attribute: onmousemove
       filters:
         - name: regexp
           args: "return overlibImage\\('.*','(.*)'\\);"
     downloadvolumefactor:
-      text: "0"
+      text: 0
     uploadvolumefactor:
-      text: "1"
+      text: 1
     date:
       selector: td:nth-child(2) > small
       filters:
         - name: replace
           args: [" u ", " "]
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
     description:
       optional: true
       selector: td:nth-child(2)
       remove: a, br, small
+# engine tbd

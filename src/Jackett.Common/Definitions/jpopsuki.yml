@@ -25,7 +25,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, artist]
 
 login:
   path: login.php
@@ -39,10 +39,6 @@ login:
     - selector: form#loginform > span.warning, font[color="red"]
   test:
     path: torrents.php
-
-ratio:
-  path: torrents.php
-  selector: li#stats_ratio > span
 
 search:
   paths:
@@ -85,10 +81,9 @@ search:
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: img[src^="static/images/torrents/"]
       attribute: src
-      optional: true
     files:
       selector: td:nth-last-child(6)
     date:
@@ -96,7 +91,7 @@ search:
       attribute: title
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 02 2006, 15:04 -07:00"
     size:

@@ -613,6 +613,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -628,19 +629,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
   path: login.php
@@ -649,7 +650,7 @@ login:
   inputs:
     login_username: "{{ .Config.username }}"
     login_password: "{{ .Config.password }}"
-    redirect: "index.php"
+    redirect: index.php
     autologin: 1
   selectorinputs:
     cookie_test:
@@ -672,7 +673,7 @@ search:
     - name: re_replace # S01E01 to сезон 1 серии 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 серии $2"]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 0
     prev_a: 0
     prev_dla: 0
@@ -758,6 +759,7 @@ search:
     grabs:
       selector: td:nth-child(10)
     date:
+      # unix
       selector: td:last-child > u
     downloadvolumefactor:
       text: 0

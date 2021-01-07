@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 17, cat: TV/Sport, desc: "4K"}
     - {id: 15, cat: TV/Sport, desc: "3D"}
     - {id: 9, cat: TV/Sport, desc: "Amateur - Full"}
     - {id: 16, cat: TV/Sport, desc: "Blu-ray"}
@@ -38,22 +39,26 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
   - name: info_download
     type: info
     label: "Download Restrictions"
@@ -81,9 +86,11 @@ search:
     # https://tc-boxing.com/browse.php?search=tyson&cat=0&incldead=1
     - path: browse.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}cat=0{{end}}"
-    # 0 active 1 incldead 2 onlydead
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
+    # 1 incldead, null active
     incldead: 1
+    # 1 freeleech only, null all
+    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     d: "{{ .Config.type }}"
@@ -111,8 +118,10 @@ search:
     date:
       selector: td:nth-last-child(6)
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:nth-last-child(5)
     grabs:
@@ -130,4 +139,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 day (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # engine n/a

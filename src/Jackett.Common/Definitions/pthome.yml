@@ -15,7 +15,7 @@ caps:
     - {id: 404, cat: TV/Documentary, desc: "Documentaries(记录片)"}
     - {id: 405, cat: TV/Anime, desc: "Animations(动漫)"}
     - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
-    - {id: 403, cat: TV/OTHER, desc: "TV Shows(综艺)"}
+    - {id: 403, cat: TV/Other, desc: "TV Shows(综艺)"}
     - {id: 406, cat: Audio/Video, desc: "Music Videos(MV)"}
     - {id: 407, cat: TV/Sport, desc: "Sports(体育)"}
     - {id: 408, cat: Audio/Lossless, desc: "HQ Audio(音乐)"}
@@ -25,10 +25,11 @@ caps:
     - {id: 409, cat: Other, desc: "Misc(其他)"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -38,7 +39,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -51,24 +55,15 @@ login:
   test:
     path: index.php
 
-ratio:
-  path: index.php
-  selector: table tr td.bottom
-  filters:
-    - name: replace
-      args: ["分享率:", "Ratio:"] # for simplified chinese language setting
-    - name: regexp
-      args: "Ratio:\\s(.*?)\\s\\s"
-
 search:
   paths:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     incldead: 0
-    spstate: 0
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     search_mode: 0
 
   rows:
@@ -110,8 +105,10 @@ search:
       selector: td:nth-child(4) span
       attribute: title
       filters:
+        - name: append
+          args: " +08:00" # CST
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:
       case:
         img.pro_free: 0

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,6 +14,7 @@ using Jackett.Common.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -23,33 +23,51 @@ namespace Jackett.Common.Indexers
     {
         private string LoginUrl => SiteLink + "user/account/login/";
         private string SearchUrl => SiteLink + "torrents/browse/list/";
-        private new ConfigurationDataRecaptchaLogin configData => (ConfigurationDataRecaptchaLogin)base.configData;
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } =
         {
-            "https://v4.torrentleech.org/",
+            "https://v4.torrentleech.org/"
         };
 
-        public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public TorrentLeech(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "torrentleech",
                    name: "TorrentLeech",
                    description: "This is what happens when you seed",
                    link: "https://www.torrentleech.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataRecaptchaLogin(
+                   cacheService: cs,
+                   configData: new ConfigurationDataBasicLogin(
                        "For best results, change the 'Default Number of Torrents per Page' setting to 100 in your Profile."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            configData.AddDynamic("freeleech", new BoolItem { Name = "Search freeleech only", Value = false });
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(8, TorznabCatType.MoviesSD, "Movies Cam");
@@ -69,13 +87,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(26, TorznabCatType.TVSD, "TV Episodes");
             AddCategoryMapping(27, TorznabCatType.TV, "TV Boxsets");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV Episodes HD");
-            AddCategoryMapping(44, TorznabCatType.TVFOREIGN, "TV Foreign");
+            AddCategoryMapping(44, TorznabCatType.TVForeign, "TV Foreign");
 
             AddCategoryMapping(3, TorznabCatType.PCGames, "Games");
             AddCategoryMapping(17, TorznabCatType.PCGames, "Games PC");
-            AddCategoryMapping(18, TorznabCatType.ConsoleXbox, "Games XBOX");
-            AddCategoryMapping(19, TorznabCatType.ConsoleXbox360, "Games XBOX360");
-            AddCategoryMapping(40, TorznabCatType.ConsoleXboxOne, "Games XBOXONE");
+            AddCategoryMapping(18, TorznabCatType.ConsoleXBox, "Games XBOX");
+            AddCategoryMapping(19, TorznabCatType.ConsoleXBox360, "Games XBOX360");
+            AddCategoryMapping(40, TorznabCatType.ConsoleXBoxOne, "Games XBOXONE");
             AddCategoryMapping(20, TorznabCatType.ConsolePS3, "Games PS2");
             AddCategoryMapping(21, TorznabCatType.ConsolePS3, "Games Mac");
             AddCategoryMapping(22, TorznabCatType.ConsolePSP, "Games PSP");
@@ -94,69 +112,20 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(35, TorznabCatType.TV, "TV Cartoons");
 
             AddCategoryMapping(5, TorznabCatType.Books, "Books");
-            AddCategoryMapping(45, TorznabCatType.BooksEbook, "Books EBooks");
+            AddCategoryMapping(45, TorznabCatType.BooksEBook, "Books EBooks");
             AddCategoryMapping(46, TorznabCatType.BooksComics, "Books Comics");
 
             AddCategoryMapping(6, TorznabCatType.PC, "Apps");
             AddCategoryMapping(23, TorznabCatType.PCISO, "PC ISO");
             AddCategoryMapping(24, TorznabCatType.PCMac, "PC Mac");
-            AddCategoryMapping(25, TorznabCatType.PCPhoneOther, "PC Mobile");
+            AddCategoryMapping(25, TorznabCatType.PCMobileOther, "PC Mobile");
             AddCategoryMapping(33, TorznabCatType.PC0day, "PC 0-day");
             AddCategoryMapping(38, TorznabCatType.Other, "Education");
-        }
-
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.Content);
-            var captcha = dom.QuerySelector(".g-recaptcha");
-            if (captcha != null)
-            {
-                var result = configData;
-                result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = captcha.GetAttribute("data-sitekey");
-                result.Captcha.Version = "2";
-                return result;
-            }
-            else
-            {
-                var result = new ConfigurationDataBasicLogin
-                {
-                    SiteLink = { Value = configData.SiteLink.Value },
-                    Instructions = { Value = configData.Instructions.Value },
-                    Username = { Value = configData.Username.Value },
-                    Password = { Value = configData.Password.Value },
-                    CookieHeader = { Value = loginPage.Cookies }
-                };
-                return result;
-            }
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
-            {
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                        throw new Exception("Found 0 results in the tracker");
-
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
-            }
-
             await DoLogin();
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -169,10 +138,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("/user/account/logout"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("/user/account/logout"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("p.text-danger:contains(\"Error:\")").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -187,6 +156,10 @@ namespace Jackett.Common.Indexers
             searchString = Regex.Replace(searchString, @"(^|\s)-", " ");
 
             var searchUrl = SearchUrl;
+
+            if (((BoolItem) configData.GetDynamic("freeleech")).Value)
+                searchUrl += "facets/tags%3AFREELEECH/";
+
             if (query.IsImdbQuery)
                 searchUrl += "imdbID/" + query.ImdbID + "/";
             else if (!string.IsNullOrWhiteSpace(searchString))
@@ -198,17 +171,17 @@ namespace Jackett.Common.Indexers
             else
                 searchUrl += "newfilter/2"; // include 0day and music
 
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
-            if (results.Content.Contains("/user/account/login")) // re-login
+            if (results.ContentString.Contains("/user/account/login")) // re-login
             {
                 await DoLogin();
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try
             {
-                var rows = (JArray)((JObject)JsonConvert.DeserializeObject(results.Content))["torrentList"];
+                var rows = (JArray)((JObject)JsonConvert.DeserializeObject(results.ContentString))["torrentList"];
                 foreach (var row in rows)
                 {
                     var title = row["name"].ToString();
@@ -216,7 +189,7 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var torrentId = row["fid"].ToString();
-                    var comments = new Uri(SiteLink + "torrent/" + torrentId);
+                    var details = new Uri(SiteLink + "torrent/" + torrentId);
                     var link = new Uri(SiteLink + "download/" + torrentId + "/" + row["filename"]);
                     var publishDate = DateTime.ParseExact(row["addedTimestamp"].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                     var seeders = (int)row["seeders"];
@@ -228,8 +201,8 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(row["categoryID"].ToString()),
@@ -241,7 +214,7 @@ namespace Jackett.Common.Indexers
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = dlVolumeFactor,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800 // 48 hours
+                        MinimumSeedTime = 864000 // 10 days for registered users, less for upgraded users
                     };
 
                     releases.Add(release);
@@ -249,7 +222,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

@@ -11,19 +11,36 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class NotWhatCD : GazelleTracker
     {
-        public NotWhatCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public NotWhatCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "notwhatcd",
                    name: "notwhat.cd",
                    description: "A music tracker",
                    link: "https://notwhat.cd/",
                    caps: new TorznabCapabilities
                    {
-                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true)
         {
             Language = "en-us";

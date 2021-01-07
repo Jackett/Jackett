@@ -19,10 +19,18 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class YTS : BaseWebIndexer
     {
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
+
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://yts.mx/",
+            "https://yts.unblockit.dev/",
+            "https://yts.unblockninja.com/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://yts.ag/",
             "https://yts.am/",
             "https://yts.lt/",
+            "https://yts.root.yt/"
         };
 
         private string ApiEndpoint => SiteLink + "api/v2/list_movies.json";
@@ -33,19 +41,21 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "yts",
                    name: "YTS",
                    description: "YTS is a Public torrent site specialising in HD movies of small size",
                    link: "https://yts.mx/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
@@ -64,7 +74,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0,
@@ -99,13 +109,13 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             try
             {
                 // returned content might start with an html error message, remove it first
-                var jsonStart = response.Content.IndexOf('{');
-                var jsonContentStr = response.Content.Remove(0, jsonStart);
+                var jsonStart = response.ContentString.IndexOf('{');
+                var jsonContentStr = response.ContentString.Remove(0, jsonStart);
 
                 var jsonContent = JObject.Parse(jsonContentStr);
 
@@ -141,31 +151,20 @@ namespace Jackett.Common.Indexers
                         switch (type)
                         {
                             case "web":
-                                type = " WEBRip";
+                                type = "WEBRip";
                                 break;
                             default:
-                                type = " BRRip";
+                                type = "BRRip";
                                 break;
                         }
                         var quality = torrent_info.Value<string>("quality");
-                        release.Title = "[YTS] " + movie_item.Value<string>("title_long") + " " + quality + type;
+                        var title = movie_item.Value<string>("title").Replace(":","").Replace(' ', '.');
+                        var year = movie_item.Value<int>("year");
+                        release.Title = $"{title}.{year}.{quality}.{type}-YTS";
                         var imdb = movie_item.Value<string>("imdb_code");
                         release.Imdb = ParseUtil.GetImdbID(imdb);
 
-                        // API does not provide magnet link, so, construct it
-                        var magnet_uri = "magnet:?xt=urn:btih:" + torrent_info.Value<string>("hash") +
-                        "&dn=" + movie_item.Value<string>("slug") +
-                        "&tr=udp://open.demonii.com:1337/announce" +
-                        "&tr=udp://tracker.openbittorrent.com:80" +
-                        "&tr=udp://tracker.coppersurfer.tk:6969" +
-                        "&tr=udp://glotorrents.pw:6969/announce" +
-                        "&tr=udp://tracker.opentrackr.org:1337/announce" +
-                        "&tr=udp://torrent.gresille.org:80/announce" +
-                        "&tr=udp://p4p.arenabg.com:1337" +
-                        "&tr=udp://tracker.leechers-paradise.org:6969";
-
-                        release.MagnetUri = new Uri(magnet_uri);
-                        release.InfoHash = torrent_info.Value<string>("hash");
+                        release.InfoHash = torrent_info.Value<string>("hash"); // magnet link is auto generated from infohash
 
                         // ex: 2015-08-16 21:25:08 +0000
                         var dateStr = torrent_info.Value<string>("date_uploaded");
@@ -175,13 +174,11 @@ namespace Jackett.Common.Indexers
                         release.Seeders = torrent_info.Value<int>("seeds");
                         release.Peers = torrent_info.Value<int>("peers") + release.Seeders;
                         release.Size = torrent_info.Value<long>("size_bytes");
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
-                        release.Comments = new Uri(movie_item.Value<string>("url"));
-                        release.BannerUrl = new Uri(movie_item.Value<string>("large_cover_image"));
+                        release.Details = new Uri(movie_item.Value<string>("url"));
+                        release.Poster = new Uri(movie_item.Value<string>("large_cover_image"));
                         release.Guid = release.Link;
 
                         // map the quality to a newznab category for torznab compatibility (for Radarr, etc)
@@ -209,7 +206,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

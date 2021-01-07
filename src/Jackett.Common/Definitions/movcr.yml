@@ -6,7 +6,7 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://movcr.to/
+  - https://movcr.st/
 legacylinks:
   - https://movcr.tv/
   - https://movcr.black-mirror.xyz/
@@ -17,17 +17,22 @@ legacylinks:
   - https://movcr.unblocked.bar/ # some torrent links are broken if 'movcr.to' is in its name
   - https://movcr.proxyportal.pw/ # some torrent links are broken if 'movcr.to' is in its name
   - https://movcr.uk-unblock.pro/ # some torrent links are broken if 'movcr.to' is in its name
+  - https://movcr.to/
 
 caps:
   categories:
-    "other": Other
+    Other: Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
 
-settings: []
+settings:
+  - name: info_8000
+    type: info
+    label: About MovCr Categories
+    default: MovCr does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 download:
   selector: a[href^="/torrents/"]
@@ -35,7 +40,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/search.php?q={{ .Keywords }}{{else}}/{{end}}"
+    - path: "{{ if .Keywords }}search/search.php?q={{ .Keywords }}{{ else }}/{{ end }}"
 
   rows:
     selector: tr:has(td.name a[href^="/download-"])
@@ -44,7 +49,7 @@ search:
 
   fields:
     category:
-      text: other
+      text: Other
     title:
       selector: td.name a:nth-child(2)
     details:
@@ -57,8 +62,10 @@ search:
       selector: td.seeds:contains("-")
       optional: true
       filters:
+        - name: append
+          args: " +05:30" # IST
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     date:
       selector: td.seeds:not(:contains("-"))
       optional: true

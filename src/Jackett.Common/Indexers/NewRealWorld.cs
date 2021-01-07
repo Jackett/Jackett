@@ -29,74 +29,94 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public NewRealWorld(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public NewRealWorld(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "newrealworld",
                    name: "New Real World",
                    description: "A German general tracker.",
                    link: "https://nrw-tracker.eu/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-de";
             Type = "private";
 
-            AddCategoryMapping(39, TorznabCatType.TVAnime); // Anime: HD|1080p
-            AddCategoryMapping(38, TorznabCatType.TVAnime); // Anime: HD|720p
-            AddCategoryMapping(1, TorznabCatType.TVAnime); // Anime: SD
-            AddCategoryMapping(7, TorznabCatType.PCPhoneOther); // Appz: Handy-PDA
-            AddCategoryMapping(36, TorznabCatType.PCMac); // Appz: Mac
-            AddCategoryMapping(18, TorznabCatType.PC); // Appz: Sonstiges
-            AddCategoryMapping(17, TorznabCatType.PC); // Appz: Win
-            AddCategoryMapping(15, TorznabCatType.Audio); // Audio: DVD-R
-            AddCategoryMapping(49, TorznabCatType.AudioLossless); // Audio: Flac
-            AddCategoryMapping(30, TorznabCatType.AudioAudiobook); // Audio: Hörspiele
-            AddCategoryMapping(14, TorznabCatType.AudioMP3); // Audio: MP3
-            AddCategoryMapping(22, TorznabCatType.AudioVideo); // Audio: Videoclip
-            AddCategoryMapping(19, TorznabCatType.Other); // Diverses: Sonstiges
-            AddCategoryMapping(43, TorznabCatType.TVDocumentary); // Dokus: HD
-            AddCategoryMapping(2, TorznabCatType.TVDocumentary); // Dokus: SD
-            AddCategoryMapping(3, TorznabCatType.Books); // Ebooks: Bücher
-            AddCategoryMapping(52, TorznabCatType.BooksComics); // Ebooks: Comics
-            AddCategoryMapping(53, TorznabCatType.BooksMagazines); // Ebooks: Magazine
-            AddCategoryMapping(55, TorznabCatType.BooksOther); // Ebooks: XXX
-            AddCategoryMapping(54, TorznabCatType.BooksOther); // Ebooks: Zeitungen
-            AddCategoryMapping(47, TorznabCatType.PCPhoneOther); // Games: Andere
-            AddCategoryMapping(32, TorznabCatType.PCMac); // Games: Mac
-            AddCategoryMapping(41, TorznabCatType.ConsoleNDS); // Games: NDS/3DS
-            AddCategoryMapping(4, TorznabCatType.PCGames); // Games: PC
-            AddCategoryMapping(5, TorznabCatType.ConsolePS3); // Games: PS2
-            AddCategoryMapping(9, TorznabCatType.ConsolePS3); // Games: PS3
-            AddCategoryMapping(6, TorznabCatType.ConsolePSP); // Games: PSP
-            AddCategoryMapping(28, TorznabCatType.ConsoleWii); // Games: Wii
-            AddCategoryMapping(31, TorznabCatType.ConsoleXbox); // Games: XboX
-            AddCategoryMapping(51, TorznabCatType.Movies3D); // Movies: 3D
-            AddCategoryMapping(37, TorznabCatType.MoviesBluRay); // Movies: BluRay
-            AddCategoryMapping(25, TorznabCatType.MoviesHD); // Movies: HD|1080p
-            AddCategoryMapping(29, TorznabCatType.MoviesHD); // Movies: HD|720p
-            AddCategoryMapping(11, TorznabCatType.MoviesDVD); // Movies: SD|DVD-R
-            AddCategoryMapping(8, TorznabCatType.MoviesSD); // Movies: SD|x264
-            AddCategoryMapping(13, TorznabCatType.MoviesSD); // Movies: SD|XviD
-            AddCategoryMapping(40, TorznabCatType.MoviesForeign); // Movies: US Movies
-            AddCategoryMapping(33, TorznabCatType.TV); // Serien: DVD-R
-            AddCategoryMapping(34, TorznabCatType.TVHD); // Serien: HD
-            AddCategoryMapping(56, TorznabCatType.TVHD); // Serien: Packs|HD
-            AddCategoryMapping(44, TorznabCatType.TVSD); // Serien: Packs|SD
-            AddCategoryMapping(16, TorznabCatType.TVSD); // Serien: SD
-            AddCategoryMapping(10, TorznabCatType.TVOTHER); // Serien: TV/Shows
-            AddCategoryMapping(21, TorznabCatType.TVFOREIGN); // Serien: US TV
-            AddCategoryMapping(24, TorznabCatType.TVSport); // Sport: Diverses
-            AddCategoryMapping(23, TorznabCatType.TVSport); // Sport: Wrestling
-            AddCategoryMapping(57, TorznabCatType.Movies); // Tracker - Crew: pmHD
-            AddCategoryMapping(58, TorznabCatType.MoviesHD); // Ultra-HD: 4K
-            AddCategoryMapping(46, TorznabCatType.XXXOther); // XXX: Diverses
-            AddCategoryMapping(50, TorznabCatType.XXX); // XXX: HD
-            AddCategoryMapping(45, TorznabCatType.XXXPacks); // XXX: Packs
-            AddCategoryMapping(27, TorznabCatType.XXX); // XXX: SD
+            AddCategoryMapping(39, TorznabCatType.TVAnime, "Anime: HD|1080p");
+            AddCategoryMapping(38, TorznabCatType.TVAnime, "Anime: HD|720p");
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime: SD");
+            AddCategoryMapping(7, TorznabCatType.PCMobileOther, "Appz: Handy-PDA");
+            AddCategoryMapping(36, TorznabCatType.PCMac, "Appz: Mac");
+            AddCategoryMapping(18, TorznabCatType.PC, "Appz: Sonstiges");
+            AddCategoryMapping(17, TorznabCatType.PC, "Appz: Win");
+            AddCategoryMapping(15, TorznabCatType.Audio, "Audio: DVD-R");
+            AddCategoryMapping(49, TorznabCatType.AudioLossless, "Audio: Flac");
+            AddCategoryMapping(30, TorznabCatType.AudioAudiobook, "Audio: Hörspiele");
+            AddCategoryMapping(14, TorznabCatType.AudioMP3, "Audio: MP3");
+            AddCategoryMapping(22, TorznabCatType.AudioVideo, "Audio: Videoclip");
+            AddCategoryMapping(19, TorznabCatType.Other, "Diverses: Sonstiges");
+            AddCategoryMapping(43, TorznabCatType.TVDocumentary, "Dokus: HD");
+            AddCategoryMapping(2, TorznabCatType.TVDocumentary, "Dokus: SD");
+            AddCategoryMapping(3, TorznabCatType.Books, "Ebooks: Bücher");
+            AddCategoryMapping(52, TorznabCatType.BooksComics, "Ebooks: Comics");
+            AddCategoryMapping(53, TorznabCatType.BooksMags, "Ebooks: Magazine");
+            AddCategoryMapping(55, TorznabCatType.BooksOther, "Ebooks: XXX");
+            AddCategoryMapping(54, TorznabCatType.BooksOther, "Ebooks: Zeitungen");
+            AddCategoryMapping(47, TorznabCatType.PCMobileOther, "Games: Andere");
+            AddCategoryMapping(32, TorznabCatType.PCMac, "Games: Mac");
+            AddCategoryMapping(41, TorznabCatType.ConsoleNDS, "Games: NDS/3DS");
+            AddCategoryMapping(4, TorznabCatType.PCGames, "Games: PC");
+            AddCategoryMapping(5, TorznabCatType.ConsolePS3, "Games: PS2");
+            AddCategoryMapping(9, TorznabCatType.ConsolePS3, "Games: PS3");
+            AddCategoryMapping(6, TorznabCatType.ConsolePSP, "Games: PSP");
+            AddCategoryMapping(28, TorznabCatType.ConsoleWii, "Games: Wii");
+            AddCategoryMapping(31, TorznabCatType.ConsoleXBox, "Games: XboX");
+            AddCategoryMapping(51, TorznabCatType.Movies3D, "Movies: 3D");
+            AddCategoryMapping(37, TorznabCatType.MoviesBluRay, "Movies: BluRay");
+            AddCategoryMapping(25, TorznabCatType.MoviesHD, "Movies: HD|1080p");
+            AddCategoryMapping(29, TorznabCatType.MoviesHD, "Movies: HD|720p");
+            AddCategoryMapping(11, TorznabCatType.MoviesDVD, "Movies: SD|DVD-R");
+            AddCategoryMapping(8, TorznabCatType.MoviesSD, "Movies: SD|x264");
+            AddCategoryMapping(13, TorznabCatType.MoviesSD, "Movies: SD|XviD");
+            AddCategoryMapping(40, TorznabCatType.MoviesForeign, "Movies: US Movies");
+            AddCategoryMapping(33, TorznabCatType.TV, "Serien: DVD-R");
+            AddCategoryMapping(34, TorznabCatType.TVHD, "Serien: HD");
+            AddCategoryMapping(56, TorznabCatType.TVHD, "Serien: Packs|HD");
+            AddCategoryMapping(44, TorznabCatType.TVSD, "Serien: Packs|SD");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "Serien: SD");
+            AddCategoryMapping(10, TorznabCatType.TVOther, "Serien: TV/Shows");
+            AddCategoryMapping(21, TorznabCatType.TVForeign, "Serien: US TV");
+            AddCategoryMapping(24, TorznabCatType.TVSport, "Sport: Diverses");
+            AddCategoryMapping(23, TorznabCatType.TVSport, "Sport: Wrestling");
+            AddCategoryMapping(57, TorznabCatType.Movies, "Tracker - Crew: pmHD");
+            AddCategoryMapping(58, TorznabCatType.MoviesHD, "Ultra-HD: 4K");
+            AddCategoryMapping(46, TorznabCatType.XXXOther, "XXX: Diverses");
+            AddCategoryMapping(50, TorznabCatType.XXX, "XXX: HD");
+            AddCategoryMapping(45, TorznabCatType.XXXPack, "XXX: Packs");
+            AddCategoryMapping(27, TorznabCatType.XXX, "XXX: SD");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -111,10 +131,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var errorMessage = dom.QuerySelector("table.tableinborder").InnerHtml;
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
@@ -150,18 +170,18 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestStringWithCookies(searchUrl);
+            var response = await RequestWithCookiesAsync(searchUrl);
             if (response.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookies(searchUrl);
+                response = await RequestWithCookiesAsync(searchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table.testtable> tbody > tr:has(td.tableb)");
 
                 foreach (var row in rows)
@@ -184,7 +204,7 @@ namespace Jackett.Common.Indexers
                     var dlLink = qDownloadLink.GetAttribute("href");
                     if (dlLink.Contains("javascript")) // depending on the user agent the DL link is a javascript call
                     {
-                        var dlLinkParts = dlLink.Split(new char[] { '\'', ',' });
+                        var dlLinkParts = dlLink.Split(new[] { '\'', ',' });
                         dlLink = SiteLink + "download/" + dlLinkParts[3] + "/" + dlLinkParts[5];
                     }
                     var link = new Uri(dlLink);
@@ -193,7 +213,7 @@ namespace Jackett.Common.Indexers
                     var dateGerman = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
                     var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateGerman, germanyTz);
                     var files = ParseUtil.CoerceInt(row.QuerySelector("td:contains(Datei) > strong ~ strong").TextContent);
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     var size = ReleaseInfo.GetBytes(qSize.TextContent.Replace(".", "").Replace(",", "."));
                     var downloadVolumeFactor = row.QuerySelector("img[title=\"OnlyUpload\"]") != null ? 0 : 1;
@@ -204,7 +224,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Category = MapTrackerCatToNewznab(catStr),
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         Size = size,
                         Seeders = seeders,
@@ -219,7 +239,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

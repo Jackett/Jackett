@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
+    [ExcludeFromCodeCoverage]
     internal class ConfigurationDataRutracker : ConfigurationDataCaptchaLogin
     {
         public BoolItem StripRussianLetters { get; private set; }

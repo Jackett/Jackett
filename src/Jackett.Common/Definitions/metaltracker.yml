@@ -11,14 +11,15 @@ legacylinks:
   - http://en.metal-tracker.com/
 
 caps:
-  categories:
-    Books: Audio/Audiobook
-    Video: Audio/Video
-    Music: Audio/MP3
+  categorymappings:
+    - {id: Books, cat: Audio/Audiobook, desc: Books}
+    - {id: Video, cat: Audio/Video, desc: Videos}
+    - {id: Music, cat: Audio/MP3, desc: Music}
 
   modes:
     search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, album, artist]
+    book-search: [q]
 
 settings:
   - name: username
@@ -30,19 +31,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "date"
+    default: date
     options:
-      "date": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      date: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: user/login.html
@@ -64,7 +65,7 @@ search:
     - path: torrents/search.html
       method: post
   inputs:
-    "SearchTorrentsForm[nameTorrent]": "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{else}}{{ .Keywords }}{{end}}"
+    "SearchTorrentsForm[nameTorrent]": "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{ else }}{{ .Keywords }}{{ end }}"
     "SearchTorrentsForm[sort]": "{{ .Config.sort }}"
     "SearchTorrentsForm[sortType]": "{{ .Config.type }}"
     go-search: Search
@@ -75,7 +76,7 @@ search:
   fields:
     title:
       selector: a h3
-    banner:
+    poster:
       selector: .thumb a img
       attribute: src
     details:

@@ -30,17 +30,17 @@ caps:
     - {id: 12, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
     - {id: 350, cat: TV/Anime, desc: "Аниме"}
     - {id: 824, cat: TV/Sport, desc: "Спорт"}
-    - {id: 9, cat: TV/OTHER, desc: "TV, развлекательные шоу, приколы и юмор"}
+    - {id: 9, cat: TV/Other, desc: "TV, развлекательные шоу, приколы и юмор"}
     - {id: 758, cat: Audio, desc: "Музыка"}
     - {id: 943, cat: Audio/Lossless, desc: "Lossless"}
     - {id: 1046, cat: Audio/Video, desc: "Музыкальное видео"}
     - {id: 616, cat: Audio/Audiobook, desc: "Аудиокниги"}
     - {id: 614, cat: Books, desc: "Книги"}
-    - {id: 617, cat: Books/Magazines, desc: "Журналы"}
+    - {id: 617, cat: Books/Mags, desc: "Журналы"}
     - {id: 488, cat: PC, desc: "Программы"}
     - {id: 492, cat: PC/Mac, desc: "ОС и ПО для Apple Macintosh"}
-    - {id: 799, cat: PC/Phone-IOS, desc: "iPhone, iPod Touch, iPad"}
-    - {id: 800, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 799, cat: PC/Mobile-iOS, desc: "iPhone, iPod Touch, iPad"}
+    - {id: 800, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 400, cat: PC/Games, desc: "Игры"}
     - {id: 748, cat: Console, desc: "Консольные игры"}
     - {id: 686, cat: XXX, desc: "Эротика и Pron"}
@@ -651,24 +651,25 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "t"
+    default: t
     options:
-      "t": "created"
-      "ts": "seeders"
-      "sz": "size"
-      "i": "title"
+      t: created
+      ts: seeders
+      sz: size
+      i: title
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 download:
   selector: a[href^="./download/file.php?id="]
@@ -685,7 +686,7 @@ search:
     tracker_search: torrent
     sk: "{{ .Config.sort }}"
     sd: "{{ .Config.type }}"
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
 
   rows:
@@ -750,8 +751,10 @@ search:
           args: ["ноя", "Nov"]
         - name: replace
           args: ["дек", "Dec"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 2006"
+          args: "02 Jan 2006 -07:00"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

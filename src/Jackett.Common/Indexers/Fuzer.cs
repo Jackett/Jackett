@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
@@ -13,6 +12,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -27,28 +27,40 @@ namespace Jackett.Common.Indexers
         };
 
         private string SearchUrl => SiteLink + "browse.php";
-        private string LoginUrl => SiteLink + "login.php";
 
-        private new ConfigurationDataRecaptchaLogin configData
-        {
-            get => (ConfigurationDataRecaptchaLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public Fuzer(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l, IProtectionService ps)
+        public Fuzer(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "fuzer",
                    name: "Fuzer",
                    description: "Fuzer is a private torrent website with israeli torrents.",
                    link: "https://www.fuzer.me/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
-                   configData: new ConfigurationDataRecaptchaLogin())
+                   cacheService: cs,
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
@@ -69,7 +81,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.TVHD, "סדרות HD");
             AddCategoryMapping(62, TorznabCatType.TVSD, "סדרות ישראליות");
             AddCategoryMapping(63, TorznabCatType.TVHD, "סדרות ישראליות HD");
-            AddCategoryMapping(84, TorznabCatType.TVOTHER, "סדרות מדובבות");
+            AddCategoryMapping(84, TorznabCatType.TVOther, "סדרות מדובבות");
 
             // מוזיקה
             AddCategoryMapping(14, TorznabCatType.Audio, "מוזיקה עולמית");
@@ -80,14 +92,14 @@ namespace Jackett.Common.Indexers
             // משחקים
             AddCategoryMapping(11, TorznabCatType.PCGames, "משחקים PC");
             AddCategoryMapping(12, TorznabCatType.ConsoleOther, "משחקים PS");
-            AddCategoryMapping(55, TorznabCatType.ConsoleXbox, "משחקים XBOX");
+            AddCategoryMapping(55, TorznabCatType.ConsoleXBox, "משחקים XBOX");
             AddCategoryMapping(56, TorznabCatType.ConsoleWii, "משחקים WII");
-            AddCategoryMapping(57, TorznabCatType.PCPhoneOther, "משחקי קונסולות ניידות");
+            AddCategoryMapping(57, TorznabCatType.PCMobileOther, "משחקי קונסולות ניידות");
 
             // תוכנה
-            AddCategoryMapping(13, TorznabCatType.PCPhoneAndroid, "אפליקציות לאנדרואיד");
+            AddCategoryMapping(13, TorznabCatType.PCMobileAndroid, "אפליקציות לאנדרואיד");
             AddCategoryMapping(15, TorznabCatType.PC0day, "תוכנות PC");
-            AddCategoryMapping(70, TorznabCatType.PCPhoneIOS, "אפליקציות לאייפון");
+            AddCategoryMapping(70, TorznabCatType.PCMobileiOS, "אפליקציות לאייפון");
             AddCategoryMapping(71, TorznabCatType.PCMac, "תוכנות MAC");
 
             // שונות
@@ -105,70 +117,26 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(76, TorznabCatType.TV, "סדרות");
         }
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var parser = new HtmlParser();
-            var cq = parser.ParseDocument(loginPage.Content);
-            var captcha = cq.QuerySelector(".g-recaptcha"); // invisible recaptcha
-            if (captcha != null)
-            {
-                var result = configData;
-                result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = captcha.GetAttribute("data-sitekey");
-                result.Captcha.Version = "2";
-                return result;
-            }
-            else
-            {
-                var result = new ConfigurationDataBasicLogin();
-                result.SiteLink.Value = configData.SiteLink.Value;
-                result.Instructions.Value = configData.Instructions.Value;
-                result.Username.Value = configData.Username.Value;
-                result.Password.Value = configData.Password.Value;
-                result.CookieHeader.Value = loginPage.Cookies;
-                return result;
-            }
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
-            {
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (!results.Any())
-                        throw new Exception("Found 0 results in the tracker");
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
-            }
 
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-            var pairs = new Dictionary<string, string>
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                {"vb_login_username", configData.Username.Value},
-                {"vb_login_password", ""},
-                {"securitytoken", "guest"},
-                {"do", "login"},
-                {"vb_login_md5password", StringUtil.Hash(configData.Password.Value).ToLower()},
-                {"vb_login_md5password_utf", StringUtil.Hash(configData.Password.Value).ToLower()},
-                {"cookieuser", "1"}
-            };
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("images/loading.gif") == true,
-                                () => throw new ExceptionWithConfigData("Couldn't login", configData));
-            Thread.Sleep(2);
-            return IndexerConfigurationStatus.RequiresTesting;
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
+
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -204,11 +172,11 @@ namespace Jackett.Common.Indexers
             }
 
             searchUrl = MapTorznabCapsToTrackers(query).Aggregate(searchUrl, (current, cat) => $"{current}&c[]={cat}");
-            var data = await RequestStringWithCookiesAndRetry(searchUrl);
+            var data = await RequestWithCookiesAndRetryAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(data.Content);
+                var dom = parser.ParseDocument(data.ContentString);
                 var rows = dom.QuerySelectorAll("tr.box_torrent");
                 foreach (var row in rows)
                 {
@@ -225,13 +193,13 @@ namespace Jackett.Common.Indexers
                                     release.Seeders;
                     var fullSize = row.QuerySelector("td:nth-child(4)").TextContent;
                     release.Size = ReleaseInfo.GetBytes(fullSize);
-                    release.Comments = new Uri(SiteLink + row.QuerySelector("a.threadlink[href]").GetAttribute("href"));
+                    release.Details = new Uri(SiteLink + row.QuerySelector("a.threadlink[href]").GetAttribute("href"));
                     release.Link = new Uri(SiteLink + row.QuerySelector("a:has(div.dlimg)").GetAttribute("href"));
-                    release.Guid = release.Comments;
-                    //some releases have invalid banner URLs, ignore the banners in this case
+                    release.Guid = release.Details;
+                    //some releases have invalid poster URLs, ignore the posters in this case
                     if (Uri.TryCreate(row.QuerySelector("a[imgsrc]").GetAttribute("imgsrc"),
-                                      UriKind.Absolute, out var banner))
-                        release.BannerUrl = banner;
+                                      UriKind.Absolute, out var poster))
+                        release.Poster = poster;
                     var dateStringAll = row.QuerySelector("div.up_info2").ChildNodes.Last().TextContent;
                     var dateParts = dateStringAll.Split(' ');
                     var dateString = dateParts[dateParts.Length - 2] + " " + dateParts[dateParts.Length - 1];
@@ -254,7 +222,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(data.Content, ex);
+                OnParseError(data.ContentString, ex);
             }
 
             return releases;
@@ -267,7 +235,7 @@ namespace Jackett.Common.Indexers
                 {"searchseriesid", ""},
                 {"tab", "listseries"},
                 {"function", "Search"},
-                {"string", searchTerm}, // eretz + nehedert
+                {"string", searchTerm} // eretz + nehedert
             };
             var site = new UriBuilder
             {
@@ -276,9 +244,9 @@ namespace Jackett.Common.Indexers
                 Path = "index.php",
                 Query = queryString.GetQueryString()
             };
-            var results = await RequestStringWithCookies(site.ToString());
+            var results = await RequestWithCookiesAsync(site.ToString());
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.Content);
+            var dom = parser.ParseDocument(results.ContentString);
             var rows = dom.QuerySelectorAll("#listtable > tbody > tr");
             foreach (var row in rows.Skip(1))
             {
@@ -288,7 +256,7 @@ namespace Jackett.Common.Indexers
                     var address = link.GetAttribute("href");
                     if (string.IsNullOrEmpty(address))
                         continue;
-                    var realDom = parser.ParseDocument(results.Content);
+                    var realDom = parser.ParseDocument(results.ContentString);
                     return realDom.QuerySelector("#content:nth-child(1) > h1").TextContent;
                 }
             }

@@ -14,20 +14,28 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class SecretCinema : GazelleTracker
     {
-        public SecretCinema(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public SecretCinema(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "secretcinema",
                    name: "Secret Cinema",
                    description: "A tracker for rare movies.",
                    link: "https://secret-cinema.pw/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true,
-                       SupportedMusicSearchParamsList = new List<string> { "q", "album", "artist", "label", "year" }
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                       }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: false) // ratioless tracker
         {
             Language = "en-us";

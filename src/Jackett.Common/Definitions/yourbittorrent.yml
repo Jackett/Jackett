@@ -12,25 +12,26 @@ legacylinks:
   - https://yourbittorrent.host/
 
 caps:
-  categories:
-    anime: TV/Anime
-    software: PC
-    ebooks: Books
-    adult: XXX
-    games: PC/Games
-    movies: Movies
-    music: Audio
-    television: TV
-    other: Other
-    photos: Other
-    pictures: Other
-    unknown: Other
+  categorymappings:
+    - {id: anime, cat: TV/Anime, desc: Anime}
+    - {id: software, cat: PC, desc: Software}
+    - {id: ebooks, cat: Books, desc: Ebooks}
+    - {id: adult, cat: XXX, desc: Adult}
+    - {id: games, cat: PC/Games, desc: Games}
+    - {id: movies, cat: Movies, desc: Movies}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: television, cat: TV, desc: TV}
+    - {id: other, cat: Other, desc: Other}
+    - {id: photos, cat: Other, desc: Photos}
+    - {id: pictures, cat: Other, desc: Pictures}
+    - {id: unknown, cat: Other, desc: Unknown}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings: []
 
@@ -40,7 +41,7 @@ search:
   inputs:
     v: ""
     c: ""
-    q: "{{ .Keywords }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "-"]
@@ -90,8 +91,10 @@ search:
       selector: td:nth-child(4):contains("/")
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "02/01/06"
+          args: "02/01/06 -07:00"
     seeders:
       selector: td:nth-child(5)
     leechers:

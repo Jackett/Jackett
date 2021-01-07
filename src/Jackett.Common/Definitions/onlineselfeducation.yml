@@ -65,6 +65,7 @@ caps:
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -76,19 +77,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -109,9 +110,9 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # title descr all
+    # title, descr, all
     searchin: title
-    # 1 incldead 0 active 2 onlydead
+    # 1 incldead, 0 active, 2 onlydead
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -149,8 +150,10 @@ search:
       selector: td:nth-child(7):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-child(8)
     grabs:
@@ -166,4 +169,5 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+# minimumratio: appears ratioless
 # engine n/a

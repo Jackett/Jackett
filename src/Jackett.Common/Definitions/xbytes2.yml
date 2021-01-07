@@ -36,7 +36,7 @@ caps:
     - {id: 65, cat: Console, desc: "Juegos Retro"}
     - {id: 33, cat: Books, desc: "Libros"}
     - {id: 7, cat: PC/0day, desc: "Software"}
-    - {id: 40, cat: PC/Phone-Other, desc: "Telefonos y tablets"}
+    - {id: 40, cat: PC/Mobile-Other, desc: "Telefonos y tablets"}
     - {id: 12, cat: XXX, desc: "Adult"}
     - {id: 32, cat: Other, desc: "Otros"}
     # internal cats not provided in search category dropdown !?!
@@ -48,6 +48,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -59,19 +60,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info
     type: info
     label: Results Per Page
@@ -85,12 +86,13 @@ login:
     pwd: "{{ .Config.password }}"
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   path: index.php
   keywordsfilters:
     - name: re_replace
-      args: ["S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
+      args: ["(?i)S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
   inputs:
     page: torrents
     $raw: "&category={{ range .Categories }}{{.}};{{end}}"
@@ -115,7 +117,7 @@ search:
         - name: re_replace
           args: ["\\/", " "]
         - name: re_replace
-          args: ["S(\\d{1,2}) E(\\d{1,2})", "S$1E$2"]
+          args: ["(?i)S(\\d{1,2}) E(\\d{1,2})", "S$1E$2"]
         - name: re_replace
           args: ["\\(", ""]
         - name: re_replace
@@ -144,8 +146,7 @@ search:
     details:
       selector: td[valign="middle"] a
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: td[valign="middle"] a
       attribute: onmouseover
       filters:
@@ -165,8 +166,10 @@ search:
     date:
       selector: td:nth-child(6)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     download:
       selector: a[href^="download.php"]
       attribute: href

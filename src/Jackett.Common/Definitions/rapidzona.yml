@@ -58,24 +58,22 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "date"
+    default: date
     options:
-      "date": "created"
-      "title": "title"
+      date: created
+      title: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 
 download:
@@ -159,7 +157,7 @@ search:
       selector: h1 > a
       attribute: href
     size:
-      text: "500 MB"
+      text: "512 MB"
     seeders:
       text: 1
     leechers:
@@ -172,8 +170,10 @@ search:
         # 20/02/2020 18:34
         - name: regexp
           args: "(\\d{1,2}\\/\\d{2}\\/\\d{4} \\d{1,2}\\:\\d{2})"
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02/01/2006 15:04"
+          args: "02/01/2006 15:04 -07:00"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

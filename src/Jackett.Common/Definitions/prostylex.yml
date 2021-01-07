@@ -7,9 +7,6 @@ type: semi-private
 encoding: UTF-8
 links:
   - https://prostylex.org/
-  - https://prostylex.unblocked.bar/
-  - https://prostylex.proxyportal.pw/
-  - https://prostylex.uk-unblock.pro/
 legacylinks:
   - http://prostylex.com/
   - https://prostylex.black-mirror.xyz/
@@ -17,11 +14,15 @@ legacylinks:
   - https://prostylex.proxyportal.fun/
   - https://prostylex.uk-unblock.xyz/
   - https://prostylex.ind-unblock.xyz/
+  - https://prostylex.unblocked.bar/
+  - https://prostylex.proxyportal.pw/
+  - https://prostylex.uk-unblock.pro/
+  - https://prostylex.unblocked.rest/ # Cloudflare - This web property is not accessible via this address.
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies/SD, desc: "Movies - Divx/Xvid"}
-    - {id: 2, cat: Movies/WEBDL, desc: "Movies - h.264/x264"}
+    - {id: 2, cat: Movies/WEB-DL, desc: "Movies - h.264/x264"}
     - {id: 3, cat: Movies/HD, desc: "Movies - HD"}
     - {id: 4, cat: Movies/DVD, desc: "Movies - DVD"}
     - {id: 5, cat: Movies/Other, desc: "Movies - Cam/TS"}
@@ -33,7 +34,7 @@ caps:
     - {id: 12, cat: TV/WEB-DL, desc: "TV - x264"}
     - {id: 13, cat: TV/SD, desc: "TV - Xvid"}
     - {id: 14, cat: TV/HD, desc: "TV - HD"}
-    - {id: 15, cat: TV/OTHER, desc: "TV - Packs"}
+    - {id: 15, cat: TV/Other, desc: "TV - Packs"}
     - {id: 16, cat: TV/Sport, desc: "TV - Sports"}
     - {id: 17, cat: TV/HD, desc: "TV - HEVC/x265"}
     - {id: 20, cat: Audio/MP3, desc: "Music - Audio"}
@@ -47,8 +48,8 @@ caps:
     - {id: 46, cat: XXX, desc: "XXX - Games"}
     - {id: 53, cat: Audio/Audiobook, desc: "Books - Audio books"}
     - {id: 54, cat: Books/Comics, desc: "Books - Comics"}
-    - {id: 55, cat: Books/Ebook, desc: "Books - Ebooks"}
-    - {id: 56, cat: Books/Magazines, desc: "Books - Magazines"}
+    - {id: 55, cat: Books/EBook, desc: "Books - Ebooks"}
+    - {id: 56, cat: Books/Mags, desc: "Books - Magazines"}
     - {id: 57, cat: Books/Other, desc: "Books - Other"}
     - {id: 58, cat: Other, desc: "Pictures - Other"}
     - {id: 59, cat: Other, desc: "Pictures - Wallpapers"}
@@ -59,15 +60,15 @@ caps:
     - {id: 92, cat: Console/PSP, desc: "Games - PSP"}
     - {id: 93, cat: Console/PS3, desc: "Games - PS3"}
     - {id: 94, cat: PC/Games, desc: "Games - PC-RIP"}
-    - {id: 95, cat: Console/Xbox 360, desc: "Games - Xbox360"}
+    - {id: 95, cat: Console/XBox 360, desc: "Games - Xbox360"}
     - {id: 96, cat: Console/Other, desc: "Games - Other"}
     - {id: 97, cat: Console/Wii, desc: "Games - Wii"}
     - {id: 98, cat: Console/NDS, desc: "Games - Nintendo DS"}
-    - {id: 99, cat: PC/Phone-Android, desc: "Games - Android"}
+    - {id: 99, cat: PC/Mobile-Android, desc: "Games - Android"}
     - {id: 103, cat: Console, desc: "Games - Switch"}
     - {id: 120, cat: PC/0day, desc: "Apps - Windows"}
     - {id: 121, cat: PC, desc: "Apps - Linux"}
-    - {id: 122, cat: PC/Phone-Android, desc: "Apps - Android"}
+    - {id: 122, cat: PC/Mobile-Android, desc: "Apps - Android"}
     - {id: 123, cat: PC/Mac, desc: "Apps - Mac"}
     - {id: 124, cat: PC, desc: "Apps - Other"}
     - {id: 130, cat: Other, desc: "Other - Other"}
@@ -79,6 +80,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -90,19 +92,23 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 login:
   path: account-login.php
@@ -114,7 +120,7 @@ login:
   error:
     - selector: div.myFrame:contains("Access Denied")
   test:
-    path: torrents-search.php
+    path: search.php
 
 download:
   selector: a[href^="magnet:?"]
@@ -122,9 +128,9 @@ download:
 
 search:
   paths:
-    # http://prostylex.org/torrents-search.php?search=
-    # http://prostylex.org/torrents-search.php?c1=1&c2=1&c3=1&search=expanse&lang=0&cat=0
-    - path: torrents-search.php
+    # http://prostylex.org/search.php?search=
+    # http://prostylex.org/search.php?c1=1&c2=1&c3=1&search=expanse&lang=0&cat=0
+    - path: search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -165,4 +171,5 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+# minimumratio: the site appears to be ratioless
 # TorrentTrader

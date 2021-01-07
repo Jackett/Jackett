@@ -38,13 +38,6 @@ login:
     path: browse.php
     selector: span.smallfont:has(a[href="logout.php"])
 
-ratio:
-  path: browse.php
-  selector: span.smallfont:has(a[href="logout.php"])
-  filters:
-    - name: regexp
-      args: "Ratio:[ \u00a0](.*?)\u00a0"
-
 search:
   paths:
     - path: browse.php

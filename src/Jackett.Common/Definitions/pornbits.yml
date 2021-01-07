@@ -12,7 +12,7 @@ legacylinks:
 
 caps:
   categories:
-    "xxx": XXX
+    xxx: XXX
 
   modes:
     search: [q]
@@ -26,17 +26,21 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "date_desc"
+    default: date_desc
     options:
-      "date_desc": "created desc"
-      "date_asc": "created asc"
-      "seeds_desc": "seeders desc"
-      "seeds_asc": "seeders asc"
-      "size_desc": "size desc"
-      "size_asc": "size asc"
+      date_desc: created desc
+      date_asc: created asc
+      seeds_desc: seeders desc
+      seeds_asc: seeders asc
+      size_desc: size desc
+      size_asc: size asc
 
 login:
   path: login
@@ -53,7 +57,11 @@ login:
 
 search:
   paths:
-    - path: "browse/{{ if .Keywords }}search/{{ .Config.sort }}/name/{{ .Keywords }}{{else}}index/{{ .Config.sort }}{{end}}"
+    # https://pornbits.net/browse/search/date/free         Browse> Freeleech / Title & Tags
+    # https://pornbits.net/browse/search/date/free/sasha   Browse> Freeleech / Title & Tags> sasha
+    # https://pornbits.net/browse/index/date/name          Browse
+    # https://pornbits.net/browse/search/date/name/sasha   Browse> Title> sasha
+    - path: "browse/{{ if or .Keywords .Config.freeleech }}search/{{ .Config.sort }}/{{ else }}index/{{ .Config.sort }}/{{ end }}{{ if .Config.freeleech }}free{{ else }}name{{ end }}{{ if .Keywords }}/{{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: tr.default, tr.danger, tr.success
@@ -69,7 +77,7 @@ search:
     download:
       selector: a[href*="/torrent/download/"]
       attribute: href
-    banner:
+    poster:
       selector: div.torrent-name-hover img
       attribute: src
     date:
@@ -81,8 +89,10 @@ search:
       selector: td:nth-child(4) div:nth-child(2):contains("-")
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "3:04pm 2006-01-02"
+          args: "3:04pm 2006-01-02 -07:00"
     size:
       selector: td:nth-child(5) div:nth-child(1)
     files:
@@ -102,4 +112,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.9
 # engine n/a

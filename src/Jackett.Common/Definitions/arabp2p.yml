@@ -7,6 +7,8 @@ type: private
 encoding: UTF-8
 links:
   - https://www.arabp2p.com/
+legacylinks:
+  - http://www.arabp2p.com/
 
 settings:
   - name: username
@@ -18,19 +20,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 caps:
   categorymappings:
@@ -47,10 +49,10 @@ caps:
     - {id: 90, cat: TV, desc: "برامج ومسابقات (Shows)"}
     - {id: 109, cat: TV, desc: "رمضان 2020 (Ramadan 2020)"}
     # المرئيات الاجنبية Foreign Movies
-    - {id: 92, cat: TV/FOREIGN, desc: "تعليمي (Educational)"}
+    - {id: 92, cat: TV/Foreign, desc: "تعليمي (Educational)"}
     - {id: 93, cat: TV/Documentary, desc: "وثائقي (Documentary)"}
-    - {id: 45, cat: TV/FOREIGN, desc: "مسلسلات وبرامج اجنبيه (Serials)"}
-    - {id: 57, cat: TV/FOREIGN, desc: "مسلسلات آسيوية (Asian Series)"}
+    - {id: 45, cat: TV/Foreign, desc: "مسلسلات وبرامج اجنبيه (Serials)"}
+    - {id: 57, cat: TV/Foreign, desc: "مسلسلات آسيوية (Asian Series)"}
     - {id: 42, cat: Movies/Foreign, desc: "افلام اجنبيه (Foreign)"}
     - {id: 76, cat: Movies/3D, desc: "&ثلاثي الابعاد 3D (3D)"}
     - {id: 74, cat: Movies/HD, desc: "جودة عالية HD"}
@@ -72,14 +74,14 @@ caps:
     # برامج  Software
     - {id: 22, cat: PC, desc: "برامج عربية (Arabic Software)"}
     - {id: 23, cat: PC, desc: "برامج عامه (Public Software)"}
-    - {id: 78, cat: PC/Phone-IOS, desc: "iPad/iPhone"}
-    - {id: 79, cat: PC/Phone-Android, desc: "android"}
+    - {id: 78, cat: PC/Mobile-iOS, desc: "iPad/iPhone"}
+    - {id: 79, cat: PC/Mobile-Android, desc: "android"}
     # العاب  Games
     - {id: 30, cat: PC/Games, desc: "PC"}
     - {id: 31, cat: Console/PS3, desc: "PS2"}
     - {id: 53, cat: Console/Wii, desc: "wii"}
     - {id: 55, cat: Console/PSP, desc: "PSP"}
-    - {id: 63, cat: Console/Xbox, desc: "XBOX"}
+    - {id: 63, cat: Console/XBox, desc: "XBOX"}
     - {id: 64, cat: Console/PS3, desc: "PS3"}
     # اخرى Other
     - {id: 17, cat: Books, desc: "كتب (Books)"}
@@ -92,6 +94,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: index.php?page=login
@@ -113,7 +116,7 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     # 0 all 1 activeonly 2 deadonly
     active: 0
     # 0 all 1 internal 2 external
@@ -145,7 +148,7 @@ search:
       attribute: title
       filters:
         - name: append
-          args: " +03:00" # (AST)
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     seeders:

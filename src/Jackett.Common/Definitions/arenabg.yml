@@ -6,71 +6,77 @@ language: bg-BG
 type: semi-private
 encoding: UTF-8
 links:
-  - https://arenabg.ch/
-legacylinks:
   - https://arenabg.com/
+legacylinks:
+  - https://arenabg.ch/
 
 caps:
   categorymappings:
-    - {id: "movies", cat: Movies, desc: "Movies"}
-    - {id: "arenabgtv", cat: Movies, desc: "Movies / ArenaBG.TV"}
-    - {id: "xvid", cat: Movies/SD, desc: "Movies / XviD"}
-    - {id: "dvd-r", cat: Movies/DVD, desc: "Movies / DVD-R"}
-    - {id: "x264", cat: Movies/HD, desc: "Movies / x264"}
-    - {id: "animemanga", cat: TV/Anime, desc: "Movies / Anime & Manga"}
-    - {id: "documentaries", cat: TV/Documentary, desc: "Movies / Documentaries"}
-    - {id: "blu-ray", cat: Movies/BluRay, desc: "Movies / Blu-ray"}
-    - {id: "boxset", cat: Movies, desc: "Movies / Boxset"}
-    - {id: "x264boxset", cat: Movies/HD, desc: "Movies / x264 Boxset"}
-    - {id: "tvepisodeshd", cat: Movies/HD, desc: "Movies / HDTV"}
-    - {id: "3d", cat: Movies/3D, desc: "Movies / 3D"}
-    - {id: "movies-hd", cat: Movies/HD, desc: "Movies / Movies HD"}
-    - {id: "x265", cat: Movies/HD, desc: "Movies / x265"}
-    - {id: "4k", cat: Movies/UHD, desc: "Movies / 4K"}
-    - {id: "series", cat: TV, desc: "Series"}
-    - {id: "hdtv", cat: TV/HD, desc: "Series / TV Episodes HD"}
-    - {id: "tvepisodes", cat: TV, desc: "Series / TV Episodes"}
-    - {id: "tvboxset", cat: TV, desc: "Series / TV Boxset"}
-    - {id: "tvboxsethd", cat: TV/HD, desc: "Series / TV Boxset HD"}
-    - {id: "music", cat: Audio, desc: "Music"}
-    - {id: "mp3", cat: Audio/MP3, desc: "Music / MP3"}
-    - {id: "music-video", cat: Audio/Video, desc: "Music / Video"}
-    - {id: "flac", cat: Audio/Lossless, desc: "Music / FLAC"}
-    - {id: "music-dvd", cat: Audio, desc: "Music / DVD"}
-    - {id: "music-ape", cat: Audio/Lossless, desc: "Music / APE"}
-    - {id: "music-dts", cat: Audio, desc: "Music / DTS"}
-    - {id: "musicwavpack", cat: Audio, desc: "Music / WavePack"}
-    - {id: "musicost", cat: Audio, desc: "Music / OST"}
-    - {id: "games", cat: PC/Games, desc: "Games"}
-    - {id: "games-iso", cat: PC/Games, desc: "Games / PC ISO"}
-    - {id: "pc-rip", cat: PC, desc: "Games / PC RIP"}
-    - {id: "ps2", cat: Console, desc: "Games / PS2"}
-    - {id: "psp", cat: Console/PSP, desc: "Games / PSP"}
-    - {id: "xbox", cat: Console/Xbox, desc: "Games / XBOX"}
-    - {id: "xbox-360", cat: Console/Xbox 360, desc: "Games / XBOX-360"}
-    - {id: "ps3", cat: Console/PS3, desc: "Games / PS3"}
-    - {id: "wii", cat: Console/Wii, desc: "Games / WII"}
-    - {id: "PS4", cat: Console/PS4, desc: "Games / PS4"}
-    - {id: "software", cat: PC, desc: "Software"}
-    - {id: "pc-iso", cat: PC/ISO, desc: "Software / PC ISO"}
-    - {id: "pdasmartphone", cat: PC/Phone-Other, desc: "Software / Smartphone"}
-    - {id: "tutorial", cat: PC, desc: "Software / Tutorial"}
-    - {id: "android", cat: PC/Phone-Android, desc: "Software / Android"}
-    - {id: "ios", cat: PC/Phone-IOS, desc: "Software / iOS"}
-    - {id: "misc", cat: Other/Misc, desc: "Misc"}
-    - {id: "other", cat: Other, desc: "Misc / Other"}
-    - {id: "e-books", cat: Books/Ebook, desc: "Misc / e-Books"}
-    - {id: "sports", cat: TV/Sport, desc: "Misc / Sports"}
-    - {id: "0-day", cat: PC/0day, desc: "Misc / 0-Day"}
-    - {id: "xxx", cat: XXX, desc: "XXX"}
-    - {id: "porn", cat: XXX, desc: "XXX / Porn"}
-    - {id: "xxx-hd", cat: XXX, desc: "XXX / XXX HD"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 8, cat: Movies, desc: "Movies / ArenaBG.TV"}
+    - {id: 9, cat: Movies/SD, desc: "Movies / XviD"}
+    - {id: 10, cat: Movies/DVD, desc: "Movies / DVD-R"}
+    - {id: 11, cat: Movies/HD, desc: "Movies / x264"}
+    - {id: 12, cat: TV/Anime, desc: "Movies / Anime & Manga"}
+    - {id: 13, cat: TV/Documentary, desc: "Movies / Documentaries"}
+    - {id: 14, cat: Movies/BluRay, desc: "Movies / Blu-ray"}
+    - {id: 15, cat: Movies, desc: "Movies / Weekend"}
+    - {id: 16, cat: Movies, desc: "Movies / Boxset"}
+    - {id: 17, cat: Movies/HD, desc: "Movies / x264 Boxset"}
+    - {id: 18, cat: Movies/HD, desc: "Movies / HDTV"}
+    - {id: 19, cat: Movies/3D, desc: "Movies / 3D"}
+    - {id: 20, cat: Movies/HD, desc: "Movies / Movies HD"}
+    - {id: 21, cat: Movies/HD, desc: "Movies / x265"}
+    - {id: 22, cat: Movies/UHD, desc: "Movies / 4K"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 23, cat: TV/HD, desc: "Series / TV Episodes HD"}
+    - {id: 24, cat: TV, desc: "Series / TV Episodes"}
+    - {id: 25, cat: TV, desc: "Series / TV Boxset"}
+    - {id: 26, cat: TV/HD, desc: "Series / TV Boxset HD"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 27, cat: Audio/MP3, desc: "Music / MP3"}
+    - {id: 28, cat: Audio/Video, desc: "Music / Video"}
+    - {id: 29, cat: Audio/Lossless, desc: "Music / FLAC"}
+    - {id: 30, cat: Audio, desc: "Music / DVD"}
+    - {id: 31, cat: Audio/Lossless, desc: "Music / APE"}
+    - {id: 32, cat: Audio, desc: "Music / DTS"}
+    - {id: 33, cat: Audio, desc: "Music / WavePack"}
+    - {id: 34, cat: Audio, desc: "Music / OST"}
+    - {id: 4, cat: PC/Games, desc: "Games"}
+    - {id: 35, cat: PC/Games, desc: "Games / PC ISO"}
+    - {id: 36, cat: PC, desc: "Games / PC RIP"}
+    - {id: 37, cat: Console, desc: "Games / PS2"}
+    - {id: 38, cat: Console/PSP, desc: "Games / PSP"}
+    - {id: 39, cat: Console/XBox, desc: "Games / XBOX"}
+    - {id: 40, cat: Console/XBox 360, desc: "Games / XBOX-360"}
+    - {id: 41, cat: Console/PS3, desc: "Games / PS3"}
+    - {id: 42, cat: Console/Wii, desc: "Games / WII"}
+    - {id: 43, cat: Console/NDS, desc: "Games / NDS"}
+    - {id: 44, cat: Console/PS4, desc: "Games / PS4"}
+    - {id: 5, cat: PC, desc: "Software"}
+    - {id: 45, cat: PC/ISO, desc: "Software / PC ISO"}
+    - {id: 46, cat: PC/Mobile-Other, desc: "Software / Smartphone"}
+    - {id: 47, cat: PC, desc: "Software / Tutorial"}
+    - {id: 48, cat: PC/Mac, desc: "Software / MAC"}
+    - {id: 49, cat: PC/Mobile-Android, desc: "Software / Android"}
+    - {id: 50, cat: PC/Mobile-iOS, desc: "Software / iOS"}
+    - {id: 51, cat: PC/Mobile-Other, desc: "Software / WM7"}
+    - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 52, cat: XXX, desc: "XXX / Porn"}
+    - {id: 53, cat: XXX, desc: "XXX / XXX HD"}
+    - {id: 7, cat: Other, desc: "Misc"}
+    - {id: 54, cat: Other/Misc, desc: "Misc / Other"}
+    - {id: 55, cat: Books/EBook, desc: "Misc / e-Books"}
+    - {id: 56, cat: Other, desc: "Misc / Banned"}
+    - {id: 57, cat: TV/Sport, desc: "Misc / Sports"}
+    - {id: 58, cat: PC/0day, desc: "Misc / 0-Day"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -84,100 +90,94 @@ settings:
     label: Download link
     default: "magnet:?xt="
     options:
-      "/get/key:": ".torrent"
+      "/en/torrents/download/?key=": ".torrent"
       "magnet:?xt=": "magnet"
 
 login:
-  path: /
+  path: en/users/signin/
   method: form
-  form: form[action="/users/"]
+  form: form[action="/en/users/signin/"]
   inputs:
-    email: "{{ .Config.username }}"
+    username_or_email: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    action: login
+  captcha:
+    type: image
+    selector: img[src="/captcha.php"]
+    input: captcha
   error:
-    - selector: div.row div div.alert i.fa-warning
-      message:
-        selector: div.row div div.alert
+    - selector: div.row div#container div.alert
   test:
-    path: /
-    selector: a[href="/users/logout/"]
+    path: en/
+    selector: a[href="/en/users/logout/"]
 
 download:
-  selector: a[href*="{{ .Config.downloadlink }}"]
+  selector: a[href^="{{ .Config.downloadlink }}"]
   attribute: href
 
 search:
   paths:
-    - path: torrents/
-      method: post
-      followredirect: true
+    # https://arenabg.com/en/torrents/?text=ice+s01e01
+    - path: en/torrents/
   inputs:
-    text: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{end}}"
-    "text_mobile": ""
-    type: 0
-    audio: 0
-    subtitles: 0
-    action: search
+    text: "{{ .Keywords }}"
+    subtitles: ""
+    audio: ""
+    # does not support multi-cats so defaulting to all
+    category: ""
 
   rows:
-    selector: tr:has(td.category)
+    selector: tr:has(a[href^="/en/torrents/?category="])
 
   fields:
-    title:
-      # use the second div for full title
-      selector: td.filename div:nth-child(2) a
-    details:
-      selector: td.filename div a
-      attribute: href
     category:
-      selector: td.category a
+      selector: td.category a[href^="/en/torrents/?category="]:last-of-type
       attribute: href
       filters:
-        - name: re_replace
-          args: ["/torrents/type:(.+?)/", "$1"]
+        - name: querystring
+          args: category
+    english:
+      selector: span[title="English"]
+      attribute: title
+      optional: true
+    bulgarian:
+      selector: span[title="Bulgarian"]
+      attribute: title
+      optional: true
+    title:
+      selector: td.filename a[href^="/en/torrents/"]
+      filters:
+        - name: append
+          args: "{{ if .Result.bulgarian }} {{ .Result.bulgarian }}{{ else }}{{ end }}{{ if .Result.english }} {{ .Result.english }}{{ else }}{{ end }}"
+    details:
+      selector: td.filename a[href^="/en/torrents/"]
+      attribute: href
     download:
-      selector: td.filename div a
+      selector: td.filename a[href^="/en/torrents/"]
       attribute: href
-    size:
-      selector: td:nth-child(4)
-    date:
-      # 08:49:09
-      selector: td:nth-child(3):contains(":")
-      optional: true
-      filters:
-        - name: dateparse
-          args: "15:04:05"
-    date:
-      # 2018-10-19
-      selector: td:nth-child(3):contains("-")
-      optional: true
-      filters:
-        - name: dateparse
-          args: "2006-01-02"
-    seeders:
-      selector: td:nth-child(6)
-      filters:
-        - name: replace
-          args: ["-", "0"]
-        - name: replace
-          args: ["DHT", "0"] # torrent can only be downloaded via DHT
-    leechers:
-      selector: td:nth-child(7)
-      filters:
-        - name: replace
-          args: ["-", "0"]
-    grabs:
-      selector: td:nth-child(8)
-      filters:
-        - name: replace
-          args: ["-", "0"]
-    banner:
-      selector: td.filename div:nth-child(2) a
+    poster:
+      selector: td.filename a[href^="/en/torrents/"]
       attribute: onmouseover
       filters:
         - name: regexp
-          args: src=\\'([^\s\\]+)
+          args: "\"(.+?)\""
+        - name: replace
+          args: ["\\", ""]
+    date:
+      # 2 January 2021, Saturday @ 20:46
+      selector: small
+      filters:
+        - name: regexp
+          args: "(.+?, .+? @ [0-9]{2}:[0-9]{2})"
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "2 January 2006, Monday @ 15:04 -07:00"
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(4)
+    leechers:
+      selector: td:nth-child(5)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

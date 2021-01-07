@@ -36,15 +36,22 @@ namespace Jackett.Common.Services
         // use: {"<old id>", "<new id>"}
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
+            {"ast4u", "animeworld"},
             {"broadcastthenet", "broadcasthenet"},
-            {"cili180", "liaorencili"},
+            {"cili180", "cilipro"},
+            {"icetorrent", "speedapp"},
+            {"leaguehd", "lemonhd"},
+            {"liaorencili", "cilipro"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
-            {"nostalgic", "vhstapes"},
             {"passtheheadphones", "redacted"},
+            {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
+            {"scenefz", "speedapp"},
             {"tehconnectionme", "anthelion"},
+            {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
+            {"xtremezone", "speedapp"},
             {"yourexotic", "exoticaz"}
         };
 
@@ -62,10 +69,13 @@ namespace Jackett.Common.Services
 
         public void InitIndexers(IEnumerable<string> path)
         {
+            logger.Info($"Using HTTP Client: {webClient.GetType().Name}");
+
             MigrateRenamedIndexers();
             InitIndexers();
             InitCardigannIndexers(path);
             InitAggregateIndexer();
+            RemoveLegacyConfigurations();
         }
 
         private void MigrateRenamedIndexers()
@@ -97,49 +107,47 @@ namespace Jackett.Common.Services
 
         private void InitIndexers()
         {
-            logger.Info("Using HTTP Client: " + webClient.GetType().Name);
+            logger.Info("Loading Native indexers ...");
 
             var allTypes = GetType().Assembly.GetTypes();
             var allIndexerTypes = allTypes.Where(p => typeof(IIndexer).IsAssignableFrom(p));
             var allInstantiatableIndexerTypes = allIndexerTypes.Where(p => !p.IsInterface && !p.IsAbstract);
             var allNonMetaInstantiatableIndexerTypes = allInstantiatableIndexerTypes.Where(p => !typeof(BaseMetaIndexer).IsAssignableFrom(p));
             var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
-            var ixs = indexerTypes.Select(type =>
+            var nativeIndexers = indexerTypes.Select(type =>
             {
-                var constructorArgumentTypes = new Type[] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService) };
+                var constructorArgumentTypes = new [] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService), typeof(ICacheService) };
                 var constructor = type.GetConstructor(constructorArgumentTypes);
                 if (constructor != null)
                 {
-                    // create own webClient instance for each indexer (seperate cookies stores, etc.)
+                    // create own webClient instance for each indexer (separate cookies stores, etc.)
                     var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService, serverConfig);
 
-                    var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService };
+                    var arguments = new object[] { configService, indexerWebClientInstance, logger, protectionService, cacheService };
                     var indexer = (IIndexer)constructor.Invoke(arguments);
                     return indexer;
                 }
-                else
-                {
-                    logger.Error("Cannot instantiate " + type.Name);
-                }
-                return null;
-            });
 
-            foreach (var idx in ixs)
+                logger.Error($"Cannot instantiate Native indexer: {type.Name}");
+                return null;
+            }).Where(indexer => indexer != null).ToList();
+
+            foreach (var indexer in nativeIndexers)
             {
-                if (idx == null)
-                    continue;
-                indexers.Add(idx.Id, idx);
-                configService.Load(idx);
+                indexers.Add(indexer.Id, indexer);
+                configService.Load(indexer);
             }
+
+            logger.Info($"Loaded {nativeIndexers.Count} Native indexers: {string.Join(", ", nativeIndexers.Select(i => i.Id))}");
         }
 
         private void InitCardigannIndexers(IEnumerable<string> path)
         {
-            logger.Info("Loading Cardigann definitions from: " + string.Join(", ", path));
+            logger.Info("Loading Cardigann indexers from: " + string.Join(", ", path));
 
             var deserializer = new DeserializerBuilder()
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
-//                        .IgnoreUnmatchedProperties()
+                        //.IgnoreUnmatchedProperties()
                         .Build();
 
             try
@@ -152,13 +160,13 @@ namespace Jackett.Common.Services
                     logger.Debug("Loading Cardigann definition " + file.FullName);
                     try
                     {
-                        var DefinitionString = File.ReadAllText(file.FullName);
-                        var definition = deserializer.Deserialize<IndexerDefinition>(DefinitionString);
+                        var definitionString = File.ReadAllText(file.FullName);
+                        var definition = deserializer.Deserialize<IndexerDefinition>(definitionString);
                         return definition;
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        logger.Error(ex, "Error while parsing Cardigann definition " + file.FullName + ": " + ex.Message);
+                        logger.Error($"Error while parsing Cardigann definition {file.FullName}\n{e}");
                         return null;
                     }
                 }).Where(definition => definition != null);
@@ -170,40 +178,46 @@ namespace Jackett.Common.Services
                         // create own webClient instance for each indexer (seperate cookies stores, etc.)
                         var indexerWebClientInstance = (WebClient)Activator.CreateInstance(webClient.GetType(), processService, logger, globalConfigService, serverConfig);
 
-                        IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, definition);
+                        IIndexer indexer = new CardigannIndexer(configService, indexerWebClientInstance, logger, protectionService, cacheService, definition);
                         configService.Load(indexer);
                         return indexer;
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        logger.Error(ex, "Error while creating Cardigann instance from Definition: " + ex.Message);
+                        logger.Error($"Error while creating Cardigann instance from definition ID={definition.Id}: {e}");
                         return null;
                     }
                 }).Where(cardigannIndexer => cardigannIndexer != null).ToList(); // Explicit conversion to list to avoid repeated resource loading
 
+                var cardigannCounter = 0;
+                var cardiganIds = new List<string>();
                 foreach (var indexer in cardigannIndexers)
                 {
                     if (indexers.ContainsKey(indexer.Id))
                     {
-                        logger.Debug(string.Format("Ignoring definition ID={0}: Indexer already exists", indexer.Id));
+                        logger.Warn($"Ignoring definition ID={indexer.Id}: Indexer already exists");
                         continue;
                     }
-
                     indexers.Add(indexer.Id, indexer);
+
+                    cardigannCounter++;
+                    cardiganIds.Add(indexer.Id);
                 }
-                logger.Info("Cardigann definitions loaded: " + string.Join(", ", indexers.Keys));
+
+                logger.Info($"Loaded {cardigannCounter} Cardigann indexers: {string.Join(", ", cardiganIds)}");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex, "Error while loading Cardigann definitions: " + ex.Message);
+                logger.Error($"Error while loading Cardigann definitions: {e}");
             }
+            logger.Info($"Loaded {indexers.Count} indexers in total");
         }
 
         public void InitAggregateIndexer()
         {
             var omdbApiKey = serverConfig.OmdbApiKey;
-            IFallbackStrategyProvider fallbackStrategyProvider = null;
-            IResultFilterProvider resultFilterProvider = null;
+            IFallbackStrategyProvider fallbackStrategyProvider;
+            IResultFilterProvider resultFilterProvider;
             if (!string.IsNullOrWhiteSpace(omdbApiKey))
             {
                 var imdbResolver = new OmdbResolver(webClient, omdbApiKey, serverConfig.OmdbApiUrl);
@@ -216,11 +230,28 @@ namespace Jackett.Common.Services
                 resultFilterProvider = new NoResultFilterProvider();
             }
 
-            logger.Info("Adding aggregate indexer");
-            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService)
+            logger.Info("Adding aggregate indexer ('all' indexer) ...");
+            aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService, cacheService)
             {
                 Indexers = indexers.Values
             };
+        }
+
+        public void RemoveLegacyConfigurations()
+        {
+            var directoryInfo = new DirectoryInfo(globalConfigService.GetIndexerConfigDir());
+            if (!directoryInfo.Exists)
+                return; // the directory does not exist the first start
+            var files = directoryInfo.GetFiles("*.json*");
+            foreach (var file in files)
+            {
+                var indexerId = file.Name.Replace(".bak", "").Replace(".json", "");
+                if (!indexers.ContainsKey(indexerId) && File.Exists(file.FullName))
+                {
+                    logger.Info($"Removing old configuration file: {file.FullName}");
+                    File.Delete(file.FullName);
+                }
+            }
         }
 
         public IIndexer GetIndexer(string name)
@@ -231,8 +262,8 @@ namespace Jackett.Common.Services
             if (renamedIndexers.ContainsKey(name))
             {
                 realName = renamedIndexers[name];
-                logger.Warn($"Indexer {name} has been renamed to {realName}. Please, update the URL of the feeds. " +
-                            "This may stop working in the future.");
+                logger.Warn($@"Indexer {name} has been renamed to {realName}. Please, update the URL of the feeds.
+ This may stop working in the future.");
             }
 
             if (indexers.ContainsKey(realName))
@@ -241,23 +272,20 @@ namespace Jackett.Common.Services
             if (realName == "all")
                 return aggregateIndexer;
 
-            logger.Error("Request for unknown indexer: " + realName);
-            throw new Exception("Unknown indexer: " + realName);
+            logger.Error($"Request for unknown indexer: {realName}");
+            throw new Exception($"Unknown indexer: {realName}");
         }
 
         public IWebIndexer GetWebIndexer(string name)
         {
             if (indexers.ContainsKey(name))
-            {
                 return indexers[name] as IWebIndexer;
-            }
-            else if (name == "all")
-            {
-                return aggregateIndexer as IWebIndexer;
-            }
 
-            logger.Error("Request for unknown indexer: " + name);
-            throw new Exception("Unknown indexer: " + name);
+            if (name == "all")
+                return aggregateIndexer;
+
+            logger.Error($"Request for unknown indexer: {name}");
+            throw new Exception($"Unknown indexer: {name}");
         }
 
         public IEnumerable<IIndexer> GetAllIndexers() => indexers.Values.OrderBy(_ => _.DisplayName);
@@ -265,17 +293,18 @@ namespace Jackett.Common.Services
         public async Task TestIndexer(string name)
         {
             var indexer = GetIndexer(name);
-            var browseQuery = new TorznabQuery
+            var query = new TorznabQuery
             {
                 QueryType = "search",
                 SearchTerm = "",
                 IsTest = true
             };
-            var result = await indexer.ResultsForQuery(browseQuery);
-            logger.Info(string.Format("Found {0} releases from {1}", result.Releases.Count(), indexer.DisplayName));
-            if (result.Releases.Count() == 0)
+            var result = await indexer.ResultsForQuery(query);
+
+            logger.Info($"Test search in {indexer.DisplayName} => Found {result.Releases.Count()} releases");
+
+            if (!result.Releases.Any())
                 throw new Exception("Found no results while trying to browse this tracker");
-            cacheService.CacheRssResults(indexer, result.Releases);
         }
 
         public void DeleteIndexer(string name)

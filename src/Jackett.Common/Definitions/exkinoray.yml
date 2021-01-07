@@ -48,9 +48,9 @@ caps:
     - {id: 84, cat: Audio/Video, desc: "Другое Видеоклипы"}
     - {id: 85, cat: PC/Games, desc: "Другое Игры"}
     - {id: 86, cat: PC/0day, desc: "Другое Программы"}
-    - {id: 87, cat: Console/Xbox, desc: "Другое XBox"}
+    - {id: 87, cat: Console/XBox, desc: "Другое XBox"}
     - {id: 88, cat: Console/PSP, desc: "Другое PSP"}
-    - {id: 89, cat: Books/Magazines, desc: "Другое Журналы"}
+    - {id: 89, cat: Books/Mags, desc: "Другое Журналы"}
     - {id: 90, cat: Other, desc: "Другое Графика"}
     - {id: 93, cat: Other, desc: "Другое Библиотека"}
     - {id: 94, cat: Console/PS3, desc: "Другое PS3"}
@@ -60,6 +60,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -75,18 +76,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
+      4: created
+      7: seeders
+      5: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info_search
     type: info
     label: "Searching with Season / Episode (S01E01)"
@@ -99,7 +100,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     autologin: 1
-    returnto: "index.php"
+    returnto: index.php
   error:
     - selector: td.embedded:contains("Ошибка входа")
   test:
@@ -117,8 +118,8 @@ search:
     - name: re_replace # strip S01E01
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", ""]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{else}}cat=0{{end}}"
-    # 0 active 1 incldead 2 onlydead 4 noseeds (isn't this == onlydead?)
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 4 noseeds (how is this different from onlydead?)
     incldead: 1
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
@@ -170,8 +171,10 @@ search:
     date:
       selector: td:nth-child(2) i
       filters:
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02 15:04:03"
+          args: "2006-01-02 15:04:05 -07:00"
     files:
       selector: td:nth-child(3)
     size:

@@ -21,6 +21,7 @@ namespace Jackett.Common.Indexers
     {
         private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
         private string AuthKey { get; set; }
+        private string PassKey { get; set; }
 
         // TODO: merge ConfigurationDataAPILoginWithUserAndPasskeyAndFilter class with with ConfigurationDataUserPasskey
         private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
@@ -29,19 +30,28 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
+        public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "passthepopcorn",
                    name: "PassThePopcorn",
                    description: "PassThePopcorn is a Private site for MOVIES / TV",
                    link: "https://passthepopcorn.me/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       }
                    },
                    configService: configService,
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
@@ -109,38 +119,43 @@ namespace Jackett.Common.Indexers
 
             movieListSearchUrl += "?" + queryCollection.GetQueryString();
 
-            var authHeaders = new Dictionary<string, string>()
+            var authHeaders = new Dictionary<string, string>
             {
                 { "ApiUser", configData.User.Value },
                 { "ApiKey", configData.Key.Value }
             };
 
-            var results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
+            var results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             if (results.IsRedirect) // untested
-                results = await RequestStringWithCookiesAndRetry(movieListSearchUrl, headers: authHeaders);
+                results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             try
             {
                 //Iterate over the releases for each movie
-                var jsResults = JObject.Parse(results.Content);
+                var jsResults = JObject.Parse(results.ContentString);
+
+                AuthKey = (string)jsResults["AuthKey"];
+                PassKey = (string)jsResults["PassKey"];
+
                 foreach (var movie in jsResults["Movies"])
                 {
                     var movieTitle = (string)movie["Title"];
                     var year = (string)movie["Year"];
                     var movieImdbIdStr = (string)movie["ImdbId"];
-                    var coverStr = (string)movie["Cover"];
-                    var coverUri = !string.IsNullOrEmpty(coverStr) ? new Uri(coverStr) : null;
+                    var posterStr = (string)movie["Cover"];
+                    var poster = !string.IsNullOrEmpty(posterStr) ? new Uri(posterStr) : null;
                     var movieImdbId = !string.IsNullOrEmpty(movieImdbIdStr) ? (long?)long.Parse(movieImdbIdStr) : null;
                     var movieGroupId = (string)movie["GroupId"];
                     foreach (var torrent in movie["Torrents"])
                     {
                         var releaseName = (string)torrent["ReleaseName"];
+                        var torrentId = (string)torrent["Id"];
 
                         var releaseLinkQuery = new NameValueCollection
                         {
                             {"action", "download"},
-                            {"id", (string)torrent["Id"]},
+                            {"id", torrentId},
                             {"authkey", AuthKey},
-                            {"torrent_pass", configData.Passkey.Value},
+                            {"torrent_pass", PassKey}
                         };
                         var free = !(torrent["FreeleechType"] is null);
 
@@ -158,7 +173,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         var link = new Uri($"{SearchUrl}?{releaseLinkQuery.GetQueryString()}");
                         var seeders = int.Parse((string)torrent["Seeders"]);
-                        var comments = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}");
+                        var details = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}&torrentid={WebUtility.UrlEncode(torrentId)}");
                         var size = long.Parse((string)torrent["Size"]);
                         var grabs = long.Parse((string)torrent["Snatched"]);
                         var publishDate = DateTime.ParseExact((string)torrent["UploadTime"],
@@ -169,9 +184,9 @@ namespace Jackett.Common.Indexers
                         {
                             Title = releaseName,
                             Description = $"Title: {movieTitle}",
-                            BannerUrl = coverUri,
+                            Poster = poster,
                             Imdb = movieImdbId,
-                            Comments = comments,
+                            Details = details,
                             Size = size,
                             Grabs = grabs,
                             Seeders = seeders,
@@ -247,7 +262,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

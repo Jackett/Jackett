@@ -24,30 +24,43 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public TorrentBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TorrentBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "torrentbytes",
                    name: "TorrentBytes",
                    description: "A decade of TorrentBytes",
                    link: "https://www.torrentbytes.net/",
-                   caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the TorrentBytes webpage."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
 
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            // TorznabCaps.SupportsImdbTVSearch = true; (supported by the site but disabled due to #8107)
-
             AddCategoryMapping(23, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(52, TorznabCatType.PCMac, "Apple/All");
             AddCategoryMapping(22, TorznabCatType.PC, "Apps/misc");
             AddCategoryMapping(1, TorznabCatType.PC, "Apps/PC");
-            AddCategoryMapping(28, TorznabCatType.TVFOREIGN, "Foreign Titles");
+            AddCategoryMapping(28, TorznabCatType.TVForeign, "Foreign Titles");
             AddCategoryMapping(50, TorznabCatType.Console, "Games/Consoles");
             AddCategoryMapping(42, TorznabCatType.PCGames, "Games/Pack");
             AddCategoryMapping(4, TorznabCatType.PCGames, "Games/PC");
@@ -73,8 +86,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(33, TorznabCatType.TVSD, "TV/SD");
             AddCategoryMapping(32, TorznabCatType.TVUHD, "TV/UHD");
             AddCategoryMapping(39, TorznabCatType.XXXx264, "XXX/HD");
-            AddCategoryMapping(24, TorznabCatType.XXXImageset, "XXX/IMGSET");
-            AddCategoryMapping(21, TorznabCatType.XXXPacks, "XXX/Pack");
+            AddCategoryMapping(24, TorznabCatType.XXXImageSet, "XXX/IMGSET");
+            AddCategoryMapping(21, TorznabCatType.XXXPack, "XXX/Pack");
             AddCategoryMapping(9, TorznabCatType.XXXXviD, "XXX/SD");
             AddCategoryMapping(29, TorznabCatType.XXX, "XXX/Web");
         }
@@ -89,15 +102,15 @@ namespace Jackett.Common.Indexers
                 {"returnto", "/"},
                 {"login", "Log in!"}
             };
-            var loginPage = await RequestStringWithCookies(SiteLink, string.Empty);
+            var loginPage = await RequestWithCookiesAsync(SiteLink, string.Empty);
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, SiteLink, SiteLink);
             await ConfigureIfOK(
-                result.Cookies, result.Content?.Contains("my.php") == true, () =>
+                result.Cookies, result.ContentString?.Contains("my.php") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.Content);
+                    var dom = parser.ParseDocument(result.ContentString);
                     var messageEl = dom.QuerySelector("td.embedded");
-                    var errorMessage = messageEl != null ? messageEl.TextContent : result.Content;
+                    var errorMessage = messageEl != null ? messageEl.TextContent : result.ContentString;
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 });
             return IndexerConfigurationStatus.RequiresTesting;
@@ -127,25 +140,25 @@ namespace Jackett.Common.Indexers
                 qc.Add("c" + cat, "1");
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestStringWithCookiesAndRetry(searchUrl, referer: SearchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
 
             if (response.IsRedirect) // re-login
             {
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl, null, SearchUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table > tbody:has(tr > td.colhead) > tr:not(:has(td.colhead))");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
                     var link = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(2)");
                     release.Guid = new Uri(SiteLink + link.GetAttribute("href"));
-                    release.Comments = release.Guid;
+                    release.Details = release.Guid;
                     release.Title = link.GetAttribute("title");
 
                     // There isn't a title attribute if the release name isn't truncated.
@@ -187,7 +200,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

@@ -10,32 +10,39 @@ links:
 
 caps:
   categories:
-    1: Other
+    Other: Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: info
-    type: info
-    default: 7torrents does not use categories. In your software Indexer settings, set the category to 7000.
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created"
+    default: created
     options:
-      "created": "created"
-      "length": "size"
-      "seeders": "seeders"
+      created: created
+      length: size
+      seeders: seeders
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+  - name: info_8000
+    type: info
+    label: About 7torrents Categories
+    default: 7torrents does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 search:
   # https://www.7torrents.cc/search?query=2020&sort=created
   paths:
     - path: search
   inputs:
-    query: "{{ if .Keywords }}{{ .Keywords }}{{else}} {{end}}"
+    query: "{{ if .Keywords }}{{ .Keywords }}{{ else }} {{ end }}"
     sort: "{{ .Config.sort }}"
 
   rows:
@@ -43,16 +50,17 @@ search:
 
   fields:
     category:
-      text: 1
+      text: Other
     title:
       selector: div.media
       attribute: data-name
     details:
       selector: div.media h5 a
       attribute: href
-    download:
-      selector: div.media-right a[href*="/torrent/"]
-      attribute: href
+# #7966
+#    download:
+#      selector: div.media-right a[href*="/torrent/"]
+#      attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href

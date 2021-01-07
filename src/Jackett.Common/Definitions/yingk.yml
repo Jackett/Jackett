@@ -22,10 +22,11 @@ caps:
     - {id: 409, cat: Other, desc: "Misc/其他"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -34,6 +35,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: english_title
     type: checkbox
     label: "Use English titles instead of Chinese ones (when available)."
@@ -41,19 +46,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -80,15 +85,15 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 active, 2 dead, 3 no rating
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 all promotions
-    spstate: 0
+    spstate: "{{ if .Config.freeleech }}8{{ else }}0{{ end }}"
     # 0 all, 1 popular, 2 classic, 3 recomended, 4 normal
     picktype: 0
     # 0 title, 3 uploader, 4 movie info, 5 movie number, 6 torrent hash, 7 active
-    search_area: "{{ if .Query.IMDBID }}5{{else}}0{{end}}"
+    search_area: "{{ if .Query.IMDBID }}5{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -112,7 +117,7 @@ search:
       optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
-    # note: final title processing is at the bottom after descrptions is fetched.
+    # note: final title processing is at the bottom after descriptions is fetched.
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -120,7 +125,6 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     imdb:
-      optional: true
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     seeders:
@@ -139,7 +143,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
     date:
@@ -148,7 +152,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
@@ -171,8 +175,8 @@ search:
       selector: td:nth-child(2)
       remove: a, img
     title_english:
-      remove: a, img, b, span
       selector: td:nth-child(2)
+      remove: a, img, b, span
     title:
       text: "{{ if and .Config.english_title .Result.title_english }}{{ .Result.title_english }}{{ else }}{{ .Result.title_raw }}{{ end }}"
 # engine n/a (likely based on NexusPHP)

@@ -23,37 +23,53 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public FunFile(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public FunFile(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "funfile",
                    name: "FunFile",
                    description: "A general tracker",
                    link: "https://www.funfile.org/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping(44, TorznabCatType.TVAnime); // Anime
-            AddCategoryMapping(22, TorznabCatType.PC); // Applications
-            AddCategoryMapping(43, TorznabCatType.AudioAudiobook); // Audio Books
-            AddCategoryMapping(27, TorznabCatType.Books); // Ebook
-            AddCategoryMapping(4, TorznabCatType.PCGames); // Games
-            AddCategoryMapping(40, TorznabCatType.OtherMisc); // Miscellaneous
-            AddCategoryMapping(19, TorznabCatType.Movies); // Movies
-            AddCategoryMapping(6, TorznabCatType.Audio); // Music
-            AddCategoryMapping(31, TorznabCatType.PCPhoneOther); // Portable
-            AddCategoryMapping(49, TorznabCatType.Other); // Tutorials
-            AddCategoryMapping(7, TorznabCatType.TV); // TV
+            AddCategoryMapping(44, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(22, TorznabCatType.PC, "Applications");
+            AddCategoryMapping(43, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(27, TorznabCatType.Books, "Ebook");
+            AddCategoryMapping(4, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(40, TorznabCatType.OtherMisc, "Miscellaneous");
+            AddCategoryMapping(19, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(6, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(31, TorznabCatType.PCMobileOther, "Portable");
+            AddCategoryMapping(49, TorznabCatType.Other, "Tutorials");
+            AddCategoryMapping(7, TorznabCatType.TV, "TV");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -63,14 +79,14 @@ namespace Jackett.Common.Indexers
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "login", "Login" },
+                { "login", "Login" }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("td.mf_content").TextContent;
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -97,18 +113,18 @@ namespace Jackett.Common.Indexers
                 qc.Add("search", query.GetQueryString());
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var results = await RequestStringWithCookiesAndRetry(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             if (results.IsRedirect) // re-login
             {
                 await ApplyConfiguration(null);
-                results = await RequestStringWithCookiesAndRetry(searchUrl);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
+                var dom = parser.ParseDocument(results.ContentString);
                 var rows = dom.QuerySelectorAll("table[cellpadding=2] > tbody > tr:has(td.row3)");
                 foreach (var row in rows)
                 {
@@ -119,7 +135,7 @@ namespace Jackett.Common.Indexers
 
                     var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
                     var title = qDetailsLink.GetAttribute("title").Trim();
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
 
                     var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
                     var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
@@ -138,7 +154,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Comments = comments,
+                        Details = details,
                         Link = link,
                         Guid = link,
                         Category = MapTrackerCatToNewznab(catStr),
@@ -159,7 +175,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

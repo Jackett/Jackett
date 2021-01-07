@@ -24,19 +24,35 @@ namespace Jackett.Common.Indexers
         private string BrowseUrl => SiteLink + "browse.php";
         private new ConfigurationDataEliteTracker configData => (ConfigurationDataEliteTracker)base.configData;
 
-        public EliteTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService protectionService)
+        public EliteTracker(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
+            IProtectionService ps, ICacheService cs)
             : base(id: "elitetracker",
                    name: "Elite-Tracker",
                    description: "French Torrent Tracker",
                    link: "https://elite-tracker.net/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
-                       // SupportsImdbTVSearch = true (supported by the site but disabled due to #8107)
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
                    },
                    configService: configService,
                    logger: logger,
-                   p: protectionService,
+                   p: ps,
+                   cacheService: cs,
                    client: webClient,
                    configData: new ConfigurationDataEliteTracker()
                 )
@@ -56,8 +72,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(59, TorznabCatType.TVAnime, "Animes - Serie");
 
             AddCategoryMapping(3, TorznabCatType.PC0day, "APPLICATION");
-            AddCategoryMapping(74, TorznabCatType.PCPhoneAndroid, "APPLICATION - ANDROID");
-            AddCategoryMapping(57, TorznabCatType.PCPhoneIOS, "APPLICATION - IPHONE");
+            AddCategoryMapping(74, TorznabCatType.PCMobileAndroid, "APPLICATION - ANDROID");
+            AddCategoryMapping(57, TorznabCatType.PCMobileiOS, "APPLICATION - IPHONE");
             AddCategoryMapping(6, TorznabCatType.PC0day, "APPLICATION - LINUX");
             AddCategoryMapping(5, TorznabCatType.PCMac, "APPLICATION - MAC");
             AddCategoryMapping(4, TorznabCatType.PC0day, "APPLICATION - WINDOWS");
@@ -76,7 +92,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(50, TorznabCatType.MoviesHD, "FiLMS HD - 720P");
             AddCategoryMapping(49, TorznabCatType.MoviesBluRay, "FiLMS HD - BluRay");
             AddCategoryMapping(78, TorznabCatType.MoviesHD, "FiLMS HD - HDRip");
-            AddCategoryMapping(95, TorznabCatType.Movies, "FiLMS HD - VOSTFR");
+            AddCategoryMapping(105, TorznabCatType.MoviesUHD, "FiLMS HD - VOSTFR 4k");
+            AddCategoryMapping(95, TorznabCatType.MoviesHD, "FiLMS HD - VOSTFR HD");
             AddCategoryMapping(85, TorznabCatType.MoviesHD, "FiLMS HD - x265");
 
             AddCategoryMapping(7, TorznabCatType.Movies, "FiLMS SD");
@@ -92,7 +109,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.Console, "JEUX VIDEO");
             AddCategoryMapping(76, TorznabCatType.Console3DS, "JEUX VIDEO - 3DS");
             AddCategoryMapping(18, TorznabCatType.ConsoleNDS, "JEUX VIDEO - DS");
-            AddCategoryMapping(55, TorznabCatType.PCPhoneIOS, "JEUX VIDEO - IPHONE");
+            AddCategoryMapping(55, TorznabCatType.PCMobileiOS, "JEUX VIDEO - IPHONE");
             AddCategoryMapping(80, TorznabCatType.PCGames, "JEUX VIDEO - LINUX");
             AddCategoryMapping(96, TorznabCatType.ConsoleOther, "JEUX VIDEO - NSW");
             AddCategoryMapping(79, TorznabCatType.PCMac, "JEUX VIDEO - OSX");
@@ -104,9 +121,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(75, TorznabCatType.ConsolePS3, "JEUX VIDEO - PSX");
             AddCategoryMapping(19, TorznabCatType.ConsoleWii, "JEUX VIDEO - WII");
             AddCategoryMapping(83, TorznabCatType.ConsoleWiiU, "JEUX VIDEO - WiiU");
-            AddCategoryMapping(16, TorznabCatType.ConsoleXbox, "JEUX VIDEO - XBOX");
-            AddCategoryMapping(82, TorznabCatType.ConsoleXboxOne, "JEUX VIDEO - XBOX ONE");
-            AddCategoryMapping(17, TorznabCatType.ConsoleXbox360, "JEUX VIDEO - XBOX360");
+            AddCategoryMapping(16, TorznabCatType.ConsoleXBox, "JEUX VIDEO - XBOX");
+            AddCategoryMapping(82, TorznabCatType.ConsoleXBoxOne, "JEUX VIDEO - XBOX ONE");
+            AddCategoryMapping(17, TorznabCatType.ConsoleXBox360, "JEUX VIDEO - XBOX360");
 
             AddCategoryMapping(23, TorznabCatType.Audio, "MUSIQUES");
             AddCategoryMapping(26, TorznabCatType.Audio, "MUSIQUES - CLIP/CONCERT");
@@ -143,7 +160,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
 
             var pairs = new Dictionary<string, string>
             {
@@ -151,11 +168,11 @@ namespace Jackett.Common.Indexers
                 { "password", configData.Password.Value }
             };
 
-            var result = await PostDataWithCookies(LoginUrl, pairs, "");
+            var result = await RequestWithCookiesAsync(LoginUrl, "", RequestType.POST, data: pairs);
 
             await ConfigureIfOK(result.Cookies, result.Cookies != null, () =>
            {
-               var errorMessage = result.Content;
+               var errorMessage = result.ContentString;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
 
@@ -174,12 +191,12 @@ namespace Jackett.Common.Indexers
                 {"category", "0"} // multi cat search not supported
             };
 
-            var results = await PostDataWithCookies(BrowseUrl, pairs);
+            var results = await RequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
             if (results.IsRedirect)
             {
                 // re-login
                 await ApplyConfiguration(null);
-                results = await PostDataWithCookies(BrowseUrl, pairs);
+                results = await RequestWithCookiesAsync(BrowseUrl, method: RequestType.POST, data: pairs);
             }
 
             try
@@ -187,7 +204,7 @@ namespace Jackett.Common.Indexers
                 var lastDate = DateTime.Now;
 
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results.Content);
+                var doc = parser.ParseDocument(results.ContentString);
                 var rows = doc.QuerySelectorAll("table[id='sortabletable'] > tbody > tr");
 
                 foreach (var row in rows.Skip(1))
@@ -199,7 +216,7 @@ namespace Jackett.Common.Indexers
                     var title = row.Children[1].QuerySelector("a").TextContent;
                     var qLinks = row.Children[2].QuerySelectorAll("a");
                     var link = new Uri(configData.TorrentHTTPSMode.Value ? qLinks[1].GetAttribute("href") : qLinks[0].GetAttribute("href"));
-                    var comments = new Uri(row.Children[1].QuerySelector("a").GetAttribute("href"));
+                    var details = new Uri(row.Children[1].QuerySelector("a").GetAttribute("href"));
                     var size = row.Children[4].TextContent;
                     var grabs = row.Children[5].QuerySelector("a").TextContent;
                     var seeders = ParseUtil.CoerceInt(row.Children[6].QuerySelector("a").TextContent);
@@ -215,11 +232,11 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
-                        MinimumSeedTime = 0,
+                        MinimumSeedTime = 172800,
                         Category = MapTrackerCatToNewznab(cat),
                         Title = title,
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Size = ReleaseInfo.GetBytes(size),
                         Seeders = seeders,
                         Grabs = ParseUtil.CoerceLong(grabs),
@@ -232,11 +249,11 @@ namespace Jackett.Common.Indexers
                     var qTooltip = row.Children[1].QuerySelector("div.tooltip-content");
                     if (qTooltip != null)
                     {
-                        var banner = qTooltip.QuerySelector("img");
-                        if (banner != null)
+                        var qPoster = qTooltip.QuerySelector("img");
+                        if (qPoster != null)
                         {
-                            release.BannerUrl = new Uri(banner.GetAttribute("src"));
-                            banner.Remove();
+                            release.Poster = new Uri(qPoster.GetAttribute("src"));
+                            qPoster.Remove();
                         }
 
                         qTooltip.QuerySelector("div:contains(\"Total Hits\")").Remove();
@@ -281,7 +298,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;

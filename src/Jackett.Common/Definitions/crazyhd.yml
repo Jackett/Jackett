@@ -6,6 +6,8 @@ language: en-us
 type: private
 encoding: UTF-8
 links:
+  - https://www.chd4.com/
+legacylinks:
   - https://www.crazyhd.com/
 
 caps:
@@ -14,13 +16,13 @@ caps:
     - {id: 16, cat: Movies/BluRay, desc: "Movies English Bluray"}
     - {id: 11, cat: Movies/DVD, desc: "Movies English DVD-RIP"}
     - {id: 14, cat: Movies, desc: "Movies English CAM"}
-    - {id: 60, cat: Movies/WEBDL, desc: "Movies English HD/WEBRIP"}
+    - {id: 60, cat: Movies/WEB-DL, desc: "Movies English HD/WEBRIP"}
     - {id: 19, cat: Movies/DVD, desc: "Movies Hindi DVDRIP"}
     - {id: 52, cat: Movies/BluRay, desc: "Movies Hindi Blu Ray"}
     - {id: 18, cat: Movies/DVD, desc: "Movies Hindi PreDVD"}
     - {id: 17, cat: Movies, desc: "Movies Hindi CAM"}
     - {id: 42, cat: Movies, desc: "Movies Tamil"}
-    - {id: 65, cat: Movies/WEBDL, desc: "Movies Hindi Webrip/HDrip"}
+    - {id: 65, cat: Movies/WEB-DL, desc: "Movies Hindi Webrip/HDrip"}
     - {id: 24, cat: Movies, desc: "Movies UNRATED"}
     - {id: 53, cat: Movies/Foreign, desc: "Movies Other Foreign"}
     - {id: 64, cat: Movies, desc: "Movies Animated"}
@@ -38,17 +40,17 @@ caps:
     - {id: 95, cat: TV, desc: "TV Other Language"}
     # Games
     - {id: 3, cat: PC/Games, desc: "Games PC"}
-    - {id: 75, cat: PC/Phone-Android, desc: "Games Android"}
-    - {id: 77, cat: PC/Phone-IOS, desc: "Games Ipad/Iphone"}
-    - {id: 79, cat: PC/Phone-Other, desc: "Games Other Platforms"}
+    - {id: 75, cat: PC/Mobile-Android, desc: "Games Android"}
+    - {id: 77, cat: PC/Mobile-iOS, desc: "Games Ipad/Iphone"}
+    - {id: 79, cat: PC/Mobile-Other, desc: "Games Other Platforms"}
     - {id: 61, cat: PC/Games, desc: "Games trailer"}
     - {id: 90, cat: Console/PS4, desc: "Games Ps4"}
     - {id: 86, cat: Console/PS3, desc: "Games xbox / ps3"}
     - {id: 92, cat: PC/Games, desc: "Games nrated"}
     # Software
     - {id: 7, cat: PC/0day, desc: "Software Windows"}
-    - {id: 20, cat: PC/Phone-Android, desc: "Software Android Apps"}
-    - {id: 83, cat: PC/Phone-IOS, desc: "Software Iphone Apps"}
+    - {id: 20, cat: PC/Mobile-Android, desc: "Software Android Apps"}
+    - {id: 83, cat: PC/Mobile-iOS, desc: "Software Iphone Apps"}
     - {id: 39, cat: PC, desc: "Software Tutorials"}
     - {id: 63, cat: PC, desc: "Software Linux"}
     - {id: 89, cat: PC/Mac, desc: "Software MAC OSX"}
@@ -76,7 +78,7 @@ caps:
     - {id: 4, cat: Other, desc: "Other"}
     - {id: 44, cat: Other, desc: "Food & Recipes"}
     - {id: 38, cat: Other, desc: "Pictures"}
-    - {id: 54, cat: Books/Magazines, desc: "Magazine"}
+    - {id: 54, cat: Books/Mags, desc: "Magazine"}
     - {id: 88, cat: Books/Comics, desc: "Comics"}
 
   modes:
@@ -84,6 +86,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -93,23 +96,26 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 login:
   method: cookie
@@ -118,13 +124,6 @@ login:
   test:
     path: index.php
     selector: a[href="logout.php"]
-
-ratio:
-  path: index.php
-  selector: span:contains("Ratio ")
-  filters:
-    - name: replace
-      args: ["Ratio ", ""]
 
 search:
   paths:
@@ -135,13 +134,13 @@ search:
     pages: 1
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
-    # 0=mixed 1=no free 2=50%free 3=100%free 4=50%&100%free
-    gold: 0
-    # 0=filename 1=file&descr 2=descr 3=uploader
+    # 0=mixed, 1=no free, 2=50%free, 3=100%free, 4=50%&100%free
+    gold: "{{ if .Config.freeleech }}4{{ else }}0{{ end }}"
+    # 0=filename, 1=file&descr, 2=descr, 3=uploader
     options: 0
-    # 0=all 1=onlyactive 2=onlydead
+    # 0=all, 1=onlyactive, 2=onlydead
     active: 0
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
 
   rows:
@@ -162,9 +161,8 @@ search:
       filters:
         - name: querystring
           args: category
-    banner:
+    poster:
       selector: div.list-name a.tlink
-      optional: true
       attribute: onmouseover
       filters:
         - name: regexp
@@ -182,8 +180,10 @@ search:
     date:
       selector: div.torrent-time
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     seeders:
       selector: div.torrent-seeder
     leechers:
@@ -197,4 +197,7 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumseedtime:
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # engine n/a

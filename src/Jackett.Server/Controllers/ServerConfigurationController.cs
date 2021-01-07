@@ -22,11 +22,14 @@ namespace Jackett.Server.Controllers
         private readonly IProcessService processService;
         private readonly IIndexerManagerService indexerService;
         private readonly ISecuityService securityService;
+        private readonly ICacheService cacheService;
         private readonly IUpdateService updater;
         private readonly ILogCacheService logCache;
         private readonly Logger logger;
 
-        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p, IIndexerManagerService i, ISecuityService ss, IUpdateService u, ILogCacheService lc, Logger l, ServerConfig sc)
+        public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p,
+            IIndexerManagerService i, ISecuityService ss, ICacheService cs, IUpdateService u, ILogCacheService lc,
+            Logger l, ServerConfig sc)
         {
             configService = c;
             serverConfig = sc;
@@ -34,6 +37,7 @@ namespace Jackett.Server.Controllers
             processService = p;
             indexerService = i;
             securityService = ss;
+            cacheService = cs;
             updater = u;
             logCache = lc;
             logger = l;
@@ -78,7 +82,8 @@ namespace Jackett.Server.Controllers
             var saveDir = config.blackholedir;
             var updateDisabled = config.updatedisabled;
             var preRelease = config.prerelease;
-            var logging = config.logging;
+            var enhancedLogging = config.logging;
+
             var basePathOverride = config.basepathoverride;
             if (basePathOverride != null)
             {
@@ -87,6 +92,9 @@ namespace Jackett.Server.Controllers
                     throw new Exception("The Base Path Override must start with a /");
             }
 
+            var cacheEnabled = config.cache_enabled;
+            var cacheTtl = config.cache_ttl;
+            var cacheMaxResultsPerIndexer = config.cache_max_results_per_indexer;
             var omdbApiKey = config.omdbkey;
             var omdbApiUrl = config.omdburl;
 
@@ -98,11 +106,25 @@ namespace Jackett.Server.Controllers
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
             serverConfig.BasePathOverride = basePathOverride;
+            serverConfig.CacheEnabled = cacheEnabled;
+            serverConfig.CacheTtl = cacheTtl;
+            serverConfig.CacheMaxResultsPerIndexer = cacheMaxResultsPerIndexer;
+
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);
 
-            Helper.SetLogLevel(logging ? LogLevel.Debug : LogLevel.Info);
-            serverConfig.RuntimeSettings.TracingEnabled = logging;
+            if (config.flaresolverrurl != serverConfig.FlareSolverrUrl)
+            {
+                if (string.IsNullOrWhiteSpace(config.flaresolverrurl))
+                    config.flaresolverrurl = "";
+                else if (!Uri.TryCreate(config.flaresolverrurl, UriKind.Absolute, out var uri)
+                    || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+                    throw new Exception("FlareSolverr API URL is invalid. Example: http://127.0.0.1:8191");
+
+                serverConfig.FlareSolverrUrl = config.flaresolverrurl;
+                configService.SaveConfig(serverConfig);
+                webHostRestartNeeded = true;
+            }
 
             if (omdbApiKey != serverConfig.OmdbApiKey || omdbApiUrl != serverConfig.OmdbApiUrl)
             {
@@ -122,13 +144,16 @@ namespace Jackett.Server.Controllers
                 if (config.proxy_port < 1 || config.proxy_port > 65535)
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
+                serverConfig.ProxyType = string.IsNullOrWhiteSpace(config.proxy_url) ? ProxyType.Disabled : config.proxy_type;
                 serverConfig.ProxyUrl = config.proxy_url;
-                serverConfig.ProxyType = config.proxy_type;
                 serverConfig.ProxyPort = config.proxy_port;
                 serverConfig.ProxyUsername = config.proxy_username;
                 serverConfig.ProxyPassword = config.proxy_password;
                 configService.SaveConfig(serverConfig);
                 webHostRestartNeeded = true;
+
+                // Remove all results from cache so we can test the new proxy
+                cacheService.CleanCache();
             }
 
             if (port != serverConfig.Port || external != serverConfig.AllowExternal)
@@ -145,13 +170,13 @@ namespace Jackett.Server.Controllers
                 configService.SaveConfig(serverConfig);
 
                 // On Windows change the url reservations
-                if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                if (Environment.OSVersion.Platform != PlatformID.Unix)
                 {
                     if (!ServerUtil.IsUserAdministrator())
                     {
                         try
                         {
-                            var consoleExePath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Replace(".dll", ".exe");
+                            var consoleExePath = EnvironmentUtil.JackettExecutablePath().Replace(".dll", ".exe");
                             processService.StartProcessAndLog(consoleExePath, "--ReserveUrls", true);
                         }
                         catch
@@ -165,7 +190,7 @@ namespace Jackett.Server.Controllers
                     }
                     else
                     {
-                        serverService.ReserveUrls(true);
+                        serverService.ReserveUrls();
                     }
                 }
 
@@ -188,10 +213,17 @@ namespace Jackett.Server.Controllers
 
             if (webHostRestartNeeded)
             {
+                // we have to restore log level when the server restarts because we are not saving the state in the
+                // configuration. when the server restarts the UI is inconsistent with the active log level
+                // https://github.com/Jackett/Jackett/issues/8315
+                SetEnhancedLogLevel(false);
+
                 Thread.Sleep(500);
                 logger.Info("Restarting webhost due to configuration change");
                 Helper.RestartWebHost();
             }
+            else
+                SetEnhancedLogLevel(enhancedLogging);
 
             serverConfig.ConfigChanged();
 
@@ -200,5 +232,11 @@ namespace Jackett.Server.Controllers
 
         [HttpGet]
         public List<CachedLog> Logs() => logCache.Logs;
+
+        private void SetEnhancedLogLevel(bool enabled)
+        {
+            Helper.SetLogLevel(enabled ? LogLevel.Debug : LogLevel.Info);
+            serverConfig.RuntimeSettings.TracingEnabled = enabled;
+        }
     }
 }

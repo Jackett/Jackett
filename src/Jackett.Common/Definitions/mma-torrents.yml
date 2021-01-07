@@ -31,13 +31,13 @@ caps:
     - {id: 93, cat: Audio/Other, desc: "Instructional - Audio"}
     - {id: 112, cat: TV/Sport, desc: "Instructional - DVD/ISO/WEB"}
     - {id: 113, cat: Movies/DVD, desc: "Instructional - DVDRip/Other"}
-    - {id: 73, cat: Books/Ebook, desc: "Instructional - E-book"}
-    - {id: 83, cat: TV/OTHER, desc: "Instructional - Fitness"}
+    - {id: 73, cat: Books/EBook, desc: "Instructional - E-book"}
+    - {id: 83, cat: TV/Other, desc: "Instructional - Fitness"}
     - {id: 124, cat: TV/Sport, desc: "JJ/BJJ - Events"}
     - {id: 85, cat: TV/Sport, desc: "JJ/BJJ - Misc/Other"}
     - {id: 99, cat: TV/Sport, desc: "Kickboxing - HD"}
     - {id: 84, cat: TV/Sport, desc: "Kickboxing - SD"}
-    - {id: 111, cat: Books/Magazines, desc: "Magazines - All"}
+    - {id: 111, cat: Books/Mags, desc: "Magazines - All"}
     - {id: 58, cat: Other/Misc, desc: "Misc - All"}
     - {id: 63, cat: TV/Sport, desc: "Misc - MMA Special"}
     - {id: 62, cat: Movies/Other, desc: "Movies - MMA Related"}
@@ -64,6 +64,8 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -72,21 +74,25 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "seeders"
+    default: seeders
     options:
-      "name": "title"
-      "size": "size"
-      "seeders": "seeders"
+      name: title
+      size: size
+      seeders: seeders
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: account-login.php
@@ -111,7 +117,7 @@ search:
     incldead: 1
     lang: 0
     # 0 all 1 notfree 2 onlyfree
-    freeleech: 0
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -132,9 +138,6 @@ search:
     details:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
-    comments:
-      selector: a[href^="comments.php?type=torrent&id="]
-      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
@@ -143,8 +146,10 @@ search:
       filters:
         - name: regexp
           args: "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})"
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "2006-01-02 15:04:05 -07:00"
     grabs:
       selector: td:nth-child(2)
       filters:

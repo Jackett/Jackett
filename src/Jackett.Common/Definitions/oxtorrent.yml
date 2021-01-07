@@ -7,11 +7,9 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.pw/
+  - https://www.oxtorrent.cc/
   - https://www.oxtorrent.co/
-  - https://oxtorrent.unblocked.bar/
-  - https://oxtorrent.proxyportal.pw/
-  - https://oxtorrent.uk-unblock.pro/
+  - https://oxtorrent.unblocked.rest/
 legacylinks:
   - https://wwv.oxtorrent.com/
   - https://www.smartorrent.tv/
@@ -21,6 +19,10 @@ legacylinks:
   - https://oxtorrent.uk-unblock.xyz/
   - https://oxtorrent.ind-unblock.xyz/
   - https://www.oxtorrent.com/
+  - https://www.oxtorrent.pw/
+  - https://oxtorrent.unblocked.bar/
+  - https://oxtorrent.proxyportal.pw/
+  - https://oxtorrent.uk-unblock.pro/
 
 caps:
   categorymappings:
@@ -38,27 +40,42 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: downloadlink
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
     type: select
-    label: Download link
-    default: "magnet:?xt="
+    label: Replace MULTI by this language
+    default: FRENCH
     options:
-      "/telecharger/": ".torrent"
-      "magnet:?xt=": "magnet"
-  - name: info_downloadlink
-    type: info
-    label: "About the Download Link"
-    default: "Note that only <b>www.oxtorrent.pw</b> supports the use of the <b>.torrent</b> download link.<br />All sites support <b>magnet</b> links."
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
 
 download:
-  selector: a[href*="{{ .Config.downloadlink }}"]
+  selector: a[href^="magnet:?"]
   attribute: href
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{else}}{{end}}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+  keywordsfilters:
+    # if searching for season packs swith S01 to saison 1 #9712
+    - name: re_replace
+      args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
+    - name: re_replace
+      args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
     selector: table.table-hover > tbody > tr:has(a[href*="torrent/"])
@@ -82,22 +99,40 @@ search:
       filters:
         # year is at the end of the title, so we get it and name it site_date
         - name: regexp
-          args: "(\\d{4})$"
-    title:
+          args: "(19|20\\d{2})$"
+    title_phase1:
       selector: td:nth-child(1) a
       filters:
         # now we put the date at the right place according scene naming rules using .Result.site_date
+        - name: re_replace
+          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+        - name: re_replace
+          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
         - name: replace
-          args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
-        - name: replace
-          args: ["MULTI", "{{ .Result.site_date }} MULTI"]
-        - name: replace
-          args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
-        - name: replace
-          args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"]
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+        - name: re_replace
+          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
-          args: ["(\\d{4})$", ""]
+          args: ["(19|20\\d{2})$", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: td:nth-child(1) a
       attribute: href

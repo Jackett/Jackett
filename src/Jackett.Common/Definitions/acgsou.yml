@@ -44,6 +44,9 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q, season, ep]
+    music-search: [q]
+    book-search: [q]
 
 settings: []
 
@@ -55,30 +58,12 @@ search:
   paths:
     # https://www.acgsou.com/1.html
     # https://www.acgsou.com/search.php?keyword=test
-    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{else}}1.html{{end}}"
+    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}1.html{{ end }}"
 
   rows:
     selector: table tbody tr[class^="alt"]:has(td:nth-child(3) a)
 
   fields:
-    date:
-      selector: td:nth-child(1):contains("昨天")
-      optional: true
-      filters:
-        - name: replace
-          args: ["昨天", "Yesterday"]
-    date:
-      selector: td:nth-child(1):contains(":"):not(:contains("昨天"))
-      optional: true
-      filters:
-        - name: dateparse
-          args: "01/02 15:04"
-    date:
-      selector: td:nth-child(1):not(:contains(":"))
-      optional: true
-      filters:
-        - name: dateparse
-          args: "2006/01/02"
     category:
       selector: td:nth-child(2) a
       attribute: href
@@ -93,6 +78,28 @@ search:
     download:
       selector: td:nth-child(3) a
       attribute: href
+    date:
+      selector: td:nth-child(1):contains("昨天")
+      optional: true
+      filters:
+        - name: replace
+          args: ["昨天", "Yesterday"]
+    date:
+      selector: td:nth-child(1):contains(":"):not(:contains("昨天"))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "01/02 15:04 -07:00"
+    date:
+      selector: td:nth-child(1):not(:contains(":"))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006/01/02 -07:00"
     size:
       selector: td:nth-child(4)
     seeders:

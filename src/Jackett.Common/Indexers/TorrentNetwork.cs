@@ -22,9 +22,9 @@ namespace Jackett.Common.Indexers
         private string APIUrl => SiteLink + "api/";
         private string passkey;
 
-        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>
         {
-            {"Content-Type", "application/json"},
+            {"Content-Type", "application/json"}
         };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
@@ -33,24 +33,44 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public TorrentNetwork(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TorrentNetwork(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "torrentnetwork",
                    name: "Torrent Network",
                    description: "Torrent Network (TN) is a GERMAN Private site for TV / MOVIES / GENERAL",
                    link: "https://tntracker.org/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
             Language = "de-de";
             Type = "private";
 
-            configData.AddDynamic("token", new HiddenItem() { Name = "token" });
-            configData.AddDynamic("passkey", new HiddenItem() { Name = "passkey" });
+            configData.AddDynamic("token", new HiddenItem { Name = "token" });
+            configData.AddDynamic("passkey", new HiddenItem { Name = "passkey" });
 
             AddCategoryMapping(24, TorznabCatType.MoviesSD, "Movies GER/SD");
             AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movies GER/720p");
@@ -85,7 +105,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.PCGames, "Games/Win");
             AddCategoryMapping(12, TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping(13, TorznabCatType.ConsolePS4, "Games/PSX");
-            AddCategoryMapping(14, TorznabCatType.ConsoleXbox, "Games/XBOX");
+            AddCategoryMapping(14, TorznabCatType.ConsoleXBox, "Games/XBOX");
 
             AddCategoryMapping(4, TorznabCatType.PCMac, "Apps/Mac");
             AddCategoryMapping(5, TorznabCatType.PC0day, "Apps/Win");
@@ -124,10 +144,11 @@ namespace Jackett.Common.Indexers
         private async Task<dynamic> SendAPIRequest(string endpoint, object data)
         {
             var jsonData = JsonConvert.SerializeObject(data);
-            var result = await PostDataWithCookies(APIUrl + endpoint, null, null, SiteLink, APIHeaders, jsonData);
-            if (!result.Content.StartsWith("{")) // not JSON => error
-                throw new ExceptionWithConfigData(result.Content, configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+            var result = await RequestWithCookiesAsync(
+                APIUrl + endpoint, method: RequestType.POST, referer: SiteLink, headers: APIHeaders, rawbody: jsonData);
+            if (!result.ContentString.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(result.ContentString, configData);
+            var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
             return json;
         }
 
@@ -202,7 +223,7 @@ namespace Jackett.Common.Indexers
                 foreach (JArray torrent in data)
                 {
                     var torrentID = (long)torrent[2];
-                    var comments = new Uri(SiteLink + "torrent/" + torrentID);
+                    var details = new Uri(SiteLink + "torrent/" + torrentID);
                     //var preDelaySeconds = (long)torrent[4];
                     var seeders = (int)torrent[6];
                     //var imdbRating = (double)torrent[8] / 10;
@@ -214,7 +235,7 @@ namespace Jackett.Common.Indexers
                     //var row13 = (string)torrent[13];
                     //var row14 = (long)torrent[14];
                     var link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey);
-                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]).ToLocalTime();
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]);
                     var downloadVolumeFactor = (long)torrent[10] switch
                     {
                         // Only Up
@@ -222,7 +243,7 @@ namespace Jackett.Common.Indexers
                         // 50 % Down
                         1 => 0.5,
                         // All others 100% down
-                        _ => 1,
+                        _ => 1
                     };
                     var release = new ReleaseInfo
                     {
@@ -230,8 +251,8 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 172800, // 48 hours
                         Category = MapTrackerCatToNewznab(torrent[0].ToString()),
                         Title = torrent[1].ToString(),
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Size = (long)torrent[5],

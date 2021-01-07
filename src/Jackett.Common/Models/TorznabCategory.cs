@@ -34,5 +34,7 @@ namespace Jackett.Common.Models
         // Get Hash code should be calculated off read only properties.
         // ID is not readonly
         public override int GetHashCode() => ID;
+
+        public TorznabCategory CopyWithoutSubCategories() => new TorznabCategory(ID, Name);
     }
 }

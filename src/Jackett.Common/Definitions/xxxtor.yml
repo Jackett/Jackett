@@ -10,6 +10,8 @@ links:
 legacylinks:
   - https://xxxtor.org/ # redirects to .com
   - https://xxxtor.info/ # redirects to .com
+certificates:
+  - 49538cc58d5b5e7b70b4a3b2454f952103701342 # expired 09 November 2020
 
 caps:
   categorymappings:
@@ -17,8 +19,6 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings: []
 
@@ -75,8 +75,10 @@ search:
           args: ["Ноя", "Nov"]
         - name: replace
           args: ["Дек", "Dec"]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 06"
+          args: "02 Jan 06 -07:00"
     size:
       selector: td:nth-of-type(3)
     seeders:

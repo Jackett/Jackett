@@ -27,28 +27,39 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://tehconnection.me/",
+            "https://tehconnection.me/"
         };
 
-        public Anthelion(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Anthelion(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "anthelion",
                    name: "Anthelion", // old name: TehConnection.me
                    description: "A movies tracker",
                    link: "https://anthelion.me/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
 
-            AddCategoryMapping("1", TorznabCatType.Movies, "Feature Film");
-            AddCategoryMapping("2", TorznabCatType.Movies, "Short Film");
-            AddCategoryMapping("3", TorznabCatType.TV, "Miniseries");
+            AddCategoryMapping("1", TorznabCatType.Movies, "Film/Feature");
+            AddCategoryMapping("2", TorznabCatType.Movies, "Film/Short");
+            AddCategoryMapping("3", TorznabCatType.TV, "TV/Miniseries");
             AddCategoryMapping("4", TorznabCatType.Other, "Other");
         }
 
@@ -65,10 +76,10 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.Content?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.Content);
+                var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("form#loginform").TextContent.Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -94,11 +105,11 @@ namespace Jackett.Common.Indexers
                 qc.Add($"filter_cat[{cat}]", "1");
 
             var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
-            var results = await RequestStringWithCookies(searchUrl);
+            var results = await RequestWithCookiesAsync(searchUrl);
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results.Content);
+                var doc = parser.ParseDocument(results.ContentString);
                 var rows = doc.QuerySelectorAll("table.torrent_table > tbody > tr.torrent");
                 foreach (var row in rows)
                 {
@@ -107,11 +118,11 @@ namespace Jackett.Common.Indexers
                     var tags = row.QuerySelector("div.torrent_info").FirstChild.TextContent.Replace(" / ", " ").Trim();
                     var title = $"{qDetailsLink.TextContent} {year} {tags}";
                     var description = row.QuerySelector("div.tags").TextContent.Trim();
-                    var comments = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
                     var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
-                    var bannerStr = qDetailsLink.GetAttribute("data-cover");
-                    var banner = !string.IsNullOrWhiteSpace(bannerStr) ? new Uri(qDetailsLink.GetAttribute("data-cover")) : null;
+                    var posterStr = qDetailsLink.GetAttribute("data-cover");
+                    var poster = !string.IsNullOrWhiteSpace(posterStr) ? new Uri(qDetailsLink.GetAttribute("data-cover")) : null;
 
                     var files = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(3)").TextContent);
                     var publishDate = DateTimeUtil.FromTimeAgo(row.QuerySelector("td:nth-child(4)").TextContent);
@@ -141,16 +152,16 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 1,
-                        MinimumSeedTime = 0,
+                        MinimumSeedTime = 259200,
                         Description = description,
                         Title = title,
                         PublishDate = publishDate,
                         Category = category,
                         Link = link,
-                        Comments = comments,
+                        Details = details,
                         Guid = link,
                         Imdb = imdb,
-                        BannerUrl = banner,
+                        Poster = poster,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         Size = size,
@@ -164,7 +175,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return releases;
