@@ -122,8 +122,6 @@ search:
       selector: td[valign="middle"] a
       filters:
         - name: re_replace
-          args: ["\\W", "."] # Spaces and other characters -> .
-        - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
           args: ["^\\.", ""] # Delete first dot
@@ -164,10 +162,6 @@ search:
           args: ["WEBDL.MHD.BDRip", "WEBDL"] # Fix for Radarr
         - name: re_replace
           args: ["WEBRIP.MHD.BDRip", "WEBRIP"] # Fix for Radarr
-        - name: append
-          args: "-XbytesV2"
-        - name: re_replace
-          args: ["\\.-XbytesV2", "-XbytesV2"] # Delete first dot
     details:
       selector: td[valign="middle"] a
       attribute: href
