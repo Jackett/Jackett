@@ -318,6 +318,7 @@ namespace Jackett.Updater
                 "Definitions/hd4free.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
                 "Definitions/hdclub.yml",
+                "Definitions/hddisk.yml",
                 "Definitions/hdplus.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
