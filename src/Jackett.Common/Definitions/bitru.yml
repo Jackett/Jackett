@@ -6,7 +6,9 @@ language: ru-ru
 type: public
 encoding: UTF-8
 links:
-  - http://bitru.org/ # site forces http, https is not supported
+  - https://bitru.org/
+legacylinks:
+  - http://bitru.org/ # site forces https
 
 caps:
   categorymappings:
