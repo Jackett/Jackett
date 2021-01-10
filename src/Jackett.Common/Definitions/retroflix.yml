@@ -64,12 +64,13 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: torrents1.php
+    path: torrents.php
+    selector: a[href*="/logout?"]
 
 search:
-  # https://retroflix.club/torrents1.php?incldead=0&spstate=0&inclbookmarked=0&search=tt0055254&search_area=4&search_mode=0
+  # https://retroflix.club/torrents.php?incldead=0&spstate=0&inclbookmarked=0&search=tt0055254&search_area=4&search_mode=0
   paths:
-    - path: torrents1.php
+    - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
