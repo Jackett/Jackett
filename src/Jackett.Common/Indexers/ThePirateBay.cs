@@ -22,7 +22,6 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://thepiratebay.org/",
-            "https://pirateproxy.dev/",
             "https://tpb19.ukpass.co/",
             "https://tpb.sadzawka.tk/",
             "https://www.tpbay.win/",
@@ -32,7 +31,8 @@ namespace Jackett.Common.Indexers
             "https://tpb.skynetcloud.site/",
             "https://piratetoday.xyz/",
             "https://piratenow.xyz/",
-            "https://piratesbaycc.com/"
+            "https://piratesbaycc.com/",
+            "https://pirateproxy.tube/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -50,7 +50,8 @@ namespace Jackett.Common.Indexers
             "https://piratebayztemzmv.onion.pet/",
             "https://piratebayztemzmv.onion.ly/",
             "https://pirateproxy.cloud/",
-            "https://tpb18.ukpass.co/"
+            "https://tpb18.ukpass.co/",
+            "https://pirateproxy.dev/"
         };
 
         private static readonly Uri _ApiBaseUri = new Uri("https://apibay.org/");
