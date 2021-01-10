@@ -746,7 +746,8 @@ namespace Jackett.Common.Indexers
 
             // test if login was successful
             var LoginTestUrl = resolvePath(Login.Test.Path).ToString();
-            var testResult = await RequestWithCookiesAsync(LoginTestUrl);
+            var headers = ParseCustomHeaders(Definition.Search?.Headers, GetBaseTemplateVariables());
+            var testResult = await RequestWithCookiesAsync(LoginTestUrl, headers: headers);
 
             if (testResult.IsRedirect)
             {
@@ -1265,16 +1266,8 @@ namespace Jackett.Common.Indexers
                 }
                 var searchUrlUri = new Uri(searchUrl);
 
-               // send HTTP request
-                Dictionary<string, string> headers = null;
-                if (Search.Headers != null)
-                {
-                    // FIXME: fix jackett header handling (allow it to specifiy the same header multipe times)
-                    headers = new Dictionary<string, string>();
-                    foreach (var header in Search.Headers)
-                        headers.Add(header.Key, header.Value[0]);
-                }
-
+                // send HTTP request
+                var headers = ParseCustomHeaders(Search.Headers, variables);
                 var response = await RequestWithCookiesAsync(
                     searchUrl, method: method, headers: headers, data: queryCollection);
 
@@ -1389,8 +1382,6 @@ namespace Jackett.Common.Indexers
                                             var magnetUri = new Uri(value);
                                             release.MagnetUri = magnetUri;
                                             value = magnetUri.ToString();
-                                            if (release.Guid == null)
-                                                release.Guid = magnetUri;
                                             break;
                                         case "infohash":
                                             release.InfoHash = value;
@@ -1398,8 +1389,6 @@ namespace Jackett.Common.Indexers
                                         case "details":
                                             var url = resolvePath(value, searchUrlUri);
                                             release.Details = url;
-                                            if (release.Guid == null)
-                                                release.Guid = url;
                                             value = url.ToString();
                                             break;
                                         case "title":
@@ -1708,9 +1697,10 @@ namespace Jackett.Common.Indexers
                 if (Download.Selector != null)
                 {
                     var selector = applyGoTemplateText(Download.Selector, variables);
-                    var response = await RequestWithCookiesAsync(link.ToString());
+                    var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                    var response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
                     if (response.IsRedirect)
-                        response = await RequestWithCookiesAsync(response.RedirectingTo);
+                        response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
                     var results = response.ContentString;
                     var searchResultParser = new HtmlParser();
                     var searchResultDocument = searchResultParser.ParseDocument(results);
@@ -1740,6 +1730,20 @@ namespace Jackett.Common.Indexers
                 }
             }
             return await base.Download(link, method, link.ToString());
+        }
+
+        private Dictionary<string, string> ParseCustomHeaders(Dictionary<string, List<string>> customHeaders,
+                                                              Dictionary<string,object> variables)
+        {
+            if (customHeaders == null)
+                return null;
+
+            // FIXME: fix jackett header handling (allow it to specifiy the same header multipe times)
+            var headers = new Dictionary<string, string>();
+            foreach (var header in customHeaders)
+                headers.Add(header.Key, applyGoTemplateText(header.Value[0], variables));
+
+            return headers;
         }
     }
 }

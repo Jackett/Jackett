@@ -132,7 +132,18 @@ namespace Jackett.Common.Indexers
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
             dom = parser.ParseDocument(result.ContentString);
-            downloadUrl = SiteLink + dom.QuerySelector("a[href^=\"/tor/\"]").GetAttribute("href");
+
+            // There are several types of download links
+            // 1. Direct link https://www.mejortorrentt.net/tor/peliculas/Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent
+            var selector = dom.QuerySelector("a[href^=\"/tor/\"]");
+            if (selector != null)
+                downloadUrl = SiteLink + selector.GetAttribute("href");
+            else
+            {
+                // 2. Hidden link onclick="post('https://cdn1.mejortorrents.net/torrents/xcceijidcd', {table: 'peliculas', name: 'Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent'});"
+                var onClickParts = dom.QuerySelector("a[onclick*=\"/torrent\"]").GetAttribute("onclick").Split('\'');
+                downloadUrl = $"{SiteLink}tor/{onClickParts[3]}/{onClickParts[5]}";
+            }
 
             // Eg https://www.mejortorrentt.net/tor/peliculas/Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent
             var content = await base.Download(new Uri(downloadUrl));

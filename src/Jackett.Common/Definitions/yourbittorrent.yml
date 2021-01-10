@@ -41,7 +41,7 @@ search:
   inputs:
     v: ""
     c: ""
-    q: "{{ .Keywords }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "-"]
