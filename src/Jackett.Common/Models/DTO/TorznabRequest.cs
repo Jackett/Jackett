@@ -26,6 +26,7 @@ namespace Jackett.Common.Models.DTO
         public string author { get; set; }
         public string title { get; set; }
         public string configured { get; set; }
+        public string downloadvolumefactor { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
         {
@@ -84,6 +85,9 @@ namespace Jackett.Common.Models.DTO
                 query.Title = request.title;
             if (!string.IsNullOrWhiteSpace(request.author))
                 query.Author = request.author;
+
+            if (!string.IsNullOrWhiteSpace(request.downloadvolumefactor))
+                query.DownloadVolumeFactor = double.Parse(request.downloadvolumefactor);
 
             return query;
         }

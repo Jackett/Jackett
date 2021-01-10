@@ -416,6 +416,19 @@ namespace Jackett.Server.Controllers
                     return r;
                 });
 
+                if (CurrentQuery.DownloadVolumeFactor != null)
+                {
+
+                    proxiedReleases = proxiedReleases.Where(r =>
+                    {
+                        if (r.DownloadVolumeFactor != null && r.DownloadVolumeFactor <= CurrentQuery.DownloadVolumeFactor)
+                        {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+
                 resultPage.Releases = proxiedReleases.ToList();
 
                 var xml = resultPage.ToXml(new Uri(serverUrl));
