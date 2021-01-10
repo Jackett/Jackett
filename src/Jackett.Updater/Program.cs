@@ -291,6 +291,7 @@ namespace Jackett.Updater
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
+                "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
