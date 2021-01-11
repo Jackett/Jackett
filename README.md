@@ -122,6 +122,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SkyTorrentsClone2 (*.to)
  * Solid Torrents
  * sosulki
+ * SubsPlease
  * sukebei-Pantsu
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)

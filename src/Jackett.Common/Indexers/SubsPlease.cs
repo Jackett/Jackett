@@ -1,0 +1,149 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NLog;
+
+namespace Jackett.Common.Indexers
+{
+    [ExcludeFromCodeCoverage]
+    public class SubsPlease : BaseWebIndexer
+    {
+        public SubsPlease(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(id: "SubsPlease",
+                   name: "SubsPlease",
+                   description: "SubsPlease - A better HorribleSubs/Erai replacement",
+                   link: "https://subsplease.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationData())
+        {
+            Encoding = Encoding.UTF8;
+            Language = "en-us";
+            Type = "public";
+
+            // Configure the category mappings
+            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+        }
+
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
+
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                throw new Exception("Could not find releases from this URL"));
+
+            return IndexerConfigurationStatus.Completed;
+        }
+
+        // If the search string is empty use the latest releases
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+            => query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm)
+            ? await FetchNewReleases()
+            : await PerformSearch(query);
+
+        private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
+        {
+            var queryParameters = new NameValueCollection
+            {
+                { "f", "search" },
+                { "tz", "America/New_York" },
+                { "s", query.SearchTerm }
+            };
+            var response = await RequestWithCookiesAndRetryAsync(SiteLink + "/api/?" + queryParameters.GetQueryString());
+            if (response.Status != HttpStatusCode.OK)
+                throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
+
+            var results = ParseApiResults(response.ContentString);
+            return results.Where(release => query.MatchQueryStringAND(release.Title));
+        }
+
+        private async Task<IEnumerable<ReleaseInfo>> FetchNewReleases()
+        {
+            var queryParameters = new NameValueCollection
+            {
+                { "f", "latest" },
+                { "tz", "America/New_York" }
+            };
+            var response = await RequestWithCookiesAndRetryAsync(SiteLink + "/api/?" + queryParameters.GetQueryString());
+            if (response.Status != HttpStatusCode.OK)
+                throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
+
+            return ParseApiResults(response.ContentString);
+        }
+
+        private List<ReleaseInfo> ParseApiResults(string json)
+        {
+            var releaseInfo = new List<ReleaseInfo>();
+            var releases = JsonConvert.DeserializeObject<Dictionary<string, Release>>(json);
+            foreach (var keyValue in releases)
+            {
+                Release r = keyValue.Value;
+                var baseRelease = new ReleaseInfo
+                {
+                    Details = new Uri(SiteLink + $"shows/{r.Page}/"),
+                    PublishDate = r.Release_Date.DateTime,
+                    Files = 1,
+                    Category = new List<int> { TorznabCatType.TVAnime.ID },
+                    Size = 0,
+                    Seeders = 1,
+                    Peers = 2,
+                    MinimumRatio = 1,
+                    MinimumSeedTime = 172800, // 48 hours
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1
+                };
+                foreach (var d in r.Downloads)
+                {
+                    var release = (ReleaseInfo)baseRelease.Clone();
+                    //Ex: [SubsPlease] Shingeki no Kyojin (The Final Season) - 64 (1080p)
+                    release.Title += $"[SubsPlease] {r.Show} - {r.Episode} ({d.Res}p)";
+                    release.MagnetUri = new Uri(d.Magnet);
+                    release.Guid = new Uri(d.Magnet);
+                    releaseInfo.Add(release);
+                }
+            }
+
+            return releaseInfo;
+        }
+
+        public class Release
+        {
+            public string Time { get; set; }
+            public DateTimeOffset Release_Date { get; set; }
+            public string Show { get; set; }
+            public string Episode { get; set; }
+            public DownloadInfo[] Downloads { get; set; }
+            public string Xdcc { get; set; }
+            public string ImageUrl { get; set; }
+            public string Page { get; set; }
+        }
+
+        public class DownloadInfo
+        {
+            public string Res { get; set; }
+            public string Magnet { get; set; }
+        }
+    }
+}
