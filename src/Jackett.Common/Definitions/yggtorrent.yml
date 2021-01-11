@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.yggtorrent.si/
+  - https://www.yggtorrent.pe/
   # don't forget to also change below in settings !
 legacylinks:
   - https://yggtorrent.com/
@@ -34,6 +34,8 @@ legacylinks:
   - https://www5.yggtorrent.pe/
   - https://yggtorrent.ws/
   - https://yggtorrent.se/
+  - https://www.yggtorrent.si/
+  - https://www2.yggtorrent.si/
 
 caps:
   categorymappings:
@@ -101,7 +103,7 @@ settings:
   - name: searchanddlurl
     label: Search and download URL
     type: text
-    default: www2.yggtorrent.si
+    default: www2.yggtorrent.pe
   - name: username
     type: text
     label: Username
