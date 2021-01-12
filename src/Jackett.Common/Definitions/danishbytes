@@ -115,22 +115,12 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    download:
+    magnet:
       selector: a[href^="magnet"]
       attribute: href
     details:
       selector: a.view-torrent
       attribute: href
-    poster:
-      selector: div.torrent-poster img
-      attribute: src
-      filters:
-        - name: prepend
-          args: "https://images.weserv.nl/?url=" # for display on dashboard
-        - name: append
-          args: "&w=180&h=270" # for display on dashboard
-        - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -142,12 +132,6 @@ search:
       filters:
         - name: regexp
           args: (\d+)
-    imdb:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    tmdbid:
-      selector: a[href*="themoviedb.org/movie/"]
-      attribute: href
     date:
       selector: time
       filters:
