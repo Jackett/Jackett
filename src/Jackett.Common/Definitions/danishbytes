@@ -20,6 +20,7 @@ caps:
 - {id: 5, cat: PC/0day, desc: "Applikationer"}
 - {id: 4, cat: PC/Games, desc: "Spil"}
 - {id: 3, cat: Audio, desc: "Musik"}
+- {id: 14, cat: Audio/Video, desc: "Musik / Videoer"}
 - {id: 9, cat: Audio/Audiobook, desc: "Lydbøger"}
 - {id: 8, cat: Books, desc: "E-Books, Magasiner, osv."}
 - {id: 11, cat: XXX, desc: "XXX"}
