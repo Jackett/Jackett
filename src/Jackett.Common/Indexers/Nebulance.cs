@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     var posterStr = row.QuerySelector("img")?.GetAttribute("src");
-                    var poster = !string.IsNullOrWhiteSpace(posterStr) ? new Uri(posterStr) : null;
+                    Uri.TryCreate(posterStr, UriKind.Absolute, out var poster);
 
                     var details = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
                     var link = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));
