@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://iptorrents.com/",
             "https://www.iptorrents.com/",
-            "https://iptorrents.eu/",
+            "https://iptorrents.me/",
             "https://nemo.iptorrents.com/",
             "https://ipt.getcrazy.me/",
             "https://ipt.findnemo.net/",
@@ -44,7 +44,8 @@ namespace Jackett.Common.Indexers
             "http://ghost.cable-modem.org/",
             "http://logan.unusualperson.com/",
             "https://ipt.rocks/",
-            "http://baywatch.workisboring.com/"
+            "http://baywatch.workisboring.com/",
+            "https://iptorrents.eu/"
         };
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
