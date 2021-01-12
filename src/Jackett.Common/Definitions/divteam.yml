@@ -120,7 +120,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " English"
+          args: " English-DivTeam"
     title:
       selector: a[href^="index.php?page=torrent-details"][onmouseover]:not(:contains("VOSE"))
       optional: true
@@ -128,7 +128,7 @@ search:
         - name: re_replace
           args: ["\\W", "."] # Spaces and other characters -> .
         - name: append
-          args: ".Spanish-DivTeam"
+          args: ".MULTi/Spanish-DivTeam" # DivTeam doesn't bring languages. Usually Original + Spanish.
         - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
