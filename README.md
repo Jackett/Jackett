@@ -304,7 +304,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * DigitalCore
  * DivTeam
  * DivxTotal
- * DocumentaryTorrents (DT)
  * Dragonworld Reloaded [![(invite needed)][inviteneeded]](#)
  * DXDHD
  * EbookParadijs
@@ -346,7 +345,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * GreekDiamond
  * Greek Team
  * HaiDan
- * HacheDe
  * HD Dolby [![(invite needed)][inviteneeded]](#)
  * HD-Bits.com
  * HD-Forever (HDF)
