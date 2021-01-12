@@ -6,9 +6,9 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - http://torrentv.org/
+  - https://torrentv.org/
 legacylinks:
-  - https://torrentv.org/ # invalid certificate
+  - http://torrentv.org/ # site forces https
 
 caps:
   categories:
