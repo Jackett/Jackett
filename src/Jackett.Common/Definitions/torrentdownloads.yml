@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.torrentdownloads.info/
   - https://www.torrentdownloads.me/
-  - https://torrentdownloads.unblockit.dev/
+  - https://torrentdownloads.unblockit.ltd/
   - https://torrentdownloads.unblocked.rest/
 legacylinks:
   - https://torrentdownloads.unblockit.pro/
@@ -29,6 +29,7 @@ legacylinks:
   - https://torrentdownloads.unblockit.top/
   - https://torrentdownloads.unblockit.lat/
   - https://torrentdownloads.unblockit.app/
+  - https://torrentdownloads.unblockit.dev/
 
 caps:
   categorymappings:
