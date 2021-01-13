@@ -104,19 +104,51 @@ search:
       selector: a.view-torrent
       filters:
         - name: re_replace
-          args: ["(?i)full", "BRDISK."] # FULL(BR/UHD) -> BRDISK
+          args: ["\\[", " "]
         - name: re_replace
+          args: ["\\]", " "]
+        - name: re_replace
+          args: ["(?i)(full(bluray)?)", "BRDISK"] # FULL(BR/UHD) -> BRDISK
+        - name: replace
           args: ["HDOlimpo", ""] # Delete HDOlimpo
-        - name: re_replace
+        - name: replace
           args: ["HD-Olimpo", ""] # Delete HD-Olimpo
         - name: re_replace
-          args: ["\\W", "."] # Spaces and other characters -> .
-        - name: append
-          args: ".Spanish-HDOlimpo"
+          args: ["[ -](?i)español[ -]", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)castellano[ -]", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)spa[ -]", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)esp[ -]", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)ingl[eé]s[ -]", " English "]
+        - name: re_replace
+          args: ["[ -](?i)[ei]ng[ -]", " English "]
+        - name: re_replace
+          args: ["[ -](?i)cat[ -]", " Catalan "]
+        - name: re_replace
+          args: ["[ -](?i)vas[ -]", " Basque "]
+        - name: re_replace
+          args: ["[ -](?i)fr[ae][ -]", " French "]
+        - name: re_replace
+          args: ["[ -](?i)jap[ -]", " Japanese "]
+        - name: re_replace
+          args: ["[ -](?i)ita[ -]", " Italian "]
+        - name: re_replace
+          args: ["[ -](?i)rus[ -]", " Russian "]
+        - name: re_replace
+          args: ["[ -](?i)ger[ -]", " German "]
+        - name: re_replace
+          args: ["(?i)(triaudio)", "MULTi/SPANiSH/English"]
+        - name: re_replace
+          args: ["(?i)(dual)", " MULTi/SPANiSH "]
         - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
           args: ["^\\.", ""] # Delete first dot
+        - name: re_replace
+          args: ["\\s+", " "] # More than 1 space to 1 space
 
     download:
       selector: a[href*="/download/"]
