@@ -132,7 +132,7 @@ search:
         - name: re_replace
           args: ["^\\.", ""] # Delete first dot
         - name: replace
-          args: ["UHDRip", "BDRip"] # Fix for Radarr
+          args: ["UHDRip", "Bluray-2160p"] # Fix for Radarr
         - name: replace
           args: ["2160p BDRip", "Bluray-2160p"] # Fix for Radarr
     poster:
