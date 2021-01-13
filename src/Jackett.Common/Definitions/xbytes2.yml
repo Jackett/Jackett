@@ -139,12 +139,14 @@ search:
         - name: re_replace # eg Supergirl 2018 S04E01 ...
           args: ["20[0-2][0-9] (S[0-9][0-9])", "$1"]
         - name: replace
-          args: ["ESP", "Spanish"]
+          args: ["SPA", "SPANiSH"]
+        - name: replace
+          args: ["ESP", "SPANiSH"]
         - name: re_replace
           args: ["[EI]NG", "English"]
         - name: replace
           args: ["CAT", "Catalan"]
-        - name: replace
+        - name: re_replace
           args: ["FR[AE]", "French"]
         - name: replace
           args: ["JAP", "Japanese"]
@@ -153,15 +155,17 @@ search:
         - name: replace
           args: ["RUS", "Russian"]
         - name: replace
-          args: ["DUAL", "Spanish English"]
+          args: ["DUAL", "MULTi/SPANiSH"]
+        - name: replace
+          args: ["BDRIP 2160P", "Bluray-2160P"] # Fix for Radarr
         - name: re_replace
-          args: ["MHD", "MHD.BDRip"] # Fix for Radarr
+          args: ["MHD", "MHD BDRIP"] # Fix for Radarr
         - name: re_replace
-          args: ["WEB.DL", "WEBDL"] # Fix for Radarr
+          args: ["WEB DL", "WEBDL"] # Fix for Radarr
         - name: re_replace
-          args: ["WEBDL.MHD.BDRip", "WEBDL"] # Fix for Radarr
+          args: ["WEBDL MHD BDRIP", "WEBDL"] # Fix for Radarr
         - name: re_replace
-          args: ["WEBRIP.MHD.BDRip", "WEBRIP"] # Fix for Radarr
+          args: ["WEBRIP MHD BDRIP", "WEBRIP"] # Fix for Radarr
     details:
       selector: td[valign="middle"] a
       attribute: href
@@ -196,6 +200,7 @@ search:
       case:
         img[src$="gold.png"]: 0
         img[src$="silver.png"]: 0.5
+        img[src$="bronze.png"]: 0.25
         "*": 1
     uploadvolumefactor:
       case:
