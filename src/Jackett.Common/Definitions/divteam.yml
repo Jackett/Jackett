@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 60, cat: Movies/HD, desc: "MicroHD 720p"}
     - {id: 77, cat: Movies/HD, desc: "MicroHD 1080p"}
-    - {id: 78, cat: Movies/HD, desc: "MicroHD 4K"}
+    - {id: 78, cat: Movies/UHD, desc: "MicroHD 4K"}
     - {id: 64, cat: TV/HD, desc: "Pack Series"}
     - {id: 65, cat: TV/HD, desc: "Pack Series VOSE"}
     - {id: 80, cat: Movies/BluRay, desc: "BDRip X265 1080p"}
@@ -125,16 +125,16 @@ search:
       selector: a[href^="index.php?page=torrent-details"][onmouseover]:not(:contains("VOSE"))
       optional: true
       filters:
-        - name: re_replace
-          args: ["\\W", "."] # Spaces and other characters -> .
         - name: append
-          args: ".MULTi/Spanish" # DivTeam doesn't bring languages. Usually Original + Spanish.
+          args: " MULTi/SPANiSH" # DivTeam doesn't bring languages. Usually Original + Spanish.
         - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
           args: ["^\\.", ""] # Delete first dot
-        - name: re_replace
+        - name: replace
           args: ["UHDRip", "BDRip"] # Fix for Radarr
+        - name: replace
+          args: ["2160p BDRip", "Bluray-2160p"] # Fix for Radarr
     poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details"]
       attribute: onmouseover
