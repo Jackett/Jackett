@@ -255,6 +255,7 @@ namespace Jackett.Updater
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Definitions/32pages.yml",
+                "Definitions/3evils.yml",
                 "Definitions/420files.yml",
                 "Definitions/academictorrents.yml",
                 "Definitions/alein.yml",
