@@ -10,29 +10,18 @@ links:
 
 caps:
   categorymappings:
-    - {id: 426, cat: Movies/SD, desc: "TLF-MiniSD"}
-    - {id: 432, cat: TV/Documentary, desc: "TLF-Fayea"}
-    - {id: 436, cat: Movies, desc: "TLF-iNT"}
-    - {id: 411, cat: Movies/SD, desc: "Movie/XviD"}
-    - {id: 430, cat: Movies/HD, desc: "Movie/X264"}
-    - {id: 415, cat: TV/SD, desc: "TV/XviD"}
-    - {id: 413, cat: TV/SD, desc: "TV/DVDRip"}
-    - {id: 414, cat: TV/HD, desc: "TV/x264"}
-    - {id: 416, cat: PC/Games, desc: "Game/PC"}
-    - {id: 417, cat: Console/PS3, desc: "Game/PS2"}
-    - {id: 418, cat: Console/PS3, desc: "Game/PS3"}
-    - {id: 419, cat: Console/PSP, desc: "Game/PSP"}
-    - {id: 420, cat: Console/Wii, desc: "Game/WII"}
-    - {id: 421, cat: Console/XBox 360, desc: "Game/Xbox360"}
-    - {id: 429, cat: Console, desc: "Game/Archive"}
-    - {id: 422, cat: PC, desc: "APPS"}
-    - {id: 423, cat: PC/0day, desc: "0day"}
-    - {id: 428, cat: PC, desc: "0day/Archive"}
-    - {id: 424, cat: Audio/MP3, desc: "MP3"}
-    - {id: 425, cat: Audio/Video, desc: "MVID"}
-    - {id: 435, cat: Audio/Lossless, desc: "Lossless"}
-    - {id: 427, cat: Other, desc: "MISC"}
-    - {id: 437, cat: Other, desc: "Unknown"}
+    - {id: 438, cat: Movies, desc: "电影 (Movie)"}
+    - {id: 440, cat: TV, desc: "电视剧(TV series)"}
+    - {id: 441, cat: TV, desc: "综艺 (TV Show)"}
+    - {id: 442, cat: TV/Anime, desc: "动漫 (Anime)"}
+    - {id: 443, cat: TV/Documentary, desc: "纪录片 (Documentary)"}
+    - {id: 444, cat: TV/Sport, desc: "体育 (Sport)"}
+    - {id: 445, cat: Audio/Video, desc: "音乐视频 (Music Video)"}
+    - {id: 446, cat: Audio, desc: "音乐(Music)"}
+    - {id: 447, cat: PC/Games, desc: "游戏 (Game)"}
+    - {id: 448, cat: PC/0day, desc: "软件 (Software)"}
+    - {id: 449, cat: Other/Misc, desc: "资料（E-Learning）"}
+    - {id: 450, cat: Other, desc: "其它 (Other)"}
 
   modes:
     search: [q]

@@ -255,6 +255,7 @@ namespace Jackett.Updater
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Definitions/32pages.yml",
+                "Definitions/3evils.yml",
                 "Definitions/420files.yml",
                 "Definitions/academictorrents.yml",
                 "Definitions/alein.yml",
@@ -291,6 +292,7 @@ namespace Jackett.Updater
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
+                "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
@@ -314,10 +316,12 @@ namespace Jackett.Updater
                 "Definitions/gods.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/greeklegends.yml",
+                "Definitions/hachede.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hd4free.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
                 "Definitions/hdclub.yml",
+                "Definitions/hddisk.yml",
                 "Definitions/hdplus.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
@@ -355,6 +359,7 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/onlyscene.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pt99.yml",

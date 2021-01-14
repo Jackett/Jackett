@@ -57,6 +57,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -96,7 +100,10 @@ search:
   inputs:
     page: torrents
     $raw: "&category={{ range .Categories }}{{.}};{{end}}"
+    # 0 all, 1 activeonly, 2 deadonly
     active: 1
+    # 0 title, 1 title&desc, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze, 8 1x, 9 2x, 10 3x, 11 4x, 12 5x, 13 6x, 14 7x, 15 8x, 16 9x, 17 10x
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -115,6 +122,10 @@ search:
       selector: td[valign="middle"] a
       filters:
         - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
+        - name: re_replace
           args: ["\\/", " "]
         - name: re_replace
           args: ["(?i)S(\\d{1,2}) E(\\d{1,2})", "S$1E$2"]
@@ -128,13 +139,15 @@ search:
         - name: re_replace # eg Supergirl 2018 S04E01 ...
           args: ["20[0-2][0-9] (S[0-9][0-9])", "$1"]
         - name: replace
-          args: ["ESP", "Spanish"]
+          args: ["SPA", "SPANiSH"]
+        - name: replace
+          args: ["ESP", "SPANiSH"]
         - name: re_replace
           args: ["[EI]NG", "English"]
         - name: replace
           args: ["CAT", "Catalan"]
-        - name: replace
-          args: ["FRA", "French"]
+        - name: re_replace
+          args: ["FR[AE]", "French"]
         - name: replace
           args: ["JAP", "Japanese"]
         - name: replace
@@ -142,7 +155,17 @@ search:
         - name: replace
           args: ["RUS", "Russian"]
         - name: replace
-          args: ["DUAL", "Spanish English"]
+          args: ["DUAL", "MULTi/SPANiSH"]
+        - name: replace
+          args: ["BDRIP 2160P", "Bluray-2160P"] # Fix for Radarr
+        - name: re_replace
+          args: ["MHD", "MHD BDRIP"] # Fix for Radarr
+        - name: re_replace
+          args: ["WEB DL", "WEBDL"] # Fix for Radarr
+        - name: re_replace
+          args: ["WEBDL MHD BDRIP", "WEBDL"] # Fix for Radarr
+        - name: re_replace
+          args: ["WEBRIP MHD BDRIP", "WEBRIP"] # Fix for Radarr
     details:
       selector: td[valign="middle"] a
       attribute: href
@@ -177,6 +200,7 @@ search:
       case:
         img[src$="gold.png"]: 0
         img[src$="silver.png"]: 0.5
+        img[src$="bronze.png"]: 0.25
         "*": 1
     uploadvolumefactor:
       case:
