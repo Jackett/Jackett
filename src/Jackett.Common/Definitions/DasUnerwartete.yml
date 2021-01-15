@@ -61,6 +61,9 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: pin
+    type: text
+    label: Pin
 
 login:
   path: login.php
@@ -69,8 +72,9 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    pin: "{{ .Config.pin }}"
   error:
-    - selector: .tablea:contains("Benutzername oder Passwort ungültig")
+    - selector: .tablea:contains("Benutzername, Passwort oder Pin ungültig")
   test:
     path: browse.php
 
