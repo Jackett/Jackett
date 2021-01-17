@@ -208,9 +208,8 @@ namespace Jackett.Common.Indexers
                     var posterStr = row.Value<string>("poster");
                     var poster = Uri.TryCreate(posterStr, UriKind.Absolute, out var posterUri) ? posterUri : null;
 
-                    var dlVolumeFactor = row.Value<bool>("is_half_download") ? 0.5: 1.0;
-                    dlVolumeFactor = row.Value<bool>("is_freeleech") ? 0.0 : dlVolumeFactor;
-                    var ulVolumeFactor = row.Value<bool>("is_double_upload") ? 2.0: 1.0;
+                    var dlVolumeFactor = row.Value<double>("download_volume_factor");
+                    var ulVolumeFactor = row.Value<double>("upload_volume_factor");
 
                     var release = new ReleaseInfo
                     {
