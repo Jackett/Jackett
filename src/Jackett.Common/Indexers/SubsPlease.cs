@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -19,8 +20,10 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class SubsPlease : BaseWebIndexer
     {
+        private string ApiEndpoint => SiteLink + "/api/?";
+
         public SubsPlease(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(id: "SubsPlease",
+            : base(id: "subsplease",
                    name: "SubsPlease",
                    description: "SubsPlease - A better HorribleSubs/Erai replacement",
                    link: "https://subsplease.org/",
@@ -65,13 +68,17 @@ namespace Jackett.Common.Indexers
 
         private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
+            // If the search terms contain [SubsPlease] or SubsPlease, remove them from the query sent to the API
+            // It's ok if this results in an empty search term
+            string searchTerm = Regex.Replace(query.SearchTerm, "\\[?SubsPlease\\]?\\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
+
             var queryParameters = new NameValueCollection
             {
                 { "f", "search" },
                 { "tz", "America/New_York" },
-                { "s", query.SearchTerm }
+                { "s", searchTerm }
             };
-            var response = await RequestWithCookiesAndRetryAsync(SiteLink + "/api/?" + queryParameters.GetQueryString());
+            var response = await RequestWithCookiesAndRetryAsync(ApiEndpoint + queryParameters.GetQueryString());
             if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
@@ -86,7 +93,7 @@ namespace Jackett.Common.Indexers
                 { "f", "latest" },
                 { "tz", "America/New_York" }
             };
-            var response = await RequestWithCookiesAndRetryAsync(SiteLink + "/api/?" + queryParameters.GetQueryString());
+            var response = await RequestWithCookiesAndRetryAsync(ApiEndpoint + queryParameters.GetQueryString());
             if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
@@ -120,6 +127,7 @@ namespace Jackett.Common.Indexers
                     //Ex: [SubsPlease] Shingeki no Kyojin (The Final Season) - 64 (1080p)
                     release.Title += $"[SubsPlease] {r.Show} - {r.Episode} ({d.Res}p)";
                     release.MagnetUri = new Uri(d.Magnet);
+                    release.Link = null;
                     release.Guid = new Uri(d.Magnet);
                     releaseInfo.Add(release);
                 }
