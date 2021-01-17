@@ -103,6 +103,11 @@ namespace Jackett.Common.Indexers
         private List<ReleaseInfo> ParseApiResults(string json)
         {
             var releaseInfo = new List<ReleaseInfo>();
+
+            // When there are no results, the API returns an empty array instead of an object
+            if (json == "[]")
+                return releaseInfo;
+
             var releases = JsonConvert.DeserializeObject<Dictionary<string, Release>>(json);
             foreach (var keyValue in releases)
             {
