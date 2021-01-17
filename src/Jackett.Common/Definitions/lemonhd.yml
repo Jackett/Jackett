@@ -26,13 +26,12 @@ caps:
     - {id: 414, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
     - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries(纪录片)"}
+    - {id: 405, cat: TV/Anime, desc: "Animations(动画片)"}
     - {id: 406, cat: Audio/Video, desc: "Music Videos(MV)"}
-    - {id: 407, cat: TV/Sport, desc: "Sports(体育)"}
     - {id: 408, cat: Audio, desc: "HQ Audio(音乐)"}
-    - {id: 421, cat: Books, desc: "Book(学习资料)"}
-    - {id: 422, cat: Console, desc: "Game(游戏)"}
-    - {id: 409, cat: Other, desc: "Misc(其他)"}
+    - {id: 500, cat: Audio, desc: "Music(无损)"}
+    - {id: 409, cat: Other, desc: "Video Portray(写真视频)"}
 
   modes:
     search: [q]
@@ -42,13 +41,12 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info
-    type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -75,9 +73,18 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  method: cookie
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  captcha:
+    type: image
+    selector: img[src^="image.php?"]
+    input: imagestring
+  error:
+    - selector: table:has(a[href="login.php"])
   test:
     path: index.php
 
@@ -85,7 +92,6 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
@@ -103,19 +109,19 @@ search:
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href*="?cat_"]
       attribute: href
       filters:
-        - name: querystring
-          args: cat
+        - name: regexp
+          args: "cat_(\\d{3})"
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="details_"] > b
     title:
       optional: true
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href^="details_"] > b
       attribute: title
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="details_"]
       attribute: href
     download:
       selector: a[href^="download.php?"]

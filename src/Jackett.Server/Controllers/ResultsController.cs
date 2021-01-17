@@ -403,11 +403,7 @@ namespace Jackett.Server.Controllers
                 {
                     Title = CurrentIndexer.DisplayName,
                     Description = CurrentIndexer.DisplayDescription,
-                    Link = new Uri(CurrentIndexer.SiteLink),
-                    ImageUrl = new Uri(serverUrl + "logos/" + CurrentIndexer.Id + ".png"),
-                    ImageTitle = CurrentIndexer.DisplayName,
-                    ImageLink = new Uri(CurrentIndexer.SiteLink),
-                    ImageDescription = CurrentIndexer.DisplayName
+                    Link = new Uri(CurrentIndexer.SiteLink)
                 });
 
                 var proxiedReleases = result.Releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>

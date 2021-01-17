@@ -41,7 +41,8 @@ namespace Jackett.Common.Indexers
             "http://www.mejortorrent.tv/",
             "http://www.mejortorrentt.com/",
             "https://www.mejortorrentt.org/",
-            "http://www.mejortorrentt.org/"
+            "http://www.mejortorrentt.org/",
+            "https://www.mejortorrents.net/"
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
@@ -49,7 +50,7 @@ namespace Jackett.Common.Indexers
             : base(id: "mejortorrent",
                    name: "MejorTorrent",
                    description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
-                   link: "https://www.mejortorrents.net/",
+                   link: "https://www.mejortorrents1.com/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>

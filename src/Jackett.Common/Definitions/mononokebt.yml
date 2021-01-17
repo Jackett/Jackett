@@ -16,6 +16,18 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: vostfr
+    type: checkbox
+    label: Add VOSTFR to titles
+    default: false
+
 login:
   path: takelogin.php
   method: post
@@ -40,8 +52,12 @@ search:
   fields:
     category:
       text: 1
-    title:
+    title_normal:
       selector: a[href^="details.php?id="]
+    title_vostfr:
+      text: "{{ .Result.title_normal }} VOSTFR"
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_normal }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href

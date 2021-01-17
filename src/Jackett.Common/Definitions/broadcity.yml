@@ -6,9 +6,9 @@ language: tr-TR
 type: private
 encoding: UTF-8
 links:
-  - http://broadcity.in/ # site is forcing to http
+  - https://broadcity.in/ # site is forcing to https
 legacylinks:
-  - https://broadcity.in/
+  - http://broadcity.in/
 
 caps:
   categorymappings:

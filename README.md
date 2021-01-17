@@ -122,6 +122,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SkyTorrentsClone2 (*.to)
  * Solid Torrents
  * sosulki
+ * SubsPlease
  * sukebei-Pantsu
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)
@@ -220,7 +221,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 2 Fast 4 You
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT) [![(invite needed)][inviteneeded]](#)
- * 3evils
  * 4thD (4th Dimension)
  * 52PT
  * 720pier
@@ -286,10 +286,12 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Cinemageddon
  * Cinematik
  * Classix
+ * Coastal-Crew
  * Concertos
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
+ * DANISH BYTES
  * Darius Tracker
  * Dark-Shadow
  * Dark Tracker
@@ -302,7 +304,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * DigitalCore
  * DivTeam
  * DivxTotal
- * DocumentaryTorrents (DT)
  * Dragonworld Reloaded [![(invite needed)][inviteneeded]](#)
  * DXDHD
  * EbookParadijs
@@ -344,7 +345,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * GreekDiamond
  * Greek Team
  * HaiDan
- * HacheDe
  * HD Dolby [![(invite needed)][inviteneeded]](#)
  * HD-Bits.com
  * HD-Forever (HDF)
@@ -360,7 +360,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDChina (HDWing)
  * HDC (HDCiTY)
  * HDCity
- * HDDisk (HDD)
  * HDHome (HDBigger)
  * HDME
  * HDRoute [![(invite needed)][inviteneeded]](#)
@@ -416,12 +415,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Nebulance (NBL) (TransmiTheNet)
  * NetCosmo
  * NetLab
- * New Real World [![(invite needed)][inviteneeded]](#)
  * NorBits
  * notwhat.cd
  * oMg[WtF]trackr
  * OnlineSelfEducation
- * ONLYscene
  * Orpheus
  * OshenPT
  * Ourbits (HDPter)
@@ -442,7 +439,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
- * Psytorrents [![(invite needed)][inviteneeded]](#)
  * PTerClub
  * PTFiles (PTF)
  * PThome

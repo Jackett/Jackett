@@ -6,11 +6,11 @@ language: ru-ru
 type: public
 encoding: windows-1251
 links:
-  - https://hdreactor.net/
   - https://hdreactor.club/
   - https://hdreactor.su/
 legacylinks:
   - https://hdreactor.guru/
+  - https://hdreactor.net/
 
 caps:
   categorymappings:
