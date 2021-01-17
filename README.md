@@ -221,7 +221,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 2 Fast 4 You
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT) [![(invite needed)][inviteneeded]](#)
- * 3evils
  * 4thD (4th Dimension)
  * 52PT
  * 720pier
@@ -292,6 +291,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
+ * DANISH BYTES
  * Darius Tracker
  * Dark-Shadow
  * Dark Tracker
@@ -415,12 +415,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Nebulance (NBL) (TransmiTheNet)
  * NetCosmo
  * NetLab
- * New Real World [![(invite needed)][inviteneeded]](#)
  * NorBits
  * notwhat.cd
  * oMg[WtF]trackr
  * OnlineSelfEducation
- * ONLYscene
  * Orpheus
  * OshenPT
  * Ourbits (HDPter)
@@ -441,7 +439,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
- * Psytorrents [![(invite needed)][inviteneeded]](#)
  * PTerClub
  * PTFiles (PTF)
  * PThome
