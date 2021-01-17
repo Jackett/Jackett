@@ -73,12 +73,6 @@ namespace Jackett.Common.Models
                         new XElement("link", ChannelInfo.Link.AbsoluteUri),
                         new XElement("language", ChannelInfo.Language),
                         new XElement("category", ChannelInfo.Category),
-                        new XElement("image",
-                            new XElement("url", ChannelInfo.ImageUrl.AbsoluteUri),
-                            new XElement("title", ChannelInfo.ImageTitle),
-                            new XElement("link", ChannelInfo.ImageLink.AbsoluteUri),
-                            new XElement("description", ChannelInfo.ImageDescription)
-                        ),
                         from r in Releases
                         select new XElement("item",
                             new XElement("title", RemoveInvalidXMLChars(r.Title)),
