@@ -368,6 +368,7 @@ namespace Jackett.Updater
                 "Definitions/rapidetracker.yml",
                 "Definitions/rarbg.yml", // migrated to C#
                 "Definitions/redtopia.yml",
+                "Definitions/retroflix.yml", // migrated to C#
                 "Definitions/rgu.yml",
                 "Definitions/rns.yml", // site merged with audiobooktorrents
                 "Definitions/rockethd.yml",
