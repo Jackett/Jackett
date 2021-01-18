@@ -104,8 +104,8 @@ namespace Jackett.Common.Indexers
         {
             var releaseInfo = new List<ReleaseInfo>();
 
-            // When there are no results, the API returns an empty array instead of an object
-            if (json == "[]")
+            // When there are no results, the API returns an empty array or empty response instead of an object
+            if (string.IsNullOrWhiteSpace(json) || json == "[]")
                 return releaseInfo;
 
             var releases = JsonConvert.DeserializeObject<Dictionary<string, Release>>(json);
@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
                     PublishDate = r.Release_Date.DateTime,
                     Files = 1,
                     Category = new List<int> { TorznabCatType.TVAnime.ID },
-                    Size = 0,
+                    Size = 1073741824, // 1GB
                     Seeders = 1,
                     Peers = 2,
                     MinimumRatio = 1,
