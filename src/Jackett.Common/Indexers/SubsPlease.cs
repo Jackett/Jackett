@@ -71,7 +71,7 @@ namespace Jackett.Common.Indexers
             // If the search terms contain [SubsPlease] or SubsPlease, remove them from the query sent to the API
             string searchTerm = Regex.Replace(query.SearchTerm, "\\[?SubsPlease\\]?\\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
 
-            // If the search terms contains a resolution, remove it from the query sent to the API
+            // If the search terms contain a resolution, remove it from the query sent to the API
             Match resMatch = Regex.Match(searchTerm, "\\d{3,4}[p|P]");
             if (resMatch.Success)
                 searchTerm = searchTerm.Replace(resMatch.Value, string.Empty);
@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
             var results = ParseApiResults(response.ContentString);
             var filteredResults = results.Where(release => query.MatchQueryStringAND(release.Title));
 
-            // If we detected a resolution in the query earlier, filter by it
+            // If we detected a resolution in the search terms earlier, filter by it
             if (resMatch.Success)
                 filteredResults = filteredResults.Where(release => release.Title.IndexOf(resMatch.Value, StringComparison.OrdinalIgnoreCase) >= 0);
 
