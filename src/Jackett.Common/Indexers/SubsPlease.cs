@@ -69,8 +69,12 @@ namespace Jackett.Common.Indexers
         private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
             // If the search terms contain [SubsPlease] or SubsPlease, remove them from the query sent to the API
-            // It's ok if this results in an empty search term
             string searchTerm = Regex.Replace(query.SearchTerm, "\\[?SubsPlease\\]?\\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
+
+            // If the search terms contains a resolution, remove it from the query sent to the API
+            Match resMatch = Regex.Match(searchTerm, "\\d{3,4}[p|P]");
+            if (resMatch.Success)
+                searchTerm = searchTerm.Replace(resMatch.Value, string.Empty);
 
             var queryParameters = new NameValueCollection
             {
@@ -83,7 +87,13 @@ namespace Jackett.Common.Indexers
                 throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             var results = ParseApiResults(response.ContentString);
-            return results.Where(release => query.MatchQueryStringAND(release.Title));
+            var filteredResults = results.Where(release => query.MatchQueryStringAND(release.Title));
+
+            // If we detected a resolution in the query earlier, filter by it
+            if (resMatch.Success)
+                filteredResults = filteredResults.Where(release => release.Title.Contains(resMatch.Value));
+
+            return filteredResults;
         }
 
         private async Task<IEnumerable<ReleaseInfo>> FetchNewReleases()
