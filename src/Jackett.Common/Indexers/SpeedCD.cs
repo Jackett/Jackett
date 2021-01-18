@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://speed.cd/",
-            "https://speed.click/"
+            "https://speed.click/",
+            "https://speeders.me/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
