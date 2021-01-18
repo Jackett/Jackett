@@ -118,7 +118,6 @@ namespace Jackett.Common.Indexers
                     PublishDate = r.Release_Date.DateTime,
                     Files = 1,
                     Category = new List<int> { TorznabCatType.TVAnime.ID },
-                    Size = 1073741824, // 1GB
                     Seeders = 1,
                     Peers = 2,
                     MinimumRatio = 1,
@@ -129,11 +128,22 @@ namespace Jackett.Common.Indexers
                 foreach (var d in r.Downloads)
                 {
                     var release = (ReleaseInfo)baseRelease.Clone();
-                    //Ex: [SubsPlease] Shingeki no Kyojin (The Final Season) - 64 (1080p)
+                    // Ex: [SubsPlease] Shingeki no Kyojin (The Final Season) - 64 (1080p)
                     release.Title += $"[SubsPlease] {r.Show} - {r.Episode} ({d.Res}p)";
                     release.MagnetUri = new Uri(d.Magnet);
                     release.Link = null;
                     release.Guid = new Uri(d.Magnet);
+
+                    // The API doesn't tell us file size, so give an estimate based on resolution
+                    if(string.Equals(d.Res, "1080"))
+                        release.Size = 1395864371; // 1.3GB
+                    else if (string.Equals(d.Res, "720"))
+                        release.Size = 734003200; // 700MB
+                    else if (string.Equals(d.Res, "480"))
+                        release.Size = 367001600; // 350MB
+                    else
+                        release.Size = 1073741824; // 1GB
+
                     releaseInfo.Add(release);
                 }
             }
