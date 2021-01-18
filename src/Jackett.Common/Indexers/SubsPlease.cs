@@ -91,7 +91,7 @@ namespace Jackett.Common.Indexers
 
             // If we detected a resolution in the query earlier, filter by it
             if (resMatch.Success)
-                filteredResults = filteredResults.Where(release => release.Title.Contains(resMatch.Value));
+                filteredResults = filteredResults.Where(release => release.Title.IndexOf(resMatch.Value, StringComparison.OrdinalIgnoreCase) >= 0);
 
             return filteredResults;
         }
