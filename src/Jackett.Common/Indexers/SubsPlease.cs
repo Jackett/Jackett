@@ -69,8 +69,12 @@ namespace Jackett.Common.Indexers
         private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
             // If the search terms contain [SubsPlease] or SubsPlease, remove them from the query sent to the API
-            // It's ok if this results in an empty search term
             string searchTerm = Regex.Replace(query.SearchTerm, "\\[?SubsPlease\\]?\\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
+
+            // If the search terms contain a resolution, remove it from the query sent to the API
+            Match resMatch = Regex.Match(searchTerm, "\\d{3,4}[p|P]");
+            if (resMatch.Success)
+                searchTerm = searchTerm.Replace(resMatch.Value, string.Empty);
 
             var queryParameters = new NameValueCollection
             {
@@ -83,7 +87,13 @@ namespace Jackett.Common.Indexers
                 throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             var results = ParseApiResults(response.ContentString);
-            return results.Where(release => query.MatchQueryStringAND(release.Title));
+            var filteredResults = results.Where(release => query.MatchQueryStringAND(release.Title));
+
+            // If we detected a resolution in the search terms earlier, filter by it
+            if (resMatch.Success)
+                filteredResults = filteredResults.Where(release => release.Title.IndexOf(resMatch.Value, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            return filteredResults;
         }
 
         private async Task<IEnumerable<ReleaseInfo>> FetchNewReleases()
@@ -104,8 +114,8 @@ namespace Jackett.Common.Indexers
         {
             var releaseInfo = new List<ReleaseInfo>();
 
-            // When there are no results, the API returns an empty array instead of an object
-            if (json == "[]")
+            // When there are no results, the API returns an empty array or empty response instead of an object
+            if (string.IsNullOrWhiteSpace(json) || json == "[]")
                 return releaseInfo;
 
             var releases = JsonConvert.DeserializeObject<Dictionary<string, Release>>(json);
@@ -118,7 +128,6 @@ namespace Jackett.Common.Indexers
                     PublishDate = r.Release_Date.DateTime,
                     Files = 1,
                     Category = new List<int> { TorznabCatType.TVAnime.ID },
-                    Size = 0,
                     Seeders = 1,
                     Peers = 2,
                     MinimumRatio = 1,
@@ -129,11 +138,22 @@ namespace Jackett.Common.Indexers
                 foreach (var d in r.Downloads)
                 {
                     var release = (ReleaseInfo)baseRelease.Clone();
-                    //Ex: [SubsPlease] Shingeki no Kyojin (The Final Season) - 64 (1080p)
+                    // Ex: [SubsPlease] Shingeki no Kyojin (The Final Season) - 64 (1080p)
                     release.Title += $"[SubsPlease] {r.Show} - {r.Episode} ({d.Res}p)";
                     release.MagnetUri = new Uri(d.Magnet);
                     release.Link = null;
                     release.Guid = new Uri(d.Magnet);
+
+                    // The API doesn't tell us file size, so give an estimate based on resolution
+                    if(string.Equals(d.Res, "1080"))
+                        release.Size = 1395864371; // 1.3GB
+                    else if (string.Equals(d.Res, "720"))
+                        release.Size = 734003200; // 700MB
+                    else if (string.Equals(d.Res, "480"))
+                        release.Size = 367001600; // 350MB
+                    else
+                        release.Size = 1073741824; // 1GB
+
                     releaseInfo.Add(release);
                 }
             }

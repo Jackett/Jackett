@@ -83,6 +83,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MejorTorrent
  * MixTapeTorrent
  * Monova
+ * Montorrent
  * MovCr
  * MoviesDVDR
  * MyPornClub
@@ -521,6 +522,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrenting (TT) [![(invite needed)][inviteneeded]](#)
  * Torrentland
  * TotallyKids (TK)
+ * Trackeros
  * TranceTraffic [![(invite needed)][inviteneeded]](#)
  * Trezzor
  * TTsWEB
