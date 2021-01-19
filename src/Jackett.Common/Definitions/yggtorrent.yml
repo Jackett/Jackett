@@ -7,8 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.yggtorrent.si/
-  # don't forget to also change below in settings !
+  - https://www2.yggtorrent.si/
 legacylinks:
   - https://yggtorrent.com/
   - https://ww1.yggtorrent.com/
@@ -34,6 +33,7 @@ legacylinks:
   - https://www5.yggtorrent.pe/
   - https://yggtorrent.ws/
   - https://yggtorrent.se/
+  - https://www.yggtorrent.si/
 
 caps:
   categorymappings:
@@ -98,10 +98,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: searchanddlurl
-    label: Search and download URL
-    type: text
-    default: www2.yggtorrent.si
   - name: username
     type: text
     label: Username
@@ -175,13 +171,11 @@ settings:
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 login:
-  method: form
-  path: /
-  form: "#user-login"
+  method: post
+  path: "/user/login"
   inputs:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
-    submit: ""
   error:
     - selector: "#login_msg_pass[style=\"\"][style] > center"
     - selector: "#ban_msg_login[style=\"\"][style] > center"
@@ -222,11 +216,9 @@ search:
       args: ["  ", " "]
     - name: trim
   paths:
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
-      followredirect: true
+    - path: "{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
     # Saison Word
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
-      followredirect: true
+    - path: "{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
 
   rows:
     selector: table.table > tbody > tr
@@ -307,7 +299,7 @@ search:
       # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
     download:
-      text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
+      text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
     date:
       selector: td:nth-child(5)
       filters:
