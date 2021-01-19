@@ -10,7 +10,7 @@ links:
   - https://www.montorrent.com/
 
 caps:
-  categorymappings:  
+  categorymappings:
     - {id: "vo", cat: Movies, desc: "Films VO"}
     - {id: "vostfr", cat: Movies, desc: "Films VOSTFR"}
     - {id: "dvdrip", cat: Movies, desc: "Films DVDRIP"}
