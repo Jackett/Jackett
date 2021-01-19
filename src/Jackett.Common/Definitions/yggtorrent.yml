@@ -176,7 +176,6 @@ login:
   inputs:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
-    submit: ""
   error:
     - selector: "#login_msg_pass[style=\"\"][style] > center"
     - selector: "#ban_msg_login[style=\"\"][style] > center"
