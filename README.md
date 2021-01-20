@@ -477,6 +477,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SportHD [![(invite needed)][inviteneeded]](#)
  * SportsCult
  * SpringSunday
+ * SugoiMusic
  * Superbits (SBS)
  * Tapochek
  * Tasmanit [![(invite needed)][inviteneeded]](#)
