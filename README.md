@@ -252,7 +252,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BeyondHD (BHD)
  * Bibliotik
  * BIGTorrent
- * BigTower
  * Bit-City Reloaded [![(invite needed)][inviteneeded]](#)
  * BIT-HDTV
  * BiT-TiTAN
@@ -328,7 +327,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FocusX
  * Fou-Du-Cinema
  * FreeTorrent
- * FullMixMusic
  * FunFile (FF)
  * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
  * FunReleases [![(invite needed)][inviteneeded]](#)
@@ -365,7 +363,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDME
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky
- * HDStreet
  * HDTime
  * HDTorrents.it
  * HDTurk [![(invite needed)][inviteneeded]](#)

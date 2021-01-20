@@ -272,6 +272,7 @@ namespace Jackett.Updater
                 "Definitions/b2s-share.yml",
                 "Definitions/badasstorrents.yml", // to be migrated to c#
                 "Definitions/bithq.yml",
+                "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
@@ -311,6 +312,7 @@ namespace Jackett.Updater
                 "Definitions/filmsclub.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
+                "Definitions/fullmixmusic.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
@@ -323,6 +325,7 @@ namespace Jackett.Updater
                 "Definitions/hdclub.yml",
                 "Definitions/hddisk.yml",
                 "Definitions/hdplus.yml",
+                "Definitions/hdstreet.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
                 "Definitions/hyperay.yml",
