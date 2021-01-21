@@ -89,6 +89,9 @@ search:
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ .Keywords }}"
+    titleonly: 1
+    # 0 Exact, 1 Fuzzy, 3 Parsed, 4 Simple # 2 Pure is not used
+    nonboolean: 0
 
   rows:
     selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
