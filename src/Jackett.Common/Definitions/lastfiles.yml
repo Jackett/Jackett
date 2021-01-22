@@ -6,7 +6,9 @@ language: ro-ro
 type: private
 encoding: windows-1252
 links:
-  - http://last-torrents.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://last-torrents.org/
+legacylinks:
+  - http://last-torrents.org/ # site forces https
 
 caps:
   categorymappings:
