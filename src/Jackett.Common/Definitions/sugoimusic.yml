@@ -78,7 +78,7 @@ login:
   error:
     - selector: span.warning
       message:
-        selector: #text
+        selector: span[class="warning"]:not(:contains("JavaScript"))
   test:
     path: index.php
     selector: a[href^="logout.php"]
