@@ -87,8 +87,13 @@ search:
       attribute: href
       optional: true
     magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
+      selector: a[onclick*="magnet:?xt="]
+      attribute: onclick
+      filters:
+        - name: replace
+          args: ["hitsTracker();location.href = '", ""]
+        - name: replace
+          args: ["'; ", ""]
     poster:
       selector: a.img-thumbnail img
       attribute: src
