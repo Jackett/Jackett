@@ -6,9 +6,9 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentz2k.pw/
-legacylinks:
   - https://torrentz2k.xyz/
+legacylinks:
+  - https://torrentz2k.pw/
 
 caps:
   categorymappings:
@@ -38,16 +38,16 @@ settings:
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 search:
-  # https://torrentz2k.pw/search/
+  # https://torrentz2k.xyz/search/ or https://torrentz2k.xyz/recent/
   paths:
-    - path: search/
+    - path: "{{ if .Keywords }}search/{{ else }}recent/{{ end }}"
       method: post
-    - path: search/
+    - path: "{{ if .Keywords }}search/{{ else }}recent/{{ end }}"
       method: post
       inputs:
         page: 2
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}:latest:{{ end }}"
+    $raw: "{{ if .Keywords }}q={{ .Keywords }}{{ else }}recent=recent{{ end }}"
     category: all
   keywordsfilters:
     # the site uses % for wildcard
@@ -76,14 +76,11 @@ search:
       selector: span.btntitle
       attribute: title
     details:
-      selector: a
+      # details page is only accessible via form and post which Cardigann does not support.
+      text: "{{ .Config.sitelink }}"
+    download:
+      selector: a[href^="magnet:?xt="]
       attribute: href
-    infohash:
-      selector: a
-      attribute: href
-      filters:
-        - name: trim
-          args: "/"
     date:
       selector: td:nth-child(5)
       filters:
