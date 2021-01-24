@@ -6,7 +6,7 @@ language: ro-ro
 type: private
 encoding: windows-1252
 links:
-  - http://last-torrents.org/
+  - https://last-torrents.org/
 legacylinks:
   - http://last-torrents.org/ # site forces https
 
