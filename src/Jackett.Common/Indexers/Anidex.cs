@@ -68,7 +68,6 @@ namespace Jackett.Common.Indexers
             // Configure the language select option
             var languageSelect = new SelectItem(new Dictionary<string, string>
                 {
-                {"", "All langs"},
                 {"1", "English"},
                 {"2", "Japanese"},
                 {"3", "Polish"},
@@ -101,7 +100,7 @@ namespace Jackett.Common.Indexers
                 {"30", "Persian"},
                 {"31", "Malaysian"}
             })
-            { Name = "Language", Value = "" };
+            { Name = "Language", Value = "1" };
             configData.AddDynamic("languageid", languageSelect);
 
             // Configure the sort selects
