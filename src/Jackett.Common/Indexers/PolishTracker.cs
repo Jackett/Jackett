@@ -67,6 +67,7 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("LanguageTitle", new BoolItem { Name = "Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr", Value = false });
 
             AddCategoryMapping(1, TorznabCatType.PC0day, "0-Day");
+            AddCategoryMapping(2, TorznabCatType.AudioVideo, "Music Video");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Apps");
             AddCategoryMapping(4, TorznabCatType.Console, "Consoles");
             AddCategoryMapping(5, TorznabCatType.Books, "E-book");
@@ -78,6 +79,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(11, TorznabCatType.TVHD, "TV HD");
             AddCategoryMapping(12, TorznabCatType.TVSD, "TV SD");
             AddCategoryMapping(13, TorznabCatType.XXX, "XXX");
+            AddCategoryMapping(14, TorznabCatType.TVUHD, "TV-UHD");
+            AddCategoryMapping(15, TorznabCatType.AudioAudiobook, "Audiobook");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
