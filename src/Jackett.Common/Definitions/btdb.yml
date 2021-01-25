@@ -7,6 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
+  # update poster placeholder link too
   - https://btdb.eu/
   - https://btdb.unblockit.ltd/
 legacylinks:
@@ -99,7 +100,7 @@ search:
       attribute: src
       filters:
         - name: replace
-          args: ["https://btdb.io/assets/img/placeholder.png", ""]
+          args: ["https://btdb.eu/assets/img/placeholder.png", ""]
     date:
       selector: small:nth-of-type(5) strong
       filters:
