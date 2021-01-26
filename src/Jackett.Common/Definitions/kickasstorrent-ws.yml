@@ -1,7 +1,7 @@
 ---
-id: kickasstorrent-kathow
-name: kickasstorrents (kickass.ws)
-description: "kickasstorrents (kickass.ws) is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
+id: kickasstorrent-ws
+name: kickasstorrents.ws
+description: "kickasstorrents.ws is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
 language: en-us
 type: public
 encoding: UTF-8
