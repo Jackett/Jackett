@@ -6,7 +6,9 @@ language: vi-vn
 type: semi-private
 encoding: UTF-8
 links:
-  - http://nethd.org/ # site does not support https NET::ERR_CERT_AUTHORITY_INVALID
+  - https://nethd.org/
+links:
+  - http://nethd.org/ # site forces https
 
 caps:
   categorymappings:
