@@ -53,6 +53,7 @@ namespace Jackett.Common.Services
             {"skytorrentsclone", "skytorrentsclone-lol"},
             {"skytorrentsclone2", "skytorrentsclone-to"},
             {"tehconnectionme", "anthelion"},
+            {"torrentgalaxyorg", "torrentgalaxy"},
             {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
             {"xtremezone", "speedapp"},
