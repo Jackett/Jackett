@@ -414,6 +414,7 @@ namespace Jackett.Updater
                 "Definitions/tntvillage.yml",
                 "Definitions/topnow.yml",
                 "Definitions/torrentcouch.yml",
+                "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
                 "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentquest.yml",
