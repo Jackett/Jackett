@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 links:
   - https://nethd.org/
-links:
+legacylinks:
   - http://nethd.org/ # site forces https
 
 caps:
