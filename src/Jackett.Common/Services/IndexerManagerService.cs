@@ -37,9 +37,11 @@ namespace Jackett.Common.Services
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
             {"ast4u", "animeworld"},
+            {"audiobooktorrents", "abtorrents"},
             {"broadcastthenet", "broadcasthenet"},
             {"cili180", "cilipro"},
             {"icetorrent", "speedapp"},
+            {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"leaguehd", "lemonhd"},
             {"liaorencili", "cilipro"},
             {"metaliplayro", "romanianmetaltorrents"},
@@ -48,7 +50,10 @@ namespace Jackett.Common.Services
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
+            {"skytorrentsclone", "skytorrents-lol"},
+            {"skytorrentsclone2", "skytorrents-to"},
             {"tehconnectionme", "anthelion"},
+            {"torrentgalaxyorg", "torrentgalaxy"},
             {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
             {"xtremezone", "speedapp"},

@@ -1,6 +1,6 @@
 ---
-id: skytorrentsclone
-name: SkyTorrentsClone
+id: skytorrents-lol
+name: SkyTorrents.lol
 description: "SkyTorrents.lol is a Public SkyTorrents clone for TV / MOVIES / GENERAL"
 language: en-us
 type: public
@@ -17,9 +17,9 @@ legacylinks:
   - https://skytorrents.unblocked.bar/ # Jackett search fails 'Returning Redirect' & 'Relogin required' loop
   - https://skytorrents.proxyportal.pw/ # Jackett search fails 'Returning Redirect' & 'Relogin required' loop
   - https://skytorrents.uk-unblock.pro/ # Jackett search fails 'Returning Redirect' & 'Relogin required' loop
-  - https://skytorrents.to/ # skytorrentsclone2 #10000
-  - https://skytorrents.org/ # skytorrentsclone2 #10000
-  - https://skytorrents.net/ # skytorrentsclone2 #10000
+  - https://skytorrents.to/ # skytorrents-to #10000
+  - https://skytorrents.org/ # skytorrents-to #10000
+  - https://skytorrents.net/ # skytorrents-to #10000
 
 caps:
   categorymappings:

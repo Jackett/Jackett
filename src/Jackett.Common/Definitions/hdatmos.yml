@@ -1,37 +1,26 @@
 ---
-id: lemonhd
-name: LemonHD
-description: "LemonHD is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+id: hdatmos
+name: HDAtmos
+description: "HDAtmos is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
 language: zh-cn
 type: private
 encoding: UTF-8
 links:
-  - https://lemonhd.org/
-legacylinks:
-  - https://leaguehd.com/
+  - https://hdatmos.club/
 
 caps:
   categorymappings:
-    - {id: 300, cat: Movies/UHD, desc: "Movies UHD-4K"}
-    - {id: 301, cat: Movies/UHD, desc: "Movies 2160p"}
-    - {id: 420, cat: Movies/UHD, desc: "Movies 2160p REMUX"}
-    - {id: 401, cat: Movies/BluRay, desc: "Movies Blu-ray"}
-    - {id: 410, cat: Movies/HD, desc: "Movies 1080p"}
-    - {id: 415, cat: Movies, desc: "Movies 1080p REMUX"}
-    - {id: 416, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 411, cat: Movies/HD, desc: "Movies 720p"}
-    - {id: 412, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
-    - {id: 413, cat: TV/HD, desc: "Movies HDTV"}
-    - {id: 417, cat: Movies, desc: "Movies iPad"}
-    - {id: 414, cat: Movies/DVD, desc: "Movies DVD"}
-    - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
-    - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries(纪录片)"}
-    - {id: 405, cat: TV/Anime, desc: "Animations(动画片)"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos(MV)"}
-    - {id: 408, cat: Audio, desc: "HQ Audio(音乐)"}
-    - {id: 500, cat: Audio, desc: "Music(无损)"}
-    - {id: 409, cat: Other, desc: "Video Portray(写真视频)"}
+    - {id: 401, cat: Movies, desc: "Movies/电影"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
+    - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
+    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
+    - {id: 422, cat: PC/Games, desc: "Games/游戏"}
+    - {id: 423, cat: TV, desc: "TV Shows/综艺"}
+    - {id: 406, cat: Audio/Video, desc: "MusicVideo/MV演唱会"}
+    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
+    - {id: 409, cat: PC/0day, desc: "Software/软件"}
+    - {id: 424, cat: Other, desc: "Misc/其他"}
+    - {id: 408, cat: Audio, desc: "HQ Audio/音乐"}
 
   modes:
     search: [q]
@@ -41,17 +30,20 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info
-    type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -68,22 +60,35 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  method: cookie
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+    securelogin: ""
+    ssl: yes
+    trackerssl: ""
+  error:
+    - selector: td.embedded:has(h2:contains("失败"))
+      message:
+        selector: td.text
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
     - path: torrents.php
   inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
@@ -101,22 +106,22 @@ search:
 
   fields:
     category:
-      selector: a[href*="?cat_"]
+      selector: a[href^="?cat="]
       attribute: href
       filters:
-        - name: regexp
-          args: "cat_(\\d{3})"
+        - name: querystring
+          args: cat
     title:
-      selector: a[href^="details_"] > b
+      selector: a[href^="details.php?id="]
     title:
       optional: true
-      selector: a[title][href^="details_"] > b
+      selector: a[title][href^="details.php?id="]
       attribute: title
     details:
-      selector: a[href^="details_"]
+      selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?"]
+      selector: a[href^="download.php?id="]
       attribute: href
     imdb:
       selector: a[href*="imdb.com/title/tt"]
@@ -133,7 +138,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date:
       # time added
-      selector: td:nth-child(4):not(:has(span[title])):not(:has(a))
+      selector: td:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -165,4 +170,6 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, img
+    minimumratio:
+      text: 0.81
 # NexusPHP Standard v1.5 Beta 4
