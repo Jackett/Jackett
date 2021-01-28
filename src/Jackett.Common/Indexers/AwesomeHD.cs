@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
             : base(id: "awesomehd",
                    name: "Awesome-HD",
                    description: "An HD tracker",
-                   link: "https://awesome-hd.me/",
+                   link: "https://awesome-hd.club/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
