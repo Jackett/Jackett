@@ -536,7 +536,7 @@ namespace Jackett.Common.Indexers
                 .FirstOrDefault();
         }
 
-        private async Task<List<ReleaseInfo>> PerformSearch(TorznabQuery query)
+        private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
             const string searchLinkSelector = "#dle-content > .searchitem > h3 > a";
 
@@ -558,8 +558,8 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.ContentString, ex);
             }
-
-            return releases;
+            
+            return releases.Where(release => query.MatchQueryStringAND(release.Title));
         }
 
         private List<KeyValuePair<string, string>> PreparePostData(TorznabQuery query)
