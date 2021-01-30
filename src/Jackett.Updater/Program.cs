@@ -413,6 +413,7 @@ namespace Jackett.Updater
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/topnow.yml",
+                "Definitions/torrentbomb.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
                 "Definitions/torrenthane.yml",
