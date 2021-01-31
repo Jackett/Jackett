@@ -44,6 +44,7 @@ caps:
     - {id: 276, cat: Audio/Audiobook, desc: "Audio: Military Fiction"}
     - {id: 299, cat: Audio/Audiobook, desc: "Audio: Magazines"}
     - {id: 301, cat: Audio/Audiobook, desc: "Audio: Collections"}
+    - {id: 314, cat: Audio/Audiobook, desc: "Audio: Dystopian/Post Apocalyptic Bks"}
     - {id: 47, cat: Books/EBook, desc: "Children's: Adventure"}
     - {id: 48, cat: Books/EBook, desc: "Children's: Novels"}
     - {id: 49, cat: Books/EBook, desc: "Children's: Collections"}
