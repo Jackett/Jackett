@@ -558,7 +558,6 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.ContentString, ex);
             }
-            
             return releases.Where(release => query.MatchQueryStringAND(release.Title));
         }
 
