@@ -24,12 +24,16 @@ namespace Jackett.Common.Indexers
         private readonly Regex _removeYearRegex = new Regex(@" [\(\[]?(19|20)\d{2}[\)\]]?$", RegexOptions.Compiled);
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
+                public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://awesome-hd.me/"
+        };
+
         public AwesomeHD(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "awesomehd",
                    name: "Awesome-HD",
                    description: "An HD tracker",
-                   link: "https://awesome-hd.me/",
+                   link: "https://awesome-hd.club/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>

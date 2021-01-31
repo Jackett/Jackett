@@ -6,7 +6,9 @@ language: ro-ro
 type: private
 encoding: windows-1252
 links:
-  - http://last-torrents.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://last-torrents.org/
+legacylinks:
+  - http://last-torrents.org/ # site forces https
 
 caps:
   categorymappings:
@@ -72,6 +74,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
   - name: sort
     type: select
     label: Sort requested from site
