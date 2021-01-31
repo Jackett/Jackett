@@ -123,6 +123,8 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
         }
 
+        private string GetLang => ((SelectItem)configData.GetDynamic("languageid")).Value;
+        
         private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
 
         private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
@@ -148,7 +150,8 @@ namespace Jackett.Common.Indexers
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "group", "0" } // No group
+                { "lang_id", GetLang },
+                { "group_id", "0" } // No group
             };
 
             // Get specified categories
