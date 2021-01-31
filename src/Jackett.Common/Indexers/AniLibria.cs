@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -18,6 +19,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AniLibria : BaseWebIndexer
     {
+        private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]?\d{1,4}){1,2}$");
+
         public AniLibria(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(id: "AniLibria",
                    name: "AniLibria",
@@ -68,7 +71,7 @@ namespace Jackett.Common.Indexers
         {
             var queryParameters = new NameValueCollection
             {
-                { "search", query.SearchTerm },
+                { "search", _EpisodeRegex.Replace(query.SearchTerm, string.Empty).TrimEnd() },
                 { "filter", "names,poster.url,code,torrents.list,season.year" }
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString());
