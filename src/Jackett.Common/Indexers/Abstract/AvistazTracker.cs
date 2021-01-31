@@ -165,6 +165,8 @@ without this configuration the torrent download does not work.<br/>You can find 
                 await RenewalTokenAsync();
                 response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             }
+            else if (response.Status == HttpStatusCode.NotFound)
+                return releases; // search without results, eg CinemaZ: tt0075998
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error: {response.ContentString}");
 
