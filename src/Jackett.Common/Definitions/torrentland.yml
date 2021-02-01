@@ -25,6 +25,7 @@ caps:
     - {id: 32, cat: Movies/DVD, desc: "Peliculas - DVDFULL"}
     - {id: 14, cat: Movies/SD, desc: "Peliculas - HDRip"}
     - {id: 15, cat: Movies/DVD, desc: "Peliculas - DVDRip"}
+    - {id: 88, cat: Movies/HD, desc: "Videos Musicales"}
     - {id: 71, cat: Movies/Other, desc: "Peliculas - Peliculas V.O."}
     # Eml HDTeam
     - {id: 69, cat: Movies/BluRay, desc: "Eml HDTeam - FULLBR"}
