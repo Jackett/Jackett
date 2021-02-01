@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 81, cat: TV/SD, desc: "Sorozat/SD-x264/Hun"}
+    - {id: 91, cat: Movies/UHD, desc: "4K Blu-Ray"}
     - {id: 62, cat: Movies/BluRay, desc: "Bluray Disc"}
     - {id: 80, cat: Movies/SD, desc: "CAM/Eng"}
     - {id: 79, cat: Movies/SD, desc: "CAM/Hun"}
@@ -39,6 +39,7 @@ caps:
     - {id: 85, cat: TV/HD, desc: "Sorozat HD/Eng"}
     - {id: 84, cat: TV/HD, desc: "Sorozat HD/Hun"}
     - {id: 8, cat: TV/SD, desc: "Sorozat/SD-x264/Eng"}
+    - {id: 81, cat: TV/SD, desc: "Sorozat/SD-x264/Hun"}
     - {id: 83, cat: TV/SD, desc: "Sorozat/SD-Xvid/Eng"}
     - {id: 7, cat: TV/SD, desc: "Sorozat/SD-Xvid/Hun"}
     - {id: 46, cat: XXX, desc: "XXX"}
