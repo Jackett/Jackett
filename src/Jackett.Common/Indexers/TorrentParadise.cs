@@ -74,7 +74,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.GetEncoding("windows-1252");
+            Encoding = Encoding.GetEncoding("UTF-8");
             Language = "en-us";
             Type = "public";
 
@@ -149,7 +149,8 @@ namespace Jackett.Common.Indexers
                 PublishDate = DateTime.Now,
                 Details = new Uri(SiteLink),
                 DownloadVolumeFactor = 1,
-                UploadVolumeFactor = 1
+                UploadVolumeFactor = 1,
+                Category = new List<int> { TorznabCatType.Other.ID }
             };
         }
 
