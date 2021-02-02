@@ -44,15 +44,27 @@ namespace Jackett.Common.Indexers
 
         public TorrentParadise(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "torrentparadise",
+            : base(id: "torrent-paradise",
                    name: "Torrent Paradise",
                    description: "The most innovative torrent site",
                    link: "https://torrent-paradise.ml/",
                    caps: new TorznabCapabilities
                    {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -66,14 +78,15 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            AddCategoryMapping(1, TorznabCatType.MoviesHD);
+            AddCategoryMapping(8000, TorznabCatType.Other);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
-            var releases = await PerformQuery(new TorznabQuery { SearchTerm = "test" });
+            var query = new TorznabQuery { SearchTerm = DateTime.Now.Year.ToString(), IsTest = true };
+            var releases = await PerformQuery(query);
 
             await ConfigureIfOK(string.Empty, releases.Any(),
                                 () => throw new Exception("Could not find releases from this URL"));
@@ -83,10 +96,9 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var queryString = query.GetQueryString();
-            if (string.IsNullOrWhiteSpace(queryString)) return new List<ReleaseInfo>();
+            var searchUrl = CreateSearchUrl(query);
+            if (string.IsNullOrWhiteSpace(searchUrl)) return new List<ReleaseInfo>();
 
-            var searchUrl = ApiUrl + "search?q=" + queryString;
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             try
@@ -99,6 +111,22 @@ namespace Jackett.Common.Indexers
             {
                 throw new Exception("Error while parsing json: " + response.ContentString, ex);
             }
+        }
+
+        private string CreateSearchUrl(TorznabQuery query)
+        {
+            var queryString = query.GetQueryString();
+            if (string.IsNullOrWhiteSpace(queryString))
+            {
+                if (!query.IsTest)
+                {
+                    return null;
+                }
+                query.SearchTerm = DateTime.Now.Year.ToString();
+                queryString = query.GetQueryString();
+            }
+
+            return ApiUrl + "search?q=" + queryString;
         }
 
         private IEnumerable<ReleaseInfo> ConvertResultsIntoReleaseInfos(IEnumerable<TorrentParadiseResult> results)
@@ -117,7 +145,11 @@ namespace Jackett.Common.Indexers
                 Size = result.Size,
                 Seeders = result.Seeders,
                 Peers = result.Seeders + result.Leechers,
-                MagnetUri = CreateMagnetUri(result)
+                MagnetUri = CreateMagnetUri(result),
+                PublishDate = DateTime.Now,
+                Details = new Uri(SiteLink),
+                DownloadVolumeFactor = 1,
+                UploadVolumeFactor = 1
             };
         }
 
