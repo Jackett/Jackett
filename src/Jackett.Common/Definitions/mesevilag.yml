@@ -17,6 +17,10 @@ caps:
     - {id: 4, cat: Movies, desc: "Családi/Cam(Family)"}
     - {id: 5, cat: Movies, desc: "Családi/Eng(Family)"}
     - {id: 6, cat: Movies, desc: "Családi/Hun(Family)"}
+    - {id: 17, cat: Movies, desc: "Családi/Romantikus/Cam(Family Romantic)"}
+    - {id: 16, cat: Movies, desc: "Családi/Romantikus/Eng(Family Romantic)"}
+    - {id: 15, cat: Movies, desc: "Családi/Romantikus/Hun(Family Romantic)"}
+    - {id: 18, cat: TV, desc: "Családi/Romantikus/Sorozat(Family Romantic Series)"}
     - {id: 14, cat: TV, desc: "Családi/Sorozat(Family Series)"}
     - {id: 8, cat: Audio/Audiobook, desc: "Hangoskönyv(Audiobooks)"}
     - {id: 9, cat: PC/Games, desc: "Játék/ISO(Games)"}
