@@ -137,6 +137,7 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();  //get search string from query
 
             WebResult results = null;
+            WebResult singleResult = null;
             var queryCollection = new NameValueCollection();
             var catList = MapTorznabCapsToTrackers(query);     // map categories from query to indexer specific
             var categ = string.Join(",", catList);
@@ -200,8 +201,17 @@ namespace Jackett.Common.Indexers
                         var qDetailsLink = Row.QuerySelector("div.listeklink a");
 
                         // Title and torrent link
-                        release.Title = qDetailsLink.TextContent;
+                        
                         release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href").TrimStart('/'));
+
+                        // Full Title is only available on the details site
+                        singleResult = await RequestWithCookiesAsync(
+                            release.Details.ToString(), referer: SearchUrl, headers: header);
+                        await FollowIfRedirect(singleResult, null, null, null, true);
+                        var SingleResultParser = new HtmlParser();
+                        var SinglePage = ResultParser.ParseDocument(singleResult.ContentString);
+                        release.Title = SinglePage.QuerySelector("div.h1hold > div.h11").TextContent;
+                        
                         release.Guid = release.Details;
 
                         // Date of torrent creation
