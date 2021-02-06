@@ -82,7 +82,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Magnet4You
  * MejorTorrent
  * MixTapeTorrent
- * Monova
  * Montorrent
  * MovCr
  * MoviesDVDR

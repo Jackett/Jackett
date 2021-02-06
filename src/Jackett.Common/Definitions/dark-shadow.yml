@@ -32,11 +32,12 @@ caps:
     - {id: 24, cat: Console, desc: "Spiele Konsole"}
     - {id: 121, cat: Console, desc: "Spiele Wimmelbild"}
     - {id: 126, cat: Console/Other, desc: "Spiele Mobil"}
-    # Musik
-    - {id: 110, cat: Audio/MP3, desc: "Musik MP3"}
-    - {id: 52, cat: Audio, desc: "Musik Pack"}
-    - {id: 48, cat: Audio/Lossless, desc: "Musik Flac"}
-    - {id: 120, cat: Audio/Video, desc: "Musik Video"}
+    # Audio
+    - {id: 110, cat: Audio/MP3, desc: "Audio MP3"}
+    - {id: 52, cat: Audio, desc: "Audio Pack"}
+    - {id: 48, cat: Audio/Lossless, desc: "Audio Flac"}
+    - {id: 120, cat: Audio/Video, desc: "Audio Video"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Hörbuch"}
     # App
     - {id: 12, cat: PC/0day, desc: "App PC"}
     - {id: 125, cat: PC/Mac, desc: "App MacOS"}
@@ -53,7 +54,6 @@ caps:
     # Sonstiges
     - {id: 64, cat: TV/Anime, desc: "Anime"}
     - {id: 96, cat: Books/EBook, desc: "e-Book"}
-    - {id: 63, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 71, cat: Other, desc: "Anderes"}
     # XXX
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
@@ -151,7 +151,7 @@ search:
       case:
         # Movies
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": "119"
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"4K/2160p\"))": "114"
+        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"2160p\"))": "114"
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"x264\"))": "28"
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"1080p\"))": "32"
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"3D\"))": "26"
@@ -161,7 +161,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "60"
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Show\"))": "122"
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Doku\"))": "123"
-        # Musik
+        # Audio
         ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Videos\"))": "120"
         ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": "48"
         ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "52"
