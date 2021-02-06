@@ -5,12 +5,12 @@ description: "LastFiles (LF) is a ROMANIAN Private Torrent Tracker for 0DAY / GE
 language: ro-ro
 type: private
 encoding: utf-8
-followredirect: true
 links:
-  - https://www.last-torrents.org/
+  - http://www.last-torrents.org/
 legacylinks:
   - http://last-torrents.org/
   - https://last-torrents.org/
+  - https://www.last-torrents.org/ # site's https regularly fails
 
 caps:
   categorymappings:
@@ -81,22 +81,23 @@ settings:
     type: info
     label: FlareSolverr
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: 4
-    options:
-      4: created
-      7: seeders
-      5: size
-      1: title
-  - name: type
-    type: select
-    label: Order requested from site
-    default: desc
-    options:
-      desc: desc
-      asc: asc
+# sorting currently broken, defaults to date added desc
+#  - name: sort
+#    type: select
+#    label: Sort requested from site
+#    default: 4
+#    options:
+#      4: created
+#      7: seeders
+#      5: size
+#      1: title
+#  - name: type
+#    type: select
+#    label: Order requested from site
+#    default: desc
+#    options:
+#      desc: desc
+#      asc: asc
 
 login:
   method: cookie
@@ -114,8 +115,8 @@ search:
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
+#    sort: "{{ .Config.sort }}"
+#    type: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
@@ -132,10 +133,6 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: <b>(.+?)</b>
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -145,11 +142,17 @@ search:
       filters:
         - name: regexp
           args: src=\\'(http.+?\.jpg)\\'
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=\\'(http.+?\.png)\\'
     download:
       selector: a[href^="download.php"]
       attribute: href
     date:
-      selector: td:nth-child(7):not(:contains("day"))
+      selector: td:nth-child(4) span:not(:contains("day"))
       optional: true
       filters:
         - name: append
@@ -157,35 +160,35 @@ search:
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
     date:
-      selector: td:nth-child(7):contains("day")
+      selector: td:nth-child(4) span:contains("day")
       optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     size:
-      selector: td:nth-child(8)
+      selector: td:nth-child(5)
     grabs:
-      selector: td:nth-child(9)
+      selector: td:nth-child(6)
       filters:
         - name: regexp
           args: (\d+)
     seeders:
-      selector: td:nth-child(10)
+      selector: td:nth-child(7)
     leechers:
-      selector: td:nth-child(11)
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "a.info >b:contains(\"FREE\")": 0
-        "a.info >b:contains(\"Half\")": 0.5
+        "a.info > b:contains(\"FREE\")": 0
+        "a.info > b:contains(\"Half\")": 0.5
         "*": 1
     uploadvolumefactor:
       case:
-        "a.info >b:contains(\"2XUP\")": 2
+        "a.info > b:contains(\"2XUP\")": 2
         "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 2 days (as seconds = 48 x 60 x 60)
       text: 172800
-# engine n/a
+# U-232 V5
