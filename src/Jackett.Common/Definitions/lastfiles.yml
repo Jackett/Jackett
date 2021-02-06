@@ -81,23 +81,22 @@ settings:
     type: info
     label: FlareSolverr
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
-# sorting currently broken, defaults to date added desc
-#  - name: sort
-#    type: select
-#    label: Sort requested from site
-#    default: 4
-#    options:
-#      4: created
-#      7: seeders
-#      5: size
-#      1: title
-#  - name: type
-#    type: select
-#    label: Order requested from site
-#    default: desc
-#    options:
-#      desc: desc
-#      asc: asc
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      6: seeders
+      4: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -115,8 +114,8 @@ search:
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-#    sort: "{{ .Config.sort }}"
-#    type: "{{ .Config.type }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
