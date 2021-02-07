@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,11 +98,10 @@ namespace Jackett.Common.Indexers
                 {
                     return null;
                 }
-                query.SearchTerm = DateTime.Now.Year.ToString();
-                searchTerm = query.GetQueryString();
+                searchTerm = DateTime.Now.Year.ToString();
             }
 
-            var qc = new List<KeyValuePair<string, string>>
+            var qc = new NameValueCollection
             {
                 {"q", searchTerm}
             };
