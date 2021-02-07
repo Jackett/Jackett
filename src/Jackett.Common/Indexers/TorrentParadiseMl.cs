@@ -94,11 +94,11 @@ namespace Jackett.Common.Indexers
             var searchTerm = query.GetQueryString();
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                if (!query.IsTest)
+                if (query.IsTest)
                 {
-                    return null;
+                    searchTerm = DateTime.Now.Year.ToString();
                 }
-                searchTerm = DateTime.Now.Year.ToString();
+                else return null;
             }
 
             var qc = new NameValueCollection
