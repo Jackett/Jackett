@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,39 +14,14 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
-    public class TorrentParadise : BaseWebIndexer
+    public class TorrentParadiseMl : BaseWebIndexer
     {
-        public class TorrentParadiseResult
-        {
-            [JsonConstructor]
-            public TorrentParadiseResult(string id, string text, string len, string s, string l)
-            {
-                Id = id;
-                Text = text;
-                Size = ToLong(len);
-                Seeders = ToLong(s);
-                Leechers = ToLong(l);
-            }
-
-            public string Id { get; }
-
-            public string Text { get; }
-
-            public long? Size { get; }
-
-            public long? Seeders { get; }
-
-            public long? Leechers { get; }
-
-            private long? ToLong(string str) => Convert.ToInt64(str);
-        }
-
         private string ApiUrl => SiteLink + "api/";
 
-        public TorrentParadise(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+        public TorrentParadiseMl(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "torrent-paradise",
-                   name: "Torrent Paradise",
+            : base(id: "torrent-paradise-ml",
+                   name: "Torrent Paradise (ML)",
                    description: "The most innovative torrent site",
                    link: "https://torrent-paradise.ml/",
                    caps: new TorznabCapabilities
@@ -74,7 +50,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.GetEncoding("UTF-8");
+            Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "public";
 
@@ -85,7 +61,7 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            var query = new TorznabQuery { SearchTerm = DateTime.Now.Year.ToString(), IsTest = true };
+            var query = new TorznabQuery { IsTest = true };
             var releases = await PerformQuery(query);
 
             await ConfigureIfOK(string.Empty, releases.Any(),
@@ -104,8 +80,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var results = JsonConvert.DeserializeObject<IEnumerable<TorrentParadiseResult>>(response.ContentString);
-                if (results == null) return new List<ReleaseInfo>();
-                return ConvertResultsIntoReleaseInfos(results);
+                return results == null ? new List<ReleaseInfo>() : ConvertResultsIntoReleaseInfos(results);
             }
             catch (Exception ex)
             {
@@ -115,18 +90,23 @@ namespace Jackett.Common.Indexers
 
         private string CreateSearchUrl(TorznabQuery query)
         {
-            var queryString = query.GetQueryString();
-            if (string.IsNullOrWhiteSpace(queryString))
+            var searchTerm = query.GetQueryString();
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 if (!query.IsTest)
                 {
                     return null;
                 }
                 query.SearchTerm = DateTime.Now.Year.ToString();
-                queryString = query.GetQueryString();
+                searchTerm = query.GetQueryString();
             }
 
-            return ApiUrl + "search?q=" + queryString;
+            var qc = new List<KeyValuePair<string, string>>
+            {
+                {"q", searchTerm}
+            };
+
+            return ApiUrl + "search?" + qc.GetQueryString();
         }
 
         private IEnumerable<ReleaseInfo> ConvertResultsIntoReleaseInfos(IEnumerable<TorrentParadiseResult> results)
@@ -145,7 +125,7 @@ namespace Jackett.Common.Indexers
                 Size = result.Size,
                 Seeders = result.Seeders,
                 Peers = result.Seeders + result.Leechers,
-                MagnetUri = CreateMagnetUri(result),
+                InfoHash = result.Id,
                 PublishDate = DateTime.Now,
                 Details = new Uri(SiteLink),
                 DownloadVolumeFactor = 1,
@@ -154,14 +134,29 @@ namespace Jackett.Common.Indexers
             };
         }
 
-        private Uri CreateMagnetUri(TorrentParadiseResult result)
+        private class TorrentParadiseResult
         {
-            var uriString = "magnet:?xt=urn:btih:" + result.Id +
-                "&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce" +
-                "&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce" +
-                "&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337";
+            [JsonConstructor]
+            public TorrentParadiseResult(string id, string text, string len, string s, string l)
+            {
+                Id = id;
+                Text = text;
+                Size = ToLong(len);
+                Seeders = ToLong(s);
+                Leechers = ToLong(l);
+            }
 
-            return new Uri(uriString);
+            public string Id { get; }
+
+            public string Text { get; }
+
+            public long? Size { get; }
+
+            public long? Seeders { get; }
+
+            public long? Leechers { get; }
+
+            private long? ToLong(string str) => Convert.ToInt64(str);
         }
     }
 }
