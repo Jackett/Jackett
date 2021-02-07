@@ -318,6 +318,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ExtremeTorrents [![(invite needed)][inviteneeded]](#)
  * FANO.IN
  * Fantastic Heaven
+ * FeedUrNeed
  * Femdomcult
  * FileList (FL)
  * Film-Paleis
