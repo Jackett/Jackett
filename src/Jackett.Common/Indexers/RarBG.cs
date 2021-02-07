@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -167,7 +168,10 @@ namespace Jackett.Common.Indexers
 
                     var magnetStr = item.Value<string>("download");
                     var magnetUri = new Uri(magnetStr);
+
+                    // #11021 we can't use the magnet link as guid because they are using random ports
                     var infoHash = magnetStr.Split(':')[3].Split('&')[0];
+                    var guid = new Uri(SiteLink + "infohash/" + infoHash);
 
                     // append app_id to prevent api server returning 403 forbidden
                     var details = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
@@ -189,7 +193,7 @@ namespace Jackett.Common.Indexers
                         InfoHash = infoHash,
                         Details = details,
                         PublishDate = publishDate,
-                        Guid = magnetUri,
+                        Guid = guid,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         Size = size,
@@ -282,6 +286,8 @@ namespace Jackett.Common.Indexers
                 var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
+                // sleep 5 seconds to make sure the token is valid in the next request
+                Thread.Sleep(5000);
             }
         }
 
