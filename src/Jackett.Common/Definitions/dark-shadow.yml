@@ -13,54 +13,54 @@ legacylinks:
 caps:
   categorymappings:
     # Film
-    - {id: 32, cat: Movies/HD, desc: "Film 720p/1080p"}
-    - {id: 28, cat: Movies/SD, desc: "Film XviD/x264"}
     - {id: 119, cat: Movies/DVD, desc: "Film DVD"}
     - {id: 114, cat: Movies/UHD, desc: "Film 4K/2160p"}
+    - {id: 28, cat: Movies/SD, desc: "Film XviD/x264"}
+    - {id: 32, cat: Movies/HD, desc: "Film 720p/1080p"}
     - {id: 26, cat: Movies/3D, desc: "Film 3D"}
     # Serien
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
-    - {id: 60, cat: TV/SD, desc: "Serien SD"}
     - {id: 59, cat: TV, desc: "Serien Pack"}
+    - {id: 60, cat: TV/SD, desc: "Serien SD"}
     - {id: 122, cat: TV, desc: "Serien Show"}
     - {id: 123, cat: TV/Documentary, desc: "Serien Doku"}
-    # Doku
-    - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
-    - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
-    # Spiele
-    - {id: 17, cat: PC/Games, desc: "Spiele PC"}
-    - {id: 24, cat: Console, desc: "Spiele Konsole"}
-    - {id: 121, cat: Console, desc: "Spiele Wimmelbild"}
-    - {id: 126, cat: Console/Other, desc: "Spiele Mobil"}
     # Audio
-    - {id: 110, cat: Audio/MP3, desc: "Audio MP3"}
-    - {id: 52, cat: Audio, desc: "Audio Pack"}
-    - {id: 48, cat: Audio/Lossless, desc: "Audio Flac"}
     - {id: 120, cat: Audio/Video, desc: "Audio Video"}
+    - {id: 48, cat: Audio/Lossless, desc: "Audio Flac"}
+    - {id: 52, cat: Audio, desc: "Audio Pack"}
+    - {id: 110, cat: Audio/MP3, desc: "Audio MP3"}
     - {id: 63, cat: Audio/Audiobook, desc: "Hörbuch"}
     # App
     - {id: 12, cat: PC/0day, desc: "App PC"}
-    - {id: 125, cat: PC/Mac, desc: "App MacOS"}
     - {id: 11, cat: PC/Mobile-Other, desc: "App Mobil"}
+    - {id: 125, cat: PC/Mac, desc: "App macOS"}
+    # Doku
+    - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
+    - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
+    # Spiel
+    - {id: 126, cat: Console/Other, desc: "Spiel Mobil"}
+    - {id: 17, cat: PC/Games, desc: "Spiel PC"}
+    - {id: 24, cat: Console, desc: "Spiel Konsole"}
+    - {id: 121, cat: Console, desc: "Spiel Wimmelbild"}
     # Sport
     - {id: 61, cat: TV/Sport, desc: "Sport HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport SD"}
-    #  Internal
-    - {id: 128, cat: Movies/HD, desc: "Internal Film HD"}
-    - {id: 129, cat: Movies/SD, desc: "Internal Film SD"}
-    - {id: 130, cat: TV/HD, desc: "Internal Serien HD"}
-    - {id: 131, cat: TV/SD, desc: "Internal Serien SD"}
-    - {id: 132, cat: Other, desc: "Internal Sonstiges"}
     # Sonstiges
     - {id: 64, cat: TV/Anime, desc: "Anime"}
-    - {id: 96, cat: Books/EBook, desc: "e-Book"}
-    - {id: 71, cat: Other, desc: "Anderes"}
+    - {id: 96, cat: Books/EBook, desc: "E-Book"}
+    - {id: 71, cat: Other, desc: "Other"}
     # XXX
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
     - {id: 76, cat: XXX/XviD, desc: "XXX SD"}
     - {id: 124, cat: XXX/Other, desc: "XXX Clips"}
     - {id: 133, cat: XXX/Other, desc: "XXX A/E-book"}
+    #  Internal
+    - {id: 128, cat: Movies/HD, desc: "Internal Film HD"}
+    - {id: 129, cat: Movies/SD, desc: "Internal Film SD"}
+    - {id: 130, cat: TV/HD, desc: "Internal Serien HD"}
+    - {id: 131, cat: TV/SD, desc: "Internal Serien SD"}
+    - {id: 132, cat: Other, desc: "Internal Sonstiges"}
 
   modes:
     search: [q]
@@ -170,15 +170,15 @@ search:
         # App
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": "12"
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Mobil\"))": "11"
-        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"MacOS\"))": "125"
+        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"macOS\"))": "125"
         # Doku
         ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "14"
         ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "15"
-        # Games
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Mobil\"))": "126"
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": "17"
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Konsole\"))": "24"
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": "121"
+        # Spiel
+        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Mobil\"))": "126"
+        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": "17"
+        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Konsole\"))": "24"
+        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": "121"
         # Sport
         ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "61"
         ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "62"
