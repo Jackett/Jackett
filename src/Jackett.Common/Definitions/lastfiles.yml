@@ -151,7 +151,7 @@ search:
       selector: a[href^="download.php"]
       attribute: href
     date:
-      selector: td:nth-child(4) span:not(:contains("day"))
+      selector: td:nth-child(5) span:not(:contains("day"))
       optional: true
       filters:
         - name: append
@@ -159,26 +159,26 @@ search:
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
     date:
-      selector: td:nth-child(4) span:contains("day")
+      selector: td:nth-child(5) span:contains("day")
       optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     size:
-      selector: td:nth-child(5)
-    grabs:
       selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
       filters:
         - name: regexp
           args: (\d+)
     seeders:
-      selector: td:nth-child(7)
-    leechers:
       selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        "img[src*=\"freedownload.gif\"]": 0
+        "a.info > b:contains(\"FREE\")": 0
 #        "a.info > b:contains(\"Half\")": 0.5
         "*": 1
     uploadvolumefactor:
@@ -191,6 +191,6 @@ search:
       # freeleech 2 days (as seconds =  2 x 24 x 60 x 60)
       # notfree 1.5 days  (as seconds =  1.5 x 24 x 60 x 60)
       case:
-        "img[src*=\"freedownload.gif\"]": 172800
+        "a.info > b:contains(\"FREE\")": 172800
         "*": 129600
 # U-232 V5
