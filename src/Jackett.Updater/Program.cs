@@ -388,7 +388,6 @@ namespace Jackett.Updater
                 "Definitions/sharespacedb.yml",
                 "Definitions/shareuniversity.yml",
                 "Definitions/sharingue.yml",
-                "Definitions/shareuniversity.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/skytorrents-lol.yml",
                 "Definitions/skytorrentsclone.yml", // renamed to skytorrents-lol
