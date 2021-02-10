@@ -72,7 +72,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Internet Archive (archive.org)
  * Isohunt2
  * iTorrent
- * kickasstorrents (kickass.ws)
+ * kickasstorrents.ws
  * kickasstorrents.to
  * Legit Torrents
  * LePorno.info
@@ -118,8 +118,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ShizaProject
  * shokweb
  * ShowRSS
- * SkyTorrentsClone (*.lol)
- * SkyTorrentsClone2 (*.to)
+ * SkyTorrents.to
  * Solid Torrents
  * sosulki
  * SubsPlease
@@ -135,7 +134,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * torrent-pirat
  * Torrent4You
  * Torrent9
- * Torrent9Clone
+ * Torrent9 clone
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
@@ -225,6 +224,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 52PT
  * 720pier
  * Abnormal [![(invite needed)][inviteneeded]](#)
+ * ABtorrents (ABT + RNS)
  * Acid Lounge (A-L) [![(invite needed)][inviteneeded]](#)
  * Aftershock
  * Aidoru!Online
@@ -241,7 +241,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AsianCinema
  * Asylum Share
  * AudioNews (AN)
- * Audiobook Torrents (ABT + RNS)
  * AvistaZ (AsiaTorrents)
  * Awesome-HD (AHD)
  * Borgzelle
