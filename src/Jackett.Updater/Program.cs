@@ -390,6 +390,7 @@ namespace Jackett.Updater
                 "Definitions/sharingue.yml",
                 "Definitions/shareuniversity.yml",
                 "Definitions/skytorrents.yml",
+                "Definitions/skytorrents-lol.yml",
                 "Definitions/skytorrentsclone.yml", // renamed to skytorrents-lol
                 "Definitions/skytorrentsclone2.yml", // renamed to skytorrents-to
                 "Definitions/solidtorrents.yml", // migrated to C#
