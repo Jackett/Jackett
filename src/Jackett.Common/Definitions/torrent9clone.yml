@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://wvw.torrent9.sh/
+  - https://www.torrent9.sh/
   - https://torrent9.unblocked.monster/
 
 legacylinks:
@@ -45,7 +45,7 @@ legacylinks:
   - https://torrent9.unblockninja.com/ # this is a proxy for torrent9
   - https://torrent9.unblocked.rest/
   - https://www.torrent9.so/
-  - https://www.torrent9.sh/
+  - https://wvw.torrent9.sh/
 
 caps:
   categorymappings:
