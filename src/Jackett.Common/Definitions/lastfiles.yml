@@ -5,12 +5,13 @@ description: "LastFiles (LF) is a ROMANIAN Private Torrent Tracker for 0DAY / GE
 language: ro-ro
 type: private
 encoding: utf-8
+followredirect: true
 links:
+  - https://www.last-torrents.org/
   - http://www.last-torrents.org/
 legacylinks:
   - http://last-torrents.org/
   - https://last-torrents.org/
-  - https://www.last-torrents.org/ # site's https regularly fails
 
 caps:
   categorymappings:
