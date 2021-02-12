@@ -7,6 +7,8 @@ type: private
 encoding: utf-8
 followredirect: true
 links:
+  - https://www.lastfiles.ro/
+  - http://www.lastfiles.ro/
   - https://www.last-torrents.org/
   - http://www.last-torrents.org/
 legacylinks:
