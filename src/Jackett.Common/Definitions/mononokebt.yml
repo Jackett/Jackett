@@ -8,8 +8,8 @@ encoding: iso-8859-15
 links:
   - http://mononoke-bt.org/
 legacylinks:
-  - https://mononoke-bt.org/
-  
+  - https://mononoke-bt.org/ # downloads do not supported https
+
 caps:
   categories:
     1: TV/Anime
