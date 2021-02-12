@@ -72,7 +72,7 @@ search:
       selector: td:nth-child(4) > span:nth-child(1)
       filters:
         - name: re_replace
-          args: ["[\\s]+Uploaded.*",""]
+          args: ["[\\s]+Uploaded.*", ""]
     download:
       selector: a[href*="attachment.php?attachmentid="]
       attribute: href
@@ -84,5 +84,4 @@ search:
       selector: td:nth-child(7)
     size:
       selector: td:nth-child(10)
-
 # engine n/a
