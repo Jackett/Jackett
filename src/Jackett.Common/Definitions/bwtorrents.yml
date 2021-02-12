@@ -43,8 +43,6 @@ caps:
     - {id: 136, cat: Movies, desc: "Hollywood-Pre-Release"}
     - {id: 194, cat: Movies, desc: "Hollywood-Movies packs"}
     - {id: 137, cat: Movies, desc: "Malayalam-Movies"}
-    - {id: 138, cat: Movies, desc: "Telugu-Movies"}
-    - {id: 139, cat: Movies, desc: "Tamil-Movies"}
     - {id: 140, cat: Movies, desc: "Punjabi-Movies"}
     - {id: 141, cat: Movies, desc: "Kannada-Movies"}
     - {id: 142, cat: Movies, desc: "Lollywood-Movies"}
@@ -96,6 +94,26 @@ caps:
     - {id: 180, cat: PC/Mobile-Other, desc: "Mobile Stuff"}
     - {id: 181, cat: Other, desc: "Pics/Wallpapers"}
     - {id: 187, cat: XXX, desc: "Adult XXX 18+"}
+    # Telugu-Movies
+    - {id: 199, cat: Movies, desc: "Telgu-Movies | 4K Ultra HD - Upscaled"}
+    - {id: 200, cat: Movies, desc: "Telgu-Movies | Untouched WEB-DLs"}
+    - {id: 201, cat: Movies, desc: "Telgu-Movies | 1080p/720p WEBRips"}
+    - {id: 202, cat: Movies, desc: "Telgu-Movies | Untouched BluRay"}
+    - {id: 208, cat: Movies, desc: "Telgu-Movies | Remuxes BluRay"}
+    - {id: 207, cat: Movies, desc: "Telgu-Movies | BluRay Rips"}
+    - {id: 203, cat: Movies, desc: "Telgu-Movies | Untouched DVDs"}
+    - {id: 204, cat: Movies, desc: "Telgu-Movies | SD-WEBRips / DVDRips"}
+    - {id: 205, cat: Movies, desc: "Telgu-Movies | Movie Packs"}
+    # Tamil-Movies
+    - {id: 209, cat: Movies, desc: "Tamil-Movies | 4K Ultra HD - Upscaled"}
+    - {id: 210, cat: Movies, desc: "Tamil-Movies | Untouched WEB-DLs"}
+    - {id: 211, cat: Movies, desc: "Tamil-Movies | 1080p/720p WEBRips"}
+    - {id: 212, cat: Movies, desc: "Tamil-Movies | Untouched BluRay"}
+    - {id: 217, cat: Movies, desc: "Tamil-Movies | Remuxes BluRay"}
+    - {id: 216, cat: Movies, desc: "Tamil-Movies | BluRay Rips"}
+    - {id: 213, cat: Movies, desc: "Tamil-Movies | Untouched DVDs"}
+    - {id: 214, cat: Movies, desc: "Tamil-Movies | SD-WEBRips / DVDRips"}
+    - {id: 215, cat: Movies, desc: "Tamil-Movies | Movie Packs"}
 
   modes:
     search: [q]

@@ -119,8 +119,9 @@ namespace Jackett.Common.Indexers.Abstract
                 foreach (var row in rows)
                 {
                     var id = row.Value<string>("id");
-                    var details = new Uri($"{SiteLink}browse/{id}");
                     var link = new Uri($"{SiteLink}api/torrent/{id}/download");
+                    var urlStr = row.Value<string>("url");
+                    var details = new Uri(urlStr);
                     var publishDate = DateTime.Parse(row.Value<string>("created_at"), CultureInfo.InvariantCulture);
                     var cat = row.Value<JToken>("category").Value<string>("id");
 
@@ -133,9 +134,14 @@ namespace Jackett.Common.Indexers.Abstract
                     var dlVolumeFactor = row.Value<double>("download_volume_factor");
                     var ulVolumeFactor = row.Value<double>("upload_volume_factor");
 
+                    // fix for Retroflix
+                    var title = row.Value<string>("name");
+                    if (title.ToUpper().StartsWith("[REQUESTED] "))
+                        title = title.Substring(12);
+
                     var release = new ReleaseInfo
                     {
-                        Title = row.Value<string>("name"),
+                        Title = title,
                         Link = link,
                         Details = details,
                         Guid = details,

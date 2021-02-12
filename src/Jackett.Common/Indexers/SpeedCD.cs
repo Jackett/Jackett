@@ -212,7 +212,7 @@ namespace Jackett.Common.Indexers
                         Seeders = seeders,
                         Peers = seeders + leechers,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
+                        MinimumSeedTime = 259200, // 72 hours
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
                     };

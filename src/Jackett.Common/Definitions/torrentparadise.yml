@@ -6,12 +6,12 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.cl/
-legacylinks:
   - https://torrentparadise.org/
+legacylinks:
   - https://torrentparadise.to/
   - https://torrentparadise.cc/
   - https://torrentparadise.la/
+  - https://torrentparadise.cl/
 
 caps:
   categories:
@@ -98,6 +98,7 @@ caps:
     MISCELLANEOUS: Other
     MOBILE: PC/Mobile-Other
     MOVIES: Movies
+    MOVIES3D: Movies/3D
     MOVIESBLURAYDISCREMUX: Movies/HD
     MOVIESBOLLYWOOD: Movies
     MOVIESCAMTS: Movies
