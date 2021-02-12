@@ -6,8 +6,10 @@ language: fr-fr
 type: private
 encoding: iso-8859-15
 links:
-  - http://mononoke-bt.org/ # site does not support https NET::ERR_CERT_DATE_INVALID expired 10 Dec 2018
-
+  - http://mononoke-bt.org/
+legacylinks:
+  - https://mononoke-bt.org/
+  
 caps:
   categories:
     1: TV/Anime
@@ -28,6 +30,14 @@ settings:
     type: checkbox
     label: Add VOSTFR to titles
     default: false
+  - name: IMPORTANT_FR
+    type: info
+    label: (FR) Informations Importantes
+    default: Avant de pouvoir télécharger un torrent depuis Jackett, allez dans la <a href="https://mononoke-bt.org/faq.php" target="_blank">FAQ</a> et cliquer tous les 'Lu et Approuvé' de la page.
+  - name: IMPORTANT_EN
+    type: info
+    label: (EN) Important infos
+    default: Before you can even begin to download anything you need to go to the <a href="https://mononoke-bt.org/faq.php" target="_blank">FAQ</a> and click every 'Lu et Approuvé' present on the page.
 
 login:
   path: takelogin.php
