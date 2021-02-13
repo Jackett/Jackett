@@ -14,6 +14,7 @@ caps:
     - {id: 2, cat: TV, desc: "Series"}
     - {id: 3, cat: Audio, desc: "Música"}
     - {id: 4, cat: Console, desc: "Juegos"}
+    - {id: 8, cat: TV/Documentary, desc: "Documentales"}
     - {id: 7, cat: Audio/Video, desc: "Conciertos"}
     - {id: 5, cat: PC, desc: "Aplicaciones"}
     - {id: 6, cat: Other, desc: "Otros"}
