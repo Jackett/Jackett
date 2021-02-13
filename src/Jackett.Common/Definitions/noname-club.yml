@@ -765,7 +765,7 @@ search:
     sha: 1
     ta: -1
     sns: -1
-    sds: -1
+    sds: 4 # only freeleech available for download without account
     nm: "{{ .Keywords }}"
     pn: ""
     submit: "Поиск"
