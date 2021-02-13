@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -118,7 +119,7 @@ namespace Jackett.Common.Indexers
             var qc = new NameValueCollection { { "s", newQuery.SearchTerm } };
 
             var page = 1;
-            AngleSharp.Html.Dom.IHtmlDocument htmlDocument = null;
+            IHtmlDocument htmlDocument = null;
             do
             {
                 var url = SiteLink + "page/" + page + "/?" + qc.GetQueryString();
@@ -182,10 +183,10 @@ namespace Jackett.Common.Indexers
                 : throw new ExceptionWithConfigData(result.ContentString, configData);
         }
 
-        private AngleSharp.Html.Dom.IHtmlDocument ParseHtmlIntoDocument(string htmlContentString)
+        private IHtmlDocument ParseHtmlIntoDocument(string htmlContentString)
             => new HtmlParser().ParseDocument(htmlContentString);
 
-        private bool IsLastPageOfQueryResult(AngleSharp.Html.Dom.IHtmlDocument htmlDocument)
+        private bool IsLastPageOfQueryResult(IHtmlDocument htmlDocument)
         {
             if (htmlDocument == null)
                 return true;
