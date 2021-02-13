@@ -181,50 +181,46 @@ namespace Jackett.Common.Indexers
 
             LoadValuesFromJson(jsonConfig, false);
 
-            StringItem passwordPropertyValue = null;
-            var passwordValue = "";
-
-            try
-            {
-                // try dynamic items first (e.g. all cardigann indexers)
-                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
-
-                if (passwordPropertyValue == null) // if there's no dynamic password try the static property
-                {
-                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
-
-                    // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
-                    if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{Id}] while attempting migration");
-                        return false;
-                    }
-                }
-
-                passwordValue = passwordPropertyValue.Value;
-            }
-            catch (Exception)
+            var passwordValue = (GetPasswordFromDynamicProperty() ?? GetPasswordFromStaticProperty())?.Value;
+            if (string.IsNullOrEmpty(passwordValue))
             {
                 logger.Debug($"Unable to source password for [{Id}] while attempting migration, likely a tracker without a password setting");
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(passwordValue))
+            try
             {
-                try
-                {
-                    protectionService.UnProtect(passwordValue);
-                    //Password successfully unprotected using Microsoft.AspNetCore.DataProtection, no further action needed as we've already converted the password previously
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
-                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {Id} : " + ex);
-                }
+                protectionService.UnProtect(passwordValue);
+                //Password successfully unprotected using Microsoft.AspNetCore.DataProtection, no further action needed as we've already converted the password previously
+                return false;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
+                    logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {Id} : " + ex);
             }
 
             return false;
+        }
+
+        private StringItem GetPasswordFromDynamicProperty() => (StringItem)configData.GetDynamicByName("password");
+
+        private StringItem GetPasswordFromStaticProperty()
+        {
+            var passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password")?.GetValue(configData, null);
+            if (passwordPropertyValue == null)
+            {
+                return null;
+            }
+
+            // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
+            if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
+            {
+                logger.Debug($"Skipping non default password property (unencrpyted password) for [{Id}] while attempting migration");
+                return null;
+            }
+
+            return passwordPropertyValue;
         }
 
         protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
