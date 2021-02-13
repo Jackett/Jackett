@@ -226,6 +226,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Abnormal [![(invite needed)][inviteneeded]](#)
  * ABtorrents (ABT + RNS)
  * Acid Lounge (A-L) [![(invite needed)][inviteneeded]](#)
+ * AcrossTheTasman [![(invite needed)][inviteneeded]](#)
  * Aftershock
  * Aidoru!Online
  * Aither
