@@ -12,10 +12,12 @@ caps:
   categorymappings:
     - {id: 1, cat: TV/Anime, desc: "Anime/Cam"}
     - {id: 2, cat: TV/Anime, desc: "Anime/Eng"}
+    - {id: 21, cat: TV/Anime, desc: "Anime/HD"}
     - {id: 3, cat: TV/Anime, desc: "Anime/Hun"}
     - {id: 13, cat: TV/Anime, desc: "Anime/Sorozat(Series)"}
     - {id: 4, cat: Movies, desc: "Családi/Cam(Family)"}
     - {id: 5, cat: Movies, desc: "Családi/Eng(Family)"}
+    - {id: 19, cat: Movies/HD, desc: "Családi/HD(Family)"}
     - {id: 6, cat: Movies, desc: "Családi/Hun(Family)"}
     - {id: 17, cat: Movies, desc: "Családi/Romantikus/Cam(Family Romantic)"}
     - {id: 16, cat: Movies, desc: "Családi/Romantikus/Eng(Family Romantic)"}
