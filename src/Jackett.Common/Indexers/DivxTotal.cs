@@ -26,6 +26,7 @@ namespace Jackett.Common.Indexers
     {
         private const string DownloadLink = "/download_tt.php";
         private const int MaxNrOfResults = 100;
+        private const int MaxPageLoads = 3;
 
         private static class DivxTotalCategories
         {
@@ -105,14 +106,16 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var newQuery = query.Clone();
+
             var releases = new List<ReleaseInfo>();
 
             var matchWords = ((BoolItem)configData.GetDynamic("MatchWords")).Value;
-            matchWords = query.SearchTerm != "" && matchWords;
+            matchWords = newQuery.SearchTerm != "" && matchWords;
 
             // we remove parts from the original query
-            query = ParseQuery(query);
-            var qc = new NameValueCollection { { "s", query.SearchTerm } };
+            newQuery = ParseQuery(newQuery);
+            var qc = new NameValueCollection { { "s", newQuery.SearchTerm } };
 
             var page = 1;
             AngleSharp.Html.Dom.IHtmlDocument htmlDocument = null;
@@ -120,7 +123,16 @@ namespace Jackett.Common.Indexers
             {
                 var url = SiteLink + "page/" + page + "/?" + qc.GetQueryString();
 
-                var htmlString = await LoadWebPageAsync(url);
+                string htmlString;
+                try
+                {
+                    htmlString = await LoadWebPageAsync(url);
+                }
+                catch
+                {
+                    logger.Error($"DivxTotal: Failed to load url {url}");
+                    return releases;
+                }
 
                 try
                 {
@@ -135,7 +147,7 @@ namespace Jackett.Common.Indexers
                     {
                         try
                         {
-                            var rels = await ParseReleasesAsync(row, query, matchWords);
+                            var rels = await ParseReleasesAsync(row, newQuery, matchWords);
                             if (rels.Any())
                             {
                                 releases.AddRange(rels);
@@ -152,38 +164,32 @@ namespace Jackett.Common.Indexers
                     OnParseError(htmlString, ex);
                 }
 
-                page++; // update page number
+                page++;
 
-            } while (releases.Count < MaxNrOfResults && !IsLastPage(htmlDocument));
+            } while (page <= MaxPageLoads &&
+                    releases.Count < MaxNrOfResults &&
+                    !IsLastPageOfQueryResult(htmlDocument));
 
             return releases;
         }
 
+        /// <Exception cref="ExceptionWithConfigData" />
         private async Task<string> LoadWebPageAsync(string url)
         {
             var result = await RequestWithCookiesAsync(url);
-
-            if (result.Status != HttpStatusCode.OK)
-            {
-                throw new ExceptionWithConfigData(result.ContentString, configData);
-            }
-
-            return result.ContentString;
+            return result.Status == HttpStatusCode.OK
+                ? result.ContentString
+                : throw new ExceptionWithConfigData(result.ContentString, configData);
         }
 
         private AngleSharp.Html.Dom.IHtmlDocument ParseHtmlIntoDocument(string htmlContentString)
-        {
-            var searchResultParser = new HtmlParser();
-            var htmlDocument = searchResultParser.ParseDocument(htmlContentString);
-            return htmlDocument;
-        }
+            => new HtmlParser().ParseDocument(htmlContentString);
 
-        private bool IsLastPage(AngleSharp.Html.Dom.IHtmlDocument htmlDocument)
+        private bool IsLastPageOfQueryResult(AngleSharp.Html.Dom.IHtmlDocument htmlDocument)
         {
             if (htmlDocument == null)
-            {
                 return true;
-            }
+
             var nextPageAnchor = htmlDocument.QuerySelector("ul.pagination > li.active + li > a");
             return nextPageAnchor == null;
         }
@@ -208,13 +214,17 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var anchor = row.QuerySelector("a");
-            var detailsStr = anchor.GetAttribute("href");
             var title = anchor.TextContent.Trim();
+
+            // match the words in the query with the titles
+            if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
+            {
+                return releases;
+            }
+
+            var detailsStr = anchor.GetAttribute("href");
             var cat = detailsStr.Split('/')[3];
             var categories = MapTrackerCatToNewznab(cat);
-            var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
-            var publishDate = TryToParseDate(publishStr, DateTime.Now);
-            var sizeStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
 
             // return results only for requested categories
             if (query.Categories.Any() && !query.Categories.Contains(categories.First()))
@@ -222,11 +232,9 @@ namespace Jackett.Common.Indexers
                 return releases;
             }
 
-            // match the words in the query with the titles
-            if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
-            {
-                return releases;
-            }
+            var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
+            var publishDate = TryToParseDate(publishStr, DateTime.Now);
+            var sizeStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
 
             // parsing is different for each category
             if (cat == DivxTotalCategories.Series)
@@ -268,10 +276,7 @@ namespace Jackett.Common.Indexers
                 {
                     var anchor = row.QuerySelector("a");
                     var episodeTitle = anchor.TextContent.Trim();
-                    var downloadLink = GetDownloadLink(row);
-                    var episodePublishStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
-                    var episodePublish = TryToParseDate(episodePublishStr, publishDate);
-
+                    
                     // Convert the title to Scene format
                     episodeTitle = ParseDivxTotalSeriesTitle(episodeTitle, query);
 
@@ -279,6 +284,10 @@ namespace Jackett.Common.Indexers
                     // query.Episode != null means scene title
                     if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
                         continue;
+
+                    var downloadLink = GetDownloadLink(row);
+                    var episodePublishStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
+                    var episodePublish = TryToParseDate(episodePublishStr, publishDate);
 
                     seriesReleases.Add(GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, episodePublish, DivxTotalFizeSizes.Series));
                 }
