@@ -26,20 +26,16 @@ settings:
     type: select
     default: date
     options:
-      date: Date
-      filename: Thread Title
-      size: Size
-      seeders: Seeders
-      leechers: Leechers
-      completed: Downloaded
-      upspeed: UL Speed
-      downspeed: DL Speed
+      date: created
+      filename: title
+      size: size
+      seeders: seeders
   - name: order
     type: select
     default: desc
     options:
-      desc: Desc
-      asc: Asc
+      desc: desc
+      asc: asc
 
 login:
   method: post
@@ -54,20 +50,20 @@ login:
 
 search:
   paths:
-    - path: "torrents.php?sort={{ .Config.sort }}&order={{ .Config.order}}&query={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "torrents.php?sort={{ .Config.sort }}&order={{ .Config.order}}&query={{ .Keywords }}"
 
   rows:
     selector: table[width='100%'][align='center']:not([class]) > tbody > tr
 
   fields:
+    category:
+      text: 1
     date:
       # Feb 12, 2021
       selector: td:nth-child(1)
       filters:
         - name: dateparse
-          args: "Feb 12, 2021 "
-    forum:
-      selector: td:nth-child(3)
+          args: "Jan 02, 2006"
     title:
       selector: td:nth-child(4) > span:nth-child(1)
       filters:
