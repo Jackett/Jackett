@@ -141,7 +141,6 @@ namespace Jackett.Common.Indexers
                 var movies = dataItems.Value<JToken>("movies");
                 if (movies == null)
                 {
-                    logger.Error($"YTS API Error: Expected {movieCount} movie(s) in result, but found 0.");
                     return new List<ReleaseInfo>();
                 }
 
