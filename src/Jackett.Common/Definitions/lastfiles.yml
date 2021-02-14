@@ -154,7 +154,7 @@ search:
       selector: a[href^="download.php"]
       attribute: href
     date:
-      selector: td:nth-child(5) span:not(:contains("day"))
+      selector: td:nth-child(4) span:not(:contains("day"))
       optional: true
       filters:
         - name: append
@@ -162,23 +162,23 @@ search:
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
     date:
-      selector: td:nth-child(5) span:contains("day")
+      selector: td:nth-child(4) span:contains("day")
       optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     size:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     grabs:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
       filters:
         - name: regexp
           args: (\d+)
     seeders:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
     leechers:
-      selector: td:nth-child(9)
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
         "a.info > b:contains(\"FREE\")": 0

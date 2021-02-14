@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers
                 InfoHash = result.Id,
                 PublishDate = DateTime.Now,
                 Details = new Uri(SiteLink),
-                DownloadVolumeFactor = 1,
+                DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
                 Category = new List<int> { TorznabCatType.Other.ID }
             };
