@@ -27,8 +27,9 @@ caps:
     - {id: 8, cat: Audio/Audiobook, desc: "Hangoskönyv(Audiobooks)"}
     - {id: 9, cat: PC/Games, desc: "Játék/ISO(Games)"}
     - {id: 11, cat: Console, desc: "Játék/Konzol(Console)"}
-    - {id: 10, cat: PC/Games, desc: "Játék/RIP(Games RIP)"}
+    - {id: 10, cat: PC/Games, desc: "Játék/RIP(Games)"}
     - {id: 7, cat: Books, desc: "Könyv(Books)"}
+    - {id: 20, cat: Movies/HD, desc: "Romantikus/HD(Romantic)"}
     - {id: 12, cat: Audio, desc: "Zene/Hun(Music)"}
 
   modes:
