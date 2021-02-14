@@ -39,13 +39,6 @@ namespace Jackett.Common.Models.IndexerConfig
 
             var arr = (JArray)json;
 
-            // transistion from alternatelink to sitelink
-            var alternatelinkItem = arr.FirstOrDefault(f => f.Value<string>("id") == "alternatelink");
-            if (alternatelinkItem != null && !string.IsNullOrEmpty(alternatelinkItem.Value<string>("value")))
-            {
-                //SiteLink.Value = alternatelinkItem.Value<string>("value");
-            }
-
             foreach (var item in GetItems(forDisplay: false))
             {
                 var arrItem = arr.FirstOrDefault(f => f.Value<string>("id") == item.ID);
