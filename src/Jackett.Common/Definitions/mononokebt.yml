@@ -40,12 +40,9 @@ settings:
     default: Before you can even begin to download anything you need to go to the <a href="https://mononoke-bt.org/faq.php" target="_blank">FAQ</a> and click every 'Lu et Approuvé' present on the page.
 
 login:
-  path: takelogin.php
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
-  error:
-    - selector: td.embedded:has(h2:contains("l'authentification"))
   test:
     path: browse2.php
 
