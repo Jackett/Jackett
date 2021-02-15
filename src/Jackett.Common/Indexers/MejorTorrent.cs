@@ -78,10 +78,10 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var matchWords = new BoolItem { Name = "Match words in title", Value = true };
+            var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            configData.AddDynamic("flaresolverr", new DisplayItem("This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."){ Name = "FlareSolverr"});
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."));
 
             AddCategoryMapping(MejorTorrentCatType.Pelicula, TorznabCatType.Movies, "Pelicula");
             AddCategoryMapping(MejorTorrentCatType.Serie, TorznabCatType.TVSD, "Serie");
@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var matchWords = ((BoolItem)configData.GetDynamic("MatchWords")).Value;
+            var matchWords = ((BoolConfigurationItem)configData.GetDynamic("MatchWords")).Value;
             matchWords = query.SearchTerm != "" && matchWords;
 
             // we remove parts from the original query

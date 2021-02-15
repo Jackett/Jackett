@@ -181,17 +181,17 @@ namespace Jackett.Common.Indexers
 
             LoadValuesFromJson(jsonConfig, false);
 
-            StringItem passwordPropertyValue = null;
+            StringConfigurationItem passwordPropertyValue = null;
             var passwordValue = "";
 
             try
             {
                 // try dynamic items first (e.g. all cardigann indexers)
-                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
+                passwordPropertyValue = (StringConfigurationItem)configData.GetDynamicByName("password");
 
                 if (passwordPropertyValue == null) // if there's no dynamic password try the static property
                 {
-                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
+                    passwordPropertyValue = (StringConfigurationItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
 
                     // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
                     if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))

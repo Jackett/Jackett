@@ -68,24 +68,24 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
-            var sort = new SelectItem(new Dictionary<string, string>
+            var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
             {
                 {"publicdate", "created"},
                 {"downloads", "downloads"},
                 {"item_size", "size"}
             })
-            { Name = "Sort requested from site", Value = "publicdate" };
+            { Value = "publicdate" };
             configData.AddDynamic("sort", sort);
 
-            var order = new SelectItem(new Dictionary<string, string>
+            var order = new SingleSelectConfigurationItem("Order requested from site", new Dictionary<string, string>
             {
                 {"desc", "desc"},
                 {"asc", "asc"}
             })
-            { Name = "Order requested from site", Value = "desc" };
+            { Value = "desc" };
             configData.AddDynamic("order", order);
 
-            var titleOnly = new BoolItem { Name = "Search only in title", Value = true };
+            var titleOnly = new BoolConfigurationItem("Search only in title") { Value = true };
             configData.AddDynamic("titleOnly", titleOnly);
 
             AddCategoryMapping("audio", TorznabCatType.Audio);
@@ -116,13 +116,13 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var sort = (SelectItem)configData.GetDynamic("sort");
+            var sort = (SingleSelectConfigurationItem)configData.GetDynamic("sort");
             _sort = sort != null ? sort.Value : "publicdate";
 
-            var order = (SelectItem)configData.GetDynamic("order");
+            var order = (SingleSelectConfigurationItem)configData.GetDynamic("order");
             _order = order != null && order.Value.Equals("asc") ? "" : "-";
 
-            var titleOnly = (BoolItem)configData.GetDynamic("titleOnly");
+            var titleOnly = (BoolConfigurationItem)configData.GetDynamic("titleOnly");
             _titleOnly = titleOnly != null && titleOnly.Value;
         }
 

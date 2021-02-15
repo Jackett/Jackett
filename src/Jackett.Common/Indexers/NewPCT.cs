@@ -143,16 +143,16 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var voItem = new BoolItem { Name = "Include original versions in search results", Value = false };
+            var voItem = new BoolConfigurationItem("Include original versions in search results") { Value = false };
             configData.AddDynamic("IncludeVo", voItem);
 
-            var filterMoviesItem = new BoolItem { Name = "Only full match movies", Value = true };
+            var filterMoviesItem = new BoolConfigurationItem("Only full match movies") { Value = true };
             configData.AddDynamic("FilterMovies", filterMoviesItem);
 
-            var removeMovieAccentsItem = new BoolItem { Name = "Remove accents in movie searches", Value = true };
+            var removeMovieAccentsItem = new BoolConfigurationItem("Remove accents in movie searches") { Value = true };
             configData.AddDynamic("RemoveMovieAccents", removeMovieAccentsItem);
 
-            var removeMovieYearItem = new BoolItem { Name = "Remove year from movie results (enable for Radarr)", Value = false };
+            var removeMovieYearItem = new BoolConfigurationItem("Remove year from movie results (enable for Radarr)") { Value = false };
             configData.AddDynamic("RemoveMovieYear", removeMovieYearItem);
 
             AddCategoryMapping(1, TorznabCatType.Movies);
@@ -210,10 +210,10 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            _includeVo = ((BoolItem)configData.GetDynamic("IncludeVo")).Value;
-            _filterMovies = ((BoolItem)configData.GetDynamic("FilterMovies")).Value;
-            _removeMovieAccents = ((BoolItem)configData.GetDynamic("RemoveMovieAccents")).Value;
-            _removeMovieYear = ((BoolItem)configData.GetDynamic("RemoveMovieYear")).Value;
+            _includeVo = ((BoolConfigurationItem)configData.GetDynamic("IncludeVo")).Value;
+            _filterMovies = ((BoolConfigurationItem)configData.GetDynamic("FilterMovies")).Value;
+            _removeMovieAccents = ((BoolConfigurationItem)configData.GetDynamic("RemoveMovieAccents")).Value;
+            _removeMovieYear = ((BoolConfigurationItem)configData.GetDynamic("RemoveMovieYear")).Value;
             _dailyNow = DateTime.Now;
             _dailyResultIdx = 0;
             var rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);

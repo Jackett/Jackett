@@ -5,13 +5,12 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     [ExcludeFromCodeCoverage]
     internal class ConfigurationDataAniDub : ConfigurationDataBasicLogin
     {
-        public BoolItem StripRussianTitle { get; private set; }
+        public BoolConfigurationItem StripRussianTitle { get; private set; }
 
         public ConfigurationDataAniDub() : base()
         {
-            StripRussianTitle = new BoolItem
+            StripRussianTitle = new BoolConfigurationItem("Strip Russian Title")
             {
-                Name = "Strip Russian Title",
                 Value = true
             };
         }
