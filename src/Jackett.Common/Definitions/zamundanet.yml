@@ -14,46 +14,54 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 42, cat: Movies/BluRay, desc: "Movies Blu-ray"}
-    - {id: 25, cat: TV/Anime, desc: "TV Animation/Anime"}
-    - {id: 35, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 46, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 20, cat: Movies/DVD, desc: "Movies DVD-R"}
-    - {id: 19, cat: Movies/SD, desc: "Movies SD"}
-    - {id: 5, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 24, cat: Movies, desc: "Movies BG"}
-    - {id: 31, cat: Movies, desc: "Movies Science"}
-    - {id: 28, cat: Movies, desc: "Movies Russia"}
-    - {id: 7, cat: TV/SD, desc: "TV SD"}
-    - {id: 33, cat: TV/HD, desc: "TV HD"}
-    - {id: 39, cat: PC/Mac, desc: "Games Mac"}
-    - {id: 4, cat: PC/ISO, desc: "Games ISO"}
-    - {id: 21, cat: PC/Games, desc: "Games PC Rip"}
-    - {id: 17, cat: Console/PS3, desc: "Games PS"}
-    - {id: 40, cat: Console/XBox, desc: "Games Xbox"}
-    - {id: 12, cat: Console, desc: "Games Console"}
-    - {id: 54, cat: PC, desc: "Games Linux"}
+    # Movies
+    - {id: 5, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 19, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 20, cat: Movies/DVD, desc: "Movies/DVD-R"}
+    - {id: 24, cat: Movies, desc: "Movies/BG"}
+    - {id: 25, cat: TV/Anime, desc: "Animation/Anime"}
+    - {id: 28, cat: Movies, desc: "Movies/Russia"}
+    - {id: 31, cat: Movies, desc: "Movies/Science"}
+    - {id: 35, cat: Movies/HD, desc: "Video/HD"}
+    - {id: 42, cat: Movies/BluRay, desc: "Blu-ray"}
+    - {id: 46, cat: Movies/3D, desc: "Movies/3D"}
+    # Serial
+    - {id: 7, cat: TV/SD, desc: "Serial"}
+    - {id: 33, cat: TV/HD, desc: "Serial/HD"}
+    # Music
     - {id: 6, cat: Audio, desc: "Music"}
-    - {id: 30, cat: Audio/Other, desc: "Music DTS"}
-    - {id: 29, cat: Audio/Other, desc: "Music DVD-R"}
-    - {id: 51, cat: Audio/Other, desc: "Music Hi-Res/Vinyl"}
-    - {id: 34, cat: Audio/Lossless, desc: "Music Lossless"}
-    - {id: 38, cat: PC/Mac, desc: "Programs Mac"}
-    - {id: 1, cat: PC/ISO, desc: "Programs PC ISO"}
-    - {id: 22, cat: PC/Mobile-Other, desc: "Programs Other"}
-    - {id: 43, cat: TV/Sport, desc: "Sport HD"}
-    - {id: 41, cat: TV/Sport, desc: "Sport SD"}
-    - {id: 36, cat: PC/Mobile-Other, desc: "Programs Mobile/GSM"}
+    - {id: 29, cat: Audio/Video, desc: "Music/DVD-R"}
+    - {id: 30, cat: Audio/Other, desc: "Music/DTS"}
+    - {id: 34, cat: Audio/Other, desc: "Music/Lossless"}
+    - {id: 51, cat: Audio/Lossless, desc: "Music/Hi-Res/Vinyl"}
+    # Games
+    - {id: 4, cat: PC/Games, desc: "Games/PC ISO"}
+    - {id: 12, cat: Console, desc: "Games/Console"}
+    - {id: 17, cat: Console/PS4, desc: "Games/PS"}
+    - {id: 21, cat: PC/Games, desc: "Games/PC Rip"}
+    - {id: 39, cat: PC/Games, desc: "Games/Mac"}
+    - {id: 40, cat: Console/XBox, desc: "Games/Xbox"}
+    - {id: 54, cat: PC/Games, desc: "Games/Linux"}
+    # Software
+    - {id: 1, cat: PC/ISO, desc: "Programs/PC ISO"}
+    - {id: 22, cat: PC/0day, desc: "Programs/other"}
+    - {id: 38, cat: PC/Mac, desc: "Programs/Mac"}
+    # Sport
+    - {id: 41, cat: TV/Sport, desc: "Sport/TV"}
+    - {id: 43, cat: TV/Sport, desc: "Sport/HD"}
+    # Other
+    - {id: 23, cat: Other, desc: "Clips"}
+    - {id: 26, cat: Other, desc: "Other"}
+    - {id: 32, cat: Books/Comics, desc: "Books/Comic"}
+    - {id: 36, cat: PC/Mobile-Other, desc: "Mobile/GSM"}
+    - {id: 37, cat: PC/0day, desc: "Dox"}
     - {id: 52, cat: PC/Mobile-Android, desc: "Android/Games"}
     - {id: 53, cat: PC/Mobile-Android, desc: "Android/Apps"}
-    - {id: 26, cat: Other, desc: "Other"}
-    - {id: 23, cat: Other, desc: "Clips"}
-    - {id: 32, cat: Books/Comics, desc: "Books Comics"}
-    - {id: 37, cat: Books/Technical, desc: "Books Dox"}
+    # XXX
     - {id: 9, cat: XXX, desc: "XXX"}
-    - {id: 48, cat: XXX, desc: "XXX 3D"}
-    - {id: 49, cat: XXX, desc: "XXX HD"}
-    - {id: 27, cat: TV/Anime, desc: "Hentai"}
+    - {id: 27, cat: XXX, desc: "Hentai"}
+    - {id: 48, cat: XXX, desc: "XXX/3D"}
+    - {id: 49, cat: XXX, desc: "XXX/HD"}
 
   modes:
     search: [q]
@@ -115,19 +123,23 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
+  headers:
+    cookie: ["xporn=1"] # enable xxx downloads
+
   rows:
-    selector: ".responsetop > tbody > tr:has(td.td_newborder){{ if .Config.freeleech }}:has(a[style=\"color: #b9a100;\"][href^=\"banan?\"]){{ else }}{{ end }}"
+    selector: ".responsetop > tbody > tr:has(a[href^=\"banan?id=\"]){{ if .Config.freeleech }}:has(a[style=\"color: #b9a100;\"]){{ else }}{{ end }}"
 
   fields:
     title:
-      selector: a:has(i.fa-download)
-      attribute: href
+      selector: a[href^="/download.php"]
+      attribute: onmouseover
       filters:
-        - name: urldecode
+        - name: regexp
+          args: " (.+?)'"
         - name: re_replace
-          args: ["^(.*?)download\\.php\\/[0-9]{1,10}\\/|\\.torrent(?=[^.]*$)", ""]
+          args: [" rq$", ""]
     details:
-      selector: td:nth-child(2) > a:nth-child(1)
+      selector: a[href^="banan?id="]
       attribute: href
     category:
       selector: a[href^="list?cat="]
@@ -136,7 +148,7 @@ search:
         - name: querystring
           args: cat
     download:
-      selector: a:has(i.fa-download)
+      selector: a[href^="/download.php"]
       attribute: href
     grabs:
       selector: td:nth-child(7)
