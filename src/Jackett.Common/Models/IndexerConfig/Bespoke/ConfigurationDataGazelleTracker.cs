@@ -6,7 +6,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     internal class ConfigurationDataGazelleTracker : ConfigurationData
     {
         public StringConfigurationItem Username { get; private set; }
-        public StringConfigurationItem Password { get; private set; }
+        public PasswordConfigurationItem Password { get; private set; }
         public StringConfigurationItem ApiKey { get; private set; }
         public DisplayInfoConfigurationItem CookieHint { get; private set; }
         public StringConfigurationItem CookieItem { get; private set; }
@@ -21,7 +21,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             else
             {
                 Username = new StringConfigurationItem("Username");
-                Password = new StringConfigurationItem("Password");
+                Password = new PasswordConfigurationItem("Password");
             }
 
             if (has2Fa)
