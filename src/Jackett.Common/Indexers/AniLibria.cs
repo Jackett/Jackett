@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
             var queryParameters = new NameValueCollection
             {
                 { "filter", "names,poster.url,code,torrents.list,season.year" },
-                { "limit", "100" },
+                { "limit", "100" }
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString() + "&search=" + Uri.EscapeDataString(title));
             if (response.Status != HttpStatusCode.OK)
