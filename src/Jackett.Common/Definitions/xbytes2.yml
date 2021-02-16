@@ -152,11 +152,11 @@ search:
         - name: replace
           args: ["//", "/"]
         - name: re_replace
-          args: ["\\((?=(.*\\d{4}))","{"]
+          args: ["\\((?=(.*\\d{4}))", "{"]
         - name: re_replace
-          args: ["\\)(?=(.*\\d{4}))","}"]
-  
-        # Years and Dates        
+          args: ["\\)(?=(.*\\d{4}))", "}"]
+
+        # Years and Dates
         - name: re_replace # eg El proyecto colibrí (Estreno 2021) (2018/...
           args: ["\\{?(?i)Estreno (19|20)\\d{2}\\}?", ""]
         - name: re_replace
@@ -172,7 +172,7 @@ search:
           args: ["\\{(19|20)\\d{2}\\/(S\\d{2})", "$2"]
         - name: re_replace # eg La habitación (The Room) (2...)
           args: ["(\\{(19|20)\\d{2})\\/", "$1}/"]
-        
+
         # Languages
         - name: replace
           args: ["/Español", "/SPANiSH"]
@@ -218,7 +218,7 @@ search:
           args: ["/Turco", "/Turkish"]
         - name: re_replace
           args: ["\\/(?i)DUAL", "/MULTi SPANiSH"]
-        
+
         # Video Origin
         - name: re_replace
           args: ["(?i)UHDRip", "Bluray"] # Fix for Radarr
@@ -241,7 +241,7 @@ search:
           args: [" ((?i)V?)((\\d+) (\\d+))", " $1$3.$4"]
         - name: re_replace # eg eg V2.1 3.4 -> V2.1.3.4
           args: ["\\.((\\d+) (\\d+))", ".$2.$3"]
-        
+
         # Another Info
         - name: re_replace
           args: ["(?i)(REPARAD[OA])", "REPACK"]
@@ -288,7 +288,7 @@ search:
           args: ["}", ")"]
         - name: replace
           args: ["  ", " "]
-        
+
     details:
       selector: td[valign="middle"] a
       attribute: href
