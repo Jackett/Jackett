@@ -69,9 +69,12 @@ namespace Jackett.Common.Indexers
 
         private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
+            // logger.Info(_EpisodeRegex.Match(query));
+            var title = _EpisodeRegex.Replace(query.SearchTerm, string.Empty).TrimEnd();
+            logger.Info(query.SearchTerm);
             var queryParameters = new NameValueCollection
             {
-                { "search", _EpisodeRegex.Replace(query.SearchTerm, string.Empty).TrimEnd() },
+                { "search", title },
                 { "filter", "names,poster.url,code,torrents.list,season.year" }
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString());
@@ -79,7 +82,7 @@ namespace Jackett.Common.Indexers
                 throw new WebException($"AniLibria search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             var results = ParseApiResults(response.ContentString);
-            return results.Where(release => query.MatchQueryStringAND(release.Title));
+            return results.Where(release => query.MatchQueryStringAND(release.Title, null, title));;
         }
 
         private async Task<IEnumerable<ReleaseInfo>> FetchNewReleases()
