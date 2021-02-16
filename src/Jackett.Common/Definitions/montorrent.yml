@@ -107,6 +107,8 @@ search:
 
   rows:
     selector: div.t-details
+    filters:
+      - name: andmatch
 
   fields:
     category:

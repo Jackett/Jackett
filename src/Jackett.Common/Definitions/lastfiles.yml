@@ -4,72 +4,78 @@ name: LastFiles
 description: "LastFiles (LF) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
 language: ro-ro
 type: private
-encoding: windows-1252
+encoding: utf-8
+followredirect: true
 links:
-  - https://last-torrents.org/
+  - https://www.lastfiles.ro/
+  - http://www.lastfiles.ro/
+  - https://www.last-torrents.org/
+  - http://www.last-torrents.org/
 legacylinks:
-  - http://last-torrents.org/ # site forces https
+  - http://last-torrents.org/
+  - https://last-torrents.org/
 
 caps:
   categorymappings:
-    - {id: 31, cat: Movies/UHD, desc: "Movies/4K"}
-    - {id: 5, cat: Movies/BluRay, desc: "Movies/BluRay"}
-    - {id: 9, cat: Movies/DVD, desc: "Movies/DVD"}
-    - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 31, cat: Movies/UHD, desc: "Movies: 4K"}
+    - {id: 5, cat: Movies/BluRay, desc: "Movies: BluRay"}
+    - {id: 9, cat: Movies/DVD, desc: "Movies: DVD"}
+    - {id: 11, cat: Movies/HD, desc: "Movies: HD"}
     - {id: 58, cat: Movies/SD, desc: "Movies/Cam"}
     - {id: 61, cat: Movies/3D, desc: "Movies/3D"}
-    - {id: 24, cat: Movies/SD, desc: "Movies/XVID"}
-    - {id: 16, cat: Movies, desc: "Old Movies"}
+    - {id: 24, cat: Movies/SD, desc: "Movies: XVID"}
+    - {id: 16, cat: Movies, desc: "Movies: Old"}
     - {id: 15, cat: Movies, desc: "Movies Mobile"}
     - {id: 54, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
     - {id: 56, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 18, cat: Movies, desc: "Movie Packs"}
-    - {id: 32, cat: Movies/UHD, desc: "Movies/4K-RO"}
-    - {id: 6, cat: Movies/BluRay, desc: "Movies/BluRay-Ro"}
-    - {id: 12, cat: Movies/HD, desc: "Movies/HD-Ro"}
-    - {id: 81, cat: Movies/HD, desc: "Movies/x265-Ro"}
-    - {id: 82, cat: Movies/HD, desc: "Movies/x265"}
-    - {id: 10, cat: Movies/DVD, desc: "Movies/DVD-Ro"}
-    - {id: 59, cat: Movies/SD, desc: "Movies/Cam-Ro"}
-    - {id: 25, cat: Movies/SD, desc: "Movies/XVID-Ro"}
-    - {id: 17, cat: Movies, desc: "Old Movies Ro"}
+    - {id: 18, cat: Movies, desc: "Movies: Pack"}
+    - {id: 32, cat: Movies/UHD, desc: "Movies:4KRO"}
+    - {id: 6, cat: Movies/BluRay, desc: "Movies: BluRay-Ro"}
+    - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro"}
+    - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro"}
+    - {id: 82, cat: Movies/HD, desc: "Movies: x265"}
+    - {id: 10, cat: Movies/DVD, desc: "Movies: DVD-Ro"}
+    - {id: 59, cat: Movies/SD, desc: "Movies/Cam-RO"}
+    - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro"}
+    - {id: 17, cat: Movies, desc: "Movies: Old-Ro"}
     - {id: 55, cat: Movies/WEB-DL, desc: "Movies/WEB-DL Ro"}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro"}
-    - {id: 62, cat: Movies/3D, desc: "Movies/3D-RO"}
-    - {id: 19, cat: Movies, desc: "Movie Packs Ro"}
+    - {id: 62, cat: Movies/3D, desc: "Movies/3D-Ro"}
+    - {id: 19, cat: Movies, desc: "Movies: Pack-Ro"}
     - {id: 20, cat: TV, desc: "TV Episodes"}
-    - {id: 21, cat: TV, desc: "TV Episodes Ro"}
-    - {id: 13, cat: TV/HD, desc: "HDTV"}
-    - {id: 14, cat: TV/HD, desc: "HDTV-Ro"}
+    - {id: 21, cat: TV, desc: "TV Episodes-Ro"}
+    - {id: 13, cat: TV/HD, desc: "HDTV Episodes"}
+    - {id: 14, cat: TV/HD, desc: "HDTV Episodes-Ro"}
     - {id: 28, cat: Audio, desc: "Music"}
-    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps & Games"}
+    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps"}
     - {id: 26, cat: PC/0day, desc: "Software"}
-    - {id: 30, cat: PC/ISO, desc: "Games PC-ISO"}
-    - {id: 33, cat: PC/Games, desc: "Game Packs"}
-    - {id: 1, cat: TV/Anime, desc: "Anime/Hentai"}
-    - {id: 2, cat: TV/Anime, desc: "Anime-Ro"}
+    - {id: 30, cat: PC/Games, desc: "Games: PC-ISO"}
+    - {id: 33, cat: PC/Games, desc: "Games: Packs"}
+    - {id: 1, cat: TV/Anime, desc: "Movies: Anime"}
+    - {id: 2, cat: TV/Anime, desc: "Movies: Anime-Ro"}
     - {id: 42, cat: TV/Sport, desc: "Sport"}
-    - {id: 43, cat: Books, desc: "Books"}
+    - {id: 43, cat: Books, desc: "Documents"}
     - {id: 44, cat: Other, desc: "Images"}
     - {id: 49, cat: Other, desc: "Diverse"}
     - {id: 22, cat: Other, desc: "RoContent"}
-    - {id: 60, cat: XXX, desc: "Images/XXX"}
-    - {id: 27, cat: XXX, desc: "XXX"}
+    - {id: 60, cat: XXX, desc: "ImagesXXX"}
+    - {id: 27, cat: XXX, desc: "Movies: XXX"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Access this tracker with your browser<li>click on the <b>Apply Filter</b> button on the page to invoke the search and solve the challenge<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -81,11 +87,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: 4
+    default: 3
     options:
-      4: created
-      7: seeders
-      5: size
+      3: created
+      6: seeders
+      4: size
       1: title
   - name: type
     type: select
@@ -96,13 +102,7 @@ settings:
       asc: asc
 
 login:
-  path: takelogin.php
-  method: post
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: td.embedded:has(h2:contains("failed"))
+  method: cookie
   test:
     path: browse.php
 
@@ -111,16 +111,20 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # 0 name 1 genre 2 descr
-    genre: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
-    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 double
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    search: "{{ .Keywords }}"
+    # title, descr, genre, all
+    searchin: title
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
-    selector: table.browser > tbody > tr:has(a[href^="download.php/"])
+    selector: tbody > tr:has(a[href^="download.php"])
 
   fields:
     category:
@@ -139,40 +143,57 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: src=([^\s]+)
+          args: src=\\'(http.+?\.jpg)\\'
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=\\'(http.+?\.png)\\'
     download:
-      selector: a[href^="download.php/"]
+      selector: a[href^="download.php"]
       attribute: href
     date:
-      selector: td:nth-child(3)
+      selector: td:nth-child(4) span:not(:contains("day"))
+      optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-200615:04:05 -07:00"
+          args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      selector: td:nth-child(4) span:contains("day")
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
     size:
-      selector: td:nth-child(4)
-    grabs:
       selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
       filters:
         - name: regexp
           args: (\d+)
     seeders:
-      selector: td:nth-child(6)
-    leechers:
       selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "span:contains(\"FREE\")": 0
-        "span:contains(\"Half\")": 0.5
+        "a.info > b:contains(\"FREE\")": 0
+#        "a.info > b:contains(\"Half\")": 0.5
         "*": 1
     uploadvolumefactor:
       case:
-        "span:contains(\"2XUP\")": 2
+#        "a.info > b:contains(\"2XUP\")": 2
         "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 36 hours (as seconds = 36 x 60 x 60)
-      text: 129600
-# engine n/a
+      # freeleech 2 days (as seconds =  2 x 24 x 60 x 60)
+      # notfree 1.5 days  (as seconds =  1.5 x 24 x 60 x 60)
+      case:
+        "a.info > b:contains(\"FREE\")": 172800
+        "*": 129600
+# U-232 V5

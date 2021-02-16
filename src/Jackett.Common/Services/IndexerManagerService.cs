@@ -50,7 +50,6 @@ namespace Jackett.Common.Services
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
-            {"skytorrentsclone", "skytorrents-lol"},
             {"skytorrentsclone2", "skytorrents-to"},
             {"tehconnectionme", "anthelion"},
             {"torrentgalaxyorg", "torrentgalaxy"},

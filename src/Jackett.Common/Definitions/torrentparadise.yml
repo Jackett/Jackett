@@ -6,17 +6,18 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.cl/
-legacylinks:
   - https://torrentparadise.org/
+legacylinks:
   - https://torrentparadise.to/
   - https://torrentparadise.cc/
   - https://torrentparadise.la/
+  - https://torrentparadise.cl/
 
 caps:
   categories:
     "": Other
     ADULT: XXX
+    ADULTHENTAI: XXX
     ADULTLATINA: XXX
     ADULTMILF: XXX
     ADULTHDMOVIES: XXX

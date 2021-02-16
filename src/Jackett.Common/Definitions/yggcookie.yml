@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www2.yggtorrent.si/
+  - https://www4.yggtorrent.li/
 legacylinks:
   - https://yggtorrent.com/
   - https://ww1.yggtorrent.com/
@@ -37,6 +37,7 @@ legacylinks:
   - https://ww3.yggtorrent.si/
   - https://yggtorrent.si/
   - http://www2.yggtorrent.si/
+  - https://www2.yggtorrent.si/
 
 caps:
   categorymappings:
@@ -157,10 +158,6 @@ settings:
     type: checkbox
     label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
     default: false
-  - name: betasearchengine
-    type: checkbox
-    label: "Use Beta Search engine URL (Less restrictive) / SonarrV3 Full Series Search NEW"
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -212,11 +209,14 @@ search:
     - name: replace
       args: ["  ", " "]
     - name: trim
+    # put each word in quotations to prevent exact phrase search
+    - name: re_replace
+      args: ["(\\w+)", "\"$1\""]
   paths:
-    - path: "{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
     # Saison Word
-    - path: "{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "engine/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
 
   rows:
