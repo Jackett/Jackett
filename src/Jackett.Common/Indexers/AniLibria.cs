@@ -72,11 +72,10 @@ namespace Jackett.Common.Indexers
             var title = _EpisodeRegex.Replace(query.SearchTerm, string.Empty).TrimEnd();
             var queryParameters = new NameValueCollection
             {
-                { "search", title },
                 { "filter", "names,poster.url,code,torrents.list,season.year" },
                 { "limit", "100" },
             };
-            var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString());
+            var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString() + "&search=" + Uri.EscapeDataString(title));
             if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"AniLibria search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
