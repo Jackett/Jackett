@@ -97,6 +97,33 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["(?i)S(\\d{1,2})E(\\d{1,2})", "S$1/E$2"]
+    - name: re_replace
+      args: ["(?i)(S0?1)(?![\\dE])", "Primera Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?2)(?![\\dE])", "Segunda Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?3)(?![\\dE])", "Tercera Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?4)(?![\\dE])", "Cuarta Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?5)(?![\\dE])", "Quinta Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?6)(?![\\dE])", "Sexta Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?7)(?![\\dE])", "Septima Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?8)(?![\\dE])", "Octava Temporada"]
+    - name: re_replace
+      args: ["(?i)(S0?9)(?![\\dE])", "Novena Temporada"]
+    - name: re_replace
+      args: ["(?i)(S10)(?![\\dE])", "Decima Temporada"]
+    - name: re_replace
+      args: ["(?i)(S11)(?![\\dE])", "Onceava Temporada"]
+    - name: re_replace
+      args: ["(?i)(S12)(?![\\dE])", "Decimosegunda Temporada"]
+    # Parse other seasons
+    - name: re_replace
+      args: ["(?i)(S(\\d{1,2}))(?![\\dE])", "Temporada"]
   inputs:
     page: torrents
     $raw: "&category={{ range .Categories }}{{.}};{{end}}"
@@ -148,17 +175,19 @@ search:
         
         # Languages
         - name: replace
-          args: ["/Español", "/SPANisH"]
+          args: ["/Español", "/SPANiSH"]
         - name: replace
-          args: ["/SPA", "/SPANisH"]
+          args: ["/SPA", "/SPANiSH"]
         - name: replace
-          args: ["/ESP", "/SPANisH"]
+          args: ["/ESP", "/SPANiSH"]
         - name: re_replace
           args: ["\\/[EI]NG", "/English"]
         - name: replace
           args: ["/CAT", "/Catalan"]
         - name: re_replace
           args: ["\\/FR[AE]?", "/French"]
+        - name: replace
+          args: ["/ALE", "/German"]
         - name: replace
           args: ["/HOL", "/Dutch"]
         - name: replace
@@ -185,8 +214,10 @@ search:
           args: ["/FIN", "/Finnish"]
         - name: replace
           args: ["/SUE", "/Swedish"]
+        - name: replace
+          args: ["/Turco", "/Turkish"]
         - name: re_replace
-          args: ["\\/(?i)DUAL", "/MULTi SPANisH"]
+          args: ["\\/(?i)DUAL", "/MULTi SPANiSH"]
         
         # Video Origin
         - name: re_replace
@@ -217,7 +248,33 @@ search:
         - name: re_replace
           args: ["(?i)(Miniserie)", ""]
         - name: re_replace
-          args: ["(?i)(Temporada Completa)", "Temporada"]
+          args: ["(?i)(Temporada(s?)( (\\d+))( Completa)?)", "S$4"]
+        - name: re_replace
+          args: ["(?i)(Decimosegunda Temporada)", "S12"]
+        - name: re_replace
+          args: ["(?i)(Primera Temporada)", "S01"]
+        - name: re_replace
+          args: ["(?i)(Segunda Temporada)", "S02"]
+        - name: re_replace
+          args: ["(?i)(Tercera Temporada)", "S03"]
+        - name: re_replace
+          args: ["(?i)(Cuarta Temporada)", "S04"]
+        - name: re_replace
+          args: ["(?i)(Quinta Temporada)", "S05"]
+        - name: re_replace
+          args: ["(?i)(Sexta Temporada)", "S06"]
+        - name: re_replace
+          args: ["(?i)(Septima Temporada)", "S07"]
+        - name: re_replace
+          args: ["(?i)(Octava Temporada)", "S08"]
+        - name: re_replace
+          args: ["(?i)(Novena Temporada)", "S09"]
+        - name: re_replace
+          args: ["(?i)(Decima Temporada)", "S10"]
+        - name: re_replace
+          args: ["(?i)(Onceava Temporada)", "S11"]
+        - name: re_replace
+          args: ["(?i)(Temporada) (\\d{1,2})", "S$2"]
 
         - name: replace
           args: ["/", " "]
