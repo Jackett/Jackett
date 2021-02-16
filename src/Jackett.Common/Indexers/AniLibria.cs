@@ -69,13 +69,12 @@ namespace Jackett.Common.Indexers
 
         private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
-            // logger.Info(_EpisodeRegex.Match(query));
             var title = _EpisodeRegex.Replace(query.SearchTerm, string.Empty).TrimEnd();
-            logger.Info(query.SearchTerm);
             var queryParameters = new NameValueCollection
             {
                 { "search", title },
-                { "filter", "names,poster.url,code,torrents.list,season.year" }
+                { "filter", "names,poster.url,code,torrents.list,season.year" },
+                { "limit", "100" },
             };
             var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString());
             if (response.Status != HttpStatusCode.OK)
