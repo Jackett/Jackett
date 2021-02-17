@@ -1,7 +1,7 @@
 ---
 id: nethd
 name: NetHD
-description: "NetHD (VietTorrent) is a VIETNAMESE Private Torrent Tracker for HD MOVIES / TV"
+description: "NetHD (VietTorrent) is a VIETNAMESE Semi-Private Torrent Tracker for HD MOVIES / TV"
 language: vi-vn
 type: semi-private
 encoding: UTF-8
@@ -71,11 +71,11 @@ login:
   error:
     - selector: form#loginform > span.warning
   test:
-    path: torrents.php
+    path: torrentsz.php
 
 search:
   paths:
-    - path: torrents.php
+    - path: torrentsz.php
   inputs:
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
@@ -120,33 +120,19 @@ search:
         - name: prepend
           args: "download.php?id="
     date:
-      # 2020-10-05<br/>14:43:24
-      selector: td:nth-child(5):contains("-")
-      optional: true
-      filters:
-        - name: append
-          args: " +08:00" # CST
-        - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
-    date:
-      # 2 days<br/>23 hours
-      selector: td:nth-child(5):not(:contains("-"))
-      optional: true
+      # 2 ngày<br/>23 giờ
+      selector: td:nth-child(5)
       filters:
         - name: re_replace
-          args: ["year|years", "years "]
+          args: ["năm", "years "]
         - name: re_replace
-          args: ["month|months", "months "]
+          args: ["tháng", "months "]
         - name: re_replace
-          args: ["week|weeks", "weeks "]
+          args: ["ngày", "days "]
         - name: re_replace
-          args: ["day|days", "days "]
+          args: ["phút", "minutes "]
         - name: re_replace
-          args: ["second|seconds", "seconds "]
-        - name: re_replace
-          args: ["minute|minutes", "minutes "]
-        - name: re_replace
-          args: ["hour|hours", "hours "]
+          args: ["giờ", "hours "]
         - name: timeago
     size:
       selector: td:nth-child(6)
