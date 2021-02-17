@@ -1526,6 +1526,11 @@ namespace Jackett.Common.Indexers
                             release.Title = regex.Replace(release.Title, "");
                         }
 
+                        if (configData.MoveTagsToEndOfReleaseTitle.Value)
+                        {
+                            release.Title = MoveTagsToEndOfReleaseTitle(release.Title);
+                        }
+
                         releases.Add(release);
                     }
                     catch (Exception ex)
@@ -1539,6 +1544,18 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        private string MoveTagsToEndOfReleaseTitle(string releaseTitle)
+        {
+            var regex = new Regex(@"\[[^\[]+\]|\([^(]+\)");
+            foreach (var match in regex.Matches(releaseTitle))
+            {
+                var strMatch = match.ToString();
+                releaseTitle = releaseTitle.Replace(strMatch, "") + strMatch;
+            }
+            releaseTitle = releaseTitle.Trim();
+            return releaseTitle;
         }
     }
 }
