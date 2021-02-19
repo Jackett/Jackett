@@ -71,11 +71,11 @@ login:
   error:
     - selector: form#loginform > span.warning
   test:
-    path: torrentsz.php
+    path: torrents.php
 
 search:
   paths:
-    - path: torrentsz.php
+    - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
