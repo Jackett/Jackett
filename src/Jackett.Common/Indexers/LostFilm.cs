@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers
             : base(id: "lostfilm",
                    name: "LostFilm.tv",
                    description: "Unique portal about foreign series",
-                   link: "https://www.lostfilm.run/",
+                   link: "https://www.lostfilm.uno/",
                    caps: new TorznabCapabilities {
                        TvSearchParams = new List<TvSearchParam>
                        {
