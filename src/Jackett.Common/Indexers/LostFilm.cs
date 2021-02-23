@@ -26,6 +26,10 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilm.tv/"
         };
 
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://www.lostfilm.run/",
+            "https://www.lostfilm.uno/"
+ };
         private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
