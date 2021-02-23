@@ -34,6 +34,8 @@ namespace Jackett.Common.Indexers
             "https://rutracker.net/"
         };
 
+        private Regex _regexToFindTagsInReleaseTitle = new Regex(@"\[[^\[]+\]|\([^(]+\)");
+
         public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "rutracker",
@@ -1526,6 +1528,15 @@ namespace Jackett.Common.Indexers
                             release.Title = regex.Replace(release.Title, "");
                         }
 
+                        if (configData.MoveAllTagsToEndOfReleaseTitle.Value)
+                        {
+                            release.Title = MoveAllTagsToEndOfReleaseTitle(release.Title);
+                        }
+                        else if (configData.MoveFirstTagsToEndOfReleaseTitle.Value)
+                        {
+                            release.Title = MoveFirstTagsToEndOfReleaseTitle(release.Title);
+                        }
+
                         releases.Add(release);
                     }
                     catch (Exception ex)
@@ -1539,6 +1550,40 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        private string MoveAllTagsToEndOfReleaseTitle(string input)
+        {
+            var output = input + " ";
+            foreach (Match match in _regexToFindTagsInReleaseTitle.Matches(input))
+            {
+                var tag = match.ToString();
+                output = output.Replace(tag, "") + tag;
+            }
+            output = output.Trim();
+            return output;
+        }
+
+        private string MoveFirstTagsToEndOfReleaseTitle(string input)
+        {
+            var output = input + " ";
+            var expectedIndex = 0;
+            foreach (Match match in _regexToFindTagsInReleaseTitle.Matches(input))
+            {
+                if (match.Index > expectedIndex)
+                {
+                    var substring = input.Substring(expectedIndex, match.Index - expectedIndex);
+                    if (string.IsNullOrWhiteSpace(substring))
+                        expectedIndex = match.Index;
+                    else
+                        break;
+                }
+                var tag = match.ToString();
+                output = output.Replace(tag, "") + tag;
+                expectedIndex += tag.Length;
+            }
+            output = output.Trim();
+            return output;
         }
     }
 }
