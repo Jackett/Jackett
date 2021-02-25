@@ -37,11 +37,11 @@ namespace Jackett.Common.Models.Config
 
                 if (System.Environment.OSVersion.Platform == PlatformID.Unix)
                 {
-                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JackettConfig");
                 }
                 else
                 {
-                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Jackett");
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "JackettConfig");
                 }
             }
         }
