@@ -96,6 +96,8 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: re_replace
+          args: ["(?i)seizoen\\s*(\\d{1,2})\\s*(tot|t\/m)\\s*(\\d{1,2})", "S$1-$3"]
+        - name: re_replace
           args: ["(?i)(seizoen\\s*)(\\d{1,2})", "S$2"]
         - name: re_replace
           args: ["(?i)(afl.\\s*|aflevering\\s*)(\\d{1,2})", "E$2"]
