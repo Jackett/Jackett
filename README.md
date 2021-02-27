@@ -83,7 +83,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MejorTorrent
  * MixTapeTorrent
  * Montorrent
- * MovCr
  * MoviesDVDR
  * MyPornClub
  * NewPCT (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
@@ -169,7 +168,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BaibaKo
  * BookTracker
  * BootyTape
- * CasStudioTV
  * Darmowe torrenty
  * Deildu
  * DimeADozen (EzTorrent)
@@ -243,7 +241,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Asylum Share
  * AudioNews (AN)
  * AvistaZ (AsiaTorrents)
- * Awesome-HD (AHD)
  * Borgzelle
  * Back-ups
  * bB

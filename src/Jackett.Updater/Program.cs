@@ -285,6 +285,7 @@ namespace Jackett.Updater
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
+                "Definitions/casstudiotv.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cinefilhd.yml",
                 "Definitions/cooltorrent.yml",
@@ -356,6 +357,7 @@ namespace Jackett.Updater
                 "Definitions/mkvcage.yml",
                 "Definitions/moecat.yml",
                 "Definitions/monova.yml",
+                "Definitions/movcr.yml",
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
