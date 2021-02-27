@@ -65,8 +65,47 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.TVAnime, "Adult Video");
             AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
 
+            AddLanguageConfiguration();
+
+            // Configure the sort selects
+            var sortBySelect = new SelectItem(new Dictionary<string, string>
+                {
+                {"upload_timestamp", "created"},
+                {"seeders", "seeders"},
+                {"size", "size"},
+                {"filename", "title"}
+            })
+            { Name = "Sort by", Value = "upload_timestamp" };
+            configData.AddDynamic("sortrequestedfromsite", sortBySelect);
+
+            var orderSelect = new SelectItem(new Dictionary<string, string>
+                {
+                    {"desc", "Descending"},
+                    {"asc", "Ascending"}
+                })
+            { Name = "Order", Value = "desc" };
+            configData.AddDynamic("orderrequestedfromsite", orderSelect);
+        }
+
+        /// <summary>
+        /// Returns the selected languages, formatted so that they can be used in a query string.
+        /// </summary>
+        private string GetLanguagesForQuery()
+        {
+            var languagesConfig = (CheckboxItem)configData.GetDynamic("languageid");
+            return string.Join(",", languagesConfig.Values);
+        }
+        
+        private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
+
+        private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
+
+        private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
+
+        private void AddLanguageConfiguration()
+        {
             // Configure the language select option
-            var languageSelect = new SelectItem(new Dictionary<string, string>
+            var languageSelect = new CheckboxItem(new Dictionary<string, string>
                 {
                 {"1", "English"},
                 {"2", "Japanese"},
@@ -100,36 +139,9 @@ namespace Jackett.Common.Indexers
                 {"30", "Persian"},
                 {"31", "Malaysian"}
             })
-            { Name = "Language", Value = "1" };
+            { Name = "Language", Values = new [] { "1" } };
             configData.AddDynamic("languageid", languageSelect);
-
-            // Configure the sort selects
-            var sortBySelect = new SelectItem(new Dictionary<string, string>
-                {
-                {"upload_timestamp", "created"},
-                {"seeders", "seeders"},
-                {"size", "size"},
-                {"filename", "title"}
-            })
-            { Name = "Sort by", Value = "upload_timestamp" };
-            configData.AddDynamic("sortrequestedfromsite", sortBySelect);
-
-            var orderSelect = new SelectItem(new Dictionary<string, string>
-                {
-                    {"desc", "Descending"},
-                    {"asc", "Ascending"}
-                })
-            { Name = "Order", Value = "desc" };
-            configData.AddDynamic("orderrequestedfromsite", orderSelect);
         }
-
-        private string GetLang => ((SelectItem)configData.GetDynamic("languageid")).Value;
-        
-        private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
-
-        private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
-
-        private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -150,7 +162,6 @@ namespace Jackett.Common.Indexers
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "lang_id", GetLang },
                 { "group_id", "0" } // No group
             };
 
@@ -161,8 +172,12 @@ namespace Jackett.Common.Indexers
             if (searchCategories.Count > 0)
                 catString = "&id=" + string.Join(",", searchCategories);
 
+            // Get Selected Languages
+            // AniDex throws errors when the commas between language IDs are url encoded.
+            var langIds = "&lang_id=" + GetLanguagesForQuery();
+
             // Make search request
-            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString);
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString + langIds);
             var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
