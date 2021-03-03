@@ -44,6 +44,7 @@ caps:
     - {id: Applications, cat: PC/0day, desc: Applications}
     - {id: ApplicationsAndroid, cat: PC/Mobile-Android, desc: "Applications Android"}
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
     - {id: BooksEbooks, cat: Books, desc: "Books Ebooks"}
     - {id: BooksEducational, cat: Books, desc: "Books Educational"}
@@ -53,8 +54,10 @@ caps:
     - {id: Games, cat: Console, desc: Games}
     - {id: GamesWindows, cat: PC/Games, desc: "Games Windows"}
     - {id: Movies, cat: Movies, desc: Movies}
+    - {id: MoviesAction, cat: Movies, desc: Movies Action}
     - {id: MoviesConcerts, cat: Movies, desc: "Movies Concerts"}
     - {id: MoviesDocumentary, cat: TV/Documentary, desc: "Movies Documentary"}
+    - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed Movies"}
     - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Musicvideos"}
     - {id: Music, cat: Audio, desc: Music}
     - {id: MusicHardrock, cat: Audio, desc: "Music Hardrock"}
