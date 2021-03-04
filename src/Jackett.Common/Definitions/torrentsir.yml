@@ -75,7 +75,7 @@ search:
     download:
       selector: div.media-heading a
       attribute: href
-    banner:
+    poster:
       selector: div.photo img
       attribute: src
     date:
