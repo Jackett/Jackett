@@ -39,6 +39,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BigFANGroup
  * BitRu
  * BT.etree
+ * BT4G
  * BTDB
  * BTDIGG
  * BTSOW
@@ -83,7 +84,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MejorTorrent
  * MixTapeTorrent
  * Montorrent
- * MovCr
  * MoviesDVDR
  * MyPornClub
  * NewPCT (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
@@ -93,6 +93,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NoNaMe Club (NNM-Club)
  * Nyaa-Pantsu
  * Nyaa.si
+ * OnceSearch
  * OneJAV
  * OxTorrent
  * ParnuXi
@@ -104,6 +105,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PornoLive
  * PornoRip
  * PornoTor
+ * Portugas
  * ProPorn
  * ProStyleX
  * Rapidzona
@@ -143,7 +145,9 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentParadise
  * TorrentProject
  * TorrentProject2
+ * TorrentQQ (토렌트큐큐)
  * Torrents.csv
+ * TorrentSir (토렌트썰)
  * Torrentv
  * TorrentView (토렌트뷰)
  * Torrentz2
@@ -497,6 +501,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * The Vault [![(invite needed)][inviteneeded]](#)
  * TheAudioScene
  * TheEmpire (TE) [![(invite needed)][inviteneeded]](#)
+ * TheLeachZone
  * TJUPT
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * ToTheGlory (TTG)

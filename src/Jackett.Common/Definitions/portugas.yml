@@ -1,29 +1,23 @@
 ---
-id: danishbytes
-name: DANISH BYTES
-description: "DANISH BYTES is a Private Danish Tracker"
-language: en-us
+id: portugas
+name: Portugas
+description: "Portugas is a Private Portoguese Tracker"
+language: pt-pt
 type: private
 encoding: UTF-8
 links:
-  - https://danishbytes.org/
+  - https://portugas.org/
 
 caps:
   categorymappings:
-    - {id: 7, cat: TV, desc: "Dansk / TV & Serier"}
-    - {id: 6, cat: Movies, desc: "Dansk / Film"}
-    - {id: 2, cat: TV, desc: "TV & Serier"}
-    - {id: 1, cat: Movies, desc: "Film"}
-    - {id: 10, cat: Movies, desc: "Film Boxset"}
-    - {id: 13, cat: TV/Anime, desc: "Cartoon & Anime / TV & Serier"}
-    - {id: 12, cat: TV/Anime, desc: "Cartoon & Anime / Film"}
-    - {id: 5, cat: PC/0day, desc: "Applikationer"}
-    - {id: 4, cat: PC/Games, desc: "Spil"}
-    - {id: 3, cat: Audio, desc: "Musik"}
-    - {id: 14, cat: Audio/Video, desc: "Musik / Videoer"}
-    - {id: 9, cat: Audio/Audiobook, desc: "Lydbøger"}
-    - {id: 8, cat: Books, desc: "E    -Books, Magasiner, osv."}
-    - {id: 11, cat: XXX, desc: "XXX"}
+    - {id: 1, cat: Movies, desc: "Filmes"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Músicas"}
+    - {id: 4, cat: PC/Games, desc: "Jogos"}
+    - {id: 5, cat: PC/0day, desc: "Appz"}
+    - {id: 7, cat: XXX, desc: "XXX"}
+    - {id: 10, cat: TV/Anime, desc: "Animação"}
+    - {id: 9, cat: Books, desc: "E-Books"}
 
   modes:
     search: [q]
@@ -116,9 +110,6 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    magnet:
-      selector: a[href^="magnet"]
-      attribute: href
     details:
       selector: a.view-torrent
       attribute: href
@@ -205,6 +196,6 @@ search:
     minimumratio:
       text: 1.1
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
-# UNIT3D 3.1.0 DB-edition
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# UNIT3D 4.0.0
