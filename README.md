@@ -127,6 +127,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * sukebei-Pantsu
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)
+ * Tjangto (짱토)
  * Tokyo Tosho
  * Torlock
  * TOROS
@@ -150,6 +151,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentSir (토렌트썰)
  * Torrentv
  * TorrentView (토렌트뷰)
+ * TorrentWhiz ( 토렌트위즈)
  * Torrentz2
  * Torrentz2k
  * truPornolabs

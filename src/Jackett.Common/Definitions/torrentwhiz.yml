@@ -1,27 +1,22 @@
 ---
-id: torrentsir
-name: TorrentSir
-description: "TorrentSir (토렌트썰) is a Public KOREAN tracker for Korean media."
+id: torrentwhiz
+name: TorrentWhiz
+description: "TorrentWhiz ( 토렌트위즈) is a Public KOREAN tracker for Korean media."
 language: ko-KR
 type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentsir31.com/
+  - https://torrentwiz22.me/
 
 caps:
   categorymappings:
-    - {id: "gallery", cat: XXX, desc: "+19 (Adult)"}
-    - {id: "ani", cat: TV, desc: "동영상 (Video)"}
-    - {id: "game", cat: Console, desc: "기타 (Games)"}
-    - {id: "tv", cat: TV, desc: "시사/교양 (TV)"}
-    - {id: "movie", cat: Movies, desc: "영화 (Movie)"}
+    - {id: "netflix", cat: TV, desc: "넷플릭스 (Netflix)"}
+    - {id: "tv", cat: TV, desc: "시사 (TV)"}
+    - {id: "mov", cat: Movies, desc: "영화 (Movie)"}
     - {id: "drama", cat: TV, desc: "드라마 (Drama)"}
-    - {id: "entertain", cat: TV, desc: "예능/오락 (Entertainment)"}
-    - {id: "music", cat: Audio, desc: "음악 (Music)"}
-    - {id: "notice", cat: Other, desc: "고객센터 (Notice)"}
-    - {id: "child", cat: Other, desc: "고객센터 (Child)"}
-    - {id: "lecture", cat: Books, desc: "도서/강좌 (Books)"}
+    - {id: "enter", cat: TV, desc: "예능 (Entertainment)"}
+    - {id: "music", cat: Audio, desc: "음원 (Music)"}
     - {id: "util", cat: PC, desc: "유틸 (Software)"}
 
   modes:
@@ -46,7 +41,7 @@ download:
 
 search:
   paths:
-    # https://torrentsir31.com/bbs/search.php?srows=100&gr_id=&sfl=wr_subject&stx=2021&sop=and
+    # https://torrentwiz22.me/bbs/search.php?url=&stx=sin&srows=100&gr_id=&sfl=wr_subject&sop=and
     - path: bbs/search.php
   inputs:
     stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
