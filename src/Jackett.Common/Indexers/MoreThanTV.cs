@@ -17,9 +17,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using System.Web;
-
 using NLog;
-using AutoMapper;
 
 namespace Jackett.Common.Indexers
 {
@@ -33,7 +31,6 @@ namespace Jackett.Common.Indexers
 
         private string LoginUrl => SiteLink + "login";
         private string BrowseUrl => SiteLink + "torrents.php";
-
         private string DetailsUrl => SiteLink + "torrents.php?id=";
 
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
@@ -92,7 +89,6 @@ namespace Jackett.Common.Indexers
             }
         }
 
-
         /// <summary>
         /// Emulate browser headers -- REQUIRED
         /// </summary>
@@ -109,6 +105,14 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
+            var pairs = new Dictionary<string, string> {
+                { "username", ConfigData.Username.Value },
+                { "password", ConfigData.Password.Value },
+                { "submit", "login" },
+                { "keeplogged", "1" },
+                { "cinfo", "3440|1440|24|360" }
+            };
+
             SetRequestHeaders();
 
             // Fetch CSRF token
@@ -117,52 +121,21 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                GetToken(preRequest.ContentString);
+                token = GetToken(preRequest.ContentString);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 string errorMessage = ParseErrorMessage(preRequest);
                 throw new ExceptionWithConfigData(errorMessage, configData);
             }
 
-            var pairs = new Dictionary<string, string> {
-                { "username", ConfigData.Username.Value },
-                { "password", ConfigData.Password.Value },
-                { "submit", "login" },
-                { "keeplogged", "1" },
-                { "token",  token},
-                { "cinfo", "3440|1440|24|360" }
-            };
+            // Add CSRF Token to payload
+            pairs.Add("token", token);
 
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, null, SiteLink, headers: _emulatedBrowserHeaders);
 
-            // Attempt Login
-            var request = new WebRequest
+            await ConfigureIfOK(response.Cookies, response.Cookies.Contains("sid="), () =>
             {
-                PostData = pairs,
-                Referer = SiteLink,
-                Type = RequestType.POST,
-                Url = LoginUrl,
-                Headers = _emulatedBrowserHeaders,
-                Cookies = preRequest.Cookies
-            };
-
-            var response = await webclient.GetResultAsync(request);
-
-
-            await ConfigureIfOK(response.Cookies, response.Cookies.Contains("sid="), async () =>
-            {
-                // Follow redirect for error messages
-                for (int i = 0; i < 5; i++)
-                {
-                    if (response.IsRedirect)
-                    {
-                        await GetErrorAsync(response);
-                    } else
-                    {
-                        break;
-                    }
-                }
-
                 // Couldn't find "sid" cookie, so check for error
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
@@ -170,18 +143,6 @@ namespace Jackett.Common.Indexers
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
-        }
-
-        public async Task GetErrorAsync(WebResult response)
-        {
-            var redirectedResponse = await webclient.GetResultAsync(new WebRequest
-            {
-                Url = response.RedirectingTo,
-                Referer = SiteLink,
-                Cookies = response.Cookies,
-                Headers = _emulatedBrowserHeaders,
-            });
-            Mapper.Map(redirectedResponse, response);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -242,7 +203,7 @@ namespace Jackett.Common.Indexers
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
             if (response.IsRedirect)
             {
-                // re login
+                // re-login
                 await ApplyConfiguration(null);
                 response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
@@ -284,6 +245,14 @@ namespace Jackett.Common.Indexers
             }
         }
 
+        /// <summary>
+        /// Gather Release info from torrent table. Target using css
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="downloadAnchor"></param>
+        /// <param name="title"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
         private ReleaseInfo GetReleaseInfo(IElement row, IElement downloadAnchor, string title, int category)
         {
 
@@ -366,6 +335,11 @@ namespace Jackett.Common.Indexers
             return $"S{season:00}";
         }
 
+        /// <summary>
+        /// Parse Error Messages from using CSS classes
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
         private string ParseErrorMessage(WebResult response)
         {
             var parser = new HtmlParser();
@@ -385,6 +359,11 @@ namespace Jackett.Common.Indexers
             return errorMessage;
         }
 
+        /// <summary>
+        /// Clean Up any title stuff
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
         private string CleanUpTitle(string title)
         {
             return title
