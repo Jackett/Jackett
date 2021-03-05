@@ -143,6 +143,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentGalaxy (TGx)
  * TorrentKitty
  * TorrentMafya
+ * TorrentMax (토렌트맥스)
  * TorrentParadise
  * TorrentProject
  * TorrentProject2
