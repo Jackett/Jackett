@@ -45,7 +45,6 @@ namespace Jackett.Common.Services
             {"leaguehd", "lemonhd"},
             {"liaorencili", "cilipro"},
             {"metaliplayro", "romanianmetaltorrents"},
-            {"moviezone", "teracod"},
             {"nnm-club", "noname-club"},
             {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
