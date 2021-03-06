@@ -108,9 +108,10 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    magnet:
-      selector: a[href^="magnet"]
-      attribute: href
+# tracker has issue with some magnet downloads failing #10758
+#    magnet:
+#      selector: a[href^="magnet"]
+#      attribute: href
     details:
       selector: a.view-torrent
       attribute: href
