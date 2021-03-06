@@ -63,7 +63,7 @@ caps:
     - {id: 30, cat: Other, desc: "Kita"}
     - {id: 77, cat: Other, desc: "Educational"}
     - {id: 41, cat: Books, desc: "E-Books"}
-    - {id: 83, cat: Other, desc: "Audiobooks"}
+    - {id: 83, cat: Audio/Audiobook, desc: "Audiobooks"}
 
   modes:
     search: [q]
