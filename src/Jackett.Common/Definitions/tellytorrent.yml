@@ -6,9 +6,10 @@ language: en
 type: private
 encoding: UTF-8
 links:
-  - https://telly.cc/
+  - https://telly.to/
 legacylinks:
   - https://tellytorrent.net/
+  - https://telly.cc/
 
 caps:
   categorymappings:
