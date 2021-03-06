@@ -40,6 +40,7 @@ namespace Jackett.Common.Services
             {"audiobooktorrents", "abtorrents"},
             {"broadcastthenet", "broadcasthenet"},
             {"cili180", "cilipro"},
+            {"hdreactor", "hdhouse"},
             {"icetorrent", "speedapp"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"leaguehd", "lemonhd"},
