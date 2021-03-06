@@ -66,6 +66,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -110,18 +111,28 @@ search:
     # http://kinonavse100.com/search.php?tracker_search=torrent&keywords=2020&terms=all&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0&submit=Search
     - path: search.php
   inputs:
-    tracker_search: torrent
+    # Search On: tracker, torrent, comment, forum, all
+    tracker_search: "{{ if .Keywords }}torrent{{ else }}tracker{{ end }}"
     keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # all, any
     terms: all
+    # Search by Author
     author: ""
+    # Search in subforums: yes 1, no 0
     sc: 1
+    # Search For: all, msgonly, titleonly, firstpost
     sf: titleonly
+    # Show Results as: posts, topics
     sr: topics
     sk: "{{ .Config.sort }}"
     sd: "{{ .Config.type }}"
+    # Seach Posts For: all 0, 1day 1, week 7, fortnight 14, month 30, 3months 90, 6 months 180, year 365
     st: 0
+    # Show first: all -1, 0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
     ch: 300
+    # hidden
     t: 0
+    # hidden
     submit: Search
     $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
 
