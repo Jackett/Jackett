@@ -15,6 +15,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using NLog.Targets;
 
 namespace Jackett.Common.Indexers
 {
@@ -1537,6 +1538,11 @@ namespace Jackett.Common.Indexers
                             release.Title = MoveFirstTagsToEndOfReleaseTitle(release.Title);
                         }
 
+                        if (release.Category.Contains(TorznabCatType.Audio.ID))
+                        {
+                            release.Title = DetectRereleaseInReleaseTitle(release.Title);
+                        }
+                        
                         releases.Add(release);
                     }
                     catch (Exception ex)
@@ -1584,6 +1590,26 @@ namespace Jackett.Common.Indexers
             }
             output = output.Trim();
             return output;
+        }
+
+        /// <summary>
+        /// Searches the release title to find a 'year1/year2' pattern that would indicate that this is a re-release of an old music album.
+        /// If the release is found to be a re-release, this is added to the title as a new tag.
+        /// Not to be confused with discographies; they mostly follow the 'year1-year2' pattern.
+        /// </summary>
+        private string DetectRereleaseInReleaseTitle(string input)
+        {
+            var output = input;
+            var isRerelease = false;
+            var regex = new Regex(@"(\d{4}) *\/ *(\d{4})");
+            foreach (Match match in regex.Matches(input))
+            {
+                isRerelease = true;
+                var fullMatch = match.ToString();
+                var firstYear = match.Groups[1].ToString();
+                output = output.Replace(fullMatch, firstYear);
+            }
+            return output + (isRerelease ? "(Re-release)" : "");
         }
     }
 }
