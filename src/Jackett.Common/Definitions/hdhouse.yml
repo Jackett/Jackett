@@ -1,11 +1,12 @@
 ---
-id: hdreactor
-name: HDReactor
-description: "HDReactor is a RUSSIAN Public Torrent Tracker for MOVIES / TV"
+id: hdhouse
+name: HDhouse
+description: "HDhouse (HDReactor) is a RUSSIAN Public Torrent Tracker for MOVIES / TV"
 language: ru-ru
 type: public
 encoding: windows-1251
 links:
+  - https://hdhouse.club/
   - https://hdreactor.club/
   - https://hdreactor.su/
 legacylinks:
