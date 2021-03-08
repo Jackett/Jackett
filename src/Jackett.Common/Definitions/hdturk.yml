@@ -112,8 +112,10 @@ search:
     category: 0
     search_type: t_name
     include_dead_torrents: yes
+
   rows:
     selector: table#sortabletable tbody tr:has(div[id^="port-target-"])
+
   fields:
     title:
       selector: div[id^="port-target-"] a
@@ -133,13 +135,10 @@ search:
       selector: div[id^="port-content-"] img
       attribute: src
     date:
-      selector: td:nth-child(2)
-      filters:
-        - name: regexp
-          args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
+      selector: td:nth-child(2) > div:nth-last-child(1)
       filters:
         - name: append
-          args: " +03:00" # TRT
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
     download:

@@ -1,12 +1,12 @@
 ---
-id: gtorrent
-name: GTorrent
-description: "GTorrent is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
+id: gtorrentpro
+name: GTorrent.pro
+description: "GTorrent.pro is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
 language: ru-ru
 type: public
-encoding: UTF-8
+encoding: windows-1251
 links:
-  - https://gtorrent.org/
+  - http://gtorrent.pro/
 
 caps:
   categorymappings:
@@ -22,7 +22,7 @@ caps:
 settings: []
 
 download:
-  selector: a[href^="/uploads/torrents/"]
+  selector: a[href^="/engine/download.php?id="]
   attribute: href
 
 search:

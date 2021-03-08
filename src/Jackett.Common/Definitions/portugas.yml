@@ -16,8 +16,9 @@ caps:
     - {id: 4, cat: PC/Games, desc: "Jogos"}
     - {id: 5, cat: PC/0day, desc: "Appz"}
     - {id: 7, cat: XXX, desc: "XXX"}
-    - {id: 10, cat: TV/Anime, desc: "Animação"}
     - {id: 9, cat: Books, desc: "E-Books"}
+    - {id: 10, cat: Movies, desc: "Animação Filmes"}
+    - {id: 11, cat: TV/Anime, desc: "Animação TV"}
 
   modes:
     search: [q]
