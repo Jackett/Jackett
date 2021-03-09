@@ -178,6 +178,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BookTracker
  * BootyTape
  * CasStudioTV
+ * Catorrent
  * Darmowe torrenty
  * Deildu
  * DimeADozen (EzTorrent)
