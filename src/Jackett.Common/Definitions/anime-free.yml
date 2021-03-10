@@ -35,9 +35,9 @@ caps:
     search: [q]
 
 settings:
-  - name: username
+  - name: email
     type: text
-    label: Username
+    label: Email
   - name: password
     type: password
     label: Password
@@ -47,7 +47,7 @@ login:
   method: form
   form: form.login-form
   inputs:
-    login_name: "{{ .Config.username }}"
+    login_name: "{{ .Config.email }}"
     login_password: "{{ .Config.password }}"
     login: submit
   error:
