@@ -330,6 +330,7 @@ namespace Jackett.Updater
                 "Definitions/hdstreet.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
+                "Definitions/horrorsite.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
