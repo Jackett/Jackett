@@ -50,7 +50,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://www.divxtotal.la/",
-            "https://www.divxtotal.one/"
+            "https://www.divxtotal.one/",
+            "https://www.divxtotal.se/"
         };
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
@@ -58,7 +59,7 @@ namespace Jackett.Common.Indexers
             : base(id: "divxtotal",
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                   link: "https://www.divxtotal.se/",
+                   link: "https://www.divxtotal.ch/",
                    caps: new TorznabCapabilities {
                        TvSearchParams = new List<TvSearchParam>
                        {
