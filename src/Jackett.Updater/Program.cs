@@ -330,6 +330,7 @@ namespace Jackett.Updater
                 "Definitions/hdstreet.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
+                "Definitions/horrorsite.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
@@ -368,6 +369,7 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/polishtracker.yml",
