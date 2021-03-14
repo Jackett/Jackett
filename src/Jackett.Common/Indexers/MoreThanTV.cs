@@ -18,6 +18,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using System.Web;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -33,6 +34,9 @@ namespace Jackett.Common.Indexers
         private string BrowseUrl => SiteLink + "torrents.php";
         private string DetailsUrl => SiteLink + "details.php";
 
+        private string _sort;
+        private string _order;
+
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
         private readonly Dictionary<string, string> _emulatedBrowserHeaders = new Dictionary<string, string>();
@@ -47,11 +51,11 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                           MovieSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -64,6 +68,25 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            var sort = new SelectItem(new Dictionary<string, string>
+            {
+                {"time", "time"},
+                {"size", "size"},
+                {"snatched", "snatched"},
+                {"seeders", "seeders"},
+                {"leechers", "leechers"},
+            })
+            { Name = "Sort requested from site", Value = "time" };
+            configData.AddDynamic("sort", sort);
+
+            var order = new SelectItem(new Dictionary<string, string>
+            {
+                {"desc", "desc"},
+                {"asc", "asc"}
+            })
+            { Name = "Order requested from site", Value = "desc" };
+            configData.AddDynamic("order", order);
 
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(2, TorznabCatType.TV);
@@ -117,31 +140,42 @@ namespace Jackett.Common.Indexers
 
             // Fetch CSRF token
             var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, referer: SiteLink, headers: _emulatedBrowserHeaders);
-            string token = null;
-
-            try
+            // Check if user is logged in. /login redirects to / if so)
+            if (preRequest.IsRedirect)
             {
-                token = GetToken(preRequest.ContentString);
-            }
-            catch (Exception)
-            {
-                string errorMessage = ParseErrorMessage(preRequest);
-                throw new ExceptionWithConfigData(errorMessage, configData);
+                await FollowIfRedirect(preRequest, SiteLink, null, preRequest.Cookies, true);
             }
 
-            // Add CSRF Token to payload
-            pairs.Add("token", token);
-
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, null, SiteLink, headers: _emulatedBrowserHeaders);
-
-            await ConfigureIfOK(response.Cookies, response.Cookies.Contains("sid="), () =>
+            // sid was not set after redirect, attempt to log in again
+            if (!preRequest.Cookies.Contains("sid="))
             {
+                string token = null;
+
+                try
+                {
+                    token = GetToken(preRequest.ContentString);
+                }
+                catch (Exception)
+                {
+                    string errorMessage = ParseErrorMessage(preRequest);
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                }
+
+                // Add CSRF Token to payload
+                pairs.Add("token", token);
+
+                var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, preRequest.Cookies, true, null, SiteLink, headers: _emulatedBrowserHeaders);
+
+                await ConfigureIfOK(response.Cookies, response.Cookies.Contains("sid="), () =>
+                {
                 // Couldn't find "sid" cookie, so check for error
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
-                var errorMessage = dom.QuerySelector(".flash.error").TextContent.Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
+                    var dom = parser.ParseDocument(response.ContentString);
+                    var errorMessage = dom.QuerySelector(".flash.error").TextContent.Trim();
+                    throw new ExceptionWithConfigData(errorMessage, configData);
+                });
+            }
+
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
@@ -149,33 +183,39 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
-                await GetReleasesAsync(releases, query, query.GetQueryString());
-            else
-            {
-                var searchQuery = query.GetQueryString();
-                searchQuery = searchQuery.Replace("Marvels", "Marvel"); // strip 's for better results
-                var newSearchQuery = Regex.Replace(searchQuery, @"(S\d{2})$", "$1*"); // If we're just seaching for a season (no episode) append an * to include all episodes of that season.
-                await GetReleasesAsync(releases, query, newSearchQuery);
+            var searchQuery = query.GetQueryString();
+            searchQuery = searchQuery.Replace("Marvels", "Marvel"); // strip 's for better results
+            var newSearchQuery = Regex.Replace(searchQuery, @"(S\d{2})$", "$1*"); // If we're just seaching for a season (no episode) append an * to include all episodes of that season.
+            await GetReleasesAsync(releases, query, newSearchQuery);
 
-                // Always search for torrent groups (complete seasons) too
-                var seasonMatch = new Regex(@".*\s[Ss]{1}\d{2}([Ee]{1}\d{2,3})?$").Match(searchQuery);
-                if (seasonMatch.Success)
-                {
-                    newSearchQuery = Regex.Replace(searchQuery, @"[Ss]{1}\d{2}([Ee]{1}\d{2,3})?", $"Season {query.Season}");
-                    await GetReleasesAsync(releases, query, newSearchQuery);
-                }
+            // Always search for torrent groups (complete seasons) too
+            var seasonMatch = new Regex(@".*\s[Ss]{1}\d{2}([Ee]{1}\d{2,3})?$").Match(searchQuery);
+            if (seasonMatch.Success)
+            {
+                newSearchQuery = Regex.Replace(searchQuery, @"[Ss]{1}\d{2}([Ee]{1}\d{2,3})?", $"Season {query.Season}");
+                await GetReleasesAsync(releases, query, newSearchQuery);
             }
 
             return releases;
+        }
+
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            var sort = (SelectItem)configData.GetDynamic("sort");
+            _sort = sort != null ? sort.Value : "time";
+
+            var order = (SelectItem)configData.GetDynamic("order");
+            _order = order != null && order.Value.Equals("asc") ? order.Value : "desc";
         }
 
         private string GetTorrentSearchUrl(TorznabQuery query, string searchQuery)
         {
             var qc = new NameValueCollection
             {
-                { "order_by", "time" },
-                { "order_way", "desc" },
+                { "order_by", _sort },
+                { "order_way",  _order },
                 { "action", "advanced" },
                 { "sizetype", "gb" },
                 { "sizerange", "0.01" },
