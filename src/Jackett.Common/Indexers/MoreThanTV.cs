@@ -31,7 +31,7 @@ namespace Jackett.Common.Indexers
 
         private string LoginUrl => SiteLink + "login";
         private string BrowseUrl => SiteLink + "torrents.php";
-        private string DetailsUrl => SiteLink + "torrents.php?id=";
+        private string DetailsUrl => SiteLink + "details.php";
 
         private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
@@ -174,18 +174,13 @@ namespace Jackett.Common.Indexers
         {
             var qc = new NameValueCollection
             {
-                { "tags_type", "1" },
                 { "order_by", "time" },
                 { "order_way", "desc" },
-                { "group_results", "1" },
-                { "action", "basic" },
-                { "searchsubmit", "1" }
+                { "action", "advanced" },
+                { "sizetype", "gb" },
+                { "sizerange", "0.01" },
+                { "title", searchQuery }
             };
-
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
-                qc.Add("description", query.ImdbID);
-            else
-                qc.Add("title", searchQuery);
 
             if (query.Categories.Contains(TorznabCatType.Movies.ID))
                 qc.Add("filter_cat[1]", "1");
@@ -294,8 +289,8 @@ namespace Jackett.Common.Indexers
             int grabs = int.Parse(snatched, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             int seeders = int.Parse(seeds, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             int leechers = int.Parse(leechs, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-            var detailsUri = new Uri(DetailsUrl + torrentId);
-            var downloadLink = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
+            var detailsUri = new Uri(DetailsUrl + "?torrentid=" + torrentId);
+            var downloadLink = new Uri(BrowseUrl + "?action=download&id=" + torrentId);
 
             return new ReleaseInfo
             {
