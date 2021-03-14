@@ -495,7 +495,7 @@ namespace Jackett.Common.Indexers
             return result;
         }
 
-        protected async Task<WebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
+        protected async Task<WebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false, Dictionary<string, string> headers = null)
         {
             var request = new WebRequest
             {
@@ -504,7 +504,8 @@ namespace Jackett.Common.Indexers
                 Cookies = cookies,
                 Referer = referer,
                 PostData = data,
-                Encoding = Encoding
+                Encoding = Encoding,
+                Headers = headers,
             };
             var response = await webclient.GetResultAsync(request);
             CheckSiteDown(response);
