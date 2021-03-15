@@ -10,7 +10,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Polly;
-using Polly.Retry;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
