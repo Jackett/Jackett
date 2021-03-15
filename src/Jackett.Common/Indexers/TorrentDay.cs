@@ -22,7 +22,6 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "t.json";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://tday.love/",
             "https://torrentday.cool/",
             "https://secure.torrentday.com/",
             "https://classic.torrentday.com/",
@@ -41,16 +40,18 @@ namespace Jackett.Common.Indexers
             "https://td-update.com/", // redirect to https://www.torrentday.com/
             "https://www.torrentday.me/",
             "https://www.torrentday.ru/",
-            "https://www.td.af/"
+            "https://www.td.af/",
+            "https://tday.love/"
         };
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "torrentday",
                    name: "TorrentDay",
                    description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                   link: "https://tday.love/",
+                   link: "https://torrentday.cool/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -74,6 +75,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie(
                        "Make sure you get the cookies from the same torrent day domain as configured above."))
         {

@@ -117,6 +117,8 @@ search:
       filters:
         - name: regexp
           args: ", (\\d+) leecher"
+        - name: replace
+          args: ["-1", "0"]
     date:
       selector: a[href^="/download.php?id="]
       attribute: title

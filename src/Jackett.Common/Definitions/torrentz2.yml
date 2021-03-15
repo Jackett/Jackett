@@ -7,12 +7,9 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentz2.is/
-  - https://torrentsmirror.com/
-  - https://torrentz.pl/
+  - https://torrentzwealmisr.onion.ly/
+  - https://torrentz.unblockit.buzz/
   - https://torrentz2.unblockninja.com/
-  - https://torrentz.unblockit.app/
-  - https://torrentz2.unblocked.rest/
 legacylinks:
   - https://torrentz.unblockit.pro/
   - https://torrentz.unblockit.one/
@@ -31,6 +28,14 @@ legacylinks:
   - https://torrentz2.uk-unblock.pro/
   - https://torrentz.unblockit.top/
   - https://torrentz.unblockit.lat/
+  - https://torrentz2.is/ # Error: 503 Service Unavailable
+  - https://torrentsmirror.com/ # Error: 503 Service Unavailable
+  - https://torrentz.pl/ # Error: 503 Service Unavailable
+  - https://torrentz.unblockit.app/
+  - https://torrentz2.unblocked.rest/
+  - https://torrentz.unblockit.dev/
+  - https://torrentz.unblockit.ltd/
+  - https://torrentz.unblockit.link/
 
 caps:
   categorymappings:

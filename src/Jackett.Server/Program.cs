@@ -37,7 +37,7 @@ namespace Jackett.Server
             {
                 var text = HelpText.AutoBuild(optionsResult);
                 text.Copyright = " ";
-                text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion;
+                text.Heading = "Jackett " + EnvironmentUtil.JackettVersion();
                 Console.WriteLine(text);
                 Environment.Exit(1);
             });
@@ -54,7 +54,7 @@ namespace Jackett.Server
 
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(Settings);
             var logger = LogManager.GetCurrentClassLogger();
-            logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
+            logger.Info("Starting Jackett " + EnvironmentUtil.JackettVersion());
 
             // create PID file early
             if (!string.IsNullOrWhiteSpace(Settings.PIDFile))
@@ -119,7 +119,7 @@ namespace Jackett.Server
                 try
                 {
                     logger.Debug("Creating web host...");
-                    var applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
+                    var applicationFolder = configurationService.GetContentFolder();
                     logger.Debug($"Content root path is: {applicationFolder}");
 
                     CreateWebHostBuilder(args, url, applicationFolder).Build().Run();

@@ -44,7 +44,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public HDTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public HDTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "hdtorrents",
                    name: "HD-Torrents",
                    description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
@@ -68,6 +69,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin(
                        "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {

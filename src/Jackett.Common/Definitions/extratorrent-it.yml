@@ -7,9 +7,14 @@ type: public
 encoding: UTF-8
 links:
   - https://extratorrents.it/
+  - https://extratorrent.unblockit.buzz/
   - https://extratorrent2.unblockninja.com/
 legacylinks:
   - https://extratorrent.ag/
+  - https://extratorrent.unblockit.app/
+  - https://extratorrent.unblockit.dev/
+  - https://extratorrent.unblockit.ltd/
+  - https://extratorrent.unblockit.link/
 
 caps:
   categorymappings:
@@ -955,6 +960,9 @@ search:
     download:
       selector: td a[href^="magnet:?xt="]
       attribute: href
+      filters:
+        - name: replace
+          args: [";", "&"]
     date:
       selector: td:nth-last-of-type(5)
       filters:

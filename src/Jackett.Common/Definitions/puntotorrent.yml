@@ -1,5 +1,5 @@
 ---
-id: puntorrent
+id: puntotorrent
 name: PuntoTorrent
 description: "PuntoTorrent is a SPANISH site for General content"
 language: es-es
@@ -84,6 +84,7 @@ caps:
     - {id: 132, cat: Books/Mags, desc: "eBooks - Revistas"}
     - {id: 72, cat: Books/Other, desc: "eBooks - Otros"}
     - {id: 133, cat: Books, desc: "eBooks - Adulto (+18)"}
+    - {id: 142, cat: Audio/Audiobook, desc: "eBooks - Audiolibros"}
     - {id: 92, cat: Other, desc: "Otros formatos - Animación"}
     - {id: 93, cat: Other, desc: "Otros formatos - Deportes"}
     - {id: 94, cat: Other, desc: "Otros formatos - Documentales"}

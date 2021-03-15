@@ -7,8 +7,9 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
+  # update poster placeholder link too
   - https://btdb.eu/
-  - https://btdb.unblockit.app/
+  - https://btdb.unblockit.buzz/
 legacylinks:
   - https://btdb.to/
   - https://btdb.unblocked.app/
@@ -29,6 +30,10 @@ legacylinks:
   - https://btdb.uk-unblock.pro/
   - https://btdb.unblockit.top/
   - https://btdb.unblockit.lat/
+  - https://btdb.unblockit.app/
+  - https://btdb.unblockit.dev/
+  - https://btdb.unblockit.ltd/
+  - https://btdb.unblockit.link/
 
 caps:
   categories:
@@ -42,6 +47,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
   - name: info_8000
     type: info
     label: About BTDB Categories
@@ -88,7 +97,7 @@ search:
       attribute: src
       filters:
         - name: replace
-          args: ["https://btdb.io/assets/img/placeholder.png", ""]
+          args: ["https://btdb.eu/assets/img/placeholder.png", ""]
     date:
       selector: small:nth-of-type(5) strong
       filters:

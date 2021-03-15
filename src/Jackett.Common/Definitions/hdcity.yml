@@ -172,7 +172,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " [English]"
+          args: " English"
         - name: re_replace
           args: ["(?i)T[\\s-_]?(\\d{1,2})\\b", " S$1 "]
         - name: re_replace
@@ -184,7 +184,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " [Spanish]"
+          args: " Spanish"
         - name: re_replace
           args: ["(?i)T[\\s-_]?(\\d{1,2})\\b", " S$1 "]
         - name: re_replace

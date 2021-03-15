@@ -1,9 +1,9 @@
 ---
 id: fouducinema
 name: Fou-Du-Cinema
-description: "Fou-Du-Cinema (FdC) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Fou-Du-Cinema (FdC) is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-fr
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://fou-du-cinema.net/
@@ -13,27 +13,38 @@ caps:
     # when refreshing categories dont forget to update the category case block
     - {id: 65, cat: TV/Documentary, desc: "Documentaires Divers"}
     - {id: 66, cat: TV/Documentary, desc: "Documentaires audio"}
-    - {id: 2, cat: Movies/DVD, desc: "Film DVD"}
-    - {id: 4, cat: Movies/HD, desc: "Film 1080P"}
-    - {id: 15, cat: Movies/BluRay, desc: "Film Bluray"}
-    - {id: 16, cat: Movies/WEB-DL, desc: "Film Web"}
-    - {id: 17, cat: Movies/Other, desc: "Film Iso"}
-    - {id: 19, cat: Movies/HD, desc: "Film 720P"}
-    - {id: 59, cat: Movies/Other, desc: "Film Divers"}
-    - {id: 67, cat: Movies/Other, desc: "Film Vob"}
+    - {id: 74, cat: Books/EBook, desc: "Documentaires Ebook"}
+    - {id: 75, cat: Audio/Audiobook, desc: "Documentaires Ebook audio"}
+    - {id: 81, cat: TV/Anime, desc: "Animation Séries"}
+    - {id: 79, cat: Movies/HD, desc: "Animation Film"}
+    - {id: 2, cat: Movies/DVD, desc: "Film DVDRip"}
+    - {id: 87, cat: Movies/HD, desc: "Film REMUX"}
+    - {id: 70, cat: Movies/BluRay, desc: "Film BRRiP - BDRiP"}
     - {id: 69, cat: Movies/DVD, desc: "Film DVD-r"}
-    - {id: 46, cat: TV/HD, desc: "Série 1080P"}
-    - {id: 48, cat: TV/HD, desc: "Série Bluray"}
-    - {id: 60, cat: TV/Other, desc: "Série Divers"}
-    - {id: 12, cat: TV/Other, desc: "Série DVDRip"}
-    - {id: 30, cat: TV/HD, desc: "Série 720P"}
-    - {id: 23, cat: TV/WEB-DL, desc: "Série Web"}
-    - {id: 44, cat: TV/HD, desc: "Pack Séries 1080P"}
-    - {id: 38, cat: TV/Other, desc: "Pack Séries intégrale"}
-    - {id: 41, cat: TV/WEB-DL, desc: "Pack Séries Web"}
-    - {id: 45, cat: TV/HD, desc: "Pack Séries 720P"}
-    - {id: 63, cat: TV/Other, desc: "Pack Séries Divers"}
-    - {id: 10, cat: XXX, desc: "XxX Film"}
+    - {id: 67, cat: Movies/Other, desc: "Film Vob"}
+    - {id: 59, cat: Movies/Other, desc: "Film Divers"}
+    - {id: 19, cat: Movies/HD, desc: "Film 720P"}
+    - {id: 17, cat: Movies/Other, desc: "Film Iso"}
+    - {id: 16, cat: Movies/WEB-DL, desc: "Film Webrip - HDrip"}
+    - {id: 15, cat: Movies/BluRay, desc: "Film Bluray Full"}
+    - {id: 4, cat: Movies/HD, desc: "Film 1080P"}
+    - {id: 86, cat: Movies/UHD, desc: "Film UHD"}
+    - {id: 46, cat: TV/HD, desc: "Serie 1080P"}
+    - {id: 48, cat: TV/HD, desc: "Serie Bluray"}
+    - {id: 60, cat: TV/Other, desc: "Serie Divers"}
+    - {id: 72, cat: TV/HD, desc: "Serie BRRiP - BDRiP"}
+    - {id: 73, cat: TV/HD, desc: "Serie BRRiP - BDRiP"}
+    - {id: 12, cat: TV/Other, desc: "Serie DVDRip"}
+    - {id: 30, cat: TV/HD, desc: "Serie 720P"}
+    - {id: 23, cat: TV/WEB-DL, desc: "Serie Web"}
+    - {id: 44, cat: TV/HD, desc: "Pack_Series 1080P"}
+    - {id: 38, cat: TV/Other, desc: "Pack_Series intégrale"}
+    - {id: 41, cat: TV/WEB-DL, desc: "Pack_Series Web"}
+    - {id: 45, cat: TV/HD, desc: "Pack_Series 720P"}
+    - {id: 63, cat: TV/Other, desc: "Pack_Series Divers"}
+    - {id: 71, cat: TV/HD, desc: "Pack_Series BRRiP - BDRiP"}
+    - {id: 82, cat: TV/Anime, desc: "Pack_Series Animation"}
+    - {id: 10, cat: XXX, desc: "XxX 18 Film"}
     - {id: 13, cat: PC/0day, desc: "Apps Win"}
     - {id: 14, cat: PC/Mac, desc: "Apps Mac"}
     - {id: 52, cat: PC/Mobile-iOS, desc: "Apps Iphone"}
@@ -145,26 +156,37 @@ search:
       case:
         ":contains(\"Documentaires\"):contains(\"Divers\")": 65
         ":contains(\"Documentaires\"):contains(\"audio\")": 66
-        ":contains(\"Film\"):contains(\"DVD\")": 2
-        ":contains(\"Film\"):contains(\"1080P\")": 4
-        ":contains(\"Film\"):contains(\"Bluray\")": 15
-        ":contains(\"Film\"):contains(\"Web\")": 16
-        ":contains(\"Film\"):contains(\"Iso\")": 17
-        ":contains(\"Film\"):contains(\"720P\")": 19
-        ":contains(\"Film\"):contains(\"Divers\")": 59
-        ":contains(\"Film\"):contains(\"Vob\")": 67
+        ":contains(\"Documentaires\"):contains(\"Ebook\")": 74
+        ":contains(\"Documentaires\"):contains(\"Ebook audio\")": 75
+        ":contains(\"Animation\"):contains(\"Séries\")": 81
+        ":contains(\"Animation\"):contains(\"Film\")": 79
+        ":contains(\"Film\"):contains(\"DVDRip\")": 2
+        ":contains(\"Film\"):contains(\"REMUX\")": 87
+        ":contains(\"Film\"):contains(\"BRRiP - BDRiP\")": 70
         ":contains(\"Film\"):contains(\"DVD-r\")": 69
-        ":contains(\"Série\"):contains(\"1080P\")": 46
-        ":contains(\"Série\"):contains(\"Bluray\")": 48
-        ":contains(\"Série\"):contains(\"Divers\")": 60
-        ":contains(\"Série\"):contains(\"DVDRip\")": 12
-        ":contains(\"Série\"):contains(\"720P\")": 30
-        ":contains(\"Série\"):contains(\"Web\")": 23
-        ":contains(\"Séries\"):contains(\"1080P\")": 44
-        ":contains(\"Séries\"):contains(\"intégrale\")": 38
-        ":contains(\"Séries\"):contains(\"Web\")": 41
-        ":contains(\"Séries\"):contains(\"720P\")": 45
-        ":contains(\"Séries\"):contains(\"Divers\")": 63
+        ":contains(\"Film\"):contains(\"Vob\")": 67
+        ":contains(\"Film\"):contains(\"Divers\")": 59
+        ":contains(\"Film\"):contains(\"720P\")": 19
+        ":contains(\"Film\"):contains(\"Iso\")": 17
+        ":contains(\"Film\"):contains(\"Webrip\")": 16
+        ":contains(\"Film\"):contains(\"Bluray\")": 15
+        ":contains(\"Film\"):contains(\"1080P\")": 4
+        ":contains(\"Film\"):contains(\"UHD\")": 86
+        ":contains(\"Serie\"):contains(\"1080P\")": 46
+        ":contains(\"Serie\"):contains(\"Bluray\")": 48
+        ":contains(\"Serie\"):contains(\"Divers\")": 60
+        ":contains(\"Serie\"):contains(\"BRRiP - BDRiP\")": 72
+        ":contains(\"Serie\"):contains(\"BRRiP - BDRiP\")": 73
+        ":contains(\"Serie\"):contains(\"DVDRip\")": 12
+        ":contains(\"Serie\"):contains(\"720P\")": 30
+        ":contains(\"Serie\"):contains(\"Web\")": 23
+        ":contains(\"Pack_Series\"):contains(\"1080P\")": 44
+        ":contains(\"Pack_Series\"):contains(\"intégrale\")": 38
+        ":contains(\"Pack_Series\"):contains(\"Web\")": 41
+        ":contains(\"Pack_Series\"):contains(\"720P\")": 45
+        ":contains(\"Pack_Series\"):contains(\"Divers\")": 63
+        ":contains(\"Pack_Series\"):contains(\"BRRiP - BDRiP\")": 71
+        ":contains(\"Pack_Series\"):contains(\"Animation\")": 82
         ":contains(\"XxX\"):contains(\"Film\")": 10
         ":contains(\"Apps\"):contains(\"Win\")": 13
         ":contains(\"Apps\"):contains(\"Mac\")": 14
@@ -199,6 +221,9 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
+    poster:
+      selector: img
+      attribute: src
     download:
       selector: a[href^="details.php?id="]
       attribute: href

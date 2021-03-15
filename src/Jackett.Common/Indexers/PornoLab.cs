@@ -33,7 +33,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public PornoLab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public PornoLab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "pornolab",
                    name: "PornoLab",
                    description: "PornoLab is a Semi-Private Russian site for Adult content",
@@ -43,6 +44,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataPornolab())
         {
             Encoding = Encoding.GetEncoding("windows-1251");
@@ -289,7 +291,7 @@ namespace Jackett.Common.Indexers
                         var seederString = Row.QuerySelector("td:nth-child(7) b").TextContent;
                         var seeders = string.IsNullOrWhiteSpace(seederString) ? 0 : ParseUtil.CoerceInt(seederString);
 
-                        var timestr = Row.QuerySelector("td:nth-child(10) u").TextContent;
+                        var timestr = Row.QuerySelector("td:nth-child(11) u").TextContent;
                         var forum = qForumLink;
                         var forumid = forum.GetAttribute("href").Split('=')[1];
                         var title = configData.StripRussianLetters.Value

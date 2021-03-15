@@ -2,12 +2,12 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 16
+  minorVersion: 17
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
-  netCoreFramework: netcoreapp3.1
-  netCoreSdkVersion: 3.1.x
+  netCoreFramework: net5.0
+  netCoreSdkVersion: 5.0.x
   # system.debug: true
 
 trigger:
@@ -110,7 +110,7 @@ stages:
               projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Service (Windows only)
@@ -120,7 +120,7 @@ stages:
               projects: 'src/Jackett.Service/Jackett.Service.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: CopyFiles@2
             displayName: Copy Jackett Server
@@ -301,14 +301,14 @@ stages:
               targetType: inline
               failOnStderr: true
               script: |
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/DateTimeRoutines
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Common
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.IntegrationTests
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Server
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Service
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Test
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Tray
-                dotnet-format --dry-run --check --verbosity diagnostic --folder ./src/Jackett.Updater
+                dotnet-format --check --verbosity diagnostic --folder ./src/DateTimeRoutines
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Common
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.IntegrationTests
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Server
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Service
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Test
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Tray
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Updater
 
       - job: Linting_YAML
         displayName: Linting YAML
@@ -368,7 +368,7 @@ stages:
               buildDescription: Linux ARM64
               imageName: ubuntu-latest
               framework: $(netCoreFramework)
-              runtime: linux-arm64
+              runtime: linux-arm
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}

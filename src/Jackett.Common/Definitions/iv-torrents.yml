@@ -137,10 +137,10 @@ caps:
     - {id: 729, cat: Other, desc: " |- Работа со звуком"}
     - {id: 766, cat: Other, desc: " |- ZBrush"}
     - {id: 473, cat: Other, desc: " |- Работа с видео"}
-    - {id: 426, cat: Other, desc: " |- Autodesk 3ds Max"}
-    - {id: 425, cat: Other, desc: " |- Adobe Photoshop"}
-    - {id: 427, cat: Other, desc: " |- Инженерные и научные программы (видеоуроки)"}
-    - {id: 424, cat: Other, desc: " |- WEB, SMM, SEO, интернет-маркетинг"}
+    - {id: 726, cat: Other, desc: " |- Autodesk 3ds Max"}
+    - {id: 725, cat: Other, desc: " |- Adobe Photoshop"}
+    - {id: 727, cat: Other, desc: " |- Инженерные и научные программы (видеоуроки)"}
+    - {id: 724, cat: Other, desc: " |- WEB, SMM, SEO, интернет-маркетинг"}
     - {id: 472, cat: Other, desc: " |- Веб-дизайн, Программирование"}
     - {id: 474, cat: Other, desc: " |- Компьютерные сети и безопасность"}
     # Игры Games

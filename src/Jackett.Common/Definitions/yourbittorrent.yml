@@ -41,14 +41,14 @@ search:
   inputs:
     v: ""
     c: ""
-    q: "{{ .Keywords }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "-"]
     - name: tolower
 
   rows:
-    selector: tr.table-default
+    selector: tr.table-default:has(a[href^="/torrent/"])
     filters:
       - name: andmatch
 

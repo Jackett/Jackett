@@ -46,7 +46,7 @@ namespace Jackett.Tray
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
             logger = LogManager.GetCurrentClassLogger();
 
-            logger.Info("Starting Jackett Tray v" + EnvironmentUtil.JackettVersion);
+            logger.Info("Starting Jackett Tray " + EnvironmentUtil.JackettVersion());
 
             processService = new ProcessService(logger);
             windowsService = new WindowsServiceConfigService(processService, logger);
@@ -73,7 +73,7 @@ namespace Jackett.Tray
                 StartConsoleApplication();
             }
 
-            updatedVersion = updatedVersion.Equals("yes", StringComparison.OrdinalIgnoreCase) ? EnvironmentUtil.JackettVersion : updatedVersion;
+            updatedVersion = updatedVersion.Equals("yes", StringComparison.OrdinalIgnoreCase) ? EnvironmentUtil.JackettVersion() : updatedVersion;
 
             if (!string.IsNullOrWhiteSpace(updatedVersion))
             {
@@ -261,9 +261,7 @@ namespace Jackett.Tray
 
         private void StartConsoleApplication()
         {
-            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-
-            var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
+            var exePath = Path.Combine(EnvironmentUtil.JackettInstallationPath(), "JackettConsole.exe");
 
             var startInfo = new ProcessStartInfo()
             {

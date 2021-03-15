@@ -33,7 +33,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public BB(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public BB(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "bb",
                    name: "bB",
                    description: "bB is a Private Torrent Tracker for 0DAY / GENERAL",
@@ -61,6 +62,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;

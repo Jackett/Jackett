@@ -24,7 +24,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLoginWith2FA configData => (ConfigurationDataBasicLoginWith2FA)base.configData;
 
-        public Nebulance(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l, IProtectionService ps)
+        public Nebulance(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "nebulance",
                    name: "Nebulance",
                    description: "At Nebulance we will change the way you think about TV",
@@ -40,6 +41,7 @@ namespace Jackett.Common.Indexers
                    client: c,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWith2FA(@"If 2FA is disabled, let the field empty.
  We recommend to disable 2FA because re-login will require manual actions.
 <br/>For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
@@ -89,12 +91,16 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
+            var searchTerm = query.GetQueryString();
+            if (!string.IsNullOrWhiteSpace(searchTerm)) // remove some characters
+                searchTerm = Regex.Replace(searchTerm, @"[-._]", " ");
+
             var qc = new NameValueCollection
             {
                 {"action", "basic"},
                 {"order_by", "time"},
                 {"order_way", "desc"},
-                {"searchtext", query.GetQueryString()}
+                {"searchtext", searchTerm}
             };
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
@@ -126,7 +132,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     var posterStr = row.QuerySelector("img")?.GetAttribute("src");
-                    var poster = !string.IsNullOrWhiteSpace(posterStr) ? new Uri(posterStr) : null;
+                    Uri.TryCreate(posterStr, UriKind.Absolute, out var poster);
 
                     var details = new Uri(SiteLink + row.QuerySelector("a[data-src]").GetAttribute("href"));
                     var link = new Uri(SiteLink + row.QuerySelector("a[href*='action=download']").GetAttribute("href"));

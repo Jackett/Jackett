@@ -6,7 +6,9 @@ language: hu-hu
 type: semi-private
 encoding: ISO-8859-2
 links:
-  - http://ztracker.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://ztracker.cc/ # site does not support https invalid certificate
+legacylinks:
+  - http://ztracker.org/
 
 caps:
   categorymappings:
@@ -79,8 +81,9 @@ settings:
       asc: asc
 
 login:
-  path: belepes.php
+  path: login.php
   method: form
+  form: form[action="takelogin.php"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
@@ -164,6 +167,11 @@ search:
       case:
         img[src="./pic/x2.gif"]: 2
         "*": 1
+    minimumratio:
+      text: 0.8
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
     date:
       selector: td:nth-child(2)
       remove: a, img

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -18,7 +19,9 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AniLibria : BaseWebIndexer
     {
-        public AniLibria(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]?\d{1,4}){1,2}$");
+
+        public AniLibria(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(id: "AniLibria",
                    name: "AniLibria",
                    description: "AniLibria is a Public torrent tracker for anime, voiced on russian by AniLibria team",
@@ -34,6 +37,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAniLibria())
         {
             Encoding = Encoding.UTF8;
@@ -65,17 +69,18 @@ namespace Jackett.Common.Indexers
 
         private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
+            var title = _EpisodeRegex.Replace(query.SearchTerm, string.Empty).TrimEnd();
             var queryParameters = new NameValueCollection
             {
-                { "search", query.SearchTerm },
-                { "filter", "names,poster.url,code,torrents.list,season.year" }
+                { "filter", "names,poster.url,code,torrents.list,season.year" },
+                { "limit", "100" }
             };
-            var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString());
+            var response = await RequestWithCookiesAndRetryAsync(Configuration.ApiLink.Value + "/searchTitles?" + queryParameters.GetQueryString() + "&search=" + Uri.EscapeDataString(title));
             if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"AniLibria search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             var results = ParseApiResults(response.ContentString);
-            return results.Where(release => query.MatchQueryStringAND(release.Title));
+            return results.Where(release => query.MatchQueryStringAND(release.Title, null, title));;
         }
 
         private async Task<IEnumerable<ReleaseInfo>> FetchNewReleases()

@@ -103,12 +103,12 @@ search:
         - name: regexp
           args: "/categories/(\\d+)"
     title:
-      selector: a.view-torrent
+      selector: a[href*="/torrents/"]
     download:
       selector: a[href*="/download/"]
       attribute: href
     details:
-      selector: a.view-torrent
+      selector: a[href*="/torrents/"]
       attribute: href
     poster:
       selector: div.torrent-poster img
@@ -193,4 +193,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# UNIT3D 4.0.0b
+# UNIT3D 5.1.0b

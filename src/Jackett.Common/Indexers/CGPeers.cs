@@ -14,7 +14,8 @@ namespace Jackett.Common.Indexers
             "https://www.cgpeers.com/"
         };
 
-        public CGPeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public CGPeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "cgpeers",
                    name: "CGPeers",
                    description: "CGPeers is a Private Torrent Tracker for GRAPHICS SOFTWARE / TUTORIALS / ETC",
@@ -24,6 +25,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true)
         {
             Language = "en-us";

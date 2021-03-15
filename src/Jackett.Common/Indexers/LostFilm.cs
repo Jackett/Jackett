@@ -26,6 +26,10 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilm.tv/"
         };
 
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://www.lostfilm.run/",
+            "https://www.lostfilm.uno/"
+ };
         private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -93,7 +97,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public LostFilm(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public LostFilm(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "lostfilm",
                    name: "LostFilm.tv",
                    description: "Unique portal about foreign series",
@@ -112,6 +117,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.UTF8;

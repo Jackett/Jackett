@@ -6,16 +6,18 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.la/
-legacylinks:
   - https://torrentparadise.org/
-  - https://torrentparadise.cl/
+legacylinks:
   - https://torrentparadise.to/
+  - https://torrentparadise.cc/
+  - https://torrentparadise.la/
+  - https://torrentparadise.cl/
 
 caps:
   categories:
     "": Other
     ADULT: XXX
+    ADULTHENTAI: XXX
     ADULTLATINA: XXX
     ADULTMILF: XXX
     ADULTHDMOVIES: XXX
@@ -24,6 +26,7 @@ caps:
     ANDROID: PC
     ANIME: TV/Anime
     ANIMEDUBBEDSUBBED: TV/Anime
+    ANIMEOTHERS: TV/Anime
     APPLICATIONS: PC
     APPLICATIONSANDROID: PC
     APPLICATIONSHANDHELD: PC/Mobile-Other
@@ -55,6 +58,7 @@ caps:
     BOOKSMAGAZINES: Books/Mags
     BOOKSNONFICTION: Books
     BOOKSTEXTBOOKS: Books
+    BOOKSTUTORIALS: Books
     COMICSNEM43COMICS: Books/Comics
     DESIPORN: XXX
     DOCUMENTARIES: TV/Documentary
@@ -78,6 +82,7 @@ caps:
     GAMESWINDOWS: PC/Games
     GAMESXBOX: Console/XBox
     GAMESXBOX360: Console/XBox 360
+    HDMOVIES: Movies/HD
     IMAGES: Other
     JAPANESEANIME: TV/Anime
     JUEGOS: Console
@@ -94,6 +99,8 @@ caps:
     MISCELLANEOUS: Other
     MOBILE: PC/Mobile-Other
     MOVIES: Movies
+    MOVIES3D: Movies/3D
+    MOVIESACTION: Movies
     MOVIESBLURAYDISCREMUX: Movies/HD
     MOVIESBOLLYWOOD: Movies
     MOVIESCAMTS: Movies
@@ -105,11 +112,14 @@ caps:
     MOVIESHD720P: Movies/HD
     MOVIESHD1080P: Movies/HD
     MOVIESHEVCX265: Movies/HD
+    MOVIESHIGHRESMOVIES: Movies/HD
+    MOVIESSCIFI: Movies
     MOVIESSPANISHLANGUAGE: Movies
     MOVIESSPANISHLATINAMERICA: Movies
     MOVIESULTRAHD4K: Movies/UHD
     MOVIESX264H264: Movies/HD
     MOVIESXVID: Movies/SD
+    MOVIESWEBRIPX264X265: Movies/HD
     MP3: Audio/MP3
     MP3MUSIC: Audio/MP3
     MSICA: Other
@@ -126,6 +136,7 @@ caps:
     OTHEROTHER: Other
     OTHERPICTURES: Other
     OTHERSOUNDCLIPS: Other
+    PACKS: TV
     PELICULASCVCD: TV/SD
     PELICULASDIVX: TV/SD
     PELICULASHDRIP: TV/HD
@@ -144,6 +155,7 @@ caps:
     SOFTWAREANDROID: PC/Mobile-Android
     SOFTWAREMAC: PC/Mac
     SOFTWAREWINDOWS: PC/0day
+    SOTFTWARE: PC
     SPORTS: TV/Sport
     TVHDSPORTS: TV/Sport
     TUTORIALS: Other

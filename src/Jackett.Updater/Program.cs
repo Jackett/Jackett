@@ -36,7 +36,7 @@ namespace Jackett.Updater
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
             logger = LogManager.GetCurrentClassLogger();
 
-            logger.Info("Jackett Updater v" + GetCurrentVersion());
+            logger.Info("Jackett Updater " + EnvironmentUtil.JackettVersion());
             logger.Info("Options \"" + string.Join("\" \"", args) + "\"");
 
             var variants = new Variants();
@@ -76,13 +76,6 @@ namespace Jackett.Updater
             {
                 logger.Error($"Exception applying update!\n{e}");
             }
-        }
-
-        private string GetCurrentVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.FileVersion;
         }
 
         private void KillPids(int[] pids)
@@ -135,7 +128,7 @@ namespace Jackett.Updater
 
         private void ProcessUpdate(UpdaterConsoleOptions options)
         {
-            var updateLocation = GetUpdateLocation();
+            var updateLocation = EnvironmentUtil.JackettInstallationPath();
             if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
                 updateLocation += Path.DirectorySeparatorChar;
 
@@ -262,6 +255,7 @@ namespace Jackett.Updater
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Definitions/32pages.yml",
+                "Definitions/3evils.yml",
                 "Definitions/420files.yml",
                 "Definitions/academictorrents.yml",
                 "Definitions/alein.yml",
@@ -270,12 +264,16 @@ namespace Jackett.Updater
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
                 "Definitions/archetorrent.yml",
+                "Definitions/asgaard.yml",
                 "Definitions/asiandvdclub.yml",
+                "Definitions/ast4u.yml", // renamed to animeworld #10578
+                "Definitions/audiobooktorrents.yml", // renamed to abtorrents
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
                 "Definitions/badasstorrents.yml", // to be migrated to c#
                 "Definitions/bithq.yml",
+                "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
@@ -283,17 +281,21 @@ namespace Jackett.Updater
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
                 "Definitions/bteye.yml",
+                "Definitions/btgigs.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
+                "Definitions/channelx.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cinefilhd.yml",
+                "Definitions/cooltorrent.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
+                "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
@@ -303,26 +305,32 @@ namespace Jackett.Updater
                 "Definitions/elittracker.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/estrenosdtl.yml",
+                "Definitions/ethor.yml",
                 "Definitions/evolutionpalace.yml",
-                "Definitions/extratorrent-ag.yml",
                 "Definitions/exoticaz.yml", // migrated to C#
+                "Definitions/extratorrent-ag.yml",
                 "Definitions/extratorrentclone.yml",
-                "Definitions/feedurneed.yml",
                 "Definitions/filmsclub.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
+                "Definitions/fullmixmusic.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/greeklegends.yml",
+                "Definitions/hachede.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hd4free.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
                 "Definitions/hdclub.yml",
+                "Definitions/hddisk.yml",
                 "Definitions/hdplus.yml",
+                "Definitions/hdreactor.yml", // renamed to hdhouse
+                "Definitions/hdstreet.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
+                "Definitions/horrorsite.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
@@ -334,19 +342,25 @@ namespace Jackett.Updater
                 "Definitions/katcrs.yml",
                 "Definitions/kaztorka.yml",
                 "Definitions/kickasstorrent.yml",
+                "Definitions/kickasstorrent-kathow.yml", // renamed to kickasstorrents-ws
                 "Definitions/kikibt.yml",
                 "Definitions/korsar.yml",
-                "Definitions/liaorencili.yml",
                 "Definitions/lapausetorrents.yml",
+                "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
+                "Definitions/liaorencili.yml", // renamed to cilipro
+                "Definitions/magnetdl.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/megabliz.yml",
                 "Definitions/metal-iplay-ro.yml", // renamed to romanianmetaltorrents
                 "Definitions/mkvcage.yml",
                 "Definitions/moecat.yml",
+                "Definitions/monova.yml",
+                "Definitions/movcr.yml",
+                "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
@@ -355,14 +369,17 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/onlineselfeducation.yml",
+                "Definitions/onlyscene.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pt99.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
                 "Definitions/rapidetracker.yml",
-                "Definitions/rarbg.yml",
+                "Definitions/rarbg.yml", // migrated to C#
                 "Definitions/redtopia.yml",
+                "Definitions/retroflix.yml", // migrated to C#
                 "Definitions/rgu.yml",
                 "Definitions/rns.yml", // site merged with audiobooktorrents
                 "Definitions/rockethd.yml",
@@ -375,29 +392,39 @@ namespace Jackett.Updater
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/seedpeer.yml",
                 "Definitions/sharespacedb.yml",
+                "Definitions/shareuniversity.yml",
                 "Definitions/sharingue.yml",
                 "Definitions/skytorrents.yml",
+                "Definitions/skytorrents-lol.yml",
+                "Definitions/skytorrentsclone.yml", // renamed to skytorrents-lol
+                "Definitions/skytorrentsclone2.yml", // renamed to skytorrents-to
                 "Definitions/solidtorrents.yml", // migrated to C#
                 "Definitions/soundpark.yml", // to be migrated to C#
+                "Definitions/spacetorrent.yml",
                 "Definitions/speed-share.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
+                "Definitions/takeabyte.yml",
                 "Definitions/tazmaniaden.yml",
+                "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
                 "Definitions/tfile.yml",
+                "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
+                "Definitions/thepiratebay.yml", // migrated to c#
                 "Definitions/theresurrection.yml",
                 "Definitions/thetorrents.yml",
-                "Definitions/the-madhouse.yml",
-                "Definitions/thepiratebay.yml", // migrated to c#
                 "Definitions/theunknown.yml", // became 3evils #9678
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/topnow.yml",
+                "Definitions/torrentbomb.yml",
                 "Definitions/torrentcouch.yml",
+                "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
                 "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
+                "Definitions/torrentquest.yml",
                 "Definitions/torrentrex.yml",
                 "Definitions/torrentseed.yml", // renamed to latinop2p #9065
                 "Definitions/torrentseeds.yml", // migrated to c#
@@ -416,15 +443,15 @@ namespace Jackett.Updater
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
                 "Definitions/vhstapes.yml",
-                "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/waffles.yml",
+                "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/xfsub.yml",
                 "Definitions/xktorrent.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
-                "Definitions/yourexotic.yml", // renamed to exoticaz.yml
+                "Definitions/yourexotic.yml", // renamed to exoticaz
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
                 "Microsoft.Owin.Host.HttpListener.dll",
@@ -470,7 +497,7 @@ namespace Jackett.Updater
                 {
                     var startInfo = new ProcessStartInfo()
                     {
-                        Arguments = $"--UpdatedVersion \" {EnvironmentUtil.JackettVersion}\"",
+                        Arguments = $"--UpdatedVersion \" {EnvironmentUtil.JackettVersion()}\"",
                         FileName = Path.Combine(options.Path, "JackettTray.exe"),
                         UseShellExecute = true
                     };
@@ -519,7 +546,7 @@ namespace Jackett.Updater
                     if (isWindows)
                     {
                         //User didn't initiate the update from Windows service and wasn't running Jackett via the tray, must have started from the console
-                        startInfo.Arguments = $"/K {startInfo.FileName} {startInfo.Arguments}";
+                        startInfo.Arguments = $"/K \"{startInfo.FileName}\" {startInfo.Arguments}";
                         startInfo.FileName = "cmd.exe";
                         startInfo.CreateNoWindow = false;
                         startInfo.WindowStyle = ProcessWindowStyle.Normal;
@@ -527,7 +554,7 @@ namespace Jackett.Updater
 
                     if (variant == Variants.JackettVariant.Mono)
                     {
-                        startInfo.Arguments = startInfo.FileName + " " + startInfo.Arguments;
+                        startInfo.Arguments = $"\"{startInfo.FileName}\" {startInfo.Arguments}";
                         startInfo.FileName = "mono";
                     }
 
@@ -538,7 +565,7 @@ namespace Jackett.Updater
                         startInfo.CreateNoWindow = true;
                     }
 
-                    logger.Info("Starting Jackett: " + startInfo.FileName + " " + startInfo.Arguments);
+                    logger.Info($"Starting Jackett: \"{startInfo.FileName }\" {startInfo.Arguments}");
                     Process.Start(startInfo);
                 }
             }
@@ -609,15 +636,6 @@ namespace Jackett.Updater
             }
 
             return success;
-        }
-
-        private string GetUpdateLocation()
-        {
-            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-            // https://stackoverflow.com/questions/896572
-            var location = new Uri(Assembly.GetEntryAssembly().GetName().EscapedCodeBase);
-            // Use LocalPath instead of AbsolutePath to avoid needing to unescape Uri format.
-            return new FileInfo(location.LocalPath).DirectoryName;
         }
 
         private string GetJackettConsolePath(string directoryPath)

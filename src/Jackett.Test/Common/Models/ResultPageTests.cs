@@ -20,7 +20,8 @@ namespace Jackett.Test.Common.Models
                    configService: null,
                    logger: null,
                    configData: null,
-                   p: null)
+                   p: null,
+                   cs: null)
         {
         }
 
@@ -47,9 +48,7 @@ namespace Jackett.Test.Common.Models
             var resultPage = new ResultPage(
                 new ChannelInfo // characters in channel info are safe because are provided by us
                 {
-                    Link = link,
-                    ImageUrl = link,
-                    ImageLink = link
+                    Link = link
                 })
                 {
                     Releases = new List<ReleaseInfo>
@@ -74,7 +73,7 @@ namespace Jackett.Test.Common.Models
             var xml = resultPage.ToXml(link);
 
             Assert.AreEqual(5, Regex.Matches(xml, validText).Count);
-            Assert.AreEqual(10, Regex.Matches(xml, validLink).Count);
+            Assert.AreEqual(8, Regex.Matches(xml, validLink).Count);
 
             // this should be in another test but it's here to avoid creating the whole object again
             Assert.True(xml.Contains("Tue, 22 Sep 2020 00:00:00 "));

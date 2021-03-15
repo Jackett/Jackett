@@ -6,8 +6,10 @@ namespace Jackett.Common.Services.Interfaces
 {
     public interface ICacheService
     {
-        void CacheRssResults(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
+        List<ReleaseInfo> Search(IIndexer indexer, TorznabQuery query);
+        void CacheResults(IIndexer indexer, TorznabQuery query, List<ReleaseInfo> releases);
         List<TrackerCacheResult> GetCachedResults();
-        int GetNewItemCount(IIndexer indexer, IEnumerable<ReleaseInfo> releases);
+        void CleanIndexerCache(IIndexer indexer);
+        void CleanCache();
     }
 }

@@ -6,7 +6,9 @@ language: ru-ru
 type: private
 encoding: windows-1251
 links:
-  - https://www.uniongang.net/
+  - http://www.uniongang.net/
+links:
+  - https://www.uniongang.net/ # site is forcing to http
 
 caps:
   categorymappings:
@@ -120,4 +122,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.3
 # engine tbd

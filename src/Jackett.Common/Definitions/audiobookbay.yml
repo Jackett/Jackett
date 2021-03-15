@@ -7,10 +7,16 @@ type: public
 encoding: UTF-8
 links:
   - http://audiobookbay.nl/ # site forces http, does not support https
-  - https://audiobookbay.unblockit.app/
+  - http://audiobookbay.net/
+  - http://audiobookbayabb.com/
+  - https://audiobookbay.unblockit.buzz/
 legacylinks:
   - https://audiobookbay.la/
   - https://audiobookbay.unblockit.lat/
+  - https://audiobookbay.unblockit.app/
+  - https://audiobookbay.unblockit.dev/
+  - https://audiobookbay.unblockit.ltd/
+  - https://audiobookbay.unblockit.link/
 
 caps:
   categorymappings:

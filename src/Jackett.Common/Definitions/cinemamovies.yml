@@ -1,7 +1,7 @@
 ---
 id: cinemamovies
-name: CinemaMovies
-description: "CinemaMovies is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+name: CinemaMovieS_ZT
+description: "CinemaMovieS_ZT is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: pl-pl
 type: private
 encoding: ISO-8859-2
@@ -18,7 +18,7 @@ caps:
     - {id: 12, cat: Movies/Other, desc: "Filmy Inne"}
     - {id: 32, cat: Movies/UHD, desc: "Filmy UHD"}
     - {id: 2, cat: TV/Anime, desc: "Anime"}
-    - {id: 2, cat: TV/Documentary, desc: "TV Dokumentalne"}
+    - {id: 10, cat: TV/Documentary, desc: "TV Dokumentalne"}
     - {id: 20, cat: TV, desc: "TV Paczki"}
     - {id: 22, cat: TV/Sport, desc: "TV Sport"}
     - {id: 24, cat: TV/HD, desc: "TV HD"}

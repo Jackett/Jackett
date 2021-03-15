@@ -10,14 +10,15 @@ namespace Jackett.Common.Indexers.Meta
     {
         public AggregateIndexer(IFallbackStrategyProvider fallbackStrategyProvider,
                                 IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
-                                WebClient client, Logger logger, IProtectionService ps)
+                                WebClient client, Logger logger, IProtectionService ps, ICacheService cs)
             : base(id: "all",
                    name: "AggregateSearch",
                    description: "This feed includes all configured trackers",
                    configService: configService,
                    client: client,
                    logger: logger,
-                   p: ps,
+                   ps: ps,
+                   cs: cs,
                    configData: new ConfigurationData(),
                    fallbackStrategyProvider: fallbackStrategyProvider,
                    resultFilterProvider: resultFilterProvider,

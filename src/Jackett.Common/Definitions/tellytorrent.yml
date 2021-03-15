@@ -6,9 +6,11 @@ language: en
 type: private
 encoding: UTF-8
 links:
-  - https://telly.cc/
+  - https://telly.wtf/
 legacylinks:
   - https://tellytorrent.net/
+  - https://telly.cc/
+  - https://telly.to/
 
 caps:
   categorymappings:
@@ -197,4 +199,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-# UNIT3D 4.0.0
+# UNIT3D 5.1.0

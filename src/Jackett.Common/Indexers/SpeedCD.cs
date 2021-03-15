@@ -27,12 +27,14 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://speed.cd/",
-            "https://speed.click/"
+            "https://speed.click/",
+            "https://speeders.me/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "speedcd",
                    name: "Speed.cd",
                    description: "Your home now!",
@@ -60,6 +62,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLogin(
                        @"Speed.Cd have increased their security. If you are having problems please check the security tab
                     in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
@@ -209,7 +212,7 @@ namespace Jackett.Common.Indexers
                         Seeders = seeders,
                         Peers = seeders + leechers,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
+                        MinimumSeedTime = 259200, // 72 hours
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
                     };

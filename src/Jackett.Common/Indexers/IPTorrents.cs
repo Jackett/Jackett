@@ -13,6 +13,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -24,7 +25,7 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://iptorrents.com/",
             "https://www.iptorrents.com/",
-            "https://iptorrents.eu/",
+            "https://iptorrents.me/",
             "https://nemo.iptorrents.com/",
             "https://ipt.getcrazy.me/",
             "https://ipt.findnemo.net/",
@@ -44,12 +45,14 @@ namespace Jackett.Common.Indexers
             "http://ghost.cable-modem.org/",
             "http://logan.unusualperson.com/",
             "https://ipt.rocks/",
-            "http://baywatch.workisboring.com/"
+            "http://baywatch.workisboring.com/",
+            "https://iptorrents.eu/"
         };
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "iptorrents",
                    name: "IPTorrents",
                    description: "Always a step ahead.",
@@ -77,11 +80,14 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            configData.AddDynamic("freeleech", new BoolItem { Name = "Search freeleech only", Value = false });
 
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");
@@ -190,6 +196,9 @@ namespace Jackett.Common.Indexers
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 qc.Add(cat, string.Empty);
+
+            if (((BoolItem)configData.GetDynamic("freeleech")).Value)
+                qc.Add("free", "on");
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);

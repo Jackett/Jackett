@@ -11,8 +11,6 @@ namespace Jackett.Common.Models.Config
 
         public string ClientOverride { get; set; }
 
-        public string ProxyConnection { get; set; }
-
         public bool? IgnoreSslErrors { get; set; }
 
         public string CustomDataFolder { get; set; }
@@ -39,7 +37,7 @@ namespace Jackett.Common.Models.Config
 
                 if (System.Environment.OSVersion.Platform == PlatformID.Unix)
                 {
-                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create), "Jackett");
                 }
                 else
                 {

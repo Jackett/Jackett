@@ -30,7 +30,7 @@ namespace Jackett.Service
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
             logger = LogManager.GetCurrentClassLogger();
 
-            logger.Info("Initiating Jackett Service v" + EnvironmentUtil.JackettVersion);
+            logger.Info("Initiating Jackett Service " + EnvironmentUtil.JackettVersion());
 
             processService = new ProcessService(logger);
         }
@@ -51,11 +51,7 @@ namespace Jackett.Service
 
         private void StartConsoleApplication()
         {
-            // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-            // https://stackoverflow.com/questions/896572
-            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
-
-            var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
+            var exePath = Path.Combine(EnvironmentUtil.JackettInstallationPath(), "JackettConsole.exe");
 
             var startInfo = new ProcessStartInfo()
             {

@@ -139,6 +139,8 @@ namespace Jackett.Server.Services
 
                 logger.Info($"Using proxy: {config.ProxyType}");
 
+                logger.Info("Using FlareSolverr: " + (string.IsNullOrEmpty(config.FlareSolverrUrl) ? "No" : config.FlareSolverrUrl));
+
                 var monotype = Type.GetType("Mono.Runtime");
                 if (monotype != null && !DotNetCoreUtil.IsRunningOnDotNetCore)
                 {
@@ -289,7 +291,7 @@ namespace Jackett.Server.Services
                 if (compiledData < DateTime.Now.AddMonths(-3))
                 {
                     var version = configService.GetVersion();
-                    var notice = $"Your version of Jackett v{version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
+                    var notice = $"Your version of Jackett {version} is very old. Multiple indexers are likely to fail when using an old version. Update to the latest version of Jackett.";
                     notices.Add(notice);
                     logger.Error(notice);
                 }

@@ -35,14 +35,18 @@ caps:
     - {id: "/games/ps3/", cat: Console/PS3, desc: "Games PS3"}
     - {id: "/games/ps4/", cat: Console/PS4, desc: "Games PS4"}
     - {id: "/games/psp/", cat: Console/PSP, desc: "Games PSP"}
+    - {id: "/games/switch/", cat: Console/Other, desc: "Games Switch"}
     - {id: "/games/wii/", cat: Console/Wii, desc: "Games Wii"}
     - {id: "/games/xbox360/", cat: Console/XBox 360, desc: "Games Xbox360"}
     - {id: "/movies/", cat: Movies, desc: Movies}
     - {id: "/movies/3d-movies/", cat: Movies/3D, desc: "Movies 3D"}
     - {id: "/movies/bollywood/", cat: Movies, desc: "Movies Bollywood"}
+    - {id: "/movies/documentary/", cat: Movies, desc: "Movies Documentary"}
     - {id: "/movies/dubbed-movies/", cat: Movies, desc: "Movies Dubbed"}
+    - {id: "/movies/dvd/", cat: Movies/DVD, desc: "Movies DVD"}
     - {id: "/movies/highres-movies/", cat: Movies/HD, desc: "Movies Highres"}
     - {id: "/movies/mp4/", cat: Movies, desc: "Movies MP4"}
+    - {id: "/movies/other-movies/", cat: Movies, desc: "Movies Other Movies"}
     - {id: "/movies/ultrahd/", cat: Movies/UHD, desc: "Movies UltraHD"}
     - {id: "/music/", cat: Audio, desc: Music}
     - {id: "/music/aac/", cat: Audio, desc: "Music AAC"}
@@ -52,6 +56,13 @@ caps:
     - {id: "/music/radio-shows/", cat: Audio, desc: "Music Radio Shows"}
     - {id: "/other/", cat: Other, desc: Other}
     - {id: "/tv/", cat: TV, desc: TV}
+    - {id: "/xxx/", cat: XXX, desc: XXX}
+    - {id: "/xxx/games/", cat: XXX/Other, desc: "XXX Games"}
+    - {id: "/xxx/hentai/", cat: XXX/Other, desc: "XXX Hentai"}
+    - {id: "/xxx/magazines/", cat: XXX/Other, desc: "XXX Magazines"}
+    - {id: "/xxx/pictures/", cat: XXX/ImageSet, desc: "XXX Pictures"}
+    - {id: "/xxx/video/", cat: XXX, desc: "XXX Video"}
+    - {id: "/video/", cat: XXX, desc: "XXX Video"}
 
   modes:
     search: [q]
@@ -76,7 +87,10 @@ settings:
     options:
       desc: desc
       asc: asc
-
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 download:
   selector: a[href^="magnet:?xt="]
@@ -88,6 +102,10 @@ search:
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/2/&{{ else }}latest/2/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/3/&{{ else }}latest/3/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/4/&{{ else }}latest/4/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
+
+  headers:
+    # site presents hcaptcha challenge for Jackett's User-Agent, so slightly alter it here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
 
   rows:
     selector: table.table-striped > tbody > tr

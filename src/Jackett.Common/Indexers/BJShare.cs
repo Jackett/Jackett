@@ -60,7 +60,8 @@ namespace Jackett.Common.Indexers
             {"greys anatomy", "grey's anatomy"}
         };
 
-        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             :  base(id: "bjshare",
                     name: "BJ-Share",
                     description: "A brazilian tracker.",
@@ -88,6 +89,7 @@ namespace Jackett.Common.Indexers
                     client: wc,
                     logger: l,
                     p: ps,
+                    cacheService: cs,
                     configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
@@ -139,8 +141,8 @@ namespace Jackett.Common.Indexers
 
         private static string InternationalTitle(string title)
         {
-            var match = Regex.Match(title, @".* \[(.*?)\]$");
-            return match.Success ? match.Groups[1].Value : title;
+            var match = Regex.Match(title, @".* \[(.*\/?)\]");
+            return match.Success ? match.Groups[1].Value.Split('/')[0] : title;
         }
 
         private static string StripSearchString(string term, bool isAnime)
@@ -154,7 +156,12 @@ namespace Jackett.Common.Indexers
 
         private string ParseTitle(string title, string seasonEp, string year, string categoryStr)
         {
+            // Removes the SxxExx if it comes on the title
             var cleanTitle = _EpisodeRegex.Replace(title, string.Empty);
+            // Removes the year if it comes on the title
+            // The space is added because on daily releases the date will be XX/XX/YYYY
+            if(!string.IsNullOrEmpty(year))
+                cleanTitle = cleanTitle.Replace(" " + year, string.Empty);
             cleanTitle = Regex.Replace(cleanTitle, @"^\s*|[\s-]*$", string.Empty);
 
             // Get international title if available, or use the full title if not
@@ -167,13 +174,14 @@ namespace Jackett.Common.Indexers
             }
 
             // do not include year to animes
-            if (categoryStr == "14")
+            if (categoryStr == "14" || cleanTitle.Contains(year))
                 cleanTitle += " " + seasonEp;
             else
                 cleanTitle += " " + year + " " + seasonEp;
 
             cleanTitle = FixAbsoluteNumbering(cleanTitle);
             cleanTitle = FixNovelNumber(cleanTitle);
+            cleanTitle = cleanTitle.Trim();
             return cleanTitle;
         }
 
@@ -183,22 +191,6 @@ namespace Jackett.Common.Indexers
                 if (title.ToLower().Contains(absoluteTitle.ToLower()))
                     return true;
             return false;
-        }
-
-        private string FixYearPosition(string title, string year)
-        {
-            var index = title.LastIndexOf('-');
-            // If its a series
-            if (index != -1)
-            {
-                title = title.Substring(0, index) + year + " " + title.Substring(index + 1);
-            }
-            else
-            {
-                title += " " + year;
-            }
-
-            return title;
         }
 
         private string FixNovelNumber(string title)
@@ -468,8 +460,8 @@ namespace Jackett.Common.Indexers
                         var qFreeLeech = row.QuerySelector("font[color=\"green\"]:contains(Free)");
                         var qTitle = qDetailsLink.QuerySelector("font");
                         // Get international title if available, or use the full title if not
-                        release.Title = Regex.Replace(qTitle.TextContent, @".* \[(.*?)\](.*)", "$1$2");
-                        var seasonEp = _EpisodeRegex.Match(qTitle.TextContent).Value;
+                        release.Title = qTitle.TextContent;
+                        var seasonEp = _EpisodeRegex.Match(release.Title).Value;
                         var year = "";
                         release.Description = "";
                         var extraInfo = "";
@@ -521,8 +513,8 @@ namespace Jackett.Common.Indexers
                         }
 
                         var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                        if (!string.IsNullOrEmpty(year))
-                            release.Title = ParseTitle(release.Title, seasonEp, year, catStr);
+
+                        release.Title = ParseTitle(release.Title, seasonEp, year, catStr);
 
                         if (qQuality != null)
                         {

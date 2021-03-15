@@ -17,6 +17,7 @@ caps:
     - {id: 27, cat: Movies/HD, desc: "MoviesHD"}
     - {id: 29, cat: Movies/SD, desc: "Movies/SD"}
     - {id: 26, cat: Movies/SD, desc: "Movies/XviD"}
+    - {id: 45, cat: Movies, desc: "Movies/Kids"}
     - {id: 41, cat: TV/Foreign, desc: "Foreign tv"}
     - {id: 40, cat: TV, desc: "Mini-Series"}
     - {id: 43, cat: TV/HD, desc: "TV H265"}
@@ -90,7 +91,7 @@ search:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
-    # 0 all 1 onlyfree
+    # 0 all, 1 onlyfree
     filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
     title: "{{ .Keywords }}"
     search_type: 1

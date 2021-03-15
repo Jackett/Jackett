@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -30,7 +31,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationData configData => base.configData;
 
-        public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "rarbg",
                    name: "RARBG",
                    description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
@@ -58,6 +60,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
@@ -104,7 +107,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(53, TorznabCatType.ConsolePS4, "Games/PS4");
             AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
-            _appId = "jackett_v" + EnvironmentUtil.JackettVersion;
+            _appId = "jackett_" + EnvironmentUtil.JackettVersion();
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
@@ -165,7 +168,10 @@ namespace Jackett.Common.Indexers
 
                     var magnetStr = item.Value<string>("download");
                     var magnetUri = new Uri(magnetStr);
+
+                    // #11021 we can't use the magnet link as guid because they are using random ports
                     var infoHash = magnetStr.Split(':')[3].Split('&')[0];
+                    var guid = new Uri(SiteLink + "infohash/" + infoHash);
 
                     // append app_id to prevent api server returning 403 forbidden
                     var details = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
@@ -187,7 +193,7 @@ namespace Jackett.Common.Indexers
                         InfoHash = infoHash,
                         Details = details,
                         PublishDate = publishDate,
-                        Guid = magnetUri,
+                        Guid = guid,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         Size = size,
@@ -280,6 +286,8 @@ namespace Jackett.Common.Indexers
                 var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
+                // sleep 5 seconds to make sure the token is valid in the next request
+                Thread.Sleep(5000);
             }
         }
 

@@ -23,7 +23,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Anidex : BaseWebIndexer
     {
-        public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "anidex",
                    name: "Anidex",
                    description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
@@ -32,13 +33,14 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q
                        }
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
@@ -121,6 +123,8 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
         }
 
+        private string GetLang => ((SelectItem)configData.GetDynamic("languageid")).Value;
+
         private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
 
         private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
@@ -146,7 +150,8 @@ namespace Jackett.Common.Indexers
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "group", "0" } // No group
+                { "lang_id", GetLang },
+                { "group_id", "0" } // No group
             };
 
             // Get specified categories

@@ -10,7 +10,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BrokenStones : GazelleTracker
     {
-        public BrokenStones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public BrokenStones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "brokenstones",
                    name: "BrokenStones",
                    description: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
@@ -20,6 +21,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cs: cs,
                    supportsFreeleechTokens: true)
         {
             Language = "en-us";

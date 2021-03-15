@@ -28,7 +28,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public BroadcasTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public BroadcasTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "broadcasthenet",
                    name: "BroadcasTheNet",
                    description: "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows",
@@ -46,6 +47,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;

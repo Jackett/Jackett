@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataFileList configData => (ConfigurationDataFileList)base.configData;
 
-        public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "filelist",
                    name: "FileList",
                    description: "The best Romanian site.",
@@ -58,6 +59,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataFileList())
         {
             Encoding = Encoding.UTF8;

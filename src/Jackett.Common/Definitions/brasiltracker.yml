@@ -133,8 +133,8 @@ search:
         - name: append
           args: " {{ .Result.title_details }}"
     minimumratio:
-      text: 0.6
+      text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # Project Gazelle

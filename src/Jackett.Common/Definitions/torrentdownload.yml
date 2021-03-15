@@ -8,8 +8,8 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.app/
-  - https://torrentdownload.unblocked.rest/
+  - https://torrentdownload.unblockit.buzz/
+  - https://torrentdownload.unblocked.monster/
 legacylinks:
   - https://torrentdownload.unblockit.pro/
   - https://torrentdownload.unblockit.one/
@@ -27,11 +27,17 @@ legacylinks:
   - https://torrentdownload.uk-unblock.pro/
   - https://torrentdownload.unblockit.top/
   - https://torrentdownload.unblockit.lat/
+  - https://torrentdownload.unblockit.app/
+  - https://torrentdownload.unblocked.rest/
+  - https://torrentdownload.unblockit.dev/
+  - https://torrentdownload.unblockit.ltd/
+  - https://torrentdownload.unblockit.link/
 
 caps:
   categorymappings:
     - {id: Adult, cat: XXX, desc: Adult}
     - {id: AdultPornHDVideo, cat: XXX, desc: "Adult Porn HD Video"}
+    - {id: AdultPornPictures, cat: XXX, desc: "Adult Porn Pictures"}
     - {id: AdultPornVideo, cat: XXX, desc: "Adult Porn Video"}
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: AnimeEnglishtranslated, cat: TV/Anime, desc: "Anime English translated"}
@@ -39,6 +45,7 @@ caps:
     - {id: Applications, cat: PC/0day, desc: Applications}
     - {id: ApplicationsAndroid, cat: PC/Mobile-Android, desc: "Applications Android"}
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
     - {id: BooksEbooks, cat: Books, desc: "Books Ebooks"}
     - {id: BooksEducational, cat: Books, desc: "Books Educational"}
@@ -48,8 +55,10 @@ caps:
     - {id: Games, cat: Console, desc: Games}
     - {id: GamesWindows, cat: PC/Games, desc: "Games Windows"}
     - {id: Movies, cat: Movies, desc: Movies}
+    - {id: MoviesAction, cat: Movies, desc: Movies Action}
     - {id: MoviesConcerts, cat: Movies, desc: "Movies Concerts"}
     - {id: MoviesDocumentary, cat: TV/Documentary, desc: "Movies Documentary"}
+    - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed Movies"}
     - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Musicvideos"}
     - {id: Music, cat: Audio, desc: Music}
     - {id: MusicHardrock, cat: Audio, desc: "Music Hardrock"}
@@ -71,6 +80,7 @@ caps:
     - {id: XXX, cat: XXX, desc: XXX}
     - {id: XXXVideo, cat: XXX, desc: "XXX Video"}
     - {id: XXXHDVideo, cat: XXX, desc: "XXX HD Video"}
+    - {id: XXXPictures, cat: XXX, desc: "XXX Pictures"}
 
   modes:
     search: [q]

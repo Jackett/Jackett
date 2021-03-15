@@ -106,7 +106,7 @@ namespace Jackett.Common.Indexers.Abstract
 
         protected AvistazTracker(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 IProtectionService p, TorznabCapabilities caps)
+                                 IProtectionService p, ICacheService cs, TorznabCapabilities caps)
             : base(id: id,
                    name: name,
                    description: description,
@@ -116,6 +116,7 @@ namespace Jackett.Common.Indexers.Abstract
                    client: client,
                    logger: logger,
                    p: p,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithPID(@"You have to check 'Enable RSS Feed' in 'My Account',
 without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
         {
@@ -164,6 +165,8 @@ without this configuration the torrent download does not work.<br/>You can find 
                 await RenewalTokenAsync();
                 response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             }
+            else if (response.Status == HttpStatusCode.NotFound)
+                return releases; // search without results, eg CinemaZ: tt0075998
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error: {response.ContentString}");
 

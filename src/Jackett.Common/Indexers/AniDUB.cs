@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers
         private static readonly Regex SeasonInfoRegex = new Regex(@"(?:(?:TV-)|(?:ТВ-))(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Lazy<Regex> StripRussianTitleRegex = new Lazy<Regex>(() => new Regex(@"^.*?\/\s*", RegexOptions.Compiled));
 
-        public AniDUB(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public AniDUB(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "anidub",
                    name: "AniDUB",
                    description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
@@ -51,6 +52,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataAniDub())
         {
             Encoding = Encoding.UTF8;
@@ -534,7 +536,7 @@ namespace Jackett.Common.Indexers
                 .FirstOrDefault();
         }
 
-        private async Task<List<ReleaseInfo>> PerformSearch(TorznabQuery query)
+        private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
             const string searchLinkSelector = "#dle-content > .searchitem > h3 > a";
 
@@ -556,8 +558,7 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.ContentString, ex);
             }
-
-            return releases;
+            return releases.Where(release => query.MatchQueryStringAND(release.Title));
         }
 
         private List<KeyValuePair<string, string>> PreparePostData(TorznabQuery query)
@@ -570,7 +571,7 @@ namespace Jackett.Common.Indexers
                 { "full_search", "1" },
                 { "result_from", "1" },
                 { "story", NormalizeSearchQuery(query)},
-                { "titleonly", "3" },
+                { "titleonly", "0" },
                 { "searchuser", "" },
                 { "replyless", "0" },
                 { "replylimit", "0" },
@@ -615,8 +616,7 @@ namespace Jackett.Common.Indexers
                 searchQuery += $" TV-{query.Season}";
             }
 
-            // Search is normalized with '+' instead of spaces
-            return searchQuery.ToLowerInvariant().Replace(" ", "+");
+            return searchQuery.ToLowerInvariant();
         }
     }
 }

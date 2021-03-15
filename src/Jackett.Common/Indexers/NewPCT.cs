@@ -100,7 +100,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://pctmix.com/",
-            "https://pctreload.com/"
+            "https://pctmix1.com/",
+            "https://pctreload1.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -113,10 +114,12 @@ namespace Jackett.Common.Indexers
             "http://tumejortorrent.com/",
             "http://pctnew.com/",
             "https://descargas2020.org/",
-            "https://pctnew.org/"
+            "https://pctnew.org/",
+            "https://pctreload.com/"
         };
 
-        public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
@@ -135,6 +138,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
@@ -552,6 +556,7 @@ namespace Jackett.Common.Indexers
 
                     // we have to guess the language (words DUAL or MULTI are not supported in Radarr)
                     var language = "spanish";
+                    if (titleLower.Contains("latino")) language += " latino";
                     if ((titleLower.Contains("castellano") && titleLower.Contains("ingles")) ||
                         (titleLower.Contains("spanish") && titleLower.Contains("english")) ||
                         titleLower.Contains("[es-en]") || titleLower.Contains("multilenguaje"))

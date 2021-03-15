@@ -191,6 +191,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumratio:
+      text: 1.2
+# does not appear to be implemented, no h&r tag found
+#     minimumseedtime:
+#       # 14 days (as seconds = 2 x 24 x 60 x 60)
+#       text: 1209600
     description:
       selector: td:nth-child(2)
       remove: a, img

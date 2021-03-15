@@ -19,21 +19,26 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class YTS : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://yts.mx/",
+            "https://yts.unblockit.buzz/",
+            "https://yts.unblockninja.com/"
+        };
+
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://yts.ag/",
             "https://yts.am/",
-            "https://yts.lt/"
+            "https://yts.lt/",
+            "https://yts.unblockit.dev/",
+            "https://yts.root.yt/",
+            "https://yts.unblockit.ltd/",
+            "https://yts.unblockit.link/"
         };
 
         private string ApiEndpoint => SiteLink + "api/v2/list_movies.json";
 
-        private new ConfigurationData configData
-        {
-            get => base.configData;
-            set => base.configData = value;
-        }
-
-        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public YTS(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "yts",
                    name: "YTS",
                    description: "YTS is a Public torrent site specialising in HD movies of small size",
@@ -46,6 +51,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
@@ -64,7 +70,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
-            configData.LoadValuesFromJson(configJson);
+            LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Count() > 0,
@@ -73,16 +79,22 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => await PerformQuery(query, 0);
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => await PerformQueryAsync(query);
 
-        public async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query, int attempts)
+        private async Task<IEnumerable<ReleaseInfo>> PerformQueryAsync(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
+            var searchUrl = CreateSearchUrl(query);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var releases = ParseWebResult(response);
+            return releases;
+        }
+
+        private string CreateSearchUrl(TorznabQuery query)
+        {
             var searchString = query.GetQueryString();
 
             var queryCollection = new NameValueCollection
             {
-
                 // without this the API sometimes returns nothing
                 { "sort", "date_added" },
                 { "limit", "50" }
@@ -99,107 +111,125 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = ApiEndpoint + "?" + queryCollection.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            return searchUrl;
+        }
 
+        private IEnumerable<ReleaseInfo> ParseWebResult(WebResult webResult)
+        {
+            var releases = new List<ReleaseInfo>();
+            var contentString = webResult.ContentString;
             try
             {
                 // returned content might start with an html error message, remove it first
-                var jsonStart = response.ContentString.IndexOf('{');
-                var jsonContentStr = response.ContentString.Remove(0, jsonStart);
+                var jsonStart = contentString.IndexOf('{');
+                var jsonContentStr = contentString.Remove(0, jsonStart);
 
                 var jsonContent = JObject.Parse(jsonContentStr);
 
                 var result = jsonContent.Value<string>("status");
                 if (result != "ok") // query was not successful
                 {
-                    return releases.ToArray();
+                    return new List<ReleaseInfo>();
                 }
 
-                var data_items = jsonContent.Value<JToken>("data");
-                var movie_count = data_items.Value<int>("movie_count");
-                if (movie_count < 1) // no results found in query
+                var dataItems = jsonContent.Value<JToken>("data");
+                var movieCount = dataItems.Value<int>("movie_count");
+                if (movieCount < 1) // no results found in query
                 {
-                    return releases.ToArray();
+                    return new List<ReleaseInfo>();
                 }
 
-                var movies = data_items.Value<JToken>("movies");
+                var movies = dataItems.Value<JToken>("movies");
                 if (movies == null)
-                    throw new Exception("API error, movies missing");
-
-                foreach (var movie_item in movies)
                 {
-                    var torrents = movie_item.Value<JArray>("torrents");
+                    return new List<ReleaseInfo>();
+                }
+
+                foreach (var movie in movies)
+                {
+                    var torrents = movie.Value<JArray>("torrents");
                     if (torrents == null)
                         continue;
-                    foreach (var torrent_info in torrents)
+                    foreach (var torrent in torrents)
                     {
-                        //TODO change to initializer
-                        var release = new ReleaseInfo();
-
-                        // append type: BRRip or WEBRip, resolves #3558 via #4577
-                        var type = torrent_info.Value<string>("type");
-                        switch (type)
-                        {
-                            case "web":
-                                type = "WEBRip";
-                                break;
-                            default:
-                                type = "BRRip";
-                                break;
-                        }
-                        var quality = torrent_info.Value<string>("quality");
-                        var title = movie_item.Value<string>("title").Replace(":","").Replace(' ', '.');
-                        var year = movie_item.Value<int>("year");
-                        release.Title = $"{title}.{year}.{quality}.{type}-YTS";
-                        var imdb = movie_item.Value<string>("imdb_code");
-                        release.Imdb = ParseUtil.GetImdbID(imdb);
-
-                        release.InfoHash = torrent_info.Value<string>("hash"); // magnet link is auto generated from infohash
-
-                        // ex: 2015-08-16 21:25:08 +0000
-                        var dateStr = torrent_info.Value<string>("date_uploaded");
-                        var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-                        release.Link = new Uri(torrent_info.Value<string>("url"));
-                        release.Seeders = torrent_info.Value<int>("seeds");
-                        release.Peers = torrent_info.Value<int>("peers") + release.Seeders;
-                        release.Size = torrent_info.Value<long>("size_bytes");
-                        release.DownloadVolumeFactor = 0;
-                        release.UploadVolumeFactor = 1;
-
-                        release.Details = new Uri(movie_item.Value<string>("url"));
-                        release.Poster = new Uri(movie_item.Value<string>("large_cover_image"));
-                        release.Guid = release.Link;
-
-                        // map the quality to a newznab category for torznab compatibility (for Radarr, etc)
-                        switch (quality)
-                        {
-                            case "720p":
-                                release.Category = MapTrackerCatToNewznab("45");
-                                break;
-                            case "1080p":
-                                release.Category = MapTrackerCatToNewznab("44");
-                                break;
-                            case "2160p":
-                                release.Category = MapTrackerCatToNewznab("46");
-                                break;
-                            case "3D":
-                                release.Category = MapTrackerCatToNewznab("47");
-                                break;
-                            default:
-                                release.Category = MapTrackerCatToNewznab("45");
-                                break;
-                        }
+                        var release = ParseJsonIntoReleaseInfo(movie, torrent);
+                        if (release == null)
+                            continue;
                         releases.Add(release);
                     }
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                OnParseError(contentString, ex);
             }
 
             return releases;
+        }
+
+        private ReleaseInfo ParseJsonIntoReleaseInfo(JToken movie, JToken torrent)
+        {
+            //TODO change to initializer
+            var release = new ReleaseInfo();
+
+            // append type: BRRip or WEBRip, resolves #3558 via #4577
+            var type = torrent.Value<string>("type");
+            switch (type)
+            {
+                case "web":
+                    type = "WEBRip";
+                    break;
+                default:
+                    type = "BRRip";
+                    break;
+            }
+            var quality = torrent.Value<string>("quality");
+            var title = movie.Value<string>("title").Replace(":", "").Replace(' ', '.');
+            var year = movie.Value<int>("year");
+            release.Title = $"{title}.{year}.{quality}.{type}-YTS";
+
+            var imdb = movie.Value<string>("imdb_code");
+            release.Imdb = ParseUtil.GetImdbID(imdb);
+
+            release.InfoHash = torrent.Value<string>("hash"); // magnet link is auto generated from infohash
+
+            // ex: 2015-08-16 21:25:08 +0000
+            var dateStr = torrent.Value<string>("date_uploaded");
+            var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
+
+            release.Link = new Uri(torrent.Value<string>("url"));
+            release.Seeders = torrent.Value<int>("seeds");
+            release.Peers = torrent.Value<int>("peers") + release.Seeders;
+            release.Size = torrent.Value<long>("size_bytes");
+            release.DownloadVolumeFactor = 0;
+            release.UploadVolumeFactor = 1;
+
+            release.Details = new Uri(movie.Value<string>("url"));
+            release.Poster = new Uri(movie.Value<string>("large_cover_image"));
+            release.Guid = release.Link;
+
+            // map the quality to a newznab category for torznab compatibility (for Radarr, etc)
+            switch (quality)
+            {
+                case "720p":
+                    release.Category = MapTrackerCatToNewznab("45");
+                    break;
+                case "1080p":
+                    release.Category = MapTrackerCatToNewznab("44");
+                    break;
+                case "2160p":
+                    release.Category = MapTrackerCatToNewznab("46");
+                    break;
+                case "3D":
+                    release.Category = MapTrackerCatToNewznab("47");
+                    break;
+                default:
+                    release.Category = MapTrackerCatToNewznab("45");
+                    break;
+            }
+
+            return release;
         }
     }
 }

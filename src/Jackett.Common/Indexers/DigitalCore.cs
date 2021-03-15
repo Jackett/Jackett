@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public DigitalCore(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public DigitalCore(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "digitalcore",
                    name: "DigitalCore",
                    description: "DigitalCore is a Private Torrent Tracker for MOVIES / TV / GENERAL",
@@ -57,6 +58,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
@@ -88,6 +90,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(23, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(24, TorznabCatType.Audio, "Music/MTV");
+            AddCategoryMapping(29, TorznabCatType.Audio, "Music/PACKS");
 
             AddCategoryMapping(25, TorznabCatType.PCGames, "Games/PC");
             AddCategoryMapping(26, TorznabCatType.Console, "Games/NSW");
@@ -95,9 +98,12 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(28, TorznabCatType.Books, "Ebooks");
 
-            AddCategoryMapping(30, TorznabCatType.XXX, "XXX/SD");
+            AddCategoryMapping(30, TorznabCatType.XXXSD, "XXX/SD");
             AddCategoryMapping(31, TorznabCatType.XXX, "XXX/HD");
-            AddCategoryMapping(32, TorznabCatType.XXX, "XXX/4K");
+            AddCategoryMapping(32, TorznabCatType.XXXUHD, "XXX/4K");
+            AddCategoryMapping(35, TorznabCatType.XXXSD, "XXX/Movies/SD");
+            AddCategoryMapping(36, TorznabCatType.XXX, "XXX/Movies/HD");
+            AddCategoryMapping(37, TorznabCatType.XXXUHD, "XXX/Movies/4K");
             AddCategoryMapping(34, TorznabCatType.XXXImageSet, "XXX/Imagesets");
         }
 
@@ -164,7 +170,7 @@ namespace Jackett.Common.Indexers
                     var tags = new List<string>();
 
                     release.MinimumRatio = 1.1;
-                    release.MinimumSeedTime = 172800; // 48 hours
+                    release.MinimumSeedTime = 432000; // 120 hours
                     release.Title = row.name;
                     release.Category = MapTrackerCatToNewznab(row.category.ToString());
                     release.Size = row.size;

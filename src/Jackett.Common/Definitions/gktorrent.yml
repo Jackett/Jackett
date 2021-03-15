@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://vww.gktorrent.pw/
+  - https://www.gktorrent.cc/
 legacylinks:
   - https://www.gktorrent.com/
   - http://www.gktorrent.com/
@@ -30,6 +30,7 @@ legacylinks:
   - https://www.gktorrent.io/
   - https://www.gktorrent.pw/
   - https://wvw.gktorrent.pw/
+  - https://vww.gktorrent.pw/
 
 caps:
   categorymappings:
@@ -50,13 +51,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: downloadlink
-    type: select
-    label: Download link
-    default: "magnet:?xt="
-    options:
-      "get_torrent": ".torrent"
-      "magnet:?xt=": "magnet"
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -78,7 +72,7 @@ settings:
     default: false
 
 download:
-  selector: a[href*="{{ .Config.downloadlink }}"]
+  selector: a[href*="magnet:?xt="]
   attribute: href
 
 search:
@@ -92,7 +86,7 @@ search:
       args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
-    selector: table.table-hover > tbody > tr:has(a)
+    selector: table.table-hover > tbody > tr:has(a[href*=torrent])
 
   fields:
     category:

@@ -121,6 +121,14 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_account
+    type: info
+    label: Account Settings
+    default: In order to see the correct date and size in the torrent rows, change the <b>Torrentliste:</b> setting to <b>Modern</b> on your account profile.
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
   path: signin.php

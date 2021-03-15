@@ -49,7 +49,8 @@ namespace Jackett.Common.Indexers
             set => configData = value;
         }
 
-        public Abnormal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public Abnormal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "abnormal",
                    name: "Abnormal",
                    description: "General French Private Tracker",
@@ -68,6 +69,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    downloadBase: "https://abnormal.ws/torrents.php?action=download&id=",
                    configData: new ConfigurationDataAbnormal())
         {

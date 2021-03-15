@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
+using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
@@ -87,6 +88,7 @@ namespace Jackett.Server
             builder.RegisterType<SecuityService>().As<ISecuityService>().SingleInstance();
             builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
             builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
+            builder.RegisterType<CacheService>().As<ICacheService>().SingleInstance();
             builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
             builder.RegisterType<FilePermissionService>().As<IFilePermissionService>().SingleInstance();
 

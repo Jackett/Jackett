@@ -17,8 +17,8 @@ namespace Jackett.Common.Indexers.Meta
         protected BaseMetaIndexer(string name, string id, string description,
                                   IFallbackStrategyProvider fallbackStrategyProvider,
                                   IResultFilterProvider resultFilterProvider,IIndexerConfigurationService configService,
-                                  WebClient client, Logger logger, ConfigurationData configData, IProtectionService p,
-                                  Func<IIndexer, bool> filter)
+                                  WebClient client, Logger logger, ConfigurationData configData, IProtectionService ps,
+                                  ICacheService cs, Func<IIndexer, bool> filter)
             : base(id: id,
                    name: name,
                    description: description,
@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers.Meta
                    configService: configService,
                    client: client,
                    logger: logger,
-                   p: p,
+                   p: ps,
+                   cacheService: cs,
                    configData: configData)
         {
             filterFunc = filter;
@@ -49,13 +50,14 @@ namespace Jackett.Common.Indexers.Meta
         public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer)
         {
             if (!CanHandleQuery(query) || !CanHandleCategories(query, true))
-                return new IndexerResult(this, new ReleaseInfo[0]);
+                return new IndexerResult(this, new ReleaseInfo[0], false);
 
             try
             {
                 var results = await PerformQuery(query);
                 // the results are already filtered and fixed by each indexer
-                return new IndexerResult(this, results);
+                // some results may come from cache, but we can't inform without refactor the code
+                return new IndexerResult(this, results, false);
             }
             catch (Exception ex)
             {

@@ -22,14 +22,10 @@ namespace Jackett.Common.Indexers
     {
         private string LoginPostUrl => SiteLink + "takeloginAjax.php";
         private string SearchUrl => SiteLink + "browse.php?sort=4&type=desc";
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
-
-        public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "hebits",
                    name: "Hebits",
                    description: "The Israeli Tracker",
@@ -57,8 +53,9 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    downloadBase: "https://hebits.net/",
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataCookie("Easily find the cookie under the 'Cookie' header in the index.php GET request. HeBits Cookie usually look like:  hebits=hebits; uid=12345; pass=[...]"))
         {
             Encoding = Encoding.GetEncoding("windows-1255");
             Language = "he-il";
@@ -93,25 +90,23 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string>
-            {
-                {"username", configData.Username.Value},
-                {"password", configData.Password.Value}
-            };
 
-            // Get inital cookies
-            CookieHeader = string.Empty;
-            var result = await RequestLoginAndFollowRedirect(LoginPostUrl, pairs, CookieHeader, true, null, SiteLink);
-            await ConfigureIfOK(
-                result.Cookies, result.ContentString?.Contains("OK") == true, () =>
-                {
-                    var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.ContentString);
-                    var errorMessage = dom.TextContent.Trim();
-                    errorMessage += " attempts left. Please check your credentials.";
-                    throw new ExceptionWithConfigData(errorMessage, configData);
-                });
-            return IndexerConfigurationStatus.RequiresTesting;
+            CookieHeader = configData.Cookie.Value;
+            try
+            {
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
+
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

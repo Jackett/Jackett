@@ -7,8 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.yggtorrent.si/
-  # don't forget to also change bellow in settings !
+  - https://www4.yggtorrent.li/
 legacylinks:
   - https://yggtorrent.com/
   - https://ww1.yggtorrent.com/
@@ -34,6 +33,11 @@ legacylinks:
   - https://www5.yggtorrent.pe/
   - https://yggtorrent.ws/
   - https://yggtorrent.se/
+  - https://www.yggtorrent.si/
+  - https://ww3.yggtorrent.si/
+  - https://yggtorrent.si/
+  - http://www2.yggtorrent.si/
+  - https://www2.yggtorrent.si/
 
 caps:
   categorymappings:
@@ -113,10 +117,6 @@ settings:
     type: info
     label: How to get the User-Agent
     default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
-  - name: searchanddlurl
-    label: Search and download URL
-    type: text
-    default: www2.yggtorrent.si
   - name: category
     type: select
     label: Catégorie
@@ -158,10 +158,6 @@ settings:
     type: checkbox
     label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
     default: false
-  - name: betasearchengine
-    type: checkbox
-    label: "Use Beta Search engine URL (Less restrictive) / SonarrV3 Full Series Search NEW"
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -178,6 +174,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 login:
   method: cookie
@@ -209,11 +209,14 @@ search:
     - name: replace
       args: ["  ", " "]
     - name: trim
+    # put each word in quotations to prevent exact phrase search
+    - name: re_replace
+      args: ["(\\w+)", "\"$1\""]
   paths:
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
     # Saison Word
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "engine/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
 
   rows:
@@ -295,7 +298,7 @@ search:
       # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
     download:
-      text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
+      text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
     date:
       selector: td:nth-child(5)
       filters:

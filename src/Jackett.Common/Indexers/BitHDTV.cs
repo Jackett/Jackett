@@ -25,7 +25,8 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        public BitHDTV(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
+        public BitHDTV(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "bithdtv",
                    name: "BIT-HDTV",
                    description: "BIT-HDTV - Home of High Definition",
@@ -45,6 +46,7 @@ namespace Jackett.Common.Indexers
                    client: w,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
