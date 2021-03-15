@@ -121,6 +121,8 @@ namespace Jackett.Common.Indexers
                 })
             { Name = "Order", Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+
+            EnableConfigurableRetryAttempts();
         }
 
         private string GetLang => ((SelectItem)configData.GetDynamic("languageid")).Value;
