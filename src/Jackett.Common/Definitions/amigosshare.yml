@@ -205,7 +205,7 @@ search:
         - name: append
           args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
         - name: re_replace
-          args: ["(Dual-Audio|Dublado)", "Brazilian $1"]
+          args: ["(Dual|[Nn]acional|[Dd]ublado)", "Brazilian $1"]
     details:
       selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       attribute: href
