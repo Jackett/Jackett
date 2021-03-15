@@ -25,8 +25,6 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Anidex : BaseWebIndexer
     {
-        const int DEFAULT_NUMBER_OF_ATTEMPTS = 1;
-
         public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
             : base(id: "anidex",
@@ -126,21 +124,7 @@ namespace Jackett.Common.Indexers
             { Name = "Order", Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
 
-            // Add retry config properties
-            var attemptSelect = new SelectItem(
-                new Dictionary<string, string>
-                {
-                    {"1", "Once only (fail fast)"},
-                    {"2", "2 attempts"},
-                    {"3", "3 attempts"},
-                    {"4", "4 attempts"},
-                    {"5", "5 attempts"}
-                })
-            {
-                Name = "Number of attempts",
-                Value = DEFAULT_NUMBER_OF_ATTEMPTS.ToString()
-            };
-            configData.AddDynamic("attempts", attemptSelect);
+            EnableConfigurableRetryAttempts();
         }
 
         private string GetLang => ((SelectItem)configData.GetDynamic("languageid")).Value;
@@ -148,23 +132,6 @@ namespace Jackett.Common.Indexers
         private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
 
         private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
-
-        private int NumberOfAttempts
-        {
-            get
-            {
-                var configValue = ((SelectItem)configData.GetDynamic("attempts")).Value;
-
-                if (int.TryParse(configValue, out int parsedConfigValue) && parsedConfigValue > 0)
-                {
-                    return parsedConfigValue;
-                }
-                else
-                {
-                    return DEFAULT_NUMBER_OF_ATTEMPTS;
-                }
-            }
-        }
 
         private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
 
@@ -198,34 +165,16 @@ namespace Jackett.Common.Indexers
             if (searchCategories.Count > 0)
                 catString = "&id=" + string.Join(",", searchCategories);
 
-            // Configure the retry policy
-            int attemptNumber = 1;
-            var retryPolicy = Policy
-                .HandleResult<WebResult>(r => (int)r.Status >= 500)
-                .WaitAndRetryAsync(
-                    NumberOfAttempts - 1,
-                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 2),
-                    onRetry: (exception, timeSpan, context) =>
-                    {
-                        logger.Warn($"Request to Anidex failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfAttempts}).");
-                        attemptNumber++;
-                    });
+            // Make search request
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString);
+            var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
-            var response = await retryPolicy.ExecuteAsync(async () =>
+            // Check for DDOS Guard
+            if (response.Status == HttpStatusCode.Forbidden)
             {
-                // Make search request
-                var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString);
-                var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
-
-                // Check for DDOS Guard
-                if (response.Status == HttpStatusCode.Forbidden)
-                {
-                    await ConfigureDDoSGuardCookie();
-                    response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
-                }
-
-                return response;
-            });
+                await ConfigureDDoSGuardCookie();
+                response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
+            }
 
             if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
