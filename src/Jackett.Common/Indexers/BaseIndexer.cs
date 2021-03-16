@@ -433,9 +433,9 @@ namespace Jackett.Common.Indexers
                     return DefaultNumberOfRetryAttempts;
                 }
 
-                var configValue = ((SelectItem)configItem).Value;
+                var configValue = ((SingleSelectConfigurationItem)configItem).Value;
 
-                if (int.TryParse(configValue, out int parsedConfigValue) && parsedConfigValue > 0)
+                if (int.TryParse(configValue, out var parsedConfigValue) && parsedConfigValue > 0)
                 {
                     return parsedConfigValue;
                 }
@@ -476,7 +476,8 @@ namespace Jackett.Common.Indexers
         /// </remarks>
         protected void EnableConfigurableRetryAttempts()
         {
-            var attemptSelect = new SelectItem(
+            var attemptSelect = new SingleSelectConfigurationItem(
+                "Number of retries",
                 new Dictionary<string, string>
                 {
                     {"0", "No retries (fail fast)"},
@@ -487,7 +488,6 @@ namespace Jackett.Common.Indexers
                     {"5", "5 retries (8s delay)"}
                 })
             {
-                Name = "Number of retries",
                 Value = DefaultNumberOfRetryAttempts.ToString()
             };
             configData.AddDynamic("retryAttempts", attemptSelect);
