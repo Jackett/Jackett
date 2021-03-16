@@ -63,7 +63,7 @@ namespace Jackett.Common.Services
                         // On Windows we need admin permissions to migrate as they were made with admin permissions.
                         if (ServerUtil.IsUserAdministrator())
                         {
-                            PerformMigration();
+                            PerformMigration(oldDir);
                         }
                         else
                         {
@@ -81,33 +81,44 @@ namespace Jackett.Common.Services
                     }
                     else
                     {
-                        PerformMigration();
+                        PerformMigration(oldDir);
                     }
-
                 }
                 catch (Exception e)
                 {
                     logger.Error($"ERROR could not migrate settings directory\n{e}");
                 }
             }
+
+            // Perform a migration in case of https://github.com/Jackett/Jackett/pull/11173#issuecomment-787520128
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                var oldDirectory = "Jackett";
+                if (Directory.Exists(oldDirectory))
+                {
+                    PerformMigration(oldDirectory);
+                }
+            }
         }
 
-        public void PerformMigration()
+        public void PerformMigration(string oldDirectory)
         {
-            var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
-            if (Directory.Exists(oldDir))
+            if (Directory.Exists(oldDirectory))
             {
-                foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
+                foreach (var file in Directory.GetFiles(oldDirectory, "*", SearchOption.AllDirectories))
                 {
-                    var path = file.Replace(oldDir, "");
+                    var path = file.Replace(oldDirectory, "");
                     var destPath = GetAppDataFolder() + path;
                     var destFolder = Path.GetDirectoryName(destPath);
                     if (!Directory.Exists(destFolder))
                     {
                         var dir = Directory.CreateDirectory(destFolder);
-                        var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
-                        directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
-                        dir.SetAccessControl(directorySecurity);
+                        if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                        {
+                            var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
+                            directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
+                            dir.SetAccessControl(directorySecurity);
+                        }
                     }
                     if (!File.Exists(destPath))
                     {
@@ -122,7 +133,7 @@ namespace Jackett.Common.Services
                         }
                     }
                 }
-                Directory.Delete(oldDir, true);
+                Directory.Delete(oldDirectory, true);
             }
         }
 
