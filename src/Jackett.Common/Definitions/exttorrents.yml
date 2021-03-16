@@ -46,6 +46,7 @@ caps:
     - {id: "/movies/dvd/", cat: Movies/DVD, desc: "Movies DVD"}
     - {id: "/movies/highres-movies/", cat: Movies/HD, desc: "Movies Highres"}
     - {id: "/movies/mp4/", cat: Movies, desc: "Movies MP4"}
+    - {id: "/movies/other-movies/", cat: Movies, desc: "Movies Other Movies"}
     - {id: "/movies/ultrahd/", cat: Movies/UHD, desc: "Movies UltraHD"}
     - {id: "/music/", cat: Audio, desc: Music}
     - {id: "/music/aac/", cat: Audio, desc: "Music AAC"}
@@ -61,6 +62,7 @@ caps:
     - {id: "/xxx/magazines/", cat: XXX/Other, desc: "XXX Magazines"}
     - {id: "/xxx/pictures/", cat: XXX/ImageSet, desc: "XXX Pictures"}
     - {id: "/xxx/video/", cat: XXX, desc: "XXX Video"}
+    - {id: "/video/", cat: XXX, desc: "XXX Video"}
 
   modes:
     search: [q]
@@ -100,6 +102,10 @@ search:
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/2/&{{ else }}latest/2/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/3/&{{ else }}latest/3/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/4/&{{ else }}latest/4/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
+
+  headers:
+    # site presents hcaptcha challenge for Jackett's User-Agent, so slightly alter it here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
 
   rows:
     selector: table.table-striped > tbody > tr

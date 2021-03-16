@@ -12,26 +12,13 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 300, cat: Movies/UHD, desc: "Movies UHD-4K"}
-    - {id: 301, cat: Movies/UHD, desc: "Movies 2160p"}
-    - {id: 420, cat: Movies/UHD, desc: "Movies 2160p REMUX"}
-    - {id: 401, cat: Movies/BluRay, desc: "Movies Blu-ray"}
-    - {id: 410, cat: Movies/HD, desc: "Movies 1080p"}
-    - {id: 415, cat: Movies, desc: "Movies 1080p REMUX"}
-    - {id: 416, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 411, cat: Movies/HD, desc: "Movies 720p"}
-    - {id: 412, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
-    - {id: 413, cat: TV/HD, desc: "Movies HDTV"}
-    - {id: 417, cat: Movies, desc: "Movies iPad"}
-    - {id: 414, cat: Movies/DVD, desc: "Movies DVD"}
-    - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
-    - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries(纪录片)"}
-    - {id: 405, cat: TV/Anime, desc: "Animations(动画片)"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos(MV)"}
-    - {id: 408, cat: Audio, desc: "HQ Audio(音乐)"}
-    - {id: 500, cat: Audio, desc: "Music(无损)"}
-    - {id: 409, cat: Other, desc: "Video Portray(写真视频)"}
+    - {id: animate, cat: TV/Anime, desc: "动漫 Anime"}
+    - {id: doc, cat: TV/Documentary, desc: "纪录片 Documentary"}
+    - {id: movie, cat: Movies, desc: "电影 Movie"}
+    - {id: mv, cat: Audio/Video, desc: "MV Music Video"}
+    - {id: music, cat: Audio, desc: "音乐 Music"}
+    - {id: tv, cat: TV, desc: "剧集综艺 TV"}
+    - {id: other, cat: Other, desc: "艺术 Other"}
 
   modes:
     search: [q]
@@ -41,12 +28,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -73,18 +61,9 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  captcha:
-    type: image
-    selector: img[src^="image.php?"]
-    input: imagestring
-  error:
-    - selector: table:has(a[href="login.php"])
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
 
@@ -109,11 +88,11 @@ search:
 
   fields:
     category:
-      selector: a[href*="?cat_"]
-      attribute: href
+      selector: img[class^="cat_"]
+      attribute: class
       filters:
         - name: regexp
-          args: "cat_(\\d{3})"
+          args: "cat_(.+?)$"
     title:
       selector: a[href^="details_"] > b
     title:

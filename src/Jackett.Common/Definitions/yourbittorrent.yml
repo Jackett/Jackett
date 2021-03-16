@@ -48,7 +48,7 @@ search:
     - name: tolower
 
   rows:
-    selector: tr.table-default
+    selector: tr.table-default:has(a[href^="/torrent/"])
     filters:
       - name: andmatch
 

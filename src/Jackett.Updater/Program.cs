@@ -267,11 +267,13 @@ namespace Jackett.Updater
                 "Definitions/asgaard.yml",
                 "Definitions/asiandvdclub.yml",
                 "Definitions/ast4u.yml", // renamed to animeworld #10578
+                "Definitions/audiobooktorrents.yml", // renamed to abtorrents
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
                 "Definitions/badasstorrents.yml", // to be migrated to c#
                 "Definitions/bithq.yml",
+                "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
@@ -283,6 +285,7 @@ namespace Jackett.Updater
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
+                "Definitions/channelx.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cinefilhd.yml",
                 "Definitions/cooltorrent.yml",
@@ -307,10 +310,10 @@ namespace Jackett.Updater
                 "Definitions/exoticaz.yml", // migrated to C#
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/extratorrentclone.yml",
-                "Definitions/feedurneed.yml",
                 "Definitions/filmsclub.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
+                "Definitions/fullmixmusic.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
@@ -323,8 +326,11 @@ namespace Jackett.Updater
                 "Definitions/hdclub.yml",
                 "Definitions/hddisk.yml",
                 "Definitions/hdplus.yml",
+                "Definitions/hdreactor.yml", // renamed to hdhouse
+                "Definitions/hdstreet.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
+                "Definitions/horrorsite.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
@@ -336,6 +342,7 @@ namespace Jackett.Updater
                 "Definitions/katcrs.yml",
                 "Definitions/kaztorka.yml",
                 "Definitions/kickasstorrent.yml",
+                "Definitions/kickasstorrent-kathow.yml", // renamed to kickasstorrents-ws
                 "Definitions/kikibt.yml",
                 "Definitions/korsar.yml",
                 "Definitions/lapausetorrents.yml",
@@ -351,6 +358,9 @@ namespace Jackett.Updater
                 "Definitions/metal-iplay-ro.yml", // renamed to romanianmetaltorrents
                 "Definitions/mkvcage.yml",
                 "Definitions/moecat.yml",
+                "Definitions/monova.yml",
+                "Definitions/movcr.yml",
+                "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
@@ -359,6 +369,7 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/polishtracker.yml",
@@ -368,6 +379,7 @@ namespace Jackett.Updater
                 "Definitions/rapidetracker.yml",
                 "Definitions/rarbg.yml", // migrated to C#
                 "Definitions/redtopia.yml",
+                "Definitions/retroflix.yml", // migrated to C#
                 "Definitions/rgu.yml",
                 "Definitions/rns.yml", // site merged with audiobooktorrents
                 "Definitions/rockethd.yml",
@@ -382,8 +394,10 @@ namespace Jackett.Updater
                 "Definitions/sharespacedb.yml",
                 "Definitions/shareuniversity.yml",
                 "Definitions/sharingue.yml",
-                "Definitions/shareuniversity.yml",
                 "Definitions/skytorrents.yml",
+                "Definitions/skytorrents-lol.yml",
+                "Definitions/skytorrentsclone.yml", // renamed to skytorrents-lol
+                "Definitions/skytorrentsclone2.yml", // renamed to skytorrents-to
                 "Definitions/solidtorrents.yml", // migrated to C#
                 "Definitions/soundpark.yml", // to be migrated to C#
                 "Definitions/spacetorrent.yml",
@@ -405,7 +419,9 @@ namespace Jackett.Updater
                 "Definitions/tigers-dl.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/topnow.yml",
+                "Definitions/torrentbomb.yml",
                 "Definitions/torrentcouch.yml",
+                "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
                 "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentquest.yml",

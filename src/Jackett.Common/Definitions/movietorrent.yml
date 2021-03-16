@@ -1,0 +1,84 @@
+---
+id: movietorrent
+name: MovieTorrent
+description: "MovieTorrent is a Public site for Bollywood, Hollywood, Hindi Dubbed, Tamil , Punjabi, Pakistani MOVIES"
+language: en-us
+type: public
+encoding: UTF-8
+links:
+  - https://movietorrent.co/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Bollywood"}
+    - {id: 2, cat: Movies/HD, desc: "1080p"}
+    - {id: 35, cat: Movies, desc: "Punjabi"}
+    - {id: 19, cat: Movies, desc: "Dubbed"}
+    - {id: 47, cat: Movies, desc: "Tamil Telugu"}
+    - {id: 32, cat: Movies, desc: "Pakistani"}
+    - {id: 26, cat: Movies, desc: "Hollywood"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+
+settings: []
+
+download:
+  selector: a[href^="magnet:?xt="]
+  attribute: href
+  filters:
+    - name: append
+      args: "&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.si%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2Fdenis.stalker.upeer.me%3A6969%2Fannounce"
+
+search:
+  paths:
+    - path: "?s={{ .Keywords }}"
+    - path: "/page/2/?s={{ .Keywords }}"
+    - path: "/page/3/?s={{ .Keywords }}"
+
+  rows:
+    selector: article:has(h2)
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: span.term-badge
+      attribute: class
+      filters:
+        - name: regexp
+          args: (\d+)
+    title:
+      selector: h2
+      filters:
+        - name: replace
+          args: ["Full Movie ", ""]
+        - name: replace
+          args: ["Torrent Magnet ", ""]
+        - name: replace
+          args: ["Download ", ""]
+    details:
+      selector: h2 > a
+      attribute: href
+    download:
+      selector: h2 > a
+      attribute: href
+    poster:
+      selector: a[data-src]
+      attribute: data-src
+    date:
+      selector: time
+      attribute: datetime
+    size:
+      text: "5 GB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine wordpress

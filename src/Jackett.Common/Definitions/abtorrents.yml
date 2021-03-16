@@ -1,7 +1,7 @@
-﻿---
-id: audiobooktorrents
-name: Audiobook Torrents
-description: "Audiobook Torrents (ABT) is a Private Torrent Tracker for AUDIOBOOKS"
+---
+id: abtorrents
+name: ABtorrents
+description: "ABtorrents (ABT) is a Private Torrent Tracker for AUDIOBOOKS"
 language: en-us
 type: private
 encoding: UTF-8
@@ -80,12 +80,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -96,17 +97,7 @@ settings:
     default: "If you are getting the error <b>Login Failed, got redirected</b> then access the site with your browser and <b>mark as read</b> all PMs."
 
 login:
-  path: takelogin.php
-  method: post
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    use_ssl: 1
-    perm_ssl: 1
-    submitme: X
-  error:
-    - selector: td.embedded:has(h2:contains("Oops"))
-    - selector: td.embedded:has(h2:contains("failed"))
+  method: cookie
   test:
     path: browse.php
 

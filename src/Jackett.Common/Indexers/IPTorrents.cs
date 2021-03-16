@@ -13,6 +13,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -85,6 +86,8 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "en-us";
             Type = "private";
+
+            configData.AddDynamic("freeleech", new BoolItem { Name = "Search freeleech only", Value = false });
 
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");
@@ -193,6 +196,9 @@ namespace Jackett.Common.Indexers
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 qc.Add(cat, string.Empty);
+
+            if (((BoolItem)configData.GetDynamic("freeleech")).Value)
+                qc.Add("free", "on");
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);

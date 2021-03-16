@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -121,7 +121,11 @@ namespace Jackett.Common.Indexers
                 })
             { Name = "Order", Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+
+            EnableConfigurableRetryAttempts();
         }
+
+        private string GetLang => ((SelectItem)configData.GetDynamic("languageid")).Value;
 
         private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
 
@@ -148,7 +152,8 @@ namespace Jackett.Common.Indexers
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "group", "0" } // No group
+                { "lang_id", GetLang },
+                { "group_id", "0" } // No group
             };
 
             // Get specified categories

@@ -18,7 +18,7 @@ caps:
     - {id: 12, cat: Movies/Other, desc: "Filmy Inne"}
     - {id: 32, cat: Movies/UHD, desc: "Filmy UHD"}
     - {id: 2, cat: TV/Anime, desc: "Anime"}
-    - {id: 2, cat: TV/Documentary, desc: "TV Dokumentalne"}
+    - {id: 10, cat: TV/Documentary, desc: "TV Dokumentalne"}
     - {id: 20, cat: TV, desc: "TV Paczki"}
     - {id: 22, cat: TV/Sport, desc: "TV Sport"}
     - {id: 24, cat: TV/HD, desc: "TV HD"}

@@ -501,6 +501,12 @@ caps:
     - {id: 1161, cat: Audio, desc: " |- Зарубежная поп-музыка (Lossless)"}
     - {id: 353, cat: Audio, desc: " |- Зарубежная поп-музыка"}
     - {id: 324, cat: Audio, desc: "Electronic"}
+    - {id: 1327, cat: Audio, desc: " |- Psybient, Psychill, Psydub (Lossless)"}
+    - {id: 1328, cat: Audio, desc: " |- Psybient, Psychill, Psydub"}
+    - {id: 1325, cat: Audio, desc: " |- Downtempo, Trip-Hop, Lounge (Lossless)"}
+    - {id: 1326, cat: Audio, desc: " |- Downtempo, Trip-Hop, Lounge"}
+    - {id: 1323, cat: Audio, desc: " |- Ambient, Experimental, Modern Classical (Lossless)"}
+    - {id: 1324, cat: Audio, desc: " |- Ambient, Experimental, Modern Classical"}
     - {id: 976, cat: Audio, desc: " |- Trance (Lossless)"}
     - {id: 346, cat: Audio, desc: " |- Trance"}
     - {id: 1243, cat: Audio, desc: " |- Trance (Singles, EPs)"}
@@ -765,7 +771,7 @@ search:
     sha: 1
     ta: -1
     sns: -1
-    sds: -1
+    sds: 4 # only freeleech available for download without account
     nm: "{{ .Keywords }}"
     pn: ""
     submit: "Поиск"

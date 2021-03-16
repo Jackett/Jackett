@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://speed.cd/",
-            "https://speed.click/"
+            "https://speed.click/",
+            "https://speeders.me/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
@@ -211,7 +212,7 @@ namespace Jackett.Common.Indexers
                         Seeders = seeders,
                         Peers = seeders + leechers,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
+                        MinimumSeedTime = 259200, // 72 hours
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
                     };

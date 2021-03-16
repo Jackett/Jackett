@@ -1,26 +1,30 @@
 ---
-id: Channelx
-name: ChannelX
-description: "ChannelX is a Private Torrent Tracker for High Quality Optimized HD MOVIES / TV"
-language: en-us
+id: trackeros
+name: Trackeros
+description: "Trackeros is a Private SPANISH Tracker for HD MOVIES / TV / GENERAL"
+language: es-es
 type: private
 encoding: UTF-8
 links:
-  - https://channelx.xyz/
-legacylinks:
-  - https://channelx.online/
+  - https://trackeros.tk
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Audiotracks"}
-    - {id: 4, cat: TV/Sport, desc: "Sports"}
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 3, cat: Audio, desc: "Música"}
+    - {id: 4, cat: Console, desc: "Juegos"}
+    - {id: 8, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 7, cat: Audio/Video, desc: "Conciertos"}
+    - {id: 5, cat: PC, desc: "Aplicaciones"}
+    - {id: 6, cat: Other, desc: "Otros"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -102,22 +106,27 @@ search:
           args: "/categories/(\\d+)"
     title:
       selector: a.view-torrent
+      filters:
+        - name: re_replace
+          args: ["[\\[\\]]", " "] # remove [ and ]
+        - name: re_replace
+          args: [" +", " "] # remove duplicate spaces
+        - name: re_replace
+          args: ["(?i)microhd", "BDRip MicroHD"]
+        - name: re_replace
+          args: ["(?i)(m1080p|mhd1080p)", "1080p MicroHD"]
+        - name: re_replace
+          args: ["(?i)(m720p|mhd720p)", "720p MicroHD"]
+        - name: re_replace
+          args: ["(?i)brrip", "BDRip"]
+        - name: append
+          args: " MULTi/SPANiSH" # Add language for Sonarr/Radarr
     download:
       selector: a[href*="/download/"]
       attribute: href
     details:
       selector: a.view-torrent
       attribute: href
-    poster:
-      selector: div.torrent-poster img
-      attribute: src
-      filters:
-        - name: prepend
-          args: "https://images.weserv.nl/?url=" # for display on dashboard
-        - name: append
-          args: "&w=180&h=270" # for display on dashboard
-        - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -129,12 +138,6 @@ search:
       filters:
         - name: regexp
           args: (\d+)
-    imdb:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    tmdbid:
-      selector: a[href*="themoviedb.org/movie/"]
-      attribute: href
     date:
       selector: time
       filters:
@@ -193,6 +196,6 @@ search:
     minimumratio:
       text: 0.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-# UNIT3D 2.7.0
+      # 32 hours => 32 * 60 * 60 seconds
+      text: 115200
+# UNIT3D 4.x.x

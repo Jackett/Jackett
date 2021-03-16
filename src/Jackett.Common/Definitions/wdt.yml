@@ -6,6 +6,8 @@ language: en-us
 type: private
 encoding: UTF-8
 links:
+  - http://ultimatewrestlingtorrents.com/
+legacylinks:
   - https://ultimatewrestlingtorrents.com/
 
 caps:
@@ -93,7 +95,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    use_ssl: 1
+    use_ssl: ""
     perm_ssl: ""
     returnto: /
   error:

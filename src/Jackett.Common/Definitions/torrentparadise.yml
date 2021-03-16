@@ -6,17 +6,18 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.la/
-legacylinks:
   - https://torrentparadise.org/
-  - https://torrentparadise.cl/
+legacylinks:
   - https://torrentparadise.to/
   - https://torrentparadise.cc/
+  - https://torrentparadise.la/
+  - https://torrentparadise.cl/
 
 caps:
   categories:
     "": Other
     ADULT: XXX
+    ADULTHENTAI: XXX
     ADULTLATINA: XXX
     ADULTMILF: XXX
     ADULTHDMOVIES: XXX
@@ -98,6 +99,8 @@ caps:
     MISCELLANEOUS: Other
     MOBILE: PC/Mobile-Other
     MOVIES: Movies
+    MOVIES3D: Movies/3D
+    MOVIESACTION: Movies
     MOVIESBLURAYDISCREMUX: Movies/HD
     MOVIESBOLLYWOOD: Movies
     MOVIESCAMTS: Movies
@@ -110,6 +113,7 @@ caps:
     MOVIESHD1080P: Movies/HD
     MOVIESHEVCX265: Movies/HD
     MOVIESHIGHRESMOVIES: Movies/HD
+    MOVIESSCIFI: Movies
     MOVIESSPANISHLANGUAGE: Movies
     MOVIESSPANISHLATINAMERICA: Movies
     MOVIESULTRAHD4K: Movies/UHD
@@ -132,6 +136,7 @@ caps:
     OTHEROTHER: Other
     OTHERPICTURES: Other
     OTHERSOUNDCLIPS: Other
+    PACKS: TV
     PELICULASCVCD: TV/SD
     PELICULASDIVX: TV/SD
     PELICULASHDRIP: TV/HD

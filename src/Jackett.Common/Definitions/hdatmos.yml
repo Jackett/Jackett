@@ -1,23 +1,26 @@
 ---
-id: retroflix
-name: RetroFlix
-description: "Private Torrent Tracker for Classic Movies / TV / General Releases."
-language: en-us
+id: hdatmos
+name: HDAtmos
+description: "HDAtmos is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+language: zh-cn
 type: private
 encoding: UTF-8
 links:
-  - https://retroflix.club/
-legacylinks:
-  - https://retroflix.net/
+  - https://hdatmos.club/
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies"}
-    - {id: 402, cat: TV, desc: "TV Series"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 407, cat: TV/Sport, desc: "Sports"}
-    - {id: 409, cat: Books, desc: "Books"}
-    - {id: 408, cat: Audio, desc: "HQ Audio"}
+    - {id: 401, cat: Movies, desc: "Movies/电影"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
+    - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
+    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
+    - {id: 422, cat: PC/Games, desc: "Games/游戏"}
+    - {id: 423, cat: TV, desc: "TV Shows/综艺"}
+    - {id: 406, cat: Audio/Video, desc: "MusicVideo/MV演唱会"}
+    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
+    - {id: 409, cat: PC/0day, desc: "Software/软件"}
+    - {id: 424, cat: Other, desc: "Misc/其他"}
+    - {id: 408, cat: Audio, desc: "HQ Audio/音乐"}
 
   modes:
     search: [q]
@@ -27,17 +30,20 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info
-    type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -54,21 +60,31 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  method: cookie
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+    securelogin: ""
+    ssl: yes
+    trackerssl: ""
+  error:
+    - selector: td.embedded:has(h2:contains("失败"))
+      message:
+        selector: td.text
   test:
-    path: torrents.php
-    selector: a[href*="/logout?"]
+    path: index.php
+    selector: a[href="logout.php"]
 
 search:
-  # https://retroflix.club/torrents.php?incldead=0&spstate=0&inclbookmarked=0&search=tt0055254&search_area=4&search_mode=0
   paths:
     - path: torrents.php
   inputs:
@@ -80,7 +96,7 @@ search:
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 Exact
+    # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -95,40 +111,18 @@ search:
       filters:
         - name: querystring
           args: cat
-    release_year:
-      selector: a[href^="/torrents.php?processing="]
-      optional: true
-    quality:
-      selector: a[href^="/torrents.php?standard="]
-      optional: true
     title:
       selector: a[href^="details.php?id="]
-      filters:
-        - name: append
-          args: " {{ .Result.release_year }}"
-        - name: append
-          args: " {{ .Result.quality }}"
     title:
+      optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
-      optional: true
-      filters:
-        - name: append
-          args: " {{ .Result.release_year }}"
-        - name: append
-          args: " {{ .Result.quality }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    poster:
-      selector: tr[onmouseover]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "src=(.+?) "
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
@@ -139,18 +133,18 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +00:00" # auto adjusted by site account profile
+          args: " +08:00" # CST
         - name: dateparse
-          args: "02-01-2006 15:04:05 -07:00"
+          args: "2006-01-02 15:04:05 -07:00"
     date:
       # time added
       selector: td:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
-          args: " +00:00" # auto adjusted by site account profile
+          args: " +08:00" # CST
         - name: dateparse
-          args: "02-01-200615:04:05 -07:00"
+          args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:nth-child(5)
     seeders:
@@ -173,9 +167,9 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    description:
+      selector: td:nth-child(2)
+      remove: a, img
     minimumratio:
-      text: 1.0
-    minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# NexusPHP
+      text: 0.81
+# NexusPHP Standard v1.5 Beta 4

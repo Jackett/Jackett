@@ -18,15 +18,17 @@ caps:
     - {id: 81, cat: TV/Anime, desc: "Animation Séries"}
     - {id: 79, cat: Movies/HD, desc: "Animation Film"}
     - {id: 2, cat: Movies/DVD, desc: "Film DVDRip"}
+    - {id: 87, cat: Movies/HD, desc: "Film REMUX"}
+    - {id: 70, cat: Movies/BluRay, desc: "Film BRRiP - BDRiP"}
     - {id: 69, cat: Movies/DVD, desc: "Film DVD-r"}
     - {id: 67, cat: Movies/Other, desc: "Film Vob"}
     - {id: 59, cat: Movies/Other, desc: "Film Divers"}
     - {id: 19, cat: Movies/HD, desc: "Film 720P"}
     - {id: 17, cat: Movies/Other, desc: "Film Iso"}
-    - {id: 16, cat: Movies/WEB-DL, desc: "Film Web"}
-    - {id: 15, cat: Movies/BluRay, desc: "Film Bluray"}
+    - {id: 16, cat: Movies/WEB-DL, desc: "Film Webrip - HDrip"}
+    - {id: 15, cat: Movies/BluRay, desc: "Film Bluray Full"}
     - {id: 4, cat: Movies/HD, desc: "Film 1080P"}
-    - {id: 70, cat: Movies/BluRay, desc: "Film BRRiP - BDRiP"}
+    - {id: 86, cat: Movies/UHD, desc: "Film UHD"}
     - {id: 46, cat: TV/HD, desc: "Serie 1080P"}
     - {id: 48, cat: TV/HD, desc: "Serie Bluray"}
     - {id: 60, cat: TV/Other, desc: "Serie Divers"}
@@ -159,15 +161,17 @@ search:
         ":contains(\"Animation\"):contains(\"Séries\")": 81
         ":contains(\"Animation\"):contains(\"Film\")": 79
         ":contains(\"Film\"):contains(\"DVDRip\")": 2
+        ":contains(\"Film\"):contains(\"REMUX\")": 87
+        ":contains(\"Film\"):contains(\"BRRiP - BDRiP\")": 70
         ":contains(\"Film\"):contains(\"DVD-r\")": 69
         ":contains(\"Film\"):contains(\"Vob\")": 67
         ":contains(\"Film\"):contains(\"Divers\")": 59
         ":contains(\"Film\"):contains(\"720P\")": 19
         ":contains(\"Film\"):contains(\"Iso\")": 17
-        ":contains(\"Film\"):contains(\"Web\")": 16
+        ":contains(\"Film\"):contains(\"Webrip\")": 16
         ":contains(\"Film\"):contains(\"Bluray\")": 15
         ":contains(\"Film\"):contains(\"1080P\")": 4
-        ":contains(\"Film\"):contains(\"BRRiP - BDRiP\")": 70
+        ":contains(\"Film\"):contains(\"UHD\")": 86
         ":contains(\"Serie\"):contains(\"1080P\")": 46
         ":contains(\"Serie\"):contains(\"Bluray\")": 48
         ":contains(\"Serie\"):contains(\"Divers\")": 60

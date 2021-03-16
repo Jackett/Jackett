@@ -291,7 +291,7 @@ namespace Jackett.Common.Indexers
                         var seederString = Row.QuerySelector("td:nth-child(7) b").TextContent;
                         var seeders = string.IsNullOrWhiteSpace(seederString) ? 0 : ParseUtil.CoerceInt(seederString);
 
-                        var timestr = Row.QuerySelector("td:nth-child(10) u").TextContent;
+                        var timestr = Row.QuerySelector("td:nth-child(11) u").TextContent;
                         var forum = qForumLink;
                         var forumid = forum.GetAttribute("href").Split('=')[1];
                         var title = configData.StripRussianLetters.Value

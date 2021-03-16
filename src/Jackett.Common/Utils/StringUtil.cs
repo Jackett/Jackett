@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using AngleSharp.Dom;
 using AngleSharp.Html;
 using Jackett.Common.Helpers;
@@ -185,8 +186,6 @@ namespace Jackett.Common.Utils
             return sb.ToString();
         }
 
-
-
         public static string GenerateRandom(int length)
         {
             var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -201,6 +200,64 @@ namespace Jackett.Common.Utils
                 }
                 return key;
             }
+        }
+
+        public static IEnumerable<int> AllIndexesOf(this string source, char value)
+        {
+            var index = source.IndexOf(value);
+            while (index != -1)
+            {
+                yield return index;
+                index = source.IndexOf(value, index + 1);
+            };
+        }
+
+        public static IEnumerable<int> AllIndexesOf(this string source, string value)
+        {
+            var index = source.IndexOf(value);
+            while (index != -1)
+            {
+                yield return index;
+                index = source.IndexOf(value, index + value.Length);
+            };
+        }
+
+        /// <summary>
+        /// Finds all substrings between two specified characters. If nested, both the parent and child substring are returned.
+        /// </summary>
+        public static IEnumerable<string> FindSubstringsBetween(this string source, char opening, char closing, bool includeOpeningAndClosing)
+        {
+            var openingIndexes = source.AllIndexesOf(opening).ToList();
+            var closingIndexes = source.AllIndexesOf(closing);
+
+            foreach (var closingIndex in closingIndexes.OrderBy(_ => _))
+            {
+                var potentialOpeningIndexes = openingIndexes.Where(x => x < closingIndex);
+                if (!potentialOpeningIndexes.Any())
+                    continue;
+                var openingIndex = potentialOpeningIndexes.OrderByDescending(_ => _).First();
+
+                var substringIndex = openingIndex + 1;
+                var substringLength = closingIndex - substringIndex;
+                if (includeOpeningAndClosing)
+                {
+                    substringIndex -= 1;
+                    substringLength += 2;
+                }
+                yield return source.Substring(substringIndex, substringLength);
+
+                openingIndexes.RemoveAll(x => x == openingIndex);
+            }
+        }
+
+        public static string RemoveSubstrings(this string source, IEnumerable<string> substrings)
+        {
+            var result = source;
+            foreach (var substring in substrings.OrderByDescending(x => x.Length))
+            {
+                result = result.Replace(substring, string.Empty);
+            }
+            return result;
         }
     }
 }
