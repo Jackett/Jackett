@@ -84,7 +84,7 @@ namespace Jackett.Common.Indexers
                 LoadValuesFromJson(null);
         }
 
-        public virtual Task<ConfigurationData> GetConfigurationForSetup() => Task.FromResult<ConfigurationData>(configData);
+        public virtual Task<ConfigurationData> GetConfigurationForSetup() => Task.FromResult(configData);
 
         public virtual void ResetBaseConfig()
         {
@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             IsConfigured = false;
         }
 
-        public virtual void SaveConfig() => configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
+        public virtual void SaveConfig() => configurationService.Save(this, configData.ToJson(protectionService, forDisplay: false));
 
         protected void LoadLegacyCookieConfig(JToken jsonConfig)
         {
@@ -105,9 +105,8 @@ namespace Jackett.Common.Indexers
             {
                 // Legacy cookie key
                 var jcookies = jsonConfig["cookies"];
-                if (jcookies is JArray)
+                if (jcookies is JArray array)
                 {
-                    var array = (JArray)jcookies;
                     legacyCookieHeader = string.Empty;
                     for (var i = 0; i < array.Count; i++)
                     {
@@ -126,27 +125,37 @@ namespace Jackett.Common.Indexers
 
         public virtual void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
-            IProtectionService ps = null;
-            if (useProtectionService)
-                ps = protectionService;
-            configData.LoadConfigDataValuesFromJson(jsonConfig, ps);
+            if (jsonConfig != null)
+            {
+                var ps = useProtectionService ? protectionService : null;
+                configData.LoadConfigDataValuesFromJson(jsonConfig, ps);
+            }
+
+            SetSiteLinkByConfig();
+        }
+
+        private void SetSiteLinkByConfig()
+        {
             if (string.IsNullOrWhiteSpace(configData.SiteLink.Value))
             {
                 configData.SiteLink.Value = DefaultSiteLink;
             }
-
-            if (!configData.SiteLink.Value.EndsWith("/", StringComparison.Ordinal))
-                configData.SiteLink.Value += "/";
-
-            // reset site link to default if it's a legacy (defunc link)
-            if (LegacySiteLinks != null && LegacySiteLinks.Contains(configData.SiteLink.Value))
+            else
             {
-                logger.Debug(string.Format("changing legacy site link from {0} to {1}", configData.SiteLink.Value, DefaultSiteLink));
-                configData.SiteLink.Value = DefaultSiteLink;
+                if (!configData.SiteLink.Value.EndsWith("/", StringComparison.Ordinal))
+                    configData.SiteLink.Value += "/";
+
+                // reset site link to default if it's a legacy (defunc link)
+                if (LegacySiteLinks != null && LegacySiteLinks.Contains(configData.SiteLink.Value))
+                {
+                    logger.Debug(string.Format("changing legacy site link from {0} to {1}", configData.SiteLink.Value, DefaultSiteLink));
+                    configData.SiteLink.Value = DefaultSiteLink;
+                }
+
+                // TODO check whether the site link is well-formatted in a better way.
+                var siteUri = new Uri(configData.SiteLink.Value);
             }
 
-            // check whether the site link is well-formatted
-            var siteUri = new Uri(configData.SiteLink.Value);
             SiteLink = configData.SiteLink.Value;
         }
 
@@ -154,11 +163,8 @@ namespace Jackett.Common.Indexers
         {
             if (jsonConfig is JArray)
             {
-                if (!MigratedFromDPAPI(jsonConfig))
-                {
-                    LoadValuesFromJson(jsonConfig, true);
-                    IsConfigured = true;
-                }
+                LoadValuesFromJson(jsonConfig, useProtectionService: true);
+                IsConfigured = true;
             }
             // read and upgrade old settings file format
             else if (jsonConfig is object)
@@ -169,68 +175,9 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        //TODO: Remove this section once users have moved off DPAPI
-        private bool MigratedFromDPAPI(JToken jsonConfig)
+        protected async Task ConfigureIfOK(string cookies, bool isLoggedIn, Func<Task> onError)
         {
-            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
-
-            if (!isWindows && DotNetCoreUtil.IsRunningOnDotNetCore)
-            {
-                // User isn't running Windows, but is running on .NET Core framework, no access to the DPAPI, so don't bother trying to migrate
-                return false;
-            }
-
-            LoadValuesFromJson(jsonConfig, false);
-
-            StringItem passwordPropertyValue = null;
-            var passwordValue = "";
-
-            try
-            {
-                // try dynamic items first (e.g. all cardigann indexers)
-                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
-
-                if (passwordPropertyValue == null) // if there's no dynamic password try the static property
-                {
-                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
-
-                    // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
-                    if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{Id}] while attempting migration");
-                        return false;
-                    }
-                }
-
-                passwordValue = passwordPropertyValue.Value;
-            }
-            catch (Exception)
-            {
-                logger.Debug($"Unable to source password for [{Id}] while attempting migration, likely a tracker without a password setting");
-                return false;
-            }
-
-            if (!string.IsNullOrEmpty(passwordValue))
-            {
-                try
-                {
-                    protectionService.UnProtect(passwordValue);
-                    //Password successfully unprotected using Microsoft.AspNetCore.DataProtection, no further action needed as we've already converted the password previously
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
-                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {Id} : " + ex);
-                }
-            }
-
-            return false;
-        }
-
-        protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
-        {
-            if (isLoggedin)
+            if (isLoggedIn)
             {
                 CookieHeader = cookies;
                 IsConfigured = true;
