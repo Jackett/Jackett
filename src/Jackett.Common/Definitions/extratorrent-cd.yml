@@ -1,7 +1,7 @@
 ---
 id: extratorrent-cd
 name: ExtraTorrent.cd
-description: "ExtraTorrent.cd is a Public tracker, a  popular alternative to the original ET site, providing Movie / TV / General magnets"
+description: "ExtraTorrent.cd is a Public tracker for MOVIE / TV / GENERAL magnets"
 language: en-us
 type: public
 encoding: UTF-8
@@ -13,8 +13,15 @@ legacylinks:
   - https://extratorrent.unblockit.one/ # for .ag
 
 caps:
-  categories:
-    Other: Other
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: "Movies"}
+    - {id: Video, cat: Movies, desc: "Movies"}
+    - {id: TV, cat: TV, desc: "TV"}
+    - {id: Music, cat: Audio, desc: "Music"}
+    - {id: Porn, cat: XXX, desc: "Adult / Porn"}
+    - {id: Software, cat: PC, desc: "Software"}
+    - {id: Games, cat: Console, desc: "Games"}
+    - {id: Other, cat: Other/Misc, desc: "Other"}
 
   modes:
     search: [q]
@@ -23,15 +30,14 @@ caps:
     music-search: [q]
     book-search: [q]
 
-settings:
-  - name: info_8000
-    type: info
-    label: About ExtraTorrent Categories
-    default: ExtraTorrent does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+settings: []
 
 search:
   paths:
-    - path: "search/?search={{ .Keywords }}"
+    # 30 rows per page
+    - path: "search/?search={{ .Keywords }}&srt=added&order=desc"
+    - path: "search/?page=2&search={{ .Keywords }}&srt=added&order=desc"
+    - path: "search/?page=3&search={{ .Keywords }}&srt=added&order=desc"
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "."]
@@ -44,7 +50,7 @@ search:
 
   fields:
     category:
-      text: Other
+      selector: span.c_tor > a
     title:
       selector: a[href*="/torrent/"][title^="view"]
     details:

@@ -100,7 +100,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://pctmix.com/",
-            "https://pctreload.com/"
+            "https://pctmix1.com/",
+            "https://pctreload1.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -113,7 +114,8 @@ namespace Jackett.Common.Indexers
             "http://tumejortorrent.com/",
             "http://pctnew.com/",
             "https://descargas2020.org/",
-            "https://pctnew.org/"
+            "https://pctnew.org/",
+            "https://pctreload.com/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,

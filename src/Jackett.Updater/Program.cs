@@ -285,7 +285,7 @@ namespace Jackett.Updater
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btxpress.yml",
-                "Definitions/casstudiotv.yml",
+                "Definitions/channelx.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cinefilhd.yml",
                 "Definitions/cooltorrent.yml",
@@ -326,9 +326,11 @@ namespace Jackett.Updater
                 "Definitions/hdclub.yml",
                 "Definitions/hddisk.yml",
                 "Definitions/hdplus.yml",
+                "Definitions/hdreactor.yml", // renamed to hdhouse
                 "Definitions/hdstreet.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
+                "Definitions/horrorsite.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
@@ -358,6 +360,7 @@ namespace Jackett.Updater
                 "Definitions/moecat.yml",
                 "Definitions/monova.yml",
                 "Definitions/movcr.yml",
+                "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
@@ -366,6 +369,7 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/polishtracker.yml",

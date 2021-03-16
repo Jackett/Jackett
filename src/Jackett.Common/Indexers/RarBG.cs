@@ -108,6 +108,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
             _appId = "jackett_" + EnvironmentUtil.JackettVersion();
+
+            EnableConfigurableRetryAttempts();
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)

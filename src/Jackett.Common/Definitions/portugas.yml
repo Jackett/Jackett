@@ -1,26 +1,31 @@
 ---
-id: Channelx
-name: ChannelX
-description: "ChannelX is a Private Torrent Tracker for High Quality Optimized HD MOVIES / TV"
-language: en-us
+id: portugas
+name: Portugas
+description: "Portugas is a Private Portoguese Tracker"
+language: pt-pt
 type: private
 encoding: UTF-8
 links:
-  - https://channelx.xyz/
-legacylinks:
-  - https://channelx.online/
+  - https://portugas.org/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Audiotracks"}
-    - {id: 4, cat: TV/Sport, desc: "Sports"}
+    - {id: 3, cat: Audio, desc: "Músicas"}
+    - {id: 4, cat: PC/Games, desc: "Jogos"}
+    - {id: 5, cat: PC/0day, desc: "Appz"}
+    - {id: 7, cat: XXX, desc: "XXX"}
+    - {id: 9, cat: Books, desc: "E-Books"}
+    - {id: 10, cat: Movies, desc: "Animação Filmes"}
+    - {id: 11, cat: TV/Anime, desc: "Animação TV"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -75,6 +80,7 @@ search:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
+    keywords: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
     tvdb: "{{ .Query.TVDBID }}"
@@ -112,12 +118,10 @@ search:
       selector: div.torrent-poster img
       attribute: src
       filters:
-        - name: prepend
-          args: "https://images.weserv.nl/?url=" # for display on dashboard
-        - name: append
-          args: "&w=180&h=270" # for display on dashboard
         - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
+          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
+        - name: replace
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -176,7 +180,7 @@ search:
         - name: timeago
     downloadvolumefactor:
       case:
-        i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
+        i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From PARA Store
         i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
         i[class*="fa-star text-bold"]: 0 # Freeleech From Token
         i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
@@ -191,8 +195,8 @@ search:
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
     minimumratio:
-      text: 0.4
+      text: 1.1
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-# UNIT3D 2.7.0
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# UNIT3D 4.0.0

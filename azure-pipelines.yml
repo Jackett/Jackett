@@ -368,7 +368,7 @@ stages:
               buildDescription: Linux ARM64
               imageName: ubuntu-latest
               framework: $(netCoreFramework)
-              runtime: linux-arm64
+              runtime: linux-arm
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}

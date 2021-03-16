@@ -10,86 +10,21 @@ links:
 
 caps:
   categorymappings:
-    # Peliculas
-    - {id: 75, cat: Movies/UHD, desc: "Peliculas - 4K"}
-    - {id: 83, cat: Movies/UHD, desc: "Peliculas - 4K CUSTOM"}
-    - {id: 81, cat: Movies/UHD, desc: "Peliculas - 4K Remux"}
-    - {id: 87, cat: Movies/UHD, desc: "Peliculas - 4K Web"}
-    - {id: 23, cat: Movies/BluRay, desc: "Peliculas - Full BluRay"}
-    - {id: 82, cat: Movies/BluRay, desc: "Peliculas - CUSTOM FULLBR"}
-    - {id: 72, cat: Movies/3D, desc: "Peliculas - 3D"}
-    - {id: 62, cat: Movies/BluRay, desc: "Peliculas - BluRay Remux"}
-    - {id: 80, cat: Movies/BluRay, desc: "Peliculas - JMBD"}
-    - {id: 66, cat: Movies/HD, desc: "Peliculas - HD 1080"}
-    - {id: 65, cat: Movies/HD, desc: "Peliculas - HD 720"}
-    - {id: 32, cat: Movies/DVD, desc: "Peliculas - DVDFULL"}
-    - {id: 14, cat: Movies/SD, desc: "Peliculas - HDRip"}
-    - {id: 15, cat: Movies/DVD, desc: "Peliculas - DVDRip"}
-    - {id: 88, cat: Audio/Video, desc: "Peliculas - Videos Musicales"}
-    - {id: 71, cat: Movies/Other, desc: "Peliculas - Peliculas V.O."}
-    # Eml HDTeam
-    - {id: 69, cat: Movies/BluRay, desc: "Eml HDTeam - FULLBR"}
-    - {id: 68, cat: Movies/BluRay, desc: "Eml HDTeam - JMBD"}
-    - {id: 67, cat: Movies/BluRay, desc: "EML HDTeam - BDRemux"}
-    - {id: 35, cat: Movies/HD, desc: "EML HDTeam - 1080"}
-    - {id: 34, cat: Movies/HD, desc: "EML HDTeam - 720"}
-    - {id: 36, cat: TV/HD, desc: "EML HDTeam - Series"}
-    - {id: 73, cat: Movies/3D, desc: "EML HDTeam - 3D"}
-    - {id: 74, cat: Movies/DVD, desc: "EML HDTeam - DVD"}
-    - {id: 77, cat: Movies/Other, desc: "EML HDTeam - Animacion"}
-    - {id: 78, cat: Movies/UHD, desc: "EML HDTeam - 4K"}
-    - {id: 79, cat: Movies/BluRay, desc: "EML HDTeam - CUSTOM BR"}
-    # Series
-    - {id: 50, cat: TV/HD, desc: "Series - Full BluRay"}
-    - {id: 86, cat: TV/UHD, desc: "Series - 4K"}
-    - {id: 49, cat: TV/HD, desc: "Series - H264"}
-    - {id: 84, cat: TV/HD, desc: "Series - H265"}
-    - {id: 22, cat: TV/SD, desc: "Series - DVD"}
-    - {id: 20, cat: TV/SD, desc: "Series - HDRip"}
-    - {id: 51, cat: TV/Other, desc: "Series - Otros Formatos"}
-    # Documentales
-    - {id: 53, cat: TV/Documentary, desc: "Documentales - HD"}
-    - {id: 52, cat: TV/Documentary, desc: "Documentales - SD"}
-    - {id: 85, cat: Books, desc: "Manuales"}
-    # Adultos
-    - {id: 55, cat: XXX/x264, desc: "Adultos - HD"}
-    - {id: 54, cat: XXX/XviD, desc: "Adultos - SD"}
-    # Animación
-    - {id: 58, cat: Movies/HD, desc: "Animacion - HD"}
-    - {id: 57, cat: Movies/SD, desc: "Animacion - SD"}
-    - {id: 76, cat: Movies/3D, desc: "Animacion - 3D"}
-    # Deportes
-    - {id: 61, cat: TV/Sport, desc: "Deportes - HD"}
-    - {id: 60, cat: TV/Sport, desc: "Deportes - SD"}
-    # internal cats not provided in search category dropdown !?!
-    # found by fishing
-    - {id: 37, cat: Books/EBook, desc: "Ebook"}
-    - {id: 47, cat: Audio/Lossless, desc: "Music Lossless"}
-    - {id: 31, cat: Audio/Video, desc: "Music Video"}
-    - {id: 19, cat: Audio/MP3, desc: "Music MP3"}
-    - {id: 29, cat: PC/Games, desc: "PC Game"}
-    - {id: 26, cat: Console/Wii, desc: "Console Wii / WiiU"}
-    - {id: 27, cat: Console/XBox 360, desc: "Console Xbox360"}
-    - {id: 28, cat: Console/PSP, desc: "Console PSP / PS3"}
-    - {id: 42, cat: PC/ISO, desc: "PC ISO"}
-    - {id: 44, cat: PC, desc: "PC"}
-    - {id: 38, cat: Books/Other, desc: "Books Other"}
-    - {id: 39, cat: Books/Other, desc: "Books Other"}
-    - {id: 70, cat: Movies/SD, desc: "Screener"}
-    - {id: 17, cat: PC, desc: "PC Other"}
-    - {id: 43, cat: PC/Mac, desc: "PC Mac"}
-    - {id: 30, cat: Console/NDS, desc: "Console NDS"}
-    - {id: 48, cat: Audio/Video, desc: "Music Video"}
-    - {id: 25, cat: Books/EBook, desc: "Ebook"}
-    - {id: 0, cat: Books/EBook, desc: "Ebook"}
-    - {id: 24, cat: XXX, desc: "Adultos"}
-    - {id: 64, cat: PC/Mobile-Android, desc: "PC Android"}
-    - {id: 21, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 3, cat: TV/Anime, desc: "Animación"}
+    - {id: 4, cat: TV/Anime, desc: "Series Animación"}
+    - {id: 5, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 6, cat: TV/Documentary, desc: "Series Documentales"}
+    - {id: 7, cat: TV/Sport, desc: "Deportes"}
+    - {id: 8, cat: Audio/Video, desc: "Videos Músicales"}
+    - {id: 9, cat: XXX, desc: "+18"}
+    - {id: 10, cat: Other, desc: "Otros"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
 
@@ -102,71 +37,91 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: 3
+    default: created_at
     options:
-      3: created
-      5: seeders
-      4: size
-      2: title
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: 2
+    default: desc
     options:
-      2: desc
-      1: asc
-  - name: info
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+      desc: desc
+      asc: asc
 
 login:
-  path: index.php?page=login
-  method: post
+  path: login
+  method: form
+  form: form[action$="/login"]
   inputs:
-    uid: "{{ .Config.username }}"
-    pwd: "{{ .Config.password }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    remember: on
+  selectorinputs:
+    _token:
+      selector: input[name="_token"]
+      attribute: value
   error:
-    - selector: .alertMessage
-  test:
-    path: index.php
-    selector: form[name="jump1"]
+    - selector: div#ERROR_COPY
+#    test:
+#      path: /
+#      selector: a[href$="/logout"]
 
 search:
-  path: index.php
+  paths:
+    # https://torrentland.li/torrents/filter?
+    # search=&description=&keywords=&uploader=&imdb=&tvdb=&view=list&tmdb=&mal=&igdb=
+    # &start_year=&end_year=&categories%5B%5D=3&sorting=seeders&direction=asc&page=0&qty=25
+    - path: torrents/filter
+  inputs:
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    description: ""
+    keywords: ""
+    uploader: ""
+    imdb: "{{ .Query.IMDBIDShort }}"
+    tvdb: "{{ .Query.TVDBID }}"
+    tmdb: "{{ .Query.TMDBID }}"
+    mal: ""
+    igdb: ""
+    start_year: ""
+    end_year: ""
+    sorting: "{{ .Config.sort }}"
+    direction: "{{ .Config.type }}"
+    qty: 100
+    page: 0
+    view: list
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(?i)\\bS(\\d+)", "T$1"]
-  inputs:
-    page: torrents
-    $raw: "category={{ range .Categories }}{{.}};{{end}}"
-    # 0 filename, 1 file&descr, 2 descr, 5 gold, 6 silver, 7 bronze
-    # note: if option=5 then you cant also filter for titles or imdb.
-    options: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
-    # 0 all, 1 active, 2 dead
-    active: 0
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    order: "{{ .Config.sort }}"
-    by: "{{ .Config.type }}"
-    # does not return imdb link in results
 
   rows:
-    selector: "#Mcol table.table-inverse ~ table.table-inverse > tbody > tr{{ if .Config.freeleech }}[style=\"background: #f9e5a5\"]{{ else }}{{ end }}:has(a[href^=\"index.php?page=torrent-details\"])"
+    selector: table > tbody > tr
 
   fields:
     category:
-      selector: td:nth-child(1) a
-      attribute: href
-      filters:
-        - name: querystring
-          args: category
+      selector: td.category-col div:nth-child(2)
+      case:
+        "span:contains(\"Películas\")": 1
+        "span:contains(\"Series\")": 2
+        "span:contains(\"Animación\")": 3
+        "span:contains(\"Series Animación\")": 4
+        "span:contains(\"Documentales\")": 5
+        "span:contains(\"Series Documentales\")": 6
+        "span:contains(\"Deportes\")": 7
+        "span:contains(\"Videos Músicales\")": 8
+        "span:contains(\"+18\")": 9
+        "span:contains(\"Otros\")": 10
     title:
-      selector: td:nth-child(2) a:contains("VOSE")
+      selector: a[href*="/torrents/"]:contains("VOSE")
       optional: true
       filters:
         - name: re_replace
@@ -176,7 +131,7 @@ search:
         - name: append
           args: " ENGLiSH"
     title:
-      selector: td:nth-child(2) a:not(:contains("VOSE"))
+      selector: a[href*="/torrents/"]:not(:contains("VOSE"))
       optional: true
       filters:
         - name: re_replace
@@ -185,76 +140,95 @@ search:
           args: ["UHDRip", "BDRip"] # Fix for Radarr
         - name: append
           args: " SPANiSH"
-    poster:
-      selector: td:nth-child(2) a
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: src=(.+?)width
-        - name: trim
-        - name: replace
-          args: ["torrentimg/nocover.jpg", ""]
-    details:
-      selector: td:nth-child(2) a
-      attribute: href
-    description:
-      selector: td:nth-child(1) a
-      attribute: href
-      filters:
-        - name: querystring
-          args: category
-        - name: prepend
-          args: "cat="
-    size:
-      selector: td:nth-child(6)
-    seeders:
-      selector: td:nth-child(8) a
-    leechers:
-      selector: td:nth-child(9) a
-    grabs:
-      selector: td:nth-child(10)
-      filters:
-        - name: replace
-          args: ["---", "0"]
-    date:
-      selector: td:nth-child(7)
-      filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
-        - name: dateparse
-          args: "02/01/2006 -07:00"
     download:
-      selector: a[href^="download.php"]
+      selector: a[href*="/download/"]
       attribute: href
-    downloadvolumefactor:
-      text: 1
-    downloadvolumefactor:
-      optional: true
-      selector: tr
-      attribute: style
+    details:
+      selector: a[href*="/torrents/"]
+      attribute: href
+    poster:
+      selector: div.torrent-poster img
+      attribute: src
+      filters:
+        - name: replace
+          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
+        - name: replace
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
+    size:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    grabs:
+      selector: td:nth-last-child(1)
       filters:
         - name: regexp
-          args: "background: #(.*)"
-        - name: replace
-          args: ["f9bdbd", "0"] # freeleech
-        - name: replace
-          args: ["f9e5a5", "0"] # gold
-        - name: replace
-          args: ["a9a9a9", "0.5"] # silver
-        - name: replace
-          args: ["f6c8a6", "0.75"] # bronze
+          args: (\d+)
+    imdb:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"]
+      attribute: href
+    date:
+      selector: time
+      filters:
+        # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
+        - name: re_replace
+          args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前|sedan)", " ago"]
+        - name: re_replace
+          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
+        - name: re_replace
+          args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten|minuter)", "minutes"]
+        - name: re_replace
+          args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟|分)", " minute"]
+        - name: re_replace
+          args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden|timmar)", "hours"]
+        - name: re_replace
+          args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时|時間|timme)", " hour"]
+        - name: re_replace
+          args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen|dagar)", "days"]
+        - name: re_replace
+          args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天|日)", " day"]
+        - name: re_replace
+          args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken|veckor)", "weeks"]
+        - name: re_replace
+          args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周|週間|vecka)", " week"]
+        - name: re_replace
+          args: ["(?i) (ay)", "month"]
+        - name: re_replace
+          args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden|månader)", "months"]
+        - name: re_replace
+          args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|Monat|месец|maand|个月|ヶ月|månad)", " month"]
+        - name: re_replace
+          args: ["(?i)(aastat|anni|lata|anos|roky|года|ani|años|ans|Jahren|години)", " years"]
+        - name: re_replace
+          args: ["(?i)(yil|aasta|år|anno|rok|ano|год|año|Jahr|година|jaar|年)", " year"]
+        - name: re_replace
+          args: ["(?i) (an)", "year"]
+        - name: re_replace
+          args: ["(?i)(För |und)", ""] # Misc removals
+        - name: timeago
+    downloadvolumefactor:
+      case:
+        i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
+        i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
+        i[class*="fa-star text-bold"]: 0 # Freeleech From Token
+        i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
+        i[class*="fa-globe text-blue"]: 0 # Global Freeleech
+        i[class*="fa-star text-gold"]: 0 # Freeleech
+        i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
+        "*": 1
     uploadvolumefactor:
       case:
-        img[src$="2x.gif"]: 2
-        img[src$="3x.gif"]: 3
-        img[src$="4x.gif"]: 4
-        img[src$="5x.gif"]: 5
-        img[src$="6x.gif"]: 6
-        img[src$="7x.gif"]: 7
+        i[class*="fa-gem text-green"]: 2 # Single Torrent Double Upload
+        i[class*="fa-globe text-green"]: 2 # Global Double Upload
+        i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# xbtit customised
+# UNIT3D 5.1.0 custom

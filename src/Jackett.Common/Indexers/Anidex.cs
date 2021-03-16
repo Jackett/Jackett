@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -121,6 +121,8 @@ namespace Jackett.Common.Indexers
                 })
             { Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+
+            EnableConfigurableRetryAttempts();
         }
 
         private string GetLang => ((SingleSelectConfigurationItem)configData.GetDynamic("languageid")).Value;
