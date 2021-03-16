@@ -573,6 +573,9 @@ function getConfigModalJson(configForm) {
             case "inputstring":
                 itemEntry.value = $el.find(".setup-item-inputstring input").val();
                 break;
+            case "password":
+                itemEntry.value = $el.find(".setup-item-password input").val();
+                break;
             case "inputbool":
                 itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
                 break;

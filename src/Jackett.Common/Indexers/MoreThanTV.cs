@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            var sort = new SelectItem(new Dictionary<string, string>
+            var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
             {
                 {"time", "time"},
                 {"size", "size"},
@@ -77,15 +77,15 @@ namespace Jackett.Common.Indexers
                 {"seeders", "seeders"},
                 {"leechers", "leechers"},
             })
-            { Name = "Sort requested from site", Value = "time" };
+            { Value = "time" };
             configData.AddDynamic("sort", sort);
 
-            var order = new SelectItem(new Dictionary<string, string>
+            var order = new SingleSelectConfigurationItem("Order requested from site", new Dictionary<string, string>
             {
                 {"desc", "desc"},
                 {"asc", "asc"}
             })
-            { Name = "Order requested from site", Value = "desc" };
+            { Value = "desc" };
             configData.AddDynamic("order", order);
 
             AddCategoryMapping(1, TorznabCatType.Movies);
@@ -203,10 +203,10 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var sort = (SelectItem)configData.GetDynamic("sort");
+            var sort = (SingleSelectConfigurationItem)configData.GetDynamic("sort");
             _sort = sort != null ? sort.Value : "time";
 
-            var order = (SelectItem)configData.GetDynamic("order");
+            var order = (SingleSelectConfigurationItem)configData.GetDynamic("order");
             _order = order != null && order.Value.Equals("asc") ? order.Value : "desc";
         }
 

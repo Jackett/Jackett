@@ -55,13 +55,12 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var language = new SelectItem(new Dictionary<string, string>
+            var language = new SingleSelectConfigurationItem("Select language", new Dictionary<string, string>
                 {
                     {"castellano", "Castilian Spanish"},
                     {"latino", "Latin American Spanish"}
                 })
             {
-                Name = "Select language",
                 Value = "castellano"
             };
             configData.AddDynamic("language", language);
@@ -72,7 +71,7 @@ namespace Jackett.Common.Indexers
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
-            var language = (SelectItem)configData.GetDynamic("language");
+            var language = (SingleSelectConfigurationItem)configData.GetDynamic("language");
             _language = language?.Value ?? "castellano";
         }
 

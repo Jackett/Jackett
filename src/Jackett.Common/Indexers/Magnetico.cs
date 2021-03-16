@@ -62,22 +62,22 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "semi-private";
 
-            var sort = new ConfigurationData.SelectItem(new Dictionary<string, string>
+            var sort = new ConfigurationData.SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
                 {
                     {"DISCOVERED_ON", "discovered"},
                     {"TOTAL_SIZE", "size"},
                     {"N_FILES", "files"},
                     {"RELEVANCE", "relevance"}
                 })
-                { Name = "Sort requested from site", Value = "discovered" };
+                { Value = "discovered" };
             configData.AddDynamic("sort", sort);
 
-            var order = new ConfigurationData.SelectItem(new Dictionary<string, string>
+            var order = new ConfigurationData.SingleSelectConfigurationItem("Order requested from site", new Dictionary<string, string>
                 {
                     {"false", "desc"},
                     {"true", "asc"}
                 })
-                { Name = "Order requested from site", Value = "false" };
+                { Value = "false" };
             configData.AddDynamic("order", order);
 
             AddCategoryMapping("1", TorznabCatType.Other);
@@ -101,8 +101,8 @@ namespace Jackett.Common.Indexers
             var qc = new NameValueCollection
             {
                 {"query", query.GetQueryString()},
-                {"orderBy", ((ConfigurationData.SelectItem)configData.GetDynamic("sort")).Value},
-                {"ascending", ((ConfigurationData.SelectItem)configData.GetDynamic("order")).Value},
+                {"orderBy", ((ConfigurationData.SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value},
+                {"ascending", ((ConfigurationData.SingleSelectConfigurationItem)configData.GetDynamic("order")).Value},
                 {"limit", "100"}
             };
             var searchUrl = SearchURl + "?" + qc.GetQueryString();

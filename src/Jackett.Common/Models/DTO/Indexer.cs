@@ -50,7 +50,7 @@ namespace Jackett.Common.Models.DTO
             configured = indexer.IsConfigured;
             site_link = indexer.SiteLink;
             language = indexer.Language;
-            last_error = indexer.LastError;
+            last_error = indexer.LastError ?? "";
             potatoenabled = indexer.TorznabCaps.Categories.GetTorznabCategoryTree().Any(i => TorznabCatType.Movies.Contains(i));
 
             alternativesitelinks = indexer.AlternativeSiteLinks;

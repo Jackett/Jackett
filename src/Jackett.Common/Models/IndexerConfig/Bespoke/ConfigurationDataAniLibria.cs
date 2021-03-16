@@ -5,19 +5,17 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     [ExcludeFromCodeCoverage]
     internal class ConfigurationDataAniLibria : ConfigurationData
     {
-        public StringItem ApiLink { get; private set; }
-        public StringItem StaticLink { get; private set; }
+        public StringConfigurationItem ApiLink { get; private set; }
+        public StringConfigurationItem StaticLink { get; private set; }
 
         public ConfigurationDataAniLibria() : base()
         {
-            ApiLink = new StringItem
+            ApiLink = new StringConfigurationItem("API Url")
             {
-                Name = "API Url",
                 Value = "https://api.anilibria.tv/v2/"
             };
-            StaticLink = new StringItem
+            StaticLink = new StringConfigurationItem("Static Url")
             {
-                Name = "Static Url",
                 Value = "https://static.anilibria.tv/"
             };
         }

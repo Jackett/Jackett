@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            configData.AddDynamic("searchgroupnames", new BoolItem { Name = "Search Group Names Only", Value = false });
+            configData.AddDynamic("searchgroupnames", new BoolConfigurationItem("Search Group Names Only") { Value = false });
 
             // Apple
             AddCategoryMapping("Mac", TorznabCatType.ConsoleOther, "Mac");
@@ -212,7 +212,7 @@ namespace Jackett.Common.Indexers
             var searchUrl = BrowseUrl;
             var searchString = query.GetQueryString();
 
-            var searchType = ((BoolItem)configData.GetDynamic("searchgroupnames")).Value ? "groupname" : "searchstr";
+            var searchType = ((BoolConfigurationItem)configData.GetDynamic("searchgroupnames")).Value ? "groupname" : "searchstr";
 
             var queryCollection = new NameValueCollection
             {
