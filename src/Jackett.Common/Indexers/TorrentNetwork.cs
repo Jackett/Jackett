@@ -69,8 +69,8 @@ namespace Jackett.Common.Indexers
             Language = "de-de";
             Type = "private";
 
-            configData.AddDynamic("token", new HiddenItem { Name = "token" });
-            configData.AddDynamic("passkey", new HiddenItem { Name = "passkey" });
+            configData.AddDynamic("token", new HiddenStringConfigurationItem("token"));
+            configData.AddDynamic("passkey", new HiddenStringConfigurationItem("passkey"));
 
             AddCategoryMapping(24, TorznabCatType.MoviesSD, "Movies GER/SD");
             AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movies GER/720p");
@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var tokenItem = (HiddenItem)configData.GetDynamic("token");
+            var tokenItem = (HiddenStringConfigurationItem)configData.GetDynamic("token");
             if (tokenItem != null)
             {
                 var token = tokenItem.Value;
@@ -134,7 +134,7 @@ namespace Jackett.Common.Indexers
                     APIHeaders["Authorization"] = token;
             }
 
-            var passkeyItem = (HiddenItem)configData.GetDynamic("passkey");
+            var passkeyItem = (HiddenStringConfigurationItem)configData.GetDynamic("passkey");
             if (passkeyItem != null)
             {
                 passkey = passkeyItem.Value;
@@ -172,10 +172,10 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(curuser.passkey.ToString()))
                 throw new ExceptionWithConfigData("got empty passkey: " + curuser.ToString(), configData);
             passkey = curuser.passkey;
-            var passkeyItem = (HiddenItem)configData.GetDynamic("passkey");
+            var passkeyItem = (HiddenStringConfigurationItem)configData.GetDynamic("passkey");
             passkeyItem.Value = passkey;
 
-            var tokenItem = (HiddenItem)configData.GetDynamic("token");
+            var tokenItem = (HiddenStringConfigurationItem)configData.GetDynamic("token");
             tokenItem.Value = token;
 
             await ConfigureIfOK("", token.Length > 0, () =>

@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
             Language = "pl-pl";
             Type = "private";
 
-            configData.AddDynamic("LanguageTitle", new BoolItem { Name = "Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr", Value = false });
+            configData.AddDynamic("LanguageTitle", new BoolConfigurationItem("Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr") { Value = false });
 
             AddCategoryMapping(1, TorznabCatType.PC0day, "0-Day");
             AddCategoryMapping(2, TorznabCatType.AudioVideo, "Music Video");
@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
                     else if ((bool?)torrent.polish == true)
                         descriptions.Add("Language: pl");
 
-                    if (language == "pl" && (((BoolItem) configData.GetDynamic("LanguageTitle")).Value))
+                    if (language == "pl" && (((BoolConfigurationItem) configData.GetDynamic("LanguageTitle")).Value))
                         title += " POLISH";
 
                     var description = descriptions.Any() ? string.Join("<br />\n", descriptions) : null;

@@ -81,10 +81,10 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var matchWords = new BoolItem { Name = "Match words in title", Value = true };
+            var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            configData.AddDynamic("flaresolverr", new DisplayItem("This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."){ Name = "FlareSolverr"});
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."));
 
             AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD, "Peliculas");
             AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesHD, "Peliculas HD");
@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
 
             var releases = new List<ReleaseInfo>();
 
-            var matchWords = ((BoolItem)configData.GetDynamic("MatchWords")).Value;
+            var matchWords = ((BoolConfigurationItem)configData.GetDynamic("MatchWords")).Value;
             matchWords = newQuery.SearchTerm != "" && matchWords;
 
             // we remove parts from the original query
