@@ -7,7 +7,8 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www4.yggtorrent.li/
+  - https://www.yggtorrent.si/
+  # don't forget to also change below in settings !
 legacylinks:
   - https://yggtorrent.com/
   - https://ww1.yggtorrent.com/
@@ -33,11 +34,6 @@ legacylinks:
   - https://www5.yggtorrent.pe/
   - https://yggtorrent.ws/
   - https://yggtorrent.se/
-  - https://www.yggtorrent.si/
-  - https://ww3.yggtorrent.si/
-  - https://yggtorrent.si/
-  - http://www2.yggtorrent.si/
-  - https://www2.yggtorrent.si/
 
 caps:
   categorymappings:
@@ -102,6 +98,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: searchanddlurl
+    label: Search and download URL
+    type: text
+    default: www2.yggtorrent.si
   - name: username
     type: text
     label: Username
@@ -148,6 +148,10 @@ settings:
   - name: enhancedAnime
     type: checkbox
     label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
+    default: false
+  - name: betasearchengine
+    type: checkbox
+    label: "Use Beta Search engine URL (Less restrictive) / SonarrV3 Full Series Search NEW"
     default: false
   - name: sort
     type: select
@@ -217,14 +221,16 @@ search:
     - name: replace
       args: ["  ", " "]
     - name: trim
-    # put each word in quotations to prevent exact phrase search
-    - name: re_replace
-      args: ["(\\w+)", "\"$1\""]
   paths:
-    - path: "engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    #Normal Search
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
-    # Saison Word
-    - path: "engine/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}&page=50"
+      followredirect: true
+    #Search with Saison word instead of Sxx
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=100{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+      followredirect: true
+    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}&page=50{{ else }}&page=150{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
 
   rows:
@@ -306,7 +312,7 @@ search:
       # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
     download:
-      text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
+      text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
     date:
       selector: td:nth-child(5)
       filters:
