@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            var sort = new SelectItem(new Dictionary<string, string>
+            var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
             {
                 {"time", "time"},
                 {"size", "size"},
@@ -77,15 +77,15 @@ namespace Jackett.Common.Indexers
                 {"seeders", "seeders"},
                 {"leechers", "leechers"},
             })
-            { Name = "Sort requested from site", Value = "time" };
+            { Value = "time" };
             configData.AddDynamic("sort", sort);
 
-            var order = new SelectItem(new Dictionary<string, string>
+            var order = new SingleSelectConfigurationItem("Order requested from site", new Dictionary<string, string>
             {
                 {"desc", "desc"},
                 {"asc", "asc"}
             })
-            { Name = "Order requested from site", Value = "desc" };
+            { Value = "desc" };
             configData.AddDynamic("order", order);
 
             AddCategoryMapping(1, TorznabCatType.Movies);
@@ -167,8 +167,8 @@ namespace Jackett.Common.Indexers
 
                 await ConfigureIfOK(response.Cookies, response.Cookies.Contains("sid="), () =>
                 {
-                // Couldn't find "sid" cookie, so check for error
-                var parser = new HtmlParser();
+                    // Couldn't find "sid" cookie, so check for error
+                    var parser = new HtmlParser();
                     var dom = parser.ParseDocument(response.ContentString);
                     var errorMessage = dom.QuerySelector(".flash.error").TextContent.Trim();
                     throw new ExceptionWithConfigData(errorMessage, configData);
@@ -196,6 +196,17 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            var sort = (SingleSelectConfigurationItem)configData.GetDynamic("sort");
+            _sort = sort != null ? sort.Value : "time";
+
+            var order = (SingleSelectConfigurationItem)configData.GetDynamic("order");
+            _order = order != null && order.Value.Equals("asc") ? order.Value : "desc";
         }
 
         private string GetTorrentSearchUrl(TorznabQuery query, string searchQuery)
@@ -242,57 +253,19 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var document = parser.ParseDocument(response.ContentString);
-                var groups = document.QuerySelectorAll(".torrent_table > tbody > tr.group");
-                var torrents = document.QuerySelectorAll(".torrent_table > tbody > tr.torrent");
+                var torrents = document.QuerySelectorAll("#torrent_table > tbody > tr.torrent");
+                var movies = new[] { "movie" };
+                var tv = new[] { "season", "episode" };
 
-                // Loop through all torrent (season) groups
-                foreach (var group in groups)
+                // Loop through all torrents checking for groups
+                foreach (var torrent in torrents)
                 {
-                    var showName = group.QuerySelector(".tp-showname a").InnerHtml.Replace("(", "").Replace(")", "").Replace(' ', '.');
-                    var season = group.QuerySelector(".big_info a").InnerHtml;
-                    var seasonNumber = SeasonToNumber(season);
-                    if (seasonNumber != null && query.Season > 0 && seasonNumber != query.Season) // filter unwanted seasons
-                        continue;
-                    var seasonTag = SeasonNumberToShortSeason(seasonNumber) ?? season;
-
-                    // Loop through all group items
-                    var previousElement = group;
-                    var qualityEdition = string.Empty;
-                    while (true)
+                    // Parse required data
+                    var torrentGroup = torrent.QuerySelectorAll("table a[href^=\"/torrents.php?action=download\"]");
+                    foreach (var downloadAnchor in torrentGroup)
                     {
-                        var groupItem = previousElement.NextElementSibling;
-
-                        if (groupItem == null)
-                            break;
-
-                        if (!groupItem.ClassList[0].Equals("group_torrent") ||
-                            !groupItem.ClassList[1].StartsWith("groupid_"))
-                            break;
-
-                        // Found a new edition
-                        if (groupItem.ClassList[2].Equals("edition"))
-                            qualityEdition = groupItem.QuerySelector(".edition_info strong").TextContent.Split('/')[1].Trim();
-                        else if (groupItem.ClassList[2].StartsWith("edition_"))
-                        {
-                            if (qualityEdition.Equals(string.Empty))
-                                break;
-
-                            // Parse required data
-                            var downloadAnchor = groupItem.QuerySelectorAll("td a").Last();
-                            var qualityData = downloadAnchor.InnerHtml.Split('/');
-
-                            switch (qualityData.Length)
-                            {
-                                case 0:
-                                    Array.Resize(ref qualityData, 2);
-                                    qualityData[0] = " ";
-                                    qualityData[1] = " ";
-                                    break;
-                                case 1:
-                                    Array.Resize(ref qualityData, 2);
-                                    qualityData[1] = " ";
-                                    break;
-                            }
+                        var title = downloadAnchor.ParentElement.ParentElement.ParentElement.TextContent.Trim();
+                        title = CleanUpTitle(title);
 
                         var category = torrent.QuerySelector(".cats_col div").GetAttribute("title");
                         // default to Other
