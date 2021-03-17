@@ -1,48 +1,49 @@
 ---
-id: moviezone
-name: Movie Zone
-description: "Movie Zone (Mz) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
+id: teracod
+name: teracod
+description: "teracod (Movie Zone) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
 language: hu-hu
 type: private
 encoding: iso-8859-2
 links:
+  - https://teracod.net/
+legacylinks:
   - https://moviezone.ws/
 
 caps:
   categorymappings:
-    - {id: 76, cat: PC/Mobile-Android, desc: "Android"}
-    - {id: 68, cat: Movies/DVD, desc: "DVD-9"}
-    - {id: 60, cat: Books/EBook, desc: "eBook/Eng"}
-    - {id: 61, cat: Books/EBook, desc: "eBook/Hun"}
-    - {id: 37, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
-    - {id: 38, cat: Movies/DVD, desc: "Film/DVD-R/Hun"}
-    - {id: 48, cat: Movies/HD, desc: "Film/HD/Eng"}
-    - {id: 71, cat: Movies/HD, desc: "Film/HD/Hun"}
-    - {id: 47, cat: Movies/HD, desc: "Film/x264/Eng"}
-    - {id: 82, cat: Movies/HD, desc: "Film/x264/Hun"}
-    - {id: 40, cat: Movies/SD, desc: "Film/XviD/Eng"}
-    - {id: 39, cat: Movies/SD, desc: "Film/XviD/Hun"}
-    - {id: 59, cat: XXX, desc: "Film/XXX"}
-    - {id: 87, cat: Audio/Audiobook, desc: "Hangoskönyv"}
-    - {id: 73, cat: PC/Games, desc: "Játék/Gyermek"}
-    - {id: 51, cat: PC/Games, desc: "Játék/ISO"}
-    - {id: 53, cat: Console/PSP, desc: "Játék/PS"}
-    - {id: 52, cat: PC/Games, desc: "Játék/Rip"}
-    - {id: 56, cat: Console/XBox, desc: "Játék/Xbox (X-360)"}
-    - {id: 75, cat: Other, desc: "Képek"}
-    - {id: 74, cat: XXX, desc: "Képek/XXX"}
-    - {id: 86, cat: Audio/Video, desc: "Klip"}
-    - {id: 66, cat: Audio/Lossless, desc: "Lossless"}
-    - {id: 50, cat: Audio/MP3, desc: "Mp3/Eng"}
-    - {id: 49, cat: Audio/MP3, desc: "Mp3/Hun"}
-    - {id: 45, cat: PC/ISO, desc: "Program/ISO"}
-    - {id: 44, cat: PC, desc: "Program/Misc"}
-    - {id: 36, cat: PC/Mobile-Other, desc: "Program/Mobil"}
-    - {id: 46, cat: PC/Mobile-Other, desc: "Program/PDA"}
-    - {id: 42, cat: TV/Anime, desc: "Rajzfilm/Eng"}
-    - {id: 43, cat: TV/Anime, desc: "Rajzfilm/Hun"}
-    - {id: 57, cat: TV, desc: "Sorozat/Eng"}
-    - {id: 58, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 42, cat: Movies/3D, desc: "Film/3D/Hun"}
+    - {id: 19, cat: Movies/SD, desc: "Film/CAM/Eng"}
+    - {id: 16, cat: Movies/SD, desc: "Film/CAM/Hun"}
+    - {id: 36, cat: Movies/DVD, desc: "Film/DVD/Eng"}
+    - {id: 35, cat: Movies/DVD, desc: "Film/DVD/Hun"}
+    - {id: 34, cat: Movies/HD, desc: "Film/HD/Eng"}
+    - {id: 33, cat: Movies/HD, desc: "Film/HD/Hun"}
+    - {id: 32, cat: Movies/SD, desc: "Film/SD/Eng"}
+    - {id: 31, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: 41, cat: Movies/UHD, desc: "Film/UHD/Hun"}
+    - {id: 28, cat: PC/Games, desc: "Játék/ISO"}
+    - {id: 27, cat: Console, desc: "Játék/Konzol"}
+    - {id: 26, cat: PC/Games, desc: "Játék/RIP"}
+    - {id: 25, cat: Audio/Video, desc: "Klipp"}
+    - {id: 24, cat: Books/EBook, desc: "Könyvek/Eng"}
+    - {id: 23, cat: Books/EBook, desc: "Könyvek/Hun"}
+    - {id: 17, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 20, cat: PC, desc: "Program/Egyéb"}
+    - {id: 14, cat: PC/ISO, desc: "Program/ISO"}
+    - {id: 13, cat: TV/SD, desc: "Sorozat/DVDR/Eng"}
+    - {id: 12, cat: TV/SD, desc: "Sorozat/DVDR/Hun"}
+    - {id: 40, cat: TV/HD, desc: "Sorozat/HD/Eng"}
+    - {id: 39, cat: TV/HD, desc: "Sorozat/HD/Hun"}
+    - {id: 38, cat: TV/SD, desc: "Sorozat/SD/Eng"}
+    - {id: 37, cat: TV/SD, desc: "Sorozat/SD/Hun"}
+    - {id: 30, cat: XXX, desc: "XXX"}
+    - {id: 18, cat: XXX/x264, desc: "XXX/HD"}
+    - {id: 15, cat: XXX/ImageSet, desc: "XXX/Képsorozatok"}
+    - {id: 11, cat: Audio/Lossless, desc: "Zene/EN/Lossless"}
+    - {id: 29, cat: Audio/Lossless, desc: "Zene/HU/Lossless"}
+    - {id: 22, cat: Audio/MP3, desc: "Zene/Mp3/Eng"}
+    - {id: 21, cat: Audio/MP3, desc: "Zene/Mp3/Hun"}
 
   modes:
     search: [q]
@@ -98,7 +99,7 @@ login:
 
 search:
   paths:
-    # https://moviezone.ws/browse.php?search=&cat=0&genre=0&incldead=1&blah=0
+    # https://teracod.net/browse.php?search=&cat=0&genre=0&incldead=1&blah=0
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
@@ -174,7 +175,7 @@ search:
         "font[color=\"#2A821E\"]:contains(\"x2\")": 2
         "*": 1
     minimumratio:
-      text: 0.6
+      text: 1.0
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800

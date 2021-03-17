@@ -67,7 +67,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            configData.AddDynamic("freeleech", new BoolItem { Name = "Search freeleech only", Value = false });
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(8, TorznabCatType.MoviesSD, "Movies Cam");
@@ -157,7 +157,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl;
 
-            if (((BoolItem) configData.GetDynamic("freeleech")).Value)
+            if (((BoolConfigurationItem) configData.GetDynamic("freeleech")).Value)
                 searchUrl += "facets/tags%3AFREELEECH/";
 
             if (query.IsImdbQuery)

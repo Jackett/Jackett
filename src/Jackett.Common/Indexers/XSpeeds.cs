@@ -153,8 +153,8 @@ namespace Jackett.Common.Indexers
                 var captchaUrl = qCaptchaImg.GetAttribute("src");
                 var captchaImageResponse = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
-                var captchaText = new StringItem { Name = "Captcha Text" };
-                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.ContentBytes};
+                var captchaText = new StringConfigurationItem("Captcha Text");
+                var captchaImage = new DisplayImageConfigurationItem("Captcha Image") { Value = captchaImageResponse.ContentBytes};
 
                 configData.AddDynamic("CaptchaText", captchaText);
                 configData.AddDynamic("CaptchaImage", captchaImage);
@@ -175,7 +175,7 @@ namespace Jackett.Common.Indexers
                             {"password", configData.Password.Value}
                         };
 
-            var captchaText = (StringItem)configData.GetDynamic("CaptchaText");
+            var captchaText = (StringConfigurationItem)configData.GetDynamic("CaptchaText");
             if (captchaText != null)
                 pairs.Add("imagestring", captchaText.Value);
 

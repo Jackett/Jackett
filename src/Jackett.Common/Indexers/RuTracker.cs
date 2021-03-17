@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -15,6 +16,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using NLog.Targets;
 
 namespace Jackett.Common.Indexers
 {
@@ -1416,14 +1418,49 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
-            var searchString = query.SanitizedSearchTerm;
+            var searchUrl = CreateSearchUrlForQuery(query);
 
+            var results = await RequestWithCookiesAsync(searchUrl);
+            if (!results.ContentString.Contains("id=\"logged-in-username\""))
+            {
+                // re login
+                await ApplyConfiguration(null);
+                results = await RequestWithCookiesAsync(searchUrl);
+            }
+
+            var releases = new List<ReleaseInfo>();
+
+            try
+            {
+                var rows = GetReleaseRows(results);
+                foreach (var row in rows)
+                {
+                    var release = ParseReleaseRow(row);
+                    if (release != null)
+                    {
+                        releases.Add(release);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.ContentString, ex);
+            }
+
+            return releases;
+        }
+
+        private string CreateSearchUrlForQuery(in TorznabQuery query)
+        {
             var queryCollection = new NameValueCollection();
+
+            var searchString = query.SanitizedSearchTerm;
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
+            {
                 queryCollection.Add("nm", searchString);
+            }
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
@@ -1433,123 +1470,163 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
-            var results = await RequestWithCookiesAsync(searchUrl);
-            if (!results.ContentString.Contains("id=\"logged-in-username\""))
-            {
-                // re login
-                await ApplyConfiguration(null);
-                results = await RequestWithCookiesAsync(searchUrl);
-            }
+            return searchUrl;
+        }
+
+        private IHtmlCollection<IElement> GetReleaseRows(WebResult results)
+        {
+            var parser = new HtmlParser();
+            var doc = parser.ParseDocument(results.ContentString);
+            var rows = doc.QuerySelectorAll("table#tor-tbl > tbody > tr");
+            return rows;
+        }
+
+        private ReleaseInfo ParseReleaseRow(IElement row)
+        {
             try
             {
-                var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results.ContentString);
-                var rows = doc.QuerySelectorAll("table#tor-tbl > tbody > tr");
-                foreach (var row in rows)
-                    try
-                    {
-                        var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
-                        if (qDownloadLink == null) // Expects moderation
-                            continue;
-                        var qDetailsLink = row.QuerySelector("td.t-title-col > div.t-title > a.tLink");
-                        var qSize = row.QuerySelector("td.tor-size");
-                        var details = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                        var seeders = 0;
-                        var qSeeders = row.QuerySelector("td:nth-child(7)");
-                        if (qSeeders != null && !qSeeders.TextContent.Contains("дн"))
-                        {
-                            var seedersString = qSeeders.QuerySelector("b").TextContent;
-                            if (!string.IsNullOrWhiteSpace(seedersString))
-                                seeders = ParseUtil.CoerceInt(seedersString);
-                        }
-                        var timestr = row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
-                        var forum = row.QuerySelector("td.f-name-col > div.f-name > a");
-                        var forumid = forum.GetAttribute("href").Split('=')[1];
-                        var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
-                        var size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
-                        var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
-                        var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(9)").TextContent);
-                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-                        var release = new ReleaseInfo
-                        {
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 0,
-                            Title = qDetailsLink.TextContent,
-                            Details = details,
-                            Link = link,
-                            Guid = details,
-                            Size = size,
-                            Seeders = seeders,
-                            Peers = leechers + seeders,
-                            Grabs = grabs,
-                            PublishDate = publishDate,
-                            Category = MapTrackerCatToNewznab(forumid),
-                            DownloadVolumeFactor = 1,
-                            UploadVolumeFactor = 1
-                        };
+                var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
+                if (qDownloadLink == null) // Expects moderation
+                    return null;
 
-                        // TODO finish extracting release variables to simiplify release initialization
-                        if (release.Category.Contains(TorznabCatType.TV.ID) ||
-                            TorznabCatType.TV.SubCategories.Any(subCat => release.Category.Contains(subCat.ID)))
-                        {
-                            // extract season and episodes
-                            var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\][\\s]?(.*)");
+                var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
 
-                            var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
-                            title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
-                            title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
+                var qDetailsLink = row.QuerySelector("td.t-title-col > div.t-title > a.tLink");
+                var details = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
+                
+                var category = GetCategoryOfRelease(row);
 
-                            release.Title = title;
-                        }
-                        else
-                        if (release.Category.Contains(TorznabCatType.Movies.ID) ||
-                            TorznabCatType.Movies.SubCategories.Any(subCat => release.Category.Contains(subCat.ID)))
-                        {
-                            // remove director's name from title
-                            // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
-                            // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
-                            // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
-                            var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
-                            release.Title = director.Replace(release.Title, "");
+                var size = GetSizeOfRelease(row);
 
-                            // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
-                            release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
-                            // language fix: all rutracker releases contains russian track
-                            if (release.Title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
-                                release.Title += " rus";
-                        }
+                var seeders = GetSeedersOfRelease(row);
+                var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
 
-                        if (configData.StripRussianLetters.Value)
-                        {
-                            var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
-                            release.Title = regex.Replace(release.Title, "");
-                        }
+                var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(9)").TextContent);
 
-                        if (configData.MoveAllTagsToEndOfReleaseTitle.Value)
-                        {
-                            release.Title = MoveAllTagsToEndOfReleaseTitle(release.Title);
-                        }
-                        else if (configData.MoveFirstTagsToEndOfReleaseTitle.Value)
-                        {
-                            release.Title = MoveFirstTagsToEndOfReleaseTitle(release.Title);
-                        }
+                var publishDate = GetPublishDateOfRelease(row);
 
-                        releases.Add(release);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}':\n\n{ex}");
-                    }
+                var release = new ReleaseInfo
+                {
+                    MinimumRatio = 1,
+                    MinimumSeedTime = 0,
+                    Title = qDetailsLink.TextContent,
+                    Details = details,
+                    Link = link,
+                    Guid = details,
+                    Size = size,
+                    Seeders = seeders,
+                    Peers = leechers + seeders,
+                    Grabs = grabs,
+                    PublishDate = publishDate,
+                    Category = category,
+                    DownloadVolumeFactor = 1,
+                    UploadVolumeFactor = 1
+                };
+
+                // TODO finish extracting release variables to simplify release initialization
+                if (IsAnyTvCategory(release.Category))
+                {
+                    // extract season and episodes
+                    var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\][\\s]?(.*)");
+
+                    var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
+                    title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
+                    title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
+                    title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
+                    title = Regex.Replace(title, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
+                    title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
+
+                    release.Title = title;
+                }
+                else if (IsAnyMovieCategory(release.Category))
+                {
+                    // remove director's name from title
+                    // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
+                    // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
+                    // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
+                    var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
+                    release.Title = director.Replace(release.Title, "");
+
+                    // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
+                    release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
+                    // language fix: all rutracker releases contains russian track
+                    if (release.Title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
+                        release.Title += " rus";
+                }
+
+                if (configData.StripRussianLetters.Value)
+                {
+                    var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
+                    release.Title = regex.Replace(release.Title, "");
+                }
+
+                if (configData.MoveAllTagsToEndOfReleaseTitle.Value)
+                {
+                    release.Title = MoveAllTagsToEndOfReleaseTitle(release.Title);
+                }
+                else if (configData.MoveFirstTagsToEndOfReleaseTitle.Value)
+                {
+                    release.Title = MoveFirstTagsToEndOfReleaseTitle(release.Title);
+                }
+
+                if (release.Category.Contains(TorznabCatType.Audio.ID))
+                {
+                    release.Title = DetectRereleaseInReleaseTitle(release.Title);
+                }
+
+                return release;
             }
             catch (Exception ex)
             {
-                OnParseError(results.ContentString, ex);
+                logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}':\n\n{ex}");
+                return null;
             }
+        }
 
-            return releases;
+        private int GetSeedersOfRelease(in IElement row)
+        {
+            var seeders = 0;
+            var qSeeders = row.QuerySelector("td:nth-child(7)");
+            if (qSeeders != null && !qSeeders.TextContent.Contains("дн"))
+            {
+                var seedersString = qSeeders.QuerySelector("b").TextContent;
+                if (!string.IsNullOrWhiteSpace(seedersString))
+                    seeders = ParseUtil.CoerceInt(seedersString);
+            }
+            return seeders;
+        }
+
+        private ICollection<int> GetCategoryOfRelease(in IElement row)
+        {
+            var forum = row.QuerySelector("td.f-name-col > div.f-name > a");
+            var forumid = forum.GetAttribute("href").Split('=')[1];
+            return MapTrackerCatToNewznab(forumid);
+        }
+
+        private long GetSizeOfRelease(in IElement row)
+        {
+            var qSize = row.QuerySelector("td.tor-size");
+            var size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
+            return size;
+        }
+
+        private DateTime GetPublishDateOfRelease(in IElement row)
+        {
+            var timestr = row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
+            var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
+            return publishDate;
+        }
+
+        private bool IsAnyTvCategory(ICollection<int> category)
+        {
+            return category.Contains(TorznabCatType.TV.ID)
+                || TorznabCatType.TV.SubCategories.Any(subCat => category.Contains(subCat.ID));
+        }
+
+        private bool IsAnyMovieCategory(ICollection<int> category)
+        {
+            return category.Contains(TorznabCatType.Movies.ID)
+                || TorznabCatType.Movies.SubCategories.Any(subCat => category.Contains(subCat.ID));
         }
 
         private string MoveAllTagsToEndOfReleaseTitle(string input)
@@ -1584,6 +1661,44 @@ namespace Jackett.Common.Indexers
             }
             output = output.Trim();
             return output;
+        }
+
+        /// <summary>
+        /// Searches the release title to find a 'year1/year2' pattern that would indicate that this is a re-release of an old music album.
+        /// If the release is found to be a re-release, this is added to the title as a new tag.
+        /// Not to be confused with discographies; they mostly follow the 'year1-year2' pattern.
+        /// </summary>
+        private string DetectRereleaseInReleaseTitle(string input)
+        {
+            var fullTitle = input;
+
+            var squareBracketTags = input.FindSubstringsBetween('[', ']', includeOpeningAndClosing:true);
+            input = input.RemoveSubstrings(squareBracketTags);
+
+            var roundBracketTags = input.FindSubstringsBetween('(', ')', includeOpeningAndClosing: true);
+            input = input.RemoveSubstrings(roundBracketTags);
+
+            var regex = new Regex(@"\d{4}");
+            var yearsInTitle = regex.Matches(input);
+
+            if (yearsInTitle == null || yearsInTitle.Count < 2)
+            {
+                //Can only be a re-release if there's at least 2 years in the title.
+                return fullTitle;
+            }
+
+            regex = new Regex(@"(\d{4}) *\/ *(\d{4})");
+            var regexMatch = regex.Match(input);
+            if (!regexMatch.Success)
+            {
+                //Not in the expected format. Return the unaltered title.
+                return fullTitle;
+            }
+
+            var originalYear = regexMatch.Groups[1].ToString();
+            fullTitle = fullTitle.Replace(regexMatch.ToString(), originalYear);
+
+            return fullTitle + "(Re-release)";
         }
     }
 }

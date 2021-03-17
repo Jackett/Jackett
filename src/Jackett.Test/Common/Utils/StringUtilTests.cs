@@ -123,5 +123,28 @@ namespace Jackett.Test.Common.Utils
             CollectionAssert.AreEqual(combined, original.ToEnumerable());
             CollectionAssert.AreEqual(duplicateKeys, original.ToEnumerable(true));
         }
+
+        [Test]
+        public void FindSubstringsBetween_ValidEntries_Succeeds()
+        {
+            var stringParts = new string[] { "<test>", "<abc>", "<def>" };
+            var source = string.Concat(stringParts);
+
+            var results = source.FindSubstringsBetween('<', '>', true);
+
+            CollectionAssert.AreEqual(stringParts, results);
+        }
+
+        [Test]
+        public void FindSubstringsBetween_NestedEntries_Succeeds()
+        {
+            var stringParts = new string[] { "(test(abc))", "(def)", "(ghi)" };
+            var source = string.Concat(stringParts);
+
+            var results = source.FindSubstringsBetween('(', ')', false);
+
+            var expectedParts = new string[] { "abc", "test(abc)", "def", "ghi" };
+            CollectionAssert.AreEqual(expectedParts, results);
+        }
     }
 }

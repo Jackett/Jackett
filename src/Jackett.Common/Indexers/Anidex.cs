@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -68,80 +68,73 @@ namespace Jackett.Common.Indexers
             AddLanguageConfiguration();
 
             // Configure the sort selects
-            var sortBySelect = new SelectItem(new Dictionary<string, string>
+            var sortBySelect = new SingleSelectConfigurationItem("Sort by", new Dictionary<string, string>
                 {
-                {"upload_timestamp", "created"},
-                {"seeders", "seeders"},
-                {"size", "size"},
-                {"filename", "title"}
-            })
-            { Name = "Sort by", Value = "upload_timestamp" };
+                    {"upload_timestamp", "created"},
+                    {"seeders", "seeders"},
+                    {"size", "size"},
+                    {"filename", "title"}
+                })
+            { Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
-            var orderSelect = new SelectItem(new Dictionary<string, string>
+            var orderSelect = new SingleSelectConfigurationItem("Order", new Dictionary<string, string>
                 {
                     {"desc", "Descending"},
                     {"asc", "Ascending"}
                 })
-            { Name = "Order", Value = "desc" };
+            { Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+
+            EnableConfigurableRetryAttempts();
         }
-
-        /// <summary>
-        /// Returns the selected languages, formatted so that they can be used in a query string.
-        /// </summary>
-        private string GetLanguagesForQuery()
-        {
-            var languagesConfig = (CheckboxItem)configData.GetDynamic("languageid");
-            return string.Join(",", languagesConfig.Values);
-        }
-        
-        private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
-
-        private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
-
-        private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
 
         private void AddLanguageConfiguration()
         {
             // Configure the language select option
-            var languageSelect = new CheckboxItem(new Dictionary<string, string>
+            var languageSelect = new MultiSelectConfigurationItem("Language", new Dictionary<string, string>
                 {
-                {"1", "English"},
-                {"2", "Japanese"},
-                {"3", "Polish"},
-                {"4", "Serbo-Croatian" },
-                {"5", "Dutch"},
-                {"6", "Italian"},
-                {"7", "Russian"},
-                {"8", "German"},
-                {"9", "Hungarian"},
-                {"10", "French"},
-                {"11", "Finnish"},
-                {"12", "Vietnamese"},
-                {"13", "Greek"},
-                {"14", "Bulgarian"},
-                {"15", "Spanish (Spain)" },
-                {"16", "Portuguese (Brazil)" },
-                {"17", "Portuguese (Portugal)" },
-                {"18", "Swedish"},
-                {"19", "Arabic"},
-                {"20", "Danish"},
-                {"21", "Chinese (Simplified)" },
-                {"22", "Bengali"},
-                {"23", "Romanian"},
-                {"24", "Czech"},
-                {"25", "Mongolian"},
-                {"26", "Turkish"},
-                {"27", "Indonesian"},
-                {"28", "Korean"},
-                {"29", "Spanish (LATAM)" },
-                {"30", "Persian"},
-                {"31", "Malaysian"}
-            })
-            { Name = "Language", Values = new [] { "1" } };
+                    {"1", "English"},
+                    {"2", "Japanese"},
+                    {"3", "Polish"},
+                    {"4", "Serbo-Croatian" },
+                    {"5", "Dutch"},
+                    {"6", "Italian"},
+                    {"7", "Russian"},
+                    {"8", "German"},
+                    {"9", "Hungarian"},
+                    {"10", "French"},
+                    {"11", "Finnish"},
+                    {"12", "Vietnamese"},
+                    {"13", "Greek"},
+                    {"14", "Bulgarian"},
+                    {"15", "Spanish (Spain)" },
+                    {"16", "Portuguese (Brazil)" },
+                    {"17", "Portuguese (Portugal)" },
+                    {"18", "Swedish"},
+                    {"19", "Arabic"},
+                    {"20", "Danish"},
+                    {"21", "Chinese (Simplified)" },
+                    {"22", "Bengali"},
+                    {"23", "Romanian"},
+                    {"24", "Czech"},
+                    {"25", "Mongolian"},
+                    {"26", "Turkish"},
+                    {"27", "Indonesian"},
+                    {"28", "Korean"},
+                    {"29", "Spanish (LATAM)" },
+                    {"30", "Persian"},
+                    {"31", "Malaysian"}
+                })
+            { Values = new [] { "1" } };
             configData.AddDynamic("languageid", languageSelect);
         }
+
+        private string GetSortBy => ((SingleSelectConfigurationItem)configData.GetDynamic("sortrequestedfromsite")).Value;
+
+        private string GetOrder => ((SingleSelectConfigurationItem)configData.GetDynamic("orderrequestedfromsite")).Value;
+
+        private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -152,6 +145,15 @@ namespace Jackett.Common.Indexers
                 throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
+        }
+
+        /// <summary>
+        /// Returns the selected languages, formatted so that they can be used in a query string.
+        /// </summary>
+        private string GetLanguagesForQuery()
+        {
+            var languagesConfig = (MultiSelectConfigurationItem)configData.GetDynamic("languageid");
+            return string.Join(",", languagesConfig.Values);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -183,7 +185,7 @@ namespace Jackett.Common.Indexers
             // Check for DDOS Guard
             if (response.Status == HttpStatusCode.Forbidden)
             {
-                await ConfigureDDoSGuardCookie();
+                await ConfigureDDoSGuardCookieAsync();
                 response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
             }
 
@@ -239,7 +241,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task ConfigureDDoSGuardCookie()
+        private async Task ConfigureDDoSGuardCookieAsync()
         {
             const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
             var response = await RequestWithCookiesAsync(ddosPostUrl, string.Empty);

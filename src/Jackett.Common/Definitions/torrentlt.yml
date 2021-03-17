@@ -13,56 +13,71 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 27, cat: TV, desc: "Animacija"}
-    - {id: 76, cat: TV, desc: "Animacija / LT"}
-    - {id: 35, cat: TV/Anime, desc: "Anime"}
-    - {id: 31, cat: Movies/DVD, desc: "Filmai / DVD"}
     - {id: 33, cat: Movies, desc: "Filmai / LT"}
     - {id: 43, cat: Movies, desc: "Filmai / LT-Subs"}
+    - {id: 74, cat: Movies/HD, desc: "Filmai LT HD"}
     - {id: 34, cat: Movies, desc: "Filmai / Eng"}
+    - {id: 54, cat: Movies/HD, desc: "Filmai / Eng HD"}
     - {id: 32, cat: Movies, desc: "Filmai / Rus"}
+    - {id: 78, cat: Movies/HD, desc: "Filmai Rus HD"}
+    - {id: 72, cat: Movies/3D, desc: "Filmai / 3D"}
+    - {id: 31, cat: Movies/DVD, desc: "Filmai / DVD"}
+
+    - {id: 76, cat: TV, desc: "Animacija / LT"}
+    - {id: 80, cat: TV/HD, desc: "Animacija / LT HD"}
+    - {id: 27, cat: TV, desc: "Animacija / Eng"}
+    - {id: 52, cat: TV/HD, desc: "Animacija / Eng HD"}
+    - {id: 81, cat: TV, desc: "Animacija / Rus"}
+    - {id: 85, cat: TV, desc: "Animacija / Rus HD"}
+    - {id: 86, cat: TV, desc: "Animacija / 3D"}
+    - {id: 35, cat: TV/Anime, desc: "Anime"}
+
+    - {id: 58, cat: TV, desc: "Serialai / LT"}
+    - {id: 79, cat: TV/HD, desc: "Serialai LT HD"}
+    - {id: 42, cat: TV, desc: "Serialai / Eng"}
+    - {id: 56, cat: TV/HD, desc: "Serialai / Eng HD"}
+    - {id: 59, cat: TV, desc: "Serialai / Rus"}
+    - {id: 84, cat: TV/HD, desc: "Serialai / Rus HD"}
+
+    - {id: 69, cat: TV, desc: "TV / LT"}
+    - {id: 28, cat: TV, desc: "TV / Eng"}
+    - {id: 70, cat: TV, desc: "TV / Rus"}
+    - {id: 39, cat: TV/Documentary, desc: "TV / Dokumentika"}
+
     - {id: 1, cat: PC/Games, desc: "Žaidimai / PC"}
-    - {id: 50, cat: Console/PS4, desc: "Žaidimai / PlayStation"}
-    - {id: 51, cat: Console/XBox 360, desc: "Žaidimai / XBOX-360"}
+    - {id: 50, cat: Console/PS4, desc: "Žaidimai / PS"}
+    - {id: 51, cat: Console/XBox 360, desc: "Žaidimai / XBOX"}
     - {id: 73, cat: Console, desc: "Žaidimai / Priedai"}
     - {id: 36, cat: Console/Other, desc: "Žaidimai / Kita"}
-    - {id: 80, cat: Movies/HD, desc: "HD / Animacija LT"}
-    - {id: 52, cat: Movies/HD, desc: "HD / Animacija"}
-    - {id: 53, cat: TV/Documentary, desc: "HD / Dokumentika"}
-    - {id: 54, cat: Movies/HD, desc: "HD / Filmai"}
-    - {id: 55, cat: Audio/Video, desc: "HD / Music videos"}
-    - {id: 72, cat: Movies/3D, desc: "HD / 3D"}
-    - {id: 56, cat: TV/HD, desc: "HD / Serialai"}
-    - {id: 74, cat: TV/HD, desc: "HD / Filmai LT"}
-    - {id: 79, cat: TV/HD, desc: "HD / Serialai LT"}
-    - {id: 78, cat: TV/HD, desc: "HD / Filmai RU"}
-    - {id: 37, cat: TV/HD, desc: "HD / Kita"}
+
+    - {id: 62, cat: TV/Sport, desc: "Sport / Basketball"}
+    - {id: 66, cat: TV/Sport, desc: "Sport / Football"}
+    - {id: 65, cat: TV/Sport, desc: "Sport / Fights"}
+    - {id: 63, cat: TV/Sport, desc: "Sport / Cars"}
+    - {id: 40, cat: TV/Sport, desc: "Sport / Kita"}
+
+    - {id: 87, cat: Audio/MP3, desc: "Muzika / LT"}
+    - {id: 6, cat: Audio, desc: "Muzika / Albumai"}
     - {id: 57, cat: Audio/MP3, desc: "Muzika / VA"}
     - {id: 26, cat: Audio, desc: "Muzika / DJ Sets"}
-    - {id: 6, cat: Audio, desc: "Muzika / Albumai"}
-    - {id: 29, cat: Audio/Video, desc: "Muzika / Video Klipai"}
-    - {id: 42, cat: TV, desc: "Serialai / Eng"}
-    - {id: 58, cat: TV, desc: "Serialai / LTU"}
-    - {id: 59, cat: TV, desc: "Serialai / Rus"}
-    - {id: 45, cat: TV, desc: "Serialai / Animacija"}
+    - {id: 29, cat: Audio/Video, desc: "Muzika / Videos"}
+
     - {id: 10, cat: PC/0day, desc: "Soft / PC"}
     - {id: 44, cat: PC/Mac, desc: "Soft / MAC"}
-    - {id: 61, cat: PC, desc: "Soft / PDA"}
-    - {id: 75, cat: PC/Mobile-Other, desc: "Soft / Kita"}
-    - {id: 40, cat: TV/Sport, desc: "Sport / Kita"}
-    - {id: 62, cat: TV/Sport, desc: "Sport / Basketball"}
-    - {id: 63, cat: TV/Sport, desc: "Sport / Cars"}
-    - {id: 65, cat: TV/Sport, desc: "Sport / Fights"}
-    - {id: 66, cat: TV/Sport, desc: "Sport / Football"}
-    - {id: 69, cat: TV, desc: "TV / LT"}
-    - {id: 70, cat: TV, desc: "TV / RU"}
-    - {id: 39, cat: TV/Documentary, desc: "TV / Dokumentika"}
-    - {id: 28, cat: TV, desc: "TV / Kita"}
-    - {id: 21, cat: XXX, desc: "pr0n"}
-    - {id: 71, cat: XXX/Pack, desc: "pr0n / pack"}
-    - {id: 30, cat: Other, desc: "Kita"}
+    - {id: 61, cat: PC/Mobile-Other, desc: "Soft / Mobile"}
+    - {id: 75, cat: PC, desc: "Soft / Kita"}
+
+    - {id: 89, cat: Audio/Audiobook, desc: "Audiobooks / LT"}
+    - {id: 83, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 90, cat: Books/EBook, desc: "E-Books / LT"}
+    - {id: 41, cat: Books/EBook, desc: "E-Books"}
     - {id: 77, cat: Other, desc: "Educational"}
-    - {id: 41, cat: Books, desc: "E-Books"}
+    - {id: 30, cat: Other/Misc, desc: "Kita"}
+
+    - {id: 21, cat: XXX, desc: "pr0n"}
+    - {id: 88, cat: XXX, desc: "pr0n / LT"}
+    - {id: 71, cat: XXX/Pack, desc: "pr0n / pack"}
+    - {id: 82, cat: XXX, desc: "pr0n / games"}
 
   modes:
     search: [q]
@@ -124,35 +139,42 @@ search:
       args: [".", " "] # issue #3296
 
   rows:
-    selector: table> tbody > tr[class^="torrents_table_row_"]
+    selector: table> tbody > tr[class^="torrents-table__"]
     filters:
       - name: andmatch
         args: 50
+    after: 1
 
   fields:
     category:
-      selector: td[class^="torrent_cat_image"] a
+      selector: td[class^="category-icon_cell"] a
       attribute: href
       filters:
         - name: querystring
-          args: cats[]
+          args: cats
     title:
-      selector: td[class$="torrent_info"] a
+      selector: div[class^="torrent-name"] a
     details:
-      selector: td[class$="torrent_info"] a
+      selector: div[class^="torrent-name"] a
       attribute: href
     download:
-      selector: td a.torrent_size
+      selector: td a[href^="download?id="]
       attribute: href
     poster:
-      selector: td[class$="torrent_info"] a
+      selector: div[class^="torrent-name"] a
       attribute: data-poster-preview
     seeders:
-      selector: td span.torrent_seeders
+      text: 0
+    seeders:
+      selector: td.seeders_cell:not(:has(i))
+      optional: true
     leechers:
-      selector: td span.torrent_leechers
+      text: 0
+    leechers:
+      selector: td.leechers_cell:not(:has(i))
+      optional: true
     size:
-      selector: td a.torrent_size
+      selector: td.size_cell
     downloadvolumefactor:
       case:
         img[src$="/freedownload.gif"]: 0
@@ -160,13 +182,13 @@ search:
     uploadvolumefactor:
       text: 1
     date:
-      selector: td[class$="torrent_info"] span
-      remove: div, i
+      selector: span.datetime
+      attribute: title
       filters:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "2006-01-02 15:04 -07:00"
     minimumratio:
       text: 0.41
 # engine n/a

@@ -249,7 +249,13 @@ function displayUnconfiguredIndexersList() {
 			        }).fail(function (data) {
                 if(data.responseJSON.error !== undefined) {
                   var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                  doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+                  var githubrepo = "Jackett/Jackett"
+                  var githubtext = "this indexer"
+                  if (data.responseJSON.error.includes("check FlareSolverr logs")) {
+                    githubrepo = "FlareSolverr/FlareSolverr"
+                    githubtext = "FlareSolverr"
+                  }
+                  doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
                 } else {
                   doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
                 }
@@ -474,7 +480,13 @@ function testIndexer(id, notifyResult) {
       updateTestState(id, "error", data.error, indexers);
       if(data.responseJSON.error !== undefined && notifyResult) {
         var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
-        doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+        var githubrepo = "Jackett/Jackett"
+        var githubtext = "this indexer"
+        if (data.responseJSON.error.includes("check FlareSolverr logs")) {
+          githubrepo = "FlareSolverr/FlareSolverr"
+          githubtext = "FlareSolverr"
+        }
+        doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
       } else {
         doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
       }
@@ -560,6 +572,9 @@ function getConfigModalJson(configForm) {
                 break;
             case "inputstring":
                 itemEntry.value = $el.find(".setup-item-inputstring input").val();
+                break;
+            case "password":
+                itemEntry.value = $el.find(".setup-item-password input").val();
                 break;
             case "inputbool":
                 itemEntry.value = $el.find(".setup-item-inputbool input").is(":checked");
