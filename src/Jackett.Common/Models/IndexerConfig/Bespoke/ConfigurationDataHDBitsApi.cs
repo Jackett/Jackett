@@ -6,13 +6,13 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     [ExcludeFromCodeCoverage]
     internal class ConfigurationDataHDBitsApi : ConfigurationDataUserPasskey
     {
-        public CheckboxItem Codecs { get; private set; }
-        public CheckboxItem Mediums { get; private set; }
-        public CheckboxItem Origins { get; private set; }
+        public MultiSelectConfigurationItem Codecs { get; private set; }
+        public MultiSelectConfigurationItem Mediums { get; private set; }
+        public MultiSelectConfigurationItem Origins { get; private set; }
 
         public ConfigurationDataHDBitsApi()
         {
-            Codecs = new CheckboxItem(new Dictionary<string, string>()
+            Codecs = new MultiSelectConfigurationItem("Codec", new Dictionary<string, string>()
                 {
                     {"0", "Undefined"},
                     {"1", "H.264"},
@@ -22,9 +22,9 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                     {"6", "VP9"},
                     {"4", "XviD"}
                 })
-            { Name = "Codec", Values = new [] { "0", "1", "5", "2", "3", "6", "4" } };
+            { Values = new [] { "0", "1", "5", "2", "3", "6", "4" } };
 
-            Mediums = new CheckboxItem(new Dictionary<string, string>()
+            Mediums = new MultiSelectConfigurationItem("Medium", new Dictionary<string, string>()
                 {
                     {"0", "Undefined"},
                     {"1", "Blu-ray/HD DVD"},
@@ -33,14 +33,14 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                     {"5", "Remux"},
                     {"6", "WEB-DL"}
                 })
-            { Name = "Medium", Values = new [] { "0", "1", "4", "3", "5", "6" } };
+            { Values = new [] { "0", "1", "4", "3", "5", "6" } };
 
-            Origins = new CheckboxItem(new Dictionary<string, string>()
+            Origins = new MultiSelectConfigurationItem("Origin", new Dictionary<string, string>()
                 {
                     {"0", "Undefined"},
                     {"1", "Internal"}
                 })
-            { Name = "Origin", Values = new [] { "0", "1" } };
+            { Values = new [] { "0", "1" } };
         }
     }
 }

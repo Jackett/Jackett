@@ -55,6 +55,10 @@ body {
     max-width: 255px;
 }
 
+.setup-item-password {
+    max-width: 255px;
+}
+
 .setup-item-inputbool input {
     max-width: 100px;
     height: 20px;
