@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -41,7 +37,7 @@ namespace Jackett.Common.Indexers
             : base(
                 id: "sharewoodapi",
                 name: "Sharewood API",
-                description: "sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL",
+                description: "Sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL",
                 link: "https://www.sharewood.tv/",
                 caps: new TorznabCapabilities
                 {
