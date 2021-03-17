@@ -229,17 +229,65 @@ namespace Jackett.Common.Indexers
                 [".False"] = null,
                 [".Today.Year"] = DateTime.Today.Year.ToString()
             };
+
             foreach (var setting in Definition.Settings)
-                variables[".Config." + setting.Name] = configData.GetDynamic(setting.Name) switch
+            {
+                var configurationItem = configData.GetDynamic(setting.Name);
+                if (configurationItem == null)
+                    continue;
+
+                var variableKey = ".Config." + setting.Name;
+
+                switch (configurationItem)
                 {
-                    MultiSelectConfigurationItem checkbox => checkbox.Values,
-                    BoolConfigurationItem boolItem => variables[boolItem.Value ? ".True" : ".False"],
-                    SingleSelectConfigurationItem selectItem => selectItem.Value,
-                    StringConfigurationItem stringItem => stringItem.Value,
-                    // Throw exception here to match original functionality.
-                    // Currently this will only throw for ImageItem.
-                    _ => throw new NotSupportedException()
-                };
+                    case BoolConfigurationItem boolItem:
+                    {
+                        variables[variableKey] = variables[boolItem.Value ? ".True" : ".False"];
+                        break;
+                    }
+                    case StringConfigurationItem stringItem:
+                    {
+                        variables[variableKey] = stringItem.Value;
+                        break;
+                    }
+                    case PasswordConfigurationItem passwordItem:
+                    {
+                        variables[variableKey] = passwordItem.Value;
+                        break;
+                    }
+                    case SingleSelectConfigurationItem selectItem:
+                    {
+                        variables[variableKey] = selectItem.Value;
+                        break;
+                    }
+                    case MultiSelectConfigurationItem multiSelectItem:
+                    {
+                        variables[variableKey] = multiSelectItem.Values;
+                        break;
+                    }
+                    case DisplayImageConfigurationItem displayImageItem:
+                    {
+                        variables[variableKey] = displayImageItem.Value;
+                        break;
+                    }
+                    case DisplayInfoConfigurationItem displayInfoItem:
+                    {
+                        variables[variableKey] = displayInfoItem.Value;
+                        break;
+                    }
+                    case HiddenStringConfigurationItem hiddenStringItem:
+                    {
+                        variables[variableKey] = hiddenStringItem.Value;
+                        break;
+                    }
+                    default:
+                    {
+                        //TODO Should this throw a NotSupportedException, as it used to?
+                        break;
+                    }
+                }
+            }
+
             return variables;
         }
 
