@@ -272,12 +272,12 @@ namespace Jackett.Common.Indexers
                     }
                     case DisplayInfoConfigurationItem displayInfoItem:
                     {
-                        //variables[variableKey] = displayInfoItem.Value;
+                        variables[variableKey] = displayInfoItem.Value;
                         break;
                     }
                     case HiddenStringConfigurationItem hiddenStringItem:
                     {
-                        //variables[variableKey] = hiddenStringItem.Value;
+                        variables[variableKey] = hiddenStringItem.Value;
                         break;
                     }
                     default:
