@@ -156,7 +156,7 @@ namespace Jackett.Common.Indexers
                 }
                 catch (Exception)
                 {
-                    string errorMessage = ParseErrorMessage(preRequest);
+                    var errorMessage = ParseErrorMessage(preRequest);
                     throw new ExceptionWithConfigData(errorMessage, configData);
                 }
 
@@ -269,7 +269,7 @@ namespace Jackett.Common.Indexers
 
                         var category = torrent.QuerySelector(".cats_col div").GetAttribute("title");
                         // default to Other
-                        int categoryId = TorznabCatType.Other.ID;
+                        var categoryId = TorznabCatType.Other.ID;
 
                         if (movies.Any(category.Contains))
                             categoryId = TorznabCatType.Movies.ID;
@@ -308,9 +308,9 @@ namespace Jackett.Common.Indexers
             /*const int USER_COL = 1;*/
 
 
-            string downloadAnchorHref = (downloadAnchor as IHtmlAnchorElement).Href;
+            var downloadAnchorHref = (downloadAnchor as IHtmlAnchorElement).Href;
             var queryParams = HttpUtility.ParseQueryString(downloadAnchorHref, Encoding.UTF8);
-            string torrentId = queryParams["id"];
+            var torrentId = queryParams["id"];
 
             var qFiles = row.QuerySelector("td:nth-last-child(" + FILES_COL + ")").TextContent;
 
@@ -331,10 +331,10 @@ namespace Jackett.Common.Indexers
                 throw new Exception($"We expected 4 torrent datas.");
             }
 
-            long size = ReleaseInfo.GetBytes(fileSize);
-            int grabs = int.Parse(snatched, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-            int seeders = int.Parse(seeds, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
-            int leechers = int.Parse(leechs, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
+            var size = ReleaseInfo.GetBytes(fileSize);
+            var grabs = int.Parse(snatched, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
+            var seeders = int.Parse(seeds, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
+            var leechers = int.Parse(leechs, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var detailsUri = new Uri(DetailsUrl + "?torrentid=" + torrentId);
             var downloadLink = new Uri(BrowseUrl + "?action=download&id=" + torrentId);
 
@@ -358,24 +358,6 @@ namespace Jackett.Common.Indexers
             };
         }
 
-        // Changes "Season 1" to "1"
-        private static int? SeasonToNumber(string season)
-        {
-            var seasonMatch = new Regex(@"Season (?<seasonNumber>\d{1,2})").Match(season);
-            if (seasonMatch.Success)
-                return int.Parse(seasonMatch.Groups["seasonNumber"].Value);
-
-            return null;
-        }
-
-        // Changes "1" to "S01"
-        private static string SeasonNumberToShortSeason(int? season)
-        {
-            if (season == null)
-                return null;
-            return $"S{season:00}";
-        }
-
         /// <summary>
         /// Parse Error Messages from using CSS classes
         /// </summary>
@@ -385,18 +367,10 @@ namespace Jackett.Common.Indexers
         {
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(response.ContentString);
-            var errorMessage = "Unknown Error";
+            var errorMessage = response.Status == System.Net.HttpStatusCode.Forbidden
+                ? dom.QuerySelector(".time").Parent.TextContent.Trim()
+                : dom.QuerySelector(".flash.error").TextContent.Trim();
 
-            switch (response.Status)
-            {
-                case System.Net.HttpStatusCode.Forbidden:
-                    errorMessage = dom.QuerySelector(".time").Parent.TextContent.Trim();
-                    break;
-                default:
-                    errorMessage = dom.QuerySelector(".flash.error").TextContent.Trim();
-                    break;
-
-            }
             return errorMessage;
         }
 
