@@ -133,14 +133,25 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
             AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
 
+<<<<<<< HEAD
             var FreeLeechOnly = new BoolConfigurationItem("Search freeleech only");
             configData.AddDynamic("freeleechonly", FreeLeechOnly);
 
             var ReplaceMulti = new BoolConfigurationItem("Replace MULTI by another language in release name");
+=======
+            var FreeLeechOnly = new boolItem() { Name = "Search freeleech only" };
+            configData.AddDynamic("freeleechonly", FreeLeechOnly);
+
+            var ReplaceMulti = new boolItem() { Name = "Replace MULTI by another language in release name" };
+>>>>>>> da906c8a7a407d5d44152301b19fda94e3b853d9
             configData.AddDynamic("replacemulti", ReplaceMulti);
-            
+
             // Configure the language select option for MULTI
+<<<<<<< HEAD
             var languageSelect = new SingleSelectConfigurationItem("Replace MULTI by this language", new Dictionary<string, string>
+=======
+            var languageSelect = new selectItem(new Dictionary<string, string>
+>>>>>>> da906c8a7a407d5d44152301b19fda94e3b853d9
             {
                 {"FRENCH", "FRENCH"},
                 {"MULTI.FRENCH", "MULTI.FRENCH"},
@@ -153,7 +164,11 @@ namespace Jackett.Common.Indexers
             ;
             configData.AddDynamic("languageid", languageSelect);
 
+<<<<<<< HEAD
             var ReplaceVostfr = new BoolConfigurationItem("Replace VOSTFR with ENGLISH");
+=======
+            var ReplaceVostfr = new boolItem() { Name = "Replace VOSTFR with ENGLISH" };
+>>>>>>> da906c8a7a407d5d44152301b19fda94e3b853d9
             configData.AddDynamic("replacevostfr", ReplaceVostfr);
 
             EnableConfigurableRetryAttempts();
@@ -174,10 +189,17 @@ namespace Jackett.Common.Indexers
             return term;
         }
 
+<<<<<<< HEAD
         private bool GetFreeLeech => ((BoolConfigurationItem)configData.GetDynamic("freeleechonly")).Value;
         private bool GetReplaceMulti => ((BoolConfigurationItem)configData.GetDynamic("replacemulti")).Value;
         private string GetLang => ((SingleSelectConfigurationItem)configData.GetDynamic("languageid")).Value;
         private bool GetReplaceVostfr => ((BoolConfigurationItem)configData.GetDynamic("replacevostfr")).Value;
+=======
+        private bool GetFreeLeech => ((boolItem)configData.GetDynamic("freeleechonly")).Value;
+        private bool GetReplaceMulti => ((boolItem)configData.GetDynamic("replacemulti")).Value;
+        private string GetLang => ((selectItem)configData.GetDynamic("languageid")).Value;
+        private bool GetReplaceVostfr => ((boolItem)configData.GetDynamic("replacevostfr")).Value;
+>>>>>>> da906c8a7a407d5d44152301b19fda94e3b853d9
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -334,4 +356,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-
