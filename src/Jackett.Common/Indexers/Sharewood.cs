@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -18,9 +14,6 @@ using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
-using WebClient = Jackett.Common.Utils.Clients.WebClient;
-
-
 
 namespace Jackett.Common.Indexers
 {
@@ -36,12 +29,12 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "api/" + configData.Passkey.Value;
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
-        public ShareWood(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+        public ShareWood(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(
                 id: "sharewoodapi",
-                name: "Sharewood API",
-                description: "sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL",
+                name: "SharewoodAPI",
+                description: "Sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL",
                 link: "https://www.sharewood.tv/",
                 caps: new TorznabCapabilities
                 {
@@ -138,7 +131,7 @@ namespace Jackett.Common.Indexers
 
             var ReplaceMulti = new BoolItem() { Name = "Replace MULTI by another language in release name" };
             configData.AddDynamic("replacemulti", ReplaceMulti);
-            
+
             // Configure the language select option for MULTI
             var languageSelect = new SelectItem(new Dictionary<string, string>
             {
@@ -147,7 +140,7 @@ namespace Jackett.Common.Indexers
                 {"ENGLISH", "ENGLISH"},
                 {"MULTI.ENGLISH", "MULTI.ENGLISH" },
                 {"VOSTFR", "VOSTFR"},
-                {"MULTI.VOSTFR", "MULTI.VOSTFR"}                
+                {"MULTI.VOSTFR", "MULTI.VOSTFR"}
             })
             { Name = "Replace MULTI by this language", Value = "1" };
             configData.AddDynamic("languageid", languageSelect);
@@ -333,4 +326,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-
