@@ -90,7 +90,6 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.Movies);
             AddCategoryMapping(2, TorznabCatType.TV);
-            AddCategoryMapping(3, TorznabCatType.Other);
         }
 
         /// <summary>
@@ -223,11 +222,18 @@ namespace Jackett.Common.Indexers
             };
 
             if (query.Categories.Contains(TorznabCatType.Movies.ID))
-                qc.Add("filter_cat[1]", "1");
+            {
+                qc.Add("filter_cat[1]", "1"); // HD Movies
+                qc.Add("filter_cat[2]", "1"); // SD Movies
+            }
+
             if (query.Categories.Contains(TorznabCatType.TV.ID))
-                qc.Add("filter_cat[2]", "1");
-            if (query.Categories.Contains(TorznabCatType.Other.ID))
-                qc.Add("filter_cat[3]", "1");
+            {
+                qc.Add("filter_cat[3]", "1"); // HD EPISODE
+                qc.Add("filter_cat[4]", "1"); // SD Episode
+                qc.Add("filter_cat[5]", "1"); // HD Season
+                qc.Add("filter_cat[6]", "1"); // SD Season
+            }
 
             return BrowseUrl + "?" + qc.GetQueryString();
         }
