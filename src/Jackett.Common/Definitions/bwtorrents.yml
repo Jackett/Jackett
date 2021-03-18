@@ -73,7 +73,7 @@ caps:
     - {id: 158, cat: TV, desc: "TV-Other Tv Shows"}
     - {id: 157, cat: TV, desc: "TV-Hollywood Tv Shows"}
     - {id: 195, cat: TV, desc: "TV-Tv Packs"}
-    - {id: 159, cat: Music, desc: "Music-Religion & Spirituality"}
+    - {id: 159, cat: Audio, desc: "Music-Religion & Spirituality"}
     - {id: 160, cat: Audio, desc: "Music-Classical"}
     - {id: 172, cat: Audio, desc: "Music-Remix"}
     - {id: 161, cat: Audio/Lossless, desc: "Music-Flacs"}
