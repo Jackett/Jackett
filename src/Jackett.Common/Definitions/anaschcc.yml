@@ -90,11 +90,11 @@ search:
 
   fields:
     category:
-      selector: td a[href^="index.php?page=torrents&category="]
+      selector: td a[href^="index.php?page=torrents&category[]="]
       attribute: href
       filters:
         - name: querystring
-          args: category
+          args: category[]
     title:
       selector: td a[href^="index.php?page=torrent-details"]
     details:
@@ -126,13 +126,13 @@ search:
     size:
       selector: td:nth-child(5)
     date:
-      # 22/01/2021 01:28
+      # 22/01/21 01:28
       selector: td:nth-child(6)
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile - doesn't adjust for DST
         - name: dateparse
-          args: "02/01/2006 15:04 -07:00"
+          args: "02/01/06 15:04 -07:00"
     seeders:
       selector: td:nth-child(7)
     leechers:
