@@ -21,7 +21,7 @@ namespace Jackett.Test.Server.Services
             }
             else
             {
-                var expectedWindowsPath = Environment.ExpandEnvironmentVariables("%ProgramData%") + "/Jackett";
+                var expectedWindowsPath = Environment.ExpandEnvironmentVariables("%ProgramData%") + "\\Jackett";
                 Assert.AreEqual(expectedWindowsPath, dataFolder);
             }
         }
