@@ -14,6 +14,9 @@ caps:
     - {id: 135, cat: Movies, desc: "Анон"}
     - {id: 213, cat: Movies, desc: "Борат 2"}
     - {id: 222, cat: Movies, desc: "Траффик"}
+    - {id: 223, cat: Movies, desc: "На колёсах"}
+    - {id: 224, cat: Movies, desc: "Чудо в камере №7"}
+    - {id: 227, cat: Movies, desc: "Сначала убили моего отца"}
     - {id: 206, cat: Movies, desc: "Брачная история"}
     - {id: 201, cat: Movies, desc: "Быстрая, как ветер"}
     - {id: 60, cat: Movies, desc: "Бэтмен против Супермена: На заре справедливости"}
