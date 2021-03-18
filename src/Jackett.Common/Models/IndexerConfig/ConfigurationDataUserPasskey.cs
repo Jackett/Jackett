@@ -2,15 +2,15 @@ namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataUserPasskey : ConfigurationData
     {
-        public StringItem Username { get; private set; }
-        public StringItem Passkey { get; private set; }
-        public DisplayItem Instructions { get; protected set; }
+        public StringConfigurationItem Username { get; private set; }
+        public StringConfigurationItem Passkey { get; private set; }
+        public DisplayInfoConfigurationItem Instructions { get; protected set; }
 
         public ConfigurationDataUserPasskey(string instructionMessageOptional = null)
         {
-            Username = new StringItem { Name = "Username" };
-            Passkey = new StringItem { Name = "Passkey" };
-            Instructions = new DisplayItem(instructionMessageOptional) { Name = "" };
+            Username = new StringConfigurationItem("Username");
+            Passkey = new StringConfigurationItem("Passkey");
+            Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
         }
     }
 }

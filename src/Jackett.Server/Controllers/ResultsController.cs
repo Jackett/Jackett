@@ -210,7 +210,12 @@ namespace Jackett.Server.Controllers
             }
 
             var manualResult = new ManualSearchResult();
-            var trackers = IndexerService.GetAllIndexers().ToList().Where(t => t.IsConfigured);
+
+            var trackers = CurrentIndexer is BaseMetaIndexer
+                ? (CurrentIndexer as BaseMetaIndexer).Indexers.Where(t => t.IsConfigured)
+                : (new[] { CurrentIndexer });
+
+            // Filter current trackers list on Tracker query parameter if available
             if (request.Tracker != null)
                 trackers = trackers.Where(t => request.Tracker.Contains(t.Id));
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));

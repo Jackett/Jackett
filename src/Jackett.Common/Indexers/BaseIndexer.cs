@@ -9,6 +9,7 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Polly;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -181,17 +182,17 @@ namespace Jackett.Common.Indexers
 
             LoadValuesFromJson(jsonConfig, false);
 
-            StringItem passwordPropertyValue = null;
+            StringConfigurationItem passwordPropertyValue = null;
             var passwordValue = "";
 
             try
             {
                 // try dynamic items first (e.g. all cardigann indexers)
-                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
+                passwordPropertyValue = (StringConfigurationItem)configData.GetDynamicByName("password");
 
                 if (passwordPropertyValue == null) // if there's no dynamic password try the static property
                 {
-                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
+                    passwordPropertyValue = (StringConfigurationItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
 
                     // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
                     if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
@@ -410,6 +411,88 @@ namespace Jackett.Common.Indexers
             IProtectionService p, ICacheService cacheService)
             : base("/", "", "", "", configService, logger, null, p, cacheService) => webclient = client;
 
+        protected virtual int DefaultNumberOfRetryAttempts => 2;
+
+        /// <summary>
+        /// Number of retry attempts to make if a web request fails.
+        /// </summary>
+        /// <remarks>
+        /// Number of retries can be overridden for unstable indexers by overriding this property. Note that retry attempts include an
+        /// exponentially increasing delay. 
+        /// 
+        /// Alternatively, <see cref="EnableConfigurableRetryAttempts()" /> can be called in the constructor to add user configurable options.
+        /// </remarks>
+        protected virtual int NumberOfRetryAttempts
+        {
+            get
+            {
+                var configItem = configData.GetDynamic("retryAttempts");
+                if (configItem == null)
+                {
+                    // No config specified so use the default.
+                    return DefaultNumberOfRetryAttempts;
+                }
+
+                var configValue = ((SingleSelectConfigurationItem)configItem).Value;
+
+                if (int.TryParse(configValue, out var parsedConfigValue) && parsedConfigValue > 0)
+                {
+                    return parsedConfigValue;
+                }
+                else
+                {
+                    // No config specified so use the default.
+                    return DefaultNumberOfRetryAttempts;
+                }
+            }
+        }
+
+        private AsyncPolicy<WebResult> RetryPolicy
+        {
+            get
+            {
+                // Configure the retry policy
+                int attemptNumber = 1;
+                var retryPolicy = Policy
+                    .HandleResult<WebResult>(r => (int)r.Status >= 500)
+                    .Or<Exception>()
+                    .WaitAndRetryAsync(
+                        NumberOfRetryAttempts,
+                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 4),
+                        onRetry: (exception, timeSpan, context) =>
+                        {
+                            logger.Warn($"Request to {DisplayName} failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            attemptNumber++;
+                        });
+                return retryPolicy;
+            }
+        }
+
+        /// <summary>
+        /// Adds configuration options to allow the user to manually configure request retries.
+        /// </summary>
+        /// <remarks>
+        /// This should only be enabled for indexers known to be unstable. To control the default value, override <see cref="DefaultNumberOfRetryAttempts" />.
+        /// </remarks>
+        protected void EnableConfigurableRetryAttempts()
+        {
+            var attemptSelect = new SingleSelectConfigurationItem(
+                "Number of retries",
+                new Dictionary<string, string>
+                {
+                    {"0", "No retries (fail fast)"},
+                    {"1", "1 retry (0.5s delay)"},
+                    {"2", "2 retries (1s delay)"},
+                    {"3", "3 retries (2s delay)"},
+                    {"4", "4 retries (4s delay)"},
+                    {"5", "5 retries (8s delay)"}
+                })
+            {
+                Value = DefaultNumberOfRetryAttempts.ToString()
+            };
+            configData.AddDynamic("retryAttempts", attemptSelect);
+        }
+
         public virtual async Task<byte[]> Download(Uri link)
         {
             var uncleanLink = UncleanLink(link);
@@ -449,25 +532,9 @@ namespace Jackett.Common.Indexers
             string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
             Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
-            Exception lastException = null;
-            for (var i = 0; i < 3; i++)
-            {
-                try
-                {
-                    return await RequestWithCookiesAsync(
-                        url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(
-                        e, string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
-                    lastException = e;
-                }
-
-                await Task.Delay(500);
-            }
-
-            throw lastException;
+            return await RetryPolicy.ExecuteAsync(async () =>
+                await RequestWithCookiesAsync(url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser)
+            );
         }
 
         protected virtual async Task<WebResult> RequestWithCookiesAsync(

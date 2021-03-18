@@ -120,23 +120,25 @@ namespace Jackett.Common.Indexers
             configData = new ConfigurationData();
             foreach (var Setting in Definition.Settings)
             {
-                Item item;
+                ConfigurationItem item;
+
+                var itemName = Setting.Label ?? Setting.Name;
 
                 if (Setting.Type != null)
                 {
                     switch (Setting.Type)
                     {
                         case "checkbox":
-                            item = new BoolItem { Value = false };
+                            item = new BoolConfigurationItem(itemName) { Value = false };
 
                             if (Setting.Default != null && Setting.Default == "true")
                             {
-                                ((BoolItem)item).Value = true;
+                                ((BoolConfigurationItem)item).Value = true;
                             }
                             break;
                         case "password":
                         case "text":
-                            item = new StringItem { Value = Setting.Default };
+                            item = new StringConfigurationItem(itemName) { Value = Setting.Default };
                             break;
                         case "multi-select":
                             if (Setting.Options == null)
@@ -144,7 +146,7 @@ namespace Jackett.Common.Indexers
                                 throw new Exception("Options must be given for the 'multi-select' type.");
                             }
 
-                            item = new CheckboxItem(Setting.Options) { Values = Setting.Defaults };
+                            item = new MultiSelectConfigurationItem(itemName, Setting.Options) { Values = Setting.Defaults };
                             break;
                         case "select":
                             if (Setting.Options == null)
@@ -152,10 +154,10 @@ namespace Jackett.Common.Indexers
                                 throw new Exception("Options must be given for the 'select' type.");
                             }
 
-                            item = new SelectItem(Setting.Options) { Value = Setting.Default };
+                            item = new SingleSelectConfigurationItem(itemName, Setting.Options) { Value = Setting.Default };
                             break;
                         case "info":
-                            item = new DisplayItem(Setting.Default);
+                            item = new DisplayInfoConfigurationItem(itemName, Setting.Default);
                             break;
                         default:
                             throw new Exception($"Invalid setting type '{Setting.Type}' specified.");
@@ -163,13 +165,9 @@ namespace Jackett.Common.Indexers
                 }
                 else
                 {
-                    item = new StringItem { Value = Setting.Default };
-                    ;
+                    item = new StringConfigurationItem(itemName) { Value = Setting.Default };
                 }
 
-                item.Name = Setting.Label;
-                if (item.Name == null)
-                    item.Name = Setting.Name;
                 configData.AddDynamic(Setting.Name, item);
             }
 
@@ -231,17 +229,65 @@ namespace Jackett.Common.Indexers
                 [".False"] = null,
                 [".Today.Year"] = DateTime.Today.Year.ToString()
             };
+
             foreach (var setting in Definition.Settings)
-                variables[".Config." + setting.Name] = configData.GetDynamic(setting.Name) switch
+            {
+                var configurationItem = configData.GetDynamic(setting.Name);
+                if (configurationItem == null)
+                    continue;
+
+                var variableKey = ".Config." + setting.Name;
+
+                switch (configurationItem)
                 {
-                    CheckboxItem checkbox => checkbox.Values,
-                    BoolItem boolItem => variables[boolItem.Value ? ".True" : ".False"],
-                    SelectItem selectItem => selectItem.Value,
-                    StringItem stringItem => stringItem.Value,
-                    // Throw exception here to match original functionality.
-                    // Currently this will only throw for ImageItem.
-                    _ => throw new NotSupportedException()
-                };
+                    case BoolConfigurationItem boolItem:
+                    {
+                        variables[variableKey] = variables[boolItem.Value ? ".True" : ".False"];
+                        break;
+                    }
+                    case StringConfigurationItem stringItem:
+                    {
+                        variables[variableKey] = stringItem.Value;
+                        break;
+                    }
+                    case PasswordConfigurationItem passwordItem:
+                    {
+                        variables[variableKey] = passwordItem.Value;
+                        break;
+                    }
+                    case SingleSelectConfigurationItem selectItem:
+                    {
+                        variables[variableKey] = selectItem.Value;
+                        break;
+                    }
+                    case MultiSelectConfigurationItem multiSelectItem:
+                    {
+                        variables[variableKey] = multiSelectItem.Values;
+                        break;
+                    }
+                    case DisplayImageConfigurationItem displayImageItem:
+                    {
+                        variables[variableKey] = displayImageItem.Value;
+                        break;
+                    }
+                    case DisplayInfoConfigurationItem displayInfoItem:
+                    {
+                        variables[variableKey] = displayInfoItem.Value;
+                        break;
+                    }
+                    case HiddenStringConfigurationItem hiddenStringItem:
+                    {
+                        variables[variableKey] = hiddenStringItem.Value;
+                        break;
+                    }
+                    default:
+                    {
+                        //TODO Should this throw a NotSupportedException, as it used to?
+                        break;
+                    }
+                }
+            }
+
             return variables;
         }
 
@@ -617,7 +663,7 @@ namespace Jackett.Common.Indexers
                     var Captcha = Login.Captcha;
                     if (Captcha.Type == "image")
                     {
-                        var CaptchaText = (StringItem)configData.GetDynamic("CaptchaText");
+                        var CaptchaText = (StringConfigurationItem)configData.GetDynamic("CaptchaText");
                         if (CaptchaText != null)
                         {
                             var input = Captcha.Input;
@@ -633,7 +679,7 @@ namespace Jackett.Common.Indexers
                     }
                     if (Captcha.Type == "text")
                     {
-                        var CaptchaAnswer = (StringItem)configData.GetDynamic("CaptchaAnswer");
+                        var CaptchaAnswer = (StringConfigurationItem)configData.GetDynamic("CaptchaAnswer");
                         if (CaptchaAnswer != null)
                         {
                             var input = Captcha.Input;
@@ -689,7 +735,7 @@ namespace Jackett.Common.Indexers
             }
             else if (Login.Method == "cookie")
             {
-                configData.CookieHeader.Value = ((StringItem)configData.GetDynamic("cookie")).Value;
+                configData.CookieHeader.Value = ((StringConfigurationItem)configData.GetDynamic("cookie")).Value;
             }
             else if (Login.Method == "get")
             {
@@ -865,8 +911,8 @@ namespace Jackett.Common.Indexers
                         var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
                         var captchaImageData = await RequestWithCookiesAsync(
                             CaptchaUrl.ToString(), landingResult.Cookies, referer: LoginUrl.AbsoluteUri);
-                        var CaptchaImage = new ImageItem { Name = "Captcha Image" };
-                        var CaptchaText = new StringItem { Name = "Captcha Text" };
+                        var CaptchaImage = new DisplayImageConfigurationItem("Captcha Image");
+                        var CaptchaText = new StringConfigurationItem("Captcha Text");
 
                         CaptchaImage.Value = captchaImageData.ContentBytes;
 
@@ -885,8 +931,8 @@ namespace Jackett.Common.Indexers
                     {
                         hasCaptcha = true;
 
-                        var CaptchaChallenge = new DisplayItem(captchaElement.TextContent) { Name = "Captcha Challenge" };
-                        var CaptchaAnswer = new StringItem { Name = "Captcha Answer" };
+                        var CaptchaChallenge = new DisplayInfoConfigurationItem("Captcha Challenge", captchaElement.TextContent);
+                        var CaptchaAnswer = new StringConfigurationItem("Captcha Answer");
 
                         configData.AddDynamic("CaptchaChallenge", CaptchaChallenge);
                         configData.AddDynamic("CaptchaAnswer", CaptchaAnswer);

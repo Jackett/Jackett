@@ -87,7 +87,7 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
-            configData.AddDynamic("freeleech", new BoolItem { Name = "Search freeleech only", Value = false });
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");
@@ -197,7 +197,7 @@ namespace Jackett.Common.Indexers
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 qc.Add(cat, string.Empty);
 
-            if (((BoolItem)configData.GetDynamic("freeleech")).Value)
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
                 qc.Add("free", "on");
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();

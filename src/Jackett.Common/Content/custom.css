@@ -55,6 +55,10 @@ body {
     max-width: 255px;
 }
 
+.setup-item-password {
+    max-width: 255px;
+}
+
 .setup-item-inputcheckbox label {
     padding: 0 1.5em;
 }

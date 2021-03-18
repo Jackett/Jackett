@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
 
             // Configure the language select option
-            var languageSelect = new SelectItem(new Dictionary<string, string>
+            var languageSelect = new SingleSelectConfigurationItem("Language", new Dictionary<string, string>
                 {
                 {"1", "English"},
                 {"2", "Japanese"},
@@ -100,34 +100,36 @@ namespace Jackett.Common.Indexers
                 {"30", "Persian"},
                 {"31", "Malaysian"}
             })
-            { Name = "Language", Value = "1" };
+            { Value = "1" };
             configData.AddDynamic("languageid", languageSelect);
 
             // Configure the sort selects
-            var sortBySelect = new SelectItem(new Dictionary<string, string>
+            var sortBySelect = new SingleSelectConfigurationItem("Sort by", new Dictionary<string, string>
                 {
                 {"upload_timestamp", "created"},
                 {"seeders", "seeders"},
                 {"size", "size"},
                 {"filename", "title"}
             })
-            { Name = "Sort by", Value = "upload_timestamp" };
+            { Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
-            var orderSelect = new SelectItem(new Dictionary<string, string>
+            var orderSelect = new SingleSelectConfigurationItem("Order", new Dictionary<string, string>
                 {
                     {"desc", "Descending"},
                     {"asc", "Ascending"}
                 })
-            { Name = "Order", Value = "desc" };
+            { Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+
+            EnableConfigurableRetryAttempts();
         }
 
-        private string GetLang => ((SelectItem)configData.GetDynamic("languageid")).Value;
+        private string GetLang => ((SingleSelectConfigurationItem)configData.GetDynamic("languageid")).Value;
         
-        private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
+        private string GetSortBy => ((SingleSelectConfigurationItem)configData.GetDynamic("sortrequestedfromsite")).Value;
 
-        private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
+        private string GetOrder => ((SingleSelectConfigurationItem)configData.GetDynamic("orderrequestedfromsite")).Value;
 
         private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
 
