@@ -18,10 +18,10 @@ namespace Jackett.Test.Server.Services
             {
                 var expectedUnixPath = Environment.GetEnvironmentVariable("HOME") + "/.config/Jackett";
                 Assert.AreEqual(expectedUnixPath, dataFolder);
-            } 
-            else 
+            }
+            else
             {
-                var expectedWindowsPath = Environment.GetEnvironmentVariable("%ProgramData%") + "/Jackett";
+                var expectedWindowsPath = Environment.ExpandEnvironmentVariables("%ProgramData%") + "/Jackett";
                 Assert.AreEqual(expectedWindowsPath, dataFolder);
             }
         }
