@@ -54,6 +54,8 @@ search:
 
   rows:
     selector: ul#searchresult > li:has(a[href$=".html"][title])
+    filters:
+      - name: andmatch
 
   fields:
     category:
