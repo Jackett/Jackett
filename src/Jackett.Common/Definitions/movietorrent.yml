@@ -17,6 +17,9 @@ caps:
     - {id: 47, cat: Movies, desc: "Tamil Telugu"}
     - {id: 32, cat: Movies, desc: "Pakistani"}
     - {id: 26, cat: Movies, desc: "Hollywood"}
+    - {id: 53, cat: Movies/WEB-DL, desc: "Web Series"}
+    - {id: 59, cat: Movies, desc: "2019"}
+    - {id: 8758, cat: Movies, desc: "2020"}
 
   modes:
     search: [q]
