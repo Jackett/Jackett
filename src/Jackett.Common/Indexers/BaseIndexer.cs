@@ -461,7 +461,14 @@ namespace Jackett.Common.Indexers
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 4),
                         onRetry: (exception, timeSpan, context) =>
                         {
-                            logger.Warn($"Request to {DisplayName} failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            if (exception.Result == null)
+                            {
+                                logger.Warn($"Request to {DisplayName} failed with exception '{exception.Exception.Message}'. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            }
+                            else
+                            {
+                                logger.Warn($"Request to {DisplayName} failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            }
                             attemptNumber++;
                         });
                 return retryPolicy;
