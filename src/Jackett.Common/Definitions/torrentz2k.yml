@@ -92,6 +92,8 @@ search:
         - name: re_replace
           args: ["(?i)hr", "hours"]
         - name: re_replace
+          args: ["(?i)mon", "months"]
+        - name: re_replace
           args: ["(?i)yr", "years"]
         - name: append
           args: " ago"
