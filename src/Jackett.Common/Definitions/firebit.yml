@@ -8,8 +8,6 @@ encoding: UTF-8
 links:
   - https://firebit.net/
   - https://firebit.info/
-  - https://firebit.pro/
-  - https://firebit.club/
 legacylinks:
   - https://firebit.name/
   - https://firebit.biz/
@@ -19,6 +17,8 @@ legacylinks:
   - http://firebit.pro/
   - http://firebit.club/
   - http://firebit.biz/
+  - https://firebit.pro/
+  - https://firebit.club/
 
 caps:
   categorymappings:
