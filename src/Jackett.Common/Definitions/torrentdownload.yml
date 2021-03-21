@@ -47,8 +47,9 @@ caps:
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
-    - {id: BooksEbooks, cat: Books, desc: "Books Ebooks"}
+    - {id: BooksEbooks, cat: Books/EBook, desc: "Books Ebooks"}
     - {id: BooksEducational, cat: Books, desc: "Books Educational"}
+    - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
     - {id: BooksFiction, cat: Books, desc: "Books Fiction"}
     - {id: BooksNonfiction, cat: Books, desc: "Books Nonfiction"}
     - {id: Ebooks, cat: Books/EBook, desc: "Books Ebooks"}
