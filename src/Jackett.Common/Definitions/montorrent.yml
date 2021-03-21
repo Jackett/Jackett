@@ -13,30 +13,30 @@ caps:
   categorymappings:
     - {id: "vo", cat: Movies, desc: "Films VO"}
     - {id: "vostfr", cat: Movies, desc: "Films VOSTFR"}
-    - {id: "dvdrip", cat: Movies, desc: "Films DVDRIP"}
-    - {id: "bdrip", cat: Movies, desc: "Films BDRIP"}
-    - {id: "webrip", cat: Movies, desc: "Films WEBRIP"}
-    - {id: "hdrip", cat: Movies, desc: "Films HDRIP"}
-    - {id: "dvdscreener", cat: Movies, desc: "Films DVD Screener"}
+    - {id: "dvdrip", cat: Movies/SD, desc: "Films DVDRip"}
+    - {id: "brrip", cat: Movies/SD, desc: "Films BRRip"}
+    - {id: "bdrip", cat: Movies/SD, desc: "Films BDRip"}
+    - {id: "webrip", cat: Movies/WEB-DL, desc: "Films WEBRip"}
+    - {id: "hdrip", cat: Movies/SD, desc: "Films HDRip"}
+    - {id: "dvdscreener", cat: Movies, desc: "Films DVDScreener"}
     - {id: "screener", cat: Movies, desc: "Films Screener"}
-    - {id: "hd2160p", cat: Movies, desc: "Films 2160p"}
-    - {id: "hd1080p", cat: Movies, desc: "Films 1080p"}
-    - {id: "hd720p", cat: Movies, desc: "Films 720p"}
-    - {id: "hd2160p-hdlight", cat: Movies, desc: "Films 2160p HD Light"}
-    - {id: "hd1080p-hdlight", cat: Movies, desc: "Films 1080p HD Light"}
-    - {id: "hd720p-hdlight", cat: Movies, desc: "Films 720p HD Light"}
-    - {id: "hd3d", cat: Movies, desc: "Films 3D"}
-    - {id: "serie-vostfr", cat: TV, desc: "Emission TV VOSTFR"}
-    - {id: "serie-vf", cat: TV, desc: "Emission TV VF"}
-    - {id: "pack-vf", cat: TV, desc: "Emission TV Pack VF"}
-    - {id: "pack-vostfr", cat: TV, desc: "Emission TV Pack VOSTFR"}
-    - {id: "pack-vo", cat: TV, desc: "Emission TV VO"}
-    - {id: "albums", cat: Audio, desc: "Audio"}
-    - {id: "jeux", cat: PC/Games, desc: "Jeu vidéo"}
-    - {id: "jeux-pc", cat: PC/Games, desc: "Jeu vidéo PC"}
-    - {id: "jeux-console", cat: PC/Games, desc: "Jeu vidéo Consoles"}
-    - {id: "logiciels", cat: PC, desc: "Application"}
-    - {id: "ebooks", cat: Books, desc: "eBook"}
+    - {id: "hd2160p", cat: Movies/UHD, desc: "Films 2160p"}
+    - {id: "hd1080p", cat: Movies/HD, desc: "Films 1080p"}
+    - {id: "hd720p", cat: Movies/HD, desc: "Films 720p"}
+    - {id: "hd2160p-hdlight", cat: Movies/UHD, desc: "Films 2160p HDLight"}
+    - {id: "hd1080p-hdlight", cat: Movies/HD, desc: "Films 1080p HDLight"}
+    - {id: "hd720p-hdlight", cat: Movies/HD, desc: "Films 720p HDLight"}
+    - {id: "hd3d", cat: Movies/3D, desc: "Films 3D"}
+    - {id: "serie-vostfr", cat: TV, desc: "TV VOSTFR"}
+    - {id: "serie-vf", cat: TV, desc: "TV VF"}
+    - {id: "pack-vf", cat: TV, desc: "TV Pack VF"}
+    - {id: "pack-vostfr", cat: TV, desc: "TV Pack VOSTFR"}
+    - {id: "pack-vo", cat: TV, desc: "TV Pack VO"}
+    - {id: "albums", cat: Audio, desc: "Albums"}
+    - {id: "jeux-pc", cat: PC/Games, desc: "Jeux PC"}
+    - {id: "jeux-console", cat: Console, desc: "Jeux Consoles"}
+    - {id: "logiciels", cat: PC/0day, desc: "Logiciels"}
+    - {id: "ebooks", cat: Books/EBook, desc: "eBooks"}
 
   modes:
     search: [q]
@@ -99,6 +99,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 search:
   paths:
@@ -168,6 +172,8 @@ search:
       attribute: href
     size:
       selector: div.t-taille
+    date:
+      text: now
     seeders:
       text: 0
     seeders:
