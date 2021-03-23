@@ -59,6 +59,7 @@ caps:
     BOOKSNONFICTION: Books
     BOOKSTEXTBOOKS: Books
     BOOKSTUTORIALS: Books
+    COMIC: Books/Comics
     COMICSNEM43COMICS: Books/Comics
     DESIPORN: XXX
     DOCUMENTARIES: TV/Documentary
