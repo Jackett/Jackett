@@ -47,6 +47,7 @@ caps:
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
+    - {id: BooksComics, cat: Books/Comics, desc: "Books Comics"}
     - {id: BooksEbooks, cat: Books/EBook, desc: "Books Ebooks"}
     - {id: BooksEducational, cat: Books, desc: "Books Educational"}
     - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
@@ -74,6 +75,7 @@ caps:
     - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
     - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
     - {id: TV, cat: TV, desc: TV}
+    - {id: TVEllenDeGeneres, cat: TV, desc: "TV Ellen DeGeneres"}
     - {id: TVOther, cat: TV/Other, desc: "TV Other"}
     - {id: TVshows, cat: TV, desc: "TV shows"}
     - {id: Television, cat: TV, desc: Television}
