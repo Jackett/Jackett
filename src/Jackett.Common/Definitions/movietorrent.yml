@@ -12,14 +12,39 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Bollywood"}
     - {id: 2, cat: Movies/HD, desc: "1080p"}
-    - {id: 35, cat: Movies, desc: "Punjabi"}
+    - {id: 3, cat: Movies/HD, desc: "2016"}
+    - {id: 4, cat: Movies/HD, desc: "2017"}
+    - {id: 6, cat: Movies/HD, desc: "2018"}
+    - {id: 7, cat: Movies/HD, desc: "720p"}
+    - {id: 8, cat: Movies/HD, desc: "480p"}
+    - {id: 9, cat: Movies/HD, desc: "Action"}
+    - {id: 10, cat: Movies, desc: "Adventure"}
+    - {id: 11, cat: Movies, desc: "Animation"}
+    - {id: 14, cat: Movies, desc: "Comedy"}
+    - {id: 15, cat: Movies, desc: "Crime"}
+    - {id: 18, cat: Movies, desc: "Drama"}
     - {id: 19, cat: Movies, desc: "Dubbed"}
-    - {id: 47, cat: Movies, desc: "Tamil Telugu"}
-    - {id: 32, cat: Movies, desc: "Pakistani"}
+    - {id: 23, cat: Movies, desc: "Hindi"}
     - {id: 26, cat: Movies, desc: "Hollywood"}
+    - {id: 27, cat: Movies, desc: "Horror"}
+    - {id: 32, cat: Movies, desc: "Pakistani"}
+    - {id: 35, cat: Movies, desc: "Punjabi"}
+    - {id: 36, cat: Movies, desc: "Religious"}
+    - {id: 38, cat: Movies, desc: "Romance"}
+    - {id: 42, cat: Movies, desc: "Sport"}
+    - {id: 44, cat: Movies, desc: "Superhero"}
+    - {id: 47, cat: Movies, desc: "Tamil Telugu"}
+    - {id: 48, cat: Movies, desc: "Thriller"}
+    - {id: 49, cat: Movies, desc: "Trending"}
     - {id: 53, cat: Movies/WEB-DL, desc: "Web Series"}
     - {id: 59, cat: Movies, desc: "2019"}
+    - {id: 5143, cat: Movies, desc: "2012"}
+    - {id: 5247, cat: Movies, desc: "2015"}
     - {id: 8758, cat: Movies, desc: "2020"}
+    - {id: 8808, cat: Movies, desc: "2013"}
+    - {id: 8809, cat: Movies, desc: "2014"}
+    - {id: 9938, cat: Movies, desc: "Turkish Dramas"}
+    - {id: 10293, cat: Movies, desc: "2021"}
 
   modes:
     search: [q]
