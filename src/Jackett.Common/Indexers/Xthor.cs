@@ -241,7 +241,9 @@ namespace Jackett.Common.Indexers
                 if (xthorResponse.torrents != null)
                 {
                     // Adding each torrent row to releases
-                    releases.AddRange(xthorResponse.torrents.Select(torrent =>
+                    // Exclude hidden torrents (category 106, example => search 'yoda' in the API) #10407
+                    releases.AddRange(xthorResponse.torrents
+                        .Where(torrent => torrent.category != 106).Select(torrent =>
                     {
                         //issue #3847 replace multi keyword
                         if (!string.IsNullOrEmpty(ReplaceMulti))
