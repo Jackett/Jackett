@@ -33,7 +33,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
   - name: info_tpp
     type: info
