@@ -216,6 +216,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Sharewood
  * SkTorrent
  * SkTorrent-org
+ * themixingbowl (TMB)
  * Toloka.to
  * Torrent-Explosiv
  * Torrents-Local
