@@ -10,7 +10,6 @@ links:
   - https://torrent9.to/
   - https://www.torrent9.gg/
   - https://torrent9.unblockninja.com/
-  - https://www.oxtorrent.me/
 
 legacylinks:
   - http://www.torrent9.ec/
@@ -43,6 +42,7 @@ legacylinks:
   - https://ww1.torrent9.to/
   - https://www.torrent9.is/
   - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
+  - https://www.oxtorrent.me/ # http 522 Connection timed out
 
 caps:
   categorymappings:
