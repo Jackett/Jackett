@@ -23,7 +23,6 @@ caps:
     - {id: 9, cat: PC/Mobile-Other, desc: "GSM/PDA"}
     - {id: 10, cat: Other, desc: "Inne"}
     - {id: 11, cat: XXX, desc: "XXX"}
-    - {id: 144, cat: Other, desc: "Nieposortowane"}
 
   modes:
     search: [q]
@@ -75,11 +74,19 @@ search:
 
   fields:
     category:
-      selector: a[href^="/tags.php?tags="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: tags
+      selector: span.tag_list
+      case:
+        "a:contains(\"Seriale\")": 1
+        "a:contains(\"Filmy\")": 2
+        "a:contains(\"Muzyka\")": 3
+        "a:contains(\"Gry\")": 4
+        "a:contains(\"Anime\")": 5
+        "a:contains(\"Programy\")": 6
+        "a:contains(\"Książki\")": 7
+        "a:contains(\"Booki\")": 8
+        "a:contains(\"PDA\")": 9
+        "a:contains(\"Inne\")": 10
+        "a:contains(\"XXX\")": 11
     title:
       selector: a[href^="/torrent/"]
     details:

@@ -95,6 +95,8 @@ search:
 
   rows:
     selector: table.table-striped > tbody > tr
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -108,7 +110,7 @@ search:
       selector: a[href^="/details/"]
       attribute: href
     download:
-      selector: a[href$=".torrent"]
+      selector: a[href^="/file/"][title="Download Torrent"]
       attribute: href
       optional: true
     magnet:

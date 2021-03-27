@@ -251,7 +251,7 @@ function displayUnconfiguredIndexersList() {
                   var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
                   var githubrepo = "Jackett/Jackett"
                   var githubtext = "this indexer"
-                  if (data.responseJSON.error.includes("check FlareSolverr logs")) {
+                  if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
                     githubrepo = "FlareSolverr/FlareSolverr"
                     githubtext = "FlareSolverr"
                   }

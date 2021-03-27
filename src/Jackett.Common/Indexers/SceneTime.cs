@@ -172,12 +172,13 @@ namespace Jackett.Common.Indexers
                     release.MinimumRatio = 1;
                     release.MinimumSeedTime = 259200; // 72 hours
 
+                    var catId = "82"; // default
                     var qCatLink = row.Children[categoryIndex].QuerySelector("a");
                     if (qCatLink != null)
                     {
-                        var catId = new Regex(@"\?cat=(\d*)").Match(qCatLink.GetAttribute("href")).Groups[1].ToString().Trim();
-                        release.Category = MapTrackerCatToNewznab(catId);
+                        catId = new Regex(@"\?cat=(\d*)").Match(qCatLink.GetAttribute("href")).Groups[1].ToString().Trim();
                     }
+                    release.Category = MapTrackerCatToNewznab(catId);
 
                     var qDescCol = row.Children[nameIndex];
                     var qLink = qDescCol.QuerySelector("a");

@@ -299,6 +299,7 @@ namespace Jackett.Updater
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
+                "Definitions/dxdhd.yml",
                 "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
                 "Definitions/elitetorrent-biz.yml",

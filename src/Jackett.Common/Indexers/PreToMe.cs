@@ -81,8 +81,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=4&tags=PS3", TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping("cat[]=4&tags=Wii", TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping("cat[]=4&tags=PSP", TorznabCatType.ConsolePSP, "Games/PSP");
+            AddCategoryMapping("cat[]=4&tags=GAMES-NSW", TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping("cat[]=4&tags=NDS", TorznabCatType.ConsoleNDS, "Games/NDS");
             AddCategoryMapping("cat[]=4&tags=Xbox", TorznabCatType.ConsoleXBox, "Games/Xbox");
+            AddCategoryMapping("cat[]=4&tags=NSW", TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping("cat[]=4&tags=PS2", TorznabCatType.ConsoleOther, "Games/PS2");
 
             // Miscellaneous
