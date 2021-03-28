@@ -17,6 +17,7 @@ caps:
     - {id: 12, cat: XXX, desc: Porn}
     - {id: 29, cat: TV/Sport, desc: Sports}
     - {id: 37, cat: PC, desc: Software}
+    - {id: 38, cat: Console, desc: Games}
 
   modes:
     search: [q]
