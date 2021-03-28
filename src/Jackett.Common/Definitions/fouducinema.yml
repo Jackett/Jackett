@@ -14,7 +14,7 @@ caps:
     - {id: 94, cat: TV/Sport, desc: "sport catch"}
     - {id: 93, cat: TV/Sport, desc: "sport catch"}
     - {id: 96, cat: TV/Sport, desc: "sport sport"}
-    - {id: 97, cat: TV/Sport, desc: "sport divers"}    
+    - {id: 97, cat: TV/Sport, desc: "sport divers"}
     - {id: 65, cat: TV/Documentary, desc: "Documentaires Divers"}
     - {id: 66, cat: TV/Documentary, desc: "Documentaires audio"}
     - {id: 74, cat: Books/EBook, desc: "Documentaires Ebook"}
