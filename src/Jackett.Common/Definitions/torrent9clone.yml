@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://wwv.torrent9.one/
+  - https://vww.torrent9.one/
   - https://torrent9.unblocked.monster/
 
 legacylinks:
@@ -49,6 +49,7 @@ legacylinks:
   - https://www.torrent9.sh/
   - https://www.torrent9.one/
   - https://wvw.torrent9.one/
+  - https://wwv.torrent9.one/
 
 caps:
   categorymappings:
