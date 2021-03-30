@@ -79,10 +79,6 @@ namespace Jackett.Common.Services
                             }
                         }
                     }
-                    else
-                    {
-                        PerformMigration(oldDir);
-                    }
                 }
                 catch (Exception e)
                 {
@@ -93,48 +89,46 @@ namespace Jackett.Common.Services
             // Perform a migration in case of https://github.com/Jackett/Jackett/pull/11173#issuecomment-787520128
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                var oldDirectory = "Jackett";
-                if (Directory.Exists(oldDirectory))
-                {
-                    PerformMigration(oldDirectory);
-                }
+                PerformMigration("Jackett");
             }
         }
 
         public void PerformMigration(string oldDirectory)
         {
-            if (Directory.Exists(oldDirectory))
+            if (!Directory.Exists(oldDirectory))
             {
-                foreach (var file in Directory.GetFiles(oldDirectory, "*", SearchOption.AllDirectories))
+                return;
+            }
+
+            foreach (var file in Directory.GetFiles(oldDirectory, "*", SearchOption.AllDirectories))
+            {
+                var path = file.Replace(oldDirectory, "");
+                var destPath = GetAppDataFolder() + path;
+                var destFolder = Path.GetDirectoryName(destPath);
+                if (!Directory.Exists(destFolder))
                 {
-                    var path = file.Replace(oldDirectory, "");
-                    var destPath = GetAppDataFolder() + path;
-                    var destFolder = Path.GetDirectoryName(destPath);
-                    if (!Directory.Exists(destFolder))
+                    var dir = Directory.CreateDirectory(destFolder);
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        var dir = Directory.CreateDirectory(destFolder);
-                        if (System.Environment.OSVersion.Platform != PlatformID.Unix)
-                        {
-                            var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
-                            directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
-                            dir.SetAccessControl(directorySecurity);
-                        }
-                    }
-                    if (!File.Exists(destPath))
-                    {
-                        File.Copy(file, destPath);
-                        // The old files were created when running as admin so make sure they are editable by normal users / services.
-                        if (System.Environment.OSVersion.Platform != PlatformID.Unix)
-                        {
-                            var fileInfo = new FileInfo(destFolder);
-                            var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);
-                            fileSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.None, AccessControlType.Allow));
-                            fileInfo.SetAccessControl(fileSecurity);
-                        }
+                        var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
+                        directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
+                        dir.SetAccessControl(directorySecurity);
                     }
                 }
-                Directory.Delete(oldDirectory, true);
+                if (!File.Exists(destPath))
+                {
+                    File.Copy(file, destPath);
+                    // The old files were created when running as admin so make sure they are editable by normal users / services.
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                    {
+                        var fileInfo = new FileInfo(destFolder);
+                        var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);
+                        fileSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.None, AccessControlType.Allow));
+                        fileInfo.SetAccessControl(fileSecurity);
+                    }
+                }
             }
+            Directory.Delete(oldDirectory, true);
         }
 
         public T GetConfig<T>()
