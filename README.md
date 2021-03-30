@@ -509,6 +509,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TheAudioScene
  * TheEmpire (TE) [![(invite needed)][inviteneeded]](#)
  * TheLeachZone
+ * TheScenePlace (TSP)
  * TJUPT
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * ToTheGlory (TTG)
