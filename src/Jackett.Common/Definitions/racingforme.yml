@@ -16,28 +16,28 @@ caps:
     - {id: 1030, cat: TV/Sport, desc: "F1 Full Season 1981-1990"}
     - {id: 1040, cat: TV/Sport, desc: "F1 Full Season 1991-2000"}
     - {id: 1050, cat: TV/Sport, desc: "F1 Full Season 2001-2010"}
-    - {id: 1060, cat: TV/Sport, desc: "F1 Full Season 2011-2019"}
-    - {id: 1070, cat: TV/Sport, desc: "F1 Full Season 2011-2019 (HD)"}
+    - {id: 1060, cat: TV/Sport, desc: "F1 Full Season 2011-2020"}
+    - {id: 1070, cat: TV/Sport, desc: "F1 Full Season 2011-2020 (HD)"}
     - {id: 2000, cat: TV/Sport, desc: "Formula 1 - Highlights"}
     - {id: 2010, cat: TV/Sport, desc: "F1 Highlights 1950-1980"}
     - {id: 2020, cat: TV/Sport, desc: "F1 Highlights 1981-1990"}
     - {id: 2030, cat: TV/Sport, desc: "F1 Highlights 1991-2000"}
     - {id: 2040, cat: TV/Sport, desc: "F1 Highlights 2001-2010"}
-    - {id: 2050, cat: TV/Sport, desc: "F1 Highlights 2011-2019"}
-    - {id: 2060, cat: TV/Sport, desc: "F1 Highlights 2011-2019 (HD)"}
+    - {id: 2050, cat: TV/Sport, desc: "F1 Highlights 2011-2020"}
+    - {id: 2060, cat: TV/Sport, desc: "F1 Highlights 2011-2020 (HD)"}
     - {id: 3000, cat: TV/Sport, desc: "Formula 1 - FP and quali"}
     - {id: 3010, cat: TV/Sport, desc: "F1 FP and quali 1950-1980"}
     - {id: 3020, cat: TV/Sport, desc: "F1 FP and quali 1981-1990"}
     - {id: 3030, cat: TV/Sport, desc: "F1 FP and quali 1991-2000"}
     - {id: 3040, cat: TV/Sport, desc: "F1 FP and quali 2001-2010"}
-    - {id: 3050, cat: TV/Sport, desc: "F1 FP and quali 2011-2019"}
-    - {id: 3060, cat: TV/Sport, desc: "F1 FP and quali 2011-2019 (HD)"}
+    - {id: 3050, cat: TV/Sport, desc: "F1 FP and quali 2011-2020"}
+    - {id: 3060, cat: TV/Sport, desc: "F1 FP and quali 2011-2020 (HD)"}
     - {id: 4000, cat: TV/Sport, desc: "Formula 1 - Onboard"}
     - {id: 4010, cat: TV/Sport, desc: "F1 Onboard 1950-1980"}
     - {id: 4020, cat: TV/Sport, desc: "F1 Onboard 1981-1990"}
     - {id: 4030, cat: TV/Sport, desc: "F1 Onboard 1991-2000"}
     - {id: 4040, cat: TV/Sport, desc: "F1 Onboard 2001-2010"}
-    - {id: 4050, cat: TV/Sport, desc: "F1 Onboard 2011-2019"}
+    - {id: 4050, cat: TV/Sport, desc: "F1 Onboard 2011-2020"}
     - {id: 5000, cat: TV/Sport, desc: "Formula 1 - Miscellaneous"}
     - {id: 5010, cat: TV/Sport, desc: "F1 Misc Documentaries"}
     - {id: 5020, cat: TV/Sport, desc: "F1 Misc Driver/team specials"}
@@ -174,17 +174,18 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    rememberme: 1
+    rememberme: on
+    redirect: ""
   error:
-    - selector: div#Error
+    - selector: div.front__error
   test:
     path: /
-    selector: a[href="/logout"]
+    selector: a[href$="/logout"]
 
 search:
   paths:
     # only 20 results per page
-    # https://www.racingfor.me/search/truck?c=-1&ob=sz_desc&offset=20#results
+    # https://www.racingfor.me/search/*?c=-1&ob=&offset=20#results
     - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
     - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
       inputs:
@@ -193,61 +194,55 @@ search:
       inputs:
         offset: 40
   keywordsfilters:
-    # S2020E02 Becomes `2020 Round 2`
+    # S2020E02 Becomes `2020 Round 02`
     - name: re_replace
-      args: ["S(\\d{1,4})E(\\d{1,2})", "$1 Round $2"]
+      args: ["(?i)S(\\d{1,4})E(\\d{1,2})", "$1 Round $2"]
   inputs:
     c: -1
     ob: "{{ .Config.sort }}"
 
   rows:
-    selector: div#torrentBorder
+    selector: div.row:has(div.torrent-item__download)
+#    selector: div.row:not(div[class^="mt-"])
+    # dateheaders are available, sometimes. But when there are none at all, then all rows are lost to errors. So we have to use 'date now' :-(
+#    dateheaders:
+#      # Monday March 29th, 2021
+#      selector: div.mt-4
+#      filters:
+#        - name: re_replace
+#          args: ["st,|nd,|rd,|th,", ""]
+#        - name: dateparse
+#          args: "Monday January 2 2006"
 
   fields:
     category:
-      selector: span.catIcon a
+      selector: div.torrent-item__category span a
       attribute: href
       filters:
         - name: querystring
           args: c
     title:
-      selector: span.browseTitle a
+      selector: div.torrent-item__title a
     download:
-      selector: span.browseTitle a
+      selector: div.torrent-item__download a
       attribute: href
-      filters:
-        - name: replace
-          args: ["/details/", "/download/"]
     details:
-      selector: span.browseTitle a
+      selector: div.torrent-item__title a
       attribute: href
     size:
-      selector: span.torrentData span.torrentFiles
-      filters:
-        - name: regexp
-          args: "(.+?) in"
-        # fix double points error
-        - name: re_replace
-          args: ["(\\d+)\\.(\\d{3})(\\.\\d{2})", "$1$2$3"]
-    files:
-      selector: span.torrentData span.torrentFiles
-      filters:
-        - name: replace
-          args: [" in > 100", " in 100 file"]
-        - name: regexp
-          args: " in (\\d+) file"
+      selector: div.data-size
     seeders:
-      selector: span.torrentData span.torrentPeers
+      selector: div.data-seeders
       filters:
         - name: regexp
-          args: "(\\d+) seeder"
+          args: (\d+)
     leechers:
-      selector: span.torrentData span.torrentPeers
+      selector: div.data-leechers
       filters:
         - name: regexp
-          args: "and (\\d+) leecher"
+          args: (\d+)
     grabs:
-      selector: span.torrentData span.torrentSnatched
+      selector: div.data-completed
       filters:
         - name: regexp
           args: (\d+)
@@ -259,4 +254,4 @@ search:
       text: 1
     minimumratio:
       text: 0.5
-# crankShaft v0.1.6
+# crankShaft v2.0.1
