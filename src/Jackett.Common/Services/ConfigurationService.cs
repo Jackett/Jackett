@@ -63,7 +63,7 @@ namespace Jackett.Common.Services
                         // On Windows we need admin permissions to migrate as they were made with admin permissions.
                         if (ServerUtil.IsUserAdministrator())
                         {
-                            PerformMigration();
+                            PerformMigration(oldDir);
                         }
                         else
                         {
@@ -79,51 +79,56 @@ namespace Jackett.Common.Services
                             }
                         }
                     }
-                    else
-                    {
-                        PerformMigration();
-                    }
-
                 }
                 catch (Exception e)
                 {
                     logger.Error($"ERROR could not migrate settings directory\n{e}");
                 }
             }
+
+            // Perform a migration in case of https://github.com/Jackett/Jackett/pull/11173#issuecomment-787520128
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                PerformMigration("Jackett");
+            }
         }
 
-        public void PerformMigration()
+        public void PerformMigration(string oldDirectory)
         {
-            var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
-            if (Directory.Exists(oldDir))
+            if (!Directory.Exists(oldDirectory))
             {
-                foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
+                return;
+            }
+
+            foreach (var file in Directory.GetFiles(oldDirectory, "*", SearchOption.AllDirectories))
+            {
+                var path = file.Replace(oldDirectory, "");
+                var destPath = GetAppDataFolder() + path;
+                var destFolder = Path.GetDirectoryName(destPath);
+                if (!Directory.Exists(destFolder))
                 {
-                    var path = file.Replace(oldDir, "");
-                    var destPath = GetAppDataFolder() + path;
-                    var destFolder = Path.GetDirectoryName(destPath);
-                    if (!Directory.Exists(destFolder))
+                    var dir = Directory.CreateDirectory(destFolder);
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        var dir = Directory.CreateDirectory(destFolder);
                         var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
                         directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
                         dir.SetAccessControl(directorySecurity);
                     }
-                    if (!File.Exists(destPath))
+                }
+                if (!File.Exists(destPath))
+                {
+                    File.Copy(file, destPath);
+                    // The old files were created when running as admin so make sure they are editable by normal users / services.
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        File.Copy(file, destPath);
-                        // The old files were created when running as admin so make sure they are editable by normal users / services.
-                        if (System.Environment.OSVersion.Platform != PlatformID.Unix)
-                        {
-                            var fileInfo = new FileInfo(destFolder);
-                            var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);
-                            fileSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.None, AccessControlType.Allow));
-                            fileInfo.SetAccessControl(fileSecurity);
-                        }
+                        var fileInfo = new FileInfo(destFolder);
+                        var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);
+                        fileSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.None, AccessControlType.Allow));
+                        fileInfo.SetAccessControl(fileSecurity);
                     }
                 }
-                Directory.Delete(oldDir, true);
             }
+            Directory.Delete(oldDirectory, true);
         }
 
         public T GetConfig<T>()
