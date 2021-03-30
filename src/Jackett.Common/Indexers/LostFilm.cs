@@ -23,12 +23,12 @@ namespace Jackett.Common.Indexers
     internal class LostFilm : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://www.lostfilm.tv/"
+            "https://www.lostfilm.tv/",
+            "https://www.lostfilm.uno/"
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://www.lostfilm.run/",
-            "https://www.lostfilm.uno/"
+            "https://www.lostfilm.run/"
  };
         private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);

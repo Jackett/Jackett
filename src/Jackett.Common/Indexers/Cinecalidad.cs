@@ -27,12 +27,16 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.cinecalidad.is/",
+            "https://www.cinecalidad.li/",
             "https://www.cinecalidad.eu/",
-            "https://www.cinecalidad.im/"
+            "https://cinecalidad.unbl0ck.xyz/",
+            "https://cinecalidad.u4m.club/",
+            "https://cinecalidad.mrunblock.icu/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://www.cinecalidad.to/"
+            "https://www.cinecalidad.to/",
+            "https://www.cinecalidad.im/" // working but outdated, maybe copycat
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -55,13 +59,12 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var language = new SelectItem(new Dictionary<string, string>
+            var language = new SingleSelectConfigurationItem("Select language", new Dictionary<string, string>
                 {
                     {"castellano", "Castilian Spanish"},
                     {"latino", "Latin American Spanish"}
                 })
             {
-                Name = "Select language",
                 Value = "castellano"
             };
             configData.AddDynamic("language", language);
@@ -72,7 +75,7 @@ namespace Jackett.Common.Indexers
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
-            var language = (SelectItem)configData.GetDynamic("language");
+            var language = (SingleSelectConfigurationItem)configData.GetDynamic("language");
             _language = language?.Value ?? "castellano";
         }
 

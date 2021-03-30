@@ -50,7 +50,7 @@ stages:
               runtime: osx-x64
               archiveType: tar
               artifactName: Jackett.Binaries.macOS.tar.gz
-            LinuxAmdx64:
+            LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-latest
               framework: $(netCoreFramework)
@@ -354,18 +354,13 @@ stages:
               imageName: macOS-latest
               framework: $(netCoreFramework)
               runtime: osx-x64
-            LinuxAmdx64:
+            LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-latest
               framework: $(netCoreFramework)
               runtime: linux-x64
-            LinuxARM32:
-              buildDescription: Linux ARM32
-              imageName: ubuntu-latest
-              framework: $(netCoreFramework)
-              runtime: linux-arm
-            LinuxARM64:
-              buildDescription: Linux ARM64
+            LinuxARM:
+              buildDescription: Linux ARM
               imageName: ubuntu-latest
               framework: $(netCoreFramework)
               runtime: linux-arm
@@ -461,7 +456,7 @@ stages:
               buildDescription: macOS
               imageName: macOS-latest
               artifactName: Jackett.Binaries.macOS.tar.gz
-            LinuxAmdx64:
+            LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-latest
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz

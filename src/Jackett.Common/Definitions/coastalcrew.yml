@@ -24,9 +24,7 @@ caps:
     - {id: 156, cat: TV/HD, desc: "Serien - Pack/1080p"}
     - {id: 158, cat: TV/UHD, desc: "Serien - UHD/4K"}
     # Doku
-    - {id: 15, cat: TV/Documentary, desc: "Doku - Xvid/x264"}
-    - {id: 14, cat: TV/Documentary, desc: "Doku - 720p/1080p"}
-    - {id: 13, cat: TV/Documentary, desc: "Doku - Pack"}
+    - {id: 15, cat: TV/Documentary, desc: "Doku - Alle"}
     # App
     - {id: 12, cat: PC/0day, desc: "App - Win"}
     - {id: 11, cat: PC, desc: "App - Other"}
@@ -45,6 +43,7 @@ caps:
     # Sport
     - {id: 62, cat: TV/Sport, desc: "Sport - Alles"}
     # Sonstiges
+    - {id: 159, cat: Audio/Audiobook, desc: "Sonstiges - Hörbuch"}
     - {id: 64, cat: Books/Comics, desc: "Sonstiges - Anime"}
     - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges - A-Book"}
     - {id: 96, cat: Books/EBook, desc: "Sonstiges - E-Book"}
@@ -140,9 +139,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack/1080p\"))": "156"
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"UHD/4K\"))": "158"
         # Doku
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Xvid/x264\"))": "15"
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"720p/1080p\"))": "14"
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "13"
+        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Alle\"))": "15"
         # App
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Win\"))": "12"
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Other\"))": "11"
@@ -161,6 +158,7 @@ search:
         # Sport
         ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Alles\"))": "62"
         # Sonstiges
+        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Hörbuch\"))": "159"
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Anime\"))": "64"
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"A-Book\"))": "63"
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"E-Book\"))": "96"

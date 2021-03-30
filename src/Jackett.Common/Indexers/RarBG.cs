@@ -69,13 +69,13 @@ namespace Jackett.Common.Indexers
 
             webclient.requestDelay = 2.5; // The api has a 1req/2s limit
 
-            var sort = new SelectItem(new Dictionary<string, string>
+            var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
             {
                 {"last", "created"},
                 {"seeders", "seeders"},
                 {"leechers", "leechers"}
             })
-            { Name = "Sort requested from site", Value = "last" };
+            { Value = "last" };
             configData.AddDynamic("sort", sort);
 
             AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var sort = (SelectItem)configData.GetDynamic("sort");
+            var sort = (SingleSelectConfigurationItem)configData.GetDynamic("sort");
             _sort = sort != null ? sort.Value : "last";
         }
 

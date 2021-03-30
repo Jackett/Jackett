@@ -44,7 +44,7 @@ namespace Jackett.Common.Indexers
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://epublibre.org/",
+            "https://www.epublibre.org/",
             "https://epublibre.unblockit.buzz/"
         };
 
@@ -53,7 +53,8 @@ namespace Jackett.Common.Indexers
             "https://epublibre.unblockit.app/",
             "https://epublibre.unblockit.dev/",
             "https://epublibre.unblockit.ltd/",
-            "https://epublibre.unblockit.link/"
+            "https://epublibre.unblockit.link/",
+            "https://epublibre.org/"
         };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -61,7 +62,7 @@ namespace Jackett.Common.Indexers
             : base(id: "epublibre",
                    name: "EpubLibre",
                    description: "Más libros, Más libres",
-                   link: "https://epublibre.org/",
+                   link: "https://www.epublibre.org/",
                    caps: new TorznabCapabilities
                    {
                        BookSearchParams = new List<BookSearchParam>

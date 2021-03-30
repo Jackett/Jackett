@@ -182,17 +182,17 @@ namespace Jackett.Common.Indexers
 
             LoadValuesFromJson(jsonConfig, false);
 
-            StringItem passwordPropertyValue = null;
+            StringConfigurationItem passwordPropertyValue = null;
             var passwordValue = "";
 
             try
             {
                 // try dynamic items first (e.g. all cardigann indexers)
-                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
+                passwordPropertyValue = (StringConfigurationItem)configData.GetDynamicByName("password");
 
                 if (passwordPropertyValue == null) // if there's no dynamic password try the static property
                 {
-                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
+                    passwordPropertyValue = (StringConfigurationItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
 
                     // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
                     if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
@@ -433,9 +433,9 @@ namespace Jackett.Common.Indexers
                     return DefaultNumberOfRetryAttempts;
                 }
 
-                var configValue = ((SelectItem)configItem).Value;
+                var configValue = ((SingleSelectConfigurationItem)configItem).Value;
 
-                if (int.TryParse(configValue, out int parsedConfigValue) && parsedConfigValue > 0)
+                if (int.TryParse(configValue, out var parsedConfigValue) && parsedConfigValue > 0)
                 {
                     return parsedConfigValue;
                 }
@@ -461,7 +461,14 @@ namespace Jackett.Common.Indexers
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 4),
                         onRetry: (exception, timeSpan, context) =>
                         {
-                            logger.Warn($"Request to {DisplayName} failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            if (exception.Result == null)
+                            {
+                                logger.Warn($"Request to {DisplayName} failed with exception '{exception.Exception.Message}'. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            }
+                            else
+                            {
+                                logger.Warn($"Request to {DisplayName} failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            }
                             attemptNumber++;
                         });
                 return retryPolicy;
@@ -476,7 +483,8 @@ namespace Jackett.Common.Indexers
         /// </remarks>
         protected void EnableConfigurableRetryAttempts()
         {
-            var attemptSelect = new SelectItem(
+            var attemptSelect = new SingleSelectConfigurationItem(
+                "Number of retries",
                 new Dictionary<string, string>
                 {
                     {"0", "No retries (fail fast)"},
@@ -487,7 +495,6 @@ namespace Jackett.Common.Indexers
                     {"5", "5 retries (8s delay)"}
                 })
             {
-                Name = "Number of retries",
                 Value = DefaultNumberOfRetryAttempts.ToString()
             };
             configData.AddDynamic("retryAttempts", attemptSelect);

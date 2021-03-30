@@ -96,7 +96,7 @@ settings:
     default: false
   - name: dropbbc
     type: checkbox
-    label: Drop "BBC " from the front of result titles
+    label: Drop BBC & other channels from the front of result titles
     default: false
   - name: stripS01E01
     type: checkbox
@@ -165,7 +165,35 @@ search:
       selector: td.doubleindent, td.singleindent a[href^="/index.php?showtopic="]
       filters:
         - name: re_replace
-          args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
+          args: ["(?i)^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^PBS (.*)", "{{ if .Config.dropbbc }}{{ else }}PBS {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^CH5 (.*)", "{{ if .Config.dropbbc }}{{ else }}Ch5 {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^CH4 (.*)", "{{ if .Config.dropbbc }}{{ else }}Ch4 {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^DC (.*)", "{{ if .Config.dropbbc }}{{ else }}DC {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^DW (.*)", "{{ if .Config.dropbbc }}{{ else }}DW {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^HC (.*)", "{{ if .Config.dropbbc }}{{ else }}HC {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^RTE (.*)", "{{ if .Config.dropbbc }}{{ else }}RTE {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^ITV (.*)", "{{ if .Config.dropbbc }}{{ else }}ITV {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^HBO (.*)", "{{ if .Config.dropbbc }}{{ else }}HBO {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^NHK (.*)", "{{ if .Config.dropbbc }}{{ else }}NHK {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^UKTV (.*)", "{{ if .Config.dropbbc }}{{ else }}UKTV {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^NOVA (.*)", "{{ if .Config.dropbbc }}{{ else }}NOVA {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^TV5Monde (.*)", "{{ if .Config.dropbbc }}{{ else }}TV5Monde {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^Al-Jazeera (.*)", "{{ if .Config.dropbbc }}{{ else }}Al-Jazeera {{ end }}$1"]
         - name: append
           args: "{{ if .Config.stripS01E01 }}{{ else }} S01E01{{ end }}"
     details:
