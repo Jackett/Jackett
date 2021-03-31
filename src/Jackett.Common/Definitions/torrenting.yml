@@ -80,9 +80,9 @@ search:
         - name: replace
           args: ["?", ""]
     title:
-      selector: a[href^="/details.php?id="]
+      selector: a[href^="/torrent.php?id="]
     details:
-      selector: a[href^="/details.php?id="]
+      selector: a[href^="/torrent.php?id="]
       attribute: href
     download:
       selector: a[href^="/download.php/"]
