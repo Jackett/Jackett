@@ -74,7 +74,7 @@ login:
     login_not_save: ""
     login: submit
   error:
-    - selector: div.alert-warning
+    - selector: div.alert-warning:contains("Ошибка авторизации")
   test:
     path: /
     selector: a[href$="/index.php?action=logout"]
