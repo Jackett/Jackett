@@ -294,7 +294,6 @@ namespace Jackett.Updater
                 "Definitions/cztorrent.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
-                "Definitions/desitorrents.yml",
                 "Definitions/digbt.yml",
                 "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",

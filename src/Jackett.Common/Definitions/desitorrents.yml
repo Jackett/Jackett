@@ -1,0 +1,274 @@
+---
+id: desitorrents
+name: DesiTorrents
+description: "Desitorrents is a  Private Torrent Tracker for BOLLYWOOD / TOLLYWOOD / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://desitorrents.tv/
+
+caps:
+  categorymappings:
+    # movies
+    - {id: 47, cat: Movies, desc: "Movies/Bollywood"}
+    - {id: 48, cat: Movies, desc: "Movies/Bengali"}
+    - {id: 49, cat: Movies, desc: "Movies/Tamil"}
+    - {id: 51, cat: Movies, desc: "Movies/Punjabi"}
+    - {id: 52, cat: Movies, desc: "Movies/Marathi"}
+    - {id: 53, cat: Movies, desc: "Movies/Malayalam"}
+    - {id: 54, cat: Movies, desc: "Movies/Kannada"}
+    - {id: 55, cat: Movies, desc: "Movies/Gujarati"}
+    - {id: 56, cat: Movies, desc: "Movies/Foreign"}
+    - {id: 57, cat: Movies, desc: "Movies/Lollywood"}
+    - {id: 58, cat: Movies, desc: "Movies/Hollywood"}
+    - {id: 103, cat: Movies, desc: "Movies/Telugu"}
+    - {id: 104, cat: Movies, desc: "Movies/South Dubbed"}
+    - {id: 110, cat: Movies, desc: "Movies/Documentary"}
+    - {id: 117, cat: Movies, desc: "Movies/Bhojpuri"}
+    - {id: 124, cat: Movies, desc: "Movies/Movie Packs"}
+    - {id: 128, cat: Movies, desc: "Movies/Dubbed Audio"}
+    - {id: 129, cat: Movies, desc: "Movies/Animated"}
+    - {id: 140, cat: Movies, desc: "Movies/Short Films"}
+    # tv shows
+    - {id: 59, cat: TV, desc: "TV/Colors"}
+    - {id: 60, cat: TV, desc: "TV/Sony"}
+    - {id: 61, cat: TV, desc: "TV/&TV"}
+    - {id: 62, cat: TV, desc: "TV/StarPlus"}
+    - {id: 63, cat: TV, desc: "TV/ZEE TV"}
+    - {id: 97, cat: TV, desc: "TV/Life OK"}
+    - {id: 98, cat: TV, desc: "TV/Documentary"}
+    - {id: 101, cat: TV/Sport, desc: "TV/Sports"}
+    - {id: 102, cat: TV/Other, desc: "TV/Others"}
+    - {id: 113, cat: TV, desc: "TV/Pak Drama"}
+    - {id: 125, cat: TV, desc: "TV/TV Packs"}
+    - {id: 130, cat: TV, desc: "TV/Star Bharat"}
+    - {id: 132, cat: TV, desc: "TV/Sab TV"}
+    - {id: 139, cat: TV, desc: "TV/Hollywood"}
+    # music
+    - {id: 67, cat: Audio/Video, desc: "Music/Video"}
+    - {id: 68, cat: Audio, desc: "Music/Hindi Soundtrack"}
+    - {id: 70, cat: Audio, desc: "Music/Remix"}
+    - {id: 71, cat: Audio, desc: "Music/Ghazal"}
+    - {id: 72, cat: Audio, desc: "Music/Instrumental"}
+    - {id: 105, cat: Audio, desc: "Music/Telugu"}
+    - {id: 106, cat: Audio, desc: "Music/Tamil"}
+    - {id: 107, cat: Audio, desc: "Music/Punjabi"}
+    - {id: 108, cat: Audio, desc: "Music/Gujarati"}
+    - {id: 109, cat: Audio, desc: "Music/Compilations"}
+    - {id: 118, cat: Audio, desc: "Music/Kannada"}
+    - {id: 126, cat: Audio, desc: "Music/Marathi"}
+    - {id: 127, cat: Audio, desc: "Music/Lollywood"}
+    - {id: 131, cat: Audio, desc: "Music/Classical"}
+    - {id: 134, cat: Audio, desc: "Music/Desi Pop"}
+    - {id: 136, cat: Audio, desc: "Music/Bengali"}
+    - {id: 137, cat: Audio, desc: "Music/Malayalam"}
+    # games
+    - {id: 78, cat: PC/Games, desc: "Games/PC"}
+    - {id: 79, cat: PC/Games, desc: "Games/Mac"}
+    - {id: 80, cat: PC/Games, desc: "Games/IOS"}
+    - {id: 81, cat: PC/Games, desc: "Games/Android"}
+    - {id: 83, cat: PC/Games, desc: "Games/XBOX"}
+    - {id: 86, cat: PC/Games, desc: "Games/Playstation"}
+    # books
+    - {id: 92, cat: Books/Mags, desc: "Books/Magazine"}
+    - {id: 93, cat: Books/EBook, desc: "Books/Novels"}
+    - {id: 95, cat: Books, desc: "Books/Newspapers"}
+    - {id: 133, cat: Audio/Audiobook, desc: "Books/Audiobooks"}
+    # Sport
+    - {id: 114, cat: TV/Sport, desc: "Sport/WWE"}
+    - {id: 115, cat: TV/Sport, desc: "Sport/Cricket"}
+    - {id: 116, cat: TV/Sport, desc: "Sport/Football"}
+    # XXX
+    - {id: 89, cat: XXX, desc: "Adult Videos"}
+    - {id: 90, cat: XXX, desc: "Adult Pics"}
+    # WEB
+    - {id: 135, cat: TV, desc: "Web Series"}
+    # Legact
+    - {id: 30, cat: Other, desc: "Legacy"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: twofa
+    type: text
+    label: 2FA code
+  - name: info_2fa
+    type: info
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Desitorrents Web Site. Otherwise just leave it empty."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    # while the grabs and date columns are merged due (see #9849), the time sort on the website fails with: "selected sorting wrong: time".
+    # default: time
+    default: relevance
+    options:
+      # time: created
+      seeders: seeders
+      size: size
+      relevance: title
+
+login:
+  path: login.php?from=index1
+  method: post
+  inputs:
+    action: login
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    twofa: "{{ .Config.twofa }}"
+  error:
+    - selector: form#loginform:has(span.warning)
+  test:
+    path: ajax.php
+
+search:
+  paths:
+    - path: ajax.php?action=search_torrent_cats
+      method: post
+  inputs:
+    # replace spaces with wildcard (percent symbol) as site's default search is exact string.
+    search_string: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
+    selected_sorting: "{{ .Config.sort }}"
+    selected_group: ""
+    search_username: ""
+    selected_sub[]: "{{ join .Categories \",\" }}"
+  error:
+    - selector: ":contains(\"Something was wrong with your request\")"
+  preprocessingfilters:
+    - name: replace
+      args: ["{\"torrent_html\":\"", ""]
+    - name: replace
+      args: ["\\", ""]
+    - name: re_replace
+      args: ["\",\"paging.*", ""]
+    - name: re_replace
+      args: ["</th<th>", "</th><th>"] # fix for #9849
+    - name: prepend
+      args: "<table>"
+    - name: append
+      args: "</table>"
+
+  rows:
+    selector: table > tbody > tr
+
+  fields:
+    category:
+      selector: th:first-child
+      case:
+        img[src*="Bollywood Movies.png"]: 47
+        img[src*="Bengali Movies.png"]: 48
+        img[src*="Tamil Films.png"]: 49
+        img[src*="Punjabi Movies.png"]: 51
+        img[src*="Marathi Movies.png"]: 52
+        img[src*="Malayalam Movies.png"]: 53
+        img[src*="Kannada Movies.png"]: 54
+        img[src*="Gujarati Movies.png"]: 55
+        img[src*="Foreign Movies.png"]: 56
+        img[src*="Pakistani Movies.png"]: 57
+        img[src*="Hollywood Movies.png"]: 58
+        img[src*="Telugu Movies.png"]: 103
+        img[src*="south-dubbed.png"]: 104
+        img[src*="docmentary.png"]: 110
+        img[src*="Bhojpuri Movies.png"]: 117
+        img[src*="Movie Packs.png"]: 124
+        img[src*="Dubbed Movies.png"]: 128
+        img[src*="Animated Movies.png"]: 129
+        img[src*="Short Films.png"]: 140
+        img[src*="Colors TV.png"]: 59
+        img[src*="Sony TV.png"]: 60
+        img[src*="AndTV.png"]: 61
+        img[src*="Star Plus.png"]: 62
+        img[src*="Zee TV.png"]: 63
+        img[src*="Life OK.png"]: 97
+        img[src*="Documentaries.png"]: 98
+        img[src*="sports.png"]: 101
+        img[src*="Others-png.png"]: 102
+        img[src*="Pak-Drama.png"]: 113
+        img[src*="TV Packs.png"]: 125
+        img[src*="Star Bharat.png"]: 130
+        img[src*="Sab TV.png"]: 132
+        img[src*="Hollywood TV.png"]: 139
+        img[src*="Music Videos.png"]: 67
+        img[src*="Hindi Soundtracks.png"]: 68
+        img[src*="Remix Music.png"]: 70
+        img[src*="Ghazal Music.png"]: 71
+        img[src*="Instrumental Music.png"]: 72
+        img[src*="Telugu Music.png"]: 105
+        img[src*="Tamil Music.png"]: 106
+        img[src*="Punjabi Music.png"]: 107
+        img[src*="Gujarati Music.png"]: 108
+        img[src*="Music Compilations.png"]: 109
+        img[src*="Kannada Music.png"]: 118
+        img[src*="Marathi Gaane.png"]: 126
+        img[src*="Lollywood Music.png"]: 127
+        img[src*="Classical Music.png"]: 131
+        img[src*="Desi Pop Music.png"]: 134
+        img[src*="Bengali Music.png"]: 136
+        img[src*="Malayalam Music.png"]: 137
+        img[src*="PC Games.png"]: 78
+        img[src*="Mac Games.png"]: 79 # unverified
+        img[src*="IOS Games.png"]: 80 # unverified
+        img[src*="Android Games.png"]: 81
+        img[src*="XBOX Games.png"]: 83 # unverified
+        img[src*="Playstation Games.png"]: 86 # unverified
+        img[src*="Magazines.png"]: 92
+        img[src*="Novels.png"]: 93
+        img[src*="Newspapers.png"]: 95
+        img[src*="AudioBooks.png"]: 133
+        img[src*="WWE.png"]: 114
+        img[src*="Cricket.png"]: 115
+        img[src*="Football.png"]: 116
+        img[src*="Adult Videos.png"]: 89 # unverified
+        img[src*="Adult Pics.png"]: 90 # unverified
+        img[src*="Web Series.png"]: 135
+        img[src*="no.png"]: 30
+    title:
+      selector: a[href^="/torrents.php?id="]
+    details:
+      selector: a[href^="/torrents.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="/torrents.php?action=download&id="]
+      attribute: href
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}"
+    size:
+      selector: th:nth-child(7)
+    files:
+      selector: th:nth-child(8)
+    seeders:
+      selector: th:nth-child(9)
+    leechers:
+      selector: th:nth-child(10)
+    grabs:
+      selector: th:nth-child(11)
+    date:
+      selector: th:nth-child(12)
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a
