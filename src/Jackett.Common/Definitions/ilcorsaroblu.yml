@@ -184,6 +184,23 @@ search:
           args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
         - name: re_replace # rimozioni varie
           args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+        # cleanup for Sonarr
+        - name: re_replace # EP 3 4 to E3-4
+          args: ["(?i)\\sEP\\s(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " E$1-$2 "]
+        - name: re_replace # S02E04 05 to S02E04-05
+          args: ["(?i)\\sS(\\d{1,2})\\s?E\\s?(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " S$1E$2-$3 "]
+        - name: re_replace
+          args: ["(?i)AC3\\s?(\\d)\\s(\\d)", "AC3 $1.$2"]
+        - name: re_replace
+          args: ["(?i) DD\\s?(\\d)\\s(\\d)", " DD $1.$2"]
+        - name: re_replace
+          args: ["(?i) DDP\\s?(\\d)\\s(\\d)", " DDP $1.$2"]
+        - name: re_replace
+          args: ["(?i)\\sE\\s?AC3", " EAC3"]
+        - name: re_replace
+          args: ["(?i)WEB\\sDL", "WEBDL"]
+        - name: re_replace
+          args: ["(?i)HDTVRIP", "HDTV"]
     details:
       selector: td:nth-child(2) > a
       attribute: href
