@@ -17,6 +17,7 @@ caps:
     - {id: 104, cat: Movies/DVD, desc: "Filme - DVD-R"}
     - {id: 132, cat: Movies/DVD, desc: "Filme - HD2DVD"}
     - {id: 130, cat: Movies, desc: "Filme - Klassiker"}
+    - {id: 134, cat: Movies, desc: "Filme - SD/HD/UHD"}
     - {id: 105, cat: Movies, desc: "Filme - x264"}
     - {id: 106, cat: Movies, desc: "Filme - XviD / DivX"}
     - {id: 69, cat: XXX, desc: " XXX"}
