@@ -210,7 +210,7 @@ search:
         - name: re_replace
           args: ["(?i)\\sE\\s?AC3", " EAC3"]
         - name: re_replace
-          args: ["(?i)WEB\\sDL", "WEBDL"]
+          args: ["(?i)WEB\\sDL", "WEB-DL"]
         - name: re_replace
           args: ["(?i)HDTVRIP", "HDTV"]
     category:
