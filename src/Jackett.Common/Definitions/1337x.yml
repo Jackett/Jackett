@@ -183,6 +183,7 @@ search:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
       filters:
+        - name: urldecode
         - name: split
           args: ["/", 3]
     title:
@@ -190,11 +191,28 @@ search:
       text: "{{ if .Result.title_href }}{{ .Result.title_href }}{{ else }}{{ .Result.title_text }}{{ end }}"
       filters:
         - name: re_replace
-          args: ["(-+)", " "]
+          args: ["-", " "]
         - name: replace
           args: ["Grey's Anatomy", "Greys Anatomy"]
         - name: replace
-          args: ["\u000f", ""] # get rid of unwanted character
+          args: ["\u000f", ""] # get rid of unwanted character #6582
+        # cleanup for Sonarr
+        - name: re_replace # EP 3 4 to E3-4
+          args: ["(?i)\\sEP\\s(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " E$1-$2 "]
+        - name: re_replace # S02E04 05 to S02E04-05
+          args: ["(?i)\\sS(\\d{1,2})\\s?E\\s?(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " S$1E$2-$3 "]
+        - name: re_replace
+          args: ["(?i)AC3\\s?(\\d)\\s(\\d)", "AC3 $1.$2"]
+        - name: re_replace
+          args: ["(?i) DD\\s?(\\d)\\s(\\d)", " DD $1.$2"]
+        - name: re_replace
+          args: ["(?i) DDP\\s?(\\d)\\s(\\d)", " DDP $1.$2"]
+        - name: re_replace
+          args: ["(?i)\\sE\\s?AC3", " EAC3"]
+        - name: re_replace
+          args: ["(?i)WEB\\sDL", "WEBDL"]
+        - name: re_replace
+          args: ["(?i)HDTVRIP", "HDTV"]
     category:
       text: 40
     category|noappend:
