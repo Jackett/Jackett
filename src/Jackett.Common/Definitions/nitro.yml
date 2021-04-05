@@ -86,6 +86,7 @@ search:
         "a:contains(\"Booki\")": 8
         "a:contains(\"PDA\")": 9
         "a:contains(\"Inne\")": 10
+        "a:contains(\"Nieposortowane\")": 10
         "a:contains(\"XXX\")": 11
     title:
       selector: a[href^="/torrent/"]

@@ -6,9 +6,9 @@ language: ro-ro
 type: private
 encoding: windows-1252
 links:
-  - https://datascene.net/
-legacylinks:
   - http://datascene.net/
+legacylinks:
+  - https://datascene.net/
 
 caps:
   categorymappings:
