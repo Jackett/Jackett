@@ -6,7 +6,7 @@ language: fr-fr
 type: private
 encoding: UTF-8
 links:
-  -  https://oasis-fun.club/
+  - https://oasis-fun.club/
 
 caps:
   categorymappings:
