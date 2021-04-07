@@ -1,7 +1,7 @@
 ---
 id: comicat
 name: comicat
-description: "comicat is a CHINESE Public tracker"
+description: "comicat is a CHINESE Public tracker for Anime / Hentai / Manga"
 language: zh-CN
 type: public
 encoding: UTF-8
@@ -12,15 +12,16 @@ settings: []
 
 caps:
   categorymappings:
-    - {id: "1", cat: TV/Anime, desc: "动画(Animated)"}
-    - {id: "2", cat: Books/Comics, desc: "漫画(Comics)"}
-    - {id: "3", cat: Audio, desc: "音乐(Music)"}
-    - {id: "4", cat: TV/Anime, desc: "周边(Peripheral)"}
-    - {id: "5", cat: Other, desc: "其它(Other)"}
-    - {id: "6", cat: TV/Anime, desc: "Raw"}
+    - {id: 1, cat: TV/Anime, desc: "动画(Anime)"}
+    - {id: 2, cat: Books/Comics, desc: "漫画(Manga)"}
+    - {id: 3, cat: Audio, desc: "音乐(Music)"}
+    - {id: 4, cat: TV/Anime, desc: "周边(Peripheral)"}
+    - {id: 5, cat: Other, desc: "其它(Other)"}
+    - {id: 6, cat: TV/Anime, desc: "Raw"}
 
   modes:
     search: [q]
+    tv-search: [q]
     movie-search: [q]
     music-search: [q]
     book-search: [q]
@@ -29,7 +30,7 @@ search:
   paths:
     # https://www.comicat.org/ (latest)
     # https://www.comicat.org/search.php?keyword=720p+2020 (search)
-    # sort_id is meant to search by categories but it doesn't work
+    # sort_id: filters by a single category, multi cats is not supported so we cannot use it.
     - path: "{{ if .Keywords }}/search.php?keyword={{ .Keywords }}{{ else }}{{ end }}"
     - path: "{{ if .Keywords }}/search.php?keyword={{ .Keywords }}&page=2{{ else }}2.html{{ end }}"
 
