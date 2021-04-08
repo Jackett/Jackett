@@ -77,6 +77,13 @@ stages:
         steps:
           - checkout: self
 
+          # https://github.com/actions/virtual-environments/issues/3038
+          # Workflow fails to download dependencies from NuGet.org
+          - uses: fabriciomurta/ensure-nuget-source@v1
+            with:
+              name: 'nuget.org'
+              url: 'https://api.nuget.org/v3/index.json'
+
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
             inputs:
