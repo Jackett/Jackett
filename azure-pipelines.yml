@@ -75,10 +75,10 @@ stages:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
         steps:
-          - name: Ensure NuGet Source
-            uses: fabriciomurta/ensure-nuget-source@v1
+        - name: Ensure NuGet Source
+          uses: fabriciomurta/ensure-nuget-source@v1
 
-          - checkout: self
+        - checkout: self
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
