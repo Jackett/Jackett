@@ -109,20 +109,20 @@ search:
       selector: td:nth-child(1)
       attribute: title
       case:
-        td[title="华语流行"] : 2
-        td[title="古典音乐"] : 3
-        td[title="民族音乐"] : 11
-        td[title="原声配乐"] : 4
-        td[title="泛摇滚乐"] : 5
-        td[title="爵士乡村"] : 8
-        td[title="新世纪"] : 12
-        td[title="舞曲"] : 13
-        td[title="电子"] : 14
-        td[title="民谣"] : 15
-        td[title="独立"] : 16
-        td[title="嘻哈"] : 17
-        td[title="音乐剧"] : 18
-        td[title="其它类型"] : 9
+        td[title="华语流行"]: 2
+        td[title="古典音乐"]: 3
+        td[title="民族音乐"]: 11
+        td[title="原声配乐"]: 4
+        td[title="泛摇滚乐"]: 5
+        td[title="爵士乡村"]: 8
+        td[title="新世纪"]: 12
+        td[title="舞曲"]: 13
+        td[title="电子"]: 14
+        td[title="民谣"]: 15
+        td[title="独立"]: 16
+        td[title="嘻哈"]: 17
+        td[title="音乐剧"]: 18
+        td[title="其它类型"]: 9
     title:
       selector: a[href^="plugin_details.php?id="]
     title:
