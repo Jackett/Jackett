@@ -79,6 +79,8 @@ search:
     tmdb: "{{ .Query.TMDBID }}"
     mal: ""
     igdb: ""
+    start_year: ""
+    end_year: ""
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
@@ -96,73 +98,31 @@ search:
       filters:
         - name: regexp
           args: "/categories/(\\d+)"
-
     title:
-      selector: a.view-torrent
+      selector: a[href*="/torrents/"]
       filters:
         - name: re_replace
           args: ["\\[", " "]
         - name: re_replace
           args: ["\\]", " "]
         - name: re_replace
-          args: ["(?i)(full(bluray)?)", "BRDISK"] # FULL(BR/UHD) -> BRDISK
-        - name: replace
-          args: ["RedBits", ""] # Delete RedBits
-        - name: replace
-          args: ["REDBITS", ""] # Delete REDBITS
+          args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
         - name: re_replace
-          args: ["[ -](?i)español[ -]", " SPANiSH "]
-        - name: re_replace
-          args: ["[ -](?i)castellano[ -]", " SPANiSH "]
-        - name: re_replace
-          args: ["[ -](?i)spa[ -]", " SPANiSH "]
-        - name: re_replace
-          args: ["[ -](?i)esp[ -]", " SPANiSH "]
-        - name: re_replace
-          args: ["[ -](?i)ingl[eé]s[ -]", " English "]
-        - name: re_replace
-          args: ["[ -](?i)[ei]ng[ -]", " English "]
-        - name: re_replace
-          args: ["[ -](?i)cat[ -]", " Catalan "]
-        - name: re_replace
-          args: ["[ -](?i)vas[ -]", " Basque "]
-        - name: re_replace
-          args: ["[ -](?i)fr[ae][ -]", " French "]
-        - name: re_replace
-          args: ["[ -](?i)jap[ -]", " Japanese "]
-        - name: re_replace
-          args: ["[ -](?i)ita[ -]", " Italian "]
-        - name: re_replace
-          args: ["[ -](?i)rus[ -]", " Russian "]
-        - name: re_replace
-          args: ["[ -](?i)ger[ -]", " German "]
-        - name: re_replace
-          args: ["(?i)(triaudio)", "MULTi/SPANiSH/English"]
-        - name: re_replace
-          args: ["(?i)(dual)", " MULTi/SPANiSH "]
-        - name: re_replace
-          args: ["\\.+", "."] # More than 1 dot -> .
-        - name: re_replace
-          args: ["^\\.", ""] # Delete first dot
-        - name: re_replace
-          args: ["\\s+", " "] # More than 1 space to 1 space
-
+          args: ["(?i)RedBits", ""] # Delete RedBits
     download:
       selector: a[href*="/download/"]
       attribute: href
     details:
-      selector: a.view-torrent
+      selector: a[href*="/torrents/"]
       attribute: href
     poster:
       selector: div.torrent-poster img
       attribute: src
       filters:
-        - name: prepend
-          args: "https://images.weserv.nl/?url=" # for display on dashboard
-        - name: append
-          args: "&w=180&h=270" # for display on dashboard
         - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
+          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
+        - name: replace
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -226,8 +186,7 @@ search:
         i[class*="fa-star text-bold"]: 0 # Freeleech From Token
         i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
         i[class*="fa-globe text-blue"]: 0 # Global Freeleech
-        i[class*="fas fa-star text-gold"]: 0 # Freeleech
-        i[class*="fal fa-star text-gold"]: 0.5 # 50% Freeleech
+        i[class*="fa-star text-gold"]: 0 # Freeleech
         i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
         "*": 1
     uploadvolumefactor:
@@ -239,4 +198,4 @@ search:
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# UNIT3D 2.4.0
+# UNIT3D 5.1.0
