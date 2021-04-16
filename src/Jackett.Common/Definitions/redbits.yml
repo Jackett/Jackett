@@ -110,7 +110,7 @@ search:
         - name: re_replace
           args: ["(?i)RedBits", ""] # Delete RedBits
         - name: append
-          args: " Spanish" # Add spanish so sona
+          args: " Spanish" # Add spanish to fix Sonarr/Radarr language
     download:
       selector: a[href*="/download/"]
       attribute: href
