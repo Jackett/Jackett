@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
             // Add note that download stats are not available
             configData.AddDynamic(
                 "download-stats-unavailable", 
-                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Size</li><li>Grabs</li><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
+                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Size</li><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
             );
 
             // Config item for title detail parsing
@@ -183,7 +183,6 @@ namespace Jackett.Common.Indexers
 
                     // Download stats are not available through scraping so set some mock values.
                     Size = GetSizeEstimate(fi),
-                    Grabs = 1,
                     Seeders = 1,
                     Peers = 1,
                     DownloadVolumeFactor = 0,
