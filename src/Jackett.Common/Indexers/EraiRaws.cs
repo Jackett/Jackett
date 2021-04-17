@@ -18,15 +18,10 @@ namespace Jackett.Common.Indexers
     {
         const string RSS_PATH = "rss-all-magnet";
 
-        private readonly Dictionary<string, string> DETAIL_SEARCH_SEASON = new Dictionary<string, string> {
-            { " Season (?<detail>[0-9]+)", "" }, // "Season 2"
-            { " (?<detail>[0-9]+)(st|nd|rd|th) Season", "" }, // "2nd Season"
-            { " (?<detail>[0-9]+) – ", " – " } // "<title> 2 – <episode>" - NOT A HYPHEN!
-        };
-
-        private readonly Dictionary<string, string> DETAIL_SEARCH_EPISODE = new Dictionary<string, string> {
-            { " – (?<detail>[0-9]+)$", " – " }, // "<title> – <episode>" <end_of_title> - NOT A HYPHEN!
-            { " – (?<detail>[0-9]+) ", " – " } // "<title> – <episode> ..." - NOT A HYPHEN!
+        private readonly IReadOnlyDictionary<string, int> sizeEstimates = new Dictionary<string, int>() {
+            { "1080p", 1332 }, // ~1.3GiB
+            { "720p", 700 },
+            { "540p", 350 }
         };
 
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
@@ -53,6 +48,12 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "public";
 
+            // Add note that download stats are not available
+            configData.AddDynamic(
+                "download-stats-unavailable", 
+                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Size</li><li>Grabs</li><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
+            );
+
             // Config item for title detail parsing
             configData.AddDynamic("title-detail-parsing", new BoolConfigurationItem("Enable Title Detail Parsing"));
             configData.AddDynamic(
@@ -63,6 +64,8 @@ namespace Jackett.Common.Indexers
             // Configure the category mappings
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime - Sub");
         }
+
+        private TitleParser titleParser = new TitleParser();
 
         private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
 
@@ -87,6 +90,18 @@ namespace Jackett.Common.Indexers
         
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var feedItems = await GetItemsFromFeed();
+            var eraiRawsReleaseInfo = ConvertFeedItemsToEraiRawsReleaseInfo(feedItems);
+
+            // Perform basic filter within Jackett
+            var filteredItems = FilterForQuery(query, eraiRawsReleaseInfo);
+
+            // Convert to release info
+            return ConvertEraiRawsInfoToJackettInfo(filteredItems);
+        }
+
+        private async Task<IEnumerable<RssFeedItem>> GetItemsFromFeed()
+        {
             // Retrieve RSS feed
             var result = await RequestWithCookiesAndRetryAsync(RssFeedUri);
 
@@ -95,42 +110,55 @@ namespace Jackett.Common.Indexers
             xmlDocument.LoadXml(result.ContentString);
 
             // Parse to RssFeedItems
-            var rawItems = xmlDocument.GetElementsByTagName("item");
-            IEnumerable<RssFeedItem> feedItems = ParseRssItems(rawItems);
-
-            // If enabled, reformat title to make details easier to detect
-            if (IsTitleDetailParsingEnabled)
+            var xmlNodes = xmlDocument.GetElementsByTagName("item");
+            List<RssFeedItem> feedItems = new List<RssFeedItem>();
+            foreach (var n in xmlNodes)
             {
-                feedItems = ReformatTitles(feedItems);
-            }
-
-            // Perform basic filter within Jackett
-            IEnumerable<RssFeedItem> filteredItems = FilterForQuery(query, feedItems);
-
-            // Convert to release info
-            IEnumerable<ReleaseInfo> releases = ConvertRssFeedItemsToReleaseInfo(filteredItems);
-
-            return releases;
-        }
-
-        private IEnumerable<RssFeedItem> ParseRssItems(XmlNodeList xmlNodes)
-        {
-            foreach (var ri in xmlNodes)
-            {
-                var node = (XmlNode)ri;
+                var node = (XmlNode)n;
 
                 if (RssFeedItem.TryParse(node, out RssFeedItem item))
                 {
-                    yield return item;
+                    feedItems.Add(item);
                 }
                 else
                 {
                     logger.Warn($"Could not parse {DisplayName} RSS item '{node.InnerText}'");
                 }
             }
+
+            return feedItems;
         }
 
-        private IEnumerable<RssFeedItem> FilterForQuery(TorznabQuery query, IEnumerable<RssFeedItem> feedItems)
+        private IEnumerable<EraiRawsReleaseInfo> ConvertFeedItemsToEraiRawsReleaseInfo(IEnumerable<RssFeedItem> feedItems)
+        {
+            foreach (var fi in feedItems)
+            {
+                EraiRawsReleaseInfo releaseInfo = new EraiRawsReleaseInfo(fi);
+
+                // Validate the release
+                if (releaseInfo.PublishDate == null)
+                {
+                    logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed publish date.");
+                    continue;
+                }
+
+                if (releaseInfo.Link == null)
+                {
+                    logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed link URI.");
+                    continue;
+                }
+
+                // If enabled, perform detailed title parsing
+                if (IsTitleDetailParsingEnabled)
+                {
+                    releaseInfo.Title = titleParser.Parse(releaseInfo.Title);
+                }
+
+                yield return releaseInfo;
+            }
+        }
+
+        private static IEnumerable<EraiRawsReleaseInfo> FilterForQuery(TorznabQuery query, IEnumerable<EraiRawsReleaseInfo> feedItems)
         {
             foreach (var fi in feedItems)
             {
@@ -141,95 +169,45 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private IEnumerable<RssFeedItem> ReformatTitles(IEnumerable<RssFeedItem> feedItems)
-        {
-            foreach(var fi in feedItems)
-            {
-                var title = fi.Title;
-
-                if (IsTitleDetailParsingEnabled)
-                {
-                    var results = SearchTitleForDetails(title, new Dictionary<string, Dictionary<string, string>> {
-                        { "episode", DETAIL_SEARCH_EPISODE },
-                        { "season", DETAIL_SEARCH_SEASON }
-                    });
-                    
-                    fi.Title = string.Concat(results.strippedTitle, " ", PrefixOrDefault("S", results.details["season"]), PrefixOrDefault("E", results.details["episode"])).Trim();
-                    yield return fi;
-                }
-            }
-        }
-
-        private IEnumerable<ReleaseInfo> ConvertRssFeedItemsToReleaseInfo(IEnumerable<RssFeedItem> feedItems)
+        private IEnumerable<ReleaseInfo> ConvertEraiRawsInfoToJackettInfo(IEnumerable<EraiRawsReleaseInfo> feedItems)
         {
             foreach (var fi in feedItems)
             {
-                if (fi.PublishDate == null)
+                yield return new ReleaseInfo
                 {
-                    logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed publish date.");
-                    continue;
-                }
-
-                Uri magnetUri;
-                if (!Uri.TryCreate(fi.Link, UriKind.Absolute, out magnetUri))
-                {
-                    logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed link URI.");
-                    continue;
-                }
-
-                // Do some basic parsing of the title to make it easier to detect the episode
-                var title = fi.Title;
-
-                if (IsTitleDetailParsingEnabled)
-                {
-                    var results = SearchTitleForDetails(title, new Dictionary<string, Dictionary<string, string>> {
-                        { "episode", DETAIL_SEARCH_EPISODE },
-                        { "season", DETAIL_SEARCH_SEASON }
-                    });
-                    
-                    title = string.Concat(results.strippedTitle, " ", PrefixOrDefault("S", results.details["season"]), PrefixOrDefault("E", results.details["episode"])).Trim();
-                }
-
-                var release = new ReleaseInfo
-                {
-                    Title = title,
-                    Guid = magnetUri,
-                    MagnetUri = magnetUri,
+                    Title = string.Concat(fi.Title, " - ", fi.Quality),
+                    Guid = fi.Link,
+                    MagnetUri = fi.Link,
                     PublishDate = fi.PublishDate.Value.ToLocalTime().DateTime,
-                    Category = MapTrackerCatToNewznab("1")
+                    Category = MapTrackerCatToNewznab("1"),
+
+                    // Download stats are not available through scraping so set some mock values.
+                    Size = GetSizeEstimate(fi),
+                    Grabs = 1,
+                    Seeders = 1,
+                    Peers = 1,
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1
                 };
-                yield return release;
             }
         }
 
-        private static (string strippedTitle, Dictionary<string, string> details) SearchTitleForDetails(string title, Dictionary<string, Dictionary<string,string>> definition)
+        /// <summary>
+        /// Get an estimate of the file size based on the release info.
+        /// </summary>
+        /// <remarks>
+        /// These estimates are currently only based on Quality. They will be very inaccurate for batch releases.
+        /// </remarks>
+        private long GetSizeEstimate(EraiRawsReleaseInfo releaseInfo)
         {
-            Dictionary<string, string> details = new Dictionary<string, string>();
-            foreach (var search in definition)
+            long sizeEstimateInMiB = 256;
+            if (sizeEstimates.ContainsKey(releaseInfo.Quality.ToLower()))
             {
-                var searchResult = SearchTitleForDetail(title, search.Value);
-                details.Add(search.Key, searchResult.detail);
-                title = searchResult.strippedTitle;
+                sizeEstimateInMiB = sizeEstimates[releaseInfo.Quality.ToLower()];
             }
 
-            return (title, details);
-        }
-
-        private static (string strippedTitle, string detail) SearchTitleForDetail(string title, Dictionary<string, string> searchReplacePatterns)
-        {
-            foreach (var srp in searchReplacePatterns)
-            {
-                var match = Regex.Match(title, srp.Key, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(0.5));
-                if (match.Success)
-                {
-                    string detail = match.Groups["detail"].Value;
-                    var strippedTitle = Regex.Replace(title, srp.Key, srp.Value, RegexOptions.IgnoreCase);
-                    return (strippedTitle, detail);
-                }
-            }
-
-            // Nothing found so return null
-            return (title, "");
+            // Convert to bytes and return
+            return sizeEstimateInMiB * (1024 * 1024);
         }
 
         private static string PrefixOrDefault(string prefix, string value, string def = "")
@@ -244,6 +222,9 @@ namespace Jackett.Common.Indexers
             }
         }
 
+        /// <summary>
+        /// Raw RSS feed item containing the data as received.
+        /// </summary>
         private class RssFeedItem
         {
             public static bool TryParse(XmlNode rssItem, out RssFeedItem item)
@@ -269,28 +250,134 @@ namespace Jackett.Common.Indexers
             {
                 Title = title;
                 Link = link;
-                PublishDateRaw = publishDate;
+                PublishDate = publishDate;
             }
 
             public string Title { get; set; }
 
             public string Link { get; }
 
-            public DateTimeOffset? PublishDate
-            {
-                get
-                {
-                    DateTimeOffset publishDate;
-                    if (DateTimeOffset.TryParse(PublishDateRaw, out publishDate))
-                    {
-                        return publishDate;
-                    }
+            public string PublishDate { get; }
+        }
 
-                    return null;
+        /// <summary>
+        /// Details of an EraiRaws release
+        /// </summary>
+        private class EraiRawsReleaseInfo
+        {
+            public EraiRawsReleaseInfo(RssFeedItem feedItem)
+            {
+                var splitTitle = SplitQualityAndTitle(feedItem.Title);
+
+                Quality = splitTitle.quality;
+                Title = splitTitle.title;
+
+                if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
+                {
+                    Link = magnetUri;
+                }
+
+                if (DateTimeOffset.TryParse(feedItem.PublishDate, out DateTimeOffset publishDate))
+                {
+                    PublishDate = publishDate;
                 }
             }
 
-            public string PublishDateRaw { get; }
+            private (string quality, string title) SplitQualityAndTitle(string rawTitle)
+            {
+                var match = Regex.Match(rawTitle, @"^\[(?<quality>[0-9]+[ip])\] (?<title>.*)$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(0.5));
+                if (match.Success)
+                {
+                    return (match.Groups["quality"].Value, match.Groups["title"].Value);
+                }
+
+                return (string.Empty, rawTitle);
+            }
+
+            public string Quality { get; }
+
+            public string Title { get; set; }
+
+            public Uri Link { get; }
+
+            public DateTimeOffset? PublishDate { get; }
+        }
+
+        public class TitleParser
+        {
+            private readonly Dictionary<string, string> DETAIL_SEARCH_SEASON = new Dictionary<string, string> {
+                { " Season (?<detail>[0-9]+)", "" }, // "Season 2"
+                { " (?<detail>[0-9]+)(st|nd|rd|th) Season", "" }, // "2nd Season"
+                { " Part (?<detail>[0-9]+) – ", " – " }, // "<title> Part 2 – <episode>"
+                { " (?<detail>[0-9]+) – ", " – " } // "<title> 2 – <episode>" - NOT A HYPHEN!
+            };
+
+            private readonly Dictionary<string, string> DETAIL_SEARCH_EPISODE = new Dictionary<string, string> {
+                { " – (?<detail>[0-9]+)$", " – " }, // "<title> – <episode>" <end_of_title> - NOT A HYPHEN!
+                { " – (?<detail>[0-9]+) ", " – " } // "<title> – <episode> ..." - NOT A HYPHEN!
+            };
+
+            public string Parse(string title)
+            {
+                var results = SearchTitleForDetails(title, new Dictionary<string, Dictionary<string, string>> {
+                    { "episode", DETAIL_SEARCH_EPISODE },
+                    { "season", DETAIL_SEARCH_SEASON }
+                });
+                
+                var seasonEpisodeIdentifier = string.Concat(
+                    PrefixOrDefault("S", results.details["season"]).Trim(),
+                    PrefixOrDefault("E", results.details["episode"]).Trim()
+                    );
+
+                // If title still contains the strange hyphen, insert the identifier after it. Otherwise put it at the end.
+                int strangeHyphenPosition = results.strippedTitle.LastIndexOf("–");
+                if (strangeHyphenPosition > -1)
+                {
+                    return string.Concat(
+                        results.strippedTitle.Substring(0, strangeHyphenPosition).Trim(),
+                        " – ",
+                        seasonEpisodeIdentifier,
+                        " ",
+                        results.strippedTitle.Substring(strangeHyphenPosition + 1).Trim()
+                    ).Trim();
+                }
+                                
+                return string.Concat(
+                    results.strippedTitle.Trim(),
+                    " ",
+                    seasonEpisodeIdentifier
+                ).Trim();
+            }
+
+            private static (string strippedTitle, Dictionary<string, string> details) SearchTitleForDetails(string title, Dictionary<string, Dictionary<string,string>> definition)
+            {
+                Dictionary<string, string> details = new Dictionary<string, string>();
+                foreach (var search in definition)
+                {
+                    var searchResult = SearchTitleForDetail(title, search.Value);
+                    details.Add(search.Key, searchResult.detail);
+                    title = searchResult.strippedTitle;
+                }
+
+                return (title, details);
+            }
+
+            private static (string strippedTitle, string detail) SearchTitleForDetail(string title, Dictionary<string, string> searchReplacePatterns)
+            {
+                foreach (var srp in searchReplacePatterns)
+                {
+                    var match = Regex.Match(title, srp.Key, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(0.5));
+                    if (match.Success)
+                    {
+                        string detail = match.Groups["detail"].Value;
+                        var strippedTitle = Regex.Replace(title, srp.Key, srp.Value, RegexOptions.IgnoreCase);
+                        return (strippedTitle, detail);
+                    }
+                }
+
+                // Nothing found so return null
+                return (title, "");
+            }
         }
     }
 }
