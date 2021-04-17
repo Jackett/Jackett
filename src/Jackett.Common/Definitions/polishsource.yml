@@ -36,6 +36,17 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI & PL by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI & PL by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTI.POLISH: MULTI.POLISH
   - name: sort
     type: select
     label: Sort requested from site
@@ -102,8 +113,17 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_phase1:
       selector: a[href^="details.php?id="]
+    title_multilang:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\.multi\\.)", ".{{ .Config.multilanguage }}."]
+        - name: re_replace
+          args: ["(?i)(\\.pl\\.)", ".{{ .Config.multilanguage }}."]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href

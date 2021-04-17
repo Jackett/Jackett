@@ -11,17 +11,25 @@ links:
 caps:
   categorymappings:
     - {id: 21, cat: PC, desc: "Appz"}
+    - {id: 27, cat: Books/EBook, desc: "E-Books"}
     - {id: 22, cat: PC/Games, desc: "Games"}
-    - {id: 23, cat: Other, desc: "Misc."}
-    - {id: 24, cat: Movies/SD, desc: "Movies SD"}
-    - {id: 11, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 3, cat: Movies, desc: "Movies Packs"}
-    - {id: 20, cat: Audio/Lossless, desc: "Music FLAC"}
-    - {id: 4, cat: Audio/Lossless, desc: "Music FLAC"}
-    - {id: 17, cat: Audio, desc: "Music Packs"}
-    - {id: 18, cat: TV/HD, desc: "TV HD"}
-    - {id: 16, cat: TV, desc: "TV Packs"}
-    - {id: 19, cat: TV/SD, desc: "TV SD"}
+    - {id: 28, cat: Console, desc: "Games/Console"}
+    - {id: 33, cat: PC/Games, desc: "Games/PC"}
+    - {id: 32, cat: Console, desc: "Games/Roms"}
+    - {id: 23, cat: Other, desc: "Misc"}
+    - {id: 31, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 26, cat: Movies/3D, desc: "Movies/Cam"}
+    - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 3, cat: Movies, desc: "Movies/Packs"}
+    - {id: 24, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 30, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 20, cat: Audio/Lossless, desc: "Music/FLAC"}
+    - {id: 4, cat: Audio/MP3, desc: "Music/MP3"}
+    - {id: 17, cat: Audio, desc: "Music/Packs"}
+    - {id: 18, cat: TV/HD, desc: "TV/HD"}
+    - {id: 16, cat: TV, desc: "TV/Packs"}
+    - {id: 19, cat: TV/SD, desc: "TV/SD"}
+    - {id: 29, cat: TV/UHD, desc: "TV/UHD"}
 
   modes:
     search: [q]

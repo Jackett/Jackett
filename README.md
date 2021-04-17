@@ -45,6 +45,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BTSOW
  * Byrutor
  * CiliPro (LIAORENCILI)
+ * comicat
  * ConCen
  * cpasbien
  * cpasbienClone
@@ -427,7 +428,9 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NetCosmo
  * NetLab
  * NorBits
+ * Oasis
  * oMg[WtF]trackr
+ * OpenCD
  * Orpheus
  * OshenPT
  * Ourbits (HDPter)
@@ -462,10 +465,12 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
+ * RedBits
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
  * RetroFlix
  * RevolutionTT
+ * ROFD
  * Romanian Metal Torrents (RMT) [![(invite needed)][inviteneeded]](#)
  * RPTorrents
  * SceneHD

@@ -307,7 +307,7 @@ namespace Jackett.Common.Indexers
             foreach (var row in rows)
             {
                 var anchor = row.QuerySelector("a");
-                if (anchor == null)
+                if (anchor == null || anchor.GetAttribute("href") == "#abajo")
                     continue;
 
                 var episodeTitle = anchor.TextContent.Trim();

@@ -28,6 +28,7 @@ caps:
     - {id: 22, cat: Movies/SD, desc: "Movie BDRip"}
     - {id: 23, cat: Movies/SD, desc: "Movie DvdRip"}
     - {id: 95, cat: Movies/SD, desc: "Movie WEBRip"}
+    - {id: 98, cat: Movies/WEB-DL, desc: "Movie WEBDL"}
     - {id: 24, cat: Movies/DVD, desc: "Movie DVD-R 5"}
     - {id: 25, cat: Movies/DVD, desc: "Movie DVD-R 9"}
     - {id: 26, cat: Movies/HD, desc: "Movie Blu-Ray HD"}

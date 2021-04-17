@@ -65,52 +65,16 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.TVAnime, "Adult Video");
             AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
 
-            // Configure the language select option
-            var languageSelect = new SingleSelectConfigurationItem("Language", new Dictionary<string, string>
-                {
-                {"1", "English"},
-                {"2", "Japanese"},
-                {"3", "Polish"},
-                {"4", "Serbo-Croatian" },
-                {"5", "Dutch"},
-                {"6", "Italian"},
-                {"7", "Russian"},
-                {"8", "German"},
-                {"9", "Hungarian"},
-                {"10", "French"},
-                {"11", "Finnish"},
-                {"12", "Vietnamese"},
-                {"13", "Greek"},
-                {"14", "Bulgarian"},
-                {"15", "Spanish (Spain)" },
-                {"16", "Portuguese (Brazil)" },
-                {"17", "Portuguese (Portugal)" },
-                {"18", "Swedish"},
-                {"19", "Arabic"},
-                {"20", "Danish"},
-                {"21", "Chinese (Simplified)" },
-                {"22", "Bengali"},
-                {"23", "Romanian"},
-                {"24", "Czech"},
-                {"25", "Mongolian"},
-                {"26", "Turkish"},
-                {"27", "Indonesian"},
-                {"28", "Korean"},
-                {"29", "Spanish (LATAM)" },
-                {"30", "Persian"},
-                {"31", "Malaysian"}
-            })
-            { Value = "1" };
-            configData.AddDynamic("languageid", languageSelect);
+            AddLanguageConfiguration();
 
             // Configure the sort selects
             var sortBySelect = new SingleSelectConfigurationItem("Sort by", new Dictionary<string, string>
                 {
-                {"upload_timestamp", "created"},
-                {"seeders", "seeders"},
-                {"size", "size"},
-                {"filename", "title"}
-            })
+                    {"upload_timestamp", "created"},
+                    {"seeders", "seeders"},
+                    {"size", "size"},
+                    {"filename", "title"}
+                })
             { Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
@@ -125,8 +89,47 @@ namespace Jackett.Common.Indexers
             EnableConfigurableRetryAttempts();
         }
 
-        private string GetLang => ((SingleSelectConfigurationItem)configData.GetDynamic("languageid")).Value;
-        
+        private void AddLanguageConfiguration()
+        {
+            // Configure the language select option
+            var languageSelect = new MultiSelectConfigurationItem("Language (None ticked = ALL)", new Dictionary<string, string>
+                {
+                    {"1", "English"},
+                    {"2", "Japanese"},
+                    {"3", "Polish"},
+                    {"4", "Serbo-Croatian"},
+                    {"5", "Dutch"},
+                    {"6", "Italian"},
+                    {"7", "Russian"},
+                    {"8", "German"},
+                    {"9", "Hungarian"},
+                    {"10", "French"},
+                    {"11", "Finnish"},
+                    {"12", "Vietnamese"},
+                    {"13", "Greek"},
+                    {"14", "Bulgarian"},
+                    {"15", "Spanish (Spain)"},
+                    {"16", "Portuguese (Brazil)"},
+                    {"17", "Portuguese (Portugal)"},
+                    {"18", "Swedish"},
+                    {"19", "Arabic"},
+                    {"20", "Danish"},
+                    {"21", "Chinese (Simplified)"},
+                    {"22", "Bengali"},
+                    {"23", "Romanian"},
+                    {"24", "Czech"},
+                    {"25", "Mongolian"},
+                    {"26", "Turkish"},
+                    {"27", "Indonesian"},
+                    {"28", "Korean"},
+                    {"29", "Spanish (LATAM)"},
+                    {"30", "Persian"},
+                    {"31", "Malaysian"}
+                })
+            { Values = new[] { "" } };
+            configData.AddDynamic("languageid", languageSelect);
+        }
+
         private string GetSortBy => ((SingleSelectConfigurationItem)configData.GetDynamic("sortrequestedfromsite")).Value;
 
         private string GetOrder => ((SingleSelectConfigurationItem)configData.GetDynamic("orderrequestedfromsite")).Value;
@@ -144,6 +147,15 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
+        /// <summary>
+        /// Returns the selected languages, formatted so that they can be used in a query string.
+        /// </summary>
+        private string GetLanguagesForQuery()
+        {
+            var languagesConfig = (MultiSelectConfigurationItem)configData.GetDynamic("languageid");
+            return string.Join(",", languagesConfig.Values);
+        }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             // Prepare the search query
@@ -152,7 +164,6 @@ namespace Jackett.Common.Indexers
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "lang_id", GetLang },
                 { "group_id", "0" } // No group
             };
 
@@ -163,14 +174,18 @@ namespace Jackett.Common.Indexers
             if (searchCategories.Count > 0)
                 catString = "&id=" + string.Join(",", searchCategories);
 
+            // Get Selected Languages
+            // AniDex throws errors when the commas between language IDs are url encoded.
+            var langIds = "&lang_id=" + GetLanguagesForQuery();
+
             // Make search request
-            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString);
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString + langIds);
             var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
             if (response.Status == HttpStatusCode.Forbidden)
             {
-                await ConfigureDDoSGuardCookie();
+                await ConfigureDDoSGuardCookieAsync();
                 response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
             }
 
@@ -195,10 +210,12 @@ namespace Jackett.Common.Indexers
                 foreach (var r in rows)
                     try
                     {
+                        var language = "";
                         var release = new ReleaseInfo();
 
                         release.Category = ParseValueFromRow(r, nameof(release.Category), "td:nth-child(1) a", (e) => MapTrackerCatToNewznab(e.Attributes["href"].Value.Substring(5)));
-                        release.Title = ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span");
+                        language = ParseValueFromRow(r, nameof(language), "td:nth-child(1) img", (e) => e.Attributes["title"].Value);
+                        release.Title = ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span") + " " + language;
                         release.Link = ParseValueFromRow(r, nameof(release.Link), "a[href^=\"/dl/\"]", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
                         release.MagnetUri = ParseValueFromRow(r, nameof(release.MagnetUri), "a[href^=\"magnet:?\"]", (e) => new Uri(e.Attributes["href"].Value));
                         release.Size = ParseValueFromRow(r, nameof(release.Size), "td:nth-child(7)", (e) => ReleaseInfo.GetBytes(e.Text()));
@@ -226,7 +243,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task ConfigureDDoSGuardCookie()
+        private async Task ConfigureDDoSGuardCookieAsync()
         {
             const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
             var response = await RequestWithCookiesAsync(ddosPostUrl, string.Empty);
