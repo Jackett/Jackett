@@ -54,6 +54,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * E-Hentai
  * emtrek
  * Epizod
+ * Erai-Raws
  * ETTV
  * EXT Torrents
  * ExtraTorrent.cd
