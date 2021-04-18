@@ -46,7 +46,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
+    tv-search: [q]
     movie-search: [q]
     music-search: [q]
     book-search: [q]
@@ -62,10 +62,11 @@ search:
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=1{{ else }}/browse/1{{ end }}"
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=2{{ else }}/browse/2{{ end }}"
   keywordsfilters:
-    - name: re_replace # S01 to 1
-      args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
-    - name: re_replace # S01E01 to 1 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+    # remove searching by season and episode due to inconsistent naming #11471
+    - name: re_replace # remove S01
+      args: ["(?i)(\\s*s\\d+)", ""]
+    - name: re_replace # remove E01
+      args: ["(?i)(\\s*e\\d+)", ""]
 
   rows:
     selector: "tr.odd,tr.odd2"
