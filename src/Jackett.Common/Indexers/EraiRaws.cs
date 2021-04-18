@@ -184,7 +184,7 @@ namespace Jackett.Common.Indexers
                     // Download stats are not available through scraping so set some mock values.
                     Size = GetSizeEstimate(fi),
                     Seeders = 1,
-                    Peers = 1,
+                    Peers = 2,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
                 };
