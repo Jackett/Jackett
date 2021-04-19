@@ -1,7 +1,7 @@
 ---
 id: nordicplus
 name: Nordic+
-description: "Nordic+ is a NORDIC Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Nordic+ is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en
 type: private
 encoding: UTF-8
@@ -114,6 +114,9 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
+    magnet:
+      selector: a[href^="magnet:?"]
+      attribute: href
     details:
       selector: a[href*="/torrents/"]
       attribute: href
@@ -124,7 +127,7 @@ search:
         - name: replace
           args: ["&w=60&h=90", "&w=180&h=270"] # for display on dashboard
         - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/60x90&w=180&h=270", ""]
+          args: ["/img/NoPoster.png", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
