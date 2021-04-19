@@ -249,11 +249,11 @@ function displayUnconfiguredIndexersList() {
 			        }).fail(function (data) {
                 if(data.responseJSON.error !== undefined) {
                   var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                  var githubrepo = "Jackett/Jackett"
-                  var githubtext = "this indexer"
+                  var githubrepo = "Jackett/Jackett";
+                  var githubtext = "this indexer";
                   if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-                    githubrepo = "FlareSolverr/FlareSolverr"
-                    githubtext = "FlareSolverr"
+                    githubrepo = "FlareSolverr/FlareSolverr";
+                    githubtext = "FlareSolverr";
                   }
                   doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
                 } else {
@@ -480,11 +480,11 @@ function testIndexer(id, notifyResult) {
       updateTestState(id, "error", data.error, indexers);
       if(data.responseJSON.error !== undefined && notifyResult) {
         var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
-        var githubrepo = "Jackett/Jackett"
-        var githubtext = "this indexer"
-        if (data.responseJSON.error.includes("check FlareSolverr logs")) {
-          githubrepo = "FlareSolverr/FlareSolverr"
-          githubtext = "FlareSolverr"
+        var githubrepo = "Jackett/Jackett";
+        var githubtext = "this indexer";
+        if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
+          githubrepo = "FlareSolverr/FlareSolverr";
+          githubtext = "FlareSolverr";
         }
         doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
       } else {
