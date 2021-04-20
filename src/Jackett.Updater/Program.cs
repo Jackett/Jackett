@@ -315,6 +315,7 @@ namespace Jackett.Updater
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/fullmixmusic.yml",
+                "Definitions/funreleases.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
