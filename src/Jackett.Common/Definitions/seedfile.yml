@@ -36,6 +36,7 @@ caps:
     - {id: 23, cat: Audio/Video, desc: "Video Clip"}
     - {id: 24, cat: XXX, desc: "Adult 18+"}
     - {id: 36, cat: Movies/3D, desc: "Video 3D"}
+    - {id: 37, cat: Movies/HD, desc: "Animație HD"}
 
   modes:
     search: [q]
