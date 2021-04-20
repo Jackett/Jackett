@@ -315,6 +315,7 @@ namespace Jackett.Updater
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/fullmixmusic.yml",
+                "Definitions/funreleases.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
@@ -453,6 +454,7 @@ namespace Jackett.Updater
                 "Definitions/xktorrent.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
+                "Definitions/yingk.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
