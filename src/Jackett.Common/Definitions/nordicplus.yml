@@ -37,6 +37,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: usemagnet
+    type: checkbox
+    label: "Use Magnet Download Link"
+    default: false
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -111,15 +115,17 @@ search:
           args: "/categories/(\\d+)"
     title:
       selector: a[href*="/torrents/"]
-    download:
-      selector: a[href*="/download/"]
-      attribute: href
-    magnet:
-      selector: a[href^="magnet:?"]
-      attribute: href
     details:
       selector: a[href*="/torrents/"]
       attribute: href
+    download1:
+      selector: a[href*="/download/"]
+      attribute: href
+    download2:
+      selector: a[href^="magnet:?"]
+      attribute: href
+    download:
+      text: "{{ if .Config.usemagnet }}{{ .Result.download2 }}{{ else }}{{ .Result.download1 }}{{ end }}"
     poster:
       selector: div.torrent-poster img
       attribute: src
