@@ -76,7 +76,7 @@ search:
     incldead: 1
     descriptions: 0
     imdbgt: 0
-    imdblt : 10
+    imdblt: 10
     imdb: "{{ .Query.IMDBID }}"
     sort: "{{ .Config.sort }}"
     d: "{{ .Config.type }}"
