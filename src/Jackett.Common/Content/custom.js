@@ -266,6 +266,32 @@ function displayUnconfiguredIndexersList() {
     });
     indexersTable.find("table").DataTable(
         {
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var headerText = column.header().innerText;
+
+                    if (headerText == 'Language') {
+                        var select = $('<select><option value="">Show all</option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    } else {
+                        $(column.footer()).empty();
+                    }
+                });
+            },
             "stateSave": true,
             "stateDuration": 0,
             "fnStateSaveParams": function (oSettings, sValue) {
@@ -1022,6 +1048,7 @@ function bindUIButtons() {
     $('#jackett-add-indexer').click(function () {
         $("#modals").empty();
         displayUnconfiguredIndexersList();
+        $('#unconfigured-indexer-datatable tfoot tr').insertAfter($('#unconfigured-indexer-datatable thead tr'));
     });
 
     $("#jackett-test-all").click(function () {
