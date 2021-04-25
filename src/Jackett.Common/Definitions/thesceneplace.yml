@@ -6,7 +6,9 @@ language: en
 type: private
 encoding: UTF-8
 links:
-  - https://www.thesceneplace.com/
+  - http://www.thesceneplace.com/
+legacylinks:
+  - https://www.thesceneplace.com/ # site is forcing http
 
 caps:
   categorymappings:
