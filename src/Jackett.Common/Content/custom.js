@@ -4,8 +4,8 @@ var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
 
-$.fn.inView = function() {
-    if(!this.length) return false;
+$.fn.inView = function () {
+    if (!this.length) return false;
     var rect = this.get(0).getBoundingClientRect();
 
     return (
@@ -23,17 +23,19 @@ $.fn.focusWithoutScrolling = function () {
 };
 
 $(document).ready(function () {
-    $.ajaxSetup({ cache: false });
-
-    Handlebars.registerHelper('if_eq', function(a, b, opts) {
-	    if (a == b)
-	        return opts.fn(this);
-	    else
-	        return opts.inverse(this);
+    $.ajaxSetup({
+        cache: false
     });
 
-    Handlebars.registerHelper('if_in', function(elem, list, opts) {
-        if(list.indexOf(elem) > -1) {
+    Handlebars.registerHelper('if_eq', function (a, b, opts) {
+        if (a == b)
+            return opts.fn(this);
+        else
+            return opts.inverse(this);
+    });
+
+    Handlebars.registerHelper('if_in', function (elem, list, opts) {
+        if (list.indexOf(elem) > -1) {
             return opts.fn(this);
         }
 
@@ -50,11 +52,11 @@ $(document).ready(function () {
 
 function openSearchIfNecessary() {
     const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) =>
-      Object.assign({
-        [item.split('=')[0]]: (item.split('=').length < 2 ?
-          undefined :
-          decodeURIComponent(item.split('=')[1].replace(/\+/g,'%20')))
-      }, prev), {});
+        Object.assign({
+            [item.split('=')[0]]: (item.split('=').length < 2 ?
+                undefined :
+                decodeURIComponent(item.split('=')[1].replace(/\+/g, '%20')))
+        }, prev), {});
     if ("search" in hashArgs) {
         showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
     }
@@ -147,20 +149,17 @@ function reloadIndexers() {
 
             if (item.type == "public") {
                 item.type_label = "success";
-            }
-            else if (item.type == "private") {
+            } else if (item.type == "private") {
                 item.type_label = "danger";
-            }
-            else if (item.type == "semi-private") {
+            } else if (item.type == "semi-private") {
                 item.type_label = "warning";
-            }
-            else {
+            } else {
                 item.type_label = "default";
             }
 
-            var main_cats_list = item.caps.filter(function(c) {
+            var main_cats_list = item.caps.filter(function (c) {
                 return c.ID < 100000;
-            }).map(function(c) {
+            }).map(function (c) {
                 return c.Name.split("/")[0];
             });
             item.mains_cats = $.unique(main_cats_list).join(", ");
@@ -180,34 +179,40 @@ function reloadIndexers() {
 
 function displayConfiguredIndexersList(indexers) {
     var indexersTemplate = Handlebars.compile($("#configured-indexer-table").html());
-    var indexersTable = $(indexersTemplate({ indexers: indexers, total_configured_indexers: indexers.length }));
+    var indexersTable = $(indexersTemplate({
+        indexers: indexers,
+        total_configured_indexers: indexers.length
+    }));
     prepareTestButtons(indexersTable);
     prepareSearchButtons(indexersTable);
     prepareSetupButtons(indexersTable);
     prepareDeleteButtons(indexersTable);
     prepareCopyButtons(indexersTable);
-    indexersTable.find("table").dataTable(
-         {
-             "stateSave": true,
-             "stateDuration": 0,
-             "pageLength": -1,
-             "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
-             "order": [[0, "asc"]],
-             "columnDefs": [
-                {
-                    "targets": 0,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "targets": 1,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                }
-             ]
-         });
+    indexersTable.find("table").dataTable({
+        "stateSave": true,
+        "stateDuration": 0,
+        "pageLength": -1,
+        "lengthMenu": [
+            [10, 20, 50, 100, 250, 500, -1],
+            [10, 20, 50, 100, 250, 500, "All"]
+        ],
+        "order": [
+            [0, "asc"]
+        ],
+        "columnDefs": [{
+                "targets": 0,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "targets": 1,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            }
+        ]
+    });
 
     $('#indexers').empty();
     $('#indexers').append(indexersTable);
@@ -218,7 +223,10 @@ function displayUnconfiguredIndexersList() {
     var UnconfiguredIndexersDialog = $($("#select-indexer").html());
 
     var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
-    var indexersTable = $(indexersTemplate({ indexers: unconfiguredIndexers, total_unconfigured_indexers: unconfiguredIndexers.length  }));
+    var indexersTable = $(indexersTemplate({
+        indexers: unconfiguredIndexers,
+        total_unconfigured_indexers: unconfiguredIndexers.length
+    }));
     indexersTable.find('.indexer-setup').each(function (i, btn) {
         var indexer = unconfiguredIndexers[i];
         $(btn).click(function () {
@@ -232,126 +240,141 @@ function displayUnconfiguredIndexersList() {
             $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
                 var indexerId = $(btn).attr("data-id");
                 api.getIndexerConfig(indexerId, function (data) {
-			        if (data.result !== undefined && data.result == "error") {
-			            doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
-			            return;
-			        }
-	                api.updateIndexerConfig(indexerId, data, function (data) {
-		                if (data == undefined) {
-		                    reloadIndexers();
-		                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
-		                } else if (data.result == "error") {
-		                    if (data.config) {
-		                        populateConfigItems(configForm, data.config);
-		                    }
-		                    doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
-		                }
-			        }).fail(function (data) {
-                if(data.responseJSON.error !== undefined) {
-                  var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                  var githubrepo = "Jackett/Jackett";
-                  var githubtext = "this indexer";
-                  if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-                    githubrepo = "FlareSolverr/FlareSolverr";
-                    githubtext = "FlareSolverr";
-                  }
-                  doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
-                } else {
-                  doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
-                }
-			        });
+                    if (data.result !== undefined && data.result == "error") {
+                        doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+                        return;
+                    }
+                    api.updateIndexerConfig(indexerId, data, function (data) {
+                        if (data == undefined) {
+                            reloadIndexers();
+                            doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
+                        } else if (data.result == "error") {
+                            if (data.config) {
+                                populateConfigItems(configForm, data.config);
+                            }
+                            doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+                        }
+                    }).fail(function (data) {
+                        if (data.responseJSON.error !== undefined) {
+                            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
+                            var githubrepo = "Jackett/Jackett";
+                            var githubtext = "this indexer";
+                            if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
+                                githubrepo = "FlareSolverr/FlareSolverr";
+                                githubtext = "FlareSolverr";
+                            }
+                            doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
+                        } else {
+                            doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
+                        }
+                    });
                 });
             });
         });
     });
-    indexersTable.find("table").DataTable(
-        {
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var headerText = column.header().innerText;
+    indexersTable.find("table").DataTable({
+        initComplete: function () {
+            var currentTable = this;
+            this.api().columns().every(function (index, i, j) {
+                var column = this;
+                var headerText = column.header().innerText;
 
-                    if (headerText == 'Language') {
-                        var select = $('<select><option value="">Show all</option></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
+                if (headerText == 'Type') {
+                    var select = createDropDownHtml(column, true);
 
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
+                    var columnData = currentTable.api().columns(index + 1).data();
+                    var distinctValues = [...new Set(columnData[0])];
+                    distinctValues.forEach(function (distinctVal) {
+                        select.append('<option value="' + distinctVal + '">' + distinctVal.replace(/^\w/, (c) => c.toUpperCase()) + '</option>')
+                    });
+                } else if (headerText == 'Categories') {
+                    var select = createDropDownHtml(column, false);
 
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
+                    var columnData = [];
+                    column.data().unique().each(function (d, j) {
+                        d.split(',').forEach(function (val) {
+                            columnData.push(val.trim());
                         });
-                    } else {
-                        $(column.footer()).empty();
-                    }
-                });
-            },
-            "stateSave": true,
-            "stateDuration": 0,
-            "fnStateSaveParams": function (oSettings, sValue) {
-                sValue.search.search = ""; // don't save the search filter content
-                return sValue;
-            },
-            "bAutoWidth": false,
-            "pageLength": -1,
-            "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
-            "order": [[0, "asc"]],
-            "columnDefs": [
-                {
-                    "name": "name",
-                    "targets": 0,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "description",
-                    "targets": 1,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "type",
-                    "targets": 2,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "type_string",
-                    "targets": 3,
-                    "visible": false,
-                    "searchable": true,
-                    "orderable": true,
-                },
-                {
-                    "name": "language",
-                    "targets": 4,
-                    "visible": true,
-                    "searchable": true,
-                    "orderable": true
-                },
-                {
-                    "name": "buttons",
-                    "targets": 5,
-                    "visible": true,
-                    "searchable" : false,
-                    "orderable": false
+                    });
+                    var distinctValues = [...new Set(columnData)];
+                    distinctValues.sort().forEach(function (distinctVal) {
+                        select.append('<option value="' + distinctVal + '">' + distinctVal + '</option>')
+                    });
+                } else if (headerText == 'Language') {
+                    var select = createDropDownHtml(column, true);
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                } else {
+                    $(column.footer()).empty();
                 }
-            ]
-        });
+            });
+        },
+        "stateSave": true,
+        "stateDuration": 0,
+        "fnStateSaveParams": function (oSettings, sValue) {
+            sValue.search.search = ""; // don't save the search filter content
+            return sValue;
+        },
+        "bAutoWidth": false,
+        "pageLength": -1,
+        "lengthMenu": [
+            [10, 20, 50, 100, 250, 500, -1],
+            [10, 20, 50, 100, 250, 500, "All"]
+        ],
+        "order": [
+            [0, "asc"]
+        ],
+        "columnDefs": [{
+                "name": "name",
+                "targets": 0,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "name": "description",
+                "targets": 1,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "name": "type",
+                "targets": 2,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "name": "type_string",
+                "targets": 3,
+                "visible": false,
+                "searchable": true,
+                "orderable": true,
+            },
+            {
+                "name": "language",
+                "targets": 4,
+                "visible": true,
+                "searchable": true,
+                "orderable": true
+            },
+            {
+                "name": "buttons",
+                "targets": 5,
+                "visible": true,
+                "searchable": false,
+                "orderable": false
+            }
+        ]
+    });
 
     var undefindexers = UnconfiguredIndexersDialog.find('#unconfigured-indexers');
     undefindexers.append(indexersTable);
 
-    UnconfiguredIndexersDialog.on('shown.bs.modal', function() {
+    UnconfiguredIndexersDialog.on('shown.bs.modal', function () {
         $(this).find('div.dataTables_filter input').focusWithoutScrolling();
     });
 
@@ -362,6 +385,28 @@ function displayUnconfiguredIndexersList() {
     $("#modals").append(UnconfiguredIndexersDialog);
 
     UnconfiguredIndexersDialog.modal("show");
+}
+
+function createDropDownHtml(column, exactMatch) {
+    var select = $('<select><option value="">Show all</option></select>')
+        .appendTo($(column.footer()).empty())
+        .on('change', function () {
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            if (exactMatch) {
+                column
+                    .search(val ? '^' + val + '$' : '', true, false)
+                    .draw();
+            } else {
+                column
+                    .search(val ? val : '', true, false)
+                    .draw();
+            }
+        });
+
+    return select;
 }
 
 function copyToClipboard(text) {
@@ -437,8 +482,8 @@ function prepareSearchButtons(element) {
     element.find('.indexer-button-search').each(function (i, btn) {
         var $btn = $(btn);
         var id = $btn.data("id");
-        $btn.click(function() {
-            window.location.hash = "search&tracker=" +  id;
+        $btn.click(function () {
+            window.location.hash = "search&tracker=" + id;
             showSearch(id);
         });
     });
@@ -453,9 +498,8 @@ function prepareSetupButtons(element) {
     });
 }
 
-function updateTestState(id, state, message, parent)
-{
-    var btn = parent.find(".indexer-button-test[data-id=" +id + "]");
+function updateTestState(id, state, message, parent) {
+    var btn = parent.find(".indexer-button-test[data-id=" + id + "]");
 
     var sortmsg = message;
     if (!sortmsg || state == "success")
@@ -468,7 +512,9 @@ function updateTestState(id, state, message, parent)
     if (message) {
         btn.tooltip("hide");
         btn.attr("title", message);
-        btn.data('bs.tooltip', false).tooltip({ title: message });
+        btn.data('bs.tooltip', false).tooltip({
+            title: message
+        });
 
     }
     var icon = btn.find("span");
@@ -481,7 +527,10 @@ function updateTestState(id, state, message, parent)
     } else if (state == "inprogres") {
         icon.addClass("glyphicon-refresh test-inprogres spinner");
     }
-    var dt = $.fn.dataTable.tables({ visible: true, api: true}).rows().invalidate('dom');
+    var dt = $.fn.dataTable.tables({
+        visible: true,
+        api: true
+    }).rows().invalidate('dom');
     if (state != "inprogres")
         dt.draw();
 }
@@ -503,19 +552,19 @@ function testIndexer(id, notifyResult) {
                 doNotify("Test failed for " + id + ": \n" + data.error, "danger", "glyphicon glyphicon-alert");
         }
     }).fail(function (data) {
-      updateTestState(id, "error", data.error, indexers);
-      if(data.responseJSON.error !== undefined && notifyResult) {
-        var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
-        var githubrepo = "Jackett/Jackett";
-        var githubtext = "this indexer";
-        if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-          githubrepo = "FlareSolverr/FlareSolverr";
-          githubtext = "FlareSolverr";
+        updateTestState(id, "error", data.error, indexers);
+        if (data.responseJSON.error !== undefined && notifyResult) {
+            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
+            var githubrepo = "Jackett/Jackett";
+            var githubtext = "this indexer";
+            if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
+                githubrepo = "FlareSolverr/FlareSolverr";
+                githubtext = "FlareSolverr";
+            }
+            doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
+        } else {
+            doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
         }
-        doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
-      } else {
-        doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
-      }
     });
 }
 
@@ -568,13 +617,20 @@ function populateConfigItems(configForm, config) {
 
 function newConfigModal(title, config, caps, link, alternativesitelinks, description) {
     var configTemplate = Handlebars.compile($("#jackett-config-setup-modal").html());
-    var configForm = $(configTemplate({ title: title, caps: caps, link: link, description: description }));
+    var configForm = $(configTemplate({
+        title: title,
+        caps: caps,
+        link: link,
+        description: description
+    }));
     $("#modals").append(configForm);
     populateConfigItems(configForm, config);
 
     if (alternativesitelinks.length >= 1) {
         var AlternativeSiteLinksTemplate = Handlebars.compile($("#setup-item-alternativesitelinks").html());
-        var template = $(AlternativeSiteLinksTemplate({ "alternativesitelinks": alternativesitelinks }));
+        var template = $(AlternativeSiteLinksTemplate({
+            "alternativesitelinks": alternativesitelinks
+        }));
         configForm.find("div[data-id='sitelink']").after(template);
         template.find("a.alternativesitelink").click(function (a) {
             $("div[data-id='sitelink'] input").val(this.href);
@@ -591,7 +647,9 @@ function getConfigModalJson(configForm) {
         $el = $(el);
         var type = $el.data("type");
         var id = $el.data("id");
-        var itemEntry = { id: id };
+        var itemEntry = {
+            id: id
+        };
         switch (type) {
             case "hiddendata":
                 itemEntry.value = $el.find(".setup-item-hiddendata input").val();
@@ -608,7 +666,7 @@ function getConfigModalJson(configForm) {
             case "inputcheckbox":
                 itemEntry.values = [];
                 $el.find(".setup-item-inputcheckbox input:checked").each(function () {
-                  itemEntry.values.push($(this).val());
+                    itemEntry.values.push($(this).val());
                 });
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
@@ -641,12 +699,12 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function (data) {
-          if(data.responseJSON.error !== undefined) {
-            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-            doNotify("An error occurred while updating this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
-          } else {
-            doNotify("An error occurred while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
-          }
+            if (data.responseJSON.error !== undefined) {
+                var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
+                doNotify("An error occurred while updating this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
+            } else {
+                doNotify("An error occurred while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
+            }
         }).always(function () {
             $goButton.html(originalBtnText);
             $goButton.prop('disabled', false);
@@ -655,7 +713,7 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
 
     configForm.on('hidden.bs.modal', function (e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
-        });
+    });
     configForm.modal("show");
 }
 
@@ -696,8 +754,7 @@ function clearNotifications() {
     $('[data-notify="container"]').remove();
 }
 
-function updateReleasesRow(row)
-{
+function updateReleasesRow(row) {
     var labels = $(row).find("span.release-labels");
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
@@ -764,7 +821,7 @@ function showSearch(selectedIndexer, query, category) {
     releaseDialog.on('hidden.bs.modal', function (e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         window.location.hash = '';
-    }) ;
+    });
 
     var setCategories = function (trackers, items) {
         var cats = {};
@@ -781,7 +838,10 @@ function showSearch(selectedIndexer, query, category) {
         var selected = select.val();
         var options = []
         $.each(cats, function (ID, Name) {
-            options.push({ label: ID + ' (' + Name + ')', value: ID });
+            options.push({
+                label: ID + ' (' + Name + ')',
+                value: ID
+            });
         });
         select.multiselect('dataprovider', options);
         select.val(selected).multiselect("refresh");
@@ -790,7 +850,9 @@ function showSearch(selectedIndexer, query, category) {
     $('#searchTracker').change(jQuery.proxy(function () {
         var trackerIds = $('#searchTracker').val();
         setCategories(trackerIds, this.items);
-    }, { items: configuredIndexers }));
+    }, {
+        items: configuredIndexers
+    }));
 
     var queryField = document.getElementById("searchquery");
     queryField.addEventListener("keyup", function (event) {
@@ -814,9 +876,9 @@ function showSearch(selectedIndexer, query, category) {
         };
 
         window.location.hash = Object.entries({
-          search: encodeURIComponent(queryObj.Query).replace(/%20/g,'+'),
-          tracker: queryObj.Tracker.join(","),
-          category: queryObj.Category.join(",")
+            search: encodeURIComponent(queryObj.Query).replace(/%20/g, '+'),
+            tracker: queryObj.Tracker.join(","),
+            category: queryObj.Category.join(",")
         }).map(([k, v], i) => k + '=' + v).join('&');
 
         $('#jackett-search-perform').html($('#spinner').html());
@@ -905,122 +967,128 @@ $.fn.dataTable.ext.search = [
 function updateSearchResultTable(element, results) {
     var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
     element.html($(resultsTemplate(results)));
-    element.find('tr.jackett-search-results-row').each(function () { updateReleasesRow(this); });
-    var settings = { "deadfilter": true };
-    var datatable = element.find('table').DataTable(
-        {
-            "fnStateSaveParams": function (oSettings, sValue) {
-                sValue.search.search = ""; // don't save the search filter content
-                sValue.deadfilter = settings.deadfilter;
-                return sValue;
-            },
-            "fnStateLoadParams": function (oSettings, sValue) {
-                if ("deadfilter" in sValue)
-                    settings.deadfilter = sValue.deadfilter;
-            },
+    element.find('tr.jackett-search-results-row').each(function () {
+        updateReleasesRow(this);
+    });
+    var settings = {
+        "deadfilter": true
+    };
+    var datatable = element.find('table').DataTable({
+        "fnStateSaveParams": function (oSettings, sValue) {
+            sValue.search.search = ""; // don't save the search filter content
+            sValue.deadfilter = settings.deadfilter;
+            return sValue;
+        },
+        "fnStateLoadParams": function (oSettings, sValue) {
+            if ("deadfilter" in sValue)
+                settings.deadfilter = sValue.deadfilter;
+        },
 
-            "dom": "lfr<\"dataTables_deadfilter\">tip",
-            "stateSave": true,
-            "stateDuration": 0,
-            "bAutoWidth": false,
-            "pageLength": 20,
-            "lengthMenu": [[10, 20, 50, 100, 250, 500, -1], [10, 20, 50, 100, 250, 500, "All"]],
-            "order": [[0, "desc"]],
-            "columnDefs": [
-                {
-                    "targets": 0,
-                    "visible": false,
-                    "searchable": false,
-                    "type": 'date'
-                },
-                {
-                    "targets": 1,
-                    "visible": true,
-                    "searchable": false,
-                    "iDataSort": 0
-                },
-                {
-                    "targets": 4,
-                    "visible": false,
-                    "searchable": false,
-                    "type": 'num'
-                },
-                {
-                    "targets": 5,
-                    "visible": true,
-                    "searchable": false,
-                    "iDataSort": 4
-                }
-            ],
-            fnPreDrawCallback: function () {
-                var table = this;
+        "dom": "lfr<\"dataTables_deadfilter\">tip",
+        "stateSave": true,
+        "stateDuration": 0,
+        "bAutoWidth": false,
+        "pageLength": 20,
+        "lengthMenu": [
+            [10, 20, 50, 100, 250, 500, -1],
+            [10, 20, 50, 100, 250, 500, "All"]
+        ],
+        "order": [
+            [0, "desc"]
+        ],
+        "columnDefs": [{
+                "targets": 0,
+                "visible": false,
+                "searchable": false,
+                "type": 'date'
+            },
+            {
+                "targets": 1,
+                "visible": true,
+                "searchable": false,
+                "iDataSort": 0
+            },
+            {
+                "targets": 4,
+                "visible": false,
+                "searchable": false,
+                "type": 'num'
+            },
+            {
+                "targets": 5,
+                "visible": true,
+                "searchable": false,
+                "iDataSort": 4
+            }
+        ],
+        fnPreDrawCallback: function () {
+            var table = this;
 
-                var inputSearch = element.find("input[type=search]");
-                if (!inputSearch.attr("custom")) {
-                  var newInputSearch = inputSearch.clone();
-                  newInputSearch.attr("custom", "true");
-                  newInputSearch.attr("data-toggle", "tooltip");
-                  newInputSearch.attr("title", "Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
-                  newInputSearch.on("input", function () {
+            var inputSearch = element.find("input[type=search]");
+            if (!inputSearch.attr("custom")) {
+                var newInputSearch = inputSearch.clone();
+                newInputSearch.attr("custom", "true");
+                newInputSearch.attr("data-toggle", "tooltip");
+                newInputSearch.attr("title", "Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
+                newInputSearch.on("input", function () {
                     var newKeywords = [];
                     var filterTextKeywords = $(this).val().split(" ");
-                    $.each(filterTextKeywords, function(index, keyword) {
-                      if (keyword === "" || keyword === "+" || keyword === "-")
-                        return;
-                      var newKeyword;
-                      if (keyword.startsWith("+"))
-                        newKeyword = $.fn.dataTable.util.escapeRegex(keyword.substring(1));
-                      else if (keyword.startsWith("-"))
-                        newKeyword = "^((?!" + $.fn.dataTable.util.escapeRegex(keyword.substring(1)) + ").)*$";
-                      else
-                        newKeyword = $.fn.dataTable.util.escapeRegex(keyword);
-                      newKeywords.push(newKeyword);
+                    $.each(filterTextKeywords, function (index, keyword) {
+                        if (keyword === "" || keyword === "+" || keyword === "-")
+                            return;
+                        var newKeyword;
+                        if (keyword.startsWith("+"))
+                            newKeyword = $.fn.dataTable.util.escapeRegex(keyword.substring(1));
+                        else if (keyword.startsWith("-"))
+                            newKeyword = "^((?!" + $.fn.dataTable.util.escapeRegex(keyword.substring(1)) + ").)*$";
+                        else
+                            newKeyword = $.fn.dataTable.util.escapeRegex(keyword);
+                        newKeywords.push(newKeyword);
                     });
                     var filterText = newKeywords.join(" ");
                     table.api().search(filterText, true, true).draw();
-                  });
-                  inputSearch.replaceWith(newInputSearch);
-                }
-
-                var deadfilterdiv = element.find(".dataTables_deadfilter");
-                var deadfiltercheckbox = deadfilterdiv.find("input");
-                if (!deadfiltercheckbox.length) {
-                    deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1"> Show dead torrents</label>'
-                        );
-                    deadfilterdiv.append(deadfilterlabel);
-                    deadfiltercheckbox = deadfilterlabel.find("input");
-                    deadfiltercheckbox.on("change", function () {
-                        settings.deadfilter = this.checked;
-                        table.api().draw();
-                    });
-                    deadfiltercheckbox.prop('checked', settings.deadfilter);
-                }
-            },
-            initComplete: function () {
-                var count = 0;
-                this.api().columns().every(function () {
-                    count++;
-                    if (count === 3 || count === 8) {
-                        var column = this;
-                        var select = $('<select><option value=""></option></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        });
-                    }
                 });
+                inputSearch.replaceWith(newInputSearch);
             }
-        });
+
+            var deadfilterdiv = element.find(".dataTables_deadfilter");
+            var deadfiltercheckbox = deadfilterdiv.find("input");
+            if (!deadfiltercheckbox.length) {
+                deadfilterlabel = $('<label><input type="checkbox" id="jackett-search-results-datatable_deadfilter_checkbox" value="1"> Show dead torrents</label>');
+                deadfilterdiv.append(deadfilterlabel);
+                deadfiltercheckbox = deadfilterlabel.find("input");
+                deadfiltercheckbox.on("change", function () {
+                    settings.deadfilter = this.checked;
+                    table.api().draw();
+                });
+                deadfiltercheckbox.prop('checked', settings.deadfilter);
+            }
+        },
+        initComplete: function () {
+            var count = 0;
+            this.api().columns().every(function () {
+                count++;
+                if (count === 3 || count === 8) {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                }
+            });
+        }
+    });
     return datatable;
 }
 
@@ -1049,6 +1117,7 @@ function bindUIButtons() {
         $("#modals").empty();
         displayUnconfiguredIndexersList();
         $('#unconfigured-indexer-datatable tfoot tr').insertAfter($('#unconfigured-indexer-datatable thead tr'));
+        $('#unconfigured-indexer-datatable').DataTable().search('').columns().search('').draw();
     });
 
     $("#jackett-test-all").click(function () {
@@ -1067,85 +1136,93 @@ function bindUIButtons() {
                 item.CategoryDesc = insertWordWrap(item.CategoryDesc);
             }
             var releaseTemplate = Handlebars.compile($("#jackett-releases").html());
-            var item = { releases: data, Title: 'Releases' };
+            var item = {
+                releases: data,
+                Title: 'Releases'
+            };
             var releaseDialog = $(releaseTemplate(item));
             var table = releaseDialog.find('table');
-            releaseDialog.find('tr.jackett-releases-row').each(function () { updateReleasesRow(this); });
+            releaseDialog.find('tr.jackett-releases-row').each(function () {
+                updateReleasesRow(this);
+            });
             releaseDialog.on('hidden.bs.modal', function (e) {
                 $('#indexers div.dataTables_filter input').focusWithoutScrolling();
             });
 
-            table.DataTable(
-                 {
-                     "stateSave": true,
-                     "stateDuration": 0,
-                     "bAutoWidth": false,
-                     "pageLength": 20,
-                     "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
-                     "order": [[0, "desc"]],
-                     "columnDefs": [
-                        {
-                            "targets": 0,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'date'
-                        },
-                        {
-                            "targets": 1,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'date'
-                        },
-                        {
-                            "targets": 2,
-                            "visible": true,
-                            "searchable": false,
-                            "iDataSort": 0
-                        },
-                        {
-                            "targets": 3,
-                            "visible": true,
-                            "searchable": false,
-                            "iDataSort": 1
-                        },
-                        {
-                            "targets": 6,
-                            "visible": false,
-                            "searchable": false,
-                            "type": 'num'
-                        },
-                        {
-                            "targets": 7,
-                            "visible": true,
-                            "searchable": false,
-                            "iDataSort": 6
+            table.DataTable({
+                "stateSave": true,
+                "stateDuration": 0,
+                "bAutoWidth": false,
+                "pageLength": 20,
+                "lengthMenu": [
+                    [10, 20, 50, -1],
+                    [10, 20, 50, "All"]
+                ],
+                "order": [
+                    [0, "desc"]
+                ],
+                "columnDefs": [{
+                        "targets": 0,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'date'
+                    },
+                    {
+                        "targets": 1,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'date'
+                    },
+                    {
+                        "targets": 2,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 0
+                    },
+                    {
+                        "targets": 3,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 1
+                    },
+                    {
+                        "targets": 6,
+                        "visible": false,
+                        "searchable": false,
+                        "type": 'num'
+                    },
+                    {
+                        "targets": 7,
+                        "visible": true,
+                        "searchable": false,
+                        "iDataSort": 6
+                    }
+                ],
+                initComplete: function () {
+                    var count = 0;
+                    this.api().columns().every(function () {
+                        count++;
+                        if (count === 5 || count === 10) {
+                            var column = this;
+                            var select = $('<select><option value=""></option></select>')
+                                .appendTo($(column.footer()).empty())
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                                });
+
+                            column.data().unique().sort().each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>')
+                            });
                         }
-                     ],
-                     initComplete: function () {
-                         var count = 0;
-                         this.api().columns().every(function () {
-                             count++;
-                             if (count === 5 || count === 10) {
-                                 var column = this;
-                                 var select = $('<select><option value=""></option></select>')
-                                     .appendTo($(column.footer()).empty())
-                                     .on('change', function () {
-                                         var val = $.fn.dataTable.util.escapeRegex(
-                                             $(this).val()
-                                         );
-
-                                         column
-                                             .search(val ? '^' + val + '$' : '', true, false)
-                                             .draw();
-                                     });
-
-                                 column.data().unique().sort().each(function (d, j) {
-                                     select.append('<option value="' + d + '">' + d + '</option>')
-                                 });
-                             }
-                         });
-                     }
-                 });
+                    });
+                }
+            });
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
         }).fail(function () {
@@ -1161,7 +1238,9 @@ function bindUIButtons() {
     $("#view-jackett-logs").click(function () {
         api.getServerLogs(function (data) {
             var releaseTemplate = Handlebars.compile($("#jackett-logs").html());
-            var item = { logs: data };
+            var item = {
+                logs: data
+            };
             var releaseDialog = $(releaseTemplate(item));
             $("#modals").append(releaseDialog);
             releaseDialog.modal("show");
@@ -1266,9 +1345,7 @@ function bindUIButtons() {
 function proxyWarning(input) {
     if (input != null && input.toString().trim() !== "-1") { // disabled = -1
         $('#proxy-warning').show();
-    }
-    else
-    {
+    } else {
         $('#proxy-warning').hide();
     }
 }
