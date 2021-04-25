@@ -6,12 +6,13 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.org/
+  - https://torrentparadise.cc/
 legacylinks:
   - https://torrentparadise.to/
-  - https://torrentparadise.cc/
+  - http://torrentparadise.cc/
   - https://torrentparadise.la/
   - https://torrentparadise.cl/
+  - https://torrentparadise.org/
 
 caps:
   categories:
