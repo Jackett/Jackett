@@ -68,6 +68,9 @@ login:
 search:
   paths:
     - path: torrents/filter
+  keywordsfilters:
+    - name: re_replace
+      args: ["(?i)\\bS0*(\\d+)\\b", "T$1"]
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
@@ -99,23 +102,42 @@ search:
         - name: regexp
           args: "/categories/(\\d+)"
     title:
-      selector: a[href*="/torrents/"]
+      selector: a.view-torrent:contains("VOSE")
+      optional: true
       filters:
         - name: re_replace
-          args: ["\\[", " "]
+          args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
         - name: re_replace
-          args: ["\\]", " "]
+          args: ["(?i)RedBits", ""] # Delete RedBits
+        - name: append
+          args: " English" # Add english to fix Sonarr/Radarr language
+        - name: re_replace
+          args: ["\\[|\\]", " "]
+        - name: re_replace
+          args: ["  ", " "]
+        - name: re_replace
+          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+    title:
+      selector: a.view-torrent:not(:contains("VOSE"))
+      optional: true
+      filters:
         - name: re_replace
           args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
         - name: re_replace
           args: ["(?i)RedBits", ""] # Delete RedBits
         - name: append
           args: " Spanish" # Add spanish to fix Sonarr/Radarr language
+        - name: re_replace
+          args: ["\\[|\\]", " "]
+        - name: re_replace
+          args: ["  ", " "]
+        - name: re_replace
+          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     download:
       selector: a[href*="/download/"]
       attribute: href
     details:
-      selector: a[href*="/torrents/"]
+      selector: a.view-torrent
       attribute: href
     poster:
       selector: div.torrent-poster img
