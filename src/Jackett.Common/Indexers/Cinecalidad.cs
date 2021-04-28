@@ -137,7 +137,7 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.ContentString);
-                var protectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
+                var protectedLink = dom.QuerySelector("li:contains('Torrent')").ParentElement.GetAttribute("href");
                 if (protectedLink.Contains("/ouo.io/"))
                 {
                     // protected link =>
@@ -182,7 +182,8 @@ namespace Jackett.Common.Indexers
                     title += " 1080p BDRip x264";
 
                     var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
-                    var link = new Uri(GetAbsoluteUrl(row.QuerySelector("a").GetAttribute("href")));
+                    var extract = row.QuerySelector("noscript").InnerHtml.Split('\'');
+                    var link = new Uri(GetAbsoluteUrl(extract[1]));
 
                     var release = new ReleaseInfo
                     {
