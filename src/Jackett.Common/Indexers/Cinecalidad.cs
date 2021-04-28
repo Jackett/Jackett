@@ -23,9 +23,10 @@ namespace Jackett.Common.Indexers
     {
         private const int MaxItemsPerPage = 15;
         private const int MaxSearchPageLimit = 6; // 15 items per page * 6 pages = 90
-        private string _language;
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.cinecalidad.to/",
+            "https://www.cinecalidad.im/", // working but outdated, maybe copycat
             "https://www.cinecalidad.is/",
             "https://www.cinecalidad.li/",
             "https://www.cinecalidad.eu/",
@@ -34,18 +35,14 @@ namespace Jackett.Common.Indexers
             "https://cinecalidad.mrunblock.icu/"
         };
 
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://www.cinecalidad.to/",
-            "https://www.cinecalidad.im/" // working but outdated, maybe copycat
-        };
-
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
-                   description: "Películas Full HD en Castellano y Latino Dual.",
-                   link: "https://www.cinecalidad.is/",
-                   caps: new TorznabCapabilities {
+                   description: "Películas Full HD en Latino y Inglés Dual.",
+                   link: "https://www.cine-calidad.com/",
+                   caps: new TorznabCapabilities
+                   {
                        MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
                    },
                    configService: configService,
@@ -59,24 +56,12 @@ namespace Jackett.Common.Indexers
             Language = "es-es";
             Type = "public";
 
-            var language = new SingleSelectConfigurationItem("Select language", new Dictionary<string, string>
-                {
-                    {"castellano", "Castilian Spanish"},
-                    {"latino", "Latin American Spanish"}
-                })
-            {
-                Value = "castellano"
-            };
-            configData.AddDynamic("language", language);
-
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
-            var language = (SingleSelectConfigurationItem)configData.GetDynamic("language");
-            _language = language?.Value ?? "castellano";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -95,8 +80,6 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var templateUrl = SiteLink;
-            if (_language.Equals("castellano"))
-                templateUrl += "espana/";
             templateUrl += "{0}"; // placeholder for page
 
             var maxPages = 2; // we scrape only 2 pages for recent torrents
@@ -137,7 +120,7 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.ContentString);
-                var protectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
+                var protectedLink = dom.QuerySelector("li:contains('Torrent')").ParentElement.GetAttribute("href");
                 if (protectedLink.Contains("/ouo.io/"))
                 {
                     // protected link =>
@@ -178,11 +161,11 @@ namespace Jackett.Common.Indexers
                     var title = qImg.GetAttribute("title");
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
-                    title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
-                    title += " 1080p BDRip x264";
+                    title += " MULTi LATiN SPANiSH 1080p BDRip x264";
 
                     var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
-                    var link = new Uri(GetAbsoluteUrl(row.QuerySelector("a").GetAttribute("href")));
+                    var extract = row.QuerySelector("noscript").InnerHtml.Split('\'');
+                    var link = new Uri(GetAbsoluteUrl(extract[1]));
 
                     var release = new ReleaseInfo
                     {
