@@ -217,13 +217,6 @@ search:
           args: "02.01.2006 15:04:05 -07:00"
     size:
       selector: td.size
-      filters:
-        - name: replace
-          args: ["\u00a0", ""]
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     downloadvolumefactor:
       case:
         "span:contains(\"OU\")": 0 # only upload is counted
