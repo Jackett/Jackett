@@ -158,7 +158,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrentv
  * TorrentView (토렌트뷰)
  * TorrentWhiz ( 토렌트위즈)
- * Torrentz2k
  * truPornolabs
  * Underverse
  * UnionDHT
