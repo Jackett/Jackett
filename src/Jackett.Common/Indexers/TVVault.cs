@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             var qc = new NameValueCollection
             {
                 { "order_by", "s3" },
-                { "order_way", "desc" },
+                { "order_way", "DESC" },
                 { "disablegrouping", "1" }
             };
 
@@ -101,7 +101,7 @@ namespace Jackett.Common.Indexers
                 qc.Add("action", "advanced");
                 qc.Add("imdbid", query.ImdbID);
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 qc.Add("searchstr", StripSearchString(query.GetQueryString()));
 
             var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
@@ -115,7 +115,7 @@ namespace Jackett.Common.Indexers
                 var rows = doc.QuerySelectorAll("table.torrent_table > tbody > tr.torrent");
                 foreach (var row in rows)
                 {
-                    var qDetailsLink = row.QuerySelector("a[href*=\"torrents.php?id=\"]");
+                    var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                     var title = qDetailsLink.TextContent;
                     // if it's a season search, we filter results. the trailing space is to match regex
                     if (query.Season > 0 && !seasonRegEx.Match($"{title} ").Success)
@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers
 
                     var description = qDetailsLink.NextSibling.TextContent.Trim();
                     title += " " + description;
-                    var details = new Uri(qDetailsLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
                     var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
 
