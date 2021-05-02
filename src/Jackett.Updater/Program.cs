@@ -421,6 +421,7 @@ namespace Jackett.Updater
                 "Definitions/thetorrents.yml",
                 "Definitions/theunknown.yml", // became 3evils #9678
                 "Definitions/tigers-dl.yml",
+                "Definitions/tjangto.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/topnow.yml",
                 "Definitions/torrentbomb.yml",
