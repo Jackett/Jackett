@@ -774,11 +774,13 @@ To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/a
 ### Windows
 * Install the .NET 5 [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
-* Open PowerShell and from the `src` directory, run `dotnet restore`
-* Open the Jackett solution in Visual Studio 2019 (version 16.4 or above)
-* Right-click on the Jackett solution and click 'Rebuild Solution' to restore NuGet packages
-* Select Jackett.Server as the startup project
-* In the drop-down menu of the run button select "Jackett.Server" instead of "IIS Express"
+* Open PowerShell and from the `src` directory:
+* - run `dotnet msbuild /restore`
+* - then run `dotnet restore`
+* - and run `dotnet build`
+* Open the Jackett solution in Visual Studio 2019 (version 16.9 or above)
+* Select **Jackett.Server** as the startup project
+* In the drop-down menu of the run button select **Jackett.Server** instead of _IIS Express_
 * Build/Start the project
 
 ### OSX
