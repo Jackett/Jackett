@@ -73,6 +73,9 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Type = "private";
 
+            // Api has 1req/2s limit
+            webclient.requestDelay = 2.1;
+
             // Movies / Films
             AddCategoryMapping(118, TorznabCatType.MoviesBluRay, "Films 2160p/Bluray");
             AddCategoryMapping(119, TorznabCatType.MoviesBluRay, "Films 2160p/Remux");
