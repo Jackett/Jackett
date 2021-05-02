@@ -1,5 +1,8 @@
+### Read and complete in full with information about your setup and issue before submitting.
+### Do not delete the template.
+
 **Please use the search bar** at the top of the page and make sure you are not creating an already submitted issue.
-Check closed issues as well, because your issue may have already been fixed.
+Check closed issues as well, because your issue may have already been fixed. Also check our [Troubleshooting](https://github.com/Jackett/Jackett/wiki/Troubleshooting) for steps to resolve common issues.
 
 Please read our [Contributing Guidelines](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md) before submitting your issue to ensure a prompt response to your bug.
 
