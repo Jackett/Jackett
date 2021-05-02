@@ -176,16 +176,12 @@ namespace Jackett.Common.Utils
                     return dt;
                 }
 
-                try
+                // try parsing the str as an unix timestamp
+                if (long.TryParse(str, out var unixTimeStamp))
                 {
-                    // try parsing the str as an unix timestamp
-                    var unixTimeStamp = long.Parse(str);
                     return UnixTimestampToDateTime(unixTimeStamp);
                 }
-                catch (FormatException)
-                {
-                    // it wasn't a timestamp, continue....
-                }
+                // it wasn't a timestamp, continue....
 
                 // add missing year
                 match = _MissingYearRegexp.Match(str);
