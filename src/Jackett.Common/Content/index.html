@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -289,7 +289,11 @@
             Click on an URL to copy it to the Site Link field.
         </div>
     </script>
-
+    <script id="setup-item-inputtags" type="text/x-handlebars-template">
+      <div class="setup-item-inputstring">
+        <input class="form-control" type="text" value="{{{value}}}" />
+      </div>
+    </script>
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
         <div class="configured-indexer-div">
@@ -303,7 +307,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each tags}} <span title="{{this}}" class="label label-default">{{this}}</span>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>

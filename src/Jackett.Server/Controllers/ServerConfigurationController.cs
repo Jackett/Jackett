@@ -132,7 +132,7 @@ namespace Jackett.Server.Controllers
                 serverConfig.OmdbApiUrl = omdbApiUrl.TrimEnd('/');
                 configService.SaveConfig(serverConfig);
                 // HACK
-                indexerService.InitAggregateIndexer();
+                indexerService.InitMetaIndexers();
             }
 
             if (config.proxy_type != serverConfig.ProxyType ||

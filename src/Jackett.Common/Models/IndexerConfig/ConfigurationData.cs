@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+
 using Newtonsoft.Json.Linq;
 
 namespace Jackett.Common.Models.IndexerConfig
@@ -12,9 +14,10 @@ namespace Jackett.Common.Models.IndexerConfig
         private const string PASSWORD_REPLACEMENT = "|||%%PREVJACKPASSWD%%|||";
         protected Dictionary<string, ConfigurationItem> dynamics = new Dictionary<string, ConfigurationItem>(); // list for dynamic items
 
-        public HiddenStringConfigurationItem CookieHeader { get; private set; } = new HiddenStringConfigurationItem(name:"CookieHeader");
-        public HiddenStringConfigurationItem LastError { get; private set; } = new HiddenStringConfigurationItem(name:"LastError");
-        public StringConfigurationItem SiteLink { get; private set; } = new StringConfigurationItem(name:"Site Link");
+        public HiddenStringConfigurationItem CookieHeader { get; private set; } = new HiddenStringConfigurationItem(name: "CookieHeader");
+        public HiddenStringConfigurationItem LastError { get; private set; } = new HiddenStringConfigurationItem(name: "LastError");
+        public StringConfigurationItem SiteLink { get; private set; } = new StringConfigurationItem(name: "Site Link");
+        public TagsConfigurationItem Tags { get; private set; } = new TagsConfigurationItem("Tags");
 
         public ConfigurationData()
         {
@@ -88,6 +91,19 @@ namespace Jackett.Common.Models.IndexerConfig
                         }
                         break;
                     }
+                    case TagsConfigurationItem tagsItem:
+                    {
+                        var tags = ReadValueAs<string>(jsonToken);
+                        if (tags != null)
+                        {
+                            tagsItem.Values.Clear();
+                            foreach (var tag in tags.Split(' '))
+                            {
+                                tagsItem.Values.Add(tag);
+                            }
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -140,6 +156,11 @@ namespace Jackett.Common.Models.IndexerConfig
                         jObject = passwordItem.ToJson(forDisplay, ps);
                         break;
                     }
+                    case TagsConfigurationItem tagsItem:
+                    {
+                        jObject = tagsItem.ToJson();
+                        break;
+                    }
                 }
 
                 if (jObject != null)
@@ -163,7 +184,12 @@ namespace Jackett.Common.Models.IndexerConfig
             properties.Remove(SiteLink);
             properties.Insert(0, SiteLink);
 
+            // remove/insert Tags manualy to make sure it shows up last
+            properties.Remove(Tags);
+
             properties.AddRange(dynamics.Values);
+
+            properties.Add(Tags);
 
             return properties;
         }
@@ -371,6 +397,24 @@ namespace Jackett.Common.Models.IndexerConfig
                     password = protectionService.Protect(password);
                 jObject["value"] = password;
 
+                return jObject;
+            }
+        }
+
+        public class TagsConfigurationItem : ConfigurationItem
+        {
+            public HashSet<string> Values { get; }
+
+            public TagsConfigurationItem(string name)
+                : base(name, "inputtags")
+            {
+                Values = new HashSet<string>();
+            }
+
+            public JObject ToJson()
+            {
+                var jObject = CreateJObject();
+                jObject["value"] = string.Join(" ", Values);
                 return jObject;
             }
         }

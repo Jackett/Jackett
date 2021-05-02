@@ -13,6 +13,6 @@ namespace Jackett.Common.Services.Interfaces
         IEnumerable<IIndexer> GetAllIndexers();
 
         void InitIndexers(IEnumerable<string> path);
-        void InitAggregateIndexer();
+        void InitMetaIndexers();
     }
 }

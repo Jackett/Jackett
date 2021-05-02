@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace Jackett.Common.Services
 
         private readonly Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
+        private ConcurrentDictionary<string, IWebIndexer> filterIndexers = new ConcurrentDictionary<string, IWebIndexer>();
 
         // this map is used to maintain backward compatibility when renaming the id of an indexer
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
@@ -79,7 +81,7 @@ namespace Jackett.Common.Services
             MigrateRenamedIndexers();
             InitIndexers();
             InitCardigannIndexers(path);
-            InitAggregateIndexer();
+            InitMetaIndexers();
             RemoveLegacyConfigurations();
         }
 
@@ -218,28 +220,29 @@ namespace Jackett.Common.Services
             logger.Info($"Loaded {indexers.Count} indexers in total");
         }
 
-        public void InitAggregateIndexer()
+        public void InitMetaIndexers()
         {
-            var omdbApiKey = serverConfig.OmdbApiKey;
-            IFallbackStrategyProvider fallbackStrategyProvider;
-            IResultFilterProvider resultFilterProvider;
-            if (!string.IsNullOrWhiteSpace(omdbApiKey))
-            {
-                var imdbResolver = new OmdbResolver(webClient, omdbApiKey, serverConfig.OmdbApiUrl);
-                fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
-                resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
-            }
-            else
-            {
-                fallbackStrategyProvider = new NoFallbackStrategyProvider();
-                resultFilterProvider = new NoResultFilterProvider();
-            }
+            var (fallbackStrategyProvider, resultFilterProvider) = GetStrategyProviders();
 
             logger.Info("Adding aggregate indexer ('all' indexer) ...");
             aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService, cacheService)
             {
                 Indexers = indexers.Values
             };
+
+            var tagIndexers = indexers.Values.SelectMany(x => x.Tags).Distinct().Select(
+                tag =>
+                {
+                    logger.Info($"Adding filter indexer ('tag:{tag}' indexer) ...");
+                    return new KeyValuePair<string, IWebIndexer>(
+                        "tag:" + tag,
+                        new FilterIndexer(
+                            tag, fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger,
+                            protectionService, cacheService, x => x.Tags.Contains(tag))
+                        { Indexers = indexers.Values });
+                });
+
+            filterIndexers = new ConcurrentDictionary<string, IWebIndexer>(tagIndexers);
         }
 
         public void RemoveLegacyConfigurations()
@@ -271,15 +274,9 @@ namespace Jackett.Common.Services
  This may stop working in the future.");
             }
 
-            if (indexers.ContainsKey(realName))
-                return indexers[realName];
-
-            if (realName == "all")
-                return aggregateIndexer;
-
-            logger.Error($"Request for unknown indexer: {realName}");
-            throw new Exception($"Unknown indexer: {realName}");
+            return GetWebIndexer(realName);
         }
+
 
         public IWebIndexer GetWebIndexer(string name)
         {
@@ -288,6 +285,12 @@ namespace Jackett.Common.Services
 
             if (name == "all")
                 return aggregateIndexer;
+
+            if (name.Contains("tag:"))
+                return filterIndexers.GetOrAdd(name, x => CreateTagIndexer(x.Substring(4)));
+
+            if (name.Contains("lang:"))
+                return filterIndexers.GetOrAdd(name, x => CreateLangIndexer(x.Substring(5)));
 
             logger.Error($"Request for unknown indexer: {name}");
             throw new Exception($"Unknown indexer: {name}");
@@ -318,5 +321,49 @@ namespace Jackett.Common.Services
             configService.Delete(indexer);
             indexer.Unconfigure();
         }
+
+        private IWebIndexer CreateTagIndexer(string tag)
+        {
+            return CreateFilterIndexer("tag:" + tag, x => x.Tags.Contains(tag));
+        }
+
+        private IWebIndexer CreateLangIndexer(string lang)
+        {
+            return CreateFilterIndexer("lang:" + lang, x => x.Language.StartsWith(lang));
+        }
+
+        private IWebIndexer CreateFilterIndexer(string filter, Func<IIndexer, bool> filterFunc)
+        {
+            var (fallbackStrategyProvider, resultFilterProvider) = GetStrategyProviders();
+            logger.Info($"Create filter indexer ('{filter}' indexer) ...");
+            return new FilterIndexer(
+                filter, fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService,
+                cacheService, filterFunc)
+                {
+                    Indexers = indexers.Values
+                };
+        }
+
+        private (IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider)
+            GetStrategyProviders()
+        {
+            var omdbApiKey = serverConfig.OmdbApiKey;
+            IFallbackStrategyProvider fallbackStrategyProvider;
+            IResultFilterProvider resultFilterProvider;
+            if (!string.IsNullOrWhiteSpace(omdbApiKey))
+            {
+                var imdbResolver = new OmdbResolver(webClient, omdbApiKey, serverConfig.OmdbApiUrl);
+                fallbackStrategyProvider = new ImdbFallbackStrategyProvider(imdbResolver);
+                resultFilterProvider = new ImdbTitleResultFilterProvider(imdbResolver);
+            }
+            else
+            {
+                fallbackStrategyProvider = new NoFallbackStrategyProvider();
+                resultFilterProvider = new NoResultFilterProvider();
+            }
+
+            return (fallbackStrategyProvider, resultFilterProvider);
+        }
+
     }
 }

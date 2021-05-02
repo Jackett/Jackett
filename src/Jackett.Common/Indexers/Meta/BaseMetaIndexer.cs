@@ -67,7 +67,7 @@ namespace Jackett.Common.Indexers.Meta
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var indexers = validIndexers;
+            var indexers = ValidIndexers;
             IEnumerable<Task<IndexerResult>> supportedTasks = indexers.Where(i => i.CanHandleQuery(query)).Select(i => i.ResultsForQuery(query, true)).ToList(); // explicit conversion to List to execute LINQ query
 
             var fallbackStrategies = fallbackStrategyProvider.FallbackStrategiesForQuery(query);
@@ -109,11 +109,13 @@ namespace Jackett.Common.Indexers.Meta
             return result;
         }
 
-        public override TorznabCapabilities TorznabCaps => validIndexers.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat);
+        public override TorznabCapabilities TorznabCaps => ValidIndexers.Select(i => i.TorznabCaps).Aggregate(new TorznabCapabilities(), TorznabCapabilities.Concat);
 
         public override bool IsConfigured => Indexers != null;
 
-        private IEnumerable<IIndexer> validIndexers => Indexers?.Where(i => i.IsConfigured && filterFunc(i));
+        public override string[] Tags => Array.Empty<string>();
+
+        public IEnumerable<IIndexer> ValidIndexers => Indexers?.Where(i => i.IsConfigured && filterFunc(i));
 
         public IEnumerable<IIndexer> Indexers;
 
