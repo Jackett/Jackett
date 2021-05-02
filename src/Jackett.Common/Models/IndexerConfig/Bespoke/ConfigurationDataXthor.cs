@@ -12,10 +12,6 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public BoolConfigurationItem Freeleech { get; private set; }
         public StringConfigurationItem ReplaceMulti { get; private set; }
         public BoolConfigurationItem EnhancedAnime { get; private set; }
-        public DisplayInfoConfigurationItem DevWarning { get; private set; }
-        public BoolConfigurationItem DevMode { get; private set; }
-        public BoolConfigurationItem HardDriveCache { get; private set; }
-        public StringConfigurationItem HardDriveCacheKeepTime { get; private set; }
 
         public BoolConfigurationItem Vostfr { get; private set; }
 
@@ -29,10 +25,6 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             Freeleech = new BoolConfigurationItem("Freeleech Only (Optional)") { Value = false };
             ReplaceMulti = new StringConfigurationItem("Replace MULTI") { Value = "MULTI.FRENCH" };
             EnhancedAnime = new BoolConfigurationItem("Enhanced anime search") { Value = false };
-            DevWarning = new DisplayInfoConfigurationItem("Development", "<b>Development Facility</b> (<i>For Developers ONLY</i>),<br /><br /> <ul><li>By enabling development mode, <b>Jackett will bypass his cache</b> and will <u>output debug messages to console</u> instead of his log file.</li><li>By enabling Hard Drive Cache, <b>This provider</b> will <u>save each query answers from tracker</u> in temp directory, in fact this reduce drastically HTTP requests when building a provider at parsing step for example. So, <b> Jackett will search for a cached query answer on hard drive before executing query on tracker side !</b> <i>DEV MODE must be enabled to use it !</li></ul>");
-            DevMode = new BoolConfigurationItem("Enable DEV MODE (Developers ONLY)") { Value = false };
-            HardDriveCache = new BoolConfigurationItem("Enable HARD DRIVE CACHE (Developers ONLY)") { Value = false };
-            HardDriveCacheKeepTime = new StringConfigurationItem("Keep Cached files for (ms)") { Value = "300000" };
             Vostfr = new BoolConfigurationItem("Replace VOSTFR or SUBFRENCH with ENGLISH") { Value = false };
         }
     }
