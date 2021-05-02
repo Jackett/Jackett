@@ -550,6 +550,10 @@ namespace Jackett.Common.Indexers
                     // DDOS Attack, API disabled
                     Output("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.descr);
                     throw new Exception("Tracker is under DDOS attack, API disabled");
+                case 8:
+                    // AntiSpam Protection
+                    Output("\nAPI State : Triggered AntiSpam Protection -> " + state.descr);
+                    throw new Exception("Triggered AntiSpam Protection, please delay your requests !");
                 default:
                     // Unknown state
                     Output("\nAPI State : Unknown state, aborting querying ... -> " + state.descr);
