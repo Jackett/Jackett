@@ -197,7 +197,7 @@ namespace Jackett.Common.Indexers
             var request = BuildQuery(searchTerm, query, ApiEndpoint);
 
             // Getting results
-            var results = await QueryTracker(request);
+            var results = await QueryTrackerAsync(request);
 
             try
             {
@@ -205,50 +205,50 @@ namespace Jackett.Common.Indexers
                 var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
 
                 // Check Tracker's State
-                CheckApiState(xthorResponse.error);
+                CheckApiState(xthorResponse.Error);
 
                 // If contains torrents
-                if (xthorResponse.torrents != null)
+                if (xthorResponse.Torrents != null)
                 {
                     // Adding each torrent row to releases
                     // Exclude hidden torrents (category 106, example => search 'yoda' in the API) #10407
-                    releases.AddRange(xthorResponse.torrents
-                        .Where(torrent => torrent.category != 106).Select(torrent =>
+                    releases.AddRange(xthorResponse.Torrents
+                        .Where(torrent => torrent.Category != 106).Select(torrent =>
                     {
                         //issue #3847 replace multi keyword
                         if (!string.IsNullOrEmpty(ReplaceMulti))
                         {
                             var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                            torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
+                            torrent.Name = regex.Replace(torrent.Name, "$1" + ReplaceMulti + "$2");
                         }
 
                         // issue #8759 replace vostfr and subfrench with English
-                        if (ConfigData.Vostfr.Value) torrent.name = torrent.name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
+                        if (ConfigData.Vostfr.Value) torrent.Name = torrent.Name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
 
-                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.Added);
                         //TODO replace with download link?
-                        var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
-                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
-                        var link = new Uri(torrent.download_link);
+                        var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
+                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
+                        var link = new Uri(torrent.Download_link);
                         var release = new ReleaseInfo
                         {
                             // Mapping data
-                            Category = MapTrackerCatToNewznab(torrent.category.ToString()),
-                            Title = torrent.name,
-                            Seeders = torrent.seeders,
-                            Peers = torrent.seeders + torrent.leechers,
+                            Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
+                            Title = torrent.Name,
+                            Seeders = torrent.Seeders,
+                            Peers = torrent.Seeders + torrent.Leechers,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600,
                             PublishDate = publishDate,
-                            Size = torrent.size,
-                            Grabs = torrent.times_completed,
-                            Files = torrent.numfiles,
+                            Size = torrent.Size,
+                            Grabs = torrent.Times_completed,
+                            Files = torrent.Numfiles,
                             UploadVolumeFactor = 1,
-                            DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
+                            DownloadVolumeFactor = (torrent.Freeleech == 1 ? 0 : 1),
                             Guid = guid,
                             Details = details,
                             Link = link,
-                            TMDb = torrent.tmdb_id
+                            TMDb = torrent.Tmdb_id
                         };
 
                         return release;
@@ -269,9 +269,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorResponse
         {
-            public XthorError error { get; set; }
-            public XthorUser user { get; set; }
-            public List<XthorTorrent> torrents { get; set; }
+            public XthorError Error { get; set; }
+            public XthorUser User { get; set; }
+            public List<XthorTorrent> Torrents { get; set; }
         }
 
         /// <summary>
@@ -279,8 +279,8 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorError
         {
-            public int code { get; set; }
-            public string descr { get; set; }
+            public int Code { get; set; }
+            public string Descr { get; set; }
         }
 
         /// <summary>
@@ -288,14 +288,14 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorUser
         {
-            public int id { get; set; }
-            public string username { get; set; }
-            public long uploaded { get; set; }
-            public long downloaded { get; set; }
-            public int uclass { get; set; } // Class is a reserved keyword.
-            public decimal bonus_point { get; set; }
-            public int hits_and_run { get; set; }
-            public string avatar_url { get; set; }
+            public int Id { get; set; }
+            public string Username { get; set; }
+            public long Uploaded { get; set; }
+            public long Downloaded { get; set; }
+            public int Uclass { get; set; } // Class is a reserved keyword.
+            public decimal Bonus_point { get; set; }
+            public int Hits_and_run { get; set; }
+            public string Avatar_url { get; set; }
         }
 
         /// <summary>
@@ -303,21 +303,21 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorTorrent
         {
-            public int id { get; set; }
-            public int category { get; set; }
-            public int seeders { get; set; }
-            public int leechers { get; set; }
-            public string name { get; set; }
-            public int times_completed { get; set; }
-            public long size { get; set; }
-            public int added { get; set; }
-            public int freeleech { get; set; }
-            public int numfiles { get; set; }
-            public string release_group { get; set; }
-            public string download_link { get; set; }
-            public int tmdb_id { get; set; }
+            public int Id { get; set; }
+            public int Category { get; set; }
+            public int Seeders { get; set; }
+            public int Leechers { get; set; }
+            public string Name { get; set; }
+            public int Times_completed { get; set; }
+            public long Size { get; set; }
+            public int Added { get; set; }
+            public int Freeleech { get; set; }
+            public int Numfiles { get; set; }
+            public string Release_group { get; set; }
+            public string Download_link { get; set; }
+            public int Tmdb_id { get; set; }
 
-            public override string ToString() => string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link, tmdb_id);
+            public override string ToString() => string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", Id, Category, Seeders, Leechers, Name, Times_completed, Size, Added, Freeleech, Numfiles, Release_group, Download_link, Tmdb_id);
         }
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<string> QueryTracker(string request)
+        private async Task<string> QueryTrackerAsync(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
             logger.Debug("\nQuerying tracker for results....");
@@ -409,38 +409,38 @@ namespace Jackett.Common.Indexers
         private void CheckApiState(XthorError state)
         {
             // Switch on state
-            switch (state.code)
+            switch (state.Code)
             {
                 case 0:
                     // Everything OK
-                    logger.Debug("\nAPI State : Everything OK ... -> " + state.descr);
+                    logger.Debug("\nAPI State : Everything OK ... -> " + state.Descr);
                     break;
 
                 case 1:
                     // Passkey not found
-                    logger.Debug("\nAPI State : Error, Passkey not found in tracker's database, aborting... -> " + state.descr);
+                    logger.Debug("\nAPI State : Error, Passkey not found in tracker's database, aborting... -> " + state.Descr);
                     throw new Exception("Passkey not found in tracker's database");
                 case 2:
                     // No results
-                    logger.Debug("\nAPI State : No results for query ... -> " + state.descr);
+                    logger.Debug("\nAPI State : No results for query ... -> " + state.Descr);
                     break;
 
                 case 3:
                     // Power Saver
-                    logger.Debug("\nAPI State : Power Saver mode, only cached query with no parameters available ... -> " + state.descr);
+                    logger.Debug("\nAPI State : Power Saver mode, only cached query with no parameters available ... -> " + state.Descr);
                     break;
 
                 case 4:
                     // DDOS Attack, API disabled
-                    logger.Debug("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.descr);
+                    logger.Debug("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.Descr);
                     throw new Exception("Tracker is under DDOS attack, API disabled");
                 case 8:
                     // AntiSpam Protection
-                    logger.Debug("\nAPI State : Triggered AntiSpam Protection -> " + state.descr);
+                    logger.Debug("\nAPI State : Triggered AntiSpam Protection -> " + state.Descr);
                     throw new Exception("Triggered AntiSpam Protection, please delay your requests !");
                 default:
                     // Unknown state
-                    logger.Debug("\nAPI State : Unknown state, aborting querying ... -> " + state.descr);
+                    logger.Debug("\nAPI State : Unknown state, aborting querying ... -> " + state.Descr);
                     throw new Exception("Unknown state, aborting querying");
             }
         }
