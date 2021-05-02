@@ -1,3 +1,5 @@
+### Read and complete in full before submitting your issue. Do not delete the template.
+
 **Please use the search bar** at the top of the page and make sure you are not creating an already submitted issue.
 Check closed issues as well, because your issue may have already been fixed.
 
