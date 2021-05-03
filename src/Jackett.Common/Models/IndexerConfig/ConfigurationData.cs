@@ -97,7 +97,7 @@ namespace Jackett.Common.Models.IndexerConfig
                         if (tags != null)
                         {
                             tagsItem.Values.Clear();
-                            foreach (var tag in tags.Split(' '))
+                            foreach (var tag in tags.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries))
                             {
                                 tagsItem.Values.Add(tag);
                             }
