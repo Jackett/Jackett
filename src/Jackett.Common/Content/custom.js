@@ -3,6 +3,7 @@ var basePath = '';
 var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
+var groups = [];
 
 $.fn.inView = function () {
     if (!this.length) return false;
@@ -58,7 +59,7 @@ function openSearchIfNecessary() {
                 decodeURIComponent(item.split('=')[1].replace(/\+/g, '%20')))
         }, prev), {});
     if ("search" in hashArgs) {
-        showSearch(hashArgs.tracker, hashArgs.search, hashArgs.category);
+        showSearch(hashArgs.group, hashArgs.tracker, hashArgs.search, hashArgs.category);
     }
 }
 
@@ -136,6 +137,7 @@ function reloadIndexers() {
         indexers = data;
         configuredIndexers = [];
         unconfiguredIndexers = [];
+        groups = [];
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             item.rss_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/api?apikey=" + api.key + "&t=search&cat=&q=");
@@ -169,6 +171,9 @@ function reloadIndexers() {
             else
                 unconfiguredIndexers.push(item);
         }
+        groups = configuredIndexers.map(t => t.groups).reduce((acc, val) => acc.concat(val), [])
+          .filter((val, idx, self) => self.indexOf(val) === idx);
+
         displayConfiguredIndexersList(configuredIndexers);
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         openSearchIfNecessary();
@@ -484,7 +489,7 @@ function prepareSearchButtons(element) {
         var id = $btn.data("id");
         $btn.click(function () {
             window.location.hash = "search&tracker=" + id;
-            showSearch(id);
+            showSearch(null, id);
         });
     });
 }
@@ -805,14 +810,15 @@ function updateReleasesRow(row) {
     }
 }
 
-function showSearch(selectedIndexer, query, category) {
+function showSearch(selectedGroup, selectedIndexer, query, category) {
     var selectedIndexers = [];
     if (selectedIndexer)
-        selectedIndexers = selectedIndexer.split(",");
+      selectedIndexers = selectedIndexer.split(",");
+    selectedGroup = groups.indexOf(selectedGroup) > -1 ? selectedGroup : "";
     $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
-        indexers: configuredIndexers
+        groups: groups
     }));
 
     $("#modals").append(releaseDialog);
@@ -825,6 +831,28 @@ function showSearch(selectedIndexer, query, category) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         window.location.hash = '';
     });
+
+    var setTrackers = function (group, trackers) {
+        var select = $('#searchTracker');
+        var selected = select.val();
+        if (group !== "")
+          trackers = trackers.filter(t => t.groups.indexOf(group) > -1);
+        var options = trackers.map(t => {
+          return {
+            label: t.name,
+            value: t.id
+          }
+        });
+        select.multiselect('dataprovider', options);
+        select.val(selected).multiselect("refresh");
+    };
+
+    $('#searchGroup').change(jQuery.proxy(function () {
+        var groupId = $('#searchGroup').val() || "";
+        setTrackers(groupId, this.items);
+    }, {
+        items: configuredIndexers
+    }));
 
     var setCategories = function (trackers, items) {
         var cats = {};
@@ -872,6 +900,7 @@ function showSearch(selectedIndexer, query, category) {
             return;
         }
         var searchString = releaseDialog.find('#searchquery').val();
+        var groupId = releaseDialog.find('#searchGroup').val() || "";
         var queryObj = {
             Query: searchString,
             Category: releaseDialog.find('#searchCategory').val(),
@@ -881,14 +910,15 @@ function showSearch(selectedIndexer, query, category) {
         window.location.hash = Object.entries({
             search: encodeURIComponent(queryObj.Query).replace(/%20/g, '+'),
             tracker: queryObj.Tracker.join(","),
-            category: queryObj.Category.join(",")
+            category: queryObj.Category.join(","),
+            group: encodeURIComponent(groupId)
         }).map(([k, v], i) => k + '=' + v).join('&');
 
         $('#jackett-search-perform').html($('#spinner').html());
         $('#searchResults div.dataTables_filter input').val("");
         clearSearchResultTable($('#searchResults'));
 
-        var trackerId = "all";
+        var trackerId = groupId !== "" ? "group:" + groupId : "all";
         api.resultsForIndexer(trackerId, queryObj, function (data) {
             for (var i = 0; i < data.Results.length; i++) {
                 var item = data.Results[i];
@@ -909,16 +939,14 @@ function showSearch(selectedIndexer, query, category) {
 
     var searchTracker = releaseDialog.find("#searchTracker");
     var searchCategory = releaseDialog.find('#searchCategory');
-    searchCategory.multiselect({
+    var searchGroup = releaseDialog.find('#searchGroup');
+    
+    searchGroup.multiselect({
         maxHeight: 400,
         enableFiltering: true,
-        includeSelectAllOption: true,
         enableCaseInsensitiveFiltering: true,
-        nonSelectedText: 'Any'
+        nonSelectedText: 'All'
     });
-    if (selectedIndexers)
-        searchTracker.val(selectedIndexers);
-    searchTracker.trigger("change");
 
     updateSearchResultTable($('#searchResults'), []);
     clearSearchResultTable($('#searchResults'));
@@ -931,6 +959,25 @@ function showSearch(selectedIndexer, query, category) {
         nonSelectedText: 'All'
     });
 
+    searchCategory.multiselect({
+      maxHeight: 400,
+      enableFiltering: true,
+      includeSelectAllOption: true,
+      enableCaseInsensitiveFiltering: true,
+      nonSelectedText: 'Any'
+    });
+
+    if (selectedGroup) {
+      searchGroup.val(selectedGroup);
+      searchGroup.multiselect("refresh");
+    }
+    searchGroup.trigger("change");
+
+    if (selectedIndexers) {
+      searchTracker.val(selectedIndexers);
+      searchTracker.multiselect("refresh");
+    }
+    searchTracker.trigger("change");
 
     if (category !== undefined) {
         searchCategory.val(category.split(","));

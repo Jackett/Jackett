@@ -496,12 +496,15 @@
                         <p>You can search all configured indexers from this screen.</p>
                         <label for="text">Query</label>
                         <input class="form-control" type="text" name="query" id="searchquery" />
-                        <label for="tracker">Tracker</label>
-                        <select name="tracker" id="searchTracker" multiple="multiple">
-                            {{#each indexers}}
-                            <option value="{{id}}" selected>{{name}}</option>
-                            {{/each}}
+                        <label for="group">Group</label>
+                        <select name="group" id="searchGroup">
+                          <option value="">All</option>
+                          {{#each groups}}
+                          <option value="{{this}}">{{this}}</option>
+                          {{/each}}
                         </select>
+                        <label for="tracker">Tracker</label>
+                        <select name="tracker" id="searchTracker" multiple="multiple"></select>
                         <label for="category">Category</label>
                         <select name="category" id="searchCategory" multiple="multiple"></select>
                         <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button>
