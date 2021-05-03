@@ -354,7 +354,7 @@ namespace Jackett.Common.Indexers
                 Guid = downloadLink,
                 Details = detailsUri,
                 DownloadVolumeFactor = 0, // ratioless tracker
-                UploadVolumeFactor = 1              
+                UploadVolumeFactor = 1
             };
         }
 
