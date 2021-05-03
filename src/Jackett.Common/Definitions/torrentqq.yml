@@ -79,7 +79,6 @@ search:
       selector: a[href$=".html"][title]
       attribute: href
     date:
-      # note: this will cause 0m date results for MM-dd dates that are higher than current date, as Jackett dateparse assumes year is now.
       selector: div.wr-date:contains("-")
       optional: true
       filters:
