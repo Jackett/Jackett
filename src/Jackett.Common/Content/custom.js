@@ -671,6 +671,9 @@ function getConfigModalJson(configForm) {
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
                 break;
+            case "inputtags":
+                itemEntry.value = $el.find(".setup-item-inputtags input").val();
+                break;
         }
         configJson.push(itemEntry)
     });

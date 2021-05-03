@@ -76,6 +76,10 @@ body {
     max-width: 255px;
 }
 
+.setup-item-inputtags {
+    max-width: 255px;
+}
+
 [data-type=hiddendata]{
     display: none;
 }
