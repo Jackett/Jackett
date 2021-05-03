@@ -58,9 +58,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1111, TorznabCatType.XXXPack, "Паки полных фильмов / Full Length Movies Packs");
             AddCategoryMapping(508, TorznabCatType.XXX, "Классические фильмы / Classic");
             AddCategoryMapping(555, TorznabCatType.XXX, "Фильмы с сюжетом / Feature & Vignettes");
-            AddCategoryMapping(1673, TorznabCatType.XXX, "Гонзо-фильмы / Gonzo");
+            AddCategoryMapping(1673, TorznabCatType.XXX, "Гонзо-фильмы 2011-2021 / Gonzo 2011-2021");
             AddCategoryMapping(1112, TorznabCatType.XXX, "Фильмы без сюжета 1991-2010 / All Sex & Amateur 1991-2010");
-            AddCategoryMapping(1718, TorznabCatType.XXX, "Фильмы без сюжета 2011-2019 / All Sex & Amateur 2011-2019");
+            AddCategoryMapping(1718, TorznabCatType.XXX, "Фильмы без сюжета 2011-2021 / All Sex & Amateur 2011-2021");
             AddCategoryMapping(553, TorznabCatType.XXX, "Лесбо-фильмы / All Girl & Solo");
             AddCategoryMapping(1143, TorznabCatType.XXX, "Этнические фильмы / Ethnic-Themed");
             AddCategoryMapping(1646, TorznabCatType.XXX, "Видео для телефонов и КПК / Pocket РС & Phone Video");
@@ -75,8 +75,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1675, TorznabCatType.XXXPack, "Паки русских порнороликов / Russian Clips Packs");
             AddCategoryMapping(36, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 1991-2015 / Russian SiteRip's 1991-2015");
             AddCategoryMapping(1830, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 1991-2015 (HD Video) / Russian SiteRip's 1991-2015 (HD Video)");
-            AddCategoryMapping(1803, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 2016-2019 / Russian SiteRip's 2016-2019");
-            AddCategoryMapping(1831, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 2016-2019 (HD Video) / Russian SiteRip's 2016-2019 (HD Video)");
+            AddCategoryMapping(1803, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 2016-2021 / Russian SiteRip's 2016-2021");
+            AddCategoryMapping(1831, TorznabCatType.XXX, "Сайтрипы с русскими актрисами 2016-2021 (HD Video) / Russian SiteRip's 2016-2021 (HD Video)");
             AddCategoryMapping(1741, TorznabCatType.XXX, "Русские Порноролики Разное / Russian Clips (various)");
             AddCategoryMapping(1676, TorznabCatType.XXX, "Русское любительское видео / Russian Amateur Video");
 
@@ -92,6 +92,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1819, TorznabCatType.XXX, "Сайтрипы 2017 (HD Video) / SiteRip's 2017 (HD Video)");
             AddCategoryMapping(1825, TorznabCatType.XXX, "Сайтрипы 2018 (HD Video) / SiteRip's 2018 (HD Video)");
             AddCategoryMapping(1836, TorznabCatType.XXX, "Сайтрипы 2019 (HD Video) / SiteRip's 2019 (HD Video)");
+            AddCategoryMapping(1842, TorznabCatType.XXX, "Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)");
+            AddCategoryMapping(1846, TorznabCatType.XXX, "Сайтрипы 2021 (HD Video) / SiteRip's 2021 (HD Video)");
+
+
             AddCategoryMapping(1451, TorznabCatType.XXX, "Сайтрипы 1991-2010 / SiteRip's 1991-2010");
             AddCategoryMapping(1788, TorznabCatType.XXX, "Сайтрипы 2011-2012 / SiteRip's 2011-2012");
             AddCategoryMapping(1789, TorznabCatType.XXX, "Сайтрипы 2013 / SiteRip's 2013");
@@ -101,6 +105,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1820, TorznabCatType.XXX, "Сайтрипы 2017 / SiteRip's 2017");
             AddCategoryMapping(1826, TorznabCatType.XXX, "Сайтрипы 2018 / SiteRip's 2018");
             AddCategoryMapping(1837, TorznabCatType.XXX, "Сайтрипы 2019 / SiteRip's 2019");
+            AddCategoryMapping(1843, TorznabCatType.XXX, "Сайтрипы 2020 / SiteRip's 2020");
+            AddCategoryMapping(1847, TorznabCatType.XXX, "Сайтрипы 2021 / SiteRip's 2021");
+
             AddCategoryMapping(1707, TorznabCatType.XXX, "Сцены из фильмов / Movie Scenes");
             AddCategoryMapping(284, TorznabCatType.XXX, "Порноролики Разное / Clips (various)");
             AddCategoryMapping(1823, TorznabCatType.XXX, "Порноролики в 3D и Virtual Reality (VR) / 3D & Virtual Reality Videos");
@@ -166,8 +173,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1717, TorznabCatType.XXX, "Зарубежные фильмы в высоком качестве (DVD&HD) / Full Length ..");
             AddCategoryMapping(1674, TorznabCatType.XXX, "Русское порно / Russian Video");
             AddCategoryMapping(1677, TorznabCatType.XXX, "Зарубежные порноролики / Clips");
-            AddCategoryMapping(1842, TorznabCatType.XXX, "Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)");
-            AddCategoryMapping(1843, TorznabCatType.XXX, "Сайтрипы 2020 / SiteRip's 2020");
             AddCategoryMapping(1800, TorznabCatType.XXX, "Японское порно / Japanese Adult Video (JAV)");
             AddCategoryMapping(1815, TorznabCatType.XXX, "Архив (Японское порно)");
             AddCategoryMapping(1723, TorznabCatType.XXX, "Эротические студии, фото и журналы / Erotic Picture Gallery ..");

@@ -8,8 +8,8 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.buzz/
-  - https://torrentdownload.unblocked.monster/
+  - https://torrentdownload.unblockit.club/
+  - https://torrentdownload.nocensor.space/
 legacylinks:
   - https://torrentdownload.unblockit.pro/
   - https://torrentdownload.unblockit.one/
@@ -32,6 +32,8 @@ legacylinks:
   - https://torrentdownload.unblockit.dev/
   - https://torrentdownload.unblockit.ltd/
   - https://torrentdownload.unblockit.link/
+  - https://torrentdownload.unblockit.buzz/
+  - https://torrentdownload.unblocked.monster/
 
 caps:
   categorymappings:
@@ -47,8 +49,10 @@ caps:
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
-    - {id: BooksEbooks, cat: Books, desc: "Books Ebooks"}
+    - {id: BooksComics, cat: Books/Comics, desc: "Books Comics"}
+    - {id: BooksEbooks, cat: Books/EBook, desc: "Books Ebooks"}
     - {id: BooksEducational, cat: Books, desc: "Books Educational"}
+    - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
     - {id: BooksFiction, cat: Books, desc: "Books Fiction"}
     - {id: BooksNonfiction, cat: Books, desc: "Books Nonfiction"}
     - {id: Ebooks, cat: Books/EBook, desc: "Books Ebooks"}
@@ -73,6 +77,7 @@ caps:
     - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
     - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
     - {id: TV, cat: TV, desc: TV}
+    - {id: TVEllenDeGeneres, cat: TV, desc: "TV Ellen DeGeneres"}
     - {id: TVOther, cat: TV/Other, desc: "TV Other"}
     - {id: TVshows, cat: TV, desc: "TV shows"}
     - {id: Television, cat: TV, desc: Television}

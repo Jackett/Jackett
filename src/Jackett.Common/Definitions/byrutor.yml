@@ -262,10 +262,10 @@ download:
   attribute: href
 
 search:
-  # keywords (any age posts, article titles only search)
+  # keywords (article titles only search)
   # do=search&subaction=search&story=five+freddy&titleonly=3&searchdate=0&sortby=date&resorder=desc&catlist[]=1&catlist[]=2&catlist[]=3
-  # keywordless (1 day old posts or newer + article body search) query=game
-  # do=search&subaction=search&story=game&titleonly=0&searchdate=1&sortby=date&resorder=desc&catlist[]=0
+  # keywordless (article body search) query=game
+  # do=search&subaction=search&story=game&titleonly=0&searchdate=0&sortby=date&resorder=desc&catlist[]=0
   paths:
     - path: index.php
   inputs:
@@ -278,7 +278,7 @@ search:
     showposts: 1
     # 0 article, 1 comments, 2 static pages, 3 article titles
     titleonly: "{{ if .Keywords }}3{{ else }}0{{ end }}"
-    searchdate: "{{ if .Keywords }}0{{ else }}1{{ end }}"
+    searchdate: 0
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}game{{ end }}"
     sortby: date
     resorder: desc

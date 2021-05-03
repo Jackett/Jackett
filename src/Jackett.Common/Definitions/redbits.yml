@@ -1,34 +1,23 @@
 ---
-id: dxdhd
-name: DXDHD
-description: "DXDHD is a Private General Tracker"
-language: en-us
+id: redbits
+name: RedBits
+description: "RedBits is a SPANISH site for classic content"
+language: es-es
 type: private
 encoding: UTF-8
 links:
-  - https://dxdhd.com/
+  - https://red-bits.com/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: TV/Anime, desc: "Anime-TV"}
-    - {id: 5, cat: PC/0day, desc: "Apps"}
-    - {id: 6, cat: Books/EBook, desc: "eBooks"}
-    - {id: 7, cat: PC/Games, desc: "Games"}
-    - {id: 8, cat: TV/Sport, desc: "Sports"}
-    - {id: 9, cat: Other, desc: "Others"}
-    - {id: 10, cat: XXX, desc: "XXX"}
-    - {id: 11, cat: Books/Comics, desc: "Comics"}
-    - {id: 12, cat: TV/Anime, desc: "Anime-Movie"}
+    - {id: 6, cat: TV/Documentary, desc: "Documentaries"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
@@ -44,7 +33,7 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created_at"
+    default: created_at
     options:
       created_at: created
       seeders: seeders
@@ -79,10 +68,14 @@ login:
 search:
   paths:
     - path: torrents/filter
+  keywordsfilters:
+    - name: re_replace
+      args: ["(?i)\\bS0*(\\d+)\\b", "T$1"]
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
+    keywords: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
     tvdb: "{{ .Query.TVDBID }}"
@@ -109,7 +102,37 @@ search:
         - name: regexp
           args: "/categories/(\\d+)"
     title:
-      selector: a.view-torrent
+      selector: a.view-torrent:contains("VOSE")
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
+        - name: re_replace
+          args: ["(?i)RedBits", ""] # Delete RedBits
+        - name: append
+          args: " English" # Add english to fix Sonarr/Radarr language
+        - name: re_replace
+          args: ["\\[|\\]", " "]
+        - name: re_replace
+          args: ["  ", " "]
+        - name: re_replace
+          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+    title:
+      selector: a.view-torrent:not(:contains("VOSE"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
+        - name: re_replace
+          args: ["(?i)RedBits", ""] # Delete RedBits
+        - name: append
+          args: " Spanish" # Add spanish to fix Sonarr/Radarr language
+        - name: re_replace
+          args: ["\\[|\\]", " "]
+        - name: re_replace
+          args: ["  ", " "]
+        - name: re_replace
+          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     download:
       selector: a[href*="/download/"]
       attribute: href
@@ -120,12 +143,10 @@ search:
       selector: div.torrent-poster img
       attribute: src
       filters:
-        - name: prepend
-          args: "https://images.weserv.nl/?url=" # for display on dashboard
-        - name: append
-          args: "&w=180&h=270" # for display on dashboard
         - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
+          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
+        - name: replace
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -198,9 +219,7 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-    minimumratio:
-      text: 0.5
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# UNIT3D 2.3.0
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# UNIT3D 5.1.0

@@ -159,6 +159,9 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table.mainblockcontenttt tr:has(td.mainblockcontent)");
                 foreach (var row in rows.Skip(1))
                 {
+                    if (row.Children.Length == 2)
+                        continue; // fix bug with search: cohen
+
                     var mainLink = row.Children[2].QuerySelector("a");
                     var title = mainLink.TextContent;
                     var details = new Uri(SiteLink + mainLink.GetAttribute("href"));

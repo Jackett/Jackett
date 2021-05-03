@@ -299,6 +299,7 @@ namespace Jackett.Updater
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dreamteam.yml",
+                "Definitions/dxdhd.yml",
                 "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
                 "Definitions/elitetorrent-biz.yml",
@@ -310,10 +311,12 @@ namespace Jackett.Updater
                 "Definitions/exoticaz.yml", // migrated to C#
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/extratorrentclone.yml",
+                "Definitions/extremlymtorrents.yml",
                 "Definitions/filmsclub.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/fullmixmusic.yml",
+                "Definitions/funreleases.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
@@ -394,6 +397,7 @@ namespace Jackett.Updater
                 "Definitions/sharespacedb.yml",
                 "Definitions/shareuniversity.yml",
                 "Definitions/sharingue.yml",
+                "Definitions/shellife.yml",
                 "Definitions/skytorrents.yml",
                 "Definitions/skytorrents-lol.yml",
                 "Definitions/skytorrentsclone.yml", // renamed to skytorrents-lol
@@ -417,6 +421,7 @@ namespace Jackett.Updater
                 "Definitions/thetorrents.yml",
                 "Definitions/theunknown.yml", // became 3evils #9678
                 "Definitions/tigers-dl.yml",
+                "Definitions/tjangto.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/topnow.yml",
                 "Definitions/torrentbomb.yml",
@@ -432,6 +437,8 @@ namespace Jackett.Updater
                 "Definitions/torrentvault.yml",
                 "Definitions/torrentwal.yml",
                 "Definitions/torrentwtf.yml",
+                "Definitions/torrentz2.yml",
+                "Definitions/torrentz2k.yml",
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
                 "Definitions/tspate.yml",
@@ -451,6 +458,7 @@ namespace Jackett.Updater
                 "Definitions/xktorrent.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
+                "Definitions/yingk.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",

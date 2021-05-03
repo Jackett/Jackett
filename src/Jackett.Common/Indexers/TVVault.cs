@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers
             var qc = new NameValueCollection
             {
                 { "order_by", "s3" },
-                { "order_way", "desc" },
+                { "order_way", "DESC" },
                 { "disablegrouping", "1" }
             };
 
@@ -101,7 +101,7 @@ namespace Jackett.Common.Indexers
                 qc.Add("action", "advanced");
                 qc.Add("imdbid", query.ImdbID);
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
                 qc.Add("searchstr", StripSearchString(query.GetQueryString()));
 
             var searchUrl = BrowseUrl + "?" + qc.GetQueryString();

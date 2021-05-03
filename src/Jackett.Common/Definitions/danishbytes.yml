@@ -122,7 +122,7 @@ search:
         - name: replace
           args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
         - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -200,4 +200,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# UNIT3D 3.1.0 DB-edition
+# UNIT3D 5.1.0 DB-edition

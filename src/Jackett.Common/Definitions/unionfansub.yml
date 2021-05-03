@@ -63,13 +63,13 @@ settings:
       asc: asc
 
 login:
-  path: http://foro.unionfansub.com/member.php
+  path: https://foro.unionfansub.com/member.php
   method: post
   inputs:
     quick_username: "{{ .Config.username }}"
     quick_password: "{{ .Config.password }}"
     action: do_login
-    url: "http://torrent.unionfansub.com/browse.php"
+    url: "https://torrent.unionfansub.com/"
     quick_login: 1
     quick_remember: yes
   error:

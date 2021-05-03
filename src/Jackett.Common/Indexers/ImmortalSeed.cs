@@ -174,9 +174,9 @@ namespace Jackett.Common.Indexers
                     release.Guid = release.Link;
                     release.Details = new Uri(qDetails.GetAttribute("href"));
 
-                    // 07-22-2015 11:08 AM
+                    // 2021-03-17 03:39 AM
                     var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().LastChild.TextContent.Trim();
-                    release.PublishDate = DateTime.ParseExact(dateString, "MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture);
+                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
 
                     var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);

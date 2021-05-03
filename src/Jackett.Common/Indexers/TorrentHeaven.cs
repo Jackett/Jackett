@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             // incomplete CA chain
-            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "cbf23ac75b07255ad7548a87567a839d23f31576");
+            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "8612e46b2abd418b6398dbf2382ebcf44b10f378");
 
             AddCategoryMapping(1, TorznabCatType.PCGames, "GAMES/PC");
             AddCategoryMapping(3, TorznabCatType.Console, "GAMES/Sonstige");
@@ -195,10 +195,10 @@ namespace Jackett.Common.Indexers
                 {"strWebAction", "search"},
                 {"sort", "torrent_added"},
                 {"by", "d"},
-                {"type", "0"},
+                {"type", "2"}, // 0 active, 1 inactive, 2 all
                 {"do_search", "suchen"},
-                {"time", "0"},
-                {"details", "title"}
+                {"time", "0"}, // 0 any, 1 1day, 2 1week, 3 30days, 4 90days
+                {"details", "title"} // title, info, descr, all
             };
             if (!string.IsNullOrWhiteSpace(searchString))
                 queryCollection.Add("searchstring", searchString);
@@ -237,9 +237,9 @@ namespace Jackett.Common.Indexers
                         downloadFactor = 1;
                     var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
                     var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    var size = ReleaseInfo.GetBytes(qColumn1[1].TextContent);
-                    var seeders = ParseUtil.CoerceInt(qColumn2[2].TextContent);
-                    var leechers = ParseUtil.CoerceInt(qColumn1[3].TextContent);
+                    var size = ReleaseInfo.GetBytes(qColumn2[1].TextContent);
+                    var seeders = ParseUtil.CoerceInt(qColumn1[3].TextContent);
+                    var leechers = ParseUtil.CoerceInt(qColumn2[3].TextContent);
                     var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);
 
                     var release = new ReleaseInfo
