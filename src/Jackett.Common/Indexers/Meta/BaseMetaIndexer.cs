@@ -113,7 +113,7 @@ namespace Jackett.Common.Indexers.Meta
 
         public override bool IsConfigured => Indexers != null;
 
-        public override string[] Tags => Array.Empty<string>();
+        public override string[] Groups => Array.Empty<string>();
 
         public IEnumerable<IIndexer> ValidIndexers => Indexers?.Where(i => i.IsConfigured && filterFunc(i));
 

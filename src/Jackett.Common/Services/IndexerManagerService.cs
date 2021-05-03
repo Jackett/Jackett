@@ -19,6 +19,8 @@ namespace Jackett.Common.Services
 
     public class IndexerManagerService : IIndexerManagerService
     {
+        private const string GroupFilterPrefix = "group:";
+        private const string LangFilterPrefix = "lang:";
         private readonly ICacheService cacheService;
         private readonly IIndexerConfigurationService configService;
         private readonly IProtectionService protectionService;
@@ -230,19 +232,19 @@ namespace Jackett.Common.Services
                 Indexers = indexers.Values
             };
 
-            var tagIndexers = indexers.Values.SelectMany(x => x.Tags).Distinct().Select(
-                tag =>
+            var groupIndexers = indexers.Values.SelectMany(x => x.Groups).Distinct().Select(
+                group =>
                 {
-                    logger.Info($"Adding filter indexer ('tag:{tag}' indexer) ...");
+                    logger.Info($"Adding filter indexer ('group:{group}' indexer) ...");
                     return new KeyValuePair<string, IWebIndexer>(
-                        "tag:" + tag,
+                        GroupFilterPrefix + group,
                         new FilterIndexer(
-                            tag, fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger,
-                            protectionService, cacheService, x => x.Tags.Contains(tag))
+                            group, fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger,
+                            protectionService, cacheService, x => x.Groups.Contains(group))
                         { Indexers = indexers.Values });
                 });
 
-            filterIndexers = new ConcurrentDictionary<string, IWebIndexer>(tagIndexers);
+            filterIndexers = new ConcurrentDictionary<string, IWebIndexer>(groupIndexers);
         }
 
         public void RemoveLegacyConfigurations()
@@ -286,11 +288,11 @@ namespace Jackett.Common.Services
             if (name == "all")
                 return aggregateIndexer;
 
-            if (name.Contains("tag:"))
-                return filterIndexers.GetOrAdd(name, x => CreateTagIndexer(x.Substring(4)));
+            if (name.Contains(GroupFilterPrefix))
+                return filterIndexers.GetOrAdd(name, x => CreateGroupIndexer(x.Substring(GroupFilterPrefix.Length)));
 
-            if (name.Contains("lang:"))
-                return filterIndexers.GetOrAdd(name, x => CreateLangIndexer(x.Substring(5)));
+            if (name.Contains(LangFilterPrefix))
+                return filterIndexers.GetOrAdd(name, x => CreateLangIndexer(x.Substring(LangFilterPrefix.Length)));
 
             logger.Error($"Request for unknown indexer: {name}");
             throw new Exception($"Unknown indexer: {name}");
@@ -322,14 +324,14 @@ namespace Jackett.Common.Services
             indexer.Unconfigure();
         }
 
-        private IWebIndexer CreateTagIndexer(string tag)
+        private IWebIndexer CreateGroupIndexer(string groupId)
         {
-            return CreateFilterIndexer("tag:" + tag, x => x.Tags.Contains(tag));
+            return CreateFilterIndexer(GroupFilterPrefix + groupId, x => x.Groups.Contains(groupId));
         }
 
         private IWebIndexer CreateLangIndexer(string lang)
         {
-            return CreateFilterIndexer("lang:" + lang, x => x.Language.StartsWith(lang));
+            return CreateFilterIndexer(LangFilterPrefix + lang, x => x.Language.StartsWith(lang));
         }
 
         private IWebIndexer CreateFilterIndexer(string filter, Func<IIndexer, bool> filterFunc)

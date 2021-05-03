@@ -17,7 +17,7 @@ namespace Jackett.Common.Models.IndexerConfig
         public HiddenStringConfigurationItem CookieHeader { get; private set; } = new HiddenStringConfigurationItem(name: "CookieHeader");
         public HiddenStringConfigurationItem LastError { get; private set; } = new HiddenStringConfigurationItem(name: "LastError");
         public StringConfigurationItem SiteLink { get; private set; } = new StringConfigurationItem(name: "Site Link");
-        public TagsConfigurationItem Tags { get; private set; } = new TagsConfigurationItem("Tags");
+        public TagsConfigurationItem Groups { get; private set; } = new TagsConfigurationItem("Groups");
 
         public ConfigurationData()
         {
@@ -184,12 +184,12 @@ namespace Jackett.Common.Models.IndexerConfig
             properties.Remove(SiteLink);
             properties.Insert(0, SiteLink);
 
-            // remove/insert Tags manualy to make sure it shows up last
-            properties.Remove(Tags);
+            // remove/insert Groups manualy to make sure it shows up last
+            properties.Remove(Groups);
 
             properties.AddRange(dynamics.Values);
 
-            properties.Add(Tags);
+            properties.Add(Groups);
 
             return properties;
         }

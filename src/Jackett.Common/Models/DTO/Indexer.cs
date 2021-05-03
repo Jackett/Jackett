@@ -34,7 +34,7 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public string language { get; private set; }
         [DataMember]
-        public IEnumerable<string> tags { get; private set; }
+        public IEnumerable<string> groups { get; private set; }
         [DataMember]
         public string last_error { get; private set; }
         [DataMember]
@@ -57,7 +57,7 @@ namespace Jackett.Common.Models.DTO
 
             alternativesitelinks = indexer.AlternativeSiteLinks;
 
-            tags = indexer.Tags;
+            groups = indexer.Groups;
 
             caps = indexer.TorznabCaps.Categories.GetTorznabCategoryList(true)
                 .Select(c => new Capability
