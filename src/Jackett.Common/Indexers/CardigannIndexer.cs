@@ -1129,7 +1129,7 @@ namespace Jackett.Common.Indexers
             return Element.QuerySelector(Selector);
         }
 
-        protected string handleSelector(selectorBlock Selector, IElement Dom, Dictionary<string, object> variables = null)
+        protected string handleSelector(selectorBlock Selector, IElement Dom, Dictionary<string, object> variables = null, bool required = true)
         {
             if (Selector.Text != null)
             {
@@ -1147,7 +1147,9 @@ namespace Jackett.Common.Indexers
                     selection = QuerySelector(Dom, Selector.Selector);
                 if (selection == null)
                 {
-                    throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.ToHtmlPretty()));
+                    if (required)
+                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.ToHtmlPretty()));
+                    return null;
                 }
             }
 
@@ -1170,13 +1172,21 @@ namespace Jackett.Common.Indexers
                     }
                 }
                 if (value == null)
-                    throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.ToHtmlPretty()));
+                {
+                    if (required)
+                        throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.ToHtmlPretty()));
+                    return null;
+                }
             }
             else if (Selector.Attribute != null)
             {
                 value = selection.GetAttribute(Selector.Attribute);
                 if (value == null)
-                    throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Selector.Attribute, selection.ToHtmlPretty()));
+                {
+                    if (required)
+                        throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Selector.Attribute, selection.ToHtmlPretty()));
+                    return null;
+                }
             }
             else
             {
@@ -1401,9 +1411,16 @@ namespace Jackett.Common.Indexers
 
                                 string value = null;
                                 var variablesKey = ".Result." + FieldName;
+                                var isOptional = OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional;
                                 try
                                 {
-                                    value = handleSelector(Field.Value, Row, variables);
+                                    value = handleSelector(Field.Value, Row, variables, !isOptional);
+                                    if (isOptional && value == null)
+                                    {
+                                        variables[variablesKey] = null;
+                                        continue;
+                                    }
+
                                     switch (FieldName)
                                     {
                                         case "download":
@@ -1560,7 +1577,7 @@ namespace Jackett.Common.Indexers
                                 {
                                     if (!variables.ContainsKey(variablesKey))
                                         variables[variablesKey] = null;
-                                    if (OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional)
+                                    if (isOptional)
                                     {
                                         variables[variablesKey] = null;
                                         continue;
