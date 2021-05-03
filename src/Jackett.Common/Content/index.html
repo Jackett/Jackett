@@ -307,7 +307,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each groups}} <span title="{{this}}" class="label label-default">{{this}}</span>{{/each}}</td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each groups}} <a href="#search&group={{this}}" title="{{this}}" class="label label-default group-button-search" role="button" data-group="{{this}}">{{this}}</a>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>

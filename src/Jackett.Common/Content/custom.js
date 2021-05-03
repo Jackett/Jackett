@@ -492,6 +492,14 @@ function prepareSearchButtons(element) {
             showSearch(null, id);
         });
     });
+    element.find('.group-button-search').each(function (i, btn) {
+        var $btn = $(btn);
+        var group = $btn.data("group");
+        $btn.click(function () {
+          window.location.hash = "search&group=" + encodeURIComponent(group);
+            showSearch(group);
+        });
+    });
 }
 
 function prepareSetupButtons(element) {
