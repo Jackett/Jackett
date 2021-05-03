@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
