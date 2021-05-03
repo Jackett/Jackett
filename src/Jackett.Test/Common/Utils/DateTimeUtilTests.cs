@@ -88,7 +88,7 @@ namespace Jackett.Test.Common.Utils
         public void FromUnknownTest()
         {
             var now = DateTime.Now;
-            var today = DateTime.UtcNow.Date;
+            var today = now.ToUniversalTime().Date;
             var yesterday = today.AddDays(-1);
             var tomorrow = today.AddDays(1);
             var testCases = new Dictionary<string, DateTime>
@@ -105,27 +105,28 @@ namespace Jackett.Test.Common.Utils
             };
 
             foreach (var testCase in testCases)
-                Assert.AreEqual(testCase.Value, DateTimeUtil.FromUnknown(testCase.Key));
+                Assert.AreEqual(testCase.Value, DateTimeUtil.FromUnknown(testCase.Key, relativeFrom: now));
 
-            AssertSimilarDates(now, DateTimeUtil.FromUnknown("now"));
-            AssertSimilarDates(now.AddHours(-3), DateTimeUtil.FromUnknown("3 hours ago"));
+            Assert.AreEqual(now, DateTimeUtil.FromUnknown("now", relativeFrom: now));
+            AssertSimilarDates(now.AddHours(-3), DateTimeUtil.FromUnknown("3 hours ago", relativeFrom: now));
 
-            Assert.True((now - DateTimeUtil.FromUnknown("monday at 10:20 am")).TotalSeconds <= 3600 * 24 * 7); // 7 days
-            Assert.True((now - DateTimeUtil.FromUnknown("Tuesday at 22:20")).TotalSeconds <= 3600 * 24 * 7);
-            Assert.True((now - DateTimeUtil.FromUnknown("wednesday at \n 22:20")).TotalSeconds <= 3600 * 24 * 7);
-            Assert.True((now - DateTimeUtil.FromUnknown("\n thursday \n at 22:20")).TotalSeconds <= 3600 * 24 * 7);
-            Assert.True((now - DateTimeUtil.FromUnknown("friday at 22:20")).TotalSeconds <= 3600 * 24 * 7);
-            Assert.True((now - DateTimeUtil.FromUnknown("Saturday at 00:20")).TotalSeconds <= 3600 * 24 * 7);
-            Assert.True((now - DateTimeUtil.FromUnknown("sunday at 22:00")).TotalSeconds <= 3600 * 24 * 7);
+            Assert.True((now - DateTimeUtil.FromUnknown("monday at 10:20 am", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7); // 7 days
+            Assert.True((now - DateTimeUtil.FromUnknown("Tuesday at 22:20", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
+            Assert.True((now - DateTimeUtil.FromUnknown("wednesday at \n 22:20", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
+            Assert.True((now - DateTimeUtil.FromUnknown("\n thursday \n at 22:20", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
+            Assert.True((now - DateTimeUtil.FromUnknown("friday at 22:20", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
+            Assert.True((now - DateTimeUtil.FromUnknown("Saturday at 00:20", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
+            Assert.True((now - DateTimeUtil.FromUnknown("sunday at 22:00", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
 
             Assert.AreEqual(new DateTime(2020, 10, 31, 3, 8, 27, DateTimeKind.Utc).ToLocalTime(), 
-                DateTimeUtil.FromUnknown("1604113707"));
+                DateTimeUtil.FromUnknown("1604113707", relativeFrom: now));
 
-            Assert.AreEqual(new DateTime(now.Year, 2, 1), DateTimeUtil.FromUnknown("02-01"));
-            Assert.AreEqual(new DateTime(now.Year, 2, 1), DateTimeUtil.FromUnknown("2-1"));
-            Assert.AreEqual(new DateTime(now.Year, 1, 2, 10, 30, 0), DateTimeUtil.FromUnknown("2 Jan 10:30"));
+            var refDate = new DateTime(2021, 03, 12, 12, 00, 00, DateTimeKind.Local);
+            Assert.AreEqual(new DateTime(refDate.Year, 2, 1), DateTimeUtil.FromUnknown("02-01", relativeFrom: refDate));
+            Assert.AreEqual(new DateTime(refDate.Year, 2, 1), DateTimeUtil.FromUnknown("2-1", relativeFrom: refDate));
+            Assert.AreEqual(new DateTime(refDate.Year, 1, 2, 10, 30, 0), DateTimeUtil.FromUnknown("2 Jan 10:30", relativeFrom: refDate));
 
-            Assert.AreEqual(new DateTime(2005, 6, 10, 10, 30, 0), 
+            Assert.AreEqual(new DateTime(2005, 6, 10, 10, 30, 0),
                 DateTimeUtil.FromUnknown("June 10, 2005 10:30AM"));
 
             // bad cases
@@ -138,6 +139,13 @@ namespace Jackett.Test.Common.Utils
             {
                 // ignored
             }
+
+            Assert.AreEqual(new DateTime(refDate.Year - 1, 5, 2), DateTimeUtil.FromUnknown("05-02", relativeFrom: refDate));
+            Assert.AreEqual(new DateTime(refDate.Year - 1, 5, 2), DateTimeUtil.FromUnknown("5-2", relativeFrom: refDate));
+            Assert.AreEqual(new DateTime(refDate.Year - 1, 5, 2, 10, 30, 0), DateTimeUtil.FromUnknown("2 May 10:30", relativeFrom: refDate));
+
+            Assert.AreEqual(new DateTime(2020, 12, 31, 23, 59, 0), DateTimeUtil.FromUnknown("12-31 23:59", relativeFrom: new DateTime(2021, 12, 31, 23, 58, 59, DateTimeKind.Local)));
+            Assert.AreEqual(new DateTime(2020, 1, 1, 0, 1, 0), DateTimeUtil.FromUnknown("1-1 00:01", relativeFrom: new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Local)));
         }
 
         [Test]
@@ -149,8 +157,9 @@ namespace Jackett.Test.Common.Utils
                 DateTimeUtil.ParseDateTimeGoLang("21-06-2010 04:20:19 -04:00", "02-01-2006 15:04:05 -07:00"));
             Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 0, 0, 0, new TimeSpan(-5, -30, 0)).ToLocalTime().DateTime, 
                 DateTimeUtil.ParseDateTimeGoLang("2010-06-21 -05:30", "2006-01-02 -07:00"));
-            Assert.AreEqual(new DateTime(now.Year, 9, 14, 7, 0, 0), 
-                DateTimeUtil.ParseDateTimeGoLang("7am Sep. 14", "3pm Jan. 2"));
+            var refDate = new DateTime(2021, 03, 12, 12, 00, 00, DateTimeKind.Local);
+            Assert.AreEqual(new DateTime(refDate.Year - 1, 9, 14, 7, 0, 0), 
+                            DateTimeUtil.ParseDateTimeGoLang("7am Sep. 14", "3pm Jan. 2", relativeFrom:refDate));
 
             // bad cases
             try
