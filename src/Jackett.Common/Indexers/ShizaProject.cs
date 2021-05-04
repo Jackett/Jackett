@@ -19,12 +19,16 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     internal class ShizaProject : BaseWebIndexer
     {
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "http://shiza-project.com/" // site is forcing https
+        };
+
         public ShizaProject(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "ShizaProject",
                    name: "ShizaProject",
                    description: "ShizaProject Tracker is a semi-private russian tracker and release group for anime",
-                   link: "http://shiza-project.com/",
+                   link: "https://shiza-project.com/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>

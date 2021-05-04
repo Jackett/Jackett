@@ -73,7 +73,7 @@ search:
     "only_free": 0
 
   rows:
-    selector: tr:has(a[href^="download.php?torrent="])
+    selector: table[cellpadding="3"] > tbody > tr:has(a[href^="download.php?torrent="])
   fields:
     category:
       selector: a[href^="browse.php?cat="]
@@ -130,4 +130,9 @@ search:
       case:
         img[src="./pic/doubleseed.gif"]: 0
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # U-232v3

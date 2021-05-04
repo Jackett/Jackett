@@ -13,28 +13,29 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: Movies/UHD, desc: "UHD"}
-    - {id: 2, cat: Movies/HD, desc: "BluRay"}
-    - {id: 8, cat: Movies/HD, desc: "TV"}
-    - {id: 6, cat: Movies/HD, desc: "WEB-DL"}
-    - {id: 16, cat: Movies/HD, desc: "WEBRip"}
-    - {id: 3, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 25, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 4, cat: Movies/HD, desc: "BluRay"}
-    - {id: 7, cat: Movies/HD, desc: "TV"}
-    - {id: 5, cat: Movies/HD, desc: "WEB-DL"}
-    - {id: 14, cat: Movies/HD, desc: "WEBRip"}
-    - {id: 27, cat: Movies/HD, desc: "LORD Rips"}
+    - {id: 2, cat: Movies/UHD, desc: "UHD - BluRay"}
+    - {id: 8, cat: Movies/UHD, desc: "UHD - TV"}
+    - {id: 6, cat: Movies/UHD, desc: "UHD - WEB-DL"}
+    - {id: 16, cat: Movies/UHD, desc: "UHD - WEBRip"}
+    - {id: 31, cat: Movies/BluRay, desc: "BluRay Disk"}
+    - {id: 3, cat: Movies/HD, desc: "HD"}
+    - {id: 25, cat: Movies/3D, desc: "HD - 3D"}
+    - {id: 4, cat: Movies/HD, desc: "HD - BluRay"}
+    - {id: 7, cat: Movies/HD, desc: "HD - TV"}
+    - {id: 5, cat: Movies/HD, desc: "HD - WEB-DL"}
+    - {id: 14, cat: Movies/HD, desc: "HD - WEBRip"}
+    - {id: 32, cat: PC/Games, desc: "Oyunlar (Games)"}
     - {id: 9, cat: Movies/SD, desc: "SD"}
-    - {id: 23, cat: Movies/SD, desc: "BluRay"}
-    - {id: 10, cat: Movies/SD, desc: "DVD"}
-    - {id: 12, cat: Movies/SD, desc: "TV"}
-    - {id: 13, cat: Movies/SD, desc: "WEB-DL"}
-    - {id: 15, cat: Movies/SD, desc: "WEBRip"}
+    - {id: 23, cat: Movies/SD, desc: "SD - BluRay"}
+    - {id: 10, cat: Movies/SD, desc: "SD - DVD"}
+    - {id: 36, cat: Movies/SD, desc: "SD - DVDRip"}
+    - {id: 12, cat: Movies/SD, desc: "SD - TV"}
+    - {id: 13, cat: Movies/SD, desc: "SD - WEB-DL"}
+    - {id: 15, cat: Movies/SD, desc: "SD - WEBRip"}
     - {id: 17, cat: TV, desc: "TV"}
-    - {id: 26, cat: TV/Other, desc: "TV Program"}
-    - {id: 19, cat: TV, desc: "Yabanci Dizi"}
-    - {id: 18, cat: TV, desc: "Yerli Dizi"}
-    - {id: 20, cat: Movies/HD, desc: "VIP"}
+    - {id: 26, cat: TV/Other, desc: "TV - TV Program"}
+    - {id: 19, cat: TV, desc: "TV - Yabanci Dizi"}
+    - {id: 18, cat: TV, desc: "TV - Yerli Dizi"}
 
   modes:
     search: [q]

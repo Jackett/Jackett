@@ -28,8 +28,9 @@ caps:
     - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
     - {id: 12, cat: PC, desc: "Maritime Software-Answers to tests"}
     - {id: 20, cat: PC, desc: "Maritime Software-Calculation soft"}
-    - {id: 188, cat: PC, desc: "Maritime Software-Other soft"}
     - {id: 179, cat: PC, desc: "Maritime Software-Programming and SDK software"}
+    - {id: 317, cat: PC, desc: "Maritime Software-Shareware (demo, trial)"}
+    - {id: 188, cat: PC, desc: "Maritime Software-Other soft"}
     - {id: 21, cat: Books, desc: "Deckofficer's Library"}
     - {id: 283, cat: Books, desc: "Deckofficer's Library-Radar at sea"}
     - {id: 114, cat: Books, desc: "Deckofficer's Library-Watch keeping"}

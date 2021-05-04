@@ -1,32 +1,34 @@
 ---
-id: tellytorrent
-name: TellyTorrent
-description: "TellyTorrent is an INDIAN Private Tracker for MOVIES / TV"
+id: nordicplus
+name: Nordic+
+description: "Nordic+ is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en
 type: private
 encoding: UTF-8
 links:
-  - https://telly.wtf/
-legacylinks:
-  - https://tellytorrent.net/
-  - https://telly.cc/
-  - https://telly.to/
+  - https://nordicplus.org/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Movies, desc: "Web Originals"}
-    - {id: 5, cat: PC/Games, desc: "Games"}
-    - {id: 6, cat: PC/0day, desc: "Application"}
-    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile App"}
+    - {id: 4, cat: Console, desc: "Games"}
+    - {id: 5, cat: PC, desc: "Apps"}
+    - {id: 6, cat: Books, desc: "Books"}
+    - {id: 11, cat: Movies/Other, desc: "Movies Boxset"}
+    - {id: 12, cat: Movies/Foreign, desc: "Movies Non Nordic"}
+    - {id: 13, cat: TV/Anime, desc: "Movies Kids"}
+    - {id: 14, cat: TV/Other, desc: "TV Boxset"}
+    - {id: 15, cat: TV/Foreign, desc: "TV Non Nordic"}
+    - {id: 16, cat: TV/Anime, desc: "TV Kids"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -35,6 +37,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: usemagnet
+    type: checkbox
+    label: "Use Magnet Download Link"
+    default: false
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -81,6 +87,7 @@ search:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
+    keywords: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
     tvdb: "{{ .Query.TVDBID }}"
@@ -107,21 +114,26 @@ search:
         - name: regexp
           args: "/categories/(\\d+)"
     title:
-      selector: a.view-torrent
-    download:
+      selector: a[href*="/torrents/"]
+    details:
+      selector: a[href*="/torrents/"]
+      attribute: href
+    download1:
       selector: a[href*="/download/"]
       attribute: href
-    details:
-      selector: a.view-torrent
+    download2:
+      selector: a[href^="magnet:?"]
       attribute: href
+    download:
+      text: "{{ if .Config.usemagnet }}{{ .Result.download2 }}{{ else }}{{ .Result.download1 }}{{ end }}"
     poster:
       selector: div.torrent-poster img
       attribute: src
       filters:
         - name: replace
-          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
+          args: ["&w=60&h=90", "&w=180&h=270"] # for display on dashboard
         - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
+          args: ["/img/NoPoster.png", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
@@ -195,8 +207,5 @@ search:
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
     minimumratio:
-      text: 1.0
-    minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      text: 0.4
 # UNIT3D 5.2.0

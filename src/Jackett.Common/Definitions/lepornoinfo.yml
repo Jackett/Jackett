@@ -27,7 +27,8 @@ caps:
     - {id: 15, cat: XXX, desc: "Pregnant"}
     - {id: 16, cat: XXX, desc: "Fetish"}
     - {id: 9, cat: XXX, desc: "Gay Forum"}
-    - {id: 18, cat: XXX, desc: "Incest and Taboo"}
+    - {id: 18, cat: XXX, desc: "Incest & Taboo"}
+    - {id: 19, cat: XXX, desc: "Femdom & Strapon"}
 
   modes:
     search: [q]

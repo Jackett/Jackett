@@ -75,7 +75,7 @@ search:
     all_word_seach: 1
     # 0 article, 1 comments, 2 static pages, 3 article titles
     titleonly: "{{ if .Keywords }}3{{ else }}0{{ end }}"
-    searchdate: "{{ if .Keywords }}0{{ else }}1{{ end }}"
+    searchdate: 0
     searchuser: ""
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sortby: date

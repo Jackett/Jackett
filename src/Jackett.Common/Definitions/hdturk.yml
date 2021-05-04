@@ -6,9 +6,10 @@ language: tr-TR
 type: private
 encoding: UTF-8
 links:
-  - https://hdturk.de/
+  - https://hdturk.club/
 legacylinks:
   - http://hdturk.de/
+  - https://hdturk.de/
 
 caps:
   categorymappings:

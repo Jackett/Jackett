@@ -21,8 +21,9 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://yts.mx/",
-            "https://yts.unblockit.buzz/",
-            "https://yts.unblockninja.com/"
+            "https://yts.unblockit.onl/",
+            "https://yts.unblockninja.com/",
+            "https://yts.nocensor.space/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -32,6 +33,8 @@ namespace Jackett.Common.Indexers
             "https://yts.unblockit.dev/",
             "https://yts.root.yt/",
             "https://yts.unblockit.ltd/",
+            "https://yts.unblockit.buzz/",
+            "https://yts.unblockit.club/",
             "https://yts.unblockit.link/"
         };
 

@@ -67,6 +67,7 @@ caps:
     - {id: 153, cat: TV, desc: "TV-Star Plus"}
     - {id: 154, cat: TV, desc: "TV-Zee TV"}
     - {id: 186, cat: TV, desc: "TV-Dangal Tv"}
+    - {id: 218, cat: TV, desc: "TV-Ishara TV"}
     - {id: 155, cat: TV/Sport, desc: "TV-Sports"}
     - {id: 156, cat: TV/Documentary, desc: "TV-Documentaries"}
     - {id: 198, cat: Movies, desc: "TV-MTV"}
