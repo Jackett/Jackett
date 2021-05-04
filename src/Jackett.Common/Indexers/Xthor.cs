@@ -286,9 +286,9 @@ namespace Jackett.Common.Indexers
                 }
 
                 // Stop ?
-                if(nextPage > MaxPageLoads | torrentsCount < 32)
+                if(nextPage > MaxPageLoads | torrentsCount < 32 | string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to page limit or max available results reached.");
+                    logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to page limit or max available results reached or indexer test.");
                     followingPages = false;
                 }
 
@@ -381,8 +381,7 @@ namespace Jackett.Common.Indexers
             else
             {
                 parameters.Add("search", string.Empty);
-                // Showing all torrents (just for output function)
-                term = "all";
+                // Showing all torrents
             }
 
             // Loop on Categories needed
@@ -403,7 +402,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Pages handling
-            if (page > 1)
+            if (page > 1 && !string.IsNullOrWhiteSpace(term))
             {
                 parameters.Add("page", page.ToString());
             }
