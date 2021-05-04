@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -25,15 +23,15 @@ namespace Jackett.Common.Indexers
     public class Xthor : BaseCachingWebIndexer
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";
+        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
+        private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
+        private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
+        private static int MaxPageLoads => 4;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://xthor.bz/",
             "https://xthor.to"
         };
-
-        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
-        private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
-        private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
         private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
 
         public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l,
@@ -186,9 +184,10 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchTerm = query.GetEpisodeSearchString() + " " + query.SanitizedSearchTerm; // use episode search string first, see issue #1202
+            var searchTerm = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
             searchTerm = searchTerm.Trim();
             searchTerm = searchTerm.ToLower();
+            searchTerm = searchTerm.Replace(" ", ".");
 
             if (EnhancedAnime && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
@@ -196,75 +195,109 @@ namespace Jackett.Common.Indexers
                 searchTerm = regex.Replace(searchTerm, " E$1");
             }
 
-            // Build our query
-            var request = BuildQuery(searchTerm, query, ApiEndpoint);
+            logger.Info("\nXthor - Search requested for \"" + searchTerm + "\"");
 
-            // Getting results
-            var results = await QueryTrackerAsync(request);
-
-            try
+            // Multiple page support
+            var nextPage = 1; var followingPages = true;
+            do
             {
-                // Deserialize our Json Response
-                var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
 
-                // Check Tracker's State
-                CheckApiState(xthorResponse.Error);
+                // Build our query
+                var request = BuildQuery(searchTerm, query, ApiEndpoint, nextPage);
 
-                // If contains torrents
-                if (xthorResponse.Torrents != null)
+                // Getting results
+                logger.Info("\nXthor - Querying API page " + nextPage);
+                var results = await QueryTrackerAsync(request);
+
+                // Torrents Result Count
+                var torrentsCount = 0;
+
+                try
                 {
-                    // Adding each torrent row to releases
-                    // Exclude hidden torrents (category 106, example => search 'yoda' in the API) #10407
-                    releases.AddRange(xthorResponse.Torrents
-                        .Where(torrent => torrent.Category != 106).Select(torrent =>
+                    // Deserialize our Json Response
+                    var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
+
+                    // Check Tracker's State
+                    CheckApiState(xthorResponse.Error);
+
+                    // If contains torrents
+                    if (xthorResponse.Torrents != null)
                     {
-                        //issue #3847 replace multi keyword
-                        if (!string.IsNullOrEmpty(ReplaceMulti))
-                        {
-                            var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                            torrent.Name = regex.Replace(torrent.Name, "$1" + ReplaceMulti + "$2");
-                        }
+                        // Store torrents rows count result
+                        torrentsCount = xthorResponse.Torrents.Count();
+                        logger.Info("\nXthor - Found " + torrentsCount + " torrents on current page.");
 
-                        // issue #8759 replace vostfr and subfrench with English
-                        if (ConfigData.Vostfr.Value) torrent.Name = torrent.Name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
+                        // Adding each torrent row to releases
+                        // Exclude hidden torrents (category 106, example => search 'yoda' in the API) #10407
+                        releases.AddRange(xthorResponse.Torrents
+                            .Where(torrent => torrent.Category != 106).Select(torrent =>
+                            {
+                                //issue #3847 replace multi keyword
+                                if (!string.IsNullOrEmpty(ReplaceMulti))
+                                {
+                                    var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                                    torrent.Name = regex.Replace(torrent.Name, "$1" + ReplaceMulti + "$2");
+                                }
 
-                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.Added);
-                        //TODO replace with download link?
-                        var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
-                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
-                        var link = new Uri(torrent.Download_link);
-                        var release = new ReleaseInfo
-                        {
-                            // Mapping data
-                            Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
-                            Title = torrent.Name,
-                            Seeders = torrent.Seeders,
-                            Peers = torrent.Seeders + torrent.Leechers,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 345600,
-                            PublishDate = publishDate,
-                            Size = torrent.Size,
-                            Grabs = torrent.Times_completed,
-                            Files = torrent.Numfiles,
-                            UploadVolumeFactor = 1,
-                            DownloadVolumeFactor = (torrent.Freeleech == 1 ? 0 : 1),
-                            Guid = guid,
-                            Details = details,
-                            Link = link,
-                            TMDb = torrent.Tmdb_id
-                        };
+                                // issue #8759 replace vostfr and subfrench with English
+                                if (ConfigData.Vostfr.Value)
+                                    torrent.Name = torrent.Name.Replace("VOSTFR", "ENGLISH").Replace("SUBFRENCH", "ENGLISH");
 
-                        return release;
-                    }));
+                                var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.Added);
+                                //TODO replace with download link?
+                                var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
+                                var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
+                                var link = new Uri(torrent.Download_link);
+                                var release = new ReleaseInfo
+                                {
+                                    // Mapping data
+                                    Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
+                                    Title = torrent.Name,
+                                    Seeders = torrent.Seeders,
+                                    Peers = torrent.Seeders + torrent.Leechers,
+                                    MinimumRatio = 1,
+                                    MinimumSeedTime = 345600,
+                                    PublishDate = publishDate,
+                                    Size = torrent.Size,
+                                    Grabs = torrent.Times_completed,
+                                    Files = torrent.Numfiles,
+                                    UploadVolumeFactor = 1,
+                                    DownloadVolumeFactor = (torrent.Freeleech == 1 ? 0 : 1),
+                                    Guid = guid,
+                                    Details = details,
+                                    Link = link,
+                                    TMDb = torrent.Tmdb_id
+                                };
+
+                                return release;
+                            }));
+                            nextPage++;
+                    }
+                    else
+                    {
+                        logger.Info("\nXthor - No results found on page  " + (nextPage -1) + ", stopping follow of next page.");
+                        //  No results or no more results available
+                        followingPages = false;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
-            }
+                catch (Exception ex)
+                {
+                    OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
+                }
 
+                // Stop ?
+                if(nextPage > MaxPageLoads | torrentsCount < 32 | string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to page limit or max available results reached or indexer test.");
+                    followingPages = false;
+                }
+
+            } while (followingPages);
+
+            // Check if there is duplicate and return unique rows - Xthor API can be very buggy !
+            var uniqReleases = releases.GroupBy(x => x.Guid).Select(x => x.First()).ToList();
             // Return found releases
-            return releases;
+            return uniqReleases;
         }
 
         /// <summary>
@@ -330,7 +363,7 @@ namespace Jackett.Common.Indexers
         /// <param name="query">Torznab Query for categories mapping</param>
         /// <param name="url">Search url for provider</param>
         /// <returns>URL to query for parsing and processing results</returns>
-        private string BuildQuery(string term, TorznabQuery query, string url)
+        private string BuildQuery(string term, TorznabQuery query, string url, int page = 1)
         {
             var parameters = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
@@ -348,8 +381,7 @@ namespace Jackett.Common.Indexers
             else
             {
                 parameters.Add("search", string.Empty);
-                // Showing all torrents (just for output function)
-                term = "all";
+                // Showing all torrents
             }
 
             // Loop on Categories needed
@@ -369,10 +401,16 @@ namespace Jackett.Common.Indexers
                 parameters.Add("accent", ConfigData.Accent.Value);
             }
 
+            // Pages handling
+            if (page > 1 && !string.IsNullOrWhiteSpace(term))
+            {
+                parameters.Add("page", page.ToString());
+            }
+
             // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong category param)
             url += "?" + string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
 
-            logger.Debug("\nBuilded query for \"" + term + "\"... " + url);
+            logger.Info("\nXthor - Builded query for \"" + term + "\"... " + url);
 
             // Return our search url
             return url;
@@ -416,34 +454,34 @@ namespace Jackett.Common.Indexers
             {
                 case 0:
                     // Everything OK
-                    logger.Debug("\nAPI State : Everything OK ... -> " + state.Descr);
+                    logger.Info("\nXthor - API State : Everything OK ... -> " + state.Descr);
                     break;
 
                 case 1:
                     // Passkey not found
-                    logger.Debug("\nAPI State : Error, Passkey not found in tracker's database, aborting... -> " + state.Descr);
+                    logger.Error("\nXthor - API State : Error, Passkey not found in tracker's database, aborting... -> " + state.Descr);
                     throw new Exception("Passkey not found in tracker's database");
                 case 2:
                     // No results
-                    logger.Debug("\nAPI State : No results for query ... -> " + state.Descr);
+                    logger.Info("\nXthor - API State : No results for query ... -> " + state.Descr);
                     break;
 
                 case 3:
                     // Power Saver
-                    logger.Debug("\nAPI State : Power Saver mode, only cached query with no parameters available ... -> " + state.Descr);
+                    logger.Warn("\nXthor - API State : Power Saver mode, only cached query with no parameters available ... -> " + state.Descr);
                     break;
 
                 case 4:
                     // DDOS Attack, API disabled
-                    logger.Debug("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.Descr);
+                    logger.Error("\nXthor - API State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.Descr);
                     throw new Exception("Tracker is under DDOS attack, API disabled");
                 case 8:
                     // AntiSpam Protection
-                    logger.Debug("\nAPI State : Triggered AntiSpam Protection -> " + state.Descr);
+                    logger.Warn("\nXthor - API State : Triggered AntiSpam Protection -> " + state.Descr);
                     throw new Exception("Triggered AntiSpam Protection, please delay your requests !");
                 default:
                     // Unknown state
-                    logger.Debug("\nAPI State : Unknown state, aborting querying ... -> " + state.Descr);
+                    logger.Error("\nXthor - API State : Unknown state, aborting querying ... -> " + state.Descr);
                     throw new Exception("Unknown state, aborting querying");
             }
         }
@@ -453,7 +491,7 @@ namespace Jackett.Common.Indexers
         /// </summary>
         private void ValidateConfig()
         {
-            logger.Debug("\nValidating Settings ... \n");
+            logger.Debug("\nXthor - Validating Settings ... \n");
 
             // Check Passkey Setting
             if (string.IsNullOrEmpty(ConfigData.PassKey.Value))
@@ -462,7 +500,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                logger.Debug("Validated Setting -- PassKey (auth) => " + ConfigData.PassKey.Value);
+                logger.Debug("Xthor - Validated Setting -- PassKey (auth) => " + ConfigData.PassKey.Value);
             }
 
             if (!string.IsNullOrEmpty(ConfigData.Accent.Value) && !string.Equals(ConfigData.Accent.Value, "1") && !string.Equals(ConfigData.Accent.Value, "2"))
@@ -471,7 +509,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                logger.Debug("Validated Setting -- Accent (audio) => " + ConfigData.Accent.Value);
+                logger.Debug("Xthor - Validated Setting -- Accent (audio) => " + ConfigData.Accent.Value);
             }
         }
     }
