@@ -18,6 +18,11 @@ body {
     display: none;
 }
 
+#groups {
+   text-align: center;
+   margin-top: 20px;
+}
+
 #indexers {
    text-align: center;
    margin-top: 20px;

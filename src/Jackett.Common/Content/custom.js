@@ -3,7 +3,8 @@ var basePath = '';
 var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
-var groups = [];
+var configuredGroups = [];
+var currentGroup = "";
 
 $.fn.inView = function () {
     if (!this.length) return false;
@@ -137,7 +138,7 @@ function reloadIndexers() {
         indexers = data;
         configuredIndexers = [];
         unconfiguredIndexers = [];
-        groups = [];
+        configuredGroups = [];
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             item.rss_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/api?apikey=" + api.key + "&t=search&cat=&q=");
@@ -171,15 +172,43 @@ function reloadIndexers() {
             else
                 unconfiguredIndexers.push(item);
         }
-        groups = configuredIndexers.map(t => t.groups).reduce((acc, val) => acc.concat(val), [])
+        configuredGroups = configuredIndexers.map(t => t.groups).reduce((acc, val) => acc.concat(val), [])
           .filter((val, idx, self) => self.indexOf(val) === idx);
-
-        displayConfiguredIndexersList(configuredIndexers);
+        displayGroupIndexersList(configuredGroups, currentGroup);
+        applyFilterConfiguredIndexersList(configuredIndexers, currentGroup);
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         openSearchIfNecessary();
     }).fail(function () {
         doNotify("Error loading indexers, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
     });
+}
+
+function displayGroupIndexersList(groups, active) {
+    var groupsTemplate = Handlebars.compile($("#groups-indexer-tab").html());
+    var groupsTabs = $(groupsTemplate({
+      groups: groups,
+      current: active
+    }));
+
+    groupsTabs.find('#jackett-select-group [data-toggle][data-group]').on('shown.bs.tab', function (e) {
+      var group = $(this).data("group");
+      applyFilterConfiguredIndexersList(configuredIndexers, group);
+    });
+
+    $('#groups').empty();
+    $('#groups').append(groupsTabs);
+    $('#groups').fadeIn();
+}
+
+function applyFilterConfiguredIndexersList(indexers, group) {
+    if (configuredGroups.indexOf(group) > -1) {
+      displayConfiguredIndexersList(indexers.filter(t => t.groups.indexOf(group) > -1));
+      currentGroup = group;
+    }
+    else {
+      displayConfiguredIndexersList(indexers);
+      currentGroup = "";
+    }
 }
 
 function displayConfiguredIndexersList(indexers) {
@@ -488,8 +517,8 @@ function prepareSearchButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            window.location.hash = "search&tracker=" + id;
-            showSearch(null, id);
+            window.location.hash = "search&tracker=" + id + "&group=" + encodeURIComponent(currentGroup);
+            showSearch(currentGroup, id);
         });
     });
     element.find('.group-button-search').each(function (i, btn) {
@@ -504,10 +533,13 @@ function prepareSearchButtons(element) {
 
 function prepareSetupButtons(element) {
     element.find('.indexer-setup').each(function (i, btn) {
-        var indexer = configuredIndexers[i];
-        $(btn).click(function () {
-            displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.link, indexer.alternativesitelinks, indexer.description);
-        });
+        var $btn = $(btn);
+        var id = $btn.data("id");
+        var indexer = configuredIndexers.find(i => i.id === id);
+        if (indexer)
+          $btn.click(function () {
+              displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.link, indexer.alternativesitelinks, indexer.description);
+          });
     });
 }
 
@@ -822,11 +854,11 @@ function showSearch(selectedGroup, selectedIndexer, query, category) {
     var selectedIndexers = [];
     if (selectedIndexer)
       selectedIndexers = selectedIndexer.split(",");
-    selectedGroup = groups.indexOf(selectedGroup) > -1 ? selectedGroup : "";
+    selectedGroup = configuredGroups.indexOf(selectedGroup) > -1 ? selectedGroup : "";
     $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
-        groups: groups
+        groups: configuredGroups
     }));
 
     $("#modals").append(releaseDialog);
@@ -1289,8 +1321,8 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-search").click(function () {
-        showSearch(null);
-        window.location.hash = "search";
+        showSearch(currentGroup);
+        window.location.hash = "search&group=" + encodeURIComponent(currentGroup);
     });
 
     $("#view-jackett-logs").click(function () {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -65,7 +65,7 @@
             </button>
         </div>
         <h3>Configured Indexers</h3>
-        <div id="indexers"> </div>
+        <div id="groups"> </div>
         <hr />
 
         <div class="input-area">
@@ -293,6 +293,20 @@
       <div class="setup-item-inputtags">
         <input class="form-control" type="text" value="{{{value}}}" />
       </div>
+    </script>
+
+    <script id="groups-indexer-tab" type="text/x-handlebars-template">
+        <div class="groups-indexer-div">
+          {{#if groups}}
+          <ul id="jackett-select-group" class="nav nav-tabs" role="tablist">
+              <li role="presentation"{{#if_eq current null}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" data-group="">All</a></li>
+              {{#each groups}}
+              <li role="presentation"{{#if_eq ../current this}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" data-group="{{this}}">{{this}}</a></li>
+              {{/each}}
+          </ul>
+          {{/if}}
+          <div id="indexers" class="tab-content"></div>
+        </div>
     </script>
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
