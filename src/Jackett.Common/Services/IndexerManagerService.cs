@@ -9,6 +9,7 @@ using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 using YamlDotNet.Serialization;
@@ -288,11 +289,11 @@ namespace Jackett.Common.Services
             if (name == "all")
                 return aggregateIndexer;
 
-            if (name.Contains(GroupFilterPrefix))
-                return filterIndexers.GetOrAdd(name, x => CreateGroupIndexer(x.Substring(GroupFilterPrefix.Length)));
+            if (filterIndexers.TryGetValue(name, out var indexer))
+                return indexer;
 
-            if (name.Contains(LangFilterPrefix))
-                return filterIndexers.GetOrAdd(name, x => CreateLangIndexer(x.Substring(LangFilterPrefix.Length)));
+            if (FilterFunc.TryParse(name, out var filterFunc))
+                return filterIndexers.GetOrAdd(name, x => CreateFilterIndexer(name, filterFunc));
 
             logger.Error($"Request for unknown indexer: {name}");
             throw new Exception($"Unknown indexer: {name}");
