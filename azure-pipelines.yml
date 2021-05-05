@@ -309,6 +309,14 @@ stages:
                 dotnet-format --fix-whitespace --verbosity diagnostic --folder ./src/Jackett.Test
                 dotnet-format --fix-whitespace --verbosity diagnostic --folder ./src/Jackett.Tray
                 dotnet-format --fix-whitespace --verbosity diagnostic --folder ./src/Jackett.Updater
+                dotnet-format --check --verbosity diagnostic --folder ./src/DateTimeRoutines
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Common
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.IntegrationTests
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Server
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Service
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Test
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Tray
+                dotnet-format --check --verbosity diagnostic --folder ./src/Jackett.Updater
 
       - job: Linting_YAML
         displayName: Linting YAML
