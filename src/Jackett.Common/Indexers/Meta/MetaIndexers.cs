@@ -74,5 +74,7 @@ namespace Jackett.Common.Indexers.Meta
         }
 
         public override bool IsConfigured => base.IsConfigured && (ValidIndexers?.Any() ?? false);
+
+        public override void SaveConfig() { }
     }
 }
