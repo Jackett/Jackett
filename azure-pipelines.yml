@@ -299,7 +299,7 @@ stages:
             inputs:
               workingDirectory: $(Build.SourcesDirectory)
               targetType: inline
-              failOnStderr: true
+              failOnStderr: false
               script: |
                 dotnet-format --fix-whitespace --check --verbosity diagnostic --folder ./src/DateTimeRoutines
                 dotnet-format --fix-whitespace --check --verbosity diagnostic --folder ./src/Jackett.Common
