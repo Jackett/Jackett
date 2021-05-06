@@ -3,8 +3,8 @@ var basePath = '';
 var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
-var configuredGroups = [];
-var currentGroup = "";
+var configuredFilters = [];
+var currentFilterId = null;
 
 $.fn.inView = function () {
     if (!this.length) return false;
@@ -60,13 +60,21 @@ function openSearchIfNecessary() {
                 decodeURIComponent(item.split('=')[1].replace(/\+/g, '%20')))
         }, prev), {});
     if ("search" in hashArgs) {
-        showSearch(hashArgs.group, hashArgs.tracker, hashArgs.search, hashArgs.category);
+        showSearch(hashArgs.filter, hashArgs.tracker, hashArgs.search, hashArgs.category);
     }
 }
 
 function insertWordWrap(str) {
     // insert optional word wrap after punctuation to avoid overflows on long scene titles
     return str.replace(/([\.\-_\/\\])/g, "$1\u200B");
+}
+
+function type_filter(indexer) {
+  return indexer.type == this.value;
+}
+
+function group_filter(indexer) {
+  return indexer.groups.map(g => g.toLowerCase()).indexOf(this.value.toLowerCase()) > -1;
 }
 
 function getJackettConfig(callback) {
@@ -133,12 +141,13 @@ function loadJackettSettings() {
 }
 
 function reloadIndexers() {
+    $('#filters').hide();
     $('#indexers').hide();
     api.getAllIndexers(function (data) {
         indexers = data;
         configuredIndexers = [];
         unconfiguredIndexers = [];
-        configuredGroups = [];
+        configuredFilters = [];
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             item.rss_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/api?apikey=" + api.key + "&t=search&cat=&q=");
@@ -172,10 +181,12 @@ function reloadIndexers() {
             else
                 unconfiguredIndexers.push(item);
         }
-        configuredGroups = configuredIndexers.map(t => t.groups).reduce((acc, val) => acc.concat(val), [])
-          .filter((val, idx, self) => self.indexOf(val) === idx);
-        displayGroupIndexersList(configuredGroups, currentGroup);
-        applyFilterConfiguredIndexersList(configuredIndexers, currentGroup);
+
+        configureFilters(configuredIndexers);
+        
+        applyFilterIndexersList(configuredIndexers, currentFilterId);
+        displayFilterIndexersList(configuredFilters, currentFilterId);
+
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         openSearchIfNecessary();
     }).fail(function () {
@@ -183,31 +194,49 @@ function reloadIndexers() {
     });
 }
 
-function displayGroupIndexersList(groups, active) {
-    var groupsTemplate = Handlebars.compile($("#groups-indexer-tab").html());
-    var groupsTabs = $(groupsTemplate({
-      groups: groups,
-      current: active
-    }));
+function configureFilters(indexers) {
+    function add(f) {
+      if (configuredFilters.find(x => x.id == f.id))
+        return;
+      if (!indexers.every(f.apply, f) && indexers.some(f.apply, f))
+        configuredFilters.push(f);
+    }
 
-    groupsTabs.find('#jackett-select-group [data-toggle][data-group]').on('shown.bs.tab', function (e) {
-      var group = $(this).data("group");
-      applyFilterConfiguredIndexersList(configuredIndexers, group);
-    });
+    ["public", "private", "semi-private"]
+      .map(t => { return { id: "type:" + t, apply: type_filter, value: t } })
+      .forEach(add);
 
-    $('#groups').empty();
-    $('#groups').append(groupsTabs);
-    $('#groups').fadeIn();
+    indexers.map(i => i.groups).reduce((a, g) => a.concat(g), []).sort()
+      .map(g => { return { id: "group:" + g.toLowerCase(), apply: group_filter, value: g }})
+      .forEach(add);
 }
 
-function applyFilterConfiguredIndexersList(indexers, group) {
-    if (configuredGroups.indexOf(group) > -1) {
-      displayConfiguredIndexersList(indexers.filter(t => t.groups.indexOf(group) > -1));
-      currentGroup = group;
-    }
-    else {
+function displayFilterIndexersList(filters, current) {
+    var filtersTemplate = Handlebars.compile($("#filters-indexer-tab").html());
+    var filtersTab = $(filtersTemplate({
+      filters: filters,
+      active: current
+    }));
+
+    filtersTab.find('#jackett-select-filter [data-toggle]').on('shown.bs.tab', function (e) {
+      var filterId = $(this).data("filter");
+      applyFilterIndexersList(configuredIndexers, filterId);
+    });
+
+    $('#filters').empty();
+    $('#filters').append(filtersTab);
+    $('#filters').fadeIn();
+}
+
+function applyFilterIndexersList(indexers, filterId) {
+    var filter = configuredFilters.find(f => f.id == filterId);
+
+    if (filter) {
+      currentFilterId = filter.id;
+      displayConfiguredIndexersList(indexers.filter(filter.apply,filter));
+    } else {
+      currentFilterId = null;
       displayConfiguredIndexersList(indexers);
-      currentGroup = "";
     }
 }
 
@@ -517,16 +546,8 @@ function prepareSearchButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            window.location.hash = "search&tracker=" + id + "&group=" + encodeURIComponent(currentGroup);
-            showSearch(currentGroup, id);
-        });
-    });
-    element.find('.group-button-search').each(function (i, btn) {
-        var $btn = $(btn);
-        var group = $btn.data("group");
-        $btn.click(function () {
-          window.location.hash = "search&group=" + encodeURIComponent(group);
-            showSearch(group);
+            window.location.hash = "search&tracker=" + id + (currentFilterId ? "&filter=" + encodeURIComponent(currentFilterId) : "");
+            showSearch(currentFilterId, id);
         });
     });
 }
@@ -850,15 +871,15 @@ function updateReleasesRow(row) {
     }
 }
 
-function showSearch(selectedGroup, selectedIndexer, query, category) {
+function showSearch(selectedFilter, selectedIndexer, query, category) {
     var selectedIndexers = [];
     if (selectedIndexer)
       selectedIndexers = selectedIndexer.split(",");
-    selectedGroup = configuredGroups.indexOf(selectedGroup) > -1 ? selectedGroup : "";
     $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
-        groups: configuredGroups
+        filters: configuredFilters,
+        active: selectedFilter
     }));
 
     $("#modals").append(releaseDialog);
@@ -872,11 +893,12 @@ function showSearch(selectedGroup, selectedIndexer, query, category) {
         window.location.hash = '';
     });
 
-    var setTrackers = function (group, trackers) {
+    var setTrackers = function (filterId, trackers) {
         var select = $('#searchTracker');
         var selected = select.val();
-        if (group !== "")
-          trackers = trackers.filter(t => t.groups.indexOf(group) > -1);
+        var filter = configuredFilters.find(f => f.id == filterId);
+        if (filter)
+          trackers = trackers.filter(filter.apply,filter);
         var options = trackers.map(t => {
           return {
             label: t.name,
@@ -887,9 +909,9 @@ function showSearch(selectedGroup, selectedIndexer, query, category) {
         select.val(selected).multiselect("refresh");
     };
 
-    $('#searchGroup').change(jQuery.proxy(function () {
-        var groupId = $('#searchGroup').val() || "";
-        setTrackers(groupId, this.items);
+    $('#searchFilter').change(jQuery.proxy(function () {
+        var filterId = $('#searchFilter').val();
+        setTrackers(filterId, this.items);
     }, {
         items: configuredIndexers
     }));
@@ -940,7 +962,7 @@ function showSearch(selectedGroup, selectedIndexer, query, category) {
             return;
         }
         var searchString = releaseDialog.find('#searchquery').val();
-        var groupId = releaseDialog.find('#searchGroup').val() || "";
+        var filterId = releaseDialog.find('#searchFilter').val();
         var queryObj = {
             Query: searchString,
             Category: releaseDialog.find('#searchCategory').val(),
@@ -951,14 +973,14 @@ function showSearch(selectedGroup, selectedIndexer, query, category) {
             search: encodeURIComponent(queryObj.Query).replace(/%20/g, '+'),
             tracker: queryObj.Tracker.join(","),
             category: queryObj.Category.join(","),
-            group: encodeURIComponent(groupId)
-        }).map(([k, v], i) => k + '=' + v).join('&');
+            filter: filterId ? encodeURIComponent(filterId) : ""
+        }).filter(([k, v]) => v).map(([k, v], i) => k + '=' + v).join('&');
 
         $('#jackett-search-perform').html($('#spinner').html());
         $('#searchResults div.dataTables_filter input').val("");
         clearSearchResultTable($('#searchResults'));
 
-        var trackerId = groupId !== "" ? "group:" + groupId : "all";
+        var trackerId = filterId | "all";
         api.resultsForIndexer(trackerId, queryObj, function (data) {
             for (var i = 0; i < data.Results.length; i++) {
                 var item = data.Results[i];
@@ -979,9 +1001,9 @@ function showSearch(selectedGroup, selectedIndexer, query, category) {
 
     var searchTracker = releaseDialog.find("#searchTracker");
     var searchCategory = releaseDialog.find('#searchCategory');
-    var searchGroup = releaseDialog.find('#searchGroup');
+    var searchFilter = releaseDialog.find('#searchFilter');
     
-    searchGroup.multiselect({
+    searchFilter.multiselect({
         maxHeight: 400,
         enableFiltering: true,
         enableCaseInsensitiveFiltering: true,
@@ -1007,11 +1029,15 @@ function showSearch(selectedGroup, selectedIndexer, query, category) {
       nonSelectedText: 'Any'
     });
 
-    if (selectedGroup) {
-      searchGroup.val(selectedGroup);
-      searchGroup.multiselect("refresh");
+    if (configuredFilters.length > 0) {
+      if (selectedFilter) {
+        searchFilter.val(selectedFilter);
+        searchFilter.multiselect("refresh");
+      }
+      searchFilter.trigger("change");
     }
-    searchGroup.trigger("change");
+    else
+      setTrackers(selectedFilter, configuredIndexers);
 
     if (selectedIndexers) {
       searchTracker.val(selectedIndexers);
@@ -1321,8 +1347,8 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-search").click(function () {
-        showSearch(currentGroup);
-        window.location.hash = "search&group=" + encodeURIComponent(currentGroup);
+        showSearch(currentFilterId);
+        window.location.hash = "search" + (currentFilterId ? "&filter=" + encodeURIComponent(currentFilterId) : "");
     });
 
     $("#view-jackett-logs").click(function () {

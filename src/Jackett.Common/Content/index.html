@@ -65,7 +65,8 @@
             </button>
         </div>
         <h3>Configured Indexers</h3>
-        <div id="groups"> </div>
+        <div id="filters"> </div>
+        <div id="indexers"></div>
         <hr />
 
         <div class="input-area">
@@ -213,7 +214,7 @@
     <div id="modals"></div>
 
     <script id="setup-item" type="text/x-handlebars-template">
-        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
+        <div class="setup-item form-filter" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
             <div class="setup-item-label">{{name}}</div>
             <div class="setup-item-value">{{{value_element}}}</div>
         </div>
@@ -295,22 +296,21 @@
       </div>
     </script>
 
-    <script id="groups-indexer-tab" type="text/x-handlebars-template">
-        <div class="groups-indexer-div">
-          {{#if groups}}
-          <ul id="jackett-select-group" class="nav nav-tabs" role="tablist">
-              <li role="presentation"{{#if_eq current null}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" data-group="">All</a></li>
-              {{#each groups}}
-              <li role="presentation"{{#if_eq ../current this}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" data-group="{{this}}">{{this}}</a></li>
+    <script id="filters-indexer-tab" type="text/x-handlebars-template">
+        {{#if filters}}
+        <div class="navbar filters-indexer-div">
+          <ul id="jackett-select-filter" class="nav nav-tabs" role="tablist">
+              <li role="presentation"{{#if_eq active null}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" style="text-transform: capitalize;">all</a></li>
+              {{#each filters}}
+              <li role="presentation"{{#if_eq ../active this}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" data-filter="{{id}}" style="text-transform: capitalize;">{{value}}</a></li>
               {{/each}}
           </ul>
-          {{/if}}
-          <div id="indexers" class="tab-content"></div>
         </div>
+        {{/if}}
     </script>
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
-        <div class="configured-indexer-div">
+        <div class="tab-content configured-indexer-div">
             <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
                 <thead>
                     <tr>
@@ -321,7 +321,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each groups}} <a href="#search&group={{this}}" title="{{this}}" class="label label-default group-button-search" role="button" data-group="{{this}}">{{this}}</a>{{/each}}</td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each groups}} <span title="{{this}}" class="label label-default" style="text-transform: capitalize;">{{this}}</span>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>
@@ -510,13 +510,15 @@
                         <p>You can search all configured indexers from this screen.</p>
                         <label for="text">Query</label>
                         <input class="form-control" type="text" name="query" id="searchquery" />
-                        <label for="group">Group</label>
-                        <select name="group" id="searchGroup">
+                        {{#if filters}}
+                        <label for="filter">Filter</label>
+                        <select name="filter" id="searchFilter">
                           <option value="">All</option>
-                          {{#each groups}}
-                          <option value="{{this}}">{{this}}</option>
+                          {{#each filters}}
+                          <option value="{{id}}" style="text-transform: capitalize;">{{value}}</option>
                           {{/each}}
                         </select>
+                        {{/if}}
                         <label for="tracker">Tracker</label>
                         <select name="tracker" id="searchTracker" multiple="multiple"></select>
                         <label for="category">Category</label>
