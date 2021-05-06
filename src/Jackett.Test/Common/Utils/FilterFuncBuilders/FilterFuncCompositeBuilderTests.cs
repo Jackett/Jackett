@@ -23,6 +23,11 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
             protected override Func<IIndexer, bool> BuildFilterFunc(string args) => builderFunc(args);
         }
 
+        private static readonly FilterFuncBuilderComponentStub BoolFilterFuncBuilder =
+                new FilterFuncBuilderComponentStub("bool",
+                    args => bool.Parse(args) ? (Func<IIndexer, bool>)(_ => true) : _ => false
+                );
+
         [Test]
         public void Ctor_NoFilters_ThrowsException()
         {
@@ -87,9 +92,7 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
         [Test]
         public void SingleSource_NotOperator()
         {
-            var target = new FilterFuncCompositeBuilder(
-                new FilterFuncBuilderComponentStub("bool", args => bool.Parse(args) ? _ => true : _ => false)
-                );
+            var target = new FilterFuncCompositeBuilder(BoolFilterFuncBuilder);
 
             Assert.IsTrue(target.TryParse("!bool:true", out var filterFunc));
             Assert.IsFalse(filterFunc(null));
@@ -98,9 +101,7 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
         [Test]
         public void SingleSource_AndOperator()
         {
-            var target = new FilterFuncCompositeBuilder(
-                new FilterFuncBuilderComponentStub("bool", args => bool.Parse(args) ? _ => true : _ => false)
-                );
+            var target = new FilterFuncCompositeBuilder(BoolFilterFuncBuilder);
 
             Assert.IsTrue(target.TryParse("bool:true+bool:false", out var filterFunc));
             Assert.IsFalse(filterFunc(null));
@@ -109,9 +110,7 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
         [Test]
         public void SingleSource_OrOperator()
         {
-            var target = new FilterFuncCompositeBuilder(
-                new FilterFuncBuilderComponentStub("bool", args => bool.Parse(args) ? _ => true : _ => false)
-                );
+            var target = new FilterFuncCompositeBuilder(BoolFilterFuncBuilder);
 
             Assert.IsTrue(target.TryParse("bool:false,bool:true", out var filterFunc));
             Assert.IsTrue(filterFunc(null));
@@ -120,9 +119,7 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
         [Test]
         public void SingleSource_OperatorPrecedence()
         {
-            var target = new FilterFuncCompositeBuilder(
-                new FilterFuncBuilderComponentStub("bool", args => bool.Parse(args) ? _ => true : _ => false)
-                );
+            var target = new FilterFuncCompositeBuilder(BoolFilterFuncBuilder);
 
             Assert.IsTrue(target.TryParse("bool:false+bool:true,bool:true", out var filterFunc1));
             Assert.IsTrue(filterFunc1(null));
