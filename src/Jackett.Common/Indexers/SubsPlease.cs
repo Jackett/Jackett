@@ -20,6 +20,11 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class SubsPlease : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://subsplease.org/",
+            "https://subsplease.nocensor.space/"
+        };
+
         private string ApiEndpoint => SiteLink + "/api/?";
 
         public SubsPlease(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
