@@ -980,7 +980,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
         $('#searchResults div.dataTables_filter input').val("");
         clearSearchResultTable($('#searchResults'));
 
-        var trackerId = filterId | "all";
+        var trackerId = filterId || "all";
         api.resultsForIndexer(trackerId, queryObj, function (data) {
             for (var i = 0; i < data.Results.length; i++) {
                 var item = data.Results[i];
