@@ -15,7 +15,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -67,8 +66,6 @@ namespace Jackett.Common.Indexers
             Language = "fr-fr";
             Encoding = Encoding.UTF8;
             Type = "private";
-            // NET::ERR_CERT_DATE_INVALID expired ‎29 ‎July ‎2020
-            //w.AddTrustedCertificate(new Uri(SiteLink).Host, "9cb32582b564256146616afddbdb8e7c94c428ed");
 
             AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD, "DVDR");
             AddCategoryMapping("MOVIE|DVDRIP", TorznabCatType.MoviesSD, "DVDRIP");
@@ -108,12 +105,6 @@ namespace Jackett.Common.Indexers
             // Check & Validate Config
             ValidateConfig();
 
-            // Getting login form to retrieve CSRF token
-            var myRequest = new Utils.Clients.WebRequest
-            {
-                Url = LoginUrl
-            };
-
             // Building login form data
             var pairs = new Dictionary<string, string> {
                 { "username", ConfigData.Username.Value },
@@ -122,18 +113,9 @@ namespace Jackett.Common.Indexers
                 { "login", "Connexion" }
             };
 
-            // Do the login
-            var request = new Utils.Clients.WebRequest
-            {
-                PostData = pairs,
-                Referer = LoginUrl,
-                Type = RequestType.POST,
-                Url = LoginUrl
-            };
-
             // Perform loggin
             logger.Info("\nAbnormal - Perform loggin.. with " + LoginUrl);
-            var response = await webclient.GetResultAsync(request);
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
 
             // Test if we are logged in
             await ConfigureIfOK(response.Cookies, response.Cookies.Contains("session="), () =>
@@ -148,7 +130,7 @@ namespace Jackett.Common.Indexers
 
                 // Oops, unable to login
                 logger.Info("Abnormal - Login failed: \"" + message + "\" and " + left + " tries left before being banned for 6 hours !", "error");
-                throw new ExceptionWithConfigData("Login failed: " + message, configData);
+                throw new ExceptionWithConfigData("Abnormal - Login failed: " + message, configData);
             });
 
             logger.Info("-> Login Success");
