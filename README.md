@@ -584,6 +584,27 @@ Using the all indexer has no advantages (besides reduced management overhead), o
 
 To get all Jackett indexers including their capabilities you can use `t=indexers` on the all indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as a query parameter.
 
+### Filter indexers
+
+Another special "filter" indexer is avaible at <code>/api/v2.0/indexers/<i><b>filter</b></i>/results/torznab</code>
+It will query the configured indexers that match the <i><b>filter</b></i> expression criterias and return the combined results as "all".
+
+Supported filters
+Filter | Condition
+-|-
+<code>type:<i><b>type</b></i></code> | where the indexer type is equal to <i><b>type</b></i>
+<code>tag:<i><b>tag</b></i></code> | where the indexer tags contains <i><b>tag</b></i>
+<code>lang:<i><b>tag</b></i></code> | where the indexer language start with <i><b>lang</b></i>
+
+Supported operators
+Operator | Condition
+-|-
+<code>!<i><b>filter</b></i></code> | where not <i><b>filter</b></i>
+<code><i><b>filter1</b></i>+<i><b>filter2</b></i>+...</code> | where <i><b>filter1</b></i> and <i><b>filter2</b> and ...</
+<code><i><b>filter1</b></i>,<i><b>filter2</b></i>,...</code> | where <i><b>filter1</b></i> or <i><b>filter2</b> or ...</
+
+Example:
+The "filter" indexer at <code>/api/v2.0/indexers/<b>tag:group1,!type:private+lang:en</b>/results/torznab</code> will query all the configured indexers tagged with `group1` or all the indexers not private and with `en` language (`en-en`,`en-us`,...)
 
 ## Installation on Windows
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
