@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text.RegularExpressions;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 
@@ -17,7 +17,7 @@ namespace Jackett.Common.Models.IndexerConfig
         public HiddenStringConfigurationItem CookieHeader { get; private set; } = new HiddenStringConfigurationItem(name: "CookieHeader");
         public HiddenStringConfigurationItem LastError { get; private set; } = new HiddenStringConfigurationItem(name: "LastError");
         public StringConfigurationItem SiteLink { get; private set; } = new StringConfigurationItem(name: "Site Link");
-        public TagsConfigurationItem Groups { get; private set; } = new TagsConfigurationItem("Groups");
+        public TagsConfigurationItem Groups { get; private set; } = new TagsConfigurationItem(name: "Groups", charSet:"A-Za-z0-9\\-\\._~");
 
         public ConfigurationData()
         {
@@ -39,79 +39,9 @@ namespace Jackett.Common.Models.IndexerConfig
                 var jsonToken = jsonArray.FirstOrDefault(f => f.Value<string>("id") == item.ID);
                 if (jsonToken == null)
                     continue;
-
-                switch (item)
-                {
-                    case StringConfigurationItem stringItem:
-                    {
-                        if (HasPasswordValue(item))
-                        {
-                            var pw = ReadValueAs<string>(jsonToken);
-                            if (pw != PASSWORD_REPLACEMENT)
-                            {
-                                stringItem.Value = ps != null ? ps.UnProtect(pw) : pw;
-                            }
-                        }
-                        else
-                        {
-                            stringItem.Value = ReadValueAs<string>(jsonToken);
-                        }
-                        break;
-                    }
-                    case HiddenStringConfigurationItem hiddenStringItem:
-                    {
-                        hiddenStringItem.Value = ReadValueAs<string>(jsonToken);
-                        break;
-                    }
-                    case BoolConfigurationItem boolItem:
-                    {
-                        boolItem.Value = ReadValueAs<bool>(jsonToken);
-                        break;
-                    }
-                    case SingleSelectConfigurationItem singleSelectItem:
-                    {
-                        singleSelectItem.Value = ReadValueAs<string>(jsonToken);
-                        break;
-                    }
-                    case MultiSelectConfigurationItem multiSelectItem:
-                    {
-                        var values = jsonToken.Value<JArray>("values");
-                        if (values != null)
-                        {
-                            multiSelectItem.Values = values.Values<string>().ToArray();
-                        }
-                        break;
-                    }
-                    case PasswordConfigurationItem passwordItem:
-                    {
-                        var pw = ReadValueAs<string>(jsonToken);
-                        if (pw != PASSWORD_REPLACEMENT)
-                        {
-                            passwordItem.Value = ps != null ? ps.UnProtect(pw) : pw;
-                        }
-                        break;
-                    }
-                    case TagsConfigurationItem tagsItem:
-                    {
-                        var tags = ReadValueAs<string>(jsonToken);
-                        if (tags != null)
-                        {
-                            tagsItem.Values.Clear();
-                            foreach (var tag in tags.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries))
-                            {
-                                tagsItem.Values.Add(tag);
-                            }
-                        }
-                        break;
-                    }
-                }
+                item.FromJson(jsonToken, ps);
             }
         }
-
-        private T ReadValueAs<T>(JToken jToken) => jToken.Value<T>("value");
-
-        private bool HasPasswordValue(ConfigurationItem item)
-            => string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase);
 
         public JToken ToJson(IProtectionService ps, bool forDisplay = true)
         {
@@ -120,48 +50,7 @@ namespace Jackett.Common.Models.IndexerConfig
             var configurationItems = GetConfigurationItems(forDisplay);
             foreach (var configurationItem in configurationItems)
             {
-                JObject jObject = null;
-
-                switch (configurationItem)
-                {
-                    case ConfigurationItemMaybePassword maybePassword:
-                    {
-                        // Remove this code and give each derived ConfigurationItem class its own ToJson method
-                        // as soon as everyone is using PasswordConfigurationItem for passwords.
-                        jObject = maybePassword.ToJson(ps);
-                        break;
-                    }
-                    case BoolConfigurationItem boolItem:
-                    {
-                        jObject = boolItem.ToJson();
-                        break;
-                    }
-                    case SingleSelectConfigurationItem singleSelectItem:
-                    {
-                        jObject = singleSelectItem.ToJson();
-                        break;
-                    }
-                    case MultiSelectConfigurationItem multiSelectItem:
-                    {
-                        jObject = multiSelectItem.ToJson();
-                        break;
-                    }
-                    case DisplayImageConfigurationItem imageItem:
-                    {
-                        jObject = imageItem.ToJson();
-                        break;
-                    }
-                    case PasswordConfigurationItem passwordItem:
-                    {
-                        jObject = passwordItem.ToJson(forDisplay, ps);
-                        break;
-                    }
-                    case TagsConfigurationItem tagsItem:
-                    {
-                        jObject = tagsItem.ToJson();
-                        break;
-                    }
-                }
+                var jObject = configurationItem.ToJson(ps, forDisplay);
 
                 if (jObject != null)
                 {
@@ -230,6 +119,14 @@ namespace Jackett.Common.Models.IndexerConfig
                     ["name"] = Name
                 };
             }
+
+            protected static T ReadValueAs<T>(JToken jToken) => jToken.Value<T>("value");
+
+            protected static bool HasPasswordValue(ConfigurationItem item)
+                => string.Equals(item.Name, "password", StringComparison.InvariantCultureIgnoreCase);
+
+            public virtual JObject ToJson(IProtectionService protectionService = null, bool forDisplay = true) => null;
+            public virtual void FromJson(JToken jsonToken, IProtectionService protectionService = null) { }
         }
 
         /// <summary>
@@ -244,7 +141,7 @@ namespace Jackett.Common.Models.IndexerConfig
             {
             }
 
-            public JObject ToJson(IProtectionService protectionService = null)
+            public override JObject ToJson(IProtectionService protectionService = null, bool forDisplay = true)
             {
                 var jObject = CreateJObject();
 
@@ -271,6 +168,22 @@ namespace Jackett.Common.Models.IndexerConfig
                 : base(name, itemType: "inputstring")
             {
             }
+
+            public override void FromJson(JToken jsonToken, IProtectionService ps = null)
+            {
+                if (HasPasswordValue(this))
+                {
+                    var pw = ReadValueAs<string>(jsonToken);
+                    if (pw != PASSWORD_REPLACEMENT)
+                    {
+                        Value = ps != null ? ps.UnProtect(pw) : pw;
+                    }
+                }
+                else
+                {
+                    Value = ReadValueAs<string>(jsonToken);
+                }
+            }
         }
 
         public class HiddenStringConfigurationItem : ConfigurationItemMaybePassword
@@ -278,6 +191,11 @@ namespace Jackett.Common.Models.IndexerConfig
             public HiddenStringConfigurationItem(string name)
                 : base(name, itemType: "hiddendata", canBeShownToUser: false)
             {
+            }
+
+            public override void FromJson(JToken jsonToken, IProtectionService ps = null)
+            {
+                Value = ReadValueAs<string>(jsonToken);
             }
         }
 
@@ -299,11 +217,16 @@ namespace Jackett.Common.Models.IndexerConfig
             {
             }
 
-            public JObject ToJson()
+            public override JObject ToJson(IProtectionService ps = null, bool forDisplay = true)
             {
                 var jObject = CreateJObject();
                 jObject["value"] = Value;
                 return jObject;
+            }
+
+            public override void FromJson(JToken jsonToken, IProtectionService ps = null)
+            {
+                Value = ReadValueAs<bool>(jsonToken);
             }
         }
 
@@ -316,7 +239,7 @@ namespace Jackett.Common.Models.IndexerConfig
             {
             }
 
-            public JObject ToJson()
+            public override JObject ToJson(IProtectionService ps = null, bool forDisplay = true)
             {
                 var jObject = CreateJObject();
 
@@ -336,7 +259,7 @@ namespace Jackett.Common.Models.IndexerConfig
             public SingleSelectConfigurationItem(string name, Dictionary<string, string> options)
                 : base(name, itemType: "inputselect") => Options = options;
 
-            public JObject ToJson()
+            public override JObject ToJson(IProtectionService ps = null, bool forDisplay = true)
             {
                 var jObject = CreateJObject();
 
@@ -349,6 +272,11 @@ namespace Jackett.Common.Models.IndexerConfig
 
                 return jObject;
             }
+
+            public override void FromJson(JToken jsonToken, IProtectionService ps = null)
+            {
+                Value = ReadValueAs<string>(jsonToken);
+            }
         }
 
         public class MultiSelectConfigurationItem : ConfigurationItem
@@ -360,7 +288,7 @@ namespace Jackett.Common.Models.IndexerConfig
             public MultiSelectConfigurationItem(string name, Dictionary<string, string> options)
                 : base(name, itemType: "inputcheckbox") => Options = options;
 
-            public JObject ToJson()
+            public override JObject ToJson(IProtectionService ps, bool forDisplay)
             {
                 var jObject = CreateJObject();
 
@@ -373,6 +301,15 @@ namespace Jackett.Common.Models.IndexerConfig
 
                 return jObject;
             }
+
+            public override void FromJson(JToken jsonToken, IProtectionService ps = null)
+            {
+                var values = jsonToken.Value<JArray>("values");
+                if (values != null)
+                {
+                    Values = values.Values<string>().ToArray();
+                }
+            }
         }
 
         public class PasswordConfigurationItem : ConfigurationItem
@@ -384,7 +321,7 @@ namespace Jackett.Common.Models.IndexerConfig
             {
             }
 
-            public JObject ToJson(bool forDisplay, IProtectionService protectionService = null)
+            public override JObject ToJson(IProtectionService protectionService = null, bool forDisplay = true)
             {
                 var jObject = CreateJObject();
 
@@ -399,23 +336,75 @@ namespace Jackett.Common.Models.IndexerConfig
 
                 return jObject;
             }
+
+            public override void FromJson(JToken jsonToken, IProtectionService ps = null)
+            {
+                var pw = ReadValueAs<string>(jsonToken);
+                if (pw != PASSWORD_REPLACEMENT)
+                {
+                    Value = ps != null ? ps.UnProtect(pw) : pw;
+                }
+            }
         }
 
         public class TagsConfigurationItem : ConfigurationItem
         {
             public HashSet<string> Values { get; }
+            public string Pattern { get; set; }
+            public char Separator { get; set; }
+            public string Delimiters { get; set; }
 
-            public TagsConfigurationItem(string name)
+            public HashSet<string> Whitelist { get; }
+            public HashSet<string> Blacklist { get; }
+
+            public TagsConfigurationItem(string name, string charSet = null, char separator = ',')
                 : base(name, "inputtags")
             {
-                Values = new HashSet<string>();
+                Values = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+                Whitelist = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+                Blacklist = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+                if (!string.IsNullOrWhiteSpace(charSet))
+                {
+                    Pattern = $"^[{charSet}]+$";
+                    Delimiters = $"[^{charSet}]+";
+                }
+                Separator = separator;
             }
 
-            public JObject ToJson()
+            public override JObject ToJson(IProtectionService ps = null, bool forDisplay = true)
             {
                 var jObject = CreateJObject();
-                jObject["value"] = string.Join(" ", Values);
+                var separator = Separator.ToString();
+                jObject["value"] = string.Join(separator, Values);
+                if (forDisplay)
+                {
+                    jObject["separator"] = separator;
+                    if (!string.IsNullOrWhiteSpace(Delimiters))
+                        jObject["delimiters"] = Delimiters;
+                    if (!string.IsNullOrWhiteSpace(Pattern))
+                        jObject["pattern"] = Pattern;
+                    if (Whitelist.Count > 0)
+                        jObject["whitelist"] = string.Join(separator, Whitelist);
+                    if (Blacklist.Count > 0)
+                        jObject["blacklist"] = string.Join(separator, Blacklist);
+                }
+
                 return jObject;
+            }
+
+            public override void FromJson(JToken jsonToken, IProtectionService ps)
+            {
+                var value = ReadValueAs<string>(jsonToken);
+                if (value == null)
+                    return;
+                Values.Clear();
+                var tags = Regex.Split(value, !string.IsNullOrWhiteSpace(Delimiters) ? Delimiters : $"{Separator}+").Select(t => t.Trim());
+                if (!string.IsNullOrWhiteSpace(Pattern))
+                    tags = tags.Where(t => Whitelist.Contains(t) || Regex.IsMatch(t, Pattern));
+                if (Blacklist.Count > 0)
+                    tags = tags.Where(t => !Blacklist.Contains(t));
+                foreach (var tag in tags)
+                    Values.Add(tag);
             }
         }
     }

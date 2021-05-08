@@ -337,3 +337,17 @@ input#searchquery {
 #proxy-warning {
     color: red;
 }
+
+.label-group {
+    font-variant: small-caps;
+    text-transform: lowercase;
+    background-color: #777;
+}
+
+.tagify {
+    height: auto;
+}
+
+.tagify__input {
+    min-width: 0;
+}

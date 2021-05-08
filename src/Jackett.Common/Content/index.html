@@ -22,11 +22,14 @@
     <script type="text/javascript" src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
+    <script type="text/javascript" src="../libs/tagify.min.js?changed=11662"></script>
+    <script type="text/javascript" src="../libs/jQuery.tagify.min.js?changed=11662"></script>
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20201208" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20201208" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=11662" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=11662" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -292,7 +295,7 @@
     </script>
     <script id="setup-item-inputtags" type="text/x-handlebars-template">
       <div class="setup-item-inputtags">
-        <input class="form-control" type="text" value="{{{value}}}" />
+        <input class="form-control" type="text" value="{{{value}}}" {{#if pattern}} pattern="{{pattern}}"{{/if}}/>
       </div>
     </script>
 
@@ -321,7 +324,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each groups}} <span title="{{this}}" class="label label-default" style="text-transform: capitalize;">{{this}}</span>{{/each}}</td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each groups}} <span title="{{this}}" class="label label-group">{{this}}</span>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>
@@ -721,6 +724,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20210424"></script>
+    <script type="text/javascript" src="../custom.js?changed=11662"></script>
 </body>
 </html>

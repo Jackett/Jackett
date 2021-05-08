@@ -676,9 +676,29 @@ function populateConfigItems(configForm, config) {
         var item = config[i];
         var setupValueTemplate = Handlebars.compile($("#setup-item-" + item.type).html());
         item.value_element = setupValueTemplate(item);
-        var template = setupItemTemplate(item);
+        var template = $(setupItemTemplate(item));
         $formItemContainer.append(template);
+        setupConfigItem(template, item);
     }
+}
+
+function setupConfigItem(configItem, item) {
+  switch (item.type) {
+    case "inputtags": {
+        configItem.find("input").tagify({
+          dropdown: {
+            enabled: 1
+          },
+          separator: item.separator || ",",
+          whitelist: item.whitelist || [],
+          blacklist: item.blacklist || [],
+          pattern: item.pattern || null,
+          delimiters: item.delimiters || item.separator || ",",
+          originalInputValueFormat: function (values) { return values.map(item => item.value).join(this.separator); }
+        });
+      }
+      break;
+  }
 }
 
 function newConfigModal(title, config, caps, link, alternativesitelinks, description) {
@@ -703,6 +723,8 @@ function newConfigModal(title, config, caps, link, alternativesitelinks, descrip
             return false;
         });
     }
+
+    $("div[data-id='groups'] input", configForm).data("tagify").settings.whitelist = configuredIndexers.map(i => i.groups).reduce((a, g) => a.concat(g), []).filter((v, i, a) => a.indexOf(v) === i);
 
     return configForm;
 }
@@ -734,6 +756,7 @@ function getConfigModalJson(configForm) {
                 $el.find(".setup-item-inputcheckbox input:checked").each(function () {
                     itemEntry.values.push($(this).val());
                 });
+                break;
             case "inputselect":
                 itemEntry.value = $el.find(".setup-item-inputselect select").val();
                 break;
