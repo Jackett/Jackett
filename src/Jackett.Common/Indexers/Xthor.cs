@@ -29,6 +29,7 @@ namespace Jackett.Common.Indexers
         private string WebRequestDelay => ((SingleSelectConfigurationItem)configData.GetDynamic("webRequestDelay")).Value;
         private int MaxPages => Convert.ToInt32(((SingleSelectConfigurationItem)configData.GetDynamic("maxPages")).Value);
         private bool MaxPagesBypassForTMDB => ((BoolConfigurationItem)configData.GetDynamic("maxPagesBypassForTMDB")).Value;
+        private int DropCategories => Convert.ToInt32(((SingleSelectConfigurationItem)configData.GetDynamic("dropCategories")).Value);
         private string MultiReplacement => ((StringConfigurationItem)configData.GetDynamic("multiReplacement")).Value;
         private bool SubReplacement => ((BoolConfigurationItem)configData.GetDynamic("subReplacement")).Value;
         private bool EnhancedAnimeSearch => ((BoolConfigurationItem)configData.GetDynamic("enhancedAnimeSearch")).Value;
@@ -208,7 +209,7 @@ namespace Jackett.Common.Indexers
             { Value = "0" };
             ConfigData.AddDynamic("specificLanguageAccent", ConfigSpecificLanguageAccent);
 
-            ConfigData.AddDynamic("advancedConfigurationWarning", new DisplayInfoConfigurationItem(string.Empty, "<center><b>Advanced Configuration</b></center>,<br /><br /> <center><b><u>WARNING !</u></b> <i>Be sure to read instructions before editing options bellow, you can <b>drastically reduce performance</b> of queries or have <b>non-accurate results</b>.</i></center><br/><br/><ul><li><b>Delay betwwen Requests</b>: (<i>not recommended</i>) you can increase delay to requests made to the tracker, but a minimum of 2.1s is enforced as there is an anti-spam protection.</li><br /><li><b>Max Pages</b>: (<i>not recommended</i>) you can increase max pages to follow when making a request. But be aware that others apps can consider this indexer not working if jackett take too many times to return results. Another thing is that API is very buggy on tracker side, most of time, results of next pages are same ... as the first page. Even if we deduplicate rows, you will loose performance for the same results. You can check logs to see if an higher pages following is not benefical, you will see an error percentage (duplicates) with recommandations.</li><br /><li><b>Bypass for TMDB</b>: (<i>recommended</i>) this indexer is compatible with TMDB queries (<i>for movies only</i>), so when requesting content with an TMDB ID, we will search directly ID on API instead of name. Results will be more accurate, so you can enable a max pages bypass for this query type. You will be at least limited by the hard limit of 4 pages.</li><br /><li><b>Enhanced Anime</b>: if you have \"Anime\", this will improve queries made to this tracker related to this type when making searches.</li><br /><li><b>Multi Replacement</b>: you can dynamically replace the word \"MULTI\" with another of your choice like \"MULTI.FRENCH\" for better analysis of 3rd party softwares.</li><li><b>Sub Replacement</b>: you can dynamically replace the word \"VOSTFR\" or \"SUBFRENCH\" with the word \"ENGLISH\" for better analysis of 3rd party softwares.</li></ul>"));
+            ConfigData.AddDynamic("advancedConfigurationWarning", new DisplayInfoConfigurationItem(string.Empty, "<center><b>Advanced Configuration</b></center>,<br /><br /> <center><b><u>WARNING !</u></b> <i>Be sure to read instructions before editing options bellow, you can <b>drastically reduce performance</b> of queries or have <b>non-accurate results</b>.</i></center><br/><br/><ul><li><b>Delay betwwen Requests</b>: (<i>not recommended</i>) you can increase delay to requests made to the tracker, but a minimum of 2.1s is enforced as there is an anti-spam protection.</li><br /><li><b>Max Pages</b>: (<i>not recommended</i>) you can increase max pages to follow when making a request. But be aware that others apps can consider this indexer not working if jackett take too many times to return results. Another thing is that API is very buggy on tracker side, most of time, results of next pages are same ... as the first page. Even if we deduplicate rows, you will loose performance for the same results. You can check logs to see if an higher pages following is not benefical, you will see an error percentage (duplicates) with recommandations.</li><br /><li><b>Bypass for TMDB</b>: (<i>recommended</i>) this indexer is compatible with TMDB queries (<i>for movies only</i>), so when requesting content with an TMDB ID, we will search directly ID on API instead of name. Results will be more accurate, so you can enable a max pages bypass for this query type. You will be at least limited by the hard limit of 4 pages.</li><br /><li><b>Drop categories</b>: (<i>recommended</i>) this indexer has some problems when too many categories are requested for filtering, so you will have better results by dropping categories from TMDB queries or selecting fewer categories in 3rd apps.</li><br /><li><b>Enhanced Anime</b>: if you have \"Anime\", this will improve queries made to this tracker related to this type when making searches.</li><br /><li><b>Multi Replacement</b>: you can dynamically replace the word \"MULTI\" with another of your choice like \"MULTI.FRENCH\" for better analysis of 3rd party softwares.</li><br /><li><b>Sub Replacement</b>: you can dynamically replace the word \"VOSTFR\" or \"SUBFRENCH\" with the word \"ENGLISH\" for better analysis of 3rd party softwares.</li></ul>"));
 
             var ConfigWebRequestDelay = new SingleSelectConfigurationItem("Which delay do you want to apply between each requests made to tracker ?", new Dictionary<string, string>
             {
@@ -234,6 +235,15 @@ namespace Jackett.Common.Indexers
 
             var ConfigMaxPagesBypassForTMDB = new BoolConfigurationItem("Do you want to bypass max pages for TMDB searches ? (Radarr) - Hard limit of 4") { Value = true };
             ConfigData.AddDynamic("maxPagesBypassForTMDB", ConfigMaxPagesBypassForTMDB);
+
+            var ConfigDropCategories = new SingleSelectConfigurationItem("Drop requested categories", new Dictionary<string, string>
+            {
+                {"0", "Disabled"},
+                {"1", "Yes, only for TMDB requests (default)"},
+                {"2", "Yes, for all requests"},
+            })
+            { Value = "1" };
+            ConfigData.AddDynamic("dropCategories", ConfigDropCategories);
 
             var ConfigEnhancedAnimeSearch = new BoolConfigurationItem("Do you want to use enhanced ANIME search ?") { Value = false };
             ConfigData.AddDynamic("enhancedAnimeSearch", ConfigEnhancedAnimeSearch);
@@ -523,18 +533,26 @@ namespace Jackett.Common.Indexers
                     logger.Info("\nXthor - Search requested for movie with title \"" + term + "\"");
                     parameters.Add("search", WebUtility.UrlEncode(term));
                 }
-                else
-                {
-                    logger.Info("\nXthor - Global search requested without term");
-                    parameters.Add("search", string.Empty);
-                    // Showing all torrents
-                }
             }
 
-            // Loop on Categories needed
+            // Loop on categories needed
             if (categoriesList.Count > 0)
             {
-                parameters.Add("category", string.Join("+", categoriesList));
+                switch (DropCategories)
+                {
+                    case 1:
+                        // Drop categories for TMDB query only.
+                        if (!query.IsTmdbQuery)
+                        { goto default; }
+                        break;
+                    case 2:
+                        // Drop categories enabled for all requests
+                        break;
+                    default:
+                        // Default or disabled state (0 value of config switch)
+                        parameters.Add("category", string.Join("+", categoriesList));
+                        break;
+                }
             }
 
             // If Only Freeleech Enabled
