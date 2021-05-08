@@ -1,17 +1,10 @@
-using System.Text;
-using System.Threading.Tasks;
-using Jackett.Common.Indexers;
-using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
-using Jackett.Common.Utils.FilterFuncBuilders;
-using Jackett.Test.TestHelpers;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using static Jackett.Common.Utils.FilterFunc;
 
-namespace Jackett.Test.Common.Utils.FilterFuncBuilders
+namespace Jackett.Test.Common.Utils.FilterFuncs
 {
     [TestFixture]
-    public class LanguageFilterFuncBuilderTests
+    public class LanguageFuncTests
     {
         private class LanguageIndexerStub : IndexerStub
         {
@@ -25,36 +18,34 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
             public override string Language { get; }
         }
 
-        private readonly FilterFuncBuilderComponent target = FilterFuncBuilder.Language;
-
         [Test]
-        public void TryParse_CaseInsensitiveSource_CaseInsensitiveFilter()
+        public void CaseInsensitiveSource_CaseInsensitiveFilter()
         {
             var language = "en";
             var region = "US";
 
             var lrLanguage = new LanguageIndexerStub($"{language.ToLower()}-{region.ToLower()}");
-            Assert.IsTrue(target.TryParse($"{target.ID}:{language.ToUpper()}-{region.ToUpper()}", out var LRFilterFunc));
+            var LRFilterFunc = Language.ToFunc($"{language.ToUpper()}-{region.ToUpper()}");
             Assert.IsTrue(LRFilterFunc(lrLanguage));
 
             var lRLanguage = new LanguageIndexerStub($"{language.ToLower()}-{region.ToUpper()}");
-            Assert.IsTrue(target.TryParse($"{target.ID}:{language.ToUpper()}-{region.ToLower()}", out var LrFilterFunc));
+            var LrFilterFunc = Language.ToFunc($"{language.ToUpper()}-{region.ToLower()}");
             Assert.IsTrue(LrFilterFunc(lRLanguage));
 
             var LrLanguage = new LanguageIndexerStub($"{language.ToUpper()}-{region.ToLower()}");
-            Assert.IsTrue(target.TryParse($"{target.ID}:{language.ToLower()}-{region.ToUpper()}", out var lRFilterFunc));
+            var lRFilterFunc = Language.ToFunc($"{language.ToLower()}-{region.ToUpper()}");
             Assert.IsTrue(lRFilterFunc(LrLanguage));
 
             var LRLanguage = new LanguageIndexerStub($"{language.ToUpper()}-{region.ToUpper()}");
-            Assert.IsTrue(target.TryParse($"{target.ID}:{language.ToLower()}-{region.ToLower()}", out var lrFilterFunc));
+            var lrFilterFunc = Language.ToFunc($"{language.ToLower()}-{region.ToLower()}");
             Assert.IsTrue(lrFilterFunc(LRLanguage));
         }
 
         [Test]
-        public void TryParse_LanguageWithoutRegion()
+        public void LanguageWithoutRegion()
         {
             var language = "en";
-            Assert.IsTrue(target.TryParse($"{target.ID}:{language}", out var funcFilter));
+            var funcFilter = Language.ToFunc(language);
 
             Assert.IsTrue(funcFilter(new LanguageIndexerStub(language)));
             Assert.IsTrue(funcFilter(new LanguageIndexerStub($"{language}-region1")));

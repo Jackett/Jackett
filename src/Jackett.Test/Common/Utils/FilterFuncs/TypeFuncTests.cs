@@ -1,10 +1,10 @@
-using Jackett.Common.Utils.FilterFuncBuilders;
 using NUnit.Framework;
+using static Jackett.Common.Utils.FilterFunc;
 
-namespace Jackett.Test.Common.Utils.FilterFuncBuilders
+namespace Jackett.Test.Common.Utils.FilterFuncs
 {
     [TestFixture]
-    public class TypeFilterFuncBuilderTests
+    public class TypeFuncTests
     {
         private class TypeIndexerStub : IndexerStub
         {
@@ -18,27 +18,29 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
             public override string Type { get; }
         }
 
-        private readonly FilterFuncBuilderComponent target = FilterFuncBuilder.Type;
-
         [Test]
-        public void TryParse_CaseInsensitiveSource_CaseInsensitiveFilter()
+        public void CaseInsensitiveSource_CaseInsensitiveFilter()
         {
             var typeId = "type-id";
 
             var lowerType = new TypeIndexerStub(typeId.ToLower());
-            Assert.IsTrue(target.TryParse($"{target.ID}:{typeId.ToUpper()}", out var upperFilterFunc));
-            Assert.IsTrue(upperFilterFunc(lowerType));
-
             var upperType = new TypeIndexerStub(typeId.ToUpper());
-            Assert.IsTrue(target.TryParse($"{target.ID}:{typeId.ToLower()}", out var lowerFilterFunc));
+
+            var upperFilterFunc = Type.ToFunc(typeId.ToUpper());
+            Assert.IsTrue(upperFilterFunc(lowerType));
+            Assert.IsTrue(upperFilterFunc(upperType));
+
+            var lowerFilterFunc = Type.ToFunc(typeId.ToLower());
+            Assert.IsTrue(lowerFilterFunc(lowerType));
             Assert.IsTrue(lowerFilterFunc(upperType));
         }
 
         [Test]
-        public void TryParse_PartialType()
+        public void PartialType()
         {
             var typeId = "type-id";
-            Assert.IsTrue(target.TryParse($"{target.ID}:{typeId}", out var funcFilter));
+
+            var funcFilter = Type.ToFunc($"{typeId}");
 
             Assert.IsFalse(funcFilter(new TypeIndexerStub($"{typeId}suffix")));
             Assert.IsFalse(funcFilter(new TypeIndexerStub($"prefix{typeId}")));

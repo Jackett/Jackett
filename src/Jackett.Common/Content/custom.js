@@ -3,7 +3,8 @@ var basePath = '';
 var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
-var configuredFilters = [];
+var configuredTags = [];
+var availableFilters = [];
 
 $.fn.inView = function () {
     if (!this.length) return false;
@@ -72,8 +73,8 @@ function type_filter(indexer) {
   return indexer.type == this.value;
 }
 
-function group_filter(indexer) {
-  return indexer.groups.map(g => g.toLowerCase()).indexOf(this.value.toLowerCase()) > -1;
+function tag_filter(indexer) {
+  return indexer.tags.map(t => t.toLowerCase()).indexOf(this.value.toLowerCase()) > -1;
 }
 
 function getJackettConfig(callback) {
@@ -146,7 +147,8 @@ function reloadIndexers() {
         indexers = data;
         configuredIndexers = [];
         unconfiguredIndexers = [];
-        configuredFilters = [];
+        configuredTags = [];
+        availableFilters = [];
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             item.rss_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/api?apikey=" + api.key + "&t=search&cat=&q=");
@@ -181,6 +183,8 @@ function reloadIndexers() {
                 unconfiguredIndexers.push(item);
         }
 
+        configuredTags = configuredIndexers.map(i => i.tags).reduce((a, g) => a.concat(g), []).filter((v, i, a) => a.indexOf(v) === i);
+
         configureFilters(configuredIndexers);
         
         displayConfiguredIndexersList(configuredIndexers);
@@ -194,18 +198,18 @@ function reloadIndexers() {
 
 function configureFilters(indexers) {
     function add(f) {
-      if (configuredFilters.find(x => x.id == f.id))
+      if (availableFilters.find(x => x.id == f.id))
         return;
       if (!indexers.every(f.apply, f) && indexers.some(f.apply, f))
-        configuredFilters.push(f);
+        availableFilters.push(f);
     }
 
     ["public", "private", "semi-private"]
       .map(t => { return { id: "type:" + t, apply: type_filter, value: t } })
       .forEach(add);
 
-    indexers.map(i => i.groups).reduce((a, g) => a.concat(g), []).sort()
-      .map(g => { return { id: "group:" + g.toLowerCase(), apply: group_filter, value: g }})
+    configuredTags.sort()
+      .map(t => { return { id: "tag:" + t.toLowerCase(), apply: tag_filter, value: t }})
       .forEach(add);
 }
 
@@ -656,14 +660,15 @@ function setupConfigItem(configItem, item) {
     case "inputtags": {
         configItem.find("input").tagify({
           dropdown: {
-            enabled: 1
+            enabled: 0,
+            position: "text"
           },
           separator: item.separator || ",",
           whitelist: item.whitelist || [],
           blacklist: item.blacklist || [],
           pattern: item.pattern || null,
           delimiters: item.delimiters || item.separator || ",",
-          originalInputValueFormat: function (values) { return values.map(item => item.value).join(this.separator); }
+          originalInputValueFormat: function (values) { return values.map(item => item.value.toLowerCase()).join(this.separator); }
         });
       }
       break;
@@ -693,7 +698,7 @@ function newConfigModal(title, config, caps, link, alternativesitelinks, descrip
         });
     }
 
-    $("div[data-id='groups'] input", configForm).data("tagify").settings.whitelist = configuredIndexers.map(i => i.groups).reduce((a, g) => a.concat(g), []).filter((v, i, a) => a.indexOf(v) === i);
+    $("div[data-id='tags'] input", configForm).data("tagify").settings.whitelist = configuredTags;
 
     return configForm;
 }
@@ -870,7 +875,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
-        filters: configuredFilters,
+        filters: availableFilters,
         active: selectedFilter
     }));
 
@@ -888,7 +893,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     var setTrackers = function (filterId, trackers) {
         var select = $('#searchTracker');
         var selected = select.val();
-        var filter = configuredFilters.find(f => f.id == filterId);
+        var filter = availableFilters.find(f => f.id == filterId);
         if (filter)
           trackers = trackers.filter(filter.apply,filter);
         var options = trackers.map(t => {
@@ -1021,7 +1026,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
       nonSelectedText: 'Any'
     });
 
-    if (configuredFilters.length > 0) {
+    if (availableFilters.length > 0) {
       if (selectedFilter) {
         searchFilter.val(selectedFilter);
         searchFilter.multiselect("refresh");

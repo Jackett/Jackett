@@ -331,8 +331,7 @@ input#searchquery {
     color: red;
 }
 
-.label-group {
-    font-variant: small-caps;
+.label-tag {
     text-transform: lowercase;
     background-color: #777;
 }
@@ -341,7 +340,11 @@ input#searchquery {
     height: auto;
 }
 
-.tagify__input {
+.tagify .tagify__input {
     min-width: 0;
+    text-transform: lowercase;
 }
 
+.tagify .tagify__tag-text {
+    text-transform: lowercase;
+}

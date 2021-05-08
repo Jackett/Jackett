@@ -14,14 +14,13 @@ using Jackett.Common.Utils.Clients;
 using NLog;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using FilterFunc = Jackett.Common.Utils.FilterFunc;
 
 namespace Jackett.Common.Services
 {
 
     public class IndexerManagerService : IIndexerManagerService
     {
-        private const string GroupFilterPrefix = "group:";
-        private const string LangFilterPrefix = "lang:";
         private readonly ICacheService cacheService;
         private readonly IIndexerConfigurationService configService;
         private readonly IProtectionService protectionService;
@@ -33,7 +32,7 @@ namespace Jackett.Common.Services
 
         private readonly Dictionary<string, IIndexer> indexers = new Dictionary<string, IIndexer>();
         private AggregateIndexer aggregateIndexer;
-        private ConcurrentDictionary<string, IWebIndexer> filterIndexers = new ConcurrentDictionary<string, IWebIndexer>();
+        private ConcurrentDictionary<string, IWebIndexer> availableFilters = new ConcurrentDictionary<string, IWebIndexer>();
 
         // this map is used to maintain backward compatibility when renaming the id of an indexer
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
@@ -233,19 +232,15 @@ namespace Jackett.Common.Services
                 Indexers = indexers.Values
             };
 
-            var groupIndexers = indexers.Values.SelectMany(x => x.Groups).Distinct().Select(
-                group =>
-                {
-                    logger.Info($"Adding filter indexer ('group:{group}' indexer) ...");
-                    return new KeyValuePair<string, IWebIndexer>(
-                        GroupFilterPrefix + group,
-                        new FilterIndexer(
-                            group, fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger,
-                            protectionService, cacheService, x => x.Groups.Contains(group))
-                        { Indexers = indexers.Values });
-                });
+            var predefinedFilters =
+                new[] { "public", "private", "semi-public" }
+                    .Select(type => (filter: FilterFunc.Type.ToFilter(type), func: FilterFunc.Type.ToFunc(type)))
+                .Concat(
+                indexers.Values.SelectMany(x => x.Tags).Distinct()
+                    .Select(tag => (filter: FilterFunc.Tag.ToFilter(tag), func: FilterFunc.Tag.ToFunc(tag)))
+                ).Select(x =>  new KeyValuePair<string, IWebIndexer>(x.filter, CreateFilterIndexer(x.filter, x.func)));
 
-            filterIndexers = new ConcurrentDictionary<string, IWebIndexer>(groupIndexers);
+            availableFilters = new ConcurrentDictionary<string, IWebIndexer>(predefinedFilters);
         }
 
         public void RemoveLegacyConfigurations()
@@ -289,11 +284,11 @@ namespace Jackett.Common.Services
             if (name == "all")
                 return aggregateIndexer;
 
-            if (filterIndexers.TryGetValue(name, out var indexer))
+            if (availableFilters.TryGetValue(name, out var indexer))
                 return indexer;
 
             if (FilterFunc.TryParse(name, out var filterFunc))
-                return filterIndexers.GetOrAdd(name, x => CreateFilterIndexer(name, filterFunc));
+                return availableFilters.GetOrAdd(name, x => CreateFilterIndexer(name, filterFunc));
 
             logger.Error($"Request for unknown indexer: {name}");
             throw new Exception($"Unknown indexer: {name}");
@@ -325,23 +320,21 @@ namespace Jackett.Common.Services
             indexer.Unconfigure();
         }
 
-        private IWebIndexer CreateGroupIndexer(string groupId)
-        {
-            return CreateFilterIndexer(GroupFilterPrefix + groupId, x => x.Groups.Contains(groupId));
-        }
-
-        private IWebIndexer CreateLangIndexer(string lang)
-        {
-            return CreateFilterIndexer(LangFilterPrefix + lang, x => x.Language.StartsWith(lang));
-        }
-
         private IWebIndexer CreateFilterIndexer(string filter, Func<IIndexer, bool> filterFunc)
         {
             var (fallbackStrategyProvider, resultFilterProvider) = GetStrategyProviders();
-            logger.Info($"Create filter indexer ('{filter}' indexer) ...");
+            logger.Info($"Adding filter indexer ('{filter}' indexer) ...");
             return new FilterIndexer(
-                filter, fallbackStrategyProvider, resultFilterProvider, configService, webClient, logger, protectionService,
-                cacheService, filterFunc)
+                    filter,
+                    fallbackStrategyProvider,
+                    resultFilterProvider,
+                    configService,
+                    webClient,
+                    logger,
+                    protectionService,
+                    cacheService,
+                    filterFunc
+                )
                 {
                     Indexers = indexers.Values
                 };

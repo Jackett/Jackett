@@ -1,19 +1,14 @@
 using System;
-
+using System.Linq;
 using Jackett.Common.Indexers;
 
-namespace Jackett.Common.Utils.FilterFuncBuilders
+namespace Jackett.Common.Utils.FilterFuncs
 {
-    public abstract class FilterFuncBuilderComponent : FilterFuncBuilder
+    public abstract class FilterFuncComponent : FilterFunc
     {
-        private static readonly char[] Separator = { ':' };
+        private static readonly char Separator = ':';
 
-        protected FilterFuncBuilderComponent()
-        {
-            ID = null;
-        }
-
-        protected FilterFuncBuilderComponent(string id)
+        protected FilterFuncComponent(string id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
@@ -24,9 +19,12 @@ namespace Jackett.Common.Utils.FilterFuncBuilders
 
         public string ID { get; }
 
-        protected override Func<IIndexer, bool> Build(string source)
+        public override Func<IIndexer, bool> FromFilter(string source)
         {
-            var parts = source.Split(Separator, 2);
+            if (string.IsNullOrWhiteSpace(source))
+                return null;
+
+            var parts = source.Split(new []{Separator}, 2);
             if (parts.Length != 2)
                 return null;
             if (!string.Equals(parts[0], ID, StringComparison.InvariantCultureIgnoreCase))
@@ -34,9 +32,15 @@ namespace Jackett.Common.Utils.FilterFuncBuilders
             var args = parts[1];
             if (string.IsNullOrWhiteSpace(args))
                 return null;
-            return BuildFilterFunc(args);
+
+            return ToFunc(args);
         }
 
-        protected internal abstract Func<IIndexer, bool> BuildFilterFunc(string args);
+        public abstract Func<IIndexer, bool> ToFunc(string args);
+
+        public string ToFilter(string args)
+        {
+            return $"{ID}{Separator}{args}";
+        }
     }
 }

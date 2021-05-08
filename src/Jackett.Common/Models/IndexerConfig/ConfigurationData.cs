@@ -17,7 +17,7 @@ namespace Jackett.Common.Models.IndexerConfig
         public HiddenStringConfigurationItem CookieHeader { get; private set; } = new HiddenStringConfigurationItem(name: "CookieHeader");
         public HiddenStringConfigurationItem LastError { get; private set; } = new HiddenStringConfigurationItem(name: "LastError");
         public StringConfigurationItem SiteLink { get; private set; } = new StringConfigurationItem(name: "Site Link");
-        public TagsConfigurationItem Groups { get; private set; } = new TagsConfigurationItem(name: "Groups", charSet:"A-Za-z0-9\\-\\._~");
+        public TagsConfigurationItem Tags { get; private set; } = new TagsConfigurationItem(name: "Tags", charSet:"A-Za-z0-9\\-\\._~");
 
         public ConfigurationData()
         {
@@ -73,12 +73,12 @@ namespace Jackett.Common.Models.IndexerConfig
             properties.Remove(SiteLink);
             properties.Insert(0, SiteLink);
 
-            // remove/insert Groups manualy to make sure it shows up last
-            properties.Remove(Groups);
+            // remove/insert Tags manualy to make sure it shows up last
+            properties.Remove(Tags);
 
             properties.AddRange(dynamics.Values);
 
-            properties.Add(Groups);
+            properties.Add(Tags);
 
             return properties;
         }
@@ -360,9 +360,9 @@ namespace Jackett.Common.Models.IndexerConfig
             public TagsConfigurationItem(string name, string charSet = null, char separator = ',')
                 : base(name, "inputtags")
             {
-                Values = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-                Whitelist = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-                Blacklist = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+                Values = new HashSet<string>();
+                Whitelist = new HashSet<string>();
+                Blacklist = new HashSet<string>();
                 if (!string.IsNullOrWhiteSpace(charSet))
                 {
                     Pattern = $"^[{charSet}]+$";
@@ -398,7 +398,7 @@ namespace Jackett.Common.Models.IndexerConfig
                 if (value == null)
                     return;
                 Values.Clear();
-                var tags = Regex.Split(value, !string.IsNullOrWhiteSpace(Delimiters) ? Delimiters : $"{Separator}+").Select(t => t.Trim());
+                var tags = Regex.Split(value, !string.IsNullOrWhiteSpace(Delimiters) ? Delimiters : $"{Separator}+").Select(t => t.Trim().ToLowerInvariant());
                 if (!string.IsNullOrWhiteSpace(Pattern))
                     tags = tags.Where(t => Whitelist.Contains(t) || Regex.IsMatch(t, Pattern));
                 if (Blacklist.Count > 0)

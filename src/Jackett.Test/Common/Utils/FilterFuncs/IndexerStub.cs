@@ -6,7 +6,7 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Test.TestHelpers;
 using Newtonsoft.Json.Linq;
 
-namespace Jackett.Test.Common.Utils.FilterFuncBuilders
+namespace Jackett.Test.Common.Utils.FilterFuncs
 {
     public class IndexerStub : IIndexer
     {
@@ -36,7 +36,7 @@ namespace Jackett.Test.Common.Utils.FilterFuncBuilders
 
         public virtual bool IsConfigured => throw TestExceptions.UnexpectedInvocation;
 
-        public virtual string[] Groups => throw TestExceptions.UnexpectedInvocation;
+        public virtual string[] Tags => throw TestExceptions.UnexpectedInvocation;
 
         public virtual Task<ConfigurationData> GetConfigurationForSetup() => throw TestExceptions.UnexpectedInvocation;
 

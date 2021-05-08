@@ -294,7 +294,7 @@
     </script>
     <script id="setup-item-inputtags" type="text/x-handlebars-template">
       <div class="setup-item-inputtags">
-        <input class="form-control" type="text" value="{{{value}}}" {{#if pattern}} pattern="{{pattern}}"{{/if}}/>
+        <input class="form-control input-sm" type="text" value="{{{value}}}" {{#if pattern}} pattern="{{pattern}}"{{/if}}/>
       </div>
     </script>
 
@@ -310,7 +310,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each groups}} <span title="{{this}}" class="label label-group">{{this}}</span>{{/each}}</td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each tags}} <span title="{{this}}" class="label label-tag">{{this}}</span>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>
@@ -502,9 +502,9 @@
                         {{#if filters}}
                         <label for="filter">Filter</label>
                         <select name="filter" id="searchFilter">
-                          <option value="">All</option>
+                          <option value="all">all</option>
                           {{#each filters}}
-                          <option value="{{id}}" style="text-transform: capitalize;">{{value}}</option>
+                          <option value="{{id}}">{{id}}</option>
                           {{/each}}
                         </select>
                         {{/if}}
