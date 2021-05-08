@@ -22,11 +22,14 @@
     <script type="text/javascript" src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
+    <script type="text/javascript" src="../libs/tagify.min.js?changed=11662"></script>
+    <script type="text/javascript" src="../libs/jQuery.tagify.min.js?changed=11662"></script>
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20201208" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20201208" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=11662" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=11662" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -65,7 +68,7 @@
             </button>
         </div>
         <h3>Configured Indexers</h3>
-        <div id="indexers"> </div>
+        <div id="indexers"></div>
         <hr />
 
         <div class="input-area">
@@ -213,7 +216,7 @@
     <div id="modals"></div>
 
     <script id="setup-item" type="text/x-handlebars-template">
-        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
+        <div class="setup-item form-filter" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
             <div class="setup-item-label">{{name}}</div>
             <div class="setup-item-value">{{{value_element}}}</div>
         </div>
@@ -289,10 +292,14 @@
             Click on an URL to copy it to the Site Link field.
         </div>
     </script>
-
+    <script id="setup-item-inputtags" type="text/x-handlebars-template">
+      <div class="setup-item-inputtags">
+        <input class="form-control input-sm" type="text" value="{{{value}}}" {{#if pattern}} pattern="{{pattern}}"{{/if}}/>
+      </div>
+    </script>
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
-        <div class="configured-indexer-div">
+        <div class="tab-content configured-indexer-div">
             <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
                 <thead>
                     <tr>
@@ -303,7 +310,7 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each tags}} <span title="{{this}}" class="label label-tag">{{this}}</span>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>
@@ -492,12 +499,17 @@
                         <p>You can search all configured indexers from this screen.</p>
                         <label for="text">Query</label>
                         <input class="form-control" type="text" name="query" id="searchquery" />
-                        <label for="tracker">Tracker</label>
-                        <select name="tracker" id="searchTracker" multiple="multiple">
-                            {{#each indexers}}
-                            <option value="{{id}}" selected>{{name}}</option>
-                            {{/each}}
+                        {{#if filters}}
+                        <label for="filter">Filter</label>
+                        <select name="filter" id="searchFilter">
+                          <option value="all">all</option>
+                          {{#each filters}}
+                          <option value="{{id}}">{{id}}</option>
+                          {{/each}}
                         </select>
+                        {{/if}}
+                        <label for="tracker">Tracker</label>
+                        <select name="tracker" id="searchTracker" multiple="multiple"></select>
                         <label for="category">Category</label>
                         <select name="category" id="searchCategory" multiple="multiple"></select>
                         <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button>
@@ -698,6 +710,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20210424"></script>
+    <script type="text/javascript" src="../custom.js?changed=11662"></script>
 </body>
 </html>

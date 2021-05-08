@@ -25,6 +25,6 @@ namespace Jackett.Test.TestHelpers
 
         public Task TestIndexer(string name) => throw new NotImplementedException();
 
-        public void InitAggregateIndexer() => throw new NotImplementedException();
+        public void InitMetaIndexers() => throw new NotImplementedException();
     }
 }

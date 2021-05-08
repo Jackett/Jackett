@@ -40,6 +40,8 @@ namespace Jackett.Common.Indexers
         // Whether this indexer has been configured, verified and saved in the past and has the settings required for functioning
         bool IsConfigured { get; }
 
+        string[] Tags { get; }
+
         // Retrieved for starting setup for the indexer via web API
         Task<ConfigurationData> GetConfigurationForSetup();
 

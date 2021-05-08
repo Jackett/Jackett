@@ -34,6 +34,8 @@ namespace Jackett.Common.Indexers
         public Encoding Encoding { get; protected set; }
 
         public virtual bool IsConfigured { get; protected set; }
+        public virtual string[] Tags { get; protected set; }
+
         protected Logger logger;
         protected IIndexerConfigurationService configurationService;
         protected IProtectionService protectionService;
@@ -148,6 +150,8 @@ namespace Jackett.Common.Indexers
             // check whether the site link is well-formatted
             var siteUri = new Uri(configData.SiteLink.Value);
             SiteLink = configData.SiteLink.Value;
+
+            Tags = configData.Tags.Values.Select(t => t.ToLowerInvariant()).ToArray();
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)

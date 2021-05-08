@@ -76,6 +76,10 @@ body {
     max-width: 255px;
 }
 
+.setup-item-inputtags {
+    max-width: 255px;
+}
+
 [data-type=hiddendata]{
     display: none;
 }
@@ -327,4 +331,22 @@ input#searchquery {
 
 #proxy-warning {
     color: red;
+}
+
+.label-tag {
+    text-transform: lowercase;
+    background-color: #777;
+}
+
+.tagify {
+    height: auto;
+}
+
+.tagify .tagify__input {
+    min-width: 0;
+    text-transform: lowercase;
+}
+
+.tagify .tagify__tag-text {
+    text-transform: lowercase;
 }
