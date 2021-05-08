@@ -24,6 +24,11 @@ namespace Jackett.Common.Indexers
             { "540p", 350 }
         };
 
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://www.erai-raws.info/",
+            "https://erairaws.nocensor.space/"
+        };
+
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
             : base(id: "erai-raws",
@@ -50,14 +55,14 @@ namespace Jackett.Common.Indexers
 
             // Add note that download stats are not available
             configData.AddDynamic(
-                "download-stats-unavailable", 
+                "download-stats-unavailable",
                 new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Size</li><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
             );
 
             // Config item for title detail parsing
             configData.AddDynamic("title-detail-parsing", new BoolConfigurationItem("Enable Title Detail Parsing"));
             configData.AddDynamic(
-                "title-detail-parsing-help", 
+                "title-detail-parsing-help",
                 new DisplayInfoConfigurationItem("", "Title Detail Parsing will attempt to determine the season and episode number from the release names and reformat them as a suffix in the format S1E1. If successful, this should provide better matching in applications such as Sonarr.")
             );
 
@@ -87,7 +92,7 @@ namespace Jackett.Common.Indexers
 
             return IndexerConfigurationStatus.Completed;
         }
-        
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var feedItems = await GetItemsFromFeed();
@@ -231,7 +236,7 @@ namespace Jackett.Common.Indexers
                 var title = rssItem.SelectSingleNode("title")?.InnerText;
                 var link = rssItem.SelectSingleNode("link")?.InnerText;
                 var publishDate = rssItem.SelectSingleNode("pubDate")?.InnerText;
-                
+
                 if (string.IsNullOrWhiteSpace(title) ||
                     string.IsNullOrWhiteSpace(link) ||
                     string.IsNullOrWhiteSpace(publishDate))
@@ -322,7 +327,7 @@ namespace Jackett.Common.Indexers
                     { "episode", DETAIL_SEARCH_EPISODE },
                     { "season", DETAIL_SEARCH_SEASON }
                 });
-                
+
                 var seasonEpisodeIdentifier = string.Concat(
                     PrefixOrDefault("S", results.details["season"]).Trim(),
                     PrefixOrDefault("E", results.details["episode"]).Trim()
@@ -340,7 +345,7 @@ namespace Jackett.Common.Indexers
                         results.strippedTitle.Substring(strangeHyphenPosition + 1).Trim()
                     ).Trim();
                 }
-                                
+
                 return string.Concat(
                     results.strippedTitle.Trim(),
                     " ",
