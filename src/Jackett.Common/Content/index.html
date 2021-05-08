@@ -68,7 +68,6 @@
             </button>
         </div>
         <h3>Configured Indexers</h3>
-        <div id="filters"> </div>
         <div id="indexers"></div>
         <hr />
 
@@ -297,19 +296,6 @@
       <div class="setup-item-inputtags">
         <input class="form-control" type="text" value="{{{value}}}" {{#if pattern}} pattern="{{pattern}}"{{/if}}/>
       </div>
-    </script>
-
-    <script id="filters-indexer-tab" type="text/x-handlebars-template">
-        {{#if filters}}
-        <div class="navbar filters-indexer-div">
-          <ul id="jackett-select-filter" class="nav nav-tabs" role="tablist">
-              <li role="presentation"{{#if_eq active null}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" style="text-transform: capitalize;">all</a></li>
-              {{#each filters}}
-              <li role="presentation"{{#if_eq ../active this}} class="active"{{/if_eq}}><a href="" role="tab" aria-control="configured-indexer-datatable" data-toggle="tab" data-target="#configured-indexer-datatable" data-filter="{{id}}" style="text-transform: capitalize;">{{value}}</a></li>
-              {{/each}}
-          </ul>
-        </div>
-        {{/if}}
     </script>
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">

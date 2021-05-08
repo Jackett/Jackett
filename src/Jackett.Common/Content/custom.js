@@ -4,7 +4,6 @@ var indexers = [];
 var configuredIndexers = [];
 var unconfiguredIndexers = [];
 var configuredFilters = [];
-var currentFilterId = null;
 
 $.fn.inView = function () {
     if (!this.length) return false;
@@ -184,8 +183,7 @@ function reloadIndexers() {
 
         configureFilters(configuredIndexers);
         
-        applyFilterIndexersList(configuredIndexers, currentFilterId);
-        displayFilterIndexersList(configuredFilters, currentFilterId);
+        displayConfiguredIndexersList(configuredIndexers);
 
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         openSearchIfNecessary();
@@ -209,35 +207,6 @@ function configureFilters(indexers) {
     indexers.map(i => i.groups).reduce((a, g) => a.concat(g), []).sort()
       .map(g => { return { id: "group:" + g.toLowerCase(), apply: group_filter, value: g }})
       .forEach(add);
-}
-
-function displayFilterIndexersList(filters, current) {
-    var filtersTemplate = Handlebars.compile($("#filters-indexer-tab").html());
-    var filtersTab = $(filtersTemplate({
-      filters: filters,
-      active: current
-    }));
-
-    filtersTab.find('#jackett-select-filter [data-toggle]').on('shown.bs.tab', function (e) {
-      var filterId = $(this).data("filter");
-      applyFilterIndexersList(configuredIndexers, filterId);
-    });
-
-    $('#filters').empty();
-    $('#filters').append(filtersTab);
-    $('#filters').fadeIn();
-}
-
-function applyFilterIndexersList(indexers, filterId) {
-    var filter = configuredFilters.find(f => f.id == filterId);
-
-    if (filter) {
-      currentFilterId = filter.id;
-      displayConfiguredIndexersList(indexers.filter(filter.apply,filter));
-    } else {
-      currentFilterId = null;
-      displayConfiguredIndexersList(indexers);
-    }
 }
 
 function displayConfiguredIndexersList(indexers) {
@@ -546,8 +515,8 @@ function prepareSearchButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            window.location.hash = "search&tracker=" + id + (currentFilterId ? "&filter=" + encodeURIComponent(currentFilterId) : "");
-            showSearch(currentFilterId, id);
+            window.location.hash = "search&tracker=" + id;
+            showSearch(null, id);
         });
     });
 }
@@ -1370,8 +1339,8 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-search").click(function () {
-        showSearch(currentFilterId);
-        window.location.hash = "search" + (currentFilterId ? "&filter=" + encodeURIComponent(currentFilterId) : "");
+        showSearch();
+        window.location.hash = "search";
     });
 
     $("#view-jackett-logs").click(function () {
