@@ -35,6 +35,11 @@ namespace Jackett.Common.Indexers
         private const string NewTorrentsUrl = "secciones.php?sec=ultimos_torrents";
         private const string SearchUrl = "secciones.php";
 
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://www.mejortorrento.com/",
+            "https://mejortorrent.nocensor.space/"
+        };
+
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://www.mejortorrentt.net/",
             "http://www.mejortorrent.org/",
