@@ -6,9 +6,9 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
     [TestFixture]
     public class LanguageFuncTests
     {
-        private class LanguageIndexerStub : IndexerStub
+        private class IndexerStub : IndexerBaseStub
         {
-            public LanguageIndexerStub(string language)
+            public IndexerStub(string language)
             {
                 Language = language;
             }
@@ -24,19 +24,19 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
             var language = "en";
             var region = "US";
 
-            var lrLanguage = new LanguageIndexerStub($"{language.ToLower()}-{region.ToLower()}");
+            var lrLanguage = new IndexerStub(language: $"{language.ToLower()}-{region.ToLower()}");
             var LRFilterFunc = Language.ToFunc($"{language.ToUpper()}-{region.ToUpper()}");
             Assert.IsTrue(LRFilterFunc(lrLanguage));
 
-            var lRLanguage = new LanguageIndexerStub($"{language.ToLower()}-{region.ToUpper()}");
+            var lRLanguage = new IndexerStub(language: $"{language.ToLower()}-{region.ToUpper()}");
             var LrFilterFunc = Language.ToFunc($"{language.ToUpper()}-{region.ToLower()}");
             Assert.IsTrue(LrFilterFunc(lRLanguage));
 
-            var LrLanguage = new LanguageIndexerStub($"{language.ToUpper()}-{region.ToLower()}");
+            var LrLanguage = new IndexerStub(language: $"{language.ToUpper()}-{region.ToLower()}");
             var lRFilterFunc = Language.ToFunc($"{language.ToLower()}-{region.ToUpper()}");
             Assert.IsTrue(lRFilterFunc(LrLanguage));
 
-            var LRLanguage = new LanguageIndexerStub($"{language.ToUpper()}-{region.ToUpper()}");
+            var LRLanguage = new IndexerStub(language: $"{language.ToUpper()}-{region.ToUpper()}");
             var lrFilterFunc = Language.ToFunc($"{language.ToLower()}-{region.ToLower()}");
             Assert.IsTrue(lrFilterFunc(LRLanguage));
         }
@@ -47,9 +47,9 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
             var language = "en";
             var funcFilter = Language.ToFunc(language);
 
-            Assert.IsTrue(funcFilter(new LanguageIndexerStub(language)));
-            Assert.IsTrue(funcFilter(new LanguageIndexerStub($"{language}-region1")));
-            Assert.IsFalse(funcFilter(new LanguageIndexerStub($"language2-{language}")));
+            Assert.IsTrue(funcFilter(new IndexerStub(language: language)));
+            Assert.IsTrue(funcFilter(new IndexerStub(language: $"{language}-region1")));
+            Assert.IsFalse(funcFilter(new IndexerStub(language: $"language2-{language}")));
         }
     }
 }
