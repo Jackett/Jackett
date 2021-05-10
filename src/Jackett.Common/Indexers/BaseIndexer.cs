@@ -36,6 +36,16 @@ namespace Jackett.Common.Indexers
         public virtual bool IsConfigured { get; protected set; }
         public virtual string[] Tags { get; protected set; }
 
+        private static readonly TimeSpan HealthyStatusValidity = TimeSpan.FromMinutes(10);
+        private static readonly TimeSpan ErrorStatusValidity = TimeSpan.FromSeconds(1);
+        private static readonly TimeSpan MaxStatusValidity = TimeSpan.FromDays(1);
+
+        private int errorCount;
+        private DateTime expireAt;
+
+        public virtual bool IsHealthy => errorCount == 0 && expireAt > DateTime.Now;
+        public virtual bool IsFailing => errorCount > 0 && expireAt > DateTime.Now;
+
         protected Logger logger;
         protected IIndexerConfigurationService configurationService;
         protected IProtectionService protectionService;
@@ -386,10 +396,14 @@ namespace Jackett.Common.Indexers
                 results = FilterResults(query, results);
                 results = FixResults(query, results);
                 cacheService.CacheResults(this, query, results.ToList());
+                errorCount = 0;
+                expireAt = DateTime.Now.Add(HealthyStatusValidity);
                 return new IndexerResult(this, results, false);
             }
             catch (Exception ex)
             {
+                var delay = Math.Min(MaxStatusValidity.TotalSeconds, ErrorStatusValidity.TotalSeconds * Math.Pow(2, errorCount++));
+                expireAt = DateTime.Now.AddSeconds(delay);
                 throw new IndexerException(this, ex);
             }
         }

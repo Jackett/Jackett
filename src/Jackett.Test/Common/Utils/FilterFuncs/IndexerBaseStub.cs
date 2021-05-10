@@ -38,6 +38,10 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
 
         public virtual string[] Tags => throw TestExceptions.UnexpectedInvocation;
 
+        public virtual bool IsHealthy => throw TestExceptions.UnexpectedInvocation;
+
+        public virtual bool IsFailing => throw TestExceptions.UnexpectedInvocation;
+
         public virtual Task<ConfigurationData> GetConfigurationForSetup() => throw TestExceptions.UnexpectedInvocation;
 
         public virtual Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson) => throw TestExceptions.UnexpectedInvocation;
