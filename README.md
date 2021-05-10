@@ -586,7 +586,7 @@ To get all Jackett indexers including their capabilities you can use `t=indexers
 
 ### Filter indexers
 
-Another special "filter" indexer is avaible at `/api/v2.0/indexers/<filter>/results/torznab`
+Another special "filter" indexer is available at `/api/v2.0/indexers/<filter>/results/torznab`
 It will query the configured indexers that match the `<filter>` expression criterias and return the combined results as "all".
 
 Supported filters
