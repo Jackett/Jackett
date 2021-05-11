@@ -625,7 +625,7 @@ namespace Jackett.Common.Indexers
             };
 
             //Sanitize
-            title = title.Replace("-", "").Replace("(", "").Replace(")", "");
+            title = title.Replace("-", "");
             title = Regex.Replace(title, @"\s+", " ");
 
             if (releaseType == ReleaseType.Tv)
