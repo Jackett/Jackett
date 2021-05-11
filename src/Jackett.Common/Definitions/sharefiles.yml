@@ -159,7 +159,7 @@ search:
         "a#double-btn": 2
         "*": 1
     minimumratio:
-      text: 1000.0
+      text: 1.0
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
