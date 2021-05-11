@@ -36,15 +36,13 @@ namespace Jackett.Common.Indexers
         public virtual bool IsConfigured { get; protected set; }
         public virtual string[] Tags { get; protected set; }
 
-        private static readonly TimeSpan HealthyStatusValidity = TimeSpan.FromMinutes(10);
-        private static readonly TimeSpan ErrorStatusValidity = TimeSpan.FromSeconds(1);
+        // https://github.com/Jackett/Jackett/issues/3292#issuecomment-838586679
+        private static readonly TimeSpan HealthyStatusValidity = TimeSpan.FromMinutes(70); // Twice cache TTL
+        private static readonly TimeSpan ErrorStatusValidity = TimeSpan.FromMinutes(10);
         private static readonly TimeSpan MaxStatusValidity = TimeSpan.FromDays(1);
 
         private int errorCount;
         private DateTime expireAt;
-
-        public virtual bool IsHealthy => errorCount == 0 && expireAt > DateTime.Now;
-        public virtual bool IsFailing => errorCount > 0 && expireAt > DateTime.Now;
 
         protected Logger logger;
         protected IIndexerConfigurationService configurationService;
@@ -70,6 +68,10 @@ namespace Jackett.Common.Indexers
                     SaveConfig();
             }
         }
+
+        public virtual bool IsHealthy => errorCount == 0 && expireAt > DateTime.Now;
+        public virtual bool IsFailing => errorCount > 0 && expireAt > DateTime.Now;
+
 
         public abstract TorznabCapabilities TorznabCaps { get; protected set; }
 
@@ -102,6 +104,8 @@ namespace Jackett.Common.Indexers
         {
             CookieHeader = string.Empty;
             IsConfigured = false;
+            errorCount = 0;
+            expireAt = DateTime.MinValue;
         }
 
         public virtual void SaveConfig() => configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
