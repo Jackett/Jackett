@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Server", "Jackett.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.IntegrationTests", "Jackett.IntegrationTests\Jackett.IntegrationTests.csproj", "{0250DEAA-ED2E-4F72-BE76-D92D80B40080}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Performance", "Jackett.Performance\Jackett.Performance.csproj", "{70202B1F-6F30-402E-AAB9-72444C6A5092}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{0250DEAA-ED2E-4F72-BE76-D92D80B40080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0250DEAA-ED2E-4F72-BE76-D92D80B40080}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0250DEAA-ED2E-4F72-BE76-D92D80B40080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70202B1F-6F30-402E-AAB9-72444C6A5092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70202B1F-6F30-402E-AAB9-72444C6A5092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70202B1F-6F30-402E-AAB9-72444C6A5092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70202B1F-6F30-402E-AAB9-72444C6A5092}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

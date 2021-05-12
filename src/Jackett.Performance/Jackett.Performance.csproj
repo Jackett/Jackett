@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net5.0;net461</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.12.1" />
+    <PackageReference Include="NLog" Version="4.7.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Jackett.Server\Jackett.Server.csproj" />
+  </ItemGroup>
+</Project>

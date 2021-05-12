@@ -395,6 +395,7 @@ namespace Jackett.Common.Indexers
         }
 
         protected abstract Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query);
+        public override string ToString() => Id;
     }
 
     public abstract class BaseWebIndexer : BaseIndexer, IWebIndexer
