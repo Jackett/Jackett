@@ -54,6 +54,8 @@
         </div>
 
         <div class="pull-right">
+            <div id="filters" class="btn-group btn-group-sm">
+            </div>
             <button id="jackett-add-indexer" class="btn btn-success btn-sm">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
             </button>
@@ -699,6 +701,17 @@
                 </div>
             </div>
         </div>
+    </script>
+
+    <script id="jackett-filters" type="text/x-handlebars-template">
+        <button id="jackett-filters-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="jackett-filters-dropdown">
+            <li class="{{#if_eq active null}}active{{/if_eq}}"><a href="#">All</a></li>
+            {{#each filters}}
+            <li class="{{#if_eq ../active id}}active{{/if_eq}}"><a href="#indexers&filter={{id}}" data-id="{{id}}">{{id}}</a></li>
+            {{/each}}
+        </ul>
     </script>
 
     <script id="spinner" type="text/x-handlebars-template">
