@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
             EnableConfigurableRetryAttempts();
 
             var ConfigApiEndpoint = new StringConfigurationItem("API URL") { Value = "https://torrentapi.org/pubapi_v2.php" };
-            ConfigData.AddDynamic("apiEndpoint", ConfigApiEndpoint);
+            configData.AddDynamic("apiEndpoint", ConfigApiEndpoint);
 
         }
 
