@@ -6,7 +6,6 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     internal class ConfigurationDataRarBG : ConfigurationData
     {
         public StringConfigurationItem ApiLink { get; private set; }
-        public StringConfigurationItem StaticLink { get; private set; }
 
         public ConfigurationDataRarBG() : base()
         {
