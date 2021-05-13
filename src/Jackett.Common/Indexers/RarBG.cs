@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers
         private DateTime _lastTokenFetch;
         private string _sort;
 
-        private new ConfigurationDataRarBG configData => (ConfigurationDataRarBG)base.configData;
+        private new ConfigurationDataRarBG Configuration => (ConfigurationDataRarBG)base.configData;
 
         public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
