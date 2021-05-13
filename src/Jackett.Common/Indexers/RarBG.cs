@@ -113,7 +113,6 @@ namespace Jackett.Common.Indexers
             _appId = "jackett_" + EnvironmentUtil.JackettVersion();
 
             EnableConfigurableRetryAttempts();
-
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
