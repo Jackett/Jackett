@@ -10,11 +10,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -22,14 +22,13 @@ namespace Jackett.Common.Indexers
     public class RarBG : BaseWebIndexer
     {
         // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
-        private const string ApiEndpoint = "https://torrentapi.org/pubapi_v2.php";
         private readonly TimeSpan TokenDuration = TimeSpan.FromMinutes(14); // 15 minutes expiration
         private readonly string _appId;
         private string _token;
         private DateTime _lastTokenFetch;
         private string _sort;
 
-        private new ConfigurationData configData => base.configData;
+        private new ConfigurationDataRarBG configData => (ConfigurationDataRarBG)base.configData;
 
         public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
@@ -61,7 +60,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationData())
+                   configData: new ConfigurationDataRarBG())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
             Language = "en-us";
@@ -271,7 +270,7 @@ namespace Jackett.Common.Indexers
             var cats = string.Join(";", querycats);
             qc.Add("category", cats);
 
-            return ApiEndpoint + "?" + qc.GetQueryString();
+            return Configuration.ApiLink.Value + "?" + qc.GetQueryString();
         }
 
         private async Task RenewalTokenAsync(bool force = false)
@@ -283,7 +282,7 @@ namespace Jackett.Common.Indexers
                     { "get_token", "get_token" },
                     { "app_id", _appId }
                 };
-                var tokenUrl = ApiEndpoint + "?" + qc.GetQueryString();
+                var tokenUrl = Configuration.ApiLink.Value + "?" + qc.GetQueryString();
                 var result = await RequestWithCookiesAndRetryAsync(tokenUrl);
                 var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
