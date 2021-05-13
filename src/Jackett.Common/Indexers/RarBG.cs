@@ -69,6 +69,9 @@ namespace Jackett.Common.Indexers
 
             webclient.requestDelay = 2.5; // The api has a 1req/2s limit
 
+            var ConfigApiEndpoint = new StringConfigurationItem("API URL") { Value = "https://torrentapi.org/pubapi_v2.php" };
+            configData.AddDynamic("apiEndpoint", ConfigApiEndpoint);
+
             var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
             {
                 {"last", "created"},
@@ -110,9 +113,6 @@ namespace Jackett.Common.Indexers
             _appId = "jackett_" + EnvironmentUtil.JackettVersion();
 
             EnableConfigurableRetryAttempts();
-
-            var ConfigApiEndpoint = new StringConfigurationItem("API URL") { Value = "https://torrentapi.org/pubapi_v2.php" };
-            configData.AddDynamic("apiEndpoint", ConfigApiEndpoint);
 
         }
 
