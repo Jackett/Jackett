@@ -84,6 +84,10 @@ function tag_filter(indexer) {
   return indexer.tags.map(t => t.toLowerCase()).indexOf(this.value.toLowerCase()) > -1;
 }
 
+function state_filter(indexer) {
+  return indexer.state == this.value;
+}
+
 function getJackettConfig(callback) {
     api.getServerConfig(callback).fail(function () {
         doNotify("Error loading Jackett settings, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
@@ -210,6 +214,9 @@ function configureFilters(indexers) {
       if (!indexers.every(f.apply, f) && indexers.some(f.apply, f))
         availableFilters.push(f);
     }
+
+    availableFilters.push({id: "test:passed", apply: state_filter, value: "success" });
+    availableFilters.push({id: "test:failed", apply: state_filter, value: "error" });
 
     ["public", "private", "semi-private"]
       .map(t => { return { id: "type:" + t, apply: type_filter, value: t } })
@@ -606,6 +613,10 @@ function updateTestState(id, state, message, parent) {
     }).rows().invalidate('dom');
     if (state != "inprogres")
         dt.draw();
+
+    var indexer = configuredIndexers.find(x => x.id == id);
+    if (indexer)
+        indexer.state = state;
 }
 
 function testIndexer(id, notifyResult) {
