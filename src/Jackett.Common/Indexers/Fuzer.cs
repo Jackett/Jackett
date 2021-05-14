@@ -79,6 +79,7 @@ namespace Jackett.Common.Indexers
             // סדרות
             AddCategoryMapping(8, TorznabCatType.TVSD, "סדרות");
             AddCategoryMapping(10, TorznabCatType.TVHD, "סדרות HD");
+            AddCategoryMapping(100, TorznabCatType.TVUHD, "סדרות UHD");
             AddCategoryMapping(62, TorznabCatType.TVSD, "סדרות ישראליות");
             AddCategoryMapping(63, TorznabCatType.TVHD, "סדרות ישראליות HD");
             AddCategoryMapping(84, TorznabCatType.TVOther, "סדרות מדובבות");
