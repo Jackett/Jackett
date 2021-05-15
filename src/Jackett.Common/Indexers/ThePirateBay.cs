@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
             "https://piratetoday.xyz/",
             "https://piratenow.xyz/",
             "https://piratesbaycc.com/",
-            "https://pirateproxy.ltda/"
+            "https://pirateproxy.ltda/",
+            "http://piratebayztemzmv.onion/" // http only, as mentioned in https://thepiratebay.org
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {

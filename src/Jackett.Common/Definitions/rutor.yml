@@ -9,6 +9,7 @@ links:
   - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
   - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
   - https://rutor.nocensor.space/
+  - http://rutorc6mqdinc4cz.onion/ # http only, as mentioned in http://rutor.info/torrent/472
 legacylinks:
   - http://live-rutor.org/ # domain expired 9 Feb 2020
   - http://new-rutor.org/ # ERR_NAME_NOT_RESOLVED
