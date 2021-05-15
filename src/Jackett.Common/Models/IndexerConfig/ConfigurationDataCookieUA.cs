@@ -17,7 +17,7 @@ namespace Jackett.Common.Models.IndexerConfig
             Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
             UserAgent = new StringConfigurationItem("User-Agent");
             UserAgentInstructions = new DisplayInfoConfigurationItem("User-Agent Instructions", 
-            "From the same place you fetched the cookie, find 'user-agent:' in the Request Headers section, select and copy the whole user-agent string and paste here."
+            "From the same place you fetched the cookie, find 'user-agent:' in the Request Headers section, select and copy the whole user-agent string and paste here.");
         }
     }
 }
