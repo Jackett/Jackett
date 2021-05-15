@@ -165,7 +165,7 @@ namespace Jackett.Common.Indexers
         {
             _emulatedBrowserHeaders.Clear();
 
-            _emulatedBrowserHeaders.Add("User-Agent", ConfigUserAgent);
+            _emulatedBrowserHeaders.Add("User-Agent", UserAgent);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
