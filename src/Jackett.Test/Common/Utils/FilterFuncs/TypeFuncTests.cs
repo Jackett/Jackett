@@ -1,4 +1,5 @@
 using NUnit.Framework;
+
 using static Jackett.Common.Utils.FilterFunc;
 
 namespace Jackett.Test.Common.Utils.FilterFuncs
@@ -6,9 +7,9 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
     [TestFixture]
     public class TypeFuncTests
     {
-        private class TypeIndexerStub : IndexerStub
+        private class IndexerStub : IndexerBaseStub
         {
-            public TypeIndexerStub(string type)
+            public IndexerStub(string type)
             {
                 Type = type;
             }
@@ -23,8 +24,8 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
         {
             var typeId = "type-id";
 
-            var lowerType = new TypeIndexerStub(typeId.ToLower());
-            var upperType = new TypeIndexerStub(typeId.ToUpper());
+            var lowerType = new IndexerStub(type: typeId.ToLower());
+            var upperType = new IndexerStub(type: typeId.ToUpper());
 
             var upperFilterFunc = Type.ToFunc(typeId.ToUpper());
             Assert.IsTrue(upperFilterFunc(lowerType));
@@ -42,11 +43,9 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
 
             var funcFilter = Type.ToFunc($"{typeId}");
 
-            Assert.IsFalse(funcFilter(new TypeIndexerStub($"{typeId}suffix")));
-            Assert.IsFalse(funcFilter(new TypeIndexerStub($"prefix{typeId}")));
-            Assert.IsFalse(funcFilter(new TypeIndexerStub($"prefix{typeId}suffix")));
+            Assert.IsFalse(funcFilter(new IndexerStub(type: $"{typeId}suffix")));
+            Assert.IsFalse(funcFilter(new IndexerStub(type: $"prefix{typeId}")));
+            Assert.IsFalse(funcFilter(new IndexerStub(type: $"prefix{typeId}suffix")));
         }
     }
-
-
 }
