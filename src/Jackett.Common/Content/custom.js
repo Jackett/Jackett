@@ -413,21 +413,25 @@ function displayUnconfiguredIndexersList() {
             $('#select-indexer-modal button').attr('disabled', true);
 
             addIndexers(selectedIndexers,
-                function () {
-                    $.notifyClose();
-                    $('#select-indexer-modal').modal('hide');
-                    doNotify("Selected indexers successfully added.", "success", "glyphicon glyphicon-ok");
-                    $('#select-indexer-modal button').attr('disabled', false);
-                },
-                function (e, xhr, options, err) {
-                    doNotify("Configuration failed", "danger", "glyphicon glyphicon-alert");
-                });
+                addSelectedIndexersSuccess,
+                addSelectedIndexersError);
         } else {
             doNotify("Error: You must select more than one indexer", "danger", "glyphicon glyphicon-alert");
         }
     });
 
     UnconfiguredIndexersDialog.modal("show");
+}
+
+function addSelectedIndexersSuccess() {
+    $.notifyClose();
+    $('#select-indexer-modal').modal('hide');
+    doNotify("Selected indexers successfully added.", "success", "glyphicon glyphicon-ok");
+    $('#select-indexer-modal button').attr('disabled', false);
+}
+
+function addSelectedIndexersError(e, xhr, options, err) {
+    doNotify("Configuration failed", "danger", "glyphicon glyphicon-alert");
 }
 
 function addCheckOnCellClick() {
@@ -442,10 +446,12 @@ function addCheckOnCellClick() {
         }));
 }
 
-function addIndexers(selectedIndexerList, callback, errorCallback) {
+function addIndexers(selectedIndexerList, successCallback, errorCallback) {
     $(document).ajaxStop(function () {
-        $(this).remove(); // Keep future AJAX events from effecting this
-        callback();
+        if (successCallback == addSelectedIndexersSuccess) {
+            $(document).ajaxStop().unbind(); // Keep future AJAX events from effecting this
+            successCallback();
+        }
     }).ajaxError(function (e, xhr, options, err) {
         errorCallback(e, xhr, options, err);
     });
@@ -490,7 +496,7 @@ function addIndexer(indexerId, displayNotification) {
             if (data == undefined) {
                 reloadIndexers();
                 if (displayNotification) {
-                    doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
+                    doNotify("Successfully configured " + indexerId, "success", "glyphicon glyphicon-ok");
                 }
             } else if (data.result == "error") {
                 if (data.config) {
