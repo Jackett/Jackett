@@ -268,9 +268,9 @@ namespace Jackett.Common.Indexers
         // Warning 1998 is async method with no await calls inside
         // TODO: Remove pragma by wrapping return in Task.FromResult and removing async
 
-        #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
-        #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // Provider not yet configured
             IsConfigured = false;
@@ -320,7 +320,8 @@ namespace Jackett.Common.Indexers
             }
 
             // Multiple page support
-            var nextPage = 1; var followingPages = true;
+            var nextPage = 1;
+            var followingPages = true;
             do
             {
 
@@ -393,7 +394,7 @@ namespace Jackett.Common.Indexers
 
                                 return release;
                             }));
-                            nextPage++;
+                        nextPage++;
                     }
                     else
                     {
@@ -409,9 +410,9 @@ namespace Jackett.Common.Indexers
                 }
 
                 // Stop ?
-                if(query.IsTmdbQuery && MaxPagesBypassForTMDB)
+                if (query.IsTmdbQuery && MaxPagesBypassForTMDB)
                 {
-                    if(nextPage > MaxPagesHardLimit)
+                    if (nextPage > MaxPagesHardLimit)
                     {
                         logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to page hard limit reached.");
                         break;
@@ -421,15 +422,17 @@ namespace Jackett.Common.Indexers
                 }
                 else
                 {
-                    if(torrentsCount < 32)
+                    if (torrentsCount < 32)
                     {
                         logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due max available results reached.");
                         break;
-                    } else if(nextPage > MaxPages)
+                    }
+                    else if (nextPage > MaxPages)
                     {
                         logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to page limit reached.");
                         break;
-                    } else if (query.IsTest)
+                    }
+                    else if (query.IsTest)
                     {
                         logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to index test query.");
                         break;
@@ -440,8 +443,8 @@ namespace Jackett.Common.Indexers
 
             // Check if there is duplicate and return unique rows - Xthor API can be very buggy !
             var uniqReleases = releases.GroupBy(x => x.Guid).Select(x => x.First()).ToList();
-            var errorPercentage = 1 - ((double) uniqReleases.Count() / releases.Count());
-            if(errorPercentage >= 0.25)
+            var errorPercentage = 1 - ((double)uniqReleases.Count() / releases.Count());
+            if (errorPercentage >= 0.25)
             {
                 logger.Warn("\nXthor - High percentage error detected: " + string.Format("{0:0.0%}", errorPercentage) + "\nWe strongly recommend that you lower max page to 1, as there is no benefit to grab additionnals.\nTracker API sent us duplicated pages with same results, even if we deduplicate returned rows, please consider to lower as it's unnecessary and increase time used for query for the same result.");
             }

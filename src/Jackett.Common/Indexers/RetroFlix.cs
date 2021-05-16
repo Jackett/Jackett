@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers
 
             // requestDelay for API Limit (1 request per 2 seconds)
             webclient.requestDelay = 2.1;
- 
+
             AddCategoryMapping(401, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(402, TorznabCatType.TV, "TV Series");
             AddCategoryMapping(406, TorznabCatType.AudioVideo, "Music Videos");

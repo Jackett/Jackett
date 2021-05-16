@@ -5,8 +5,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -80,7 +80,8 @@ namespace Jackett.Common.Indexers
                 throw new WebException($"AniLibria search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             var results = ParseApiResults(response.ContentString);
-            return results.Where(release => query.MatchQueryStringAND(release.Title, null, title));;
+            return results.Where(release => query.MatchQueryStringAND(release.Title, null, title));
+            ;
         }
 
         private async Task<IEnumerable<ReleaseInfo>> FetchNewReleases()
@@ -97,7 +98,8 @@ namespace Jackett.Common.Indexers
             return ParseApiResults(response.ContentString);
         }
 
-        private string composeTitle(dynamic json) {
+        private string composeTitle(dynamic json)
+        {
             var title = json.names.ru;
             title += " / " + json.names.en;
             if (json.alternative is string)
@@ -109,7 +111,8 @@ namespace Jackett.Common.Indexers
         private List<ReleaseInfo> ParseApiResults(string json)
         {
             var releases = new List<ReleaseInfo>();
-            foreach (dynamic r in JArray.Parse(json)) {
+            foreach (dynamic r in JArray.Parse(json))
+            {
                 var baseRelease = new ReleaseInfo
                 {
                     Title = composeTitle(r),
@@ -117,12 +120,13 @@ namespace Jackett.Common.Indexers
                     Details = new Uri(SiteLink + "/release/" + r.code + ".html"),
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
-                    Category = new []
+                    Category = new[]
                     {
                         TorznabCatType.TVAnime.ID
                     }
                 };
-                foreach (var t in r.torrents.list) {
+                foreach (var t in r.torrents.list)
+                {
                     var release = (ReleaseInfo)baseRelease.Clone();
                     release.Title += " [" + t.quality["string"] + "] - " + t.series["string"];
                     release.Size = t.total_size;

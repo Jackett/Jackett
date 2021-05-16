@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers
                        {
                            MovieSearchParam.Q
                        },
-                        MusicSearchParams = new List<MusicSearchParam>
+                       MusicSearchParams = new List<MusicSearchParam>
                        {
                            MusicSearchParam.Q
                        },

@@ -230,7 +230,7 @@ namespace Jackett.Common.Indexers
                     var link = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
 
                     var descrSplit = row.QuerySelector("div.sub").TextContent.Split('|');
-                    var dateSplit = descrSplit.Last().Split(new [] {" by "}, StringSplitOptions.None);
+                    var dateSplit = descrSplit.Last().Split(new[] { " by " }, StringSplitOptions.None);
                     var publishDate = DateTimeUtil.FromTimeAgo(dateSplit.First());
                     var description = descrSplit.Length > 1 ? "Tags: " + descrSplit.First().Trim() : "";
                     description += dateSplit.Length > 1 ? " Uploaded by: " + dateSplit.Last().Trim() : "";

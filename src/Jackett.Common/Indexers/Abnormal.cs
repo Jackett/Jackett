@@ -45,7 +45,8 @@ namespace Jackett.Common.Indexers
                    name: "Abnormal",
                    description: "General French Private Tracker",
                    link: "https://abnormal.ws/",
-                   caps: new TorznabCapabilities {
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep

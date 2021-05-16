@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                 cacheService: cs,
                 configData: new ConfigurationDataPasskey()
                 )
-            {
+        {
             Encoding = Encoding.UTF8;
             Language = "fr-fr";
             Type = "semi-private";
@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
                 {"ENGLISH", "ENGLISH"},
                 {"MULTI.ENGLISH", "MULTI.ENGLISH" },
                 {"VOSTFR", "VOSTFR"},
-                {"MULTI.VOSTFR", "MULTI.VOSTFR"}                
+                {"MULTI.VOSTFR", "MULTI.VOSTFR"}
             })
             { Value = "FRENCH" };
             ;

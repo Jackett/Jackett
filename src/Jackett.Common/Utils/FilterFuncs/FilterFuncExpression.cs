@@ -37,7 +37,7 @@ namespace Jackett.Common.Utils.FilterFuncs
                 return Not(FromFilter(source.Substring(1)));
             if (source.Contains(Separator))
             {
-                var parts = source.Split(new[] {Separator}, 2);
+                var parts = source.Split(new[] { Separator }, 2);
                 if (parts.Length == 2 && components.TryGetValue(parts[0], out var toFunc))
                     return toFunc(parts[1]);
             }

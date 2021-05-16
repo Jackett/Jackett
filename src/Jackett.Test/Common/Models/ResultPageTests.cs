@@ -50,8 +50,8 @@ namespace Jackett.Test.Common.Models
                 {
                     Link = link
                 })
-                {
-                    Releases = new List<ReleaseInfo>
+            {
+                Releases = new List<ReleaseInfo>
                     {
                         new ReleaseInfo // these fields are from websites and they can be problematic
                         {
@@ -69,7 +69,7 @@ namespace Jackett.Test.Common.Models
                             Origin = new TestIndexer()
                         }
                     }
-                };
+            };
             var xml = resultPage.ToXml(link);
 
             Assert.AreEqual(5, Regex.Matches(xml, validText).Count);

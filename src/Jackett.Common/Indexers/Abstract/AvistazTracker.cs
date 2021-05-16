@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers.Abstract
         {
             var cats = new List<int>();
             var resolution = row.Value<string>("video_quality");
-            switch(row.Value<string>("type"))
+            switch (row.Value<string>("type"))
             {
                 case "Movie":
                     cats.Add(resolution switch

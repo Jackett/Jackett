@@ -274,7 +274,8 @@ namespace Jackett.Common.Indexers
                             for (var i = releaseTags.Count - 1; i >= 0; i--)
                             {
                                 var releaseTag = releaseTags[i];
-                                if (VolumeTagMappings.ContainsKey(releaseTag)) {
+                                if (VolumeTagMappings.ContainsKey(releaseTag))
+                                {
                                     var volumeFactor = VolumeTagMappings[releaseTag];
                                     release.DownloadVolumeFactor = volumeFactor.DownloadVolumeFactor;
                                     release.UploadVolumeFactor = volumeFactor.UploadVolumeFactor;

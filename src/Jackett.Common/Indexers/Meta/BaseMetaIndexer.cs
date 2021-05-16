@@ -16,7 +16,7 @@ namespace Jackett.Common.Indexers.Meta
     {
         protected BaseMetaIndexer(string name, string id, string description,
                                   IFallbackStrategyProvider fallbackStrategyProvider,
-                                  IResultFilterProvider resultFilterProvider,IIndexerConfigurationService configService,
+                                  IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
                                   WebClient client, Logger logger, ConfigurationData configData, IProtectionService ps,
                                   ICacheService cs, Func<IIndexer, bool> filter)
             : base(id: id,

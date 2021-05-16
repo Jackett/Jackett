@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 using System.Xml;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -353,7 +353,7 @@ namespace Jackett.Common.Indexers
                 ).Trim();
             }
 
-            private static (string strippedTitle, Dictionary<string, string> details) SearchTitleForDetails(string title, Dictionary<string, Dictionary<string,string>> definition)
+            private static (string strippedTitle, Dictionary<string, string> details) SearchTitleForDetails(string title, Dictionary<string, Dictionary<string, string>> definition)
             {
                 Dictionary<string, string> details = new Dictionary<string, string>();
                 foreach (var search in definition)

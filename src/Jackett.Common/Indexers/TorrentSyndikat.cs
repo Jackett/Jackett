@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection {{"apikey", ConfigData.Key.Value}};
+            var queryCollection = new NameValueCollection { { "apikey", ConfigData.Key.Value } };
 
             queryCollection.Add("limit", "50"); // Default 30
             //queryCollection.Add("ponly", true); // Torrents with products only
@@ -162,7 +162,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in jsonContent.Value<JArray>("rows"))
                 {
-                    var dateTime = new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc);
+                    var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
                     var id = row.Value<string>("id");
                     var details = new Uri(SiteLink + "details.php?id=" + id);

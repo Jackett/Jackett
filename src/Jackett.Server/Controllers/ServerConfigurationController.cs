@@ -44,7 +44,7 @@ namespace Jackett.Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult AdminPassword([FromBody]string password)
+        public IActionResult AdminPassword([FromBody] string password)
         {
             var oldPassword = serverConfig.AdminPassword;
             if (string.IsNullOrEmpty(password))
@@ -71,7 +71,7 @@ namespace Jackett.Server.Controllers
 
         [ActionName("Config")]
         [HttpPost]
-        public IActionResult UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
+        public IActionResult UpdateConfig([FromBody] Common.Models.DTO.ServerConfig config)
         {
             var webHostRestartNeeded = false;
 

@@ -17,7 +17,7 @@ namespace Jackett.Common.Models.IndexerConfig
         public HiddenStringConfigurationItem CookieHeader { get; private set; } = new HiddenStringConfigurationItem(name: "CookieHeader");
         public HiddenStringConfigurationItem LastError { get; private set; } = new HiddenStringConfigurationItem(name: "LastError");
         public StringConfigurationItem SiteLink { get; private set; } = new StringConfigurationItem(name: "Site Link");
-        public TagsConfigurationItem Tags { get; private set; } = new TagsConfigurationItem(name: "Tags", charSet:"A-Za-z0-9\\-\\._~");
+        public TagsConfigurationItem Tags { get; private set; } = new TagsConfigurationItem(name: "Tags", charSet: "A-Za-z0-9\\-\\._~");
 
         public ConfigurationData()
         {

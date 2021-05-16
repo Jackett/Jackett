@@ -139,7 +139,7 @@ namespace Jackett.Server.Controllers
 
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
             {
-                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, 
+                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201,
                     $"{resultController.CurrentIndexer.Id} does not support the requested query. " +
                     "Please check the capabilities (t=caps) and make sure the search mode and parameters are supported.");
 
@@ -302,7 +302,7 @@ namespace Jackett.Server.Controllers
 
         [Route("[action]/{ignored?}")]
         [HttpGet]
-        public async Task<IActionResult> Torznab([FromQuery]TorznabRequest request)
+        public async Task<IActionResult> Torznab([FromQuery] TorznabRequest request)
         {
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -482,7 +482,7 @@ namespace Jackett.Server.Controllers
 
         [Route("[action]/{ignored?}")]
         [HttpGet]
-        public async Task<TorrentPotatoResponse> Potato([FromQuery]TorrentPotatoRequest request)
+        public async Task<TorrentPotatoResponse> Potato([FromQuery] TorrentPotatoRequest request)
         {
             var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 

@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
             var details = titleRow.QuerySelector("a[href^=\"details.php?id=\"]:has(span)");
             var detailsLink = new Uri(SiteLink + details.GetAttribute("href"));
             var encodedDownloadLink = detailsRow.QuerySelector("a[id^=\"download_\"]").GetAttribute("data-href");
-            var siteDownloadLink =  new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
+            var siteDownloadLink = new Uri(SiteLink + Uri.UnescapeDataString(StringUtil.FromBase64(encodedDownloadLink)));
             var infoHash = HttpUtility.ParseQueryString(siteDownloadLink.Query)["id"];
             var posterStr = detailsRow.QuerySelector("img[src^=\"./imgtorrent/\"]")?.GetAttribute("src");
             var poster = !string.IsNullOrEmpty(posterStr) ? new Uri(SiteLink + posterStr) : null;
@@ -228,10 +228,10 @@ namespace Jackett.Common.Indexers
                 {
                     return releases;
                 }
-                for (var i = 0; i < rows.Length; i+=2)
+                for (var i = 0; i < rows.Length; i += 2)
                 {
                     // First row contains table, the second row contains the rest of the details
-                    var releaseInfo = ParseRow(rows[i], rows[i+1]);
+                    var releaseInfo = ParseRow(rows[i], rows[i + 1]);
                     releases.Add(releaseInfo);
                 }
             }

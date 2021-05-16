@@ -157,7 +157,7 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchUrl;
 
-            if (((BoolConfigurationItem) configData.GetDynamic("freeleech")).Value)
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
                 searchUrl += "facets/tags%3AFREELEECH/";
 
             if (query.IsImdbQuery)

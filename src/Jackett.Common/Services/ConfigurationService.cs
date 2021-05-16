@@ -91,7 +91,7 @@ namespace Jackett.Common.Services
             {
                 // In cases where the app data folder is the same as "$(cwd)/Jackett" we don't need to perform a migration
                 var fullConfigPath = Path.GetFullPath("Jackett");
-                if (GetAppDataFolder() != fullConfigPath && ! File.Exists(Path.Combine(fullConfigPath, "jackett")))
+                if (GetAppDataFolder() != fullConfigPath && !File.Exists(Path.Combine(fullConfigPath, "jackett")))
                 {
                     PerformMigration(fullConfigPath);
                 }
@@ -135,7 +135,8 @@ namespace Jackett.Common.Services
             }
 
             // Don't remove configs that have been migrated to the same folder
-            if (GetAppDataFolder() != oldDirectory) {
+            if (GetAppDataFolder() != oldDirectory)
+            {
                 Directory.Delete(oldDirectory, true);
             }
         }

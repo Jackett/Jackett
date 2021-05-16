@@ -22,7 +22,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                     {"6", "VP9"},
                     {"4", "XviD"}
                 })
-            { Values = new [] { "0", "1", "5", "2", "3", "6", "4" } };
+            { Values = new[] { "0", "1", "5", "2", "3", "6", "4" } };
 
             Mediums = new MultiSelectConfigurationItem("Medium", new Dictionary<string, string>()
                 {
@@ -33,14 +33,14 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                     {"5", "Remux"},
                     {"6", "WEB-DL"}
                 })
-            { Values = new [] { "0", "1", "4", "3", "5", "6" } };
+            { Values = new[] { "0", "1", "4", "3", "5", "6" } };
 
             Origins = new MultiSelectConfigurationItem("Origin", new Dictionary<string, string>()
                 {
                     {"0", "Undefined"},
                     {"1", "Internal"}
                 })
-            { Values = new [] { "0", "1" } };
+            { Values = new[] { "0", "1" } };
         }
     }
 }

@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
                     else if ((bool?)torrent.polish == true)
                         descriptions.Add("Language: pl");
 
-                    if (language == "pl" && (((BoolConfigurationItem) configData.GetDynamic("LanguageTitle")).Value))
+                    if (language == "pl" && (((BoolConfigurationItem)configData.GetDynamic("LanguageTitle")).Value))
                         title += " POLISH";
 
                     var description = descriptions.Any() ? string.Join("<br />\n", descriptions) : null;

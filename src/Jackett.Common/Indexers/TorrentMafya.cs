@@ -36,7 +36,8 @@ namespace Jackett.Common.Indexers
                    name: "TorrentMafya",
                    description: "TorrentMafya is a Turkish general torrent tracker ",
                    link: "https://www.torrentmafya.org/",
-                   caps: new TorznabCapabilities {
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -57,7 +58,7 @@ namespace Jackett.Common.Indexers
             Language = "tr-tr";
             Type = "public";
 
-            AddCategoryMapping("games", TorznabCatType.PCGames,"Oyun");
+            AddCategoryMapping("games", TorznabCatType.PCGames, "Oyun");
             AddCategoryMapping("programs", TorznabCatType.PC, "Program");
             AddCategoryMapping("movies", TorznabCatType.Movies, "Film");
             AddCategoryMapping("tv", TorznabCatType.TV, "Dizi");
@@ -97,17 +98,20 @@ namespace Jackett.Common.Indexers
             if (classes.Contains("fa-gamepad"))
             {
                 result.Add(TorznabCatType.PCGames.ID);
-            } else if (classes.Contains("fa-film"))
+            }
+            else if (classes.Contains("fa-film"))
             {
                 result.Add(TorznabCatType.Movies.ID);
-            } else if (classes.Contains("fa-tv"))
+            }
+            else if (classes.Contains("fa-tv"))
             {
                 result.Add(TorznabCatType.TV.ID);
             }
             else if (classes.Contains("fa-microchip"))
             {
                 result.Add(TorznabCatType.PC.ID);
-            } else if (classes.Contains("fa-android"))
+            }
+            else if (classes.Contains("fa-android"))
             {
                 result.Add(TorznabCatType.PCMobileAndroid.ID);
             }
@@ -134,7 +138,7 @@ namespace Jackett.Common.Indexers
             var detailsLink = new Uri(firstColumn.QuerySelector("a").GetAttribute("href"));
             var category = ParseReleaseCategory(firstColumn.QuerySelector("i")?.ClassList);
             var seederContent = mainColumn.QuerySelector("span.sayiGonderen")?.TextContent;
-            var leecherContent  = mainColumn.QuerySelector("span.sayiIndiren")?.TextContent;
+            var leecherContent = mainColumn.QuerySelector("span.sayiIndiren")?.TextContent;
             int.TryParse(seederContent, out var seeders);
             int.TryParse(leecherContent, out var leechers);
             return new ReleaseInfo
