@@ -24,7 +24,7 @@ namespace Jackett.Common.Utils.FilterFuncs
             if (string.IsNullOrWhiteSpace(source))
                 return null;
 
-            var parts = source.Split(new []{Separator}, 2);
+            var parts = source.Split(new[] { Separator }, 2);
             if (parts.Length != 2)
                 return null;
             if (!string.Equals(parts[0], ID, StringComparison.InvariantCultureIgnoreCase))

@@ -241,50 +241,50 @@ namespace Jackett.Common.Indexers
                 switch (configurationItem)
                 {
                     case BoolConfigurationItem boolItem:
-                    {
-                        variables[variableKey] = variables[boolItem.Value ? ".True" : ".False"];
-                        break;
-                    }
+                        {
+                            variables[variableKey] = variables[boolItem.Value ? ".True" : ".False"];
+                            break;
+                        }
                     case StringConfigurationItem stringItem:
-                    {
-                        variables[variableKey] = stringItem.Value;
-                        break;
-                    }
+                        {
+                            variables[variableKey] = stringItem.Value;
+                            break;
+                        }
                     case PasswordConfigurationItem passwordItem:
-                    {
-                        variables[variableKey] = passwordItem.Value;
-                        break;
-                    }
+                        {
+                            variables[variableKey] = passwordItem.Value;
+                            break;
+                        }
                     case SingleSelectConfigurationItem selectItem:
-                    {
-                        variables[variableKey] = selectItem.Value;
-                        break;
-                    }
+                        {
+                            variables[variableKey] = selectItem.Value;
+                            break;
+                        }
                     case MultiSelectConfigurationItem multiSelectItem:
-                    {
-                        variables[variableKey] = multiSelectItem.Values;
-                        break;
-                    }
+                        {
+                            variables[variableKey] = multiSelectItem.Values;
+                            break;
+                        }
                     case DisplayImageConfigurationItem displayImageItem:
-                    {
-                        variables[variableKey] = displayImageItem.Value;
-                        break;
-                    }
+                        {
+                            variables[variableKey] = displayImageItem.Value;
+                            break;
+                        }
                     case DisplayInfoConfigurationItem displayInfoItem:
-                    {
-                        variables[variableKey] = displayInfoItem.Value;
-                        break;
-                    }
+                        {
+                            variables[variableKey] = displayInfoItem.Value;
+                            break;
+                        }
                     case HiddenStringConfigurationItem hiddenStringItem:
-                    {
-                        variables[variableKey] = hiddenStringItem.Value;
-                        break;
-                    }
+                        {
+                            variables[variableKey] = hiddenStringItem.Value;
+                            break;
+                        }
                     default:
-                    {
-                        //TODO Should this throw a NotSupportedException, as it used to?
-                        break;
-                    }
+                        {
+                            //TODO Should this throw a NotSupportedException, as it used to?
+                            break;
+                        }
                 }
             }
 
@@ -378,23 +378,23 @@ namespace Jackett.Common.Indexers
                         break;
                     case "eq": // Returns .True if equal
                     case "ne": // Returns .False if equal
-                    {
-                        var wantEqual = functionName == "eq";
-                        // eq/ne take exactly 2 params. Update the length to match
-                        // This removes the whitespace between params 2 and 3.
-                        // It shouldn't matter because the match starts at a word boundary
-                        if (parameters.Count > 2)
-                            functionLength = logicMatch.Groups[2].Captures[2].Index - functionStartIndex;
+                        {
+                            var wantEqual = functionName == "eq";
+                            // eq/ne take exactly 2 params. Update the length to match
+                            // This removes the whitespace between params 2 and 3.
+                            // It shouldn't matter because the match starts at a word boundary
+                            if (parameters.Count > 2)
+                                functionLength = logicMatch.Groups[2].Captures[2].Index - functionStartIndex;
 
-                        // Take first two parameters, convert vars to values and strip quotes on string literals
-                        // Counting distinct gives us 1 if equal and 2 if not.
-                        var isEqual =
-                            parameters.Take(2).Select(param => param.StartsWith("\"") ? param.Trim('"') : variables[param] as string)
-                                      .Distinct().Count() == 1;
+                            // Take first two parameters, convert vars to values and strip quotes on string literals
+                            // Counting distinct gives us 1 if equal and 2 if not.
+                            var isEqual =
+                                parameters.Take(2).Select(param => param.StartsWith("\"") ? param.Trim('"') : variables[param] as string)
+                                          .Distinct().Count() == 1;
 
-                        functionResult = isEqual == wantEqual ? ".True" : ".False";
-                        break;
-                    }
+                            functionResult = isEqual == wantEqual ? ".True" : ".False";
+                            break;
+                        }
                 }
 
                 template = template.Remove(functionStartIndex, functionLength)
@@ -1796,7 +1796,7 @@ namespace Jackett.Common.Indexers
         }
 
         private Dictionary<string, string> ParseCustomHeaders(Dictionary<string, List<string>> customHeaders,
-                                                              Dictionary<string,object> variables)
+                                                              Dictionary<string, object> variables)
         {
             if (customHeaders == null)
                 return null;

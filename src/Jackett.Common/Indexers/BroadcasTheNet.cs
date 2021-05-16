@@ -108,7 +108,8 @@ namespace Jackett.Common.Indexers
             {
                 searchParam["name"] = $"Season {query.Season}";
                 searchParam["category"] = "Season";
-            } else if (query.Season > 0 && int.Parse(query.Episode) > 0)
+            }
+            else if (query.Season > 0 && int.Parse(query.Episode) > 0)
             {
                 searchParam["name"] = string.Format("S{0:00}E{1:00}", query.Season, int.Parse(query.Episode));
                 searchParam["category"] = "Episode";

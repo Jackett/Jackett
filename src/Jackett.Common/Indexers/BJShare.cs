@@ -62,7 +62,7 @@ namespace Jackett.Common.Indexers
 
         public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            :  base(id: "bjshare",
+            : base(id: "bjshare",
                     name: "BJ-Share",
                     description: "A brazilian tracker.",
                     link: "https://bj-share.info/",
@@ -160,7 +160,7 @@ namespace Jackett.Common.Indexers
             var cleanTitle = _EpisodeRegex.Replace(title, string.Empty);
             // Removes the year if it comes on the title
             // The space is added because on daily releases the date will be XX/XX/YYYY
-            if(!string.IsNullOrEmpty(year))
+            if (!string.IsNullOrEmpty(year))
                 cleanTitle = cleanTitle.Replace(" " + year, string.Empty);
             cleanTitle = Regex.Replace(cleanTitle, @"^\s*|[\s-]*$", string.Empty);
 
@@ -296,10 +296,12 @@ namespace Jackett.Common.Indexers
                         // so let's try to pick up first without the .tooltip class,
                         // if nothing is found, then we try again without that filter
                         var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
-                        if (qDetailsLink == null) {
+                        if (qDetailsLink == null)
+                        {
                             qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                             // if still can't find the right link, skip it
-                            if (qDetailsLink == null) {
+                            if (qDetailsLink == null)
+                            {
                                 logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
                                 continue;
                             }

@@ -27,7 +27,7 @@ namespace Jackett.Test.Common.Indexers
                 yield return new TestCaseData("[1080p] Tokyo Revengers – 02").Returns("[1080p] Tokyo Revengers – E02");
                 yield return new TestCaseData("[1080p] Mairimashita! Iruma-kun 2nd Season – 01").Returns("[1080p] Mairimashita! Iruma-kun – S2E01");
                 yield return new TestCaseData("[540p] Seijo no Maryoku wa Bannou Desu – 02 v2 (Multi)").Returns("[540p] Seijo no Maryoku wa Bannou Desu – E02 v2 (Multi)");
-                yield return new TestCaseData("[1080p] Yuukoku no Moriarty Part 2 – 01 (Multi)").Returns("[1080p] Yuukoku no Moriarty – S2E01 (Multi)");                
+                yield return new TestCaseData("[1080p] Yuukoku no Moriarty Part 2 – 01 (Multi)").Returns("[1080p] Yuukoku no Moriarty – S2E01 (Multi)");
             }
         }
     }

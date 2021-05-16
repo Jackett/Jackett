@@ -13,7 +13,7 @@ namespace Jackett.Test.Common.Utils
         [Test]
         public void GetQueryStringTests()
         {
-#region Encoding Tests
+            #region Encoding Tests
 
             //Add windows-1251 to Encoding list if not present
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -41,9 +41,9 @@ namespace Jackett.Test.Common.Utils
             //Encoding should make values websafe, but not keys
             StringAssert.Contains("space key=space+value", encodingNvc.GetQueryString());
 
-#endregion
+            #endregion
 
-#region Separator Tests
+            #region Separator Tests
 
             var separatorNvc = new NameValueCollection
             {
@@ -62,9 +62,9 @@ namespace Jackett.Test.Common.Utils
             Assert.AreEqual(noSeparator, separatorNvc.GetQueryString(separator: null));
             Assert.AreEqual(noSeparator, separatorNvc.GetQueryString(separator: string.Empty));
 
-#endregion
+            #endregion
 
-#region Split Keys Tests
+            #region Split Keys Tests
 
             var duplicateKeysNvc = new NameValueCollection
             {
@@ -84,9 +84,9 @@ namespace Jackett.Test.Common.Utils
             Assert.AreEqual(
                 "key1=value&key1=duplicate&key2=value2", duplicateKeysNvc.GetQueryString(duplicateKeysIfMulti: true));
 
-#endregion
+            #endregion
 
-#region Edge Case Tests
+            #region Edge Case Tests
 
             //Throws NullReferenceException if the NameValueCollection is null in all cases
             Assert.Throws<NullReferenceException>(() => ((NameValueCollection)null).GetQueryString());
@@ -94,7 +94,7 @@ namespace Jackett.Test.Common.Utils
             //Returns empty string on empty collection in all cases
             Assert.AreEqual(string.Empty, new NameValueCollection().GetQueryString());
 
-#endregion
+            #endregion
         }
 
         [Test]

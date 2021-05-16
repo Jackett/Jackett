@@ -262,7 +262,7 @@ namespace Jackett.Common.Models
                     BooksOther,
                     BooksForeign
                 });
-            Other.SubCategories.AddRange(new List<TorznabCategory> {OtherMisc, OtherHashed});
+            Other.SubCategories.AddRange(new List<TorznabCategory> { OtherMisc, OtherHashed });
         }
 
         public static string GetCatDesc(int torznabCatId) =>

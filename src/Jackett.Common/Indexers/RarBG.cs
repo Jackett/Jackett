@@ -137,7 +137,8 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
             => await PerformQueryWithRetry(query, true);
 
-        private async Task<IEnumerable<ReleaseInfo>> PerformQueryWithRetry(TorznabQuery query, bool retry) {
+        private async Task<IEnumerable<ReleaseInfo>> PerformQueryWithRetry(TorznabQuery query, bool retry)
+        {
             var releases = new List<ReleaseInfo>();
 
             // check the token and renewal if necessary

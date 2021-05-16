@@ -63,11 +63,11 @@ namespace Jackett.Test.Common.Utils
             // there are few tests because we are using a well known library
             var now = DateTime.Now;
 
-            Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 4, 20, 19, new TimeSpan(-4, -30, 0)).DateTime, 
+            Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 4, 20, 19, new TimeSpan(-4, -30, 0)).DateTime,
                 DateTimeUtil.FromFuzzyTime("21 Jun 2010 04:20:19 -0430 blah"));
-            Assert.AreEqual(new DateTime(2005, 6, 10, 10, 30, 0), 
+            Assert.AreEqual(new DateTime(2005, 6, 10, 10, 30, 0),
                 DateTimeUtil.FromFuzzyTime("June 10, 2005 10:30AM", "UK"));
-            Assert.AreEqual(new DateTime(now.Year, now.Month, now.Day, 19, 54, 0), 
+            Assert.AreEqual(new DateTime(now.Year, now.Month, now.Day, 19, 54, 0),
                 DateTimeUtil.FromFuzzyTime("today 19:54"));
             Assert.True((now - DateTimeUtil.FromFuzzyTime("Yesterday at 10:20 pm")).TotalSeconds <= 3600 * 24); // 1 day
             Assert.True((now - DateTimeUtil.FromFuzzyTime("Sunday at 14:30")).TotalSeconds <= 3600 * 24 * 7); // 1 week
@@ -118,7 +118,7 @@ namespace Jackett.Test.Common.Utils
             Assert.True((now - DateTimeUtil.FromUnknown("Saturday at 00:20", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
             Assert.True((now - DateTimeUtil.FromUnknown("sunday at 22:00", relativeFrom: now)).TotalSeconds <= 3600 * 24 * 7);
 
-            Assert.AreEqual(new DateTime(2020, 10, 31, 3, 8, 27, DateTimeKind.Utc).ToLocalTime(), 
+            Assert.AreEqual(new DateTime(2020, 10, 31, 3, 8, 27, DateTimeKind.Utc).ToLocalTime(),
                 DateTimeUtil.FromUnknown("1604113707", relativeFrom: now));
 
             var refDate = new DateTime(2021, 03, 12, 12, 00, 00, DateTimeKind.Local);
@@ -153,13 +153,13 @@ namespace Jackett.Test.Common.Utils
         {
             var now = DateTime.Now;
 
-            Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 4, 20, 19, new TimeSpan(-4, 0, 0)).ToLocalTime().DateTime, 
+            Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 4, 20, 19, new TimeSpan(-4, 0, 0)).ToLocalTime().DateTime,
                 DateTimeUtil.ParseDateTimeGoLang("21-06-2010 04:20:19 -04:00", "02-01-2006 15:04:05 -07:00"));
-            Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 0, 0, 0, new TimeSpan(-5, -30, 0)).ToLocalTime().DateTime, 
+            Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 0, 0, 0, new TimeSpan(-5, -30, 0)).ToLocalTime().DateTime,
                 DateTimeUtil.ParseDateTimeGoLang("2010-06-21 -05:30", "2006-01-02 -07:00"));
             var refDate = new DateTime(2021, 03, 12, 12, 00, 00, DateTimeKind.Local);
-            Assert.AreEqual(new DateTime(refDate.Year - 1, 9, 14, 7, 0, 0), 
-                            DateTimeUtil.ParseDateTimeGoLang("7am Sep. 14", "3pm Jan. 2", relativeFrom:refDate));
+            Assert.AreEqual(new DateTime(refDate.Year - 1, 9, 14, 7, 0, 0),
+                            DateTimeUtil.ParseDateTimeGoLang("7am Sep. 14", "3pm Jan. 2", relativeFrom: refDate));
 
             // bad cases
             try

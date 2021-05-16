@@ -150,7 +150,7 @@ namespace Jackett.Common.Indexers
                     release.Guid = new Uri(d.Magnet);
 
                     // The API doesn't tell us file size, so give an estimate based on resolution
-                    if(string.Equals(d.Res, "1080"))
+                    if (string.Equals(d.Res, "1080"))
                         release.Size = 1395864371; // 1.3GB
                     else if (string.Equals(d.Res, "720"))
                         release.Size = 734003200; // 700MB

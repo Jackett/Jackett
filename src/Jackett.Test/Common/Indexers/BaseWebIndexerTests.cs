@@ -74,7 +74,7 @@ namespace Jackett.Test.Common.Indexers
 
             query = new TorznabQuery // with child category
             {
-                Categories = new [] { TorznabCatType.MoviesSD.ID }
+                Categories = new[] { TorznabCatType.MoviesSD.ID }
             };
             filteredResults = indexer._FilterResults(query, results).ToList();
             Assert.AreEqual(2, filteredResults.Count);
@@ -83,7 +83,7 @@ namespace Jackett.Test.Common.Indexers
 
             query = new TorznabQuery // with parent category
             {
-                Categories = new [] { TorznabCatType.Movies.ID }
+                Categories = new[] { TorznabCatType.Movies.ID }
             };
             filteredResults = indexer._FilterResults(query, results).ToList();
             Assert.AreEqual(3, filteredResults.Count);
@@ -93,7 +93,7 @@ namespace Jackett.Test.Common.Indexers
 
             query = new TorznabQuery // with custom category
             {
-                Categories = new [] { 100004 }
+                Categories = new[] { 100004 }
             };
             filteredResults = indexer._FilterResults(query, results).ToList();
             Assert.AreEqual(2, filteredResults.Count);
@@ -207,7 +207,7 @@ namespace Jackett.Test.Common.Indexers
         {
             var indexer = new TestWebIndexer();
 
-            indexer._AddMultiCategoryMapping(TorznabCatType.MoviesHD,19, 18);
+            indexer._AddMultiCategoryMapping(TorznabCatType.MoviesHD, 19, 18);
             Assert.AreEqual(1, indexer.TorznabCaps.Categories.GetTorznabCategoryTree().Count);
         }
 
@@ -220,7 +220,7 @@ namespace Jackett.Test.Common.Indexers
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs
             var query = new TorznabQuery // int category with subcategories (parent cat)
             {
-                Categories = new [] { TorznabCatType.Movies.ID }
+                Categories = new[] { TorznabCatType.Movies.ID }
             };
             var trackerCats = indexer._MapTorznabCapsToTrackers(query);
             Assert.AreEqual(2, trackerCats.Count);

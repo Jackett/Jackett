@@ -25,7 +25,7 @@ namespace Jackett.Common.Converters
 
             return long.TryParse((string)reader.Value, out var foo)
                 ? foo
-                : (long?) null;
+                : (long?)null;
         }
 
         public override bool CanConvert(Type objectType) => objectType == typeof(string);

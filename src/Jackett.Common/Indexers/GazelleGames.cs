@@ -226,7 +226,7 @@ namespace Jackett.Common.Indexers
             var i = 0;
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add($"artistcheck[{i++}]", cat);
-                
+
 
             searchUrl += "?" + queryCollection.GetQueryString();
 

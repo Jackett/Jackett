@@ -74,7 +74,8 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var searchUrl = CreateSearchUrl(query);
-            if (string.IsNullOrWhiteSpace(searchUrl)) return new List<ReleaseInfo>();
+            if (string.IsNullOrWhiteSpace(searchUrl))
+                return new List<ReleaseInfo>();
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 

@@ -99,7 +99,7 @@ namespace Jackett.Common.Utils
 
             throw new Exception("FromFuzzyTime parsing failed");
         }
-        
+
         private static DateTime FromFuzzyPastTime(string str, string format, DateTime now)
         {
             var result = FromFuzzyTime(str, format);

@@ -60,7 +60,8 @@ namespace Jackett.Common.Indexers
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
                    link: "https://www.divxtotal.ch/",
-                   caps: new TorznabCapabilities {
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -278,7 +279,7 @@ namespace Jackett.Common.Indexers
                 {
                     var anchor = row.QuerySelector("a");
                     var episodeTitle = anchor.TextContent.Trim();
-                    
+
                     // Convert the title to Scene format
                     episodeTitle = ParseDivxTotalSeriesTitle(episodeTitle, query);
 

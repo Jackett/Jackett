@@ -48,7 +48,7 @@ namespace Jackett.Common.Services
         {
             // do not cache test queries!
             if (query.IsTest)
-                return; 
+                return;
 
             lock (_cache)
             {
@@ -72,7 +72,7 @@ namespace Jackett.Common.Services
 
                 var trackerCache = _cache[indexer.Id];
                 var queryHash = GetQueryHash(query);
-                if (trackerCache.Queries.ContainsKey(queryHash)) 
+                if (trackerCache.Queries.ContainsKey(queryHash))
                     trackerCache.Queries[queryHash] = trackerCacheQuery; // should not happen, just in case
                 else
                     trackerCache.Queries.Add(queryHash, trackerCacheQuery);
@@ -94,7 +94,7 @@ namespace Jackett.Common.Services
 
                 if (!_cache.ContainsKey(indexer.Id))
                     return null;
- 
+
                 var trackerCache = _cache[indexer.Id];
                 var queryHash = GetQueryHash(query);
                 var cacheHit = trackerCache.Queries.ContainsKey(queryHash);
@@ -184,7 +184,7 @@ namespace Jackett.Common.Services
                 // remove cached results just in case user disabled cache recently
                 _cache.Clear();
                 _logger.Debug("CACHE IsCacheEnabled => false");
-            } 
+            }
             return _serverConfig.CacheEnabled;
         }
 
