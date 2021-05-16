@@ -595,7 +595,7 @@ Filter | Condition
 `type:<type>` | where the indexer type is equal to `<type>`
 `tag:<tag>` | where the indexer tags contains `<tag>`
 `lang:<tag>` | where the indexer language start with `<lang>`
-`test:{passed|failed}` | where the last indexer test performed `passed` or `failed`
+`test:{passed\|failed}` | where the last indexer test performed `passed` or `failed`
 
 Supported operators
 Operator | Condition
