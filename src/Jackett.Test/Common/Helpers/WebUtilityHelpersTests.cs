@@ -17,7 +17,7 @@ namespace Jackett.Test.Common.Helpers
             //https://docs.microsoft.com/en-us/dotnet/api/system.text.codepagesencodingprovider?view=netcore-2.0
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            _codePagesToTest = new []{
+            _codePagesToTest = new[]{
                 Encoding.UTF8,
                 Encoding.ASCII,
                 Encoding.GetEncoding("iso-8859-1"),
@@ -26,7 +26,7 @@ namespace Jackett.Test.Common.Helpers
                 Encoding.GetEncoding("windows-1251") }
             ;
 
-            _stringsToTest = new []
+            _stringsToTest = new[]
             {
                 "Test! אני לא יודע עברית, אבל אני מאמין שזה טקסט חוקי! $ # 2 אני תוהה אם אמוג'י יהיה נתמך 🐀.",
                 "Å[ÉfÉBÉìÉOÇÕìÔÇµÇ≠Ç»Ç¢",

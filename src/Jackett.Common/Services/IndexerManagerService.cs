@@ -125,7 +125,7 @@ namespace Jackett.Common.Services
             var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
             var nativeIndexers = indexerTypes.Select(type =>
             {
-                var constructorArgumentTypes = new [] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService), typeof(ICacheService) };
+                var constructorArgumentTypes = new[] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService), typeof(ICacheService) };
                 var constructor = type.GetConstructor(constructorArgumentTypes);
                 if (constructor != null)
                 {
@@ -238,7 +238,7 @@ namespace Jackett.Common.Services
                 .Concat(
                 indexers.Values.SelectMany(x => x.Tags).Distinct()
                     .Select(tag => (filter: FilterFunc.Tag.ToFilter(tag), func: FilterFunc.Tag.ToFunc(tag)))
-                ).Select(x =>  new KeyValuePair<string, IWebIndexer>(x.filter, CreateFilterIndexer(x.filter, x.func)));
+                ).Select(x => new KeyValuePair<string, IWebIndexer>(x.filter, CreateFilterIndexer(x.filter, x.func)));
 
             availableFilters = new ConcurrentDictionary<string, IWebIndexer>(predefinedFilters);
         }
@@ -335,9 +335,9 @@ namespace Jackett.Common.Services
                     cacheService,
                     filterFunc
                 )
-                {
-                    Indexers = indexers.Values
-                };
+            {
+                Indexers = indexers.Values
+            };
         }
 
         private (IFallbackStrategyProvider fallbackStrategyProvider, IResultFilterProvider resultFilterProvider)

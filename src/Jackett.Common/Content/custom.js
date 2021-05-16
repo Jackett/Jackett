@@ -5,6 +5,7 @@ var configuredIndexers = [];
 var unconfiguredIndexers = [];
 var configuredTags = [];
 var availableFilters = [];
+var currentFilter = null;
 
 $.fn.inView = function () {
     if (!this.length) return false;
@@ -48,20 +49,26 @@ $(document).ready(function () {
     var pathPrefix = window.location.pathname.substr(0, index);
     api.root = pathPrefix + api.root;
 
+    const hashArgs = getHashArgs();
+    if ("indexers" in hashArgs)
+      currentFilter = hashArgs.filter
     bindUIButtons();
     loadJackettSettings();
 });
 
 function openSearchIfNecessary() {
-    const hashArgs = location.hash.substring(1).split('&').reduce((prev, item) =>
-        Object.assign({
-            [item.split('=')[0]]: (item.split('=').length < 2 ?
-                undefined :
-                decodeURIComponent(item.split('=')[1].replace(/\+/g, '%20')))
-        }, prev), {});
+    const hashArgs = getHashArgs();
     if ("search" in hashArgs) {
         showSearch(hashArgs.filter, hashArgs.tracker, hashArgs.search, hashArgs.category);
     }
+}
+
+function getHashArgs() {
+    return location.hash.substring(1).split('&').reduce((prev, item) => Object.assign({
+        [item.split('=')[0]]: (item.split('=').length < 2 ?
+            undefined :
+            decodeURIComponent(item.split('=')[1].replace(/\+/g, '%20')))
+    }, prev), {});
 }
 
 function insertWordWrap(str) {
@@ -75,6 +82,10 @@ function type_filter(indexer) {
 
 function tag_filter(indexer) {
   return indexer.tags.map(t => t.toLowerCase()).indexOf(this.value.toLowerCase()) > -1;
+}
+
+function state_filter(indexer) {
+  return indexer.state == this.value;
 }
 
 function getJackettConfig(callback) {
@@ -187,7 +198,7 @@ function reloadIndexers() {
 
         configureFilters(configuredIndexers);
         
-        displayConfiguredIndexersList(configuredIndexers);
+        displayFilteredIndexersList(configuredIndexers, currentFilter);
 
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         openSearchIfNecessary();
@@ -204,6 +215,9 @@ function configureFilters(indexers) {
         availableFilters.push(f);
     }
 
+    availableFilters.push({id: "test:passed", apply: state_filter, value: "success" });
+    availableFilters.push({id: "test:failed", apply: state_filter, value: "error" });
+
     ["public", "private", "semi-private"]
       .map(t => { return { id: "type:" + t, apply: type_filter, value: t } })
       .forEach(add);
@@ -211,6 +225,33 @@ function configureFilters(indexers) {
     configuredTags.sort()
       .map(t => { return { id: "tag:" + t.toLowerCase(), apply: tag_filter, value: t }})
       .forEach(add);
+}
+
+function displayFilteredIndexersList(indexers, filter) {
+    var active = availableFilters.find(x => x.id == filter);
+    if (availableFilters.length > 0) {
+        var filtersTemplate = Handlebars.compile($("#jackett-filters").html());
+        var filters = $(filtersTemplate({
+              filters: availableFilters,
+              active: active ? active.id : null
+            }));
+
+        $("li a", filters).on('click', function(){
+            displayFilteredIndexersList(configuredIndexers, $(this).data("id"));
+        });
+
+        $('#filters').empty();
+        $('#filters').append(filters);
+        $('#filters').fadeIn();
+    }
+    if (active) {
+        indexers = indexers.filter(active.apply, active);
+        currentFilter = active.id;
+    }
+    else {
+        currentFilter = null;
+    }
+    displayConfiguredIndexersList(indexers)
 }
 
 function displayConfiguredIndexersList(indexers) {
@@ -595,8 +636,8 @@ function prepareSearchButtons(element) {
         var $btn = $(btn);
         var id = $btn.data("id");
         $btn.click(function () {
-            window.location.hash = "search&tracker=" + id;
-            showSearch(null, id);
+            window.location.hash = "search&tracker=" + id + (currentFilter ? "&filter=" + currentFilter : "");
+            showSearch(currentFilter, id);
         });
     });
 }
@@ -648,6 +689,10 @@ function updateTestState(id, state, message, parent) {
     }).rows().invalidate('dom');
     if (state != "inprogres")
         dt.draw();
+
+    var indexer = configuredIndexers.find(x => x.id == id);
+    if (indexer)
+        indexer.state = state;
 }
 
 function testIndexer(id, notifyResult) {
@@ -963,7 +1008,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
 
     releaseDialog.on('hidden.bs.modal', function (e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
-        window.location.hash = '';
+        window.location.hash = currentFilter ? "indexers&filter=" + currentFilter : '';
     });
 
     var setTrackers = function (filterId, trackers) {
@@ -1421,8 +1466,8 @@ function bindUIButtons() {
     });
 
     $("#jackett-show-search").click(function () {
-        showSearch();
-        window.location.hash = "search";
+        showSearch(currentFilter);
+        window.location.hash = "search" + (currentFilter ? "&filter=" + currentFilter : "");
     });
 
     $("#view-jackett-logs").click(function () {

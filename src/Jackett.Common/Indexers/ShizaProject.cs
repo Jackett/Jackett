@@ -41,7 +41,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new  ConfigurationDataBasicLoginWithEmail())
+                   configData: new ConfigurationDataBasicLoginWithEmail())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
@@ -98,13 +98,17 @@ namespace Jackett.Common.Indexers
         }
 
         // If the search string is empty use the latest releases
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) {
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
             await EnsureAuthorized();
 
             WebResult result;
-            if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm)) {
+            if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
                 result = await RequestWithCookiesAndRetryAsync(SiteLink);
-            } else {
+            }
+            else
+            {
                 // Prepare the search query
                 var queryParameters = new NameValueCollection
                 {
@@ -164,7 +168,7 @@ namespace Jackett.Common.Indexers
                     Details = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
-                    Category = new[]{ TorznabCatType.TVAnime.ID }
+                    Category = new[] { TorznabCatType.TVAnime.ID }
                 };
 
                 foreach (var t in r.QuerySelectorAll("a[data-toggle]"))
@@ -191,13 +195,15 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private string composeBaseTitle(IElement release) {
+        private string composeBaseTitle(IElement release)
+        {
             var titleDiv = release.QuerySelector("section:nth-of-type(2) > div.card > article:nth-of-type(1) > div.card-header");
             return titleDiv.QuerySelector("h3").Text() + " " + titleDiv.QuerySelector("p").Text();
         }
 
         // Appending id to differentiate between different quality versions
-        private bool IsAuthorized(WebResult result) {
+        private bool IsAuthorized(WebResult result)
+        {
             return result.ContentString.Contains("/logout");
         }
 

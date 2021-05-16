@@ -6,9 +6,9 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
     [TestFixture]
     public class TagFuncTests
     {
-        private class TagsIndexerStub : IndexerStub
+        private class IndexerStub : IndexerBaseStub
         {
-            public TagsIndexerStub(params string[] tags)
+            public IndexerStub(params string[] tags)
             {
                 Tags = tags;
             }
@@ -23,7 +23,7 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
         {
             var tagId = "g1";
 
-            var tag = new TagsIndexerStub(tagId);
+            var tag = new IndexerStub(tagId);
 
             var upperTarget = Tag.ToFunc(tagId.ToUpper());
             Assert.IsTrue(upperTarget(tag));
@@ -38,10 +38,10 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
             var tagId = "g1";
             var target = Tag.ToFunc(tagId);
 
-            Assert.IsTrue(target(new TagsIndexerStub(tagId)));
-            Assert.IsTrue(target(new TagsIndexerStub(tagId, "g2")));
-            Assert.IsTrue(target(new TagsIndexerStub("g2", tagId)));
-            Assert.IsFalse(target(new TagsIndexerStub("g2")));
+            Assert.IsTrue(target(new IndexerStub(tagId)));
+            Assert.IsTrue(target(new IndexerStub(tagId, "g2")));
+            Assert.IsTrue(target(new IndexerStub("g2", tagId)));
+            Assert.IsFalse(target(new IndexerStub("g2")));
         }
     }
 }

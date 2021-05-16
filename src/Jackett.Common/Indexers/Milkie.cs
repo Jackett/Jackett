@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
                     releases.Add(release);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 OnParseError(jsonResponse.ContentString, ex);
             }

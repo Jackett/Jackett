@@ -60,7 +60,7 @@ namespace Jackett.Common.Utils.Clients
             {
                 // in case of error in DNS resolution, we use a fake proxy to avoid leaking the user IP (disabling proxy)
                 // https://github.com/Jackett/Jackett/issues/8826
-                var addresses = new [] { new IPAddress(2130706433) }; // 127.0.0.1
+                var addresses = new[] { new IPAddress(2130706433) }; // 127.0.0.1
                 try
                 {
                     addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;

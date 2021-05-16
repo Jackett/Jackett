@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Jackett.Test.Common.Utils.FilterFuncs
 {
-    public class IndexerStub : IIndexer
+    public abstract class IndexerBaseStub : IIndexer
     {
         public virtual string SiteLink => throw TestExceptions.UnexpectedInvocation;
 

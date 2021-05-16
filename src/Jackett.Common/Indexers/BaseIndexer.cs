@@ -9,10 +9,10 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
-using Polly;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Polly;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
@@ -510,7 +510,7 @@ namespace Jackett.Common.Indexers
             return await Download(uncleanLink, RequestType.GET);
         }
 
-        protected async Task<byte[]> Download(Uri link, RequestType method, string referer = null, Dictionary<string, string>headers = null)
+        protected async Task<byte[]> Download(Uri link, RequestType method, string referer = null, Dictionary<string, string> headers = null)
         {
             // return magnet link
             if (link.Scheme == "magnet")
@@ -769,7 +769,7 @@ namespace Jackett.Common.Indexers
 
     public abstract class BaseCachingWebIndexer : BaseWebIndexer
     {
-        protected BaseCachingWebIndexer(string link,string id, string name, string description,
+        protected BaseCachingWebIndexer(string link, string id, string name, string description,
                                         IIndexerConfigurationService configService, WebClient client, Logger logger,
                                         ConfigurationData configData, IProtectionService p, ICacheService cacheService,
                                         TorznabCapabilities caps = null, string downloadBase = null)

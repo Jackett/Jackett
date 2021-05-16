@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers.Meta
                           WebClient client, Logger logger, IProtectionService ps, ICacheService cs, Func<IIndexer, bool> filterFunc)
             : base(id: filter,
                    name: filter,
-                   description: "This feed includes all configured trackers filter by "+filter,
+                   description: "This feed includes all configured trackers filter by " + filter,
                    configService: configService,
                    client: client,
                    logger: logger,

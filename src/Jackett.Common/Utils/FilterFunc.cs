@@ -16,10 +16,11 @@ namespace Jackett.Common.Utils
         });
         public static readonly FilterFuncComponent Language = Component("lang", args => indexer => indexer.Language.StartsWith(args, StringComparison.InvariantCultureIgnoreCase));
         public static readonly FilterFuncComponent Type = Component("type", args => indexer => string.Equals(indexer.Type, args, StringComparison.InvariantCultureIgnoreCase));
+        public static readonly FilterFuncComponent Test = TestFilterFunc.Default;
 
         static FilterFunc()
         {
-            Expression = new FilterFuncExpression(Tag, Language, Type);
+            Expression = new FilterFuncExpression(Tag, Language, Type, Test);
         }
 
         public static bool TryParse(string source, out Func<IIndexer, bool> func)
@@ -49,10 +50,10 @@ namespace Jackett.Common.Utils
             public override Func<IIndexer, bool> ToFunc(string args)
             {
                 var func = builder(args);
-                return indexer => indexer != null
-                    ? indexer.IsConfigured && func(indexer)
-                    : throw new ArgumentNullException(nameof(indexer));
+                return indexer => IsValid(indexer) && func(indexer);
             }
         }
+
+        protected static bool IsValid(IIndexer indexer) => (indexer?.IsConfigured ?? throw new ArgumentNullException(nameof(indexer)));
     }
 }

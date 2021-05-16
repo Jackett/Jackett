@@ -240,7 +240,7 @@ namespace Jackett.Common.Indexers
         {
             // The first page set the cookies and the session_id
             CookieHeader = "";
-            var result = await RequestWithCookiesAsync(Login1Url,  "");
+            var result = await RequestWithCookiesAsync(Login1Url, "");
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(result.ContentString);
             var sessionId = dom.QuerySelector("input#session_id")?.GetAttribute("value");

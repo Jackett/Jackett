@@ -9,9 +9,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Jackett.Test.TestHelpers
 {
-    public class TestWebIndexer: BaseWebIndexer
+    public class TestWebIndexer : BaseWebIndexer
     {
-        public TestWebIndexer():
+        public TestWebIndexer() :
             base(id: "test_id",
                  name: "test_name",
                  description: "test_description",
@@ -26,7 +26,7 @@ namespace Jackett.Test.TestHelpers
         {
             Encoding = Encoding.UTF8;
             Language = "en-us";
-            Type = "private";  
+            Type = "private";
         }
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {

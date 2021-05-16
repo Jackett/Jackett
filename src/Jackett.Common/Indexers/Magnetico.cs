@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
                     {"N_FILES", "files"},
                     {"RELEVANCE", "relevance"}
                 })
-                { Value = "discovered" };
+            { Value = "discovered" };
             configData.AddDynamic("sort", sort);
 
             var order = new ConfigurationData.SingleSelectConfigurationItem("Order requested from site", new Dictionary<string, string>
@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers
                     {"false", "desc"},
                     {"true", "asc"}
                 })
-                { Value = "false" };
+            { Value = "false" };
             configData.AddDynamic("order", order);
 
             AddCategoryMapping("1", TorznabCatType.Other);
@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
                         Guid = details,
                         InfoHash = torrent.infoHash,
                         PublishDate = publishDate,
-                        Category = new List<int>{ TorznabCatType.Other.ID },
+                        Category = new List<int> { TorznabCatType.Other.ID },
                         Size = torrent.size,
                         Files = torrent.nFiles,
                         Seeders = 1,

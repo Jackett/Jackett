@@ -83,7 +83,7 @@ namespace Jackett.Server.Controllers
         [HttpPost]
         [Route("{indexerId?}/Config")]
         [TypeFilter(typeof(RequiresIndexer))]
-        public async Task<IActionResult> UpdateConfig([FromBody]Common.Models.DTO.ConfigItem[] config)
+        public async Task<IActionResult> UpdateConfig([FromBody] Common.Models.DTO.ConfigItem[] config)
         {
             // invalidate cache for this indexer
             cacheService.CleanIndexerCache(CurrentIndexer);

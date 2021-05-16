@@ -145,7 +145,7 @@ namespace Jackett.Common.Indexers.Abstract
                         Link = link,
                         Details = details,
                         Guid = details,
-                        Category =  MapTrackerCatToNewznab(cat),
+                        Category = MapTrackerCatToNewznab(cat),
                         PublishDate = publishDate,
                         Description = description,
                         Poster = poster,

@@ -36,7 +36,8 @@ namespace Jackett.Common.Indexers
                    name: "Anthelion", // old name: TehConnection.me
                    description: "A movies tracker",
                    link: "https://anthelion.me/",
-                   caps: new TorznabCapabilities {
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep

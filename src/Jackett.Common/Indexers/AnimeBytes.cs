@@ -40,7 +40,8 @@ namespace Jackett.Common.Indexers
                    link: "https://animebytes.tv/",
                    configService: configService,
                    client: client,
-                   caps: new TorznabCapabilities {
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -214,7 +215,8 @@ namespace Jackett.Common.Indexers
                                     synonyms.Add(allSyonyms[1]);
                                 if (AddAlternativeTitles && allSyonyms.Count >= 3)
                                     synonyms.AddRange(allSyonyms[2].Split(',').Select(t => t.Trim()));
-                            } else
+                            }
+                            else
                             {
                                 var allSynonyms = group["Synonymns"].ToObject<Dictionary<int, string>>();
 
@@ -222,7 +224,8 @@ namespace Jackett.Common.Indexers
                                     synonyms.Add(allSynonyms[0]);
                                 if (AddRomajiTitle && allSynonyms.ContainsKey(1))
                                     synonyms.Add(allSynonyms[1]);
-                                if (AddAlternativeTitles && allSynonyms.ContainsKey(2)) {
+                                if (AddAlternativeTitles && allSynonyms.ContainsKey(2))
+                                {
                                     synonyms.AddRange(allSynonyms[2].Split(',').Select(t => t.Trim()));
                                 }
                             }

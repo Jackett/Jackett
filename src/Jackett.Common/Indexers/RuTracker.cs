@@ -1493,7 +1493,7 @@ namespace Jackett.Common.Indexers
 
                 var qDetailsLink = row.QuerySelector("td.t-title-col > div.t-title > a.tLink");
                 var details = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                
+
                 var category = GetCategoryOfRelease(row);
 
                 var size = GetSizeOfRelease(row);
@@ -1672,7 +1672,7 @@ namespace Jackett.Common.Indexers
         {
             var fullTitle = input;
 
-            var squareBracketTags = input.FindSubstringsBetween('[', ']', includeOpeningAndClosing:true);
+            var squareBracketTags = input.FindSubstringsBetween('[', ']', includeOpeningAndClosing: true);
             input = input.RemoveSubstrings(squareBracketTags);
 
             var roundBracketTags = input.FindSubstringsBetween('(', ')', includeOpeningAndClosing: true);

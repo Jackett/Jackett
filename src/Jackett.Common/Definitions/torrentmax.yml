@@ -27,6 +27,7 @@ caps:
     - {id: "MUSIC", cat: Audio, desc: "한국음악 (Music)"}
     - {id: "MUSIK", cat: Audio/Foreign, desc: "외국음악 (Music Foreign)"}
     - {id: "notice", cat: Other, desc: "공지사항 (Notice)"}
+    - {id: "humor", cat: Other, desc: "유머 (Humor)"}
     - {id: "MOBILE", cat: PC/Mobile-Other, desc: "모바일 (Mobile)"}
     - {id: "UTIL", cat: PC, desc: "유틸 (Software)"}
 

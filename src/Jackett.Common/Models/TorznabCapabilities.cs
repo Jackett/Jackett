@@ -83,7 +83,7 @@ namespace Jackett.Common.Models
             Categories = new TorznabCapabilitiesCategories();
         }
 
-        public void ParseCardigannSearchModes(Dictionary<string,List<string>> modes)
+        public void ParseCardigannSearchModes(Dictionary<string, List<string>> modes)
         {
             if (modes == null || !modes.Any())
                 throw new Exception("At least one search mode is required");
@@ -148,7 +148,7 @@ namespace Jackett.Common.Models
             foreach (var paramStr in paramsList)
                 if (Enum.TryParse(paramStr, true, out MusicSearchParam param))
                     if (!MusicSearchParams.Contains(param))
-                       MusicSearchParams.Add(param);
+                        MusicSearchParams.Add(param);
                     else
                         throw new Exception($"Duplicate music-search param: {paramStr}");
                 else

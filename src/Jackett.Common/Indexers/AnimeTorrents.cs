@@ -1,4 +1,4 @@
- using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
@@ -38,7 +38,8 @@ namespace Jackett.Common.Indexers
                    name: "AnimeTorrents",
                    description: "Definitive source for anime and manga",
                    link: "https://animetorrents.me/",
-                   caps: new TorznabCapabilities {
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
