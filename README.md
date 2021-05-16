@@ -602,7 +602,7 @@ Operator | Condition
 -|-
 `!<expr>` | where not `<expr>`
 `<expr1>+<expr2>[+<expr3>...]` | where `<expr1>` and `<expr2>` [and `<expr3>`...]
-`<expr1>,<expr2>[+<expr3>...]` | where `<expr1>` or `<expr2>` [or `<expr3>`...]
+`<expr1>,<expr2>[,<expr3>...]` | where `<expr1>` or `<expr2>` [or `<expr3>`...]
 
 Example:
 The "filter" indexer at `/api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab` will query all the configured indexers tagged with `group1` or all the indexers not private and with `en` language (`en-en`,`en-us`,...)
