@@ -102,7 +102,6 @@ search:
       filters:
         - name: regexp
           args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
-      filters:
         - name: append
           args: " +03:00" # TRT
         - name: dateparse
