@@ -53,17 +53,17 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(3, TorznabCatType.TVAnime, "Anime - Dub");
             AddCategoryMapping(4, TorznabCatType.TVAnime, "LA - Sub");
             AddCategoryMapping(5, TorznabCatType.TVAnime, "LA - Raw");
-            AddCategoryMapping(6, TorznabCatType.TVAnime, "Light Novel");
-            AddCategoryMapping(7, TorznabCatType.TVAnime, "Manga - TLed");
-            AddCategoryMapping(8, TorznabCatType.TVAnime, "Manga - Raw");
-            AddCategoryMapping(9, TorznabCatType.TVAnime, "♫ - Lossy");
-            AddCategoryMapping(10, TorznabCatType.TVAnime, "♫ - Lossless");
-            AddCategoryMapping(11, TorznabCatType.TVAnime, "♫ - Video");
-            AddCategoryMapping(12, TorznabCatType.TVAnime, "Games");
-            AddCategoryMapping(13, TorznabCatType.TVAnime, "Applications");
-            AddCategoryMapping(14, TorznabCatType.TVAnime, "Pictures");
-            AddCategoryMapping(15, TorznabCatType.TVAnime, "Adult Video");
-            AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
+            AddCategoryMapping(6, TorznabCatType.BooksEBook, "Light Novel");
+            AddCategoryMapping(7, TorznabCatType.BooksComics, "Manga - TLed");
+            AddCategoryMapping(8, TorznabCatType.BooksComics, "Manga - Raw");
+            AddCategoryMapping(9, TorznabCatType.AudioMP3, "♫ - Lossy");
+            AddCategoryMapping(10, TorznabCatType.AudioLossless, "♫ - Lossless");
+            AddCategoryMapping(11, TorznabCatType.AudioVideo, "♫ - Video");
+            AddCategoryMapping(12, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(13, TorznabCatType.PC0day, "Applications");
+            AddCategoryMapping(14, TorznabCatType.XXXImageSet, "Pictures");
+            AddCategoryMapping(15, TorznabCatType.XXX, "Adult Video");
+            AddCategoryMapping(16, TorznabCatType.Other, "Other");
 
             AddLanguageConfiguration();
 
