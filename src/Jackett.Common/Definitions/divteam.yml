@@ -24,6 +24,7 @@ caps:
     - {id: 89, cat: Movies/HD, desc: "BDRemux"}
     - {id: 88, cat: Movies/BluRay, desc: "Full HD"}
     - {id: 90, cat: Movies/BluRay, desc: "UHD Full"}
+    - {id: 92, cat: Movies/UHD, desc: "Web-DL UHD"}
     - {id: 23, cat: TV/Sport, desc: "Deportes"}
     - {id: 20, cat: TV/HD, desc: "Series"}
     - {id: 31, cat: TV/HD, desc: "Series VOSE"}
