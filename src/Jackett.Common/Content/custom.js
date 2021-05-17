@@ -316,36 +316,7 @@ function displayUnconfiguredIndexersList() {
         $(btn).click(function () {
             $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
                 var indexerId = $(btn).attr("data-id");
-                api.getIndexerConfig(indexerId, function (data) {
-                    if (data.result !== undefined && data.result == "error") {
-                        doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
-                        return;
-                    }
-                    api.updateIndexerConfig(indexerId, data, function (data) {
-                        if (data == undefined) {
-                            reloadIndexers();
-                            doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
-                        } else if (data.result == "error") {
-                            if (data.config) {
-                                populateConfigItems(configForm, data.config);
-                            }
-                            doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
-                        }
-                    }).fail(function (data) {
-                        if (data.responseJSON.error !== undefined) {
-                            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                            var githubrepo = "Jackett/Jackett";
-                            var githubtext = "this indexer";
-                            if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-                                githubrepo = "FlareSolverr/FlareSolverr";
-                                githubtext = "FlareSolverr";
-                            }
-                            doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
-                        } else {
-                            doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
-                        }
-                    });
-                });
+                addIndexer(indexerId, true);
             });
         });
     });
@@ -388,6 +359,9 @@ function displayUnconfiguredIndexersList() {
                 }
             });
         },
+        "drawCallback": function (settings) {
+            addCheckOnCellClick();
+        },
         "stateSave": true,
         "stateDuration": 0,
         "fnStateSaveParams": function (oSettings, sValue) {
@@ -400,47 +374,58 @@ function displayUnconfiguredIndexersList() {
             [10, 20, 50, 100, 250, 500, -1],
             [10, 20, 50, 100, 250, 500, "All"]
         ],
+        "select": {
+            style: 'os',
+            selector: 'td:first-child'
+        },
         "order": [
-            [0, "asc"]
+            [1, "asc"]
         ],
         "columnDefs": [{
-                "name": "name",
+                "name": "select",
                 "targets": 0,
                 "visible": true,
-                "searchable": true,
-                "orderable": true
+                "searchable": false,
+                "orderable": false
             },
             {
-                "name": "description",
+                "name": "name",
                 "targets": 1,
                 "visible": true,
                 "searchable": true,
                 "orderable": true
             },
             {
-                "name": "type",
+                "name": "description",
                 "targets": 2,
                 "visible": true,
                 "searchable": true,
                 "orderable": true
             },
             {
-                "name": "type_string",
+                "name": "type",
                 "targets": 3,
-                "visible": false,
+                "visible": true,
                 "searchable": true,
-                "orderable": true,
+                "orderable": true
+            },
+            {
+                "name": "type_string",
+                "targets": 4,
+                "visible": false,
+                "searchable": false,
+                "orderable": false,
             },
             {
                 "name": "language",
-                "targets": 4,
+                "targets": 5,
                 "visible": true,
                 "searchable": true,
                 "orderable": true
             },
             {
                 "name": "buttons",
-                "targets": 5,
+                "targets": 6,
                 "visible": true,
                 "searchable": false,
                 "orderable": false
@@ -461,7 +446,62 @@ function displayUnconfiguredIndexersList() {
 
     $("#modals").append(UnconfiguredIndexersDialog);
 
+    $('#add-selected-indexers').click(function () {
+        var selectedIndexers = $('#unconfigured-indexer-datatable').DataTable().$('input[type="checkbox"]');
+        var hasSelectedIndexers = selectedIndexers.is(':checked');
+        if (hasSelectedIndexers) {
+            doNotify("Adding selected Indexers, please wait...", "info", "glyphicon glyphicon-transfer", false);
+            $('#select-indexer-modal button').attr('disabled', true);
+
+            addIndexers(selectedIndexers,
+                addSelectedIndexersSuccess,
+                addSelectedIndexersError);
+        } else {
+            doNotify("Error: You must select more than one indexer", "danger", "glyphicon glyphicon-alert");
+        }
+    });
+
     UnconfiguredIndexersDialog.modal("show");
+}
+
+function addSelectedIndexersSuccess() {
+    $.notifyClose();
+    $('#select-indexer-modal').modal('hide');
+    doNotify("Selected indexers successfully added.", "success", "glyphicon glyphicon-ok");
+    $('#select-indexer-modal button').attr('disabled', false);
+}
+
+function addSelectedIndexersError(e, xhr, options, err) {
+    doNotify("Configuration failed", "danger", "glyphicon glyphicon-alert");
+}
+
+function addCheckOnCellClick() {
+    $('td.checkboxColumn')
+        .off('click')
+        .on('click', (function (event) {
+            if (!$(event.target).is('input')) {
+                $('input:checkbox', this).prop('checked', function (i, value) {
+                    return !value;
+                });
+            }
+        }));
+}
+
+function addIndexers(selectedIndexerList, successCallback, errorCallback) {
+    $(document).ajaxStop(function () {
+        if (successCallback == addSelectedIndexersSuccess) {
+            $(document).ajaxStop().unbind(); // Keep future AJAX events from effecting this
+            successCallback();
+        }
+    }).ajaxError(function (e, xhr, options, err) {
+        errorCallback(e, xhr, options, err);
+    });
+
+    selectedIndexerList.each(function () {
+        if (this.checked) {
+            addIndexer($(this).data('id'), false);
+        }
+    })
 }
 
 function createDropDownHtml(column, exactMatch) {
@@ -484,6 +524,42 @@ function createDropDownHtml(column, exactMatch) {
         });
 
     return select;
+}
+
+function addIndexer(indexerId, displayNotification) {
+    api.getIndexerConfig(indexerId, function (data) {
+        if (data.result !== undefined && data.result == "error") {
+            doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
+            return;
+        }
+
+        api.updateIndexerConfig(indexerId, data, function (data) {
+            if (data == undefined) {
+                reloadIndexers();
+                if (displayNotification) {
+                    doNotify("Successfully configured " + indexerId, "success", "glyphicon glyphicon-ok");
+                }
+            } else if (data.result == "error") {
+                if (data.config) {
+                    populateConfigItems(configForm, data.config);
+                }
+                doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
+            }
+        }).fail(function (data) {
+            if (data.responseJSON.error !== undefined) {
+                var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
+                var githubrepo = "Jackett/Jackett";
+                var githubtext = "this indexer";
+                if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
+                    githubrepo = "FlareSolverr/FlareSolverr";
+                    githubtext = "FlareSolverr";
+                }
+                doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
+            } else {
+                doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
+            }
+        });
+    });
 }
 
 function copyToClipboard(text) {
@@ -1274,6 +1350,7 @@ function bindUIButtons() {
     $('#jackett-add-indexer').click(function () {
         $("#modals").empty();
         displayUnconfiguredIndexersList();
+        addCheckOnCellClick();
         $('#unconfigured-indexer-datatable tfoot tr').insertAfter($('#unconfigured-indexer-datatable thead tr'));
         $('#unconfigured-indexer-datatable').DataTable().search('').columns().search('').draw();
     });

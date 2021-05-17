@@ -351,10 +351,11 @@
             <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Indexer</th>
                         <th>Categories</th>
                         <th>Type</th>
-                        <th>Type string</th>
+                        <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
                     </tr>
@@ -362,10 +363,15 @@
                 <tbody>
                     {{#each indexers}}
                     <tr class="unconfigured-indexer-row">
+                        <td class="checkboxColumn">
+                            {{#if_eq type "public"}}
+                            <input type="checkbox" id="select{{id}}" data-id="{{id}}" />
+                            {{/if_eq}}
+                        </td>
                         <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
                         <td>{{mains_cats}}</td>
                         <td class="fit"><span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
-                        <td>{{type}}</td>
+                        <td data-type="hiddendata">{{type}}</td>
                         <td class="fit">{{language}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
@@ -384,10 +390,11 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th></th>
                         <th>Indexer</th>
                         <th>Categories</th>
                         <th>Type</th>
-                        <th>Type string</th>
+                        <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
                     </tr>
@@ -618,7 +625,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="add-selected-indexers" class="btn btn-default">Add Selected</button>
+                        <button type="button" id="close-selected-indexers" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -723,6 +732,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=PR11717"></script>
+    <script type="text/javascript" src="../custom.js?changed=PR11721"></script>
 </body>
 </html>
