@@ -11,16 +11,21 @@ links:
 caps:
   categorymappings:
     # when refreshing categories dont forget to update the category case block
-    - {id: 94, cat: TV/Sport, desc: "sport catch"}
-    - {id: 93, cat: TV/Sport, desc: "sport catch"}
+    - {id: 116, cat: Books, desc: "livres cuisine"}
+    - {id: 125, cat: XXX/Other, desc: "livres XXX"}
+    - {id: 123, cat: Books, desc: "livres roman"}
+    - {id: 113, cat: Books/EBook, desc: "livres Ebook"}
+    - {id: 110, cat: Audio/Audiobook, desc: "livres audio"}
+    - {id: 109, cat: Books/Comics, desc: "livres bd"}
+    - {id: 108, cat: Books/Comics, desc: "livres manga"}
+    - {id: 106, cat: Books, desc: "livres presse"}
+    - {id: 105, cat: Books/Mags, desc: "livres magazine"}
+    - {id: 126, cat: Books, desc: "livres "}
     - {id: 96, cat: TV/Sport, desc: "sport sport"}
     - {id: 97, cat: TV/Sport, desc: "sport divers"}
     - {id: 81, cat: TV/Anime, desc: "Animation Séries"}
     - {id: 79, cat: Movies/HD, desc: "Animation Film"}
     - {id: 65, cat: TV/Documentary, desc: "Documentaires Divers"}
-    - {id: 66, cat: TV/Documentary, desc: "Documentaires audio"}
-    - {id: 74, cat: Books/EBook, desc: "Documentaires Ebook"}
-    - {id: 75, cat: Audio/Audiobook, desc: "Documentaires Ebook audio"}
     - {id: 2, cat: Movies/DVD, desc: "Film DVDRip"}
     - {id: 99, cat: Movies/HD, desc: "Film Hdrip"}
     - {id: 98, cat: Movies/WEB-DL, desc: "Film Webrip"}
@@ -28,11 +33,10 @@ caps:
     - {id: 87, cat: Movies/HD, desc: "Film REMUX"}
     - {id: 70, cat: Movies/BluRay, desc: "Film BRRiP - BDRiP"}
     - {id: 69, cat: Movies/DVD, desc: "Film DVD-r"}
-    - {id: 67, cat: Movies/Other, desc: "Film Vob"}
+    - {id: 67, cat: Movies/3D, desc: "Film 3D Bluray"}
     - {id: 59, cat: Movies/Other, desc: "Film Divers"}
     - {id: 19, cat: Movies/HD, desc: "Film 720P"}
     - {id: 17, cat: Movies/Other, desc: "Film Iso"}
-    - {id: 16, cat: Movies/WEB-DL, desc: "Film Webrip - HDrip"}
     - {id: 15, cat: Movies/BluRay, desc: "Film Bluray Full"}
     - {id: 4, cat: Movies/HD, desc: "Film 1080P"}
     - {id: 102, cat: Movies/UHD, desc: "Film HDR"}
@@ -51,6 +55,7 @@ caps:
     - {id: 63, cat: TV/Other, desc: "Pack_Series Divers"}
     - {id: 71, cat: TV/HD, desc: "Pack_Series BRRiP - BDRiP"}
     - {id: 82, cat: TV/Anime, desc: "Pack_Series Animation"}
+    - {id: 112, cat: TV/HD, desc: "Pack_Series HDTV"}
     - {id: 10, cat: XXX, desc: "XxX 18 Film"}
     - {id: 13, cat: PC/0day, desc: "Apps Win"}
     - {id: 14, cat: PC/Mac, desc: "Apps Mac"}
@@ -161,16 +166,21 @@ search:
       selector: div.kat_cat_pic
       filters:
       case:
-        ":contains(\"sport\"):contains(\"catch\")": 94
-        ":contains(\"sport\"):contains(\"catch\")": 93
+        ":contains(\"livres\"):contains(\"cuisine\")": 116
+        ":contains(\"livres\"):contains(\"XXX\")": 125
+        ":contains(\"livres\"):contains(\"roman\")": 123
+        ":contains(\"livres\"):contains(\"Ebook\")": 113
+        ":contains(\"livres\"):contains(\"audio\")": 110
+        ":contains(\"livres\"):contains(\"bd\")": 109
+        ":contains(\"livres\"):contains(\"manga\")": 108
+        ":contains(\"livres\"):contains(\"presse\")": 106
+        ":contains(\"livres\"):contains(\"magazine\")": 105
+        ":contains(\"livres\"):contains(\"\")": 126
         ":contains(\"sport\"):contains(\"sport\")": 96
         ":contains(\"sport\"):contains(\"divers\")": 97
         ":contains(\"Animation\"):contains(\"Séries\")": 81
         ":contains(\"Animation\"):contains(\"Film\")": 79
         ":contains(\"Documentaires\"):contains(\"Divers\")": 65
-        ":contains(\"Documentaires\"):contains(\"audio\")": 66
-        ":contains(\"Documentaires\"):contains(\"Ebook\")": 74
-        ":contains(\"Documentaires\"):contains(\"Ebook audio\")": 75
         ":contains(\"Film\"):contains(\"DVDRip\")": 2
         ":contains(\"Film\"):contains(\"Hdrip\")": 99
         ":contains(\"Film\"):contains(\"Webrip\")": 98
@@ -178,12 +188,11 @@ search:
         ":contains(\"Film\"):contains(\"REMUX\")": 87
         ":contains(\"Film\"):contains(\"BRRiP - BDRiP\")": 70
         ":contains(\"Film\"):contains(\"DVD-r\")": 69
-        ":contains(\"Film\"):contains(\"Vob\")": 67
+        ":contains(\"Film\"):contains(\"3D\")": 67
         ":contains(\"Film\"):contains(\"Divers\")": 59
         ":contains(\"Film\"):contains(\"720P\")": 19
         ":contains(\"Film\"):contains(\"Iso\")": 17
-        ":contains(\"Film\"):contains(\"Webrip\")": 16
-        ":contains(\"Film\"):contains(\"Bluray\")": 15
+        ":contains(\"Film\"):contains(\"Full\")": 15
         ":contains(\"Film\"):contains(\"1080P\")": 4
         ":contains(\"Film\"):contains(\"HDR\")": 102
         ":contains(\"Serie\"):contains(\"1080P\")": 46
@@ -201,6 +210,7 @@ search:
         ":contains(\"Pack_Series\"):contains(\"Divers\")": 63
         ":contains(\"Pack_Series\"):contains(\"BRRiP - BDRiP\")": 71
         ":contains(\"Pack_Series\"):contains(\"Animation\")": 82
+        ":contains(\"Pack_Series\"):contains(\"HDTV\")": 112
         ":contains(\"XxX\"):contains(\"Film\")": 10
         ":contains(\"Apps\"):contains(\"Win\")": 13
         ":contains(\"Apps\"):contains(\"Mac\")": 14
