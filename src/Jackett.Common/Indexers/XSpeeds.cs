@@ -25,6 +25,8 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "takelogin.php";
         private string GetRSSKeyUrl => SiteLink + "getrss.php";
         private string SearchUrl => SiteLink + "browse.php";
+        private readonly Regex _dateMatchRegex = new Regex(
+            @"\d{2}-\d{2}-\d{4} \d{2}:\d{2}", RegexOptions.Compiled);
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
             (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
@@ -268,8 +270,11 @@ namespace Jackett.Common.Indexers
                     release.Link = release.Guid;
                     release.Details = new Uri(qDetails.GetAttribute("href"));
                     //08-08-2015 12:51
-                    release.PublishDate = DateTime.ParseExact(
-                        row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",
+                    // requests can be 'Pre Release Time: 25-04-2021 15:00 Uploaded: 3 Weeks, 2 Days, 23 Hours, 53 Minutes, 39 Seconds after Pre'
+                    var dateMatch = _dateMatchRegex.Match(row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim());
+                    if (dateMatch.Success)
+                        release.PublishDate = DateTime.ParseExact(dateMatch.Value
+                        , "dd-MM-yyyy H:mm",
                         CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
