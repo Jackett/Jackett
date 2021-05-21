@@ -1,0 +1,135 @@
+---
+id: htcztorrent
+name: HD-CzTorrent
+description: "HD CzTorrent is a CZECH semi private site for TV / MOVIES / GENERAL"
+language: cs-cz
+type: semi-private
+encoding: windows-1250
+links:
+  - http://www.hd-cztorrent.cz/
+
+caps:
+  categorymappings:
+    - {id: 37, cat: Movies/DVD, desc: "DVD", default: false}
+    - {id: 92, cat: TV, desc: "TV Serial ENG", default: false}
+    - {id: 39, cat: Audio/Video, desc: "Hudba Video", default: false}
+    - {id: 41, cat: Movies/SD, desc: "DivX / AVI", default: false}
+    - {id: 90, cat: Movies/SD, desc: "DivX / AVI Titulky", default: false}
+    - {id: 43, cat: Movies/Other, desc: "FILM dokument", default: false}
+    - {id: 44, cat: Movies/Other, desc: "FILM sport", default: false}
+    - {id: 45, cat: TV, desc: "SERIALY CZ", default: false}
+    - {id: 47, cat: Movies, desc: "Animované", default: false}
+    - {id: 91, cat: TV, desc: "Serial titulky", default: false}
+    - {id: 50, cat: Movies/BluRay, desc: "FILMY Blu-ray", default: false}
+    - {id: 109, cat: Movies/BluRay, desc: "BLURAY orig JAZYK", default: false}
+    - {id: 52, cat: Movies/HD, desc: "HD 1080 ", default: false}
+    - {id: 53, cat: Movies/HD, desc: "HD 720", default: false}
+    - {id: 55, cat: Movies/3D, desc: "3D Filmy", default: false}
+    - {id: 110, cat: Movies/3D, desc: "3D ORIGINÁL", default: false}
+    - {id: 111, cat: Movies, desc: "FILMY CZ TVORBA", default: false}
+    - {id: 98, cat: Movies/UHD, desc: "ORIGINAL JAZYK 4K", default: false}
+    - {id: 77, cat: Movies/UHD, desc: "ULTRA HD  4K", default: false}
+    - {id: 89, cat: Movies/HD, desc: "HD720 titulky ", default: false}
+    - {id: 93, cat: Movies/HD, desc: "HD 1080 titulky", default: false}
+    - {id: 107, cat: Movies, desc: "CAMERA RIP ", default: false}
+    - {id: 94, cat: Movies, desc: "h 265", default: false}
+    - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK", default: false}
+    - {id: 95, cat: Movies/Other, desc: "FILM RETRO", default: false}
+    - {id: 57, cat: Audio/Lossless, desc: "Hudba flac", default: false}
+    - {id: 58, cat: Audio/MP3, desc: "Hudba mp3", default: false}
+    - {id: 96, cat: Audio/Other, desc: "RETRO HUDBA", default: false}
+    - {id: 64, cat: Books, desc: "E-books, PDF fotky", default: false}
+    - {id: 65, cat: Audio/Audiobook, desc: "Mluvene slovo", default: false}
+    - {id: 113, cat: Books/Other, desc: "obrazky fotky", default: false}
+    - {id: 11, cat: XXX, desc: "XXX 18+KLASIKA", default: false}
+    - {id: 99, cat: XXX, desc: "XXX GAY", default: false}
+    - {id: 100, cat: XXX, desc: "XXX ASIAN", default: false}
+    - {id: 101, cat: XXX, desc: "XXX 3D", default: false}
+    - {id: 106, cat: XXX/ImageSet, desc: "XXX-OBRÁZKY", default: false}
+    - {id: 108, cat: XXX, desc: "PORNO BDSM", default: false}
+    - {id: 73, cat: PC/Games, desc: "Hry, Games", default: false}
+    - {id: 97, cat: Console/PS4, desc: "HRY PS4", default: false}
+    - {id: 60, cat: PC/Mobile-Other, desc: "Mobil PDA", default: false}
+    - {id: 62, cat: PC, desc: "Aplikace All", default: false}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+
+  - name: password
+    type: password
+    label: Password
+
+login:
+  # use simple post login
+  method: post
+  # target of the POST request
+  path: index.php?page=login
+  # list of POST parameters
+  inputs:
+    # using configured username and password from the prior settings block
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: tbody:has(td.lista > span:contains("Nesprávné uživatelské jméno"))
+
+
+search:
+  paths:
+    - path: index.php
+  inputs:
+    page: "torrents"
+    search: "{{ .Keywords }}"
+    category: 0
+    uploader: 0
+    options: 0
+    active: 1
+    gold: 0
+  preprocessingfilters:
+   - name: replace
+     args: ["else:","else_"]
+
+  rows:
+    selector: else_is_displayed_2 tr:has(> td > a[href^=download])
+
+  fields:
+    category:
+      selector: a[href*="category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: td:nth-child(2) > a
+    details:
+      selector: a[href^="index.php?page=torrent-details"]
+      attribute: href
+    download:
+      selector: a[href^="download.php"]
+      attribute: href
+    poster:
+      selector: a[href^="index.php?page=torrent-details"]
+      attribute: onmouseover
+      filters:
+       - name: replace
+         args: "return overlib\\('<img src=(.+?) "
+    date:
+      selector: td:nth-child(6)
+      filters:
+       - name: dateparse
+         args: "02/01/2006"
+    size:
+      selector: td:nth-child(11)
+    seeders:
+      selector: td:nth-child(8) > a
+    leechers:
+      selector: td:nth-child(9) > a
+
