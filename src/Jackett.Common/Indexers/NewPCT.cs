@@ -101,7 +101,8 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://pctmix.com/",
             "https://pctmix1.com/",
-            "https://pctreload1.com/"
+            "https://pctreload1.com/",
+            "https://maxitorrent.com"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
