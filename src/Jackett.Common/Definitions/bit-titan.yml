@@ -124,11 +124,11 @@ settings:
 login:
   path: login.php
   method: form
-  form: form[action="takelogin.php"]
+  form: form[action$="login.php"]
   cookies: ["JAVA=OK"] # avoid jscheck redirect
   captcha:
     type: image
-    selector: img[src^="cap/captcha_math.php"]
+    selector: img[src*="captcha_math.php"]
     input: stringCaptcha
   inputs:
     username: "{{ .Config.username }}"
@@ -150,7 +150,7 @@ search:
     allCats: ""
     search: "{{ .Keywords }}"
     # 1 25, 2 50, 3 75, 4 100
-    limit: 1
+    limit: 4
     # searchin: 0 all, 1 active, 2 dead, 3 highlights, 4 bookmarks, 5 uploads, 10 bots, 11 onlyupload, 12 multiplier, 13 %download, 14 freeleech
     # note: freeleech on this site means download and upload is not counted, whereas OU means download is free and upload is counted
     # 14 yields no freeleech, but 11 returns results
@@ -184,6 +184,9 @@ search:
           args: (\d+)
         - name: prepend
           args: "download.php?torrent="
+    poster:
+      selector: div[data-image]
+      attribute: data-image
     seeders:
       selector: td.peers:has(i[title="Seeders"])
     leechers:
@@ -227,9 +230,9 @@ search:
         "*": 1
     uploadvolumefactor:
       case:
-        "span:contains(\"2x\")": 2
-        "span:contains(\"5x\")": 5
-        "span:contains(\"10x\")": 10
+        "span:contains(\"x2\")": 2
+        "span:contains(\"x5\")": 5
+        "span:contains(\"x10\")": 10
         "span:contains(\"FL\")": 0 # freeleech neither dl or ul is counted
         "*": 1
     minimumseedtime:
