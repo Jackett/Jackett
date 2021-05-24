@@ -48,7 +48,8 @@ caps:
     - {id: 100, cat: XXX, desc: "XXX ASIAN", default: false}
     - {id: 101, cat: XXX, desc: "XXX 3D", default: false}
     - {id: 106, cat: XXX/ImageSet, desc: "XXX-OBRÁZKY", default: false}
-    - {id: 108, cat: XXX, desc: "PORNO BDSM", default: false}
+    - {id: 108, cat: XXX, desc: "PORNO BDSM"}
+    # HRY
     - {id: 73, cat: PC/Games, desc: "Hry, Games", default: false}
     - {id: 97, cat: Console/PS4, desc: "HRY PS4", default: false}
     - {id: 60, cat: PC/Mobile-Other, desc: "Mobil PDA", default: false}
