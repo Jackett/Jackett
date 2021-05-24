@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 37, cat: Movies/DVD, desc: "DVD", default: false}
+    - {id: 37, cat: Movies/DVD, desc: "DVD"}
     - {id: 92, cat: TV, desc: "TV Serial ENG", default: false}
     - {id: 39, cat: Audio/Video, desc: "Hudba Video", default: false}
     - {id: 41, cat: Movies/SD, desc: "DivX / AVI", default: false}
@@ -132,4 +132,3 @@ search:
       selector: td:nth-child(8) > a
     leechers:
       selector: td:nth-child(9) > a
-
