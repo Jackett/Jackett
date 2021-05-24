@@ -122,6 +122,7 @@ search:
     search: "{{ .Keywords }}"
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     uploader: 0
+    # 0 filename, 1 file & desc, 2 description
     options: 0
     # 0 filename, 1 file & desc, 2 description
     active: 0
