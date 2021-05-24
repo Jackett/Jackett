@@ -147,11 +147,14 @@ namespace Jackett.Common.Indexers
                     continue;
                 }
 
-                if (releaseInfo.Link == null)
+                if (releaseInfo.MagnetLink == null)
                 {
                     logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed link URI.");
                     continue;
                 }
+
+                // Run the title parser for the details link
+                releaseInfo.DetailsLink = new Uri(string.Format("{0}anime-list/{1}", SiteLink, titleParser.GetUrlSlug(releaseInfo.Title)));
 
                 // If enabled, perform detailed title parsing
                 if (IsTitleDetailParsingEnabled)
@@ -181,8 +184,9 @@ namespace Jackett.Common.Indexers
                 yield return new ReleaseInfo
                 {
                     Title = string.Concat(fi.Title, " - ", fi.Quality),
-                    Guid = fi.Link,
-                    MagnetUri = fi.Link,
+                    Guid = fi.MagnetLink,
+                    MagnetUri = fi.MagnetLink,
+                    Details = fi.DetailsLink,
                     PublishDate = fi.PublishDate.Value.ToLocalTime().DateTime,
                     Category = MapTrackerCatToNewznab("1"),
 
@@ -278,7 +282,7 @@ namespace Jackett.Common.Indexers
 
                 if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
                 {
-                    Link = magnetUri;
+                    MagnetLink = magnetUri;
                 }
 
                 if (DateTimeOffset.TryParse(feedItem.PublishDate, out DateTimeOffset publishDate))
@@ -302,7 +306,9 @@ namespace Jackett.Common.Indexers
 
             public string Title { get; set; }
 
-            public Uri Link { get; }
+            public Uri MagnetLink { get; }
+
+            public Uri DetailsLink { get; set; }
 
             public DateTimeOffset? PublishDate { get; }
         }
@@ -320,6 +326,8 @@ namespace Jackett.Common.Indexers
                 { " – (?<detail>[0-9]+)$", " – " }, // "<title> – <episode>" <end_of_title> - NOT A HYPHEN!
                 { " – (?<detail>[0-9]+) ", " – " } // "<title> – <episode> ..." - NOT A HYPHEN!
             };
+
+            private const string TITLE_URL_SLUG_REGEX = @"^(?<url_slug>.+) –";
 
             public string Parse(string title)
             {
@@ -353,6 +361,25 @@ namespace Jackett.Common.Indexers
                 ).Trim();
             }
 
+            public string GetUrlSlug(string title)
+            {
+                var match = Regex.Match(title, TITLE_URL_SLUG_REGEX, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
+                if (!match.Success)
+                {
+                    return null;
+                }
+
+                var urlSlug = match.Groups["url_slug"].Value.ToLowerInvariant();
+                urlSlug = Regex.Replace(urlSlug, "[^a-zA-Z0-9]", "-");
+                urlSlug = urlSlug.Trim('-');
+                while (urlSlug.Contains("--"))
+                {
+                    urlSlug = urlSlug.Replace("--", "-");
+                }
+
+                return urlSlug;
+            }
+
             private static (string strippedTitle, Dictionary<string, string> details) SearchTitleForDetails(string title, Dictionary<string, Dictionary<string, string>> definition)
             {
                 Dictionary<string, string> details = new Dictionary<string, string>();
@@ -370,7 +397,7 @@ namespace Jackett.Common.Indexers
             {
                 foreach (var srp in searchReplacePatterns)
                 {
-                    var match = Regex.Match(title, srp.Key, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(0.5));
+                    var match = Regex.Match(title, srp.Key, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
                     if (match.Success)
                     {
                         string detail = match.Groups["detail"].Value;
