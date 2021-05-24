@@ -38,7 +38,8 @@ caps:
     - {id: 95, cat: Movies/Other, desc: "FILM RETRO", default: false}
     - {id: 57, cat: Audio/Lossless, desc: "Hudba flac", default: false}
     - {id: 58, cat: Audio/MP3, desc: "Hudba mp3", default: false}
-    - {id: 96, cat: Audio/Other, desc: "RETRO HUDBA", default: false}
+    - {id: 96, cat: Audio/Other, desc: "RETRO HUDBA"}
+    # ostatni
     - {id: 64, cat: Books, desc: "E-books, PDF fotky", default: false}
     - {id: 65, cat: Audio/Audiobook, desc: "Mluvene slovo", default: false}
     - {id: 113, cat: Books/Other, desc: "obrazky fotky", default: false}
