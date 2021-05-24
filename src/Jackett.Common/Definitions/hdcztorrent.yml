@@ -122,7 +122,7 @@ search:
       selector: a[href^="index.php?page=torrent-details"]
       attribute: onmouseover
       filters:
-       - name: replace
+        - name: regexp
          args: "return overlib\\('<img src=(.+?) "
     date:
       selector: td:nth-child(6)
