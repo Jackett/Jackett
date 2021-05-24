@@ -97,7 +97,8 @@ search:
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     uploader: 0
     options: 0
-    active: 1
+    # 0 filename, 1 file & desc, 2 description
+    active: 0
     gold: 0
   preprocessingfilters:
     - name: replace
