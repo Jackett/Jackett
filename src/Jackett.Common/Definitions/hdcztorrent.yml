@@ -51,7 +51,8 @@ caps:
     - {id: 108, cat: XXX, desc: "PORNO BDSM"}
     # HRY
     - {id: 73, cat: PC/Games, desc: "Hry, Games", default: false}
-    - {id: 97, cat: Console/PS4, desc: "HRY PS4", default: false}
+    - {id: 97, cat: Console/PS4, desc: "HRY PS4"}
+    # APLIKACE
     - {id: 60, cat: PC/Mobile-Other, desc: "Mobil PDA", default: false}
     - {id: 62, cat: PC, desc: "Aplikace All", default: false}
 
