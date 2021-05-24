@@ -35,7 +35,8 @@ caps:
     - {id: 107, cat: Movies, desc: "CAMERA RIP ", default: false}
     - {id: 94, cat: Movies, desc: "h 265", default: false}
     - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK", default: false}
-    - {id: 95, cat: Movies/Other, desc: "FILM RETRO", default: false}
+    - {id: 95, cat: Movies/Other, desc: "FILM RETRO"}
+    # HUDBA
     - {id: 57, cat: Audio/Lossless, desc: "Hudba flac", default: false}
     - {id: 58, cat: Audio/MP3, desc: "Hudba mp3", default: false}
     - {id: 96, cat: Audio/Other, desc: "RETRO HUDBA"}
