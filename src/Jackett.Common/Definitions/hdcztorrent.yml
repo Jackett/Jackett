@@ -141,4 +141,4 @@ search:
     seeders:
       selector: td:nth-child(8) > a
     leechers:
-      selector: td:nth-child(9) > a
+      selector: td:nth-child(9)
