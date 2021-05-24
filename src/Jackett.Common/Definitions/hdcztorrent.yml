@@ -104,9 +104,7 @@ login:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
   error:
-    - selector: tbody:has(td.lista > span:contains("Nesprávné uživatelské jméno"))
-    - selector: tbody:has(td.lista > span:contains("Musíte zadat uživatelské jméno!"))
-    - selector: tbody:has(td.lista > span:contains("Nesprávné heslo"))
+    - selector: td.lista span[style="color:#FF0000;"]
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -123,8 +121,8 @@ search:
     uploader: 0
     # 0 filename, 1 file & desc, 2 description
     options: 0
-    # 0 all, 1 active only, 2 dead only
-    active: 0
+    # 0 all, 1 oactive only, 2 dead only
+    active: 1
     # 0 all, 1 classic, 2 silver, 3 gold, 4 silver & gold
     gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
@@ -157,8 +155,10 @@ search:
     date:
       selector: td:nth-child(6)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     size:
       selector: td:nth-child(11)
     seeders:
