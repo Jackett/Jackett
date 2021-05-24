@@ -123,8 +123,8 @@ search:
     uploader: 0
     # 0 filename, 1 file & desc, 2 description
     options: 0
-    # 0 all, 1 oactive only, 2 dead only
-    active: 1
+    # 0 all, 1 active only, 2 dead only
+    active: 0
     # 0 all, 1 classic, 2 silver, 3 gold, 4 silver & gold
     gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
@@ -158,7 +158,7 @@ search:
       selector: td:nth-child(6)
       filters:
         - name: dateparse
-         args: "02/01/2006"
+          args: "02/01/2006"
     size:
       selector: td:nth-child(11)
     seeders:
