@@ -91,7 +91,7 @@ search:
   inputs:
     page: "torrents"
     search: "{{ .Keywords }}"
-    category: 0
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     uploader: 0
     options: 0
     active: 1
