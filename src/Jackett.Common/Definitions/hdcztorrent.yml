@@ -139,6 +139,6 @@ search:
     size:
       selector: td:nth-child(11)
     seeders:
-      selector: td:nth-child(8) > a
+      selector: td:nth-child(8)
     leechers:
       selector: td:nth-child(9)
