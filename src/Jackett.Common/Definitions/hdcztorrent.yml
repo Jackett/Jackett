@@ -108,7 +108,7 @@ search:
      args: ["else:","else_"]
 
   rows:
-    selector: else_is_displayed_2 tr:has(> td > a[href^=download])
+    selector: table.lista > tbody > tr:has(a[href*=bookmark])
 
   fields:
     category:
