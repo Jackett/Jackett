@@ -364,7 +364,8 @@ namespace Jackett.Common.Indexers
             public string GetUrlSlug(string title)
             {
                 var match = Regex.Match(title, TITLE_URL_SLUG_REGEX, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
-                if (!match.Success) {
+                if (!match.Success)
+                {
                     return null;
                 }
 
