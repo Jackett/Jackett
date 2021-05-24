@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # Film
     - {id: 37, cat: Movies/DVD, desc: "DVD"}
     - {id: 92, cat: TV, desc: "TV Serial ENG", default: false}
     - {id: 39, cat: Audio/Video, desc: "Hudba Video", default: false}
