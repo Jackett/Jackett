@@ -1,7 +1,7 @@
 ---
 id: hdcztorrent
 name: HD-CzTorrent
-description: "HD CzTorrent is a CZECH semi private site for TV / MOVIES / GENERAL"
+description: "HD-CzTorrent is a CZECH semi private site for TV / MOVIES / GENERAL"
 language: cs-cz
 type: semi-private
 encoding: UTF-8
@@ -12,51 +12,51 @@ caps:
   categorymappings:
     # Film
     - {id: 37, cat: Movies/DVD, desc: "DVD"}
-    - {id: 92, cat: TV, desc: "TV Serial ENG", default: false}
-    - {id: 39, cat: Audio/Video, desc: "Hudba Video", default: false}
-    - {id: 41, cat: Movies/SD, desc: "DivX / AVI", default: false}
-    - {id: 90, cat: Movies/SD, desc: "DivX / AVI Titulky", default: false}
-    - {id: 43, cat: Movies/Other, desc: "FILM dokument", default: false}
-    - {id: 44, cat: Movies/Other, desc: "FILM sport", default: false}
-    - {id: 45, cat: TV, desc: "SERIALY CZ", default: false}
-    - {id: 47, cat: Movies, desc: "Animované", default: false}
-    - {id: 91, cat: TV, desc: "Serial titulky", default: false}
-    - {id: 50, cat: Movies/BluRay, desc: "FILMY Blu-ray", default: false}
-    - {id: 109, cat: Movies/BluRay, desc: "BLURAY orig JAZYK", default: false}
-    - {id: 52, cat: Movies/HD, desc: "HD 1080 ", default: false}
-    - {id: 53, cat: Movies/HD, desc: "HD 720", default: false}
-    - {id: 55, cat: Movies/3D, desc: "3D Filmy", default: false}
-    - {id: 110, cat: Movies/3D, desc: "3D ORIGINÁL", default: false}
-    - {id: 111, cat: Movies, desc: "FILMY CZ TVORBA", default: false}
-    - {id: 98, cat: Movies/UHD, desc: "ORIGINAL JAZYK 4K", default: false}
-    - {id: 77, cat: Movies/UHD, desc: "ULTRA HD  4K", default: false}
-    - {id: 89, cat: Movies/HD, desc: "HD720 titulky ", default: false}
-    - {id: 93, cat: Movies/HD, desc: "HD 1080 titulky", default: false}
-    - {id: 107, cat: Movies, desc: "CAMERA RIP ", default: false}
-    - {id: 94, cat: Movies, desc: "h 265", default: false}
-    - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK", default: false}
+    - {id: 92, cat: TV, desc: "TV Serial ENG"}
+    - {id: 39, cat: Audio/Video, desc: "Hudba Video"}
+    - {id: 41, cat: Movies/SD, desc: "DivX / AVI"}
+    - {id: 90, cat: Movies/SD, desc: "DivX / AVI Titulky"}
+    - {id: 43, cat: Movies/Other, desc: "FILM dokument"}
+    - {id: 44, cat: Movies/Other, desc: "FILM sport"}
+    - {id: 45, cat: TV, desc: "SERIALY CZ"}
+    - {id: 47, cat: Movies, desc: "Animované"}
+    - {id: 91, cat: TV, desc: "Serial titulky"}
+    - {id: 50, cat: Movies/BluRay, desc: "FILMY Blu-ray"}
+    - {id: 109, cat: Movies/BluRay, desc: "BLURAY orig JAZYK"}
+    - {id: 52, cat: Movies/HD, desc: "HD 1080 "}
+    - {id: 53, cat: Movies/HD, desc: "HD 720"}
+    - {id: 55, cat: Movies/3D, desc: "3D Filmy"}
+    - {id: 110, cat: Movies/3D, desc: "3D ORIGINÁL"}
+    - {id: 111, cat: Movies, desc: "FILMY CZ TVORBA"}
+    - {id: 98, cat: Movies/UHD, desc: "ORIGINAL JAZYK 4K"}
+    - {id: 77, cat: Movies/UHD, desc: "ULTRA HD  4K"}
+    - {id: 89, cat: Movies/HD, desc: "HD720 titulky "}
+    - {id: 93, cat: Movies/HD, desc: "HD 1080 titulky"}
+    - {id: 107, cat: Movies, desc: "CAMERA RIP "}
+    - {id: 94, cat: Movies, desc: "h 265"}
+    - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK"}
     - {id: 95, cat: Movies/Other, desc: "FILM RETRO"}
     # HUDBA
-    - {id: 57, cat: Audio/Lossless, desc: "Hudba flac", default: false}
-    - {id: 58, cat: Audio/MP3, desc: "Hudba mp3", default: false}
+    - {id: 57, cat: Audio/Lossless, desc: "Hudba flac"}
+    - {id: 58, cat: Audio/MP3, desc: "Hudba mp3"}
     - {id: 96, cat: Audio/Other, desc: "RETRO HUDBA"}
     # ostatni
-    - {id: 64, cat: Books, desc: "E-books, PDF fotky", default: false}
-    - {id: 65, cat: Audio/Audiobook, desc: "Mluvene slovo", default: false}
+    - {id: 64, cat: Books, desc: "E-books, PDF fotky"}
+    - {id: 65, cat: Audio/Audiobook, desc: "Mluvene slovo"}
     - {id: 113, cat: Books/Other, desc: "obrazky fotky"}
     # PORNO
-    - {id: 11, cat: XXX, desc: "XXX 18+KLASIKA", default: false}
-    - {id: 99, cat: XXX, desc: "XXX GAY", default: false}
-    - {id: 100, cat: XXX, desc: "XXX ASIAN", default: false}
-    - {id: 101, cat: XXX, desc: "XXX 3D", default: false}
-    - {id: 106, cat: XXX/ImageSet, desc: "XXX-OBRÁZKY", default: false}
+    - {id: 11, cat: XXX, desc: "XXX 18+KLASIKA"}
+    - {id: 99, cat: XXX, desc: "XXX GAY"}
+    - {id: 100, cat: XXX, desc: "XXX ASIAN"}
+    - {id: 101, cat: XXX, desc: "XXX 3D"}
+    - {id: 106, cat: XXX/ImageSet, desc: "XXX-OBRÁZKY"}
     - {id: 108, cat: XXX, desc: "PORNO BDSM"}
     # HRY
-    - {id: 73, cat: PC/Games, desc: "Hry, Games", default: false}
+    - {id: 73, cat: PC/Games, desc: "Hry, Games"}
     - {id: 97, cat: Console/PS4, desc: "HRY PS4"}
     # APLIKACE
-    - {id: 60, cat: PC/Mobile-Other, desc: "Mobil PDA", default: false}
-    - {id: 62, cat: PC, desc: "Aplikace All", default: false}
+    - {id: 60, cat: PC/Mobile-Other, desc: "Mobil PDA"}
+    - {id: 62, cat: PC, desc: "Aplikace All"}
 
   modes:
     search: [q]
@@ -98,17 +98,15 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  # use simple post login
   method: post
-  # target of the POST request
   path: index.php?page=login
-  # list of POST parameters
   inputs:
-    # using configured username and password from the prior settings block
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
   error:
     - selector: tbody:has(td.lista > span:contains("Nesprávné uživatelské jméno"))
+    - selector: tbody:has(td.lista > span:contains("Musíte zadat uživatelské jméno!"))
+    - selector: tbody:has(td.lista > span:contains("Nesprávné heslo"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -119,21 +117,18 @@ search:
     # http://www.hd-cztorrent.cz/index.php?page=torrents&search=the+avengers&category=0&uploader=0&options=0&active=0&gold=0&order=3&by=2
     - path: index.php
   inputs:
-    page: "torrents"
+    page: torrents
     search: "{{ .Keywords }}"
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     uploader: 0
     # 0 filename, 1 file & desc, 2 description
     options: 0
-    # 0 filename, 1 file & desc, 2 description
-    active: 0
+    # 0 all, 1 oactive only, 2 dead only
+    active: 1
     # 0 all, 1 classic, 2 silver, 3 gold, 4 silver & gold
     gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
-  preprocessingfilters:
-    - name: replace
-     args: ["else:","else_"]
 
   rows:
     selector: table.lista > tbody > tr:has(a[href*=bookmark])
@@ -170,3 +165,24 @@ search:
       selector: td:nth-child(8)
     leechers:
       selector: td:nth-child(9)
+    downloadvolumefactor:
+      case:
+        img[src$="freeleech.gif"]: 0
+        img[src$="gold.gif"]: 0
+        img[src$="silver.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="2x.gif"]: 2
+        img[src$="3x.gif"]: 3
+        img[src$="4x.gif"]: 4
+        img[src$="5x.gif"]: 5
+        img[src$="6x.gif"]: 6
+        img[src$="7x.gif"]: 7
+        img[src$="8x.gif"]: 8
+        img[src$="9x.gif"]: 9
+        img[src$="10x.gif"]: 10
+        "*": 1
+    minimumratio:
+      text: 0.3
+# xbtit dt fm v7.1 customized
