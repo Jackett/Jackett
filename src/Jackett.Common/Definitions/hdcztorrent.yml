@@ -99,7 +99,10 @@ search:
     options: 0
     # 0 filename, 1 file & desc, 2 description
     active: 0
-    gold: 0
+    # 0 all, 1 classic, 2 silver, 3 gold, 4 silver & gold
+    gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
   preprocessingfilters:
     - name: replace
      args: ["else:","else_"]
