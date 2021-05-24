@@ -123,7 +123,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-         args: "return overlib\\('<img src=(.+?) "
+          args: "src=(.+?) "
     date:
       selector: td:nth-child(6)
       filters:
