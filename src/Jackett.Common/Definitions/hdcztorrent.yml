@@ -127,7 +127,7 @@ search:
     date:
       selector: td:nth-child(6)
       filters:
-       - name: dateparse
+        - name: dateparse
          args: "02/01/2006"
     size:
       selector: td:nth-child(11)
