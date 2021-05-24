@@ -97,7 +97,7 @@ search:
     active: 1
     gold: 0
   preprocessingfilters:
-   - name: replace
+    - name: replace
      args: ["else:","else_"]
 
   rows:
