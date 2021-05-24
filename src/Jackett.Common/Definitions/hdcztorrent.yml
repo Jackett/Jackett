@@ -42,7 +42,8 @@ caps:
     # ostatni
     - {id: 64, cat: Books, desc: "E-books, PDF fotky", default: false}
     - {id: 65, cat: Audio/Audiobook, desc: "Mluvene slovo", default: false}
-    - {id: 113, cat: Books/Other, desc: "obrazky fotky", default: false}
+    - {id: 113, cat: Books/Other, desc: "obrazky fotky"}
+    # PORNO
     - {id: 11, cat: XXX, desc: "XXX 18+KLASIKA", default: false}
     - {id: 99, cat: XXX, desc: "XXX GAY", default: false}
     - {id: 100, cat: XXX, desc: "XXX ASIAN", default: false}
