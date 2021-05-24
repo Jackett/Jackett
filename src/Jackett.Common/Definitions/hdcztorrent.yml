@@ -80,6 +80,9 @@ login:
     pwd: "{{ .Config.password }}"
   error:
     - selector: tbody:has(td.lista > span:contains("Nesprávné uživatelské jméno"))
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
 
 
 search:
