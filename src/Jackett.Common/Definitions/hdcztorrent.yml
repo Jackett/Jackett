@@ -129,7 +129,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table.lista > tbody > tr:has(a[href*=bookmark])
+    selector: td#mcol table.lista > tbody > tr:has(a[href*=bookmark])
 
   fields:
     category:
