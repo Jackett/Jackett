@@ -319,6 +319,7 @@ namespace Jackett.Updater
                 "Definitions/freedomhd.yml",
                 "Definitions/fullmixmusic.yml",
                 "Definitions/funreleases.yml",
+                "Definitions/galeriens.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
