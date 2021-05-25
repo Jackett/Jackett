@@ -55,6 +55,8 @@ namespace Jackett.Common.Indexers
             Language = "en-us";
             Type = "private";
 
+            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "22E3C9896A1207EFF97599FE12B9DBB2AF8EC0CA");
+
             AddCategoryMapping(1, TorznabCatType.AudioMP3);
             AddCategoryMapping(2, TorznabCatType.AudioLossless);
             AddCategoryMapping(3, TorznabCatType.AudioOther);
