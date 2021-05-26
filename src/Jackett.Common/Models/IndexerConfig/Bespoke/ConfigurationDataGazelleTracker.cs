@@ -40,11 +40,9 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
 <li>Copy & paste the whole cookie string to here.</ol>");
                 CookieItem = new StringConfigurationItem("Cookie") { Value = "" };
             }
-            
-            {
+
             if (usePassKey)
                 PassKey = new StringConfigurationItem("Passkey");
-            }
 
             if (supportsFreeleechToken)
                 UseTokenItem = new BoolConfigurationItem("Use Freeleech Tokens when Available") { Value = false };
