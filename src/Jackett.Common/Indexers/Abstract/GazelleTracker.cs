@@ -32,6 +32,7 @@ namespace Jackett.Common.Indexers.Abstract
 
         private readonly bool imdbInTags;
         private readonly bool useApiKey;
+        private readonly bool usePassKey;
 
         private new ConfigurationDataGazelleTracker configData => (ConfigurationDataGazelleTracker)base.configData;
 
@@ -39,7 +40,7 @@ namespace Jackett.Common.Indexers.Abstract
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  IProtectionService p, ICacheService cs, TorznabCapabilities caps,
                                  bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false,
-                                 bool useApiKey = false, string instructionMessageOptional = null)
+                                 bool useApiKey = false, bool usePassKey = false, string instructionMessageOptional = null)
             : base(id: id,
                    name: name,
                    description: description,
@@ -51,12 +52,13 @@ namespace Jackett.Common.Indexers.Abstract
                    p: p,
                    cacheService: cs,
                    configData: new ConfigurationDataGazelleTracker(
-                       has2Fa, supportsFreeleechTokens, useApiKey, instructionMessageOptional))
+                       has2Fa, supportsFreeleechTokens, useApiKey, usePassKey, instructionMessageOptional))
         {
             Encoding = Encoding.UTF8;
 
             this.imdbInTags = imdbInTags;
             this.useApiKey = useApiKey;
+            this.usePassKey = usePassKey;
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
