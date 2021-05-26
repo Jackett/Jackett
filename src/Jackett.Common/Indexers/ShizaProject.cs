@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
@@ -41,11 +38,11 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithEmail())
+                   configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
             Language = "ru-ru";
-            Type = "semi-private";
+            Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
         }
@@ -53,168 +50,222 @@ namespace Jackett.Common.Indexers
         private ConfigurationDataBasicLoginWithEmail Configuration => (ConfigurationDataBasicLoginWithEmail)configData;
 
         /// <summary>
-        /// http://shiza-project.com/accounts/login
+        /// http://shiza-project.com/graphql
         /// </summary>
-        private string LoginUrl => SiteLink + "accounts/login";
-
-        /// <summary>
-        /// http://shiza-project.com/releases/search
-        /// </summary>
-        private string SearchUrl => SiteLink + "releases/search";
+        private string GraphqlEndpointUrl => SiteLink + "graphql";
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            var releases = await PerformQuery(new TorznabQuery());
 
-            var data = new Dictionary<string, string>
-            {
-                { "field-email", Configuration.Email.Value },
-                { "field-password", Configuration.Password.Value }
-            };
-
-            var result = await RequestLoginAndFollowRedirect(
-                LoginUrl,
-                data,
-                null,
-                returnCookiesFromFirstCall: true
-            );
-
-            var parser = new HtmlParser();
-            var document = await parser.ParseDocumentAsync(result.ContentString);
-
-            await ConfigureIfOK(result.Cookies, IsAuthorized(result), () =>
-            {
-                var errorMessage = document.QuerySelector("div.alert-error").Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, Configuration);
-            });
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
 
-        public override async Task<byte[]> Download(Uri link)
-        {
-            await EnsureAuthorized();
-            return await base.Download(link);
-        }
-
-        // If the search string is empty use the latest releases
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            await EnsureAuthorized();
-
-            WebResult result;
-            if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm))
+            var releasesQuery = new
             {
-                result = await RequestWithCookiesAndRetryAsync(SiteLink);
-            }
-            else
-            {
-                // Prepare the search query
-                var queryParameters = new NameValueCollection
+                operationName = "fetchReleases",
+                variables = new
                 {
-                    { "q", query.SearchTerm}
-                };
-                result = await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParameters.GetQueryString());
-            }
-
-            const string ReleaseLinksSelector = "article.grid-card > a.card-box";
+                    first = 50, //Number of fetched releases (required parameter) TODO: consider adding pagination 
+                    query = query.SearchTerm
+                },
+                query = @"
+                query fetchReleases($first: Int, $query: String) {
+                    releases(first: $first, query: $query) {
+                        edges {
+                            node {
+                                name
+                                originalName
+                                alternativeNames
+                                publishedAt
+                                slug
+                                posters {
+                                    preview: resize(width: 360, height: 500) {
+                                        url
+                                    }
+                                }
+                                torrents {
+                                    downloaded
+                                    seeders
+                                    leechers
+                                    size
+                                    magnetUri
+                                    updatedAt
+                                    file {
+                                        url
+                                    }
+                                    videoQualities
+                                }
+                            }
+                        }
+                    }
+                }"
+            };
+            var headers = new Dictionary<string, string>
+            {
+                { "Content-Type", "application/json; charset=utf-8" },
+            };
+            var response = await RequestWithCookiesAndRetryAsync(GraphqlEndpointUrl, method: RequestType.POST, rawbody: Newtonsoft.Json.JsonConvert.SerializeObject(releasesQuery), headers: headers);
+            var j = JsonConvert.DeserializeObject<ReleasesResponse>(response.ContentString);
             var releases = new List<ReleaseInfo>();
-
-            try
+            foreach (var e in j.Data.Releases.Edges)
             {
-                var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.ContentString);
-
-                foreach (var linkNode in document.QuerySelectorAll(ReleaseLinksSelector))
-                {
-                    var url = linkNode.GetAttribute("href");
-                    releases.AddRange(await FetchShowReleases(url));
-                }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(result.ContentString, ex);
-            }
-
-            return releases;
-        }
-
-        private async Task EnsureAuthorized()
-        {
-            var result = await RequestWithCookiesAndRetryAsync(SiteLink);
-
-            if (!IsAuthorized(result))
-            {
-                await ApplyConfiguration(null);
-            }
-        }
-
-        private async Task<List<ReleaseInfo>> FetchShowReleases(string url)
-        {
-            var releases = new List<ReleaseInfo>();
-            var uri = new Uri(url);
-            var result = await RequestWithCookiesAndRetryAsync(url);
-
-            try
-            {
-                var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.ContentString);
-                var r = document.QuerySelector("div.release > div.wrapper-release");
-
+                var n = e.Node;
                 var baseRelease = new ReleaseInfo
                 {
-                    Title = composeBaseTitle(r),
-                    Poster = new Uri(SiteLink + r.QuerySelector("a[data-fancybox]").Attributes["href"].Value),
-                    Details = uri,
+                    Title = composeTitle(n),
+                    Poster = n.Posters[0].Preview.Url,
+                    Details = new Uri(SiteLink + "releases/" + n.Slug),
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
                     Category = new[] { TorznabCatType.TVAnime.ID }
                 };
 
-                foreach (var t in r.QuerySelectorAll("a[data-toggle]"))
+                foreach (var t in n.Torrents)
                 {
                     var release = (ReleaseInfo)baseRelease.Clone();
-                    release.Title += " " + t.Text().Trim();
-                    var tr_id = t.Attributes["href"].Value;
-                    var tr = r.QuerySelector("div" + tr_id);
-                    release.Link = new Uri(tr.QuerySelector("a.button--success").Attributes["href"].Value);
-                    release.Seeders = long.Parse(tr.QuerySelector("div.torrent-counter > div:nth-of-type(1)").Text().Trim().Split(' ')[0]);
-                    release.Peers = release.Seeders + long.Parse(tr.QuerySelector("div.torrent-counter > div:nth-of-type(2)").Text().Trim().Split(' ')[0]);
-                    release.Grabs = long.Parse(tr.QuerySelector("div.torrent-counter > div:nth-of-type(3)").Text().Trim().Split(' ')[0]);
-                    release.PublishDate = DateTime.Parse(tr.QuerySelector("time.torrent-time").Text());
-                    release.Size = getReleaseSize(tr);
-                    release.Guid = new Uri(uri.ToString() + tr_id);
+
+                    release.Title += getTitleQualities(t);
+                    release.Size = t.Size;
+                    release.Seeders = t.Seeders;
+                    release.Peers = t.Leechers + t.Seeders;
+                    release.Grabs = t.Downloaded;
+                    release.Link = t.File.Url;
+                    release.Guid = t.File.Url;
+                    release.MagnetUri = t.MagnetUri;
+                    release.PublishDate = getActualPublishDate(n, t);
                     releases.Add(release);
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(result.ContentString, ex);
             }
 
             return releases;
         }
 
-        private string composeBaseTitle(IElement release)
+        private string composeTitle(Node n)
         {
-            var titleDiv = release.QuerySelector("section:nth-of-type(2) > div.card > article:nth-of-type(1) > div.card-header");
-            return titleDiv.QuerySelector("h3").Text() + " " + titleDiv.QuerySelector("p").Text();
+            var title = n.Name;
+            title += " / " + n.OriginalName;
+            foreach (string name in n.AlternativeNames)
+                title += " / " + name;
+
+            return title;
         }
 
-        // Appending id to differentiate between different quality versions
-        private bool IsAuthorized(WebResult result)
+        private DateTime getActualPublishDate(Node n, Torrent t)
         {
-            return result.ContentString.Contains("/logout");
+            if (n.PublishedAt == null)
+            {
+                return t.UpdatedAt;
+            }
+            else
+            {
+                return (t.UpdatedAt > n.PublishedAt) ? t.UpdatedAt : n.PublishedAt.Value;
+            }
         }
 
-        private static long getReleaseSize(IElement tr)
+        private string getTitleQualities(Torrent t)
         {
-            var size = tr.QuerySelector("a.torrent-size").Text().Trim();
-            size = size.Replace("КБ", "KB");
-            size = size.Replace("МБ", "MB");
-            size = size.Replace("ГБ", "GB");
-            size = size.Replace("ТБ", "TB");
-            return ReleaseInfo.GetBytes(size);
+            var s = " [";
+
+            foreach (string q in t.VideoQualities)
+            {
+                s += " " + q;
+            }
+
+            return s + " ]";
+        }
+
+        public partial class ReleasesResponse
+        {
+            [JsonProperty("data")]
+            public Data Data { get; set; }
+        }
+
+        public partial class Data
+        {
+            [JsonProperty("releases")]
+            public Releases Releases { get; set; }
+        }
+
+        public partial class Releases
+        {
+            [JsonProperty("edges")]
+            public Edge[] Edges { get; set; }
+        }
+
+        public partial class Edge
+        {
+            [JsonProperty("node")]
+            public Node Node { get; set; }
+        }
+
+        public partial class Node
+        {
+            [JsonProperty("name")]
+            public string Name { get; set; }
+
+            [JsonProperty("originalName")]
+            public string OriginalName { get; set; }
+
+            [JsonProperty("alternativeNames")]
+            public string[] AlternativeNames { get; set; }
+
+            [JsonProperty("publishedAt")]
+            public DateTime? PublishedAt { get; set; }
+
+            [JsonProperty("slug")]
+            public string Slug { get; set; }
+
+            [JsonProperty("posters")]
+            public Poster[] Posters { get; set; }
+
+            [JsonProperty("torrents")]
+            public Torrent[] Torrents { get; set; }
+        }
+
+        public partial class Poster
+        {
+            [JsonProperty("preview")]
+            public Preview Preview { get; set; }
+        }
+
+        public partial class Preview
+        {
+            [JsonProperty("url")]
+            public Uri Url { get; set; }
+        }
+
+        public partial class Torrent
+        {
+            [JsonProperty("downloaded")]
+            public long Downloaded { get; set; }
+
+            [JsonProperty("seeders")]
+            public long Seeders { get; set; }
+
+            [JsonProperty("leechers")]
+            public long Leechers { get; set; }
+
+            [JsonProperty("size")]
+            public long Size { get; set; }
+
+            [JsonProperty("magnetUri")]
+            public Uri MagnetUri { get; set; }
+
+            [JsonProperty("updatedAt")]
+            public DateTime UpdatedAt { get; set; }
+
+            [JsonProperty("file")]
+            public Preview File { get; set; }
+
+            [JsonProperty("videoQualities")]
+            public string[] VideoQualities { get; set; }
         }
     }
 }
