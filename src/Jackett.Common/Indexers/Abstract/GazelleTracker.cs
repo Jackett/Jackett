@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Abstract
     {
         protected virtual string LoginUrl => SiteLink + "login.php";
         protected virtual string APIUrl => SiteLink + "ajax.php";
-        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&torrent_pass=" + PassKey + "&id=";
         protected virtual string DetailsUrl => SiteLink + "torrents.php?torrentid=";
 
         protected bool useTokens;
@@ -72,6 +72,10 @@ namespace Jackett.Common.Indexers.Abstract
             var useTokenItem = configData.UseTokenItem;
             if (useTokenItem != null)
                 useTokens = useTokenItem.Value;
+
+            var PassKey = configData.PassKey;
+            if (PassKey != null)
+                PassKey = PassKey.Value;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
