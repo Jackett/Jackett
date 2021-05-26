@@ -73,9 +73,7 @@ namespace Jackett.Common.Indexers.Abstract
             if (useTokenItem != null)
                 useTokens = useTokenItem.Value;
 
-            var PassKey = configData.PassKey;
-            if (PassKey != null)
-                PassKey = PassKey.Value;
+            var PassKey = configData.PassKey.Value;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
