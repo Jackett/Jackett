@@ -36,9 +36,10 @@ caps:
     - {id: 191, cat: TV, desc: "TV/BluTv"}
     - {id: 192, cat: TV, desc: "TV/BluTv Series"}
     - {id: 193, cat: Movies, desc: "TV/BluTv Film"}
-    - {id: 199, cat: TV, desc: "TV/Netflix"}
+    - {id: 188, cat: TV, desc: "TV/Netflix"}
     - {id: 189, cat: TV, desc: "TV/Netflix Series"}
     - {id: 190, cat: Movies, desc: "TV/Netflix Film"}
+    - {id: 195, cat: TV, desc: "TV/Exxen"}
     - {id: 171, cat: Audio, desc: "Music"}
     - {id: 172, cat: Audio, desc: "Music/Turkish"}
     - {id: 173, cat: Audio, desc: "Music/Foreign"}
