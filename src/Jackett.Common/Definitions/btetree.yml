@@ -56,21 +56,21 @@ search:
     files:
       selector: td:nth-child(4)
     date:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
       filters:
         - name: dateparse
           args: "01/02 15:04"
     size:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     grabs:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
       filters:
         - name: regexp
           args: (\d+)
     seeders:
-      selector: td:nth-child(9)
+      selector: td:nth-child(8)
     leechers:
-      selector: td:nth-child(10)
+      selector: td:nth-child(9)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
