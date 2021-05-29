@@ -29,6 +29,7 @@ caps:
     - {id: 30, cat: Audio/MP3, desc: "Musik mp3"}
     - {id: 31, cat: Audio/Lossless, desc: "Musik Flac"}
     - {id: 32, cat: Audio/Video, desc: "Musik Video"}
+    - {id: 45, cat: Audio, desc: "Musik Pack"}
     - {id: 34, cat: PC/Games, desc: "Spiele Windows"}
     - {id: 35, cat: Console, desc: "Spiele Konsole"}
     - {id: 36, cat: Console, desc: "Spiele Wimmel"}
