@@ -128,9 +128,6 @@ search:
       selector: td:nth-last-child(3)
     grabs:
       selector: td:nth-last-child(2)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-last-child(1)
       filters:
