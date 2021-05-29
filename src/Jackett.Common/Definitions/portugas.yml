@@ -107,12 +107,12 @@ search:
         - name: regexp
           args: "/categories/(\\d+)"
     title:
-      selector: a.view-torrent
+      selector: a.text-bright
     download:
       selector: a[href*="/download/"]
       attribute: href
     details:
-      selector: a.view-torrent
+      selector: a.text-bright
       attribute: href
     poster:
       selector: div.torrent-poster img
@@ -133,12 +133,6 @@ search:
       filters:
         - name: regexp
           args: (\d+)
-    imdb:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    tmdbid:
-      selector: a[href*="themoviedb.org/movie/"]
-      attribute: href
     date:
       selector: time
       filters:
