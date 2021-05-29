@@ -86,6 +86,9 @@ search:
 
   fields:
     category:
+      text: 54
+    category|noappend:
+      optional: true
       selector: a[href*="category="]
       attribute: href
       case:
@@ -130,6 +133,9 @@ search:
     leechers:
       text: 1
     size:
+      text: "0 B"
+    size:
+      optional: true
       selector: b.file_size
     downloadvolumefactor:
       text: 0
