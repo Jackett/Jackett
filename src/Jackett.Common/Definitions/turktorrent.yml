@@ -14,7 +14,9 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 36, cat: Movies, desc: "Film"}
-    - {id: 59, cat: Movies, desc: "Türk Filmi"}
+    - {id: 76, cat: Movies, desc: "Film Almanca [Tek Dil!]"}
+    - {id: 78, cat: Movies, desc: "Film İngilizce [NL Altyazı!]"}
+    - {id: 59, cat: Movies, desc: "Film Türk Filmi"}
     - {id: 61, cat: Movies/3D, desc: "Film 3D"}
     - {id: 18, cat: Movies, desc: "Anime - Çizgi"}
     - {id: 20, cat: Movies, desc: "Film Boxset"}
@@ -44,6 +46,14 @@ caps:
     - {id: 39, cat: TV, desc: "Netflix Film"}
     - {id: 38, cat: TV, desc: "Netflix Dizi"}
     - {id: 40, cat: TV, desc: "Netflix Belgesel"}
+    - {id: 83, cat: TV, desc: "Dijital Platform"}
+    - {id: 84, cat: TV, desc: "Dijital Platform BluTV"}
+    - {id: 85, cat: TV, desc: "Dijital Platform BEiN"}
+    - {id: 77, cat: TV, desc: "Dijital Platform EXXEN"}
+    - {id: 86, cat: TV, desc: "Dijital Platform AMAZON"}
+    - {id: 87, cat: TV, desc: "Dijital Platform GAIN"}
+    - {id: 88, cat: TV, desc: "Dijital Platform TV+"}
+    - {id: 89, cat: TV, desc: "Dijital Platform Diger"}
     - {id: 31, cat: TV, desc: "Dizi"}
     - {id: 32, cat: TV, desc: "Dizi Yerli"}
     - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
