@@ -119,6 +119,36 @@ search:
           args: ["(?i)(m720p|mhd720p)", "720p MicroHD"]
         - name: re_replace
           args: ["(?i)brrip", "BDRip"]
+        - name: re_replace # Temporada 1 to S01
+          args: ["(?i)\\btemporada *(\\d{1,2})\\b", "S$1"]
+        - name: re_replace # T1 to S01
+          args: ["\\bT(\\d{1,2})\\b", "S$1"]
+        - name: re_replace # S1 to S01 / E1 to E01
+          args: ["\\b([SE])(\\d)\\b", "${1}0$2"]
+        - name: re_replace # S01 E01 to S01E01 / T01E01 to S01E01
+          args: ["\\b[ST](\\d{1,2}) *E(\\d{1,2})\\b", "S$1E$2"]
+        - name: re_replace # S1 a S2 to S1-2
+          args: ["(S\\d{1,2})( a S*| A S*| a la S*| A LA S*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # S01E01 E02 E03 to S01E01-02-03 (2 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (3 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (4 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (5 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (6 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (7 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (8 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (9 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (10 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # 2x6 to S02E06
+          args: ["\\b(\\d{1,2})x(\\d{1,2})\\b", "S$1E$2"]
         - name: append
           args: " MULTi/SPANiSH" # Add language for Sonarr/Radarr
     download:
@@ -127,6 +157,14 @@ search:
     details:
       selector: a.view-torrent
       attribute: href
+    poster:
+      selector: div.torrent-poster img
+      attribute: src
+      filters:
+        - name: replace
+          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
+        - name: replace
+          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
     size:
       selector: td:nth-last-child(4)
     seeders:
