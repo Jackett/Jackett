@@ -145,6 +145,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(86, TorznabCatType.PC0day, "Appz/Non-English");
             AddCategoryMapping(64, TorznabCatType.AudioAudiobook, "AudioBook");
             AddCategoryMapping(35, TorznabCatType.Books, "Books");
+            AddCategoryMapping(102, TorznabCatType.Books, "Books/Non-English");
             AddCategoryMapping(94, TorznabCatType.BooksComics, "Books/Comics");
             AddCategoryMapping(95, TorznabCatType.BooksOther, "Books/Educational");
             AddCategoryMapping(98, TorznabCatType.Other, "Other/Fonts");
