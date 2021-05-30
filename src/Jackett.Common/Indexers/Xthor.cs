@@ -309,15 +309,16 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
-            searchTerm = searchTerm.Trim();
-            searchTerm = searchTerm.ToLower();
-            searchTerm = searchTerm.Replace(" ", ".");
 
             if (EnhancedAnimeSearch && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
                 var regex = new Regex(" ([0-9]+)");
                 searchTerm = regex.Replace(searchTerm, " E$1");
             }
+
+            searchTerm = searchTerm.Trim();
+            searchTerm = searchTerm.ToLower();
+            searchTerm = searchTerm.Replace(" ", ".");
 
             // Multiple page support
             var nextPage = 1;
