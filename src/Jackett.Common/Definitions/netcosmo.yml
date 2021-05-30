@@ -15,6 +15,7 @@ caps:
     - {id: 15, cat: Movies/HD, desc: "Rip H264"}
     - {id: 16, cat: Movies/HD, desc: "Rip H265"}
     - {id: 24, cat: Movies/UHD, desc: "Rip 4K"}
+    - {id: 40, cat: Movies/UHD, desc: "4K - 3840X2160"}
     - {id: 21, cat: Movies/HD, desc: "Full HD"}
     - {id: 31, cat: TV/HD, desc: "Serie TV 720P"}
     - {id: 25, cat: Audio, desc: "Musica"}
