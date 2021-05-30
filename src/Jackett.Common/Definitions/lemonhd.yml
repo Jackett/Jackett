@@ -42,12 +42,12 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: 4
+    default: added
     options:
-      4: created
-      7: seeders
-      5: size
-      1: title
+      added: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
@@ -72,16 +72,10 @@ search:
     - path: torrents.php
   inputs:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # 0 incldead, 1 active, 2 dead
-    incldead: 0
-    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
-    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 exact
-    search_mode: 0
-    sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
+    search_area: "{{ if .Query.IMDBID }}imdb{{ else }}name{{ end }}"
+    suggest: 0
+    column: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
 
   rows:
     selector: table.torrents > tbody > tr:has(a[href^="download.php?"])
