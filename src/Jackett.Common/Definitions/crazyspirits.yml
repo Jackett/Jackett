@@ -33,6 +33,7 @@ caps:
     - {id: 65, cat: Movies, desc: "Films FSCR"}
     - {id: 66, cat: Movies, desc: "Films CamTS"}
     - {id: 67, cat: Movies, desc: "Films Pack Films"}
+    - {id: 129, cat: Movies, desc: "Films QC~Film"}
     - {id: 68, cat: Movies, desc: "Films VostFR"}
     - {id: 69, cat: Movies, desc: "Films VO"}
     - {id: 70, cat: Movies/WEB-DL, desc: "Films WebRip 1080p"}
@@ -71,6 +72,7 @@ caps:
     - {id: 107, cat: Audio/MP3, desc: "Musiques MP3"}
     - {id: 108, cat: Audio/Lossless, desc: "Musiques FLAC"}
     - {id: 109, cat: Audio, desc: "Musiques WMA"}
+    - {id: 132, cat: Audio, desc: "Musiques QC~Musique"}
     # Séries
     - {id: 76, cat: TV/HD, desc: "Series Blu-Ray"}
     - {id: 77, cat: TV/HD, desc: "Series HDTV"}
@@ -88,10 +90,13 @@ caps:
     - {id: 97, cat: TV/Anime, desc: "Series Animée"}
     - {id: 88, cat: TV, desc: "Series Pack HD"}
     - {id: 128, cat: TV, desc: "Series Pack SD"}
+    - {id: 130, cat: TV, desc: "SeriesQC~Serie"}
     # Spéctacle
+    - {id: 131, cat: TV, desc: "SeriesQC~Spectacle"}
     - {id: 91, cat: TV/Other, desc: "Spectacle 720p"}
     - {id: 90, cat: TV/Other, desc: "Spectacle 1080p"}
     # Télévision
+    - {id: 133, cat: TV, desc: "TV QC~Tv"}
     - {id: 74, cat: TV/HD, desc: "TV TVHD"}
     - {id: 75, cat: TV, desc: "TV TVRip"}
     - {id: 92, cat: TV/Other, desc: "TV Spectacles"}
