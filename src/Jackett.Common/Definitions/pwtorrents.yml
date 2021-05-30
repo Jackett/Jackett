@@ -30,6 +30,8 @@ caps:
     - {id: 18, cat: TV/Sport, desc: "WWE Network"}
     - {id: 16, cat: TV/Sport, desc: "WWE PPV's"}
     - {id: 17, cat: TV/Sport, desc: "WWE Weekly"}
+    - {id: 19, cat: TV/Sport, desc: "AEW Weekly"}
+    - {id: 20, cat: TV/Sport, desc: "AEW PPV's"}
 
   modes:
     search: [q]
