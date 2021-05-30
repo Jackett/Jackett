@@ -36,16 +36,18 @@ caps:
     - {id: 50, cat: Books/EBook, desc: "E-Books: Manuel Français"}
     - {id: 66, cat: Movies, desc: "Films: VOSTFR"}
     - {id: 65, cat: Movies, desc: "Films: VO"}
-    - {id: 55, cat: Movies/HD, desc: "Films: MHD x265"}
     - {id: 54, cat: Movies/HD, desc: "Films: MHD HDlight"}
+    - {id: 55, cat: Movies/HD, desc: "Films: MHD x265"}
     - {id: 69, cat: Movies/3D, desc: "Films: 3D"}
-    - {id: 110, cat: Movies/WEB-DL, desc: "Films: WEB"}
     - {id: 2, cat: Movies/HD, desc: "Films: HD"}
-    - {id: 59, cat: Movies, desc: "Films: Spectacle"}
+    - {id: 110, cat: Movies/WEB-DL, desc: "Films: WEB"}
+    - {id: 154, cat: Movies/UHD, desc: "Films: AV1-2160p"}
     - {id: 89, cat: Movies/SD, desc: "Films: SD"}
+    - {id: 153, cat: Movies/HD, desc: "Films: AV1-1080p"}
+    - {id: 59, cat: Movies, desc: "Films: Spectacle"}
     - {id: 70, cat: Movies/HD, desc: "Films: X265"}
-    - {id: 92, cat: Movies/UHD, desc: "Films: 4K"}
     - {id: 135, cat: Movies, desc: "Films: Noel"}
+    - {id: 155, cat: Movies/UHD, desc: "films: 4K X265"}
     - {id: 87, cat: XXX, desc: "Films: XXX"}
     - {id: 4, cat: Movies, desc: "Films: ISO"}
     - {id: 151, cat: TV, desc: "Films: .Série animation"}
@@ -55,8 +57,8 @@ caps:
     - {id: 97, cat: Audio, desc: "Musique: Podcast"}
     - {id: 137, cat: Audio, desc: "Musique: Noel"}
     - {id: 25, cat: Audio/MP3, desc: "Musique: Single MP3"}
-    - {id: 143, cat: Audio/MP3, desc: "Musique: Wav"}
     - {id: 22, cat: Audio/MP3, desc: "Musique: Album MP3"}
+    - {id: 143, cat: Audio/MP3, desc: "Musique: Wav"}
     - {id: 98, cat: Audio, desc: "Musique: karaoké"}
     - {id: 58, cat: Audio, desc: "Musique: Concert"}
     - {id: 24, cat: Audio/Lossless, desc: "Musique: Single Flac"}
@@ -64,8 +66,8 @@ caps:
     - {id: 64, cat: Audio, desc: "Musique: Mégamix Maison"}
     - {id: 6, cat: TV, desc: "Serie TV: Saison FR"}
     - {id: 7, cat: TV, desc: "Serie TV: Episode FR"}
-    - {id: 153, cat: TV, desc: "Serie TV: Saison VO"}
-    - {id: 63, cat: TV, desc: "Serie TV: Episode VO"}
+    - {id: 63, cat: TV, desc: "Serie TV: Saison VO"}
+    - {id: 152, cat: TV, desc: "Serie TV: Episode VO"}
     - {id: 93, cat: TV, desc: "Serie TV: Saison VOSTFR"}
     - {id: 61, cat: TV, desc: "Serie TV: Episode VOSTFR"}
     - {id: 12, cat: TV, desc: "Serie TV: Animation"}
