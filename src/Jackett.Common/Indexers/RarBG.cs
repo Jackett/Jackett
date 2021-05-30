@@ -264,8 +264,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                qc.Add("mode", "list");
-                qc.Remove("sort");
+                qc.Add("mode", "search");
             }
 
             var querycats = MapTorznabCapsToTrackers(query);
