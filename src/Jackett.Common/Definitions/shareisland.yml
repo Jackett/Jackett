@@ -77,24 +77,24 @@ login:
 
 search:
   paths:
-    - path: torrents/filter
+    - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
+    mediainfo: ""
+    keywords: ""
     uploader: ""
-    imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: "{{ .Query.TVDBID }}"
-    tmdb: "{{ .Query.TMDBID }}"
-    mal: ""
-    igdb: ""
-    start_year: ""
-    end_year: ""
-    sorting: "{{ .Config.sort }}"
-    direction: "{{ .Config.type }}"
-    qty: 100
-    page: 0
-    view: list
+    tmdbId: "{{ .Query.TMDBID }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    malId: ""
+    startYear: ""
+    endYear: ""
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
   keywordsfilters:
     - name: diacritics
@@ -151,28 +151,17 @@ search:
       attribute: src
       filters:
         - name: replace
-          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
-        - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
+          args: ["https://via.placeholder.com/90x135", ""]
     size:
-      selector: td:nth-last-child(4)
+      selector: td:nth-last-child(5)
     seeders:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     leechers:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
     grabs:
-      selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
-    imdb:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    tmdbid:
-      selector: a[href*="themoviedb.org/movie/"]
-      attribute: href
+      selector: td:nth-last-child(2)
     date:
-      selector: time
+      selector: td:nth-last-child(1)
       filters:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
         - name: re_replace
@@ -226,7 +215,10 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
-      # 6 days (as seconds = 6 x 24 x 60 x 60)
-      text: 518400
-# UNIT3D 5.2.0
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# UNIT3D 5.3.0
