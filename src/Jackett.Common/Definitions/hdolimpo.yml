@@ -113,6 +113,8 @@ search:
           args: ["HDOlimpo", ""] # Delete HDOlimpo
         - name: replace
           args: ["HD-Olimpo", ""] # Delete HD-Olimpo
+        - name: replace
+          args: ["E-AC-3", "EAC3"]
         - name: re_replace
           args: ["[ -](?i)español[ -]", " SPANiSH "]
         - name: re_replace
