@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Movies/Other, desc: "FANRES"}
     - {id: 5, cat: Movies/Other, desc: "Trailer"}
@@ -68,28 +68,24 @@ login:
 
 search:
   paths:
-    # https://blutopia.xyz/torrents/filter?
-    # search=&description=&keywords=&uploader=&imdb=&tvdb=&view=list&tmdb=&mal=&igdb=
-    # &start_year=&end_year=&categories%5B%5D=3&sorting=seeders&direction=asc&page=0&qty=25
-    - path: torrents/filter
+    - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
+    mediainfo: ""
     keywords: ""
     uploader: ""
-    imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: "{{ .Query.TVDBID }}"
-    tmdb: "{{ .Query.TMDBID }}"
-    mal: ""
-    igdb: ""
-    start_year: ""
-    end_year: ""
-    sorting: "{{ .Config.sort }}"
-    direction: "{{ .Config.type }}"
-    qty: 100
-    page: 0
-    view: list
+    tmdbId: "{{ .Query.TMDBID }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    malId: ""
+    startYear: ""
+    endYear: ""
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
@@ -103,40 +99,29 @@ search:
         - name: regexp
           args: "/categories/(\\d+)"
     title:
-      selector: a[href*="/torrents/"]
+      selector: a.view-torrent
     download:
       selector: a[href*="/download/"]
       attribute: href
     details:
-      selector: a[href*="/torrents/"]
+      selector: a.view-torrent
       attribute: href
     poster:
       selector: div.torrent-poster img
       attribute: src
       filters:
         - name: replace
-          args: ["&w=52&h=80", "&w=180&h=270"] # for display on dashboard
-        - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/52x80&w=180&h=270", ""]
+          args: ["https://via.placeholder.com/90x135", ""]
     size:
-      selector: td:nth-last-child(4)
+      selector: td:nth-last-child(5)
     seeders:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     leechers:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
     grabs:
-      selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
-    imdb:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    tmdbid:
-      selector: a[href*="themoviedb.org/movie/"]
-      attribute: href
+      selector: td:nth-last-child(2)
     date:
-      selector: time
+      selector: td:nth-last-child(1)
       filters:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
         - name: re_replace
@@ -190,7 +175,10 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# UNIT3D 5.2.1b
+# UNIT3D 5.3.0b
