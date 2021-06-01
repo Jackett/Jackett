@@ -40,7 +40,6 @@ namespace Jackett.Common.Services
         // use: {"<old id>", "<new id>"}
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
-            {"ast4u", "animeworld"},
             {"audiobooktorrents", "abtorrents"},
             {"broadcastthenet", "broadcasthenet"},
             {"cili180", "cilipro"},
