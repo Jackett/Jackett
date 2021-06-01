@@ -13,7 +13,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 6, cat: TV, desc: "ts Firehose (RAW TS)"}
-    - {id: 7, cat: TV/Anime, desc: "Anime Movies"}
+    - {id: 7, cat: Movies/Other, desc: "Anime Movies"}
     - {id: 9, cat: TV/Anime, desc: "Anime Series"}
     - {id: 8, cat: Audio, desc: "Music"}
 
