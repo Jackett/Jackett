@@ -24,7 +24,7 @@ caps:
     - {id: 2, cat: TV/Anime, desc: "动画分类 (Anime)"}
     - {id: 7, cat: TV/Anime, desc: "新番连载 (Anime New Fan Series)"}
     - {id: 8, cat: TV/Anime, desc: "完整动画 (Anime Collection)"}
-    - {id: 9, cat: TV/Anime, desc: "剧场版 (Anime Movie)"}
+    - {id: 9, cat: Movies/Other, desc: "剧场版 (Anime Movie)"}
     - {id: 10, cat: TV/Anime, desc: "DVDRIP (Anime DVDRIP)"}
     - {id: 11, cat: TV/Anime, desc: "BDRIP (Anime BDRIP)"}
     - {id: 5, cat: TV/Anime, desc: "RAW/ISO"}
