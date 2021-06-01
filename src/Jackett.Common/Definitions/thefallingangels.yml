@@ -57,8 +57,8 @@ caps:
     - {id: 117, cat: Books/EBook, desc: "Books Romane"}
     - {id: 156, cat: Books, desc: "Books Packs"}
     - {id: 130, cat: Books, desc: "Books FSK 18"}
-    - {id: 159, cat: TV/Anime, desc: "Anime Movies HD"}
-    - {id: 160, cat: TV/Anime, desc: "Anime Movies SD"}
+    - {id: 159, cat: Movies/HD, desc: "Anime Movies HD"}
+    - {id: 160, cat: Movies/SD, desc: "Anime Movies SD"}
     - {id: 128, cat: TV/Anime, desc: "Anime Serien"}
     - {id: 131, cat: TV/Anime, desc: "Anime Hentai"}
     - {id: 129, cat: TV/Anime, desc: "Anime Sonstiges"}
