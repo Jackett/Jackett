@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: TV/Anime, desc: "Anime Movie"}
+    - {id: 1, cat: Movies/Other, desc: "Anime Movie"}
     - {id: 2, cat: TV/Anime, desc: "Anime Serie"}
     - {id: 3, cat: Audio, desc: "Anime Musik/OST"}
     - {id: 4, cat: PC/Games, desc: "Anime Spiele"}
