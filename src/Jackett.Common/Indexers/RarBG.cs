@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers
             { Value = "last" };
             configData.AddDynamic("sort", sort);
 
-            AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
+            //AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)"); // 3x is not supported by API #11848
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
             AddCategoryMapping(17, TorznabCatType.MoviesSD, "Movies/x264");
             AddCategoryMapping(18, TorznabCatType.TVSD, "TV Episodes");
