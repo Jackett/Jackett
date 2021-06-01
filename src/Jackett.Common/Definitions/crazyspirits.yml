@@ -41,7 +41,7 @@ caps:
     - {id: 73, cat: Movies/WEB-DL, desc: "Films Webrip"}
     - {id: 72, cat: Movies/WEB-DL, desc: "Films WEB DL"}
     - {id: 99, cat: Movies, desc: "Films Remux"}
-    - {id: 98, cat: TV/Anime, desc: "Films Film Animées"}
+    - {id: 98, cat: Movies/Other, desc: "Films Film Animées"}
     - {id: 122, cat: Movies/WEB-DL, desc: "Films Web-DL 1080P"}
     - {id: 123, cat: Movies/WEB-DL, desc: "Films WEB-DL 720p"}
     - {id: 126, cat: Movies, desc: "Films HDTV"}
