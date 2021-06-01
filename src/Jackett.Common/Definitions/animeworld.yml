@@ -29,7 +29,7 @@ caps:
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
-    
+
 settings:
   - name: username
     type: text
