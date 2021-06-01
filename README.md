@@ -429,7 +429,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Ourbits (HDPter)
  * P2PBG
  * P2PElite
- * Partis [![(invite needed)][inviteneeded]](#)
  * PassThePopcorn (PTP)
  * Peers.FM
  * Pirata Digital
