@@ -62,12 +62,6 @@ search:
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=0{{ else }}/browse/0{{ end }}"
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=1{{ else }}/browse/1{{ end }}"
     - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=2{{ else }}/browse/2{{ end }}"
-  keywordsfilters:
-    # remove searching by season and episode due to inconsistent naming #11471
-    - name: re_replace # remove S01
-      args: ["(?i)(\\s*s\\d+)", ""]
-    - name: re_replace # remove E01
-      args: ["(?i)(\\s*e\\d+)", ""]
 
   rows:
     selector: "tr.odd,tr.odd2"
