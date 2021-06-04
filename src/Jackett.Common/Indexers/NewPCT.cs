@@ -180,9 +180,9 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var results = await RequestWithCookiesAndRetryAsync(linkParam.AbsoluteUri);
-
-            var uriLink = ExtractDownloadUri(results.ContentString, linkParam.AbsoluteUri);
+            var downloadLink = linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/");
+            var results = await RequestWithCookiesAndRetryAsync(downloadLink);
+            var uriLink = ExtractDownloadUri(results.ContentString, downloadLink);
             if (uriLink == null)
                 throw new Exception("Download link not found!");
 
