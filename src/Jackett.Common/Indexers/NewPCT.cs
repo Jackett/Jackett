@@ -101,7 +101,8 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://pctmix.com/",
             "https://pctmix1.com/",
-            "https://pctreload1.com/"
+            "https://pctreload1.com/",
+            "https://maxitorrent.com"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -180,7 +181,10 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var downloadLink = linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/");
+            var downloadLink = new Regex("maxitorrent.com").Match(linkParam.AbsoluteUri).Success
+                ? linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/")
+                : linkParam.AbsoluteUri;
+
             var results = await RequestWithCookiesAndRetryAsync(downloadLink);
             var uriLink = ExtractDownloadUri(results.ContentString, downloadLink);
             if (uriLink == null)
