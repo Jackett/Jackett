@@ -116,8 +116,7 @@ namespace Jackett.Common.Indexers
             "http://pctnew.com/",
             "https://descargas2020.org/",
             "https://pctnew.org/",
-            "https://pctreload.com/",
-            "https://maxitorrent.com"
+            "https://pctreload.com/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
