@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "secciones.php";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://www.mejortorrento.com/",
+            "https://www.mejortorrento.net/",
             "https://mejortorrent.nocensor.space/"
         };
 
@@ -49,7 +49,8 @@ namespace Jackett.Common.Indexers
             "http://www.mejortorrentt.org/",
             "https://www.mejortorrents.net/",
             "https://www.mejortorrents1.com/",
-            "https://www.mejortorrents1.net/"
+            "https://www.mejortorrents1.net/",
+            "https://www.mejortorrento.com/"
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
