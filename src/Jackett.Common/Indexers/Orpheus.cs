@@ -11,6 +11,10 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Orpheus : GazelleTracker
     {
+        // API Reference: https://github.com/OPSnet/Gazelle/wiki/JSON-API-Documentation
+        protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+        protected override string AuthorizationFormat => "token {0}";
+        protected override int ApiKeyLength => 118;
         public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "orpheus",
@@ -42,7 +46,8 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
-                   has2Fa: true)
+                   has2Fa: false,
+                   useApiKey: true)
         {
             Language = "en-us";
             Type = "private";
