@@ -59,7 +59,7 @@ namespace Jackett.Common.Models
             var xdoc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", null),
                 new XElement("rss",
-                    new XAttribute("version", "1.0"),
+                    new XAttribute("version", "2.0"),
                     new XAttribute(XNamespace.Xmlns + "atom", _AtomNs.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "torznab", _TorznabNs.NamespaceName),
                     new XElement("channel",

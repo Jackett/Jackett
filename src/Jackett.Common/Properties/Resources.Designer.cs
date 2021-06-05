@@ -62,7 +62,7 @@ namespace Jackett.Common.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-        ///&lt;rss version=&quot;1.0&quot; xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot; xmlns:torznab=&quot;http://torznab.com/schemas/2015/feed&quot;&gt;
+        ///&lt;rss version=&quot;2.0&quot; xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot; xmlns:torznab=&quot;http://torznab.com/schemas/2015/feed&quot;&gt;
         ///  &lt;channel&gt;
         ///    &lt;atom:link href=&quot;https://hdaccess.net/api&quot; rel=&quot;self&quot; type=&quot;application/rss+xml&quot; /&gt;
         ///    &lt;title&gt;HDAccess&lt;/title&gt;
@@ -82,7 +82,7 @@ namespace Jackett.Common.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-        ///&lt;rss version=&quot;1.0&quot; xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot; xmlns:torznab=&quot;http://torznab.com/schemas/2015/feed&quot;&gt;
+        ///&lt;rss version=&quot;2.0&quot; xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot; xmlns:torznab=&quot;http://torznab.com/schemas/2015/feed&quot;&gt;
         ///  &lt;channel&gt;
         ///    &lt;item&gt;
         ///      &lt;link&gt;https://example.com&lt;/link&gt;
