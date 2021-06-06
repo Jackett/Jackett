@@ -26,6 +26,8 @@ namespace Jackett.Common.Indexers.Abstract
         protected virtual string APIUrl => SiteLink + "ajax.php";
         protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + "&id=";
         protected virtual string DetailsUrl => SiteLink + "torrents.php?torrentid=";
+        protected virtual string AuthorizationFormat => "{0}";
+        protected virtual int ApiKeyLength => 41;
 
         protected bool useTokens;
         protected string cookie = "";
@@ -83,8 +85,8 @@ namespace Jackett.Common.Indexers.Abstract
                 var apiKey = configData.ApiKey;
                 if (apiKey?.Value == null)
                     throw new Exception("Invalid API Key configured");
-                if (apiKey.Value.Length != 41)
-                    throw new Exception($"Invalid API Key configured: expected length: 41, got {apiKey.Value.Length}");
+                if (apiKey.Value.Length != ApiKeyLength)
+                    throw new Exception($"Invalid API Key configured: expected length: {ApiKeyLength}, got {apiKey.Value.Length}");
 
                 try
                 {
@@ -191,7 +193,7 @@ namespace Jackett.Common.Indexers.Abstract
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var apiKey = configData.ApiKey;
-            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = apiKey.Value } : null;
+            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
             // we get a redirect in html pages and an error message in json response (api)
@@ -370,7 +372,7 @@ namespace Jackett.Common.Indexers.Abstract
         public override async Task<byte[]> Download(Uri link)
         {
             var apiKey = configData.ApiKey;
-            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = apiKey.Value } : null;
+            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
             var response = await base.RequestWithCookiesAsync(link.ToString(), null, RequestType.GET, headers: headers);
             var content = response.ContentBytes;
 
@@ -383,7 +385,7 @@ namespace Jackett.Common.Indexers.Abstract
             {
                 var html = Encoding.GetString(content);
                 if (html.Contains("You do not have any freeleech tokens left.")
-                    || html.Contains("You do not have enough freeleech tokens left.")
+                    || html.Contains("You do not have enough freeleech tokens")
                     || html.Contains("This torrent is too large."))
                 {
                     // download again with usetoken=0
