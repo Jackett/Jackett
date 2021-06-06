@@ -46,9 +46,10 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
-
-                   has2Fa: true,
-                   usePassKey: true)
+                   has2Fa: false,
+                   useApiKey: true,
+                   usePassKey: false,
+                   instructionMessageOptional: "<ol><li>Go to Orpheus's site and open your account settings.</li><li>Under <b>Access Settings</b> click on 'Create a new token'</li><li>Give it a name you like and click <b>Generate</b>.</li><li>Copy the generated API Key and paste it in the above text field.</li></ol>")
         {
             Language = "en-us";
             Type = "private";
