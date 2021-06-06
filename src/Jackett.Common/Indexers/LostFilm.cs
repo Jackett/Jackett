@@ -125,6 +125,8 @@ namespace Jackett.Common.Indexers
             Language = "ru-ru";
             Type = "semi-private";
 
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "25234600906DF82792DE9F4AA75A5AED2F226577");
+
             // TODO: review if there is only this category (movie search is enabled)
             AddCategoryMapping(1, TorznabCatType.TV);
         }
