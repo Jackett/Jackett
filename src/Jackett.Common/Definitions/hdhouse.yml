@@ -15,14 +15,15 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies/HD, desc: "Кино HD"}
-    - {id: 2, cat: Movies/UHD, desc: "Кино UHD"}
-    - {id: 3, cat: XXX, desc: "18+ HD"}
-    - {id: 4, cat: Audio/Lossless, desc: "Музыка A"}
-    - {id: 5, cat: PC/Games, desc: "Игры"}
-    - {id: 6, cat: TV/HD, desc: "Сериалы HD"}
-    - {id: 7, cat: TV/Anime, desc: "Мультфильмы"}
-    - {id: 9, cat: Audio/Video, desc: "Музыка V"}
+    - {id: 2001, cat: Movies/HD, desc: "Кино HD"}
+    - {id: 5006, cat: Movies/UHD, desc: "Кино UHD"}
+    - {id: 2007, cat: TV/Anime, desc: "Мультфильмы"}
+    - {id: 2006, cat: TV/HD, desc: "Сериалы HD"}
+    - {id: 2004, cat: Audio/Lossless, desc: "Музыка A"}
+    - {id: 5007, cat: Audio/Video, desc: "Музыка V"}
+    - {id: 2003, cat: XXX, desc: "18+ HD"}
+    - {id: 2005, cat: PC/Games, desc: "Игры"}
+    - {id: 5005, cat: TV/Sport, desc: "Спорт HD"} # not shown in list
 
   modes:
     search: [q]
@@ -83,14 +84,15 @@ search:
     category:
       selector: div.movie-item__meta > span > a
       case:
-        a[href$="/1/"]: 1
-        a[href$="/3/"]: 3
-        a[href$="/4/"]: 4
-        a[href$="/4k_uhd/"]: 2
-        a[href$="/5/"]: 5
-        a[href$="/6/"]: 6
-        a[href$="/7/"]: 7
-        a[href$="/9/"]: 9
+        a[href$="/1/"]: 2001
+        a[href$="/4k_uhd/"]: 5006
+        a[href$="/7/"]: 2007
+        a[href$="/6/"]: 2006
+        a[href$="/4/"]: 2004
+        a[href$="/9/"]: 5007
+        a[href$="/3/"]: 2003
+        a[href$="/5/"]: 2005
+        a[href$="/sport-hd/"]: 5005 # not shown in list
     title:
       selector: span.movie-item__title
       filters:

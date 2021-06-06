@@ -11,21 +11,6 @@ links:
 caps:
   categorymappings:
     # when refreshing categories dont forget to update the category case block
-    - {id: 116, cat: Books, desc: "livres cuisine"}
-    - {id: 125, cat: XXX/Other, desc: "livres XXX"}
-    - {id: 123, cat: Books, desc: "livres roman"}
-    - {id: 113, cat: Books/EBook, desc: "livres Ebook"}
-    - {id: 110, cat: Audio/Audiobook, desc: "livres audio"}
-    - {id: 109, cat: Books/Comics, desc: "livres bd"}
-    - {id: 108, cat: Books/Comics, desc: "livres manga"}
-    - {id: 106, cat: Books, desc: "livres presse"}
-    - {id: 105, cat: Books/Mags, desc: "livres magazine"}
-    - {id: 126, cat: Books, desc: "livres "}
-    - {id: 96, cat: TV/Sport, desc: "sport sport"}
-    - {id: 97, cat: TV/Sport, desc: "sport divers"}
-    - {id: 81, cat: TV/Anime, desc: "Animation Séries"}
-    - {id: 79, cat: Movies/HD, desc: "Animation Film"}
-    - {id: 65, cat: TV/Documentary, desc: "Documentaires Divers"}
     - {id: 2, cat: Movies/DVD, desc: "Film DVDRip"}
     - {id: 99, cat: Movies/HD, desc: "Film Hdrip"}
     - {id: 98, cat: Movies/WEB-DL, desc: "Film Webrip"}
@@ -56,19 +41,33 @@ caps:
     - {id: 71, cat: TV/HD, desc: "Pack_Series BRRiP - BDRiP"}
     - {id: 82, cat: TV/Anime, desc: "Pack_Series Animation"}
     - {id: 112, cat: TV/HD, desc: "Pack_Series HDTV"}
-    - {id: 10, cat: XXX, desc: "XxX 18 Film"}
+    - {id: 105, cat: Books/Mags, desc: "Livres Magazine"}
+    - {id: 116, cat: Books, desc: "Livres Cuisine"}
+    - {id: 123, cat: Books, desc: "Livres Roman"}
+    - {id: 113, cat: Books/EBook, desc: "Livres Ebook"}
+    - {id: 106, cat: Books, desc: "Livres Presse"}
+    - {id: 108, cat: Books/Comics, desc: "Livres Manga"}
+    - {id: 110, cat: Audio/Audiobook, desc: "Livres Audio"}
+    - {id: 109, cat: Books/Comics, desc: "Livres Bd"}
+    - {id: 125, cat: XXX/Other, desc: "livres XXX"}
+    - {id: 65, cat: TV/Documentary, desc: "Documentaires Divers"}
     - {id: 13, cat: PC/0day, desc: "Apps Win"}
     - {id: 14, cat: PC/Mac, desc: "Apps Mac"}
     - {id: 52, cat: PC/Mobile-iOS, desc: "Apps Iphone"}
     - {id: 53, cat: PC/Mobile-Android, desc: "Apps android"}
+    - {id: 81, cat: TV/Anime, desc: "Animation Séries"}
+    - {id: 79, cat: Movies/HD, desc: "Animation Film"}
     - {id: 5, cat: Audio/MP3, desc: "Music Mp3"}
     - {id: 6, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 97, cat: TV/Sport, desc: "Sport Divers"}
+    - {id: 96, cat: TV/Sport, desc: "Sport Sport"}
     - {id: 7, cat: PC/Games, desc: "Jeux Win"}
     - {id: 8, cat: Console/PS3, desc: "Jeux PS3"}
     - {id: 54, cat: PC/Games, desc: "Jeux Pc"}
     - {id: 55, cat: Console/PS4, desc: "Jeux PS4"}
     - {id: 56, cat: Console/XBox 360, desc: "Jeux XBOX 360"}
     - {id: 57, cat: Console/Other, desc: "Jeux androïd"}
+    - {id: 10, cat: XXX, desc: "XxX 18 Film"}
 
   modes:
     search: [q]
@@ -166,21 +165,6 @@ search:
       selector: div.kat_cat_pic
       filters:
       case:
-        ":contains(\"livres\"):contains(\"cuisine\")": 116
-        ":contains(\"livres\"):contains(\"XXX\")": 125
-        ":contains(\"livres\"):contains(\"roman\")": 123
-        ":contains(\"livres\"):contains(\"Ebook\")": 113
-        ":contains(\"livres\"):contains(\"audio\")": 110
-        ":contains(\"livres\"):contains(\"bd\")": 109
-        ":contains(\"livres\"):contains(\"manga\")": 108
-        ":contains(\"livres\"):contains(\"presse\")": 106
-        ":contains(\"livres\"):contains(\"magazine\")": 105
-        ":contains(\"livres\"):contains(\"\")": 126
-        ":contains(\"sport\"):contains(\"sport\")": 96
-        ":contains(\"sport\"):contains(\"divers\")": 97
-        ":contains(\"Animation\"):contains(\"Séries\")": 81
-        ":contains(\"Animation\"):contains(\"Film\")": 79
-        ":contains(\"Documentaires\"):contains(\"Divers\")": 65
         ":contains(\"Film\"):contains(\"DVDRip\")": 2
         ":contains(\"Film\"):contains(\"Hdrip\")": 99
         ":contains(\"Film\"):contains(\"Webrip\")": 98
@@ -211,19 +195,33 @@ search:
         ":contains(\"Pack_Series\"):contains(\"BRRiP - BDRiP\")": 71
         ":contains(\"Pack_Series\"):contains(\"Animation\")": 82
         ":contains(\"Pack_Series\"):contains(\"HDTV\")": 112
-        ":contains(\"XxX\"):contains(\"Film\")": 10
+        ":contains(\"Livres\"):contains(\"Magazine\")": 105
+        ":contains(\"Livres\"):contains(\"Cuisine\")": 116
+        ":contains(\"Livres\"):contains(\"Roman\")": 123
+        ":contains(\"Livres\"):contains(\"Ebook\")": 113
+        ":contains(\"Livres\"):contains(\"Presse\")": 106
+        ":contains(\"Livres\"):contains(\"Manga\")": 108
+        ":contains(\"Livres\"):contains(\"Audio\")": 110
+        ":contains(\"Livres\"):contains(\"Bd\")": 109
+        ":contains(\"Livres\"):contains(\"XXX\")": 125
+        ":contains(\"Documentaires\"):contains(\"Divers\")": 65
         ":contains(\"Apps\"):contains(\"Win\")": 13
         ":contains(\"Apps\"):contains(\"Mac\")": 14
         ":contains(\"Apps\"):contains(\"Iphone\")": 52
         ":contains(\"Apps\"):contains(\"android\")": 53
+        ":contains(\"Animation\"):contains(\"Séries\")": 81
+        ":contains(\"Animation\"):contains(\"Film\")": 79
         ":contains(\"Music\"):contains(\"Mp3\")": 5
         ":contains(\"Music\"):contains(\"FLAC\")": 6
+        ":contains(\"Sport\"):contains(\"Divers\")": 97
+        ":contains(\"Sport\"):contains(\"Sport\")": 96
         ":contains(\"Jeux\"):contains(\"Win\")": 7
         ":contains(\"Jeux\"):contains(\"PS3\")": 8
         ":contains(\"Jeux\"):contains(\"Pc\")": 54
         ":contains(\"Jeux\"):contains(\"PS4\")": 55
         ":contains(\"Jeux\"):contains(\"XBOX 360\")": 56
         ":contains(\"Jeux\"):contains(\"androïd\")": 57
+        ":contains(\"XxX\"):contains(\"Film\")": 10
     title_phase1:
       selector: a[href^="details.php?id="]
     title_multilang:

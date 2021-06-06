@@ -17,21 +17,24 @@ caps:
     - {id: 16, cat: TV/HD, desc: "TV x265"}
     - {id: 17, cat: TV/SD, desc: "TV XVID"}
     - {id: 18, cat: TV, desc: "TV PACKS"}
-    - {id: 25, cat: TV/Anime, desc: "TV KIDS"}
+    - {id: 25, cat: TV, desc: "TV KIDS"}
+    - {id: 38, cat: TV/SD, desc: "TV 480p"}
     - {id: 20, cat: Movies/HD, desc: "Movies x264"}
     - {id: 21, cat: Movies/HD, desc: "Movies x265"}
     - {id: 22, cat: Movies/SD, desc: "Movies XVID"}
     - {id: 23, cat: Movies, desc: "Movies PACKS"}
-    - {id: 24, cat: TV/Anime, desc: "Movies KIDS"}
+    - {id: 24, cat: Movies, desc: "Movies KIDS"}
     - {id: 35, cat: Movies/UHD, desc: "Movies 4K/UHD"}
     - {id: 36, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 37, cat: Movies/SD, desc: "Movies 480p"}
     - {id: 27, cat: Audio/MP3, desc: "Music MP3"}
     - {id: 28, cat: Audio/Lossless, desc: "Music FLAC"}
     - {id: 29, cat: Audio, desc: "Music PACKS"}
-    - {id: 34, cat: Audio, desc: "Music karaoke "}
-    - {id: 30, cat: Books/EBook, desc: "ebooks"}
+    - {id: 34, cat: Audio, desc: "Music Karaoke "}
+    - {id: 30, cat: Books/EBook, desc: "eBooks"}
     - {id: 32, cat: PC/Games, desc: "Games PC"}
     - {id: 33, cat: Console, desc: "Games ROMS"}
+    - {id: 39, cat: Other, desc: "Misc"}
 
   modes:
     search: [q]
