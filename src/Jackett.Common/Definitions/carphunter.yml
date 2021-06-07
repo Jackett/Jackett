@@ -16,10 +16,6 @@ caps:
     - {id: 2, cat: Movies/SD, desc: "Film/Cam/Hun"}
     - {id: 8, cat: Movies/DVD, desc: "Film/DVD/Eng"}
     - {id: 7, cat: Movies/DVD, desc: "Film/DVD/Hun"}
-    - {id: 10, cat: Movies/DVD, desc: "Film/DVD5/Eng"}
-    - {id: 9, cat: Movies/DVD, desc: "Film/DVD5/Hun"}
-    - {id: 12, cat: Movies/DVD, desc: "Film/DVD9/Eng"}
-    - {id: 11, cat: Movies/DVD, desc: "Film/DVD9/Hun"}
     - {id: 16, cat: Movies/HD, desc: "Film/HD1080P/Eng"}
     - {id: 15, cat: Movies/HD, desc: "Film/HD1080P/Hun"}
     - {id: 14, cat: Movies/HD, desc: "Film/HD720P/Eng"}
@@ -105,14 +101,14 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active, 1 both, 2 onlydead, 3 onlyfree, 4 x2 torrents, 6 mytorrents
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    # 0 both, 1 onlyactive, 2 onlydead, 3 onlyfree, 4 x2 torrents, 5 mytorrents, 6 waiting for seeds
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not support imdbid searches
 
   rows:
-    selector: table[width="800"] > tbody > tr:has(a[href^="details.php?id="])
+    selector: table[width="920px"] > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
     category:
