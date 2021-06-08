@@ -475,6 +475,8 @@ namespace Jackett.Test.Common.Models
             var res = TorznabCapabilities.Concat(torznabCaps1, torznabCaps2);
 
             Assert.True(res.SearchAvailable);
+            Assert.False(res.SearchEngineAvailable);
+            Assert.AreEqual(SearchEngineType.Sphinx, res.SearchEngine);
             Assert.IsEmpty(res.TvSearchParams);
             Assert.IsEmpty(res.MovieSearchParams);
             Assert.IsEmpty(res.MusicSearchParams);
@@ -484,6 +486,7 @@ namespace Jackett.Test.Common.Models
             torznabCaps1 = new TorznabCapabilities
             {
                 SearchAvailable = false,
+                SearchEngineAvailable = false,
                 TvSearchParams = new List<TvSearchParam> { TvSearchParam.Q },
                 MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
                 MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Q },
@@ -494,6 +497,7 @@ namespace Jackett.Test.Common.Models
             torznabCaps2 = new TorznabCapabilities
             {
                 SearchAvailable = false,
+                SearchEngineAvailable = true,
                 TvSearchParams = new List<TvSearchParam> { TvSearchParam.Season },
                 MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.ImdbId },
                 MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Artist },
@@ -504,11 +508,66 @@ namespace Jackett.Test.Common.Models
             res = TorznabCapabilities.Concat(torznabCaps1, torznabCaps2);
 
             Assert.False(res.SearchAvailable);
+            Assert.True(res.SearchEngineAvailable);
             Assert.True(res.TvSearchParams.Count == 2);
             Assert.True(res.MovieSearchParams.Count == 2);
             Assert.True(res.MusicSearchParams.Count == 2);
             Assert.True(res.BookSearchParams.Count == 2);
             Assert.True(res.Categories.GetTorznabCategoryTree().Count == 3); // only CustomCat2 is removed
+
+            // Additional tests for SearchEngine
+            torznabCaps1 = new TorznabCapabilities
+            {
+                SearchAvailable = false,
+                SearchEngineAvailable = false,
+                SearchEngine = SearchEngineType.Raw,
+                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Q },
+                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
+                MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Q },
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q }
+            };
+
+            torznabCaps2 = new TorznabCapabilities
+            {
+                SearchAvailable = false,
+                SearchEngineAvailable = true,
+                SearchEngine = SearchEngineType.Sphinx,
+                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Season },
+                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.ImdbId },
+                MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Artist },
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Title }
+            };
+            res = TorznabCapabilities.Concat(torznabCaps1, torznabCaps2);
+
+            Assert.True(res.SearchEngineAvailable);
+            Assert.AreEqual(SearchEngineType.Sphinx, res.SearchEngine);
+
+            // Concat should pick Left SearchEngine
+            torznabCaps1 = new TorznabCapabilities
+            {
+                SearchAvailable = false,
+                SearchEngineAvailable = true,
+                SearchEngine = SearchEngineType.Raw,
+                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Q },
+                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
+                MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Q },
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q }
+            };
+
+            torznabCaps2 = new TorznabCapabilities
+            {
+                SearchAvailable = false,
+                SearchEngineAvailable = true,
+                SearchEngine = SearchEngineType.Sphinx,
+                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Season },
+                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.ImdbId },
+                MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Artist },
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Title }
+            };
+            res = TorznabCapabilities.Concat(torznabCaps1, torznabCaps2);
+
+            Assert.True(res.SearchEngineAvailable);
+            Assert.AreEqual(SearchEngineType.Raw, res.SearchEngine);
         }
     }
 }
