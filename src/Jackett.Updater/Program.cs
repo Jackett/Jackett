@@ -353,6 +353,7 @@ namespace Jackett.Updater
                 "Definitions/korsar.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
+                "Definitions/lechaudron.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
