@@ -9,7 +9,7 @@ followredirect: true
 links:
   # update poster placeholder link too
   - https://btdb.eu/
-  - https://btdb.unblockit.onl/
+  - https://btdb.unblockit.li/
 legacylinks:
   - https://btdb.to/
   - https://btdb.unblocked.app/
@@ -36,6 +36,7 @@ legacylinks:
   - https://btdb.unblockit.link/
   - https://btdb.unblockit.buzz/
   - https://btdb.unblockit.club/
+  - https://btdb.unblockit.onl/
 
 caps:
   categories:
