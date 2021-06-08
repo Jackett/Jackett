@@ -102,7 +102,8 @@ namespace Jackett.Common.Indexers
             "https://pctmix.com/",
             "https://pctmix1.com/",
             "https://pctreload1.com/",
-            "https://maxitorrent.com"
+            "https://maxitorrent.com",
+            "https://pctmix1.unblockit.li/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
