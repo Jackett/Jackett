@@ -6,9 +6,10 @@ language: en
 type: public
 encoding: UTF-8
 links:
-  - http://pornleech.io/
+  - https://pornleech.ch/
 legacylinks:
-  - https://pornleech.io/ # site is forcing redirect to http
+  - https://pornleech.io/
+  - http://pornleech.io/
 
 caps:
   categorymappings:

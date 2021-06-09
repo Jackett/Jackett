@@ -207,6 +207,8 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
                 var content = dom.QuerySelector("tbody:has(script)");
+                if (content == null)
+                    return releases; // no results
                 var release = new ReleaseInfo();
                 release.MinimumRatio = 1;
                 release.MinimumSeedTime = 72 * 60 * 60;
