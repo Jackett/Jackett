@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 links:
   - https://www.gay-torrents.net/
-  
+
 settings:
   - name: username
     type: text
@@ -182,4 +182,3 @@ search:
     uploadvolumefactor:
       text: 1
 # Morbid Suite vB4
-
