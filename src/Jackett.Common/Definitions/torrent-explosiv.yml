@@ -16,8 +16,8 @@ caps:
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
     - {id: 127, cat: PC/Mobile-Android, desc: "App Android"}
     # Doku
-    - {id: 177, cat: TV/Documentary, desc: "Doku HD "}
-    - {id: 178, cat: TV/Documentary, desc: "Doku SD "}
+    - {id: 177, cat: TV/Documentary, desc: "Doku HD"}
+    - {id: 178, cat: TV/Documentary, desc: "Doku SD"}
     # Game
     - {id: 263, cat: Console/Other, desc: "Game Sonstiege"}
     - {id: 264, cat: Console, desc: "Game PDA / Handy"}
@@ -27,11 +27,11 @@ caps:
     # Movie
     - {id: 277, cat: Movies, desc: "Movie Pack"}
     - {id: 300, cat: Movies/3D, desc: "Movie 3D"}
-    - {id: 258, cat: Movies/UHD, desc: "Movie UHD "}
+    - {id: 258, cat: Movies/UHD, desc: "Movie UHD"}
     - {id: 262, cat: Movies/DVD, desc: "Movie DVD-R"}
     - {id: 301, cat: Movies/BluRay, desc: "Movie Bluray"}
-    - {id: 28, cat: Movies/SD, desc: "Movie SD "}
-    - {id: 32, cat: Movies/HD, desc: "Movie HD "}
+    - {id: 28, cat: Movies/SD, desc: "Movie SD"}
+    - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     # Music
     - {id: 48, cat: Audio, desc: "Music Album"}
     - {id: 288, cat: Audio, desc: "Music Discographie"}
@@ -46,7 +46,8 @@ caps:
     # Tv Serien
     - {id: 286, cat: TV/Anime, desc: "Tv Serien Anime HD"}
     - {id: 226, cat: TV/SD, desc: "Tv Serien SD"}
-    - {id: 209, cat: TV/HD, desc: "Tv Serien HD "}
+    - {id: 209, cat: TV/HD, desc: "Tv Serien HD"}
+    - {id: 305, cat: TV/UHD, desc: "Tv Serien UHD"}
     - {id: 287, cat: TV/Anime, desc: "Tv Serien Anime SD"}
     - {id: 273, cat: TV, desc: "Tv Serien Pack"}
     # Sport
@@ -57,14 +58,15 @@ caps:
     - {id: 202, cat: Books/Mags, desc: "Sonstiges Magazine"}
     - {id: 217, cat: Books, desc: "Sonstiges EPaper"}
     - {id: 269, cat: Books, desc: "Sonstiges Hörspiel"}
+    - {id: 304, cat: Books/Comics, desc: "Sonstiges Comic"}
     - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
     # XXX
-    - {id: 73, cat: XXX, desc: "XXX HD "}
+    - {id: 73, cat: XXX, desc: "XXX HD"}
     - {id: 75, cat: XXX, desc: "XXX Pack"}
-    - {id: 76, cat: XXX, desc: "XXX SD "}
+    - {id: 76, cat: XXX, desc: "XXX SD"}
     - {id: 147, cat: XXX, desc: "XXX Bilder//Clips"}
-    - {id: 302, cat: XXX, desc: "XXX DVD-R"}
+    - {id: 302, cat: XXX, desc: "XXX Diverses"}
 
   modes:
     search: [q]
@@ -161,6 +163,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Anime SD\"))": "287"
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "226"
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "209"
+        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": "305"
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "273"
         # Music
         ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Album\"))": "48"
@@ -194,6 +197,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Magazine\"))": "202"
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"EPaper\"))": "217"
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Hörspiel\"))": "269"
+        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Comic\"))": "304"
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"A-Book\"))": "63"
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"E-Book\"))": "96"
         # XXX
@@ -201,7 +205,7 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "75"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "76"
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Clips\"))": "147"
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": "302"
+        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Diverses\"))": "302"
     poster:
       selector: div[id^="details"] img
       attribute: src
