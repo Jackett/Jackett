@@ -14,6 +14,7 @@ caps:
     - {id: 108, cat: Other, desc: "APPS Wallpapers"}
     - {id: 8, cat: Movies/BluRay, desc: "BLU-RAY"}
     - {id: 172, cat: Movies/BluRay, desc: "BLU-RAY 1080p"}
+    - {id: 179, cat: Movies/BluRay, desc: "BLU-RAY 4K"}
     - {id: 176, cat: Movies/BluRay, desc: "BLU-RAY 720p"}
     - {id: 156, cat: Movies/BluRay, desc: "BLU-RAY H264"}
     - {id: 153, cat: Movies/BluRay, desc: "BLU-RAY X264"}
@@ -22,6 +23,7 @@ caps:
     - {id: 164, cat: Movies/Other, desc: "Christmas Music"}
     - {id: 160, cat: Movies/Other, desc: "Classic Movies"}
     - {id: 169, cat: Console, desc: "Console Games"}
+    - {id: 178, cat: PC/Games, desc: "PC GAMES"}
     - {id: 175, cat: Console/XBox, desc: "Console Games XBOX"}
     - {id: 82, cat: Audio/Other, desc: "DJ MUSIC"}
     - {id: 84, cat: Audio/Other, desc: "DJ MUSIC DMC"}
@@ -45,8 +47,8 @@ caps:
     - {id: 150, cat: Audio, desc: "MUSIC Collections"}
     - {id: 96, cat: Audio, desc: "MUSIC Discographys"}
     - {id: 97, cat: Audio/Lossless, desc: "MUSIC Flac"}
+    - {id: 177, cat: Audio, desc: "MUSIC Rock / Metal"}
     - {id: 171, cat: Audio/Video, desc: "Music-Videos"}
-    - {id: 22, cat: PC/Games, desc: "PC GAMES"}
     - {id: 81, cat: Movies, desc: "RatioBoosters"}
     - {id: 26, cat: TV/Sport, desc: "SPORT"}
     - {id: 7, cat: Audio, desc: "Top 40 Albums/Singles"}
