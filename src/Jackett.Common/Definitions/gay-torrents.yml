@@ -7,6 +7,38 @@ type: semi-private
 encoding: UTF-8
 links:
   - https://www.gay-torrents.net/
+  
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort by
+    default: 5
+    options:
+      0: published
+      1: title
+      2: files
+      4: size
+      5: seeders
+      6: leechers
+      7: downloads
+      8: health
+  - name: order
+    type: select
+    label: Sort Order
+    default: 0
+    options:
+      0: desc
+      1: asc
 
 caps:
   categorymappings:
@@ -80,9 +112,31 @@ login:
 search:
   paths:
     - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 1
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 2
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 3
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 4
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 5
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 6
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 7
   inputs:
     $raw: "{{ range .Categories }}type={{.}}&{{end}}"
     textsearch: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.order }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
