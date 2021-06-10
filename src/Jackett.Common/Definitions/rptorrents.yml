@@ -11,18 +11,22 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: PC/Games, desc: "Games PC"}
+    - {id: 35, cat: PC/Games, desc: "Games Pack"}
     - {id: 2, cat: PC/0day, desc: "Apps Windows"}
     - {id: 3, cat: PC/Mac, desc: "Apps  Mac"}
     - {id: 4, cat: PC, desc: "Apps Linux"}
     - {id: 34, cat: PC/Mobile-Other, desc: "Apps Mobile"}
     - {id: 6, cat: TV/Anime, desc: "Movie Cartoons"}
+    - {id: 37, cat: Movies/SD, desc: "Movies SD"}
     - {id: 7, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
     - {id: 32, cat: Movies/UHD, desc: "Movies 4k"}
     - {id: 9, cat: Movies/HD, desc: "Movies HD"}
     - {id: 10, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 11, cat: Movies, desc: "Movies Pack"}
     - {id: 12, cat: Movies/BluRay, desc: "Movies Bluray"}
-    - {id: 33, cat: Movies/HD, desc: "Movies  Full-HD"}
+    - {id: 33, cat: Movies/HD, desc: "Movies Full-HD"}
+    - {id: 40, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: 41, cat: Movies/SD, desc: "Movies Xvid"}
     - {id: 14, cat: TV/HD, desc: "TV HD"}
     - {id: 15, cat: TV/WEB-DL, desc: "TV WEB-DL"}
     - {id: 16, cat: TV/SD, desc: "TV SD"}
@@ -32,9 +36,7 @@ caps:
     - {id: 20, cat: Audio/Lossless, desc: "Music Flac"}
     - {id: 23, cat: Audio, desc: "Music Pack"}
     - {id: 22, cat: Audio/Video, desc: "Music Video"}
-    - {id: 35, cat: PC/Games, desc: "Games Pack"}
     - {id: 36, cat: XXX, desc: "Movie XXX"}
-    - {id: 37, cat: Movies/SD, desc: "Movies SD"}
     - {id: 38, cat: Books/EBook, desc: "Books eBooks"}
     - {id: 39, cat: Audio/Audiobook, desc: "Books Audio"}
 
