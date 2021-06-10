@@ -24,6 +24,36 @@ settings:
     type: info
     label: "Search results"
     default: "You can increase the number of search results in your profile.<br />Default is 15."
+  - name: status
+    type: select
+    label: Status
+    default: 0
+    options:
+      0: All
+      1: Active Only
+      2: Dead Only
+      3: Free
+      4: 50%free
+      5: 25%free
+      6: packs
+  - name: sort
+    type: select
+    label: Sort by
+    default: seeds
+    options:
+      data: added
+      finished: downloads
+      seeds: seeders
+      leechers: leechers
+      size: size
+      filename: filename
+  - name: order
+    type: select
+    label: Sort Order
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 caps:
   categorymappings:
@@ -62,6 +92,7 @@ caps:
     - {id: 41, cat: Movies, desc: "Non-Porn"}
     - {id: 41, cat: TV, desc: "Non-Porn"}
     - {id: 41, cat: Other, desc: "Non-Porn"}
+    - {id: 71, cat: XXX, desc: "Fan Sites"}
 
   modes:
     search: [q]
@@ -88,7 +119,9 @@ search:
     $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
     # 0 both, 1 active, 2 dead
-    active: 0
+    active: "{{ .Config.status }}"
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.order }}"
 
   rows:
     selector: div.torrent
