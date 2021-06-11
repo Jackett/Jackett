@@ -214,71 +214,94 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results);
+                var hasNextPage = true;
 
-                var rows = doc.QuerySelectorAll("table[id='torrents'] > tbody > tr");
-                foreach (var row in rows)
+                while (hasNextPage)
                 {
-                    var qTitleLink = row.QuerySelector("a.hv");
-                    if (qTitleLink == null) // no results
-                        continue;
+                    var doc = parser.ParseDocument(results);
+                    var nextPage = doc.QuerySelectorAll("div.paginate > span > div.single > a")
+                                      .FirstOrDefault(x => x.TextContent.Contains("Next"));
 
-                    // drop invalid char that seems to have cropped up in some titles. #6582
-                    var title = qTitleLink.TextContent.Trim().Replace("\u000f", "");
-                    var details = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
-
-                    var qLink = row.QuerySelector("a[href^=\"/download.php/\"]");
-                    var link = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
-
-                    var descrSplit = row.QuerySelector("div.sub").TextContent.Split('|');
-                    var dateSplit = descrSplit.Last().Split(new[] { " by " }, StringSplitOptions.None);
-                    var publishDate = DateTimeUtil.FromTimeAgo(dateSplit.First());
-                    var description = descrSplit.Length > 1 ? "Tags: " + descrSplit.First().Trim() : "";
-                    description += dateSplit.Length > 1 ? " Uploaded by: " + dateSplit.Last().Trim() : "";
-
-                    var catIcon = row.QuerySelector("td:nth-of-type(1) a");
-                    if (catIcon == null)
-                        // Torrents - Category column == Text or Code
-                        // release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
-                        throw new Exception("Please, change the 'Torrents - Category column' option to 'Icons' in the website Settings. Wait a minute (cache) and then try again.");
-                    // Torrents - Category column == Icons
-                    var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
-
-                    var size = ReleaseInfo.GetBytes(row.Children[5].TextContent);
-
-                    var colIndex = 6;
-                    int? files = null;
-                    if (row.Children.Length == 10) // files column is enabled in the site settings
+                    var rows = doc.QuerySelectorAll("table[id='torrents'] > tbody > tr");
+                    foreach (var row in rows)
                     {
-                        files = ParseUtil.CoerceInt(row.Children[colIndex].TextContent.Replace("Go to files", ""));
-                        colIndex++;
+                        var qTitleLink = row.QuerySelector("a.hv");
+                        if (qTitleLink == null) // no results
+                            continue;
+
+                        // drop invalid char that seems to have cropped up in some titles. #6582
+                        var title = qTitleLink.TextContent.Trim().Replace("\u000f", "");
+                        var details = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
+
+                        var qLink = row.QuerySelector("a[href^=\"/download.php/\"]");
+                        var link = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
+
+                        var descrSplit = row.QuerySelector("div.sub").TextContent.Split('|');
+                        var dateSplit = descrSplit.Last().Split(
+                            new[]
+                            {
+                                " by "
+                            }, StringSplitOptions.None);
+                        var publishDate = DateTimeUtil.FromTimeAgo(dateSplit.First());
+                        var description = descrSplit.Length > 1 ? "Tags: " + descrSplit.First().Trim() : "";
+                        description += dateSplit.Length > 1 ? " Uploaded by: " + dateSplit.Last().Trim() : "";
+
+                        var catIcon = row.QuerySelector("td:nth-of-type(1) a");
+                        if (catIcon == null)
+                            // Torrents - Category column == Text or Code
+                            // release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
+                            throw new Exception(
+                                "Please, change the 'Torrents - Category column' option to 'Icons' in the website Settings. Wait a minute (cache) and then try again.");
+                        // Torrents - Category column == Icons
+                        var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
+
+                        var size = ReleaseInfo.GetBytes(row.Children[5].TextContent);
+
+                        var colIndex = 6;
+                        int? files = null;
+                        if (row.Children.Length == 10) // files column is enabled in the site settings
+                        {
+                            files = ParseUtil.CoerceInt(row.Children[colIndex].TextContent.Replace("Go to files", ""));
+                            colIndex++;
+                        }
+
+                        var grabs = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
+                        var seeders = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
+                        var leechers = ParseUtil.CoerceInt(row.Children[colIndex].TextContent);
+                        var dlVolumeFactor = row.QuerySelector("span.free") != null ? 0 : 1;
+
+                        var release = new ReleaseInfo
+                        {
+                            Title = title,
+                            Details = details,
+                            Guid = details,
+                            Link = link,
+                            PublishDate = publishDate,
+                            Category = cat,
+                            Description = description,
+                            Size = size,
+                            Files = files,
+                            Grabs = grabs,
+                            Seeders = seeders,
+                            Peers = seeders + leechers,
+                            DownloadVolumeFactor = dlVolumeFactor,
+                            UploadVolumeFactor = 1,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 1209600 // 336 hours
+                        };
+
+                        releases.Add(release);
                     }
-                    var grabs = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
-                    var seeders = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
-                    var leechers = ParseUtil.CoerceInt(row.Children[colIndex].TextContent);
-                    var dlVolumeFactor = row.QuerySelector("span.free") != null ? 0 : 1;
 
-                    var release = new ReleaseInfo
+                    if (nextPage == null || string.IsNullOrEmpty(query.SearchTerm))
                     {
-                        Title = title,
-                        Details = details,
-                        Guid = details,
-                        Link = link,
-                        PublishDate = publishDate,
-                        Category = cat,
-                        Description = description,
-                        Size = size,
-                        Files = files,
-                        Grabs = grabs,
-                        Seeders = seeders,
-                        Peers = seeders + leechers,
-                        DownloadVolumeFactor = dlVolumeFactor,
-                        UploadVolumeFactor = 1,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 1209600 // 336 hours
-                    };
+                        hasNextPage = false;
+                        continue;
+                    }
 
-                    releases.Add(release);
+                    var newUrl = SearchUrl + nextPage.Attributes["href"].Value;
+                    response = await RequestWithCookiesAndRetryAsync(newUrl, referer: SearchUrl);
+                    results = response.ContentString;
                 }
             }
             catch (Exception ex)
