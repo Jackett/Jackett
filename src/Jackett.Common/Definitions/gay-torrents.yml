@@ -21,20 +21,16 @@ settings:
     default: false
   - name: sort
     type: select
-    label: Sort by
-    default: 5
+    label: Sort requested from site
+    default: 0
     options:
-      0: published
+      0: created
       1: title
-      2: files
       4: size
       5: seeders
-      6: leechers
-      7: downloads
-      8: health
   - name: order
     type: select
-    label: Sort Order
+    label: Order requested from site
     default: 0
     options:
       0: desc
@@ -126,17 +122,12 @@ search:
     - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
       inputs:
         page: 5
-    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
-      inputs:
-        page: 6
-    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
-      inputs:
-        page: 7
   inputs:
     $raw: "{{ range .Categories }}type={{.}}&{{end}}"
     textsearch: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.order }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
