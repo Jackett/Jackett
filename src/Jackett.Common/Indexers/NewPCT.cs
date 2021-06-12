@@ -181,9 +181,7 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var downloadLink = new Regex("maxitorrent.com").Match(linkParam.AbsoluteUri).Success
-                ? linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/")
-                : linkParam.AbsoluteUri;
+            var downloadLink = linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/");
 
             var results = await RequestWithCookiesAndRetryAsync(downloadLink);
             var uriLink = ExtractDownloadUri(results.ContentString, downloadLink);
