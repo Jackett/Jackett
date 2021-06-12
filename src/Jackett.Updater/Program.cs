@@ -271,7 +271,6 @@ namespace Jackett.Updater
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
-                "Definitions/badasstorrents.yml", // to be migrated to c#
                 "Definitions/bithq.yml",
                 "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
