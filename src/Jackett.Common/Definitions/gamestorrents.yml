@@ -30,8 +30,9 @@ caps:
 settings: []
 
 download:
-  selector: a#download_torrent
-  attribute: href
+  selectors:
+    - selector: a#download_torrent
+      attribute: href
 
 search:
   paths:

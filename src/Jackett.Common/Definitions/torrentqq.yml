@@ -55,8 +55,9 @@ settings:
     default: Some download links on this site use a link to a direct file download service, instead of a .torrent link. Jackett does not support direct file downloads, so you will get a page-cannot-be-found error when you try them.
 
 download:
-  selector: a[href^="/torrent/download/"]
-  attribute: href
+  selectors:
+    - selector: a[href^="/torrent/download/"]
+      attribute: href
 
 search:
   paths:

@@ -51,8 +51,9 @@ settings:
       size: size
 
 download:
-  selector: "#download > div:nth-child(2) > div:nth-child(1) > a"
-  attribute: href
+  selectors:
+    - selector: "#download > div:nth-child(2) > div:nth-child(1) > a"
+      attribute: href
   filters:
     - name: replace
       args: ["https://mylink.me.uk/?url=", ""]

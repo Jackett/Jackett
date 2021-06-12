@@ -57,8 +57,9 @@ login:
     selector: a[href$="/index.php?action=logout"]
 
 download:
-  selector: a[href*="/engine/download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href*="/engine/download.php?id="]
+      attribute: href
 
 search:
   # https://anime-free.biz/index.php?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story=slaves+to+passion&all_word_seach=1&titleonly=3&searchuser=&replyless=0&replylimit=0&searchdate=0&beforeafter=after&sortby=date&resorder=desc&showposts=0&catlist[]=0

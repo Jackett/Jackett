@@ -77,8 +77,9 @@ login:
     selector: a[href="logout.php"]
 
 download:
-  selector: a[href^="download.php"]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php"]
+      attribute: href
 
 search:
   paths:
