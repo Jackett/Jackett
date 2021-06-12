@@ -24,32 +24,22 @@ settings:
     type: info
     label: "Search results"
     default: "You can increase the number of search results in your profile.<br />Default is 15."
-  - name: status
-    type: select
-    label: Status
-    default: 0
-    options:
-      0: All
-      1: Active Only
-      2: Dead Only
-      3: Free
-      4: 50%free
-      5: 25%free
-      6: packs
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
-    label: Sort by
-    default: seeds
+    label: Sort requested from site
+    default: data
     options:
-      data: added
-      finished: downloads
+      data: created
       seeds: seeders
-      leechers: leechers
       size: size
-      filename: filename
+      filename: title
   - name: order
     type: select
-    label: Sort Order
+    label: Order requested from site
     default: desc
     options:
       desc: desc
@@ -118,8 +108,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 both, 1 active, 2 dead
-    active: "{{ .Config.status }}"
+    # 0 all, 1 active, 2 dead, 3 free, 4 50%free, 5 25%free, 6 packs
+    active: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.order }}"
 
