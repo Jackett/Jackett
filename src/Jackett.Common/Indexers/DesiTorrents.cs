@@ -12,7 +12,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DesiTorrents : GazelleTracker
     {
-        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+        public DesiTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "desitorrents",
                    name: "DesiTorrents",
