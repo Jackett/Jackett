@@ -104,7 +104,8 @@ search:
       args: ["(?i)\\bS(\\d+)", "T$1"]
 
   rows:
-    selector: table > tbody > tr
+    # pre-release/vip torrents don't have download link
+    selector: table > tbody > tr:has(a[href*="/download/"])
 
   fields:
     category:
@@ -125,6 +126,8 @@ search:
       optional: true
       filters:
         - name: re_replace
+          args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
+        - name: re_replace
           args: ["(?i)\\bT(\\d+)", "S$1"]
         - name: re_replace
           args: ["UHDRip", "BDRip"] # Fix for Radarr
@@ -134,6 +137,8 @@ search:
       selector: a[href*="/torrents/"]:not(:contains("VOSE"))
       optional: true
       filters:
+        - name: re_replace
+          args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
         - name: re_replace
           args: ["(?i)\\bT(\\d+)", "S$1"]
         - name: re_replace
