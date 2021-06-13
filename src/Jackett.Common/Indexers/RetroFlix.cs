@@ -12,6 +12,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class RetroFlix : SpeedAppTracker
     {
+        protected override string ItemsPerPage => "90";
+
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://retroflix.net/"
         };
