@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -8,7 +10,7 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Redacted : GazelleTracker
+    public class DesiTorrents : GazelleTracker
     {
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
@@ -52,6 +54,17 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(4, TorznabCatType.BooksEBook, "ebooks");
             AddCategoryMapping(5, TorznabCatType.TVSport, "Sports");
             AddCategoryMapping(6, TorznabCatType.PCGames, "Games");
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = await base.PerformQuery(query);
+            foreach (var release in releases)
+            {
+                release.MinimumRatio = 0.6;
+                release.MinimumSeedTime = 259200;
+            }
+            return releases;
         }
     }
 }
