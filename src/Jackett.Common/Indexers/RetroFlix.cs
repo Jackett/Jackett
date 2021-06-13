@@ -13,6 +13,7 @@ namespace Jackett.Common.Indexers
     public class RetroFlix : SpeedAppTracker
     {
         protected override string ItemsPerPage => "90";
+        protected override bool UseP2PReleaseName => true;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://retroflix.net/"
