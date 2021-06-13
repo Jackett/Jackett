@@ -1,0 +1,57 @@
+using System.Diagnostics.CodeAnalysis;
+using Jackett.Common.Indexers.Abstract;
+using Jackett.Common.Models;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils.Clients;
+using NLog;
+
+namespace Jackett.Common.Indexers
+{
+    [ExcludeFromCodeCoverage]
+    public class Redacted : GazelleTracker
+    {
+        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
+            : base(id: "desitorrents",
+                   name: "DesiTorrents",
+                   description: "Desitorrents is a  Private Torrent Tracker for BOLLYWOOD / TOLLYWOOD / GENERAL",
+                   link: "https://desitorrents.tv/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cs: cs,
+                   has2Fa: true
+                )
+        {
+            Language = "en-us";
+            Type = "private";
+
+            AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(2, TorznabCatType.TV, "Tv shows");
+            AddCategoryMapping(3, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(4, TorznabCatType.BooksEBook, "ebooks");
+            AddCategoryMapping(5, TorznabCatType.TVSport, "Sports");
+            AddCategoryMapping(6, TorznabCatType.PCGames, "Games");
+        }
+    }
+}
