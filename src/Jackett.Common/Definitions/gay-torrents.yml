@@ -8,6 +8,34 @@ encoding: UTF-8
 links:
   - https://www.gay-torrents.net/
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 0
+    options:
+      0: created
+      1: title
+      4: size
+      5: seeders
+  - name: order
+    type: select
+    label: Order requested from site
+    default: 0
+    options:
+      0: desc
+      1: asc
+
 caps:
   categorymappings:
     - {id: porn, cat: XXX, desc: "Porn"}
@@ -80,9 +108,26 @@ login:
 search:
   paths:
     - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 1
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 2
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 3
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 4
+    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+      inputs:
+        page: 5
   inputs:
     $raw: "{{ range .Categories }}type={{.}}&{{end}}"
     textsearch: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.order }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
