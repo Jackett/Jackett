@@ -61,9 +61,10 @@ download:
   selectors:
     - selector: a.btn-magnet
       attribute: href
-  filters:
-    - name: querystring
-      args: url
+      filters:
+        - name: querystring
+          args: url
+
 search:
   paths:
     - path: torrents

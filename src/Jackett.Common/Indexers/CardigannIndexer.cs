@@ -1797,7 +1797,7 @@ namespace Jackett.Common.Indexers
                                 href = downloadElement.TextContent;
                             }
 
-                            href = applyFilters(href, Download.Filters, variables);
+                            href = applyFilters(href, selector.Filters, variables);
                             var torrentLink = resolvePath(href, link);
                             if (torrentLink.Scheme != "magnet")
                             {
