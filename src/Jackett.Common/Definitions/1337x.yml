@@ -158,7 +158,7 @@ settings:
   - name: info_download
     type: info
     label: About the Download links
-    default: As the .torrent download links on this site are know to fail from time to time, you can optionally set as a fallback an automatic alternate link. We suggest using the magnet link as a fallback.
+    default: As the .torrent download links on this site are known to fail from time to time, you can optionally set as a fallback an automatic alternate link. We suggest using the magnet link as a fallback.
   - name: sort
     type: select
     label: Sort requested from site
