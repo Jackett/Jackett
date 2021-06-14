@@ -61,7 +61,6 @@ settings:
   - name: useragent
     type: text
     label: User-Agent
-    label: User-Agent
   - name: info_useragent
     type: info
     label: How to get the User-Agent
@@ -101,8 +100,9 @@ login:
     user-agent: "[ .Config.useragent ]"
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:

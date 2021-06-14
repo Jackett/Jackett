@@ -1,4 +1,4 @@
-﻿---
+---
 id: uniondht
 name: UnionDHT
 description: "UnionDHT is a RUSSIAN Public Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
@@ -528,8 +528,9 @@ settings:
       1: asc
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:

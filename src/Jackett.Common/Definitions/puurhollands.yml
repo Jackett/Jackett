@@ -55,8 +55,9 @@ download:
       action: add
       tid: "{{ .DownloadUri.Query.id }}"
       text: "{{ .Config.thankyou }}"
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:

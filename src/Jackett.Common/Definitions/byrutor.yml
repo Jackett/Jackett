@@ -260,8 +260,9 @@ caps:
 settings: []
 
 download:
-  selector: a.itemtop_game
-  attribute: href
+  selectors:
+    - selector: a.itemtop_game
+      attribute: href
 
 search:
   # keywords (article titles only search)

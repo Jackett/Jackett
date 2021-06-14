@@ -49,7 +49,8 @@ settings:
       asc: asc
 
 download:
-  selector: script:contains("magnet:")
+  selectors:
+    - selector: script:contains("magnet:")
   filters:
     - name: regexp
       args: "(magnet:[^\"]+)\""

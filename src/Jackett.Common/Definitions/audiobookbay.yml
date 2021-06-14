@@ -89,7 +89,8 @@ caps:
 settings: []
 
 download:
-  selector: td:contains("Info Hash:") ~ td
+  selectors:
+    - selector: td:contains("Info Hash:") ~ td
   filters:
     - name: prepend
       args: "magnet:?xt=urn:btih:"

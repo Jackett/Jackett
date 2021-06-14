@@ -18,8 +18,9 @@ caps:
 settings: []
 
 download:
-  selector: div.facepaylas a
-  attribute: href
+  selectors:
+    - selector: div.facepaylas a
+      attribute: href
 
 search:
   paths:

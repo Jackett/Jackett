@@ -52,8 +52,9 @@ settings:
       asc: asc
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   # https://hdreactor.net/index.php?do=search&subaction=search&showposts=1&story=2020&catlist[]=2001&catlist[]=2006

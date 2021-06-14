@@ -38,6 +38,7 @@ caps:
     - {id: "/games/switch/", cat: Console/Other, desc: "Games Switch"}
     - {id: "/games/wii/", cat: Console/Wii, desc: "Games Wii"}
     - {id: "/games/xbox360/", cat: Console/XBox 360, desc: "Games Xbox360"}
+    - {id: "/games/mac/", cat: PC/Mac, desc: "Games Mac"}
     - {id: "/movies/", cat: Movies, desc: Movies}
     - {id: "/movies/3d-movies/", cat: Movies/3D, desc: "Movies 3D"}
     - {id: "/movies/bollywood/", cat: Movies, desc: "Movies Bollywood"}
@@ -48,6 +49,8 @@ caps:
     - {id: "/movies/mp4/", cat: Movies, desc: "Movies MP4"}
     - {id: "/movies/other-movies/", cat: Movies, desc: "Movies Other Movies"}
     - {id: "/movies/ultrahd/", cat: Movies/UHD, desc: "Movies UltraHD"}
+    - {id: "/movies/music-videos/", cat: Audio/Video, desc: "Movies Music videos"}
+    - {id: "/movies/movie-clips/", cat: Movies/Other, desc: "Movies Movie clips"}
     - {id: "/music/", cat: Audio, desc: Music}
     - {id: "/music/aac/", cat: Audio, desc: "Music AAC"}
     - {id: "/music/lossless/", cat: Audio/Lossless, desc: "Music Lossless"}
@@ -93,8 +96,9 @@ settings:
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:

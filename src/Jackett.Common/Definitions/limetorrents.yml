@@ -83,8 +83,9 @@ settings:
 
 download:
   # the .torrent url is on the on the details page
-  selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink }}"]
-  attribute: href
+  selectors:
+    - selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink }}"]
+      attribute: href
 
 search:
   paths:

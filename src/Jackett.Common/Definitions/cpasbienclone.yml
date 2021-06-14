@@ -68,8 +68,9 @@ settings:
       ?trie-nom-a: title asc
 
 download:
-  selector: a[href^="magnet:"]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:"]
+      attribute: href
 
 search:
   paths:

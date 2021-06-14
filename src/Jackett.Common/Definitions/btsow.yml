@@ -44,8 +44,9 @@ settings:
     default: BTSOW does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 download:
-  selector: a#magnetOpen
-  attribute: href
+  selectors:
+    - selector: a#magnetOpen
+      attribute: href
 
 search:
   paths:

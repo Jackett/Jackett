@@ -19,8 +19,9 @@ caps:
     tv-search: [q, season, ep]
 
 download:
-  selector: a[href*="/get/"]
-  attribute: href
+  selectors:
+    - selector: a[href*="/get/"]
+      attribute: href
 
 search:
   paths:

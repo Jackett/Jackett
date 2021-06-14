@@ -80,8 +80,9 @@ login:
     selector: a[href$="/index.php?action=logout"]
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   # do=search&subaction=search&story=greyhound&titleonly=0&sortby=date&resorder=desc&showposts=0&catlist[]=45&catlist[]=46&catlist[]=47

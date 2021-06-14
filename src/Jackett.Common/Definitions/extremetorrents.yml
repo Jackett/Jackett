@@ -78,8 +78,9 @@ download:
       tid: "{{ .DownloadUri.Query.id }}"
       text: "{{ .Config.thankyou }}"
       submit: Opslaan
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:

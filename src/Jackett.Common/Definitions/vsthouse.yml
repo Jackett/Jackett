@@ -19,8 +19,9 @@ caps:
 settings: []
 
 download:
-  selector: a[title^="Скачать:"]
-  attribute: href
+  selectors:
+    - selector: a[title^="Скачать:"]
+      attribute: href
 
 search:
   paths:
