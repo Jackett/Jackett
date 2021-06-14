@@ -228,7 +228,7 @@ namespace Jackett.Common.Indexers.Abstract
                         ? "Tags: " + string.Join(", ", tags) + "\n"
                         : null;
                     Uri poster = null;
-                    if (!string.IsNullOrEmpty(cover))
+                    if (!string.IsNullOrEmpty(cover) && cover.StartsWith("http"))
                         poster = new Uri(cover);
                     var release = new ReleaseInfo
                     {
