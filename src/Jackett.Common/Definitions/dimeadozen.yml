@@ -100,8 +100,9 @@ login:
 
 download:
   # download.php/673256/Talk%20Talk%20-%201986-07-05%20Paris.torrent
-  selector: a[href^="download.php/"]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php/"]
+      attribute: href
 
 search:
   paths:

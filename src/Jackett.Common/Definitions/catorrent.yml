@@ -56,8 +56,9 @@ login:
     selector: a[href$="/index.php?action=logout"]
 
 download:
-  selector: a[href*="/index.php?do=download&id="]
-  attribute: href
+  selectors:
+    - selector: a[href*="/index.php?do=download&id="]
+      attribute: href
 
 search:
   # https://catorrent.org/index.php?do=search&subaction=search&story=lovelot

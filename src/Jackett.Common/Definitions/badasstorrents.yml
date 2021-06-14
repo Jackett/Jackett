@@ -52,8 +52,9 @@ settings:
       asc: asc
 
 download:
-  selector: a[href*="{{ .Config.downloadlink }}"]
-  attribute: href
+  selectors:
+    - selector: a[href*="{{ .Config.downloadlink }}"]
+      attribute: href
 
 search:
   paths:

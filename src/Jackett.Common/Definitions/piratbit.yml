@@ -646,8 +646,9 @@ settings:
 
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:

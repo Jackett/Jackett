@@ -58,8 +58,9 @@ settings:
       size: size
 
 download:
-  selector: a.btn-magnet
-  attribute: href
+  selectors:
+    - selector: a.btn-magnet
+      attribute: href
   filters:
     - name: querystring
       args: url

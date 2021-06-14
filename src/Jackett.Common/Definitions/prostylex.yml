@@ -123,8 +123,9 @@ login:
     path: search.php
 
 download:
-  selector: a[href^="magnet:?"]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
 
 search:
   paths:

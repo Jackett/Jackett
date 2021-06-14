@@ -206,8 +206,9 @@ caps:
 settings: []
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   # https://torrentparadise.org/search.php?f=monday+night

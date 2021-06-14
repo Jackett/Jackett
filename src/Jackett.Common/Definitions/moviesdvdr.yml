@@ -21,8 +21,9 @@ caps:
 settings: []
 
 download:
-  selector: a.torrent_download
-  attribute: href
+  selectors:
+    - selector: a.torrent_download
+      attribute: href
 
 search:
   paths:

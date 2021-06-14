@@ -36,8 +36,9 @@ settings:
       title: name
 
 download:
-  selector: form[action^="../torrents/"]
-  attribute: action
+  selectors:
+    - selector: form[action^="../torrents/"]
+      attribute: action
 
 search:
   paths:
