@@ -67,5 +67,13 @@ namespace Jackett.Common.Indexers
             }
             return releases;
         }
+        
+        protected override bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
+        {
+            // Add missing category information
+            var category = (string)result["category"];
+            release.Category = MapTrackerCatToNewznab(category);
+            return true;
+        }
     }
 }
