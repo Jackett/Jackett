@@ -67,7 +67,7 @@ namespace Jackett.Common.Indexers
             }
             return releases;
         }
-        
+
         protected override bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
         {
             // Add missing category information
