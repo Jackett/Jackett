@@ -74,7 +74,7 @@ search:
       categories: ["!", TELEVISION, MOVIES, MUSIC, GAMES, SOFTWARE, ANIME, EBOOKS, OTHER, ADULT, AUDIOBOOK, IMAGES]
     - path: "{{ if .Keywords }}/television/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/television/1/added/desc.html{{end}}"
       categories: [TELEVISION]
-    - path: "{{ if .Keywords }}/movies/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/movies/1/added/desc.html{{end}}"
+    - path: "{{ if .Keywords }}/movie/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/movies/1/added/desc.html{{end}}"
       categories: [MOVIES]
     - path: "{{ if .Keywords }}/music/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/music/1/added/desc.html{{end}}"
       categories: [MUSIC]
