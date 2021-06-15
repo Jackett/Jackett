@@ -78,7 +78,7 @@ search:
       categories: [MOVIES]
     - path: "{{ if .Keywords }}/music/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/music/1/added/desc.html{{end}}"
       categories: [MUSIC]
-    - path: "{{ if .Keywords }}/games/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/games/1/added/desc.html{{end}}"
+    - path: "{{ if .Keywords }}/game/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/games/1/added/desc.html{{end}}"
       categories: [GAMES]
     - path: "{{ if .Keywords }}/software/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/software/1/added/desc.html{{end}}"
       categories: [SOFTWARE]
