@@ -168,7 +168,6 @@ namespace Jackett.Common.Models
     public class downloadBlock
     {
         public List<downloadsField> Selectors { get; set; }
-        public List<filterBlock> Filters { get; set; }
         public string Method { get; set; }
         public requestBlock Before { get; set; }
     }
@@ -177,5 +176,6 @@ namespace Jackett.Common.Models
     {
         public string Selector { get; set; }
         public string Attribute { get; set; }
+        public List<filterBlock> Filters { get; set; }
     }
 }
