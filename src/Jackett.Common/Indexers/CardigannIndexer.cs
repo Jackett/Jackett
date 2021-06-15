@@ -1262,7 +1262,7 @@ namespace Jackett.Common.Indexers
             foreach (var SearchPath in SearchPaths)
             {
                 // skip path if categories don't match
-                if (SearchPath.Categories != null && mappedCategories.Count > 0)
+                if (SearchPath.Categories.Count > 0)
                 {
                     var invertMatch = (SearchPath.Categories[0] == "!");
                     var hasIntersect = mappedCategories.Intersect(SearchPath.Categories).Any();
