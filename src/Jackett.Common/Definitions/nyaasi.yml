@@ -117,16 +117,14 @@ caps:
 
 search:
   paths:
-    - path: /
-  inputs:
-    q: "{{ .Keywords }}"
-    f: "{{ .Config.filter-id }}"
-    c: "{{ .Config.cat-id }}"
-    s: "{{ .Config.sort }}"
-    o: "{{ .Config.type }}"
+    - path: "?q={{ .Keywords }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
+    # strip 0 from start of episode number - #11019
+    - path: "?q={{ if .Keywords }}{{ re_replace .Keywords \" 0(\\d{1})\" \" $1\" }}{{ else }}&p=2{{ end }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
 
   rows:
     selector: tr.default,tr.danger,tr.success
+    filters:
+      - name: andmatch
 
   fields:
     category:
