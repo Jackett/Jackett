@@ -13,6 +13,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DesiTorrents : GazelleTracker
     {
+        protected override string PosterUrl => SiteLink + "static/media/posters/";
         public DesiTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "desitorrents",
