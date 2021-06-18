@@ -235,10 +235,6 @@ namespace Jackett.Common.Indexers
                 // Torrents Result Count
                 var torrentsCount = results.Length;
 
-                // Is there more pages to follow ?
-                var morePages = dom.QuerySelectorAll("div.mvc-grid-pager > button").Last().GetAttribute("tabindex");
-                if (morePages == "-1")
-                    followingPages = false;
                 try
                 {
                     // If contains torrents
@@ -296,6 +292,13 @@ namespace Jackett.Common.Indexers
 
                                 return release;
                             }));
+                        if(torrentsCount == 50)
+                        {
+                            // Is there more pages to follow ?
+                            var morePages = dom.QuerySelectorAll("div.mvc-grid-pager > button").Last().GetAttribute("tabindex");
+                            if (morePages == "-1")
+                                followingPages = false;
+                        }
                         nextPage++;
                     }
                     else
