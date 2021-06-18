@@ -292,7 +292,7 @@ namespace Jackett.Common.Indexers
 
                                 return release;
                             }));
-                        if(torrentsCount == 50)
+                        if (torrentsCount == 50)
                         {
                             // Is there more pages to follow ?
                             var morePages = dom.QuerySelectorAll("div.mvc-grid-pager > button").Last().GetAttribute("tabindex");
