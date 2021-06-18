@@ -237,7 +237,8 @@ namespace Jackett.Common.Indexers
 
                 // Is there more pages to follow ?
                 var morePages = dom.QuerySelectorAll("div.mvc-grid-pager > button").Last().GetAttribute("tabindex");
-                if (morePages == "-1") followingPages = false;
+                if (morePages == "-1")
+                    followingPages = false;
                 try
                 {
                     // If contains torrents
