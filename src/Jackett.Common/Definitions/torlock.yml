@@ -71,6 +71,29 @@ settings:
 search:
   paths:
     - path: "{{ if .Keywords }}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{ else }}/fresh.html{{ end }}"
+      categories: ["!", TELEVISION, MOVIES, MUSIC, GAMES, SOFTWARE, ANIME, EBOOKS, OTHER, ADULT, AUDIOBOOK, IMAGES]
+    - path: "{{ if .Keywords }}/television/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/television/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [TELEVISION]
+    - path: "{{ if .Keywords }}/movie/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/movies/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [MOVIES]
+    - path: "{{ if .Keywords }}/music/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/music/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [MUSIC]
+    - path: "{{ if .Keywords }}/game/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/games/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [GAMES]
+    - path: "{{ if .Keywords }}/software/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/software/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [SOFTWARE]
+    - path: "{{ if .Keywords }}/anime/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/anime/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [ANIME]
+    - path: "{{ if .Keywords }}/ebook/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/ebooks/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [EBOOKS]
+    - path: "{{ if .Keywords }}/unknown/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/unknown.html{{end}}" # sorting is broken for unknown
+      categories: [OTHER]
+    - path: "{{ if .Keywords }}/adult/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/adult/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [ADULT]
+    - path: "{{ if .Keywords }}/audiobook/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/audiobook/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [AUDIOBOOK]
+    - path: "{{ if .Keywords }}/image/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/images/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [IMAGES]
   keywordsfilters:
     - name: tolower
     - name: re_replace
