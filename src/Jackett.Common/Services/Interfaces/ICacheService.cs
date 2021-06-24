@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
@@ -11,5 +12,6 @@ namespace Jackett.Common.Services.Interfaces
         List<TrackerCacheResult> GetCachedResults();
         void CleanIndexerCache(IIndexer indexer);
         void CleanCache();
+        TimeSpan CacheTTL { get; }
     }
 }

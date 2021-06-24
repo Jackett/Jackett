@@ -17,10 +17,11 @@ namespace Jackett.Common.Utils
         public static readonly FilterFuncComponent Language = Component("lang", args => indexer => indexer.Language.StartsWith(args, StringComparison.InvariantCultureIgnoreCase));
         public static readonly FilterFuncComponent Type = Component("type", args => indexer => string.Equals(indexer.Type, args, StringComparison.InvariantCultureIgnoreCase));
         public static readonly FilterFuncComponent Test = TestFilterFunc.Default;
+        public static readonly FilterFuncComponent Status = StatusFilterFunc.Default;
 
         static FilterFunc()
         {
-            Expression = new FilterFuncExpression(Tag, Language, Type, Test);
+            Expression = new FilterFuncExpression(Tag, Language, Type, Test, Status);
         }
 
         public static bool TryParse(string source, out Func<IIndexer, bool> func)

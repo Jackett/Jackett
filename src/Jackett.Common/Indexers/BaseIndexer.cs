@@ -36,6 +36,14 @@ namespace Jackett.Common.Indexers
         public virtual bool IsConfigured { get; protected set; }
         public virtual string[] Tags { get; protected set; }
 
+        // https://github.com/Jackett/Jackett/issues/3292#issuecomment-838586679
+        private TimeSpan HealthyStatusValidity => cacheService.CacheTTL + cacheService.CacheTTL;
+        private static readonly TimeSpan ErrorStatusValidity = TimeSpan.FromMinutes(10);
+        private static readonly TimeSpan MaxStatusValidity = TimeSpan.FromDays(1);
+
+        private int errorCount;
+        private DateTime expireAt;
+
         protected Logger logger;
         protected IIndexerConfigurationService configurationService;
         protected IProtectionService protectionService;
@@ -60,6 +68,10 @@ namespace Jackett.Common.Indexers
                     SaveConfig();
             }
         }
+
+        public virtual bool IsHealthy => errorCount == 0 && expireAt > DateTime.Now;
+        public virtual bool IsFailing => errorCount > 0 && expireAt > DateTime.Now;
+
 
         public abstract TorznabCapabilities TorznabCaps { get; protected set; }
 
@@ -92,6 +104,8 @@ namespace Jackett.Common.Indexers
         {
             CookieHeader = string.Empty;
             IsConfigured = false;
+            errorCount = 0;
+            expireAt = DateTime.MinValue;
         }
 
         public virtual void SaveConfig() => configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
@@ -386,10 +400,14 @@ namespace Jackett.Common.Indexers
                 results = FilterResults(query, results);
                 results = FixResults(query, results);
                 cacheService.CacheResults(this, query, results.ToList());
+                errorCount = 0;
+                expireAt = DateTime.Now.Add(HealthyStatusValidity);
                 return new IndexerResult(this, results, false);
             }
             catch (Exception ex)
             {
+                var delay = Math.Min(MaxStatusValidity.TotalSeconds, ErrorStatusValidity.TotalSeconds * Math.Pow(2, errorCount++));
+                expireAt = DateTime.Now.AddSeconds(delay);
                 throw new IndexerException(this, ex);
             }
         }
