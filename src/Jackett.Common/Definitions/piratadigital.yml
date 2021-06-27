@@ -10,11 +10,12 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 6, cat: TV/Anime, desc: "Animes"}
-    - {id: 4, cat: Console, desc: "Games"}
-    - {id: 5, cat: PC, desc: "Software"}
+    - {id: 4, cat: Console, desc: "Jogos"}
+    - {id: 5, cat: PC, desc: "Aplicativos"}
+    - {id: 7, cat: Other, desc: "Cursos"}
 
   modes:
     search: [q]
@@ -177,8 +178,9 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-    minimumratio:
-      text: 0.4
+# global MR is 0.4 but torrents must be seeded for 5 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
