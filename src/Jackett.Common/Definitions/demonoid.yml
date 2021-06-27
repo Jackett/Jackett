@@ -319,7 +319,7 @@ login:
 
 download:
   selectors:
-    - selector: a[href^="magnet:?xt="]
+    - selector: a[href^="/files/download/"]
       attribute: href
 
 search:
