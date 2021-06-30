@@ -271,7 +271,6 @@ namespace Jackett.Updater
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
-                "Definitions/badasstorrents.yml", // to be migrated to c#
                 "Definitions/bithq.yml",
                 "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
@@ -294,6 +293,7 @@ namespace Jackett.Updater
                 "Definitions/cztorrent.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/demonsite.yml",
+                "Definitions/desitorrents.yml", // migrated to C#
                 "Definitions/digbt.yml",
                 "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",
@@ -302,7 +302,6 @@ namespace Jackett.Updater
                 "Definitions/dxdhd.yml",
                 "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
-                "Definitions/elitetorrent-biz.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/epizod.yml",
                 "Definitions/eotforum.yml",

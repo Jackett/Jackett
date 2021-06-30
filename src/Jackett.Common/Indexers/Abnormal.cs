@@ -2,21 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -28,23 +27,27 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Abnormal : BaseCachingWebIndexer
     {
-        private string LoginUrl => SiteLink + "login.php";
-        private string SearchUrl => SiteLink + "torrents.php";
-        private string DetailsUrl => SiteLink + "torrents.php?id=";
-        private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
+        private string TorrentDetailsUrl => SiteLink + "Torrent/Details?ReleaseId={id}";
+        private string TorrentDownloadUrl => SiteLink + "Torrent/Download?ReleaseId={id}";
+        private string LoginUrl => SiteLink + "Home/Login";
+        private string SearchUrl => SiteLink + "Torrent";
+        private string WebRequestDelay => ((SingleSelectConfigurationItem)configData.GetDynamic("webRequestDelay")).Value;
+        private int MaxPages => Convert.ToInt32(((SingleSelectConfigurationItem)configData.GetDynamic("maxPages")).Value);
+        private string MultiReplacement => ((StringConfigurationItem)configData.GetDynamic("multiReplacement")).Value;
+        private bool SubReplacement => ((BoolConfigurationItem)configData.GetDynamic("subReplacement")).Value;
+        private bool EnhancedAnimeSearch => ((BoolConfigurationItem)configData.GetDynamic("enhancedAnimeSearch")).Value;
 
-        private ConfigurationDataAbnormal ConfigData
-        {
-            get => (ConfigurationDataAbnormal)configData;
-            set => configData = value;
-        }
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://abnormal.ws"
+        };
+        private ConfigurationDataBasicLogin ConfigData => (ConfigurationDataBasicLogin)configData;
 
         public Abnormal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "abnormal",
                    name: "Abnormal",
                    description: "General French Private Tracker",
-                   link: "https://abnormal.ws/",
+                   link: "https://abn.lol/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -54,6 +57,10 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -61,80 +68,132 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   downloadBase: "https://abnormal.ws/torrents.php?action=download&id=",
-                   configData: new ConfigurationDataAbnormal())
+                   downloadBase: "https://abn.lol/Torrent/Download?ReleaseId=",
+                   configData: new ConfigurationDataBasicLogin()
+                   )
         {
-            Language = "fr-fr";
             Encoding = Encoding.UTF8;
+            Language = "fr-fr";
             Type = "private";
 
-            AddCategoryMapping("MOVIE|DVDR", TorznabCatType.MoviesDVD, "DVDR");
-            AddCategoryMapping("MOVIE|DVDRIP", TorznabCatType.MoviesSD, "DVDRIP");
-            AddCategoryMapping("MOVIE|BDRIP", TorznabCatType.MoviesSD, "BDRIP");
-            AddCategoryMapping("MOVIE|VOSTFR", TorznabCatType.MoviesOther, "VOSTFR");
-            AddCategoryMapping("MOVIE|HD|720p", TorznabCatType.MoviesHD, "HD 720P");
-            AddCategoryMapping("MOVIE|HD|1080p", TorznabCatType.MoviesHD, "HD 1080P");
-            AddCategoryMapping("MOVIE|REMUXBR", TorznabCatType.MoviesBluRay, "REMUX BLURAY");
-            AddCategoryMapping("MOVIE|FULLBR", TorznabCatType.MoviesBluRay, "FULL BLURAY");
-            AddCategoryMapping("TV|SD|VOSTFR", TorznabCatType.TV, "TV SD VOSTFR");
-            AddCategoryMapping("TV|HD|VOSTFR", TorznabCatType.TVHD, "TV HD VOSTFR");
-            AddCategoryMapping("TV|SD|VF", TorznabCatType.TVSD, "TV SD VF");
-            AddCategoryMapping("TV|HD|VF", TorznabCatType.TVHD, "TV HD VF");
-            AddCategoryMapping("TV|PACK|FR", TorznabCatType.TVOther, "TV PACK FR");
-            AddCategoryMapping("TV|PACK|VOSTFR", TorznabCatType.TVOther, "TV PACK VOSTFR");
-            AddCategoryMapping("TV|EMISSIONS", TorznabCatType.TVOther, "TV EMISSIONS");
-            AddCategoryMapping("ANIME", TorznabCatType.TVAnime, "ANIME");
-            AddCategoryMapping("DOCS", TorznabCatType.TVDocumentary, "TV DOCS");
-            AddCategoryMapping("MUSIC|FLAC", TorznabCatType.AudioLossless, "FLAC");
-            AddCategoryMapping("MUSIC|MP3", TorznabCatType.AudioMP3, "MP3");
-            AddCategoryMapping("MUSIC|CONCERT", TorznabCatType.AudioVideo, "CONCERT");
-            AddCategoryMapping("PC|APP", TorznabCatType.PC, "PC");
-            AddCategoryMapping("PC|GAMES", TorznabCatType.PCGames, "GAMES");
-            AddCategoryMapping("EBOOKS", TorznabCatType.BooksEBook, "EBOOKS");
+            AddCategoryMapping(1, TorznabCatType.TV, "Series");
+            AddCategoryMapping(2, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentaries");
+            AddCategoryMapping(4, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(5, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(6, TorznabCatType.PC, "Applications");
+            AddCategoryMapping(7, TorznabCatType.BooksEBook, "Ebooks");
+            AddCategoryMapping(9, TorznabCatType.TV, "Emissions");
+
+            // Dynamic Configuration
+            ConfigData.AddDynamic("advancedConfigurationWarning", new DisplayInfoConfigurationItem(string.Empty, "<center><b>Advanced Configuration</b></center>,<br /><br /> <center><b><u>WARNING !</u></b> <i>Be sure to read instructions before editing options bellow, you can <b>drastically reduce performance</b> of queries or have <b>non-accurate results</b>.</i></center><br/><br/><ul><li><b>Delay between Requests</b>: (<i>not recommended</i>) you can increase delay to requests made to the tracker, but a minimum of 2.1s is enforced as there is an anti-spam protection.</li><br /><li><b>Max Pages</b>: (<i>not recommended</i>) you can increase max pages to follow when making a request. But be aware that others apps can consider this indexer not working if jackett take too many times to return results. </li><br /><li><b>Enhanced Anime</b>: if you have \"Anime\", this will improve queries made to this tracker related to this type when making searches.</li><br /><li><b>Multi Replacement</b>: you can dynamically replace the word \"MULTI\" with another of your choice like \"MULTI.FRENCH\" for better analysis of 3rd party softwares.</li><br /><li><b>Sub Replacement</b>: you can dynamically replace the word \"VOSTFR\" or \"SUBFRENCH\" with the word \"ENGLISH\" for better analysis of 3rd party softwares.</li></ul>"));
+
+            var ConfigWebRequestDelay = new SingleSelectConfigurationItem("Which delay do you want to apply between each requests made to tracker ?", new Dictionary<string, string>
+            {
+                {"0", "0s (disabled)"},
+                {"0.1", "0.1s"},
+                {"0.3", "0.3s"},
+                {"0.5", "0.5s (default)" },
+                {"0.7", "0.7s" },
+                {"1.0", "1.0s"},
+                {"1.25", "1.25s"},
+                {"1.50", "1.50s"}
+            })
+            { Value = "0.5" };
+            ConfigData.AddDynamic("webRequestDelay", ConfigWebRequestDelay);
+
+            var ConfigMaxPages = new SingleSelectConfigurationItem("How many pages do you want to follow ?", new Dictionary<string, string>
+            {
+                {"1", "1 (50 results - default / best perf.)"},
+                {"2", "2 (100 results)"},
+                {"3", "3 (150 results)"},
+                {"4", "4 (200 results - hard limit max)" },
+            })
+            { Value = "1" };
+            ConfigData.AddDynamic("maxPages", ConfigMaxPages);
+
+            var ConfigEnhancedAnimeSearch = new BoolConfigurationItem("Do you want to use enhanced ANIME search ?") { Value = false };
+            ConfigData.AddDynamic("enhancedAnimeSearch", ConfigEnhancedAnimeSearch);
+
+            var ConfigMultiReplacement = new StringConfigurationItem("Do you want to replace \"MULTI\" keyword in release title by another word ?") { Value = "MULTI.FRENCH" };
+            ConfigData.AddDynamic("multiReplacement", ConfigMultiReplacement);
+
+            var ConfigSubReplacement = new BoolConfigurationItem("Do you want to replace \"VOSTFR\" and \"SUBFRENCH\" with \"ENGLISH\" word ?") { Value = false };
+            ConfigData.AddDynamic("subReplacement", ConfigSubReplacement);
+
+            webclient.requestDelay = Convert.ToDouble(WebRequestDelay);
         }
 
         /// <summary>
-        /// Configure our WiHD Provider
+        /// Configure our Provider
         /// </summary>
         /// <param name="configJson">Our params in Json</param>
         /// <returns>Configuration state</returns>
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
+            // Provider not yet configured
+            IsConfigured = false;
+
             // Retrieve config values set by Jackett's user
             LoadValuesFromJson(configJson);
 
             // Check & Validate Config
-            ValidateConfig();
+            logger.Debug("\nAbnormal - Validating Settings ...");
+
+            // Check Username Setting
+            if (string.IsNullOrEmpty(ConfigData.Username.Value))
+            {
+                throw new ExceptionWithConfigData("You must provide a username for this tracker to login !", ConfigData);
+            }
+            else
+            {
+                logger.Debug("\nAbnormal - Validated Setting -- Username (auth) => " + ConfigData.Username.Value.ToString());
+            }
+
+            // Check Password Setting
+            if (string.IsNullOrEmpty(ConfigData.Password.Value))
+            {
+                throw new ExceptionWithConfigData("You must provide a password with your username for this tracker to login !", ConfigData);
+            }
+            else
+            {
+                logger.Debug("\nAbnormal - Validated Setting -- Password (auth) => " + ConfigData.Password.Value.ToString());
+            }
 
             // Building login form data
             var pairs = new Dictionary<string, string> {
-                { "username", ConfigData.Username.Value },
-                { "password", ConfigData.Password.Value },
-                { "keeplogged", "1" },
-                { "login", "Connexion" }
+                { "Username", ConfigData.Username.Value },
+                { "Password", ConfigData.Password.Value },
+                { "RememberMe", "true" },
             };
 
+            // Get CSRF Token
+            logger.Debug("\nAbnormal - Getting CSRF token for " + LoginUrl);
+            var response = await RequestWithCookiesAsync(LoginUrl);
+
+            var loginResultParser = new HtmlParser();
+            var loginResultDocument = loginResultParser.ParseDocument(response.ContentString);
+            var csrfToken = loginResultDocument.QuerySelector("input[name=\"__RequestVerificationToken\"]").GetAttribute("value");
+            pairs.Add("__RequestVerificationToken", csrfToken);
+
             // Perform loggin
-            logger.Info("\nAbnormal - Perform loggin.. with " + LoginUrl);
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
+            logger.Debug("\nAbnormal - Perform loggin.. with " + LoginUrl);
+            response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
 
             // Test if we are logged in
-            await ConfigureIfOK(response.Cookies, response.Cookies.Contains("session="), () =>
+            await ConfigureIfOK(response.Cookies, response.Cookies.Contains(".AspNetCore.Identity.Application="), () =>
             {
                 // Parse error page
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
-                var message = dom.QuerySelector(".warning").TextContent.Split('.').Reverse().Skip(1).First();
-
-                // Try left
-                var left = dom.QuerySelector(".info").TextContent.Trim();
+                var message = dom.QuerySelector(".validation-summary-errors").TextContent.Split('.').Reverse().Skip(1).First();
 
                 // Oops, unable to login
-                logger.Info("Abnormal - Login failed: \"" + message + "\" and " + left + " tries left before being banned for 6 hours !", "error");
-                throw new ExceptionWithConfigData("Abnormal - Login failed: " + message, configData);
+                logger.Debug("Abnormal - Login failed: \"" + message, "error");
+                throw new ExceptionWithConfigData("\nAbnormal - Login failed: " + message, configData);
             });
 
-            logger.Info("-> Login Success");
+            logger.Debug("\nAbnormal - Login Success");
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -146,165 +205,133 @@ namespace Jackett.Common.Indexers
         /// <returns>Releases</returns>
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            var endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            var delta = new TimeSpan(1, 0, 0);
-            var adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
-            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            var FranceTz = TimeZoneInfo.CreateCustomTimeZone("W. Europe Standard Time", new TimeSpan(1, 0, 0), "(GMT+01:00) W. Europe Standard Time", "W. Europe Standard Time", "W. Europe DST Time", adjustments);
-
             var releases = new List<ReleaseInfo>();
-            var qRowList = new List<IElement>();
-            var searchTerm = query.GetQueryString();
-            var searchUrl = SearchUrl;
+            var searchTerm = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
 
-            // Build our query
-            var request = BuildQuery(searchTerm, query, searchUrl);
-
-            // Getting results & Store content
-            var parser = new HtmlParser();
-            var dom = parser.ParseDocument(await QueryExecAsync(request));
-
-            try
+            if (EnhancedAnimeSearch && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
-                // Find torrent rows
-                var firstPageRows = FindTorrentRows(dom);
+                var regex = new Regex(" ([0-9]+)");
+                searchTerm = regex.Replace(searchTerm, " E$1");
+            }
 
-                // Add them to torrents list
-                qRowList.AddRange(firstPageRows);
+            searchTerm = searchTerm.Trim();
+            searchTerm = searchTerm.ToLower();
+            searchTerm = searchTerm.Replace(" ", ".");
 
-                // Check if there are pagination links at bottom
-                var qPagination = dom.QuerySelectorAll(".linkbox > a");
-                int pageLinkCount;
-                int nbResults;
-                if (qPagination.Length > 0)
+            // Multiple page support
+            var nextPage = 1;
+            var followingPages = true;
+            do
+            {
+
+                // Build our query
+                var request = BuildQuery(searchTerm, query, SearchUrl, nextPage);
+
+                // Getting results
+                logger.Info("\nAbnormal - Querying API page " + nextPage);
+                var dom = new HtmlParser().ParseDocument(await QueryExecAsync(request));
+                var results = dom.QuerySelectorAll(".table-rows > tbody > tr:not(.mvc-grid-empty-row)");
+
+                // Torrents Result Count
+                var torrentsCount = results.Length;
+
+                try
                 {
-                    // Calculate numbers of pages available for this search query (Based on number results and number of torrents on first page)
-                    pageLinkCount = ParseUtil.CoerceInt(Regex.Match(qPagination.Last().GetAttribute("href").ToString(), @"\d+").Value);
-
-                    // Calculate average number of results (based on torrents rows lenght on first page)
-                    nbResults = firstPageRows.Length * pageLinkCount;
-                }
-                else
-                {
-                    // Check if we have a minimum of one result
-                    if (firstPageRows.Length >= 1)
+                    // If contains torrents
+                    if (torrentsCount > 0)
                     {
-                        // Retrieve total count on our alone page
-                        nbResults = firstPageRows.Length;
-                        pageLinkCount = 1;
+                        logger.Info("\nAbnormal - Found " + torrentsCount + " torrents on current page.");
+
+                        // Adding each torrent row to releases
+                        releases.AddRange(results.Select(torrent =>
+                            {
+                                // Selectors
+                                var id = torrent.QuerySelector("td.grid-release-column > a").GetAttribute("href");      // ID
+                                var name = torrent.QuerySelector("td.grid-release-column > a").TextContent;             // Release Name 
+                                var categoryId = torrent.QuerySelector("td.grid-cat-column > a").GetAttribute("href");  // Category
+                                var completed = torrent.QuerySelector("td:nth-of-type(3)").TextContent;                 // Completed
+                                var seeders = torrent.QuerySelector("td.text-green").TextContent;                       // Seeders
+                                var leechers = torrent.QuerySelector("td.text-red").TextContent;                        // Leechers
+                                var size = torrent.QuerySelector("td:nth-of-type(5)").TextContent;                      // Size
+
+                                var release = new ReleaseInfo
+                                {
+                                    // Mapping data
+                                    Category = MapTrackerCatToNewznab(Regex.Match(categoryId, @"\d+").Value),
+                                    Title = name,
+                                    Seeders = int.Parse(Regex.Match(seeders, @"\d+").Value),
+                                    Peers = int.Parse(Regex.Match(seeders, @"\d+").Value) + int.Parse(Regex.Match(leechers, @"\d+").Value),
+                                    Grabs = int.Parse(Regex.Match(completed, @"\d+").Value) + int.Parse(Regex.Match(leechers, @"\d+").Value),
+                                    MinimumRatio = 1,
+                                    MinimumSeedTime = 172800,
+                                    Size = ReleaseInfo.GetBytes(size.Replace(",", ".").Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb")),
+                                    UploadVolumeFactor = 1,
+                                    DownloadVolumeFactor = 1,
+                                    PublishDate = DateTime.Now,
+                                    Guid = new Uri(TorrentDetailsUrl.Replace("{id}", Regex.Match(id, @"\d+").Value)),
+                                    Details = new Uri(TorrentDetailsUrl.Replace("{id}", Regex.Match(id, @"\d+").Value)),
+                                    Link = new Uri(TorrentDownloadUrl.Replace("{id}", Regex.Match(id, @"\d+").Value))
+                                };
+
+                                // Multi Replacement
+                                if (!string.IsNullOrEmpty(MultiReplacement))
+                                {
+                                    var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                                    release.Title = regex.Replace(release.Title, "$1" + MultiReplacement + "$2");
+                                }
+
+                                // Sub Replacement
+                                if (SubReplacement)
+                                    release.Title = release.Title.Replace("VOSTFR", "ENGLISH").Replace("SUBFRENCH", "ENGLISH");
+
+                                // Freeleech
+                                if (torrent.QuerySelector("img[alt=\"Freeleech\"]") != null)
+                                {
+                                    release.DownloadVolumeFactor = 0;
+                                }
+
+                                return release;
+                            }));
+                        if (torrentsCount == 50)
+                        {
+                            // Is there more pages to follow ?
+                            var morePages = dom.QuerySelectorAll("div.mvc-grid-pager > button").Last().GetAttribute("tabindex");
+                            if (morePages == "-1")
+                                followingPages = false;
+                        }
+                        nextPage++;
                     }
                     else
                     {
-                        logger.Info("\nAbnormal - No result found for your query, please try another search term ...\n", "info");
-                        // No result found for this query
-                        return releases;
+                        logger.Info("\nAbnormal - No results found on page  " + nextPage + ", stopping follow of next page.");
+                        //  No results or no more results available
+                        followingPages = false;
+                        break;
                     }
                 }
-                logger.Info("\nAbnormal - Found " + nbResults + " result(s) (+/- " + firstPageRows.Length + ") in " + pageLinkCount + " page(s) for this query !");
-                logger.Info("\nAbnormal - There are " + firstPageRows.Length + " results on the first page !");
-
-                // If we have a term used for search and pagination result superior to one
-                if (!string.IsNullOrWhiteSpace(query.GetQueryString()) && pageLinkCount > 1)
+                catch (Exception ex)
                 {
-                    // Starting with page #2
-                    for (var i = 2; i <= Math.Min(int.Parse(ConfigData.Pages.Value), pageLinkCount); i++)
-                    {
-                        logger.Info("\nAbnormal - Processing page #" + i);
-
-                        // Build our query
-                        var pageRequest = BuildQuery(searchTerm, query, searchUrl, i);
-
-                        // Getting results & Store content
-                        parser = new HtmlParser();
-                        dom = parser.ParseDocument(await QueryExecAsync(pageRequest));
-
-                        // Process page results
-                        var additionalPageRows = FindTorrentRows(dom);
-
-                        // Add them to torrents list
-                        qRowList.AddRange(additionalPageRows);
-                    }
+                    OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
                 }
 
-                // Loop on results
-                foreach (var row in qRowList)
+                // Stop ?
+                if (torrentsCount < int.Parse(dom.QuerySelector(".mvc-grid-pager-rows").GetAttribute("value")))
                 {
-                    // ID
-                    var id = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(2) > a").GetAttribute("href"), @"\d+").Value);
-
-                    // Release Name
-                    var name = row.QuerySelector("td:nth-of-type(2) > a").TextContent;
-                    //issue #3847 replace multi keyword
-                    if (!string.IsNullOrEmpty(ReplaceMulti))
-                    {
-                        var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                        name = regex.Replace(name, "$1" + ReplaceMulti + "$2");
-                    }
-
-                    var categoryId = row.QuerySelector("td:nth-of-type(1) > a").GetAttribute("href").Replace("torrents.php?cat[]=", string.Empty);  // Category
-                    var newznab = MapTrackerCatToNewznab(categoryId);                                                                               // Newznab Category
-                    var seeders = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(6)").TextContent, @"\d+").Value);               // Seeders
-                    var leechers = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(7)").TextContent, @"\d+").Value);              // Leechers
-                    var completed = ParseUtil.CoerceInt(Regex.Match(row.QuerySelector("td:nth-of-type(6)").TextContent, @"\d+").Value);             // Completed
-                    var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb");   // Size
-                    var size = ReleaseInfo.GetBytes(sizeStr);                                                                                       // Size in bytes
-
-                    // Publish DateToString
-                    var datestr = row.QuerySelector("span.time").GetAttribute("title");
-                    var dateLocal = DateTime.SpecifyKind(DateTime.ParseExact(datestr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                    var date = TimeZoneInfo.ConvertTimeToUtc(dateLocal, FranceTz);
-
-                    // Torrent Details URL
-                    var details = new Uri(DetailsUrl + id);
-
-                    // Torrent Download URL
-                    Uri downloadLink = null;
-                    var link = row.QuerySelector("td:nth-of-type(4) > a").GetAttribute("href");
-                    if (!string.IsNullOrEmpty(link))
-                    {
-                        // Download link available
-                        downloadLink = new Uri(SiteLink + link);
-                    }
-                    else
-                    {
-                        // No download link available -- Must be on pending ( can't be downloaded now...)
-                        logger.Info("Abnormal - Download Link: Not available, torrent pending ? Skipping ...");
-                        continue;
-                    }
-
-                    // Freeleech
-                    var downloadVolumeFactor = 1;
-                    if (row.QuerySelector("img[alt=\"Freeleech\"]") != null)
-                    {
-                        downloadVolumeFactor = 0;
-                    }
-
-                    // Building release infos
-                    var release = new ReleaseInfo
-                    {
-                        Category = MapTrackerCatToNewznab(categoryId),
-                        Title = name,
-                        Seeders = seeders,
-                        Peers = seeders + leechers,
-                        PublishDate = date,
-                        Size = size,
-                        Guid = details,
-                        Details = details,
-                        Link = downloadLink,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
-                        UploadVolumeFactor = 1,
-                        DownloadVolumeFactor = downloadVolumeFactor
-                    };
-                    releases.Add(release);
-                    logger.Info("Abnormal - Found Release: " + release.Title + "(" + id + ")");
+                    logger.Info("\nAbnormal - Stopping follow of next page " + nextPage + " due max available results reached.");
+                    break;
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError("Error, unable to parse result \n" + ex.StackTrace, ex);
-            }
+                else if (nextPage > MaxPages)
+                {
+                    logger.Info("\nAbnormal - Stopping follow of next page " + nextPage + " due to page limit reached.");
+                    break;
+                }
+                else if (query.IsTest)
+                {
+                    logger.Info("\nAbnormal - Stopping follow of next page " + nextPage + " due to index test query.");
+                    break;
+                }
+
+            } while (followingPages);
 
             // Return found releases
             return releases;
@@ -324,10 +351,9 @@ namespace Jackett.Common.Indexers
             var categoriesList = MapTorznabCapsToTrackers(query);
             string categories = null;
 
-            // Check if we are processing a new page
-            if (page > 0)
+            // Pages handling
+            if (page > 1 && !query.IsTest)
             {
-                // Adding page number to query
                 parameters.Add("page", page.ToString());
             }
 
@@ -338,12 +364,12 @@ namespace Jackett.Common.Indexers
                 if (categoriesList.Last() == category)
                 {
                     // Adding previous categories to URL with latest category
-                    parameters.Add(Uri.EscapeDataString("cat[]"), WebUtility.UrlEncode(category) + categories);
+                    parameters.Add(Uri.EscapeDataString("SelectedCats="), WebUtility.UrlEncode(category) + categories);
                 }
                 else
                 {
                     // Build categories parameter
-                    categories += "&" + Uri.EscapeDataString("cat[]") + "=" + WebUtility.UrlEncode(category);
+                    categories += "&" + Uri.EscapeDataString("SelectedCats=") + "=" + WebUtility.UrlEncode(category);
                 }
             }
 
@@ -351,17 +377,14 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrWhiteSpace(term))
             {
                 // Add search term
-                parameters.Add("search", WebUtility.UrlEncode(term));
+                parameters.Add("Search", WebUtility.UrlEncode(term));
+                url += "?" + string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
             }
             else
             {
-                parameters.Add("search", WebUtility.UrlEncode("%"));
                 // Showing all torrents (just for output function)
                 term = "all";
             }
-
-            // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong cat[] param)
-            url += "?" + string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
 
             logger.Info("\nAbnormal - Builded query for \"" + term + "\"... " + url);
 
@@ -376,10 +399,9 @@ namespace Jackett.Common.Indexers
         /// <returns>Results from query</returns>
         private async Task<string> QueryExecAsync(string request)
         {
-            string results = null;
 
             // Querying tracker directly
-            results = await QueryTrackerAsync(request);
+            var results = await QueryTrackerAsync(request);
 
             return results;
         }
@@ -399,58 +421,6 @@ namespace Jackett.Common.Indexers
 
             // Return results from tracker
             return results.ContentString;
-        }
-
-        /// <summary>
-        /// Find torrent rows in search pages
-        /// </summary>
-        /// <returns>List of rows</returns>
-        private IHtmlCollection<IElement> FindTorrentRows(IHtmlDocument dom) =>
-            dom.QuerySelectorAll(".torrent_table > tbody > tr:not(.colhead)");
-
-        /// <summary>
-        /// Validate Config entered by user on Jackett
-        /// </summary>
-        private void ValidateConfig()
-        {
-            logger.Info("\nAbnormal - Validating Settings ... \n");
-
-            // Check Username Setting
-            if (string.IsNullOrEmpty(ConfigData.Username.Value))
-            {
-                throw new ExceptionWithConfigData("You must provide a username for this tracker to login !", ConfigData);
-            }
-            else
-            {
-                logger.Info("Abnormal - Validated Setting -- Username (auth) => " + ConfigData.Username.Value.ToString());
-            }
-
-            // Check Password Setting
-            if (string.IsNullOrEmpty(ConfigData.Password.Value))
-            {
-                throw new ExceptionWithConfigData("You must provide a password with your username for this tracker to login !", ConfigData);
-            }
-            else
-            {
-                logger.Info("Abnormal - Validated Setting -- Password (auth) => " + ConfigData.Password.Value.ToString());
-            }
-
-            // Check Max Page Setting
-            if (!string.IsNullOrEmpty(ConfigData.Pages.Value))
-            {
-                try
-                {
-                    logger.Info("Abnormal - Validated Setting -- Max Pages => " + Convert.ToInt32(ConfigData.Pages.Value));
-                }
-                catch (Exception)
-                {
-                    throw new ExceptionWithConfigData("Please enter a numeric maximum number of pages to crawl !", ConfigData);
-                }
-            }
-            else
-            {
-                throw new ExceptionWithConfigData("Please enter a maximum number of pages to crawl !", ConfigData);
-            }
         }
     }
 }

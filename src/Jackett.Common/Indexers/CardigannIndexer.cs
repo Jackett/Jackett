@@ -1262,7 +1262,7 @@ namespace Jackett.Common.Indexers
             foreach (var SearchPath in SearchPaths)
             {
                 // skip path if categories don't match
-                if (SearchPath.Categories != null && mappedCategories.Count > 0)
+                if (SearchPath.Categories.Count > 0)
                 {
                     var invertMatch = (SearchPath.Categories[0] == "!");
                     var hasIntersect = mappedCategories.Intersect(SearchPath.Categories).Any();
@@ -1757,39 +1757,78 @@ namespace Jackett.Common.Indexers
                 if (Download.Method == "post")
                     method = RequestType.POST;
 
-                if (Download.Selector != null)
+                if (Download.Selectors != null)
                 {
-                    var selector = applyGoTemplateText(Download.Selector, variables);
                     var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
-                    var response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
-                    if (response.IsRedirect)
-                        response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
-                    var results = response.ContentString;
+                    var results = "";
                     var searchResultParser = new HtmlParser();
-                    var searchResultDocument = searchResultParser.ParseDocument(results);
-                    var downloadElement = searchResultDocument.QuerySelector(selector);
-                    if (downloadElement != null)
+
+                    foreach (var selector in Download.Selectors)
                     {
-                        logger.Debug(string.Format("CardigannIndexer ({0}): Download selector {1} matched:{2}", Id, selector, downloadElement.ToHtmlPretty()));
-                        var href = "";
-                        if (Download.Attribute != null)
+                        var querySelector = applyGoTemplateText(selector.Selector, variables);
+                        try
                         {
-                            href = downloadElement.GetAttribute(Download.Attribute);
-                            if (href == null)
-                                throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Download.Attribute, downloadElement.ToHtmlPretty()));
+
+                            var response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
+                            if (response.IsRedirect)
+                                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                            results = response.ContentString;
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
+                            var downloadElement = searchResultDocument.QuerySelector(querySelector);
+                            if (downloadElement == null)
+                            {
+                                logger.Debug(
+                                    $"CardigannIndexer ({Id}): Download selector {querySelector} could not match any elements, retrying with next available selector.");
+                                continue;
+                            }
+
+                            logger.Debug(
+                                $"CardigannIndexer ({Id}): Download selector {querySelector} matched:{downloadElement.ToHtmlPretty()}");
+                            var href = "";
+                            if (selector.Attribute != null)
+                            {
+                                href = downloadElement.GetAttribute(selector.Attribute);
+                                if (href == null)
+                                    throw new Exception(
+                                        $"Attribute \"{selector.Attribute}\" is not set for element {downloadElement.ToHtmlPretty()}");
+                            }
+                            else
+                            {
+                                href = downloadElement.TextContent;
+                            }
+
+                            href = applyFilters(href, selector.Filters, variables);
+                            var torrentLink = resolvePath(href, link);
+                            if (torrentLink.Scheme != "magnet")
+                            {
+                                // Test link
+                                response = await base.RequestWithCookiesAsync(
+                                    torrentLink.ToString(), null, RequestType.GET, headers: headers);
+                                if (response.IsRedirect)
+                                    await FollowIfRedirect(response);
+                                var content = response.ContentBytes;
+                                if (content.Length >= 1 && content[0] != 'd')
+                                {
+                                    logger.Debug(
+                                        $"CardigannIndexer ({Id}): Download selector {querySelector}'s torrent file is invalid, retrying with next available selector");
+                                    continue;
+                                }
+                            }
+
+                            link = torrentLink;
+                            return await base.Download(link, method, link.ToString());
                         }
-                        else
+                        catch (Exception e)
                         {
-                            href = downloadElement.TextContent;
+                            logger.Error(e,
+                                $"CardigannIndexer ({Id}): An exception occurred while trying selector {querySelector}, retrying with next available selector"
+                                );
                         }
-                        href = applyFilters(href, Download.Filters, variables);
-                        link = resolvePath(href, link);
                     }
-                    else
-                    {
-                        logger.Error(string.Format("CardigannIndexer ({0}): Download selector {1} didn't match:\n{2}", Id, Download.Selector, results));
-                        throw new Exception(string.Format("Download selector {0} didn't match", Download.Selector));
-                    }
+
+                    logger.Error(
+                        $"CardigannIndexer ({Id}): Download selectors didn't match:\n{results}");
+                    throw new Exception($"Download selectors didn't match");
                 }
             }
             return await base.Download(link, method, link.ToString());

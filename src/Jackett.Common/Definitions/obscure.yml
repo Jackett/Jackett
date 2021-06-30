@@ -1,0 +1,96 @@
+---
+id: obscure
+name: Obscure
+description: "Obscure is a Private Torrent Tracker for Obscure Stuff."
+language: en-us
+type: private
+encoding: UTF-8
+links:
+  - https://www.obscure.wtf/
+
+caps:
+  categorymappings:
+    - {id: movies, cat: Movies, desc: "Movies"}
+    - {id: tv, cat: TV, desc: "TV Shows"}
+    - {id: music, cat: Audio, desc: "Music"}
+    - {id: books, cat: Books, desc: "Books"}
+    - {id: miscellaneous, cat: Other, desc: "Misc"}
+    - {id: packs, cat: Movies/Other, desc: "Packs"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
+login:
+  path: login/login
+  method: post
+  inputs:
+    login: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    remember: 1
+  error:
+    - selector: div.blockMessage--error
+  test:
+    path: /
+    selector: a[href^="/logout/?t="]
+
+search:
+  paths:
+    # 20 results per page
+    - path: "tracker/?filename={{ .Keywords }}&freeleech={{ if .Config.freeleech }}1{{ else }}{{ end }}"
+
+  rows:
+    selector: tr.dataList-row:has(td.download)
+
+  fields:
+    category:
+      selector: a[href^="/forums/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "\\/(\\w+)\\/$"
+    title:
+      selector: a[href^="/threads/"]
+    details:
+      selector: a[href^="/threads/"]
+      attribute: href
+    download:
+      selector: td.download a
+      attribute: href
+    poster:
+      selector: td:nth-child(2) img
+      attribute: src
+    date:
+      text: now
+    size:
+      selector: td:nth-last-child(4)
+    grabs:
+      selector: td:nth-last-child(3)
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    downloadvolumefactor:
+      case:
+        i.fa-star: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# engine n/a

@@ -36,6 +36,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AniRena
  * AniSource
  * AudioBook Bay (ABB)
+ * Badass Torrents
  * BigFANGroup
  * BitRu
  * BT.etree
@@ -52,6 +53,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Demonoid
  * dmhy
  * E-Hentai
+ * elitetorrent
  * emtrek
  * Erai-Raws
  * ETTV
@@ -156,6 +158,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentView (토렌트뷰)
  * TorrentWhiz ( 토렌트위즈)
  * truPornolabs
+ * ttobogo
  * Underverse
  * UnionDHT
  * VSTHouse
@@ -205,6 +208,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PornoLab
  * PussyTorrents
  * Rainbow Tracker
+ * RGFootball
  * RiperAM
  * RockBox
  * RuTracker
@@ -421,8 +425,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NorBits
  * Nordic+
  * Oasis
+ * Obscure
  * oMg[WtF]trackr
  * OpenCD
+ * Oppaitime [![(invite needed)][inviteneeded]](#)
  * Orpheus
  * OshenPT
  * Ourbits (HDPter)
@@ -592,6 +598,7 @@ Filter | Condition
 `tag:<tag>` | where the indexer tags contains `<tag>`
 `lang:<tag>` | where the indexer language start with `<lang>`
 `test:{passed\|failed}` | where the last indexer test performed `passed` or `failed`
+`status:{healthy\|failing\|unknown}` | where the indexer state is `healthy` (succesfully operates in the last minutes), `failing` (generates errors in the recent call) or `unknown` (unused for a while)
 
 Supported operators
 Operator | Condition
@@ -600,8 +607,11 @@ Operator | Condition
 `<expr1>+<expr2>[+<expr3>...]` | where `<expr1>` and `<expr2>` [and `<expr3>`...]
 `<expr1>,<expr2>[,<expr3>...]` | where `<expr1>` or `<expr2>` [or `<expr3>`...]
 
-Example:
+Example 1:
 The "filter" indexer at `/api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab` will query all the configured indexers tagged with `group1` or all the indexers not private and with `en` language (`en-en`,`en-us`,...)
+
+Example 2:
+The "filter" indexer at `/api/v2.0/indexers/!status:failing,test:passed` will query all the configured indexers not `failing` or which `passed` its last test.
 
 ## Installation on Windows
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.

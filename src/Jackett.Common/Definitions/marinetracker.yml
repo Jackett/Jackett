@@ -58,6 +58,7 @@ caps:
     - {id: 233, cat: Movies, desc: "Video for Seamen-Video for Marine Engineers"}
     - {id: 235, cat: Movies, desc: "Video for Seamen-Other videos"}
     - {id: 102, cat: Books, desc: "Marine Engineer's Library"}
+    - {id: 316, cat: Books, desc: "Marine Engineer's Library-Marine Fuels & Lubricants"}
     - {id: 28, cat: Books, desc: Marine Engineer's Library-Ship's systems and mechanisms"}
     - {id: 22, cat: Books, desc: Marine Engineer's Library-Daihatsu"}
     - {id: 164, cat: Books, desc: Marine Engineer's Library-Operation of ship's power plants"}
@@ -67,7 +68,6 @@ caps:
     - {id: 173, cat: Books, desc: Marine Engineer's Library-MAK & Caterpillar"}
     - {id: 166, cat: Books, desc: Marine Engineer's Library-Ship's steam and gas turbines"}
     - {id: 134, cat: Books, desc: Marine Engineer's Library-Marine Pumps"}
-    - {id: 112, cat: Books, desc: Marine Engineer's Library-AALBORG"}
     - {id: 108, cat: Books, desc: Marine Engineer's Library-Hydraulics"}
     - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
     - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
@@ -95,7 +95,7 @@ caps:
     - {id: 265, cat: Books, desc: "Section for cadets-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 191, cat: Books, desc: "Maritime Law"}
     - {id: 240, cat: Books, desc: "Maritime Law-IMO Resolutions"}
-    - {id: 38, cat: Books, desc: "Uncategorized"}
+    - {id: 212, cat: Books, desc: "Ship's documentation"}
     - {id: 190, cat: Books, desc: "Catalogs"}
     - {id: 113, cat: Books, desc: "Medicine"}
     - {id: 299, cat: Books, desc: "Sailing Kitchen"}
@@ -111,8 +111,6 @@ caps:
     - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
     - {id: 287, cat: Audio, desc: "Audio-Non-Fiction"}
     - {id: 286, cat: Audio, desc: "Audio-Fiction"}
-    - {id: 212, cat: Books, desc: "Ship's documentation"}
-    - {id: 251, cat: Books, desc: "Diving"}
     - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
     - {id: 298, cat: Books, desc: "Yachting, sailing, boating-Cruising Guides"}
     - {id: 297, cat: Books, desc: "Yachting, sailing, boating-Weather Sailing"}
@@ -125,6 +123,7 @@ caps:
     - {id: 255, cat: Books, desc: "Yachting, sailing, boating-Sailing Alone"}
     - {id: 256, cat: Books, desc: "Yachting, sailing, boating-Rigging, knots"}
     - {id: 252, cat: Books, desc: "Yachting, sailing, boating-Projects, design, construction"}
+    - {id: 251, cat: Books, desc: "Diving"}
     - {id: 177, cat: Books, desc: "Shipmodeling"}
     - {id: 293, cat: Books, desc: "Shipmodeling-Radio controlled models"}
     - {id: 292, cat: Books, desc: "Shipmodeling-Marine Modelling Magazines"}
@@ -161,6 +160,8 @@ caps:
     - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
     - {id: 162, cat: Books, desc: "Archive"}
+    - {id: 315, cat: Books, desc: "Archive-Unformed"}
+    - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
     - {id: 295, cat: Books, desc: "Archive-Unregistered releases"}
 
   modes:

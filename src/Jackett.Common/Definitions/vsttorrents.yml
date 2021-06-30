@@ -21,8 +21,9 @@ caps:
 settings: []
 
 download:
-  selector: div.wp-block-file a
-  attribute: href
+  selectors:
+    - selector: div.wp-block-file a
+      attribute: href
 
 search:
   paths:

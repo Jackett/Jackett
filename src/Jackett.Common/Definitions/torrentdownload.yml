@@ -114,8 +114,9 @@ settings:
       _: size
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 login:
   method: cookie

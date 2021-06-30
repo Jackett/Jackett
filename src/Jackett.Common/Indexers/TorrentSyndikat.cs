@@ -13,6 +13,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -21,6 +22,9 @@ namespace Jackett.Common.Indexers
     public class TorrentSyndikat : BaseWebIndexer
     {
         private string ApiBase => SiteLink + "api_9djWe8Tb2NE3p6opyqnh/v1";
+
+        private bool ProductsOnly => ((BoolConfigurationItem)configData.GetDynamic("productsOnly")).Value;
+        private string[] ReleaseType => ((MultiSelectConfigurationItem)configData.GetDynamic("releaseType")).Values;
 
         private ConfigurationDataAPIKey ConfigData
         {
@@ -108,6 +112,20 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.Books, "Englisch / eBooks");
             AddCategoryMapping(48, TorznabCatType.Other, "Englisch / Bildung");
             AddCategoryMapping(49, TorznabCatType.TVSport, "Englisch / Sport");
+
+            ConfigData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Generate a new key <a href=\"https://torrent-syndikat.org/keymgm/keys.php\" target=_blank>here</a>, set <i>download</i> and <i>browse</i> scopes."));
+            ConfigData.AddDynamic("productsOnly", new BoolConfigurationItem("Products only"));
+            ConfigData.AddDynamic("productsOnlyInfo", new DisplayInfoConfigurationItem(String.Empty, "Limit search to torrents linked to a product."));
+            ConfigData.AddDynamic("releaseType", new MultiSelectConfigurationItem("Release Type", new Dictionary<string, string>()
+            {
+                    { "P2P", "P2P"},
+                    { "Scene", "Scene"},
+                    { "O-Scene", "O-Scene"}
+            })
+            {
+                Values = new[] { "P2P", "Scene", "O-Scene" }
+            });
+            ConfigData.AddDynamic("releaseTypeInfo", new DisplayInfoConfigurationItem(String.Empty, "Limit search to specific release types."));
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -131,7 +149,11 @@ namespace Jackett.Common.Indexers
             var queryCollection = new NameValueCollection { { "apikey", ConfigData.Key.Value } };
 
             queryCollection.Add("limit", "50"); // Default 30
-            //queryCollection.Add("ponly", true); // Torrents with products only
+            queryCollection.Add("ponly", ProductsOnly ? "true" : "false");
+            foreach (var releaseType in ReleaseType)
+            {
+                queryCollection.Add("release_type", releaseType);
+            }
 
             if (query.ImdbIDShort != null)
             {

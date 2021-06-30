@@ -175,8 +175,9 @@ download:
       id: "{{ .DownloadUri.Query.id }}"
       to: give
       torrent: "{{ .DownloadUri.Query.id }}"
-  selector: "a[href^=\"/{{ .DownloadUri.Query.id }}/\"]"
-  attribute: href
+  selectors:
+    - selector: "a[href^=\"/{{ .DownloadUri.Query.id }}/\"]"
+      attribute: href
 
 search:
   paths:

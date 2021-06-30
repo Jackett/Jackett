@@ -177,6 +177,8 @@ namespace Jackett.Common.Services
             }
         }
 
+        public TimeSpan CacheTTL => TimeSpan.FromSeconds(_serverConfig.CacheTtl);
+
         private bool IsCacheEnabled()
         {
             if (!_serverConfig.CacheEnabled)

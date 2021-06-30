@@ -26,6 +26,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected virtual string APIUrl => SiteLink + "ajax.php";
         protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + "&id=";
         protected virtual string DetailsUrl => SiteLink + "torrents.php?torrentid=";
+        protected virtual string PosterUrl => SiteLink;
         protected virtual string AuthorizationFormat => "{0}";
         protected virtual int ApiKeyLength => 41;
 
@@ -229,7 +230,7 @@ namespace Jackett.Common.Indexers.Abstract
                         : null;
                     Uri poster = null;
                     if (!string.IsNullOrEmpty(cover))
-                        poster = new Uri(cover);
+                        poster = (cover.StartsWith("http")) ? new Uri(cover) : new Uri(PosterUrl + cover);
                     var release = new ReleaseInfo
                     {
                         PublishDate = groupTime,

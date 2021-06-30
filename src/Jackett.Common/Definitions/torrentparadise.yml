@@ -6,11 +6,13 @@ language: en-us
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.to/
-  - https://torrentparadise.cc/
-  - https://torrentparadise.la/
-  - https://torrentparadise.cl/
-  - https://torrentparadise.org/
+  - https://torrentparadise.pm/
+legacylinks:
+  - https://torrentparadise.cc/ # redirects to *.pm
+  - https://torrentparadise.to/ # redirects to *.pm
+  - https://torrentparadise.la/ # redirects to *.pm
+  - https://torrentparadise.cl/ # redirects to *.pm
+  - https://torrentparadise.org/ # redirects to *.pm
 
 caps:
   categories:
@@ -204,8 +206,9 @@ caps:
 settings: []
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   # https://torrentparadise.org/search.php?f=monday+night

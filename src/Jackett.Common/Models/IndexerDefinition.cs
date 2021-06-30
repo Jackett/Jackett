@@ -152,7 +152,7 @@ namespace Jackett.Common.Models
 
     public class searchPathBlock : requestBlock
     {
-        public List<string> Categories { get; set; }
+        public List<string> Categories { get; set; } = new List<string>();
         public bool Inheritinputs { get; set; } = true;
         public bool Followredirect { get; set; } = false;
     }
@@ -167,10 +167,15 @@ namespace Jackett.Common.Models
 
     public class downloadBlock
     {
+        public List<downloadsField> Selectors { get; set; }
+        public string Method { get; set; }
+        public requestBlock Before { get; set; }
+    }
+
+    public class downloadsField
+    {
         public string Selector { get; set; }
         public string Attribute { get; set; }
         public List<filterBlock> Filters { get; set; }
-        public string Method { get; set; }
-        public requestBlock Before { get; set; }
     }
 }

@@ -41,6 +41,8 @@ namespace Jackett.Common.Indexers
         bool IsConfigured { get; }
 
         string[] Tags { get; }
+        bool IsHealthy { get; }
+        bool IsFailing { get; }
 
         // Retrieved for starting setup for the indexer via web API
         Task<ConfigurationData> GetConfigurationForSetup();

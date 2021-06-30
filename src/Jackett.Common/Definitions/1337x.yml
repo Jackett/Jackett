@@ -143,7 +143,22 @@ settings:
     default: "magnet:"
     options:
       "http://itorrents.org/": iTorrents.org
+      "http://torrage.info/": Torrage
+      "http://btcache.me/": BTcache
       "magnet:": magnet
+  - name: downloadlink2
+    type: select
+    label: Download link (fallback)
+    default: "http://itorrents.org/"
+    options:
+      "http://itorrents.org/": iTorrents.org
+      "http://torrage.info/": Torrage
+      "http://btcache.me/": BTcache
+      "magnet:": magnet
+  - name: info_download
+    type: info
+    label: About the Download links
+    default: As the .torrent download links on this site are known to fail from time to time, you can optionally set as a fallback an automatic alternate link. We suggest using the magnet link as a fallback.
   - name: sort
     type: select
     label: Sort requested from site
@@ -161,9 +176,12 @@ settings:
       asc: asc
 
 download:
-  # the .torrent url is on the on the details page
-  selector: ul li a[href^="{{ .Config.downloadlink }}"]
-  attribute: href
+  # the .torrent URL and magnet URI are on the details page
+  selectors:
+    - selector: ul li a[href^="{{ .Config.downloadlink }}"]
+      attribute: href
+    - selector: ul li a[href^="{{ .Config.downloadlink2 }}"]
+      attribute: href
 
 search:
   paths:

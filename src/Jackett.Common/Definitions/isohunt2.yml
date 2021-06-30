@@ -58,11 +58,13 @@ settings:
       size: size
 
 download:
-  selector: a.btn-magnet
-  attribute: href
-  filters:
-    - name: querystring
-      args: url
+  selectors:
+    - selector: a.btn-magnet
+      attribute: href
+      filters:
+        - name: querystring
+          args: url
+
 search:
   paths:
     - path: torrents

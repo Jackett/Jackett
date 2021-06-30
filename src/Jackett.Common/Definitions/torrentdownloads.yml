@@ -66,10 +66,24 @@ settings:
     options:
       "http://itorrents.org/": "iTorrents.org"
       "magnet:": "magnet"
+  - name: downloadlink2
+    type: select
+    label: Download link (fallback)
+    default: "http://itorrents.org/"
+    options:
+      "http://itorrents.org/": "iTorrents.org"
+      "magnet:": "magnet"
+  - name: info_download
+    type: info
+    label: About the Download links
+    default: As the .torrent download links on this site are known to fail from time to time, you can optionally set as a fallback an automatic alternate link.
 
 download:
-  selector: a[href^="{{ .Config.downloadlink }}"]
-  attribute: href
+  selectors:
+    - selector: a[href^="{{ .Config.downloadlink }}"]
+      attribute: href
+    - selector: a[href^="{{ .Config.downloadlink2 }}"]
+      attribute: href
 
 search:
   paths:

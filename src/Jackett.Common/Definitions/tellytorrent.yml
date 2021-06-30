@@ -96,7 +96,7 @@ search:
     sortDirection: "{{ .Config.type }}"
     perPage: 100
     page: 1
-    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
     selector: table > tbody > tr
