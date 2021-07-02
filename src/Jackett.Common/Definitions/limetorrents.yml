@@ -7,11 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.limetorrents.info/
-  - https://www.limetorrents.asia/
-  - https://www.limetorrents.co/
-  - https://limetor.com/
-  - https://www.limetor.pro/
+  - https://www.limetorrents.pro/
   - https://limetorrents.unblockit.li/
   - https://limetorrents.unblockninja.com/
   - https://limetorrents.nocensor.space/
@@ -43,6 +39,11 @@ legacylinks:
   - https://limetorrents.unblockit.buzz/
   - https://limetorrents.unblockit.club/
   - https://limetorrents.unblockit.onl/
+  - https://www.limetorrents.info/
+  - https://www.limetorrents.asia/
+  - https://www.limetorrents.co/
+  - https://limetor.com/
+  - https://www.limetor.pro/
 
 caps:
   categorymappings:
