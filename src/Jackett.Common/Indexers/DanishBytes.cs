@@ -19,8 +19,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DanishBytes : BaseWebIndexer
     {
-        private string SearchURl => SiteLink + "api/torrents/filter";
-        private string TorrentsUrl => SiteLink + "api/torrents";
+        private string SearchURl => SiteLink + "api/torrents/v2/filter";
 
         private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
@@ -32,8 +31,8 @@ namespace Jackett.Common.Indexers
                    link: "https://danishbytes.org/",
                    caps: new TorznabCapabilities
                    {
-                       LimitsDefault = 15,
-                       LimitsMax = 15,
+                       LimitsDefault = 25,
+                       LimitsMax = 25,
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.ImdbId, TvSearchParam.TvdbId
@@ -88,11 +87,9 @@ namespace Jackett.Common.Indexers
 
             var qc = new NameValueCollection
             {
-                {"name", query.GetQueryString()},
+                {"search", query.GetQueryString()},
                 {"api_token", configData.Key.Value},
             };
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-                qc.Add("categories[]", cat);
 
             if (query.IsImdbQuery)
                 qc.Add("imdb", query.ImdbID);
@@ -101,8 +98,11 @@ namespace Jackett.Common.Indexers
             if (query.IsTmdbQuery)
                 qc.Add("tmdb", query.TmdbID.ToString());
 
-            var requestUrl = UseFilterEndpoint(query) ? SearchURl : TorrentsUrl;
+            var requestUrl = SearchURl;
             var searchUrl = requestUrl + "?" + qc.GetQueryString();
+
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                searchUrl += $"&categories[]={cat}";
 
             var results = await RequestWithCookiesAsync(searchUrl);
             if (results.Status != HttpStatusCode.OK)
@@ -111,23 +111,21 @@ namespace Jackett.Common.Indexers
             try
             {
                 var dbResponse = JsonConvert.DeserializeObject<DBResponse>(results.ContentString);
-                foreach (var torrent in dbResponse.data)
+                foreach (var attr in dbResponse.torrents)
                 {
-                    var attr = torrent.attributes;
                     var release = new ReleaseInfo
                     {
                         Title = attr.name,
-                        Details = new Uri(attr.details_link),
-                        Link = new Uri(attr.download_link),
+                        Details = new Uri($"{SiteLink}torrents/{attr.id}"),
+                        Link = new Uri($"{SiteLink}torrent/download/{attr.id}.{dbResponse.rsskey}"),
                         PublishDate = attr.created_at,
-                        Category = MapTrackerCatDescToNewznab(attr.category),
+                        Category = MapTrackerCatToNewznab(attr.category_id),
                         Size = attr.size,
-                        Files = attr.num_file,
                         Seeders = attr.seeders,
                         Peers = attr.leechers + attr.seeders,
                         Grabs = attr.times_completed,
-                        DownloadVolumeFactor = StringToBool(attr.freeleech) ? 0 : 1,
-                        UploadVolumeFactor = StringToBool(attr.double_upload) ? 2 : 1
+                        DownloadVolumeFactor = attr.free ? 0 : 1,
+                        UploadVolumeFactor = attr.doubleup ? 2 : 1
                     };
 
                     releases.Add(release);
@@ -141,50 +139,61 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private bool UseFilterEndpoint(TorznabQuery query) => !string.IsNullOrEmpty(query.GetQueryString()) ||
-                                                              (query.Categories.Length > 0 || query.IsImdbQuery ||
-                                                               query.IsTvdbSearch);
-
-        private static bool StringToBool(string value) => value.Equals("yes", StringComparison.CurrentCultureIgnoreCase) ||
-                                                          value.Equals(
-                                                              bool.TrueString, StringComparison.CurrentCultureIgnoreCase) ||
-                                                          value.Equals("1");
-
         private class Torrent
         {
             public int id { get; set; }
-            public string type { get; set; }
-            public TorrentAttribute attributes { get; set; }
+            public string name { get; set; }
+            public string info_hash { get; set; }
+            public long size { get; set; }
+            public int leechers { get; set; }
+            public int seeders { get; set; }
+            public int times_completed { get; set; }
+            public string category_id { get; set; }
+            public string tmdb { get; set; }
+            public string igdb { get; set; }
+            public string mal { get; set; }
+            public string tvdb { get; set; }
+            public string imdb { get; set; }
+            public int stream { get; set; }
+            public bool free { get; set; }
+            public bool on_fire { get; set; }
+            public bool doubleup { get; set; }
+            public bool highspeed { get; set; }
+            public bool featured { get; set; }
+            public bool webstream { get; set; }
+            public bool anon { get; set; }
+            public bool sticky { get; set; }
+            public bool sd { get; set; }
+            public DateTime created_at { get; set; }
+            public DateTime bumped_at { get; set; }
+            public int type_id { get; set; }
+            public int resolution_id { get; set; }
+            public string poster_image { get; set; }
+            public string video { get; set; }
+            public int thanks_count { get; set; }
+            public int comments_count { get; set; }
+            public string getSize { get; set; }
+            public string created_at_human { get; set; }
+            public bool bookmarked { get; set; }
+            public bool liked { get; set; }
+            public bool show_last_torrents { get; set; }
         }
 
-        private class TorrentAttribute
+        private class PageLinks
         {
-            public string name { get; set; }
-            public DateTime? release_year { get; set; }
-            public string category { get; set; }
-            public string type { get; set; }
-            public string resolution { get; set; }
-            public long size { get; set; }
-            public int num_file { get; set; }
-            public string freeleech { get; set; }
-            public string double_upload { get; set; }
-            public string uploader { get; set; }
-            public int seeders { get; set; }
-            public int leechers { get; set; }
-            public int times_completed { get; set; }
-            public string tmdb_id { get; set; }
-            public string imdb_id { get; set; }
-            public string tvdb_id { get; set; }
-            public string mal_id { get; set; }
-            public string igdb_id { get; set; }
-            public DateTime created_at { get; set; }
-            public string download_link { get; set; }
-            public string details_link { get; set; }
+            public int to { get; set; }
+            public string qty { get; set; }
+            public int current_page { get; set; }
         }
 
         private class DBResponse
         {
-            public Torrent[] data { get; set; }
+            public Torrent[] torrents { get; set; }
+            public int resultsCount { get; set; }
+            public PageLinks links { get; set; }
+            public string currentCount { get; set; }
+            public int torrentCountTotal { get; set; }
+            public string rsskey { get; set; }
         }
 
     }
