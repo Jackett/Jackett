@@ -12,8 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 5, cat: PC, desc: "Special OS"}
-    - {id: 6, cat: PC, desc: "Special Release [Requested/Exclusive/Etc]"}
+    - {id: 18, cat: PC, desc: "Team-OS VIP Releases"}
     - {id: 19, cat: PC, desc: "Windows 7 Releases"}
     - {id: 20, cat: PC, desc: "Windows 7 Releases 32 Bit"}
     - {id: 21, cat: PC, desc: "Windows 7 Releases 64 Bit"}
@@ -23,6 +22,7 @@ caps:
     - {id: 25, cat: PC, desc: "Windows 8.1 Release 32 Bit"}
     - {id: 26, cat: PC, desc: "Windows 8.1 Release 64 Bit"}
     - {id: 27, cat: PC, desc: "Windows 8.1 Release x86-x64 AIO"}
+    - {id: 28, cat: PC, desc: "Operating Systems"}
     - {id: 29, cat: PC, desc: "Windows XP"}
     - {id: 30, cat: PC, desc: "Windows XP 32 Bit"}
     - {id: 31, cat: PC, desc: "Windows XP 64 Bit"}
@@ -35,10 +35,15 @@ caps:
     - {id: 38, cat: PC, desc: "Windows 8 & 8.1 32 Bit"}
     - {id: 39, cat: PC, desc: "Windows 8 & 8.1 64 Bit"}
     - {id: 40, cat: PC, desc: "Windows 8 & 8.1 x86/64+AIO"}
-    - {id: 41, cat: PC, desc: "Linux/Unix/Mac/Others"}
+    - {id: 41, cat: PC, desc: "Windows Servers/Old Windows OS/Others"}
+    - {id: 42, cat: PC, desc: "Windows 10"}
     - {id: 43, cat: PC, desc: "Windows 10 (x86)"}
     - {id: 44, cat: PC, desc: "Windows 10 (x64)"}
     - {id: 45, cat: PC, desc: "Windows 10 (x86 & x64)"}
+    - {id: 157, cat: PC, desc: "Windows 11"}
+    - {id: 158, cat: PC, desc: "Windows 11 (x86)"}
+    - {id: 159, cat: PC, desc: "Windows 11 (x64)"}
+    - {id: 160, cat: PC, desc: "Windows 11 (x86 & x64)"}
     - {id: 46, cat: PC/ISO, desc: "Windows 10 Untouched ISO(MSDN)"}
     - {id: 47, cat: PC, desc: "Windows 7 Untouched (MSDN)"}
     - {id: 48, cat: PC, desc: "Windows 7 32 Bit Untouched (MSDN)"}
@@ -53,6 +58,7 @@ caps:
     - {id: 57, cat: PC, desc: "Windows Server 2003 64 Bit Untouched"}
     - {id: 58, cat: PC/ISO, desc: "Microsoft Office Multi-lang Untouch ISO"}
     - {id: 59, cat: PC/ISO, desc: "x86-x64 bit Untouched Iso"}
+    - {id: 60, cat: PC/0day, desc: "Software Releases"}
     - {id: 61, cat: PC/0day, desc: "Antivirus"}
     - {id: 62, cat: PC/Mobile-Android, desc: "Android Apps"}
     - {id: 63, cat: PC/0day, desc: "Download Managers"}
@@ -76,12 +82,12 @@ caps:
     - {id: 81, cat: PC/0day, desc: "Developers"}
     - {id: 82, cat: PC/0day, desc: "Designers"}
     - {id: 83, cat: PC/0day, desc: "Silent Apps"}
+    - {id: 84, cat: PC, desc: "TEAM OS Other Stuff Releases"}
     - {id: 85, cat: PC/Games, desc: "Games"}
     - {id: 86, cat: Books/EBook, desc: "Ebooks"}
     - {id: 87, cat: Other, desc: "Wallpapers, Themes & Screensavers"}
     - {id: 88, cat: PC/Mobile-Android, desc: "Android Games"}
     - {id: 89, cat: PC, desc: "Other Releases"}
-    - {id: 100, cat: Other, desc: "Tutorials"}
     - {id: 107, cat: PC, desc: "Windows 10 Releases"}
     - {id: 109, cat: PC, desc: "Windows 10 Releases 64 Bit"}
     - {id: 110, cat: PC, desc: "Windows 10 Releases x86-x64 AIO"}
@@ -89,7 +95,6 @@ caps:
     - {id: 112, cat: PC/0day, desc: "Ghost Images"}
     - {id: 113, cat: PC/0day, desc: "32 Bit Ghost Images"}
     - {id: 114, cat: PC/0day, desc: "64 Bit Ghost Images"}
-    - {id: 125, cat: PC, desc: "Dead Torrents"}
     - {id: 131, cat: PC/Mac, desc: "Mac Games"}
     - {id: 132, cat: PC/Mobile-Other, desc: "Linux/Unix"}
     - {id: 140, cat: PC/Mac, desc: "MacOS"}
