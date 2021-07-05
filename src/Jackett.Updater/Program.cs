@@ -465,6 +465,7 @@ namespace Jackett.Updater
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/yingk.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
+                "Definitions/witchhunter.yml",
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",
                 "Microsoft.Owin.Host.HttpListener.dll",
