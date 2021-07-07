@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
             "https://pctmix1.com/",
             "https://pctreload1.com/",
             "https://maxitorrent.com",
-            "https://pctmix1.unblockit.li/"
+            "https://pctmix1.unblockit.uno/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -117,7 +117,8 @@ namespace Jackett.Common.Indexers
             "http://pctnew.com/",
             "https://descargas2020.org/",
             "https://pctnew.org/",
-            "https://pctreload.com/"
+            "https://pctreload.com/",
+            "https://pctmix1.unblockit.li/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
