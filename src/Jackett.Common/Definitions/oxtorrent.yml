@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.ph/
+  - https://www.oxtorrent.pe/
   - https://www.oxtorrent.co/
   - https://oxtorrent.nocensor.space/
 legacylinks:
@@ -30,6 +30,7 @@ legacylinks:
   - https://wvw.oxtorrent.ws/
   - https://oxtorrent.unblocked.monster/
   - https://www.oxtorrent.tv/
+  - https://www.oxtorrent.ph/
 
 caps:
   categorymappings:
