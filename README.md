@@ -500,7 +500,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TellyTorrent
  * teracod (Movie Zone)
  * The Falling Angels (TFA)
- * The Geeks [![(invite needed)][inviteneeded]](#)
+ * The Geeks
  * The Horror Charnel (THC)
  * The New Retro
  * The Occult [![(invite needed)][inviteneeded]](#)
