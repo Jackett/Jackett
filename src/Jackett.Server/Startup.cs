@@ -30,6 +30,8 @@ namespace Jackett.Server
 {
     public class Startup
     {
+        readonly string AllowAllOrigins = "AllowAllOrigins";
+
         public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
@@ -39,7 +41,14 @@ namespace Jackett.Server
         {
             services.AddResponseCompression();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            services.AddCors(options =>
+                        {
+                            options.AddPolicy(
+                                name: AllowAllOrigins,
+                                builder => builder.AllowAnyOrigin()
+                            );
+                        })
+                    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                         options =>
                         {
@@ -182,6 +191,8 @@ namespace Jackett.Server
             app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseCors(AllowAllOrigins);
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
