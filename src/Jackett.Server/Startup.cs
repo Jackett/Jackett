@@ -45,7 +45,7 @@ namespace Jackett.Server
                         {
                             options.AddPolicy(
                                 name: AllowAllOrigins,
-                                builder => builder.AllowAnyOrigin()
+                                corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin()
                             );
                         })
                     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
