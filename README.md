@@ -28,6 +28,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 7torrents
  * ACG.RIP
  * ACGsou (36DM)
+ * AngieTorrents
  * Anidex
  * AniLibria
  * AnimeClipse
