@@ -13,7 +13,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -57,11 +56,6 @@ namespace Jackett.Common.Indexers
             Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
-        }
-
-        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
-        {
-            base.LoadValuesFromJson(jsonConfig, useProtectionService);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -165,7 +159,15 @@ namespace Jackett.Common.Indexers
 
                     var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
                     var extract = row.QuerySelector("noscript").InnerHtml.Split('\'');
-                    var link = new Uri(GetAbsoluteUrl(extract[1]));
+                    Uri link = null;
+                    foreach (var part in extract)
+                    {
+                        if (part.StartsWith(SiteLink) && part.EndsWith("/"))
+                        {
+                            link = new Uri(GetAbsoluteUrl(part));
+                            break;
+                        }
+                    }
 
                     var release = new ReleaseInfo
                     {
