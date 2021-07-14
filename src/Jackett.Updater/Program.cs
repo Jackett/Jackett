@@ -313,6 +313,7 @@ namespace Jackett.Updater
                 "Definitions/evolutionpalace.yml",
                 "Definitions/exoticaz.yml", // migrated to C#
                 "Definitions/extratorrent-ag.yml",
+                "Definitions/extratorrent-it.yml",
                 "Definitions/extratorrentclone.yml",
                 "Definitions/extremlymtorrents.yml",
                 "Definitions/filmsclub.yml",
