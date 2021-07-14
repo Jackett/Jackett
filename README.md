@@ -433,6 +433,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * P2PBG
  * P2PElite
  * PassThePopcorn (PTP)
+ * PeerJunkies
  * Peers.FM
  * Pirata Digital
  * PirateTheNet (PTN)
