@@ -308,6 +308,7 @@ namespace Jackett.Updater
                 "Definitions/epizod.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/erzsebet.yml",
+                "Definitions/erzsebetpl.yml",
                 "Definitions/estrenosdtl.yml",
                 "Definitions/ethor.yml",
                 "Definitions/evolutionpalace.yml",
