@@ -2,9 +2,11 @@
 id: hdcity
 name: HDCity
 description: "HDCity is a SPANISH site for HD content"
-language: es-es
+language: es-ES
 type: private
 encoding: ISO-8859-1
+certificates:
+  - a10f2f7a863cd3fba9663185b0943cde01698451 # expired  ‎25 ‎October ‎2021
 links:
   - https://hdcity.li/
 
@@ -167,7 +169,7 @@ search:
       filters:
         - name: querystring
           args: category
-    title:
+    title_vose:
       selector: td[valign="middle"] a:contains("VOSE")
       optional: true
       filters:
@@ -179,7 +181,7 @@ search:
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
           args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
-    title:
+    title_notvose:
       selector: td[valign="middle"] a:not(:contains("VOSE"))
       optional: true
       filters:
@@ -191,6 +193,8 @@ search:
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
           args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     details:
       selector: td[valign="middle"] a
       attribute: href
@@ -208,9 +212,6 @@ search:
       selector: td:nth-child(7) a
     grabs:
       selector: td:nth-child(8)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     date:
       selector: td:nth-child(5)
       filters:

@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
                    )
         {
             Encoding = Encoding.UTF8;
-            Language = "fr-fr";
+            Language = "fr-FR";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TV, "Series");
@@ -252,7 +252,7 @@ namespace Jackett.Common.Indexers
                                 var completed = torrent.QuerySelector("td:nth-of-type(3)").TextContent;                 // Completed
                                 var seeders = torrent.QuerySelector("td.text-green").TextContent;                       // Seeders
                                 var leechers = torrent.QuerySelector("td.text-red").TextContent;                        // Leechers
-                                var size = torrent.QuerySelector("td:nth-of-type(5)").TextContent;                      // Size
+                                var size = torrent.QuerySelector("td:nth-of-type(6)").TextContent;                      // Size
 
                                 var release = new ReleaseInfo
                                 {
@@ -264,7 +264,7 @@ namespace Jackett.Common.Indexers
                                     Grabs = int.Parse(Regex.Match(completed, @"\d+").Value) + int.Parse(Regex.Match(leechers, @"\d+").Value),
                                     MinimumRatio = 1,
                                     MinimumSeedTime = 172800,
-                                    Size = ReleaseInfo.GetBytes(size.Replace(",", ".").Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb")),
+                                    Size = ReleaseInfo.GetBytes(size.Replace("Go", "gb").Replace("Mo", "mb").Replace("Ko", "kb")),
                                     UploadVolumeFactor = 1,
                                     DownloadVolumeFactor = 1,
                                     PublishDate = DateTime.Now,

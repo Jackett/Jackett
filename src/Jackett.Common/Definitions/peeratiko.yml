@@ -1,0 +1,202 @@
+---
+id: peeratiko
+name: Peeratiko
+description: "Peeratiko is a GREEK Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: el-GR
+type: private
+encoding: UTF-8
+links:
+  - https://peeratiko.org/
+
+caps:
+  categorymappings:
+    - {id: 58, cat: PC, desc: "Applications Linux"}
+    - {id: 4, cat: PC/Mac, desc: "Applications Mac"}
+    - {id: 54, cat: PC/Mobile-Other, desc: "Applications Mobiles"}
+    - {id: 2, cat: PC, desc: "Applications Other"}
+    - {id: 3, cat: PC/0day, desc: "Applications Windows"}
+    - {id: 39, cat: Books/EBook, desc: "Books Books"}
+    - {id: 56, cat: Books/Comics, desc: "Books Comics"}
+    - {id: 47, cat: Books/Mags, desc: "Books Magazines"}
+    - {id: 57, cat: PC/Mobile-Other, desc: "Games Mobiles"}
+    - {id: 5, cat: Console/Other, desc: "Games Other"}
+    - {id: 8, cat: Console/PS3, desc: "Games PSP/PS2/PS3"}
+    - {id: 6, cat: PC/Games, desc: "Games Windows"}
+    - {id: 7, cat: Console/XBox, desc: "Games XBOX"}
+    - {id: 60, cat: Movies/3D, desc: "Movies 3D"}
+    - {id: 1, cat: Movies, desc: "Movies Anime/Cartoons"}
+    - {id: 9, cat: Movies/BluRay, desc: "Movies BluRay x264"}
+    - {id: 62, cat: Movies/DVD, desc: "Movies DVD-R"}
+    - {id: 15, cat: Movies/WEB-DL, desc: "DVD/BD/BR-rip x264"}
+    - {id: 16, cat: Movies/WEB-DL, desc: "Movies Gr. Subs DVD/BD/BR-rip"}
+    - {id: 18, cat: Movies, desc: "Movies Gr. Subs Embeddeed"}
+    - {id: 19, cat: Movies/Other, desc: "Movies Gr. Subs Other"}
+    - {id: 17, cat: Movies/DVD, desc: "Movies Greek DVD-R"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "Movies Greek DVD/BD/BR-rip"}
+    - {id: 22, cat: Movies/Other, desc: "Movies Greek Other"}
+    - {id: 10, cat: Movies/HD, desc: "Movies HD Packs"}
+    - {id: 13, cat: Movies/Other, desc: "Movies Other"}
+    - {id: 14, cat: Movies, desc: "Movies Packs"}
+    - {id: 23, cat: Audio, desc: "Music DJs Stuff"}
+    - {id: 26, cat: Audio, desc: "Music English/Discographies"}
+    - {id: 24, cat: Audio, desc: "Music English/Foreign"}
+    - {id: 25, cat: Audio/Lossless, desc: "Music English/Foreign FLAC"}
+    - {id: 27, cat: Audio, desc: "Music Greek"}
+    - {id: 28, cat: Audio/Lossless, desc: "Music Greek FLAC"}
+    - {id: 29, cat: Audio, desc: "Music Greek/Discographies"}
+    - {id: 36, cat: Audio/Video, desc: "Music Video Clips"}
+    - {id: 61, cat: Other, desc: "Other Packs"}
+    - {id: 40, cat: Other/Misc, desc: "Other Misc"}
+    - {id: 59, cat: Other, desc: "Other Pictures"}
+    - {id: 11, cat: TV/Documentary, desc: "TV Documentaries"}
+    - {id: 12, cat: TV/HD, desc: "TV HD Series"}
+    - {id: 63, cat: TV/HD, desc: "TV HD Series Packs"}
+    - {id: 53, cat: TV/Other, desc: "TV Other"}
+    - {id: 31, cat: TV, desc: "TV Series Gr. Subs"}
+    - {id: 32, cat: TV, desc: "TV Series Gr. Subs Embedded"}
+    - {id: 33, cat: TV, desc: "TV Series Gr. Subs Packs"}
+    - {id: 34, cat: TV, desc: "TV Series Greek"}
+    - {id: 35, cat: TV, desc: "TV Series Greek Packs"}
+    - {id: 30, cat: TV/Sport, desc: "TV Sports"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page</b> setting to <b>100</b> on your <i>Personal Options</i> from the <i>Personal Settings</i> menu on the Peeratiko webpage.
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    use_ssl: 1
+    keeplogged: 1
+  error:
+    - selector: h2
+      message:
+        selector: table tr td.text
+  test:
+    path: index.php
+    selector: a[href^="/logout.php?auth="]
+
+search:
+  paths:
+    # https://peeratiko.org/browse.php?cats2[]=39&cats5[]=28&cats5[]=29&cats5[]=36&search=&searchin=title&incldead=1
+    - path: browse.php
+  inputs:
+    # note: site uses the catsX[]=nn method which cardigann does not support.
+    search: "{{ .Keywords }}"
+    # title, descr, filelist, genre, tags, all
+    searchin: title
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # does not support searching imdbid and does not return imdb links
+
+  rows:
+    selector: table[width="90%"] tbody tr:has(a[href^="download.php?torrent="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: ">(.+?)<"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=..(https.+).. width"
+    files:
+      selector: td:nth-last-child(8)
+    date_day:
+      # Today<br>08:10 AM
+      # Yesterday<br>06:44 PM
+      optional: true
+      selector: td:nth-last-child(6):contains("day")
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+    date_year:
+      # Dec 4 2021<br>10:20 AM
+      optional: true
+      selector: td:nth-last-child(6):not(:contains("day"))
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        "b:contains(\"[FREE]\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# U-232 V3

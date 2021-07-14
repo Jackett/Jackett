@@ -2,35 +2,36 @@
 id: oxtorrent
 name: OxTorrent
 description: "OxTorrent is a French Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.pe/
-  - https://www.oxtorrent.co/
-  - https://oxtorrent.nocensor.space/
+  - https://www.oxtorrent.re/
+  - https://oxtorrent.unblockit.llc/
+  - https://oxtorrent.nocensor.sbs/
 legacylinks:
-  - https://wwv.oxtorrent.com/
-  - https://www.smartorrent.tv/
-  - https://oxtorrent.black-mirror.xyz/
-  - https://oxtorrent.unblocked.casa/
-  - https://oxtrorrent.proxyportal.fun/
-  - https://oxtorrent.uk-unblock.xyz/
-  - https://oxtorrent.ind-unblock.xyz/
-  - https://www.oxtorrent.com/
-  - https://www.oxtorrent.pw/
-  - https://oxtorrent.unblocked.bar/
-  - https://oxtorrent.proxyportal.pw/
-  - https://oxtorrent.uk-unblock.pro/
-  - https://oxtorrent.unblocked.rest/
-  - https://www.oxtorrent.cc/
   - https://www.oxtorrent.bz/
   - https://www.oxtorrent.ws/
-  - https://wvw.oxtorrent.ws/
-  - https://oxtorrent.unblocked.monster/
   - https://www.oxtorrent.tv/
   - https://www.oxtorrent.ph/
+  - https://www.oxtorrent.pe/
+  - https://www.oxtorrent.co/
+  - https://www.oxtorrent.io/
+  - https://www.oxtorrent.cx/
+  - https://www.oxtorrent.nz/
+  - https://oxtorrent.nocensor.work/
+  - https://oxtorrent.unblockit.kim/
+  - https://www.oxtorrent.sh/
+  - https://www.oxtorrent.pl/
+  - https://oxtorrent.unblockit.bz/
+  - https://www.oxtorrent.vc/
+  - https://oxtorrent.unblockit.tv/
+  - https://oxtorrent.unblockit.how/
+  - https://www.oxtorrent.be/
+  - https://oxtorrent.unblockit.cam/
+  - https://oxtorrent.nocensor.biz/
+  - https://oxtorrent.unblockit.day/
 
 caps:
   categorymappings:
@@ -75,10 +76,14 @@ download:
   selectors:
     - selector: a[href^="magnet:?"]
       attribute: href
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}derniers{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace

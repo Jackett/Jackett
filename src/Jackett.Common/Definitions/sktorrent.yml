@@ -2,7 +2,7 @@
 id: sktorrent
 name: SkTorrent
 description: "SkTorrent is a CZECH/SLOVAK Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: cs-cz
+language: cs-CZ
 type: semi-private
 encoding: windows-1250
 links:
@@ -181,12 +181,16 @@ search:
     details:
       selector: a[href^="details.php?name="]
       attribute: href
-    poster:
+    poster_default:
       selector: img[class="lozad"]
       attribute: data-src
-    poster:
+      optional: true
+    poster_optional:
       selector: img[src="//cdn.sktorrent.eu/obrazky/xXx.jpg"]
       attribute: src
+      optional: true
+    poster:
+      text: "{{ if .Result.poster_optional }}{{ .Result.poster_optional }}{{ else }}{{ .Result.poster_default }}{{ end }}"
     download:
       selector: a[href^="details.php?name="]
       attribute: href

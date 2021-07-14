@@ -2,7 +2,7 @@
 id: extremebits
 name: ExtremeBits
 description: "ExtremeBits is a Private Torrent Tracker for EXTREME SPORTS"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -132,9 +132,6 @@ search:
       selector: td:nth-of-type(8)
     grabs:
       selector: td:nth-of-type(10) a
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-of-type(10)
       remove: a

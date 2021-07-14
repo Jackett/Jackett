@@ -2,14 +2,15 @@
 id: empornium
 name: Empornium
 description: "Empornium (EMP) is a Private Torrent Tracker for XXX"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
   - https://www.empornium.is/
-  - https://empornium.sx/
+  - https://www.empornium.sx/ # site forces www.
 legacylinks:
   - https://www.empornium.me/
+  - https://empornium.sx/
 
 caps:
   categorymappings:

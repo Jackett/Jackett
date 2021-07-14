@@ -13,7 +13,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -21,10 +20,11 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Cinecalidad : BaseWebIndexer
     {
-        private const int MaxItemsPerPage = 15;
-        private const int MaxSearchPageLimit = 6; // 15 items per page * 6 pages = 90
+        private const int MaxLatestPageLimit = 3; // 12 items per page * 3 pages = 36
+        private const int MaxSearchPageLimit = 6;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://cinecalidad.website/",
             "https://www.cinecalidad.to/",
             "https://www.cinecalidad.im/", // working but outdated, maybe copycat
             "https://www.cinecalidad.is/",
@@ -32,15 +32,18 @@ namespace Jackett.Common.Indexers
             "https://www.cinecalidad.eu/",
             "https://cinecalidad.unbl0ck.xyz/",
             "https://cinecalidad.u4m.club/",
-            "https://cinecalidad.mrunblock.icu/"
+            "https://cinecalidad.mrunblock.icu/",
+            "https://www.cinecalidad.lat/",
+            "https://cinecalidad3.com/",
+            "https://www.cine-calidad.com/"
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
-                   description: "Películas Full HD en Latino y Inglés Dual.",
-                   link: "https://www.cine-calidad.com/",
+                   description: "Películas Full HD en Latino Dual.",
+                   link: "https://www5.cine-calidad.com/",
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
@@ -53,15 +56,10 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-419";
             Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
-        }
-
-        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
-        {
-            base.LoadValuesFromJson(jsonConfig, useProtectionService);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -80,12 +78,13 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var templateUrl = SiteLink;
-            templateUrl += "{0}"; // placeholder for page
+            templateUrl += "{0}?s="; // placeholder for page
 
-            var maxPages = 2; // we scrape only 2 pages for recent torrents
-            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+            var maxPages = MaxLatestPageLimit; // we scrape only 3 pages for recent torrents
+            var recent = !string.IsNullOrWhiteSpace(query.GetQueryString());
+            if (recent)
             {
-                templateUrl += "?s=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
+                templateUrl += WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
                 maxPages = MaxSearchPageLimit;
             }
 
@@ -105,7 +104,7 @@ namespace Jackett.Common.Indexers
                 }
                 releases.AddRange(pageReleases);
 
-                if (pageReleases.Count < MaxItemsPerPage)
+                if (pageReleases.Count < 1 && recent)
                     break; // this is the last page
             }
 
@@ -120,14 +119,8 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.ContentString);
-                var protectedLink = dom.QuerySelector("li:contains('Torrent')").ParentElement.GetAttribute("href");
-                if (protectedLink.Contains("/ouo.io/"))
-                {
-                    // protected link =>
-                    // https://ouo.io/qs/qsW6rCh4?s=https://www.cinecalidad.is/protect/v2.php?i=A8--9InL&title=High+Life+%282018%29
-                    var linkParts = protectedLink.Split('=');
-                    protectedLink = protectedLink.Replace(linkParts[0] + "=", "");
-                }
+                var protectedLink = dom.QuerySelector("a:contains('Torrent')").GetAttribute("data-url");
+                protectedLink = Base64Decode(protectedLink);
                 protectedLink = GetAbsoluteUrl(protectedLink);
 
                 results = await RequestWithCookiesAsync(protectedLink);
@@ -152,20 +145,23 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
 
-                var rows = dom.QuerySelectorAll("div.home_post_cont");
+                var rows = dom.QuerySelectorAll("article");
                 foreach (var row in rows)
                 {
-                    var qImg = row.QuerySelector("img");
-                    if (qImg == null)
+                    if (row.QuerySelector("div.selt") != null)
+                        continue; // we only support movies
+
+                    var qLink = row.QuerySelector("a.absolute");
+                    var qImg = row.QuerySelector("img.rounded");
+                    if (qLink == null || qImg == null)
                         continue; // skip results without image
-                    var title = qImg.GetAttribute("title");
+
+                    var title = qLink.TextContent.Trim();
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
-                    title += " MULTi LATiN SPANiSH 1080p BDRip x264";
-
+                    title += " MULTi/LATiN SPANiSH 1080p BDRip x264";
                     var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
-                    var extract = row.QuerySelector("noscript").InnerHtml.Split('\'');
-                    var link = new Uri(GetAbsoluteUrl(extract[1]));
+                    var link = new Uri(qLink.GetAttribute("href"));
 
                     var release = new ReleaseInfo
                     {
@@ -218,6 +214,12 @@ namespace Jackett.Common.Indexers
             if (!url.StartsWith("http"))
                 return SiteLink + url.TrimStart('/');
             return url;
+        }
+
+        private string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 

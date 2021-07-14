@@ -2,15 +2,18 @@
 id: yourbittorrent
 name: YourBittorrent
 description: "YourBittorrent is a Public torrent index"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
   - https://yourbittorrent.com/
   - https://yourbittorrent2.com/
-  - https://yourbittorrent.nocensor.space/
+  - https://yourbittorrent.nocensor.sbs/
 legacylinks:
   - https://yourbittorrent.host/
+  - https://yourbittorrent.nocensor.space/
+  - https://yourbittorrent.nocensor.work/
+  - https://yourbittorrent.nocensor.biz/
 
 caps:
   categorymappings:
@@ -79,7 +82,7 @@ search:
           args: ".torrent"
     size:
       selector: td:nth-child(3)
-    date:
+    date_day:
       selector: td:nth-child(4):not(:contains("/"))
       optional: true
       filters:
@@ -88,7 +91,7 @@ search:
         - name: replace
           args: ["Yesterday", "1 day"]
         - name: timeago
-    date:
+    date_year:
       selector: td:nth-child(4):contains("/")
       optional: true
       filters:
@@ -96,6 +99,8 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "02/01/06 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     seeders:
       selector: td:nth-child(5)
     leechers:

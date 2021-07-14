@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             webclient.EmulateBrowser = false; // Animebytes doesn't like fake user agents (issue #1535)

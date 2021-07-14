@@ -56,8 +56,10 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAniDub())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "semi-private";
+
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "392E98CE1447B59CA62BAB8824CA1EEFC2ED3D37");
 
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Аниме TV / Законченные сериалы");

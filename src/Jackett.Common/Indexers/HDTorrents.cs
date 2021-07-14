@@ -38,8 +38,11 @@ namespace Jackett.Common.Indexers
         {
             "https://hdts.ru/",
             "https://hd-torrents.org/",
-            "https://hd-torrents.net/",
             "https://hd-torrents.me/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://hd-torrents.net/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
@@ -74,7 +77,7 @@ namespace Jackett.Common.Indexers
                        "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             // Movie
@@ -143,8 +146,8 @@ namespace Jackett.Common.Indexers
                 {"options", "0"}
             };
 
-            // manually url encode parenthesis to prevent "hacking" detection
-            searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29");
+            // manually url encode parenthesis to prevent "hacking" detection, remove . as not used in titles
+            searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29").Replace(".", " ");
 
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
             try

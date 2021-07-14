@@ -41,23 +41,24 @@ namespace Jackett.Common.Services
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
             {"audiobooktorrents", "abtorrents"},
+            {"baibako", "rudub"},
             {"broadcastthenet", "broadcasthenet"},
-            {"cili180", "cilipro"},
-            {"hdreactor", "hdhouse"},
+            {"casatorrent", "teamctgame"},
             {"icetorrent", "speedapp"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
+            {"kisssub", "miobt"},
             {"leaguehd", "lemonhd"},
-            {"liaorencili", "cilipro"},
+            {"legacyhd", "reelflix"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
             {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
-            {"skytorrentsclone2", "skytorrents-to"},
+            {"seals", "greatposterwall"},
             {"tehconnectionme", "anthelion"},
+            {"todotorrents", "dontorrent"},
             {"torrentgalaxyorg", "torrentgalaxy"},
-            {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
             {"xtremezone", "speedapp"},
             {"yourexotic", "exoticaz"}
@@ -309,7 +310,7 @@ namespace Jackett.Common.Services
             logger.Info($"Test search in {indexer.DisplayName} => Found {result.Releases.Count()} releases");
 
             if (!result.Releases.Any())
-                throw new Exception("Found no results while trying to browse this tracker");
+                throw new Exception($"Test search in {indexer.DisplayName} => Found no results while trying to browse this tracker");
         }
 
         public void DeleteIndexer(string name)

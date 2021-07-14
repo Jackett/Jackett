@@ -2,7 +2,7 @@
 id: concertos
 name: Concertos
 description: "Concertos - Private site for Live Concerts with Strict Quality Control"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -111,7 +111,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     downloadvolumefactor:

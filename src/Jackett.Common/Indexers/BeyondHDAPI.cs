@@ -50,10 +50,10 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataAPIKeyAndRSSKey())
+                   configData: new ConfigurationDataAPIKeyAndRSSKey("Find the API and RSS keys under your security settings (your profile picture -> my security)"))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping("Movies", TorznabCatType.Movies);
@@ -90,20 +90,13 @@ namespace Jackett.Common.Indexers
             {
                 { BHDParams.action, "search" },
                 { BHDParams.rsskey, configData.RSSKey.Value },
-                { BHDParams.search, query.SanitizedSearchTerm },
+                { BHDParams.search, query.GetQueryString() },
             };
 
             if (query.IsTVSearch)
-            {
                 postData.Add(BHDParams.categories, "TV");
-
-                if (query.Season != 0)
-                    postData[BHDParams.search] = $"{query.SanitizedSearchTerm} {query.GetEpisodeSearchString()}";
-            }
             else if (query.IsMovieSearch)
-            {
                 postData.Add(BHDParams.categories, "Movies");
-            }
 
             var imdbId = ParseUtil.GetImdbID(query.ImdbID);
             if (imdbId != null)

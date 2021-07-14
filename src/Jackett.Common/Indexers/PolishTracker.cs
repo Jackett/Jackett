@@ -61,7 +61,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
-            Language = "pl-pl";
+            Language = "pl-PL";
             Type = "private";
 
             configData.AddDynamic("LanguageTitle", new BoolConfigurationItem("Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr") { Value = false });

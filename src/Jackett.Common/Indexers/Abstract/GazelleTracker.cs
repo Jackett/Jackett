@@ -29,6 +29,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected virtual string PosterUrl => SiteLink;
         protected virtual string AuthorizationFormat => "{0}";
         protected virtual int ApiKeyLength => 41;
+        protected virtual string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "usetoken=0");
 
         protected bool useTokens;
         protected string cookie = "";
@@ -191,19 +192,28 @@ namespace Jackett.Common.Indexers.Abstract
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
 
-            searchUrl += "?" + queryCollection.GetQueryString();
+            // remove . as not used in titles
+            searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
 
             var apiKey = configData.ApiKey;
             var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
             // we get a redirect in html pages and an error message in json response (api)
-            if (response.IsRedirect || (response.ContentString != null && response.ContentString.Contains("\"bad credentials\"")))
+            if (response.IsRedirect && !useApiKey)
             {
-                // re-login
+                // re-login only if API key is not in use.
                 await ApplyConfiguration(null);
                 response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
+            else if (response.ContentString != null && response.ContentString.Contains("failure") && useApiKey)
+            {
+                // reason for failure should be explained.
+                var jsonError = JObject.Parse(response.ContentString);
+                var errorReason = (string)jsonError["error"];
+                throw new Exception(errorReason);
+            }
+
 
             try
             {
@@ -387,10 +397,11 @@ namespace Jackett.Common.Indexers.Abstract
                 var html = Encoding.GetString(content);
                 if (html.Contains("You do not have any freeleech tokens left.")
                     || html.Contains("You do not have enough freeleech tokens")
-                    || html.Contains("This torrent is too large."))
+                    || html.Contains("This torrent is too large.")
+                    || html.Contains("You cannot use tokens here"))
                 {
                     // download again with usetoken=0
-                    var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");
+                    var requestLinkNew = FlipOptionalTokenString(requestLink);
                     content = await base.Download(new Uri(requestLinkNew), RequestType.GET, headers: headers);
                 }
             }

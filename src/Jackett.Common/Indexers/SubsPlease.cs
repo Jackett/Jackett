@@ -22,7 +22,13 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://subsplease.org/",
-            "https://subsplease.nocensor.space/"
+            "https://subsplease.nocensor.sbs/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://subsplease.nocensor.space/",
+            "https://subsplease.nocensor.work/",
+            "https://subsplease.nocensor.biz/"
         };
 
         private string ApiEndpoint => SiteLink + "/api/?";
@@ -47,7 +53,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "public";
 
             // Configure the category mappings

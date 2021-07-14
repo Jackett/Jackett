@@ -2,7 +2,7 @@
 id: rustorka
 name: Rustorka
 description: "Rustorka is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / GENERAL"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:

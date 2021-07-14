@@ -94,7 +94,7 @@ namespace Jackett.Server
 
             builder.Populate(services);
             builder.RegisterModule(new JackettModule(runtimeSettings));
-            builder.RegisterType<SecuityService>().As<ISecuityService>().SingleInstance();
+            builder.RegisterType<SecurityService>().As<ISecurityService>().SingleInstance();
             builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
             builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
             builder.RegisterType<CacheService>().As<ICacheService>().SingleInstance();

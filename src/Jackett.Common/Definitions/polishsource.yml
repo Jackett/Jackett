@@ -2,7 +2,7 @@
 id: polishsource
 name: PolishSource
 description: "PolishSource (PS) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: pl-pl
+language: pl-PL
 type: private
 encoding: ISO-8859-2
 links:
@@ -131,7 +131,7 @@ search:
     download:
       selector: a[href^="downloadssl.php?id="]
       attribute: href
-    description:
+    genre:
       optional: true
       selector: td:nth-child(2) > small
       filters:
@@ -139,23 +139,21 @@ search:
           args: "Genre: "
         - name: append
           args: "\n<br>"
-    description:
+    language:
       optional: true
       selector: img[src="pic/pl.png"]
       filters:
         - name: append
           args: "Language: polish\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    description:
+    subbed:
       optional: true
       selector: img[src="pic/napisy.png"]
       filters:
         - name: append
           args: "Subbed\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    imdb:
+    description:
+      text: "{{ .Result.genre }}{{ .Result.language }}{{ .Result.subbed }}"
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
     date:
       selector: td:nth-child(4)
@@ -168,9 +166,6 @@ search:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(7)
     leechers:

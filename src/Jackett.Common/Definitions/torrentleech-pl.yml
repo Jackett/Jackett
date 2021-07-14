@@ -2,7 +2,7 @@
 id: torrentleech-pl
 name: Torrentleech.pl
 description: "Torrentleech.pl is a POLISH Private Torrent Tracker for 0DAY / GENERAL"
-language: pl-pl
+language: pl-PL
 type: private
 encoding: UTF-8
 links:
@@ -115,25 +115,23 @@ search:
     download:
       selector: a[href^="download.php/"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    description:
+    language:
       optional: true
       selector: img[src="pic/pl.jpg"]
       filters:
         - name: append
           args: "Language: polish\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    description:
+    subbed:
       optional: true
       selector: img[src="pic/napisy.gif"]
       filters:
         - name: append
           args: "Subbed\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
+    description:
+      text: "{{ .Result.language }}{{ .Result.subbed }}"
     date:
       selector: td:nth-child(4)
       filters:
@@ -145,9 +143,6 @@ search:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(7)
       filters:
@@ -164,4 +159,7 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a

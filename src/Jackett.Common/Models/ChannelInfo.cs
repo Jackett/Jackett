@@ -13,7 +13,7 @@ namespace Jackett.Common.Models
         public ChannelInfo()
         {
             // Set default values
-            Language = "en-us";
+            Language = "en-US";
             Category = "search";
         }
     }

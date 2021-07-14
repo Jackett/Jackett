@@ -7,42 +7,25 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentview36.com/
+  - https://torrentview57.com/
 legacylinks:
   - https://torrentview.net/
-  - https://torrentview3.net/
-  - https://torrentview4.net/
-  - https://torrentview5.net/
-  - https://torrentview6.net/
-  - https://torrentview7.net/
-  - https://torrentview8.net/
-  - https://torrentview9.net/
-  - https://torrentview10.net/
-  - https://torrentview11.net/
-  - https://torrentview12.net/
-  - https://torrentview13.net/
-  - https://torrentview14.net/
-  - https://torrentview15.net/
-  - https://torrentview16.net/
-  - https://torrentview17.net/
-  - https://torrentview18.net/
-  - https://torrentview19.net/
-  - https://torrentview20.net/
-  - https://torrentview21.net/
-  - https://torrentview22.net/
-  - https://torrentview23.net/
-  - https://torrentview24.com/
-  - https://torrentview25.com/
-  - https://torrentview26.com/
-  - https://torrentview27.com/
-  - https://torrentview28.com/
-  - https://torrentview29.com/
-  - https://torrentview30.com/
-  - https://torrentview31.com/
-  - https://torrentview32.com/
-  - https://torrentview33.com/
-  - https://torrentview34.com/
-  - https://torrentview35.com/
+  - https://torrentview.co/
+  - https://torrentview36.com/
+  - https://torrentview37.com/
+  - https://torrentview38.com/
+  - https://torrentview39.com/
+  - https://torrentview40.com/
+  - https://torrentview41.com/
+  - https://torrentview42.com/
+  - https://torrentview44.com/
+  - https://torrentview45.com/
+  - https://torrentview46.com/
+  - https://torrentview47.com/
+  - https://torrentview49.com/
+  - https://torrentview50.com/
+  - https://torrentview52.com/
+  - https://torrentview53.com/
 
 caps:
   categorymappings:
@@ -106,11 +89,6 @@ search:
       # 2020-03-28T01:30:01+09:00
       selector: time
       attribute: datetime
-      filters:
-        - name: replace
-          args: ["T", " "]
-        - name: dateparse
-          args: "2006-01-02 15:04:05-07:00"
     cat:
       selector: div.media-heading > a[href^="./board.php"]
       attribute: href

@@ -2,7 +2,7 @@
 id: rus-media
 name: Rus-media
 description: "Rus-media is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: UTF-8
 links:
@@ -279,6 +279,14 @@ caps:
     book-search: [q]
 
 settings:
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: false
+  - name: addrussian
+    type: checkbox
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -327,15 +335,42 @@ search:
           args: f
     title:
       selector: a.topictitle
+      filters:
+        - name: replace
+          args: ["Кураж-Бамбей", "kurazh"]
+        - name: replace
+          args: ["Кубик в Кубе", "Kubik"]
+        - name: replace
+          args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
+        - name: replace
+          args: ["Лицензия", "Lic"]
+        - name: replace
+          args: ["селезень", "selezen"]
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["[\\:\\-\\/\\|\\[\\]]", " "]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
+        - name: replace
+          args: [" Rip", "Rip"]
+        - name: replace
+          args: ["WEB DL", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
     details:
       selector: a.topictitle
       attribute: href
     download:
       selector: a.topictitle
       attribute: href
-    size:
-      text: "0 B"
-    size:
+    size_optional:
       selector: td:nth-of-type(5) p:not(:empty)
       optional: true
       filters:
@@ -347,17 +382,27 @@ search:
           args: ["МБ", "MB"]
         - name: replace
           args: ["КБ", "KB"]
-    seeders:
-      text: 0
-    seeders:
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    seeders_optional:
       selector: span.seed
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: span.leech
       optional: true
-    date:
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    date_minutes:
+      # 55 минут назад
+      selector: td:nth-of-type(6) p:nth-of-type(1):contains("минут")
+      optional: true
+      filters:
+        - name: replace
+          args: ["минут назад", "minutes ago"]
+        - name: timeago
+    date_day:
       # Сегодня, 03:04
       # Вчера, 22:47
       selector: td:nth-of-type(6) p:nth-of-type(1):contains("Сегодня"),  td:nth-of-type(6) p:contains("Вчера")
@@ -367,9 +412,9 @@ search:
           args: ["Сегодня", "Today"]
         - name: replace
           args: ["Вчера", "Yesterday"]
-    date:
+    date_year:
       # 12 янв 2019, 12:47
-      selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера"))
+      selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера")):not(:contains("минут"))
       optional: true
       filters:
         # replace month abbreviations
@@ -403,6 +448,8 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "02 Jan 2006 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_minutes }}{{ or .Result.date_year .Result.date_day .Result.date_minutes }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

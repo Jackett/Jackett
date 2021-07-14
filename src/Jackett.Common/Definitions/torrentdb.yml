@@ -2,7 +2,7 @@
 id: torrentdb
 name: TorrentDB
 description: "TorrentDB - Private site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -19,7 +19,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep] # see #12156 for why imdbid and tvdbid are not defined.
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
 
@@ -83,6 +83,10 @@ search:
     direction: "{{ .Config.type }}"
     qty: 100
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
     selector: table > tbody > tr
     filters:
@@ -117,7 +121,7 @@ search:
       selector: td:nth-child(9)
     leechers:
       selector: td:nth-child(10)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

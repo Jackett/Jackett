@@ -2,7 +2,7 @@
 id: torrentoyunindir
 name: Torrent Oyun indir
 description: "Torrent Oyun indir is a TURKISH Public torrent site for GAMES"
-language: tr
+language: tr-TR
 type: public
 encoding: UTF-8
 links:
@@ -28,6 +28,8 @@ search:
 
   rows:
     selector: div.moviefilm
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -43,7 +45,6 @@ search:
     description:
       selector: a > span
       attribute: class
-      optional: true
     poster:
       selector: img
       attribute: src

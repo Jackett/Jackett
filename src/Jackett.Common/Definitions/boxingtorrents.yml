@@ -2,7 +2,7 @@
 id: boxingtorrents
 name: Boxing Torrents
 description: "Boxing Torrents is a Private Torrent Tracker for BOXING"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -127,9 +127,6 @@ search:
       selector: td:nth-last-child(5)
     grabs:
       selector: td:nth-last-child(4)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(3)
     leechers:

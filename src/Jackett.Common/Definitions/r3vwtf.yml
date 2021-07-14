@@ -2,7 +2,7 @@
 id: r3vwtf
 name: R3V WTF!
 description: "R3V WTF! is a Private site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -27,7 +27,6 @@ caps:
     - {id: 40, cat: Audio/Video, desc: "Music Videos"}
     - {id: 22, cat: Audio/Lossless, desc: "Music/Flac"}
     - {id: 51, cat: PC/Games, desc: "PC  GAMES"}
-    - {id: 52, cat: Other/Misc, desc: "ThE CoLLeCtiVe"}
     - {id: 23, cat: TV, desc: "Tv/Packs"}
     - {id: 16, cat: TV/HD, desc: "Tv/x264"}
     - {id: 49, cat: TV/HD, desc: "Tv/X265"}
@@ -97,7 +96,7 @@ search:
           args: "src=\\\\'(.+?)\\\\'"
     files:
       selector: td:nth-last-child(8)
-    date:
+    date_year:
       # Jul 4 2019 08:04 AM
       selector: td:nth-last-child(6):not(:contains("day"))
       optional: true
@@ -106,18 +105,17 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
-    date:
+    date_day:
       # Today 02:40 PM
       # Yesterday 09:10 AM
       selector: td:nth-last-child(6):contains("day")
       optional: true
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(5)
     grabs:
       selector: td:nth-last-child(4)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(3)
     leechers:

@@ -2,7 +2,7 @@
 id: zamundanet
 name: Zamunda.net
 description: "Zamunda is a BULGARIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: bg-bg
+language: bg-BG
 type: private
 encoding: windows-1251
 links:
@@ -26,8 +26,9 @@ caps:
     - {id: 42, cat: Movies/BluRay, desc: "Blu-ray"}
     - {id: 46, cat: Movies/3D, desc: "Movies/3D"}
     # Serial
-    - {id: 7, cat: TV/SD, desc: "Serial"}
-    - {id: 33, cat: TV/HD, desc: "Serial/HD"}
+    - {id: 7, cat: TV/SD, desc: "Series"}
+    - {id: 33, cat: TV/HD, desc: "Series/HD"}
+    - {id: 55, cat: TV, desc: "Series/Russia"}
     # Music
     - {id: 6, cat: Audio, desc: "Music"}
     - {id: 29, cat: Audio/Video, desc: "Music/DVD-R"}
@@ -119,7 +120,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    incldead: 1
+    # blank = incldead
+    incldead: ""
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -152,9 +154,6 @@ search:
       attribute: href
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(6)
     date:

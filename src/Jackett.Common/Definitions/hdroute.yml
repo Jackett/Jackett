@@ -2,7 +2,7 @@
 id: hdroute
 name: HDRoute
 description: "HDRoute is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
@@ -79,7 +79,7 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
-    imdb:
+    imdbid:
       selector: div.torrent-imdb
       attribute: href
     poster:

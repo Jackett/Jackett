@@ -32,12 +32,12 @@ namespace Jackett.Common.Indexers
             public static string Otro => "Otro";
         }
 
-        private const string NewTorrentsUrl = "secciones.php?sec=ultimos_torrents";
         private const string SearchUrl = "secciones.php";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://www.mejortorrento.net/",
-            "https://mejortorrent.nocensor.space/"
+            "https://www.mejortorrentes.org/",
+            "https://mejortorrent.unblockit.llc/",
+            "https://mejortorrent.nocensor.sbs/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -50,7 +50,20 @@ namespace Jackett.Common.Indexers
             "https://www.mejortorrents.net/",
             "https://www.mejortorrents1.com/",
             "https://www.mejortorrents1.net/",
-            "https://www.mejortorrento.com/"
+            "https://www.mejortorrento.com/",
+            "https://www.mejortorrento.org/",
+            "https://www.mejortorrento.net/",
+            "https://www.mejortorrento.info/",
+            "https://mejortorrent.nocensor.space/",
+            "https://www.mejortorrentes.com/",
+            "https://www.mejortorrento.info/",
+            "https://mejortorrent.nocensor.work/",
+            "https://www.mejortorrentes.net/",
+            "https://mejortorrent.unblockit.how/",
+            "https://mejortorrent.unblockit.tv/",
+            "https://mejortorrent.unblockit.cam/",
+            "https://mejortorrent.unblockit.day/",
+            "https://mejortorrent.nocensor.biz/"
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
@@ -58,7 +71,7 @@ namespace Jackett.Common.Indexers
             : base(id: "mejortorrent",
                    name: "MejorTorrent",
                    description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
-                   link: "https://www.mejortorrento.com/",
+                   link: "https://www.mejortorrentes.org/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -82,13 +95,13 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-ES";
             Type = "public";
 
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."));
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
 
             AddCategoryMapping(MejorTorrentCatType.Pelicula, TorznabCatType.Movies, "Pelicula");
             AddCategoryMapping(MejorTorrentCatType.Serie, TorznabCatType.TVSD, "Serie");
@@ -111,15 +124,15 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            if (string.IsNullOrEmpty(query.SearchTerm))
+                query.SearchTerm = "Historia";
             var matchWords = ((BoolConfigurationItem)configData.GetDynamic("MatchWords")).Value;
             matchWords = query.SearchTerm != "" && matchWords;
 
             // we remove parts from the original query
             query = ParseQuery(query);
 
-            var releases = string.IsNullOrEmpty(query.SearchTerm) ?
-                await PerformQueryNewest(query) :
-                await PerformQuerySearch(query, matchWords);
+            var releases = await PerformQuerySearch(query, matchWords);
 
             return releases;
         }
@@ -157,60 +170,6 @@ namespace Jackett.Common.Indexers
             // Eg https://www.mejortorrentt.net/tor/peliculas/Harry_Potter_1_y_la_Piedra_Filosofal_MicroHD_1080p.torrent
             var content = await base.Download(new Uri(downloadUrl));
             return content;
-        }
-
-        private async Task<List<ReleaseInfo>> PerformQueryNewest(TorznabQuery query)
-        {
-            var releases = new List<ReleaseInfo>();
-            var url = SiteLink + NewTorrentsUrl;
-            var result = await RequestWithCookiesAsync(url);
-            if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
-            try
-            {
-                var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.ContentString);
-
-                var container = doc.QuerySelector("#main_table_center_center1 table div");
-                var parsedDetailsLink = new List<string>();
-                string rowTitle = null;
-                string rowDetailsLink = null;
-                string rowPublishDate = null;
-                string rowQuality = null;
-
-                foreach (var row in container.Children)
-                    if (row.TagName.Equals("A"))
-                    {
-                        rowTitle = row.TextContent;
-                        rowDetailsLink = SiteLink + row.GetAttribute("href");
-                    }
-                    else if (rowPublishDate == null && row.TagName.Equals("SPAN"))
-                        rowPublishDate = row.TextContent;
-                    else if (rowPublishDate != null && row.TagName.Equals("SPAN"))
-                        rowQuality = row.TextContent;
-                    else if (row.TagName.Equals("BR"))
-                    {
-                        // we add parsed items to rowDetailsLink to avoid duplicates in newest torrents
-                        // list results
-                        if (!parsedDetailsLink.Contains(rowDetailsLink))
-                        {
-                            await ParseRelease(releases, rowTitle, rowDetailsLink, null,
-                                rowPublishDate, rowQuality, query, false);
-                            parsedDetailsLink.Add(rowDetailsLink);
-                        }
-                        // clean the current row
-                        rowTitle = null;
-                        rowDetailsLink = null;
-                        rowPublishDate = null;
-                        rowQuality = null;
-                    }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(result.ContentString, ex);
-            }
-
-            return releases;
         }
 
         private async Task<List<ReleaseInfo>> PerformQuerySearch(TorznabQuery query, bool matchWords)
@@ -330,9 +289,9 @@ namespace Jackett.Common.Indexers
                     continue;
 
                 // guess size
-                var size = 524288000L; // 500 MB
+                var size = 536870912L; // 512 MB
                 if (episodeTitle.ToLower().Contains("720p"))
-                    size = 1288490188L; // 1.2 GB
+                    size = 1073741824L; // 1 GB
 
                 var release = GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, episodePublish, size);
                 releases.Add(release);

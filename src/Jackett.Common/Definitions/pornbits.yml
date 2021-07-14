@@ -2,7 +2,7 @@
 id: pornbits
 name: Pornbits
 description: "Pornbits (PB) is a Private Torrent Tracker for 3X"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -80,26 +80,25 @@ search:
     poster:
       selector: div.torrent-name-hover img
       attribute: src
-    date:
+    date_day:
       selector: td:nth-child(4) div:nth-child(2):contains("ago")
       optional: true
       filters:
         - name: timeago
-    date:
+    date_year:
       selector: td:nth-child(4) div:nth-child(2):contains("-")
       optional: true
       filters:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "3:04pm 2006-01-02 -07:00"
+          args: "3:04pm 2006-1-2 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(5) div:nth-child(1)
     files:
       selector: td:nth-child(5) div:nth-child(2)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(6)
     leechers:

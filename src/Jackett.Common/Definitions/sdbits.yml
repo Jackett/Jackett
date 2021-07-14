@@ -2,7 +2,7 @@
 id: sdbits
 name: SDBits
 description: "SDBits is a small tracker that focuses on SD movies and tv."
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -103,9 +103,6 @@ search:
       selector: td:nth-child(6)
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(8)
     leechers:
@@ -115,7 +112,7 @@ search:
       filters:
         - name: append
           args: " ago"
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     downloadvolumefactor:

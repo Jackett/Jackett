@@ -2,7 +2,7 @@
 id: unionfansub
 name: Union Fansub
 description: "Union Fansub is a SPANISH Semi private torrent site focused on ANIME"
-language: es-es
+language: es-ES
 type: semi-private
 encoding: UTF-8
 links:
@@ -114,15 +114,7 @@ search:
     files:
       selector: td:nth-last-child(8)
     size:
-      # 1,36 GB
-      # 296,98 MB
-      # 1.018,29 MB
       selector: td:nth-last-child(5)
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: td:nth-last-child(4)
     seeders:

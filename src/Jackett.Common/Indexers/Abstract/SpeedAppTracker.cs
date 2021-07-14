@@ -141,6 +141,9 @@ namespace Jackett.Common.Indexers.Abstract
                     if (UseP2PReleaseName && !string.IsNullOrWhiteSpace(row.Value<string>("p2p_release_name")))
                         title = row.Value<string>("p2p_release_name");
 
+                    if (!query.IsImdbQuery && !query.MatchQueryStringAND(title))
+                        continue;
+
                     var release = new ReleaseInfo
                     {
                         Title = title,

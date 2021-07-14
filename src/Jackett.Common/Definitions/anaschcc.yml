@@ -2,7 +2,7 @@
 id: anaschcc
 name: anasch.cc
 description: "anasch.cc is a Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -104,7 +104,7 @@ search:
     download:
       selector: td a[href^="download.php"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href^="index.php?page=torrent-details"]
       attribute: onmouseover
       filters:
@@ -140,9 +140,6 @@ search:
       selector: td:nth-child(8)
     grabs:
       selector: td:nth-child(9)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     downloadvolumefactor:
       case:
         img[src*="freeleech.png"]: 0

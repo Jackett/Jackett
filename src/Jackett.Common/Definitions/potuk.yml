@@ -2,7 +2,7 @@
 id: potuk
 name: PotUK
 description: "PotUK - Private site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -120,6 +120,10 @@ search:
     # supports only single cat search, so defaulting to all
     - path: "index.php?torrents/&freeleech={{ if .Config.freeleech }}1{{ else }}{{ end }}&filename={{ .Keywords }}"
     # imdb and tmdb not supported
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
 
   rows:
     selector: table.dataList-table > tbody.normal-torrents > tr

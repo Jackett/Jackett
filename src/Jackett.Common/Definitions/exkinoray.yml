@@ -2,11 +2,13 @@
 id: exkinoray
 name: ExKinoRay
 description: "ExKinoRay is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - http://exkinoray.tv/ # site forces http, does not support https
+  - http://exkinoray.fun/ # site does not support https
+legacylinks:
+  - http://exkinoray.tv/
 
 caps:
   categorymappings:

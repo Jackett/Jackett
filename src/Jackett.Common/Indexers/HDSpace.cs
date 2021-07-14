@@ -55,10 +55,10 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
-            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."));
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
             AddCategoryMapping(19, TorznabCatType.MoviesHD, "Movie / 1080p");
@@ -126,7 +126,8 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", query.GetQueryString());
             }
 
-            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString());
+            // remove . as not used in titles
+            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString().Replace(".", " "));
 
             try
             {
@@ -141,9 +142,11 @@ namespace Jackett.Common.Indexers
                     if (prev == null || !string.Equals(prev.NodeName, "style", StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 86400; // 24 hours
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 86400 // 24 hours
+                    };
 
                     var qLink = row.Children[1].FirstElementChild;
                     release.Title = qLink.TextContent.Trim();

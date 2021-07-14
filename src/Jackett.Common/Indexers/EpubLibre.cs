@@ -45,7 +45,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.epublibre.org/",
-            "https://epublibre.unblockit.uno/"
+            "https://epublibre.unblockit.llc/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -58,7 +58,16 @@ namespace Jackett.Common.Indexers
             "https://epublibre.unblockit.club/",
             "https://epublibre.org/",
             "https://epublibre.unblockit.onl/",
-            "https://epublibre.unblockit.li/"
+            "https://epublibre.unblockit.uno/",
+            "https://epublibre.unblockit.ch/",
+            "https://epublibre.unblockit.ws/",
+            "https://epublibre.unblockit.li/",
+            "https://epublibre.unblockit.kim/",
+            "https://epublibre.unblockit.bz/",
+            "https://epublibre.unblockit.how/",
+            "https://epublibre.unblockit.tv/",
+            "https://epublibre.unblockit.day/",
+            "https://epublibre.unblockit.cam/"
         };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -82,7 +91,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-ES";
             Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.BooksEBook);

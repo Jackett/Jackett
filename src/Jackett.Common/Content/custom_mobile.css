@@ -231,7 +231,7 @@ pre {
     white-space: nowrap;
 }
 
-.dataTables_length select, .dataTables_filter input, .dataTable.compact tfoot td select {
+.dataTables_filter input, select {
     display: inline-block;
     height: 26px;
     padding: 0 8px;
@@ -282,6 +282,14 @@ table td.fit{
 
 .label-imdb {
     background-color: #d0ab44;
+}
+
+.label-tmdb {
+    background-color: #86cca8;
+}
+
+.tooltip {
+    pointer-events: none;
 }
 
 .tooltip-inner {

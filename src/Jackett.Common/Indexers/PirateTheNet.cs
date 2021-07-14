@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show the maximum."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");

@@ -2,7 +2,7 @@
 id: dark-shadow
 name: Dark-Shadow
 description: "Dark-Shadow is a German Private site for TV / MOVIES / GENERAL"
-language: de-de
+language: de-DE
 type: private
 encoding: UTF-8
 links:
@@ -12,31 +12,30 @@ legacylinks:
 
 caps:
   categorymappings:
-    # Film
-    - {id: 119, cat: Movies/DVD, desc: "Film DVD"}
-    - {id: 114, cat: Movies/UHD, desc: "Film 4K/2160p"}
-    - {id: 28, cat: Movies/SD, desc: "Film XviD/x264"}
-    - {id: 32, cat: Movies/HD, desc: "Film 720p/1080p"}
-    - {id: 26, cat: Movies/3D, desc: "Film 3D"}
+    # Movie
+    - {id: 28, cat: Movies/SD, desc: "Filme SD"}
+    - {id: 32, cat: Movies/HD, desc: "Filme HD"}
+    - {id: 114, cat: Movies/UHD, desc: "Filme UHD"}
+    - {id: 138, cat: Movies, desc: "Filme Pack`s"}
     # Serien
-    - {id: 57, cat: TV/HD, desc: "Serien HD"}
-    - {id: 59, cat: TV, desc: "Serien Pack"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
-    - {id: 122, cat: TV, desc: "Serien Show"}
-    - {id: 123, cat: TV/Documentary, desc: "Serien Doku"}
+    - {id: 57, cat: TV/HD, desc: "Serien HD"}
+    - {id: 139, cat: TV/UHD, desc: "Serien UHD"}
+    - {id: 59, cat: TV, desc: "Serien Pack`s"}
     # Audio
-    - {id: 120, cat: Audio/Video, desc: "Audio Video"}
+    - {id: 110, cat: Audio/MP3, desc: "Audio MP3"}
     - {id: 48, cat: Audio/Lossless, desc: "Audio Flac"}
     - {id: 52, cat: Audio, desc: "Audio Pack"}
-    - {id: 110, cat: Audio/MP3, desc: "Audio MP3"}
-    - {id: 63, cat: Audio/Audiobook, desc: "Hörbuch"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Audio Hörbuch"}
+    - {id: 120, cat: Audio/Video, desc: "Audio Videos"}
     # App
     - {id: 12, cat: PC/0day, desc: "App PC"}
     - {id: 11, cat: PC/Mobile-Other, desc: "App Mobil"}
     - {id: 125, cat: PC/Mac, desc: "App macOS"}
     # Doku
-    - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
+    - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
+    - {id: 123, cat: TV/Documentary, desc: "Doku Reihe"}
     # Spiel
     - {id: 126, cat: Console/Other, desc: "Spiel Mobil"}
     - {id: 17, cat: PC/Games, desc: "Spiel PC"}
@@ -45,21 +44,19 @@ caps:
     # Sport
     - {id: 61, cat: TV/Sport, desc: "Sport HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport SD"}
-    # Sonstiges
-    - {id: 64, cat: TV/Anime, desc: "Anime"}
-    - {id: 96, cat: Books/EBook, desc: "E-Book"}
-    - {id: 71, cat: Other, desc: "Other"}
+    # Paper
+    - {id: 96, cat: Books/Mags, desc: "ePaper Zeitungen"}
+    - {id: 136, cat: Books/EBook, desc: "ePaper E-Book"}
+    - {id: 137, cat: Books/Comics, desc: "ePaper Comics"}
     # XXX
+    - {id: 76, cat: XXX/XviD, desc: "XXX SD"}
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
-    - {id: 76, cat: XXX/XviD, desc: "XXX SD"}
-    - {id: 124, cat: XXX/Other, desc: "XXX Clips"}
-    - {id: 133, cat: XXX/Other, desc: "XXX A/E-book"}
     #  Internal
-    - {id: 128, cat: Movies/HD, desc: "Internal Film HD"}
     - {id: 129, cat: Movies/SD, desc: "Internal Film SD"}
+    - {id: 128, cat: Movies/HD, desc: "Internal Film HD"}
+    - {id: 131, cat: TV/SD, desc: "Internal Serie SD"}
     - {id: 130, cat: TV/HD, desc: "Internal Serien HD"}
-    - {id: 131, cat: TV/SD, desc: "Internal Serien SD"}
     - {id: 132, cat: Other, desc: "Internal Sonstiges"}
 
   modes:
@@ -138,68 +135,28 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # 0 name, 1 descr, 2 both
-    blah: 0
+    # name searching is broken. #10788
+    blah: 1
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
   rows:
     selector: "div.selection_wrap{{ if .Config.freeleech }}:root:has(div.onlyup){{ else }}{{ end }}"
+    filters:
+      - name: andmatch
 
   fields:
-    category:
-      selector: div.kat_cat_pic
-      case:
-        # Movies
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": "119"
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"2160p\"))": "114"
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"x264\"))": "28"
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"1080p\"))": "32"
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"3D\"))": "26"
-        # Serien
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "57"
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "59"
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "60"
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Show\"))": "122"
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Doku\"))": "123"
-        # Audio
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Videos\"))": "120"
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": "48"
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "52"
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"MP3\"))": "110"
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Hörbuch\"))": "63"
-        # App
-        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": "12"
-        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Mobil\"))": "11"
-        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"macOS\"))": "125"
-        # Doku
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "14"
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "15"
-        # Spiel
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Mobil\"))": "126"
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": "17"
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Konsole\"))": "24"
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": "121"
-        # Sport
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "61"
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "62"
-        # Sonstiges
-        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Anime\"))": "64"
-        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"E-Book\"))": "96"
-        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Other\"))": "71"
-        # XXX
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": "73"
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": "75"
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": "76"
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Clips\"))": "124"
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"book\"))": "133"
-        # Internal
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film HD\"))": "128"
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film SD\"))": "129"
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Serien HD\"))": "130"
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Serien SD\"))": "131"
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": "132"
+    cat_p1:
+      selector: div.kat_cat_pic_name
+    cat_p2:
+      selector: div.kat_cat_pic_name_b
+    categorydesc:
+      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
     title:
       selector: a.selection_a
+      filters:
+        - name: re_replace
+          args: ["^(\\[.*\\])(.*)", "$2"]
     details:
       selector: a.selection_a
       attribute: href
@@ -212,26 +169,14 @@ search:
     poster:
       selector: div[id^="details"] img
       attribute: src
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
       selector: div.selection_unter_ad
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: div.selection_unter_ae
-      filters:
-        - name: trim
-          args: "x"
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
-    date:
+    date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
       selector: div.selection_unter_ab:not(:contains("."))
@@ -243,7 +188,7 @@ search:
           args: ["Gestern", "Yesterday"]
         - name: append
           args: " +01:00" # CET
-    date:
+    date_year:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
       optional: true
@@ -254,23 +199,14 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     description:
       selector: selection_unter_af
-      optional: true
     seeders:
       selector: div.selection_unter_aa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     leechers:
       selector: div.selection_unter_aaa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     downloadvolumefactor:
       case:
         ":root:has(div.onlyup)": 0
@@ -282,4 +218,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# Engine n/a
+# engine n/a

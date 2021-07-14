@@ -1,8 +1,8 @@
 ---
 id: theleachzone
 name: TheLeachZone
-description: "The Leach Zone is a Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-us
+description: "The Leach Zone (TLZ) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -11,21 +11,24 @@ links:
 caps:
   categorymappings:
     - {id: 21, cat: PC, desc: "Appz"}
+    - {id: 35, cat: Books/Comics, desc: "Comics/Mags"}
     - {id: 27, cat: Books/EBook, desc: "E-Books"}
-    - {id: 22, cat: PC/Games, desc: "Games"}
     - {id: 28, cat: Console, desc: "Games/Console"}
+    - {id: 22, cat: PC/Games, desc: "Games"}
     - {id: 33, cat: PC/Games, desc: "Games/PC"}
-    - {id: 32, cat: Console, desc: "Games/Roms"}
     - {id: 23, cat: Other, desc: "Misc"}
-    - {id: 31, cat: Movies/3D, desc: "Movies/3D"}
-    - {id: 26, cat: Movies/3D, desc: "Movies/Cam"}
+    - {id: 26, cat: Movies/SD, desc: "Movies/Cam"}
+    - {id: 36, cat: Movies/Foreign, desc: "Movies/Foreign"}
     - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
     - {id: 3, cat: Movies, desc: "Movies/Packs"}
     - {id: 24, cat: Movies/SD, desc: "Movies/SD"}
     - {id: 30, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 37, cat: Movies/WEB-DL, desc: "Movies/Web-DL"}
     - {id: 20, cat: Audio/Lossless, desc: "Music/FLAC"}
     - {id: 4, cat: Audio/MP3, desc: "Music/MP3"}
     - {id: 17, cat: Audio, desc: "Music/Packs"}
+    - {id: 34, cat: Audio/Video, desc: "Music/Video"}
+    - {id: 31, cat: TV/Anime, desc: "TV/Anime"}
     - {id: 18, cat: TV/HD, desc: "TV/HD"}
     - {id: 16, cat: TV, desc: "TV/Packs"}
     - {id: 19, cat: TV/SD, desc: "TV/SD"}
@@ -108,6 +111,8 @@ search:
 
   rows:
     selector: table.table-bordered tr:has(a[href^="download.php?torrent="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -125,17 +130,23 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=\\'(.+?)\\'
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     files:
       selector: td:nth-child(5)
-    date:
+    date_day:
       selector: td:nth-child(7):contains("day")
       optional: true
       filters:
         - name: fuzzytime
-    date:
+    date_year:
       selector: td:nth-child(7):not(:contains("day"))
       optional: true
       filters:
@@ -143,13 +154,12 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(8)
     grabs:
       selector: td:nth-child(9)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(10)
     leechers:

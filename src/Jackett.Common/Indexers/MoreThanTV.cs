@@ -22,7 +22,7 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
-    // This tracker uses a hybrid Luminance (based on GazelleTracker) 
+    // This tracker uses a hybrid Luminance (based on GazelleTracker)
     [ExcludeFromCodeCoverage]
     public class MoreThanTV : BaseWebIndexer
     {
@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers
         };
 
         private string LoginUrl => SiteLink + "login";
-        private string BrowseUrl => SiteLink + "torrents.php";
+        private string BrowseUrl => SiteLink + "torrents/browse";
+        private string DownloadUrl => SiteLink + "torrents.php";
         private string DetailsUrl => SiteLink + "details.php";
 
         private string _sort;
@@ -66,7 +67,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
@@ -138,7 +139,8 @@ namespace Jackett.Common.Indexers
             SetRequestHeaders();
 
             // Fetch CSRF token
-            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, referer: SiteLink, headers: _emulatedBrowserHeaders);
+            // We need to clean the old cookies to avoid issues
+            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, referer: SiteLink, headers: _emulatedBrowserHeaders, cookieOverride: "");
             // Check if user is logged in. /login redirects to / if so)
             if (preRequest.IsRedirect)
             {
@@ -229,7 +231,7 @@ namespace Jackett.Common.Indexers
 
             if (query.Categories.Contains(TorznabCatType.TV.ID))
             {
-                qc.Add("filter_cat[3]", "1"); // HD EPISODE
+                qc.Add("filter_cat[3]", "1"); // HD Episode
                 qc.Add("filter_cat[4]", "1"); // SD Episode
                 qc.Add("filter_cat[5]", "1"); // HD Season
                 qc.Add("filter_cat[6]", "1"); // SD Season
@@ -261,23 +263,20 @@ namespace Jackett.Common.Indexers
                 foreach (var torrent in torrents)
                 {
                     // Parse required data
-                    var torrentGroup = torrent.QuerySelectorAll("table a[href^=\"/torrents.php?action=download\"]");
-                    foreach (var downloadAnchor in torrentGroup)
-                    {
-                        var title = downloadAnchor.ParentElement.ParentElement.ParentElement.TextContent.Trim();
-                        title = CleanUpTitle(title);
+                    var downloadAnchor = torrent.QuerySelector("span a[href^=\"/torrents.php?action=download\"]");
+                    var title = downloadAnchor.ParentElement.ParentElement.ParentElement.QuerySelector("a[class=\"overlay_torrent\"]").TextContent.Trim();
+                    title = CleanUpTitle(title);
 
-                        var category = torrent.QuerySelector(".cats_col div").GetAttribute("title");
-                        // default to Other
-                        var categoryId = TorznabCatType.Other.ID;
+                    var category = torrent.QuerySelector(".cats_col div").GetAttribute("title");
+                    // default to Other
+                    var categoryId = TorznabCatType.Other.ID;
 
-                        if (movies.Any(category.Contains))
-                            categoryId = TorznabCatType.Movies.ID;
-                        else if (tv.Any(category.Contains))
-                            categoryId = TorznabCatType.TV.ID;
+                    if (movies.Any(category.Contains))
+                        categoryId = TorznabCatType.Movies.ID;
+                    else if (tv.Any(category.Contains))
+                        categoryId = TorznabCatType.TV.ID;
 
-                        releases.Add(GetReleaseInfo(torrent, downloadAnchor, title, categoryId));
-                    }
+                    releases.Add(GetReleaseInfo(torrent, downloadAnchor, title, categoryId));
                 }
             }
             catch (Exception ex)
@@ -298,7 +297,7 @@ namespace Jackett.Common.Indexers
         {
 
             // count from bottom
-            const int FILES_COL = 8;
+            const int FILES_COL = 7;
             /*const int COMMENTS_COL = 7;*/
             const int DATE_COL = 6;
             const int FILESIZE_COL = 5;
@@ -336,7 +335,7 @@ namespace Jackett.Common.Indexers
             var seeders = int.Parse(seeds, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var leechers = int.Parse(leechs, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var detailsUri = new Uri(DetailsUrl + "?torrentid=" + torrentId);
-            var downloadLink = new Uri(BrowseUrl + "?action=download&id=" + torrentId);
+            var downloadLink = new Uri(DownloadUrl + "?action=download&id=" + torrentId);
 
             return new ReleaseInfo
             {

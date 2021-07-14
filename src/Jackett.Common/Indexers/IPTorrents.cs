@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
             "https://iptorrents.eu/"
         };
 
-        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
+        private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
         public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
@@ -81,11 +81,21 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
+                   configData: new ConfigurationDataCookieUA("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
+
+            var sort = new ConfigurationData.SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
+                {
+                    {"time", "created"},
+                    {"size", "size"},
+                    {"seeders", "seeders"},
+                    {"name", "title"}
+                })
+            { Value = "time" };
+            configData.AddDynamic("sort", sort);
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
@@ -93,18 +103,18 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(87, TorznabCatType.Movies3D, "Movie/3D");
             AddCategoryMapping(77, TorznabCatType.MoviesSD, "Movie/480p");
             AddCategoryMapping(101, TorznabCatType.MoviesUHD, "Movie/4K");
-            AddCategoryMapping(89, TorznabCatType.MoviesHD, "Movie/BD-R");
-            AddCategoryMapping(90, TorznabCatType.MoviesSD, "Movie/BD-Rip");
+            AddCategoryMapping(89, TorznabCatType.MoviesBluRay, "Movie/BD-R");
+            AddCategoryMapping(90, TorznabCatType.MoviesHD, "Movie/BD-Rip");
             AddCategoryMapping(96, TorznabCatType.MoviesSD, "Movie/Cam");
             AddCategoryMapping(6, TorznabCatType.MoviesDVD, "Movie/DVD-R");
-            AddCategoryMapping(48, TorznabCatType.MoviesBluRay, "Movie/HD/Bluray");
+            AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movie/HD/Bluray");
             AddCategoryMapping(54, TorznabCatType.Movies, "Movie/Kids");
             AddCategoryMapping(62, TorznabCatType.MoviesSD, "Movie/MP4");
             AddCategoryMapping(38, TorznabCatType.MoviesForeign, "Movie/Non-English");
             AddCategoryMapping(68, TorznabCatType.Movies, "Movie/Packs");
-            AddCategoryMapping(20, TorznabCatType.MoviesHD, "Movie/Web-DL");
+            AddCategoryMapping(20, TorznabCatType.MoviesWEBDL, "Movie/Web-DL");
+            AddCategoryMapping(100, TorznabCatType.MoviesHD, "Movie/x265");
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "Movie/Xvid");
-            AddCategoryMapping(100, TorznabCatType.Movies, "Movie/x265");
 
             AddCategoryMapping(73, TorznabCatType.TV, "TV");
             AddCategoryMapping(26, TorznabCatType.TVDocumentary, "TV/Documentaries");
@@ -125,34 +135,34 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(74, TorznabCatType.Console, "Games");
             AddCategoryMapping(2, TorznabCatType.ConsoleOther, "Games/Mixed");
-            AddCategoryMapping(47, TorznabCatType.ConsoleNDS, "Games/Nintendo DS");
-            AddCategoryMapping(43, TorznabCatType.PCISO, "Games/PC-ISO");
+            AddCategoryMapping(47, TorznabCatType.ConsoleOther, "Games/Nintendo");
+            AddCategoryMapping(43, TorznabCatType.PCGames, "Games/PC-ISO");
             AddCategoryMapping(45, TorznabCatType.PCGames, "Games/PC-Rip");
-            AddCategoryMapping(71, TorznabCatType.ConsolePS3, "Games/PS3");
+            AddCategoryMapping(71, TorznabCatType.ConsolePS4, "Games/Playstation");
             AddCategoryMapping(50, TorznabCatType.ConsoleWii, "Games/Wii");
-            AddCategoryMapping(44, TorznabCatType.ConsoleXBox360, "Games/Xbox-360");
+            AddCategoryMapping(44, TorznabCatType.ConsoleXBox, "Games/Xbox");
 
             AddCategoryMapping(75, TorznabCatType.Audio, "Music");
             AddCategoryMapping(3, TorznabCatType.AudioMP3, "Music/Audio");
             AddCategoryMapping(80, TorznabCatType.AudioLossless, "Music/Flac");
             AddCategoryMapping(93, TorznabCatType.Audio, "Music/Packs");
             AddCategoryMapping(37, TorznabCatType.AudioVideo, "Music/Video");
-            AddCategoryMapping(21, TorznabCatType.AudioVideo, "Podcast");
+            AddCategoryMapping(21, TorznabCatType.AudioOther, "Podcast");
 
-            AddCategoryMapping(76, TorznabCatType.Other, "Other/Miscellaneous");
+            AddCategoryMapping(76, TorznabCatType.Other, "Miscellaneous");
             AddCategoryMapping(60, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(1, TorznabCatType.PC0day, "Appz");
             AddCategoryMapping(86, TorznabCatType.PC0day, "Appz/Non-English");
             AddCategoryMapping(64, TorznabCatType.AudioAudiobook, "AudioBook");
             AddCategoryMapping(35, TorznabCatType.Books, "Books");
             AddCategoryMapping(102, TorznabCatType.Books, "Books/Non-English");
-            AddCategoryMapping(94, TorznabCatType.BooksComics, "Books/Comics");
-            AddCategoryMapping(95, TorznabCatType.BooksOther, "Books/Educational");
-            AddCategoryMapping(98, TorznabCatType.Other, "Other/Fonts");
-            AddCategoryMapping(69, TorznabCatType.PCMac, "Appz/Mac");
-            AddCategoryMapping(92, TorznabCatType.BooksMags, "Books/Magazines & Newspapers");
-            AddCategoryMapping(58, TorznabCatType.PCMobileOther, "Appz/Mobile");
-            AddCategoryMapping(36, TorznabCatType.Other, "Other/Pics/Wallpapers");
+            AddCategoryMapping(94, TorznabCatType.BooksComics, "Comics");
+            AddCategoryMapping(95, TorznabCatType.BooksOther, "Educational");
+            AddCategoryMapping(98, TorznabCatType.Other, "Fonts");
+            AddCategoryMapping(69, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(92, TorznabCatType.BooksMags, "Magazines / Newspapers");
+            AddCategoryMapping(58, TorznabCatType.PCMobileOther, "Mobile");
+            AddCategoryMapping(36, TorznabCatType.Other, "Pics/Wallpapers");
 
             AddCategoryMapping(88, TorznabCatType.XXX, "XXX");
             AddCategoryMapping(85, TorznabCatType.XXXOther, "XXX/Magazines");
@@ -167,6 +177,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
 
             CookieHeader = configData.Cookie.Value;
+
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
@@ -180,7 +191,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 IsConfigured = false;
-                throw new Exception("Your cookie did not work: " + e.Message);
+                throw new Exception("Your cookie did not work, make sure the user agent matches your computer: " + e.Message);
             }
         }
 
@@ -189,6 +200,15 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var qc = new NameValueCollection();
+
+
+            Dictionary<string, string> headers = null;
+
+            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
+            {
+                headers = new Dictionary<string, string>();
+                headers.Add("User-Agent", configData.UserAgent.Value);
+            }
 
             if (query.IsImdbQuery)
                 qc.Add("q", query.ImdbID);
@@ -201,8 +221,10 @@ namespace Jackett.Common.Indexers
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
                 qc.Add("free", "on");
 
+            qc.Add("o", ((SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value);
+
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl, headers: headers);
             var results = response.ContentString;
 
             if (results == null || !results.Contains("/lout.php"))

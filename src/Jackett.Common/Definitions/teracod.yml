@@ -2,9 +2,9 @@
 id: teracod
 name: teracod
 description: "teracod (Movie Zone) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: hu-hu
+language: hu-HU
 type: private
-encoding: iso-8859-2
+encoding: UTF-8
 links:
   - https://teracod.net/
 legacylinks:
@@ -133,7 +133,7 @@ search:
     download:
       selector: a[href*="/download.php/"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
@@ -157,9 +157,6 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: td:nth-last-child(5) > u
-      filters:
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: td:nth-last-child(4)
     seeders:

@@ -2,12 +2,11 @@
 id: firebit
 name: FireBit
 description: "FireBit is an UKRAINIAN / RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: UTF-8
 links:
   - https://firebit.net/
-  - https://firebit.info/
 legacylinks:
   - https://firebit.name/
   - https://firebit.biz/
@@ -19,6 +18,7 @@ legacylinks:
   - http://firebit.biz/
   - https://firebit.pro/
   - https://firebit.club/
+  - https://firebit.info/
 
 caps:
   categorymappings:
@@ -45,6 +45,7 @@ caps:
     - {id: "Музыка Видео", cat: Audio/Video, desc: "Музыка Видео"}
     - {id: "Другие категории", cat: Other, desc: "Другие категории"}
     - {id: "Сериалы", cat: TV, desc: "Сериалы"}
+    - {id: "18+", cat: TV, desc: "18+"}
     - {id: "-", cat: Other, desc: "Другие категории"}
 
   modes:
@@ -96,13 +97,28 @@ search:
       filters:
         - name: replace
           args: ["-", "0 B"]
-    date:
-      selector: td:nth-child(5), li.meta-date
+    date_day:
+      # Вчера, 08:01:41
+      # 2 дня назад, 19:33:51
+      selector: td:nth-child(5):contains(","), li.meta-date:contains(",")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Вчера,", "Yesterday"]
+        - name: replace
+          args: ["дня назад,", "days"]
+        - name: fuzzytime
+    date_year:
+      # 16.08.2021 20:29:39
+      selector: td:nth-child(5):not(:contains(",")), li.meta-date:not(:contains(","))
+      optional: true
       filters:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     seeders:
       selector: td.l1, li.meta-sead
     leechers:

@@ -2,12 +2,12 @@
 id: cpasbien
 name: cpasbien
 description: "cpasbien is a FRENCH Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://wwwv.cpasbien-fr.fr/
+  - https://vwwvwvwvvw.cpasbien-fr.nz/
 legacylinks:
   - http://www.cpasbiens.cc/
   - http://www.cpabien.cm/
@@ -40,6 +40,9 @@ legacylinks:
   - https://www.gktorrent.biz/
   - https://vww.cpasbien-fr.fr/
   - https://wvw.cpasbien-fr.fr/
+  - https://wwwv.cpasbien-fr.fr/
+  - https://www2.cpasbien-fr.fr/
+  - https://www.cpasbien-fr.nz/
 
 caps:
   categories:
@@ -58,17 +61,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Solve the challenge<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-  - name: useragent
-    type: text
-    label: User-Agent
-  - name: info_useragent
-    type: info
-    label: How to get the User-Agent
-    default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
   - name: info_8000
     type: info
     label: About cpasbien Categories
@@ -97,7 +93,6 @@ login:
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
-    user-agent: "[ .Config.useragent ]"
 
 download:
   selectors:
@@ -173,16 +168,16 @@ search:
       selector: div.poid
     date:
       text: now
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: div.up
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: div.down
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

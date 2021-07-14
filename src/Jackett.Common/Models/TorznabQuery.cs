@@ -19,6 +19,7 @@ namespace Jackett.Common.Models
         public int? TvdbID { get; set; }
         public string ImdbID { get; set; }
         public int? TmdbID { get; set; }
+        public bool Cache { get; set; } = true;
 
         public int Season { get; set; }
         public string Episode { get; set; }
@@ -137,7 +138,8 @@ namespace Jackett.Common.Models
                 RageID = RageID,
                 TvdbID = TvdbID,
                 ImdbID = ImdbID,
-                TmdbID = TmdbID
+                TmdbID = TmdbID,
+                Cache = Cache
             };
             if (Categories?.Length > 0)
             {

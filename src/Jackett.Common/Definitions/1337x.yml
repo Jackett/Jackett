@@ -2,42 +2,19 @@
 id: 1337x
 name: 1337x
 description: "1337X is a Public torrent site that offers verified torrent downloads"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
 links:
   - https://1337x.to/
-  - https://1337x.gd/
-  - https://1337x.is/
   - https://1337x.st/
   - https://x1337x.ws/
   - https://x1337x.eu/
   - https://x1337x.se/
-  - https://1337x.unblockit.uno/
-  - https://1337x.nocensor.space/
+  - https://1337x.unblockit.llc/
+  - https://1337x.nocensor.sbs/
 legacylinks:
-  - https://1337x.unblocked.earth/
-  - https://1337x.unblockit.pro/
-  - https://1337x.unblockit.one/
-  - https://1337x.black-mirror.xyz/
-  - https://1337x.unblocked.casa/
-  - https://1337x.proxyportal.fun/
-  - https://1337x.uk-unblock.xyz/
-  - https://1337x.ind-unblock.xyz/
-  - https://1337x.unblockninja.com/ # 403 Forbidden
-  - https://1337x.unblockit.me/
-  - https://1337x.unblockit.pw/
-  - https://1337x.unblockit.id/
-  - https://1337x.unblockit.win/
-  - https://1337x.unblocked.bar/
-  - https://1337x.proxyportal.pw/
-  - https://1337x.uk-unblock.pro/
-  - https://1337x.unblockit.top/
-  - https://1337x.unblockit.lat/
-  - https://1337x.unblockit.app/
-  - https://1337.root.yt/
-  - https://1337x.unblocked.rest/
   - https://1337x.unblockit.dev/
   - https://1337x.unblockit.ltd/
   - https://1337x.unblockit.link/
@@ -46,6 +23,20 @@ legacylinks:
   - https://1337x.unblockit.club/
   - https://1337x.unblockit.onl/
   - https://1337x.unblockit.li/
+  - https://1337x.unblockit.uno/
+  - https://1337x.is/
+  - https://1337x.unblockit.ch/
+  - https://1337x.nocensor.space/
+  - https://1337x.unblockit.ws/
+  - https://1337x.nocensor.work/
+  - https://1337x.unblockit.kim/
+  - https://1337x.unblockit.bz/
+  - https://1337x.unblockit.tv/
+  - https://1337x.unblockit.how/
+  - https://1337x.unblockit.cam/
+  - https://1337x.nocensor.biz/
+  - https://1337x.gd/
+  - https://1337x.unblockit.day/
 
 caps:
   categorymappings:
@@ -138,28 +129,28 @@ caps:
     book-search: [q]
 
 settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
   - name: downloadlink
     type: select
     label: Download link
-    default: "magnet:"
+    default: "http://itorrents.org/"
     options:
       "http://itorrents.org/": iTorrents.org
-      "http://torrage.info/": Torrage
-      "http://btcache.me/": BTcache
       "magnet:": magnet
   - name: downloadlink2
     type: select
     label: Download link (fallback)
-    default: "http://itorrents.org/"
+    default: "magnet:"
     options:
       "http://itorrents.org/": iTorrents.org
-      "http://torrage.info/": Torrage
-      "http://btcache.me/": BTcache
       "magnet:": magnet
   - name: info_download
     type: info
     label: About the Download links
-    default: As the .torrent download links on this site are known to fail from time to time, you can optionally set as a fallback an automatic alternate link. We suggest using the magnet link as a fallback.
+    default: As the iTorrents .torrent download link on this site is known to fail from time to time, we suggest using the magnet link as a fallback. The BTCache and Torrage services are not supported because they require additional user interaction (a captcha for BTCache and a download button on Torrage.)
   - name: sort
     type: select
     label: Sort requested from site
@@ -198,10 +189,10 @@ search:
     selector: tr:has(a[href^="/torrent/"])
 
   fields:
-    title_text:
+    title_default:
       # the movies, tv and music pages abbreviate the title
       selector: td[class^="coll-1"] a[href^="/torrent/"]
-    title_href:
+    title_optional:
       # the movies, tv and music pages abbreviate the title so we process the href instead. #8137
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
@@ -210,8 +201,8 @@ search:
         - name: split
           args: ["/", 3]
     title:
-      # title_href can be empty so use the title_text instead #8586
-      text: "{{ if .Result.title_href }}{{ .Result.title_href }}{{ else }}{{ .Result.title_text }}{{ end }}"
+      # title_optional can be empty so use the title_default instead #8586
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
       filters:
         - name: re_replace
           args: ["-", " "]
@@ -236,9 +227,7 @@ search:
           args: ["(?i)WEB\\sDL", "WEB-DL"]
         - name: re_replace
           args: ["(?i)HDTVRIP", "HDTV"]
-    category:
-      text: 40
-    category|noappend:
+    category_sub:
       optional: true
       selector: td[class^="coll-1"] a[href^="/sub/"]
       attribute: href
@@ -246,6 +235,8 @@ search:
         # extract the third part
         - name: split
           args: ["/", 2]
+    category:
+      text: "{{ if .Result.category_sub }}{{ .Result.category_sub }}{{ else }}40{{ end }}"
     details:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
@@ -254,7 +245,7 @@ search:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
     # dates come in three flavours:
-    date:
+    date_year:
       # (within this year) 7am Sep. 14th
       optional: true
       selector: td[class^="coll-date"]:not(:contains(":")):not(:contains("'"))
@@ -263,7 +254,7 @@ search:
           args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "3pm Jan. 2"
-    date:
+    date_years:
       # (more than a year ago) Apr. 18th '11
       optional: true
       selector: td[class^="coll-date"]:contains("'")
@@ -274,13 +265,14 @@ search:
           args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "Jan. 2 06"
-    date:
+    date_today:
       # (today) 12:25am
       optional: true
       selector: td[class^="coll-date"]:contains(":")
       filters:
-        - name: dateparse
-          args: "3:04pm"
+        - name: fuzzytime
+    date:
+      text: "{{ if or .Result.date_year .Result.date_years .Result.date_today }}{{ or .Result.date_year .Result.date_years .Result.date_today }}{{ else }}now{{ end }}"
     size:
       selector: td[class^="coll-4"]
     seeders:

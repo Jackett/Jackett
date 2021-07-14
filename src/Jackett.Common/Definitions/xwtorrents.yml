@@ -2,7 +2,7 @@
 id: xwtorrents
 name: XWtorrents
 description: "XtremeWrestlingTorrents (XWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING / MMA"
-language: en-us
+language: en-US
 type: private
 encoding: windows-1252
 links:
@@ -12,8 +12,12 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 74, cat: TV/Sport, desc: "AEW"}
-    - {id: 75, cat: TV/Sport, desc: "AEW HD"}
+    - {id: 74, cat: TV/Sport, desc: "AEW Dynamite"}
+    - {id: 75, cat: TV/Sport, desc: "AEW Dynamite HD"}
+    - {id: 78, cat: TV/Sport, desc: "AEW PPV's"}
+    - {id: 79, cat: TV/Sport, desc: "AEW PPV's HD"}
+    - {id: 76, cat: TV/Sport, desc: "AEW Rampage"}
+    - {id: 77, cat: TV/Sport, desc: "AEW Rampage HD"}
     - {id: 47, cat: TV/Sport, desc: "Boxing"}
     - {id: 14, cat: Movies, desc: "Documentary"}
     - {id: 20, cat: TV/Sport, desc: "DVD"}
@@ -155,9 +159,6 @@ search:
       selector: td:nth-child(3)
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(6)
     seeders:

@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             // Unfortunately most of them are tags not categories and they return the parent category

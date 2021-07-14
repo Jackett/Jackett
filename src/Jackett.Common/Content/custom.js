@@ -1,4 +1,5 @@
 var basePath = '';
+var baseUrl = '';
 
 var indexers = [];
 var configuredIndexers = [];
@@ -114,6 +115,12 @@ function loadJackettSettings() {
             basePath = '';
         }
 
+        $("#jackett-baseurloverride").val(data.baseurloverride);
+        baseUrl = data.baseurloverride;
+        if (baseUrl === null || baseUrl === undefined) {
+            baseUrl = '';
+        }
+
         api.key = data.api_key;
 
         $("#jackett-savedir").val(data.blackholedir);
@@ -130,6 +137,7 @@ function loadJackettSettings() {
         }
 
         $("#jackett-flaresolverrurl").val(data.flaresolverrurl);
+        $("#jackett-flaresolverr-maxtimeout").val(data.flaresolverr_maxtimeout);
         $("#jackett-omdbkey").val(data.omdbkey);
         $("#jackett-omdburl").val(data.omdburl);
         var password = data.password;
@@ -162,9 +170,9 @@ function reloadIndexers() {
         availableFilters = [];
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
-            item.rss_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/api?apikey=" + api.key + "&t=search&cat=&q=");
-            item.torznab_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/");
-            item.potato_host = resolveUrl(basePath + "/api/v2.0/indexers/" + item.id + "/results/potato/");
+            item.rss_host = resolveUrl(baseUrl, basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/api?apikey=" + api.key + "&t=search&cat=&q=");
+            item.torznab_host = resolveUrl(baseUrl, basePath + "/api/v2.0/indexers/" + item.id + "/results/torznab/");
+            item.potato_host = resolveUrl(baseUrl, basePath + "/api/v2.0/indexers/" + item.id + "/results/potato/");
 
             if (item.last_error)
                 item.state = "error";
@@ -197,7 +205,7 @@ function reloadIndexers() {
         configuredTags = configuredIndexers.map(i => i.tags).reduce((a, g) => a.concat(g), []).filter((v, i, a) => a.indexOf(v) === i);
 
         configureFilters(configuredIndexers);
-        
+
         displayFilteredIndexersList(configuredIndexers, currentFilter);
 
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
@@ -287,6 +295,12 @@ function displayConfiguredIndexersList(indexers) {
                 "visible": true,
                 "searchable": true,
                 "orderable": true
+            },
+            {
+                "targets": 2,
+                "visible": false,
+                "searchable": true,
+                "orderable": false
             }
         ]
     });
@@ -429,6 +443,13 @@ function displayUnconfiguredIndexersList() {
                 "visible": true,
                 "searchable": false,
                 "orderable": false
+            },
+            {
+                "name": "url",
+                "targets": 7,
+                "visible": false,
+                "searchable": true,
+                "orderable": false
             }
         ]
     });
@@ -546,18 +567,7 @@ function addIndexer(indexerId, displayNotification) {
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function (data) {
-            if (data.responseJSON.error !== undefined) {
-                var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                var githubrepo = "Jackett/Jackett";
-                var githubtext = "this indexer";
-                if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-                    githubrepo = "FlareSolverr/FlareSolverr";
-                    githubtext = "FlareSolverr";
-                }
-                doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
-            } else {
-                doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
-            }
+            doErrorNotify(indexerId, data.responseJSON.error, "configuring");
         });
     });
 }
@@ -713,18 +723,7 @@ function testIndexer(id, notifyResult) {
         }
     }).fail(function (data) {
         updateTestState(id, "error", data.error, indexers);
-        if (data.responseJSON.error !== undefined && notifyResult) {
-            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
-            var githubrepo = "Jackett/Jackett";
-            var githubtext = "this indexer";
-            if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-                githubrepo = "FlareSolverr/FlareSolverr";
-                githubtext = "FlareSolverr";
-            }
-            doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new?title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
-        } else {
-            doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
-        }
+        doErrorNotify(id, data.responseJSON.error, "testing");
     });
 }
 
@@ -886,12 +885,7 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function (data) {
-            if (data.responseJSON.error !== undefined) {
-                var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                doNotify("An error occurred while updating this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
-            } else {
-                doNotify("An error occurred while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
-            }
+            doErrorNotify(indexerId, data.responseJSON.error, "updating");
         }).always(function () {
             $goButton.html(originalBtnText);
             $goButton.prop('disabled', false);
@@ -904,11 +898,42 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
     configForm.modal("show");
 }
 
-function resolveUrl(url) {
-    var a = document.createElement('a');
-    a.href = url;
-    url = a.href;
+function resolveUrl(baseUrl, url) {
+    if (baseUrl != '') {
+        url = baseUrl + url;
+    }else{
+        var a = document.createElement('a');
+        a.href = url;
+        url = a.href;
+    }
     return url;
+}
+
+function doErrorNotify(indexerId, errorMessage, errorEvent) {
+  if (errorMessage !== undefined) {
+    var githubRepo = "Jackett/Jackett";
+    var githubText = "this indexer";
+    var githubTemplate = "?template=bug_report.yml&"
+    if (errorMessage.includes("FlareSolverr")) {
+      githubRepo = "FlareSolverr/FlareSolverr";
+      githubText = "FlareSolverr";
+      githubTemplate = "?"
+    }
+    var githubUrl = "https://github.com/" + githubRepo + "/issues/new" + githubTemplate + "title=[" + indexerId + "] (" + errorEvent + ")";
+    var indexEnd = 2000 - githubUrl.length; // keep url <= 2k #5104
+    var htmlEscapedError = $("<div>").text(errorMessage.substring(0, indexEnd)).html();
+    var urlEscapedError = encodeURIComponent(errorMessage.substring(0, indexEnd));
+    var link = "<i><a href=\"" + githubUrl + " " + urlEscapedError + "\" target=\"_blank\">Click here to open an issue on GitHub for " + githubText + ".</a><i>";
+    if (errorMessage.includes("FlareSolverr is not configured")) {
+      link = "<i><a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">Instructions to install and configure FlareSolverr.</a><i><br />" +
+        "<i><a href=\"https://github.com/Jackett/Jackett/wiki/Troubleshooting#error-connecting-to-flaresolverr-server\" target=\"_blank\">Troubleshooting frecuent errors with FlareSolverr.</a><i>";
+    }
+    doNotify("An error occurred while " + errorEvent + " this indexer<br /><b>" + htmlEscapedError + "</b><br />" + link,
+      "danger", "glyphicon glyphicon-alert", false);
+  } else {
+    doNotify("An error occurred while " + errorEvent + " indexers, please take a look at indexers with failed test for more information.",
+      "danger", "glyphicon glyphicon-alert");
+  }
 }
 
 function doNotify(message, type, icon, autoHide) {
@@ -945,6 +970,7 @@ function updateReleasesRow(row) {
     var labels = $(row).find("span.release-labels");
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
+    var TMDBId = $(row).data("tmdb");
     var Poster = $(row).data("poster");
     var Description = $(row).data("description");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
@@ -960,14 +986,20 @@ function updateReleasesRow(row) {
         TitleLink.data("toggle", "tooltip");
         TitleLink.tooltip({
             title: TitleTooltip,
-            html: true
+            html: true,
+            placement: "auto"
         });
     }
 
     labels.empty();
 
     if (IMDBId) {
-        labels.append('\n<a href="http://www.imdb.com/title/tt' + ("0000000" + IMDBId).slice(-8) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
+        var imdbLen = (IMDBId.toString().length > 7) ? 8 : 7;
+        labels.append('\n<a href="https://www.imdb.com/title/tt' + ("00000000" + IMDBId).slice(-imdbLen) + '/" target="_blank" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
+    }
+
+    if (TMDBId && TMDBId > 0) {
+      labels.append('\n<a href="https://www.themoviedb.org/movie/' + TMDBId + '" target="_blank" class="label label-tmdb" alt="TMDB" title="TMDB">TMDB</a>');
     }
 
     if (!isNaN(DownloadVolumeFactor)) {
@@ -1120,7 +1152,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     var searchTracker = releaseDialog.find("#searchTracker");
     var searchCategory = releaseDialog.find('#searchCategory');
     var searchFilter = releaseDialog.find('#searchFilter');
-    
+
     searchFilter.multiselect({
         maxHeight: 400,
         enableFiltering: true,
@@ -1347,6 +1379,13 @@ function bindUIButtons() {
         return false;
     });
 
+    $('#api-key-copy-button').click(function () {
+        var apiKey = api.key;
+        if (apiKey !== null || apiKey !== undefined) {
+            copyToClipboard(apiKey);
+        }
+    });
+
     $('#jackett-add-indexer').click(function () {
         $("#modals").empty();
         displayUnconfiguredIndexersList();
@@ -1487,6 +1526,7 @@ function bindUIButtons() {
     $("#change-jackett-port").click(function () {
         var jackett_port = Number($("#jackett-port").val());
         var jackett_basepathoverride = $("#jackett-basepathoverride").val();
+        var jackett_baseurloverride = $("#jackett-baseurloverride").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
         var jackett_update = $("#jackett-allowupdate").is(':checked');
         var jackett_prerelease = $("#jackett-prerelease").is(':checked');
@@ -1495,6 +1535,7 @@ function bindUIButtons() {
         var jackett_cache_ttl = $("#jackett-cache-ttl").val();
         var jackett_cache_max_results_per_indexer = $("#jackett-cache-max-results-per-indexer").val();
         var jackett_flaresolverr_url = $("#jackett-flaresolverrurl").val();
+        var jackett_flaresolverr_maxtimeout = $("#jackett-flaresolverr-maxtimeout").val();
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();
 
@@ -1512,11 +1553,13 @@ function bindUIButtons() {
             blackholedir: $("#jackett-savedir").val(),
             logging: jackett_logging,
             basepathoverride: jackett_basepathoverride,
+            baseurloverride: jackett_baseurloverride,
             logging: jackett_logging,
             cache_enabled: jackett_cache_enabled,
             cache_ttl: jackett_cache_ttl,
             cache_max_results_per_indexer: jackett_cache_max_results_per_indexer,
             flaresolverrurl: jackett_flaresolverr_url,
+            flaresolverr_maxtimeout: jackett_flaresolverr_maxtimeout,
             omdbkey: jackett_omdb_key,
             omdburl: jackett_omdb_url,
             proxy_type: jackett_proxy_type,

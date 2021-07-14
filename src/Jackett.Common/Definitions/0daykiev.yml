@@ -2,7 +2,7 @@
 id: 0daykiev
 name: 0day.kiev
 description: "0day.kiev.ua is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: ru-ru
+language: ru-RU
 type: private
 encoding: windows-1251
 links:
@@ -156,10 +156,6 @@ search:
       selector: td:nth-child(4)
       filters:
         - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
-        - name: replace
           args: ["ТБ", "TB"]
         - name: replace
           args: ["ГБ", "GB"]
@@ -169,9 +165,6 @@ search:
           args: ["КБ", "KB"]
     grabs:
       selector: td:nth-child(5)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(6)
       filters:

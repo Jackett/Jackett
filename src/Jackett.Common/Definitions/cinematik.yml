@@ -2,7 +2,7 @@
 id: cinematik
 name: Cinematik
 description: "A tracker for full BD and DVD discs of non-mainstream movies, niche cinema and arthouse."
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Comedy"}
     - {id: 4, cat: Movies, desc: "Action"}
+    - {id: 5, cat: Movies, desc: "Horror"}
     - {id: 6, cat: Movies, desc: "Drama"}
     - {id: 7, cat: Movies, desc: "Documentary"}
     - {id: 9, cat: Movies, desc: "Crime"}
@@ -31,7 +32,7 @@ caps:
 
   modes:
     search: [q]
-    movie-search: [q]
+    movie-search: [q, imdbid]
 
 settings:
   - name: username
@@ -48,13 +49,14 @@ settings:
       0: Active
       1: "Active and Inactive"
       2: Inactive
-  - name: srchdtls
+  - name: dropbumped
     type: checkbox
-    label: "Detailed search"
+    label: Ignore Bumped Torrents
+    default: false
   - name: info_results
     type: info
-    label: "Search results"
-    default: "You can increase the number of search results in your profile.<br>Default is 15."
+    label: Results Per Page
+    default: "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.<br>Default is <i>15</i>."
 
 login:
   method: form
@@ -74,12 +76,12 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: "{{ .Config.incldead }}"
-    srchdtls: "{{ if .Config.srchdtls }}1{{ else }}0{{ end }}"
+    srchdtls: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
 
   rows:
-    selector: table[border="1"] tr:not(:first-child)
+    selector: "table[border=\"1\"] tr:not(:first-child){{ if .Config.dropbumped }}:not(:has(span.bumped)){{ else }}{{ end }}"
 
   fields:
     category:

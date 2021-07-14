@@ -13,6 +13,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -80,10 +81,12 @@ namespace Jackett.Common.Indexers
                        "Make sure you get the cookies from the same torrent day domain as configured above."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             wc.EmulateBrowser = false;
+
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
             AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(28, TorznabCatType.PC, "Appz/Packs");
@@ -170,6 +173,9 @@ namespace Jackett.Common.Indexers
                 searchUrl += ";q=" + query.ImdbID;
             else
                 searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding);
+
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+                searchUrl += ";free=on";
 
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 

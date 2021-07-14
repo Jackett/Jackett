@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers
 <br/>For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TV);

@@ -2,7 +2,7 @@
 id: proaudiotorrents
 name: ProAudioTorrents
 description: "ProAudioTorrents (PAT) is a Private Torrent Tracker for AUDIO SOFTWARE / SAMPLES / TUTORIALS / ETC"
-language: en
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -112,9 +112,6 @@ search:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(7)
     leechers:

@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
@@ -95,25 +95,13 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var searchString = query.SearchTerm != null ? query.SearchTerm : "";
+            var searchString = query.GetQueryString();
             var btnResults = query.Limit;
             if (btnResults == 0)
                 btnResults = (int)TorznabCaps.LimitsDefault;
             var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
             var searchParam = new Dictionary<string, string>();
-
-            // If only the season/episode is searched for then change format to match expected format
-            if (query.Season > 0 && query.Episode == null)
-            {
-                searchParam["name"] = $"Season {query.Season}";
-                searchParam["category"] = "Season";
-            }
-            else if (query.Season > 0 && int.Parse(query.Episode) > 0)
-            {
-                searchParam["name"] = string.Format("S{0:00}E{1:00}", query.Season, int.Parse(query.Episode));
-                searchParam["category"] = "Episode";
-            }
 
             searchParam["search"] = searchString.Replace(" ", "%");
 

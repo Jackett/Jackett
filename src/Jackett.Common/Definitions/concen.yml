@@ -2,7 +2,7 @@
 id: concen
 name: ConCen
 description: "ConCen (Conspiracy Central) is a Public conspiracy related torrent index"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
@@ -14,6 +14,9 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort

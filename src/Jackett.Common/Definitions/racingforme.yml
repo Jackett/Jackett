@@ -2,7 +2,7 @@
 id: racingforme
 name: RacingForMe
 description: "Racing For Me (RFM) is a Private Torrent Tracker for RACING"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -231,24 +231,12 @@ search:
       attribute: href
     size:
       selector: div.data-size
-      filters:
-        - name: re_replace
-          args: ["(\\d)\\.(\\d{3}\\.\\d{2})", "$1$2"]
     seeders:
       selector: div.data-seeders
-      filters:
-        - name: regexp
-          args: (\d+)
     leechers:
       selector: div.data-leechers
-      filters:
-        - name: regexp
-          args: (\d+)
     grabs:
       selector: div.data-completed
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       text: now
     downloadvolumefactor:

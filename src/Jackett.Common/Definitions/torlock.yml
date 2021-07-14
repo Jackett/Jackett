@@ -2,7 +2,7 @@
 id: torlock
 name: Torlock
 description: "Torlock is a torrent search site that lists verified torrents only for TV series and movies"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
@@ -10,18 +10,10 @@ links:
   - https://www.torlock.com/
   - https://www.torlock2.com/
   - https://www.torlock.icu/
-  - https://torlock.unblockit.uno/
-  - https://torlock.nocensor.space/
+  - https://torlock.unblockit.llc/
+  - https://torlock.nocensor.sbs/
 legacylinks:
   - https://torlock.com/
-  - https://torlock.unblockit.pro/
-  - https://torlock.unblockit.one/
-  - https://torlock.unblockit.me/
-  - https://torlock.unblockit.pw/
-  - https://torlock.unblockit.id/
-  - https://torlock.unblockit.win/
-  - https://torlock.unblockit.top/
-  - https://torlock.unblockit.lat/
   - https://torlock.unblockit.app/
   - https://torlock.unblockit.dev/
   - https://torlock.unblockit.ltd/
@@ -30,8 +22,21 @@ legacylinks:
   - https://torlock.unblockit.club/
   - https://torlock.unblockit.onl/
   - https://torlock.unblockit.li/
+  - https://torlock.unblockit.uno/
+  - https://torlock.unblockit.ch/
+  - https://torlock.nocensor.space/
+  - https://torlock.unblockit.ws/
+  - https://torlock.nocensor.work/
+  - https://torlock.unblockit.kim/
+  - https://torlock.unblockit.bz/
+  - https://torlock.unblockit.tv/
+  - https://torlock.unblockit.how/
+  - https://torlock.unblockit.cam/
+  - https://torlock.nocensor.biz/
+  - https://torlock.unblockit.day/
 
 caps:
+  # dont forget to update the search fields category case block
   categorymappings:
     - {id: TELEVISION, cat: TV, desc: "TV Shows"}
     - {id: MOVIES, cat: Movies, desc: "Movies"}
@@ -138,7 +143,7 @@ search:
           args: (^/tor/\d*)
         - name: append
           args: ".torrent"
-    date:
+    date_year:
       selector: td:nth-child(2):contains("/")
       optional: true
       filters:
@@ -146,18 +151,20 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "1/2/2006 -07:00"
-    date:
+    date_day:
       selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
       optional: true
       filters:
         - name: fuzzytime
-    date:
+    date_ago:
       selector: td:nth-child(2):not(:contains("Today")):not(:contains("Yesterday")):not(:contains("/"))
       optional: true
       filters:
         - name: re_replace
           args: ["(min|mins)", "minutes"]
         - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago .Result.date_day }}{{ or .Result.date_year  .Result.date_ago .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(3)
     seeders:

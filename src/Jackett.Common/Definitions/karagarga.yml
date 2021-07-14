@@ -2,7 +2,7 @@
 id: karagarga
 name: Karagarga
 description: "Karagarga tracks non-hollywood, rare and obscure movies, music and literature."
-language: en-us
+language: en-US
 type: private
 encoding: iso-8859-1
 links:
@@ -45,6 +45,7 @@ login:
     input: captcha
   error:
     - selector: table:contains("Login failed!")
+    - selector: table:contains("Login unsuccessful")
   test:
     path: index.php
 
@@ -110,7 +111,7 @@ search:
     download:
       selector: a[href^="/down.php/"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date:
@@ -126,9 +127,6 @@ search:
       selector: td:nth-child(11)
     grabs:
       selector: td:nth-child(12)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(13)
     leechers:

@@ -2,7 +2,7 @@
 id: cinemamovies
 name: CinemaMovieS_ZT
 description: "CinemaMovieS_ZT is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: pl-pl
+language: pl-PL
 type: private
 encoding: ISO-8859-2
 links:
@@ -16,8 +16,9 @@ caps:
     - {id: 8, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 11, cat: Movies/SD, desc: "Filmy SD"}
     - {id: 12, cat: Movies/Other, desc: "Filmy Inne"}
-    - {id: 32, cat: Movies/UHD, desc: "Filmy UHD"}
-    - {id: 2, cat: TV/Anime, desc: "Anime"}
+    - {id: 32, cat: Movies/UHD, desc: "Filmy UHD 4K"}
+    - {id: 33, cat: TV/UHD, desc: "TV UHD"}
+    - {id: 2, cat: TV/Anime, desc: "Bajki/Anime"}
     - {id: 10, cat: TV/Documentary, desc: "TV Dokumentalne"}
     - {id: 20, cat: TV, desc: "TV Paczki"}
     - {id: 22, cat: TV/Sport, desc: "TV Sport"}
@@ -53,6 +54,17 @@ settings:
     type: checkbox
     label: Drop the Polish title prefix
     default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI & PL by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI & PL by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTI.POLISH: MULTI.POLISH
   - name: sort
     type: select
     label: Sort requested from site
@@ -105,13 +117,22 @@ search:
           args: cat
     title_raw:
       selector: a[href^="details.php?id="]
+    title_multilang:
+      text: "{{ .Result.title_raw }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\[multi\\])", " {{ .Config.multilanguage }} "]
+        - name: re_replace
+          args: ["(?i)(\\[pl\\])", " {{ .Config.multilanguage }} "]
+    title_phase1:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_raw }}{{ end }}"
     title_stripped:
-      selector: a[href^="details.php?id="]
+      text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
           args: ["^(.* / )(.*)$", "$2"]
     title:
-      text: "{{ if .Config.drop_polish_prefix }}{{ .Result.title_stripped }}{{ else }}{{ .Result.title_raw }}{{ end }}"
+      text: "{{ if .Config.drop_polish_prefix }}{{ .Result.title_stripped }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -124,11 +145,10 @@ search:
       filters:
         - name: regexp
           args: "src=(.+?) "
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
-      optional: true
       selector: img[src="pic/Poland.png"]
       attribute: src
       filters:

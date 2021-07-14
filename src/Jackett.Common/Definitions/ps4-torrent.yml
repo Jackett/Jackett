@@ -1,0 +1,69 @@
+---
+id: ps4-torrent
+name: PS4-Torrent
+description: "PS4-Torrent is a Public Russian site for PS4 Games"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - http://ps4-torrent.ru/ # site forces http
+
+caps:
+  categories:
+    Console/PS4: Console/PS4
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a.down-game
+      attribute: href
+
+search:
+  paths:
+    # http://ps4-torrent.ru/search/?q=%&t=0
+    - path: search/
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%{{ end }}"
+    t: 0
+
+  rows:
+    selector: table.eBlock
+
+  fields:
+    category:
+      text: Console/PS4
+    title:
+      selector: div.eTitle a
+    details:
+      selector: div.eTitle a
+      attribute: href
+    download:
+      selector: div.eTitle a
+      attribute: href
+    description:
+      selector: div.eDetails
+    date:
+      selector: div.eDetails
+      remove: a, span
+      filters:
+        - name: replace
+          args: ["- ", ""]
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine uCoz

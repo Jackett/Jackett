@@ -7,27 +7,26 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentqq96.com/
+  - https://torrentqq140.com/
 legacylinks:
-  - https://torrentqq76.com/
-  - https://torrentqq77.com/
-  - https://torrentqq78.com/
-  - https://torrentqq79.com/
-  - https://torrentqq80.com/
-  - https://torrentqq81.com/
-  - https://torrentqq82.com/
-  - https://torrentqq83.com/
-  - https://torrentqq84.com/
-  - https://torrentqq85.com/
-  - https://torrentqq86.com/
-  - https://torrentqq87.com/
-  - https://torrentqq88.com/
-  - https://torrentqq89.com/
-  - https://torrentqq90.com/
-  - https://torrentqq91.com/
-  - https://torrentqq92.com/
-  - https://torrentqq93.com/
-  - https://torrentqq95.com/
+  - https://torrentqq121.com/
+  - https://torrentqq122.com/
+  - https://torrentqq123.com/
+  - https://torrentqq125.com/
+  - https://torrentqq126.com/
+  - https://torrentqq127.com/
+  - https://torrentqq128.com/
+  - https://torrentqq129.com/
+  - https://torrentqq130.com/
+  - https://torrentqq131.com/
+  - https://torrentqq132.com/
+  - https://torrentqq133.com/
+  - https://torrentqq134.com/
+  - https://torrentqq135.com/
+  - https://torrentqq136.com/
+  - https://torrentqq137.com/
+  - https://torrentqq138.com/
+  - https://torrentqq139.com/
 
 caps:
   categorymappings:
@@ -52,16 +51,20 @@ settings:
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
-  - name: downloads
-    type: info
-    label: About Downloads
-    default: Some download links on this site use a link to a direct file download service, instead of a .torrent link. Jackett does not support direct file downloads, so you will get a page-cannot-be-found error when you try them.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
 
 download:
-  selectors:
-    - selector: a[href^="/torrent/download/"]
-      attribute: href
+  infohash:
+    hash:
+      selector: table.table-bordered > tbody > tr > td > ul > li
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: table.table-bordered > thead > tr > th > strong
+      filters:
+        - name: trim
+        - name: validfilename
 
 search:
   paths:
@@ -89,18 +92,20 @@ search:
     download:
       selector: a[href$=".html"][title]
       attribute: href
-    date:
+    date_day:
       selector: div.wr-date:contains("-")
       optional: true
       filters:
         - name: dateparse
           args: "01-02"
-    date:
+    date_time:
       selector: div.wr-date:contains(":")
       optional: true
       filters:
         - name: dateparse
           args: "15:04"
+    date:
+      text: "{{ if or .Result.date_time .Result.date_day }}{{ or .Result.date_time .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: div.wr-size
       filters:

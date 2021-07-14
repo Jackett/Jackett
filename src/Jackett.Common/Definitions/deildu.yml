@@ -2,7 +2,7 @@
 id: deildu
 name: Deildu
 description: "Deildu is an Icelandic Semi-Private site for TV / MOVIES / GENERAL"
-language: is-is
+language: is-IS
 type: semi-private
 encoding: iso-8859-1
 links:
@@ -106,9 +106,6 @@ search:
       selector: td:nth-child(4)
     grabs:
       selector: td:nth-child(8)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(9)
     leechers:

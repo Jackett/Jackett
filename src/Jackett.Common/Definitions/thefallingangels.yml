@@ -2,7 +2,7 @@
 id: thefallingangels
 name: The Falling Angels
 description: "The Falling Angels (TFA) is a German Private site for TV / MOVIES / GENERAL"
-language: de-de
+language: de-DE
 type: private
 encoding: UTF-8
 links:
@@ -134,107 +134,38 @@ search:
     selector: div.selection_wrap
 
   fields:
-    category:
-      selector: div.kat_cat_pic
-      case:
-        ":has(div.kat_cat_pic_name:contains(\"Apps\")):has(div.kat_cat_pic_name_b:contains(\"Win\"))": 107
-        ":has(div.kat_cat_pic_name:contains(\"Apps\")):has(div.kat_cat_pic_name_b:contains(\"Mac\"))": 132
-        ":has(div.kat_cat_pic_name:contains(\"Apps\")):has(div.kat_cat_pic_name_b:contains(\"Oth\"))": 105
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 116
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"DS\"))": 155
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Swi\"))": 134
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Wii\"))": 138
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"PS\"))": 124
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"XBOX\"))": 139
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Ult\"))": 125
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 140
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 141
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 104
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Hor\"))": 100
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"S-DVD\"))": 144
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": 142
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Blu\"))": 143
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Eng\"))": 133
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"AVC\"))": 101
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Spe\"))": 103
-        ":has(div.kat_cat_pic_name:contains(\"Dokus\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 108
-        ":has(div.kat_cat_pic_name:contains(\"Dokus\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 113
-        ":has(div.kat_cat_pic_name:contains(\"Dokus\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 154
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 149
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 151
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 150
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Eng\"))": 136
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Ult\"))": 135
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 152
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 153
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 106
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"MP3\"))": 147
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": 145
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"M4A\"))": 137
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Dis\"))": 109
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 146
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Vid\"))": 148
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"s HD\"))": 157
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"s SD\"))": 158
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"n HD\"))": 161
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"n SD\"))": 162
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"buch\"))": 112
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Zeit\"))": 115
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Com\"))": 114
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Rom\"))": 117
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 156
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"FSK\"))": 130
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Zeit\"))": 115
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 159
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 160
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"Ser\"))": 128
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"Hen\"))": 131
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"Son\"))": 129
-        ":has(div.kat_cat_pic_name:contains(\"Other\")):has(div.kat_cat_pic_name_b:contains(\"cher\"))": 119
-        ":has(div.kat_cat_pic_name:contains(\"Other\")):has(div.kat_cat_pic_name_b:contains(\"Mob\"))": 118
-        ":has(div.kat_cat_pic_name:contains(\"Other\")):has(div.kat_cat_pic_name_b:contains(\"Pic\"))": 123
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 120
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 121
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 122
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pic\"))": 110
+    cat_p1:
+      selector: div.kat_cat_pic_name
+    cat_p2:
+      selector: div.kat_cat_pic_name_b
+    categorydesc:
+      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
     title:
       selector: a.selection_a
       filters:
         - name: re_replace
           args: ["^\\[[\\w ]*\\]\\s?", ""]
-        - name: re_replace
-          args: ["^\\[[\\w ]*\\]\\s?", ""]
     details:
       selector: a.selection_a
       attribute: href
-    download:
+    download_default:
       selector: a[href^="download.php?torrent="]
       optional: true
       attribute: href
-    download:
+    download_ssl:
       selector: a[href^="download_ssl.php?torrent="]
       optional: true
       attribute: href
+    download:
+      text: "{{ if .Result.download_ssl }}{{ .Result.download_ssl }}{{ else }}{{ .Result.download_default }}{{ end }}"
     poster:
       selector: div[id^="details"] img
       attribute: src
     size:
       selector: div.selection_unter_ad
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: div.selection_unter_ae
-      filters:
-        - name: trim
-          args: "x"
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
-    date:
+    date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
       selector: div.selection_unter_ab:not(:contains("."))
@@ -244,7 +175,7 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
-    date:
+    date_year:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
       optional: true
@@ -255,23 +186,14 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     description:
       selector: selection_unter_af
-      optional: true
     seeders:
       selector: div.selection_unter_aa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     leechers:
       selector: div.selection_unter_aaa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     downloadvolumefactor:
       case:
         "div[onmouseover=\"return overlib('OnlyUp: Ja');\"]": 0

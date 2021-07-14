@@ -58,7 +58,7 @@ namespace Jackett.Common.Indexers
 
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-ES";
             Type = "private";
 
             AddCategoryMapping("cat[]=1&subcat[]=1", TorznabCatType.MoviesDVD, "Películas/DVD");
@@ -192,7 +192,7 @@ namespace Jackett.Common.Indexers
 
                     var publishDateStr = row.Children[4].InnerHtml.Split('>').Last();
                     var publishDate = DateTime.ParseExact(publishDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    var size = ReleaseInfo.GetBytes(row.Children[5].TextContent.Replace(".", "").Replace(",", "."));
+                    var size = ReleaseInfo.GetBytes(row.Children[5].TextContent);
                     var seeders = ParseUtil.CoerceInt(row.Children[6].TextContent);
                     var leechers = ParseUtil.CoerceInt(row.Children[7].TextContent);
                     var grabs = ParseUtil.CoerceInt(row.Children[8].TextContent);

@@ -2,7 +2,7 @@
 id: opencd
 name: OpenCD
 description: "OpenCD is a CHINESE Private Torrent Tracker for MUSIC"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
@@ -23,6 +23,9 @@ caps:
     - {id: 16, cat: Audio, desc: "独立(Indie)"}
     - {id: 17, cat: Audio, desc: "嘻哈(Hip Hop)"}
     - {id: 18, cat: Audio, desc: "音乐剧(Musical)"}
+    - {id: 19, cat: Audio, desc: "乡村(Country)"}
+    - {id: 20, cat: Audio, desc: "另类(Alternative)"}
+    - {id: 21, cat: Audio, desc: "世界音樂(World))"}
     - {id: 9, cat: Audio, desc: "其它类型(Others)"}
 
   modes:
@@ -30,12 +33,13 @@ caps:
     music-search: [q, artist]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -62,23 +66,9 @@ settings:
       asc: asc
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[alt="CAPTCHA"]
-    input: imagestring
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: ""
-    securelogin: ""
-    ssl: yes
-    trackerssl: yes
-  error:
-    - selector: td.embedded:has(h2:contains("失敗"))
-    - selector: td.embedded:has(h2:contains("failed!"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -122,15 +112,22 @@ search:
         td[title="独立"]: 16
         td[title="嘻哈"]: 17
         td[title="音乐剧"]: 18
+        td[title="乡村(Country)"]: 19
+        td[title="另类(Alternative)"]: 20
+        td[title="世界音樂(World)"]: 21
         td[title="其它类型"]: 9
-    title:
-      selector: a[href^="plugin_details.php?id="]
-    title:
+        # Some torrents have no title set on td
+        td:not([title]): 9
+    title_default:
+      selector: a[href*="details.php?id="]
+    title_optional:
       optional: true
-      selector: a[title][href^="plugin_details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
-      selector: a[href^="plugin_details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
@@ -143,7 +140,7 @@ search:
           args: "https://images.weserv.nl/?url={{ .Config.sitelink }}" # for display on dashboard
         - name: append
           args: "&w=180&h=270" # for display on dashboard
-    date:
+    date_elapsed:
       # time type: time elapsed (default)
       selector: td:nth-child(6) > span[title]
       attribute: title
@@ -153,7 +150,7 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_added:
       # time added
       selector: td:nth-child(6):not(:has(span))
       optional: true
@@ -162,6 +159,8 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(7)
     seeders:

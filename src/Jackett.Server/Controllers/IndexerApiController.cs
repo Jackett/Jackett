@@ -170,6 +170,7 @@ namespace Jackett.Server.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
+                result.Poster = serverService.ConvertToProxyLink(result.Poster, serverUrl, result.TrackerId, "img", "poster");
                 if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(serverService.GetBlackholeDirectory()))
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
             }

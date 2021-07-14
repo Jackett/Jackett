@@ -23,7 +23,8 @@ namespace Jackett.Common.Indexers
     internal class LostFilm : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://lostfilm.site" // redirects to *.tw
+            "https://lostfilm.site",
+            "https://lostfilm.tw/",
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -31,7 +32,8 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilmtv.site/",
             "https://www.lostfilm.tv/",
             "https://www.lostfilm.win/",
-            "https://lostfilm.tw/",
+            "https://www.lostfilm.tw/",
+            "https://www.lostfilmtv2.site/",
             "https://www.lostfilm.uno/"
 
  };
@@ -127,10 +129,10 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "semi-private";
 
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "25234600906DF82792DE9F4AA75A5AED2F226577"); // for *.run expired 07/Jun/21
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "98D43B6E740B42C02A9BD1A9D1A813E4350BE332"); // for *.win expired 26/Mar/22
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
 
             // TODO: review if there is only this category (movie search is enabled)
@@ -420,7 +422,8 @@ namespace Jackett.Common.Indexers
         {
             var url = DiscoveryUrl;
             logger.Debug("FetchNewReleases: " + url);
-            var results = await RequestStringAndRelogin(url);
+            var results = await RequestWithCookiesAndRetryAsync(
+                url, referer: SiteLink);
             var releases = new List<ReleaseInfo>();
 
             try
@@ -463,7 +466,8 @@ namespace Jackett.Common.Indexers
                     var details = new Uri(url);
 
                     var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
-                    dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
+                    var key = (dateString.Contains("TBA")) ? "ru: " : "eng: ";
+                    dateString = TrimString(dateString, key, " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
                     DateTime date;
                     if (dateString.Length == 4) //dateString might be just a year, e.g. https://www.lostfilm.tv/series/Ghosted/season_1/episode_14/
                     {
@@ -810,8 +814,9 @@ namespace Jackett.Common.Indexers
 
         private DateTime DateFromEpisodeColumn(IElement dateColumn)
         {
-            var dateString = dateColumn.QuerySelector("span").TextContent;
-            dateString = dateString.Substring(dateString.IndexOf(":") + 2); // 'Eng: 23.05.2017' -> '23.05.2017'
+            var dateString = dateColumn.QuerySelector("span.small-text")?.TextContent;
+            // 'Eng: 23.05.2017' -> '23.05.2017' OR '23.05.2017' -> '23.05.2017'
+            dateString = (string.IsNullOrEmpty(dateString)) ? dateColumn.QuerySelector("span")?.TextContent : dateString.Substring(dateString.IndexOf(":") + 2);
             var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
             return date;
         }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -12,9 +14,10 @@ namespace Jackett.Common.Indexers
     public class Orpheus : GazelleTracker
     {
         // API Reference: https://github.com/OPSnet/Gazelle/wiki/JSON-API-Documentation
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+        protected override string DownloadUrl => SiteLink + "ajax.php?action=download" + (useTokens ? "&usetoken=1" : "") + "&id=";
         protected override string AuthorizationFormat => "token {0}";
         protected override int ApiKeyLength => 118;
+        protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "");
         public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "orpheus",
@@ -51,7 +54,7 @@ namespace Jackett.Common.Indexers
                    usePassKey: false,
                    instructionMessageOptional: "<ol><li>Go to Orpheus's site and open your account settings.</li><li>Under <b>Access Settings</b> click on 'Create a new token'</li><li>Give it a name you like and click <b>Generate</b>.</li><li>Copy the generated API Key and paste it in the above text field.</li></ol>")
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");

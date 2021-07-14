@@ -2,22 +2,14 @@
 id: gktorrent
 name: GkTorrent
 description: "GkTorrent is a French Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.gktorrent.cc/
-  - https://gktorrent.nocensor.space/
+  - https://www.gktorrents.org/
+  - https://gktorrent.nocensor.sbs/
 legacylinks:
-  - https://www.gktorrent.com/
-  - http://www.gktorrent.com/
-  - http://ww1.gktorrent.com/
-  - http://ww2.gktorrent.com/
-  - https://ww2.gktorrent.com/
-  - https://ww3.gktorrent.com/
-  - http://www.gktorrent.net/
-  - https://ww4.gktorrent.com/
   - http://www.gktorrent.co/
   - https://www.gktorrent.co/
   - https://www.gktorrent.ws/
@@ -32,6 +24,12 @@ legacylinks:
   - https://www.gktorrent.pw/
   - https://wvw.gktorrent.pw/
   - https://vww.gktorrent.pw/
+  - https://www.gktorrent.cc/
+  - https://gktorrent.nocensor.space/
+  - https://www.gktorrents.com/
+  - https://gktorrent.nocensor.work/
+  - https://www.gktorrents.net/
+  - https://gktorrent.nocensor.biz/
 
 caps:
   categorymappings:
@@ -74,9 +72,12 @@ settings:
 
 download:
   selectors:
-    - selector: a[href*="magnet:?xt="]
+    - selector: a[href^="magnet:?"]
       attribute: href
-
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 search:
   paths:
     - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"

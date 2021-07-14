@@ -2,7 +2,7 @@
 id: tapochek
 name: Tapochek
 description: "Tapochek is a RUSSIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: ru-ru
+language: ru-RU
 type: private
 encoding: windows-1251
 links:
@@ -318,10 +318,12 @@ caps:
     - {id: 230, cat: PC, desc: "Windows 7"}
     - {id: 879, cat: PC, desc: "Windows 8"}
     - {id: 905, cat: PC, desc: "Windows 10"}
+    - {id: 969, cat: PC, desc: "Windows 11"}
     - {id: 698, cat: PC, desc: "Сборки (Microsoft Windows XP)"}
     - {id: 701, cat: PC, desc: "Сборки (Microsoft Windows 7)"}
     - {id: 880, cat: PC, desc: "Сборки (Microsoft Windows 8)"}
     - {id: 906, cat: PC, desc: "Сборки (Microsoft Windows 10)"}
+    - {id: 970, cat: PC, desc: "Сборки (Microsoft Windows 11)"}
     - {id: 231, cat: PC, desc: "Серверные (Microsoft Windows OS)"}
     - {id: 232, cat: PC, desc: "Разное (Microsoft Windows OS)"}
     - {id: 236, cat: PC, desc: "Работа с жёстким диском"}

@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                                                                "Show-Adult-Content option in your BakaBT account Settings."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
@@ -173,9 +173,10 @@ namespace Jackett.Common.Indexers
 
                     foreach (var name in titles)
                     {
-                        var release = new ReleaseInfo();
-
-                        release.Title = (name + releaseInfo).Trim();
+                        var release = new ReleaseInfo
+                        {
+                            Title = (name + releaseInfo).Trim()
+                        };
                         // Ensure the season is defined as this tracker only deals with full seasons
                         if (release.Title.IndexOf("Season") == -1 && AppendSeason)
                         {

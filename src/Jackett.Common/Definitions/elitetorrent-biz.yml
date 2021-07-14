@@ -2,11 +2,12 @@
 id: elitetorrent-biz
 name: EliteTorrent.biz
 description: "EliteTorrent.biz is a Public torrent site for TV, movies and documentaries"
-language: es-es
+language: es-ES
 type: public
 encoding: UTF-8
 links:
-  - https://elitetorrent.app/
+  - https://www.elitetorrent.wtf/
+  - https://elitetorrent.nocensor.sbs/
 legacylinks:
   - https://www.elitetorrent.biz/
   - https://www.elitetorrent.io/
@@ -23,13 +24,18 @@ legacylinks:
   - https://www.elitetorrent.to/
   - https://www.elitetorrent.se/
   - https://www.elitetorrent.com/
+  - https://elitetorrent.si/
+  - https://elitetorrent.nocensor.work/
   - https://elitetorrent.com/
+  - https://elitetorrent.app/
+  - https://elitetorrent.nocensor.biz/
+  - https://elitetorrent.la/
 
 caps:
   categories:
-    "series": TV
-    "peliculas": Movies
-    "other": Other
+    series: TV
+    peliculas: Movies
+    other: Other
 
   modes:
     search: [q]
@@ -44,11 +50,13 @@ download:
       attribute: href
 
 search:
-  # site returns just 30 results, attempt to fetch upto 90
+  # site returns just 30 results, attempt to fetch up to 90
   paths:
     - path: /
     - path: /page/2/
+      followredirect: true
     - path: /page/3/
+      followredirect: true
   keywordsfilters:
     # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
     - name: re_replace
@@ -60,11 +68,25 @@ search:
     $raw: "&x=0&y=0"
 
   rows:
-    selector: "#principal .miniboxs-ficha li"
+    selector: "#principal .miniboxs-ficha li:has(span:nth-of-type(2))"
     filters:
       - name: andmatch
 
   fields:
+    category_movie:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(peliculas)/.*$"
+    category_tv:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(series)/.*$"
+    category:
+      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
     quality:
       selector: span:nth-of-type(2) > i
       filters:
@@ -86,7 +108,7 @@ search:
           args: ["Subtitulado", " SPASUBS"]
         - name: replace
           args: ["VOSE", ""]
-    _title:
+    title:
       selector: div.imagen > a
       attribute: title
       # normalize to SXXEYY format
@@ -101,40 +123,27 @@ search:
           args: ["(\\d{2})×(\\d{2})", "S$1E$2"]
         - name: re_replace
           args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
-    title:
-      text: "{{ .Result._title}} {{ .Result.language }} {{ .Result.quality }}"
+        - name: append
+          args: " {{ .Result.quality }} {{ .Result.language }}"
     details:
       selector: .meta a
       attribute: href
     download:
       selector: .meta a
       attribute: href
-    banner:
+    poster:
       selector: .imagen img
       attribute: data-src
-    category_movie:
-      selector: .meta a
-      attribute: href
-      filters:
-        - name: regexp
-          args: "^.*/(peliculas)/.*$"
-    category_tv:
-      selector: .meta a
-      attribute: href
-      filters:
-        - name: regexp
-          args: "^.*/(series)/.*$"
-    category:
-      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
-    size:
-      text: "0 B"
-    size:
-      # size can be missing
-      optional: true
+    size_optional:
       selector: .voto1
+      optional: true
       filters:
         - name: replace
+          args: ["desc.", "512 MB"]
+        - name: replace
           args: ["s", ""]
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}512 MB{{ end }}"
     date:
       text: now
     seeders:

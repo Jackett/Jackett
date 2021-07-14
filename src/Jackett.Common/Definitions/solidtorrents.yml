@@ -1,0 +1,135 @@
+---
+id: solidtorrents
+name: Solid Torrents
+description: "Solid Torrents is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://solidtorrents.to/
+legacylinks:
+  - https://solidtorrents.net/
+
+caps:
+  categories:
+    AudioBook: Audio/Audiobook
+    eBook: Books/EBook
+    "Ebook/Course": Books/EBook
+    Games: PC/Games
+    "Games/PC": PC/Games
+    Movies: Movies
+    Music: Audio
+    "Music/Album": Audio
+    "Music/mp3": Audio/MP3
+    "Music/Lossless": Audio/Lossless
+    "Music/Video": Audio/Video
+    Other: Other
+    "Other/Android": PC/Mobile-Android
+    "Other/Archive": Other
+    "Other/Audio": Audio
+    "Other/Database": PC
+    "Other/DiskImage": PC/ISO
+    "Other/Document": Books/Comics
+    "Other/Image": Other/Misc
+    "Other/Program": PC/0day
+    "Other/Sourcecode": PC
+    "Other/Source Code": PC
+    "Other/Video": TV
+    Softwares: PC/0day
+    "Softwares/Windows": PC/0day
+    TV: TV
+    Unknown: Other
+    XXX: XXX
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  paths:
+    # https://solidtorrents.net/search?q=&sort=date&order=desc
+    - path: search
+  inputs:
+    q: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: li.search-result:has(a[class="dl-torrent"])
+
+  fields:
+    category:
+      selector: a.category
+    title:
+      selector: h5
+    details:
+      selector: h5 a
+      attribute: href
+    download:
+      selector: a[class="dl-torrent"]
+      attribute: href
+    infohash:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    grabs:
+      selector: div.stats div:has(img[alt="Download"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
+    size:
+      selector: div.stats div:has(img[alt="Size"])
+    seeders:
+      selector: div.stats div:has(img[alt="Seeder"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
+    leechers:
+      selector: div.stats div:has(img[alt="Leecher"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
+    date:
+      selector: div.stats div:has(img[alt="Date"])
+      filters:
+        - name: dateparse
+          args: "Jan 2, 2006"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

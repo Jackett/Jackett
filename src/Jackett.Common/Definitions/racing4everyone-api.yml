@@ -1,0 +1,172 @@
+---
+id: racing4everyone-api
+name: Racing4Everyone (API)
+description: "Racing4Everyone (R4E) is a Private Torrent Tracker for RACING"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://racing4everyone.eu/
+legacylinks:
+  - https://racing4everyone.jp/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Sport, desc: "BTCC"}
+    - {id: 2, cat: TV/Sport, desc: "TV-Documentaries"}
+    - {id: 3, cat: TV/Sport, desc: "DTM"}
+    - {id: 22, cat: TV/Sport, desc: "Formula 2"}
+    - {id: 23, cat: TV/Sport, desc: "Formula E"}
+    - {id: 24, cat: TV/Sport, desc: "Misc"}
+    - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
+    - {id: 26, cat: TV/Sport, desc: "MotoGP-2-3-E"}
+    - {id: 31, cat: TV/Sport, desc: "Nascar"}
+    - {id: 32, cat: TV/Sport, desc: "Stock Car Brazil"}
+    - {id: 50, cat: TV/Sport, desc: "WRC"}
+    - {id: 55, cat: TV/Sport, desc: "Season Reviews"}
+    - {id: 56, cat: TV/Sport, desc: "WRX"}
+    - {id: 57, cat: TV/Sport, desc: "WEC"}
+    - {id: 58, cat: TV/Sport, desc: "W Series"}
+    - {id: 60, cat: TV/Sport, desc: "Drag Racing"}
+    - {id: 61, cat: TV/Sport, desc: "ERC"}
+    - {id: 62, cat: TV/Sport, desc: "Indycar Series"}
+    - {id: 63, cat: TV/Sport, desc: "Supercars"}
+    - {id: 66, cat: TV/Sport, desc: "Documentaries"}
+    - {id: 67, cat: TV/Sport, desc: "Formula 1"}
+    - {id: 68, cat: TV/Sport, desc: "Formula 3"}
+    - {id: 69, cat: TV/Sport, desc: "Other Cars"}
+    - {id: 70, cat: TV/Sport, desc: "Motorsport Movies"}
+    - {id: 71, cat: TV/Sport, desc: "WSBK"}
+    - {id: 72, cat: TV/Sport, desc: "AMA Pro Motocross"}
+    - {id: 73, cat: TV/Sport, desc: "AMA Supercross"}
+    - {id: 74, cat: TV/Sport, desc: "WTCR"}
+    - {id: 76, cat: TV/Sport, desc: "ARCA"}
+    - {id: 77, cat: TV/Sport, desc: "Blancpain GT"}
+    - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
+    - {id: 79, cat: TV/Sport, desc: "TV Series"}
+    - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
+    - {id: 81, cat: TV/Sport, desc: "Extreme E"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://racing4everyone.eu/\" target =_blank>Racing4Everyone</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php
+    - path: "/api/torrents/filter"
+      response:
+        type: json
+
+  inputs:
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    api_token: "{{ .Config.apikey }}"
+    name: "{{ .Keywords }}"
+    $raw: "{{ if .Query.Season }}&seasonNumber={{ .Query.Season }}{{ else }}{{ end }}{{ if .Query.Ep }}&episodeNumber={{ .Query.Ep }}{{ else }}{{ end }}{{ if .Query.TMDBID }}&tmdbId={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if .Query.IMDBIDShort }}&imdbId={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdbId={{ .Query.TVDBID }}{{ else }}{{ end }}{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&free=1{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: data
+    attribute: attributes
+    count:
+      selector: meta.total
+
+  fields:
+    categorydesc:
+      selector: category
+    title:
+      selector: name
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    poster:
+      selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2021-10-18T00:34:50.000000Z"
+      selector: created_at
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
+      case:
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: double_upload
+      case:
+        0: 1 # normal
+        1: 2 # double
+    minimumratio:
+      text: 1.0
+# json UNIT3D 6.0.4

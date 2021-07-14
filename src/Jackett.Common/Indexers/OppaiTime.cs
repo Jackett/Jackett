@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
                    useApiKey: false
                 )
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");

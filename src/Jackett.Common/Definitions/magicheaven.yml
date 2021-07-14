@@ -2,9 +2,10 @@
 id: magicheaven
 name: magic-heaven
 description: "magic-heaven is a Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en
+language: en-US
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://magic-heaven.info/
 
@@ -18,42 +19,38 @@ caps:
     - {id: 176, cat: Movies/BluRay, desc: "BLU-RAY 720p"}
     - {id: 156, cat: Movies/BluRay, desc: "BLU-RAY H264"}
     - {id: 153, cat: Movies/BluRay, desc: "BLU-RAY X264"}
-    - {id: 36, cat: Movies/SD, desc: "CAMS"}
-    - {id: 161, cat: Movies/Other, desc: "Christmas Movies"}
-    - {id: 164, cat: Movies/Other, desc: "Christmas Music"}
-    - {id: 160, cat: Movies/Other, desc: "Classic Movies"}
-    - {id: 169, cat: Console, desc: "Console Games"}
-    - {id: 178, cat: PC/Games, desc: "PC GAMES"}
-    - {id: 175, cat: Console/XBox, desc: "Console Games XBOX"}
-    - {id: 82, cat: Audio/Other, desc: "DJ MUSIC"}
-    - {id: 84, cat: Audio/Other, desc: "DJ MUSIC DMC"}
-    - {id: 102, cat: Audio/Other, desc: "DJ MUSIC Full Tilt Remix"}
-    - {id: 92, cat: Audio/Other, desc: "DJ MUSIC Funkymix"}
-    - {id: 83, cat: Audio/Other, desc: "DJ MUSIC MASTERMIX"}
-    - {id: 93, cat: Audio/Other, desc: "DJ MUSIC Ultimix"}
-    - {id: 90, cat: Audio/Other, desc: " DJ MUSIC X-mix"}
+    - {id: 36, cat: Movies/SD, desc: "Cams"}
+    - {id: 180, cat: Movies/Other, desc: "Christmas"}
+    - {id: 181, cat: Movies/Other, desc: "Christmas Movies"}
+    - {id: 182, cat: Audio/Other, desc: "Christmas Music"}
+    - {id: 82, cat: Audio/Other, desc: "DJ Music"}
+    - {id: 84, cat: Audio/Other, desc: "DJ Music DMC"}
+    - {id: 92, cat: Audio/Other, desc: "DJ Music Funkymix"}
+    - {id: 83, cat: Audio/Other, desc: "DJ Music MASTERMIX"}
+    - {id: 93, cat: Audio/Other, desc: "DJ Music Ultimix"}
     - {id: 3, cat: Movies/DVD, desc: "DVD-R"}
     - {id: 11, cat: Books/EBook, desc: "E BOOKS"}
     - {id: 114, cat: Audio/Audiobook, desc: "E BOOKS Audio Books"}
     - {id: 86, cat: Books/Mags, desc: "E BOOKS Magazines"}
+    - {id: 169, cat: Console, desc: "Games"}
+    - {id: 178, cat: PC/Games, desc: "Games PC GAMES"}
+    - {id: 175, cat: Console/XBox, desc: "Games XBOX"}
     - {id: 167, cat: Audio/Other, desc: "KARAOKE"}
     - {id: 14, cat: Movies/Other, desc: "MKV's"}
     - {id: 13, cat: Audio/MP3, desc: "MP3 RELEASES"}
-    - {id: 17, cat: Movies/Other, desc: "MP4"}
     - {id: 18, cat: Movies/Other, desc: "MULTI'S"}
     - {id: 98, cat: Movies/Other, desc: "MULTI'S Movie Box Sets"}
-    - {id: 20, cat: Audio/MP3, desc: "MUSIC - MP3"}
-    - {id: 170, cat: Audio, desc: "MUSIC Artist Albums"}
+    - {id: 183, cat: Audio/Lossless, desc: "MUSIC FLAC"}
+    - {id: 20, cat: Audio/MP3, desc: "MUSIC MP3"}
     - {id: 150, cat: Audio, desc: "MUSIC Collections"}
     - {id: 96, cat: Audio, desc: "MUSIC Discographys"}
-    - {id: 97, cat: Audio/Lossless, desc: "MUSIC Flac"}
     - {id: 177, cat: Audio, desc: "MUSIC Rock / Metal"}
     - {id: 171, cat: Audio/Video, desc: "Music-Videos"}
     - {id: 81, cat: Movies, desc: "RatioBoosters"}
-    - {id: 26, cat: TV/Sport, desc: "SPORT"}
+    - {id: 26, cat: TV/Sport, desc: "Sport"}
     - {id: 7, cat: Audio, desc: "Top 40 Albums/Singles"}
-    - {id: 9, cat: TV, desc: "TV EPISODES"}
-    - {id: 38, cat: TV, desc: "TV SERIES"}
+    - {id: 9, cat: TV, desc: "TV Episodes"}
+    - {id: 38, cat: TV, desc: "TV Series"}
     - {id: 30, cat: Other, desc: "VIP"}
     - {id: 158, cat: Other, desc: "VIP GOLD"}
     - {id: 173, cat: Movies/WEB-DL, desc: "Web-dl"}
@@ -61,8 +58,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -120,9 +117,9 @@ download:
     path: takethanks.php
     method: post
     inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
+      torrentid: "{{ re_replace  .DownloadUri.PathAndQuery \".*torrent-details-(\\d+).*\" \"$1\"}}"
   selectors:
-    - selector: a[href*="/download.php?id="]
+    - selector: a[href*="download-torrent-"]
       attribute: href
 
 search:
@@ -134,35 +131,40 @@ search:
     category: 0
     # yes incldead, no activeonly
     include_dead_torrents: yes
-    keywords: "{{ .Keywords }}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name, t_description, t_both, t_uploader, t_genre
-    search_type: t_name
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-    # does not return imdb link in results, does not support imdbid searches
+    # does not return imdb link in results
   keywordsfilters:
     - name: re_replace # replace special characters with "%" (wildcard)
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: "table#sortabletable tbody tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable tbody tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="browse.php?category="]
+      selector: a[href*="torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
-    title:
+        - name: regexp
+          args: (\d+)
+    title_default:
       # is often abbreviated
-      selector: a[href*="details.php?id="]
-    title:
+      selector: a[href*="torrent-details-"]
+    title_optional:
       # usually longer than details title
       selector: div[id^="port-content-"] div
       optional: true
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
+      attribute: href
+    download:
+      selector: a[href*="torrent-details-"]
       attribute: href
     poster:
       selector: div[id^="port-content-"] img
@@ -172,17 +174,10 @@ search:
       filters:
         - name: regexp
           args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
-      filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    download:
-      selector: a[href*="details.php?id="]
-      attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
     size:
       selector: td:nth-child(5)
     grabs:
@@ -203,4 +198,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-# TS Special Edition v.7.5
+# TS Special Edition v.8.0

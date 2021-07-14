@@ -2,7 +2,7 @@
 id: mesevilag
 name: MeseVilág
 description: "MeseVilág (Fairytale World) is a Hungarian Private site for fairy tales, family movies and comedies"
-language: hu-hu
+language: hu-HU
 type: private
 encoding: UTF-8
 links:
@@ -123,7 +123,7 @@ search:
       filters:
         - name: replace
           args: ["span_bookmark_", "download.php?id="]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:

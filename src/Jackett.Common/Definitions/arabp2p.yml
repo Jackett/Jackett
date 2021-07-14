@@ -2,7 +2,7 @@
 id: arabp2p
 name: ArabP2P
 description: "ArabP2P is an ARABIC Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: ar-ar
+language: ar-AR
 type: private
 encoding: UTF-8
 links:
@@ -47,7 +47,7 @@ caps:
     - {id: 52, cat: TV, desc: "مسرحيات (Plays)"}
     - {id: 71, cat: TV, desc: "مسلسلات مدبلجه عربي (Arabic Dubbed Series)"}
     - {id: 90, cat: TV, desc: "برامج ومسابقات (Shows)"}
-    - {id: 110, cat: TV, desc: "رمضان 2021 (Ramadan 2021)"}
+    - {id: 111, cat: TV, desc: "2022 رمضان (2022 Ramadan)"}
     # المرئيات الاجنبية Foreign Movies
     - {id: 92, cat: TV/Foreign, desc: "تعليمي (Educational)"}
     - {id: 93, cat: TV/Documentary, desc: "وثائقي (Documentary)"}
@@ -127,6 +127,8 @@ search:
 
   rows:
     selector: table.torrent tr.torrent
+    filters:
+      - name: andmatch
 
   fields:
     category:

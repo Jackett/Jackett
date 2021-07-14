@@ -2,7 +2,7 @@
 id: acgrip
 name: ACG.RIP
 description: "ACG.RIP is a CHINESE Public torrent tracker for the latest anime and Japanese related torrents"
-language: zh-cn
+language: zh-CN
 type: public
 followredirect: true
 encoding: UTF-8

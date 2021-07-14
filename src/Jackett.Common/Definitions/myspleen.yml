@@ -2,7 +2,7 @@
 id: myspleen
 name: MySpleen
 description: "MySpleen is a Private Torrent Tracker for TV / COMEDY / ANIMATION / 80-90’S VHS NOSTALGIA"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -33,7 +33,7 @@ login:
     password: "{{ .Config.password }}"
     returnto: /
   error:
-    - selector: div#content:has(h2:contains("Login Failed"))
+    - selector: div#content:has(h3:contains("Login Failed"))
   test:
     path: browse.php
     selector: span.key:contains("Ratio") + span.value

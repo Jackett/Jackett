@@ -44,6 +44,10 @@ namespace Jackett.Common.Services
             filePermissionService = fps;
 
             variant = new Variants().GetVariant();
+
+            // Increase the HTTP client timeout just for update download (not other requests)
+            // The update is heavy and can take longer time for slow connections. Fix #12711
+            client.SetTimeout(300); // 5 minutes
         }
 
         public void StartUpdateChecker() => Task.Factory.StartNew(UpdateWorkerThread);
@@ -155,8 +159,9 @@ namespace Jackett.Common.Services
         }
 
         private string GetUpdaterPath(string tempDirectory) =>
-            variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64 ||
-            variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64
+            variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreMacOsArm64 ||
+            variant == Variants.JackettVariant.CoreLinuxAmdx64 || variant == Variants.JackettVariant.CoreLinuxArm32 ||
+            variant == Variants.JackettVariant.CoreLinuxArm64
                 ? Path.Combine(tempDirectory, "Jackett", "JackettUpdater")
                 : Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
 
@@ -252,19 +257,16 @@ namespace Jackett.Common.Services
                 Stream inStream = File.OpenRead(gzPath);
                 Stream gzipStream = new GZipInputStream(inStream);
 
-                var tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+                var tarArchive = TarArchive.CreateInputTarArchive(gzipStream, null);
                 tarArchive.ExtractContents(tempDir);
                 tarArchive.Close();
                 gzipStream.Close();
                 inStream.Close();
 
-                if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreLinuxAmdx64
-                || variant == Variants.JackettVariant.CoreLinuxArm32 || variant == Variants.JackettVariant.CoreLinuxArm64
-                || variant == Variants.JackettVariant.Mono)
+                if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreMacOsArm64
+                || variant == Variants.JackettVariant.CoreLinuxAmdx64 || variant == Variants.JackettVariant.CoreLinuxArm32
+                || variant == Variants.JackettVariant.CoreLinuxArm64 || variant == Variants.JackettVariant.Mono)
                 {
-                    //Calling the file permission service to limit usage to netcoreapp. The Mono.Posix.NETStandard library causes issues outside of .NET Core
-                    //https://github.com/xamarin/XamarinComponents/issues/282
-
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
 
                     var jackettPath = tempDir + "/Jackett/jackett";
@@ -273,7 +275,7 @@ namespace Jackett.Common.Services
                     var jackettUpdaterPath = tempDir + "/Jackett/JackettUpdater";
                     filePermissionService.MakeFileExecutable(jackettUpdaterPath);
 
-                    if (variant == Variants.JackettVariant.CoreMacOs)
+                    if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreMacOsArm64)
                     {
                         filePermissionService.MakeFileExecutable(tempDir + "/Jackett/install_service_macos");
                         filePermissionService.MakeFileExecutable(tempDir + "/Jackett/uninstall_jackett_macos");

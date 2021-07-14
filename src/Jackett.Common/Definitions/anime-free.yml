@@ -2,9 +2,12 @@
 id: anime-free
 name: Anime-Free
 description: "Anime-Free is a RUSSIAN Semi-Private Torrent Tracker for Hentai manga, eroge and flash porn games"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
+testlinktorrent: false
+certificates:
+  - 2b49b401259cb893f37de9eff343f7d356b1c2f2 # expired 8 ‎January ‎2022
 links:
   - https://anime-free.biz/
 legacylinks:
@@ -86,9 +89,7 @@ search:
     selector: article
 
   fields:
-    category:
-      text: 54
-    category|noappend:
+    category_optional:
       optional: true
       selector: a[href*="category="]
       attribute: href
@@ -110,6 +111,8 @@ search:
         a[href$="original_hentai"]: 48
         a[href$="rus-game"]: 57
         a[href$="uncensored"]: 45
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}54{{ end }}"
     title:
       selector: h2.title a
     details:
@@ -133,11 +136,11 @@ search:
       text: 1
     leechers:
       text: 1
-    size:
-      text: "0 B"
-    size:
+    size_optional:
       optional: true
       selector: b.file_size
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

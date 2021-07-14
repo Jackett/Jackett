@@ -2,7 +2,7 @@
 id: pttime
 name: PTTime
 description: "PTTime is a ratioless CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
@@ -14,19 +14,19 @@ caps:
     - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
     - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
     - {id: 404, cat: TV/Documentary, desc: "Documentaries(纪录片)"}
-    - {id: 406, cat: PC/Games, desc: "Games(游戏)"}
-    - {id: 408, cat: Audio, desc: "Music(音乐)"}
-    - {id: 411, cat: Other, desc: "Ability(技能)"}
-    - {id: 412, cat: Other, desc: "School(考试)"}
-    - {id: 413, cat: Books, desc: "Book(图书)"}
-    - {id: 420, cat: PC, desc: "IT(计算机)"}
-    - {id: 430, cat: TV/Anime, desc: "Animate(3D动画)"}
+    - {id: 405, cat: TV/Sport, desc: "Sport(体育、竞技、武术及相关)"}
+    - {id: 406, cat: PC/Games, desc: "Games(游戏及相关)"}
+    - {id: 408, cat: Audio, desc: "Music(音乐、专辑、MV、演唱会)"}
+    - {id: 409, cat: Other, desc: "Art(舞蹈、歌剧、戏曲、相声、评书等)"}
+    - {id: 411, cat: Other, desc: "Science(科学、知识、技能)"}
+    - {id: 412, cat: Other, desc: "School(应试、考级、初中以上教育)"}
+    - {id: 413, cat: Books, desc: "Book(书籍、有声书)"}
+    - {id: 420, cat: PC, desc: "Code(IT、编程、大数据、人工智能"}
+    - {id: 430, cat: TV/Anime, desc: "Animate(3D动画、2.5次元)"}
     - {id: 431, cat: TV/Anime, desc: "ACGN(二次元)"}
-    - {id: 432, cat: TV/Other, desc: "Baby(婴幼)"}
-    - {id: 440, cat: XXX, desc: "AV(步兵)"}
-    - {id: 441, cat: XXX, desc: "Sex(骑兵)"}
-    - {id: 442, cat: XXX, desc: "III(三级、写真)"}
-    - {id: 450, cat: Other, desc: "Resource(资源)"}
+    - {id: 432, cat: TV/Other, desc: "Baby(婴幼、早教、小学及相关)"}
+    - {id: 450, cat: Other, desc: "Resource(资源、素材、模板)"}
+    - {id: 451, cat: PC, desc: "Software(软件、系统、 程序、APP等)"}
     - {id: 490, cat: Other, desc: "Other(其它)"}
 
   modes:
@@ -93,12 +93,14 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_default:
       selector: a[href^="details.php?id="]
-    title:
+    title_optional:
       optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -108,10 +110,10 @@ search:
     poster:
       selector: td.torrentimg > img
       attribute: src
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    date:
+    date_elapsed:
       # time type: time elapsed (default)
       selector: td:nth-child(5) > span[title]
       attribute: title
@@ -121,7 +123,7 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_added:
       # time added
       selector: td:nth-child(5):not(:has(span))
       optional: true
@@ -130,6 +132,8 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(6)
     seeders:

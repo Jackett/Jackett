@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechTokens: true,
                    imdbInTags: true)
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TVSD, "TvSD");
@@ -70,17 +70,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(28, TorznabCatType.AudioAudiobook, "AudioBook");
             AddCategoryMapping(29, TorznabCatType.AudioOther, "Music");
             AddCategoryMapping(30, TorznabCatType.Other, "Misc");
-        }
-
-        protected override string GetSearchTerm(TorznabQuery query)
-        {
-            // Ignore season search without episode. Alpharatio doesn't support it.
-            var searchTerm = string.IsNullOrWhiteSpace(query.Episode)
-                ? query.SanitizedSearchTerm
-                : query.GetQueryString();
-
-            // Alpharatio can't handle dots in the searchstr
-            return searchTerm.Replace(".", " ");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

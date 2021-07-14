@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers.Feeds
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-en";
+            Language = "en-US";
             Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.TVAnime);

@@ -2,13 +2,13 @@
 id: hdcztorrent
 name: HD-CzTorrent
 description: "HD-CzTorrent is a CZECH semi private site for TV / MOVIES / GENERAL"
-language: cs-cz
+language: cs-CZ
 type: semi-private
 encoding: UTF-8
 links:
-  - https://www.hd-cztorrent.cz/
+  - http://www.hd-cztorrent.cz/
 legacylinks:
-  - http://www.hd-cztorrent.cz/ # site is forcing https
+  - https://www.hd-cztorrent.cz/  # site is forcing http
 
 caps:
   categorymappings:
@@ -38,6 +38,8 @@ caps:
     - {id: 94, cat: Movies, desc: "h 265"}
     - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK"}
     - {id: 95, cat: Movies/Other, desc: "FILM RETRO"}
+    #
+    - {id: 115, cat: Movies/Other, desc: "RLS-HD"}
     # HUDBA
     - {id: 57, cat: Audio/Lossless, desc: "Hudba flac"}
     - {id: 58, cat: Audio/MP3, desc: "Hudba mp3"}

@@ -2,48 +2,18 @@
 id: torrent9clone
 name: Torrent9 clone
 description: "Torrent9 clone is a FRENCH Public Torrent9 clone for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent9.pw/
-  - https://torrent9.nocensor.space/
-
+  - https://www.torrent9.nl/
+  - https://torrent9.nocensor.sbs/
 legacylinks:
-  - https://www.torrents9.pw/
-  - https://www.torrent9.ch/
-  - https://www1.torrent9.ch/
-  - https://www2.torrent9.ch/
-  - https://wwv.torrent9.vg/
-  - https://www.torrent9.vc/
-  - https://wvw.torrent9.vc/
-  - https://www.torrent9.lol/
-  - https://wvw.torrent9.lol/
-  - https://wwv.torrent9.lol/
-  - https://ww1.torrent9.lol/
-  - https://ww5.torrent9.lol/
-  - https://ww6.torrent9.lol/
-  - https://www.torrent9.tw/
-  - https://ww7.torrent9.lol/
-  - https://www.torrent9.dev/
-  - https://www.torrent9.sx/
-  - https://ww1.torrent9.sx/
-  - https://www.t9.re/
   - https://www.t9.vc/
   - https://www.torrent9.ai/
-  - https://torrent9.black-mirror.xyz/
-  - https://torrent9.unblocked.casa/
-  - https://torrent9.proxyportal.fun/
-  - https://torrent9.uk-unblock.xyz/
-  - https://torrent9.ind-unblock.xyz/
   - https://www.torrent9.pl/
   - https://www.torrent9.ac/
-  - https://torrent9.unblocked.bar/
-  - https://torrent9.proxyportal.pw/
-  - https://torrent9.uk-unblock.pro/
-  - https://torrent9.unblockninja.com/ # this is a proxy for torrent9
-  - https://torrent9.unblocked.rest/
   - https://www.torrent9.so/
   - https://wvw.torrent9.sh/
   - https://www.torrent9.sh/
@@ -55,13 +25,18 @@ legacylinks:
   - https://torrent9.unblocked.monster/
   - https://www.torrent9.la/
   - https://www.torrent9.ninja/
+  - https://torrent9.nocensor.space/
+  - https://torrent9.nocensor.work/
+  - https://www.torrent9.pw/
+  - https://www.torrent9.si/
+  - https://torrent9.nocensor.biz/
 
 caps:
   categorymappings:
     - {id: Films, cat: Movies, desc: "Movies"}
     - {id: Séries, cat: TV, desc: "TV"}
-    - {id: Musique, cat: Audio, desc: "Music"}
-    - {id: Ebook, cat: Books, desc: "Books"}
+    - {id: Musiques, cat: Audio, desc: "Music"}
+    - {id: Ebooks, cat: Books, desc: "Books"}
     - {id: Logiciels, cat: PC, desc: "Software"}
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
@@ -78,7 +53,7 @@ settings:
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -98,19 +73,19 @@ settings:
     type: checkbox
     label: Replace VOSTFR with ENGLISH
     default: false
-  - name: info_145469
-    type: info
-    label: About Torrent9clone Categories
-    default: Torrent9clone only returns category <b>Movies</b> in its <i>Keywordless</i> search results page.</br>To pass your apps' indexer TEST you will need to include the 145469(Movies) category.
 
 download:
   selectors:
     - selector: a[href^="magnet:?"]
       attribute: href
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{ else }}/top{{ end }}"
+    - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{ else }}{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace
@@ -174,16 +149,16 @@ search:
       text: now
     size:
       selector: td:nth-child(2)
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: td:nth-child(3)
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:nth-child(4)
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

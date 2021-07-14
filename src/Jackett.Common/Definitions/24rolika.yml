@@ -1,0 +1,138 @@
+---
+id: 24rolika
+name: 24rolika
+description: "24rolika is a RUSSIAN Public Torrent Tracker for 3X"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - http://24rolika.ru/ # does not support https
+
+caps:
+  categorymappings:
+    # only subcategories of Порно фильмы (Movies) have torrents
+    - {id: 94, cat: XXX, desc: "4K порно фильмы", default: true}
+    - {id: 76, cat: XXX, desc: "Японские порно фильмы", default: true}
+    - {id: 81, cat: XXX, desc: "Бразильские порно фильмы", default: true}
+    - {id: 41, cat: XXX, desc: "Итальянские порно фильмы", default: true}
+    - {id: 42, cat: XXX, desc: "Американские порно фильмы", default: true}
+    - {id: 43, cat: XXX, desc: "Немецкие порно фильмы", default: true}
+    - {id: 44, cat: XXX, desc: "Французские порно фильмы", default: true}
+    - {id: 45, cat: XXX, desc: "Русские порно фильмы", default: true}
+    - {id: 47, cat: XXX, desc: "Порно фильмы 2018 года", default: true}
+    - {id: 75, cat: XXX, desc: "Порно фильмы 2019 года", default: true}
+    - {id: 92, cat: XXX, desc: "Порно фильмы 2020 года", default: true}
+    - {id: 93, cat: XXX, desc: "Порно фильмы 2021 года", default: true}
+    - {id: 48, cat: XXX, desc: "Ретро / Классика", default: true}
+    - {id: 49, cat: XXX, desc: "С русским переводом", default: true}
+    - {id: 82, cat: XXX, desc: "С сюжетом", default: true}
+    - {id: 91, cat: XXX, desc: "Пародии", default: true}
+    - {id: 51, cat: XXX, desc: "Brazzers", default: true}
+    - {id: 52, cat: XXX, desc: "BangBros", default: true}
+    - {id: 53, cat: XXX, desc: "Marc Dorcel", default: true}
+    - {id: 54, cat: XXX, desc: "Evil Angel", default: true}
+    - {id: 55, cat: XXX, desc: "Tushy", default: true}
+    - {id: 56, cat: XXX, desc: "Blacked", default: true}
+    - {id: 57, cat: XXX, desc: "Evil Playgrounds", default: true}
+    - {id: 58, cat: XXX, desc: "Reality Kings", default: true}
+    - {id: 59, cat: XXX, desc: "New Sensations", default: true}
+    - {id: 60, cat: XXX, desc: "Wicked Pictures", default: true}
+    - {id: 61, cat: XXX, desc: "21Sextury", default: true}
+    - {id: 62, cat: XXX, desc: "PornPros", default: true}
+    - {id: 63, cat: XXX, desc: "Private", default: true}
+    - {id: 64, cat: XXX, desc: "DD Busty", default: true}
+    - {id: 65, cat: XXX, desc: "Naughty America", default: true}
+    - {id: 66, cat: XXX, desc: "Third Degree Films", default: true}
+    - {id: 67, cat: XXX, desc: "Hustler", default: true}
+    - {id: 68, cat: XXX, desc: "Blacks on Blondes", default: true}
+    - {id: 69, cat: XXX, desc: "Team Skeet", default: true}
+    - {id: 70, cat: XXX, desc: "Mofos", default: true}
+    - {id: 71, cat: XXX, desc: "Vixen", default: true}
+    - {id: 72, cat: XXX, desc: "Jules Jordan", default: true}
+    - {id: 73, cat: XXX, desc: "Nubile Films", default: true}
+    - {id: 74, cat: XXX, desc: "Digital Playground", default: true}
+    - {id: 83, cat: XXX, desc: "Zero Tolerance", default: true}
+    - {id: 84, cat: XXX, desc: "Pure Taboo", default: true}
+    - {id: 85, cat: XXX, desc: "Devil's Film", default: true}
+    - {id: 86, cat: XXX, desc: "Sweet Sinner", default: true}
+    - {id: 87, cat: XXX, desc: "Penthouse", default: true}
+    - {id: 88, cat: XXX, desc: "Elegant Angel", default: true}
+    - {id: 89, cat: XXX, desc: "Digital Sin", default: true}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      title: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+
+download:
+  selectors:
+    - selector: a[href*="index.php?do=download&id="]
+      attribute: href
+
+search:
+  paths:
+    - path: index.php
+  inputs:
+    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+    do: search
+    subaction: search
+    search_start: 0
+    full_search: 1
+    result_from: 1
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # 0 in article 1 in comments 2 in static pages 3 in article titles
+    titleonly: 3
+    sortby: "{{ .Config.sort }}"
+    resorder: "{{ .Config.type }}"
+    showposts: 0
+
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
+  rows:
+    selector: article.shortstory
+
+  fields:
+    category:
+      text: 94
+    title:
+      selector: h2.short_title a
+    details:
+      selector: h2.short_title a
+      attribute: href
+    download:
+      selector: h2.short_title a
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    date:
+      text: now
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    description:
+      selector: div.video_time
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# DataLife

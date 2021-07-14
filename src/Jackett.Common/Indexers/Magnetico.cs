@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
 
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "semi-private";
 
             var sort = new ConfigurationData.SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>

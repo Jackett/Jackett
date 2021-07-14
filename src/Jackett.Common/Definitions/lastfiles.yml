@@ -2,7 +2,7 @@
 id: lastfiles
 name: LastFiles
 description: "LastFiles (LF) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: ro-ro
+language: ro-RO
 type: private
 encoding: utf-8
 followredirect: true
@@ -21,26 +21,25 @@ caps:
     - {id: 5, cat: Movies/BluRay, desc: "Movies: BluRay"}
     - {id: 9, cat: Movies/DVD, desc: "Movies: DVD"}
     - {id: 11, cat: Movies/HD, desc: "Movies: HD"}
-    - {id: 58, cat: Movies/SD, desc: "Movies/Cam"}
-    - {id: 61, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 58, cat: Movies/SD, desc: "Movies: Cam"}
+    - {id: 61, cat: Movies/3D, desc: "Movies: 3D"}
     - {id: 24, cat: Movies/SD, desc: "Movies: XVID"}
     - {id: 16, cat: Movies, desc: "Movies: Old"}
-    - {id: 15, cat: Movies, desc: "Movies Mobile"}
-    - {id: 54, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
+    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL"}
     - {id: 56, cat: TV/Documentary, desc: "Documentary"}
     - {id: 18, cat: Movies, desc: "Movies: Pack"}
-    - {id: 32, cat: Movies/UHD, desc: "Movies:4KRO"}
+    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRO"}
     - {id: 6, cat: Movies/BluRay, desc: "Movies: BluRay-Ro"}
     - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro"}
     - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro"}
     - {id: 82, cat: Movies/HD, desc: "Movies: x265"}
     - {id: 10, cat: Movies/DVD, desc: "Movies: DVD-Ro"}
-    - {id: 59, cat: Movies/SD, desc: "Movies/Cam-RO"}
+    - {id: 59, cat: Movies/SD, desc: "Movies: Cam-RO"}
     - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro"}
     - {id: 17, cat: Movies, desc: "Movies: Old-Ro"}
-    - {id: 55, cat: Movies/WEB-DL, desc: "Movies/WEB-DL Ro"}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro"}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro"}
-    - {id: 62, cat: Movies/3D, desc: "Movies/3D-Ro"}
+    - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro"}
     - {id: 19, cat: Movies, desc: "Movies: Pack-Ro"}
     - {id: 20, cat: TV, desc: "TV Episodes"}
     - {id: 21, cat: TV, desc: "TV Episodes-Ro"}
@@ -58,7 +57,7 @@ caps:
     - {id: 44, cat: Other, desc: "Images"}
     - {id: 49, cat: Other, desc: "Diverse"}
     - {id: 22, cat: Other, desc: "RoContent"}
-    - {id: 60, cat: XXX, desc: "ImagesXXX"}
+    - {id: 60, cat: XXX/ImageSet, desc: "Images: XXX"}
     - {id: 27, cat: XXX, desc: "Movies: XXX"}
 
   modes:
@@ -83,7 +82,7 @@ settings:
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
   - name: sort
     type: select
     label: Sort requested from site
@@ -109,6 +108,10 @@ login:
 search:
   paths:
     - path: browse.php
+      categories: ["!", 60, 27]
+    - path: browseadult.php
+      categories: [60, 27]
+
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -119,6 +122,7 @@ search:
     only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
@@ -128,32 +132,28 @@ search:
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*=".php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[onmouseover]
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[onmouseover]
       attribute: href
     poster:
-      selector: a[href^="details.php?id="]
+      selector: a[onmouseover]
       attribute: onmouseover
       filters:
         - name: regexp
-          args: src=\\'(http.+?\.jpg)\\'
-    poster:
-      selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: src=\\'(http.+?\.png)\\'
+          args: src=\\'(.+?)\\'
+        - name: replace
+          args: ["./pic/noposter.png", ""]
     download:
       selector: a[href^="download.php"]
       attribute: href
-    date:
+    date_year:
       selector: td:nth-child(4) span:not(:contains("day"))
       optional: true
       filters:
@@ -161,20 +161,19 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
-    date:
+    date_day:
       selector: td:nth-child(4) span:contains("day")
       optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(7)
     leechers:

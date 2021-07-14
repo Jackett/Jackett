@@ -2,23 +2,16 @@
 id: torrentfunk
 name: TorrentFunk
 description: "TorrentFunk is a Public torrent index"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentfunk.com/
   - https://www.torrentfunk2.com/
-  - https://torrentfunk.unblockit.uno/
-  - https://torrentfunk.nocensor.space/
+  - https://torrentfunk.unblockit.llc/
+  - https://torrentfunk.nocensor.sbs/
 legacylinks:
-  - https://torrentfunk.unblockit.pro/
-  - https://torrentfunk.unblockit.one/
-  - https://torrentfunk.unblockit.me/
-  - https://torrentfunk.unblockit.pw/
-  - https://torrentfunk.unblockit.id/
-  - https://torrentfunk.unblockit.win/
-  - https://torrentfunk.unblockit.top/
   - https://torrentfunk.unblockit.lat/
   - https://torrentfunk.unblockit.app/
   - https://torrentfunk.unblockit.dev/
@@ -28,6 +21,18 @@ legacylinks:
   - https://torrentfunk.unblockit.club/
   - https://torrentfunk.unblockit.onl/
   - https://torrentfunk.unblockit.li/
+  - https://torrentfunk.unblockit.uno/
+  - https://torrentfunk.unblockit.ch/
+  - https://torrentfunk.nocensor.space/
+  - https://torrentfunk.unblockit.ws/
+  - https://torrentfunk.nocensor.work/
+  - https://torrentfunk.unblockit.kim/
+  - https://torrentfunk.unblockit.bz/
+  - https://torrentfunk.unblockit.tv/
+  - https://torrentfunk.unblockit.how/
+  - https://torrentfunk.unblockit.cam/
+  - https://torrentfunk.nocensor.biz/
+  - https://torrentfunk.unblockit.day/
 
 caps:
   categorymappings:
@@ -55,7 +60,7 @@ settings: []
 search:
   paths:
     # https://www.torrentfunk.com/all/torrents/morty-402-castellano.html
-    - path: "all/torrents/{{ .Keywords }}.html"
+    - path: "all/torrents/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}.html"
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "-"]
@@ -89,14 +94,14 @@ search:
           args: "/tor/"
         - name: append
           args: ".torrent"
-    date:
+    date_day:
       # Today
       # Yesterday
       selector: td:nth-child(2):contains("day")
       optional: true
       filters:
         - name: fuzzytime
-    date:
+    date_month:
       # 7 Jul
       # 25 Dec
       selector: td:nth-child(2):not(:contains("day"))
@@ -106,6 +111,8 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "2 Jan -07:00"
+    date:
+      text: "{{ if or .Result.date_month .Result.date_day }}{{ or .Result.date_month .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(3)
     seeders:

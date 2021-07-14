@@ -2,7 +2,7 @@
 id: nethd
 name: NetHD
 description: "NetHD (VietTorrent) is a VIETNAMESE Semi-Private Torrent Tracker for HD MOVIES / TV"
-language: vi-vn
+language: vi-VN
 type: semi-private
 encoding: UTF-8
 links:
@@ -119,9 +119,17 @@ search:
           args: "-torrent-(\\d+).html"
         - name: prepend
           args: "download.php?id="
-    date:
+    date_year:
+      # 2021-08-13<br>09:32:42
+      selector: td:nth-child(5):contains("-")
+      optional: true
+      filters:
+        - name: dateparse
+          args: "2006-01-0215:04:05"
+    date_ago:
       # 2 ngày<br/>23 giờ
-      selector: td:nth-child(5)
+      selector: td:nth-child(5):not(:contains("-"))
+      optional: true
       filters:
         - name: re_replace
           args: ["năm", "years "]
@@ -134,6 +142,8 @@ search:
         - name: re_replace
           args: ["giờ", "hours "]
         - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(6)
     seeders:

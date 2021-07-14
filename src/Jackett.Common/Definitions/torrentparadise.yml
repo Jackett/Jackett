@@ -2,21 +2,20 @@
 id: torrentparadise
 name: TorrentParadise
 description: "Torrent Paradise is a Public magnet indexer"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.pm/
+  - https://torrentparadise.cc/
 legacylinks:
-  - https://torrentparadise.cc/ # redirects to *.pm
-  - https://torrentparadise.to/ # redirects to *.pm
-  - https://torrentparadise.la/ # redirects to *.pm
-  - https://torrentparadise.cl/ # redirects to *.pm
-  - https://torrentparadise.org/ # redirects to *.pm
+  - https://torrentparadise.cl/ # redirects to *.cc
+  - https://torrentparadise.to/ # redirects to *.cc
+  - https://torrentparadise.la/ # broken
+  - https://torrentparadise.org/ # redirects to *.cc
+  - https://torrentparadise.pm/ # DNS_PROBE_FINISHED_NXDOMAIN
 
 caps:
   categories:
-    "": Other
     ADULT: XXX
     ADULTHENTAI: XXX
     ADULTLATINA: XXX
@@ -211,17 +210,19 @@ download:
       attribute: href
 
 search:
-  # https://torrentparadise.org/search.php?f=monday+night
-  # https://torrentparadise.org/recent
+  # https://torrentparadise.org/searchA.php?f=monday+night
   paths:
-    - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}recent{{ end }}"
+    - path: "searchA.php?f={{ if .Keywords }}{{ .Keywords }}{{ else }}%{{ end }}"
 
   rows:
     selector: table.table-bordered > tbody > tr.table-default
 
   fields:
     category:
+      text: OTHER
+    category|noappend:
       selector: td:nth-child(1) a
+      optional: true
       filters:
         - name: re_replace
           args: ["[^a-zA-Z0-9]+", ""]

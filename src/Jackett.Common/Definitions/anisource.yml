@@ -2,7 +2,7 @@
 id: anisource
 name: AniSource
 description: "AniSource is a Public site for HD Anime raws."
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers.Abstract
 without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
         }
 

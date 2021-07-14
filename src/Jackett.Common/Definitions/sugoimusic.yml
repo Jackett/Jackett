@@ -2,7 +2,7 @@
 id: sugoimusic
 name: SugoiMusic
 description: "SugoiMusic is a Private Torrent Tracker for Asian MUSIC / TV"
-language: en
+language: en-US
 type: private
 encoding: UTF-8
 links:

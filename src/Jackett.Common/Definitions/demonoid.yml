@@ -1,8 +1,8 @@
 ---
 id: demonoid
 name: Demonoid
-description: "Demonoid is a Public torrent site for MOVIES / TV / GENERAL"
-language: en-us
+description: "Demonoid is a Semi-Private torrent site for MOVIES / TV / GENERAL"
+language: en-US
 type: semi-private
 encoding: UTF-8
 followredirect: true
@@ -10,22 +10,11 @@ links:
   - https://www.demonoid.is/
   - https://www.dnoid.to/
   - https://www.dnoid.pw/
-  - https://demonoid.unblockit.uno/
+  - https://demonoidevmsgasmojajlhikwetsr4pxzw6xkjt3dgdv6nr5yxvsamid.onion.ly/
+  - https://demonoid.unblockit.llc/
   - https://demonoid.torrentbay.to/
-  - https://demonoid.nocensor.space/
+  - https://demonoid.nocensor.sbs/
 legacylinks:
-  - https://demonoid.unblockit.pro/
-  - https://demonoid.unblockit.one/
-  - https://demonoid.unblockit.me/
-  - https://dnoid.black-mirror.xyz/
-  - https://dnoid.unblocked.casa/
-  - https://dnoid.proxyportal.fun/
-  - https://dnoid.uk-unblock.xyz/
-  - https://dnoid.ind-unblock.xyz/
-  - https://demonoid.unblockit.pw/
-  - https://demonoid.unblockit.id/
-  - https://demonoid.unblockit.win/
-  - https://demonoid.unblockit.top/
   - https://demonoid.unblockit.lat/
   - https://demonoid.unblockit.app/
   - https://demonoid.unblockit.dev/
@@ -35,13 +24,25 @@ legacylinks:
   - https://demonoid.unblockit.club/
   - https://demonoid.unblockit.onl/
   - https://demonoid.unblockit.li/
+  - https://demonoid.unblockit.uno/
+  - https://demonoid.unblockit.ch/
+  - https://demonoid.nocensor.space/
+  - https://demonoid.unblockit.ws/
+  - https://demonoid.nocensor.work/
+  - https://demonoid.unblockit.kim/
+  - https://demonoid.unblockit.bz/
+  - https://demonoid.unblockit.tv/
+  - https://demonoid.unblockit.how/
+  - https://demonoid.unblockit.cam/
+  - https://demonoid.nocensor.biz/
+  - https://demonoid.unblockit.day/
 
 caps:
   categorymappings:
     # fetch these from https://www.demonoid.is/cached/torrent_categories_script.js?v5
     # Applications
     - {id: 1, cat: PC/Mobile-Android, desc: "Applications Android"}
-    - {id: 2, cat: PC/Mobile-iOS, desc: "Applications Iphone / Ipod touch"}
+    - {id: 2, cat: PC/Mobile-iOS, desc: "Applications phone / Ipod touch"}
     - {id: 3, cat: PC, desc: "Applications Linux"}
     - {id: 4, cat: PC/Mac, desc: "Applications Mac"}
     - {id: 5, cat: PC/Mobile-Other, desc: "Applications Mobile phone"}
@@ -147,7 +148,6 @@ caps:
     - {id: 101, cat: PC/Games, desc: "Games Windows"}
     - {id: 102, cat: Console/XBox, desc: "Games XBox"}
     # Anime
-    - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
     - {id: 103, cat: TV/Anime, desc: "Anime Action"}
     - {id: 104, cat: TV/Anime, desc: "Anime Adventure"}
     - {id: 105, cat: TV/Anime, desc: "Anime Comedy"}
@@ -156,6 +156,7 @@ caps:
     - {id: 108, cat: TV/Anime, desc: "Anime Horror"}
     - {id: 109, cat: TV/Anime, desc: "Anime Other"}
     - {id: 157, cat: TV/Anime, desc: "Anime Romance"}
+    - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
     # Movies
     - {id: 151, cat: Movies, desc: "Movies Action"}
     - {id: 110, cat: Movies, desc: "Movies Adventure"}
@@ -324,7 +325,7 @@ login:
 
 download:
   selectors:
-    - selector: a[href^="/files/download/"]
+    - selector: a[href^="/files/download/"]:has(i.fa-download)
       attribute: href
 
 search:
@@ -349,10 +350,10 @@ search:
 
   rows:
     # only the default theme "Demonoid - v5" is supported
-    selector: table.table:has(td.torrent__table-today) > tbody > tr:has(td[class^="tone_"])
+    selector: table.table tbody tr.table__row:has(td[class*="tone_"])
     after: 1
     dateheaders:
-      selector: tr td.torrent__table-today:not(:contains("Sponsored links"))
+      selector: tr td.table__separator:not(:contains("Sponsored links"))
       filters:
         - name: replace
           args: ["Added ", ""]
@@ -360,24 +361,29 @@ search:
           args: ["on ", ""]
 
   fields:
-    title:
-      selector: a[href^="/files/details/"]
-    title:
-      selector: a[href^="/files/details/"]
-      optional: true
-      attribute: title
     category:
-      selector: span.torrent__table-info > a:nth-child(2)
+      selector: span.table__column__subtext > a:nth-child(2)
       attribute: href
       optional: true
       filters:
         - name: querystring
           args: subcategory
+    title:
+      selector: a[href^="/files/details/"]
     details:
       selector: a[href^="/files/details/"]
       attribute: href
     download:
       selector: a[href^="/files/details/"]
+      attribute: href
+    poster:
+      selector: div[title]
+      attribute: data-bs-content
+      filters:
+        - name: regexp
+          args: src='(.+?)'
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
       selector: td:nth-last-child(7)

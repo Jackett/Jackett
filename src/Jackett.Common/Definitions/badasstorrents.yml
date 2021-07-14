@@ -2,11 +2,15 @@
 id: badasstorrents
 name: Badass Torrents
 description: "Badass Torrents is a Public torrent site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
   - https://badasstorrents.com/
+  - https://badasstorrents.nocensor.sbs/
+legacylinks:
+  - https://badasstorrents.nocensor.work/
+  - https://badasstorrents.nocensor.biz/
 
 caps:
   categories:
@@ -51,7 +55,7 @@ settings:
     default: date
     options:
       date: created
-      seeders: seeds
+      seeds: seeders
       size: size
       title: title
   - name: type
@@ -78,6 +82,8 @@ search:
 
   rows:
     selector: table.table-hover > tbody > tr:has(a[href*="/torrent/"])
+    filters:
+      - name: andmatch
 
   fields:
     category:

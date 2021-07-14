@@ -2,7 +2,7 @@
 id: sporthd
 name: SportHD
 description: "SportHD is a Private Torrent Tracker for HD SPORTS"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -204,7 +204,6 @@ search:
           args: "^(.+?)\\d{4}"
         - name: timeago
     description:
-      optional: true
       selector: img[src="/pic/vipbig.gif"]
       attribute: title
     downloadvolumefactor:

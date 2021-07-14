@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using AutoMapper;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using NLog;
 
 namespace Jackett.Common.Services
@@ -60,7 +60,8 @@ namespace Jackett.Common.Services
                     _cache.Add(indexer.Id, new TrackerCache
                     {
                         TrackerId = indexer.Id,
-                        TrackerName = indexer.DisplayName
+                        TrackerName = indexer.DisplayName,
+                        TrackerType = indexer.Type
                     });
                 }
 
@@ -129,10 +130,11 @@ namespace Jackett.Common.Services
                     {
                         foreach (var release in query.Results)
                         {
-                            var item = Mapper.Map<TrackerCacheResult>(release);
+                            var item = MapperUtil.Mapper.Map<TrackerCacheResult>(release);
                             item.FirstSeen = query.Created;
                             item.Tracker = trackerCache.TrackerName;
                             item.TrackerId = trackerCache.TrackerId;
+                            item.TrackerType = trackerCache.TrackerType;
                             item.Peers -= item.Seeders; // Use peers as leechers
                             trackerResults.Add(item);
                         }
@@ -241,7 +243,7 @@ namespace Jackett.Common.Services
         {
             var json = GetSerializedQuery(query);
             // Compute the hash
-            return BitConverter.ToString(_sha256.ComputeHash(Encoding.ASCII.GetBytes(json)));
+            return BitConverter.ToString(_sha256.ComputeHash(Encoding.UTF8.GetBytes(json)));
         }
 
         private static string GetSerializedQuery(TorznabQuery query)
@@ -251,6 +253,9 @@ namespace Jackett.Common.Services
             // Changes in the query to improve cache hits
             // Both request must return the same results, if not we are breaking Jackett search
             json = json.Replace("\"SearchTerm\":null", "\"SearchTerm\":\"\"");
+
+            // The Cache parameter's value should not affect caching itself
+            json = json.Replace("\"Cache\":false", "\"Cache\":true");
 
             return json;
         }

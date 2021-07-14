@@ -279,9 +279,10 @@ namespace Jackett.Server.Controllers
 
                 return searchResults.Select(result =>
                 {
-                    var item = AutoMapper.Mapper.Map<TrackerCacheResult>(result);
+                    var item = MapperUtil.Mapper.Map<TrackerCacheResult>(result);
                     item.Tracker = indexer.DisplayName;
                     item.TrackerId = indexer.Id;
+                    item.TrackerType = indexer.Type;
                     item.Peers = item.Peers - item.Seeders; // Use peers as leechers
                     return item;
                 });
@@ -290,7 +291,7 @@ namespace Jackett.Server.Controllers
             ConfigureCacheResults(manualResult.Results);
 
             // Log info
-            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.ID));
+            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name));
             var cacheStr = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Any(t => t.Result.IsFromCache) ? " (from cache)" : "";
             if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
                 logger.Info($"Manual search in {indexersName} => Found {manualResult.Results.Count()} releases{cacheStr}");
@@ -411,9 +412,10 @@ namespace Jackett.Server.Controllers
                     Link = new Uri(CurrentIndexer.SiteLink)
                 });
 
-                var proxiedReleases = result.Releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>
+                var proxiedReleases = result.Releases.Select(r => MapperUtil.Mapper.Map<ReleaseInfo>(r)).Select(r =>
                 {
                     r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
+                    r.Poster = serverService.ConvertToProxyLink(r.Poster, serverUrl, r.Origin.Id, "img", "poster");
                     return r;
                 });
 
@@ -496,8 +498,11 @@ namespace Jackett.Server.Controllers
             var serverUrl = serverService.GetServerUrl(Request);
             var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
-                var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
+                var release = MapperUtil.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.Id, "dl", release.Title);
+                // Poster is not used in Potato response
+                //release.Poster = serverService.ConvertToProxyLink(release.Poster, serverUrl, CurrentIndexer.Id, "img", "poster");
+
                 // IMPORTANT: We can't use Uri.ToString(), because it generates URLs without URL encode (links with unicode
                 // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly
                 var item = new TorrentPotatoResponseItem()
@@ -534,6 +539,7 @@ namespace Jackett.Server.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
+                result.Poster = serverService.ConvertToProxyLink(result.Poster, serverUrl, result.TrackerId, "img", "poster");
                 if (!string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
                 {
                     if (result.Link != null)

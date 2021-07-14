@@ -22,7 +22,6 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BJShare : BaseWebIndexer
     {
-        private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
         private string TodayUrl => SiteLink + "torrents.php?action=today";
         private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
@@ -32,7 +31,7 @@ namespace Jackett.Common.Indexers
             "https://bj-share.me/"
         };
 
-        private ConfigurationDataBasicLoginWithRSSAndDisplay ConfigData => (ConfigurationDataBasicLoginWithRSSAndDisplay)configData;
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
 
 
@@ -90,53 +89,55 @@ namespace Jackett.Common.Indexers
                     logger: l,
                     p: ps,
                     cacheService: cs,
-                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
-            Language = "pt-br";
+            Language = "pt-BR";
             Type = "private";
 
-            AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(3, TorznabCatType.PC0day, "Aplicativos");
-            AddCategoryMapping(8, TorznabCatType.Other, "Apostilas/Tutoriais");
-            AddCategoryMapping(19, TorznabCatType.AudioAudiobook, "Audiobook");
-            AddCategoryMapping(16, TorznabCatType.TVOther, "Desenho Animado");
-            AddCategoryMapping(18, TorznabCatType.TVDocumentary, "Documentários");
-            AddCategoryMapping(10, TorznabCatType.Books, "E-Books");
-            AddCategoryMapping(20, TorznabCatType.TVSport, "Esportes");
             AddCategoryMapping(1, TorznabCatType.Movies, "Filmes");
-            AddCategoryMapping(12, TorznabCatType.MoviesOther, "Histórias em Quadrinhos");
-            AddCategoryMapping(5, TorznabCatType.Audio, "Músicas");
-            AddCategoryMapping(7, TorznabCatType.Other, "Outros");
-            AddCategoryMapping(9, TorznabCatType.BooksMags, "Revistas");
             AddCategoryMapping(2, TorznabCatType.TV, "Seriados");
-            AddCategoryMapping(17, TorznabCatType.TV, "Shows");
-            AddCategoryMapping(13, TorznabCatType.TV, "Stand Up Comedy");
-            AddCategoryMapping(11, TorznabCatType.Other, "Video-Aula");
-            AddCategoryMapping(6, TorznabCatType.TV, "Vídeos de TV");
+            AddCategoryMapping(3, TorznabCatType.PC, "Aplicativos");
             AddCategoryMapping(4, TorznabCatType.PCGames, "Jogos");
-            AddCategoryMapping(199, TorznabCatType.XXX, "Filmes Adultos");
-            AddCategoryMapping(200, TorznabCatType.XXX, "Jogos Adultos");
-            AddCategoryMapping(201, TorznabCatType.XXXImageSet, "Fotos Adultas");
+            AddCategoryMapping(5, TorznabCatType.BooksComics, "Mangás");
+            AddCategoryMapping(6, TorznabCatType.TV, "Vídeos de TV");
+            AddCategoryMapping(7, TorznabCatType.Other, "Outros");
+            AddCategoryMapping(8, TorznabCatType.TVSport, "Esportes");
+            AddCategoryMapping(9, TorznabCatType.BooksMags, "Revistas");
+            AddCategoryMapping(10, TorznabCatType.BooksEBook, "E-Books");
+            AddCategoryMapping(11, TorznabCatType.AudioAudiobook, "Audiobook");
+            AddCategoryMapping(12, TorznabCatType.BooksComics, "HQs");
+            AddCategoryMapping(13, TorznabCatType.TVOther, "Stand Up Comedy");
+            AddCategoryMapping(14, TorznabCatType.TVAnime, "Animes");
+            AddCategoryMapping(15, TorznabCatType.XXXImageSet, "Fotos Adultas");
+            AddCategoryMapping(16, TorznabCatType.TVOther, "Desenhos Animado");
+            AddCategoryMapping(17, TorznabCatType.TVDocumentary, "Documentários");
+            AddCategoryMapping(18, TorznabCatType.Other, "Cursos");
+            AddCategoryMapping(19, TorznabCatType.XXX, "Filmes Adultos");
+            AddCategoryMapping(20, TorznabCatType.XXXOther, "Jogos Adultos");
+            AddCategoryMapping(21, TorznabCatType.XXXOther, "Mangás Adultos");
+            AddCategoryMapping(22, TorznabCatType.XXXOther, "Animes Adultos");
+            AddCategoryMapping(23, TorznabCatType.XXXOther, "HQs Adultos");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string>
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                {"username", ConfigData.Username.Value},
-                {"password", ConfigData.Password.Value},
-                {"keeplogged", "1"}
-            };
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
-            await ConfigureIfOK(
-                result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
-                {
-                    var errorMessage = result.ContentString;
-                    throw new ExceptionWithConfigData(errorMessage, ConfigData);
-                });
-            return IndexerConfigurationStatus.RequiresTesting;
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         private static string InternationalTitle(string title)
@@ -222,17 +223,14 @@ namespace Jackett.Common.Indexers
             // until they or the source from where they get that info fix it...
             if (IsAbsoluteNumbering(title))
             {
-                title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "");
+                title = Regex.Replace(title, @"(Ep[\.]?[ ]?)|([S]\d\d[Ee])", "E");
                 return title;
             }
 
             return title;
         }
 
-        private bool IsSessionIsClosed(WebResult result)
-        {
-            return result.IsRedirect && result.RedirectingTo.Contains("login.php");
-        }
+        private bool IsSessionIsClosed(WebResult result) => result.IsRedirect && result.RedirectingTo.Contains("login.php");
 
         private string FixSearchTerm(TorznabQuery query)
         {
@@ -265,14 +263,16 @@ namespace Jackett.Common.Indexers
                 {"searchsubmit", "1"}
             };
             foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
+
             searchUrl += "?" + queryCollection.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
             if (IsSessionIsClosed(results))
             {
-                // re-login
-                await ApplyConfiguration(null);
-                results = await RequestWithCookiesAsync(searchUrl);
+                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
+                                    "made a mistake when copying it. Please check the settings.");
             }
 
             try
@@ -436,9 +436,8 @@ namespace Jackett.Common.Indexers
             var results = await RequestWithCookiesAsync(TodayUrl);
             if (IsSessionIsClosed(results))
             {
-                // re-login
-                await ApplyConfiguration(null);
-                results = await RequestWithCookiesAsync(TodayUrl);
+                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
+                                    "made a mistake when copying it. Please check the settings.");
             }
 
             try

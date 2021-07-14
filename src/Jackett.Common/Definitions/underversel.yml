@@ -2,7 +2,7 @@
 id: underversel
 name: UnderverseL
 description: "this is the Underverse indexer with Login enabled in the config."
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
@@ -406,6 +406,8 @@ caps:
     - {id: 436, cat: PC/0day, desc: "ОС от Microsoft"}
     - {id: 993, cat: PC/0day, desc: " |- Активаторы продуктов Microsoft"}
     - {id: 1104, cat: PC/0day, desc: " |- Патчи, дополнения для ОС от Microsoft"}
+    - {id: 1145, cat: PC/0day, desc: " |- Windows 11 [оригинальные версии]"}
+    - {id: 1147, cat: PC/0day, desc: " |- Windows 11 [сборки]"}
     - {id: 1030, cat: PC/0day, desc: " |- Windows 10 [оригинальные версии]"}
     - {id: 1031, cat: PC/0day, desc: " |- Windows 10 [сборки]"}
     - {id: 968, cat: PC/0day, desc: " |- Windows 8 и 8.1 [оригинальные версии]"}
@@ -586,6 +588,7 @@ caps:
     - {id: 679, cat: Audio/Audiobook, desc: " |- Тренинг, бизнес"}
     - {id: 1079, cat: Audio/Audiobook, desc: " |- Юмор, анекдоты"}
     - {id: 1080, cat: Audio/Audiobook, desc: " |- Учебники, аудиолекции"}
+    - {id: 1144, cat: Audio/Audiobook, desc: " |- Нон-фикшн"}
     - {id: 1081, cat: Audio/Audiobook, desc: " |- Книги с аудиоприложением"}
     - {id: 680, cat: Audio/Audiobook, desc: " |- Аудиокниги на иностранных языках"}
     - {id: 578, cat: Audio/Audiobook, desc: " |- Другие аудиокниги"}

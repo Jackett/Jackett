@@ -2,7 +2,7 @@
 id: asiancinema
 name: AsianCinema
 description: "Tracker Movies/TV/Music"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -122,10 +122,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

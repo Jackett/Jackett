@@ -1,0 +1,58 @@
+---
+id: jav-torrent
+name: JAV-Torrent
+description: "JAV-Torrent is a Public tracker for Asian 3X (JAV)"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://jav-torrent.org/
+
+caps:
+  categories:
+    XXX: XXX
+
+  modes:
+    search: [q]
+
+settings: []
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}search?keyword={{ .Keywords }}{{ else }}new{{ end }}"
+
+  rows:
+    selector: div.card
+
+  fields:
+    category:
+      text: XXX
+    title:
+      selector: h5 a
+    details:
+      selector: h5 a
+      attribute: href
+    download:
+      selector: a.button
+      attribute: href
+    poster:
+      selector: img
+      attribute: data-src
+    date:
+      selector: p.is-6 a
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "Jan. 02, 2006 -07:00"
+    size:
+      selector: span.is-size-6
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

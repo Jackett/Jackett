@@ -13,7 +13,7 @@
     <link rel="icon" type="image/ico" href="../favicon.ico" />
     <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
     <script type="text/javascript" src="../libs/filesize.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/jquery.min.js?changed=2017083001"></script>
+    <script type="text/javascript" src="../libs/jquery.min.js?changed=13019"></script>
     <script type="text/javascript" src="../libs/jquery.dataTables.min.js?changed=2017083001" charset="utf8"></script>
     <script type="text/javascript" src="../libs/handlebars.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/moment.min.js?changed=2017083001"></script>
@@ -28,8 +28,8 @@
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=11662" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=11662" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=202204222" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=202204222" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -43,6 +43,9 @@
         <div class="pull-right jackett-apikey">
             <span class="input-header">API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
+            <button id="api-key-copy-button" title="Copy API Key to clipboard" class="btn btn-primary btn-xs">
+                <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+            </button>
         </div>
         <hr />
 
@@ -128,6 +131,10 @@
             <input id="jackett-basepathoverride" class="form-control input-right" type="text" value="" placeholder="/jackett">
         </div>
         <div class="input-area">
+            <span class="input-header">Base URL override: </span>
+            <input id="jackett-baseurloverride" class="form-control input-right" type="text" value="" placeholder="http://jackett:9117">
+        </div>
+        <div class="input-area">
             <span class="input-header">Server port: </span>
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
         </div>
@@ -191,15 +198,19 @@
         </div>
         <div class="input-area">
             <span class="input-header">Cache TTL (seconds): </span>
-            <input id="jackett-cache-ttl" class="form-control input-right" type="text" value="" placeholder="">
+            <input id="jackett-cache-ttl" class="form-control input-right" type="text" value="" placeholder="2100">
         </div>
         <div class="input-area">
             <span class="input-header">Cache max results per indexer: </span>
-            <input id="jackett-cache-max-results-per-indexer" class="form-control input-right" type="text" value="" placeholder="">
+            <input id="jackett-cache-max-results-per-indexer" class="form-control input-right" type="text" value="" placeholder="1000">
         </div>
         <div class="input-area">
           <span class="input-header">FlareSolverr API URL: </span>
           <input id="jackett-flaresolverrurl" class="form-control input-right" type="text" value="" placeholder="Blank for default">
+        </div>
+        <div class="input-area">
+          <span class="input-header">FlareSolverr Max Timeout (ms): </span>
+          <input id="jackett-flaresolverr-maxtimeout" class="form-control input-right" type="text" value="" placeholder="55000">
         </div>
         <div class="input-area">
             <span class="input-header">OMDB API key: </span>
@@ -226,15 +237,15 @@
     <script id="setup-item-inputstring" type="text/x-handlebars-template">
         <div class="setup-item-inputstring">
             {{#if ispassword}}
-            <input class="form-control" type="password" value="{{{value}}}" />
+            <input class="form-control" type="password" value="{{value}}" />
             {{else}}
-            <input class="form-control" type="text" value="{{{value}}}" />
+            <input class="form-control" type="text" value="{{value}}" />
             {{/if}}
         </div>
     </script>
     <script id="setup-item-password" type="text/x-handlebars-template">
         <div class="setup-item-password">
-            <input class="form-control" type="password" value="{{{value}}}" />
+            <input class="form-control" type="password" value="{{value}}" />
         </div>
     </script>
     <script id="setup-item-inputbool" type="text/x-handlebars-template">
@@ -280,7 +291,7 @@
     </script>
     <script id="setup-item-hiddendata" type="text/x-handlebars-template">
         <div class="setup-item-hiddendata">
-            <input class="form-control" type="text" value="{{{value}}}" />
+            <input class="form-control" type="text" value="{{value}}" />
         </div>
     </script>
     <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
@@ -302,11 +313,12 @@
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
         <div class="tab-content configured-indexer-div">
-            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
                         <th>Indexer</th>
                         <th>Actions</th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -334,12 +346,15 @@
                                 </button>
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2"></td>
+                      <th></th>
+                      <th></th>
+                      <th data-type="hiddendata"></th>
                     </tr>
                 </tfoot>
             </table>
@@ -348,7 +363,7 @@
 
     <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
         <div class="unconfigured-indexer-div">
-            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
                         <th></th>
@@ -358,6 +373,7 @@
                         <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -385,6 +401,7 @@
                                 {{/if_eq}}
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -397,6 +414,7 @@
                         <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </tfoot>
             </table>
@@ -436,7 +454,7 @@
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-poster="{{Poster}}" data-description="{{Description}}">
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-poster="{{Poster}}" data-description="{{Description}}">
                                     <td class="fit">{{PublishDate}}</td>
                                     <td class="fit">{{FirstSeen}}</td>
                                     <td class="fit">{{jacketTimespan PublishDate}}</td>
@@ -564,7 +582,7 @@
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-poster="{{Poster}}" data-description="{{Description}}">
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-poster="{{Poster}}" data-description="{{Description}}">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
@@ -732,6 +750,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=PR11721"></script>
+    <script type="text/javascript" src="../custom.js?changed=202204222"></script>
 </body>
 </html>

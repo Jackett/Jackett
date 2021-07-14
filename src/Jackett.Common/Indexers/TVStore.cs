@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
                  configData: new ConfigurationDataTVstore())
         {
             Encoding = Encoding.UTF8;
-            Language = "hu-hu";
+            Language = "hu-HU";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TV);

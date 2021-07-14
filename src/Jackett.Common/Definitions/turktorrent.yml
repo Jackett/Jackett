@@ -56,6 +56,8 @@ caps:
     - {id: 89, cat: TV, desc: "Dijital Platform Diger"}
     - {id: 90, cat: TV, desc: "Dijital Platform MUBi"}
     - {id: 91, cat: TV, desc: "Dijital Platform Vodafone"}
+    - {id: 94, cat: TV, desc: "Dijital Platform Apple TV+"}
+    - {id: 95, cat: TV, desc: "Dijital Platform DSmart GO"}
     - {id: 31, cat: TV, desc: "Dizi"}
     - {id: 32, cat: TV, desc: "Dizi Yerli"}
     - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
@@ -68,6 +70,7 @@ caps:
     - {id: 48, cat: PC, desc: "Programlar Windows"}
     - {id: 49, cat: PC, desc: "Programlar MaC"}
     - {id: 50, cat: PC, desc: "Programlar Mobile"}
+    - {id: 96, cat: PC, desc: "Programlar Linux"}
 
   modes:
     search: [q]
@@ -144,15 +147,10 @@ search:
     details:
       selector: a[href*="?p=torrents&pid=10&action=details"]
       attribute: href
-    date:
-      # within the hour
-      optional: true
-      selector: td.torrent_name
-      attribute: data-time
-    date:
-      optional: true
+    date_year:
       # Uploaded 30-01-2019 15:02 by
-      selector: td.torrent_name:not(:contains(" at "))
+      selector: td.torrent_name:not(:contains(" at ")):not(:has(abbr[data-time]))
+      optional: true
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
@@ -160,17 +158,25 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    date:
-      optional: true
+    date_day:
       # Uploaded Friday at 05:11 by
       # Uploaded Today at 00:48 by
       # Uploaded Yesterday at 23:57 by
-      selector: td.torrent_name:contains(" at ")
+      selector: td.torrent_name:contains(" at "):not(:has(abbr[data-time]))
+      optional: true
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
         - name: replace
           args: [" at ", " "]
+        - name: fuzzytime
+    date_unix:
+      # within the hour (unix)
+      selector: abbr[data-time]
+      attribute: data-time
+      optional: true
+    date:
+      text: "{{ if or .Result.date_year .Result.date_unix .Result.date_day }}{{ or .Result.date_year .Result.date_unix .Result.date_day }}{{ else }}now{{ end }}"
     download:
       selector: a[href*="?p=torrents&pid=10&action=download"]
       attribute: href

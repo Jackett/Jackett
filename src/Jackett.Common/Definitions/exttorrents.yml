@@ -2,16 +2,17 @@
 id: exttorrents
 name: EXT Torrents
 description: "EXT Torrents is a Public torrent site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
   - https://ext.to/
-  - https://torrent.extto.com/
+  - https://site.extto.com/
   - https://ext.torrentbay.to/
 legacylinks:
-  - https://ext.unblockninja.com/ # currently redirects to https://ext.torrentbay.to/
-  - https://t.extto.com/ # redirects to https://torrent.extto.com/
+  - https://ext.unblockninja.com/
+  - https://t.extto.com/
+  - https://torrent.extto.com/
 
 caps:
   categorymappings:
@@ -93,7 +94,7 @@ settings:
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
 
 download:
   selectors:
@@ -128,11 +129,11 @@ search:
       attribute: href
     size:
       selector: td:nth-child(2)
-    files:
-      text: 0
-    files:
+    files_optional:
       selector: td:nth-child(3)
       optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}0{{ end }}"
     date:
       selector: td:nth-child(4)
     seeders:

@@ -2,7 +2,7 @@
 id: dxp
 name: DXP
 description: "Deaf Experts (DXP) is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV with Russian Subtitles."
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
@@ -81,6 +81,8 @@ login:
 download:
   selectors:
     - selector: a[href^="download.php?id="]
+      attribute: href
+    - selector: a[href^="magnet:?xt="]
       attribute: href
 
 search:

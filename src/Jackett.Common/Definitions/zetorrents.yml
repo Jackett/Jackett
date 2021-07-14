@@ -2,11 +2,11 @@
 id: zetorrents
 name: zetorrents
 description: "zetorrents is a FRENCH Public site for MOVIES / TV / GENERAL"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 links:
-  - https://wvw.zetorrents.org/
+  - https://www.zetorrents.nl/
 legacylinks:
   - https://www.zetorrents.co/
   - https://www.zetorrents.io/
@@ -15,6 +15,10 @@ legacylinks:
   - https://wwv.zetorrents.io/
   - https://ww1.zetorrents.io/
   - https://www.zetorrents.org/
+  - https://wvw.zetorrents.org/
+  - https://www.zetorrents.cc/
+  - https://www.zetorrents.tv/
+  - https://www.zetorrents.bz/
 
 caps:
   categories:
@@ -52,8 +56,10 @@ settings:
 
 download:
   selectors:
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 
 search:
   paths:

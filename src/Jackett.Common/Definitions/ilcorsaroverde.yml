@@ -1,0 +1,279 @@
+---
+id: ilcorsaroverde
+name: Il Corsaro Verde
+description: "Il Corsaro Verde (iCV-CreW) is a ratioless ITALIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: it-IT
+type: private
+encoding: UTF-8
+links:
+  - https://www.icv-crew.com/
+
+caps:
+  # commented out categories are discussion-only forums
+  categorymappings:
+    # CIURMA
+    # - {id: "150", cat: Other, desc: "Regole per Postare"}
+    - {id: "140", cat: Other/Misc, desc: "Bozze - Sezione fruibile a tutti i nuovi Releaser", default: true}
+    # INFORMAZIONI E REGOLE DEL FORUM
+    # - {id: "108", cat: Other, desc: "Manifesto Generale"}
+    # - {id: "30", cat: Other, desc: "Disclaimer"}
+    # - {id: "76", cat: Other, desc: "Statuto"}
+    # - {id: "31", cat: Other, desc: "Comunicazioni dello STAFF"}
+    # - {id: "32", cat: Other, desc: "Guide sull'uso del Forum"}
+    # - {id: "124", cat: Other, desc: "iCV Community"}
+    # PROGETTI
+    # - {id: "172", cat: Audio, desc: "Progetto - Discografie"}
+    # - {id: "109", cat: Movies, desc: "Progetto - Filmografie"}
+    # - {id: "110", cat: Books, desc: "Progetto - Biblico"}
+    # - {id: "137", cat: Other, desc: "Progetto - Releaser/Crew"}
+    # - {id: "126", cat: Movies, desc: "Progetto - Cine Vintage "}
+    # MUSICA
+    - {id: "19", cat: Audio, desc: "Musica Audio - Tutti i formati", default: true}
+    - {id: "20", cat: Audio/Video, desc: "Musica Video - Standard Definition - High Definition", default: true}
+    # - {id: "135", cat: Audio, desc: "Richieste Titoli Musica"}
+    # VIDEO
+    - {id: "6", cat: Movies/SD, desc: "Video - Screener", default: true}
+    - {id: "7", cat: Movies/SD, desc: "Video - Standard Definition", default: true}
+    - {id: "9", cat: Movies/HD, desc: "Video - High Definition H.264", default: true}
+    - {id: "74", cat: Movies/HD, desc: "Video - High Definition HEVC/H.265", default: true}
+    - {id: "11", cat: Movies/BluRay, desc: "Video - Blu-ray Full", default: true}
+    - {id: "8", cat: Movies/DVD, desc: "Video - DVD", default: true}
+    - {id: "95", cat: Movies, desc: "Video - Dispositivi Mobili (Portable)", default: true}
+    - {id: "79", cat: Movies, desc: "Video - TVRip - Standard Definition - High Definition", default: true}
+    - {id: "14", cat: TV/Other, desc: "Video - Documentari - Sportivi - Spettacoli - Lirica - Standard Definition - High Definition", default: true}
+    # - {id: "134", cat: Movies, desc: "Richieste Titoli Video"}
+    # SERIE TV
+    - {id: "12", cat: TV/SD, desc: "Serie TV - Standard Definition", default: true}
+    - {id: "102", cat: TV/HD, desc: "Serie TV - High definition H.264", default: true}
+    - {id: "161", cat: TV/HD, desc: "Serie TV - High definition HEVC/H.265", default: true}
+    # - {id: "103", cat: TV, desc: "L'angolo di Giuseppe-iCV & littlelinx"}
+    # - {id: "160", cat: TV, desc: "L'angolo di Pir8"}
+    # - {id: "169", cat: TV, desc: "L'angolo di TV-P2P"}
+    # - {id: "133", cat: TV, desc: "Richieste Titoli Serie TV"}
+    # CARTONI ANIMATI - ANIME
+    - {id: "17", cat: Movies/SD, desc: "Cartoni Animati - Standard Definition - High Definition", default: true}
+    - {id: "18", cat: TV/HD, desc: "Cartoni Animati - Serie TV Standard Definition - High Definition", default: true}
+    - {id: "15", cat: TV/Anime, desc: "Anime - Standard Definition - High Definition", default: true}
+    - {id: "16", cat: TV/Anime, desc: "Anime - Serie TV Standard Definition - High Definition", default: true}
+    - {id: "89", cat: Movies/HD, desc: "Cartoni Animati - Anime - Serie Tv e Non - High Definition - HEVC/H.265", default: true}
+    # - {id: "132", cat: TV/Anime, desc: "Richieste Titoli Cartoni Animati - Anime"}
+    # EBOOK - FUMETTI - RIVISTE - QUOTIDIANI
+    - {id: "25", cat: Books/EBook, desc: "Ebook", default: true}
+    - {id: "26", cat: Audio/Audiobook, desc: "Ebook Audio", default: true}
+    - {id: "170", cat: Books/Comics, desc: "Fumetti", default: true}
+    - {id: "28", cat: Books/Mags, desc: "Riviste - Quotidiani", default: true}
+    - {id: "47", cat: Other, desc: "Wallpapers - Poster - Calendari", default: true}
+    # - {id: "131", cat: Movies, desc: "Richieste Titoli Ebook - Fumetti - Riviste"}
+    # SOFTWARE
+    - {id: "21", cat: PC/0day, desc: "Windows Software", default: true}
+    # - {id: "22", cat: PC, desc: "Windows Guide e altre in generale"}
+    # - {id: "92", cat: PC, desc: "Windows Supporto "}
+    - {id: "138", cat: PC/Mac, desc: "macOS Software", default: true}
+    # - {id: "162", cat: PC/Mac, desc: "macOS Guide"}
+    # - {id: "163", cat: PC/Mac, desc: "macOS Supporto"}
+    # - {id: "164", cat: PC/Mac, desc: "Hackintosh Guide"}
+    # - {id: "165", cat: PC/Mac, desc: "Hackintosh Supporto"}
+    - {id: "23", cat: PC, desc: "Linux Software", default: true}
+    # - {id: "168", cat: PC, desc: "Linux Guide"}
+    # - {id: "93", cat: PC, desc: "Linux Supporto"}
+    - {id: "24", cat: PC, desc: "Guide & Tutorial Video", default: true}
+    # - {id: "129", cat: PC, desc: "Richieste Titoli Software"}
+    # GAMES
+    - {id: "36", cat: PC/Games, desc: "Games - Pc Windows", default: true}
+    - {id: "158", cat: PC/Mac, desc: "Games - macOS", default: true}
+    - {id: "37", cat: Console/XBox 360, desc: "Games - Console Microsoft Xbox 360", default: true}
+    - {id: "38", cat: Console/PS3, desc: "Games - Console Sony PS3", default: true}
+    - {id: "152", cat: Console/PS4, desc: "Games - Console Sony PS4", default: true}
+    # - {id: "99", cat: PC/Games, desc: "Games - Supporto"}
+    # - {id: "123", cat: PC/Games, desc: "Games - Guide"}
+    # - {id: "130", cat: PC/Games, desc: "Richieste Titoli Games"}
+    # ANDROID
+    - {id: "58", cat: PC/Mobile-Android, desc: "Android Apps", default: true}
+    # - {id: "144", cat: PC/Mobile-Android, desc: "Android Guide"}
+    # - {id: "128", cat: PC/Mobile-Android, desc: "Richieste Titoli Android"}
+    # TEAM GRAFICO
+    # - {id: "88", cat: Other, desc: "Vetrina Grafica"}
+    # - {id: "100", cat: Other, desc: "Tutorial Photoshop CC"}
+    # TAVERNA DEI CORSARI
+    # - {id: "39", cat: Other, desc: "Presentati alla Community"}
+    # - {id: "112", cat: Other, desc: "Assistenza Forum"}
+    # - {id: "33", cat: Other, desc: "Chiacchiere in generale"}
+    # - {id: "83", cat: Other, desc: "Commenti Titoli "}
+    # - {id: "136", cat: Other, desc: "Sondaggi"}
+    # - {id: "145", cat: Other, desc: "il CorSaRo VeRde App"}
+    # ARCHIVIO FORUM
+    - {id: "171", cat: PC/0day, desc: "Windows Software obsoleto", default: true}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: compatItal
+    type: checkbox
+    label: Improve Sonarr compatibility with the tracker's Italian season naming scheme by renaming Sxx to Stagione xx in searches. Can cause results already using Sxx to not be found.
+    default: false
+  - name: info30s
+    type: info
+    label: 30s Delay for Searches
+    default: The site forces a 30s delay between searches, so you may get zero results if you perform searches too close together.
+
+login:
+  method: form
+  path: forum/index.php
+  form: form#frmLogin
+  inputs:
+    user: "{{ .Config.username }}"
+    passwrd: "{{ .Config.password }}"
+    cookieneverexp: on
+  error:
+    - selector: p[class="error"]
+  test:
+    path: forum/index.php
+    selector: li#button_logout
+
+download:
+  before:
+    pathselector:
+      selector: ul.quickbuttons a
+      attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: forum/index.php?action=search2
+      method: post
+  inputs:
+    $raw: "{{ range .Categories }}brd[]={{.}}&{{end}}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    searchtype: 1
+    userspec: "*"
+    sort: id_msg|desc
+    show_complete: 1
+    subject_only: 1
+    minage: 0
+    maxage: 9999
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word, all keywords must be 2 characters or more
+    - name: re_replace
+      args: ["(?i)(\\bS(\\d+)(E\\d+)?\\b)", "{{ if .Config.compatItal }}Stagione +$2 $3{{ else }}S$2$3{{ end }}"] # Replace SXXEYY with Stagione XX EYY
+
+  rows:
+    selector: div.search_results_posts
+
+  fields:
+    category:
+      selector: a[href*="index.php?board="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: board
+        - name: split
+          args: [".", 0]
+    title:
+      selector: a[href*="index.php?topic="]
+      filters:
+        # normalize to SXXEYY format
+        - name: re_replace # Stagione XX a YY --> SXX-YY
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\s?[ae-]\\s?(\\d{2,})\\b", "S$1-$2"]
+        - name: re_replace # Stagione XX --> SXX
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b", "S$1"]
+        - name: re_replace # Stagione X a YY --> S0X-YY
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\s?[ae-]\\s?(\\d{2,})\\b", "S0$1-$2"]
+        - name: re_replace # Stagione X a Y --> S0X-0Y
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\s?[ae-]\\s?(\\d{1})\\b", "S0$1-$02"]
+        - name: re_replace # Stagione X --> S0X
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b", "S0$1"]
+        - name: re_replace # remove various
+          args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+        # cleanup for Sonarr
+        - name: re_replace # EP 3 4 to E3-4
+          args: ["(?i)\\sEP.?\\s(\\d{1,2})[\\s-](E?\\s?\\d{1,2})\\s", " E$1-$2 "]
+        - name: re_replace
+          args: ["(?i)HDTVRIP", "HDTV"]
+    details:
+      selector: a[href*="index.php?topic="]
+      attribute: href
+    download:
+      selector: a[href*="index.php?topic="]
+      attribute: href
+    date_today:
+      # Today at 18:31:59
+      # Oggi alle 18:31:59
+      selector: span.smalltext em:contains("Today"),  span.smalltext em:contains("Oggi")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Today at", "Today"]
+        - name: replace
+          args: ["Oggi alle", "Today"]
+    date_year:
+      # 11 January 2021, 10:59:53
+      # 11 Gennaio 2021, 10:59:53
+      selector: span.smalltext em:not(:contains("Today")):not(:contains("Oggi"))
+      optional: true
+      filters:
+        - name: replace
+          args: ["Gennaio", "January"]
+        - name: replace
+          args: ["Febbraio", "February"]
+        - name: replace
+          args: ["Marzo", "March"]
+        - name: replace
+          args: ["Aprile", "April"]
+        - name: replace
+          args: ["Maggio", "May"]
+        - name: replace
+          args: ["Giugno", "June"]
+        - name: replace
+          args: ["Luglio", "July"]
+        - name: replace
+          args: ["Agosto", "August"]
+        - name: replace
+          args: ["Settembre", "September"]
+        - name: replace
+          args: ["Ottobre", "October"]
+        - name: replace
+          args: ["Novembre", "November"]
+        - name: replace
+          args: ["Dicembre", "December"]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "02 January 2006, 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_today .Result.date_year }}{{ or .Result.date_today .Result.date_year }}{{ else }}now{{ end }}"
+    size:
+      text: 512 MB
+    poster:
+      selector: img.bbc_img
+      attribute: src
+      filters:
+        - name: replace
+          args: ["https://www.icv-crew.com/forum/proxy.php?request=", ""]
+        - name: urldecode
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# SMF 2.0.15

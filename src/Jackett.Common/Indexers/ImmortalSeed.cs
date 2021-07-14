@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(3, TorznabCatType.Other, "Nuked");

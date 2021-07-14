@@ -2,34 +2,16 @@
 id: torrentdownloads
 name: Torrent Downloads
 description: "Torrent Downloads (TD) is a Public torrent site for all kinds of content"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownloads.info/
-  - https://www.torrentdownloads.me/
-  - https://torrentdownloads.unblockit.uno/
-  - https://torrentdownloads.nocensor.space/
+  - https://www.torrentdownloads.pro/
+  - https://torrentdownloads.unblockit.llc/
+  - https://torrentdownloads.nocensor.sbs/
 legacylinks:
-  - https://torrentdownloads.unblockit.pro/
-  - https://torrentdownloads.unblockit.one/
-  - https://torrentdownloads.black-mirror.xyz/
-  - https://torrentdownloads.unblocked.casa/
-  - https://torrentdownloads.proxyportal.fun/
-  - https://torrentdownloads.uk-unblock.xyz/
-  - https://torrentdownloads.ind-unblock.xyz/
-  - https://torrentdownloads.unblockit.me/
-  - https://torrentdownloads.unblockit.pw/
-  - https://torrentdownloads.unblockit.id/
-  - https://torrentdownloads.unblockit.win/
-  - https://torrentdownloads.unblocked.bar/
-  - https://torrentdownloads.proxyportal.pw/
-  - https://torrentdownloads.uk-unblock.pro/
-  - https://torrentdownloads.unblockit.top/
-  - https://torrentdownloads.unblockit.lat/
-  - https://torrentdownloads.unblockit.app/
-  - https://torrentdownloads.unblocked.rest/
   - https://torrentdownloads.unblockit.dev/
   - https://torrentdownloads.unblockit.ltd/
   - https://torrentdownloads.unblockit.link/
@@ -38,6 +20,19 @@ legacylinks:
   - https://torrentdownloads.unblockit.club/
   - https://torrentdownloads.unblockit.onl/
   - https://torrentdownloads.unblockit.li/
+  - https://torrentdownloads.unblockit.uno/
+  - https://www.torrentdownloads.me/
+  - https://torrentdownloads.unblockit.ch/
+  - https://torrentdownloads.nocensor.space/
+  - https://torrentdownloads.unblockit.ws/
+  - https://torrentdownloads.nocensor.work/
+  - https://torrentdownloads.unblockit.kim/
+  - https://torrentdownloads.unblockit.bz/
+  - https://torrentdownloads.unblockit.tv/
+  - https://torrentdownloads.unblockit.how/
+  - https://torrentdownloads.unblockit.cam/
+  - https://torrentdownloads.nocensor.biz/
+  - https://torrentdownloads.unblockit.day/
 
 caps:
   categorymappings:
@@ -89,6 +84,7 @@ download:
 search:
   paths:
     - path: "{{ if .Keywords }}/search/{{ else }}/today/{{ end }}"
+      followredirect: true
   inputs:
     $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
     search: "{{ .Keywords }}"

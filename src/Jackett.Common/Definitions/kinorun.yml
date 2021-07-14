@@ -2,7 +2,7 @@
 id: kinorun
 name: Kinorun
 description: "Kinorun is a RUSSIAN Semi-Private Torrent Tracker for 3X"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
@@ -116,6 +116,9 @@ search:
 
   fields:
     category:
+      text: 24
+    category|noappend:
+      optional: true
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
@@ -137,7 +140,6 @@ search:
     description:
       selector: a[href^="browse.php?cat="] img
       attribute: alt
-      optional: true
     poster:
       selector: td[onmouseover]
       attribute: onmouseover

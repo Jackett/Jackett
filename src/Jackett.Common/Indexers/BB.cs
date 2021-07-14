@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Audio);
@@ -132,8 +132,10 @@ namespace Jackett.Common.Indexers
 
             foreach (var searchString in searchStrings)
             {
-                var queryCollection = new NameValueCollection();
-                queryCollection.Add("action", "basic");
+                var queryCollection = new NameValueCollection
+                {
+                    { "action", "basic" }
+                };
 
                 if (!string.IsNullOrWhiteSpace(searchString))
                 {
@@ -145,7 +147,8 @@ namespace Jackett.Common.Indexers
                     queryCollection.Add("filter_cat[" + cat + "]", "1");
                 }
 
-                request_urls.Add(SearchUrl + queryCollection.GetQueryString());
+                // remove . as not used in titles 
+                request_urls.Add(SearchUrl + queryCollection.GetQueryString().Replace(".", " "));
             }
 
             var downloadTasksQuery = from url in request_urls select RequestWithCookiesAndRetryAsync(url);
@@ -168,10 +171,11 @@ namespace Jackett.Common.Indexers
                     var rows = dom.QuerySelectorAll("#torrent_table > tbody > tr.torrent");
                     foreach (var row in rows)
                     {
-                        var release = new ReleaseInfo();
-
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
+                        var release = new ReleaseInfo
+                        {
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800 // 48 hours
+                        };
 
                         var catStr = row.Children[0].FirstElementChild.GetAttribute("href").Split(new[] { '[', ']' })[1];
                         release.Category = MapTrackerCatToNewznab(catStr);

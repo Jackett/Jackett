@@ -44,7 +44,7 @@ namespace Jackett.Common.Indexers
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
                        }
                    },
                    configService: configService,
@@ -55,7 +55,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping("1", TorznabCatType.Movies, "Film/Feature");
@@ -91,21 +91,27 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            // TODO: IMDB search is available but it requires to parse the details page
             var qc = new NameValueCollection
             {
                 { "order_by", "time" },
                 { "order_way", "desc" },
                 { "action", "basic" },
-                { "searchsubmit", "1" },
-                { "searchstr", query.IsImdbQuery ? query.ImdbID : query.GetQueryString() }
+                { "searchsubmit", "1" }
             };
+
+            if (query.IsImdbQuery)
+                qc.Add("imdb", query.ImdbID);
+            else if (query.IsTmdbQuery)
+                qc.Add("tmdb", query.TmdbID.ToString());
+            else
+                qc.Add("searchstr", query.GetQueryString());
 
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
                 qc.Add($"filter_cat[{cat}]", "1");
 
-            var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
+            // remove . as not used in titles
+            var searchUrl = BrowseUrl + "?" + qc.GetQueryString().Replace(".", " ");
             var results = await RequestWithCookiesAsync(searchUrl);
             try
             {
@@ -146,9 +152,11 @@ namespace Jackett.Common.Indexers
                         }
                     };
 
-                    // TODO: TMDb is also available
                     var qImdb = row.QuerySelector("a[href^=\"https://www.imdb.com\"]");
                     var imdb = qImdb != null ? ParseUtil.GetImdbID(qImdb.GetAttribute("href").Split('/').Last()) : null;
+
+                    qImdb = row.QuerySelector("a[href^=\"https://www.themoviedb.org\"]");
+                    var tmdb = qImdb != null ? ParseUtil.GetLongFromString(qImdb.GetAttribute("href").Split('/').Last()) : null;
 
                     var release = new ReleaseInfo
                     {
@@ -162,6 +170,7 @@ namespace Jackett.Common.Indexers
                         Details = details,
                         Guid = link,
                         Imdb = imdb,
+                        TMDb = tmdb,
                         Poster = poster,
                         Seeders = seeders,
                         Peers = leechers + seeders,
