@@ -42,7 +42,7 @@ search:
     - path: "{{ if .Keywords }}search?skeyword={{ .Keywords }}{{ else }}board/new{{ end }}"
 
   rows:
-    selector: ul#searchresult > li
+    selector: ul#searchresult > li:has(a.subject)
     filters:
       - name: andmatch
 

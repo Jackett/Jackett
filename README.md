@@ -28,6 +28,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 7torrents
  * ACG.RIP
  * ACGsou (36DM)
+ * AngieTorrents
  * Anidex
  * AniLibria
  * AnimeClipse
@@ -462,6 +463,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RedBits
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
+ * Resurrect The Net
  * RetroFlix
  * RevolutionTT
  * ROFD
@@ -490,6 +492,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SpringSunday
  * SugoiMusic
  * Superbits (SBS)
+ * Swarmazon
  * Tapochek
  * Tasmanit [![(invite needed)][inviteneeded]](#)
  * TeamHD
@@ -525,7 +528,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentDay (TD)
  * TorrentDB
  * Torrentech (TTH)
- * TorrentFactory
  * TorrentHeaven [![(invite needed)][inviteneeded]](#)
  * TorrentHR
  * Torrenting (TT) [![(invite needed)][inviteneeded]](#)
