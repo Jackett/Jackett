@@ -6,9 +6,9 @@ language: cs-cz
 type: semi-private
 encoding: UTF-8
 links:
-  - https://www.hd-cztorrent.cz/
+  - http://www.hd-cztorrent.cz/
 legacylinks:
-  - http://www.hd-cztorrent.cz/ # site is forcing https
+  - https://www.hd-cztorrent.cz/  # site is forcing http
 
 caps:
   categorymappings:
