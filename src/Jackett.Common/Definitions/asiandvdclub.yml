@@ -74,18 +74,18 @@ search:
       selector: img[class^="cat-"]
       attribute: class
       case:
-        img.cat-anime : 1
-        img.cat-hk : 2
-        img.cat-japan : 3
-        img.cat-korea : 4
-        img.cat-china : 5
-        img.cat-phil : 6
-        img.cat-taiwan : 7
-        img.cat-thai : 8
-        img.cat-viet : 9
-        img.cat-malaysia : 10
-        img.cat-rest : 11
-        img.cat-misc : 12 # unconfirmed as there are currently no torrents for cat[12]
+        img.cat-anime: 1
+        img.cat-hk: 2
+        img.cat-japan: 3
+        img.cat-korea: 4
+        img.cat-china: 5
+        img.cat-phil: 6
+        img.cat-taiwan: 7
+        img.cat-thai: 8
+        img.cat-viet: 9
+        img.cat-malaysia: 10
+        img.cat-rest: 11
+        img.cat-misc: 12 # unconfirmed as there are currently no torrents for cat[12]
     title:
       selector: a[href^="/torrent/"]
     details:
