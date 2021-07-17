@@ -20,6 +20,7 @@ caps:
     - {id: 24, cat: Books/EBook, desc: E-Books}
     - {id: 64, cat: PC/Games, desc: Games/ISO}
     - {id: 65, cat: PC/Games, desc: Games/Rips}
+    - {id: 83, cat: Movies/HD, desc: HeaVen2H3LL}
     - {id: 28, cat: Movies/3D, desc: Movies/3D}
     - {id: 30, cat: Movies, desc: Movies/Cam-TS}
     - {id: 15, cat: Movies/DVD, desc: Movies/DVDR}
