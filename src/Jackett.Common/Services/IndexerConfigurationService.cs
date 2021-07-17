@@ -129,6 +129,32 @@ namespace Jackett.Common.Services
         public string GetIndexerConfigFilePath(string indexerId)
             => Path.Combine(configService.GetIndexerConfigDir(), indexerId + ".json");
 
+        public void RenameIndexer(string oldId, string newId)
+        {
+            var oldPath = GetIndexerConfigFilePath(oldId);
+            if (File.Exists(oldPath))
+            {
+                // if the old configuration exists, we rename it to be used by the renamed indexer
+                logger.Info($"Old configuration detected: {oldPath}");
+                var newPath = GetIndexerConfigFilePath(newId);
+                if (File.Exists(newPath))
+                    File.Delete(newPath);
+                File.Move(oldPath, newPath);
+                // backups
+                var oldPathBak = oldPath + ".bak";
+                var newPathBak = newPath + ".bak";
+                if (File.Exists(oldPathBak))
+                {
+                    if (File.Exists(newPathBak))
+                        File.Delete(newPathBak);
+                    File.Move(oldPathBak, newPathBak);
+                }
+
+                logger.Info($"Configuration renamed: {oldPath} => {newPath}");
+            }
+        }
+
+
         private readonly IConfigurationService configService;
         private readonly Logger logger;
 
