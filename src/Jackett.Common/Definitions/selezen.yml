@@ -6,12 +6,13 @@ language: ru-ru
 type: semi-private
 encoding: UTF-8
 links:
+  - https://use.selezen.club/
   - https://mel.selezen.net/
   - https://selezen.org/
-  - https://s1.selezen.site/
 legacylinks:
   - https://www.selezen.site/
   - https://www.selezen.net/
+  - https://s1.selezen.site/
 
 caps:
   categorymappings:
@@ -65,7 +66,7 @@ settings:
       asc: asc
 
 login:
-  path: /
+  path: login.html
   method: form
   form: form[role="form"]
   inputs:
