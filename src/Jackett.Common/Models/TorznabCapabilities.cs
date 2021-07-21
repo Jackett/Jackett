@@ -5,6 +5,11 @@ using System.Xml.Linq;
 
 namespace Jackett.Common.Models
 {
+    public enum SearchEngineType
+    {
+        Sphinx,
+        Raw
+    }
     public enum TvSearchParam
     {
         Q,
@@ -44,6 +49,8 @@ namespace Jackett.Common.Models
         public int? LimitsDefault { get; set; }
 
         public bool SearchAvailable { get; set; }
+        public SearchEngineType SearchEngine { get; set; }
+        public bool SearchEngineAvailable { get; set; }
 
         public List<TvSearchParam> TvSearchParams;
         public bool TvSearchAvailable => (TvSearchParams.Count > 0);
@@ -76,6 +83,8 @@ namespace Jackett.Common.Models
         public TorznabCapabilities()
         {
             SearchAvailable = true;
+            SearchEngineAvailable = false;
+            SearchEngine = SearchEngineType.Sphinx;
             TvSearchParams = new List<TvSearchParam>();
             MovieSearchParams = new List<MovieSearchParam>();
             MusicSearchParams = new List<MusicSearchParam>();
@@ -236,7 +245,8 @@ namespace Jackett.Common.Models
                     new XElement("searching",
                         new XElement("search",
                             new XAttribute("available", SearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", "q")
+                            new XAttribute("supportedParams", "q"),
+                            SearchEngineAvailable ? new XAttribute("searchEngine", SearchEngine.ToString().ToLower()) : null
                         ),
                         new XElement("tv-search",
                             new XAttribute("available", TvSearchAvailable ? "yes" : "no"),
@@ -283,6 +293,8 @@ namespace Jackett.Common.Models
         public static TorznabCapabilities Concat(TorznabCapabilities lhs, TorznabCapabilities rhs)
         {
             lhs.SearchAvailable = lhs.SearchAvailable || rhs.SearchAvailable;
+            lhs.SearchEngine = lhs.SearchEngineAvailable ? lhs.SearchEngine : rhs.SearchEngine;
+            lhs.SearchEngineAvailable = lhs.SearchEngineAvailable || rhs.SearchEngineAvailable;
             lhs.TvSearchParams = lhs.TvSearchParams.Union(rhs.TvSearchParams).ToList();
             lhs.MovieSearchParams = lhs.MovieSearchParams.Union(rhs.MovieSearchParams).ToList();
             lhs.MusicSearchParams = lhs.MusicSearchParams.Union(rhs.MusicSearchParams).ToList();
