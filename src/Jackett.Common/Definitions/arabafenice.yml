@@ -136,6 +136,9 @@ download:
   selectors:
     - selector: a[href^="download.php?id="]
       attribute: href
+      filters:
+        - name: regexp
+          args: "^(.+?)&key="
 
 search:
   paths:
