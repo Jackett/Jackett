@@ -72,6 +72,7 @@ search:
     - path: torrents.php
   inputs:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # name, imdb, douban
     search_area: "{{ if .Query.IMDBID }}imdb{{ else }}name{{ end }}"
     suggest: 0
     column: "{{ .Config.sort }}"
@@ -91,7 +92,7 @@ search:
       selector: a[href^="details_"] > b
     title:
       optional: true
-      selector: a[title][href^="details_"] > b
+      selector: a[title][href^="details_"]
       attribute: title
     details:
       selector: a[href^="details_"]
@@ -104,7 +105,7 @@ search:
       attribute: href
     date:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: td:nth-last-child(7) > span[title]
       attribute: title
       optional: true
       filters:
@@ -114,7 +115,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date:
       # time added
-      selector: td:nth-child(4):not(:has(span[title])):not(:has(a))
+      selector: td:nth-last-child(7):not(:has(span[title])):not(:has(a))
       optional: true
       filters:
         - name: append
@@ -122,13 +123,13 @@ search:
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
-      selector: td:nth-child(5)
+      selector: td:nth-last-child(6)
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-last-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td:nth-last-child(4)
     grabs:
-      selector: td:nth-child(8)
+      selector: td:nth-last-child(3)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -144,6 +145,6 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
+      selector: a[href^="details_"]
       remove: a, img
 # NexusPHP Standard v1.5 Beta 4 (customised)
