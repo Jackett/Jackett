@@ -455,6 +455,7 @@ namespace Jackett.Updater
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
                 "Definitions/tspate.yml",
+                "Definitions/ttobogo.yml",
                 "Definitions/turknova.yml",
                 "Definitions/u-torrents.yml",
                 "Definitions/ultimategamerclub.yml",
