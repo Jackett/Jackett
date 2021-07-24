@@ -349,6 +349,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * GreekDiamond
  * Greek Team
  * HaiDan
+ * Haitang
  * HD Dolby
  * HD-Bits.com
  * HD-Forever (HDF)
