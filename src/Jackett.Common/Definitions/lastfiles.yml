@@ -131,7 +131,7 @@ search:
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*=".php?cat="]
       attribute: href
       filters:
         - name: querystring
