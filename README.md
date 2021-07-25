@@ -264,15 +264,16 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BeyondHD (BHD)
  * Bibliotik
  * BIGTorrent
- * Bitded
  * Bit-City Reloaded [![(invite needed)][inviteneeded]](#)
  * BIT-HDTV
  * BiT-TiTAN
+ * Bitded
+ * Bithorlo (BHO)
  * BitHUmen
+ * BitSexy
+ * Bitspyder
  * BitTorrentFiles
  * BiTTuRK
- * Bithorlo (BHO)
- * Bitspyder
  * BJ-Share (BJ)
  * BlueBird [![(invite needed)][inviteneeded]](#)
  * Blutopia (BLU)
