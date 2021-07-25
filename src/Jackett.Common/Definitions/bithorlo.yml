@@ -28,6 +28,8 @@ caps:
     - {id: 28, cat: Movies/HD, desc: "HD/Hun"}
     - {id: 33, cat: TV, desc: "Sorozat/Eng"}
     - {id: 5, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 52, cat: TV/HD, desc: "Sorozat/Eng/HD"}
+    - {id: 53, cat: TV/HD, desc: "Sorozat/Hun/HD"}
     - {id: 4, cat: Movies/SD, desc: "Xvid/Eng"}
     - {id: 3, cat: Movies/SD, desc: "Xvid/Hun"}
     # Zene
