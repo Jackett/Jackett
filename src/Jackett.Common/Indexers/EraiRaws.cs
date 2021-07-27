@@ -363,16 +363,16 @@ namespace Jackett.Common.Indexers
             private readonly Dictionary<string, string> DETAIL_SEARCH_SEASON = new Dictionary<string, string> {
                 { " Season (?<detail>[0-9]+)", "" }, // "Season 2"
                 { " (?<detail>[0-9]+)(st|nd|rd|th) Season", "" }, // "2nd Season"
-                { " Part (?<detail>[0-9]+) – ", " – " }, // "<title> Part 2 – <episode>"
-                { " (?<detail>[0-9]+) – ", " – " } // "<title> 2 – <episode>" - NOT A HYPHEN!
+                { " Part (?<detail>[0-9]+) - ", " - " }, // "<title> Part 2 - <episode>"
+                { " (?<detail>[0-9]+) - ", " - " } // "<title> 2 - <episode>"
             };
 
             private readonly Dictionary<string, string> DETAIL_SEARCH_EPISODE = new Dictionary<string, string> {
-                { " – (?<detail>[0-9]+)$", " – " }, // "<title> – <episode>" <end_of_title> - NOT A HYPHEN!
-                { " – (?<detail>[0-9]+) ", " – " } // "<title> – <episode> ..." - NOT A HYPHEN!
+                { " - (?<detail>[0-9]+)$", " - " }, // "<title> - <episode>" <end_of_title>
+                { " - (?<detail>[0-9]+) ", " - " } // "<title> - <episode> ..."
             };
 
-            private const string TITLE_URL_SLUG_REGEX = @"^(?<url_slug>.+) –";
+            private const string TITLE_URL_SLUG_REGEX = @"^(?<url_slug>.+) -";
 
             public string Parse(string title)
             {
@@ -386,13 +386,13 @@ namespace Jackett.Common.Indexers
                     PrefixOrDefault("E", results.details["episode"]).Trim()
                     );
 
-                // If title still contains the strange hyphen, insert the identifier after it. Otherwise put it at the end.
-                int strangeHyphenPosition = results.strippedTitle.LastIndexOf("–");
+                // If title still contains the hyphen, insert the identifier after it. Otherwise put it at the end.
+                int strangeHyphenPosition = results.strippedTitle.LastIndexOf("-");
                 if (strangeHyphenPosition > -1)
                 {
                     return string.Concat(
                         results.strippedTitle.Substring(0, strangeHyphenPosition).Trim(),
-                        " – ",
+                        " - ",
                         seasonEpisodeIdentifier,
                         " ",
                         results.strippedTitle.Substring(strangeHyphenPosition + 1).Trim()
