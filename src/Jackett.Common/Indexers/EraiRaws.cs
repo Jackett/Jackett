@@ -406,25 +406,6 @@ namespace Jackett.Common.Indexers
                 ).Trim();
             }
 
-            public string GetUrlSlug(string title)
-            {
-                var match = Regex.Match(title, TITLE_URL_SLUG_REGEX, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
-                if (!match.Success)
-                {
-                    return null;
-                }
-
-                var urlSlug = match.Groups["url_slug"].Value.ToLowerInvariant();
-                urlSlug = Regex.Replace(urlSlug, "[^a-zA-Z0-9]", "-");
-                urlSlug = urlSlug.Trim('-');
-                while (urlSlug.Contains("--"))
-                {
-                    urlSlug = urlSlug.Replace("--", "-");
-                }
-
-                return urlSlug;
-            }
-
             private static (string strippedTitle, Dictionary<string, string> details) SearchTitleForDetails(string title, Dictionary<string, Dictionary<string, string>> definition)
             {
                 Dictionary<string, string> details = new Dictionary<string, string>();
