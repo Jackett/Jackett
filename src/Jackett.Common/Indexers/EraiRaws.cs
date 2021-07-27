@@ -8,7 +8,6 @@ using System.Xml;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -280,7 +279,7 @@ namespace Jackett.Common.Indexers
             {
                 Title = StripTitle(feedItem.Title);
                 Quality = feedItem.Quality;
-                Size = ParseSize(feedItem.Size);
+                Size = ReleaseInfo.GetBytes(feedItem.Size);
                 DetailsLink = ParseDetailsLink(feedItem.Description);
 
                 if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
@@ -299,17 +298,6 @@ namespace Jackett.Common.Indexers
                 var prefixStripped = Regex.Replace(rawTitle, "^\\[.+?\\] ", "");
                 var suffixStripped = Regex.Replace(prefixStripped, " \\[.+\\]", "");
                 return suffixStripped.Trim();
-            }
-
-            private long ParseSize(string size)
-            {
-                if (SizeUtil.TryConvertHumanReadableToBytes(size, out long sizeInBytes))
-                {
-                    return sizeInBytes;
-                }
-
-                // Conversion failed so use default of 1MB
-                return 1024L * 1024L;
             }
 
             private Uri ParseDetailsLink(string description)
