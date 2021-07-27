@@ -224,7 +224,8 @@ namespace Jackett.Common.Indexers
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
                 var quality = rssItem.SelectSingleNode("erai:res", nsm)?.InnerText;
 
-                item = new RssFeedItem {
+                item = new RssFeedItem
+                {
                     Title = title,
                     Link = link,
                     PublishDate = publishDate,
