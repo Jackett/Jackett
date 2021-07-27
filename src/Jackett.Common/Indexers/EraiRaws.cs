@@ -8,6 +8,7 @@ using System.Xml;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -16,7 +17,7 @@ namespace Jackett.Common.Indexers
 {
     public class EraiRaws : BaseWebIndexer
     {
-        const string RSS_PATH = "rss-all-magnet";
+        const string RSS_PATH = "feed/?type=magnet";
 
         private readonly IReadOnlyDictionary<string, int> sizeEstimates = new Dictionary<string, int>() {
             { "1080p", 1332 }, // ~1.3GiB
@@ -25,8 +26,10 @@ namespace Jackett.Common.Indexers
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://www.erai-raws.info/",
-            "https://erairaws.nocensor.space/"
+            // At some point the beta site will probably replace the current one
+            // At that point, these can probably be re-enabled.
+            // "https://www.erai-raws.info/",
+            // "https://erairaws.nocensor.space/"
         };
 
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
@@ -34,7 +37,8 @@ namespace Jackett.Common.Indexers
             : base(id: "erai-raws",
                    name: "Erai-Raws",
                    description: "Erai-Raws is a team release site for Anime subtitles.",
-                   link: "https://www.erai-raws.info/",
+                   //link: "https://www.erai-raws.info/",
+                   link: "https://beta.erai-raws.info/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -56,7 +60,7 @@ namespace Jackett.Common.Indexers
             // Add note that download stats are not available
             configData.AddDynamic(
                 "download-stats-unavailable",
-                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Size</li><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
+                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
             );
 
             // Config item for title detail parsing
@@ -114,6 +118,9 @@ namespace Jackett.Common.Indexers
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(result.ContentString);
 
+            var nsm = new XmlNamespaceManager(xmlDocument.NameTable);
+            nsm.AddNamespace("erai", "https://beta.erai-raws.info/rss-page/");
+
             // Parse to RssFeedItems
             var xmlNodes = xmlDocument.GetElementsByTagName("item");
             List<RssFeedItem> feedItems = new List<RssFeedItem>();
@@ -121,7 +128,7 @@ namespace Jackett.Common.Indexers
             {
                 var node = (XmlNode)n;
 
-                if (RssFeedItem.TryParse(node, out RssFeedItem item))
+                if (RssFeedItem.TryParse(nsm, node, out RssFeedItem item))
                 {
                     feedItems.Add(item);
                 }
@@ -152,9 +159,6 @@ namespace Jackett.Common.Indexers
                     logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed link URI.");
                     continue;
                 }
-
-                // Run the title parser for the details link
-                releaseInfo.DetailsLink = new Uri(string.Format("{0}anime-list/{1}", SiteLink, titleParser.GetUrlSlug(releaseInfo.Title)));
 
                 // If enabled, perform detailed title parsing
                 if (IsTitleDetailParsingEnabled)
@@ -235,37 +239,54 @@ namespace Jackett.Common.Indexers
         /// </summary>
         private class RssFeedItem
         {
-            public static bool TryParse(XmlNode rssItem, out RssFeedItem item)
+            public static bool TryParse(XmlNamespaceManager nsm, XmlNode rssItem, out RssFeedItem item)
             {
                 var title = rssItem.SelectSingleNode("title")?.InnerText;
                 var link = rssItem.SelectSingleNode("link")?.InnerText;
                 var publishDate = rssItem.SelectSingleNode("pubDate")?.InnerText;
+                var size = rssItem.SelectSingleNode("erai:size", nsm)?.InnerText;
+                var description = rssItem.SelectSingleNode("description")?.InnerText;
+                var quality = rssItem.SelectSingleNode("erai:res", nsm)?.InnerText;
 
-                if (string.IsNullOrWhiteSpace(title) ||
-                    string.IsNullOrWhiteSpace(link) ||
-                    string.IsNullOrWhiteSpace(publishDate))
-                {
-                    // One of the properties was empty so fail to parse
-                    item = null;
-                    return false;
-                }
-
-                item = new RssFeedItem(title, link, publishDate);
-                return true;
+                item = new RssFeedItem {
+                    Title = title,
+                    Link = link,
+                    PublishDate = publishDate,
+                    Size = size,
+                    Description = description,
+                    Quality = quality
+                };
+                return item.IsValid();
             }
 
-            private RssFeedItem(string title, string link, string publishDate)
+            private RssFeedItem()
             {
-                Title = title;
-                Link = link;
-                PublishDate = publishDate;
+                // Nothing to do
             }
 
             public string Title { get; set; }
 
-            public string Link { get; }
+            public string Link { get; private set; }
 
-            public string PublishDate { get; }
+            public string PublishDate { get; private set; }
+
+            public string Size { get; private set; }
+
+            public string Description { get; private set; }
+
+            public string Quality { get; private set; }
+
+            /// <summary>
+            /// Check there is enough information to process the item.
+            /// </summary>
+            private bool IsValid()
+            {
+                return !(string.IsNullOrWhiteSpace(Title) ||
+                    string.IsNullOrWhiteSpace(Link) ||
+                    string.IsNullOrWhiteSpace(PublishDate) ||
+                    string.IsNullOrWhiteSpace(Size) ||
+                    string.IsNullOrWhiteSpace(Quality));
+            }
         }
 
         /// <summary>
@@ -275,10 +296,10 @@ namespace Jackett.Common.Indexers
         {
             public EraiRawsReleaseInfo(RssFeedItem feedItem)
             {
-                var splitTitle = SplitQualityAndTitle(feedItem.Title);
-
-                Quality = splitTitle.quality;
-                Title = splitTitle.title;
+                Title = StripTitle(feedItem.Title);
+                Quality = feedItem.Quality;
+                Size = ParseSize(feedItem.Size);
+                DetailsLink = ParseDetailsLink(feedItem.Description);
 
                 if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
                 {
@@ -291,15 +312,37 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-            private (string quality, string title) SplitQualityAndTitle(string rawTitle)
+            private string StripTitle(string rawTitle)
             {
-                var match = Regex.Match(rawTitle, @"^\[(?<quality>[0-9]+[ip])\] (?<title>.*)$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(0.5));
-                if (match.Success)
+                var prefixStripped = Regex.Replace(rawTitle, "^\\[.+?\\] ", "");
+                var suffixStripped = Regex.Replace(prefixStripped, " \\[.+\\]", "");
+                return suffixStripped.Trim();
+            }
+
+            private long ParseSize(string size)
+            {
+                if (SizeUtil.TryConvertHumanReadableToBytes(size, out long sizeInBytes))
                 {
-                    return (match.Groups["quality"].Value, match.Groups["title"].Value);
+                    return sizeInBytes;
                 }
 
-                return (string.Empty, rawTitle);
+                // Conversion failed so use default of 1MB
+                return 1024L * 1024L;
+            }
+
+            private Uri ParseDetailsLink(string description)
+            {
+                var match = Regex.Match(description, "href=\"(.+?)\"");
+                if (match.Success)
+                {
+                    var detailsLinkText = match.Groups[1].Value;
+                    if (Uri.TryCreate(detailsLinkText, UriKind.Absolute, out Uri detailsLink))
+                    {
+                        return detailsLink;
+                    }
+                }
+
+                return null;
             }
 
             public string Quality { get; }
@@ -311,6 +354,8 @@ namespace Jackett.Common.Indexers
             public Uri DetailsLink { get; set; }
 
             public DateTimeOffset? PublishDate { get; }
+
+            public long Size { get; }
         }
 
         public class TitleParser
