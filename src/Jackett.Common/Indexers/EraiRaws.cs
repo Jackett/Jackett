@@ -26,6 +26,11 @@ namespace Jackett.Common.Indexers
             // "https://erairaws.nocensor.space/"
         };
 
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://www.erai-raws.info/",
+            "https://erairaws.nocensor.space/"
+        };
+
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
             : base(id: "erai-raws",
