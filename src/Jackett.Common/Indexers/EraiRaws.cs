@@ -19,12 +19,6 @@ namespace Jackett.Common.Indexers
     {
         const string RSS_PATH = "feed/?type=magnet";
 
-        private readonly IReadOnlyDictionary<string, int> sizeEstimates = new Dictionary<string, int>() {
-            { "1080p", 1332 }, // ~1.3GiB
-            { "720p", 700 },
-            { "540p", 350 }
-        };
-
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             // At some point the beta site will probably replace the current one
             // At that point, these can probably be re-enabled.
@@ -195,31 +189,13 @@ namespace Jackett.Common.Indexers
                     Category = MapTrackerCatToNewznab("1"),
 
                     // Download stats are not available through scraping so set some mock values.
-                    Size = GetSizeEstimate(fi),
+                    Size = fi.Size,
                     Seeders = 1,
                     Peers = 2,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
                 };
             }
-        }
-
-        /// <summary>
-        /// Get an estimate of the file size based on the release info.
-        /// </summary>
-        /// <remarks>
-        /// These estimates are currently only based on Quality. They will be very inaccurate for batch releases.
-        /// </remarks>
-        private long GetSizeEstimate(EraiRawsReleaseInfo releaseInfo)
-        {
-            long sizeEstimateInMiB = 256;
-            if (sizeEstimates.ContainsKey(releaseInfo.Quality.ToLower()))
-            {
-                sizeEstimateInMiB = sizeEstimates[releaseInfo.Quality.ToLower()];
-            }
-
-            // Convert to bytes and return
-            return sizeEstimateInMiB * (1024 * 1024);
         }
 
         private static string PrefixOrDefault(string prefix, string value, string def = "")
