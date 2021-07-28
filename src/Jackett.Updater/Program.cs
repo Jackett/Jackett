@@ -402,6 +402,7 @@ namespace Jackett.Updater
                 "Definitions/rockethd.yml",
                 "Definitions/rockhardlossless.yml",
                 "Definitions/rodvd.yml",
+                "Definitions/rofd.yml",
                 "Definitions/scenefz.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)
                 "Definitions/scenereactor.yml",
