@@ -280,6 +280,7 @@ namespace Jackett.Updater
                 "Definitions/brobits.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
+                "Definitions/btdb.yml",
                 "Definitions/bteye.yml",
                 "Definitions/btgigs.yml",
                 "Definitions/btkitty.yml",
