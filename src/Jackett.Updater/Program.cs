@@ -342,6 +342,7 @@ namespace Jackett.Updater
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
                 "Definitions/hdstreet.yml",
+                "Definitions/hon3yhd.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
                 "Definitions/horrorsite.yml",
