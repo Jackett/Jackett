@@ -204,6 +204,8 @@ search:
       args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
     - name: re_replace # Full season S >= 10
       args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
+    - name: re_replace # episode number at the end "123" to "E123"
+      args: ["(.*)(\\.| |\\-)(\\d{2,3})(.*)", "$1 E$3 $4"]
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
