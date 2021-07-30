@@ -213,7 +213,7 @@ search:
     - name: re_replace # Full season S >= 10
       args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
     - name: re_replace # episode number at the end "123" to "E123"
-      args: ["(.*)(\\.| |\\-)(\\d{2,3})(.*)", "$1 E$3 $4"]
+      args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
@@ -299,7 +299,7 @@ search:
         # Sonarr need E in front of 3 digit number or else it thinks it is episode
         # S01E10 for number 110 for example ==> enhancedAnime
         - name: re_replace
-          args: ["(.*)(\\.| |\\-)(\\d{2,3})(\\.| |\\-)(.*)", "$1 E$3 $5"]
+          args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-)(.*)", "$1 E$3 $5"]
     title:
       text: "{{ if .Config.enhancedAnime }}{{ .Result.title_anime }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
     details:
