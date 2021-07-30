@@ -318,7 +318,6 @@ namespace Jackett.Updater
                 "Definitions/extratorrent-ag.yml",
                 "Definitions/extratorrent-it.yml",
                 "Definitions/extratorrentclone.yml",
-                "Definitions/extremlymtorrents.yml",
                 "Definitions/filmsclub.yml",
                 "Definitions/focusx.yml",
                 "Definitions/freakstrackingsystem.yml",
