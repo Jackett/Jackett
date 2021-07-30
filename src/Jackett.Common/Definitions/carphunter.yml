@@ -99,7 +99,7 @@ search:
     - name: re_replace
       args: ["[^a-zA-Z0-9]+", "%"]
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
     # 0 both, 1 onlyactive, 2 onlydead, 3 onlyfree, 4 x2 torrents, 5 mytorrents, 6 waiting for seeds
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
@@ -118,13 +118,13 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="/details.php?id="]
+      selector: a[href*="/details.php?id="]
       attribute: title
     details:
-      selector: a[href^="/details.php?id="]
+      selector: a[href*="/details.php?id="]
       attribute: href
     download:
-      selector: a[href^="/details.php?id="]
+      selector: a[href*="/details.php?id="]
       attribute: href
       filters:
         - name: replace
