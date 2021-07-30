@@ -49,7 +49,9 @@ search:
   paths:
     - path: /
     - path: /page/2/
+      followredirect: true
     - path: /page/3/
+      followredirect: true
   keywordsfilters:
     # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
     - name: re_replace
@@ -61,7 +63,7 @@ search:
     $raw: "&x=0&y=0"
 
   rows:
-    selector: "#principal .miniboxs-ficha li"
+    selector: "#principal .miniboxs-ficha li:has(span:nth-of-type(2))"
     filters:
       - name: andmatch
 
@@ -128,7 +130,7 @@ search:
     category:
       text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
     size:
-      text: "0 B"
+      text: "512 MB"
     size:
       # size can be missing
       optional: true
