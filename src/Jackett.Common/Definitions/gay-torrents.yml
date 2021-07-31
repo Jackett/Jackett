@@ -165,7 +165,7 @@ search:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "02 Jan 06, 15:04 -07:00"
+          args: "15:04 02-Jan-2006 -07:00"
     downloadvolumefactor:
       case:
         ".TorrentList2 > a:contains(\"[FFL]\")": 0
