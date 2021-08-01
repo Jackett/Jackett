@@ -51,7 +51,7 @@ settings:
     default: date
     options:
       date: created
-      seeders: seeds
+      seeds: seeders
       size: size
       title: title
   - name: type
