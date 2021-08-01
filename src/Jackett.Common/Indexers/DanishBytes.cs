@@ -110,22 +110,24 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var dbResponse = JsonConvert.DeserializeObject<DBResponse>(results.ContentString);
-                foreach (var attr in dbResponse.torrents)
+                var jsonContent = JObject.Parse(results.ContentString);
+                var rsskey = jsonContent.Value<string>("rsskey");
+                foreach (var item in jsonContent.Value<JArray>("torrents"))
                 {
+                    var torrent = item.ToObject<Torrent>();
                     var release = new ReleaseInfo
                     {
-                        Title = attr.name,
-                        Details = new Uri($"{SiteLink}torrents/{attr.id}"),
-                        Link = new Uri($"{SiteLink}torrent/download/{attr.id}.{dbResponse.rsskey}"),
-                        PublishDate = attr.created_at,
-                        Category = MapTrackerCatToNewznab(attr.category_id),
-                        Size = attr.size,
-                        Seeders = attr.seeders,
-                        Peers = attr.leechers + attr.seeders,
-                        Grabs = attr.times_completed,
-                        DownloadVolumeFactor = attr.free ? 0 : 1,
-                        UploadVolumeFactor = attr.doubleup ? 2 : 1
+                        Title = torrent.name,
+                        Details = new Uri($"{SiteLink}torrents/{torrent.id}"),
+                        Link = new Uri($"{SiteLink}torrent/download/{torrent.id}.{rsskey}"),
+                        PublishDate = torrent.created_at,
+                        Category = MapTrackerCatToNewznab(torrent.category_id),
+                        Size = torrent.size,
+                        Seeders = torrent.seeders,
+                        Peers = torrent.leechers + torrent.seeders,
+                        Grabs = torrent.times_completed,
+                        DownloadVolumeFactor = torrent.free ? 0 : 1,
+                        UploadVolumeFactor = torrent.doubleup ? 2 : 1
                     };
 
                     releases.Add(release);
@@ -143,57 +145,14 @@ namespace Jackett.Common.Indexers
         {
             public int id { get; set; }
             public string name { get; set; }
-            public string info_hash { get; set; }
             public long size { get; set; }
             public int leechers { get; set; }
             public int seeders { get; set; }
             public int times_completed { get; set; }
             public string category_id { get; set; }
-            public string tmdb { get; set; }
-            public string igdb { get; set; }
-            public string mal { get; set; }
-            public string tvdb { get; set; }
-            public string imdb { get; set; }
-            public int stream { get; set; }
             public bool free { get; set; }
-            public bool on_fire { get; set; }
             public bool doubleup { get; set; }
-            public bool highspeed { get; set; }
-            public bool featured { get; set; }
-            public bool webstream { get; set; }
-            public bool anon { get; set; }
-            public bool sticky { get; set; }
-            public bool sd { get; set; }
             public DateTime created_at { get; set; }
-            public DateTime bumped_at { get; set; }
-            public int type_id { get; set; }
-            public int resolution_id { get; set; }
-            public string poster_image { get; set; }
-            public string video { get; set; }
-            public int thanks_count { get; set; }
-            public int comments_count { get; set; }
-            public string getSize { get; set; }
-            public string created_at_human { get; set; }
-            public bool bookmarked { get; set; }
-            public bool liked { get; set; }
-            public bool show_last_torrents { get; set; }
-        }
-
-        private class PageLinks
-        {
-            public int to { get; set; }
-            public string qty { get; set; }
-            public int current_page { get; set; }
-        }
-
-        private class DBResponse
-        {
-            public Torrent[] torrents { get; set; }
-            public int resultsCount { get; set; }
-            public PageLinks links { get; set; }
-            public string currentCount { get; set; }
-            public int torrentCountTotal { get; set; }
-            public string rsskey { get; set; }
         }
 
     }
