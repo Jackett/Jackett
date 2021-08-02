@@ -48,10 +48,10 @@ caps:
   categorymappings:
     - {id: 28, cat: TV/Anime, desc: "Anime - All"}
     - {id: 20, cat: PC/Mobile-Other, desc: "Apps - Mobile"}
-    - {id: 19, cat: PC/Mac, desc: "Apps - OS"}
     - {id: 21, cat: PC, desc: "Apps - Other"}
     - {id: 18, cat: PC/0day, desc: "Apps - Windows"}
     - {id: 13, cat: Audio/Audiobook, desc: "Books - Audiobooks"}
+    - {id: 19, cat: Books/Comics, desc: "Books - Comics"}
     - {id: 12, cat: Books/EBook, desc: "Books - Ebooks"}
     - {id: 14, cat: Books/Technical, desc: "Books - Education"}
     - {id: 15, cat: Books/Mags, desc: "Books - Magazine"}
