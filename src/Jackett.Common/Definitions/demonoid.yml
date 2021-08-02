@@ -324,7 +324,7 @@ login:
 
 download:
   selectors:
-    - selector: a[href^="/files/download/"]
+    - selector: a[href^="/files/download/"]:has(i.fa-download)
       attribute: href
 
 search:
