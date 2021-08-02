@@ -22,7 +22,7 @@ caps:
     - {id: 3, cat: Movies, desc: "Movies/Packs"}
     - {id: 24, cat: Movies/SD, desc: "Movies/SD"}
     - {id: 30, cat: Movies/UHD, desc: "Movies/UHD"}
-    - {id: 35, cat: Movies/BlueRay, desc: "Movies/BlueRay"}
+    - {id: 35, cat: Movies/BluRay, desc: "Movies/Blu-Ray"}
     - {id: 36, cat: Movies/UHD, desc: "Movies/4K"}
     - {id: 20, cat: Audio/Lossless, desc: "Music/FLAC"}
     - {id: 4, cat: Audio/MP3, desc: "Music/MP3"}
