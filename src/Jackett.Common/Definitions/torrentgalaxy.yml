@@ -48,19 +48,17 @@ caps:
   categorymappings:
     - {id: 28, cat: TV/Anime, desc: "Anime - All"}
     - {id: 20, cat: PC/Mobile-Other, desc: "Apps - Mobile"}
-    - {id: 19, cat: PC/Mac, desc: "Apps - OS"}
     - {id: 21, cat: PC, desc: "Apps - Other"}
     - {id: 18, cat: PC/0day, desc: "Apps - Windows"}
     - {id: 13, cat: Audio/Audiobook, desc: "Books - Audiobooks"}
+    - {id: 19, cat: Books/Comics, desc: "Books - Comics"}
     - {id: 12, cat: Books/EBook, desc: "Books - Ebooks"}
     - {id: 14, cat: Books/Technical, desc: "Books - Education"}
     - {id: 15, cat: Books/Mags, desc: "Books - Magazine"}
     - {id: 9, cat: TV/Documentary, desc: "Documentaries - All"}
-    - {id: 11, cat: Console, desc: "Games - Console"}
     - {id: 43, cat: PC/Mobile-Other, desc: "Games - Mobile"}
-    - {id: 17, cat: Console/Other, desc: "Games - Other"}
     - {id: 10, cat: PC/Games, desc: "Games - Windows"}
-    - {id: 3, cat: Movies/UHD, desc: "Movies - 2K/4K UHD"}
+    - {id: 3, cat: Movies/UHD, desc: "Movies - 4K UHD"}
     - {id: 46, cat: Movies/Foreign, desc: "Movies - Bollywood"}
     - {id: 45, cat: Movies/Other, desc: "Movies - CAM/TS"}
     - {id: 42, cat: Movies/HD, desc: "Movies - HD"}
@@ -71,16 +69,18 @@ caps:
     - {id: 23, cat: Audio/Lossless, desc: "Music - Lossless"}
     - {id: 25, cat: Audio/Video, desc: "Music - Musicvideo"}
     - {id: 24, cat: Audio, desc: "Music - Singles"}
-    - {id: 40, cat: Audio/Other, desc: "Other - Other"}
+    - {id: 17, cat: Audio/Other, desc: "Audio - Other"}
+    - {id: 40, cat: Other/Misc, desc: "Other - Other"}
     - {id: 37, cat: Other, desc: "Other - Pictures"}
     - {id: 33, cat: Other, desc: "Other - Training"}
     - {id: 41, cat: TV/HD, desc: "TV - Episodes HD"}
     - {id: 5, cat: TV/SD, desc: "TV - Episodes SD"}
+    - {id: 11, cat: TV/UHD, desc: "TV - Episodes 4K UHD"}
     - {id: 6, cat: TV/Other, desc: "TV - Packs"}
     - {id: 7, cat: TV/Sport, desc: "TV - Sports"}
-    - {id: 35, cat: XXX, desc: "XXX - HD"}
-    - {id: 47, cat: XXX, desc: "XXX - Misc"}
-    - {id: 34, cat: XXX, desc: "XXX - SD"}
+    - {id: 35, cat: XXX/x264, desc: "XXX - HD"}
+    - {id: 47, cat: XXX/Other, desc: "XXX - Misc"}
+    - {id: 34, cat: XXX/SD, desc: "XXX - SD"}
 
   modes:
     search: [q]
