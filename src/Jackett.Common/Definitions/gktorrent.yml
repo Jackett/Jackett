@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.gktorrent.cc/
+  - https://www.gktorrents.com/
   - https://gktorrent.nocensor.space/
 legacylinks:
   - https://www.gktorrent.com/
@@ -32,6 +32,7 @@ legacylinks:
   - https://www.gktorrent.pw/
   - https://wvw.gktorrent.pw/
   - https://vww.gktorrent.pw/
+  - https://www.gktorrent.cc/
 
 caps:
   categorymappings:

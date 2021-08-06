@@ -86,22 +86,22 @@ search:
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
-    selector: table > tbody > tr:has(a[href^="magnet:?dn="])
+    selector: table > tbody > tr:has(a[href*="/download/"])
 
   fields:
     category:
       text: 1
     title:
-      selector: a[href*="/torrents/"]
+      selector: span[class="name"]
     details:
       selector: a[href*="/torrents/"]
       attribute: href
     download:
       selector: a[href*="/download/"]
       attribute: href
-    magnet:
-      selector: a[href^="magnet:?dn="]
-      attribute: href
+#    magnet:
+#      selector: a[href^="magnet:?dn="]
+#      attribute: href
     poster:
       selector: img.tps
       attribute: src

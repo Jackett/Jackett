@@ -14,41 +14,53 @@ caps:
   categorymappings:
     # HRS
     - {id: 34, cat: Movies/HD, desc: "1080p HRS x264"}
-    - {id: 47, cat: Movies/UHD, desc: "2160p 4k UltraHD HRS"}
+    - {id: 47, cat: Movies/UHD, desc: "2160p 4K UHD HRS"}
     - {id: 35, cat: TV, desc: "Serie TV HRS"}
     - {id: 36, cat: Movies/SD, desc: "DVDRip HRS"}
     - {id: 41, cat: Movies/SD, desc: "BDRip 576p HRS"}
     - {id: 39, cat: Movies/HD, desc: "1080p HRS x265 HEVC"}
+    # AREA SuperVip
+    - {id: 33, cat: Movies/HD, desc: "[DD] Film 720p MP4"}
+    - {id: 54, cat: Movies/HD, desc: "[DD] 1080p V.U. MKV"}
+    - {id: 55, cat: Movies/BluRay, desc: "[DD] FULL BluRay"}
+    - {id: 57, cat: Movies/UHD, desc: "[DD] 4K FULL BluRay"}
+    - {id: 58, cat: XXX, desc: "[DD] XXX 1080p"}
+    - {id: 59, cat: XXX, desc: "[DD] XXX 4K 2160p"}
+    - {id: 60, cat: XXX, desc: "[DD] XXX 720p"}
     # VIDEO
     - {id: 1, cat: Movies, desc: "News Cinema"}
+    - {id: 40, cat: TV/UHD, desc: "4K Video Untouched"}
     - {id: 2, cat: Movies/SD, desc: "BD-DVDRip"}
     - {id: 3, cat: Movies/DVD, desc: "DVD 5"}
-    - {id: 5, cat: Movies/DVD, desc: "DVD 9"}
+    - {id: 50, cat: Movies/UHD, desc: "4K 2160p UHD"}
     - {id: 6, cat: Movies/BluRay, desc: "BluRay Full"}
     - {id: 4, cat: Movies/HD, desc: "1080p 3D x264"}
     - {id: 7, cat: Movies/HD, desc: "1080p x264"}
-    - {id: 46, cat: Movies/HD, desc: "1080p Video Untouch"}
-    - {id: 44, cat: Movies/HD, desc: "1080p x265"}
+    - {id: 46, cat: Movies/HD, desc: "1080p VideoUntouched"}
+    - {id: 44, cat: Movies/HD, desc: "1080p x265 HEVC"}
+    - {id: 5, cat: Movies/DVD, desc: "DVD 9"}
     - {id: 9, cat: TV/Anime, desc: "Cartoons"}
     - {id: 8, cat: TV/Anime, desc: "720p x264"}
-    - {id: 12, cat: TV, desc: "He concluded seasons"}
-    - {id: 13, cat: TV, desc: "Seasons in Onda"}
+    - {id: 12, cat: TV, desc: "Stagioni Concluse"}
+    - {id: 13, cat: TV, desc: "Stagioni in Onda"}
     - {id: 14, cat: TV, desc: "TV Show"}
     - {id: 42, cat: TV, desc: "Serie Tv Sub Ita"}
-    - {id: 15, cat: TV/Documentary, desc: "documentaries"}
-    - {id: 33, cat: TV, desc: "mp4"}
-    - {id: 40, cat: TV/UHD, desc: "2160p 4K UltraHD"}
+    - {id: 15, cat: TV/Documentary, desc: "Documentari"}
+    - {id: 53, cat: TV/HD, desc: "VIDEO MP4 720p"}
     - {id: 38, cat: XXX, desc: "xXx"}
-    - {id: 43, cat: Other, desc: "Arabic for social"}
+    - {id: 43, cat: Other, desc: "Araba per il sociale"}
     # MUSICA
-    - {id: 17, cat: Audio, desc: "Italian music"}
-    - {id: 45, cat: Audio, desc: "Discography"}
+    - {id: 17, cat: Audio, desc: "Musica Italiana"}
+    - {id: 45, cat: Audio, desc: "Discografie"}
     - {id: 18, cat: Audio, desc: "MusicaInternazionale"}
     - {id: 19, cat: Audio, desc: "Compilation"}
     # PDF
     - {id: 21, cat: Books, desc: "Ebook"}
     - {id: 22, cat: Books/Comics, desc: "Comics"}
     - {id: 23, cat: Books, desc: "Newsstand"}
+    - {id: 56, cat: Books/Mags, desc: "Riviste"}
+    - {id: 48, cat: XXX/Other, desc: "Riviste xXx"}
+    - {id: 49, cat: XXX/Other, desc: "Fumetti xXx"}
     # GAMES
     - {id: 25, cat: Console/PS4, desc: "Sony Games"}
     - {id: 26, cat: Console/XBox, desc: "XboX Games"}
@@ -124,6 +136,9 @@ download:
   selectors:
     - selector: a[href^="download.php?id="]
       attribute: href
+      filters:
+        - name: regexp
+          args: "^(.+?)&key="
 
 search:
   paths:

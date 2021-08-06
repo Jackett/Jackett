@@ -23,6 +23,7 @@ caps:
     - {id: 8, cat: Movies, desc: "Kids"}
     - {id: 9, cat: TV/Sport, desc: "Sport"}
     - {id: 10, cat: TV/Documentary, desc: "Doku"}
+    - {id: 11, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]

@@ -6,7 +6,9 @@ language: ru-ru
 type: semi-private
 encoding: UTF-8
 links:
-  - http://exkinoray.tv/ # site forces http, does not support https
+  - http://exkinoray.fun/ # site does not support https
+legacylinks:
+  - http://exkinoray.tv/
 
 caps:
   categorymappings:

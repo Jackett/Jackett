@@ -7,8 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.ph/
-  - https://www.oxtorrent.co/
+  - https://www.oxtorrent.io/
+  - https://oxtorrent.unblockit.uno/
   - https://oxtorrent.nocensor.space/
 legacylinks:
   - https://wwv.oxtorrent.com/
@@ -30,6 +30,10 @@ legacylinks:
   - https://wvw.oxtorrent.ws/
   - https://oxtorrent.unblocked.monster/
   - https://www.oxtorrent.tv/
+  - https://www.oxtorrent.ph/
+  - https://wvw.oxtorrent.pe/
+  - https://www.oxtorrent.pe/
+  - https://www.oxtorrent.co/
 
 caps:
   categorymappings:
@@ -77,7 +81,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}derniers{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace

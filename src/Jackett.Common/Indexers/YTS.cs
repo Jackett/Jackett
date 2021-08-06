@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://yts.mx/",
-            "https://yts.unblockit.li/",
+            "https://yts.unblockit.uno/",
             "https://yts.unblockninja.com/",
             "https://yts.nocensor.space/"
         };
@@ -36,7 +36,8 @@ namespace Jackett.Common.Indexers
             "https://yts.unblockit.buzz/",
             "https://yts.unblockit.club/",
             "https://yts.unblockit.link/",
-            "https://yts.unblockit.onl/"
+            "https://yts.unblockit.onl/",
+            "https://yts.unblockit.li/"
         };
 
         private string ApiEndpoint => SiteLink + "api/v2/list_movies.json";
@@ -202,15 +203,15 @@ namespace Jackett.Common.Indexers
             var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
             release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
 
-            release.Link = new Uri(torrent.Value<string>("url"));
+            release.Link = UrlWithSiteLink(torrent.Value<string>("url"));
             release.Seeders = torrent.Value<int>("seeds");
             release.Peers = torrent.Value<int>("peers") + release.Seeders;
             release.Size = torrent.Value<long>("size_bytes");
             release.DownloadVolumeFactor = 0;
             release.UploadVolumeFactor = 1;
 
-            release.Details = new Uri(movie.Value<string>("url"));
-            release.Poster = new Uri(movie.Value<string>("large_cover_image"));
+            release.Details = UrlWithSiteLink(movie.Value<string>("url"));
+            release.Poster = UrlWithSiteLink(movie.Value<string>("large_cover_image"));
             release.Guid = release.Link;
 
             // map the quality to a newznab category for torznab compatibility (for Radarr, etc)
@@ -234,6 +235,17 @@ namespace Jackett.Common.Indexers
             }
 
             return release;
+        }
+
+        private Uri UrlWithSiteLink(string url)
+        {
+            var siteLinkUri = new Uri(SiteLink);
+            var builder = new UriBuilder(url)
+            {
+                Scheme = siteLinkUri.Scheme,
+                Host = siteLinkUri.Host
+            };
+            return builder.Uri;
         }
     }
 }

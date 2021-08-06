@@ -823,14 +823,8 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
-      selector: td:nth-child(10)
-      filters:
-        - name: re_replace
-          args: [".*(\\d{2}-\\d{2}-\\d{4})(\\d{2}:\\d{2})", "$1 $2"]
-        - name: append
-          args: ":00 +03:00" # MSK
-        - name: dateparse
-          args: "02-01-2006 15:04:05 -07:00"
+      # unix
+      selector: td:last-child > u
     seeders:
       selector: td.seedmed > b
     leechers:

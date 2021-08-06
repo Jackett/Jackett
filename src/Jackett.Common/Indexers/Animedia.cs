@@ -146,11 +146,11 @@ namespace Jackett.Common.Indexers
                     var tr_id = t.Attributes["href"].Value;
                     var tr = document.QuerySelector("div" + tr_id);
                     release.Title += " - " + composeTitleAdditionalInfo(t, tr);
-                    release.Link = new Uri(document.QuerySelector("div.download_tracker > a.btn__green").Attributes["href"].Value);
-                    release.MagnetUri = new Uri(document.QuerySelector("div.download_tracker > a.btn__d-gray").Attributes["href"].Value);
-                    release.Seeders = long.Parse(document.QuerySelector("div.circle_green_text_top").Text());
-                    release.Peers = release.Seeders + long.Parse(document.QuerySelector("div.circle_red_text_top").Text());
-                    release.Grabs = long.Parse(document.QuerySelector("div.circle_grey_text_top").Text());
+                    release.Link = new Uri(tr.QuerySelector("div.download_tracker > a.btn__green").Attributes["href"].Value);
+                    release.MagnetUri = new Uri(tr.QuerySelector("div.download_tracker > a.btn__d-gray").Attributes["href"].Value);
+                    release.Seeders = long.Parse(tr.QuerySelector("div.circle_green_text_top").Text());
+                    release.Peers = release.Seeders + long.Parse(tr.QuerySelector("div.circle_red_text_top").Text());
+                    release.Grabs = long.Parse(tr.QuerySelector("div.circle_grey_text_top").Text());
                     release.PublishDate = getReleaseDate(tr);
                     release.Size = getReleaseSize(tr);
                     release.Guid = new Uri(uri.ToString() + tr_id);

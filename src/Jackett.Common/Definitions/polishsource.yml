@@ -15,6 +15,7 @@ caps:
     - {id: 46, cat: Movies/UHD, desc: "Movies/UHD"}
     - {id: 10, cat: TV/SD, desc: "TV/SD"}
     - {id: 39, cat: TV/HD, desc: "TV/HD"}
+    - {id: 47, cat: TV/UHD, desc: "TV/UHD"}
     - {id: 8, cat: PC/Games, desc: "Games/PC"}
     - {id: 3, cat: Console, desc: "Games/Consoles"}
     - {id: 5, cat: Books, desc: "E-Books"}

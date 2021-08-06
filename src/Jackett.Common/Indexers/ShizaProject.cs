@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers
                 var baseRelease = new ReleaseInfo
                 {
                     Title = composeTitle(n),
-                    Poster = n.Posters[0].Preview.Url,
+                    Poster = getFirstPoster(n),
                     Details = new Uri(SiteLink + "releases/" + n.Slug),
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
@@ -179,6 +179,18 @@ namespace Jackett.Common.Indexers
             }
 
             return s + " ]";
+        }
+
+        private Uri getFirstPoster(Node n)
+        {
+            if (n.Posters.Length == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return n.Posters[0].Preview.Url;
+            }
         }
 
         public partial class ReleasesResponse

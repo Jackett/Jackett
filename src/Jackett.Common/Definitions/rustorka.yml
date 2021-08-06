@@ -706,6 +706,7 @@ caps:
     - {id: 1430, cat: PC, desc: " |- Windows 7"}
     - {id: 1429, cat: PC, desc: " |- Windows 8"}
     - {id: 1906, cat: PC, desc: " |- Windows 10"}
+    - {id: 2054, cat: PC, desc: " |- Windows 11"}
     - {id: 1428, cat: PC, desc: " |- Серверные (Microsoft Windows OS)"}
     - {id: 1910, cat: PC, desc: " |- Мультисборки Windows OS"}
     - {id: 363, cat: PC, desc: "Системные программы"}

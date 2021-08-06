@@ -258,7 +258,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "=green>(\\d+)<"
+          args: "=greene>(\\d+)<"
     leechers:
       selector: a[onmouseover][href^="torrents-details.php?id="]
       attribute: onmouseover

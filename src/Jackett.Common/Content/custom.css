@@ -51,6 +51,10 @@ body {
    width: 60px;
 }
 
+.setup-item-label:empty {
+    margin: 1em;
+}
+
 .setup-item-inputstring {
     max-width: 255px;
 }

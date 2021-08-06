@@ -21,26 +21,26 @@ caps:
     - {id: 5, cat: Movies/BluRay, desc: "Movies: BluRay"}
     - {id: 9, cat: Movies/DVD, desc: "Movies: DVD"}
     - {id: 11, cat: Movies/HD, desc: "Movies: HD"}
-    - {id: 58, cat: Movies/SD, desc: "Movies/Cam"}
-    - {id: 61, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 58, cat: Movies/SD, desc: "Movies: Cam"}
+    - {id: 61, cat: Movies/3D, desc: "Movies: 3D"}
     - {id: 24, cat: Movies/SD, desc: "Movies: XVID"}
     - {id: 16, cat: Movies, desc: "Movies: Old"}
-    - {id: 15, cat: Movies, desc: "Movies Mobile"}
-    - {id: 54, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
+    - {id: 15, cat: Movies, desc: "Movies: Mobile"}
+    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL"}
     - {id: 56, cat: TV/Documentary, desc: "Documentary"}
     - {id: 18, cat: Movies, desc: "Movies: Pack"}
-    - {id: 32, cat: Movies/UHD, desc: "Movies:4KRO"}
+    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRO"}
     - {id: 6, cat: Movies/BluRay, desc: "Movies: BluRay-Ro"}
     - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro"}
     - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro"}
     - {id: 82, cat: Movies/HD, desc: "Movies: x265"}
     - {id: 10, cat: Movies/DVD, desc: "Movies: DVD-Ro"}
-    - {id: 59, cat: Movies/SD, desc: "Movies/Cam-RO"}
+    - {id: 59, cat: Movies/SD, desc: "Movies: Cam-RO"}
     - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro"}
     - {id: 17, cat: Movies, desc: "Movies: Old-Ro"}
-    - {id: 55, cat: Movies/WEB-DL, desc: "Movies/WEB-DL Ro"}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro"}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro"}
-    - {id: 62, cat: Movies/3D, desc: "Movies/3D-Ro"}
+    - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro"}
     - {id: 19, cat: Movies, desc: "Movies: Pack-Ro"}
     - {id: 20, cat: TV, desc: "TV Episodes"}
     - {id: 21, cat: TV, desc: "TV Episodes-Ro"}
@@ -58,7 +58,7 @@ caps:
     - {id: 44, cat: Other, desc: "Images"}
     - {id: 49, cat: Other, desc: "Diverse"}
     - {id: 22, cat: Other, desc: "RoContent"}
-    - {id: 60, cat: XXX, desc: "ImagesXXX"}
+    - {id: 60, cat: XXX, desc: "Images: XXX"}
     - {id: 27, cat: XXX, desc: "Movies: XXX"}
 
   modes:
@@ -109,6 +109,9 @@ login:
 search:
   paths:
     - path: browse.php
+      categories: ["!", 60, 27]
+    - path: browseadult.php
+      categories: [60, 27]
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -128,7 +131,7 @@ search:
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*=".php?cat="]
       attribute: href
       filters:
         - name: querystring
