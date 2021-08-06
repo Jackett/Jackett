@@ -152,6 +152,7 @@ caps:
     - {id: 272, cat: Books, desc: "Navy-Naval magazines"}
     - {id: 260, cat: Books, desc: "Navy-Naval shipbuilding (1950 - 20??)"}
     - {id: 220, cat: Books, desc: "Fishing & Spearfishing"}
+    - {id: 319, cat: Books, desc: "Fishing tackle and knots"}
     - {id: 294, cat: Books, desc: "Environmental protection"}
     - {id: 242, cat: Books, desc: "Foreign language books"}
     - {id: 243, cat: Books, desc: "Rarity"}
