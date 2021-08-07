@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.limetorrents.pro/
-  - https://limetorrents.unblockit.uno/
+  - https://limetorrents.unblockit.ch/
   - https://limetorrents.unblockninja.com/
   - https://limetorrents.nocensor.space/
 legacylinks:
@@ -45,6 +45,7 @@ legacylinks:
   - https://limetor.com/
   - https://www.limetor.pro/
   - https://limetorrents.unblockit.li/
+  - https://limetorrents.unblockit.uno/
 
 caps:
   categorymappings:
