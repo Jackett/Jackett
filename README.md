@@ -407,6 +407,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MeseVilág (Fairytale World)
  * MicroBit (µBit)
  * Milkie
+ * MIRcrew
  * MMA-Torrents
  * MNV (Max-New-Vision)
  * Mononoké-BT [![(invite needed)][inviteneeded]](#)

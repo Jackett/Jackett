@@ -1,0 +1,175 @@
+﻿---
+id: mircrew
+name: MIRCrew
+description: "MIRCrew is an ITALIAN Private Torrent Tracker for MOVIES / TV / MUSIC"
+language: it-it
+type: private
+encoding: UTF-8
+links:
+  - https://mircrew-releases.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Other, desc: "MIRCrew Sharing Community"}
+    - {id: 2, cat: Other, desc: "  Piazza Grande"}
+    - {id: 3, cat: Other, desc: "  Comunicazioni, Annunci & Guide"}
+    - {id: 11, cat: Other, desc: "CAG Progetti & Collezioni"}
+    - {id: 12, cat: Other, desc: "CAG Pir8 Channel"}
+    - {id: 13, cat: Other, desc: "CAG Progetti"}
+    - {id: 61, cat: Other, desc: "CAG Video"}
+    - {id: 62, cat: Other, desc: "CAG Animazione"}
+    - {id: 63, cat: Other, desc: "CAG Libreria"}
+    - {id: 64, cat: Other, desc: "CAG Musica"}
+    - {id: 14, cat: Other, desc: "CAG Collezioni"}
+    - {id: 50, cat: Other, desc: "CAG Proposte & Richieste"}
+    - {id: 60, cat: Other, desc: "CAG Abbandonati"}
+    - {id: 15, cat: Other, desc: "Area Grafica"}
+    - {id: 16, cat: Other, desc: "Vetrina MIRCrew"}
+    - {id: 17, cat: Other, desc: "Vetrina Utenti"}
+    - {id: 19, cat: Other, desc: "Area Staff"}
+    - {id: 23, cat: Other, desc: "Archivio"}
+    - {id: 25, cat: Movies, desc: "Video Releases"}
+    - {id: 26, cat: Movies, desc: "Releases Film"}
+    - {id: 28, cat: TV, desc: "Releases Serie TV"}
+    - {id: 51, cat: TV, desc: "Releases TV Stagioni in corso"}
+    - {id: 52, cat: TV, desc: "Releases TV Stagioni complete"}
+    - {id: 29, cat: TV/Documentary, desc: "Documentari"}
+    - {id: 30, cat: TV, desc: "TV Show"}
+    - {id: 31, cat: TV, desc: "Teatro"}
+    - {id: 32, cat: Movies, desc: "Richieste Video"}
+    - {id: 53, cat: Movies, desc: "Richieste Film"}
+    - {id: 54, cat: TV, desc: "Richieste Serie TV"}
+    - {id: 55, cat: Movies, desc: "Richieste Video diverse"}
+    - {id: 33, cat: TV/Anime, desc: "Animazione Releases"}
+    - {id: 34, cat: TV/Anime, desc: "Anime - Movies"}
+    - {id: 35, cat: TV/Anime, desc: "Anime - Serie"}
+    - {id: 36, cat: TV/Anime, desc: "Cartoon - Movies"}
+    - {id: 37, cat: TV/Anime, desc: "Cartoon - Serie"}
+    - {id: 38, cat: TV/Anime, desc: "Richieste Animazione"}
+    - {id: 39, cat: Books, desc: "Libreria Releases"}
+    - {id: 40, cat: Books/EBook, desc: "E-Books"}
+    - {id: 41, cat: Audio/Audiobook, desc: "A-Books"}
+    - {id: 42, cat: Books/Comics, desc: "Comics"}
+    - {id: 43, cat: Books/Mags, desc: "Edicola"}
+    - {id: 44, cat: Books, desc: "Richieste Libreria"}
+    - {id: 45, cat: Audio, desc: "Music Releases"}
+    - {id: 46, cat: Audio, desc: "Musica - Audio"}
+    - {id: 47, cat: Audio/Video, desc: "Musica - Video"}
+    - {id: 48, cat: Audio, desc: "Richieste Musica"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: ucp.php?mode=login
+  method: form
+  form: form#login
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    autologin: on
+    viewonline: on
+  error:
+    - selector: div.error
+  test:
+    path: index.php
+    selector: a[href^="./ucp.php?mode=logout&sid="]
+
+download:
+  selectors:
+    # the first download path is actually the thankyou button link to enable the page refresh to present the magnet
+    # so basically I am deliberately causing an internal failed download so I can do a GET with the thankyou link
+    # I can't use the traditional BEFORE method because the post_id, to_id and from_id are not available from the .DownloadUri.Query.<variables>
+    # details link: https://mircrew-releases.org/viewtopic.php?f=52&t=28752&hilit=2021
+    # thankyou link: ./viewtopic.php?f=52&p=65417&thanks=65417&to_id=54&from_id=3950
+    - selector: a[id^="lnk_thanks_post"]
+      attribute: href
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: search.php
+  keywordsfilters:
+    # the site's TV are seasonal packs only, so we swap Sxx with Stagione xx
+    - name: re_replace
+      args: ["(?i)S0?(\\d{1,2})", "stagione $1"]
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+  inputs:
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # all, any
+    terms: all
+    # Search by Author
+    author: ""
+    # Search in subforums: yes 1, no 0
+    sc: 1
+    # Search For: all, msgonly, titleonly, firstpost
+    sf: titleonly
+    # Show Results as: posts, topics
+    sr: topics
+    # sort: a author, t post time, f forum, i title, s post subject
+    sk: t
+    # order: a ascending, d descending
+    sd: d
+    # Seach Posts For: all 0, 1day 1, week 7, fortnight 14, month 30, 3months 90, 6 months 180, year 365
+    st: 0
+    # Show first: all -1, 0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
+    ch: 300
+    # hidden
+    t: 0
+    # hidden
+    submit: Cerca
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+
+  rows:
+    selector: li.row
+
+  fields:
+    category:
+      selector: a[href^="./viewforum.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a.topictitle
+      filters:
+        # normalize Stagione xx to Sxx format
+        - name: re_replace
+          args: ["(?i)Stagione 0?(\\d{1,2})", "S$1"]
+    details:
+      selector: a.topictitle
+      attribute: href
+    download:
+      selector: a.topictitle
+      attribute: href
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    date:
+      selector: time
+      filters:
+        # datetime is auto adjusted by site account profile
+        - name: replace
+          args: ["T", " "]
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+# phpBB
