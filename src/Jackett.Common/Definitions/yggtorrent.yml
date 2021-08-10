@@ -214,7 +214,7 @@ search:
     - name: re_replace # Full season S >= 10
       args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
     - name: re_replace # episode number at the end "123" to "E123"
-      args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
+      args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
