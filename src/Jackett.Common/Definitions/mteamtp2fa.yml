@@ -6,9 +6,10 @@ language: zh-cn
 type: private
 encoding: UTF-8
 links:
-  - https://pt.m-team.cc/
+  - https://kp.m-team.cc/
 legacylinks:
   - https://tp.m-team.cc/
+  - https://pt.m-team.cc/
 
 caps:
   categorymappings:
