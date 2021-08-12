@@ -1,0 +1,112 @@
+---
+id: bitsearch
+name: BitSearch
+description: "BitSearch is a Public torrent meta-search engine"
+language: en
+type: public
+encoding: UTF-8
+links:
+  - https://bitsearch.to/
+
+caps:
+  categories:
+    eBook: Books/EBook
+    Movies: Movies
+    Other: Other
+    "Other/Android": PC/Mobile-Android
+    "Other/Archive": Other
+    "Other/Audio": Audio
+    "Other/Database": Movies/DVD
+    "Other/DiskImage": PC/ISO
+    "Other/Document": Books/Comics
+    "Other/Image": Other/Misc
+    "Other/Program": PC/0day
+    "Other/Sourcecode": Movies/Other
+    "Other/Video": TV
+    Unknown: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt"]
+      attribute: href
+
+search:
+  paths:
+     # https://bitsearch.to/search?q=&sort=date&order=desc
+    - path: search
+  inputs:
+    q: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: div.search-result
+
+  fields:
+    category:
+      selector: a.category
+    title:
+      selector: h5
+    details:
+      selector: h5 a
+      attribute: href
+    download:
+      selector: h5 a
+      attribute: href
+    grabs:
+      selector: div.stats div:has(img[alt="Download"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+    size:
+      selector: div.stats div:has(img[alt="Size"])
+    seeders:
+      selector: div.stats div:has(img[alt="Seeder"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+    leechers:
+      selector: div.stats div:has(img[alt="Leecher"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+    date:
+      selector: div.stats div:has(img[alt="Date"])
+      filters:
+        - name: dateparse
+          args: "Jan 2, 2006"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
