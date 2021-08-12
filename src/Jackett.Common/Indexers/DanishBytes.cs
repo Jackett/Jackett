@@ -35,7 +35,7 @@ namespace Jackett.Common.Indexers
                        LimitsMax = 25,
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.ImdbId, TvSearchParam.TvdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
@@ -67,7 +67,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("3", TorznabCatType.Audio, "Music");
             AddCategoryMapping("4", TorznabCatType.PCGames, "Games");
             AddCategoryMapping("5", TorznabCatType.PC0day, "Appz");
-            AddCategoryMapping("6", TorznabCatType.Books, "Bookz");
+            AddCategoryMapping("8", TorznabCatType.Books, "Bookz");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
