@@ -59,6 +59,8 @@ namespace Jackett.Common.Indexers
             Language = "ru-ru";
             Type = "semi-private";
 
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "392E98CE1447B59CA62BAB8824CA1EEFC2ED3D37");
+
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Аниме TV / Законченные сериалы");
             AddCategoryMapping(10, TorznabCatType.TVAnime, "Аниме TV / Аниме Ongoing");
