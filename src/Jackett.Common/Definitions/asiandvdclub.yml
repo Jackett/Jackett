@@ -98,17 +98,18 @@ search:
         - name: replace
           args: ["torrent", "download"]
     size:
-      selector: td:nth-child(5)
+      selector: td:nth-last-child(6)
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-last-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td:nth-last-child(4)
     date:
-      selector: td:nth-child(8)
+      selector: td:nth-last-child(3)
+      remove: p
       filters:
         - name: timeago
     grabs:
-      selector: td:nth-child(9)
+      selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
         img[src="../images/golden.gif"]: 0
