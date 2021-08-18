@@ -226,7 +226,7 @@ namespace Jackett.Common.Indexers
                 var publishDate = rssItem.SelectSingleNode("pubDate")?.InnerText;
                 var size = rssItem.SelectSingleNode("erai:size", nsm)?.InnerText;
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
-                var quality = rssItem.SelectSingleNode("erai:res", nsm)?.InnerText;
+                var quality = rssItem.SelectSingleNode("erai:resolution", nsm)?.InnerText;
 
                 item = new RssFeedItem
                 {
