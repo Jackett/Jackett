@@ -310,7 +310,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Dark-Shadow
  * Dark Tracker
  * Das Unerwartete [![(invite needed)][inviteneeded]](#)
- * DataScene (DS)
  * DesiReleasers
  * DesiTorrents
  * Diablo Torrent
