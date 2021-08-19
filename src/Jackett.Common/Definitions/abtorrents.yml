@@ -138,13 +138,13 @@ search:
     files:
       selector: td:nth-last-child(8)
     date:
-      # Sep 20 2020<br/>07:25 PM
+      # Sep 20 2020<br/>7:25 PM
       selector: td:nth-last-child(7)
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
+          args: "Jan 2 2006 3:04 PM -07:00"
     size:
       selector: td:nth-last-child(6)
     grabs:
