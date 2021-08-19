@@ -89,7 +89,10 @@ search:
     date:
       selector: td:nth-last-child(5)
       filters:
-        - name: timeago
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "2006-01-02 -07:00"
     grabs:
       selector: td:nth-last-child(4)
     seeders:
