@@ -192,14 +192,14 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     date:
-      # Oct 17 2020<br /> 02:55 PM
+      # Aug 4 2021<br />02:36 AM
       selector: td:nth-child(8):not(:contains("day"))
       optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 02 2006 03:04 PM -07:00"
+          args: "Jan 2 2006 03:04 PM -07:00"
     size:
       selector: td:nth-child(9)
     grabs:
