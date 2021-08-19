@@ -82,7 +82,7 @@ settings:
   - name: type
     type: select
     label: Order requested from site
-    default: 1
+    default: 2
     options:
       2: desc
       1: asc
