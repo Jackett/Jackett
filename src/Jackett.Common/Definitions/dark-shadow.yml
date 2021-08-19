@@ -200,6 +200,9 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": "132"
     title:
       selector: a.selection_a
+      filters:
+        - name: re_replace
+          args: ["^(\\[.*\\])(.*)", "$2"]
     details:
       selector: a.selection_a
       attribute: href
