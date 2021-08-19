@@ -128,7 +128,7 @@ search:
         - name: replace
           args: ["апр", "Apr"]
         - name: replace
-          args: ["май", "May"]
+          args: ["мая", "May"]
         - name: replace
           args: ["июн", "Jun"]
         - name: replace
