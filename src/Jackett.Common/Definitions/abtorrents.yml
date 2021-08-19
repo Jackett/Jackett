@@ -138,8 +138,17 @@ search:
     files:
       selector: td:nth-last-child(8)
     date:
-      # Sep 20 2020<br/>7:25 PM
-      selector: td:nth-last-child(7)
+      # Yesterday<br/>6:00 AM
+      selector: td:nth-last-child(7):contains("day")
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
+    date:
+      # Aug 6 2021<br/>7:25 PM
+      selector: td:nth-last-child(7):not(:contains("day"))
+      optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
