@@ -280,8 +280,7 @@ search:
       optional: true
       selector: td[class^="coll-date"]:contains(":")
       filters:
-        - name: dateparse
-          args: "3:04pm"
+        - name: fuzzytime
     size:
       selector: td[class^="coll-4"]
     seeders:
