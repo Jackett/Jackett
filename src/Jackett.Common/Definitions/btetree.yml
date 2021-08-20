@@ -58,6 +58,8 @@ search:
     date:
       selector: td:nth-child(5)
       filters:
+        - name: replace
+          args: ["  ", " 0"]
         - name: dateparse
           args: "01/02 15:04"
     size:
