@@ -130,7 +130,7 @@ search:
         - name: replace
           args: ["февраля", "February"]
         - name: replace
-          args: ["марта ", "March"]
+          args: ["марта", "March"]
         - name: replace
           args: ["апреля", "April"]
         - name: replace
