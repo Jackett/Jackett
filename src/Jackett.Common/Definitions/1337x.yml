@@ -9,7 +9,6 @@ followredirect: true
 links:
   - https://1337x.to/
   - https://1337x.gd/
-  - https://1337x.is/
   - https://1337x.st/
   - https://x1337x.ws/
   - https://x1337x.eu/
@@ -47,6 +46,7 @@ legacylinks:
   - https://1337x.unblockit.onl/
   - https://1337x.unblockit.li/
   - https://1337x.unblockit.uno/
+  - https://1337x.is/
 
 caps:
   categorymappings:
