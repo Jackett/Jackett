@@ -86,16 +86,16 @@ search:
       optional: true
       selector: div.tooltip-content > div
     category:
-      selector: a[href^="https://tasmanit.es/browse.php?category="]
+      selector: a[href*="/browse.php?category="]
       attribute: href
       filters:
         - name: querystring
           args: category
     details:
-      selector: a[href^="https://tasmanit.es/details.php?id="]
+      selector: a[href*="/details.php?id="]
       attribute: href
     download:
-      selector: a[href^="https://tasmanit.es/details.php?id="]
+      selector: a[href*="/details.php?id="]
       attribute: href
       filters:
         - name: replace
@@ -116,3 +116,4 @@ search:
     uploadvolumefactor:
       case:
         "*": 1
+# TS Special Edition
