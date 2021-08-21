@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers
             xmlDocument.LoadXml(result.ContentString);
 
             var nsm = new XmlNamespaceManager(xmlDocument.NameTable);
-            nsm.AddNamespace("erai", "https://beta.erai-raws.info/rss-page/");
+            nsm.AddNamespace("erai", "https://www.erai-raws.info/rss-page/");
 
             // Parse to RssFeedItems
             var xmlNodes = xmlDocument.GetElementsByTagName("item");
