@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://wwwv.cpasbien-fr.fr/
+  - https://www2.cpasbien-fr.fr/
 legacylinks:
   - http://www.cpasbiens.cc/
   - http://www.cpabien.cm/
@@ -40,6 +40,7 @@ legacylinks:
   - https://www.gktorrent.biz/
   - https://vww.cpasbien-fr.fr/
   - https://wvw.cpasbien-fr.fr/
+  - https://wwwv.cpasbien-fr.fr/
 
 caps:
   categories:
