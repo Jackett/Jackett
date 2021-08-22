@@ -439,6 +439,7 @@ caps:
     # Software
     - {id: 834, cat: PC/0day, desc: "Операционные системы от Microsoft"}
     - {id: 844, cat: PC/0day, desc: " | Оригинальные образы восстановления ОС ноутбуков (нетбуков)"}
+    - {id: 1116, cat: PC/0day, desc: " | Windows 11 (оригинальные образы)"}
     - {id: 1083, cat: PC/0day, desc: " | Windows 10 (оригинальные образы)"}
     - {id: 1084, cat: PC/0day, desc: " | Windows 8 / 8.1 (оригинальные образы)"}
     - {id: 1085, cat: PC/0day, desc: " | Windows 7 (оригинальные образы)"}
