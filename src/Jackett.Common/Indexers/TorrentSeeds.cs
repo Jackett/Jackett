@@ -22,8 +22,8 @@ namespace Jackett.Common.Indexers
     public class TorrentSeeds : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
+        private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
         private string SearchUrl => SiteLink + "browse_elastic.php";
-        private string TokenUrl => SiteLink + "login.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
@@ -131,29 +131,25 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await RequestWithCookiesAsync(TokenUrl);
-            var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.ContentString);
-            var token = dom.QuerySelector("form.form-horizontal > span");
-            var csrf = token.Children[1].GetAttribute("value");
-            var pairs = new Dictionary<string, string>
-            {
+            CookieHeader = ""; // clear old cookies
+
+            var result1 = await RequestWithCookiesAsync(CaptchaUrl);
+            var json1 = JObject.Parse(result1.ContentString);
+            var captchaSelection = json1["images"][0]["hash"];
+
+            var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "perm_ssl", "1" },
-                { "returnto", "/" },
-                { "csrf_token", csrf }
+                { "submitme", "X" },
+                { "captchaSelection", (string)captchaSelection }
             };
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, accumulateCookies: true);
-            await ConfigureIfOK(
-                result.Cookies, result.ContentString.Contains("/logout.php?"),
-                () =>
-                {
-                    var errorDom = parser.ParseDocument(result.ContentString);
-                    var errorMessage = errorDom.QuerySelector("td.colhead2").InnerHtml;
-                    throw new ExceptionWithConfigData(errorMessage, configData);
-                });
+
+            var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
+
+            await ConfigureIfOK(result2.Cookies, result2.ContentString.Contains("logout.php"), () =>
+                                    throw new ExceptionWithConfigData("Login Failed", configData));
             return IndexerConfigurationStatus.RequiresTesting;
+
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
