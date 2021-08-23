@@ -32,6 +32,10 @@ login:
   inputs:
     uname: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+  selectorinputs:
+    csrf:
+      selector: input[name="csrf"]
+      attribute: value
   error:
     - selector: table.main:contains("Login Failed!")
   test:
