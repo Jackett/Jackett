@@ -11,6 +11,7 @@ links:
 caps:
   categories:
     eBook: Books/EBook
+    "Ebook/Course": Books/EBook
     Movies: Movies
     Other: Other
     "Other/Android": PC/Mobile-Android
@@ -23,7 +24,10 @@ caps:
     "Other/Program": PC/0day
     "Other/Sourcecode": Movies/Other
     "Other/Video": TV
+    "Software/Windows": PC/0day
+    TV: TV
     Unknown: Other
+    XXX: XXX
 
   modes:
     search: [q]
