@@ -206,7 +206,7 @@ namespace Jackett.Common.Indexers
                 Peers = 2,
                 Grabs = GetFieldAs<long>("downloads", torrent),
                 Link = link,
-                InfoHash = _noMagnet? null : btih, // magnet link is auto generated from infohash
+                InfoHash = _noMagnet ? null : btih, // magnet link is auto generated from infohash
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };
