@@ -89,7 +89,7 @@ login:
     - selector: td.embedded:contains("Sikertelen bejelentkezés!")
   test:
     path: letoltes.php
-    selector: a[href="logout.php"]
+    selector: a[href^="logout.php"]
 
 search:
   paths:
