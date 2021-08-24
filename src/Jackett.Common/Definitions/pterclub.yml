@@ -15,6 +15,7 @@ caps:
     - {id: 403, cat: TV/Anime, desc: "动漫 (Anime)"}
     - {id: 405, cat: TV, desc: "综艺 (TV Show)"}
     - {id: 413, cat: Audio/Video, desc: "音乐短片 (MV)"}
+    - {id: 418, cat: Audio/Video, desc: "舞台演出(Stage Performance)"}
     - {id: 406, cat: Audio, desc: "音乐 (Music)"}
     - {id: 402, cat: TV/Documentary, desc: "纪录片 (Documentary)"}
     - {id: 407, cat: TV/Sport, desc: "体育 (Sport)"}
