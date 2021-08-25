@@ -13,6 +13,9 @@ caps:
     eBook: Books/EBook
     "Ebook/Course": Books/EBook
     Movies: Movies
+    "Music/Album": Audio
+    "Music/mp3": Audio/MP3
+    "Music/Lossless": Audio/Lossless
     Other: Other
     "Other/Android": PC/Mobile-Android
     "Other/Archive": Other
