@@ -287,33 +287,30 @@ search:
     resorder: desc
 
   rows:
-    selector: div.short_search:has(div.shor_subtitles span:nth-child(2):contains("Б"))
+    selector: div.short_item:has(div.shor_subtitle span:nth-child(2):contains("Б"))
 
   fields:
     category:
       text: 1
     year:
-      selector: div.shor_subtitles span
+      selector: div.shor_subtitle span
       filters:
         - name: regexp
           args: (\d+)
     title:
-      selector: div.short_titles > a
+      selector: div.short_title > a
       filters:
         - name: append
           args: " [{{ .Result.year }}]"
     details:
-      selector: div.short_titles > a
+      selector: div.short_title > a
       attribute: href
     download:
-      selector: div.short_titles > a
+      selector: div.short_title > a
       attribute: href
     poster:
       selector: img
       attribute: src
-    description:
-      selector: div.shor_desc
-      optional: true
     date:
       text: now
     seeders:
@@ -321,7 +318,7 @@ search:
     leechers:
       text: 1
     size:
-      selector: div.shor_subtitles span:nth-child(2)
+      selector: div.shor_subtitle span:nth-child(2)
       filters:
         - name: replace
           args: ["ТБ", "TB"]
