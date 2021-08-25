@@ -306,7 +306,7 @@ namespace Jackett.Common.Services
             logger.Info($"Test search in {indexer.DisplayName} => Found {result.Releases.Count()} releases");
 
             if (!result.Releases.Any())
-                throw new Exception("Found no results while trying to browse this tracker");
+                throw new Exception($"Test search in {indexer.DisplayName} => Found no results while trying to browse this tracker");
         }
 
         public void DeleteIndexer(string name)
