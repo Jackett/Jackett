@@ -13,6 +13,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -63,6 +64,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("movies", TorznabCatType.Movies, "Film");
             AddCategoryMapping("tv", TorznabCatType.TV, "Dizi");
             AddCategoryMapping("apk", TorznabCatType.PCMobileAndroid, "APK");
+
+            configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "TorrentMafya allows only Turkish IP addressess. The error <b>403 Forbidden: Parse error</b> means your IP was not accepted."));
         }
 
         private static DateTime ParseReleasePublishDate(string date)
