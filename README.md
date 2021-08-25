@@ -289,6 +289,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Carpathians
  * CartoonChaos (CC)
  * CasaTorrent [![(invite needed)][inviteneeded]](#)
+ * Cathode-Ray.Tube (CRT)
  * CCFBits
  * CeskeForum
  * CGPeers
