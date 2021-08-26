@@ -7,6 +7,8 @@ type: private
 encoding: UTF-8
 links:
   - https://hellastz.com/
+certificates:
+  - d2e56574d77a5059c30883c221094f0556d99cb6 # expired
 
 caps:
   categorymappings:
