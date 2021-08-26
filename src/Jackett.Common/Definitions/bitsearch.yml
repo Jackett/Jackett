@@ -27,7 +27,7 @@ caps:
     "Other/Program": PC/0day
     "Other/Sourcecode": Movies/Other
     "Other/Video": TV
-    "Software/Windows": PC/0day
+    "Softwares/Windows": PC/0day
     TV: TV
     Unknown: Other
     XXX: XXX
