@@ -123,11 +123,11 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 118
         ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 4
         # Movies
+        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 2
         ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 26
         ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"3D\"))": 139
         ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 19
         ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 18
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 2
         # Serien
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 143
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack HD\"))": 80
