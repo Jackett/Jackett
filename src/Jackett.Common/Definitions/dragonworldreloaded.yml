@@ -12,25 +12,25 @@ caps:
   categorymappings:
     # Kino
     - {id: 118, cat: Movies/HD, desc: "Kino - HD"}
-    - {id: 141, cat: Movies/HD, desc: "Kino - UHD"}
+    - {id: 141, cat: Movies/UHD, desc: "Kino - UHD"}
     - {id: 4, cat: Movies/SD, desc: "Kino - SD"}
     # Movies
     - {id: 139, cat: Movies/3D, desc: "Movies - 3D"}
     - {id: 19, cat: Movies/HD, desc: "Movies - HD"}
     - {id: 18, cat: Movies/SD, desc: "Movies - SD"}
-    - {id: 26, cat: Movies/BluRay, desc: "Movies - UHD"}
+    - {id: 26, cat: Movies/UHD, desc: "Movies - UHD"}
     - {id: 2, cat: Movies, desc: "Movies - Pack SD/HD"}
     # Serien
     - {id: 41, cat: TV/HD, desc: "Serien - HD"}
     - {id: 40, cat: TV/SD, desc: "Serien - SD"}
-    - {id: 143, cat: TV/SD, desc: "Serien - UHD"}
+    - {id: 143, cat: TV/UHD, desc: "Serien - UHD"}
     - {id: 80, cat: TV/HD, desc: "Serien - Pack HD"}
     - {id: 42, cat: TV/SD, desc: "Serien - Pack SD"}
     # Musik
     - {id: 119, cat: Audio, desc: "Musik - Album"}
     - {id: 92, cat: Audio, desc: "Musik - Discography"}
     - {id: 5, cat: Audio, desc: "Musik - Sampler"}
-    - {id: 142, cat: Audio, desc: "Musik - Flac"}
+    - {id: 142, cat: Audio/Lossless, desc: "Musik - Flac"}
     - {id: 136, cat: Audio/Video, desc: "Musik - Videos"}
     # Doku
     - {id: 38, cat: TV/Documentary, desc: "Doku - HD"}
@@ -54,7 +54,7 @@ caps:
     - {id: 35, cat: Audio/Audiobook, desc: "Sonstiges - Audiobook"}
     # XXX
     - {id: 47, cat: XXX, desc: "XXX - SD/HD"}
-    - {id: 49, cat: XXX, desc: "XXX - Sonstiges"}
+    - {id: 49, cat: XXX/Other, desc: "XXX - Sonstiges"}
 
   modes:
     search: [q]
