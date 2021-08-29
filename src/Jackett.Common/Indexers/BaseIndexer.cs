@@ -390,9 +390,12 @@ namespace Jackett.Common.Indexers
             if (!CanHandleQuery(query) || !CanHandleCategories(query, isMetaIndexer))
                 return new IndexerResult(this, new ReleaseInfo[0], false);
 
-            var cachedReleases = cacheService.Search(this, query);
-            if (cachedReleases != null)
-                return new IndexerResult(this, cachedReleases, true);
+            if (query.Cache)
+            {
+                var cachedReleases = cacheService.Search(this, query);
+                if (cachedReleases != null)
+                    return new IndexerResult(this, cachedReleases, true);
+            }
 
             try
             {
