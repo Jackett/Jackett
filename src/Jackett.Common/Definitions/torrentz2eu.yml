@@ -44,7 +44,7 @@ search:
       # no details page, default to sitelink
       text: "{{ .Config.sitelink }}"
     magnet:
-      selector: td:nth-child(6)
+      selector: td:nth-child(6) a
       attribute: href
     date:
       selector: td:nth-child(2)
