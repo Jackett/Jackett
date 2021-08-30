@@ -209,23 +209,23 @@ search:
         - name: regexp
           args: "src=(.+?) "
     date:
-      selector: td:nth-last-child(8)
+      selector: td:nth-last-child(9)
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/2006 -07:00"
     seeders:
-      selector: td:nth-last-child(7)
+      selector: td:nth-last-child(8)
     leechers:
-      selector: td:nth-last-child(6)
+      selector: td:nth-last-child(7)
     grabs:
-      selector: td:nth-last-child(5)
+      selector: td:nth-last-child(6)
       filters:
         - name: replace
           args: ["---", "0"]
     size:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     downloadvolumefactor:
       case:
         img[alt="Free Leech"]: 0
@@ -244,4 +244,4 @@ search:
           args: ["x Upload Multiplier", ""]
     minimumratio:
       text: 0.5
-# xbtitFM 3.0.00
+# xbtitFM 3.1.00
