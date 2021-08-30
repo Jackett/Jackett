@@ -252,6 +252,9 @@ namespace Jackett.Common.Services
             // Both request must return the same results, if not we are breaking Jackett search
             json = json.Replace("\"SearchTerm\":null", "\"SearchTerm\":\"\"");
 
+            // The Cache parameter's value should not affect caching itself
+            json = json.Replace("\"Cache\":false", "\"Cache\":true");
+
             return json;
         }
 

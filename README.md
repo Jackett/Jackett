@@ -738,6 +738,9 @@ configuration or even disable the cache. Keep in mind that you can be banned by 
 * **Cache TTL (seconds)**: (default 2100 / 35 minutes) It indicates how long the results can remain in the cache.
 * **Cache max results per indexer**: (default 1000) How many results are kept in cache for each indexer. This limit is used to limit the use of RAM. If you make many requests and you have enough memory, increase this number.
 
+## Torznab cache
+If you have enabled the Jackett internal cache, but have an indexer for which you would prefer to fetch fresh results (thus ignoring the internal cache) then add the **&cache=false** parameter to your torznab query.
+
 ## Configuring FlareSolverr
 Some indexers are protected by CloudFlare or similar services and Jackett is not able to solve the challenges.
 For these cases, [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) has been integrated into Jackett. This service is in charge of solving the challenges and configuring Jackett with the necessary cookies.
