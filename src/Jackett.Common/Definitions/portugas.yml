@@ -86,7 +86,6 @@ search:
     tvdb: "{{ .Query.TVDBID }}"
     tmdb: "{{ .Query.TMDBID }}"
     mal: ""
-    igdb: ""
     start_year: ""
     end_year: ""
     sorting: "{{ .Config.sort }}"
