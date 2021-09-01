@@ -32,18 +32,18 @@ login:
   path: en/account/login.php
   method: form
   form: form
-  captcha:
-    type: image
-    selector: img[alt="CAPTCHA"]
-    input: captcha_challenge
+#  captcha:
+#    type: image
+#    selector: img[alt="CAPTCHA"]
+#    input: captcha_challenge
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     remember: on
   error:
-    - selector: script:contains("The Captcha")
-      message:
-        text: The Captcha you entered was incorrect.
+#    - selector: script:contains("The Captcha")
+#      message:
+#        text: The Captcha you entered was incorrect.
     - selector: script:contains("Wrong")
       message:
         text: Wrong username or password.
