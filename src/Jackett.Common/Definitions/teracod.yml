@@ -157,9 +157,6 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: td:nth-last-child(5) > u
-      filters:
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: td:nth-last-child(4)
     seeders:

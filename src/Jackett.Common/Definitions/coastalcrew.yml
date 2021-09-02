@@ -177,11 +177,6 @@ search:
       attribute: src
     size:
       selector: div.selection_unter_ag
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       text: 0
     seeders:

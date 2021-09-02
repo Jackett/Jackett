@@ -191,7 +191,7 @@ namespace Jackett.Common.Indexers
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
                     var sizeStr = row.QuerySelector("table tbody tr:nth-of-type(2)").QuerySelector("td b").TextContent.Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr.Replace(",", "."));
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(1) font").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(2) font").TextContent.Trim()) + release.Seeders;

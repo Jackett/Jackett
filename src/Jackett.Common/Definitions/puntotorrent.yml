@@ -311,15 +311,7 @@ search:
         - name: replace
           args: ["download.php?", "index.php?page=torrent-details&"]
     size:
-      # 1,36 GB
-      # 296,98 MB
-      # 1.018,29 MB
       selector: td:nth-child(6)
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     seeders:
       selector: td:nth-child(8) a
     leechers:

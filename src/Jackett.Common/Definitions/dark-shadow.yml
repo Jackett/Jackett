@@ -220,11 +220,6 @@ search:
       attribute: href
     size:
       selector: div.selection_unter_ad
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: div.selection_unter_ae
       filters:

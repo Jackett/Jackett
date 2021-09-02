@@ -180,9 +180,6 @@ search:
           args: "'(.+?)'"
     size:
       selector: div.selection_unter_ad
-      filters:
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: div.selection_unter_ae
       filters:

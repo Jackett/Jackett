@@ -98,11 +98,6 @@ search:
       selector: td:nth-child(5)
     size:
       selector: td:nth-child(7)
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: td:nth-child(7)
       filters:

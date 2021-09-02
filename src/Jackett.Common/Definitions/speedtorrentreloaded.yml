@@ -142,10 +142,6 @@ search:
       filters:
         - name: replace
           args: ["Größe: ", ""]
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     seeders:
       selector: tr > th > span:nth-child(3)
       filters:

@@ -165,9 +165,6 @@ search:
       selector: i.fa-download ~ span
     size:
       selector: i.fa-file-video-o ~ b
-      filters:
-        - name: replace
-          args: [",", "."]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

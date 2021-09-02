@@ -156,10 +156,6 @@ search:
       selector: td:nth-child(4)
       filters:
         - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
-        - name: replace
           args: ["ТБ", "TB"]
         - name: replace
           args: ["ГБ", "GB"]

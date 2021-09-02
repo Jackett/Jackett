@@ -153,10 +153,6 @@ search:
       filters:
         - name: regexp
           args: "Größe: <b>(.*?)</b>"
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     seeders:
       selector: a[href^="details.php"]
       attribute: onMouseover

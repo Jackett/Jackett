@@ -163,9 +163,6 @@ search:
           args: ["---", "0"]
     size:
       selector: td:nth-last-of-type(6)
-      filters:
-        - name: replace
-          args: [",", ""]
     description:
       selector: td:nth-last-of-type(4) img
       attribute: title

@@ -54,9 +54,6 @@ search:
       selector: td:nth-child(4)
     size:
       selector: td:nth-child(5)
-      filters:
-        - name: re_replace
-          args: ["(\\d+)\\.(\\d+\\.\\d+ \\D+)", "$1$2"]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

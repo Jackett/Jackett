@@ -135,11 +135,6 @@ search:
           args: [".", ""]
     size:
       selector: td.center.size
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     seeders:
       selector: td.center.data > a:first-child
       filters:
