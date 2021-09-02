@@ -101,9 +101,6 @@ search:
           args: url
     size:
       selector: td:nth-child(2)
-      filters:
-        - name: re_replace # 1.014.2 MB => 1014.2 MB
-          args: ["\\.([0-9]{3})", "$1"]
     date:
       selector: td:nth-child(3)
       filters:
