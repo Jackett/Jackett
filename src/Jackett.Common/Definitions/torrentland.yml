@@ -109,7 +109,7 @@ search:
 
   fields:
     category:
-      selector: td.category-col div:nth-child(2)
+      selector: td:nth-child(2) div:nth-child(2)
       case:
         "span:contains(\"Películas\")": 1
         "span:contains(\"Series\")": 2
