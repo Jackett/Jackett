@@ -79,14 +79,16 @@ settings:
       asc: asc
 
 login:
-  path: takelogin.php
+  path: login.php?takelogin
   method: post
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    two_factor_auth_code: ""
+    inactivity_: ""
     returnto: /
   error:
-    - selector: td.embedded:contains("Sikertelen bejelentkezés!")
+    - selector: td.embedded:contains("Sikertelen bejelentkezés")
   test:
     path: letoltes.php
     selector: a[href^="logout.php"]
