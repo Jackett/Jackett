@@ -1484,7 +1484,7 @@ namespace Jackett.Common.Indexers
                                             value = release.Size.ToString();
                                             break;
                                         case "leechers":
-                                            var leechers = ParseUtil.CoerceLong(value);
+                                            var leechers = ReleaseInfo.GetBytes(value);
                                             leechers = leechers < 5000000L ? leechers : 0; // to fix #6558
                                             if (release.Peers == null)
                                                 release.Peers = leechers;
@@ -1493,7 +1493,7 @@ namespace Jackett.Common.Indexers
                                             value = leechers.ToString();
                                             break;
                                         case "seeders":
-                                            release.Seeders = ParseUtil.CoerceLong(value);
+                                            release.Seeders = ReleaseInfo.GetBytes(value);
                                             release.Seeders = release.Seeders < 5000000L ? release.Seeders : 0; // to fix #6558
                                             if (release.Peers == null)
                                                 release.Peers = release.Seeders;
@@ -1506,11 +1506,11 @@ namespace Jackett.Common.Indexers
                                             value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
                                             break;
                                         case "files":
-                                            release.Files = ParseUtil.CoerceLong(value);
+                                            release.Files = ReleaseInfo.GetBytes(value);
                                             value = release.Files.ToString();
                                             break;
                                         case "grabs":
-                                            release.Grabs = ParseUtil.CoerceLong(value);
+                                            release.Grabs = ReleaseInfo.GetBytes(value);
                                             value = release.Grabs.ToString();
                                             break;
                                         case "downloadvolumefactor":
