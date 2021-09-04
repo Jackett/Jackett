@@ -110,7 +110,7 @@ search:
     # does not support imdbid searches
 
   rows:
-    selector: table[width="920px"] > tbody > tr:has(a[href^="details.php?id="])
+    selector: table[width="920px"] > tbody > tr:has(a[href^="letoltes.php?cat="])
 
   fields:
     category:
