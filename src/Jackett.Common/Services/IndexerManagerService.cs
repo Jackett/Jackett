@@ -54,7 +54,6 @@ namespace Jackett.Common.Services
             {"scenefz", "speedapp"},
             {"tehconnectionme", "anthelion"},
             {"torrentgalaxyorg", "torrentgalaxy"},
-            {"torrentseed", "latinop2p"},
             {"transmithenet", "nebulance"},
             {"xtremezone", "speedapp"},
             {"yourexotic", "exoticaz"}
