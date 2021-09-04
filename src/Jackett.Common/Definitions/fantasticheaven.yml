@@ -177,9 +177,6 @@ search:
           args: [" x", ""]
     size:
       selector: div.selection_unter_ad
-      filters:
-        - name: replace
-          args: [",", "."]
     seeders:
       selector: div.selection_unter_aa > b
     leechers:

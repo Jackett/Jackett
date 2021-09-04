@@ -222,13 +222,6 @@ search:
       selector: div.selection_unter_ad
     grabs:
       selector: div.selection_unter_ae
-      filters:
-        - name: trim
-          args: "x"
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     date:
       # Heute 13:30:04
       # Gestern 09:10:10
@@ -255,18 +248,8 @@ search:
       optional: true
     seeders:
       selector: div.selection_unter_aa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     leechers:
       selector: div.selection_unter_aaa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     downloadvolumefactor:
       case:
         "div[onmouseover=\"return overlib('OnlyUp: Ja');\"]": 0
