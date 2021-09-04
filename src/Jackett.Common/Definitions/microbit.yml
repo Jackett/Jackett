@@ -129,9 +129,6 @@ search:
       attribute: href
     grabs:
       selector: td:nth-child(5)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(6)
     leechers:

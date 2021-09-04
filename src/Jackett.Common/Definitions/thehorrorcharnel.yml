@@ -204,9 +204,6 @@ search:
       selector: td:nth-child(9)
     grabs:
       selector: td:nth-child(10)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(11)
     leechers:

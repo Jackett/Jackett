@@ -180,8 +180,6 @@ search:
       filters:
         - name: replace
           args: ["Never", "0"]
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(9)
     leechers:

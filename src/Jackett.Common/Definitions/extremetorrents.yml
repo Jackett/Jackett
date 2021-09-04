@@ -135,9 +135,6 @@ search:
           args: "in (\\d+) bestan"
     grabs:
       selector: table table tr:nth-child(2) td:nth-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: table table tr:nth-child(2) td:nth-child(3)
       filters:

@@ -134,9 +134,6 @@ search:
           args: "<img src=(.*) width="
     grabs:
       selector: tr > th > span:nth-child(5)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: tr > th > span:nth-child(2)
       filters:
@@ -144,14 +141,8 @@ search:
           args: ["Größe: ", ""]
     seeders:
       selector: tr > th > span:nth-child(3)
-      filters:
-        - name: regexp
-          args: (\d+)
     leechers:
       selector: tr > th > span:nth-child(4)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: tr > td:nth-child(3)
       filters:

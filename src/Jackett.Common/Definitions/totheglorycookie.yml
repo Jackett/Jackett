@@ -157,9 +157,6 @@ search:
           args: ["\n", ""]
     grabs:
       selector: td:nth-child(8)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-child(5)
       filters:

@@ -97,9 +97,6 @@ search:
       selector: td:nth-child(5) div:nth-child(1)
     files:
       selector: td:nth-child(5) div:nth-child(2)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(6)
     leechers:

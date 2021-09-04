@@ -155,9 +155,6 @@ search:
       selector: td:nth-child(3)
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(6)
     seeders:

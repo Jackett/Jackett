@@ -134,9 +134,6 @@ search:
       selector: td:nth-last-child(4)
     grabs:
       selector: td:nth-last-child(3)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(2)
     leechers:

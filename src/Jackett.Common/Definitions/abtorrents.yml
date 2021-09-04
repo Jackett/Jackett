@@ -158,9 +158,6 @@ search:
       selector: td:nth-last-child(6)
     grabs:
       selector: td:nth-last-child(5)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(4)
     leechers:

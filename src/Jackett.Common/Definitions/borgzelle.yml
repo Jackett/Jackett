@@ -179,24 +179,12 @@ search:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) b
     files:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) a span
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) a span
-      filters:
-        - name: regexp
-          args: (\d+)
     leechers:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) a span:nth-child(2)
-      filters:
-        - name: regexp
-          args: (\d+)
     grabs:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) a span
-      filters:
-        - name: regexp
-          args: (\d+)
     downloadvolumefactor:
       case:
         "span:contains(\"[OnlyUpload]\")": 0

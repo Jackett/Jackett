@@ -128,8 +128,6 @@ search:
       filters:
         - name: replace
           args: ["Never", "0"]
-        - name: regexp
-          args: (\d+)
     files:
       selector: td:nth-child(4)
     size:

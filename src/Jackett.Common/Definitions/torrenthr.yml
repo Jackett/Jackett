@@ -100,11 +100,6 @@ search:
       selector: td:nth-child(7)
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: replace
-          args: [",", ""]
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(9)
     leechers:

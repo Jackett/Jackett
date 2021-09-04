@@ -120,9 +120,6 @@ search:
       attribute: href
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(6)
     date:

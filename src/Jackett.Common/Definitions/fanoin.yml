@@ -136,9 +136,6 @@ search:
       selector: td:nth-child(8)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-child(2) > small:nth-last-child(2), td:nth-child(2) > small
       filters:

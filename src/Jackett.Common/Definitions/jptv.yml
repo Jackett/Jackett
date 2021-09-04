@@ -123,9 +123,6 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

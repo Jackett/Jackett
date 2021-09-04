@@ -132,9 +132,6 @@ search:
       selector: td:nth-of-type(8)
     grabs:
       selector: td:nth-of-type(10) a
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-of-type(10)
       remove: a
