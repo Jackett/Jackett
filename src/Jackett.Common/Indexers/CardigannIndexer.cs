@@ -1715,9 +1715,8 @@ namespace Jackett.Common.Indexers
             if (queryCollection.Count > 0)
             {
                 if (!requestLinkStr.Contains("?"))
-                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding, separator: request.Queryseparator).Substring(1);
-                else
-                    requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
+                    requestLinkStr += "?";
+                requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
             }
 
             var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs);
@@ -1751,8 +1750,10 @@ namespace Jackett.Common.Indexers
                 var Download = Definition.Download;
                 var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
+
+                WebResult response = null;
                 if (Download.Before != null)
-                    await handleRequest(Download.Before, variables, link.ToString());
+                    response = await handleRequest(Download.Before, variables, link.ToString());
 
                 if (Download.Method == "post")
                     method = RequestType.POST;
@@ -1769,9 +1770,12 @@ namespace Jackett.Common.Indexers
                         var results = "";
                         var searchResultParser = new HtmlParser();
 
-                        var response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
-                        if (response.IsRedirect)
-                            response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                        if (!Download.Infohash.Before || Download.Before == null || response == null)
+                        {
+                            response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
+                            if (response.IsRedirect)
+                                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                        }
                         results = response.ContentString;
                         var searchResultDocument = searchResultParser.ParseDocument(results);
                         var hashElement = searchResultDocument.QuerySelector(hashSelector);
@@ -1826,7 +1830,7 @@ namespace Jackett.Common.Indexers
                         try
                         {
 
-                            var response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
+                            response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
                             if (response.IsRedirect)
                                 response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
                             results = response.ContentString;

@@ -169,6 +169,7 @@ namespace Jackett.Common.Models
     {
         public downloadsField Hash { get; set; }
         public downloadsField Title { get; set; }
+        public bool Before { get; set; } = false;
     }
 
     public class downloadBlock
