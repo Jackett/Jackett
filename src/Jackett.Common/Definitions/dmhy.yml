@@ -86,10 +86,19 @@ search:
       selector: td:nth-child(5)
     seeders:
       selector: td:nth-child(6)
+      filters:
+        - name: replace
+          args: ["-", "0"]
     leechers:
       selector: td:nth-child(7)
+      filters:
+        - name: replace
+          args: ["-", "0"]
     grabs:
       selector: td:nth-child(8)
+      filters:
+        - name: replace
+          args: ["-", "0"]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
