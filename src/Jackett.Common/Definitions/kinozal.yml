@@ -115,7 +115,6 @@ download:
     inputs:
       action: 2
       id: "{{ .DownloadUri.Query.id }}"
-
   infohash:
     before: true
     hash:
@@ -123,14 +122,10 @@ download:
       filters:
         - name: regexp
           args: ([A-F|0-9]{40})
-        - name: strdump
-          args: hash
     title:
       selector: div.b
       filters:
         - name: trim
-        - name: strdump
-          args: title
 
 search:
   paths:
