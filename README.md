@@ -391,7 +391,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Karagarga
  * Keep Friends
  * LastFiles
- * LatinoP2P
  * Le Saloon
  * LearnBits
  * LearnFlakes
@@ -424,7 +423,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NetCosmo
  * NetLab
  * NorBits
- * Nordic+
  * Oasis
  * oMg[WtF]trackr
  * OpenCD

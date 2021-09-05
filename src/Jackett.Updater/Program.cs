@@ -362,6 +362,7 @@ namespace Jackett.Updater
                 "Definitions/kikibt.yml",
                 "Definitions/korsar.yml",
                 "Definitions/lapausetorrents.yml",
+                "Definitions/latinop2p.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lechaudron.yml",
                 "Definitions/lemencili.yml",
@@ -384,6 +385,7 @@ namespace Jackett.Updater
                 "Definitions/nexttorrent.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
                 "Definitions/nordichd.yml",
+                "Definitions/nordicplus.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
