@@ -7,6 +7,8 @@ type: public
 encoding: UTF-8
 links:
   - https://www.toros.co/
+  - https://toros.nocensor.work/
+legacylinks:
   - https://toros.nocensor.space/
 
 caps:
