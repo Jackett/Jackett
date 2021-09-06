@@ -155,6 +155,9 @@ search:
       selector: td:nth-child(7)
     grabs:
       selector: td:nth-child(8)
+      filters:
+        - name: replace
+          args: ["---", "0"]
     date:
       selector: td:nth-child(5)
       filters:
