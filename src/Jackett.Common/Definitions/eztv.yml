@@ -100,9 +100,8 @@ search:
           args: " ago"
     seeders:
       selector: td:nth-child(6)
-      filters:
-        - name: replace
-          args: ["-", "0"]
+    leechers:
+      text: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

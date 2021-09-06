@@ -172,9 +172,6 @@ search:
       attribute: href
     grabs:
       selector: div.selection_unter_ae
-      filters:
-        - name: replace
-          args: [" x", ""]
     size:
       selector: div.selection_unter_ad
     seeders:
