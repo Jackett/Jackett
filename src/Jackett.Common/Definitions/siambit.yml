@@ -110,7 +110,7 @@ download:
     path: ajax.php
     method: get
     inputs:
-      _action: "say_thank"
+      action: "say_thanks"
       id: "{{ .DownloadUri.Query.id }}"
   selectors:
     - selector: a[href^="downloadnew.php?id="]
