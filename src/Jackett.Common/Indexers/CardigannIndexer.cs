@@ -1715,9 +1715,8 @@ namespace Jackett.Common.Indexers
             if (queryCollection.Count > 0)
             {
                 if (!requestLinkStr.Contains("?"))
-                    requestLinkStr += "?" + queryCollection.GetQueryString(Encoding, separator: request.Queryseparator).Substring(1);
-                else
-                    requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
+                    requestLinkStr += "?";
+                requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
             }
 
             var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs);
@@ -1751,13 +1750,75 @@ namespace Jackett.Common.Indexers
                 var Download = Definition.Download;
                 var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
+
+                WebResult response = null;
                 if (Download.Before != null)
-                    await handleRequest(Download.Before, variables, link.ToString());
+                    response = await handleRequest(Download.Before, variables, link.ToString());
 
                 if (Download.Method == "post")
                     method = RequestType.POST;
+                if (Download.Infohash != null)
+                {
+                    var hashBlock = Download.Infohash.Hash;
+                    var hashSelector = applyGoTemplateText(hashBlock.Selector, variables);
+                    var titleBlock = Download.Infohash.Title;
+                    var titleSelector = applyGoTemplateText(titleBlock.Selector, variables);
 
-                if (Download.Selectors != null)
+                    try
+                    {
+                        var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                        var results = "";
+                        var searchResultParser = new HtmlParser();
+
+                        if (!Download.Infohash.Before || Download.Before == null || response == null)
+                        {
+                            response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
+                            if (response.IsRedirect)
+                                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                        }
+                        results = response.ContentString;
+                        var searchResultDocument = searchResultParser.ParseDocument(results);
+                        var hashElement = searchResultDocument.QuerySelector(hashSelector);
+                        if (hashElement == null)
+                        {
+                            logger.Debug(
+                                $"CardigannIndexer ({Id}): Hash selector {hashSelector} could not match any elements.");
+                            throw new Exception($"InfoHash selectors didn't match");
+                        }
+                        var hash = string.Empty;
+                        if (hashBlock.Attribute != null)
+                            hash = hashElement.GetAttribute(hashBlock.Attribute);
+                        else
+                            hash = hashElement.TextContent;
+                        hash = applyFilters(hash, hashBlock.Filters, variables);
+
+                        var titleElement = searchResultDocument.QuerySelector(titleSelector);
+                        if (titleElement == null)
+                        {
+                            logger.Debug(
+                                $"CardigannIndexer ({Id}): Title selector {titleSelector} could not match any elements.");
+                            throw new Exception($"InfoHash selectors didn't match");
+                        }
+                        var title = string.Empty;
+                        if (titleBlock.Attribute != null)
+                            title = titleElement.GetAttribute(titleBlock.Attribute);
+                        else
+                            title = titleElement.TextContent;
+                        title = applyFilters(title, titleBlock.Filters, variables);
+
+                        var magnet = MagnetUtil.InfoHashToPublicMagnet(hash, title);
+                        var torrentLink = resolvePath(magnet.AbsoluteUri, link);
+                        return await base.Download(torrentLink, method, torrentLink.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e,
+                            $"CardigannIndexer ({Id}): An exception occurred while trying infohash block with hashSelector {hashSelector} and titleSelector {titleSelector}"
+                            );
+                    }
+
+                }
+                else if (Download.Selectors != null)
                 {
                     var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
                     var results = "";
@@ -1769,7 +1830,7 @@ namespace Jackett.Common.Indexers
                         try
                         {
 
-                            var response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
+                            response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
                             if (response.IsRedirect)
                                 response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
                             results = response.ContentString;

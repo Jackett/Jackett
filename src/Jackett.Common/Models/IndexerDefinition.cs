@@ -165,11 +165,19 @@ namespace Jackett.Common.Models
         public string Queryseparator { get; set; } = "&";
     }
 
+    public class infohashBlock
+    {
+        public downloadsField Hash { get; set; }
+        public downloadsField Title { get; set; }
+        public bool Before { get; set; } = false;
+    }
+
     public class downloadBlock
     {
         public List<downloadsField> Selectors { get; set; }
         public string Method { get; set; }
         public requestBlock Before { get; set; }
+        public infohashBlock Infohash { get; set; }
     }
 
     public class downloadsField
