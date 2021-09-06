@@ -184,6 +184,9 @@ search:
       selector: td:nth-child(9)
     grabs:
       selector: td:nth-child(10)
+      filters:
+        - name: replace
+          args: ["---", "0"]
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
