@@ -21,6 +21,10 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.erai-raws.info/",
             "https://beta.erai-raws.info/",
+            "https://erairaws.nocensor.work/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://erairaws.nocensor.space/"
         };
 

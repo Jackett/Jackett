@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.oxtorrent.cx/
   - https://oxtorrent.unblockit.ws/
-  - https://oxtorrent.nocensor.space/
+  - https://oxtorrent.nocensor.work/
 legacylinks:
   - https://wwv.oxtorrent.com/
   - https://www.smartorrent.tv/
@@ -37,6 +37,7 @@ legacylinks:
   - https://oxtorrent.unblockit.uno/
   - https://www.oxtorrent.io/
   - https://oxtorrent.unblockit.ch/
+  - https://oxtorrent.nocensor.space/
 
 caps:
   categorymappings:

@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.mejortorrento.info/",
-            "https://mejortorrent.nocensor.space/"
+            "https://mejortorrent.nocensor.work/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -52,7 +52,8 @@ namespace Jackett.Common.Indexers
             "https://www.mejortorrents1.net/",
             "https://www.mejortorrento.com/",
             "https://www.mejortorrento.org/",
-            "https://www.mejortorrento.net/"
+            "https://www.mejortorrento.net/",
+            "https://mejortorrent.nocensor.space/"
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
