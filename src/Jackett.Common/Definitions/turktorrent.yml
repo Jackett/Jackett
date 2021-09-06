@@ -77,14 +77,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info_cookie
-    type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-  - name: info_profile
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info
     type: info
     label: Layout
     default: "<ol><li>Only the English Classic profile is supported.<li>Make sure to set the <b>Torrent Listing (Listeleme Biçimi)</b> option in your profile to <b>Classic (Klasik)</b><li>And set the <b>Language (Dil)</b> to <b>English</b><li>Using the <i>Modern</i> theme will prevent results, and using <i>Turkish</i> will prevent upload dates.</ol>"
@@ -109,9 +108,24 @@ settings:
       asc: asc
 
 login:
-  method: cookie
+  path: ?p=home&pid=1
+  method: form
+  form: form#loginbox_form
+  submitpath: ajax/login.php
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    action: login
+    loginbox_membername: "{{ .Config.username }}"
+    loginbox_password: "{{ .Config.password }}"
+    loginbox_remember: 1
+  selectorinputs:
+    securitytoken:
+      selector: "script:contains(\"stKey: \")"
+      filters:
+        - name: regexp
+          args: "stKey: \"(.+?)\","
+  error:
+    - selector: div.error
+    - selector: :contains("-ERROR-")
   test:
     path: ?p=home&pid=1
     selector: div#member_info_bar
