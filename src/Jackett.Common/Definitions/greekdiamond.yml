@@ -158,9 +158,6 @@ search:
       selector: td:nth-last-of-type(9)
     grabs:
       selector: td:nth-last-of-type(8)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     size:
       selector: td:nth-last-of-type(6)
     description:

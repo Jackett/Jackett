@@ -148,9 +148,6 @@ search:
       selector: td:nth-child(6)
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     size:
       selector: td:nth-child(8)
     downloadvolumefactor:
