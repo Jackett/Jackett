@@ -91,10 +91,10 @@ download:
 
 search:
   paths:
-    - path: search/
+    - path: "{{ if .Keywords }}/search/{{ else }}/today/{{ end }}"
   inputs:
     $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
-    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search: "{{ .Keywords }}"
 
   rows:
     selector: div.inner_container > div:has(p:has(a[href^="/torrent/"])):not(:has(span.__cf_email__))
