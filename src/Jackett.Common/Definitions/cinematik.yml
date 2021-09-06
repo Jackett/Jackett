@@ -31,7 +31,7 @@ caps:
 
   modes:
     search: [q]
-    movie-search: [q]
+    movie-search: [q, imdbid]
 
 settings:
   - name: username
@@ -74,7 +74,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: "{{ .Config.incldead }}"
     srchdtls: "{{ if .Config.srchdtls }}1{{ else }}0{{ end }}"
 
