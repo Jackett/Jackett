@@ -92,6 +92,9 @@ search:
       selector: td:nth-of-type(6)
     grabs:
       selector: td:nth-of-type(7)
+      filters:
+        - name: replace
+          args: ["---", "0"]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
