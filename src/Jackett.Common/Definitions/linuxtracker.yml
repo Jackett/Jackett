@@ -377,6 +377,9 @@ search:
     grabs:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(5) > td
       remove: strong
+      filters:
+        - name: replace
+          args: ["---", "0"]
     cat:
       selector: a[href^="index.php?page=torrents&category="]
       attribute: href
