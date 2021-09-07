@@ -2,7 +2,7 @@
 id: p2pelite
 name: P2PElite
 description: "P2PElite is a Private Torrent Tracker for EBOOKS / AUDIOBOOKS"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

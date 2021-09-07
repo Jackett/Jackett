@@ -2,7 +2,7 @@
 id: torrentslocal
 name: Torrents-Local
 description: "Torrents-Local is a RUSSIAN Semi-Private Torrent Tracker"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:

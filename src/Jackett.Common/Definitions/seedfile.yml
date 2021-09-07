@@ -2,7 +2,7 @@
 id: seedfile
 name: SeedFile
 description: "SeedFile (SF) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: ro-ro
+language: ro-RO
 type: private
 encoding: UTF-8
 links:

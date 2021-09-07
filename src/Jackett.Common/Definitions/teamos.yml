@@ -2,7 +2,7 @@
 id: teamos
 name: TeamOS
 description: "Team OS is a Private Torrent Tracker for SOFTWARE"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

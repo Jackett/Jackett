@@ -2,7 +2,7 @@
 id: finelite
 name: FinElite
 description: "FinElite (FE) is a FINNISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: fi-fi
+language: fi-FI
 type: private
 encoding: UTF-8
 links:

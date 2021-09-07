@@ -2,7 +2,7 @@
 id: nethd
 name: NetHD
 description: "NetHD (VietTorrent) is a VIETNAMESE Semi-Private Torrent Tracker for HD MOVIES / TV"
-language: vi-vn
+language: vi-VN
 type: semi-private
 encoding: UTF-8
 links:

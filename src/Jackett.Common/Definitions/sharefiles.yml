@@ -2,7 +2,7 @@
 id: sharefiles
 name: ShareFiles
 description: "ShareFiles is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: ro-ro
+language: ro-RO
 type: private
 encoding: UTF-8
 links:

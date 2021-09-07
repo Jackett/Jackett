@@ -2,7 +2,7 @@
 id: sportscult
 name: SportsCult
 description: "SportsCult is a Private Torrent Tracker for SPORTS"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

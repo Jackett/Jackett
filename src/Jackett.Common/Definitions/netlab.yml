@@ -2,7 +2,7 @@
 id: netlab
 name: NetLab
 description: "NetLab is a RUSSIAN Private Torrent Tracker"
-language: ru-ru
+language: ru-RU
 type: private
 encoding: windows-1251
 links:

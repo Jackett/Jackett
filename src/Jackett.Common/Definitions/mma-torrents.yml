@@ -2,7 +2,7 @@
 id: mma-torrents
 name: MMA-torrents
 description: "MMA-Torrents is a Private Torrent Tracker for MMA (Mixed Martial Arts)"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

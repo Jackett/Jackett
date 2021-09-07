@@ -2,7 +2,7 @@
 id: bitru
 name: BitRu
 description: "BitRu is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: UTF-8
 links:

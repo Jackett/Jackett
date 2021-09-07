@@ -2,7 +2,7 @@
 id: hdcenter
 name: HDCenter
 description: "An German HD tracker"
-language: de-de
+language: de-DE
 type: private
 encoding: UTF-8
 links:

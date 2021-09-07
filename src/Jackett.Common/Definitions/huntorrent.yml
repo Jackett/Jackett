@@ -2,7 +2,7 @@
 id: huntorrent
 name: HunTorrent
 description: "HunTorrent is a Hungarian Semi-Private site for MOVIES / TV / GENERAL"
-language: hu-hu
+language: hu-HU
 type: semi-private
 encoding: UTF-8
 links:

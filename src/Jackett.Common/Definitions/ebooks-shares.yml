@@ -2,7 +2,7 @@
 id: ebooks-shares
 name: Ebooks-Shares
 description: "Ebooks-Shares is a Private Torrent Tracker for EBOOKS / AUDIOBOOKS"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

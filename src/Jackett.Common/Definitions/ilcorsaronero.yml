@@ -2,7 +2,7 @@
 id: ilcorsaronero
 name: Il Corsaro Nero
 description: "Il Corsaro Nero is an ITALIAN Public site for TV / MOVIES / GENERAL"
-language: it-it
+language: it-IT
 type: public
 encoding: Windows-1252
 followredirect: true

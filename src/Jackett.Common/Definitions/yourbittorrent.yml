@@ -2,7 +2,7 @@
 id: yourbittorrent
 name: YourBittorrent
 description: "YourBittorrent is a Public torrent index"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

@@ -2,7 +2,7 @@
 id: hdcztorrent
 name: HD-CzTorrent
 description: "HD-CzTorrent is a CZECH semi private site for TV / MOVIES / GENERAL"
-language: cs-cz
+language: cs-CZ
 type: semi-private
 encoding: UTF-8
 links:

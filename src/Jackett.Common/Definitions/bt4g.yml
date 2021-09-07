@@ -2,7 +2,7 @@
 id: bt4g
 name: BT4G
 description: "BT4G is a Public metadata crawler for magnets"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

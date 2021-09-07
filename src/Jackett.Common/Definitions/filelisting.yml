@@ -2,7 +2,7 @@
 id: filelisting
 name: FileListing
 description: "FileListing is a Public Torrent Search Engine"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

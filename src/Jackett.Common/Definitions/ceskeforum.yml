@@ -2,7 +2,7 @@
 id: ceskeforum
 name: CeskeForum
 description: "CeskeForum is a CZECH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: cs-cz
+language: cs-CZ
 type: private
 encoding: UTF-8
 links:

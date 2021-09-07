@@ -2,7 +2,7 @@
 id: hdzone
 name: HDZone
 description: "HDZone is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:

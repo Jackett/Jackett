@@ -2,7 +2,7 @@
 id: learnbits
 name: LearnBits
 description: "LearnBits is a Private Torrent Tracker for E-LEARNING"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

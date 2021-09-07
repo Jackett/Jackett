@@ -2,7 +2,7 @@
 id: feedurneed
 name: FeedUrNeed
 description: "FeedUrNeed (FuN) is a Private Torrent Tracker for MOVIES / TV / General"
-language: en-us
+language: en-US
 type: private
 encoding: utf-8
 links:

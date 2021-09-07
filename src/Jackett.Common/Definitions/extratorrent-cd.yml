@@ -2,7 +2,7 @@
 id: extratorrent-cd
 name: ExtraTorrent.cd
 description: "ExtraTorrent.cd is a Public tracker for MOVIE / TV / GENERAL magnets"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true

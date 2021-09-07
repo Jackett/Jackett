@@ -2,7 +2,7 @@
 id: sktorrent-org
 name: SkTorrent-org
 description: "SkTorrent.org is a Semi-Private torrent site for MOVIES / TV/ GENERAL"
-language: en-us
+language: en-US
 type: semi-private
 encoding: UTF-8
 links:

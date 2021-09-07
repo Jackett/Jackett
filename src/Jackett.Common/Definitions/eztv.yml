@@ -2,7 +2,7 @@
 id: eztv
 name: EZTV
 description: "EZTV is a Public torrent site for TV shows"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true

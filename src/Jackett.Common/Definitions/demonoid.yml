@@ -2,7 +2,7 @@
 id: demonoid
 name: Demonoid
 description: "Demonoid is a Public torrent site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: semi-private
 encoding: UTF-8
 followredirect: true

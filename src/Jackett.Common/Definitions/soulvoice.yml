@@ -2,7 +2,7 @@
 id: soulvoice
 name: SoulVoice
 description: "SoulVoice is a CHINESE Private Torrent Tracker for Movies, TV, and e-Learning"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
