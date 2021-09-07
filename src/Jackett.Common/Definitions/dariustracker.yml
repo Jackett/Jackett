@@ -2,7 +2,7 @@
 id: dariustracker
 name: Darius Tracker
 description: "Darius Tracker is a HUNGARIAN Private Tracker for MOVIES / TV / GENERAL"
-language: hu
+language: hu-HU
 type: private
 encoding: UTF-8
 links:

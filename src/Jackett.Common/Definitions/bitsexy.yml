@@ -2,7 +2,7 @@
 id: bitsexy
 name: BitSexy
 description: "BitSexy is a Private Torrent Tracker for 3x"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

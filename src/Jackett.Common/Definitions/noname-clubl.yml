@@ -2,7 +2,7 @@
 id: noname-clubl
 name: NoNaMe ClubL
 description: "This is the NoNaMe Club indexer with Login enabled in the config."
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:

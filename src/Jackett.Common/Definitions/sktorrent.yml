@@ -2,7 +2,7 @@
 id: sktorrent
 name: SkTorrent
 description: "SkTorrent is a CZECH/SLOVAK Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: cs-cz
+language: cs-CZ
 type: semi-private
 encoding: windows-1250
 links:

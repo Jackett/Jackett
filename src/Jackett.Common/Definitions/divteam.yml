@@ -2,7 +2,7 @@
 id: divteam
 name: DivTeam
 description: "DivTeam is a SPANISH Private Torrent Tracker for MOVIES / GENERAL"
-language: es-es
+language: es-ES
 type: private
 encoding: UTF-8
 links:

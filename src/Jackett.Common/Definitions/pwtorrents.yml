@@ -2,7 +2,7 @@
 id: pwtorrents
 name: PWTorrents
 description: "PWTorrents (PWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

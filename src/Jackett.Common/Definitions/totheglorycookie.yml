@@ -1,8 +1,8 @@
 ---
 id: totheglorycookie
 name: ToTheGloryCookie
-description: "this is an alternate to the ToTheGlory indexer using the cookie method for access"
-language: zh-cn
+description: "ToTheGlory (TTG) A Chinese tracker. This uses the cookie method for access"
+language: zh-CN
 type: private
 encoding: UTF-8
 links:

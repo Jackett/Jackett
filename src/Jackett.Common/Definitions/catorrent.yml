@@ -2,7 +2,7 @@
 id: catorrent
 name: Catorrent
 description: "Catorrent is a RUSSIAN Semi-Private Torrent Tracker for GAMES"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:

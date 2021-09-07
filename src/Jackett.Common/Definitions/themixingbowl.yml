@@ -2,7 +2,7 @@
 id: themixingbowl
 name: themixingbowl
 description: "themixingbowl (TMB) is a Semi-Private Torrent Tracker for DJ Music mixes"
-language: en-us
+language: en-US
 type: semi-private
 encoding: UTF-8
 links:

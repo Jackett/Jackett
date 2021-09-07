@@ -2,7 +2,7 @@
 id: mteamtp2fa
 name: MTeamTP2FA
 description: "this indexer uses a cookie login for MTeamTP for those that want to use 2FA"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:

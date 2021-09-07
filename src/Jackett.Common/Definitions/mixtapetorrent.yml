@@ -2,7 +2,7 @@
 id: mixtapetorrent
 name: MixtapeTorrent
 description: "MixtapeTorrent is a Public Music site for MixTapes"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

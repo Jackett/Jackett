@@ -2,7 +2,7 @@
 id: torrent9
 name: Torrent9
 description: "Torrent9 is a FRENCH Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true

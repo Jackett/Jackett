@@ -2,7 +2,7 @@
 id: bitsearch
 name: BitSearch
 description: "BitSearch is a Public torrent meta-search engine"
-language: en
+language: en-US
 type: public
 encoding: UTF-8
 links:

@@ -2,7 +2,7 @@
 id: sdbits
 name: SDBits
 description: "SDBits is a small tracker that focuses on SD movies and tv."
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

@@ -2,7 +2,7 @@
 id: kickasstorrents-ws
 name: kickasstorrents.ws
 description: "kickasstorrents.ws is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true

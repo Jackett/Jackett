@@ -1,8 +1,8 @@
 ---
 id: bootytape
 name: BootyTape
-language: en-us
 description: "BootyTape is a Semi-Private site for 3X"
+language: en-US
 type: semi-private
 encoding: UTF-8
 links:

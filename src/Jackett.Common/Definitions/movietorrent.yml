@@ -2,7 +2,7 @@
 id: movietorrent
 name: MovieTorrent
 description: "MovieTorrent is a Public site for Bollywood, Hollywood, Hindi Dubbed, Tamil , Punjabi, Pakistani MOVIES"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

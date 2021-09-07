@@ -2,7 +2,7 @@
 id: torrentproject2
 name: TorrentProject2
 description: "TorrentProject2 is a Public torrent meta-search engine"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

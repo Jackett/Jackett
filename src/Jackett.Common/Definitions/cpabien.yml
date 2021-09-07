@@ -2,7 +2,7 @@
 id: cpasbien
 name: cpasbien
 description: "cpasbien is a FRENCH Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: semi-private
 encoding: UTF-8
 followredirect: true

@@ -2,7 +2,7 @@
 id: empornium2fa
 name: Empornium2FA
 description: "this indexer uses a cookie login for Empornium for those that want to use 2FA"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

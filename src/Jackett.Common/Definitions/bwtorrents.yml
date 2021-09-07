@@ -2,7 +2,7 @@
 id: bwtorrents
 name: BwTorrents
 description: "BwTorrents is a Private Torrent Tracker for BollyWood MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

@@ -2,7 +2,7 @@
 id: thesceneplace
 name: TheScenePlace
 description: "TheScenePlace (TSP) is a Private site for TV / MOVIES / GENERAL"
-language: en
+language: en-US
 type: private
 encoding: UTF-8
 links:

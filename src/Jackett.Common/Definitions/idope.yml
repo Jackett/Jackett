@@ -2,7 +2,7 @@
 id: idope
 name: Idope
 description: "iDope is a Public torrent search engine presenting direct magnet links"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

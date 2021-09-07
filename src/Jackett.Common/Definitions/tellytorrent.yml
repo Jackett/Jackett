@@ -2,7 +2,7 @@
 id: tellytorrent
 name: TellyTorrent
 description: "TellyTorrent is an INDIAN Private Tracker for MOVIES / TV"
-language: en
+language: en-US
 type: private
 encoding: UTF-8
 links:

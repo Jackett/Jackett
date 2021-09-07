@@ -2,9 +2,9 @@
 id: hdbitscom
 name: HD-Bits.com
 description: "HD tracker"
-language: en-us
-encoding: UTF-8
+language: en-US
 type: private
+encoding: UTF-8
 links:
   - https://www.hd-bits.com/
 

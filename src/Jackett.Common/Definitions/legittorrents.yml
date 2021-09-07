@@ -2,7 +2,7 @@
 id: legittorrents
 name: Legit Torrents
 description: "Legit Torrents is a Public site for free and legal torrents"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

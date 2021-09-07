@@ -1,8 +1,8 @@
 ---
 id: piratbitl
 name: PiratBitL
-description: "this is the PiratBit indexer with Login enabled in the config."
-language: ru-ru
+description: "PirateBit is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL. This supports login."
+language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:

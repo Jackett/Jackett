@@ -2,7 +2,7 @@
 id: itorrent
 name: iTorrent
 description: "iTorrent is a Public HUNGARIAN site"
-language: hu
+language: hu-HU
 type: public
 encoding: UTF-8
 followredirect: true

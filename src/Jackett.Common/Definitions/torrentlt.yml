@@ -2,7 +2,7 @@
 id: torrentlt
 name: Torrent.LT
 description: "Torrent.LT is a LITHUANIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: lt-lt
+language: lt-LT
 type: private
 encoding: UTF-8
 links:

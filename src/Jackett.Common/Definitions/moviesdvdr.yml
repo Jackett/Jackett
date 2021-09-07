@@ -2,7 +2,7 @@
 id: moviesdvdr
 name: MoviesDVDR
 description: "MoviesDVDR is a SPANISH Public tracker for MOVIES"
-language: es-es
+language: es-ES
 type: public
 encoding: UTF-8
 links:

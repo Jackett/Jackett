@@ -2,7 +2,7 @@
 id: acgsou
 name: ACGsou
 description: "ACGsou (36DM) is a CHINESE Public torrent tracker for ANIME"
-language: zh-cn
+language: zh-CN
 type: public
 followredirect: true
 encoding: UTF-8

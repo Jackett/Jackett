@@ -2,7 +2,7 @@
 id: brasiltracker
 name: BrasilTracker
 description: "BrasilTracker is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: pt-br
+language: pt-BR
 encoding: UTF-8
 type: private
 links:

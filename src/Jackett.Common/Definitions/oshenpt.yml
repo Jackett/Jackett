@@ -2,7 +2,7 @@
 id: oshenpt
 name: OshenPT
 description: "OshenPT is a CHINESE Private Torrent Tracker for HD Movies, TV, Music"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:

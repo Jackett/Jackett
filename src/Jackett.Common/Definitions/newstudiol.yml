@@ -2,7 +2,7 @@
 id: newstudiol
 name: NewstudioL
 description: "this is the Newstudio indexer with Login enabled in the config."
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:

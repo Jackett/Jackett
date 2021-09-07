@@ -2,7 +2,7 @@
 id: ibit
 name: IBit
 description: "IBit is a Public Verified Torrent Search Engine"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

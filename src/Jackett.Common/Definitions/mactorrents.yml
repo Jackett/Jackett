@@ -2,7 +2,7 @@
 id: mactorrents
 name: MacTorrents
 description: "MacTorrents is a Public tracker for Mac software"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:

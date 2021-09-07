@@ -2,7 +2,7 @@
 id: mousebits
 name: MouseBits
 description: "MouseBits is a Private Torrent Tracker for all things Disney"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:

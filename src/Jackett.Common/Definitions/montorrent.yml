@@ -2,7 +2,7 @@
 id: montorrent
 name: MonTorrent
 description: "MonTorrent is a FRENCH Public Indexer"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
