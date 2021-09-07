@@ -126,6 +126,7 @@ caps:
     - {id: 252, cat: PC/ISO, desc: "IPFire"}
     - {id: 2181, cat: PC/ISO, desc: "KDE Neon"}
     - {id: 2052, cat: PC/ISO, desc: "KaOS"}
+    - {id: 2294, cat: PC/ISO, desc: "Kaisen Linux"}
     - {id: 2051, cat: PC/ISO, desc: "Kali"}
     - {id: 2053, cat: PC/ISO, desc: "Karoshi"}
     - {id: 277, cat: PC/ISO, desc: "Knoppix"}

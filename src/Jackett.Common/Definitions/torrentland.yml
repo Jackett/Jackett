@@ -109,7 +109,7 @@ search:
 
   fields:
     category:
-      selector: td.category-col div:nth-child(2)
+      selector: td:nth-child(2) div:last-child
       case:
         "span:contains(\"Películas\")": 1
         "span:contains(\"Series\")": 2
@@ -169,9 +169,6 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
     imdb:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

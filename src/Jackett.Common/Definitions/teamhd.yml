@@ -110,9 +110,6 @@ search:
           args: ["|", 1]
     grabs:
       selector: td:nth-child(5) strong
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(5)
       remove: strong

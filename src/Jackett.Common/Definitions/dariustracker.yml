@@ -136,9 +136,6 @@ search:
       attribute: href
     files:
       selector: td:nth-last-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-last-child(5)
       filters:
@@ -150,9 +147,6 @@ search:
       selector: td:nth-last-child(4) b
     grabs:
       selector: td:nth-last-child(3)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(2)
     leechers:

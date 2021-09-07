@@ -126,8 +126,6 @@ search:
       filters:
         - name: re_replace
           args: ["\\s", "0"]
-        - name: regexp
-          args: (\d+)
     leechers:
       text: 0
     leechers:
@@ -136,8 +134,6 @@ search:
       filters:
         - name: re_replace
           args: ["\\s", "0"]
-        - name: regexp
-          args: (\d+)
     grabs:
       text: 0
     grabs:
@@ -146,8 +142,6 @@ search:
       filters:
         - name: re_replace
           args: ["\\s", "0"]
-        - name: regexp
-          args: (\d+)
     date:
       remove: a, span
       selector: div[style="float:right;"]

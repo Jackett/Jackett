@@ -8,7 +8,7 @@ encoding: UTF-8
 links:
   - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
   - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
-  - https://rutor.nocensor.space/
+  - https://rutor.nocensor.work/
 legacylinks:
   - http://live-rutor.org/ # domain expired 9 Feb 2020
   - http://new-rutor.org/ # ERR_NAME_NOT_RESOLVED
@@ -23,6 +23,7 @@ legacylinks:
   - https://rutor.root.yt/
   - https://rutor.unblocked.rest/
   - https://rutor.unblocked.monster/
+  - https://rutor.nocensor.space/
 
 caps:
   # unfortunately RuTor does not display categories anywhere in its search results page :-(

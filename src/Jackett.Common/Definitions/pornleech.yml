@@ -108,8 +108,6 @@ search:
       filters:
         - name: regexp
           args: "Complete:\\s*\u00a0\\s*(.+?)$"
-        - name: replace
-          args: ["---", "0"]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

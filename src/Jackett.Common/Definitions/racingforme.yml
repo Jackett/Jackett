@@ -231,24 +231,12 @@ search:
       attribute: href
     size:
       selector: div.data-size
-      filters:
-        - name: re_replace
-          args: ["(\\d)\\.(\\d{3}\\.\\d{2})", "$1$2"]
     seeders:
       selector: div.data-seeders
-      filters:
-        - name: regexp
-          args: (\d+)
     leechers:
       selector: div.data-leechers
-      filters:
-        - name: regexp
-          args: (\d+)
     grabs:
       selector: div.data-completed
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       text: now
     downloadvolumefactor:

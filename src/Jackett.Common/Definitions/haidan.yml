@@ -145,15 +145,6 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
-      # time added
-      selector: div.time_col:not(:has(span))
-      optional: true
-      filters:
-        - name: append
-          args: " +08:00" # CST
-        - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
     size:
       # group size.  item size
       selector: div.group > div.video_size, div.torrent_item > div.video_size
@@ -177,6 +168,20 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    date:
+      # time added
+      selector: div.time_col:contains("发布于"):not(:has(span[title]))
+      remove: a # drop uploader
+      optional: true
+      filters:
+        - name: replace # remove the 'posted on' tag
+          args: ["发布于", ""]
+        - name: replace # remove anonymous tag
+          args: ["匿名", ""]
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
     minimumratio:
       text: 1.0
 # NexusPHP Standard v1.5 Beta 4 customised

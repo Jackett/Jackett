@@ -60,9 +60,6 @@ search:
       selector: td:nth-child(10)
     grabs:
       selector: td:nth-child(8)
-      filters:
-        - name: regexp
-          args: (\d+)
     files:
       selector: td:nth-child(4)
     size:

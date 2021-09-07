@@ -39,6 +39,10 @@ settings:
     options:
       2: desc
       1: asc
+  - name: info_row
+    type: info
+    label: Search settings
+    default: This Indexer requires specifc columns to be active on your account search settings.<br>Login to the web site and ensure that only the <b>Автор</b> (Author) and <b>Форум</b> (Forum) checkboxes are ticked in the <b>Показывать колонку</b> (Show Columns) section of the <b>Настройки поиска Torrent</b> (Torrent Search Settings) page.<br>Having other columns active may prevent the Indexer processing/displaying results correctly.
 
 caps:
   categorymappings:

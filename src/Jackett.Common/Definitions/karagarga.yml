@@ -126,9 +126,6 @@ search:
       selector: td:nth-child(11)
     grabs:
       selector: td:nth-child(12)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(13)
     leechers:

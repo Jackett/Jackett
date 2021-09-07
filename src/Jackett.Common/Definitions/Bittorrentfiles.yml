@@ -185,11 +185,6 @@ search:
       optional: true
     size:
       selector: td:nth-child(6)
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     seeders:
       text: 0
     seeders:

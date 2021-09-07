@@ -109,10 +109,6 @@ search:
       filters:
         - name: regexp
           args: "/ (.+? [T|G|M|K]*B)"
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     date:
       selector: td:last-child
       filters:

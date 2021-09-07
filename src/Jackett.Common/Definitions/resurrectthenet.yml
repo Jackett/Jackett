@@ -147,9 +147,6 @@ search:
       selector: td:nth-last-child(3)
     grabs:
       selector: td:nth-last-child(2)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     size:
       selector: td:nth-last-child(1)
     downloadvolumefactor:

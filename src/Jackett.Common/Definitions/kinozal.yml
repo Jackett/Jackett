@@ -109,6 +109,24 @@ login:
   test:
     path: userdetails.php
 
+download:
+  before:
+    path: get_srv_details.php
+    inputs:
+      action: 2
+      id: "{{ .DownloadUri.Query.id }}"
+  infohash:
+    before: true
+    hash:
+      selector: li:first-child
+      filters:
+        - name: regexp
+          args: ([A-F|0-9]{40})
+    title:
+      selector: div.b
+      filters:
+        - name: trim
+
 search:
   paths:
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0

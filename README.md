@@ -40,12 +40,12 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Badass Torrents
  * BigFANGroup
  * BitRu
+ * BitSearch
  * BT.etree
  * BT4G
  * BTDIGG
  * BTSOW
  * Byrutor
- * CiliPro (LIAORENCILI)
  * comicat
  * ConCen
  * cpasbien
@@ -62,6 +62,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ExtraTorrent.cd
  * EZTV
  * Filebase
+ * FileListing
  * FireBit
  * Frozen Layer
  * GamesTorrents
@@ -83,7 +84,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * LimeTorrents
  * LinuxTracker
  * MacTorrents
- * Magnet4You
  * MejorTorrent
  * MixTapeTorrent
  * Montorrent
@@ -138,7 +138,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrent Oyun indir
  * Torrent Paradise (ML)
  * torrent-pirat
- * Torrent4You
  * Torrent9
  * Torrent9 clone
  * TorrentDownload
@@ -155,6 +154,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrentv
  * TorrentView (토렌트뷰)
  * TorrentWhiz ( 토렌트위즈)
+ * Torrentz2eu
  * truPornolabs
  * Underverse
  * UnionDHT
@@ -281,6 +281,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BroadcasTheNet (BTN)
  * BroadCity
  * BrokenStones [![(invite needed)][inviteneeded]](#)
+ * BrSociety
  * BTNext (BTNT)
  * BTSCHOOL
  * BWTorrents
@@ -288,6 +289,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Carpathians
  * CartoonChaos (CC)
  * CasaTorrent [![(invite needed)][inviteneeded]](#)
+ * Cathode-Ray.Tube (CRT)
  * CCFBits
  * CeskeForum
  * CGPeers
@@ -309,7 +311,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Dark-Shadow
  * Dark Tracker
  * Das Unerwartete [![(invite needed)][inviteneeded]](#)
- * DataScene (DS)
  * DesiReleasers
  * DesiTorrents
  * Diablo Torrent
@@ -390,8 +391,8 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Karagarga
  * Keep Friends
  * LastFiles
- * LatinoP2P
  * Le Saloon
+ * LearnBits
  * LearnFlakes
  * LegacyHD (HD4Free)
  * LemonHD
@@ -407,6 +408,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MeseVilág (Fairytale World)
  * MicroBit (µBit)
  * Milkie
+ * MIRcrew
  * MMA-Torrents
  * MNV (Max-New-Vision)
  * Mononoké-BT [![(invite needed)][inviteneeded]](#)
@@ -421,9 +423,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NetCosmo
  * NetLab
  * NorBits
- * Nordic+
  * Oasis
- * Obscure
  * oMg[WtF]trackr
  * OpenCD
  * Oppaitime [![(invite needed)][inviteneeded]](#)
@@ -513,7 +513,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TheEmpire (TE)
  * TheLeachZone (TLZ)
  * TheScenePlace (TSP)
- * TheSpit
  * TJUPT
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * ToTheGlory (TTG)
@@ -737,6 +736,9 @@ The default values should be good for most users. If you have problems, you can 
 configuration or even disable the cache. Keep in mind that you can be banned by the sites if you make a lot of requests.
 * **Cache TTL (seconds)**: (default 2100 / 35 minutes) It indicates how long the results can remain in the cache.
 * **Cache max results per indexer**: (default 1000) How many results are kept in cache for each indexer. This limit is used to limit the use of RAM. If you make many requests and you have enough memory, increase this number.
+
+## Torznab cache
+If you have enabled the Jackett internal cache, but have an indexer for which you would prefer to fetch fresh results (thus ignoring the internal cache) then add the **&cache=false** parameter to your torznab query.
 
 ## Configuring FlareSolverr
 Some indexers are protected by CloudFlare or similar services and Jackett is not able to solve the challenges.

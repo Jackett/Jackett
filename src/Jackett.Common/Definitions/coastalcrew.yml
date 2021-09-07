@@ -177,27 +177,12 @@ search:
       attribute: src
     size:
       selector: div.selection_unter_ag
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       text: 0
     seeders:
       selector: div.selection_unter_aa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     leechers:
       selector: div.selection_unter_aaa
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     date:
       # Heute 13:30:04
       # Gestern 09:10:10

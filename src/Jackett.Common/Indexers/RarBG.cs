@@ -41,7 +41,7 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
@@ -54,7 +54,8 @@ namespace Jackett.Common.Indexers
                        BookSearchParams = new List<BookSearchParam>
                        {
                            BookSearchParam.Q
-                       }
+                       },
+                       TvSearchImdbAvailable = true
                    },
                    configService: configService,
                    client: wc,
@@ -230,6 +231,7 @@ namespace Jackett.Common.Indexers
         private string BuildSearchUrl(TorznabQuery query)
         {
             var searchString = query.GetQueryString();
+            var episodeSearchString = query.GetEpisodeSearchString();
             var qc = new NameValueCollection
             {
                 { "token", _token },
@@ -240,7 +242,13 @@ namespace Jackett.Common.Indexers
                 { "sort", _sort }
             };
 
-            if (query.ImdbID != null)
+            if (query.IsTVSearch && !string.IsNullOrWhiteSpace(episodeSearchString) && query.ImdbID != null)
+            {
+                qc.Add("mode", "search");
+                qc.Add("search_imdb", query.ImdbID);
+                qc.Add("search_string", episodeSearchString);
+            }
+            else if (query.ImdbID != null)
             {
                 qc.Add("mode", "search");
                 qc.Add("search_imdb", query.ImdbID);

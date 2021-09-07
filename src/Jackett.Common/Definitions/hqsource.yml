@@ -108,9 +108,6 @@ search:
       selector: a[href*="imdb.com/title/tt"]
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(5)
     date:

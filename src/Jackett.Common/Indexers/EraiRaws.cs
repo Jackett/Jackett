@@ -19,14 +19,12 @@ namespace Jackett.Common.Indexers
         const string RSS_PATH = "feed/?type=magnet";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            // At some point the beta site will probably replace the current one
-            // At that point, these can probably be re-enabled.
-            // "https://www.erai-raws.info/",
-            // "https://erairaws.nocensor.space/"
+            "https://www.erai-raws.info/",
+            "https://beta.erai-raws.info/",
+            "https://erairaws.nocensor.work/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://www.erai-raws.info/",
             "https://erairaws.nocensor.space/"
         };
 
@@ -35,8 +33,7 @@ namespace Jackett.Common.Indexers
             : base(id: "erai-raws",
                    name: "Erai-Raws",
                    description: "Erai-Raws is a team release site for Anime subtitles.",
-                   //link: "https://www.erai-raws.info/",
-                   link: "https://beta.erai-raws.info/",
+                   link: "https://www.erai-raws.info/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -111,13 +108,15 @@ namespace Jackett.Common.Indexers
         {
             // Retrieve RSS feed
             var result = await RequestWithCookiesAndRetryAsync(RssFeedUri);
+            if (result.IsRedirect)
+                await FollowIfRedirect(result);
 
             // Parse as XML document
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(result.ContentString);
 
             var nsm = new XmlNamespaceManager(xmlDocument.NameTable);
-            nsm.AddNamespace("erai", "https://beta.erai-raws.info/rss-page/");
+            nsm.AddNamespace("erai", "https://www.erai-raws.info/rss-page/");
 
             // Parse to RssFeedItems
             var xmlNodes = xmlDocument.GetElementsByTagName("item");
@@ -226,7 +225,7 @@ namespace Jackett.Common.Indexers
                 var publishDate = rssItem.SelectSingleNode("pubDate")?.InnerText;
                 var size = rssItem.SelectSingleNode("erai:size", nsm)?.InnerText;
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
-                var quality = rssItem.SelectSingleNode("erai:res", nsm)?.InnerText;
+                var quality = rssItem.SelectSingleNode("erai:resolution", nsm)?.InnerText;
 
                 item = new RssFeedItem
                 {

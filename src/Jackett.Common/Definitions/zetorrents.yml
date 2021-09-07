@@ -6,7 +6,7 @@ language: fr-fr
 type: public
 encoding: UTF-8
 links:
-  - https://www.zetorrents.cc/
+  - https://www.zetorrents.tv/
 legacylinks:
   - https://www.zetorrents.co/
   - https://www.zetorrents.io/
@@ -16,6 +16,7 @@ legacylinks:
   - https://ww1.zetorrents.io/
   - https://www.zetorrents.org/
   - https://wvw.zetorrents.org/
+  - https://www.zetorrents.cc/
 
 caps:
   categories:

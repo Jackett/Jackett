@@ -136,9 +136,6 @@ search:
       selector: td:nth-of-type(8)
     grabs:
       selector: td:nth-of-type(9)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-of-type(10)
     leechers:

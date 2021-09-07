@@ -148,9 +148,6 @@ search:
       selector: .tsnatch
     files:
       selector: .tfiles
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: .tsize
     seeders:

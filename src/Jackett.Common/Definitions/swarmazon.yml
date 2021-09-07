@@ -32,18 +32,18 @@ login:
   path: en/account/login.php
   method: form
   form: form
-  captcha:
-    type: image
-    selector: img[alt="CAPTCHA"]
-    input: captcha_challenge
+#  captcha:
+#    type: image
+#    selector: img[alt="CAPTCHA"]
+#    input: captcha_challenge
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     remember: on
   error:
-    - selector: script:contains("The Captcha")
-      message:
-        text: The Captcha you entered was incorrect.
+#    - selector: script:contains("The Captcha")
+#      message:
+#        text: The Captcha you entered was incorrect.
     - selector: script:contains("Wrong")
       message:
         text: Wrong username or password.
@@ -89,7 +89,10 @@ search:
     date:
       selector: td:nth-last-child(5)
       filters:
-        - name: timeago
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
     grabs:
       selector: td:nth-last-child(4)
     seeders:

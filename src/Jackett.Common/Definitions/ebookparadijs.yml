@@ -126,9 +126,6 @@ search:
           args: "in (\\d+) bestan"
     grabs:
       selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-child(4) table tr:nth-child(2) td:last-child
       filters:

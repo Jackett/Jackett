@@ -149,9 +149,6 @@ search:
           args: "02/01/2006 -07:00"
     grabs:
       selector: td:nth-last-child(4)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     seeders:
       selector: td:nth-last-child(6)
     leechers:

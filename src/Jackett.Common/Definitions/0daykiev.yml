@@ -156,10 +156,6 @@ search:
       selector: td:nth-child(4)
       filters:
         - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
-        - name: replace
           args: ["ТБ", "TB"]
         - name: replace
           args: ["ГБ", "GB"]
@@ -169,9 +165,6 @@ search:
           args: ["КБ", "KB"]
     grabs:
       selector: td:nth-child(5)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(6)
       filters:

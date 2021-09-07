@@ -22,17 +22,28 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://thepiratebay.org/",
+            "https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ly/",
             "https://tpb22.ukpass.co/",
             "https://tpb.sadzawka.tk/",
-            "https://www.tpbay.win/",
+            "https://thepiratebay.host/",
             "https://tpb.cnp.cx/",
             "https://thepiratebay.d4.re/",
-            "https://baypirated.site/",
             "https://tpb.skynetcloud.site/",
             "https://piratetoday.xyz/",
             "https://piratenow.xyz/",
-            "https://piratesbaycc.com/",
-            "https://pirateproxy.ltda/"
+            "https://pirate-proxy.app/",
+            "https://thepb.cyou/",
+            "https://mirrorbay.top/",
+            "https://5mins.eu/",
+            "https://piratebayproxy.buzz/",
+            "https://tpb.surf/",
+            "https://wearethereal.ninja/",
+            "https://tpb.monster/",
+            "https://tpb.wtf/",
+            "https://bibtor.com/",
+            "https://gigatorrent.xyz/",
+            "https://thepirateb.xyz/",
+            "https://ezrasstuff.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -53,7 +64,11 @@ namespace Jackett.Common.Indexers
             "https://tpb18.ukpass.co/",
             "https://pirateproxy.dev/",
             "https://tpb19.ukpass.co/",
-            "https://pirateproxy.tube/"
+            "https://pirateproxy.tube/",
+            "https://www.tpbay.win/",
+            "https://baypirated.site/",
+            "https://piratesbaycc.com/",
+            "https://pirateproxy.ltda/"
         };
 
         private static readonly Uri _ApiBaseUri = new Uri("https://apibay.org/");

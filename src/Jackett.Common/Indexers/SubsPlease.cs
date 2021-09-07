@@ -22,6 +22,10 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://subsplease.org/",
+            "https://subsplease.nocensor.work/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
             "https://subsplease.nocensor.space/"
         };
 

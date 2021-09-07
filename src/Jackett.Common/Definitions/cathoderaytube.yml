@@ -1,41 +1,31 @@
 ---
-id: thespit
-name: TheSpit
-description: "TheSpit is a Private Torrent Tracker for SPORT"
+id: cathoderaytube
+name: Cathode-Ray.Tube
+description: "Cathode-Ray.Tube (CRT) is a Private Torrent Tracker for CLASSIC MOVIES / TV"
 language: en
 type: private
 encoding: UTF-8
 links:
-  - https://www.thespit.me/
+  - https://www.cathode-ray.tube/
 
 caps:
   categorymappings:
-    - {id: 16, cat: TV/Sport, desc: "American Football"}
-    - {id: 8, cat: TV/Sport, desc: "Basketball"}
-    - {id: 6, cat: TV/Sport, desc: "Combat"}
-    - {id: 23, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 22, cat: Books, desc: "eBooks"}
-    - {id: 5, cat: TV/Sport, desc: "Football"}
-    - {id: 14, cat: TV/Sport, desc: "Golf"}
-    - {id: 19, cat: TV/Sport, desc: "Gymnastics"}
-    - {id: 18, cat: TV/Sport, desc: "Handball"}
-    - {id: 10, cat: TV/Sport, desc: "Hockey"}
-    - {id: 25, cat: TV/Sport, desc: "Mindsports"}
-    - {id: 13, cat: TV/Sport, desc: "Motorsports"}
-    - {id: 21, cat: Other, desc: "Other"}
-    - {id: 20, cat: TV/Sport, desc: "Rugby"}
-    - {id: 24, cat: TV/Sport, desc: "Scene"}
-    - {id: 15, cat: TV/Sport, desc: "Tennis"}
-    - {id: 17, cat: TV/Sport, desc: "Watersports"}
-    - {id: 12, cat: TV/Sport, desc: "Wintersports"}
+    - {id: 13, cat: PC/Games, desc: "Games"}
+    - {id: 4, cat: Other, desc: "Misc"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Other, desc: "WOC"}
 
   modes:
     search: [q]
-    tv-search: [q]
+    tv-search: [q, season, ep]
     movie-search: [q]
-    book-search: [q]
 
 settings:
+  - name: info_2fa
+    type: info
+    label: "About 2FA"
+    default: "If you want to enable 2FA then use the CRT2FA indexer instead."
   - name: username
     type: text
     label: Username
@@ -83,21 +73,18 @@ login:
 
 search:
   paths:
-    # https://www.thespit.me/torrents.php?filter_cat[22]=1&filter_cat[24]=1&order_by=time&order_way=desc&filter_freeleech=1&searchtext=&action=advanced&title=&filelist=&taglist=
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchtext: ""
-    title: "{{ .Keywords }}"
+    searchtext: "{{ .Keywords }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
     action: advanced
     filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    filelist: ""
     taglist: ""
 
   rows:
-    selector: table#torrent_table > tbody > tr[class^="torrent row"]
+    selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
 
   fields:
     category:
@@ -105,7 +92,7 @@ search:
       attribute: href
       filters:
         - name: regexp
-          args: "\\[(\\d+)\\]"
+          args: \[(\d+)\]
     title:
       selector: a[href^="/torrents.php?id="]
     details:
@@ -125,7 +112,7 @@ search:
         - name: re_replace
           args: ["\\\\(.)", "$1"]
         - name: replace
-          args: ["/static/common/noartwork/noimage.png", ""]
+          args: ["/static/styles/modern/crt.png", ""]
     files:
       selector: td:nth-child(3)
     date:
@@ -150,10 +137,10 @@ search:
         "img[alt=\"Freeleech\"]": 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        span.icon[title*="DoubleSeed"]: 2
+        "img[alt=\"DoubleSeed\"]": 2
+        "*": 1
     minimumratio:
-      text: 0.5
-    minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      text: 1.0
 # Luminance

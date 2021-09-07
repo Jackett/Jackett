@@ -140,9 +140,6 @@ search:
       selector: td:nth-child(8)
     grabs:
       selector: td:nth-child(9)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     downloadvolumefactor:
       case:
         img[src*="freeleech.png"]: 0

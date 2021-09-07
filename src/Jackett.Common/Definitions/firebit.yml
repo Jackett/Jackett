@@ -97,7 +97,20 @@ search:
         - name: replace
           args: ["-", "0 B"]
     date:
-      selector: td:nth-child(5), li.meta-date
+      # Вчера, 08:01:41
+      # 2 дня назад, 19:33:51
+      selector: td:nth-child(5):contains(","), li.meta-date:contains(",")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Вчера,", "Yesterday"]
+        - name: replace
+          args: ["дня назад,", "days"]
+        - name: fuzzytime
+    date:
+      # 16.08.2021 20:29:39
+      selector: td:nth-child(5):not(:contains(",")), li.meta-date:not(:contains(","))
+      optional: true
       filters:
         - name: append
           args: " +03:00" # MSK

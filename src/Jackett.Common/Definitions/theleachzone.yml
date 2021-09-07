@@ -150,9 +150,6 @@ search:
       selector: td:nth-child(8)
     grabs:
       selector: td:nth-child(9)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(10)
     leechers:

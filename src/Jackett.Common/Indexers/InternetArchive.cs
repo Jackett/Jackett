@@ -29,6 +29,7 @@ namespace Jackett.Common.Indexers
         private string _sort;
         private string _order;
         private bool _titleOnly;
+        private bool _noMagnet;
 
         private ConfigurationData ConfigData => configData;
 
@@ -88,6 +89,9 @@ namespace Jackett.Common.Indexers
             var titleOnly = new BoolConfigurationItem("Search only in title") { Value = true };
             configData.AddDynamic("titleOnly", titleOnly);
 
+            var noMagnet = new BoolConfigurationItem("Download using .torrent only. No Magnets.") { Value = false };
+            configData.AddDynamic("noMagnet", noMagnet);
+
             AddCategoryMapping("audio", TorznabCatType.Audio);
             AddCategoryMapping("etree", TorznabCatType.Audio);
             AddCategoryMapping("movies", TorznabCatType.Movies);
@@ -124,6 +128,9 @@ namespace Jackett.Common.Indexers
 
             var titleOnly = (BoolConfigurationItem)configData.GetDynamic("titleOnly");
             _titleOnly = titleOnly != null && titleOnly.Value;
+
+            var noMagnet = (BoolConfigurationItem)configData.GetDynamic("noMagnet");
+            _noMagnet = noMagnet != null && noMagnet.Value;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -199,7 +206,7 @@ namespace Jackett.Common.Indexers
                 Peers = 2,
                 Grabs = GetFieldAs<long>("downloads", torrent),
                 Link = link,
-                InfoHash = btih, // magnet link is auto generated from infohash
+                InfoHash = _noMagnet ? null : btih, // magnet link is auto generated from infohash
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };

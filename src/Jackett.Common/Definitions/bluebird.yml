@@ -68,9 +68,6 @@ search:
       attribute: href
     grabs:
       selector: a[href*="&snatched=1#snatched"]
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(7)
       remove: a

@@ -120,8 +120,16 @@ search:
         - name: prepend
           args: "download.php?id="
     date:
+      # 2021-08-13<br>09:32:42
+      selector: td:nth-child(5):contains("-")
+      optional: true
+      filters:
+        - name: dateparse
+          args: "2006-01-0215:04:05"
+    date:
       # 2 ngày<br/>23 giờ
-      selector: td:nth-child(5)
+      selector: td:nth-child(5):not(:contains("-"))
+      optional: true
       filters:
         - name: re_replace
           args: ["năm", "years "]

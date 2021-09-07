@@ -237,8 +237,12 @@ caps:
     - {id: 1185, cat: Audio/MP3, desc: " |- New Age, Relax, Meditative (mp3)"}
     - {id: 1649, cat: Audio/Lossless, desc: " |- Other musical genres (Lossless)"}
     - {id: 1183, cat: Audio/MP3, desc: " |- Музыкальное видео (все жанры)"}
+    - {id: 1664, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
+    - {id: 1665, cat: Audio, desc: " |- Зарубежная поп-музыка (Vinyl)"}
+    - {id: 1666, cat: Audio, desc: " |- Зарубежная рок-музыка (Vinyl)"}
     # Программное обеспечение Software
     - {id: 105, cat: PC, desc: "Операционные системы"}
+    - {id: 1663, cat: PC, desc: " |- Windows 11"}
     - {id: 1120, cat: PC, desc: " |- Windows 10"}
     - {id: 706, cat: PC, desc: " |- Windows 8, 8.1"}
     - {id: 212, cat: PC, desc: " |- Windows 7"}

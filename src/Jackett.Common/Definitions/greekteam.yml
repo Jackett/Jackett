@@ -129,9 +129,6 @@ search:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td
     grabs:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td
     leechers:
