@@ -113,8 +113,8 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo
                     {
-                        MinimumRatio = 0.8,
-                        MinimumSeedTime = 259200 // 72 hours
+                        MinimumRatio = 1.0,
+                        MinimumSeedTime = 604800 // 168 hours
                     };
                     var qCat = row.QuerySelector("div[class*=\"cats_\"]");
                     var catStr = qCat.GetAttribute("class").Split('_')[1];
