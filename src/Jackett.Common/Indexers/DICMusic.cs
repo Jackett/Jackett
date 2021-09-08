@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechTokens: true,
                    has2Fa: true)
         {
-            Language = "zh-cn";
+            Language = "zh-CN";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");

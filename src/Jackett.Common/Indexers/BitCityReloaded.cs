@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum)."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "de-de";
+            Language = "de-DE";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Other, "Other/Anderes");

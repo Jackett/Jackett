@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             webclient.requestDelay = 2; // 0.5 requests per second

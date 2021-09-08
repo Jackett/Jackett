@@ -60,7 +60,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");

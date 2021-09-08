@@ -58,7 +58,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataSceneTime())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(10, TorznabCatType.XXX, "Movies Adult");

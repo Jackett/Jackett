@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSS())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TV);

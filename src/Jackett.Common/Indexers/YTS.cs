@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
-            Language = "en-us";
+            Language = "en-US";
             Type = "public";
 
             webclient.requestDelay = 2.5; // 0.5 requests per second (2 causes problems)

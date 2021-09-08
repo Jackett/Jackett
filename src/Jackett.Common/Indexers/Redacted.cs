@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
                    instructionMessageOptional: "<ol><li>Go to Redacted's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab and copy the API Key.</li><li>Ensure that you've checked <b>Confirm API Key</b>.</li><li>Finally, click <b>Save Profile</b>.</li></ol>"
                 )
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             webclient.EmulateBrowser = false; // Issue #9751

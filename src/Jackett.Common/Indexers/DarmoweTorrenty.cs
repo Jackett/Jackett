@@ -68,7 +68,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.GetEncoding("iso-8859-2");
-            Language = "pl-pl";
+            Language = "pl-PL";
             Type = "semi-private";
 
             AddCategoryMapping(14, TorznabCatType.Movies, "Filmy");

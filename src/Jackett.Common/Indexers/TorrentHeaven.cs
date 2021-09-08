@@ -53,7 +53,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "de-de";
+            Language = "de-DE";
             Type = "private";
 
             // incomplete CA chain

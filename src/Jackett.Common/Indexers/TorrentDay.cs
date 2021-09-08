@@ -80,7 +80,7 @@ namespace Jackett.Common.Indexers
                        "Make sure you get the cookies from the same torrent day domain as configured above."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             wc.EmulateBrowser = false;

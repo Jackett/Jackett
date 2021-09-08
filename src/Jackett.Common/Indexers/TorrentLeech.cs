@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
                        "For best results, change the 'Default Number of Torrents per Page' setting to 100 in your Profile."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });

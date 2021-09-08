@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
-            Language = "de-de";
+            Language = "de-DE";
             Type = "private";
 
             AddCategoryMapping(2, TorznabCatType.PC, "Apps / Windows");

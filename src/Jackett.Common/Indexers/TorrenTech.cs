@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             wc.AddTrustedCertificate(new Uri(SiteLink).Host, "22E3C9896A1207EFF97599FE12B9DBB2AF8EC0CA");

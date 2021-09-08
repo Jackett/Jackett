@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers
                 cs: cs)
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             // requestDelay for API Limit (1 request per 2 seconds)

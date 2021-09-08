@@ -53,7 +53,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the TorrentBytes webpage."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(23, TorznabCatType.TVAnime, "Anime");

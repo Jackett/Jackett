@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
                    cs: cs,
                    supportsFreeleechTokens: false) // ratioless tracker
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");

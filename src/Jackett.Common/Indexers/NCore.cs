@@ -78,7 +78,7 @@ namespace Jackett.Common.Indexers
                   configData: new ConfigurationDataNCore())
         {
             Encoding = Encoding.UTF8;
-            Language = "hu-hu";
+            Language = "hu-HU";
             Type = "private";
 
             AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");

@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataFileList())
         {
             Encoding = Encoding.UTF8;
-            Language = "ro-ro";
+            Language = "ro-RO";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Filme SD");

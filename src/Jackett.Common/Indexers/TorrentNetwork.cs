@@ -66,7 +66,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
-            Language = "de-de";
+            Language = "de-DE";
             Type = "private";
 
             configData.AddDynamic("token", new HiddenStringConfigurationItem("token"));

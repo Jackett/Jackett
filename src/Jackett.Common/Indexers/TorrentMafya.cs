@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "tr-tr";
+            Language = "tr-TR";
             Type = "public";
 
             AddCategoryMapping("games", TorznabCatType.PCGames, "Oyun");

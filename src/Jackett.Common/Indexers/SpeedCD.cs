@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
