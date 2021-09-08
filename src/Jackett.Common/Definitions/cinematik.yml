@@ -48,13 +48,10 @@ settings:
       0: Active
       1: "Active and Inactive"
       2: Inactive
-  - name: srchdtls
-    type: checkbox
-    label: "Detailed search"
   - name: info_results
     type: info
-    label: "Search results"
-    default: "You can increase the number of search results in your profile.<br>Default is 15."
+    label: Results Per Page
+    default: "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.<br>Default is <i>15</i>."
 
 login:
   method: form
@@ -76,7 +73,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: "{{ .Config.incldead }}"
-    srchdtls: "{{ if .Config.srchdtls }}1{{ else }}0{{ end }}"
+    srchdtls: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
 
   rows:
     selector: table[border="1"] tr:not(:first-child)
