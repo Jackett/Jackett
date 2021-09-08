@@ -53,7 +53,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataCookie("Easily find the cookie under the 'Cookie' header in the index.php GET request. HeBits Cookie usually look like:  hebits=hebits; uid=12345; pass=[...]"))
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.GetEncoding("UTF-8");
             Language = "he-IL";
