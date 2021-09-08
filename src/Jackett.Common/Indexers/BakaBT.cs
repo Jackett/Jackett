@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                                                                "Show-Adult-Content option in your BakaBT account Settings."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");

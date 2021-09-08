@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataNorbits())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "nb-no";
+            Language = "nb-NO";
             Type = "private";
 
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=49", TorznabCatType.MoviesUHD, "Filmer - UHD-2160p");

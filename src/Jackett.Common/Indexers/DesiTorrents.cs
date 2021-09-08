@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers
                    has2Fa: true
                 )
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");

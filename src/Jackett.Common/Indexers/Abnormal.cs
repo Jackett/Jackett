@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
                    )
         {
             Encoding = Encoding.UTF8;
-            Language = "fr-fr";
+            Language = "fr-FR";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TV, "Series");

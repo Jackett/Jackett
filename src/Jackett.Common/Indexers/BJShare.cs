@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers
                     configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
-            Language = "pt-br";
+            Language = "pt-BR";
             Type = "private";
 
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");

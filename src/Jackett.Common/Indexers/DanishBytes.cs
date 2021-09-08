@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
 
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping("1", TorznabCatType.Movies, "Movies");

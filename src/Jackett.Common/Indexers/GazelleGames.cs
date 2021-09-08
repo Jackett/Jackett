@@ -45,7 +45,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             configData.AddDynamic("searchgroupnames", new BoolConfigurationItem("Search Group Names Only") { Value = false });

@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCookie("Easily find the cookie under the 'Cookie' header in the index.php GET request. HeBits Cookie usually look like:  hebits=hebits; uid=12345; pass=[...]"))
         {
             Encoding = Encoding.GetEncoding("UTF-8");
-            Language = "he-il";
+            Language = "he-IL";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Movies, "סרטים (Movies)");

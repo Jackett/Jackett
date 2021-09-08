@@ -71,7 +71,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataRutracker())
         {
             Encoding = Encoding.GetEncoding("windows-1251");
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "semi-private";
             // note: when refreshing the categories use the tracker.php page and NOT the search.php page!
             AddCategoryMapping(22, TorznabCatType.Movies, "Наше кино");

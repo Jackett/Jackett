@@ -127,7 +127,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCaptchaLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "semi-private";
 
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "25234600906DF82792DE9F4AA75A5AED2F226577"); // for *.run expired 07/Jun/21

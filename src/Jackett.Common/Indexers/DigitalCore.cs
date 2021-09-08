@@ -62,7 +62,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.MoviesDVD, "Movies/DVDR");

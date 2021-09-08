@@ -41,7 +41,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAniLibria())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "public";
 
             // Configure the category mappings

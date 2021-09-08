@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers
                   )
         {
             Encoding = Encoding.UTF8;
-            Language = "fr-fr";
+            Language = "fr-FR";
             Type = "private";
 
             // Movies / Films

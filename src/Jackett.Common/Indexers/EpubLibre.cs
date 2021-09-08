@@ -84,7 +84,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-ES";
             Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.BooksEBook);

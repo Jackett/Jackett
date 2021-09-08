@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");

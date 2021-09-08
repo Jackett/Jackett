@@ -148,7 +148,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
-            Language = "es-es";
+            Language = "es-ES";
             Type = "public";
 
             var voItem = new BoolConfigurationItem("Include original versions in search results") { Value = false };

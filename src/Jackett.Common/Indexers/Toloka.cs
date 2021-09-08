@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataToloka())
         {
             Encoding = Encoding.UTF8;
-            Language = "uk-ua";
+            Language = "uk-UA";
             Type = "semi-private";
 
             AddCategoryMapping(117, TorznabCatType.Movies, "Українське кіно");

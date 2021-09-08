@@ -50,7 +50,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataHDBitsApi())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");

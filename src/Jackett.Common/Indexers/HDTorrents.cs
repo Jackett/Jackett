@@ -74,7 +74,7 @@ namespace Jackett.Common.Indexers
                        "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             // Movie

@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.GetEncoding("windows-1255");
-            Language = "he-il";
+            Language = "he-IL";
             Type = "private";
 
             // סרטים

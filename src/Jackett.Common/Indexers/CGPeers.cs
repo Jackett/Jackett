@@ -28,7 +28,7 @@ namespace Jackett.Common.Indexers
                    cs: cs,
                    supportsFreeleechTokens: true)
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.PCISO, "Full Applications");

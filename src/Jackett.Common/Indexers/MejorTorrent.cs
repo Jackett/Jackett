@@ -85,7 +85,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-ES";
             Type = "public";
 
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };

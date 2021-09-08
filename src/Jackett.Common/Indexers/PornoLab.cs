@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataPornolab())
         {
             Encoding = Encoding.GetEncoding("windows-1251");
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "semi-private";
 
             AddCategoryMapping(1768, TorznabCatType.XXX, "Эротические фильмы / Erotic Movies");
