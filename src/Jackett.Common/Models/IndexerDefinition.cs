@@ -165,7 +165,7 @@ namespace Jackett.Common.Models
         public string Queryseparator { get; set; } = "&";
     }
 
-    public class beforeBlock: requestBlock
+    public class beforeBlock : requestBlock
     {
         public selectorField Pathselector { get; set; }
     }
