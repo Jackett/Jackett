@@ -1703,13 +1703,16 @@ namespace Jackett.Common.Indexers
                 pairs = new Dictionary<string, string>();
             }
 
-            foreach (var Input in request.Inputs)
+            if (request.Inputs != null)
             {
-                var value = applyGoTemplateText(Input.Value, variables);
-                if (method == RequestType.GET)
-                    queryCollection.Add(Input.Key, value);
-                else if (method == RequestType.POST)
-                    pairs.Add(Input.Key, value);
+                foreach (var Input in request.Inputs)
+                {
+                    var value = applyGoTemplateText(Input.Value, variables);
+                    if (method == RequestType.GET)
+                        queryCollection.Add(Input.Key, value);
+                    else if (method == RequestType.POST)
+                        pairs.Add(Input.Key, value);
+                }
             }
 
             if (queryCollection.Count > 0)
@@ -1751,9 +1754,45 @@ namespace Jackett.Common.Indexers
                 var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
 
+                var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
                 WebResult response = null;
-                if (Download.Before != null)
-                    response = await handleRequest(Download.Before, variables, link.ToString());
+                HtmlParser searchResultParser = null;
+                string results = string.Empty;
+
+                var beforeBlock = Download.Before;
+                if (beforeBlock != null)
+                {
+                    if (beforeBlock.Pathselector != null)
+                    {
+                        response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
+                        if (response.IsRedirect)
+                            response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+
+                        var beforeSelector = applyGoTemplateText(beforeBlock.Pathselector.Selector, variables);
+                        searchResultParser = new HtmlParser();
+
+                        results = response.ContentString;
+                        var searchResultDocument = searchResultParser.ParseDocument(results);
+
+                        var beforeElement = searchResultDocument.QuerySelector(beforeSelector);
+                        if (beforeElement == null)
+                        {
+                            logger.Debug(
+                                $"CardigannIndexer ({Id}): Before path selector {beforeSelector} could not match any elements.");
+                            throw new Exception($"Before selectors didn't match");
+                        }
+
+                        string path;
+                        if (beforeBlock.Pathselector.Attribute != null)
+                            path = beforeElement.GetAttribute(beforeBlock.Pathselector.Attribute);
+                        else
+                            path = beforeElement.TextContent;
+                        path = applyFilters(path, beforeBlock.Pathselector.Filters, variables);
+                        beforeBlock.Path = path;
+                    }
+
+                    response = await handleRequest(beforeBlock, variables, link.ToString());
+                }
 
                 if (Download.Method == "post")
                     method = RequestType.POST;
@@ -1766,9 +1805,9 @@ namespace Jackett.Common.Indexers
 
                     try
                     {
-                        var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
-                        var results = "";
-                        var searchResultParser = new HtmlParser();
+                        headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                        results = "";
+                        searchResultParser = new HtmlParser();
 
                         if (!Download.Infohash.Before || Download.Before == null || response == null)
                         {
@@ -1820,9 +1859,9 @@ namespace Jackett.Common.Indexers
                 }
                 else if (Download.Selectors != null)
                 {
-                    var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
-                    var results = "";
-                    var searchResultParser = new HtmlParser();
+                    headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                    results = "";
+                    searchResultParser = new HtmlParser();
 
                     foreach (var selector in Download.Selectors)
                     {

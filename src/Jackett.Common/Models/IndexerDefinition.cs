@@ -165,22 +165,27 @@ namespace Jackett.Common.Models
         public string Queryseparator { get; set; } = "&";
     }
 
+    public class beforeBlock : requestBlock
+    {
+        public selectorField Pathselector { get; set; }
+    }
+
     public class infohashBlock
     {
-        public downloadsField Hash { get; set; }
-        public downloadsField Title { get; set; }
+        public selectorField Hash { get; set; }
+        public selectorField Title { get; set; }
         public bool Before { get; set; } = false;
     }
 
     public class downloadBlock
     {
-        public List<downloadsField> Selectors { get; set; }
+        public List<selectorField> Selectors { get; set; }
         public string Method { get; set; }
-        public requestBlock Before { get; set; }
+        public beforeBlock Before { get; set; }
         public infohashBlock Infohash { get; set; }
     }
 
-    public class downloadsField
+    public class selectorField
     {
         public string Selector { get; set; }
         public string Attribute { get; set; }
