@@ -1,4 +1,4 @@
-﻿---
+---
 id: mircrew
 name: MIRCrew
 description: "MIRCrew is an ITALIAN Private Torrent Tracker for MOVIES / TV / MUSIC"
@@ -89,14 +89,12 @@ login:
     selector: a[href^="./ucp.php?mode=logout&sid="]
 
 download:
-  selectors:
-    # the first download path is actually the thankyou button link to enable the page refresh to present the magnet
-    # so basically I am deliberately causing an internal failed download so I can do a GET with the thankyou link
-    # I can't use the traditional BEFORE method because the post_id, to_id and from_id are not available from the .DownloadUri.Query.<variables>
-    # details link: https://mircrew-releases.org/viewtopic.php?f=52&t=28752&hilit=2021
+  before:
     # thankyou link: ./viewtopic.php?f=52&p=65417&thanks=65417&to_id=54&from_id=3950
-    - selector: a[id^="lnk_thanks_post"]
+    pathselector:
+      selector: a[id^="lnk_thanks_post"]
       attribute: href
+  selectors:
     - selector: a[href^="magnet:?xt="]
       attribute: href
 
