@@ -240,6 +240,9 @@ caps:
     - {id: 1664, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
     - {id: 1665, cat: Audio, desc: " |- Зарубежная поп-музыка (Vinyl)"}
     - {id: 1666, cat: Audio, desc: " |- Зарубежная рок-музыка (Vinyl)"}
+    - {id: 1667, cat: Audio, desc: " |- Джаз и блюз (Vinyl)"}
+    - {id: 1668, cat: Audio, desc: " |- Электронная музыка (Vinyl)"}
+    - {id: 1669, cat: Audio, desc: " |- Шансон, авторские, военные песни (Vinyl)"}
     # Программное обеспечение Software
     - {id: 105, cat: PC, desc: "Операционные системы"}
     - {id: 1663, cat: PC, desc: " |- Windows 11"}
