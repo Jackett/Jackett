@@ -1,22 +1,36 @@
 ---
-id: nbytez
-name: Nbytez
-description: "Nbytez is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: devils-playground
+name: Devils-Playground
+description: "Devils-Playground (Nbytez) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://devils-playground.org/
+legacylinks:
   - https://nbytez.me/
 
 caps:
   categorymappings:
+    - {id: 82, cat: PC, desc: "0day"}
+    - {id: 12, cat: PC, desc: "Anime"}
     - {id: 1, cat: PC, desc: "Apps"}
-    - {id: 8, cat: Books/EBook, desc: "Ebooks"}
-    - {id: 2, cat: PC/Games, desc: "Games"}
-    - {id: 3, cat: Movies, desc: "Movies"}
-    - {id: 4, cat: Audio, desc: "Music"}
-    - {id: 5, cat: TV, desc: "TV"}
-    - {id: 16, cat: TV, desc: "TV-Dutch"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 24, cat: Books/EBook, desc: "E-Books"}
+    - {id: 64, cat: PC/Games, desc: "Games"}
+    - {id: 30, cat: Movies/SD, desc: "Movies/Cam-TS"}
+    - {id: 31, cat: Movies, desc: "Movies/FooKaS RG"}
+    - {id: 70, cat: Movies/HD, desc: "Movies/HD-Blu-Ray"}
+    - {id: 84, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 71, cat: Movies/UHD, desc: "Movies/UHD-Blu-Ray"}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies/Web"}
+    - {id: 26, cat: Audio/Lossless, desc: "Music/FLAC"}
+    - {id: 10, cat: Audio/MP3, desc: "Music/MP3"}
+    - {id: 29, cat: Movies, desc: "Packs/Movies"}
+    - {id: 19, cat: Audio, desc: "Packs/MP3"}
+    - {id: 61, cat: TV, desc: "Packs/TV"}
+    - {id: 45, cat: TV/HD, desc: "TV/HD"}
+    - {id: 36, cat: TV/SD, desc: "TV/SD"}
 
   modes:
     search: [q]
@@ -76,7 +90,7 @@ login:
 
 search:
   paths:
-    # https://nbytez.me/browse.php?c5=1&c16=1&search=&searchin=title&incldead=1&only_free=1&sort=4&type=desc
+    # https://devils-playground.org/browse.php?c5=1&c16=1&search=&searchin=title&incldead=1&only_free=1&sort=4&type=desc
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

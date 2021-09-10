@@ -47,6 +47,7 @@ namespace Jackett.Common.Services
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"leaguehd", "lemonhd"},
             {"metaliplayro", "romanianmetaltorrents"},
+            {"nbytez", "devils-playground"},
             {"nnm-club", "noname-club"},
             {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
