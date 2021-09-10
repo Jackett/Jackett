@@ -113,7 +113,7 @@ search:
     download:
       selector: .meta a
       attribute: href
-    banner:
+    poster:
       selector: .imagen img
       attribute: data-src
     category_movie:
