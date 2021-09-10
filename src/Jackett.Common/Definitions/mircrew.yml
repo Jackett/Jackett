@@ -97,8 +97,6 @@ download:
   selectors:
     - selector: a[href^="magnet:?xt="]
       attribute: href
-      filters:
-        - name: trim
 
 search:
   paths:
