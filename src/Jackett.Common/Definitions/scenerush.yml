@@ -50,6 +50,7 @@ caps:
     - {id: 43, cat: Books, desc: "Ebook"}
     - {id: 44, cat: TV/Sport, desc: "Sports"}
     - {id: 46, cat: Movies/UHD, desc: "4K"}
+    - {id: 47, cat: TV/HD, desc: "TV X265"}
 
   modes:
     search: [q]
