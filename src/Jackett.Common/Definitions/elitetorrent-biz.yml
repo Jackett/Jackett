@@ -29,9 +29,9 @@ legacylinks:
 
 caps:
   categories:
-    "series": TV
-    "peliculas": Movies
-    "other": Other
+    series: TV
+    peliculas: Movies
+    other: Other
 
   modes:
     search: [q]
@@ -46,7 +46,7 @@ download:
       attribute: href
 
 search:
-  # site returns just 30 results, attempt to fetch upto 90
+  # site returns just 30 results, attempt to fetch up to 90
   paths:
     - path: /
     - path: /page/2/
@@ -69,6 +69,20 @@ search:
       - name: andmatch
 
   fields:
+    category_movie:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(peliculas)/.*$"
+    category_tv:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(series)/.*$"
+    category:
+      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
     quality:
       selector: span:nth-of-type(2) > i
       filters:
@@ -90,7 +104,7 @@ search:
           args: ["Subtitulado", " SPASUBS"]
         - name: replace
           args: ["VOSE", ""]
-    _title:
+    title:
       selector: div.imagen > a
       attribute: title
       # normalize to SXXEYY format
@@ -105,8 +119,8 @@ search:
           args: ["(\\d{2})×(\\d{2})", "S$1E$2"]
         - name: re_replace
           args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
-    title:
-      text: "{{ .Result._title}} {{ .Result.language }} {{ .Result.quality }}"
+        - name: append
+          args: " {{ .Result.quality }} {{ .Result.language }}"
     details:
       selector: .meta a
       attribute: href
@@ -116,29 +130,15 @@ search:
     poster:
       selector: .imagen img
       attribute: data-src
-    category_movie:
-      selector: .meta a
-      attribute: href
-      filters:
-        - name: regexp
-          args: "^.*/(peliculas)/.*$"
-    category_tv:
-      selector: .meta a
-      attribute: href
-      filters:
-        - name: regexp
-          args: "^.*/(series)/.*$"
-    category:
-      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
-    size:
-      text: "512 MB"
-    size:
-      # size can be missing
-      optional: true
+    _size:
       selector: .voto1
       filters:
+        - name: prepend
+          args: 0
         - name: replace
           args: ["s", ""]
+    size:
+      text: "{{ if eq .Result._size \"0\"}}512MB{{ else }}{{ .Result._size }}{{ end }}"
     date:
       text: now
     seeders:
