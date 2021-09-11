@@ -153,13 +153,20 @@ search:
     size:
       selector: div.list-inner div[style="float:right;"]
     seeders:
+      text: 0
+    seeders:
       selector: dd.posts span.my_tt.seed
       optional: true
+    leechers:
+      text: 0
     leechers:
       selector: dd.posts span.my_tt.leech
       optional: true
     grabs:
+      text: 0
+    grabs:
       selector: dd.views span.my_tt.complet
+      optional: true
     date:
       selector: div.left-box time
       filters:
