@@ -243,6 +243,7 @@ caps:
     - {id: 1667, cat: Audio, desc: " |- Джаз и блюз (Vinyl)"}
     - {id: 1668, cat: Audio, desc: " |- Электронная музыка (Vinyl)"}
     - {id: 1669, cat: Audio, desc: " |- Шансон, авторские, военные песни (Vinyl)"}
+    - {id: 1670, cat: Audio, desc: " |- Отечественная поп-музыка (Vinyl)"}
     # Программное обеспечение Software
     - {id: 105, cat: PC, desc: "Операционные системы"}
     - {id: 1663, cat: PC, desc: " |- Windows 11"}
