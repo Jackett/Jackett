@@ -44,6 +44,7 @@ namespace Jackett.Common.Services
             {"broadcastthenet", "broadcasthenet"},
             {"hdreactor", "hdhouse"},
             {"icetorrent", "speedapp"},
+            {"feedurneed", "devils-playground"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"leaguehd", "lemonhd"},
             {"metaliplayro", "romanianmetaltorrents"},
