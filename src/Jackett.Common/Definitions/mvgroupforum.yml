@@ -207,7 +207,7 @@ search:
       selector: td a.magnetlink
       attribute: href
     size:
-      text: "500 MB"
+      text: "512 MB"
     date:
       selector: td:nth-of-type(3)
       filters:
