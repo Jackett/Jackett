@@ -126,11 +126,14 @@ search:
     files:
       selector: td:nth-child(4)
       optional: true
-    size:
-      text: "256 MB"
-    size:
+    _size:
       selector: td:nth-child(5)
       optional: true
+      filters:
+        - name: prepend
+          args: 0
+    size:
+      text: "{{ if eq .Result._size \"0\"}}256MB{{ else }}{{ .Result._size }}{{ end }}"
     seeders:
       text: 1
     leechers:
