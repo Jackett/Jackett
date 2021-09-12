@@ -1415,7 +1415,7 @@ namespace Jackett.Common.Indexers
                                 try
                                 {
                                     value = handleSelector(Field.Value, Row, variables, !isOptional);
-                                    if (isOptional && value == null)
+                                    if (isOptional && string.IsNullOrWhiteSpace(value))
                                     {
                                         variables[variablesKey] = null;
                                         continue;
