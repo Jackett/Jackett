@@ -150,14 +150,11 @@ search:
     download:
       selector: a.topictitle
       attribute: href
-    _size:
+    size:
+      text: "1 GB"
+    size:
       selector: div.list-inner div[style="float:right;"]
       optional: true
-      filters:
-        - name: prepend
-          args: 0
-    size:
-      text: "{{ if eq .Result._size \"0\"}}1GB{{ else }}{{ .Result._size }}{{ end }}"
     seeders:
       text: 0
     seeders:

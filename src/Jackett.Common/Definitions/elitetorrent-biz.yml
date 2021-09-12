@@ -130,15 +130,14 @@ search:
     poster:
       selector: .imagen img
       attribute: data-src
-    _size:
+    size:
+      text: "512 MB"
+    size:
       selector: .voto1
+      optional: true
       filters:
-        - name: prepend
-          args: 0
         - name: replace
           args: ["s", ""]
-    size:
-      text: "{{ if eq .Result._size \"0\"}}512MB{{ else }}{{ .Result._size }}{{ end }}"
     date:
       text: now
     seeders:
