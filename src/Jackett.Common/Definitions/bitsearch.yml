@@ -91,6 +91,8 @@ search:
           args: [".", ""]
         - name: replace
           args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
     size:
       selector: div.stats div:has(img[alt="Size"])
     seeders:
@@ -100,6 +102,8 @@ search:
           args: [".", ""]
         - name: replace
           args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
     leechers:
       selector: div.stats div:has(img[alt="Leecher"])
       filters:
@@ -107,6 +111,8 @@ search:
           args: [".", ""]
         - name: replace
           args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
     date:
       selector: div.stats div:has(img[alt="Date"])
       filters:
