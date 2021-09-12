@@ -1727,6 +1727,14 @@ namespace Jackett.Common.Indexers
             return response;
         }
 
+        protected async Task<WebResult> HandleRedirectableRequestAsync(string url, Dictionary<string, string> headers = null)
+        {
+            var response = await RequestWithCookiesAsync(url, headers: headers);
+            if (response.IsRedirect)
+                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+            return response;
+        }
+
         protected IDictionary<string, object> AddTemplateVariablesFromUri(IDictionary<string, object> variables, Uri uri, string prefix = "")
         {
             variables[prefix + ".AbsoluteUri"] = uri.AbsoluteUri;
@@ -1764,9 +1772,7 @@ namespace Jackett.Common.Indexers
                 {
                     if (beforeBlock.Pathselector != null)
                     {
-                        response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
-                        if (response.IsRedirect)
-                            response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                        response = await HandleRedirectableRequestAsync(link.ToString(), headers);
 
                         var beforeSelector = applyGoTemplateText(beforeBlock.Pathselector.Selector, variables);
                         searchResultParser = new HtmlParser();
@@ -1811,9 +1817,7 @@ namespace Jackett.Common.Indexers
 
                         if (!Download.Infohash.Before || Download.Before == null || response == null)
                         {
-                            response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
-                            if (response.IsRedirect)
-                                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                            response = await HandleRedirectableRequestAsync(link.ToString(), headers);
                         }
                         results = response.ContentString;
                         var searchResultDocument = searchResultParser.ParseDocument(results);
@@ -1869,9 +1873,7 @@ namespace Jackett.Common.Indexers
                         try
                         {
 
-                            response = await RequestWithCookiesAsync(link.ToString(), headers: headers);
-                            if (response.IsRedirect)
-                                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                            response = await HandleRedirectableRequestAsync(link.ToString(), headers);
                             results = response.ContentString;
                             var searchResultDocument = searchResultParser.ParseDocument(results);
                             var downloadElement = searchResultDocument.QuerySelector(querySelector);
@@ -1902,10 +1904,7 @@ namespace Jackett.Common.Indexers
                             if (torrentLink.Scheme != "magnet")
                             {
                                 // Test link
-                                response = await base.RequestWithCookiesAsync(
-                                    torrentLink.ToString(), null, RequestType.GET, headers: headers);
-                                if (response.IsRedirect)
-                                    await FollowIfRedirect(response);
+                                response = await HandleRedirectableRequestAsync(link.ToString(), headers);
                                 var content = response.ContentBytes;
                                 if (content.Length >= 1 && content[0] != 'd')
                                 {
