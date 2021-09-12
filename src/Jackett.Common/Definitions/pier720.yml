@@ -151,7 +151,10 @@ search:
       selector: a.topictitle
       attribute: href
     size:
+      text: "1 GB"
+    size:
       selector: div.list-inner div[style="float:right;"]
+      optional: true
     seeders:
       text: 0
     seeders:
