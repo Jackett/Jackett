@@ -1753,6 +1753,41 @@ namespace Jackett.Common.Indexers
             return variables;
         }
 
+        protected string MatchSelector(WebResult response, selectorField selector, Dictionary<string, object> variables, bool debugMatch = false)
+        {
+            var selectorText = applyGoTemplateText(selector.Selector, variables);
+            var parser = new HtmlParser();
+
+            var results = response.ContentString;
+            var resultDocument = parser.ParseDocument(results);
+
+            var element = resultDocument.QuerySelector(selectorText);
+            if (element == null)
+            {
+                logger.Debug(
+                    $"CardigannIndexer ({Id}): Selector {selectorText} could not match any elements.");
+                return null;
+            }
+
+            if (debugMatch)
+                logger.Debug(
+                    $"CardigannIndexer ({Id}): Download selector {selector} matched:{element.ToHtmlPretty()}");
+
+            string val;
+            if (selector.Attribute != null)
+            {
+                val = element.GetAttribute(selector.Attribute);
+                if (val == null)
+                    throw new Exception(
+                        $"Attribute \"{selector.Attribute}\" is not set for element {element.ToHtmlPretty()}");
+            }
+            else
+                val = element.TextContent;
+
+            val = applyFilters(val, selector.Filters, variables);
+            return val;
+        }
+
         public override async Task<byte[]> Download(Uri link)
         {
             var method = RequestType.GET;
@@ -1764,8 +1799,6 @@ namespace Jackett.Common.Indexers
 
                 var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
                 WebResult response = null;
-                HtmlParser searchResultParser = null;
-                string results = string.Empty;
 
                 var beforeBlock = Download.Before;
                 if (beforeBlock != null)
@@ -1773,28 +1806,7 @@ namespace Jackett.Common.Indexers
                     if (beforeBlock.Pathselector != null)
                     {
                         response = await HandleRedirectableRequestAsync(link.ToString(), headers);
-
-                        var beforeSelector = applyGoTemplateText(beforeBlock.Pathselector.Selector, variables);
-                        searchResultParser = new HtmlParser();
-
-                        results = response.ContentString;
-                        var searchResultDocument = searchResultParser.ParseDocument(results);
-
-                        var beforeElement = searchResultDocument.QuerySelector(beforeSelector);
-                        if (beforeElement == null)
-                        {
-                            logger.Debug(
-                                $"CardigannIndexer ({Id}): Before path selector {beforeSelector} could not match any elements.");
-                            throw new Exception($"Before selectors didn't match");
-                        }
-
-                        string path;
-                        if (beforeBlock.Pathselector.Attribute != null)
-                            path = beforeElement.GetAttribute(beforeBlock.Pathselector.Attribute);
-                        else
-                            path = beforeElement.TextContent;
-                        path = applyFilters(path, beforeBlock.Pathselector.Filters, variables);
-                        beforeBlock.Path = path;
+                        beforeBlock.Path = MatchSelector(response, beforeBlock.Pathselector, variables);
                     }
 
                     response = await handleRequest(beforeBlock, variables, link.ToString());
@@ -1804,50 +1816,20 @@ namespace Jackett.Common.Indexers
                     method = RequestType.POST;
                 if (Download.Infohash != null)
                 {
-                    var hashBlock = Download.Infohash.Hash;
-                    var hashSelector = applyGoTemplateText(hashBlock.Selector, variables);
-                    var titleBlock = Download.Infohash.Title;
-                    var titleSelector = applyGoTemplateText(titleBlock.Selector, variables);
-
                     try
                     {
                         headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
-                        results = "";
-                        searchResultParser = new HtmlParser();
 
                         if (!Download.Infohash.Before || Download.Before == null || response == null)
-                        {
                             response = await HandleRedirectableRequestAsync(link.ToString(), headers);
-                        }
-                        results = response.ContentString;
-                        var searchResultDocument = searchResultParser.ParseDocument(results);
-                        var hashElement = searchResultDocument.QuerySelector(hashSelector);
-                        if (hashElement == null)
-                        {
-                            logger.Debug(
-                                $"CardigannIndexer ({Id}): Hash selector {hashSelector} could not match any elements.");
-                            throw new Exception($"InfoHash selectors didn't match");
-                        }
-                        var hash = string.Empty;
-                        if (hashBlock.Attribute != null)
-                            hash = hashElement.GetAttribute(hashBlock.Attribute);
-                        else
-                            hash = hashElement.TextContent;
-                        hash = applyFilters(hash, hashBlock.Filters, variables);
 
-                        var titleElement = searchResultDocument.QuerySelector(titleSelector);
-                        if (titleElement == null)
-                        {
-                            logger.Debug(
-                                $"CardigannIndexer ({Id}): Title selector {titleSelector} could not match any elements.");
+                        var hash = MatchSelector(response, Download.Infohash.Hash, variables);
+                        if (hash == null)
                             throw new Exception($"InfoHash selectors didn't match");
-                        }
-                        var title = string.Empty;
-                        if (titleBlock.Attribute != null)
-                            title = titleElement.GetAttribute(titleBlock.Attribute);
-                        else
-                            title = titleElement.TextContent;
-                        title = applyFilters(title, titleBlock.Filters, variables);
+
+                        var title = MatchSelector(response, Download.Infohash.Title, variables);
+                        if (title == null)
+                            throw new Exception($"InfoHash selectors didn't match");
 
                         var magnet = MagnetUtil.InfoHashToPublicMagnet(hash, title);
                         var torrentLink = resolvePath(magnet.AbsoluteUri, link);
@@ -1856,7 +1838,7 @@ namespace Jackett.Common.Indexers
                     catch (Exception e)
                     {
                         logger.Error(e,
-                            $"CardigannIndexer ({Id}): An exception occurred while trying infohash block with hashSelector {hashSelector} and titleSelector {titleSelector}"
+                            $"CardigannIndexer ({Id}): An exception occurred while trying Infohash block with hashSelector {Download.Infohash.Hash.Selector} and titleSelector {Download.Infohash.Title.Selector}"
                             );
                     }
 
@@ -1864,8 +1846,6 @@ namespace Jackett.Common.Indexers
                 else if (Download.Selectors != null)
                 {
                     headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
-                    results = "";
-                    searchResultParser = new HtmlParser();
 
                     foreach (var selector in Download.Selectors)
                     {
@@ -1874,32 +1854,10 @@ namespace Jackett.Common.Indexers
                         {
 
                             response = await HandleRedirectableRequestAsync(link.ToString(), headers);
-                            results = response.ContentString;
-                            var searchResultDocument = searchResultParser.ParseDocument(results);
-                            var downloadElement = searchResultDocument.QuerySelector(querySelector);
-                            if (downloadElement == null)
-                            {
-                                logger.Debug(
-                                    $"CardigannIndexer ({Id}): Download selector {querySelector} could not match any elements, retrying with next available selector.");
+                            var href = MatchSelector(response, selector, variables, debugMatch: true);
+                            if (href == null)
                                 continue;
-                            }
 
-                            logger.Debug(
-                                $"CardigannIndexer ({Id}): Download selector {querySelector} matched:{downloadElement.ToHtmlPretty()}");
-                            var href = "";
-                            if (selector.Attribute != null)
-                            {
-                                href = downloadElement.GetAttribute(selector.Attribute);
-                                if (href == null)
-                                    throw new Exception(
-                                        $"Attribute \"{selector.Attribute}\" is not set for element {downloadElement.ToHtmlPretty()}");
-                            }
-                            else
-                            {
-                                href = downloadElement.TextContent;
-                            }
-
-                            href = applyFilters(href, selector.Filters, variables);
                             var torrentLink = resolvePath(href, link);
                             if (torrentLink.Scheme != "magnet")
                             {
@@ -1926,7 +1884,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     logger.Error(
-                        $"CardigannIndexer ({Id}): Download selectors didn't match:\n{results}");
+                        $"CardigannIndexer ({Id}): Download selectors didn't match:\n{response.ContentString}");
                     throw new Exception($"Download selectors didn't match");
                 }
             }
