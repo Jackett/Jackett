@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Comedy"}
     - {id: 4, cat: Movies, desc: "Action"}
+    - {id: 5, cat: Movies, desc: "Horror"}
     - {id: 6, cat: Movies, desc: "Drama"}
     - {id: 7, cat: Movies, desc: "Documentary"}
     - {id: 9, cat: Movies, desc: "Crime"}
