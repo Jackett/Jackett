@@ -1862,7 +1862,7 @@ namespace Jackett.Common.Indexers
                             if (torrentLink.Scheme != "magnet")
                             {
                                 // Test link
-                                response = await HandleRedirectableRequestAsync(link.ToString(), headers);
+                                response = await HandleRedirectableRequestAsync(torrentLink.ToString(), headers);
                                 var content = response.ContentBytes;
                                 if (content.Length >= 1 && content[0] != 'd')
                                 {
