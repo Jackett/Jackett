@@ -95,6 +95,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("audio", TorznabCatType.Audio);
             AddCategoryMapping("etree", TorznabCatType.Audio);
             AddCategoryMapping("movies", TorznabCatType.Movies);
+            AddCategoryMapping("movies", TorznabCatType.TV);
             AddCategoryMapping("image", TorznabCatType.OtherMisc);
             AddCategoryMapping("texts", TorznabCatType.Books);
             AddCategoryMapping("software", TorznabCatType.PC);
