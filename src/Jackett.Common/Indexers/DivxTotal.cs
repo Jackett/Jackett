@@ -44,8 +44,8 @@ namespace Jackett.Common.Indexers
         {
             public static long Peliculas => 2147483648; // 2 GB
             public static long PeliculasDvdr => 5368709120; // 5 GB
-            public static long Series => 524288000; // 500 MB
-            public static long Otros => 524288000; // 500 MB
+            public static long Series => 536870912; // 512 MB
+            public static long Otros => 536870912; // 512 MB
         }
 
         public override string[] LegacySiteLinks { get; protected set; } = {
