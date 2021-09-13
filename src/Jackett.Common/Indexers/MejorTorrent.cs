@@ -333,9 +333,9 @@ namespace Jackett.Common.Indexers
                     continue;
 
                 // guess size
-                var size = 524288000L; // 500 MB
+                var size = 536870912L; // 512 MB
                 if (episodeTitle.ToLower().Contains("720p"))
-                    size = 1288490188L; // 1.2 GB
+                    size = 1073741824L; // 1 GB
 
                 var release = GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, episodePublish, size);
                 releases.Add(release);
