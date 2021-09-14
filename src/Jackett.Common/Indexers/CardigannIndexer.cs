@@ -1859,7 +1859,7 @@ namespace Jackett.Common.Indexers
                                 continue;
 
                             var torrentLink = resolvePath(href, link);
-                            if (torrentLink.Scheme != "magnet")
+                            if (torrentLink.Scheme != "magnet" && Definition.Testlinktorrent)
                             {
                                 // Test link
                                 response = await HandleRedirectableRequestAsync(torrentLink.ToString(), headers);
