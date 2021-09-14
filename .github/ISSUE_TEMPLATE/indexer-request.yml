@@ -13,7 +13,7 @@ body:
   attributes:
     label: Tracker details
     description: Please provide the details of your tracker.
-    Placeholder: |
+    placeholder: |
       - Name: TrackerX
       - URL: https://trackerx.yz
       - Description: TrackerX is a Private Torrent Tracker for Movies, TV, and e-Learning
