@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # dont forget to amend the category case block in the search fields section below.
     # Kino
     - {id: 118, cat: Movies/HD, desc: "Kino - HD"}
     - {id: 141, cat: Movies/UHD, desc: "Kino - UHD"}
@@ -152,7 +153,7 @@ search:
         # Appz
         ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Windows\"))": 30
         ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Android\"))": 106
-        ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": 138
+        ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 138
         # Sport
         ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 43
         ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 50
