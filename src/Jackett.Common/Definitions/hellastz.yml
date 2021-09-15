@@ -5,6 +5,7 @@ description: "HellasTZ is an Greek Private site for TV / MOVIES / GENERAL"
 language: el-GR
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://hellastz.com/
 certificates:

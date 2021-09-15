@@ -5,6 +5,7 @@ description: "Anime-Free is a RUSSIAN Semi-Private Torrent Tracker for Hentai ma
 language: ru-RU
 type: semi-private
 encoding: windows-1251
+testlinktorrent: false
 links:
   - https://anime-free.biz/
 legacylinks:
