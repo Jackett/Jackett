@@ -129,6 +129,7 @@ settings:
 login:
   path: login.php?returnto=
   method: form
+  form: form[action="takelogin.php"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
@@ -137,7 +138,8 @@ login:
     passid: "{{ .Config.passid }}"
     passan: "{{ .Config.passan }}"
   error:
-    - selector: form#loginform > span.warning
+    - selector: td.embedded:has(h2:contains("！")) # Chinese, Japanese
+    - selector: td.embedded:has(h2:contains("!")) # English, Korean
   test:
     path: my.php
 
