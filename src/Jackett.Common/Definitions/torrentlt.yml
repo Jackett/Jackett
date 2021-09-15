@@ -137,6 +137,8 @@ search:
   keywordsfilters:
     - name: replace
       args: [".", " "] # issue #3296
+    - name: re_replace
+      args: ["[^\\w\\d\\(\\)]+", "%"]
 
   rows:
     selector: table> tbody > tr[class^="torrents-table__"]
