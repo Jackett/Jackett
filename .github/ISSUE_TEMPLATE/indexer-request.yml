@@ -9,6 +9,17 @@ body:
     options:
       - label: I have checked older issues, open and closed
         required: true
+- type: dropdown
+  id: type
+  attributes:
+    label: Type
+    description: Select which type of Web Site this is
+    options:
+    - Public
+    - Semi-Private
+    - Private
+  validations:
+    required: true
 - type: textarea
   attributes:
     label: Tracker details
@@ -18,14 +29,12 @@ body:
       - Name: TrackerX
       - URL: https://trackerx.yz
       - Description: TrackerX is a Private Torrent Tracker for Movies, TV, and e-Learning
-      - Public, Semi-private, or Private: Private
       - Minimum Seeding Time and Minimum Ratio (if Private): MST 24hrs, MR 1.0
       - Additional Comments: IMDB search has to be enabled in account settings, often has hcaptcha at login
     value: |
       - Name:
       - URL:
       - Description:
-      - Public, Semi-private, or Private:
       - Minimum Seeding Time and Minimum Ratio (if Private):
       - Additional Comments:
     render: markdown
