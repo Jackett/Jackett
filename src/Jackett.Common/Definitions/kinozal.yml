@@ -121,11 +121,12 @@ download:
       selector: li:first-child
       filters:
         - name: regexp
-          args: ([A-F|0-9]{40})
+          args: ([A-F|a-f|0-9]{40})
     title:
       selector: div.b
       filters:
         - name: trim
+        - name: validfilename
 
 search:
   paths:
