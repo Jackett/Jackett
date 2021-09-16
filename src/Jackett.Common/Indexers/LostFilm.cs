@@ -811,8 +811,9 @@ namespace Jackett.Common.Indexers
 
         private DateTime DateFromEpisodeColumn(IElement dateColumn)
         {
-            var dateString = dateColumn.QuerySelector("span").TextContent;
-            dateString = dateString.Substring(dateString.IndexOf(":") + 2); // 'Eng: 23.05.2017' -> '23.05.2017'
+            var dateString = dateColumn.QuerySelector("span.small-text")?.TextContent;
+            // 'Eng: 23.05.2017' -> '23.05.2017' OR '23.05.2017' -> '23.05.2017'
+            dateString = (string.IsNullOrEmpty(dateString)) ? dateColumn.QuerySelector("span")?.TextContent : dateString.Substring(dateString.IndexOf(":") + 2);
             var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
             return date;
         }
