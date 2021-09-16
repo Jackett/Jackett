@@ -1727,11 +1727,16 @@ namespace Jackett.Common.Indexers
             return response;
         }
 
-        protected async Task<WebResult> HandleRedirectableRequestAsync(string url, Dictionary<string, string> headers = null)
+        protected async Task<WebResult> HandleRedirectableRequestAsync(string url, Dictionary<string, string> headers = null, int maxRedirects = 5)
         {
             var response = await RequestWithCookiesAsync(url, headers: headers);
-            if (response.IsRedirect)
-                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+            for (var i = 0; i < maxRedirects; i++)
+            {
+                if (response.IsRedirect)
+                    response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
+                else
+                    break;
+            }
             return response;
         }
 
