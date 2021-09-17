@@ -82,6 +82,8 @@ download:
   selectors:
     - selector: a[href^="download.php?id="]
       attribute: href
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   # https://dxp.ru/torrents.php?search=&sort=4&type=desc
