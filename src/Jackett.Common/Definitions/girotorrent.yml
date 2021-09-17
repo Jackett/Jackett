@@ -5,6 +5,7 @@ description: "Girotorrent is an ITALIAN Private site for TV / MOVIES / GENERAL"
 language: it-IT
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://girotorrent.org/
 legacylinks:

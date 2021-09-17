@@ -57,9 +57,22 @@ settings:
       asc: asc
 
 download:
+  # the magnet URI on this site exceeds 2048 bytes which some interfaces will reject. So we use the infohash and build our own.
   selectors:
-    - selector: a[href^="magnet:?xt"]
+  infohash:
+    hash:
+      selector: a[href^="magnet:?xt"]
       attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "&dn=(.+?)$"
+        - name: validfilename
 
 search:
   paths:

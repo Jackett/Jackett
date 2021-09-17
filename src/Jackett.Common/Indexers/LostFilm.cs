@@ -463,7 +463,8 @@ namespace Jackett.Common.Indexers
                     var details = new Uri(url);
 
                     var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
-                    dateString = TrimString(dateString, "eng: ", " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
+                    var key = (dateString.Contains("TBA")) ? "ru: " : "eng: ";
+                    dateString = TrimString(dateString, key, " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
                     DateTime date;
                     if (dateString.Length == 4) //dateString might be just a year, e.g. https://www.lostfilm.tv/series/Ghosted/season_1/episode_14/
                     {
@@ -810,8 +811,9 @@ namespace Jackett.Common.Indexers
 
         private DateTime DateFromEpisodeColumn(IElement dateColumn)
         {
-            var dateString = dateColumn.QuerySelector("span").TextContent;
-            dateString = dateString.Substring(dateString.IndexOf(":") + 2); // 'Eng: 23.05.2017' -> '23.05.2017'
+            var dateString = dateColumn.QuerySelector("span.small-text")?.TextContent;
+            // 'Eng: 23.05.2017' -> '23.05.2017' OR '23.05.2017' -> '23.05.2017'
+            dateString = (string.IsNullOrEmpty(dateString)) ? dateColumn.QuerySelector("span")?.TextContent : dateString.Substring(dateString.IndexOf(":") + 2);
             var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
             return date;
         }

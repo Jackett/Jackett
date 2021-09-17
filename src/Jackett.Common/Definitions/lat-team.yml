@@ -1,27 +1,22 @@
 ---
-id: animeworld
-name: AnimeWorld
-description: "AnimeWorld (AW) is a GERMAN Private site for ANIME / MANGA / HENTAI"
-language: de-DE
+id: lat-team
+name: Lat-Team
+description: "Lat-Team is a SPANISH Private Torrent Tracker for MOVIES / TV"
+language: es-ES
 type: private
 encoding: UTF-8
 links:
-  - https://animeworld.cx/
+  - https://lat-team.com/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies/Other, desc: "Anime Movie"}
-    - {id: 2, cat: TV/Anime, desc: "Anime Serie"}
-    - {id: 3, cat: Audio, desc: "Anime Musik/OST"}
-    - {id: 4, cat: PC/Games, desc: "Anime Spiele"}
-    - {id: 5, cat: XXX, desc: "Hentai"}
-    - {id: 6, cat: PC, desc: "Spiele Linux"}
-    - {id: 7, cat: Other, desc: "Sonstiges"}
-    - {id: 8, cat: Movies, desc: "Filme"}
-    - {id: 9, cat: TV, desc: "Serien"}
-    - {id: 10, cat: PC/Games, desc: "Spiele"}
-    - {id: 11, cat: Audio, desc: "Musik"}
-    - {id: 12, cat: Books, desc: "Mangas"}
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 6, cat: Movies/Other, desc: "Retro Pelicula"}
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
+    - {id: 2, cat: TV, desc: "TV Series"}
+    - {id: 7, cat: TV/Other, desc: "Retro Serie TV"}
+    - {id: 8, cat: TV/Foreign, desc: "Telenovelas y Teleseries"}
+    - {id: 3, cat: Audio, desc: "Musica"}
 
   modes:
     search: [q]
@@ -92,11 +87,16 @@ search:
     malId: ""
     startYear: ""
     endYear: ""
+    playlistId: ""
+    collectionId: ""
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
     page: 1
     free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["(?i)\\bS(\\d+)", "T$1"]
 
   rows:
     selector: table > tbody > tr
@@ -109,7 +109,29 @@ search:
         - name: regexp
           args: "/categories/(\\d+)"
     title:
-      selector: a.view-torrent
+      selector: a.view-torrent:contains("VOSE")
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
+        - name: re_replace
+          args: ["(?i)\\bT(\\d+)", "S$1"]
+        - name: re_replace
+          args: ["UHDRip", "BDRip"] # Fix for Radarr
+        - name: append
+          args: " ENGLiSH"
+    title:
+      selector: a.view-torrent:not(:contains("VOSE"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
+        - name: re_replace
+          args: ["(?i)\\bT(\\d+)", "S$1"]
+        - name: re_replace
+          args: ["UHDRip", "BDRip"] # Fix for Radarr
+        - name: append
+          args: " SPANiSH"
     download:
       selector: a[href*="/download/"]
       attribute: href
@@ -187,7 +209,9 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
+    minimumratio:
+      text: 1.0
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # UNIT3D 5.3.0

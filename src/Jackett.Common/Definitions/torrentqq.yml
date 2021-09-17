@@ -70,11 +70,12 @@ download:
       selector: table.table-bordered > tbody > tr > td > ul > li
       filters:
         - name: regexp
-          args: ([a-f|0-9]{40})
+          args: ([A-F|a-f|0-9]{40})
     title:
       selector: table.table-bordered > thead > tr > th > strong
       filters:
         - name: trim
+        - name: validfilename
 
 search:
   paths:
