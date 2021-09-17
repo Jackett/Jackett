@@ -10,7 +10,7 @@ cd /d "%~dp0"
 >nul 2>&1 tasklist | find /i "JackettUpdater.exe" || (
     echo JackettUpdater is still running
     >nul ping -n 2 127.0.0.1
-    goto :LOOP
+    goto LOOP
 )
 
 :: Start Jackett Tray
