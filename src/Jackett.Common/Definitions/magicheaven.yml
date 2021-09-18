@@ -18,42 +18,38 @@ caps:
     - {id: 176, cat: Movies/BluRay, desc: "BLU-RAY 720p"}
     - {id: 156, cat: Movies/BluRay, desc: "BLU-RAY H264"}
     - {id: 153, cat: Movies/BluRay, desc: "BLU-RAY X264"}
-    - {id: 36, cat: Movies/SD, desc: "CAMS"}
-    - {id: 161, cat: Movies/Other, desc: "Christmas Movies"}
-    - {id: 164, cat: Movies/Other, desc: "Christmas Music"}
-    - {id: 160, cat: Movies/Other, desc: "Classic Movies"}
-    - {id: 169, cat: Console, desc: "Console Games"}
-    - {id: 178, cat: PC/Games, desc: "PC GAMES"}
-    - {id: 175, cat: Console/XBox, desc: "Console Games XBOX"}
-    - {id: 82, cat: Audio/Other, desc: "DJ MUSIC"}
-    - {id: 84, cat: Audio/Other, desc: "DJ MUSIC DMC"}
-    - {id: 102, cat: Audio/Other, desc: "DJ MUSIC Full Tilt Remix"}
-    - {id: 92, cat: Audio/Other, desc: "DJ MUSIC Funkymix"}
-    - {id: 83, cat: Audio/Other, desc: "DJ MUSIC MASTERMIX"}
-    - {id: 93, cat: Audio/Other, desc: "DJ MUSIC Ultimix"}
-    - {id: 90, cat: Audio/Other, desc: " DJ MUSIC X-mix"}
+    - {id: 36, cat: Movies/SD, desc: "Cams"}
+    - {id: 180, cat: Movies/Other, desc: "Christmas"}
+    - {id: 181, cat: Movies/Other, desc: "Christmas Movies"}
+    - {id: 182, cat: Audio/Other, desc: "Christmas Music"}
+    - {id: 82, cat: Audio/Other, desc: "DJ Music"}
+    - {id: 84, cat: Audio/Other, desc: "DJ Music DMC"}
+    - {id: 92, cat: Audio/Other, desc: "DJ Music Funkymix"}
+    - {id: 83, cat: Audio/Other, desc: "DJ Music MASTERMIX"}
+    - {id: 93, cat: Audio/Other, desc: "DJ Music Ultimix"}
     - {id: 3, cat: Movies/DVD, desc: "DVD-R"}
     - {id: 11, cat: Books/EBook, desc: "E BOOKS"}
     - {id: 114, cat: Audio/Audiobook, desc: "E BOOKS Audio Books"}
     - {id: 86, cat: Books/Mags, desc: "E BOOKS Magazines"}
+    - {id: 169, cat: Console, desc: "Games"}
+    - {id: 178, cat: PC/Games, desc: "Games PC GAMES"}
+    - {id: 175, cat: Console/XBox, desc: "Games XBOX"}
     - {id: 167, cat: Audio/Other, desc: "KARAOKE"}
     - {id: 14, cat: Movies/Other, desc: "MKV's"}
     - {id: 13, cat: Audio/MP3, desc: "MP3 RELEASES"}
-    - {id: 17, cat: Movies/Other, desc: "MP4"}
     - {id: 18, cat: Movies/Other, desc: "MULTI'S"}
     - {id: 98, cat: Movies/Other, desc: "MULTI'S Movie Box Sets"}
-    - {id: 20, cat: Audio/MP3, desc: "MUSIC - MP3"}
-    - {id: 170, cat: Audio, desc: "MUSIC Artist Albums"}
+    - {id: 183, cat: Audio/Lossless, desc: "MUSIC FLAC"}
+    - {id: 20, cat: Audio/MP3, desc: "MUSIC MP3"}
     - {id: 150, cat: Audio, desc: "MUSIC Collections"}
     - {id: 96, cat: Audio, desc: "MUSIC Discographys"}
-    - {id: 97, cat: Audio/Lossless, desc: "MUSIC Flac"}
     - {id: 177, cat: Audio, desc: "MUSIC Rock / Metal"}
     - {id: 171, cat: Audio/Video, desc: "Music-Videos"}
     - {id: 81, cat: Movies, desc: "RatioBoosters"}
-    - {id: 26, cat: TV/Sport, desc: "SPORT"}
+    - {id: 26, cat: TV/Sport, desc: "Sport"}
     - {id: 7, cat: Audio, desc: "Top 40 Albums/Singles"}
-    - {id: 9, cat: TV, desc: "TV EPISODES"}
-    - {id: 38, cat: TV, desc: "TV SERIES"}
+    - {id: 9, cat: TV, desc: "TV Episodes"}
+    - {id: 38, cat: TV, desc: "TV Series"}
     - {id: 30, cat: Other, desc: "VIP"}
     - {id: 158, cat: Other, desc: "VIP GOLD"}
     - {id: 173, cat: Movies/WEB-DL, desc: "Web-dl"}
