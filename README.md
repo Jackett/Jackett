@@ -596,7 +596,7 @@ Filter | Condition
 `tag:<tag>` | where the indexer tags contains `<tag>`
 `lang:<tag>` | where the indexer language start with `<lang>`
 `test:{passed\|failed}` | where the last indexer test performed `passed` or `failed`
-`status:{healthy\|failing\|unknown}` | where the indexer state is `healthy` (succesfully operates in the last minutes), `failing` (generates errors in the recent call) or `unknown` (unused for a while)
+`status:{healthy\|failing\|unknown}` | where the indexer state is `healthy` (successfully operates in the last minutes), `failing` (generates errors in the recent call) or `unknown` (unused for a while)
 
 Supported operators
 Operator | Condition
