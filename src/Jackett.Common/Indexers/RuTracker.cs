@@ -1529,6 +1529,9 @@ namespace Jackett.Common.Indexers
                     // extract season and episodes
                     var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\][\\s]?(.*)");
 
+                    //replace double 4K quality in title
+                    release.Title = release.Title.Replace(", 4K]", "]");
+
                     var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
                     title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
                     title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
