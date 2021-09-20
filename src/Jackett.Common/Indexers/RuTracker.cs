@@ -194,6 +194,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(173, TorznabCatType.TVForeign, "|- Черное зеркало / Black Mirror");
             AddCategoryMapping(195, TorznabCatType.TVForeign, "|- Для некондиционных раздач");
             AddCategoryMapping(2366, TorznabCatType.TVHD, "Зарубежные сериалы (HD Video)");
+            AddCategoryMapping(119, TorznabCatType.TVUHD, "|- Зарубежные сериалы (UHD Video)");
             AddCategoryMapping(1803, TorznabCatType.TVHD, "|- Новинки и сериалы в стадии показа (HD Video)");
             AddCategoryMapping(266, TorznabCatType.TVHD, "|- Сериалы США и Канады (HD Video)");
             AddCategoryMapping(193, TorznabCatType.TVHD, "|- Сериалы Великобритании и Ирландии (HD Video)");
@@ -1528,6 +1529,9 @@ namespace Jackett.Common.Indexers
                 {
                     // extract season and episodes
                     var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\][\\s]?(.*)");
+
+                    //replace double 4K quality in title
+                    release.Title = release.Title.Replace(", 4K]", "]");
 
                     var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
                     title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
