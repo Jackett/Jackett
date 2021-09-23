@@ -1,7 +1,7 @@
 ---
 id: renegade
 name: Renegade
-description: "Renegade  is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Renegade is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: hu-HU
 type: private
 encoding: ISO-8859-2
@@ -74,7 +74,7 @@ search:
   paths:
     # https://renegade-tracker.com/letoltes.php?search=&incldead=1&cat=36
     - path: letoltes.php
-      categories: ["!",  39, 49]
+      categories: ["!", 39, 49]
     - path: xxx.php
       categories: [39, 49]
   keywordsfilters:
@@ -145,31 +145,31 @@ search:
       selector: div#bro_browse_details
       remove: a
       case:
-         ":contains(\"DVD/Eng\")": 26
-         ":contains(\"DVD/Hun\")": 25
-         ":contains(\"XviD/Eng\")": 38
-         ":contains(\"XviD/Hun\")": 24
-         ":contains(\"HD/Eng\")": 50
-         ":contains(\"HD/Hun\")": 42
-         ":contains(\"Játék/ISO\")": 28
-         ":contains(\"Játék/Rip\")": 30
-         ":contains(\"Képek\")": 31
-         ":contains(\"Klip\")": 43
-         ":contains(\"Könyv/Eng\")": 33
-         ":contains(\"Könyv/Hun\")": 44
-         ":contains(\"Konzol\")": 32
-         ":contains(\"Lossless/Eng\")": 53
-         ":contains(\"Lossless/Hun\")": 52
-         ":contains(\"Mese/Eng\")": 51
-         ":contains(\"Mese/Hun\")": 45
-         ":contains(\"Mobil\")": 34
-         ":contains(\"Mp3/Eng\")": 40
-         ":contains(\"Mp3/Hun\")": 41
-         ":contains(\"Program\")": 35
-         ":contains(\"Sorozat/Eng\")": 47
-         ":contains(\"Sorozat/Hun\")": 36
-         ":contains(\"XXX/Film\")": 39
-         ":contains(\"XXX/Kép\")": 49
+        ":contains(\"DVD/Eng\")": 26
+        ":contains(\"DVD/Hun\")": 25
+        ":contains(\"XviD/Eng\")": 38
+        ":contains(\"XviD/Hun\")": 24
+        ":contains(\"HD/Eng\")": 50
+        ":contains(\"HD/Hun\")": 42
+        ":contains(\"Játék/ISO\")": 28
+        ":contains(\"Játék/Rip\")": 30
+        ":contains(\"Képek\")": 31
+        ":contains(\"Klip\")": 43
+        ":contains(\"Könyv/Eng\")": 33
+        ":contains(\"Könyv/Hun\")": 44
+        ":contains(\"Konzol\")": 32
+        ":contains(\"Lossless/Eng\")": 53
+        ":contains(\"Lossless/Hun\")": 52
+        ":contains(\"Mese/Eng\")": 51
+        ":contains(\"Mese/Hun\")": 45
+        ":contains(\"Mobil\")": 34
+        ":contains(\"Mp3/Eng\")": 40
+        ":contains(\"Mp3/Hun\")": 41
+        ":contains(\"Program\")": 35
+        ":contains(\"Sorozat/Eng\")": 47
+        ":contains(\"Sorozat/Hun\")": 36
+        ":contains(\"XXX/Film\")": 39
+        ":contains(\"XXX/Kép\")": 49
     minimumratio:
       text: 0.7
     minimumseedtime:
