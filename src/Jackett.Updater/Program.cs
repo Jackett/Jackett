@@ -275,6 +275,7 @@ namespace Jackett.Updater
                 "Definitions/bithq.yml",
                 "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
+                "Definitions/bit-titan.yml", // migrated to C# #10281
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
                 "Definitions/brobits.yml",
