@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
-            Language = "de-de";
+            Language = "de-DE";
             Type = "private";
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
