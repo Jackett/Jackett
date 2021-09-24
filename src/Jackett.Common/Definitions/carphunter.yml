@@ -167,6 +167,7 @@ search:
     uploadvolumefactor:
       case:
         font:contains("x2"): 2
+        font:contains("x4"): 4
         "*": 1
     minimumratio:
       text: 1.0
