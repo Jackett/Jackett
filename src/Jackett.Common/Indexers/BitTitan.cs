@@ -60,6 +60,7 @@ namespace Jackett.Common.Indexers
             Language = "de-DE";
             Type = "private";
 
+            configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Find or Generate a new key <a href=\"https://bit-titan.net/api_cp.php\" target =_blank>here</a>."));
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
             // Configure the category mappings
@@ -176,6 +177,8 @@ namespace Jackett.Common.Indexers
             searchUrl += "&search=" + query.SanitizedSearchTerm;
 
             searchUrl += "&downloadLink=1";
+
+            searchUrl += "&limit=4";
 
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
                 searchUrl += "&searchIn=9";
