@@ -16,21 +16,23 @@ caps:
     - {id: 141, cat: Movies/UHD, desc: "Kino - UHD"}
     - {id: 4, cat: Movies/SD, desc: "Kino - SD"}
     # Movies
-    - {id: 139, cat: Movies/3D, desc: "Movies - 3D"}
     - {id: 19, cat: Movies/HD, desc: "Movies - HD"}
-    - {id: 18, cat: Movies/SD, desc: "Movies - SD"}
     - {id: 26, cat: Movies/UHD, desc: "Movies - UHD"}
+    - {id: 18, cat: Movies/SD, desc: "Movies - SD"}
+    - {id: 139, cat: Movies/3D, desc: "Movies - 3D"}
     - {id: 2, cat: Movies, desc: "Movies - Pack SD/HD"}
     # Serien
     - {id: 41, cat: TV/HD, desc: "Serien - HD"}
-    - {id: 40, cat: TV/SD, desc: "Serien - SD"}
     - {id: 143, cat: TV/UHD, desc: "Serien - UHD"}
+    - {id: 40, cat: TV/SD, desc: "Serien - SD"}
     - {id: 80, cat: TV/HD, desc: "Serien - Pack HD"}
     - {id: 42, cat: TV/SD, desc: "Serien - Pack SD"}
     # Musik
     - {id: 119, cat: Audio, desc: "Musik - Album"}
-    - {id: 92, cat: Audio, desc: "Musik - Discography"}
+    - {id: 148, cat: Audio, desc: "Musik - Charts"}
     - {id: 5, cat: Audio, desc: "Musik - Sampler"}
+    - {id: 92, cat: Audio, desc: "Musik - Discography"}
+    - {id: 146, cat: Audio, desc: "Musik - Mixe"}
     - {id: 142, cat: Audio/Lossless, desc: "Musik - Flac"}
     - {id: 136, cat: Audio/Video, desc: "Musik - Videos"}
     # Doku
@@ -38,21 +40,22 @@ caps:
     - {id: 37, cat: TV/Documentary, desc: "Doku - SD"}
     - {id: 144, cat: TV/Documentary, desc: "Doku - Pack SD/HD"}
     # Games
-    - {id: 140, cat: Console, desc: "Games - Konsole"}
-    - {id: 145, cat: Console/Other, desc: "Games - Sonstige"}
     - {id: 16, cat: PC/Games, desc: "Games - PC"}
     - {id: 14, cat: Console/Other, desc: "Games - Wimmelbild"}
+    - {id: 140, cat: Console, desc: "Games - Konsole"}
+    - {id: 145, cat: Console/Other, desc: "Games - Sonstige"}
     # Appz
     - {id: 30, cat: PC/0day, desc: "Appz - Windows"}
     - {id: 106, cat: PC/Mobile-Android, desc: "Appz - Android"}
     - {id: 138, cat: PC/0day, desc: "Appz - Sonstige"}
     # Sport
-    - {id: 43, cat: TV/Sport, desc: "Sport - SD"}
     - {id: 50, cat: TV/Sport, desc: "Sport - HD"}
+    - {id: 43, cat: TV/Sport, desc: "Sport - SD"}
     # Sonstiges
     - {id: 137, cat: Books/Comics, desc: "Sonstiges - Anime"}
     - {id: 34, cat: Books/EBook, desc: "Sonstiges - E-Books"}
     - {id: 35, cat: Audio/Audiobook, desc: "Sonstiges - Audiobook"}
+    - {id: 147, cat: Other, desc: "Sonstiges - Sonstige"}
     # XXX
     - {id: 47, cat: XXX, desc: "XXX - SD/HD"}
     - {id: 49, cat: XXX/Other, desc: "XXX - Sonstiges"}
@@ -120,49 +123,52 @@ search:
       selector: div.kat_cat_pic
       case:
         # Kino
-        ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 141
         ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 118
+        ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 141
         ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 4
         # Movies
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 2
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 26
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"3D\"))": 139
         ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 19
+        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 26
         ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 18
+        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"3D\"))": 139
+        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 2
         # Serien
+        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 41
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 143
+        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 40
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack HD\"))": 80
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack SD\"))": 42
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 41
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 40
         # Musik
         ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Album\"))": 119
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Charts\"))": 148
         ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Sampler\"))": 5
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": 142
         ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Discography\"))": 92
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Mixe\"))": 146
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": 142
         ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Videos\"))": 136
         # Doku
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 144
         ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 38
         ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 37
+        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 144
         # Games
-        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Konsole\"))": 140
-        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 145
         ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 16
         ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": 14
+        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Konsole\"))": 140
+        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 145
         # Appz
         ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Windows\"))": 30
         ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Android\"))": 106
         ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 138
         # Sport
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 43
         ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 50
+        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 43
         # Sonstiges
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Anime\"))": 137
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"E-Books\"))": 34
         ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Audiobook\"))": 35
+        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 147
         # XXX
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"D\"))": 47
+        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 47
         ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": 49
     title:
       selector: a.selection_a
