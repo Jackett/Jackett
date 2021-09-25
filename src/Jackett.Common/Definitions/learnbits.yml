@@ -108,7 +108,6 @@ settings:
       added: created
       seeders: seeders
       size: size
-      1: title
   - name: type
     type: select
     label: Order requested from site
