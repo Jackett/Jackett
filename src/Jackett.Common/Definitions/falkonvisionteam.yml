@@ -136,7 +136,7 @@ search:
     leechers:
       selector: td:nth-last-child(2)
     description:
-      # Wait: 4 h 
+      # Wait: 4 h
       # Cekanje: 4 h
       selector: div.tooltip-content > div:last-child
     downloadvolumefactor:
