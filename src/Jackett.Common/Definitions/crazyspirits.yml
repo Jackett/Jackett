@@ -33,12 +33,12 @@ caps:
     - {id: 65, cat: Movies, desc: "Films FSCR"}
     - {id: 66, cat: Movies, desc: "Films CamTS"}
     - {id: 67, cat: Movies, desc: "Films Pack Films"}
-    - {id: 129, cat: Movies, desc: "Films QC~Film"}
     - {id: 68, cat: Movies, desc: "Films VostFR"}
     - {id: 69, cat: Movies, desc: "Films VO"}
     - {id: 70, cat: Movies/WEB-DL, desc: "Films WebRip 1080p"}
     - {id: 71, cat: Movies/WEB-DL, desc: "Films WebRip 720p"}
     - {id: 73, cat: Movies/WEB-DL, desc: "Films Webrip"}
+    - {id: 129, cat: Movies, desc: "Films QC~Film"}
     - {id: 72, cat: Movies/WEB-DL, desc: "Films WEB DL"}
     - {id: 99, cat: Movies, desc: "Films Remux"}
     - {id: 98, cat: Movies/Other, desc: "Films Film Animées"}
@@ -52,9 +52,10 @@ caps:
     - {id: 117, cat: Console, desc: "Jeux Roms"}
     - {id: 118, cat: Console, desc: "Jeux Switch"}
     - {id: 119, cat: Console/Wii, desc: "Jeux Wii"}
-    - {id: 120, cat: Console/WiiU, desc: "Jeux WiiU"}
     - {id: 121, cat: Console/XBox, desc: "Jeux Xbox"}
+    - {id: 120, cat: Console/WiiU, desc: "Jeux WiiU"}
     # Livre
+    - {id: 135, cat: Books, desc: "Livre Québéçois"}
     - {id: 100, cat: Audio/Audiobook, desc: "Livre Audio"}
     - {id: 101, cat: Books/EBook, desc: "Livre Epub"}
     - {id: 102, cat: Books, desc: "Livre Mangas"}
@@ -68,25 +69,16 @@ caps:
     - {id: 113, cat: PC/Mobile-iOS, desc: "Logiciel Apple"}
     - {id: 112, cat: PC/Mobile-Other, desc: "Logiciel Smart Phone"}
     # Musiques
+    - {id: 132, cat: Audio, desc: "Musiques QC~Musique"}
     - {id: 125, cat: Audio/Video, desc: "Musiques Videos Pack"}
     - {id: 107, cat: Audio/MP3, desc: "Musiques MP3"}
     - {id: 108, cat: Audio/Lossless, desc: "Musiques FLAC"}
     - {id: 109, cat: Audio, desc: "Musiques WMA"}
-    - {id: 132, cat: Audio, desc: "Musiques QC~Musique"}
     # Séries
-    - {id: 76, cat: TV/HD, desc: "Series Blu-Ray"}
     - {id: 77, cat: TV/HD, desc: "Series HDTV"}
-    - {id: 78, cat: TV/HD, desc: "Series 1080p"}
-    - {id: 79, cat: TV/HD, desc: "Series 720p"}
-    - {id: 80, cat: TV/SD, desc: "Series DvDR"}
-    - {id: 81, cat: TV/SD, desc: "Series DVDrip"}
-    - {id: 82, cat: TV/HD, desc: "Series MHD"}
-    - {id: 83, cat: TV/WEB-DL, desc: "Series WebDL1080p"}
     - {id: 84, cat: TV/HD, desc: "Series Épisodes HD"}
     - {id: 85, cat: TV/SD, desc: "Series Épisodes SD"}
     - {id: 86, cat: TV, desc: "Series VosFR"}
-    - {id: 87, cat: TV, desc: "Series VO"}
-    - {id: 89, cat: TV, desc: "Series VOSTA"}
     - {id: 97, cat: TV/Anime, desc: "Series Animée"}
     - {id: 88, cat: TV, desc: "Series Pack HD"}
     - {id: 128, cat: TV, desc: "Series Pack SD"}
@@ -96,12 +88,12 @@ caps:
     - {id: 91, cat: TV/Other, desc: "Spectacle 720p"}
     - {id: 90, cat: TV/Other, desc: "Spectacle 1080p"}
     # Télévision
-    - {id: 133, cat: TV, desc: "TV QC~Tv"}
     - {id: 74, cat: TV/HD, desc: "TV TVHD"}
     - {id: 75, cat: TV, desc: "TV TVRip"}
     - {id: 92, cat: TV/Other, desc: "TV Spectacles"}
     - {id: 93, cat: TV/Documentary, desc: "TV Documentaires"}
     - {id: 94, cat: TV, desc: "TV Animation"}
+    - {id: 133, cat: TV, desc: "TV QC~Tv"}
     - {id: 95, cat: TV/Sport, desc: "TV Sports"}
 
   modes:
