@@ -443,7 +443,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PirateTheNet (PTN)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
- * Pleasuredome
  * PolishSource (PS)
  * PolishTracker
  * PornBits (PB)
