@@ -10,8 +10,6 @@ links:
 
 caps:
   categorymappings:
-    - {id: 5, cat: Movies/BluRay, desc: "Film/BDRip/Eng"}
-    - {id: 6, cat: Movies/BluRay, desc: "Film/BDRip/Hun"}
     - {id: 1, cat: Movies/SD, desc: "Film/Cam/Eng"}
     - {id: 2, cat: Movies/SD, desc: "Film/Cam/Hun"}
     - {id: 8, cat: Movies/DVD, desc: "Film/DVD/Eng"}
@@ -20,10 +18,10 @@ caps:
     - {id: 15, cat: Movies/HD, desc: "Film/HD1080P/Hun"}
     - {id: 14, cat: Movies/HD, desc: "Film/HD720P/Eng"}
     - {id: 13, cat: Movies/HD, desc: "Film/HD720P/Hun"}
+    - {id: 4, cat: Movies/SD, desc: "Film/SD/Eng"}
+    - {id: 3, cat: Movies/SD, desc: "Film/SD/Hun"}
     - {id: 18, cat: Movies/UHD, desc: "Film/UHD/Eng"}
     - {id: 17, cat: Movies/UHD, desc: "Film/UHD/Hun"}
-    - {id: 4, cat: Movies/SD, desc: "Film/Xvid/Eng"}
-    - {id: 3, cat: Movies/SD, desc: "Film/Xvid/Hun"}
     - {id: 23, cat: Audio/Audiobook, desc: "Hangosköny"}
     - {id: 19, cat: PC/Games, desc: "Játék/ISO"}
     - {id: 20, cat: PC/Games, desc: "Játék/RIP"}
@@ -38,7 +36,7 @@ caps:
     - {id: 33, cat: TV, desc: "Sorozat/Eng"}
     - {id: 32, cat: TV, desc: "Sorozat/Hun"}
     - {id: 34, cat: XXX, desc: "XXX/Filmek"}
-    - {id: 39, cat: XXX, desc: "XXX/Képek"}
+    - {id: 39, cat: XXX/ImageSet, desc: "XXX/Képek"}
     - {id: 29, cat: Audio/Lossless, desc: "Zene/FLAC/Eng"}
     - {id: 28, cat: Audio/Lossless, desc: "Zene/FLAC/Hun"}
     - {id: 27, cat: Audio/MP3, desc: "Zene/MP3/Eng"}
