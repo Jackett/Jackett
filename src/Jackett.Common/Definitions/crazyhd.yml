@@ -13,10 +13,6 @@ legacylinks:
 caps:
   categorymappings:
     # Movies
-    - {id: 62, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 96, cat: Movies/UHD, desc: "Movies 4k Hindi"}
-    - {id: 94, cat: Movies/UHD, desc: "Movies 4k"}
-    - {id: 64, cat: Movies, desc: "Movies Animated"}
     - {id: 16, cat: Movies/BluRay, desc: "Movies English Bluray"}
     - {id: 11, cat: Movies/DVD, desc: "Movies English DVD-RIP"}
     - {id: 14, cat: Movies, desc: "Movies English CAM"}
@@ -29,16 +25,20 @@ caps:
     - {id: 65, cat: Movies/WEB-DL, desc: "Movies Hindi Webrip/HDrip"}
     - {id: 24, cat: Movies, desc: "Movies UNRATED"}
     - {id: 53, cat: Movies/Foreign, desc: "Movies Other Foreign"}
+    - {id: 64, cat: Movies, desc: "Movies Animated"}
     - {id: 45, cat: Movies, desc: "Movies Trailers"}
     - {id: 93, cat: Movies, desc: "Movies Dual Movies"}
+    - {id: 96, cat: Movies/UHD, desc: "Movies 4k Hindi"}
     - {id: 59, cat: Movies, desc: "Movies Pack"}
+    - {id: 94, cat: Movies/UHD, desc: "Movies 4k"}
+    - {id: 62, cat: Movies/3D, desc: "Movies 3D"}
     # TV
     - {id: 34, cat: TV, desc: "TV English Series"}
     - {id: 57, cat: TV, desc: "TV Bangla series"}
     - {id: 58, cat: TV, desc: "TV Hindi series"}
+    - {id: 95, cat: TV, desc: "TV Other Language"}
     - {id: 28, cat: TV/Sport, desc: "TV Sports"}
     - {id: 29, cat: TV/Documentary, desc: "TV Documentary"}
-    - {id: 95, cat: TV, desc: "TV Other Language"}
     # Games
     - {id: 3, cat: PC/Games, desc: "Games PC"}
     - {id: 75, cat: PC/Mobile-Android, desc: "Games Android"}
