@@ -14,6 +14,8 @@ links:
 
 caps:
   categorymappings:
+    # note: to update cats for this site its easier to use my.php and sort by cat integer
+    # also cat 187 is undocumented but exists
     - {id: 113, cat: Movies, desc: "Bollywood-Pre-Release"}
     - {id: 114, cat: Movies/UHD, desc: "Bollywood-4K Ultra HD / Upscaled"}
     - {id: 115, cat: Movies/BluRay, desc: "Bollywood-Untouched BluRay"}
@@ -22,15 +24,11 @@ caps:
     - {id: 118, cat: Movies, desc: "Bollywood-Remuxes BluRay"}
     - {id: 119, cat: Movies/WEB-DL, desc: "Bollywood-Untouched WEB-DLs"}
     - {id: 120, cat: Movies/WEB-DL, desc: "Bollywood-1080p WEB-Rips"}
-    - {id: 188, cat: Movies/WEB-DL, desc: "Bollywood-720p WEB-Rips"}
     - {id: 121, cat: Movies/DVD, desc: "Bollywood-Untouched DVDs"}
-    - {id: 189, cat: Movies/DVD, desc: "Bollywood-Encoded DVDs"}
     - {id: 122, cat: Movies/WEB-DL, desc: "Bollywood-DVDRips 1080p/720p"}
     - {id: 123, cat: Movies/WEB-DL, desc: "Bollywood-SDRips WEB/DVD"}
     - {id: 124, cat: Movies/3D, desc: "Bollywood-3D-Movies"}
-    - {id: 190, cat: Movies, desc: "Bollywood-Movie packs"}
     - {id: 125, cat: Movies/WEB-DL, desc: "Bollywood-Web Series"}
-    - {id: 136, cat: Movies, desc: "Hollywood-Pre-Release"}
     - {id: 126, cat: Movies/UHD, desc: "Hollywood-4K Ultra HD / Upscaled"}
     - {id: 127, cat: Movies/BluRay, desc: "Hollywood-Untouched BluRay"}
     - {id: 128, cat: Movies/HD, desc: "Hollywood-1080p BluRay Rips"}
@@ -38,13 +36,10 @@ caps:
     - {id: 130, cat: Movies, desc: "Hollywood-BluRay Remuxes"}
     - {id: 131, cat: Movies/WEB-DL, desc: "Hollywood-Untouched WEB-DLs"}
     - {id: 132, cat: Movies, desc: "Hollywood-1080p WEB-Rips"}
-    - {id: 192, cat: Movies, desc: "Hollywood-720p WEB-Rips"}
     - {id: 133, cat: Movies/DVD, desc: "Hollywood-Untouched DVDs"}
-    - {id: 191, cat: Movies/WEB-DL, desc: "Hollywood-Encoded DVDs"}
     - {id: 134, cat: Movies/WEB-DL, desc: "Hollywood-DVDRips 1080p/720p"}
-    - {id: 193, cat: Movies/SD, desc: "Hollywood-SDRips - WEB/DVD"}
     - {id: 135, cat: Movies/3D, desc: "Hollywood-3D-Movies"}
-    - {id: 194, cat: Movies, desc: "Hollywood-Movie packs"}
+    - {id: 136, cat: Movies, desc: "Hollywood-Pre-Release"}
     - {id: 137, cat: Movies, desc: "Malayalam-Movies"}
     - {id: 140, cat: Movies, desc: "Punjabi-Movies"}
     - {id: 141, cat: Movies, desc: "Kannada-Movies"}
@@ -52,11 +47,6 @@ caps:
     - {id: 143, cat: Movies, desc: "Bhoipuri-Movies"}
     - {id: 144, cat: Movies, desc: "Marathi-Movies"}
     - {id: 145, cat: Movies, desc: "Bangla-Movies"}
-    - {id: 185, cat: Movies, desc: "Gujarati-Movies"}
-    - {id: 184, cat: Movies, desc: "South Hindi Dubbed"}
-    - {id: 183, cat: Movies, desc: "English Hindi Dubbed"}
-    - {id: 197, cat: Movies, desc: "Turkish Hindi Dubbed"}
-    - {id: 182, cat: Movies, desc: "Other Movies"}
     - {id: 146, cat: TV, desc: "TV-Colors"}
     - {id: 147, cat: TV, desc: "TV-TV"}
     - {id: 148, cat: TV, desc: "TV-Life OK"}
@@ -66,18 +56,12 @@ caps:
     - {id: 152, cat: TV, desc: "TV-Star Bharat"}
     - {id: 153, cat: TV, desc: "TV-Star Plus"}
     - {id: 154, cat: TV, desc: "TV-Zee TV"}
-    - {id: 186, cat: TV, desc: "TV-Dangal Tv"}
     - {id: 155, cat: TV/Sport, desc: "TV-Sports"}
     - {id: 156, cat: TV/Documentary, desc: "TV-Documentaries"}
-    - {id: 198, cat: Movies, desc: "TV-MTV"}
-    - {id: 218, cat: TV, desc: "TV-Ishara TV"}
-    - {id: 219, cat: TV, desc: "TV-Bengali Tv"}
-    - {id: 158, cat: TV, desc: "TV-Other Tv Shows"}
     - {id: 157, cat: TV, desc: "TV-Hollywood Tv Shows"}
-    - {id: 195, cat: TV, desc: "TV-Tv Packs"}
+    - {id: 158, cat: TV, desc: "TV-Other Tv Shows"}
     - {id: 159, cat: Audio, desc: "Music-Religion & Spirituality"}
     - {id: 160, cat: Audio, desc: "Music-Classical"}
-    - {id: 172, cat: Audio, desc: "Music-Remix"}
     - {id: 161, cat: Audio/Lossless, desc: "Music-Flacs"}
     - {id: 162, cat: Audio, desc: "Music-Ghazals"}
     - {id: 163, cat: Audio, desc: "Music-Hindi OSTs"}
@@ -89,9 +73,9 @@ caps:
     - {id: 169, cat: Audio/Video, desc: "Music-Videos"}
     - {id: 170, cat: Audio, desc: "Music-Pop"}
     - {id: 171, cat: Audio, desc: "Music-Punjabi"}
-    - {id: 174, cat: Audio, desc: "Music-Telugu"}
+    - {id: 172, cat: Audio, desc: "Music-Remix"}
     - {id: 173, cat: Audio, desc: "Music-Tamil"}
-    - {id: 196, cat: Audio, desc: "Music-Packs"}
+    - {id: 174, cat: Audio, desc: "Music-Telugu"}
     - {id: 175, cat: Books/EBook, desc: "Ebooks"}
     - {id: 176, cat: PC/Games, desc: "Games PC"}
     - {id: 177, cat: Console, desc: "Games Console"}
@@ -99,27 +83,43 @@ caps:
     - {id: 179, cat: PC, desc: "Appz"}
     - {id: 180, cat: PC/Mobile-Other, desc: "Mobile Stuff"}
     - {id: 181, cat: Other, desc: "Pics/Wallpapers"}
+    - {id: 182, cat: Movies, desc: "Other Movies"}
+    - {id: 183, cat: Movies, desc: "English Hindi Dubbed"}
+    - {id: 184, cat: Movies, desc: "South Hindi Dubbed"}
+    - {id: 185, cat: Movies, desc: "Gujarati-Movies"}
+    - {id: 186, cat: TV, desc: "TV-Dangal Tv"}
     - {id: 187, cat: XXX, desc: "Adult XXX 18+"}
-    # Telugu-Movies
+    - {id: 188, cat: Movies/WEB-DL, desc: "Bollywood-720p WEB-Rips"}
+    - {id: 189, cat: Movies/DVD, desc: "Bollywood-Encoded DVDs"}
+    - {id: 190, cat: Movies, desc: "Bollywood-Movie packs"}
+    - {id: 191, cat: Movies/WEB-DL, desc: "Hollywood-Encoded DVDs"}
+    - {id: 192, cat: Movies, desc: "Hollywood-720p WEB-Rips"}
+    - {id: 193, cat: Movies/SD, desc: "Hollywood-SDRips - WEB/DVD"}
+    - {id: 194, cat: Movies, desc: "Hollywood-Movie packs"}
+    - {id: 195, cat: TV, desc: "TV-Tv Packs"}
+    - {id: 196, cat: Audio, desc: "Music-Packs"}
+    - {id: 197, cat: Movies, desc: "Turkish Hindi Dubbed"}
+    - {id: 198, cat: Movies, desc: "TV-MTV"}
     - {id: 199, cat: Movies, desc: "Telgu-Movies | 4K Ultra HD - Upscaled"}
     - {id: 200, cat: Movies, desc: "Telgu-Movies | Untouched WEB-DLs"}
     - {id: 201, cat: Movies, desc: "Telgu-Movies | 1080p/720p WEBRips"}
     - {id: 202, cat: Movies, desc: "Telgu-Movies | Untouched BluRay"}
-    - {id: 208, cat: Movies, desc: "Telgu-Movies | Remuxes BluRay"}
-    - {id: 207, cat: Movies, desc: "Telgu-Movies | BluRay Rips"}
     - {id: 203, cat: Movies, desc: "Telgu-Movies | Untouched DVDs"}
     - {id: 204, cat: Movies, desc: "Telgu-Movies | SD-WEBRips / DVDRips"}
     - {id: 205, cat: Movies, desc: "Telgu-Movies | Movie Packs"}
-    # Tamil-Movies
+    - {id: 207, cat: Movies, desc: "Telgu-Movies | BluRay Rips"}
+    - {id: 208, cat: Movies, desc: "Telgu-Movies | Remuxes BluRay"}
     - {id: 209, cat: Movies, desc: "Tamil-Movies | 4K Ultra HD - Upscaled"}
     - {id: 210, cat: Movies, desc: "Tamil-Movies | Untouched WEB-DLs"}
     - {id: 211, cat: Movies, desc: "Tamil-Movies | 1080p/720p WEBRips"}
     - {id: 212, cat: Movies, desc: "Tamil-Movies | Untouched BluRay"}
-    - {id: 217, cat: Movies, desc: "Tamil-Movies | Remuxes BluRay"}
-    - {id: 216, cat: Movies, desc: "Tamil-Movies | BluRay Rips"}
     - {id: 213, cat: Movies, desc: "Tamil-Movies | Untouched DVDs"}
     - {id: 214, cat: Movies, desc: "Tamil-Movies | SD-WEBRips / DVDRips"}
     - {id: 215, cat: Movies, desc: "Tamil-Movies | Movie Packs"}
+    - {id: 216, cat: Movies, desc: "Tamil-Movies | BluRay Rips"}
+    - {id: 217, cat: Movies, desc: "Tamil-Movies | Remuxes BluRay"}
+    - {id: 218, cat: TV, desc: "TV-Ishara TV"}
+    - {id: 219, cat: TV, desc: "TV-Bengali Tv"}
 
   modes:
     search: [q]
