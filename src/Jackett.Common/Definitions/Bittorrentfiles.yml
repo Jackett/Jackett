@@ -27,7 +27,7 @@ caps:
     - {id: 79, cat: TV/HD, desc: "Staffeln HD"}
     - {id: 56, cat: TV/SD, desc: "Staffeln SD"}
     - {id: 88, cat: TV/UHD, desc: "Staffeln UHD"}
-    - {id: 86, cat: TV/HD, desc: "Folgen UHD"}
+    - {id: 86, cat: TV/UHD, desc: "Folgen UHD"}
     - {id: 54, cat: TV/HD, desc: "Folgen HD"}
     - {id: 80, cat: TV/HD, desc: "Folgen HD/BD"}
     - {id: 7, cat: TV/SD, desc: "Folgen SD"}
@@ -68,7 +68,7 @@ caps:
     - {id: 74, cat: TV/Sport, desc: "Sport HD"}
     - {id: 39, cat: TV/Sport, desc: "Sport SD"}
     # Sonstiges
-    - {id: 41, cat: Books/Comics, desc: "Sonstiges A-Book"}
+    - {id: 41, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 33, cat: TV/Anime, desc: "Sonstiges Anime"}
     - {id: 35, cat: Books/EBook, desc: "Sonstiges e-Book-DE"}
     - {id: 90, cat: Books/EBook, desc: "Sonstiges e-Book-INT"}
@@ -79,11 +79,10 @@ caps:
     - {id: 47, cat: Other, desc: "Sonstiges Line"}
     - {id: 9, cat: Other, desc: "Sonstiges Andere"}
     # XXX
-    - {id: 58, cat: Books/Comics, desc: "XXX HD"}
+    - {id: 58, cat: XXX/x264, desc: "XXX HD"}
     - {id: 46, cat: XXX, desc: "XXX Hentai"}
-    - {id: 35, cat: XXX/Other, desc: "XXX Andere"}
     - {id: 59, cat: XXX/Pack, desc: "XXX Pack"}
-    - {id: 27, cat: XXX, desc: "XXX SD"}
+    - {id: 27, cat: XXX/SD, desc: "XXX SD"}
     - {id: 76, cat: XXX, desc: "XXX Andere"}
 
 
