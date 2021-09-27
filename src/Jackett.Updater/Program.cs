@@ -395,6 +395,7 @@ namespace Jackett.Updater
                 "Definitions/onlyscene.yml",
                 "Definitions/obscure.yml",
                 "Definitions/passionetorrent.yml",
+                "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pt99.yml",
                 "Definitions/qctorrent.yml",
