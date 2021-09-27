@@ -13,6 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 65, cat: Movies/3D, desc: "3D Film"}
+    - {id: 79, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 37, cat: Movies, desc: "Deca"}
     - {id: 43, cat: TV/Documentary, desc: "Dokumentarci"}
     - {id: 52, cat: Movies/DVD, desc: "Film/DVD Domaće"}
