@@ -161,6 +161,7 @@ caps:
     - {id: 201, cat: Audio/Other, desc: "PRESETS Xfer Serum"}
     - {id: 164, cat: Audio/Other, desc: "PRESETS Sylenth"}
     - {id: 168, cat: Audio/Other, desc: "PRESETS Toontrack"}
+    - {id: 239, cat: Books, desc: "Service Manuals"}
     - {id: 21, cat: Other, desc: "UPDATE"}
     - {id: 222, cat: Other, desc: "GFXNEWS 3D"}
     - {id: 235, cat: Other, desc: "GFXNEWS APPS ANDROID & IOS"}
