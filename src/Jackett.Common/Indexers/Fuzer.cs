@@ -70,8 +70,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "סרטים");
             AddCategoryMapping(9, TorznabCatType.MoviesHD, "סרטים HD");
             AddCategoryMapping(97, TorznabCatType.MoviesUHD, "סרטים UHD");
+            AddCategoryMapping(101, TorznabCatType.MoviesHD, "סרטים x265");
             AddCategoryMapping(58, TorznabCatType.MoviesDVD, "סרטים DVD-R");
-            AddCategoryMapping(59, TorznabCatType.MoviesSD, "סרטי BDRIP-BRRip");
+            AddCategoryMapping(59, TorznabCatType.MoviesHD, "סרטי BDRIP-BRRip");
             AddCategoryMapping(60, TorznabCatType.MoviesSD, "סרטים ישראליים");
             AddCategoryMapping(61, TorznabCatType.MoviesHD, "סרטים ישראליים HD");
             AddCategoryMapping(83, TorznabCatType.MoviesOther, "סרטים מדובבים");
@@ -87,12 +88,12 @@ namespace Jackett.Common.Indexers
             // מוזיקה
             AddCategoryMapping(14, TorznabCatType.Audio, "מוזיקה עולמית");
             AddCategoryMapping(66, TorznabCatType.Audio, "מוזיקה ישראלית");
-            AddCategoryMapping(67, TorznabCatType.AudioMP3, "FLAC");
+            AddCategoryMapping(67, TorznabCatType.AudioLossless, "FLAC");
             AddCategoryMapping(68, TorznabCatType.Audio, "פסקולים");
 
             // משחקים
             AddCategoryMapping(11, TorznabCatType.PCGames, "משחקים PC");
-            AddCategoryMapping(12, TorznabCatType.ConsoleOther, "משחקים PS");
+            AddCategoryMapping(12, TorznabCatType.ConsolePSP, "משחקים PS");
             AddCategoryMapping(55, TorznabCatType.ConsoleXBox, "משחקים XBOX");
             AddCategoryMapping(56, TorznabCatType.ConsoleWii, "משחקים WII");
             AddCategoryMapping(57, TorznabCatType.PCMobileOther, "משחקי קונסולות ניידות");
@@ -106,8 +107,8 @@ namespace Jackett.Common.Indexers
             // שונות
             AddCategoryMapping(16, TorznabCatType.XXX, "למבוגרים בלבד");
             AddCategoryMapping(17, TorznabCatType.Other, "שונות");
-            AddCategoryMapping(64, TorznabCatType.Other, "ספורט");
-            AddCategoryMapping(65, TorznabCatType.Other, "אנימה");
+            AddCategoryMapping(64, TorznabCatType.TVSport, "ספורט");
+            AddCategoryMapping(65, TorznabCatType.TVAnime, "אנימה");
             AddCategoryMapping(69, TorznabCatType.Books, "Ebooks");
 
             // FuzePacks
