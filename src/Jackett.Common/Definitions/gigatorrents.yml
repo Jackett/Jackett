@@ -27,15 +27,13 @@ caps:
     - {id: 47, cat: PC/Games, desc: "Játékok/ISO"}
     - {id: 64, cat: PC/Games, desc: "Játékok/Rip"}
     - {id: 48, cat: Other, desc: "Képek"}
-    - {id: 49, cat: XXX, desc: "Képek XXX"}
-    - {id: 51, cat: Other, desc: "Klip"}
+    - {id: 49, cat: XXX/ImageSet, desc: "Képek XXX"}
+    - {id: 51, cat: Audio/Video, desc: "Klip"}
     - {id: 39, cat: Books, desc: "Könyvek/Eng"}
     - {id: 52, cat: Books, desc: "Könyvek/Hun"}
     - {id: 33, cat: Console, desc: "Konzol"}
     - {id: 1, cat: Audio/Lossless, desc: "Lossless"}
     - {id: 55, cat: PC/Mobile-Other, desc: "Mobil/PDA"}
-    - {id: 77, cat: PC/ISO, desc: "PC/ISO"}
-    - {id: 78, cat: PC/0day, desc: "PC/Rip"}
     - {id: 85, cat: TV/HD, desc: "Sorozat HD/Eng"}
     - {id: 84, cat: TV/HD, desc: "Sorozat HD/Hun"}
     - {id: 8, cat: TV/SD, desc: "Sorozat/SD-x264/Eng"}
