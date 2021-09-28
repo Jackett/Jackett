@@ -10,8 +10,10 @@ links:
 
 caps:
   categorymappings:
+    # TV
     - {id: 22, cat: TV, desc: "TV Greek series"}
     - {id: 23, cat: TV, desc: "TV series packs"}
+    # Movies
     - {id: 21, cat: Movies, desc: "Movies World series"}
     - {id: 12, cat: Movies/DVD, desc: "Movies DVDRIp"}
     - {id: 13, cat: Movies/HD, desc: "Movies Hd rip x264"}
@@ -24,6 +26,7 @@ caps:
     - {id: 51, cat: TV, desc: "TV Greek Packs"}
     - {id: 52, cat: Movies, desc: "Movies Greek Packs"}
     - {id: 53, cat: Movies/HD, desc: "BDRIP-BRRIP"}
+    # Music
     - {id: 24, cat: Audio, desc: "Music Greek"}
     - {id: 25, cat: Audio, desc: "Music Greek discografy"}
     - {id: 26, cat: Audio, desc: "Music Rock"}
@@ -33,19 +36,24 @@ caps:
     - {id: 30, cat: Audio, desc: "Music Pop/Electronic"}
     - {id: 31, cat: Audio, desc: "Music Soundtracks-VArtists"}
     - {id: 32, cat: Audio/Video, desc: "Music videos"}
-    - {id: 50, cat: Audio, desc: "Music Διάφορα (Other)"}
+    - {id: 50, cat: Audio/Other, desc: "Music Διάφορα (Other)"}
+    # Games
     - {id: 33, cat: PC/Games, desc: "Games PC"}
     - {id: 34, cat: Console/PSP, desc: "Games Playstation/PSP"}
     - {id: 35, cat: Console/XBox, desc: "Games Xbox"}
+    # Children
     - {id: 36, cat: TV/Anime, desc: "Anime /Μεταγλωτισμένα"}
     - {id: 37, cat: TV/Anime, desc: "Anime /Subtitled"}
+    # Books
     - {id: 40, cat: Books/Comics, desc: "Comics"}
     - {id: 41, cat: Books/Mags, desc: "Magazines"}
     - {id: 42, cat: Books/EBook, desc: "E-books"}
     - {id: 43, cat: Books/EBook, desc: "PDF"}
+    # Other
     - {id: 44, cat: Other, desc: "Images"}
     - {id: 45, cat: TV/Sport, desc: "Football Leagues"}
     - {id: 46, cat: TV/Sport, desc: "Formula 1"}
+    # Apps
     - {id: 48, cat: PC/0day, desc: "Apps Win"}
     - {id: 8, cat: PC, desc: "Apps Linux"}
     - {id: 9, cat: PC/Mac, desc: "Apps Mac"}
