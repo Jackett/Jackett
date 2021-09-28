@@ -19,7 +19,7 @@ caps:
     - {id: 410, cat: Movies, desc: "世界(World)"}
     - {id: 411, cat: TV, desc: "剧集(Series)"}
     - {id: 414, cat: Audio, desc: "音乐(Music)"}
-    - {id: 413, cat: Audio, desc: "记录(Record)"}
+    - {id: 413, cat: TV/Documentary, desc: "记录(Documentary)"}
     - {id: 416, cat: TV, desc: "综艺(Variety Show)"}
     - {id: 417, cat: TV/Sport, desc: "体育(Sports)"}
     - {id: 419, cat: TV/Anime, desc: "动漫(Animation)"}
