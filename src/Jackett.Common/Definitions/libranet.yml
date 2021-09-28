@@ -16,7 +16,6 @@ caps:
     - {id: 4, cat: Audio/Audiobook, desc: "Hangoskönyv/Hun"}
     - {id: 1, cat: Books/EBook, desc: "Könyv"}
     - {id: 2, cat: Books/EBook, desc: "Könyv/Hun"}
-    - {id: 55, cat: Other, desc: "Mûhelysarok"}
     - {id: 56, cat: Audio/Lossless, desc: "LossLess"}
     - {id: 57, cat: Audio/Lossless, desc: "LossLess/Hun"}
     - {id: 48, cat: Books/Mags, desc: "Magazin"}
