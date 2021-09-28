@@ -9,12 +9,19 @@ links:
   - https://efectodoppler.pw/
 
 caps:
-  categories:
-    1: Audio
+  categorymappings:
+    - {id: 1, cat: Audio, desc: "Música"}
+    - {id: 2, cat: PC, desc: "Aplicaciones"}
+    - {id: 3, cat: Books/EBook, desc: "Libros Electrónicos"}
+    - {id: 4, cat: Audio/Audiobook, desc: "Audiolibros"}
+    - {id: 5, cat: Audio/Video, desc: "Vídeos de aprendizaje"}
+    - {id: 6, cat: Books/Comics, desc: "Comedia"}
+    - {id: 7, cat: Books/Mags, desc: "Revistas"}
 
   modes:
     search: [q]
     music-search: [q, album, artist]
+    book-search: [q]
 
 settings:
   - name: username
@@ -60,6 +67,7 @@ search:
   paths:
     - path: torrents.php
   inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"
     artistname: "{{ .Query.Artist }}"
     groupname: "{{ .Query.Album }}"
@@ -75,7 +83,15 @@ search:
 
   fields:
     category:
-      text: 1
+      selector: div.tooltip
+      case:
+        div.cats_música: 1
+        div.cats_aplicaciones: 2
+        div.cats_libroselectrónicos: 3
+        div.cats_audiolibros: 4
+        div.cats_vídeosdeaprendizaje: 5
+        div.cats_comedia: 6
+        div.cats_revistas: 7
     artist:
       selector: a[href^="artist.php?id="]
       optional: true
