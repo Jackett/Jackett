@@ -58,11 +58,6 @@ caps:
     - {id: 172, cat: Movies/HD, desc: "Film - M-HD"}
     - {id: 38, cat: Movies, desc: "Film - REMUX"}
     - {id: 39, cat: Movies, desc: "Film - TVRIP"}
-    - {id: 184, cat: Movies, desc: "Film - VOSTFR bdrip"}
-    - {id: 203, cat: Movies, desc: "Film - VOSTFR-bluray"}
-    - {id: 185, cat: Movies, desc: "Film - VOSTFR.DVDrip"}
-    - {id: 202, cat: Movies, desc: "Film - VOSTFR.WEB-DL"}
-    - {id: 186, cat: Movies, desc: "Film - VOSTFR.WEBrip"}
     - {id: 41, cat: Movies/WEB-DL, desc: "Film - WEB-DL"}
     - {id: 200, cat: Movies/WEB-DL, desc: "Film - Webrip"}
     - {id: 59, cat: Console/3DS, desc: "Jeux - 3DS-DS"}
@@ -98,15 +93,9 @@ caps:
     - {id: 91, cat: TV, desc: "Serie - REMUX"}
     - {id: 166, cat: TV, desc: "Serie - SERIE  Docu"}
     - {id: 92, cat: TV, desc: "Serie - TVRIP"}
-    - {id: 188, cat: TV, desc: "Serie - VOSTFR.BDrip"}
-    - {id: 180, cat: TV, desc: "Serie - VOSTFR.COFFRET"}
-    - {id: 189, cat: TV, desc: "Serie - VOSTFR.DVDrip"}
-    - {id: 190, cat: TV, desc: "Serie - VOSTFR.HDRIP"}
-    - {id: 192, cat: TV, desc: "Serie - VOSTFR.WEB-DL"}
-    - {id: 191, cat: TV, desc: "Serie - VOSTFR.WEBrip"}
+    - {id: 199, cat: TV/WEB-DL, desc: "Serie - WebDL"}
     - {id: 179, cat: TV/WEB-DL, desc: "Serie - WEB-DL 1080"}
     - {id: 178, cat: TV/WEB-DL, desc: "Serie - WEB-DL 720"}
-    - {id: 199, cat: TV/WEB-DL, desc: "Serie - WebDL"}
     - {id: 93, cat: TV/WEB-DL, desc: "Serie - WEBRIP"}
 
   modes:
