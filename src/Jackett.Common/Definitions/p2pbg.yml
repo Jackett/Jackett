@@ -10,51 +10,58 @@ links:
 
 caps:
   categorymappings:
+    # movies
     - {id: 1, cat: Movies/SD, desc: "Movies-XviD"}
-    - {id: 16, cat: Movies/HD, desc: "Movies-x264"}
-    - {id: 34, cat: Movies, desc: "Movies-BG"}
-    - {id: 17, cat: Movies/HD, desc: "Movies-MPEG2"}
-    - {id: 35, cat: Movies, desc: "Movies-GSM"}
     - {id: 55, cat: Movies/3D, desc: "Movies-3D"}
+    - {id: 16, cat: Movies/HD, desc: "Movies-x264"}
+    - {id: 11, cat: Movies/DVD, desc: "Movies-DVD"}
+    - {id: 17, cat: Movies/HD, desc: "Movies-MPEG2"}
     - {id: 18, cat: Movies/BluRay, desc: "Movies-BR/HD-DVD"}
     - {id: 7, cat: TV/Documentary, desc: "Movies-Documentaries"}
-    - {id: 11, cat: Movies/DVD, desc: "Movies-DVD"}
+    - {id: 35, cat: Movies, desc: "Movies-GSM"}
+    - {id: 34, cat: Movies, desc: "Movies-BG"}
     - {id: 24, cat: TV/SD, desc: "TV-BG"}
     - {id: 14, cat: TV, desc: "TV-Shows"}
     - {id: 15, cat: TV, desc: "TV-Boxset"}
     - {id: 38, cat: TV/Anime, desc: "TV-Cartoons"}
-    - {id: 8, cat: PC/Games, desc: "Games-PC ISO"}
-    - {id: 9, cat: PC/Games, desc: "Games-PC Rips"}
-    - {id: 21, cat: Console/XBox, desc: "Games-XboX"}
-    - {id: 22, cat: Console/XBox 360, desc: "Games-X360"}
-    - {id: 33, cat: Console/Wii, desc: "Games-Wii"}
-    - {id: 20, cat: Console/PSP, desc: "Games-PSP"}
-    - {id: 23, cat: Console/PS3, desc: "Games-PS3"}
-    - {id: 12, cat: Console/PS3, desc: "Games-PS2"}
+    # music
     - {id: 2, cat: Audio/MP3, desc: "Music-Song"}
     - {id: 28, cat: Audio, desc: "Music-Album"}
-    - {id: 19, cat: Audio/Video, desc: "Music-Video"}
     - {id: 29, cat: Audio, desc: "Music-Discography"}
     - {id: 3, cat: Audio/Video, desc: "Music-DVD"}
-    - {id: 31, cat: PC/0day, desc: "Appz Ripped"}
+    - {id: 19, cat: Audio/Video, desc: "Music-Video"}
+    # games
+    - {id: 8, cat: PC/Games, desc: "Games-PC ISO"}
+    - {id: 9, cat: PC/Games, desc: "Games-PC Rips"}
+    - {id: 33, cat: Console/Wii, desc: "Games-Wii"}
+    - {id: 12, cat: Console/PS3, desc: "Games-PS2"}
+    - {id: 23, cat: Console/PS3, desc: "Games-PS3"}
+    - {id: 20, cat: Console/PSP, desc: "Games-PSP"}
+    - {id: 21, cat: Console/XBox, desc: "Games-XboX"}
+    - {id: 22, cat: Console/XBox 360, desc: "Games-X360"}
+    # appz
     - {id: 26, cat: PC/ISO, desc: "Appz PC-ISO"}
-    - {id: 49, cat: PC/Mac, desc: "Appz MacOS"}
+    - {id: 31, cat: PC/0day, desc: "Appz Ripped"}
     - {id: 30, cat: PC, desc: "Appz-Linux"}
+    - {id: 49, cat: PC/Mac, desc: "Appz MacOS"}
     - {id: 27, cat: PC, desc: "Appz-GSM"}
-    - {id: 39, cat: Other, desc: "e-Learning"}
-    - {id: 37, cat: Other/Misc, desc: "Pictures"}
-    - {id: 4, cat: Other, desc: "Other"}
+    # sports
+    - {id: 5, cat: TV/Sport, desc: "Sport F1"}
+    - {id: 51, cat: TV/Sport, desc: "Sport"}
+    # other
     - {id: 6, cat: Books, desc: "Books"}
+    - {id: 4, cat: Other, desc: "Other"}
+    - {id: 37, cat: Other/Misc, desc: "Pictures"}
+    - {id: 39, cat: Other, desc: "e-Learning"}
     - {id: 52, cat: PC/Mobile-Other, desc: "Mobile-GSM"}
     - {id: 40, cat: PC/Mobile-iOS, desc: "Mobile-iPhone"}
-    - {id: 51, cat: TV/Sport, desc: "Sport"}
-    - {id: 5, cat: TV/Sport, desc: "Sport F1"}
+    # 3x
     - {id: 13, cat: XXX, desc: "XXX"}
     - {id: 54, cat: XXX/x264, desc: "XXX HD"}
     - {id: 32, cat: XXX/ImageSet, desc: "XXX Pictures"}
-    - {id: 56, cat: XXX, desc: "XXX 3D"}
-    - {id: 53, cat: XXX, desc: "XXX Hentai"}
     - {id: 48, cat: XXX, desc: "XXX BG Amateurs"}
+    - {id: 53, cat: XXX, desc: "XXX Hentai"}
+    - {id: 56, cat: XXX, desc: "XXX 3D"}
 
   modes:
     search: [q]
