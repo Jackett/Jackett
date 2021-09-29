@@ -178,49 +178,66 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "&downloadLink=1";
 
-            searchUrl += "&limit=4";
+            int currentPage = 1;
+
+            searchUrl += "&limit=1";
 
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
                 searchUrl += "&searchIn=9";
 
-            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl + "&page" + currentPage);
 
             try
             {
-                var rows = (JArray)((JObject)JsonConvert.DeserializeObject(results.ContentString))["results"];
-                foreach (var row in rows)
+                var resultObject = (JObject)JsonConvert.DeserializeObject(results.ContentString);
+                int maxPage = (int) resultObject["pages"];
+
+                // MaxPageSize = 100
+                if (maxPage > 4)
+                    maxPage = 4;
+
+                while (currentPage <= maxPage)
                 {
-                    var title = row["name"].ToString();
-                    if (!query.MatchQueryStringAND(title))
-                        continue;
+                    // Get results for next Page if currentPage not equals to 1
+                    if (currentPage != 1)
+                        results = await RequestWithCookiesAndRetryAsync(searchUrl + "&page" + currentPage);
 
-                    var torrentId = row["id"].ToString();
-                    var details = new Uri(DETAILS + "?id=" + torrentId);
-                    var link = new Uri(row["download"].ToString());
-                    var publishDate = DateTime.Parse(row["added"].ToString());
-                    var seeders = (int)row["seeds"];
-                    var cat = MapTrackerCatToNewznab(row["category"].ToString());
-
-                    var release = new ReleaseInfo
+                    var rows = (JArray)((JObject)JsonConvert.DeserializeObject(results.ContentString))["results"];
+                    foreach (var row in rows)
                     {
-                        Title = title,
-                        Details = details,
-                        Guid = details,
-                        Link = link,
-                        PublishDate = publishDate,
-                        Category = cat,
-                        Size = (long)row["size"],
-                        Grabs = (int)row["snatchers"],
-                        Seeders = seeders,
-                        Peers = seeders + (int)row["leechers"],
-                        Imdb = null,
-                        UploadVolumeFactor = (int)row["uploadFactor"],
-                        DownloadVolumeFactor = (int)row["downloadFactor"],
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800 // 2 days
-                    };
+                        var title = row["name"].ToString();
+                        if (!query.MatchQueryStringAND(title))
+                            continue;
 
-                    releases.Add(release);
+                        var torrentId = row["id"].ToString();
+                        var details = new Uri(DETAILS + "?id=" + torrentId);
+                        var link = new Uri(row["download"].ToString());
+                        var publishDate = DateTime.Parse(row["added"].ToString());
+                        var seeders = (int)row["seeds"];
+                        var cat = MapTrackerCatToNewznab(row["category"].ToString());
+
+                        var release = new ReleaseInfo
+                        {
+                            Title = title,
+                            Details = details,
+                            Guid = details,
+                            Link = link,
+                            PublishDate = publishDate,
+                            Category = cat,
+                            Size = (long)row["size"],
+                            Grabs = (int)row["snatchers"],
+                            Seeders = seeders,
+                            Peers = seeders + (int)row["leechers"],
+                            Imdb = null,
+                            UploadVolumeFactor = (int)row["uploadFactor"],
+                            DownloadVolumeFactor = (int)row["downloadFactor"],
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 172800 // 2 days
+                        };
+
+                        releases.Add(release);
+                    }
+                    currentPage++;
                 }
             }
             catch (Exception ex)
