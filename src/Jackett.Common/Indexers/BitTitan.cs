@@ -178,7 +178,7 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "&downloadLink=1";
 
-            searchUrl += "&limit=4";
+            searchUrl += "&limit=2";
 
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
                 searchUrl += "&searchIn=9";
