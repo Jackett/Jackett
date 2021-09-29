@@ -20,13 +20,16 @@ namespace Jackett.Common.Indexers
     public class YTS : BaseWebIndexer
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://yts.mx/",
+            "https://yts.je/",
+            "https://yts.hn/",
+            "https://yts.rs/",
             "https://yts.unblockit.ws/",
             "https://yts.unblockninja.com/",
             "https://yts.nocensor.work/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://yts.mx/",
             "https://yts.ag/",
             "https://yts.am/",
             "https://yts.lt/",
