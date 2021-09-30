@@ -13,15 +13,18 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 18, cat: PC, desc: "Team-OS VIP Releases"}
+    - {id: 23, cat: PC, desc: "Team OS Program"}
     - {id: 19, cat: PC, desc: "Windows 7 Releases"}
     - {id: 20, cat: PC, desc: "Windows 7 Releases 32 Bit"}
     - {id: 21, cat: PC, desc: "Windows 7 Releases 64 Bit"}
     - {id: 22, cat: PC, desc: "Windows 7 Releases  x86-x64 AIO"}
-    - {id: 23, cat: PC, desc: "Team OS Program"}
     - {id: 24, cat: PC, desc: "Windows 8.1 Release"}
     - {id: 25, cat: PC, desc: "Windows 8.1 Release 32 Bit"}
     - {id: 26, cat: PC, desc: "Windows 8.1 Release 64 Bit"}
     - {id: 27, cat: PC, desc: "Windows 8.1 Release x86-x64 AIO"}
+    - {id: 107, cat: PC, desc: "Windows 10 Releases"}
+    - {id: 109, cat: PC, desc: "Windows 10 Releases 64 Bit"}
+    - {id: 110, cat: PC, desc: "Windows 10 Releases x86-x64 AIO"}
     - {id: 28, cat: PC, desc: "Operating Systems"}
     - {id: 29, cat: PC, desc: "Windows XP"}
     - {id: 30, cat: PC, desc: "Windows XP 32 Bit"}
@@ -35,7 +38,6 @@ caps:
     - {id: 38, cat: PC, desc: "Windows 8 & 8.1 32 Bit"}
     - {id: 39, cat: PC, desc: "Windows 8 & 8.1 64 Bit"}
     - {id: 40, cat: PC, desc: "Windows 8 & 8.1 x86/64+AIO"}
-    - {id: 41, cat: PC, desc: "Windows Servers/Old Windows OS/Others"}
     - {id: 42, cat: PC, desc: "Windows 10"}
     - {id: 43, cat: PC, desc: "Windows 10 (x86)"}
     - {id: 44, cat: PC, desc: "Windows 10 (x64)"}
@@ -44,61 +46,59 @@ caps:
     - {id: 158, cat: PC, desc: "Windows 11 (x86)"}
     - {id: 159, cat: PC, desc: "Windows 11 (x64)"}
     - {id: 160, cat: PC, desc: "Windows 11 (x86 & x64)"}
-    - {id: 46, cat: PC/ISO, desc: "Windows 10 Untouched ISO(MSDN)"}
+    - {id: 140, cat: PC/Mac, desc: "MacOS"}
+    - {id: 41, cat: PC, desc: "Windows Servers/Old Windows OS/Others"}
+    - {id: 112, cat: PC, desc: "Windows Servers Ghost Images"}
+    - {id: 113, cat: PC, desc: "Windows Servers 32 Bit Ghost Images"}
+    - {id: 114, cat: PC, desc: "Windows Servers 64 Bit Ghost Images"}
+    - {id: 46, cat: PC/ISO, desc: "Windows Untouched ISO(MSDN)"}
     - {id: 47, cat: PC, desc: "Windows 7 Untouched (MSDN)"}
     - {id: 48, cat: PC, desc: "Windows 7 32 Bit Untouched (MSDN)"}
     - {id: 49, cat: PC, desc: "Windows 7 64 Bit Untouched (MSDN)"}
     - {id: 50, cat: PC/ISO, desc: "Windows 7 x86/64+AIO Untouched ISO"}
-    - {id: 51, cat: PC, desc: "Windows 8&8.1 Untouched (MSDN)"}
-    - {id: 52, cat: PC, desc: "Windows 8&8.1 32 Bit Untouched (MSDN)"}
-    - {id: 53, cat: PC, desc: "Windows 8&8.1 64 Bit Untouched (MSDN)"}
-    - {id: 54, cat: PC/ISO, desc: "Windows 8&8.1 x86/64+AIO Untouched ISO"}
+    - {id: 51, cat: PC, desc: "Windows 8 & 8.1 Untouched (MSDN)"}
+    - {id: 52, cat: PC, desc: "Windows 8 & 8.1 32 Bit Untouched (MSDN)"}
+    - {id: 53, cat: PC, desc: "Windows 8 & 8.1 64 Bit Untouched (MSDN)"}
+    - {id: 54, cat: PC/ISO, desc: "Windows 8 & 8.1 x86/64+AIO Untouched ISO"}
+    - {id: 58, cat: PC/ISO, desc: "Microsoft Office Multi-lang Untouch ISO"}
+    - {id: 59, cat: PC/ISO, desc: "x86-x64 bit Untouched Iso"}
     - {id: 55, cat: PC, desc: "Windows Server 2003 (Untouched)"}
     - {id: 56, cat: PC, desc: "Windows Server 2003 32 Bit Untouched"}
     - {id: 57, cat: PC, desc: "Windows Server 2003 64 Bit Untouched"}
-    - {id: 58, cat: PC/ISO, desc: "Microsoft Office Multi-lang Untouch ISO"}
-    - {id: 59, cat: PC/ISO, desc: "x86-x64 bit Untouched Iso"}
+    - {id: 132, cat: PC, desc: "Linux/Unix"}
     - {id: 60, cat: PC/0day, desc: "Software Releases"}
-    - {id: 61, cat: PC/0day, desc: "Antivirus"}
+    - {id: 71, cat: PC/0day, desc: "Activators/ Crack/ patch/ keygen"}
+    - {id: 75, cat: PC/0day, desc: "Adobe Plugins"}
     - {id: 62, cat: PC/Mobile-Android, desc: "Android Apps"}
-    - {id: 63, cat: PC/0day, desc: "Download Managers"}
-    - {id: 64, cat: PC/0day, desc: "DVD Tools"}
+    - {id: 141, cat: PC/Mac, desc: "Mac Apps"}
+    - {id: 61, cat: PC/0day, desc: "Antivirus"}
     - {id: 65, cat: PC/0day, desc: "Multimedia"}
     - {id: 66, cat: PC/0day, desc: "Audio Apps"}
-    - {id: 67, cat: PC/0day, desc: "Video Apps"}
     - {id: 68, cat: PC/0day, desc: "Photo Apps"}
-    - {id: 69, cat: PC/0day, desc: "Document Tools"}
-    - {id: 70, cat: PC/0day, desc: "Utility Tools"}
-    - {id: 71, cat: PC/0day, desc: "Activators/ Crack/ patch/ keygen"}
-    - {id: 72, cat: PC/0day, desc: "Other Softwares"}
-    - {id: 73, cat: PC/0day, desc: "Microsoft Office"}
-    - {id: 74, cat: PC/0day, desc: "Web Tools"}
-    - {id: 75, cat: PC/0day, desc: "Adobe Plugins"}
+    - {id: 111, cat: PC/0day, desc: "3D Modeling"}
+    - {id: 67, cat: PC/0day, desc: "Video Apps"}
     - {id: 76, cat: PC/0day, desc: "Customisation"}
+    - {id: 69, cat: PC/0day, desc: "Document Tools"}
+    - {id: 63, cat: PC/0day, desc: "Download Managers"}
     - {id: 77, cat: PC/0day, desc: "Drivers and Necessary Tools"}
-    - {id: 78, cat: PC/0day, desc: "Security Tools"}
+    - {id: 64, cat: PC/0day, desc: "DVD Tools"}
+    - {id: 73, cat: PC/0day, desc: "Microsoft Office"}
+    - {id: 83, cat: PC/0day, desc: "Silent Apps"}
+    - {id: 72, cat: PC/0day, desc: "Other Softwares"}
     - {id: 79, cat: PC/0day, desc: "Recovery Tools"}
+    - {id: 78, cat: PC/0day, desc: "Security Tools"}
+    - {id: 70, cat: PC/0day, desc: "Utility Tools"}
+    - {id: 74, cat: PC/0day, desc: "Web Tools"}
     - {id: 80, cat: PC/0day, desc: "Windows Phone Apps"}
     - {id: 81, cat: PC/0day, desc: "Developers"}
     - {id: 82, cat: PC/0day, desc: "Designers"}
-    - {id: 83, cat: PC/0day, desc: "Silent Apps"}
     - {id: 84, cat: PC, desc: "TEAM OS Other Stuff Releases"}
+    - {id: 131, cat: PC/Mac, desc: "MAC Games"}
+    - {id: 88, cat: PC/Mobile-Android, desc: "Android Games"}
     - {id: 85, cat: PC/Games, desc: "Games"}
     - {id: 86, cat: Books/EBook, desc: "Ebooks"}
     - {id: 87, cat: Other, desc: "Wallpapers, Themes & Screensavers"}
-    - {id: 88, cat: PC/Mobile-Android, desc: "Android Games"}
     - {id: 89, cat: PC, desc: "Other Releases"}
-    - {id: 107, cat: PC, desc: "Windows 10 Releases"}
-    - {id: 109, cat: PC, desc: "Windows 10 Releases 64 Bit"}
-    - {id: 110, cat: PC, desc: "Windows 10 Releases x86-x64 AIO"}
-    - {id: 111, cat: PC/0day, desc: "3D Modeling"}
-    - {id: 112, cat: PC/0day, desc: "Ghost Images"}
-    - {id: 113, cat: PC/0day, desc: "32 Bit Ghost Images"}
-    - {id: 114, cat: PC/0day, desc: "64 Bit Ghost Images"}
-    - {id: 131, cat: PC/Mac, desc: "Mac Games"}
-    - {id: 132, cat: PC/Mobile-Other, desc: "Linux/Unix"}
-    - {id: 140, cat: PC/Mac, desc: "MacOS"}
-    - {id: 141, cat: PC/Mac, desc: "Mac Apps"}
 
   modes:
     search: [q]
