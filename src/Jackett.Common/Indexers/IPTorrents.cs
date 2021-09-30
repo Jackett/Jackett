@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(62, TorznabCatType.MoviesSD, "Movie/MP4");
             AddCategoryMapping(38, TorznabCatType.MoviesForeign, "Movie/Non-English");
             AddCategoryMapping(68, TorznabCatType.Movies, "Movie/Packs");
-            AddCategoryMapping(20, TorznabCatType.MoviesWEB-DL, "Movie/Web-DL");
+            AddCategoryMapping(20, TorznabCatType.MoviesWEBDL, "Movie/Web-DL");
             AddCategoryMapping(100, TorznabCatType.MoviesHD, "Movie/x265");
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "Movie/Xvid");
 
