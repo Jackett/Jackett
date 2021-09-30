@@ -49,8 +49,6 @@ caps:
     - {id: 96, cat: Books/EBook, desc: "Sonstiges - E-Book"}
     - {id: 69, cat: Books, desc: "Sonstiges - Tutorial"}
     - {id: 71, cat: Books/Other, desc: "Sonstiges - Other"}
-    # Kinder
-    - {id: 102, cat: Movies, desc: "Kinder - Alles"}
     # XXX
     - {id: 113, cat: XXX/DVD, desc: "XXX - DVD"}
     - {id: 76, cat: XXX, desc: "XXX - HD-SD"}
