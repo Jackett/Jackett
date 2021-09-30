@@ -28,7 +28,7 @@ caps:
     - {id: 125, cat: Audio/Video, desc: "Musik - Video"}
     - {id: 113, cat: PC, desc: "Programme - Linux"}
     - {id: 114, cat: PC/Mac, desc: "Programme - Mac"}
-    - {id: 115, cat: PC, desc: "Programme - Windows"}
+    - {id: 115, cat: PC/0day, desc: "Programme - Windows"}
     - {id: 117, cat: TV, desc: "Allgemein - Serien"}
     - {id: 116, cat: TV/Documentary, desc: "Serien - Dokus"}
     - {id: 118, cat: TV/Sport, desc: "Serien - Sport"}
@@ -37,7 +37,7 @@ caps:
     - {id: 127, cat: Other, desc: "Für Unsere kleinsten"}
     - {id: 121, cat: Other, desc: "Handy Stuff"}
     - {id: 129, cat: Other, desc: "Sonstiges"}
-    - {id: 109, cat: Other, desc: "Spiele - Handy"}
+    - {id: 109, cat: PC/Mobile-Other, desc: "Spiele - Handy"}
     - {id: 112, cat: Console, desc: "Spiele - Konsolen"}
     - {id: 111, cat: PC/Games, desc: "Spiele - Mac / Linux"}
     - {id: 110, cat: PC/Games, desc: "Spiele - PC"}
