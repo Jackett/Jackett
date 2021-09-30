@@ -14,12 +14,8 @@ caps:
     - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
     - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
     - {id: 402, cat: TV, desc: "TV Series/电视剧"}
-    - {id: 422, cat: PC/Games, desc: "Games/游戏"}
-    - {id: 423, cat: TV, desc: "TV Shows/综艺"}
-    - {id: 406, cat: Audio/Video, desc: "MusicVideo/MV演唱会"}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos/MV演唱会"}
     - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
-    - {id: 409, cat: PC/0day, desc: "Software/软件"}
-    - {id: 424, cat: Other, desc: "Misc/其他"}
     - {id: 408, cat: Audio, desc: "HQ Audio/音乐"}
 
   modes:
