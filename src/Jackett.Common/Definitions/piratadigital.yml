@@ -13,8 +13,8 @@ caps:
     - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 6, cat: TV/Anime, desc: "Animes"}
-    - {id: 4, cat: Console, desc: "Jogos"}
-    - {id: 5, cat: PC, desc: "Aplicativos"}
+    - {id: 4, cat: PC/Games, desc: "Jogos"}
+    - {id: 5, cat: PC/0day, desc: "Aplicativos"}
     - {id: 7, cat: Other, desc: "Cursos"}
 
   modes:
