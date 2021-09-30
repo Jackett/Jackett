@@ -19,8 +19,8 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "Sports体育"}
     - {id: 408, cat: Audio, desc: "HQ Audio音乐"}
     - {id: 409, cat: Other, desc: "Others其他"}
-    - {id: 410, cat: Console, desc: "Games游戏"}
-    - {id: 411, cat: Books, desc: "Study学习"}
+    - {id: 410, cat: PC/Games, desc: "Games游戏"}
+    - {id: 411, cat: Other, desc: "Study学习"}
 
   modes:
     search: [q]
