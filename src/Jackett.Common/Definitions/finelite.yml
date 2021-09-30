@@ -57,7 +57,7 @@ caps:
     - {id: 17, cat: TV/SD, desc: "TV SD"}
     - {id: 31, cat: Movies/UHD, desc: "Ultra HD"}
     - {id: 20, cat: XXX, desc: "XXX HD"}
-    - {id: 21, cat: XXX, desc: "XXX SD"}
+    - {id: 21, cat: XXX/SD, desc: "XXX SD"}
 
   modes:
     search: [q]
