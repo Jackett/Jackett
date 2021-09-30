@@ -27,7 +27,6 @@ caps:
     - {id: 40, cat: Audio/Video, desc: "Music Videos"}
     - {id: 22, cat: Audio/Lossless, desc: "Music/Flac"}
     - {id: 51, cat: PC/Games, desc: "PC  GAMES"}
-    - {id: 52, cat: Other/Misc, desc: "ThE CoLLeCtiVe"}
     - {id: 23, cat: TV, desc: "Tv/Packs"}
     - {id: 16, cat: TV/HD, desc: "Tv/x264"}
     - {id: 49, cat: TV/HD, desc: "Tv/X265"}
