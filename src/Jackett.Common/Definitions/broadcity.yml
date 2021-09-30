@@ -15,22 +15,22 @@ caps:
     - {id: 1, cat: Movies/UHD, desc: "UHD"}
     - {id: 2, cat: Movies/UHD, desc: "UHD - BluRay"}
     - {id: 8, cat: Movies/UHD, desc: "UHD - TV"}
-    - {id: 6, cat: Movies/UHD, desc: "UHD - WEB-DL"}
+    - {id: 6, cat: Movies/WEB-DL, desc: "UHD - WEB-DL"}
     - {id: 16, cat: Movies/UHD, desc: "UHD - WEBRip"}
     - {id: 31, cat: Movies/BluRay, desc: "BluRay Disk"}
     - {id: 3, cat: Movies/HD, desc: "HD"}
     - {id: 25, cat: Movies/3D, desc: "HD - 3D"}
     - {id: 4, cat: Movies/HD, desc: "HD - BluRay"}
     - {id: 7, cat: Movies/HD, desc: "HD - TV"}
-    - {id: 5, cat: Movies/HD, desc: "HD - WEB-DL"}
+    - {id: 5, cat: Movies/WEB-DL, desc: "HD - WEB-DL"}
     - {id: 14, cat: Movies/HD, desc: "HD - WEBRip"}
     - {id: 32, cat: PC/Games, desc: "Oyunlar (Games)"}
     - {id: 9, cat: Movies/SD, desc: "SD"}
     - {id: 23, cat: Movies/SD, desc: "SD - BluRay"}
-    - {id: 10, cat: Movies/SD, desc: "SD - DVD"}
+    - {id: 10, cat: Movies/DVD, desc: "SD - DVD"}
     - {id: 36, cat: Movies/SD, desc: "SD - DVDRip"}
     - {id: 12, cat: Movies/SD, desc: "SD - TV"}
-    - {id: 13, cat: Movies/SD, desc: "SD - WEB-DL"}
+    - {id: 13, cat: Movies/WEB-DL, desc: "SD - WEB-DL"}
     - {id: 15, cat: Movies/SD, desc: "SD - WEBRip"}
     - {id: 17, cat: TV, desc: "TV"}
     - {id: 26, cat: TV/Other, desc: "TV - TV Program"}
