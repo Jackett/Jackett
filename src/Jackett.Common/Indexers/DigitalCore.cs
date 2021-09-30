@@ -89,14 +89,14 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(22, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(23, TorznabCatType.AudioLossless, "Music/FLAC");
-            AddCategoryMapping(24, TorznabCatType.Audio, "Music/MTV");
+            AddCategoryMapping(24, TorznabCatType.AudioVideo, "Music/MTV");
             AddCategoryMapping(29, TorznabCatType.Audio, "Music/PACKS");
 
             AddCategoryMapping(25, TorznabCatType.PCGames, "Games/PC");
             AddCategoryMapping(26, TorznabCatType.Console, "Games/NSW");
             AddCategoryMapping(27, TorznabCatType.PCMac, "Games/Mac");
 
-            AddCategoryMapping(28, TorznabCatType.Books, "Ebooks");
+            AddCategoryMapping(28, TorznabCatType.BooksEBook, "Ebooks");
 
             AddCategoryMapping(30, TorznabCatType.XXXSD, "XXX/SD");
             AddCategoryMapping(31, TorznabCatType.XXX, "XXX/HD");
