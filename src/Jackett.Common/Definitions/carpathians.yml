@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 186, cat: Books, desc: "E-book"}
+    - {id: 186, cat: Books/EBook, desc: "E-book"}
     - {id: 199, cat: Movies/SD, desc: "Film/Bluray/Hun"}
     - {id: 194, cat: Movies/SD, desc: "Film/CAM"}
     - {id: 60, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
@@ -18,7 +18,7 @@ caps:
     - {id: 20, cat: Movies/DVD, desc: "Film/DVD9/Hun"}
     - {id: 181, cat: Movies/HD, desc: "Film/HD/Eng"}
     - {id: 183, cat: Movies/HD, desc: "Film/HD/Hun"}
-    - {id: 200, cat: Movies/HD, desc: "Film/UHD/Hun"}
+    - {id: 200, cat: Movies/UHD, desc: "Film/UHD/Hun"}
     - {id: 192, cat: Movies/HD, desc: "Film/x264/Eng"}
     - {id: 190, cat: Movies/HD, desc: "Film/x264/Hun"}
     - {id: 70, cat: Movies/SD, desc: "Film/XviD/Eng"}
