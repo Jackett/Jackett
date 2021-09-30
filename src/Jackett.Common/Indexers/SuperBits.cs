@@ -87,9 +87,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(19, TorznabCatType.ConsoleOther, "Nintendo");
             AddCategoryMapping(20, TorznabCatType.ConsoleXBox, "Xbox");
             AddCategoryMapping(21, TorznabCatType.MoviesSD, "Xvid");
-            AddCategoryMapping(21, TorznabCatType.MoviesForeign, "Subpacks");
+            AddCategoryMapping(25, TorznabCatType.MoviesForeign, "Subpacks");
             AddCategoryMapping(22, TorznabCatType.XXX, "XXX");
-            AddCategoryMapping(21, TorznabCatType.AudioLossless, "FLAC");
+            AddCategoryMapping(23, TorznabCatType.AudioLossless, "FLAC");
             AddCategoryMapping(26, TorznabCatType.TV, "TV DK");
             AddCategoryMapping(27, TorznabCatType.TV, "TV NO");
             AddCategoryMapping(28, TorznabCatType.TV, "TV FI");
