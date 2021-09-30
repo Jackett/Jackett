@@ -53,12 +53,13 @@ caps:
     - {id: 36, cat: Audio/Video, desc: "MÜZİK Video"}
     - {id: 56, cat: Console, desc: "OYUN"}
     - {id: 59, cat: Console, desc: "Konsol"}
-    - {id: 58, cat: Console, desc: "Mobil/PDA"}
+    - {id: 58, cat: PC/Mobile-Android, desc: "Mobil/PDA"}
     - {id: 57, cat: PC/Games, desc: "PC"}
     - {id: 52, cat: PC, desc: "PROGRAM"}
-    - {id: 54, cat: PC/Mac, desc: "Apple"}
-    - {id: 55, cat: PC, desc: "Mobil/PDA"}
-    - {id: 53, cat: PC/0day, desc: "WINDOWS"}
+    - {id: 55, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 223, cat: PC, desc: "Linux"}
+    - {id: 54, cat: PC/Mac, desc: "macOS"}
+    - {id: 53, cat: PC/0day, desc: "Windows"}
     - {id: 182, cat: Movies/SD, desc: "SD"}
     - {id: 191, cat: Movies/SD, desc: "x264 DUAL"}
     - {id: 192, cat: Movies/SD, desc: "x264 TR"}
@@ -71,10 +72,10 @@ caps:
     - {id: 199, cat: Movies/SD, desc: "XviD Yabancı"}
     - {id: 221, cat: Other, desc: "VIP"}
     - {id: 85, cat: XXX, desc: "XXX"}
-    - {id: 92, cat: XXX, desc: "XXX E-Magazin"}
+    - {id: 92, cat: XXX/Other, desc: "XXX E-Magazin"}
     - {id: 93, cat: XXX, desc: "XXX Movie"}
-    - {id: 95, cat: XXX, desc: "XXX Packs"}
-    - {id: 96, cat: XXX, desc: "XXX Pics"}
+    - {id: 95, cat: XXX/Pack, desc: "XXX Packs"}
+    - {id: 96, cat: XXX/ImageSet, desc: "XXX Pics"}
 
   modes:
     search: [q]
