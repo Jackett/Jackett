@@ -126,6 +126,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(88, TorznabCatType.XXXImageSet, "XXX/Image-Sets");
             AddCategoryMapping(57, TorznabCatType.XXX, "XXX/Paysite");
             AddCategoryMapping(6, TorznabCatType.XXX, "XXX/SD");
+            AddCategoryMapping(89, TorznabCatType.AudioOther, "Music/MBluRay");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
