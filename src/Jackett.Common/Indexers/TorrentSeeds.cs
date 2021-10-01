@@ -96,8 +96,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(49, TorznabCatType.MoviesUHD, "Movies/UHD");
             AddCategoryMapping(76, TorznabCatType.MoviesForeign, "Movies/UHD-Foreign");
             AddCategoryMapping(33, TorznabCatType.AudioLossless, "Music/FLAC");
-            AddCategoryMapping(28, TorznabCatType.AudioOther, "Music/MBluRay-Rips");
-            AddCategoryMapping(34, TorznabCatType.AudioOther, "Music/MDVDR");
+            AddCategoryMapping(89, TorznabCatType.AudioVideo, "Music/MBluRay");
+            AddCategoryMapping(28, TorznabCatType.AudioVideo, "Music/MBluRay-Rips");
+            AddCategoryMapping(34, TorznabCatType.AudioVideo, "Music/MDVDR");
             AddCategoryMapping(4, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(20, TorznabCatType.AudioVideo, "Music/MVID");
             AddCategoryMapping(77, TorznabCatType.TVAnime, "Anime/Packs");
@@ -125,8 +126,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(53, TorznabCatType.XXX, "XXX/HD");
             AddCategoryMapping(88, TorznabCatType.XXXImageSet, "XXX/Image-Sets");
             AddCategoryMapping(57, TorznabCatType.XXX, "XXX/Paysite");
-            AddCategoryMapping(6, TorznabCatType.XXX, "XXX/SD");
-            AddCategoryMapping(89, TorznabCatType.AudioOther, "Music/MBluRay");
+            AddCategoryMapping(6, TorznabCatType.XXXSD, "XXX/SD");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
