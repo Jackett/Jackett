@@ -56,6 +56,7 @@ caps:
     - {id: 89, cat: TV, desc: "Dijital Platform Diger"}
     - {id: 90, cat: TV, desc: "Dijital Platform MUBi"}
     - {id: 91, cat: TV, desc: "Dijital Platform Vodafone"}
+    - {id: 94, cat: TV, desc: "Dijital Platform Apple TV+"}
     - {id: 31, cat: TV, desc: "Dizi"}
     - {id: 32, cat: TV, desc: "Dizi Yerli"}
     - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
