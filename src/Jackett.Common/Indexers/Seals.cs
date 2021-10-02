@@ -17,7 +17,7 @@ namespace Jackett.Common.Indexers
             : base(id: "seals",
                    name: "Seals",
                    description: "Seals is a CHINESE Private site for MOVIES / TV",
-                   link: "https://greatposterwall.com/",
+                   link: StringUtil.FromBase64("aHR0cHM6Ly9ncmVhdHBvc3RlcndhbGwuY29tLw=="),
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
