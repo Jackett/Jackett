@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 
