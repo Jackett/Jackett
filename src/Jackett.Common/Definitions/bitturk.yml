@@ -27,7 +27,8 @@ caps:
     - {id: 72, cat: Movies, desc: "Belgesel"}
     - {id: 60, cat: Movies/3D, desc: "3D"}
     - {id: 76, cat: Movies/UHD, desc: "4K UHD"}
-    - {id: 45, cat: Movies, desc: "Eğitim / Prog"}
+    - {id: 80, cat: TV/Sport, desc: "Formula-1"}
+    - {id: 45, cat: Other, desc: "Eğitim / Prog"}
     - {id: 1, cat: Movies, desc: "Filmler"}
     - {id: 14, cat: Movies/3D, desc: "3D Film"}
     - {id: 77, cat: Movies/UHD, desc: "4K UHD"}
@@ -35,7 +36,7 @@ caps:
     - {id: 17, cat: TV/Anime, desc: "Anime"}
     - {id: 31, cat: Movies, desc: "Belgesel"}
     - {id: 32, cat: Movies/BluRay, desc: "Bluray"}
-    - {id: 33, cat: Movies/BluRay, desc: "BRRiP"}
+    - {id: 33, cat: Movies/HD, desc: "BRRiP"}
     - {id: 34, cat: Movies, desc: "Çizgi Film"}
     - {id: 35, cat: Movies, desc: "D-Z0N3"}
     - {id: 36, cat: Movies/DVD, desc: "DVD"}
@@ -52,9 +53,9 @@ caps:
     - {id: 46, cat: Audio, desc: "Yab@ncı MüziK"}
     - {id: 21, cat: Audio/Video, desc: "Video Klipler"}
     - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 74, cat: PC, desc: "PC"}
+    - {id: 74, cat: PC/Games, desc: "PC"}
     - {id: 73, cat: Console, desc: "SONY-PS"}
-    - {id: 6, cat: PC, desc: "Program"}
+    - {id: 6, cat: PC/0day, desc: "Program"}
     - {id: 47, cat: Other, desc: "Resimler"}
     - {id: 48, cat: TV, desc: "Televizyon"}
     - {id: 49, cat: TV/HD, desc: "Tv HD"}
