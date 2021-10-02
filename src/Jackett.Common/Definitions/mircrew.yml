@@ -11,8 +11,8 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Other, desc: "MIRCrew Sharing Community"}
-    - {id: 2, cat: Other, desc: "  Piazza Grande"}
-    - {id: 3, cat: Other, desc: "  Comunicazioni, Annunci & Guide"}
+    - {id: 2, cat: Other, desc: "Piazza Grande"}
+    - {id: 3, cat: Other, desc: "Comunicazioni, Annunci & Guide"}
     - {id: 11, cat: Other, desc: "CAG Progetti & Collezioni"}
     - {id: 12, cat: Other, desc: "CAG Pir8 Channel"}
     - {id: 13, cat: Other, desc: "CAG Progetti"}
@@ -40,6 +40,7 @@ caps:
     - {id: 53, cat: Movies, desc: "Richieste Film"}
     - {id: 54, cat: TV, desc: "Richieste Serie TV"}
     - {id: 55, cat: Movies, desc: "Richieste Video diverse"}
+    - {id: 57, cat: Movies, desc: "Richieste Video Soddisfatte"}
     - {id: 33, cat: TV/Anime, desc: "Animazione Releases"}
     - {id: 34, cat: TV/Anime, desc: "Anime - Movies"}
     - {id: 35, cat: TV/Anime, desc: "Anime - Serie"}
