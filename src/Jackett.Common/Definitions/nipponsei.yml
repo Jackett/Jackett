@@ -1,0 +1,68 @@
+---
+id: nipponsei
+name: Nipponsei
+description: "Nipponsei is a Public site for MUSIC fresh from Japan"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://nipponsei.minglong.org/
+
+caps:
+  categorymappings:
+    - {id: music, cat: Audio, desc: Music}
+
+  modes:
+    search: [q]
+    music-search: [q]
+
+settings: []
+
+search:
+  # https://nipponsei.minglong.org/index.php?section=Tracker&search=Kanojo+mo+Kanojo+ED+Single
+  paths:
+    - path: index.php
+  inputs:
+    section: Tracker
+    search: "{{ .Keywords }}"
+
+  rows:
+    selector: tr.odd, tr.even
+
+  fields:
+    category:
+      text: music
+    title:
+      selector: a
+      filters:
+        - name: replace
+          args: ["[Nipponsei] ", ""]
+    details:
+      text: "{{ .Config.sitelink }}"
+    download:
+      selector: a
+      attribute: href
+    date:
+      text: now
+    date:
+      optional: true
+      selector: td.date
+      filters:
+        - name: dateparse
+          args: "2006-01-02 15:04"
+    size:
+      text: "128 MB"
+    size:
+      optional: true
+      selector: td.bytes
+    seeders:
+      selector: "{{ if .Keywords }}td:nth-child(2){{ else }}td:nth-child(4){{ end }}"
+    leechers:
+      selector: "{{ if .Keywords }}td:nth-child(3){{ else }}td:nth-child(5){{ end }}"
+    grabs:
+      selector: td.number
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
