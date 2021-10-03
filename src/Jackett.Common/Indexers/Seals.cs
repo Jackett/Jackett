@@ -70,6 +70,15 @@ namespace Jackett.Common.Indexers
                 release.MinimumSeedTime = 172800; // 48 hours
                 // tag each results with both Movie and TV cats.
                 release.Category = new List<int> { TorznabCatType.Movies.ID, TorznabCatType.TV.ID };
+                // Seals loads artist with the movie director and the gazelleTracker abstract
+                // places it in front of the movie separated with a dash.
+                // eg. Keishi Ohtomo -​ Rurouni Kenshin Part II: Kyoto Inferno [2014] [Feature Film] 1080p /​ MKV /​ x264 /​ 0
+                // We need to strip it or Radarr will not get a title match for automatic DL
+                var artistEndsAt = release.Title.IndexOf(" - ");
+                if (artistEndsAt > -1)
+                {
+                    release.Title = release.Title.Substring(artistEndsAt + 3);
+                }
             }
             return releases;
         }
