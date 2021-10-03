@@ -1141,14 +1141,15 @@ namespace Jackett.Common.Indexers
 
             if (Selector.Selector != null)
             {
-                if (Dom.Matches(Selector.Selector))
+                var selector_Selector = applyGoTemplateText(Selector.Selector, variables);
+                if (Dom.Matches(selector_Selector))
                     selection = Dom;
                 else
-                    selection = QuerySelector(Dom, Selector.Selector);
+                    selection = QuerySelector(Dom, selector_Selector);
                 if (selection == null)
                 {
                     if (required)
-                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", Selector.Selector, Dom.ToHtmlPretty()));
+                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", selector_Selector, Dom.ToHtmlPretty()));
                     return null;
                 }
             }
