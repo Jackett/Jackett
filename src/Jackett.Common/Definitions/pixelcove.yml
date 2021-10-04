@@ -55,6 +55,7 @@ caps:
     - {id: 72, cat: Other, desc: "Board Games"}
     - {id: 75, cat: Other, desc: "Paper Crafting"}
     - {id: 77, cat: Other, desc: "Arcade"}
+    - {id: 78, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
