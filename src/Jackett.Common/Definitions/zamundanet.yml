@@ -26,8 +26,9 @@ caps:
     - {id: 42, cat: Movies/BluRay, desc: "Blu-ray"}
     - {id: 46, cat: Movies/3D, desc: "Movies/3D"}
     # Serial
-    - {id: 7, cat: TV/SD, desc: "Serial"}
-    - {id: 33, cat: TV/HD, desc: "Serial/HD"}
+    - {id: 7, cat: TV/SD, desc: "Series"}
+    - {id: 33, cat: TV/HD, desc: "Series/HD"}
+    - {id: 55, cat: TV, desc: "Series/Russia"}
     # Music
     - {id: 6, cat: Audio, desc: "Music"}
     - {id: 29, cat: Audio/Video, desc: "Music/DVD-R"}
