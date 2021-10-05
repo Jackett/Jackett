@@ -18,9 +18,9 @@ caps:
     - {id: 32, cat: PC, desc: "Appz/PC"}
     - {id: 48, cat: Audio/Audiobook, desc: "Audio/Books"}
     - {id: 84, cat: Other, desc: "Damaged Torrent"}
-    - {id: 14, cat: Books, desc: "eBooks"}
-    - {id: 82, cat: Books, desc: "eBooks/Comics"}
-    - {id: 81, cat: Books, desc: "eBooks/Mags"}
+    - {id: 14, cat: Books/EBook, desc: "eBooks"}
+    - {id: 82, cat: Books/Comics, desc: "eBooks/Comics"}
+    - {id: 81, cat: Books/Mags, desc: "eBooks/Mags"}
     - {id: 60, cat: PC/Mac, desc: "Games/Mac"}
     - {id: 54, cat: Console/NDS, desc: "Games/NDS"}
     - {id: 4, cat: PC/Games, desc: "Games/PC"}
@@ -52,7 +52,9 @@ caps:
     - {id: 75, cat: TV/HD, desc: "TV/Boxsets HD"}
     - {id: 76, cat: TV/SD, desc: "TV/Boxsets SD"}
     - {id: 37, cat: XXX, desc: "XXX"}
+    - {id: 68, cat: XXX, desc: "XXX/0-Day"}
     - {id: 78, cat: XXX, desc: "XXX/3D"}
+    - {id: 67, cat: XXX/ImageSet, desc: "XXX/Imagesets"}
 
   modes:
     search: [q]
@@ -61,6 +63,33 @@ caps:
     music-search: [q]
     book-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: dateAdded
+    options:
+      dateAdded: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 login:
   path: Main/?act=Login
   method: form
@@ -81,50 +110,39 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
+    # alive, aliveanddead, nobot, dead, free, nuked
+    status: "{{ if .Config.freeleech }}free{{ else }}aliveanddead{{ end }}"
+    # title, desc, both
     search_type: title
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
 
   rows:
     selector: table#browse_torrents_table > tbody > tr[id^="torrent_row_"]
 
   fields:
-    title:
-      selector: a.torrent_name
-      attribute: title
-    description:
-      selector: span.torrent_small_desc
     category:
-      selector: td.torrent_table_type > a
+      selector: a[href^="browse.php?cat[]="]
       attribute: href
       filters:
         - name: querystring
           args: cat[]
+    title:
+      selector: a.torrent_name
+      attribute: title
     details:
       selector: a.torrent_name
       attribute: href
     download:
       selector: a[href^="download.php?"]
       attribute: href
-    size:
-      selector: td.torrent_table_size
+    description:
+      optional: true
+      selector: span.torrent_small_desc
     files:
       selector: td.torrent_table_files
-    seeders:
-      selector: td.torrent_table_seeders
-    leechers:
-      selector: td.torrent_table_leechers
-    grabs:
-      selector: td.torrent_table_snatched
-      filters:
-        - name: regexp
-          args: ([\d\.]+)
-    downloadvolumefactor:
-      case:
-        ":root div#notice_ratioBoostingMadness": 0
-        "*": 1
-    uploadvolumefactor:
-      text: 1
     date:
       selector: td.torrent_table_dateAdded
       filters:
@@ -132,4 +150,27 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-# engine tbd
+    size:
+      selector: td.torrent_table_size
+    grabs:
+      selector: td.torrent_table_snatched
+      filters:
+        - name: regexp
+          args: (\d+)
+    seeders:
+      selector: td.torrent_table_seeders
+    leechers:
+      selector: td.torrent_table_leechers
+    downloadvolumefactor:
+      case:
+        ":root div#notice_ratioBoostingMadness": 0
+        img[src$="images/freedownload.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 5 day (as seconds = 5 x 24 x 60 x 60)
+      text: 432000 # 3 days for torrents under 20GB
+# engine n/a
