@@ -45,6 +45,7 @@ login:
     input: captcha
   error:
     - selector: table:contains("Login failed!")
+    - selector: table:contains("Login unsuccessful")
   test:
     path: index.php
 
