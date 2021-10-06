@@ -90,6 +90,7 @@ caps:
     - {id: 504, cat: Other, desc: " |- Оригинальные версии Windows"}
     - {id: 506, cat: Other, desc: " |- Оригинальные версии Windows Server"}
     - {id: 763, cat: Other, desc: " |- Windows OEM Recovery СD/DVD"}
+    - {id: 1335, cat: Other, desc: " |- Сборки Windows 11"}
     - {id: 1241, cat: Other, desc: " |- Сборки Windows 10"}
     - {id: 1023, cat: Other, desc: " |- Сборки Windows 8"}
     - {id: 717, cat: Other, desc: " |- Сборки Windows 7"}
