@@ -106,7 +106,7 @@ login:
     - selector: table.main:contains("failed")
   test:
     path: my.php
-    selector: a[href="logout.php"]
+    selector: a[href$="logout.php"]
 
 search:
   paths:
@@ -116,9 +116,11 @@ search:
     search: "{{ .Keywords }}"
     # 0 active, 1 incldead, 2 onlydead, 3 freeleech, 4 480p, 5 720p, 6 1080p, 7 4k
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
   rows:
-    selector: table[cellpadding="5"] tbody tr:has(a[href^="download.php?torrent="])
+    selector: div.torrentrow:has(a[href^="download.php?torrent="])
 
   fields:
     category:
@@ -142,10 +144,10 @@ search:
         - name: regexp
           args: "src=(.*?) width"
     files:
-      selector: td:nth-last-child(7)
+      selector: div.torrenttable:nth-last-child(7)
     date:
       # Jul 4 2019 08:04 AM
-      selector: td:nth-last-child(5):not(:contains("day"))
+      selector: div.torrenttable:nth-last-child(5):not(:contains("day"))
       optional: true
       filters:
         - name: append
@@ -155,16 +157,16 @@ search:
     date:
       # Today 02:40 PM
       # Yesterday 09:10 AM
-      selector: td:nth-last-child(5):contains("day")
+      selector: div.torrenttable:nth-last-child(5):contains("day")
       optional: true
     size:
-      selector: td:nth-last-child(4)
+      selector: div.torrenttable:nth-last-child(4)
     grabs:
-      selector: td:nth-last-child(3)
+      selector: div.torrenttable:nth-last-child(3)
     seeders:
-      selector: td:nth-last-child(2)
+      selector: div.torrenttable:nth-last-child(2)
     leechers:
-      selector: td:nth-last-child(1)
+      selector: div.torrenttable:nth-last-child(1)
     downloadvolumefactor:
       case:
         img[src$="/pic/freeleech.gif"]: 0
