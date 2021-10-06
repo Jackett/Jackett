@@ -24,6 +24,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
 
+ * 01torrent
  * ØMagnet
  * 1337x
  * 7torrents
