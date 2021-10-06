@@ -1826,7 +1826,7 @@ namespace Jackett.Common.Indexers
                     {
                         headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
 
-                        if (!Download.Infohash.Before || Download.Before == null || response == null)
+                        if (!Download.Infohash.Usebeforeresponse || Download.Before == null || response == null)
                             response = await HandleRedirectableRequestAsync(link.ToString(), headers);
 
                         var hash = MatchSelector(response, Download.Infohash.Hash, variables);

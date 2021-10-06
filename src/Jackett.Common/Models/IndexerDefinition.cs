@@ -175,7 +175,7 @@ namespace Jackett.Common.Models
     {
         public selectorField Hash { get; set; }
         public selectorField Title { get; set; }
-        public bool Before { get; set; } = false;
+        public bool Usebeforeresponse { get; set; } = false;
     }
 
     public class downloadBlock

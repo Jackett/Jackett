@@ -116,7 +116,7 @@ download:
       action: 2
       id: "{{ .DownloadUri.Query.id }}"
   infohash:
-    before: true
+    usebeforeresponse: true
     hash:
       selector: li:first-child
       filters:
