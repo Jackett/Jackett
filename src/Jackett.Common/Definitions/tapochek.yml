@@ -318,6 +318,7 @@ caps:
     - {id: 230, cat: PC, desc: "Windows 7"}
     - {id: 879, cat: PC, desc: "Windows 8"}
     - {id: 905, cat: PC, desc: "Windows 10"}
+    - {id: 969, cat: PC, desc: "Windows 11"}
     - {id: 698, cat: PC, desc: "Сборки (Microsoft Windows XP)"}
     - {id: 701, cat: PC, desc: "Сборки (Microsoft Windows 7)"}
     - {id: 880, cat: PC, desc: "Сборки (Microsoft Windows 8)"}
