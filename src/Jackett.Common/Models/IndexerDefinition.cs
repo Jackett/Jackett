@@ -190,6 +190,7 @@ namespace Jackett.Common.Models
     {
         public string Selector { get; set; }
         public string Attribute { get; set; }
+        public bool Usebeforeresponse { get; set; } = false;
         public List<filterBlock> Filters { get; set; }
     }
 }

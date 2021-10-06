@@ -1859,7 +1859,8 @@ namespace Jackett.Common.Indexers
                         try
                         {
 
-                            response = await HandleRedirectableRequestAsync(link.ToString(), headers);
+                            if (!selector.Usebeforeresponse || Download.Before == null || response == null)
+                                response = await HandleRedirectableRequestAsync(link.ToString(), headers);
                             var href = MatchSelector(response, selector, variables, debugMatch: true);
                             if (href == null)
                                 continue;
