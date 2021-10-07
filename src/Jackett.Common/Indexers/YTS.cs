@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://yts.mx/",
-            "https://yts.unblockit.ws/",
+            "https://yts.unblockit.kim/",
             "https://yts.unblockninja.com/",
             "https://yts.nocensor.work/"
         };
@@ -40,6 +40,7 @@ namespace Jackett.Common.Indexers
             "https://yts.unblockit.uno/",
             "https://yts.unblockit.ch/",
             "https://yts.unblockit.li/",
+            "https://yts.unblockit.ws/",
             "https://yts.nocensor.space/"
         };
 
