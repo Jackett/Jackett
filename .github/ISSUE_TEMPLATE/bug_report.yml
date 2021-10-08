@@ -36,16 +36,6 @@ body:
       OS version: platform n.nn (32bit/64bit)
       Environment version: n.n.nn (folder path)
       Starting Jackett vn.nn.nn
-    value: |
-      Using HTTP Client: clientType
-      Using FlareSolverr: Disabled or a url
-      Using proxy: Disabled or HTTP/SOCKS4/SOCKS5
-      App config/log directory: folder path
-      Running in Docker: No/Yes
-      Jackett variant: variantType
-      OS version: platform n.nn (32bit/64bit)
-      Environment version: n.n.nn (folder path)
-      Starting Jackett vn.nn.nn
     render: markdown
   validations:
     required: true
