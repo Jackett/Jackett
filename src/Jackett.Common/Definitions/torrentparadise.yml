@@ -6,13 +6,13 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://torrentparadise.pm/
+  - https://torrentparadise.cl/
 legacylinks:
-  - https://torrentparadise.cc/ # redirects to *.pm
-  - https://torrentparadise.to/ # redirects to *.pm
-  - https://torrentparadise.la/ # redirects to *.pm
-  - https://torrentparadise.cl/ # redirects to *.pm
-  - https://torrentparadise.org/ # redirects to *.pm
+  - https://torrentparadise.cc/ # redirects to *.cl
+  - https://torrentparadise.to/ # redirects to *.cl
+  - https://torrentparadise.la/ # redirects to *.cl
+  - https://torrentparadise.org/ # redirects to *.cl
+  - https://torrentparadise.pm/ # DNS_PROBE_FINISHED_NXDOMAIN
 
 caps:
   categories:
