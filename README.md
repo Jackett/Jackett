@@ -310,6 +310,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
+ * CrypticHaven Comedy Club (CCC)
  * DANISH BYTES
  * Darius Tracker
  * Dark-Shadow
