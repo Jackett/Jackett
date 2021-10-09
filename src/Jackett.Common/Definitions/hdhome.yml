@@ -133,13 +133,24 @@ search:
     leechers:
       selector: td.rowfollow:nth-child(7)
     date:
+      # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
       attribute: title
+      optional: true
       filters:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
+    date:
+      # time added
+      selector: td.rowfollow:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
     downloadvolumefactor:
       case:
         img.pro_free: 0
