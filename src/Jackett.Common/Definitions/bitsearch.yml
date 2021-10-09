@@ -20,12 +20,13 @@ caps:
     "Other/Android": PC/Mobile-Android
     "Other/Archive": Other
     "Other/Audio": Audio
-    "Other/Database": Movies/DVD
+    "Other/Database": PC
     "Other/DiskImage": PC/ISO
     "Other/Document": Books/Comics
     "Other/Image": Other/Misc
     "Other/Program": PC/0day
-    "Other/Sourcecode": Movies/Other
+    "Other/Sourcecode": PC
+    "Other/Source Code": PC
     "Other/Video": TV
     "Softwares/Windows": PC/0day
     TV: TV
