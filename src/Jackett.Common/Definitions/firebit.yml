@@ -45,6 +45,7 @@ caps:
     - {id: "Музыка Видео", cat: Audio/Video, desc: "Музыка Видео"}
     - {id: "Другие категории", cat: Other, desc: "Другие категории"}
     - {id: "Сериалы", cat: TV, desc: "Сериалы"}
+    - {id: "18+", cat: TV, desc: "18+"}
     - {id: "-", cat: Other, desc: "Другие категории"}
 
   modes:
