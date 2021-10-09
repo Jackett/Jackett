@@ -446,6 +446,7 @@ caps:
     - {id: 1086, cat: PC/0day, desc: " | Windows Vista (оригинальные образы)"}
     - {id: 1087, cat: PC/0day, desc: " | Windows XP (оригинальные образы)"}
     - {id: 1088, cat: PC/0day, desc: " | Windows OS, выпущенные до 2001 года (оригинальные образы)"}
+    - {id: 1117, cat: PC/0day, desc: " | Сборки Windows 11"}
     - {id: 1035, cat: PC/0day, desc: " | Сборки Windows 10"}
     - {id: 843, cat: PC/0day, desc: " | Сборки Windows 8 / 8.1"}
     - {id: 842, cat: PC/0day, desc: " | Сборки Windows 7"}
