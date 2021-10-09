@@ -103,6 +103,7 @@ namespace Jackett.Common.Indexers
             "https://pctmix1.com/",
             "https://pctreload1.com/",
             "https://maxitorrent.com",
+            "https://atomixhq.com/",
             "https://pctmix1.unblockit.kim/"
         };
 
