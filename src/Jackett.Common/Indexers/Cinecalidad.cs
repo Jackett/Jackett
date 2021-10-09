@@ -74,12 +74,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var templateUrl = SiteLink;
-            templateUrl += "{0}"; // placeholder for page
+            templateUrl += "{0}?s="; // placeholder for page
 
             var maxPages = 2; // we scrape only 2 pages for recent torrents
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
             {
-                templateUrl += "?s=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
+                templateUrl += WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
                 maxPages = MaxSearchPageLimit;
             }
 
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
                     title += " MULTi LATiN SPANiSH 1080p BDRip x264";
 
                     var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
-                    var extract = row.QuerySelector("noscript").InnerHtml.Split('\'');
+                    var extract = qImg.GetAttribute("extract").Split('\'');
                     Uri link = null;
                     foreach (var part in extract)
                     {
