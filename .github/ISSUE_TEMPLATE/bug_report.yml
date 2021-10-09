@@ -27,12 +27,12 @@ body:
     label: Environment
     description: Please provide the details of the system Jackett is running on. The best way to do this is to restart Jackett, access the dashboard, view the log, and copy/paste replacing the example below with the last 10 Info lines at the bottom of the log.
     placeholder: |
-      Using HTTP Client: clientType
+      Using HTTP Client: HttpWebClient/HttpWebClient2
       Using FlareSolverr: Disabled or a url
       Using proxy: Disabled or HTTP/SOCKS4/SOCKS5
       App config/log directory: folder path
       Running in Docker: No/Yes
-      Jackett variant: variantType
+      Jackett variant: CoreWindows/FullFrameworkWindows/CoreMacOs/CoreLinuxAmdx64/CoreLinuxArm32/CoreLinuxArm64/Mono
       OS version: platform n.nn (32bit/64bit)
       Environment version: n.n.nn (folder path)
       Starting Jackett vn.nn.nn
