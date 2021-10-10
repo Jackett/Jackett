@@ -323,6 +323,7 @@ caps:
     - {id: 701, cat: PC, desc: "Сборки (Microsoft Windows 7)"}
     - {id: 880, cat: PC, desc: "Сборки (Microsoft Windows 8)"}
     - {id: 906, cat: PC, desc: "Сборки (Microsoft Windows 10)"}
+    - {id: 970, cat: PC, desc: "Сборки (Microsoft Windows 11)"}
     - {id: 231, cat: PC, desc: "Серверные (Microsoft Windows OS)"}
     - {id: 232, cat: PC, desc: "Разное (Microsoft Windows OS)"}
     - {id: 236, cat: PC, desc: "Работа с жёстким диском"}
