@@ -103,7 +103,7 @@ search:
     # does not support imdbid search and does not return imdb link in results
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.freeleech }}, table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(img[src=\"images/gold.gif\"]){{ else }}{{ end }}"
+    selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.freeleech }}, table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]):has(img[src=\"images/gold.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -129,8 +129,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     superuser:
-      selector: img[src="images/recomend.jpg"]
-      attribute: title
+      selector: a[href^="index.php?page=userdetails"]
       optional: true
     date:
       selector: "{{ if .Result.superuser }}td:nth-last-child(10){{ else }}td:nth-last-child(8){{ end }}"
