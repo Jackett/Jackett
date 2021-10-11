@@ -381,6 +381,7 @@ namespace Jackett.Updater
                 "Definitions/mkvcage.yml",
                 "Definitions/moecat.yml",
                 "Definitions/monova.yml",
+                "Definitions/montorrent.yml",
                 "Definitions/movcr.yml",
                 "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
