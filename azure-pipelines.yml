@@ -512,6 +512,8 @@ stages:
       - job: Publish
         workspace:
           clean: all
+        pool:
+          vmImage: ubuntu-latest
         steps:
           - checkout: self
 
