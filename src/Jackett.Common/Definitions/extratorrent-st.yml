@@ -1,0 +1,124 @@
+---
+id: extratorrent-st
+name: ExtraTorrent.st
+description: "ExtraTorrent.st is a Public tracker for MOVIE / TV / GENERAL magnets"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://extratorrent.st/
+  - https://extratorrent.unblockit.kim/
+  - https://extratorrent.nocensor.work/ 
+
+caps:
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: Movies}
+    - {id: Highres Movies, cat: Movies/HD, desc: Movies HD}
+    - {id: UltraHD, cat: Movies/UHD, desc: Movies UHD}
+    - {id: 3D Movies, cat: Movies/3D, desc: Movies 3D}
+    - {id: Bollywood, cat: Movies, desc: Bollywood}
+    - {id: Movie clips, cat: Movies, desc: Movies clips}
+    - {id: DVD, cat: Movies/DVD, desc: Movies DVD}
+    - {id: MP4, cat: Movies, desc: Movies MP4}
+    - {id: Dubbed Movies, cat: Movies/Foreign, desc: Moves Dubbed}
+    - {id: Other Movies, cat: Movies/Other, desc: Moves Other}
+    - {id: Documentary, cat: TV/Documentary, desc: Documentary}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: MP3, cat: Audio/MP3, desc: Music MP3}
+    - {id: AAC, cat: Audio, desc: Music AAC}
+    - {id: Lossless, cat: Audio/Lossless, desc: Music Lossless}
+    - {id: Music videos, cat: Audio/Video, desc: Music Videos}
+    - {id: Other Music, cat: Audio/Other, desc: Music Other}
+    - {id: Radio  Shows, cat: Audio/Other, desc: Music Radio}
+    - {id: Video, cat: XXX, desc: Adult / Porn}
+    - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
+    - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}
+    - {id: Games, cat: XXX/Other, desc: Adult Games}
+    - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
+    - {id: Windows, cat: PC, desc: Software}
+    - {id: PC Games, cat: PC/Games, desc: PC Games}
+    - {id: Mac, cat: PC/Mac, desc: Games Mac}
+    - {id: NDS, cat: Console/NDS, desc: Games NDS}
+    - {id: PS3, cat: Console/PS3, desc: Games PS3}
+    - {id: PS4, cat: Console/PS4, desc: Games PS4}
+    - {id: PSP, cat: Console/PSP, desc: Games PSP}
+    - {id: Wii, cat: Console/Wii, desc: Games Wii}
+    - {id: Xbox360, cat: Console/XBox 360, desc: Games Xbox360}
+    - {id: Switch, cat: Console/Other, desc: Games Switch}
+    - {id: Other Games, cat: Console/Other, desc: Games Other}
+    - {id: English-translated, cat: TV/Anime, desc: Anime  English-translated}
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: Audio books, cat: Audio/Audiobook, desc: Books Audiobook}
+    - {id: Comics, cat: Books/Comics, desc: Books Comics}
+    - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
+    - {id: Other, cat: Other/Misc, desc: Other}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://extratorrent.st/search/?srt=added&order=desc&search=captain&new=1&x=0&y=0
+    - path: "{{ if .Keywords }}search/?srt=added&order=desc&search={{ .Keywords }}&new=1&x=0&y=0{{ else }}{{ end }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "."]
+
+  rows:
+    selector: tr[class^="tl"]
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: span.c_tor
+      filters:
+        - name: replace
+          args: ["in ", ""]
+        - name: trim
+    title:
+      selector: a[href^="/torrent/"]
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      # 8m , 13h, 2d , 3w , 1m , 1y # site uses m for both minutes and months!?!?
+      selector: td:nth-last-of-type(5)
+      filters:
+        - name: replace
+          args: ["m", " minutes"]
+        - name: replace
+          args: ["h", " hours"]
+        - name: replace
+          args: ["y", " years"]
+        - name: replace
+          args: ["d", " days"]
+        - name: replace
+          args: ["w", " weeks"]
+        - name: timeago
+    size:
+      selector: td:nth-last-of-type(4)
+    seeders:
+      text: 0
+    seeders:
+      optional: true
+      selector: td.sy, td.sn
+    leechers:
+      text: 0
+    leechers:
+      optional: true
+      selector: td.ly, td.ln
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
