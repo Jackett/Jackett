@@ -69,6 +69,9 @@ caps:
     - {id: 98, cat: TV/Sport, desc: "Soccer - FIFA World Cup"}
     - {id: 56, cat: TV/Sport, desc: "Sports on tv"}
     - {id: 70, cat: TV/Sport, desc: "Sports on tv ESPN Films"}
+    # not in search_forum drop down
+    - {id: 73, cat: TV/Sport, desc: "Other sports - Auto, moto racing"}
+    # left out 39, 60 and 40 since they are not torrent forums
 
   modes:
     search: [q]
