@@ -6,10 +6,10 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - http://iv-torrents.com/
-legacylinks:
   - https://iv-torrents.ru/
+legacylinks:
   - https://iv-torrents.com/
+  - http://iv-torrents.com/
 
 caps:
   categorymappings:
