@@ -158,7 +158,11 @@ namespace Jackett.Common.Indexers
                     var qDetails = row.QuerySelector(".br_right > a");
                     var details = new Uri(SiteLink + qDetails.GetAttribute("href"));
                     var title = qDetails.QuerySelector("b").TextContent;
-
+                    // Remove auto-generated [REQ] tag from fulfilled requests
+                    if (title.StartsWith("[REQ] "))
+                    {
+                        title = title.Substring(6);
+                    }
                     var qLink = row.QuerySelector("td:nth-child(4) > a");
                     if (qLink == null)
                         continue; // support/donation banner
