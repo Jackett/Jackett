@@ -23,7 +23,8 @@ namespace Jackett.Common.Indexers
     internal class LostFilm : BaseWebIndexer
     {
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://lostfilm.site" // redirects to *.tw
+            "https://lostfilm.site",
+            "https://lostfilm.tw/",
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -31,7 +32,7 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilmtv.site/",
             "https://www.lostfilm.tv/",
             "https://www.lostfilm.win/",
-            "https://lostfilm.tw/",
+            "https://www.lostfilm.tw/",
             "https://www.lostfilm.uno/"
 
  };
