@@ -249,7 +249,7 @@ namespace Jackett.Common.Indexers
                     searchString += " Сезон " + query.Season;
                 }
                 queryCollection.Add("nm", searchString);
-            }
+            };
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("f[]", cat);
