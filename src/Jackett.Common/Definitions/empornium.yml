@@ -7,9 +7,10 @@ type: private
 encoding: UTF-8
 links:
   - https://www.empornium.is/
-  - https://empornium.sx/
+  - https://www.empornium.sx/ # site forces www.
 legacylinks:
   - https://www.empornium.me/
+  - https://empornium.sx/
 
 caps:
   categorymappings:
