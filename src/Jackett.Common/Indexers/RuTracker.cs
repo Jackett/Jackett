@@ -1470,6 +1470,9 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("nm", searchString);
             }
 
+            if (query.HasSpecifiedCategories)
+                queryCollection.Add("f", string.Join(",", MapTorznabCapsToTrackers(query)));
+
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             return searchUrl;
         }
