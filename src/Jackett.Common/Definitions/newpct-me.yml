@@ -78,6 +78,8 @@ search:
       selector: a.complets-right
       filters:
         - name: replace
+          args: ["desc.", "0 B"]
+        - name: replace
           args: ["s", ""]
     date:
       text: now
