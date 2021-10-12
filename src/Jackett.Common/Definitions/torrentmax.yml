@@ -13,10 +13,6 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: "PHOTO", cat: XXX, desc: "후방주의 (Adult)"}
-    - {id: "19", cat: XXX, desc: "후방주의2 (Adult)"}
-    - {id: "GIRL", cat: XXX, desc: "걸그룹 (Adult)"}
-    - {id: "CAM", cat: XXX, desc: "직캠 (Adult)"}
     - {id: "ANIMATION", cat: TV/Anime, desc: "애니 (Animation)"}
     - {id: "GAME", cat: Console, desc: "게임 (Games)"}
     - {id: "MOVIE_EN", cat: Movies/Foreign, desc: "영화 (Movie EN)"}
@@ -28,8 +24,6 @@ caps:
     - {id: "VARIETY", cat: TV, desc: "예능 (Variety)"}
     - {id: "MUSIC", cat: Audio, desc: "한국음악 (Music)"}
     - {id: "MUSIK", cat: Audio/Foreign, desc: "외국음악 (Music Foreign)"}
-    - {id: "notice", cat: Other, desc: "공지사항 (Notice)"}
-    - {id: "humor", cat: Other, desc: "유머 (Humor)"}
     - {id: "MOBILE", cat: PC/Mobile-Other, desc: "모바일 (Mobile)"}
     - {id: "UTIL", cat: PC, desc: "유틸 (Software)"}
 
@@ -68,7 +62,7 @@ search:
     sop: and
 
   rows:
-    selector: div.search-media div.media
+    selector: div.search-media div.media:not(:has(a[href*=\"PHOTO\"])):not(:has(a[href*=\"19\"])):not(:has(a[href*=\"GIRL\"])):not(:has(a[href*=\"CAM\"])):not(:has(a[href*=\"notice\"])):not(:has(a[href*=\"humor\"]))
 
   fields:
     category:
