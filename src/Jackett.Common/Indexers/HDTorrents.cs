@@ -38,8 +38,11 @@ namespace Jackett.Common.Indexers
         {
             "https://hdts.ru/",
             "https://hd-torrents.org/",
-            "https://hd-torrents.net/",
             "https://hd-torrents.me/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://hd-torrents.net/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
