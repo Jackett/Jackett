@@ -36,7 +36,7 @@ caps:
     - {id: Games, cat: XXX/Other, desc: Adult Games}
     - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
     - {id: Windows, cat: PC, desc: Software Windows}
-    - {id: Android, cat: Mobile-Android, desc: Software Android}
+    - {id: Android, cat: PC/Mobile-Android, desc: Software Android}
     - {id: Mac, cat: PC/Mac, desc: Software Mac}
     - {id: Linux, cat: PC, desc: Software Linux}
     - {id: PC Games, cat: PC/Games, desc: PC Games}
