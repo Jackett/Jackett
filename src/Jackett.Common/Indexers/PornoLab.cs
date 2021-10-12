@@ -253,20 +253,27 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.SanitizedSearchTerm;
 
-            var queryCollection = new NameValueCollection();
+            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
+            {
+                {"o", "1"},
+                {"s", "2"}
+            };
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                queryCollection.Add("nm", searchString);
+                qc.Add("nm", searchString);
             }
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
-                queryCollection.Add("nm", searchString);
+                qc.Add("nm", searchString);
             }
 
-            var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                qc.Add("f[]", cat);
+
+            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
             if (!results.ContentString.Contains("Вы зашли как:"))
             {
