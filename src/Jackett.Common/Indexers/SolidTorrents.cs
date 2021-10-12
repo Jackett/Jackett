@@ -71,6 +71,7 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "public";
 
+            // when updating categories also update ParseCategory routine.
             AddCategoryMapping("Audio", TorznabCatType.Audio, "Audio");
             AddCategoryMapping("Video", TorznabCatType.Movies, "Video");
             AddCategoryMapping("Image", TorznabCatType.OtherMisc, "Image");
@@ -83,6 +84,63 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("Sourcecode", TorznabCatType.MoviesOther, "Sourcecode");
             AddCategoryMapping("Database", TorznabCatType.MoviesDVD, "Database");
             AddCategoryMapping("Unknown", TorznabCatType.Other, "Unknown");
+        }
+
+        protected virtual List<int> ParseCategory(string query)
+        {
+            var cats = new List<int>();
+            // the json category can be either a category name or an integer !?!
+            switch (query)
+            {
+                case "Audio":
+                case "7":
+                case "8":
+                    cats.Add(TorznabCatType.Audio.ID);
+                    break;
+                case "Video":
+                case "2":
+                    cats.Add(TorznabCatType.Movies.ID);
+                    break;
+                case "Image":
+                    cats.Add(TorznabCatType.OtherMisc.ID);
+                    break;
+                case "Document":
+                    cats.Add(TorznabCatType.BooksComics.ID);
+                    break;
+                case "eBook":
+                case "9":
+                    cats.Add(TorznabCatType.BooksEBook.ID);
+                    break;
+                case "Program":
+                case "6":
+                    cats.Add(TorznabCatType.PC0day.ID);
+                    break;
+                case "Android":
+                case "5":
+                    cats.Add(TorznabCatType.PCMobileAndroid.ID);
+                    break;
+                case "Archive":
+                    cats.Add(TorznabCatType.Other.ID);
+                    break;
+                case "Diskimage":
+                    cats.Add(TorznabCatType.PCISO.ID);
+                    break;
+                case "Sourcecode":
+                    cats.Add(TorznabCatType.MoviesOther.ID);
+                    break;
+                case "Database":
+                    cats.Add(TorznabCatType.MoviesDVD.ID);
+                    break;
+                case "Unknown":
+                case "1":
+                    cats.Add(TorznabCatType.Other.ID);
+                    break;
+                default:
+                    // since there is no category table resource on the web site
+                    // the numeric categories are a process of discovery.
+                    throw new Exception($"Error parsing category={query}!");
+            }
+            return cats;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -171,6 +229,7 @@ namespace Jackett.Common.Indexers
             var seeders = (int)swarm["seeders"];
             var publishDate = torrent["imported"] != null ? DateTime.Parse((string)torrent["imported"]) : DateTime.Now;
             var magnetUri = new Uri((string)torrent["magnet"]);
+            var category = ParseCategory((string)torrent["category"]);
 
             return new ReleaseInfo
             {
@@ -178,7 +237,7 @@ namespace Jackett.Common.Indexers
                 Details = details,
                 Guid = details,
                 PublishDate = publishDate,
-                Category = MapTrackerCatToNewznab((string)torrent["category"]),
+                Category = category,
                 Size = (long)torrent["size"],
                 Seeders = seeders,
                 Peers = seeders + (int)swarm["leechers"],
