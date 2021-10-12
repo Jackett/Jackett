@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -55,6 +56,8 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "private";
 
+            webclient.requestDelay = 5.1; // 1 request per 5 seconds
+
             AddCategoryMapping(1, TorznabCatType.TV);
             AddCategoryMapping(2, TorznabCatType.Movies);
             // as returned by TvCategoryParser.ParseTvShowQuality these two TV cats are required
@@ -91,8 +94,6 @@ namespace Jackett.Common.Indexers
 
             var qc = new NameValueCollection
             {
-                { "order_by", "s3" },
-                { "order_way", "DESC" },
                 { "disablegrouping", "1" }
             };
 
@@ -112,6 +113,14 @@ namespace Jackett.Common.Indexers
 
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(results.ContentString);
+
+                // get params to build download link (user could be banned without those params)
+                var rssFeedUri = new Uri(SiteLink + doc.QuerySelector("link[href^=\"/feeds.php?feed=\"]")
+                    .GetAttribute("href"));
+                var rssFeedQuery = HttpUtility.ParseQueryString(rssFeedUri.Query);
+                var downloadLinkExtraParams = "&authkey=" + rssFeedQuery["authkey"] + "&torrent_pass=" + rssFeedQuery["passkey"];
+
+                // parse rows
                 var rows = doc.QuerySelectorAll("table.torrent_table > tbody > tr.torrent");
                 foreach (var row in rows)
                 {
@@ -125,7 +134,7 @@ namespace Jackett.Common.Indexers
                     title += " " + description;
                     var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                     var torrentId = qDetailsLink.GetAttribute("href").Split('=').Last();
-                    var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId);
+                    var link = new Uri(SiteLink + "torrents.php?action=download&id=" + torrentId + downloadLinkExtraParams);
 
                     var files = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(3)").TextContent);
                     var publishDate = DateTimeUtil.FromTimeAgo(row.QuerySelector("td:nth-child(4)").TextContent);
