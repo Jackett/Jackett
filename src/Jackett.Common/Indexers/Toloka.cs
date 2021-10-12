@@ -235,6 +235,10 @@ namespace Jackett.Common.Indexers
             var searchString = query.SanitizedSearchTerm;
 
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
+            {
+                {"o", "1"},
+                {"s", "2"}
+            };
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
