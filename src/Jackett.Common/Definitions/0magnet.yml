@@ -41,7 +41,9 @@ search:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
-    selector: table > tbody > tr
+    selector: table > tbody > tr:has(td)
+    filters:
+      - name: andmatch
 
   fields:
     category:
