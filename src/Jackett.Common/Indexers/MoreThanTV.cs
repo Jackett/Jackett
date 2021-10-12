@@ -138,7 +138,8 @@ namespace Jackett.Common.Indexers
             SetRequestHeaders();
 
             // Fetch CSRF token
-            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, referer: SiteLink, headers: _emulatedBrowserHeaders);
+            // We need to clean the old cookies to avoid issues
+            var preRequest = await RequestWithCookiesAndRetryAsync(LoginUrl, referer: SiteLink, headers: _emulatedBrowserHeaders, cookieOverride: "");
             // Check if user is logged in. /login redirects to / if so)
             if (preRequest.IsRedirect)
             {
