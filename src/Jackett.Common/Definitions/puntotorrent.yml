@@ -12,17 +12,6 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 17, cat: Movies/Other, desc: "VCD/SVCD - SVCD/VCD"}
-    - {id: 78, cat: Movies/Other, desc: "VCD/SVCD - Estrenos VCD/SVCD"}
-    - {id: 14, cat: TV/SD, desc: "XVID - Series"}
-    - {id: 45, cat: TV/Anime, desc: "XVID - Animación"}
-    - {id: 46, cat: TV/Sport, desc: "XVID - Deportes"}
-    - {id: 47, cat: TV/Documentary, desc: "XVID - Documentales"}
-    - {id: 33, cat: Movies/SD, desc: "XVID - Estrenos"}
-    - {id: 48, cat: Movies/SD, desc: "XVID - Películas"}
-    - {id: 114, cat: Movies/SD, desc: "XVID - Estrenos BajaCalidad"}
-    - {id: 12, cat: XXX/XviD, desc: "XVID - Adulto (+18)"}
-    - {id: 51, cat: Audio/Video, desc: "XVID - Música"}
     - {id: 37, cat: TV/Anime, desc: "DVD - Animación"}
     - {id: 38, cat: TV/Sport, desc: "DVD - Deportes"}
     - {id: 39, cat: TV/Documentary, desc: "DVD - Documentales"}
@@ -30,6 +19,15 @@ caps:
     - {id: 41, cat: TV/SD, desc: "DVD - Series"}
     - {id: 42, cat: XXX/DVD, desc: "DVD - Adulto (+18)"}
     - {id: 43, cat: Audio/Video, desc: "DVD - Música"}
+    - {id: 45, cat: TV/Anime, desc: "XVID - Animación"}
+    - {id: 46, cat: TV/Sport, desc: "XVID - Deportes"}
+    - {id: 47, cat: TV/Documentary, desc: "XVID - Documentales"}
+    - {id: 48, cat: Movies/SD, desc: "XVID - Películas"}
+    - {id: 33, cat: Movies/SD, desc: "XVID - Estrenos"}
+    - {id: 114, cat: Movies/SD, desc: "XVID - Estrenos BajaCalidad"}
+    - {id: 14, cat: TV/SD, desc: "XVID - Series"}
+    - {id: 12, cat: XXX/XviD, desc: "XVID - Adulto (+18)"}
+    - {id: 51, cat: Audio/Video, desc: "XVID - Música"}
     - {id: 106, cat: TV/Anime, desc: "HDRip - Animación"}
     - {id: 107, cat: TV/Sport, desc: "HDRip - Deportes"}
     - {id: 108, cat: TV/Documentary, desc: "HDRip - Documentales"}
@@ -37,12 +35,26 @@ caps:
     - {id: 110, cat: TV/HD, desc: "HDRip - Series"}
     - {id: 112, cat: XXX/x264, desc: "HDRip - Adulto (+18)"}
     - {id: 111, cat: Audio/Video, desc: "HDRip - Música"}
-    - {id: 117, cat: TV/Anime, desc: "3D - Animación"}
-    - {id: 118, cat: TV/Sport, desc: "3D - Deportes"}
-    - {id: 119, cat: TV/Documentary, desc: "3D - Documentales"}
-    - {id: 120, cat: Movies/3D, desc: "3D - Películas"}
-    - {id: 121, cat: XXX, desc: "3D - Adulto (+18)"}
-    - {id: 122, cat: Audio/Video, desc: "3D - Música"}
+    - {id: 53, cat: TV/Anime, desc: "HD - Animación"}
+    - {id: 54, cat: TV/Sport, desc: "HD - Deportes"}
+    - {id: 55, cat: TV/Documentary, desc: "HD - Documentales"}
+    - {id: 56, cat: Movies/HD, desc: "HD - BDrip/BDremux/FullBD"}
+    - {id: 59, cat: TV/HD, desc: "HD - Series"}
+    - {id: 63, cat: XXX/x264, desc: "HD - Adulto (+18)"}
+    - {id: 61, cat: Audio/Video, desc: "HD - Música"}
+    - {id: 144, cat: TV/Anime, desc: "WEB-DL - Animación"}
+    - {id: 145, cat: TV/Sport, desc: "WEB-DL - Deportes"}
+    - {id: 146, cat: TV/Documentary, desc: "WEB-DL - Documentales"}
+    - {id: 147, cat: Movies/HD, desc: "WEB-DL - Películas"}
+    - {id: 148, cat: TV/HD, desc: "WEB-DL - Series"}
+    - {id: 149, cat: XXX/x264, desc: "WEB-DL - Adulto (+18)"}
+    - {id: 150, cat: Audio/Video, desc: "WEB-DL - Música"}
+    - {id: 136, cat: TV/Anime, desc: "UHD - Animación"}
+    - {id: 137, cat: TV/Sport, desc: "UHD - Deportes"}
+    - {id: 138, cat: TV/Documentary, desc: "UHD - Documentales"}
+    - {id: 139, cat: Movies/UHD, desc: "UHD - Películas"}
+    - {id: 140, cat: TV/UHD, desc: "UHD - Series"}
+    - {id: 141, cat: XXX/x264, desc: "UHD - Adulto (+18)"}
     - {id: 126, cat: TV/Anime, desc: "Micro HD - Animación"}
     - {id: 127, cat: TV/Sport, desc: "Micro HD - Deportes"}
     - {id: 128, cat: TV/Documentary, desc: "Micro HD - Documentales"}
@@ -50,49 +62,43 @@ caps:
     - {id: 124, cat: TV/HD, desc: "Micro HD - Series"}
     - {id: 129, cat: XXX/x264, desc: "Micro HD - Adulto"}
     - {id: 130, cat: Audio/Video, desc: "Micro HD - Música"}
-    - {id: 53, cat: TV/Anime, desc: "HD - Animación"}
-    - {id: 54, cat: TV/Sport, desc: "HD - Deportes"}
-    - {id: 55, cat: TV/Documentary, desc: "HD - Documentales"}
-    - {id: 56, cat: Movies/HD, desc: "HD - BDrip/BDremux/FullBD"}
-    - {id: 58, cat: Movies/HD, desc: "HD - WEB-DL/Line Dubbed"}
-    - {id: 59, cat: TV/HD, desc: "HD - Series"}
-    - {id: 63, cat: XXX/x264, desc: "HD - Adulto (+18)"}
-    - {id: 61, cat: Audio/Video, desc: "HD - Música"}
-    - {id: 136, cat: TV/Anime, desc: "UHD - Animación"}
-    - {id: 137, cat: TV/Sport, desc: "UHD - Deportes"}
-    - {id: 138, cat: TV/Documentary, desc: "UHD - Documentales"}
-    - {id: 139, cat: Movies/UHD, desc: "UHD - Películas"}
-    - {id: 140, cat: TV/UHD, desc: "UHD - Series"}
-    - {id: 141, cat: XXX/x264, desc: "UHD - Adulto (+18)"}
-    - {id: 69, cat: Audio/MP3, desc: "MP3"}
-    - {id: 70, cat: Audio/Lossless, desc: "FLAC"}
-    - {id: 71, cat: Audio/Other, desc: "Otros Formatos"}
-    - {id: 74, cat: PC/0day, desc: "Software - Windows"}
-    - {id: 75, cat: PC, desc: "Software - Linux"}
-    - {id: 76, cat: PC/Mac, desc: "Software - MAC"}
-    - {id: 77, cat: PC/Mobile-Other, desc: "Software - Otras Plataformas"}
-    - {id: 115, cat: PC/Mobile-Android, desc: "Software - Android"}
-    - {id: 25, cat: PC/Games, desc: "Juegos - Microsoft"}
-    - {id: 26, cat: Console, desc: "Juegos - Sony"}
-    - {id: 27, cat: PC/Games, desc: "Juegos - PC"}
-    - {id: 28, cat: Console/NDS, desc: "Juegos - Nintendo"}
-    - {id: 34, cat: Console/Other, desc: "Juegos - Otros"}
-    - {id: 113, cat: Console/Other, desc: "Juegos - Emuladores/Otras P."}
-    - {id: 6, cat: Books/EBook, desc: "eBooks - eBooks"}
-    - {id: 131, cat: Books/Comics, desc: "eBooks - Cómics"}
-    - {id: 134, cat: Books, desc: "eBooks - Manga"}
-    - {id: 132, cat: Books/Mags, desc: "eBooks - Revistas"}
-    - {id: 72, cat: Books/Other, desc: "eBooks - Otros"}
-    - {id: 133, cat: Books, desc: "eBooks - Adulto (+18)"}
-    - {id: 142, cat: Audio/Audiobook, desc: "eBooks - Audiolibros"}
+    - {id: 117, cat: TV/Anime, desc: "3D - Animación"}
+    - {id: 118, cat: TV/Sport, desc: "3D - Deportes"}
+    - {id: 119, cat: TV/Documentary, desc: "3D - Documentales"}
+    - {id: 120, cat: Movies/3D, desc: "3D - Películas"}
+    - {id: 121, cat: XXX, desc: "3D - Adulto (+18)"}
+    - {id: 122, cat: Audio/Video, desc: "3D - Música"}
     - {id: 92, cat: Other, desc: "Otros formatos - Animación"}
     - {id: 93, cat: Other, desc: "Otros formatos - Deportes"}
     - {id: 94, cat: Other, desc: "Otros formatos - Documentales"}
     - {id: 95, cat: Other, desc: "Otros formatos - Películas"}
+    - {id: 100, cat: Other, desc: "Otros formatos - Estrenos"}
     - {id: 97, cat: Other, desc: "Otros formatos - Series"}
     - {id: 98, cat: Other, desc: "Otros formatos - Adulto (+18)"}
     - {id: 99, cat: Other, desc: "Otros formatos - Música"}
-    - {id: 100, cat: Other, desc: "Otros formatos - Estrenos"}
+    - {id: 69, cat: Audio/MP3, desc: "Música - MP3"}
+    - {id: 70, cat: Audio/Lossless, desc: "Música - FLAC"}
+    - {id: 71, cat: Audio/Other, desc: "Música - Otros Formatos"}
+    - {id: 6, cat: Books/EBook, desc: "eBooks - eBooks"}
+    - {id: 142, cat: Audio/Audiobook, desc: "eBooks - Audiolibros"}
+    - {id: 131, cat: Books/Comics, desc: "eBooks - Cómics"}
+    - {id: 134, cat: Books, desc: "eBooks - Manga"}
+    - {id: 132, cat: Books/Mags, desc: "eBooks - Revistas"}
+    - {id: 133, cat: Books, desc: "eBooks - Adulto (+18)"}
+    - {id: 72, cat: Books/Other, desc: "eBooks - Otros"}
+    - {id: 25, cat: PC/Games, desc: "Juegos - Microsoft"}
+    - {id: 26, cat: Console, desc: "Juegos - Sony"}
+    - {id: 27, cat: PC/Games, desc: "Juegos - PC (Windows)"}
+    - {id: 28, cat: Console/NDS, desc: "Juegos - Nintendo"}
+    - {id: 113, cat: Console/Other, desc: "Juegos - Emuladores/Otras P."}
+    - {id: 74, cat: PC/0day, desc: "Software - Windows"}
+    - {id: 75, cat: PC, desc: "Software - Linux"}
+    - {id: 76, cat: PC/Mac, desc: "Software - MAC"}
+    - {id: 115, cat: PC/Mobile-Android, desc: "Software - Android"}
+    - {id: 77, cat: PC/Mobile-Other, desc: "Software - Otras Plataformas"}
+    # hidden but with torrents
+    - {id: 17, cat: Movies/Other, desc: "VCD/SVCD - SVCD/VCD"}
+    - {id: 78, cat: Movies/Other, desc: "VCD/SVCD - Estrenos VCD/SVCD"}
 
   modes:
     search: [q]
