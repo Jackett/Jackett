@@ -266,6 +266,9 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("nm", searchString);
             }
 
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                queryCollection.Add("f[]", cat);
+
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
             if (!results.ContentString.Contains("Вы зашли как:"))
