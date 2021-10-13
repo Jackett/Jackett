@@ -198,12 +198,20 @@ namespace Jackett.Common.Indexers.Abstract
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
             // we get a redirect in html pages and an error message in json response (api)
-            if (response.IsRedirect || (response.ContentString != null && response.ContentString.Contains("\"bad credentials\"")))
+            if (response.IsRedirect && !useApiKey)
             {
-                // re-login
+                // re-login only if API key is not in use.
                 await ApplyConfiguration(null);
                 response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
+            else if (response.ContentString != null && response.ContentString.Contains("failure") && useApiKey)
+            {
+                // reason for failure should be explained.
+                var jsonError = JObject.Parse(response.ContentString);
+                var errorReason = (string)jsonError["error"];
+                throw new Exception(errorReason);
+            }
+
 
             try
             {
