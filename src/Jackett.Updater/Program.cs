@@ -300,6 +300,7 @@ namespace Jackett.Updater
                 "Definitions/datascene.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/danishbytes.yml", // migrated to C#
+                "Definitions/DasUnerwartete.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
                 "Definitions/documentarytorrents.yml",
