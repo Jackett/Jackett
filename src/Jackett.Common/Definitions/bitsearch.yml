@@ -59,7 +59,6 @@ settings:
 
 download:
   # the magnet URI on this site exceeds 2048 bytes which some interfaces will reject. So we use the infohash and build our own.
-  selectors:
   infohash:
     hash:
       selector: a[href^="magnet:?xt"]

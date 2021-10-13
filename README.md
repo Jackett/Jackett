@@ -317,7 +317,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Darius Tracker
  * Dark-Shadow
  * Dark Tracker
- * Das Unerwartete [![(invite needed)][inviteneeded]](#)
  * DataTalli
  * DesiReleasers
  * DesiTorrents
@@ -388,7 +387,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Hebits
  * HellasTZ
  * HQSource (HQS)
- * HuSh [![(invite needed)][inviteneeded]](#)
  * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos

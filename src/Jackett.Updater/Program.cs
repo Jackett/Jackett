@@ -300,6 +300,7 @@ namespace Jackett.Updater
                 "Definitions/datascene.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/danishbytes.yml", // migrated to C#
+                "Definitions/DasUnerwartete.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/digbt.yml",
                 "Definitions/documentarytorrents.yml",
@@ -350,6 +351,7 @@ namespace Jackett.Updater
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/horriblesubs.yml",
                 "Definitions/horrorsite.yml",
+                "Definitions/hush.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",

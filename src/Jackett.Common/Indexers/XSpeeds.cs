@@ -98,6 +98,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
             AddCategoryMapping(76, TorznabCatType.TVHD, "HD Boxsets");
             AddCategoryMapping(47, TorznabCatType.TVHD, "TV-HD");
+            AddCategoryMapping(96, TorznabCatType.TVHD, "TV-HD HEVC");
             AddCategoryMapping(16, TorznabCatType.TVSD, "TV-SD");
             AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Wii Games");
             AddCategoryMapping(43, TorznabCatType.TVSport, "Wrestling");

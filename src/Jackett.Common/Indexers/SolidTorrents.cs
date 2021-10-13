@@ -74,6 +74,7 @@ namespace Jackett.Common.Indexers
             // when updating categories also update ParseCategory routine.
             AddCategoryMapping("Audio", TorznabCatType.Audio, "Audio");
             AddCategoryMapping("Video", TorznabCatType.Movies, "Video");
+            AddCategoryMapping("Video", TorznabCatType.TV, "Video");
             AddCategoryMapping("Image", TorznabCatType.OtherMisc, "Image");
             AddCategoryMapping("Document", TorznabCatType.BooksComics, "Document");
             AddCategoryMapping("eBook", TorznabCatType.BooksEBook, "eBook");
@@ -93,13 +94,17 @@ namespace Jackett.Common.Indexers
             switch (query)
             {
                 case "Audio":
-                case "7":
-                case "8":
+                case "7": // music
+                case "8": // audiobook
                     cats.Add(TorznabCatType.Audio.ID);
                     break;
                 case "Video":
-                case "2":
+                case "2": // movies
+                case "3": // tv
+                case "4": // anime , hentai
+                case "10": // 3x
                     cats.Add(TorznabCatType.Movies.ID);
+                    cats.Add(TorznabCatType.TV.ID);
                     break;
                 case "Image":
                     cats.Add(TorznabCatType.OtherMisc.ID);
@@ -108,15 +113,15 @@ namespace Jackett.Common.Indexers
                     cats.Add(TorznabCatType.BooksComics.ID);
                     break;
                 case "eBook":
-                case "9":
+                case "9": // books
                     cats.Add(TorznabCatType.BooksEBook.ID);
                     break;
                 case "Program":
-                case "6":
+                case "5": // software
+                case "6": // games
                     cats.Add(TorznabCatType.PC0day.ID);
                     break;
                 case "Android":
-                case "5":
                     cats.Add(TorznabCatType.PCMobileAndroid.ID);
                     break;
                 case "Archive":
@@ -132,7 +137,7 @@ namespace Jackett.Common.Indexers
                     cats.Add(TorznabCatType.MoviesDVD.ID);
                     break;
                 case "Unknown":
-                case "1":
+                case "1": // other
                     cats.Add(TorznabCatType.Other.ID);
                     break;
                 default:
