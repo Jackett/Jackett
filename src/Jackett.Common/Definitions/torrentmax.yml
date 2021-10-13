@@ -42,11 +42,9 @@ settings:
 
 download:
   infohash:
-    usebeforeresponse: true
     hash:
       selector: a[href^="magnet:?xt="]
       attribute: href
-      filters:
       filters:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
