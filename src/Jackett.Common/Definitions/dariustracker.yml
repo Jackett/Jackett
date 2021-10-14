@@ -122,6 +122,7 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
+      attribute: title
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -152,12 +153,12 @@ search:
     leechers:
       selector: td:nth-last-child(1)
     downloadvolumefactor:
-      selector: img[src="skin/vilagos_kek/arrowdown.png"] ~ span
+      selector: img[src$="/arrowdown.png"] ~ span
       filters:
         - name: regexp
           args: (\d+)
     uploadvolumefactor:
-      selector: img[src="skin/vilagos_kek/arrowup.png"] ~ span
+      selector: img[src$="/arrowup.png"] ~ span
       filters:
         - name: regexp
           args: (\d+)
