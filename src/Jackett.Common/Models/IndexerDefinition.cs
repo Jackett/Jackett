@@ -156,6 +156,7 @@ namespace Jackett.Common.Models
         public List<string> Categories { get; set; } = new List<string>();
         public bool Inheritinputs { get; set; } = true;
         public bool Followredirect { get; set; } = false;
+        public responseBlock Response { get; set; }
     }
 
     public class requestBlock
@@ -192,5 +193,12 @@ namespace Jackett.Common.Models
         public string Attribute { get; set; }
         public bool Usebeforeresponse { get; set; } = false;
         public List<filterBlock> Filters { get; set; }
+    }
+
+    public class responseBlock
+    {
+        public string Type { get; set; }
+        public string Attribute { get; set; }
+        public bool Multiple { get; set; } = false;
     }
 }
