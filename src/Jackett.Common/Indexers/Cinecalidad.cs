@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
 
-                var rows = dom.QuerySelectorAll("div.home_post_cont");
+                var rows = dom.QuerySelectorAll("div.postItem");
                 foreach (var row in rows)
                 {
                     var qImg = row.QuerySelector("img");
@@ -157,17 +157,8 @@ namespace Jackett.Common.Indexers
                         continue; // skip if it doesn't contain all words
                     title += " MULTi LATiN SPANiSH 1080p BDRip x264";
 
-                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
-                    var extract = qImg.GetAttribute("extract").Split('\'');
-                    Uri link = null;
-                    foreach (var part in extract)
-                    {
-                        if (part.StartsWith(SiteLink) && part.EndsWith("/"))
-                        {
-                            link = new Uri(GetAbsoluteUrl(part));
-                            break;
-                        }
-                    }
+                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("data-large")));
+                    var link = new Uri(row.QuerySelector("a.postItem__back-link").GetAttribute("href"));
 
                     var release = new ReleaseInfo
                     {
