@@ -1,0 +1,59 @@
+---
+id: yts-yml
+name: YTS-Yml
+description: "YTS is a Public torrent site specialising in HD movies of small size"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://yts.mx/
+
+caps:
+  categorymappings:
+    - {id: 45, cat: Movies/HD, desc: "Movies/x264/720p"}
+    - {id: 44, cat: Movies/HD, desc: "Movies/x264/1080p"}
+    - {id: 46, cat: Movies/UHD, desc: "Movies/x264/2160p"}
+    - {id: 47, cat: Movies/3D, desc: "Movies/x264/3D"}
+
+  modes:
+    search: [q]
+    movie-search: [q]
+
+search:
+  paths:
+    - path: api/v2/list_movies.json
+      # Response block is necessary for parsing as JSON
+      response:
+        type: json
+        # If the torrents are in separate category
+        attribute: torrents
+        # If there are multiple torrents per title
+        multiple: true
+  inputs:
+    query_term: "{{ .Keywords }}"
+    limit: 50
+    sort: date_added
+
+  rows:
+    selector: data > movies
+
+  fields:
+    id:
+    # Here .. means extract from row and without that means from the torrent attribute if applicable
+      selector: ..id
+    title:
+      selector: ..title
+    infohash:
+      selector: hash
+    seeders:
+      selector: seeds
+    peers:
+      selector: peers
+    details:
+      selector: ..url
+    poster:
+      selector: ..large_cover_image
+    date:
+      selector: date_uploaded
+    size:
+      selector: size_bytes
