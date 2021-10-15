@@ -52,6 +52,7 @@ caps:
     - {id: 230, cat: TV, desc: " |- Отечественные Мультфильмы (HD*Rip/LQ, DVDRip, SATRip,..."}
     - {id: 659, cat: TV, desc: " |- Отечественные Мультфильмы (HD, UHD, UHD-LQ, DVD, Сборники)"}
     - {id: 658, cat: TV, desc: " |- Отечественные Мультсериалы"}
+    - {id: 1332, cat: TV, desc: " |- Отечественные мультфильмы 21-го века (HD, FHD, UHD, 3D)"}
     - {id: 231, cat: TV, desc: " |- Зарубежные Мультфильмы (HD*Rip/LQ, DVDRip, SATRip, VHSRip)"}
     - {id: 660, cat: TV, desc: " |- Зарубежные Мультфильмы (DVD, Сборники)"}
     - {id: 661, cat: TV, desc: " |- Зарубежные Мультфильмы (HD, UHD, UHD-LQ)"}
