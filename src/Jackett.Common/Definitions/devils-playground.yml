@@ -6,9 +6,11 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://devils-playground.org/
-legacylinks:
   - https://nbytez.me/
+legacylinks:
+  - https://devils-playground.org/
+certificates:
+  - 0c11383bf2b391ba5463fd1210fe85f8f49d8b86 # issued for devils-playground.org/ domain
 
 caps:
   categorymappings:
