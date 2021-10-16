@@ -210,7 +210,16 @@ namespace Jackett.Common.Indexers
                     else
                         linkText = match.Groups[1].Value;
 
-                    return new Uri(new Uri(baseLink), linkText);
+                    // take the details page link and the download page link and build a Torrent link
+                    // Details page: https://atomixhq.com/descargar/torrent/peliculas-x264-mkv/el-viaje-i-onde-dager--2021-/bluray-microhd/
+                    // Download page: https://atomtt.com/download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD/
+                    // Torrent link: https://atomixhq.com/download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD.torrent
+                    linkText = linkText.Remove(linkText.Length - 1, 1) + ".torrent";
+                    var linkHost = new Uri(linkText).Host;
+                    var linkBase = new Uri(baseLink).Host;
+                    var downloadLink = linkText.Replace(linkHost.ToString(), linkBase.ToString());
+
+                    return new Uri(downloadLink);
                 }
             }
 
