@@ -96,9 +96,8 @@ search:
       selector: seeds
     leechers:
       selector: peers
-# fields without selector generate error
-#    downloadvolumefactor:
-#      text: 0
-#    uploadvolumefactor:
-#      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
 # json api v2

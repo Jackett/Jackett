@@ -1197,6 +1197,30 @@ namespace Jackett.Common.Indexers
             return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
+        protected string handleJsonSelector(selectorBlock Selector, JObject parentObj, Dictionary<string, object> variables = null, bool required = true)
+        {
+            if (Selector.Text != null)
+            {
+                return applyFilters(applyGoTemplateText(Selector.Text, variables), Selector.Filters, variables);
+            }
+
+            string value = null;
+
+            if (Selector.Selector != null)
+            {
+                var selector_Selector = applyGoTemplateText(Selector.Selector.TrimStart('.'), variables);
+                var selection = parentObj.SelectToken(selector_Selector);
+                if (selection == null)
+                {
+                    if (required)
+                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", selector_Selector, parentObj.ToString()));
+                    return null;
+                }
+                value = selection.Value<string>();
+            }
+            return value;
+        }
+
         protected Uri resolvePath(string path, Uri currentUrl = null) => new Uri(currentUrl ?? new Uri(SiteLink), path);
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -1366,8 +1390,11 @@ namespace Jackett.Common.Indexers
                                 var isOptional = OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional;
                                 try
                                 {
-                                    var parentObj = Field.Value.Selector.StartsWith("..") ? Row.Value<JObject>() : mulRow;
-                                    value = parentObj.SelectToken(Field.Value.Selector.TrimStart('.')).Value<string>();
+                                    var parentObj = mulRow;
+                                    if (Field.Value.Selector != null && Field.Value.Selector.StartsWith(".."))
+                                        parentObj = Row.Value<JObject>();
+
+                                    value = handleJsonSelector(Field.Value, parentObj, variables, !isOptional);
                                     if (isOptional && string.IsNullOrWhiteSpace(value))
                                     {
                                         variables[variablesKey] = null;
