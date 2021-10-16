@@ -1221,7 +1221,7 @@ namespace Jackett.Common.Indexers
                 }
                 value = selection.Value<string>();
             }
-            return value;
+            return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
         protected Uri resolvePath(string path, Uri currentUrl = null) => new Uri(currentUrl ?? new Uri(SiteLink), path);

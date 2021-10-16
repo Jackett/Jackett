@@ -77,7 +77,7 @@ search:
         - name: replace
           args: [" ", "."]
         - name: append
-          args: ".{{ .Result.year }}.{{ .Result.quality }}.{{ .if eq .Result.type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
+          args: ".{{ .Result.year }}.{{ .Result.quality }}.{{ if eq .Result.type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
     details:
       selector: ..url
     download:
