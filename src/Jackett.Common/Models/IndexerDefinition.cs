@@ -36,6 +36,7 @@ namespace Jackett.Common.Models
         public string Type { get; set; }
         public string Language { get; set; }
         public string Encoding { get; set; }
+        public double? RequestDelay { get; set; }
         public List<string> Links { get; set; }
         public List<string> Legacylinks { get; set; }
         public bool Followredirect { get; set; } = false;

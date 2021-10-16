@@ -5,7 +5,7 @@ description: "YTS is a Public torrent site specialising in HD movies of small si
 language: en-US
 type: public
 encoding: UTF-8
-# requestDelay: 2.5
+requestDelay: 2.5
 links:
   - https://yts.mx/
   - https://yts.unblockit.kim/

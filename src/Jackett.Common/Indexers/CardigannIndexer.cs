@@ -82,6 +82,9 @@ namespace Jackett.Common.Indexers
             if (Definition.Encoding == null)
                 Definition.Encoding = "UTF-8";
 
+            if (Definition.RequestDelay != null)
+                webclient.requestDelay = Definition.RequestDelay.Value;
+
             if (Definition.Login != null && Definition.Login.Method == null)
                 Definition.Login.Method = "form";
 
