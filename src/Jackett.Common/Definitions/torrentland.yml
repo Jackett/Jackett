@@ -39,6 +39,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: compatOld
+    type: checkbox
+    label: Improve Sonarr compatibility with the tracker's older season naming scheme by renaming Sxx to Txx in searches. Can cause results already using Sxx to not be found.
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -102,7 +106,7 @@ search:
     free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
   keywordsfilters:
     - name: re_replace
-      args: ["(?i)\\bS(\\d+)", "T$1"]
+      args: ["(?i)\\bS(\\d+)", "{{ if .Config.compatOld }}T$1{{ else }}S$1{{ end }}"]
 
   rows:
     # pre-release/vip torrents don't have download link
