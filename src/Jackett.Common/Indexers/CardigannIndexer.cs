@@ -1366,8 +1366,15 @@ namespace Jackett.Common.Indexers
                     if (parsedJson == null)
                         throw new Exception("Error Parsing Json Response");
 
-                    var rowsSelector = Search.Rows.Selector.Replace(" > ", ".");
-                    var rowsObj = parsedJson.SelectToken(rowsSelector);
+                    if (Search.Rows.Count != null)
+                    {
+                        var countVal = handleJsonSelector(Search.Rows.Count, parsedJson.Value<JObject>(), variables);
+                        if (int.TryParse(countVal, out var count))
+                            if (count < 1)
+                                continue;
+                    }
+
+                    var rowsObj = parsedJson.SelectToken(Search.Rows.Selector);
                     if (rowsObj == null)
                         throw new Exception("Error Parsing Rows Selector");
 

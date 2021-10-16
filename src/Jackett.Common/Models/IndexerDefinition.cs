@@ -150,6 +150,7 @@ namespace Jackett.Common.Models
         public int After { get; set; }
         //public string Remove { get; set; } // already inherited
         public selectorBlock Dateheaders { get; set; }
+        public selectorBlock Count { get; set; }
     }
 
     public class searchPathBlock : requestBlock
