@@ -1221,6 +1221,25 @@ namespace Jackett.Common.Indexers
                 }
                 value = selection.Value<string>();
             }
+
+            if (Selector.Case != null)
+            {
+                foreach (var Case in Selector.Case)
+                {
+                    if (value.Equals(Case.Key))
+                    {
+                        value = Case.Value;
+                        break;
+                    }
+                }
+                if (value == null)
+                {
+                    if (required)
+                        throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), parentObj.ToString()));
+                    return null;
+                }
+            }
+
             return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
