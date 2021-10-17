@@ -40,7 +40,7 @@ caps:
     - {id: 18, cat: Console, desc: "Game - PS"}
     - {id: 24, cat: Console/Other, desc: "Game - Wimmelbild"}
     # Audio
-    - {id: 159, cat: Audio/Audibook, desc: "Audio - Hörbuch"}
+    - {id: 159, cat: Audio/Audiobook, desc: "Audio - Hörbuch"}
     - {id: 48, cat: Audio/MP3, desc: "Audio - mp3"}
     - {id: 53, cat: Audio/Lossless, desc: "Audio - Flac"}
     - {id: 52, cat: Audio, desc: "Audio - Pack"}
