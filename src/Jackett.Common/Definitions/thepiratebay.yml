@@ -129,6 +129,8 @@ search:
   rows:
     # Use $ to refer root object
     selector: $
+    count:
+      selector: id
 
   fields:
     id:
