@@ -1200,7 +1200,7 @@ namespace Jackett.Common.Indexers
             return applyFilters(ParseUtil.NormalizeSpace(value), Selector.Filters, variables);
         }
 
-        protected string handleJsonSelector(selectorBlock Selector, JObject parentObj, Dictionary<string, object> variables = null, bool required = true)
+        protected string handleJsonSelector(selectorBlock Selector, JToken parentObj, Dictionary<string, object> variables = null, bool required = true)
         {
             if (Selector.Text != null)
             {
@@ -1387,7 +1387,7 @@ namespace Jackett.Common.Indexers
 
                     if (Search.Rows.Count != null)
                     {
-                        var countVal = handleJsonSelector(Search.Rows.Count, parsedJson.Value<JObject>(), variables);
+                        var countVal = handleJsonSelector(Search.Rows.Count, parsedJson, variables);
                         if (int.TryParse(countVal, out var count))
                             if (count < 1)
                                 continue;

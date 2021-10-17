@@ -130,7 +130,7 @@ search:
     # Use $ to refer root object
     selector: $
     count:
-      selector: id
+      selector: $[0].id
 
   fields:
     id:
