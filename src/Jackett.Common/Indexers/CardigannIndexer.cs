@@ -1226,7 +1226,7 @@ namespace Jackett.Common.Indexers
             {
                 foreach (var Case in Selector.Case)
                 {
-                    if (value.Equals(Case.Key))
+                    if (value.Equals(Case.Key) || Case.Key.Equals("*"))
                     {
                         value = Case.Value;
                         break;
