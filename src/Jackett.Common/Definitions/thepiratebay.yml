@@ -127,7 +127,8 @@ search:
         type: json
 
   rows:
-    selector: .
+    # Use $ to refer root object
+    selector: $
 
   fields:
     id:
