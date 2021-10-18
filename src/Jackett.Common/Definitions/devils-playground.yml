@@ -2,37 +2,37 @@
 id: devils-playground
 name: Devils-Playground
 description: "Devils-Playground (Nbytez) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-US
+language: en-GB
 type: private
 encoding: UTF-8
 links:
-  - https://nbytez.me/
+  - http://devils-playground.org/
 legacylinks:
   - https://devils-playground.org/
-certificates:
-  - 0c11383bf2b391ba5463fd1210fe85f8f49d8b86 # issued for devils-playground.org/ domain
+  - https://nbytez.me/
+  - http://nbytez.me/
 
 caps:
   categorymappings:
-    - {id: 82, cat: PC, desc: "0day"}
-    - {id: 12, cat: PC, desc: "Anime"}
-    - {id: 1, cat: PC, desc: "Apps"}
-    - {id: 63, cat: Audio/Audiobook, desc: "Audiobooks"}
-    - {id: 24, cat: Books/EBook, desc: "E-Books"}
-    - {id: 64, cat: PC/Games, desc: "Games"}
-    - {id: 30, cat: Movies/SD, desc: "Movies/Cam-TS"}
-    - {id: 31, cat: Movies, desc: "Movies/FooKaS RG"}
-    - {id: 70, cat: Movies/HD, desc: "Movies/HD-Blu-Ray"}
-    - {id: 84, cat: Movies/SD, desc: "Movies/SD"}
-    - {id: 71, cat: Movies/UHD, desc: "Movies/UHD-Blu-Ray"}
-    - {id: 55, cat: Movies/WEB-DL, desc: "Movies/Web"}
-    - {id: 26, cat: Audio/Lossless, desc: "Music/FLAC"}
-    - {id: 10, cat: Audio/MP3, desc: "Music/MP3"}
-    - {id: 29, cat: Movies, desc: "Packs/Movies"}
-    - {id: 19, cat: Audio, desc: "Packs/MP3"}
-    - {id: 61, cat: TV, desc: "Packs/TV"}
-    - {id: 45, cat: TV/HD, desc: "TV/HD"}
-    - {id: 36, cat: TV/SD, desc: "TV/SD"}
+    - {id: 3, cat: PC, desc: "Apps"}
+    - {id: 4, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 22, cat: PC/Games, desc: "Games"}
+    - {id: 15, cat: Movies, desc: "Movies"}
+    - {id: 19, cat: Movies/UHD, desc: "Movies/Bluray"}
+    - {id: 20, cat: Movies, desc: "Movies/Packs"}
+    - {id: 17, cat: Movies/WEB-DL, desc: "Movies/Webrip"}
+    - {id: 16, cat: Movies/HD, desc: "Movies/x265"}
+    - {id: 18, cat: Movies/SD, desc: "Movies/XVID"}
+    - {id: 10, cat: Audio, desc: "Music/"}
+    - {id: 12, cat: Audio/Lossless, desc: "Music/FLAC"}
+    - {id: 11, cat: Audio/MP3, desc: "Music/MP3"}
+    - {id: 14, cat: Audio, desc: "Music/Packs"}
+    - {id: 13, cat: Audio, desc: "Music/Top UK 40"}
+    - {id: 5, cat: TV, desc: "TV"}
+    - {id: 9, cat: TV, desc: "TV/Packs"}
+    - {id: 6, cat: TV/HD, desc: "TV/x254"}
+    - {id: 7, cat: TV/HD, desc: "TV/x255"}
+    - {id: 8, cat: TV/SD, desc: "TV/XVID"}
 
   modes:
     search: [q]
@@ -50,17 +50,15 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
-    type: select
-    label: Sort requested from site
-    default: 4
+    default: added
     options:
-      4: created
-      7: seeders
-      5: size
-      1: title
+      added: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
@@ -71,7 +69,7 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The default is <i>15</i>.
 
 login:
   path: takelogin.php
@@ -79,90 +77,87 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    use_ssl: 1
-    perm_ssl: ""
-    returnto: /
   error:
-    - selector: table.main:contains("Login failed!")
-      message:
-        selector: table tr td.colhead2
+    - selector: table:contains("Error")
   test:
     path: index.php
-    selector: a[href*="logout.php?hash_please="]
+    selector: a[href*="logout.php?logouthash="]
 
 search:
   paths:
-    # https://devils-playground.org/browse.php?c5=1&c16=1&search=&searchin=title&incldead=1&only_free=1&sort=4&type=desc
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    # title, descr, genre, all
-    searchin: title
-    # 0 active, 1 incldead, 2 onlydead
-    incldead: 1
-    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    do: search
+    # does not support multi categories so defaulting to ALL
+    category: 0
+    # yes incldead, no activeonly
+    include_dead_torrents: yes
+    keywords: "{{ .Keywords }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: t_name
     sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
+    order: "{{ .Config.type }}"
+    # does not return imdb link in results, does not support imdbid searches
   keywordsfilters:
-    - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+    - name: re_replace # replace special characters with "%" (wildcard)
+      args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: table.table-bordered tr:has(a[href^="download.php?torrent="])
+    selector: "table#sortabletable tbody tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*="browse.php?category="]
       attribute: href
       filters:
         - name: querystring
-          args: cat
+          args: category
     title:
-      selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "Tip\\('<b>(.+?)</b>"
+      # is often abbreviated
+      selector: a[href*="details.php?id="]
+    title:
+      # usually longer than details title
+      selector: div[id^="port-content-"] div
+      optional: true
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?torrent="]
+      selector: a[href*="download.php?id="]
       attribute: href
-    files:
-      selector: td:nth-child(5)
+    poster:
+      selector: div[id^="port-content-"] img
+      attribute: src
     date:
-      selector: td:nth-child(7):contains("day")
-      optional: true
+      selector: td:nth-child(2) > div:last-child
       filters:
-        - name: fuzzytime
-    date:
-      selector: td:nth-child(7):not(:contains("day"))
-      optional: true
-      filters:
+        - name: regexp
+          args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
+          args: "02-01-2006 15:04 -07:00"
     size:
-      selector: td:nth-child(8)
+      selector: td:nth-child(5)
     grabs:
-      selector: td:nth-child(9)
+      selector: td:nth-child(6)
     seeders:
-      selector: td:nth-child(10)
+      selector: td:nth-child(7)
     leechers:
-      selector: td:nth-child(11)
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "a.info:contains(\"[FREE]\")": 0
-        "a.info:contains(\"[SILVER]\")": 0.5
+        img[src$="/freedownload.gif"]: 0
+        img[src$="/silverdownload.gif"]: 0.5
         "*": 1
     uploadvolumefactor:
-      text: 1
-    minimumratio:
-      text: 1.0
-    minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
-# U-232 V5
+      case:
+        img[src$="/x2.gif"]: 2
+        "*": 1
+# TBD, Rules and FAQ do not cover this yet
+#    minimumratio:
+#      text: 1.0
+#    minimumseedtime:
+#      # 2 days (as seconds = 2 x 24 x 60 x 60)
+#      text: 172800
+#  TS Special Edition v.7.5
