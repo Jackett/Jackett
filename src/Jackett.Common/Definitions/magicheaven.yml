@@ -111,16 +111,6 @@ login:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
 
-download:
-  before:
-    path: takethanks.php
-    method: post
-    inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
-  selectors:
-    - selector: a[href*="/download.php?id="]
-      attribute: href
-
 search:
   paths:
     - path: browse.php
@@ -160,6 +150,12 @@ search:
     details:
       selector: a[href*="details.php?id="]
       attribute: href
+    download:
+      selector: a[href*="download.php?id="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
     poster:
       selector: div[id^="port-content-"] img
       attribute: src
@@ -168,17 +164,10 @@ search:
       filters:
         - name: regexp
           args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
-      filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    download:
-      selector: a[href*="details.php?id="]
-      attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
     size:
       selector: td:nth-child(5)
     grabs:

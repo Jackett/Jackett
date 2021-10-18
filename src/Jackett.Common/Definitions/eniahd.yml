@@ -108,10 +108,12 @@ search:
   keywordsfilters:
     - name: diacritics
       args: replace
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
     - name: re_replace # S01 to сезон 1
-      args: ["(?i)\\bS0*(\\d+)\\b", "сезон $1"]
+      args: ["(?i)S0*(\\d+)", "сезон $1"]
     - name: re_replace # S01E01 to сезон 1 серии 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 серии $2"]
+      args: ["(?i)S0*(\\d+)E0*(\\d+)", "сезон $1 серии $2"]
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 0
@@ -150,9 +152,6 @@ search:
     pn: ""
     # search by partial word
     allw: 0
-  keywordsfilters:
-    - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./dl.php?id="])
