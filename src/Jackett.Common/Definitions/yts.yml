@@ -40,6 +40,8 @@ caps:
     search: [q]
     movie-search: [q]
 
+settings: []
+
 search:
   paths:
     - path: api/v2/list_movies.json
