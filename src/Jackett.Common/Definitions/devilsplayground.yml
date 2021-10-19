@@ -78,7 +78,15 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-    - selector: table:contains("Error")
+    - selector: table:has(a[href*="login.php?error=1"])
+      message:
+        text: "ERROR: Incorrect username!"
+    - selector: table:has(a[href*="login.php?error=4"])
+      message:
+        text: "ERROR: Incorrect password!"
+    - selector: table:has(a[href*="login.php?error="])
+      message:
+        text: "ERROR: Something went wrong during login!"
   test:
     path: index.php
     selector: a[href*="logout.php?logouthash="]
@@ -112,13 +120,15 @@ search:
       filters:
         - name: querystring
           args: category
-    title:
+    a_title:
       # is often abbreviated
       selector: a[href*="details.php?id="]
-    title:
+    d_title:
       # usually longer than details title
       selector: div[id^="port-content-"] div
       optional: true
+    title:
+      text: "{{ if .Result.d_title }}{{ .Result.d_title }}{{ else }}{{ .Result.a_title }}{{ end }}"
     details:
       selector: a[href*="details.php?id="]
       attribute: href
