@@ -236,9 +236,7 @@ search:
           args: ["(?i)WEB\\sDL", "WEB-DL"]
         - name: re_replace
           args: ["(?i)HDTVRIP", "HDTV"]
-    category:
-      text: 40
-    category|noappend:
+    sub_category:
       optional: true
       selector: td[class^="coll-1"] a[href^="/sub/"]
       attribute: href
@@ -246,6 +244,8 @@ search:
         # extract the third part
         - name: split
           args: ["/", 2]
+    category:
+      text: "{{ if .Result.sub_category }}{{ .Result.sub_category }}{{ else }}40{{ end }}"
     details:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
@@ -254,7 +254,7 @@ search:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
     # dates come in three flavours:
-    date:
+    w_date:
       # (within this year) 7am Sep. 14th
       optional: true
       selector: td[class^="coll-date"]:not(:contains(":")):not(:contains("'"))
@@ -263,7 +263,7 @@ search:
           args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "3pm Jan. 2"
-    date:
+    y_date:
       # (more than a year ago) Apr. 18th '11
       optional: true
       selector: td[class^="coll-date"]:contains("'")
@@ -274,12 +274,14 @@ search:
           args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "Jan. 2 06"
-    date:
+    t_date:
       # (today) 12:25am
       optional: true
       selector: td[class^="coll-date"]:contains(":")
       filters:
         - name: fuzzytime
+    date:
+      text: "{{ if or .Result.w_date .Result.y_date .Result.t_date }}{{ or .Result.w_date .Result.y_date .Result.t_date }}{{ else }}now{{ end }}"
     size:
       selector: td[class^="coll-4"]
     seeders:
