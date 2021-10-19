@@ -395,6 +395,7 @@ namespace Jackett.Updater
                 "Definitions/nordicplus.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa.yml",
+                "Definitions/nyaa-pantsu.yml",
                 "Definitions/nyoo.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
@@ -435,6 +436,7 @@ namespace Jackett.Updater
                 "Definitions/solidtorrents.yml", // migrated to C#
                 "Definitions/spacetorrent.yml",
                 "Definitions/speed-share.yml",
+                "Definitions/sukebei-pantsu.yml",
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
                 "Definitions/takeabyte.yml",
