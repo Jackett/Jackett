@@ -433,7 +433,6 @@ namespace Jackett.Updater
                 "Definitions/skytorrentsclone.yml", // renamed to skytorrents-lol
                 "Definitions/skytorrentsclone2.yml", // renamed to skytorrents-to
                 "Definitions/solidtorrents.yml", // migrated to C#
-                "Definitions/soundpark.yml", // to be migrated to C#
                 "Definitions/spacetorrent.yml",
                 "Definitions/speed-share.yml",
                 "Definitions/t411.yml",
