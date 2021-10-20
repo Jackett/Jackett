@@ -1,0 +1,79 @@
+---
+id: bangumi-moe
+name: Bangumi Moe
+description: "Bangumi Moe is a Public torrent site for ANIME"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://bangumi.moe/
+
+caps:
+  categorymappings:
+    - {id: 549ef207fe682f7549f1ea90, cat: TV/Anime, desc: "Anime"}
+    - {id: 54967e14ff43b99e284d0bf7, cat: TV/Anime, desc: "Anime Pack"}
+    - {id: 549cc9369310bc7d04cddf9f, cat: Movies, desc: "Anime Movie"}
+    - {id: 549eef6ffe682f7549f1ea8b, cat: Audio, desc: "Music"}
+    - {id: 549eefebfe682f7549f1ea8c, cat: Books/Comics, desc: "Comic"}
+    - {id: 549ef015fe682f7549f1ea8d, cat: Console, desc: "Game"}
+    - {id: 549ef250fe682f7549f1ea91, cat: Other, desc: "Other"}
+    - {id: 549ff1db30bcfc225bf9e607, cat: Console, desc: "Dorama"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://bangumi.moe/api/torrent/latest
+    # https://bangumi.moe/api/v2/torrent/search
+    - path: "{{ if .Keywords }}api/v2/torrent/search{{ else }}api/torrent/latest{{ end }}"
+      method: "{{ if .Keywords }}post{{ else }}get{{ end }}"
+      response:
+        type: json
+
+  inputs:
+#    $raw: "{{ if .Keywords }}query={{ .Keywords }}{{ else }}{{ end }}"
+    query: "{{ .Keywords }}"
+
+  rows:
+    selector: torrents
+
+  fields:
+    category:
+      selector: category_tag_id
+    title:
+      selector: title
+    details:
+      text: "{{ .Config.sitelink }}"
+    infohash:
+      selector: infoHash
+    poster:
+      selector: introduction
+      filters:
+        - name: regexp
+          args: "src=\\\"(.+?)\\\""
+    description:
+      selector: category_tag.locale.en
+      optional: true
+    date:
+      # 2021-10-19T06:10:15.772Z
+      selector: publish_time
+    size:
+      selector: size
+    grabs:
+      selector: downloads
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json api v2
