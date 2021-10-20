@@ -56,8 +56,8 @@ namespace Jackett.Common.Utils.Clients
         {
             clearanceHandlr = new ClearanceHandler(serverConfig.FlareSolverrUrl)
             {
-                UserAgent = BrowserUtil.ChromeUserAgent,
-                MaxTimeout = 50000
+                MaxTimeout = 55000,
+                ProxyUrl = serverConfig.GetProxyUrl(false)
             };
             clientHandlr = new HttpClientHandler
             {
