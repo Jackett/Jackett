@@ -1430,158 +1430,7 @@ namespace Jackett.Common.Indexers
                                         continue;
                                     }
 
-                                    switch (FieldName)
-                                    {
-                                        case "download":
-                                            if (string.IsNullOrEmpty(value))
-                                            {
-                                                value = null;
-                                                release.Link = null;
-                                                break;
-                                            }
-                                            if (value.StartsWith("magnet:"))
-                                            {
-                                                release.MagnetUri = new Uri(value);
-                                                value = release.MagnetUri.ToString();
-                                            }
-                                            else
-                                            {
-                                                release.Link = resolvePath(value, searchUrlUri);
-                                                value = release.Link.ToString();
-                                            }
-                                            break;
-                                        case "magnet":
-                                            var magnetUri = new Uri(value);
-                                            release.MagnetUri = magnetUri;
-                                            value = magnetUri.ToString();
-                                            break;
-                                        case "infohash":
-                                            release.InfoHash = value;
-                                            break;
-                                        case "details":
-                                            var url = resolvePath(value, searchUrlUri);
-                                            release.Details = url;
-                                            value = url.ToString();
-                                            break;
-                                        case "title":
-                                            if (FieldModifiers.Contains("append"))
-                                                release.Title += value;
-                                            else
-                                                release.Title = value;
-                                            value = release.Title;
-                                            break;
-                                        case "description":
-                                            if (FieldModifiers.Contains("append"))
-                                                release.Description += value;
-                                            else
-                                                release.Description = value;
-                                            value = release.Description;
-                                            break;
-                                        case "category":
-                                            var cats = MapTrackerCatToNewznab(value);
-                                            if (cats.Any())
-                                            {
-                                                if (release.Category == null || FieldModifiers.Contains("noappend"))
-                                                    release.Category = cats;
-                                                else
-                                                    release.Category = release.Category.Union(cats).ToList();
-                                            }
-                                            value = release.Category.ToString();
-                                            break;
-                                        case "size":
-                                            release.Size = ReleaseInfo.GetBytes(value);
-                                            value = release.Size.ToString();
-                                            break;
-                                        case "leechers":
-                                            var leechers = ReleaseInfo.GetBytes(value);
-                                            leechers = leechers < 5000000L ? leechers : 0; // to fix #6558
-                                            if (release.Peers == null)
-                                                release.Peers = leechers;
-                                            else
-                                                release.Peers += leechers;
-                                            value = leechers.ToString();
-                                            break;
-                                        case "seeders":
-                                            release.Seeders = ReleaseInfo.GetBytes(value);
-                                            release.Seeders = release.Seeders < 5000000L ? release.Seeders : 0; // to fix #6558
-                                            if (release.Peers == null)
-                                                release.Peers = release.Seeders;
-                                            else
-                                                release.Peers += release.Seeders;
-                                            value = release.Seeders.ToString();
-                                            break;
-                                        case "date":
-                                            release.PublishDate = DateTimeUtil.FromUnknown(value);
-                                            value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
-                                            break;
-                                        case "files":
-                                            release.Files = ReleaseInfo.GetBytes(value);
-                                            value = release.Files.ToString();
-                                            break;
-                                        case "grabs":
-                                            release.Grabs = ReleaseInfo.GetBytes(value);
-                                            value = release.Grabs.ToString();
-                                            break;
-                                        case "downloadvolumefactor":
-                                            release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
-                                            value = release.DownloadVolumeFactor.ToString();
-                                            break;
-                                        case "uploadvolumefactor":
-                                            release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
-                                            value = release.UploadVolumeFactor.ToString();
-                                            break;
-                                        case "minimumratio":
-                                            release.MinimumRatio = ParseUtil.CoerceDouble(value);
-                                            value = release.MinimumRatio.ToString();
-                                            break;
-                                        case "minimumseedtime":
-                                            release.MinimumSeedTime = ParseUtil.CoerceLong(value);
-                                            value = release.MinimumSeedTime.ToString();
-                                            break;
-                                        case "imdb":
-                                        case "imdbid":
-                                            release.Imdb = ParseUtil.GetLongFromString(value);
-                                            value = release.Imdb.ToString();
-                                            break;
-                                        case "tmdbid":
-                                            var TmdbIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                            var TmdbIDMatch = TmdbIDRegEx.Match(value);
-                                            var TmdbID = TmdbIDMatch.Groups[1].Value;
-                                            release.TMDb = ParseUtil.CoerceLong(TmdbID);
-                                            value = release.TMDb.ToString();
-                                            break;
-                                        case "rageid":
-                                            var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                            var RageIDMatch = RageIDRegEx.Match(value);
-                                            var RageID = RageIDMatch.Groups[1].Value;
-                                            release.RageID = ParseUtil.CoerceLong(RageID);
-                                            value = release.RageID.ToString();
-                                            break;
-                                        case "tvdbid":
-                                            var TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                            var TVDBIdMatch = TVDBIdRegEx.Match(value);
-                                            var TVDBId = TVDBIdMatch.Groups[1].Value;
-                                            release.TVDBId = ParseUtil.CoerceLong(TVDBId);
-                                            value = release.TVDBId.ToString();
-                                            break;
-                                        case "author":
-                                            release.Author = value;
-                                            break;
-                                        case "booktitle":
-                                            release.BookTitle = value;
-                                            break;
-                                        case "poster":
-                                            if (!string.IsNullOrWhiteSpace(value))
-                                            {
-                                                var poster = resolvePath(value, searchUrlUri);
-                                                release.Poster = poster;
-                                            }
-                                            value = release.Poster.ToString();
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    variables[variablesKey] = value;
+                                    variables[variablesKey] = ParseFields(value, FieldName, release, FieldModifiers, searchUrlUri);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1596,45 +1445,7 @@ namespace Jackett.Common.Indexers
                                 }
 
                                 var Filters = Definition.Search.Rows.Filters;
-                                var SkipRelease = false;
-                                if (Filters != null)
-                                {
-                                    foreach (var Filter in Filters)
-                                    {
-                                        switch (Filter.Name)
-                                        {
-                                            case "andmatch":
-                                                var CharacterLimit = -1;
-                                                if (Filter.Args != null)
-                                                    CharacterLimit = int.Parse(Filter.Args);
-
-                                                if (query.ImdbID != null && TorznabCaps.MovieSearchImdbAvailable)
-                                                    break; // skip andmatch filter for imdb searches
-
-                                                if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
-                                                    break; // skip andmatch filter for tmdb searches
-
-                                                if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)
-                                                    break; // skip andmatch filter for tvdb searches
-
-                                                var queryKeywords = variables[".Keywords"] as string;
-
-                                                if (!query.MatchQueryStringAND(release.Title, CharacterLimit, queryKeywords))
-                                                {
-                                                    logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", Id, release.Title));
-                                                    SkipRelease = true;
-                                                }
-                                                break;
-                                            case "strdump":
-                                                // for debugging
-                                                logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", Id, Row.ToString()));
-                                                break;
-                                            default:
-                                                logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", Id, Filter.Name));
-                                                break;
-                                        }
-                                    }
-                                }
+                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
 
                                 if (SkipRelease)
                                     continue;
@@ -1734,157 +1545,7 @@ namespace Jackett.Common.Indexers
                                             continue;
                                         }
 
-                                        switch (FieldName)
-                                        {
-                                            case "download":
-                                                if (string.IsNullOrEmpty(value))
-                                                {
-                                                    value = null;
-                                                    release.Link = null;
-                                                    break;
-                                                }
-                                                if (value.StartsWith("magnet:"))
-                                                {
-                                                    release.MagnetUri = new Uri(value);
-                                                    value = release.MagnetUri.ToString();
-                                                }
-                                                else
-                                                {
-                                                    release.Link = resolvePath(value, searchUrlUri);
-                                                    value = release.Link.ToString();
-                                                }
-                                                break;
-                                            case "magnet":
-                                                var magnetUri = new Uri(value);
-                                                release.MagnetUri = magnetUri;
-                                                value = magnetUri.ToString();
-                                                break;
-                                            case "infohash":
-                                                release.InfoHash = value;
-                                                break;
-                                            case "details":
-                                                var url = resolvePath(value, searchUrlUri);
-                                                release.Details = url;
-                                                value = url.ToString();
-                                                break;
-                                            case "title":
-                                                if (FieldModifiers.Contains("append"))
-                                                    release.Title += value;
-                                                else
-                                                    release.Title = value;
-                                                value = release.Title;
-                                                break;
-                                            case "description":
-                                                if (FieldModifiers.Contains("append"))
-                                                    release.Description += value;
-                                                else
-                                                    release.Description = value;
-                                                value = release.Description;
-                                                break;
-                                            case "category":
-                                                var cats = MapTrackerCatToNewznab(value);
-                                                if (cats.Any())
-                                                {
-                                                    if (release.Category == null || FieldModifiers.Contains("noappend"))
-                                                        release.Category = cats;
-                                                    else
-                                                        release.Category = release.Category.Union(cats).ToList();
-                                                }
-                                                value = release.Category.ToString();
-                                                break;
-                                            case "size":
-                                                release.Size = ReleaseInfo.GetBytes(value);
-                                                value = release.Size.ToString();
-                                                break;
-                                            case "leechers":
-                                                var leechers = ReleaseInfo.GetBytes(value);
-                                                leechers = leechers < 5000000L ? leechers : 0; // to fix #6558
-                                                if (release.Peers == null)
-                                                    release.Peers = leechers;
-                                                else
-                                                    release.Peers += leechers;
-                                                value = leechers.ToString();
-                                                break;
-                                            case "seeders":
-                                                release.Seeders = ReleaseInfo.GetBytes(value);
-                                                release.Seeders = release.Seeders < 5000000L ? release.Seeders : 0; // to fix #6558
-                                                if (release.Peers == null)
-                                                    release.Peers = release.Seeders;
-                                                else
-                                                    release.Peers += release.Seeders;
-                                                value = release.Seeders.ToString();
-                                                break;
-                                            case "date":
-                                                release.PublishDate = DateTimeUtil.FromUnknown(value);
-                                                value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
-                                                break;
-                                            case "files":
-                                                release.Files = ReleaseInfo.GetBytes(value);
-                                                value = release.Files.ToString();
-                                                break;
-                                            case "grabs":
-                                                release.Grabs = ReleaseInfo.GetBytes(value);
-                                                value = release.Grabs.ToString();
-                                                break;
-                                            case "downloadvolumefactor":
-                                                release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
-                                                value = release.DownloadVolumeFactor.ToString();
-                                                break;
-                                            case "uploadvolumefactor":
-                                                release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
-                                                value = release.UploadVolumeFactor.ToString();
-                                                break;
-                                            case "minimumratio":
-                                                release.MinimumRatio = ParseUtil.CoerceDouble(value);
-                                                value = release.MinimumRatio.ToString();
-                                                break;
-                                            case "minimumseedtime":
-                                                release.MinimumSeedTime = ParseUtil.CoerceLong(value);
-                                                value = release.MinimumSeedTime.ToString();
-                                                break;
-                                            case "imdb":
-                                                release.Imdb = ParseUtil.GetLongFromString(value);
-                                                value = release.Imdb.ToString();
-                                                break;
-                                            case "tmdbid":
-                                                var TmdbIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                                var TmdbIDMatch = TmdbIDRegEx.Match(value);
-                                                var TmdbID = TmdbIDMatch.Groups[1].Value;
-                                                release.TMDb = ParseUtil.CoerceLong(TmdbID);
-                                                value = release.TMDb.ToString();
-                                                break;
-                                            case "rageid":
-                                                var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                                var RageIDMatch = RageIDRegEx.Match(value);
-                                                var RageID = RageIDMatch.Groups[1].Value;
-                                                release.RageID = ParseUtil.CoerceLong(RageID);
-                                                value = release.RageID.ToString();
-                                                break;
-                                            case "tvdbid":
-                                                var TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                                                var TVDBIdMatch = TVDBIdRegEx.Match(value);
-                                                var TVDBId = TVDBIdMatch.Groups[1].Value;
-                                                release.TVDBId = ParseUtil.CoerceLong(TVDBId);
-                                                value = release.TVDBId.ToString();
-                                                break;
-                                            case "author":
-                                                release.Author = value;
-                                                break;
-                                            case "booktitle":
-                                                release.BookTitle = value;
-                                                break;
-                                            case "poster":
-                                                if (!string.IsNullOrWhiteSpace(value))
-                                                {
-                                                    var poster = resolvePath(value, searchUrlUri);
-                                                    release.Poster = poster;
-                                                }
-                                                value = release.Poster.ToString();
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                        variables[variablesKey] = value;
+                                        variables[variablesKey] = ParseFields(value, FieldName, release, FieldModifiers, searchUrlUri);
                                     }
                                     catch (Exception ex)
                                     {
@@ -1900,45 +1561,7 @@ namespace Jackett.Common.Indexers
                                 }
 
                                 var Filters = Definition.Search.Rows.Filters;
-                                var SkipRelease = false;
-                                if (Filters != null)
-                                {
-                                    foreach (var Filter in Filters)
-                                    {
-                                        switch (Filter.Name)
-                                        {
-                                            case "andmatch":
-                                                var CharacterLimit = -1;
-                                                if (Filter.Args != null)
-                                                    CharacterLimit = int.Parse(Filter.Args);
-
-                                                if (query.ImdbID != null && TorznabCaps.MovieSearchImdbAvailable)
-                                                    break; // skip andmatch filter for imdb searches
-
-                                                if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
-                                                    break; // skip andmatch filter for tmdb searches
-
-                                                if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)
-                                                    break; // skip andmatch filter for tvdb searches
-
-                                                var queryKeywords = variables[".Keywords"] as string;
-
-                                                if (!query.MatchQueryStringAND(release.Title, CharacterLimit, queryKeywords))
-                                                {
-                                                    logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", Id, release.Title));
-                                                    SkipRelease = true;
-                                                }
-                                                break;
-                                            case "strdump":
-                                                // for debugging
-                                                logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", Id, Row.ToHtmlPretty()));
-                                                break;
-                                            default:
-                                                logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", Id, Filter.Name));
-                                                break;
-                                        }
-                                    }
-                                }
+                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
 
                                 if (SkipRelease)
                                     continue;
@@ -2223,6 +1846,207 @@ namespace Jackett.Common.Indexers
                 headers.Add(header.Key, applyGoTemplateText(header.Value[0], variables));
 
             return headers;
+        }
+
+        private string ParseFields(string value, string FieldName, ReleaseInfo release, List<string> FieldModifiers, Uri searchUrlUri)
+        {
+            switch (FieldName)
+            {
+                case "download":
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        value = null;
+                        release.Link = null;
+                        break;
+                    }
+                    if (value.StartsWith("magnet:"))
+                    {
+                        release.MagnetUri = new Uri(value);
+                        value = release.MagnetUri.ToString();
+                    }
+                    else
+                    {
+                        release.Link = resolvePath(value, searchUrlUri);
+                        value = release.Link.ToString();
+                    }
+                    break;
+                case "magnet":
+                    var magnetUri = new Uri(value);
+                    release.MagnetUri = magnetUri;
+                    value = magnetUri.ToString();
+                    break;
+                case "infohash":
+                    release.InfoHash = value;
+                    break;
+                case "details":
+                    var url = resolvePath(value, searchUrlUri);
+                    release.Details = url;
+                    value = url.ToString();
+                    break;
+                case "title":
+                    if (FieldModifiers.Contains("append"))
+                        release.Title += value;
+                    else
+                        release.Title = value;
+                    value = release.Title;
+                    break;
+                case "description":
+                    if (FieldModifiers.Contains("append"))
+                        release.Description += value;
+                    else
+                        release.Description = value;
+                    value = release.Description;
+                    break;
+                case "category":
+                    var cats = MapTrackerCatToNewznab(value);
+                    if (cats.Any())
+                    {
+                        if (release.Category == null || FieldModifiers.Contains("noappend"))
+                            release.Category = cats;
+                        else
+                            release.Category = release.Category.Union(cats).ToList();
+                    }
+                    value = release.Category.ToString();
+                    break;
+                case "size":
+                    release.Size = ReleaseInfo.GetBytes(value);
+                    value = release.Size.ToString();
+                    break;
+                case "leechers":
+                    var leechers = ReleaseInfo.GetBytes(value);
+                    leechers = leechers < 5000000L ? leechers : 0; // to fix #6558
+                    if (release.Peers == null)
+                        release.Peers = leechers;
+                    else
+                        release.Peers += leechers;
+                    value = leechers.ToString();
+                    break;
+                case "seeders":
+                    release.Seeders = ReleaseInfo.GetBytes(value);
+                    release.Seeders = release.Seeders < 5000000L ? release.Seeders : 0; // to fix #6558
+                    if (release.Peers == null)
+                        release.Peers = release.Seeders;
+                    else
+                        release.Peers += release.Seeders;
+                    value = release.Seeders.ToString();
+                    break;
+                case "date":
+                    release.PublishDate = DateTimeUtil.FromUnknown(value);
+                    value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
+                    break;
+                case "files":
+                    release.Files = ReleaseInfo.GetBytes(value);
+                    value = release.Files.ToString();
+                    break;
+                case "grabs":
+                    release.Grabs = ReleaseInfo.GetBytes(value);
+                    value = release.Grabs.ToString();
+                    break;
+                case "downloadvolumefactor":
+                    release.DownloadVolumeFactor = ParseUtil.CoerceDouble(value);
+                    value = release.DownloadVolumeFactor.ToString();
+                    break;
+                case "uploadvolumefactor":
+                    release.UploadVolumeFactor = ParseUtil.CoerceDouble(value);
+                    value = release.UploadVolumeFactor.ToString();
+                    break;
+                case "minimumratio":
+                    release.MinimumRatio = ParseUtil.CoerceDouble(value);
+                    value = release.MinimumRatio.ToString();
+                    break;
+                case "minimumseedtime":
+                    release.MinimumSeedTime = ParseUtil.CoerceLong(value);
+                    value = release.MinimumSeedTime.ToString();
+                    break;
+                case "imdb":
+                case "imdbid":
+                    release.Imdb = ParseUtil.GetLongFromString(value);
+                    value = release.Imdb.ToString();
+                    break;
+                case "tmdbid":
+                    var TmdbIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var TmdbIDMatch = TmdbIDRegEx.Match(value);
+                    var TmdbID = TmdbIDMatch.Groups[1].Value;
+                    release.TMDb = ParseUtil.CoerceLong(TmdbID);
+                    value = release.TMDb.ToString();
+                    break;
+                case "rageid":
+                    var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var RageIDMatch = RageIDRegEx.Match(value);
+                    var RageID = RageIDMatch.Groups[1].Value;
+                    release.RageID = ParseUtil.CoerceLong(RageID);
+                    value = release.RageID.ToString();
+                    break;
+                case "tvdbid":
+                    var TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var TVDBIdMatch = TVDBIdRegEx.Match(value);
+                    var TVDBId = TVDBIdMatch.Groups[1].Value;
+                    release.TVDBId = ParseUtil.CoerceLong(TVDBId);
+                    value = release.TVDBId.ToString();
+                    break;
+                case "author":
+                    release.Author = value;
+                    break;
+                case "booktitle":
+                    release.BookTitle = value;
+                    break;
+                case "poster":
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        var poster = resolvePath(value, searchUrlUri);
+                        release.Poster = poster;
+                    }
+                    value = release.Poster.ToString();
+                    break;
+                default:
+                    break;
+            }
+
+            return value;
+        }
+
+        private bool ParseRowFilters(List<filterBlock> Filters, ReleaseInfo release, TorznabQuery query, Dictionary<string, object> variables, object Row)
+        {
+            var SkipRelease = false;
+            if (Filters != null)
+            {
+                foreach (var Filter in Filters)
+                {
+                    switch (Filter.Name)
+                    {
+                        case "andmatch":
+                            var CharacterLimit = -1;
+                            if (Filter.Args != null)
+                                CharacterLimit = int.Parse(Filter.Args);
+
+                            if (query.ImdbID != null && TorznabCaps.MovieSearchImdbAvailable)
+                                break; // skip andmatch filter for imdb searches
+
+                            if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
+                                break; // skip andmatch filter for tmdb searches
+
+                            if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)
+                                break; // skip andmatch filter for tvdb searches
+
+                            var queryKeywords = variables[".Keywords"] as string;
+
+                            if (!query.MatchQueryStringAND(release.Title, CharacterLimit, queryKeywords))
+                            {
+                                logger.Debug(string.Format("CardigannIndexer ({0}): skipping {1} (andmatch filter)", Id, release.Title));
+                                SkipRelease = true;
+                            }
+                            break;
+                        case "strdump":
+                            // for debugging
+                            logger.Debug(string.Format("CardigannIndexer ({0}): row strdump: {1}", Id, Row.ToString()));
+                            break;
+                        default:
+                            logger.Error(string.Format("CardigannIndexer ({0}): Unsupported rows filter: {1}", Id, Filter.Name));
+                            break;
+                    }
+                }
+            }
+            return SkipRelease;
         }
     }
 }
