@@ -87,9 +87,7 @@ search:
     selector: article
 
   fields:
-    category:
-      text: 54
-    category|noappend:
+    category_optional:
       optional: true
       selector: a[href*="category="]
       attribute: href
@@ -111,6 +109,8 @@ search:
         a[href$="original_hentai"]: 48
         a[href$="rus-game"]: 57
         a[href$="uncensored"]: 45
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}54{{ end }}"
     title:
       selector: h2.title a
     details:
@@ -134,11 +134,11 @@ search:
       text: 1
     leechers:
       text: 1
-    size:
-      text: "0 B"
-    size:
+    size_optional:
       optional: true
       selector: b.file_size
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
