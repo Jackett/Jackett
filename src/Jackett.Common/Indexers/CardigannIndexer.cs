@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "rageid", "tmdbid", "tvdbid", "poster" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "rageid", "tmdbid", "tvdbid", "poster", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -1531,6 +1531,7 @@ namespace Jackett.Common.Indexers
                                             value = release.MinimumSeedTime.ToString();
                                             break;
                                         case "imdb":
+                                        case "imdbid":
                                             release.Imdb = ParseUtil.GetLongFromString(value);
                                             value = release.Imdb.ToString();
                                             break;
