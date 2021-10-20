@@ -52,6 +52,7 @@ search:
       attribute: src
     description:
       selector: div.cat-links
+      optional: true
     date:
       selector: time
       attribute: datetime

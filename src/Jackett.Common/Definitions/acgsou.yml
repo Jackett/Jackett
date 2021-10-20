@@ -79,21 +79,15 @@ search:
     download:
       selector: td:nth-child(3) a
       attribute: href
-    date:
-      selector: td:nth-child(1):contains("昨天")
-      optional: true
-      filters:
-        - name: replace
-          args: ["昨天", "Yesterday"]
-    date:
-      selector: td:nth-child(1):contains(":"):not(:contains("昨天"))
+    date_year:
+      selector: td:nth-child(1):contains(":")
       optional: true
       filters:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "01/02 15:04 -07:00"
-    date:
+    date_years:
       selector: td:nth-child(1):not(:contains(":"))
       optional: true
       filters:
@@ -101,6 +95,8 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006/01/02 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_years }}{{ or .Result.date_year .Result.date_years }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(4)
     seeders:

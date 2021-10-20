@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: "applications", cat: PC/Mac, desc: "Apps"}
     - {id: "games", cat: PC/Games, desc: Games}
+    - {id: "design-assets", cat: Other, desc: Design Assets}
     - {id: "uncategorized", cat: Other, desc: Uncategorized}
 
   modes:

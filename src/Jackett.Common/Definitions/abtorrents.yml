@@ -137,7 +137,7 @@ search:
       attribute: src
     files:
       selector: td:nth-last-child(8)
-    date:
+    date_yday:
       # Yesterday<br/>6:00 AM
       selector: td:nth-last-child(7):contains("day")
       optional: true
@@ -145,7 +145,7 @@ search:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
-    date:
+    date_year:
       # Aug 6 2021<br/>7:25 PM
       selector: td:nth-last-child(7):not(:contains("day"))
       optional: true
@@ -154,6 +154,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 3:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_yday .Result.date_year }}{{ or .Result.date_yday .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(6)
     grabs:

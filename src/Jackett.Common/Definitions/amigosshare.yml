@@ -292,9 +292,7 @@ search:
         "[src$=\"/Scripts.png\"]": 128
         "[src$=\"/Vetores.png\"]": 124
         "[src$=\"/outros2.png\"]": 130
-    date:
-      text: now
-    date:
+    date_optional:
       selector: p:contains("Lançado:")
       optional: true
       filters:
@@ -306,6 +304,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/06 15:04:05 -07:00"
+    date:
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:
       selector: div.list-group-item-content p.m-0 span.badge-info
     seeders:

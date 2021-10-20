@@ -295,35 +295,26 @@ search:
       filters:
         - name: querystring
           args: f
-    size:
-      text: "0 B"
-    size:
+    size_optional:
       optional: true
-      selector: td:contains(\00a0GB)
+      selector: td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0kB), td:contains(\00a0B)
     size:
-      optional: true
-      selector: td:contains(\00a0MB)
-    size:
-      optional: true
-      selector: td:contains(\00a0kB)
-    size:
-      optional: true
-      selector: td:contains(\00a0B)
-    seeders:
-      text: 0
-    seeders:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    seeders_optional:
       optional: true
       selector: td[title="Seeders"]
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       optional: true
       selector: td[title="Leechers"]
-    grabs:
-      text: 0
-    grabs:
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    grabs_optional:
       optional: true
       selector: td[title^="Replies:"]
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

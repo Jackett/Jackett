@@ -137,7 +137,7 @@ search:
     poster:
       selector: img
       attribute: src
-    _date:
+    date_optional:
       selector: div.postContent
       filters:
         - name: regexp
@@ -145,8 +145,8 @@ search:
         - name: dateparse
           args: "2 Jan 2006"
     date:
-      text: "{{ if .Result._date }}{{ .Result._date }}{{ else }}now{{ end }}"
-    _size:
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
+    size_optional:
       selector: div.postContent
       filters:
         - name: regexp
@@ -158,7 +158,7 @@ search:
         - name: replace
           args: ["KBs", "KB"]
     size:
-      text: "{{ if .Result._size }}{{ .Result._size }}{{ else }}0 B{{ end }}"
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     seeders:
       text: 1
     leechers:
