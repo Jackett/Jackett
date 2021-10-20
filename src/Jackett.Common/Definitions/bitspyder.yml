@@ -137,7 +137,7 @@ search:
       selector: td.rowcol:nth-last-child(3)
     leechers:
       selector: td.rowcol:nth-last-child(2)
-    date:
+    date_added:
       optional: true
       selector: font[color="5F5F5F"]
       filters:
@@ -149,7 +149,7 @@ search:
           args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_upload:
       optional: true
       selector: a[title^="Upploaded at"]
       attribute: title
@@ -162,6 +162,8 @@ search:
           args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_upload .Result.date_added }}{{ or .Result.date_upload .Result.date_added }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

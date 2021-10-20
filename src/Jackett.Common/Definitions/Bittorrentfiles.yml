@@ -172,30 +172,30 @@ search:
     download:
       selector: a[href^="/download.php"]
       attribute: href
-    grabs:
-      text: 0
-    grabs:
+    grabs_optional:
       selector: a[title="Snatcher"]
       optional: true
-    files:
-      text: 0
-    files:
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+    files_optional:
       selector: a[title="Files"]
       optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}0{{ end }}"
     size:
       selector: td:nth-child(6)
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: a[title="Seeder"]
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: a[title="Leecher"]
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
       # 2 flavours of dates
-    date:
+    date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
       selector: td:nth-child(10):contains("Heute"),  td:nth-child(10):contains("Gestern")
@@ -209,7 +209,7 @@ search:
           args: ["Gestern", "Yesterday"]
         - name: append
           args: " +01:00" # CET
-    date:
+    date_year:
       # 30.02.2018 23:12:50
       selector: td:nth-child(10):contains("."):contains(":")
       optional: true
@@ -220,6 +220,8 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img[alt="OU"]: 0

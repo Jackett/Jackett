@@ -84,11 +84,13 @@ search:
       filters:
         - name: querystring
           args: category
-    title:
+    title_default:
       selector: a[href*="/details.php?id="]
-    title:
+    title_optional:
       optional: true
       selector: div.tooltip-content > div
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href*="/details.php?id="]
       attribute: href
@@ -115,7 +117,6 @@ search:
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
     poster:
-      optional: true
       selector: div.tooltip-content > img
       attribute: src
     downloadvolumefactor:

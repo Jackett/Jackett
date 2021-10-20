@@ -68,11 +68,11 @@ search:
       filters:
         - name: replace
           args: ["found ", ""]
-    files:
-      text: 1
-    files:
+    files_optional:
       selector: span.torrent_files
       optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
     size:
       selector: span.torrent_size
     seeders:
