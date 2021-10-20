@@ -77,8 +77,8 @@ namespace Jackett.Common.Utils.Clients
 
             using (var clearanceHandlr = new ClearanceHandler(serverConfig.FlareSolverrUrl))
             {
-                clearanceHandlr.UserAgent = BrowserUtil.ChromeUserAgent;
-                clearanceHandlr.MaxTimeout = 50000;
+                clearanceHandlr.MaxTimeout = 55000;
+                clearanceHandlr.ProxyUrl = serverConfig.GetProxyUrl(false);
                 using (var clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
