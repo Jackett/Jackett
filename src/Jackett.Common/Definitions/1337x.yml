@@ -198,10 +198,10 @@ search:
     selector: tr:has(a[href^="/torrent/"])
 
   fields:
-    title_text:
+    title_default:
       # the movies, tv and music pages abbreviate the title
       selector: td[class^="coll-1"] a[href^="/torrent/"]
-    title_href:
+    title_optional:
       # the movies, tv and music pages abbreviate the title so we process the href instead. #8137
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
@@ -210,8 +210,8 @@ search:
         - name: split
           args: ["/", 3]
     title:
-      # title_href can be empty so use the title_text instead #8586
-      text: "{{ if .Result.title_href }}{{ .Result.title_href }}{{ else }}{{ .Result.title_text }}{{ end }}"
+      # title_optional can be empty so use the title_default instead #8586
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
       filters:
         - name: re_replace
           args: ["-", " "]
@@ -236,9 +236,7 @@ search:
           args: ["(?i)WEB\\sDL", "WEB-DL"]
         - name: re_replace
           args: ["(?i)HDTVRIP", "HDTV"]
-    category:
-      text: 40
-    category|noappend:
+    category_sub:
       optional: true
       selector: td[class^="coll-1"] a[href^="/sub/"]
       attribute: href
@@ -246,6 +244,8 @@ search:
         # extract the third part
         - name: split
           args: ["/", 2]
+    category:
+      text: "{{ if .Result.category_sub }}{{ .Result.category_sub }}{{ else }}40{{ end }}"
     details:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
@@ -254,7 +254,7 @@ search:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
     # dates come in three flavours:
-    date:
+    date_year:
       # (within this year) 7am Sep. 14th
       optional: true
       selector: td[class^="coll-date"]:not(:contains(":")):not(:contains("'"))
@@ -263,7 +263,7 @@ search:
           args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "3pm Jan. 2"
-    date:
+    date_years:
       # (more than a year ago) Apr. 18th '11
       optional: true
       selector: td[class^="coll-date"]:contains("'")
@@ -274,12 +274,14 @@ search:
           args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "Jan. 2 06"
-    date:
+    date_today:
       # (today) 12:25am
       optional: true
       selector: td[class^="coll-date"]:contains(":")
       filters:
         - name: fuzzytime
+    date:
+      text: "{{ if or .Result.date_year .Result.date_years .Result.date_today }}{{ or .Result.date_year .Result.date_years .Result.date_today }}{{ else }}now{{ end }}"
     size:
       selector: td[class^="coll-4"]
     seeders:

@@ -20,8 +20,8 @@ caps:
     - {id: Movie clips, cat: Movies, desc: Movies clips}
     - {id: DVD, cat: Movies/DVD, desc: Movies DVD}
     - {id: MP4, cat: Movies, desc: Movies MP4}
-    - {id: Dubbed Movies, cat: Movies/Foreign, desc: Moves Dubbed}
-    - {id: Other Movies, cat: Movies/Other, desc: Moves Other}
+    - {id: Dubbed Movies, cat: Movies/Foreign, desc: Movies Dubbed}
+    - {id: Other Movies, cat: Movies/Other, desc: Movies Other}
     - {id: Documentary, cat: TV/Documentary, desc: Documentary}
     - {id: TV, cat: TV, desc: TV}
     - {id: MP3, cat: Audio/MP3, desc: Music MP3}
@@ -29,7 +29,7 @@ caps:
     - {id: Lossless, cat: Audio/Lossless, desc: Music Lossless}
     - {id: Music videos, cat: Audio/Video, desc: Music Videos}
     - {id: Other Music, cat: Audio/Other, desc: Music Other}
-    - {id: Radio  Shows, cat: Audio/Other, desc: Music Radio}
+    - {id: Radio Shows, cat: Audio/Other, desc: Music Radio}
     - {id: Video, cat: XXX, desc: Adult / Porn}
     - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
     - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}

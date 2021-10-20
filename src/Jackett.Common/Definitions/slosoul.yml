@@ -1,38 +1,27 @@
 ---
-id: devilsplayground
-name: Devils-Playground
-description: "Devils-Playground (Nbytez) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-GB
+id: slosoul
+name: slosoul
+description: "slosoul is a Slovanian  Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
 type: private
 encoding: UTF-8
 links:
-  - http://devils-playground.org/
-legacylinks:
-  - https://devils-playground.org/
-  - https://nbytez.me/
-  - http://nbytez.me/
+  - https://slosoul.net/
 
 caps:
   categorymappings:
-    - {id: 3, cat: PC, desc: "Apps"}
-    - {id: 4, cat: Books/EBook, desc: "Ebooks"}
-    - {id: 22, cat: PC/Games, desc: "Games"}
-    - {id: 15, cat: Movies, desc: "Movies"}
-    - {id: 19, cat: Movies/UHD, desc: "Movies/Bluray"}
-    - {id: 20, cat: Movies, desc: "Movies/Packs"}
-    - {id: 17, cat: Movies/WEB-DL, desc: "Movies/Webrip"}
-    - {id: 16, cat: Movies/HD, desc: "Movies/x265"}
-    - {id: 18, cat: Movies/SD, desc: "Movies/XVID"}
-    - {id: 10, cat: Audio, desc: "Music/"}
-    - {id: 12, cat: Audio/Lossless, desc: "Music/FLAC"}
-    - {id: 11, cat: Audio/MP3, desc: "Music/MP3"}
-    - {id: 14, cat: Audio, desc: "Music/Packs"}
-    - {id: 13, cat: Audio, desc: "Music/Top UK 40"}
-    - {id: 5, cat: TV, desc: "TV"}
-    - {id: 9, cat: TV, desc: "TV/Packs"}
-    - {id: 6, cat: TV/HD, desc: "TV/x254"}
-    - {id: 7, cat: TV/HD, desc: "TV/x255"}
-    - {id: 8, cat: TV/SD, desc: "TV/XVID"}
+    - {id: 5, cat: PC, desc: "Apps"}
+    - {id: 7, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 6, cat: PC/Games, desc: "Games PC"}
+    - {id: 8, cat: Movies, desc: "Movies Packs"}
+    - {id: 1, cat: Movies/SD, desc: "Movies Divx/Xvid"}
+    - {id: 9, cat: Movies/DVD, desc: "Movies DVD-r"}
+    - {id: 11, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 4, cat: XXX, desc: "Porn"}
+    - {id: 13, cat: TV/Sport, desc: "TV Sport"}
+    - {id: 10, cat: TV, desc: "TV Shows"}
+    - {id: 12, cat: Other, desc: "VIP"}
 
   modes:
     search: [q]
@@ -66,10 +55,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The default is <i>15</i>.
 
 login:
   path: takelogin.php
@@ -77,19 +62,22 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    logout: ""
   error:
-    - selector: table:has(a[href*="login.php?error=1"])
-      message:
-        text: "ERROR: Incorrect username!"
-    - selector: table:has(a[href*="login.php?error=4"])
-      message:
-        text: "ERROR: Incorrect password!"
-    - selector: table:has(a[href*="login.php?error="])
-      message:
-        text: "ERROR: Something went wrong during login!"
+    - selector: table:has(td.thead:contains("An error has occured!"))
   test:
     path: index.php
     selector: a[href*="logout.php?logouthash="]
+
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+  selectors:
+    - selector: a[href*="download-torrent-"]
+      attribute: href
 
 search:
   paths:
@@ -111,18 +99,18 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: "table#sortabletable tbody tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable tbody tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="browse.php?category="]
+      selector: a[href*="torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: (\d+)
     a_title:
       # is often abbreviated
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
     d_title:
       # usually longer than details title
       selector: div[id^="port-content-"] div
@@ -133,7 +121,10 @@ search:
       selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href*="download.php?id="]
+      selector: a[href*="details.php?id="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
       attribute: href
     poster:
       selector: div[id^="port-content-"] img
@@ -170,4 +161,4 @@ search:
 #    minimumseedtime:
 #      # 2 days (as seconds = 2 x 24 x 60 x 60)
 #      text: 172800
-#  TS Special Edition v.7.5
+#  TS Special Edition v.8.0

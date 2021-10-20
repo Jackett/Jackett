@@ -57,8 +57,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -120,12 +120,12 @@ search:
     category: 0
     # yes incldead, no activeonly
     include_dead_torrents: yes
-    keywords: "{{ .Keywords }}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name, t_description, t_both, t_uploader, t_genre
-    search_type: t_name
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-    # does not return imdb link in results, does not support imdbid searches
+    # does not return imdb link in results
   keywordsfilters:
     - name: re_replace # replace special characters with "%" (wildcard)
       args: ["[^a-zA-Z0-9]+", "%"]
@@ -140,13 +140,15 @@ search:
       filters:
         - name: querystring
           args: category
-    title:
+    a_title:
       # is often abbreviated
       selector: a[href*="details.php?id="]
-    title:
+    d_title:
       # usually longer than details title
       selector: div[id^="port-content-"] div
       optional: true
+    title:
+      text: "{{ if .Result.d_title }}{{ .Result.d_title }}{{ else }}{{ .Result.a_title }}{{ end }}"
     details:
       selector: a[href*="details.php?id="]
       attribute: href
