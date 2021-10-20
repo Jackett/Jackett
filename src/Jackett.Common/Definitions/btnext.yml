@@ -217,11 +217,11 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-    date:
+    date_ago:
       selector: td.torrent_name > abbr.timeago
       optional: true
       attribute: data-time
-    date:
+    date_year:
       selector: td.torrent_name:not(:has(abbr.timeago)):not(:contains("day")):not(:contains("Domingo")):not(:contains("Sábado")):not(:contains("Sexta")):not(:contains("Quinta")):not(:contains("Quarta")):not(:contains("Terça")):not(:contains("Segunda")):not(:contains("ontem")):not(:contains("Hoje"))
       optional: true
       remove: span, a, br
@@ -242,7 +242,7 @@ search:
           args: " +00:00" # WET
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    date:
+    date_day:
       selector: td.torrent_name:not(:has(abbr.timeago)):contains("day"), td.torrent_name:not(:has(abbr.timeago)):contains("Domingo"), td.torrent_name:not(:has(abbr.timeago)):contains("Sábado"), td.torrent_name:not(:has(abbr.timeago)):contains("Quinta"), td.torrent_name:not(:has(abbr.timeago)):contains("Sexta"), td.torrent_name:not(:has(abbr.timeago)):contains("Quarta"), td.torrent_name:not(:has(abbr.timeago)):contains("Terça"), td.torrent_name:not(:has(abbr.timeago)):contains("Segunda"), td.torrent_name:not(:has(abbr.timeago)):contains("ontem"), td.torrent_name:not(:has(abbr.timeago)):contains("Hoje")
       optional: true
       remove: span, a, br
@@ -278,4 +278,6 @@ search:
         - name: replace
           args: ["Domingo", "Sunday"]
         - name: fuzzytime
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_ago }}{{ or .Result.date_year .Result.date_day .Result.date_ago }}{{ else }}now{{ end }}"
 # TSUE 2.2

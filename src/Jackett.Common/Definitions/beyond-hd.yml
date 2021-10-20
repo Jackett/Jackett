@@ -87,7 +87,7 @@ search:
     selector: div.table-torrents > table > tbody > tr[id^="torrentposter"]
 
   fields:
-    _category:
+    category_optional:
       selector: a[href*="/categories/"]
       optional: true
       attribute: href
@@ -95,7 +95,7 @@ search:
         - name: regexp
           args: "/categories/.*?\\.(\\d+)"
     category:
-      text: "{{ if .Result._category }}{{ .Result._category }}{{ else }}1{{ end }}"
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}1{{ end }}"
     title:
       selector: a.torrent-name
     details:
