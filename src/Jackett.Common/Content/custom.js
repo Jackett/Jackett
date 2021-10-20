@@ -197,7 +197,7 @@ function reloadIndexers() {
         configuredTags = configuredIndexers.map(i => i.tags).reduce((a, g) => a.concat(g), []).filter((v, i, a) => a.indexOf(v) === i);
 
         configureFilters(configuredIndexers);
-        
+
         displayFilteredIndexersList(configuredIndexers, currentFilter);
 
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
@@ -971,7 +971,7 @@ function updateReleasesRow(row) {
     labels.empty();
 
     if (IMDBId) {
-        labels.append('\n<a href="http://www.imdb.com/title/tt' + ("0000000" + IMDBId).slice(-8) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
+        labels.append('\n<a href="https://www.imdb.com/title/tt' + ("0000000" + IMDBId).slice(-7) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
     }
 
     if (!isNaN(DownloadVolumeFactor)) {
@@ -1124,7 +1124,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     var searchTracker = releaseDialog.find("#searchTracker");
     var searchCategory = releaseDialog.find('#searchCategory');
     var searchFilter = releaseDialog.find('#searchFilter');
-    
+
     searchFilter.multiselect({
         maxHeight: 400,
         enableFiltering: true,
