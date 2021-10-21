@@ -127,6 +127,18 @@ search:
     - path: "https://apibay.org/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_recent.json{{ end }}"
       response:
         type: json
+  keywordsfilters:
+    # remove it's #8829
+    - name: re_replace
+      args: ["(?i)(it's\\s)", ""]
+    # replace simplified chinese as this confuses TPB search engine #7291
+    - name: re_replace
+      args: ["([\\p{IsCJKUnifiedIdeographs}\\W]+)", "."]
+    # currently, the only uploader for General Hospital puts a space between season and episode
+    # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
+    - name: re_replace
+      args: ["General Hospital S(\\d{2,3})E(\\d{2,3})", "$0 | \\(S$1 E$2\\)"]
+    - name: tolower
 
   rows:
     selector: $
