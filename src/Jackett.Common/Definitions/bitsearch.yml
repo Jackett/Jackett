@@ -12,6 +12,7 @@ caps:
   categories:
     eBook: Books/EBook
     "Ebook/Course": Books/EBook
+    "Games/PC": PC/Games
     Movies: Movies
     "Music/Album": Audio
     "Music/mp3": Audio/MP3
