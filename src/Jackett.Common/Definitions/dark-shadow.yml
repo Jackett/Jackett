@@ -214,14 +214,14 @@ search:
     poster:
       selector: div[id^="details"] img
       attribute: src
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
       selector: div.selection_unter_ad
     grabs:
       selector: div.selection_unter_ae
-    date:
+    date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
       selector: div.selection_unter_ab:not(:contains("."))
@@ -233,7 +233,7 @@ search:
           args: ["Gestern", "Yesterday"]
         - name: append
           args: " +01:00" # CET
-    date:
+    date_year:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
       optional: true
@@ -244,9 +244,10 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     description:
       selector: selection_unter_af
-      optional: true
     seeders:
       selector: div.selection_unter_aa
     leechers:

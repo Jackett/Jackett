@@ -365,12 +365,14 @@ search:
           args: ["on ", ""]
 
   fields:
-    title:
+    title_default:
       selector: a[href^="/files/details/"]
-    title:
+    title_optional:
       selector: a[href^="/files/details/"]
       optional: true
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     category:
       selector: span.torrent__table-info > a:nth-child(2)
       attribute: href
