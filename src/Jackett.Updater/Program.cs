@@ -447,7 +447,6 @@ namespace Jackett.Updater
                 "Definitions/tfile.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
-                "Definitions/thepiratebay.yml", // migrated to c#
                 "Definitions/theresurrection.yml",
                 "Definitions/thespit.yml",
                 "Definitions/thetorrents.yml",
