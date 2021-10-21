@@ -1,0 +1,112 @@
+---
+id: yts
+name: YTS
+description: "YTS is a Public torrent site specialising in HD movies of small size"
+language: en-US
+type: public
+encoding: UTF-8
+requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
+links:
+  - https://yts.mx/
+  - https://yts.unblockit.kim/
+  - https://yts.unblockninja.com/
+  - https://yts.nocensor.work/
+legacylinks:
+  - https://yts.ag/
+  - https://yts.am/
+  - https://yts.lt/
+  - https://yts.unblockit.dev/
+  - https://yts.root.yt/
+  - https://yts.unblockit.ltd/
+  - https://yts.unblockit.buzz/
+  - https://yts.unblockit.club/
+  - https://yts.unblockit.link/
+  - https://yts.unblockit.onl/
+  - https://yts.unblockit.uno/
+  - https://yts.unblockit.ch/
+  - https://yts.unblockit.li/
+  - https://yts.unblockit.ws/
+  - https://yts.nocensor.space/
+
+caps:
+  categorymappings:
+    # note: the API does not support searching with categories, so these are dummy ones for torznab compatibility
+    # we map these newznab cats with the returned quality value in the releases routine.
+    - {id: 45, cat: Movies/HD, desc: "Movies/x264/720p"}
+    - {id: 44, cat: Movies/HD, desc: "Movies/x264/1080p"}
+    - {id: 46, cat: Movies/UHD, desc: "Movies/x264/2160p"}
+    - {id: 47, cat: Movies/3D, desc: "Movies/x264/3D"}
+
+  modes:
+    search: [q]
+    movie-search: [q, imdbid]
+
+settings: []
+
+search:
+  paths:
+    - path: api/v2/list_movies.json
+      response:
+        type: json
+        attribute: torrents
+        multiple: true
+  inputs:
+    # ignore ' (e.g. search for america's Next Top Model)
+    query_term: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ re_replace .Keywords \"[']\" \"\" }}{{ end }}"
+    # without this the API sometimes returns nothing
+    limit: 50
+    sort: date_added
+
+  rows:
+    selector: data.movies
+    count:
+      selector: data.movie_count
+
+  fields:
+    quality:
+      selector: quality
+    category:
+      selector: quality
+      case:
+        "720p": 45
+        "1080p": 44
+        "2160p": 46
+        "3D": 47
+        "*": 45
+    type:
+      selector: type
+    year:
+      selector: ..year
+    title:
+      selector: ..title
+      filters:
+        - name: replace
+          args: [":", ""]
+        - name: replace
+          args: [" ", "."]
+        # append type: BRRip or WEBRip, resolves #3558 via #4577
+        - name: append
+          args: ".{{ .Result.year }}.{{ .Result.quality }}.{{ if eq .Result.type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
+    details:
+      selector: ..url
+    download:
+      selector: url
+    infohash:
+      selector: hash
+    poster:
+      selector: ..large_cover_image
+    imdb:
+      selector: ..imdb_code
+    date:
+      selector: date_uploaded_unix
+    size:
+      selector: size_bytes
+    seeders:
+      selector: seeds
+    leechers:
+      selector: peers
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json api v2
