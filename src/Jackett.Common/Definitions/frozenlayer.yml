@@ -90,7 +90,7 @@ search:
     category|noappend:
       optional: true
       selector: td.tit span
-    date:
+    date_day:
       # 1d
       # 2d 3h
       # 3 dias
@@ -101,7 +101,7 @@ search:
         - name: replace
           args: ["días", "days ago"]
         - name: timeago
-    date:
+    date_year:
       # 29 Oct 17
       optional: true
       selector: td.fecha:not(:contains("d")):not(:contains("h"))
@@ -110,6 +110,8 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02 Jan 06 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(6)
     seeders:

@@ -97,7 +97,7 @@ search:
       filters:
         - name: replace
           args: ["-", "0 B"]
-    date:
+    date_day:
       # Вчера, 08:01:41
       # 2 дня назад, 19:33:51
       selector: td:nth-child(5):contains(","), li.meta-date:contains(",")
@@ -108,7 +108,7 @@ search:
         - name: replace
           args: ["дня назад,", "days"]
         - name: fuzzytime
-    date:
+    date_year:
       # 16.08.2021 20:29:39
       selector: td:nth-child(5):not(:contains(",")), li.meta-date:not(:contains(","))
       optional: true
@@ -117,6 +117,8 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     seeders:
       selector: td.l1, li.meta-sead
     leechers:

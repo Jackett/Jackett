@@ -101,7 +101,6 @@ search:
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-    # supports search using imdbid, does not return imdb links in results
 
   rows:
     selector: div.group_content:has(a[href^="download.php?id="])
@@ -135,6 +134,9 @@ search:
     poster:
       selector: img#poster
       attribute: data-src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     date:
       # time type: time elapsed (default)
       selector: div.time_col span[title]

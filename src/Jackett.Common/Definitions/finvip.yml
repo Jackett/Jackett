@@ -136,15 +136,13 @@ search:
     download:
       selector: td a[href^="index.php?page=downloadcheck"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
       filters:
         # javascript:popdetails('http://www.imdb.com/title/tt10209130');
-        - name: replace
-          args: ["javascript:popdetails('", ""]
-        - name: replace
-          args: ["');", ""]
+        - name: regexp
+          args: tt(\d+)
     size:
       selector: td:nth-last-child(1)
     leechers:

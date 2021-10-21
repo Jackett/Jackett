@@ -104,7 +104,7 @@ search:
     download:
       selector: td a[href^="download.php"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href^="index.php?page=torrent-details"]
       attribute: onmouseover
       filters:

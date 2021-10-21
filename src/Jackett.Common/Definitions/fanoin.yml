@@ -125,7 +125,7 @@ search:
       filters:
         - name: replace
           args: ["details.php", "download.php"]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:

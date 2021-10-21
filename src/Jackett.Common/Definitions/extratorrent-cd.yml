@@ -62,7 +62,7 @@ search:
     download:
       selector: a[href^="magnet:?xt="]
       attribute: href
-    date:
+    date_day:
       # Y-day-2020 (seriously!?!, like there's a Y-day-2019 ?)
       # Today-22:03
       selector: td:nth-last-of-type(5):contains("day")
@@ -75,7 +75,7 @@ search:
         - name: re_replace
           args: ["(Y-day-.*)", "Yesterday"]
         - name: fuzzytime
-    date:
+    date_year:
       # 12-27-2019
       selector: td:nth-last-of-type(5):not(:contains(":")):not(:contains("day")):not(:contains("ago"))
       optional: true
@@ -86,7 +86,7 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "01-02-2006 -07:00"
-    date:
+    date_ago:
       # 4-mins-ago
       selector: td:nth-last-of-type(5):contains("ago")
       optional: true
@@ -96,18 +96,20 @@ search:
         - name: replace
           args: ["-", " "]
         - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_ago }}{{ or .Result.date_year .Result.date_day .Result.date_ago }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-of-type(4)
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       optional: true
       selector: td.sy, td.sn
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       optional: true
       selector: td.ly, td.ln
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

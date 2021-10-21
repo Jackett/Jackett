@@ -202,15 +202,13 @@ search:
     poster:
       selector: a[rel="fancybox"]
       attribute: href
-    imdb:
+    imdbid:
       # a href="http://tracker.btnext.com/data/torrents/imdb/tt0249677.jpg"
       selector: a[href*="/imdb/tt"]
       attribute: href
       filters:
         - name: regexp
-          args: "imdb/(.+?).jpg"
-        - name: prepend
-          args: "https://www.imdb.com/title/"
+          args: tt(\d+)
     downloadvolumefactor:
       case:
         "img[title=\"FREE!\"]": 0

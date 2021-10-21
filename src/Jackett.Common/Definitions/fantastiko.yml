@@ -128,7 +128,7 @@ search:
     download:
       selector: a[href*="?p=torrents"][href*="&action=download"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
@@ -148,7 +148,7 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-    date:
+    date_day:
       optional: true
       selector: td.torrent_name:contains("day"), td.torrent_name:contains("σήμερα"), td.torrent_name:contains("εχθές"), td.torrent_name:contains("Δευτέρα"), td.torrent_name:contains("Τρίτη"), td.torrent_name:contains("Τετάρτη"), td.torrent_name:contains("Πέμπτη"), td.torrent_name:contains("Παρασκευή"), td.torrent_name:contains("Σάββατο"), td.torrent_name:contains("Κυριακή")
       remove: span, a
@@ -184,7 +184,7 @@ search:
         - name: replace
           args: ["Κυριακή", "Sunday"]
         - name: fuzzytime
-    date:
+    date_year:
       optional: true
       selector: td.torrent_name:contains("-")
       remove: span, a
@@ -207,6 +207,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:

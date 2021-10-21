@@ -97,7 +97,7 @@ search:
     poster:
       selector: img[alt="Cover"]
       attribute: src
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:

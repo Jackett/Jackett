@@ -96,7 +96,7 @@ search:
       selector: a[href$="/peers"] span.text-red
     grabs:
       selector: a[href$="/history"]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

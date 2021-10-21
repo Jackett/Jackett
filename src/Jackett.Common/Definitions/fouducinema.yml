@@ -256,7 +256,7 @@ search:
       selector: div.selection_unter_aa > b
     leechers:
       selector: div.selection_unter_aaa > b
-    date:
+    date_day:
       # Aujourd'hui à 06:26:25
       # Hier à 05:15:19
       selector: div.selection_unter_ab:not(:contains("."))
@@ -269,7 +269,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: fuzzytime
-    date:
+    date_year:
       # Le 17.10.2020 à 04:39:44
       selector: div.selection_unter_ab:contains(".")
       optional: true
@@ -282,6 +282,8 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: div.selection_unter_ad
     grabs:

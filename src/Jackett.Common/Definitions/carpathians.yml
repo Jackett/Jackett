@@ -112,7 +112,7 @@ search:
     details:
       selector: a[id][href^="details.php?"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:

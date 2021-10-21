@@ -115,7 +115,7 @@ search:
     download:
       selector: a[href^="/lataa.php/"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:

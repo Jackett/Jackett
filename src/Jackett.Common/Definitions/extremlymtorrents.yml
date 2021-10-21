@@ -130,7 +130,6 @@ search:
     language:
       selector: td:nth-last-child(5)
     description:
-      optional: true
       selector: img[src="/images/vip-icon.png"]
       attribute: src
       filters:
