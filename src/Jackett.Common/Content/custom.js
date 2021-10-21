@@ -970,8 +970,8 @@ function updateReleasesRow(row) {
 
     labels.empty();
 
-    if (IMDBId) {
-        var imdbLen = (IMDBId.length > 7) ? 8 : 7
+  if (IMDBId) {
+    var imdbLen = (IMDBId.toString().length > 7) ? 8 : 7;
         labels.append('\n<a href="https://www.imdb.com/title/tt' + ("00000000" + IMDBId).slice(-imdbLen) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
     }
 
