@@ -136,7 +136,7 @@ search:
       attribute: href
     files:
       selector: td:nth-of-type(4)
-    date:
+    date_day:
       # Danas<br>08:10 AM
       # Juče<br>06:44 PM
       optional: true
@@ -148,7 +148,7 @@ search:
           args: ["Juče", "Yesterday"]
         - name: append
           args: " +00:00" # auto adjusted by site account profile
-    date:
+    date_year:
       # Feb 14 2019<br>10:20 AM
       optional: true
       selector: td:nth-of-type(6):not(:contains("Juče")):not(:contains("Danas"))
@@ -157,6 +157,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-of-type(7)
     grabs:

@@ -90,7 +90,6 @@ search:
       attribute: src
     description:
       selector: div.short_game_genre
-      optional: true
     date:
       text: now
     seeders:

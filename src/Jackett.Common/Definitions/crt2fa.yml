@@ -92,7 +92,6 @@ search:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
     description:
-      optional: true
       selector: div.tags
     poster:
       selector: td:nth-child(2) > script

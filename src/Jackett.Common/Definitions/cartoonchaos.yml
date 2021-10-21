@@ -121,15 +121,13 @@ search:
     download:
       selector: td a[href^="download.php"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
       filters:
         # http://anonym.to?javascript:popdetails('http://www.imdb.com/title/tt0086817');
-        - name: replace
-          args: [" http://anonym.to?javascript:popdetails('", ""]
-        - name: replace
-          args: ["');", ""]
+        - name: regexp
+          args: tt(\d+)
     poster:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: onmouseover
@@ -141,7 +139,7 @@ search:
     size:
       selector: td:nth-child(10)
       # two flavours of dates
-    date:
+    date_day:
       # Yesterday at 10:03:30 PM
       selector: td:nth-child(5):contains("day")
       optional: true
@@ -150,7 +148,7 @@ search:
           args: ["[ ]at|[\\s+]|[//\xa0],\\/g", " "]
         - name: append
           args: " +00:00" # auto adjusted by site account profile
-    date:
+    date_year:
       # February 09, 2019, 06:35:08 AM
       selector: td:nth-child(5):not(:contains("day"))
       optional: true
@@ -161,6 +159,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "January 02  2006  03:04:05 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     seeders:
       selector: td:nth-child(6)
     leechers:

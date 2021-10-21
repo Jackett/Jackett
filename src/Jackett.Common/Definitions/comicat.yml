@@ -59,7 +59,7 @@ search:
       selector: td:nth-child(4)
     grabs:
       selector: td:nth-child(7) span
-    date:
+    date_year:
       selector: td:nth-child(1):contains("/")
       optional: true
       filters:
@@ -67,7 +67,7 @@ search:
           args: " +08:00" # CST (China)
         - name: dateparse
           args: "2006/01/02 -07:00"
-    date:
+    date_today:
       selector: td:nth-child(1):contains("今天")
       optional: true
       filters:
@@ -77,20 +77,22 @@ search:
           args: " +08:00" # CST (China)
         - name: timeparse
           args: "15:04 -07:00"
-    date:
+    date_yday:
       selector: td:nth-child(1):contains("昨天")
       optional: true
       filters:
         - name: re_replace
           args: [".+", "yesterday"]
         - name: fuzzytime
-    date:
+    date_ago:
       selector: td:nth-child(1):contains("前天")
       optional: true
       filters:
         - name: re_replace
           args: [".+", "2 days"]
         - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday .Result.date_ago }}{{ or .Result.date_year .Result.date_today .Result.date_yday .Result.date_ago }}{{ else }}now{{ end }}"
     seeders:
       selector: td:nth-child(5) span
     leechers:

@@ -148,7 +148,6 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
-      optional: true
       selector: img[src="pic/Poland.png"]
       attribute: src
       filters:
