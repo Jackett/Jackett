@@ -94,7 +94,7 @@ search:
       filters:
         - name: querystring
           args: cat
-    category:
+    category|append:
       optional: true
       case:
         a[href="/browse.php?ext=1&bitrate=Lossless"]: 3040

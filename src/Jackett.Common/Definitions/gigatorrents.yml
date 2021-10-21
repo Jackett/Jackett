@@ -119,7 +119,7 @@ search:
     details:
       selector: a[href^="/details.php?id="]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href^="imdb.com/title/tt"]
       attribute: href
     poster:
@@ -143,27 +143,24 @@ search:
           args: ["/", 1]
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: ([\d,]+)
     files:
       selector: td:nth-child(4)
-    downloadvolumefactor:
-      text: "1"
-    downloadvolumefactor:
+    downloadvolumefactor_optional:
       selector: td:nth-child(6) > span:nth-last-child(2)
       optional: true
       filters:
         - name: trim
           args: "x"
-    uploadvolumefactor:
-      text: "1"
-    uploadvolumefactor:
+    downloadvolumefactor:
+      text: "{{ if .Result.downloadvolumefactor_optional }}{{ .Result.downloadvolumefactor_optional }}{{ else }}1{{ end }}"
+    uploadvolumefactor_optional:
       selector: td:nth-child(6) > span:nth-last-child(1)
       optional: true
       filters:
         - name: trim
           args: "x"
+    uploadvolumefactor:
+      text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
     minimumratio:
       text: 0.5
     minimumseedtime:

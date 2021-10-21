@@ -136,8 +136,6 @@ search:
       filters:
         - name: replace
           args: ["No downloads yet", "0"]
-        - name: regexp
-          args: ([\d,]+)
     download:
       selector: a[href^="download.php?id="]
       attribute: href
