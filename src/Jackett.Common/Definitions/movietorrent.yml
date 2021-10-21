@@ -14,7 +14,8 @@ caps:
     - {id: 2, cat: Movies/HD, desc: "1080p"}
     - {id: 3, cat: Movies/HD, desc: "2016"}
     - {id: 4, cat: Movies/HD, desc: "2017"}
-    - {id: 6, cat: Movies/HD, desc: "2018"}
+    - {id: 5, cat: Movies/HD, desc: "2018"}
+    - {id: 6, cat: Movies/HD, desc: "2019"}
     - {id: 7, cat: Movies/HD, desc: "720p"}
     - {id: 8, cat: Movies/HD, desc: "480p"}
     - {id: 9, cat: Movies/HD, desc: "Action"}
