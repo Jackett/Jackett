@@ -971,7 +971,8 @@ function updateReleasesRow(row) {
     labels.empty();
 
     if (IMDBId) {
-        labels.append('\n<a href="https://www.imdb.com/title/tt' + ("0000000" + IMDBId).slice(-7) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
+        var imdbLen = (IMDBId.length > 7) ? 8 : 7
+        labels.append('\n<a href="https://www.imdb.com/title/tt' + ("00000000" + IMDBId).slice(-imdbLen) + '/" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
     }
 
     if (!isNaN(DownloadVolumeFactor)) {
