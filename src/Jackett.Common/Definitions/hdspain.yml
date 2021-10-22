@@ -77,7 +77,7 @@ search:
           args: "["
         - name: append
           args: "]"
-    title:
+    title_vose:
       selector: td.titulo a[id]:contains("VOSE")
       optional: true
       filters:
@@ -87,7 +87,7 @@ search:
           args: " English"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
-    title:
+    title_notvose:
       selector: td.titulo a[id]:not(:contains("VOSE"))
       optional: true
       filters:
@@ -97,6 +97,8 @@ search:
           args: " Spanish"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     details:
       selector: td.titulo a[id]
       attribute: href
@@ -104,7 +106,6 @@ search:
       selector: td.descargar a
       attribute: href
     description:
-      optional: true
       selector: td.titulo a[class]
     size:
       selector: td.tamano
@@ -114,7 +115,7 @@ search:
       selector: td.usuarios.leechers a
     grabs:
       selector: td.usuarios.completados
-    date:
+    date_optional:
       optional: true
       selector: td.fecha
       attribute: title
@@ -161,9 +162,9 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "Monday 2 January 2006, 15:04 -07:00"
-    downloadvolumefactor:
-      text: 1
-    downloadvolumefactor:
+    date:
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
+    downloadvolumefactor_optional:
       optional: true
       selector: td.descargar a b strong
       filters:
@@ -171,14 +172,16 @@ search:
           args: [" X2", ""]
         - name: replace
           args: ["Freeleech", "0"]
-    uploadvolumefactor:
-      text: 1
-    uploadvolumefactor:
+    downloadvolumefactor:
+      text: "{{ if .Result.downloadvolumefactor_optional }}{{ .Result.downloadvolumefactor_optional }}{{ else }}1{{ end }}"
+    uploadvolumefactor_optional:
       optional: true
       selector: td.descargar a b strong
       filters:
         - name: replace
           args: ["Freeleech X2", "2"]
+    uploadvolumefactor:
+      text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:

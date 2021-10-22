@@ -130,7 +130,7 @@ search:
       attribute: href
     description:
       selector: td:nth-child(2) div:nth-child(2)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
@@ -147,9 +147,6 @@ search:
       selector: td:nth-last-child(5) b
     grabs:
       selector: td:nth-last-child(4)
-      filters:
-        - name: replace
-          args: ["x", ""]
     seeders:
       selector: td:nth-last-child(3)
     leechers:

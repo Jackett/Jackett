@@ -61,20 +61,22 @@ search:
     details:
       selector: a.torrent_link_title
       attribute: href
-    title:
+    title_default:
       selector: a.torrent_link_title
-    title: # special selector which only matches HDC releases not containing "English" and "only" tags and doesn't contain English in the title
+    title_hdc: # special selector which only matches HDC releases not containing "English" and "only" tags and doesn't contain English in the title
       selector: td.cats_col:has(a[href*="filter_cat[9]=1"]) + td.title_col:not(:has(span.tags_inner:contains("English"):contains("only"))):not(:has(span.tags_inner:contains("English"):contains("Only"))):not(:has(span.tags_inner:contains("english"):contains("only"))) a.torrent_link_title:not(:contains("English"))
       optional: true
       filters:
         - name: replace # add GERMAN tag
           args: ["-HDC", ".GERMAN-HDC"]
-    title: # special selector which only matches TvR releases not containing "GERMAN" already
+    title_tvr: # special selector which only matches TvR releases not containing "GERMAN" already
       selector: td.cats_col:has(a[href*="filter_cat[10]=1"]) + td.title_col a.torrent_link_title:not(:contains("GERMAN"))
       optional: true
       filters:
         - name: replace # add GERMAN tag
           args: [".DL", ".GERMAN.DL"]
+    title:
+      text: "{{ if or .Result.title_tvr .Result.title_hdc }}{{ or .Result.title_tvr .Result.title_hdc }}{{ else }}{{ .Result.title_default }}{{ end }}"
     category:
       selector: td.cats_col > a
       attribute: href

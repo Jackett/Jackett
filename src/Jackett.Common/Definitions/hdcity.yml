@@ -167,7 +167,7 @@ search:
       filters:
         - name: querystring
           args: category
-    title:
+    title_vose:
       selector: td[valign="middle"] a:contains("VOSE")
       optional: true
       filters:
@@ -179,7 +179,7 @@ search:
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
           args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
-    title:
+    title_notvose:
       selector: td[valign="middle"] a:not(:contains("VOSE"))
       optional: true
       filters:
@@ -191,6 +191,8 @@ search:
           args: ["(?i)\\w*Temp\\w*\\b\\s?(\\d{1,2})(ª|\\D)?\\b", " S$1 "]
         - name: re_replace
           args: ["(?i)(\\d{1,2})(ª|\\D)?\\s?\\w*Temp\\w*\\b", " S$1 "]
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     details:
       selector: td[valign="middle"] a
       attribute: href

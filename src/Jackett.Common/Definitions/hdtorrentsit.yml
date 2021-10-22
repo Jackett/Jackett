@@ -66,6 +66,24 @@ search:
     selector: tbody#highlighted tr
 
   fields:
+    year:
+      selector: td:nth-child(2) a:nth-child(1)
+      filters:
+        - name: regexp # find torrent year
+          args: (\d{4})
+    quality: # (BDRip 1080, BDRip 720p etc)
+      selector: td:nth-child(1) a:nth-child(1) img
+      attribute: alt
+    audio: # ita audio TAG
+      selector: a[href^="download.php?id="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: name
+        - name: regexp
+          args: (DTS AC3 ITA|DTS ITA|AC3 ITA)
+        - name: re_replace
+          args: ["ITA", ""]
     title:
       selector: td:nth-child(2) a:nth-child(1)
       filters:
@@ -89,35 +107,8 @@ search:
           args: ["(?i)(\\sdi\\s\\d{1,2}|\\/\\d{1,2})\\]", " "]
         - name: re_replace # remove various
           args: ["(?i)(Serie completa|Completa|\\[in pausa\\])", ""]
-    title|append: # start year
-      text: " ("
-    title|append: # add year
-      selector: td:nth-child(2) a:nth-child(1)
-      filters:
-        - name: regexp # find torrent year
-          args: (\d{4})
-    title|append: # end year
-      text: ") "
-    title|append: # start quality TAG
-      text: "["
-    title|append: # quality TAG (BDRip 1080, BDRip 720p etc)
-      selector: td:nth-child(1) a:nth-child(1) img
-      attribute: alt
-    title|append: # separator
-      text: " - "
-    title|append: # ita audio TAG
-      selector: a[href^="download.php?id="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: name
-        - name: regexp
-          args: (DTS AC3 ITA|DTS ITA|AC3 ITA)
-        - name: re_replace
-          args: ["ITA", ""]
-    title|append: # end TAG
-      text: "ITA]"
-      filters:
+        - name: append
+          args: " ({{ .Result.year }}) [{{ .Result.quality }} - {{ .Result.audio }} ITA]"
         - name: re_replace # replace multiple spaces
           args: ["[ ]{2,}", " "]
     details:
@@ -134,22 +125,22 @@ search:
       attribute: href
     size:
       selector: td:nth-child(3)
-    seeders:
-      text: 1
-    seeders:
+    seeders_optional:
       selector: td:nth-child(4)
       optional: true
       filters:
         - name: re_replace
           args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$1"]
-    leechers:
-      text: 1
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}1{{ end }}"
+    leechers_optional:
       selector: td:nth-child(4)
       optional: true
       filters:
         - name: re_replace
           args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$2"]
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}1{{ end }}"
     date:
       selector: td:nth-child(2) i
       filters:

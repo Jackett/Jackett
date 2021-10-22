@@ -68,7 +68,7 @@ search:
       attribute: href
     description:
       selector: div.group_info div.tags
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
