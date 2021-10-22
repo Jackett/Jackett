@@ -9,6 +9,7 @@ links:
   - https://blutopia.xyz/
 
 caps:
+  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "TV Show"}
@@ -91,6 +92,11 @@ search:
       selector: download_link
     poster:
       selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+        - name: replace
+          args: ["https://via.placeholder.com/400x600", ""]
     imdbid:
       selector: imdb_id
     tmdbid:
