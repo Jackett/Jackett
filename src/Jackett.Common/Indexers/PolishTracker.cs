@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -19,53 +20,48 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class PolishTracker : BaseWebIndexer
     {
-        private string SearchUrl => SiteLink + "apitorrents";
-        private static string CdnUrl => "https://cdn.pte.nu/";
+        private readonly string APIBASE = "https://api.pte.nu/torrents/";
 
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://polishtracker.net/"
-        };
+        private new ConfigurationDataAPIKey configData
+        {
+            get => (ConfigurationDataAPIKey)base.configData;
+            set => base.configData = value;
+        }
 
-        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
+        private readonly HttpClient client;
+        private readonly int maxQueryCount = 250;
 
         public PolishTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(id: "polishtracker",
-                   name: "PolishTracker",
-                   description: "Polish Tracker is a POLISH Private site for 0DAY / MOVIES / GENERAL",
-                   link: "https://pte.nu/",
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
-                   client: wc,
-                   logger: l,
-                   p: ps,
-                   cacheService: cs,
-                   configData: new ConfigurationDataCookie())
+                             ICacheService cs) : base(
+            id: "polishtracker", name: "PolishTracker",
+            description: "Polish Tracker is a POLISH Private site for 0DAY / MOVIES / GENERAL", link: "https://pte.nu/",
+            caps: new TorznabCapabilities
+            {
+                TvSearchParams =
+                    new List<TvSearchParam>
+                    {
+                        TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                    },
+                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId },
+                MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Q },
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q }
+            }, configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
+            configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
             Language = "pl-PL";
             Type = "private";
-
-            configData.AddDynamic("LanguageTitle", new BoolConfigurationItem("Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr") { Value = false });
-
+            var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true;
+            client = new HttpClient(handler);
+            client.BaseAddress = new Uri(APIBASE);
+            configData.AddDynamic(
+                "LanguageTitle",
+                new BoolConfigurationItem("Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr")
+                {
+                    Value = false
+                });
             AddCategoryMapping(1, TorznabCatType.PC0day, "0-Day");
             AddCategoryMapping(2, TorznabCatType.AudioVideo, "Music Video");
             AddCategoryMapping(3, TorznabCatType.PC0day, "Apps");
@@ -86,122 +82,138 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            CookieHeader = configData.Cookie.Value;
+            IsConfigured = false;
             try
             {
-                var results = await PerformQuery(new TorznabQuery());
+                var results = await PerformQuery(new TorznabQuery { IsTest = true });
                 if (!results.Any())
-                    throw new Exception("Found 0 results in the tracker");
-
+                    throw new Exception("Testing returned no results!");
                 IsConfigured = true;
                 SaveConfig();
-                return IndexerConfigurationStatus.Completed;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                IsConfigured = false;
-                throw;
+                throw new ExceptionWithConfigData(e.Message, configData);
             }
+
+            return IndexerConfigurationStatus.Completed;
+        }
+
+        private static string RemoveSpecialCharacters(string str)
+        {
+            var sb = new StringBuilder();
+            foreach (var c in str)
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_' ||
+                    c == ' ')
+                    sb.Append(c);
+            return sb.ToString();
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
-            var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
-            {
-                { "tpage", "1" }
-            };
-
-            if (query.IsImdbQuery)
-            {
-                qc.Add("search", query.ImdbID);
-                qc.Add("nfo", "true");
-            }
-            else if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-                qc.Add("search", query.GetQueryString());
-
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-                qc.Add("cat[]", cat);
-
-            var searchUrl = SearchUrl + "?" + qc.GetQueryString();
-            var result = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);
-            if (result.IsRedirect)
-                throw new Exception($"Your cookie did not work. Please, configure the tracker again. Message: {result.ContentString}");
-
-            if (!result.ContentString.StartsWith("{")) // not JSON => error
-                throw new ExceptionWithConfigData(result.ContentString, configData);
-
-            var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
+            string url;
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add("API-Key", configData.Key.Value);
+            if (query.IsTest)
+                url = "list?num=1";
+            else
+                url = "list?num=" + maxQueryCount;
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var resp = await response.Content.ReadAsStringAsync();
             try
             {
-                var torrents = json["torrents"]; // latest torrents
-                if (json["hits"] != null) // is search result
-                    torrents = json.SelectTokens("$.hits[?(@._type == 'torrent')]._source");
-                foreach (var torrent in torrents)
-                {
-                    var torrentId = (long)torrent.id;
-                    var details = new Uri(SiteLink + "torrents/" + torrentId);
-                    var link = new Uri(SiteLink + "download/" + torrentId);
-                    var publishDate = DateTime.Parse(torrent.added.ToString());
-                    var imdbId = ParseUtil.GetImdbID(torrent.imdb_id.ToString());
-
-                    Uri poster = null;
-                    if ((bool)torrent.poster)
+                var pteResponse = JsonConvert.DeserializeObject<List<PTEResultItem>>(resp);
+                if (pteResponse?.Count > 0)
+                    foreach (var pteResult in pteResponse)
                     {
-                        if (torrent["imdb_id"] != null)
-                            poster = new Uri(CdnUrl + "images/torrents/poster/imd/l/" + torrent["imdb_id"] + ".jpg");
-                        else if (torrent["cdu_id"] != null)
-                            poster = new Uri(CdnUrl + "images/torrents/poster/cdu/b/" + torrent["cdu_id"] + "_front.jpg");
-                        else if (torrent["steam_id"] != null)
-                            poster = new Uri(CdnUrl + "images/torrents/poster/ste/l/" + torrent["steam_id"] + ".jpg");
+                        if (!RemoveSpecialCharacters(pteResult.Name).ToLower().Contains(
+                            RemoveSpecialCharacters(query.SanitizedSearchTerm).ToLower()))
+                            continue;
+                        var descriptions = new List<string>
+                        {
+                            "ID: " + pteResult.ID,
+                            "Name: " + pteResult.Name,
+                            "Category: " + pteResult.Category,
+                            "Comments: " + pteResult.Comments,
+                            "Leechers: " + pteResult.Leechers,
+                            "Seeders: " + pteResult.Seeders,
+                            "Completed: " + pteResult.Completed
+                        };
+                        if (!string.IsNullOrWhiteSpace(pteResult.Imdb_ID))
+                            descriptions.Add("IMDB_ID: " + pteResult.Imdb_ID);
+                        if (!string.IsNullOrWhiteSpace(pteResult.Cdu_ID))
+                            descriptions.Add("CDU_ID: " + pteResult.Cdu_ID);
+                        if (!string.IsNullOrWhiteSpace(pteResult.Steam_ID))
+                            descriptions.Add("STEAM_ID: " + pteResult.Steam_ID);
+                        if (!string.IsNullOrWhiteSpace(pteResult.Subs))
+                            descriptions.Add("Subs: " + pteResult.Subs);
+                        if (!string.IsNullOrWhiteSpace(pteResult.Language))
+                            descriptions.Add("Language: " + pteResult.Language);
+                        var publishDate = DateTime.Parse(pteResult.Added);
+                        descriptions.Add("Added: " + publishDate);
+                        var imdb = ParseUtil.GetImdbID(pteResult.Imdb_ID);
+                        var link = new Uri(APIBASE + "download/" + pteResult.ID);
+                        var details = new Uri(DefaultSiteLink + "torrents/" + pteResult.ID);
+                        var title = pteResult.Name;
+                        if (pteResult.Language.Contains("pl") &&
+                            ((BoolConfigurationItem)configData.GetDynamic("LanguageTitle")).Value)
+                            title += " POLISH";
+                        var release = new ReleaseInfo
+                        {
+                            Category = MapTrackerCatToNewznab(pteResult.Category),
+                            Details = details,
+                            Guid = link,
+                            Link = link,
+                            MinimumRatio = 1,
+                            PublishDate = publishDate,
+                            Seeders = pteResult.Seeders,
+                            Peers = pteResult.Seeders + pteResult.Leechers,
+                            Size = pteResult.Size,
+                            Title = title,
+                            Grabs = pteResult.Completed,
+                            Description = string.Join("<br />\n", descriptions),
+                            Imdb = imdb,
+                            DownloadVolumeFactor = 1,
+                            UploadVolumeFactor = 1
+                        };
+                        releases.Add(release);
                     }
-
-                    var title = torrent.name.ToString();
-
-                    var descriptions = new List<string>();
-                    var language = (string)torrent.language;
-                    if (!string.IsNullOrEmpty(language))
-                        descriptions.Add("Language: " + language);
-                    else if ((bool?)torrent.polish == true)
-                        descriptions.Add("Language: pl");
-
-                    if (language == "pl" && (((BoolConfigurationItem)configData.GetDynamic("LanguageTitle")).Value))
-                        title += " POLISH";
-
-                    var description = descriptions.Any() ? string.Join("<br />\n", descriptions) : null;
-
-                    var release = new ReleaseInfo
-                    {
-                        Title = title,
-                        Details = details,
-                        Guid = details,
-                        Link = link,
-                        PublishDate = publishDate,
-                        Category = MapTrackerCatToNewznab(torrent.category.ToString()),
-                        Size = (long)torrent.size,
-                        Grabs = (long)torrent.completed,
-                        Seeders = (int)torrent.seeders,
-                        Peers = (int)torrent.seeders + (int)torrent.leechers,
-                        Imdb = imdbId,
-                        Poster = poster,
-                        Description = description,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 259200, // 72 hours (I can't verify this, but this is a safe value in most trackers)
-                        UploadVolumeFactor = 1,
-                        DownloadVolumeFactor = 1
-                    };
-
-                    releases.Add(release);
-                }
             }
             catch (Exception ex)
             {
-                OnParseError(result.ToString(), ex);
+                OnParseError(resp, ex);
             }
 
             return releases;
+        }
+
+        public override async Task<byte[]> Download(Uri link)
+        {
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Add("API-Key", configData.Key.Value);
+            var response = await client.GetAsync(link.ToString());
+            response.EnsureSuccessStatusCode();
+            return response.Content.ReadAsByteArrayAsync().Result;
+        }
+
+        public class PTEResultItem
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public long Size { get; set; }
+            public string Category { get; set; }
+            public string Added { get; set; }
+            public int Comments { get; set; }
+            public int Seeders { get; set; }
+            public int Leechers { get; set; }
+            public int Completed { get; set; }
+            public string Imdb_ID { get; set; }
+            public string Cdu_ID { get; set; }
+            public string Steam_ID { get; set; }
+            public string Subs { get; set; }
+            public string Language { get; set; }
         }
     }
 }
