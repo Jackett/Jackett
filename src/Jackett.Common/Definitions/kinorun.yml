@@ -137,7 +137,6 @@ search:
     description:
       selector: a[href^="browse.php?cat="] img
       attribute: alt
-      optional: true
     poster:
       selector: td[onmouseover]
       attribute: onmouseover

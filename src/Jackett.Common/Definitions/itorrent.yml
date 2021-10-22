@@ -78,7 +78,7 @@ search:
     download:
       selector: td:nth-child(2) a
       attribute: href
-    date:
+    date_time:
       selector: td:nth-child(4) span
       optional: true
       attribute: title
@@ -87,7 +87,7 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "2006.01.02 15:04 -07:00"
-    date:
+    date_year:
       selector: td:nth-child(4):not(:has(span))
       optional: true
       filters:
@@ -95,13 +95,12 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "2006.01.02 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_time }}{{ or .Result.date_year .Result.date_time }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: replace
-          args: [" ", ""]
     seeders:
       selector: td:nth-child(7)
     leechers:

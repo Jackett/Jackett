@@ -1,26 +1,25 @@
 ---
-id: immortuos
-name: Immortuos
-description: "Immortuos is a GERMAN Private Tracker for MOVIES / TV"
-language: de-DE
+id: datascene
+name: DataScene
+description: "DataScene (DS) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://immortuos.life/
+  - https://datascene.xyz/
 legacylinks:
-  - https://www.immortuos.life/
+  - http://datascene.net/
+  - https://datascene.net/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: PC, desc: "Apps"}
-    - {id: 5, cat: XXX, desc: "XXX"}
-    - {id: 6, cat: TV/Documentary, desc: "Doku"}
-    - {id: 7, cat: Console, desc: "Games"}
-    - {id: 8, cat: Other, desc: "Sonstiges"}
-    - {id: 9, cat: Movies, desc: "Kino"}
+    - {id: 4, cat: PC/Games, desc: "Game"}
+    - {id: 5, cat: PC/0day, desc: "Application"}
+    - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
 
   modes:
     search: [q]
@@ -69,31 +68,34 @@ login:
       selector: input[name="_token"]
       attribute: value
   error:
-    - selector: script[nonce]:contains("Error")
-      message:
-        selector: script[nonce]:contains("Error")
+    - selector: div#ERROR_COPY
 #    test:
 #      path: /
 #      selector: a[href$="/logout"]
 
 search:
   paths:
-    - path: filterTorrents
+    - path: torrents
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     description: ""
+    mediainfo: ""
+    keywords: ""
     uploader: ""
-    imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: "{{ .Query.TVDBID }}"
-    tmdb: "{{ .Query.TMDBID }}"
-    mal: ""
-    sorting: "{{ .Config.sort }}"
-    direction: "{{ .Config.type }}"
-    qty: 100
-    page: 0
-    view: list
-    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    malId: ""
+    startYear: ""
+    endYear: ""
+    playlistId: ""
+    collectionId: ""
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
+    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
     selector: table > tbody > tr
@@ -104,7 +106,7 @@ search:
       attribute: href
       filters:
         - name: regexp
-          args: "/categories/.*?\\.(\\d+)"
+          args: "/categories/(\\d+)"
     title:
       selector: a.view-torrent
     download:
@@ -117,28 +119,20 @@ search:
       selector: div.torrent-poster img
       attribute: src
       filters:
-        - name: prepend
-          args: "https://images.weserv.nl/?url=" # for display on dashboard
-        - name: append
-          args: "&w=180&h=270" # for display on dashboard
         - name: replace
-          args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
+          args: ["https://via.placeholder.com/90x135", ""]
+        - name: replace
+          args: ["https://via.placeholder.com/400x600", ""]
     size:
-      selector: td:nth-last-child(4)
+      selector: td:nth-last-child(5)
     seeders:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     leechers:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
     grabs:
-      selector: td:nth-last-child(1)
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    tmdbid:
-      selector: a[href*="themoviedb.org/movie/"]
-      attribute: href
+      selector: td:nth-last-child(2)
     date:
-      selector: time
+      selector: td:nth-last-child(1)
       filters:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
         - name: re_replace
@@ -192,4 +186,9 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-# UNIT3D 1.9.3
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# UNIT3D 5.3.0

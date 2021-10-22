@@ -9,6 +9,7 @@ links:
   - https://aither.cc/
 
 caps:
+  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 9, cat: TV/Sport, desc: "Sport"}

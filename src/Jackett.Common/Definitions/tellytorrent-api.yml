@@ -1,19 +1,28 @@
 ---
-id: desitorrents-api
-name: DesiTorrents (API)
-description: "Desitorrents is a Private Torrent Tracker for BOLLYWOOD / TOLLYWOOD / MUSIC"
+id: tellytorrent-api
+name: TellyTorrent (API)
+description: "TellyTorrent is an INDIAN Private Tracker for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://desitorrents.tv/
+  - https://telly.wtf/
+legacylinks:
+  - https://tellytorrent.net/
+  - https://telly.cc/
+  - https://telly.to/
 
 caps:
   # dont forget to update the case block in the search fields category
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 4, cat: Movies/WEB-DL, desc: "Web Originals"}
+    - {id: 5, cat: PC/Games, desc: "Games"}
+    - {id: 6, cat: PC/0day, desc: "Application"}
+    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile App"}
+    - {id: 8, cat: Movies, desc: "Movies"}
 
   modes:
     search: [q]
@@ -28,7 +37,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://desitorrents.tv/\" target =_blank>DesiTorrents</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://telly.wtf/\" target =_blank>TellyTorrent</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -80,9 +89,14 @@ search:
     category:
       selector: category
       case:
-        Movies: 1
-        TV: 2
-        Music: 3
+        "Movie": 1
+        "TV": 2
+        "Music": 3
+        "Web Originals": 4
+        "Games": 5
+        "Application": 6
+        "Mobile App": 7
+        "Movies": 8
     title:
       selector: name
     details:
@@ -127,9 +141,10 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-    minimumratio:
-      text: 1.0
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
-      # 5 day (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 5.3.0 (custom)
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 5.3.0
