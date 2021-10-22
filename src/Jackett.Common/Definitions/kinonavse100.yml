@@ -1,4 +1,4 @@
-﻿---
+---
 id: kinonavse100
 name: KinoNaVse100
 description: "Кино на все 100 is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
@@ -171,7 +171,7 @@ search:
       selector: span.leech
     grabs:
       selector: span.complet
-    date:
+    date_day:
       # Сегодня, 12:35
       selector: td:last-of-type p:first-of-type:contains("Сегодня"), td:last-of-type p:first-of-type:contains("Вчера")
       optional: true
@@ -181,7 +181,7 @@ search:
         - name: replace
           args: ["Вчера", "Yesterday"]
         - name: fuzzytime
-    date:
+    date_year:
       # 12 янв 2019, 11:26
       selector: td:last-of-type p:first-of-type:not(:contains("Сегодня")):not(:contains("Вчера"))
       optional: true
@@ -215,6 +215,8 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "02 Jan 2006, 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img[src="./images/tracker/3_bookmark.gif"]: 0 # gold 100% free

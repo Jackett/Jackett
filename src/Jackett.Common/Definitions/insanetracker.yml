@@ -119,39 +119,22 @@ search:
     download:
       selector: a[href*="/download.php/"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[title="IMDb link"]
       attribute: href
     poster:
-      selector: img[alt="offer"]
+      selector: img[alt="offer"], a.cover
       attribute: src
-    poster:
-      selector: a.cover
-      attribute: href
     files:
       selector: div.files > a.button.small
-      filters:
-        - name: replace
-          args: [".", ""]
     size:
       selector: td.center.size
     seeders:
       selector: td.center.data > a:first-child
-      filters:
-        - name: replace
-          args: [".", ""]
     leechers:
       selector: td.center.data > a:nth-child(2)
-      filters:
-        - name: replace
-          args: [".", ""]
     grabs:
       selector: td.center.data
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [" ", ""]
       remove: div.uploader, div.moderation, a.leftborder
     date:
       selector: td.center.date
@@ -172,7 +155,6 @@ search:
         "*": 1
     description:
       selector: div.contenttext
-      optional: true
       remove: div.contenttitle
     minimumratio:
       text: 1.0
