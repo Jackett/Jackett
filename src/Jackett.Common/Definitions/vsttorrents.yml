@@ -32,7 +32,7 @@ search:
     s: "{{ .Keywords }}"
 
   rows:
-    selector: article:has(h3)
+    selector: article:has(h3):has(time)
     filters:
       - name: andmatch
 
