@@ -12,6 +12,7 @@ legacylinks:
   - http://www.shareisland.org/
 
 caps:
+  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "Serie TV"}
