@@ -1,7 +1,7 @@
 ---
-id: legacyhd
-name: LegacyHD
-description: "LegacyHD (HD4Free) is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+id: reelflix
+name: ReelFlix
+description: "ReelFlix (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
@@ -15,12 +15,8 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Books/EBook, desc: "Ebook"}
+    - {id: 4, cat: Books/EBook, desc: "E-Book"}
     - {id: 5, cat: TV, desc: "TV Pack"}
-    - {id: 6, cat: PC, desc: "Software"}
-    - {id: 7, cat: Movies, desc: "Movie Pack"}
-    - {id: 8, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 9, cat: TV/Anime, desc: "Animation"}
 
   modes:
     search: [q]

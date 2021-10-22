@@ -46,6 +46,7 @@ namespace Jackett.Common.Services
             {"icetorrent", "speedapp"},
             {"feedurneed", "devils-playground"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
+            {"legacyhd", "reelflix"},
             {"leaguehd", "lemonhd"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nbytez", "devils-playground"},
