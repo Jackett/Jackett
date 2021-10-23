@@ -33,7 +33,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ re_replace .Keywords \"\\s+\" \"-\" }}{{ else }}torrents{{ end }}"
+    - path: "{{ if .Keywords }}search/{{ re_replace .Keywords \"\\s+\" \"-\" }}{{ else }}ts{{ end }}"
 
   rows:
     selector: div.torrents_list > div.torrent_element
@@ -44,13 +44,13 @@ search:
     category:
       text: XXX
     title:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/t/"]
       remove: i
     details:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/t/"]
       attribute: href
     download:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/t/"]
       attribute: href
     date:
       selector: div.torrent_element_info span:nth-child(2)
