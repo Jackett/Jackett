@@ -1,4 +1,4 @@
-﻿---
+---
 id: parnuxi
 name: ParnuXi
 description: "ParnuXi is a RUSSIAN Public Torrent Tracker for 3X"
@@ -229,7 +229,7 @@ search:
       selector: span.leech
     grabs:
       selector: span.complet
-    find_date:
+    date_optional:
       # (09.03.2020)
       selector: a.topictitle
       optional: true
@@ -240,7 +240,7 @@ search:
         - name: dateparse
           args: "02.01.2006"
     date:
-      text: "{{ if .Result.find_date }}{{ .Result.find_date }}{{ else }}now{{ end }}"
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

@@ -119,14 +119,14 @@ search:
           args: "-torrent-(\\d+).html"
         - name: prepend
           args: "download.php?id="
-    date:
+    date_year:
       # 2021-08-13<br>09:32:42
       selector: td:nth-child(5):contains("-")
       optional: true
       filters:
         - name: dateparse
           args: "2006-01-0215:04:05"
-    date:
+    date_ago:
       # 2 ngày<br/>23 giờ
       selector: td:nth-child(5):not(:contains("-"))
       optional: true
@@ -142,6 +142,8 @@ search:
         - name: re_replace
           args: ["giờ", "hours "]
         - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(6)
     seeders:

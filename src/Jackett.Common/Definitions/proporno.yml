@@ -83,7 +83,7 @@ search:
     poster:
       selector: img[src*="/uploads/posts/"]
       attribute: src
-    date:
+    date_today:
       # Сегодня, 19:56
       selector: div.mini:contains("Сегодня")
       optional: true
@@ -93,7 +93,7 @@ search:
         - name: replace
           args: ["Сегодня", "Today"]
         - name: fuzzytime
-    date:
+    date_yday:
       # Вчера, 20:01
       selector: div.mini:contains("Вчера")
       optional: true
@@ -103,7 +103,7 @@ search:
         - name: replace
           args: ["Вчера", "Yesterday"]
         - name: fuzzytime
-    date:
+    date_year:
       # 20-09-2020, 19:41
       selector: div.mini:contains("-")
       optional: true
@@ -114,6 +114,8 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "2-01-2006, 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year  .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
     size:
       text: "1 GB"
     seeders:

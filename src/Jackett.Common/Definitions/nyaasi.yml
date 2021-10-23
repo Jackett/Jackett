@@ -134,14 +134,16 @@ search:
       filters:
         - name: split
           args: ["=", -1]
-    title:
+    title_default:
       selector: td:nth-child(2) a:last-of-type
-    title:
+    title_optional:
       selector: td:nth-child(2) a:last-of-type:contains("[PuyaSubs!] ")
       optional: true
       filters:
         - name: append
           args: " Spanish"
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: td:nth-child(2) a:last-of-type
       attribute: href
@@ -161,33 +163,21 @@ search:
           args: " -00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04 -07:00"
-    seeders:
-      selector: td:nth-child(6):empty
-      optional: true
-      filters:
-        - name: append
-          args: 0
-    seeders:
+    seeders_optional:
       selector: td:nth-child(6):not(:empty)
       optional: true
-    leechers:
-      selector: td:nth-child(7):empty
-      optional: true
-      filters:
-        - name: append
-          args: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:nth-child(7):not(:empty)
       optional: true
-    grabs:
-      selector: td:nth-child(8):empty
-      optional: true
-      filters:
-        - name: append
-          args: 0
-    grabs:
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    grabs_optional:
       selector: td:nth-child(8):not(:empty)
       optional: true
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

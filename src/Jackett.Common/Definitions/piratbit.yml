@@ -718,7 +718,7 @@ search:
     size:
       selector: td > u
       # 2 date flavours for 3 languages
-    date:
+    date_day:
       # 15:04
       optional: true
       selector: td[title="Добавлен"] p:first-of-type:not(:contains("-")), td[title="Доданий"] p:first-of-type:not(:contains("-")), td[title="Added"] p:first-of-type:not(:contains("-"))
@@ -727,7 +727,7 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "15:04 -07:00"
-    date:
+    date_year:
       # 15:04 24-02-19
       optional: true
       selector: td[title="Добавлен"] p:first-of-type:contains("-"), td[title="Доданий"] p:first-of-type:contains("-"), td[title="Added"] p:first-of-type:contains("-")
@@ -736,6 +736,8 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "15:04 2-01-06 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     # Russian and Ukranian and English languages are supported
     grabs:
       selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]

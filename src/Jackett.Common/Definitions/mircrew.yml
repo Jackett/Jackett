@@ -163,10 +163,6 @@ search:
       text: 1
     date:
       selector: time
-      filters:
-        # datetime is auto adjusted by site account profile
-        - name: replace
-          args: ["T", " "]
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

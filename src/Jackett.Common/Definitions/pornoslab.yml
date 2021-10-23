@@ -56,7 +56,6 @@ search:
     exactname: ""
     replyless: 0
     replylimit: 0
-    searchdate: 0
     beforeafter: after
     sortby: "{{ .Config.sort }}"
     resorder: "{{ .Config.type }}"

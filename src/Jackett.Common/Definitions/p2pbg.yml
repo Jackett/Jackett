@@ -162,7 +162,7 @@ search:
         - name: regexp
           args: "src=(.+?) width="
     # two flavours
-    date:
+    date_day:
       # Yesterday
       # Вчера
       selector: td:nth-child(6):not(:contains("/"))
@@ -174,7 +174,7 @@ search:
           args: ["сегодня", "Today"]
         - name: replace
           args: ["вчера", "Yesterday"]
-    date:
+    date_year:
       # 14/03/2019
       selector: td:nth-child(6):contains("/")
       optional: true
@@ -183,6 +183,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/2006 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(7)
     seeders:

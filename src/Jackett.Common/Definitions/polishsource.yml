@@ -131,7 +131,7 @@ search:
     download:
       selector: a[href^="downloadssl.php?id="]
       attribute: href
-    description:
+    genre:
       optional: true
       selector: td:nth-child(2) > small
       filters:
@@ -139,7 +139,7 @@ search:
           args: "Genre: "
         - name: append
           args: "\n<br>"
-    description:
+    language:
       optional: true
       selector: img[src="pic/pl.png"]
       filters:
@@ -147,7 +147,7 @@ search:
           args: "Language: polish\n<br>"
         - name: prepend
           args: "{{ .Result.description }}"
-    description:
+    subbed:
       optional: true
       selector: img[src="pic/napisy.png"]
       filters:
@@ -155,7 +155,9 @@ search:
           args: "Subbed\n<br>"
         - name: prepend
           args: "{{ .Result.description }}"
-    imdb:
+    description:
+      text: "{{ .Result.genre }}{{ .Result.language }}{{ .Result.subbed }}"
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
     date:
       selector: td:nth-child(4)

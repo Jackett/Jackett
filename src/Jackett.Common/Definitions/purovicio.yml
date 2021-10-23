@@ -116,7 +116,7 @@ search:
           args: "&w=180&h=270" # for display on dashboard
         - name: replace
           args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

@@ -90,7 +90,7 @@ search:
       filters:
         - name: replace
           args: ["details.php", "download.php"]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
@@ -101,7 +101,7 @@ search:
       selector: td:nth-child(6)
     leechers:
       selector: td:nth-child(7)
-    date:
+    date_elapsed:
       # time type: time elapsed (default)
       selector: td:nth-child(4) > span[title]
       attribute: title
@@ -111,7 +111,7 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_added:
       # time added
       selector: td:nth-child(4):not(:has(span))
       optional: true
@@ -120,6 +120,8 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img.pro_free: 0

@@ -121,16 +121,16 @@ search:
       selector: td:nth-child(3)
       filters:
         - name: timeago
-    files:
-      text: 1
-    files:
+    files_optional:
       selector: td:nth-child(4)
       optional: true
-    size:
-      text: "256 MB"
-    size:
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
+    size_optional:
       selector: td:nth-child(5)
       optional: true
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}256 MB{{ end }}"
     seeders:
       text: 1
     leechers:

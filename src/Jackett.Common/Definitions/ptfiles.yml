@@ -122,7 +122,7 @@ search:
     details:
       selector: a.torrentlink
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:
