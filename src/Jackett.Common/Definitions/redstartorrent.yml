@@ -82,7 +82,6 @@ search:
       selector: a[href^="/download.php/"]
       attribute: href
     description:
-      optional: true
       selector: img[src="/pic/pl.gif"]
       attribute: src
       filters:
@@ -90,7 +89,7 @@ search:
           args: "Language: polish\n<br>"
         - name: prepend
           args: "{{ .Result.description }}"
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
     date:
       selector: td:nth-child(5)

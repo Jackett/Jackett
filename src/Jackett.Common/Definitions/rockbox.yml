@@ -80,7 +80,7 @@ search:
       selector: td a[href^="download.php?id="]
       attribute: href
     # dates come in two flavours:
-    date:
+    date_year:
       # 13/10/2018
       selector: td:nth-child(6):contains("/")
       optional: true
@@ -89,12 +89,14 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/2006 -07:00"
-    date:
+    date_ago:
       # 1 hour ago, 2 days ago, 3 weeks ago etc
       selector: td:nth-child(6):not(:contains("/"))
       optional: true
       filters:
         - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(7)
     seeders:

@@ -96,7 +96,7 @@ search:
           args: "src=\\\\'(.+?)\\\\'"
     files:
       selector: td:nth-last-child(8)
-    date:
+    date_year:
       # Jul 4 2019 08:04 AM
       selector: td:nth-last-child(6):not(:contains("day"))
       optional: true
@@ -105,11 +105,13 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
-    date:
+    date_day:
       # Today 02:40 PM
       # Yesterday 09:10 AM
       selector: td:nth-last-child(6):contains("day")
       optional: true
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(5)
     grabs:

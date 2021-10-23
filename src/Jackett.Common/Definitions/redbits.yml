@@ -101,7 +101,7 @@ search:
       filters:
         - name: regexp
           args: "/categories/(\\d+)"
-    title:
+    title_vose:
       selector: a.view-torrent:contains("VOSE")
       optional: true
       filters:
@@ -117,7 +117,7 @@ search:
           args: ["  ", " "]
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
-    title:
+    title_notvose:
       selector: a.view-torrent:not(:contains("VOSE"))
       optional: true
       filters:
@@ -133,6 +133,8 @@ search:
           args: ["  ", " "]
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     download:
       selector: a[href*="/download/"]
       attribute: href
@@ -155,7 +157,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

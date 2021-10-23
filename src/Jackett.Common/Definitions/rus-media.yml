@@ -333,9 +333,7 @@ search:
     download:
       selector: a.topictitle
       attribute: href
-    size:
-      text: "0 B"
-    size:
+    size_optional:
       selector: td:nth-of-type(5) p:not(:empty)
       optional: true
       filters:
@@ -347,17 +345,19 @@ search:
           args: ["МБ", "MB"]
         - name: replace
           args: ["КБ", "KB"]
-    seeders:
-      text: 0
-    seeders:
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    seeders_optional:
       selector: span.seed
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: span.leech
       optional: true
-    date:
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    date_day:
       # Сегодня, 03:04
       # Вчера, 22:47
       selector: td:nth-of-type(6) p:nth-of-type(1):contains("Сегодня"),  td:nth-of-type(6) p:contains("Вчера")
@@ -367,7 +367,7 @@ search:
           args: ["Сегодня", "Today"]
         - name: replace
           args: ["Вчера", "Yesterday"]
-    date:
+    date_year:
       # 12 янв 2019, 12:47
       selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера"))
       optional: true
@@ -403,6 +403,8 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "02 Jan 2006 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

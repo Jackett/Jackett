@@ -128,16 +128,7 @@ search:
     # some results don't have comments which throws off td count. So we go fishing for the following fields
     size:
       optional: true
-      selector: td:contains(\00a0GB)
-    size:
-      optional: true
-      selector: td:contains(\00a0MB)
-    size:
-      optional: true
-      selector: td:contains(\00a0kB)
-    size:
-      optional: true
-      selector: td:contains(\00a0B)
+      selector: td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0kB), td:contains(\00a0B)
     seeders:
       selector: td span.green
     leechers:

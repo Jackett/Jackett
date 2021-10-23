@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 2, cat: TV, desc: "TV Shows"}
     - {id: 6, cat: TV, desc: "TS Firehose (RAW TS)"}
     - {id: 7, cat: Movies/Other, desc: "Anime Movies"}
     - {id: 9, cat: TV/Anime, desc: "Anime Series"}
@@ -127,7 +127,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:
