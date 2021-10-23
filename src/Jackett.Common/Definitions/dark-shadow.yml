@@ -19,6 +19,7 @@ caps:
     - {id: 28, cat: Movies/SD, desc: "Movie XviD/x264"}
     - {id: 32, cat: Movies/HD, desc: "Movie 720p/1080p"}
     - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
+    - {id: 138, cat: Movies, desc: "Movie Packs"}
     # Serien
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
     - {id: 59, cat: TV, desc: "Serien Pack"}
