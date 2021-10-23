@@ -182,7 +182,7 @@ search:
     download:
       selector: a[href*="?p=torrents"][href*="&action=download"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
@@ -197,7 +197,6 @@ search:
       selector: a[rel="fancybox"]
       attribute: href
     description:
-      optional: true
       selector: div.torrentDetails > div:has(span.floatright)
     downloadvolumefactor:
       case:
@@ -206,11 +205,12 @@ search:
     uploadvolumefactor:
       case:
         "*": 1
-    date:
+    date_unix:
       optional: true
       selector: div.torrentOwner > abbr.timeago
       attribute: data-time
-    date:
+    date_day:
+      # Uploaded Yesterday at 20:12 by
       optional: true
       selector: div.torrentOwner:not(:has(abbr.timeago)):contains("day"), div.torrentOwner:not(:has(abbr.timeago)):contains("σήμερα"), div.torrentOwner:not(:has(abbr.timeago)):contains("εχθές"), div.torrentOwner:not(:has(abbr.timeago)):contains("Δευτέρα"), div.torrentOwner:not(:has(abbr.timeago)):contains("Τρίτη"), div.torrentOwner:not(:has(abbr.timeago)):contains("Τετάρτη"), div.torrentOwner:not(:has(abbr.timeago)):contains("Πέμπτη"), div.torrentOwner:not(:has(abbr.timeago)):contains("Παρασκευή"), div.torrentOwner:not(:has(abbr.timeago)):contains("Σάββατο"), div.torrentOwner:not(:has(abbr.timeago)):contains("Κυριακή")
       remove: span
@@ -246,7 +246,8 @@ search:
         - name: replace
           args: ["Κυριακή", "Sunday"]
         - name: fuzzytime
-    date:
+    date_year:
+      # 23-10-2021 22:59
       optional: true
       selector: div.torrentOwner:not(:has(abbr.timeago)):contains("-")
       remove: span
@@ -269,8 +270,7 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    date:
-      # <br /> Uploaded Saturday at 21:09 by
+    date_other:
       optional: true
       selector: td.torrent_name
       remove: div, a, span
@@ -285,4 +285,6 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
+    date:
+      text: "{{ if .Result.date_unix .Result.date_day or .Result.date_year or .Result.date_other }}{{ or .Result.date_unix .Result.date_day or .Result.date_year or .Result.date_other }}{{ else }}now{{ end }}"
 # TSUE 2.2

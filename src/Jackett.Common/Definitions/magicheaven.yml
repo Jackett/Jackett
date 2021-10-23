@@ -140,15 +140,15 @@ search:
       filters:
         - name: querystring
           args: category
-    a_title:
+    title_default:
       # is often abbreviated
       selector: a[href*="details.php?id="]
-    d_title:
+    title_optional:
       # usually longer than details title
       selector: div[id^="port-content-"] div
       optional: true
     title:
-      text: "{{ if .Result.d_title }}{{ .Result.d_title }}{{ else }}{{ .Result.a_title }}{{ end }}"
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href*="details.php?id="]
       attribute: href

@@ -146,9 +146,8 @@ search:
     leechers:
       text: 1
     date:
+      # Добавлен: 5 октября 2021 в 06:56:08
       selector: p
-      filters:
-        # Добавлен: 5 октября 2021 в 06:56:08
       filters:
         - name: replace
           args: ["Добавлен: ", ""]

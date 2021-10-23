@@ -123,7 +123,7 @@ search:
       filters:
         - name: replace
           args: ["span_bookmark_", "download.php?id="]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:

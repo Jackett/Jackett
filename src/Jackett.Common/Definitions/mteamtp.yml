@@ -131,12 +131,16 @@ search:
     selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
-    title: # shortened for long release names
+    title_default:
+      # shortened for long release names
       selector: a[href^="details.php?id="] > b
-    title:
-      optional: true # not available if IMDB tooltips are turned on
+    title_optional:
+      # not available if IMDB tooltips are turned on
+      optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     category:
       selector: a[href^="?cat="]
       attribute: href
@@ -155,7 +159,7 @@ search:
       filters:
         - name: replace
           args: ["pic/nopic.jpg", ""]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
@@ -166,15 +170,7 @@ search:
       selector: td.rowfollow:nth-last-child(5)
     leechers:
       selector: td.rowfollow:nth-last-child(4)
-    date:
-      selector: td.rowfollow:nth-last-child(7):not(:has(span))
-      optional: true
-      filters:
-        - name: append
-          args: " +08:00" # CST
-        - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
-    date:
+    date_added:
       selector: td.rowfollow:nth-last-child(7) > span[title]
       optional: true
       attribute: title
@@ -183,6 +179,16 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
+    date_elapsed:
+      selector: td.rowfollow:nth-last-child(7):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img.pro_free: 0

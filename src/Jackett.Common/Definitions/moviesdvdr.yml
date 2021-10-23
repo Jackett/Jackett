@@ -39,67 +39,65 @@ search:
   fields:
     category:
       text: 1
-    title:
-      selector: div.titulo
-      filters:
-        - name: append
-          args: " "
-    title|append:
+    multi:
       optional: true
       selector: img.flageitor:nth-child(2)
       filters:
         - name: re_replace
           args: [".*", "MULTi "]
-    title|append:
+    eng:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/english.png"]
       filters:
         - name: re_replace
           args: [".*", "English "]
-    title|append:
+    esp:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/espanol.png"]
       filters:
         - name: re_replace
           args: [".*", "SPANiSH "]
-    title|append:
+    ita:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/italian.png"]
       filters:
         - name: re_replace
           args: [".*", "iTALiAN "]
-    title|append:
+    deu:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/german.png"]
       filters:
         - name: re_replace
           args: [".*", "German "]
-    title|append:
+    fra:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/french.png"]
       filters:
         - name: re_replace
           args: [".*", "FRENCH "]
-    title|append:
+    oth:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/other.png"]
       filters:
         - name: re_replace
           args: [".*", "oTHer "]
-    title|append:
+    doc:
       optional: true
       selector: div.imagem span:contains("Documental")
       filters:
         - name: re_replace
           args: ["Documental", "DOC "]
-    title|append:
+    3x:
       optional: true
       selector: div.imagem span:contains("Adulto")
       filters:
         - name: replace
           args: ["Adulto", "XXX "]
-    title|append:
-      text: "DVDRiP XViD"
+    title:
+      selector: div.titulo
+      filters:
+        - name: append
+          args: " {{ .Result.multi }}{{ .Result.eng }}{{ .Result.esp }}{{ .Result.ita }}{{ .Result.deu }}{{ .Result.fra }}{{ .Result.oth }}{{ .Result.doc }}{{ .Result.3x }}DVDRiP XViD"
     details:
       selector: a
       attribute: href

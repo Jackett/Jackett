@@ -157,10 +157,10 @@ search:
   fields:
     category:
       text: Other
-    title:
+    title_default:
       # fallback title (to prevent abend if optional is not found)
       text: "title not found"
-    title:
+    title_optional:
       optional: true
       selector: td.doubleindent, td.singleindent a[href^="/index.php?showtopic="]
       filters:
@@ -196,6 +196,8 @@ search:
           args: ["(?i)^Al-Jazeera (.*)", "{{ if .Config.dropbbc }}{{ else }}Al-Jazeera {{ end }}$1"]
         - name: append
           args: "{{ if .Config.stripS01E01 }}{{ else }} S01E01{{ end }}"
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       optional: true
       selector: td.singleindent a[href^="/index.php?showtopic="]

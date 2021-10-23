@@ -65,7 +65,6 @@ settings:
   - name: useragent
     type: text
     label: User-Agent
-    label: User-Agent
   - name: info_useragent
     type: info
     label: How to get the User-Agent
@@ -106,16 +105,18 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
-    title:
+    title_default:
       selector: a[href^="details.php?id="] > b
       attribute: title
-    title:
+    title_optional:
       selector: a[href^="details.php?id="] > b[title*="Torrent neve:"]
       optional: true
       attribute: title
       filters:
         - name: regexp
           args: "Torrent neve: (.*?)<"
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     description:
       selector: a[href^="details.php?id="] > b
       attribute: title
@@ -131,7 +132,7 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
