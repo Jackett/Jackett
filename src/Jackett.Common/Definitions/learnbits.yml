@@ -189,10 +189,7 @@ search:
     size:
       selector: td:nth-child(8)
       remove: b
-      filters:
-        - name: replace
-          args: [" x time(s)", ""]
-    date:
+    date_day:
       selector: td:nth-child(2):contains("day ")
       optional: true
       remove: a, b, img, span
@@ -200,7 +197,7 @@ search:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
-    date:
+    date_year:
       # 2021-07-16 09:30 PM
       selector: td:nth-child(2):not(:contains("day "))
       optional: true
@@ -210,6 +207,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "2006-01-02 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     minimumratio:
       text: 1.0
 # TS Special Edition

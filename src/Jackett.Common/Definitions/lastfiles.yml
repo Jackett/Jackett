@@ -111,6 +111,7 @@ search:
       categories: ["!", 60, 27]
     - path: browseadult.php
       categories: [60, 27]
+
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -121,6 +122,7 @@ search:
     only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
@@ -145,17 +147,11 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: src=\\'(http.+?\.jpg)\\'
-    poster:
-      selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: src=\\'(http.+?\.png)\\'
+          args: src=\\'(.+?)\\'
     download:
       selector: a[href^="download.php"]
       attribute: href
-    date:
+    date_year:
       selector: td:nth-child(4) span:not(:contains("day"))
       optional: true
       filters:
@@ -163,13 +159,15 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
-    date:
+    date_day:
       selector: td:nth-child(4) span:contains("day")
       optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(5)
     grabs:

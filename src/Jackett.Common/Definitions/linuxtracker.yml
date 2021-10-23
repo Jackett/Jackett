@@ -348,7 +348,7 @@ search:
     details:
       selector: a[href^="index.php?page=torrent-details&id="][title]
       attribute: href
-    infohash: # magnet link is auto generated from infohash
+    infohash:
       selector: a[href^="index.php?page=torrent-details&id="][title]
       attribute: href
       filters:
