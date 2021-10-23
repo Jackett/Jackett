@@ -47,19 +47,21 @@ search:
   fields:
     category:
       text: 1
-    title:
+    title_default:
       selector: a[href^="/forum.php?mod=viewthread&tid="]
-    title:
+    title_optional:
       optional: true
       selector: a[title][href^="/forum.php?mod=viewthread&tid="]
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="/forum.php?mod=viewthread&tid="]
       attribute: href
     download:
       selector: a[href^="/download.php?id="]
       attribute: href
-    date:
+    date_elapsed:
       # time type: time elapsed (default)
       selector: td:nth-child(3) > span[title]
       attribute: title
@@ -69,7 +71,7 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_added:
       # time added
       selector: td:nth-child(3):not(:has(span))
       optional: true
@@ -78,6 +80,8 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(4)
     seeders:

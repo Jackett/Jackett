@@ -106,7 +106,7 @@ search:
   fields:
     category:
       text: 0
-    category:
+    category|noappend:
       selector: div.noimg > a
       optional: true
       case:
@@ -142,7 +142,7 @@ search:
     poster:
       selector: img.poster
       attribute: src
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:

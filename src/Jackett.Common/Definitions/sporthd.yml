@@ -204,7 +204,6 @@ search:
           args: "^(.+?)\\d{4}"
         - name: timeago
     description:
-      optional: true
       selector: img[src="/pic/vipbig.gif"]
       attribute: title
     downloadvolumefactor:
