@@ -111,9 +111,9 @@ search:
       optional: true
     files:
       text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
-    size:
-      selector: td:nth-child(3)
     size_optional:
+      selector: td:nth-child(3)
+    size:
       text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     seeders_optional:
       selector: a[href$="toseeders=1"]
