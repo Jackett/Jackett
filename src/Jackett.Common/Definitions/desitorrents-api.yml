@@ -71,6 +71,10 @@ search:
     page: 1
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}free=1{{ else }}{{ end }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: [^$, "%"]
+
   rows:
     selector: data
     count:
