@@ -1381,6 +1381,8 @@ namespace Jackett.Common.Indexers
 
                 if (SearchPath.Response != null && SearchPath.Response.Type.Equals("json"))
                 {
+                    if (response.Status != HttpStatusCode.OK)
+                        throw new Exception($"Error Parsing Json Response: Status={response.Status} Response={results}");
                     var parsedJson = JToken.Parse(results);
                     if (parsedJson == null)
                         throw new Exception("Error Parsing Json Response");
