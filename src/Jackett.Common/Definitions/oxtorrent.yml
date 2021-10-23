@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.nz/
+  - https://www.oxtorrent.sh/
   - https://oxtorrent.unblockit.kim/
   - https://oxtorrent.nocensor.work/
 legacylinks:
@@ -40,6 +40,7 @@ legacylinks:
   - https://oxtorrent.nocensor.space/
   - https://www.oxtorrent.cx/
   - https://oxtorrent.unblockit.ws/
+  - https://www.oxtorrent.nz/
 
 caps:
   categorymappings:
