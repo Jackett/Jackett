@@ -1,0 +1,58 @@
+---
+id: torrent-paradise-ml
+name: Torrent Paradise (ML)
+description: "The most innovative torrent site"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://torrent-paradise.ml/
+
+caps:
+  categorymappings:
+    - {id: 8000, cat: Other, desc: Other}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://torrent-paradise.ml/api/search?q=2021
+    - path: api/search
+      response:
+        type: json
+        noResultsMessage: "null"
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+
+  rows:
+    selector: $
+
+  fields:
+    category:
+      text: 8000
+    title:
+      selector: text
+    details:
+      text: "{{ .Config.sitelink }}"
+    infohash:
+      selector: id
+    date:
+      text: now
+    size:
+      selector: len
+    seeders:
+      selector: s
+    leechers:
+      selector: l
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json engine n/a
