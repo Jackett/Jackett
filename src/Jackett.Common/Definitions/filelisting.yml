@@ -56,13 +56,19 @@ search:
     seeders:
       selector: td.dn-status
       filters:
-        - name: split
-          args: ["/", 0]
+        # seeders can be missing
+        - name: re_replace
+          args: ["^(\\d+)", "0$1"]
+        - name: regexp
+          args: ^(\d+)
     leechers:
       selector: td.dn-status
       filters:
-        - name: split
-          args: ["/", 1]
+        # leechers can be missing
+        - name: re_replace
+          args: ["(\\d+)$", "0$1"]
+        - name: regexp
+          args: (\d+)$
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
