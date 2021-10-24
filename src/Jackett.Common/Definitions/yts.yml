@@ -95,7 +95,7 @@ search:
       selector: hash
     poster:
       selector: ..large_cover_image
-    imdb:
+    imdbid:
       selector: ..imdb_code
     date:
       selector: date_uploaded_unix

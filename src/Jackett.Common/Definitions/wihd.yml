@@ -9,6 +9,7 @@ links:
   - https://world-in-hd.net/
 
 caps:
+  # dont forget to update the search fields category (and size) case block(s)
   categorymappings:
     - {id: 565af82b1fd35761568b4572, cat: Movies/HD, desc: "1080p"}
     - {id: 565af82b1fd35761568b4574, cat: Movies/HD, desc: "720p"}

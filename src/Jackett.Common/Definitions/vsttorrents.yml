@@ -52,15 +52,9 @@ search:
       attribute: src
     description:
       selector: div.cat-links
-      optional: true
     date:
       selector: time
       attribute: datetime
-      filters:
-        - name: replace
-          args: ["T", " "]
-        - name: dateparse
-          args: "2006-01-02 15:04:05-07:00"
     size:
       text: "512 MB"
     seeders:

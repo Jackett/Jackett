@@ -304,11 +304,11 @@ search:
       selector: td:nth-child(7) a
     leechers:
       selector: td:nth-child(8) a
-    grabs:
-      text: 0
-    grabs:
+    grabs_optional:
       selector: td:nth-child(9) a
       optional: true
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
     date:
       selector: td:nth-child(6)
       filters:

@@ -101,7 +101,7 @@ search:
       filters:
         - name: regexp
           args: src="(.+?)"
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:

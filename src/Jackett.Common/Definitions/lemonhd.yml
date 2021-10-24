@@ -102,7 +102,7 @@ search:
     download:
       selector: a[href^="download.php?"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date_elapsed:

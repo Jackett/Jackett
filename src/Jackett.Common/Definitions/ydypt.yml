@@ -105,22 +105,24 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_default:
       selector: a[href^="details.php?id="]
-    title:
+    title_optional:
       optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    date:
+    date_elapsed:
       # time type: time elapsed (default)
       selector: td:nth-child(4) > span[title]
       attribute: title
@@ -130,7 +132,7 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_added:
       # time added
       selector: td:nth-child(4):not(:has(span))
       optional: true
@@ -139,6 +141,8 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(5)
     seeders:

@@ -114,7 +114,6 @@ settings:
   - name: useragent
     type: text
     label: User-Agent
-    label: User-Agent
   - name: info_useragent
     type: info
     label: How to get the User-Agent
@@ -335,16 +334,16 @@ search:
           args: ["o", "B"]
     grabs:
       selector: td:nth-child(7)
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: td:nth-child(8)
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:nth-child(9)
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
