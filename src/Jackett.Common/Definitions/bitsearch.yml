@@ -12,8 +12,10 @@ caps:
   categories:
     eBook: Books/EBook
     "Ebook/Course": Books/EBook
+    Games: PC/Games
     "Games/PC": PC/Games
     Movies: Movies
+    Music: Audio
     "Music/Album": Audio
     "Music/mp3": Audio/MP3
     "Music/Lossless": Audio/Lossless
@@ -29,6 +31,7 @@ caps:
     "Other/Sourcecode": PC
     "Other/Source Code": PC
     "Other/Video": TV
+    Softwares: PC/0day
     "Softwares/Windows": PC/0day
     TV: TV
     Unknown: Other
