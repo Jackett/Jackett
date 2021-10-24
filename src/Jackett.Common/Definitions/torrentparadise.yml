@@ -16,7 +16,6 @@ legacylinks:
 
 caps:
   categories:
-    "": Other
     ADULT: XXX
     ADULTHENTAI: XXX
     ADULTLATINA: XXX
@@ -221,6 +220,8 @@ search:
 
   fields:
     category:
+      text: OTHER
+    category|noappend:
       selector: td:nth-child(1) a
       filters:
         - name: re_replace
