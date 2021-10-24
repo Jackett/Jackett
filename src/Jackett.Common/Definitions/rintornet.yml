@@ -57,7 +57,7 @@ search:
     $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
 
   rows:
-    selector: div.entry
+    selector: div.entry:has(div.entry__title)
 
   fields:
     category:
