@@ -17,7 +17,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Movies, desc: "Web Originals"}
+    - {id: 4, cat: Movies/WEB-DL, desc: "Web Originals"}
     - {id: 5, cat: PC/Games, desc: "Games"}
     - {id: 6, cat: PC/0day, desc: "Application"}
     - {id: 7, cat: PC/Mobile-Other, desc: "Mobile App"}
