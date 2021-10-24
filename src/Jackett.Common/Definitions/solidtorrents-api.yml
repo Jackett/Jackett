@@ -1,0 +1,125 @@
+---
+id: solidtorrents
+name: Solid Torrents
+description: "Solid Torrents is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://solidtorrents.net/
+
+caps:
+  # dont forget to update the case block in the search fields category
+  categorymappings:
+    - {id: Audio, cat: Audio, desc: Audio}
+    - {id: Video, cat: Movies, desc: Video}
+    - {id: Video, cat: TV, desc: Video}
+    - {id: Image, cat: Other/Misc, desc: Image}
+    - {id: Document, cat: Books/Comics, desc: Document}
+    - {id: eBook, cat: Books/EBook, desc: eBook}
+    - {id: Program, cat: PC/0day, desc: Program}
+    - {id: Android, cat: PC/Mobile-Android, desc: Android}
+    - {id: Archive, cat: Other, desc: Archive}
+    - {id: Diskimage, cat: PC/ISO, desc: Diskimage}
+    - {id: Sourcecode, cat: Movies/Other, desc: Sourcecode}
+    - {id: Database, cat: Movies/DVD, desc: Database}
+    - {id: Unknown, cat: Other, desc: Unknown}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: filter-verified
+    type: checkbox
+    label: "Only include verifed content in results"
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      seeders: seeders
+      size: size
+
+search:
+  paths:
+    - path: api/v1/search
+      response:
+        type: json
+    - path: api/v1/search
+      response:
+        type: json
+      inputs:
+        skip: 20
+    - path: api/v1/search
+      response:
+        type: json
+      inputs:
+        skip: 40
+
+  inputs:
+    q: "{{ .Keywords }}"
+    category:  "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}all{{ end }}"
+    sort: "{{ .Config.sort }}"
+    fuv: "{{ if .Config.filter-verified }}yes{{ else }}no{{ end }}"
+
+  rows:
+    selector: results
+    count:
+      selector: hits.value
+
+  fields:
+    category:
+      selector: category
+      case:
+        Audio: Audio
+        7: Audio # music
+        8: Audio # audiobook
+        Video: Video
+        2: Video # movies
+        3: Video # tv
+        4: Video # anime , hentai
+        10: Video # 3x
+        Image: Image
+        Document: Document
+        eBook: eBook
+        9: eBook # books
+        Program: Program
+        5: Program # software
+        6: Program # games
+        Android: Android
+        Archive: Archive
+        Diskimage: Diskimage
+        Sourcecode: Sourcecode
+        Database: Database
+        Unknown: Unknown
+        1: Unknown # other
+    title:
+      selector: title
+    id:
+      selector: _id
+    details:
+      text: "{{ .Config.sitelink }}view/{{ .Result.id }}"
+    magnet:
+      selector: magnet
+    size:
+      selector: size
+    seeders:
+      selector: swarm.seeders
+    leechers:
+      selector: swarm.leechers
+    grabs:
+      selector: swarm.downloads
+    date:
+      # 2021-09-24T00:12:29.918Z
+      selector: imported
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json api v1
