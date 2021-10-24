@@ -135,6 +135,8 @@ search:
       optional: true
       filters:
         - name: replace
+          args: ["desc.", "512 MB"]
+        - name: replace
           args: ["s", ""]
     size:
       text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}512 MB{{ end }}"
