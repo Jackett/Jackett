@@ -64,7 +64,7 @@ search:
 
   inputs:
     q: "{{ .Keywords }}"
-    category:  "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}all{{ end }}"
+    category: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}all{{ end }}"
     sort: "{{ .Config.sort }}"
     fuv: "{{ if .Config.filter-verified }}yes{{ else }}no{{ end }}"
 
