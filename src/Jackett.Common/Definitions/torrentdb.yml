@@ -117,7 +117,7 @@ search:
       selector: td:nth-child(9)
     leechers:
       selector: td:nth-child(10)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

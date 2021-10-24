@@ -155,7 +155,7 @@ search:
     download:
       selector: a[href*="?p=torrents&pid=10&action=download"]
       attribute: href
-    date:
+    date_year:
       optional: true
       # Uploaded 30-01-2019 15:02 by
       selector: td.torrent_name:not(:contains(" at "))
@@ -166,7 +166,7 @@ search:
           args: " +03:00" # TRT
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    date:
+    date_day:
       optional: true
       # Uploaded Friday at 05:11 by
       # Uploaded Today at 00:48 by
@@ -177,6 +177,8 @@ search:
           args: "Uploaded (.+?) by"
         - name: replace
           args: [" at ", " "]
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: a[rel="torrent_size"]
     seeders:

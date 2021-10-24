@@ -9,6 +9,7 @@ links:
   - https://tfa.tf/
 
 caps:
+  # dont forget to update the search fields category case block
   categorymappings:
     - {id: 107, cat: PC/0day, desc: "Apps Windows"}
     - {id: 132, cat: PC/Mac, desc: "Apps Mac-OSX"}
@@ -179,7 +180,6 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"n HD\"))": 161
         ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"n SD\"))": 162
         ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"buch\"))": 112
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Zeit\"))": 115
         ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Com\"))": 114
         ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Rom\"))": 117
         ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 156
@@ -202,19 +202,19 @@ search:
       filters:
         - name: re_replace
           args: ["^\\[[\\w ]*\\]\\s?", ""]
-        - name: re_replace
-          args: ["^\\[[\\w ]*\\]\\s?", ""]
     details:
       selector: a.selection_a
       attribute: href
-    download:
+    download_default:
       selector: a[href^="download.php?torrent="]
       optional: true
       attribute: href
-    download:
+    download_ssl:
       selector: a[href^="download_ssl.php?torrent="]
       optional: true
       attribute: href
+    download:
+      text: "{{ if .Result.download_ssl }}{{ .Result.download_ssl }}{{ else }}{{ .Result.download_default }}{{ end }}"
     poster:
       selector: div[id^="details"] img
       attribute: src
@@ -222,7 +222,7 @@ search:
       selector: div.selection_unter_ad
     grabs:
       selector: div.selection_unter_ae
-    date:
+    date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
       selector: div.selection_unter_ab:not(:contains("."))
@@ -232,7 +232,7 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
-    date:
+    date_year:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
       optional: true
@@ -243,9 +243,10 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     description:
       selector: selection_unter_af
-      optional: true
     seeders:
       selector: div.selection_unter_aa
     leechers:

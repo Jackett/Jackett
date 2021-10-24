@@ -83,7 +83,7 @@ search:
     download:
       selector: span > a
       attribute: href
-    date:
+    date_year:
       # Sep. 7th '10
       selector: div > span:nth-child(4):not(:contains(":"))
       optional: true
@@ -96,7 +96,7 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "Jan. 2 06 -07:00"
-    date:
+    date_time:
       # 2020-11-05 07:34:44
       selector: div > span:nth-child(4):contains(":")
       optional: true
@@ -105,6 +105,8 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_time }}{{ or .Result.date_year .Result.date_time }}{{ else }}now{{ end }}"
     size:
       selector: div > span:nth-child(5)
     seeders:

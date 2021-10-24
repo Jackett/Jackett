@@ -84,17 +84,17 @@ search:
     download:
       selector: a[href^="/torrent/"]
       attribute: href
-    date:
+    date_day:
       selector: td:nth-child(2):contains("day")
       optional: true
       filters:
         - name: fuzzytime
-    date:
+    date_ago:
       selector: td:nth-child(2):contains("ago")
       optional: true
       filters:
         - name: timeago
-    date:
+    date_year:
       selector: td:nth-child(2):not(:contains("ago")):not(:contains("day"))
       optional: true
       filters:
@@ -102,6 +102,8 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "2 Jan -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago .Result.date_day }}{{ or .Result.date_year  .Result.date_ago .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(3)
     seeders:

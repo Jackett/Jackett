@@ -156,20 +156,20 @@ search:
           args: "src=\\\\'(.+?)\\\\'"
         - name: replace
           args: ["./pic/noposter.png", ""]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:
       selector: td:nth-last-child(8)
     # 2 flavours of dates
-    date:
+    date_day:
       # Today<br> 10:20 AM
       # Yesterday<br> 08:03 PM
       optional: true
       selector: td:nth-last-child(6):contains("day")
       filters:
         - name: fuzzytime
-    date:
+    date_year:
       # Feb 4 2019<br> 10:20 AM
       optional: true
       selector: td:nth-last-child(6):not(:contains("day"))
@@ -178,6 +178,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(5)
     grabs:

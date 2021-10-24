@@ -115,25 +115,23 @@ search:
     download:
       selector: a[href^="download.php/"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    description:
+    language:
       optional: true
       selector: img[src="pic/pl.jpg"]
       filters:
         - name: append
           args: "Language: polish\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    description:
+    subbed:
       optional: true
       selector: img[src="pic/napisy.gif"]
       filters:
         - name: append
           args: "Subbed\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
+    description:
+      text: "{{ .Result.language }}{{ .Result.subbed }}"
     date:
       selector: td:nth-child(4)
       filters:

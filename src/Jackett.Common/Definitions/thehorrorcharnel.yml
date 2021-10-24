@@ -182,7 +182,7 @@ search:
       attribute: href
     files:
       selector: td:nth-child(6)
-    date:
+    date_day:
       # Yesterday<br /> 11:29 PM
       # Today<br /> 05:23 PM
       selector: td:nth-child(8):contains("day")
@@ -191,7 +191,7 @@ search:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
-    date:
+    date_year:
       # Aug 4 2021<br />02:36 AM
       selector: td:nth-child(8):not(:contains("day"))
       optional: true
@@ -200,6 +200,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(9)
     grabs:

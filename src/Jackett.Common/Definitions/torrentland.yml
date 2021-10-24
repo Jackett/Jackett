@@ -126,7 +126,7 @@ search:
         "span:contains(\"Videos Músicales\")": 8
         "span:contains(\"+18\")": 9
         "span:contains(\"Otros\")": 10
-    title:
+    title_vose:
       selector: a.view-torrent:contains("VOSE")
       optional: true
       filters:
@@ -138,7 +138,7 @@ search:
           args: ["UHDRip", "BDRip"] # Fix for Radarr
         - name: append
           args: " ENGLiSH"
-    title:
+    title_notvose:
       selector: a.view-torrent:not(:contains("VOSE"))
       optional: true
       filters:
@@ -150,6 +150,8 @@ search:
           args: ["UHDRip", "BDRip"] # Fix for Radarr
         - name: append
           args: " SPANiSH"
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     download:
       selector: a[href*="/download/"]
       attribute: href

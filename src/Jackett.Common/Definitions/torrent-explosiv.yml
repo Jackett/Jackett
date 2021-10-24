@@ -9,8 +9,8 @@ links:
   - https://torrent-explosiv.eu/
 
 caps:
+    # dont forget to update the search fields category case block
   categorymappings:
-    # note: if refreshing cats dont forget the category case block.
     # App
     - {id: 12, cat: PC/0day, desc: "App Win"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
@@ -142,8 +142,6 @@ search:
       filters:
         - name: re_replace
           args: ["^\\[[\\w ]*\\]\\s?", ""]
-        - name: re_replace
-          args: ["^\\[[\\w ]*\\]\\s?", ""]
     details:
       selector: a.selection_a
       attribute: href
@@ -213,7 +211,7 @@ search:
       selector: div.selection_unter_ad
     grabs:
       selector: div.selection_unter_ae
-    date:
+    date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
       selector: div.selection_unter_ab:not(:contains("."))
@@ -223,7 +221,7 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
-    date:
+    date_year:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
       optional: true
@@ -234,9 +232,10 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     description:
       selector: selection_unter_af
-      optional: true
     seeders:
       selector: div.selection_unter_aa
     leechers:

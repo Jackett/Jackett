@@ -43,7 +43,6 @@ search:
     description:
       selector: a > span
       attribute: class
-      optional: true
     poster:
       selector: img
       attribute: src

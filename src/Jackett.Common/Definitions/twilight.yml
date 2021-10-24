@@ -121,10 +121,10 @@ search:
       attribute: href
     files:
       selector: td:nth-of-type(6)
-    date:
+    date_day:
       selector: td:nth-of-type(8):contains("day")
       optional: true
-    date:
+    date_year:
       selector: td:nth-of-type(8):not(:contains("day"))
       optional: true
       filters:
@@ -132,6 +132,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-of-type(9)
     grabs:

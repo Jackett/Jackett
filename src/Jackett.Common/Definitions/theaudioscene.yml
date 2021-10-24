@@ -108,6 +108,8 @@ search:
         img[title="Win VST"]: 13
         img[title="Win VSTi"]: 14
         img[title="Handheld App"]: 15
+    date:
+      text: now
     size:
       selector: td[id$="_6"]
     seeders:

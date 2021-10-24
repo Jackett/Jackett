@@ -75,19 +75,21 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_default:
       selector: a[href^="details.php?id="]
-    title:
+    title_optional:
       optional: true
       selector: a[href^="details.php?id="][title]
       attribute: title
-    title:
+    title_optional2:
       optional: true
       selector: a[href^="details.php?id="][onmousemove]
       attribute: onmousemove
       filters:
         - name: regexp
           args: "return overlibImage\\('(.*)','.*'\\);"
+    title:
+      text: "{{ if or .Result.title_optional .Result.title_optional2 }}{{ or .Result.title_optional .Result.title_optional2 }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -124,7 +126,6 @@ search:
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
     description:
-      optional: true
       selector: td:nth-child(2)
       remove: a, br, small
 # engine tbd

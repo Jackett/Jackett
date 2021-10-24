@@ -109,18 +109,20 @@ search:
     download:
       selector: a[href$=".html"][title]
       attribute: href
-    date:
+    date_day:
       selector: div.wr-date:contains("-")
       optional: true
       filters:
         - name: dateparse
           args: "01-02"
-    date:
+    date_time:
       selector: div.wr-date:contains(":")
       optional: true
       filters:
         - name: dateparse
           args: "15:04"
+    date:
+      text: "{{ if or .Result.date_time .Result.date_day }}{{ or .Result.date_time .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: div.wr-size
       filters:

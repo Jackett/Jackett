@@ -80,11 +80,13 @@ search:
     selector: table#sortabletable > tbody > tr:has(a[href])
 
   fields:
-    title:
+    title_default:
       selector: td:nth-child(2) a
-    title:
+    title_optional:
       optional: true
       selector: div.tooltip-content > div
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     category:
       selector: a[href*="/browse.php?category="]
       attribute: href
