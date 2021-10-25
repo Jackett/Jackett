@@ -165,21 +165,18 @@ search:
     downloadvolumefactor_optional:
       optional: true
       selector: td.descargar a b strong
-      filters:
-        - name: replace
-          args: [" X2", ""]
-        - name: replace
-          args: ["Freeleech", "0"]
+      case:
+        "Freeleech": 0
+        "Freeleech X2": 0
+        "*": 1
     downloadvolumefactor:
       text: "{{ if .Result.downloadvolumefactor_optional }}{{ .Result.downloadvolumefactor_optional }}{{ else }}1{{ end }}"
     uploadvolumefactor_optional:
       optional: true
       selector: td.descargar a b strong
-      filters:
-        - name: replace
-          args: [" X2", "2"]
-        - name: replace
-          args: ["Freeleech", ""]
+      case:
+        "Freeleech X2": 2
+        "*": 1
     uploadvolumefactor:
       text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
     minimumratio:
