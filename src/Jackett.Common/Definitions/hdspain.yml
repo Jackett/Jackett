@@ -55,7 +55,9 @@ search:
     sec: listado
     ord: 9
     b: "{{ .Keywords }}"
+    # 0 incldead, 1 onlyactive, 2 onlydead
     ver: 0
+    # 0 new and relaunch, 1 onlynew, 2 onlyrelaunch
     relanz: 0
     $raw: "{{ range .Categories }}&cat[]={{.}}{{end}}"
 
@@ -81,20 +83,16 @@ search:
       selector: td.titulo a[id]:contains("VOSE")
       optional: true
       filters:
-        - name: prepend
-          args: "{{ .Result.extras }} "
         - name: append
-          args: " English"
+          args: "{{ .Result.extras }} English"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     title_notvose:
       selector: td.titulo a[id]:not(:contains("VOSE"))
       optional: true
       filters:
-        - name: prepend
-          args: "{{ .Result.extras }} "
         - name: append
-          args: " Spanish"
+          args: "{{ .Result.extras }} Spanish"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     title:
@@ -179,11 +177,13 @@ search:
       selector: td.descargar a b strong
       filters:
         - name: replace
-          args: ["Freeleech X2", "2"]
+          args: [" X2", "2"]
+        - name: replace
+          args: ["Freeleech", ""]
     uploadvolumefactor:
       text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
       text: 345600
-# engine tbd
+# engine n/a
