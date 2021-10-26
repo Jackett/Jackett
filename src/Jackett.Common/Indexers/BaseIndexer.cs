@@ -306,12 +306,12 @@ namespace Jackett.Common.Indexers
                 // set guid
                 if (r.Guid == null)
                 {
-                    if (r.Details != null)
-                        r.Guid = r.Details;
-                    else if (r.Link != null)
+                    if (r.Link != null)
                         r.Guid = r.Link;
                     else if (r.MagnetUri != null)
                         r.Guid = r.MagnetUri;
+                    else if (r.Details != null)
+                        r.Guid = r.Details;
                 }
 
                 return r;
