@@ -325,6 +325,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * DigitalCore
  * DiscFan
  * DivTeam
+ * DocsPedia
  * Dragonworld Reloaded [![(invite needed)][inviteneeded]](#)
  * EbookParadijs
  * Ebooks-Shares
