@@ -1397,11 +1397,11 @@ namespace Jackett.Common.Indexers
                                 continue;
                     }
 
-                    var rowsObj = parsedJson.SelectToken(Search.Rows.Selector);
+                    var rowsObj = ParseRowSelector(parsedJson, Search.Rows.Selector);
                     if (rowsObj == null)
                         throw new Exception("Error Parsing Rows Selector");
 
-                    foreach (var Row in rowsObj.Value<JArray>())
+                    foreach (var Row in rowsObj)
                     {
                         var selObj = SearchPath.Response.Attribute != null ? Row.SelectToken(SearchPath.Response.Attribute).Value<JToken>() : Row;
                         var mulRows = SearchPath.Response.Multiple == true ? selObj.Values<JObject>() : new List<JObject> { selObj.Value<JObject>() };
@@ -2051,6 +2051,36 @@ namespace Jackett.Common.Indexers
                 }
             }
             return SkipRelease;
+        }
+
+        private JArray ParseRowSelector(JToken parsedJson, string rowSelector)
+        {
+            var parts = rowSelector.Split(':');
+            var selector = parts[0];
+            var rowsObj = parsedJson.SelectToken(selector).Value<JArray>();
+
+            string pattern = @"(?<filter>.+)\((?<key>.+)\)";
+            var regex = new Regex(pattern, RegexOptions.Compiled);
+            for (var idx = 1; idx < parts.Length; idx++)
+            {
+                var part = parts[idx];
+
+                var match = regex.Match(part);
+                if (match.Success)
+                {
+                    var filter = match.Result("${filter}");
+                    var key = match.Result("${key}");
+                    switch (filter)
+                    {
+                        case "has":
+                            rowsObj = new JArray(rowsObj.SelectTokens($"$[?(@.{key})]"));
+                            break;
+                        default:
+                            continue;
+                    }
+                }
+            }
+            return rowsObj;
         }
     }
 }
