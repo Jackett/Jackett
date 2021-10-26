@@ -158,6 +158,7 @@ namespace Jackett.Common.Indexers
                     response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
                     jsonContent = JObject.Parse(response.ContentString);
                     break;
+                case 8: // imdb not found, see issue #12466
                 case 10: // imdb not found, see issue #1486
                 case 20: // no results found
                     // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
