@@ -97,7 +97,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
     category:
