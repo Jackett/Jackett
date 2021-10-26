@@ -256,7 +256,7 @@ search:
         "*": "Norwegian subtitles"
     tagdesc:
       optional: true
-      text: "{{ if .Result.p2ptag }}{{ .Result.p2ptag }}, {{ else }}{{ end }}{{ if .Result.packtag }}{{ .Result.packtag }}, {{ else }}{{ end }}{{ if .Result.reqidtag }}{{ .Result.reqidtag }}, {{ else }}{{ end }}{{ if .Result.sweaudiotag }}{{ .Result.sweaudiotag }}, {{ else }}{{ end }}{{ if .Result.swesubtag }}{{ .Result.swesubtag }}, {{ else }}{{ end }}{{ if .Result.dkaudiotag }}{{ .Result.dkaudiotag }}, {{ else }}{{ end }}{{ if .Result.dksubtag }}{{ .Result.sksubtag }}, {{ else }}{{ end }}{{ if .Result.enaudiotag }}{{ .Result.enaudiotag }}, {{ else }}{{ end }}{{ if .Result.ensubtag }}{{ .Result.ensubtag }}, {{ else }}{{ end }}{{ if .Result.noaudiotag }}{{ .Result.noaudiotag }}, {{ else }}{{ end }}{{ if .Result.nosubtag }}{{ .Result.nosubtag }}{{ else }}{{ end }}"
+      text: "{{ if .Result.p2ptag }}{{ .Result.p2ptag }}, {{ else }}{{ end }}{{ if .Result.packtag }}{{ .Result.packtag }}, {{ else }}{{ end }}{{ if .Result.reqidtag }}{{ .Result.reqidtag }}, {{ else }}{{ end }}{{ if .Result.sweaudiotag }}{{ .Result.sweaudiotag }}, {{ else }}{{ end }}{{ if .Result.swesubtag }}{{ .Result.swesubtag }}, {{ else }}{{ end }}{{ if .Result.dkaudiotag }}{{ .Result.dkaudiotag }}, {{ else }}{{ end }}{{ if .Result.dksubtag }}{{ .Result.dksubtag }}, {{ else }}{{ end }}{{ if .Result.enaudiotag }}{{ .Result.enaudiotag }}, {{ else }}{{ end }}{{ if .Result.ensubtag }}{{ .Result.ensubtag }}, {{ else }}{{ end }}{{ if .Result.noaudiotag }}{{ .Result.noaudiotag }}, {{ else }}{{ end }}{{ if .Result.nosubtag }}{{ .Result.nosubtag }}{{ else }}{{ end }}"
       filters:
         - name: regexp
           args: "(.+?), $"
