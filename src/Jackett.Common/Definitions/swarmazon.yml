@@ -40,7 +40,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    remember: on
+    remember: 1
   error:
 #    - selector: script:contains("The Captcha")
 #      message:
