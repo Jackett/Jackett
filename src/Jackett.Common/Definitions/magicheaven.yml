@@ -158,6 +158,7 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
+      optional: true
     poster:
       selector: div[id^="port-content-"] img
       attribute: src
