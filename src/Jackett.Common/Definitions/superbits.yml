@@ -1,0 +1,267 @@
+---
+id: superbits
+name: Superbits
+description: "Superbits is a SWEDISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: sv-SW
+type: private
+encoding: UTF-8
+links:
+  - https://superbits.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies/DVD, desc: DVD-R Swesub}
+    - {id: 2, cat: TV, desc: DVD-R TV}
+    - {id: 3, cat: Books/EBook, desc: eBok}
+    - {id: 4, cat: Movies/HD, desc: Film 1080}
+    - {id: 5, cat: Movies/3D, desc: Film 3D}
+    - {id: 6, cat: Movies/HD, desc: Film 720}
+    - {id: 7, cat: Movies/BluRay, desc: Film Bluray}
+    - {id: 24, cat: Movies/UHD, desc: Film 4K}
+    - {id: 8, cat: TV, desc: Svensk TV}
+    - {id: 9, cat: Audio/Audiobook, desc: Ljudböcker}
+    - {id: 10, cat: Audio/Video, desc: Musikvideos}
+    - {id: 11, cat: Books/Mags, desc: E-tidningar}
+    - {id: 12, cat: Audio, desc: MP3}
+    - {id: 13, cat: Other, desc: Omslag}
+    - {id: 14, cat: Other, desc: Övrigt}
+    - {id: 15, cat: PC/Games, desc: PC-Spel}
+    - {id: 16, cat: PC/0day, desc: Program}
+    - {id: 17, cat: Console/PS4, desc: Playstation}
+    - {id: 18, cat: TV, desc: TV}
+    - {id: 19, cat: Console/Other, desc: Nintendo}
+    - {id: 20, cat: Console/XBox, desc: Xbox}
+    - {id: 21, cat: Movies/SD, desc: Xvid}
+    - {id: 25, cat: Movies/Foreign, desc: Subpacks}
+    - {id: 22, cat: XXX, desc: XXX}
+    - {id: 23, cat: Audio/Lossless, desc: FLAC}
+    - {id: 26, cat: TV, desc: TV DK}
+    - {id: 27, cat: TV, desc: TV NO}
+    - {id: 28, cat: TV, desc: TV FI}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: d
+    options:
+      d: created
+      up: seeders
+      s: size
+      n: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+
+search:
+  paths:
+    - path: api/v1/torrents
+      response:
+        type: json
+        noResultsMessage: ""
+
+  inputs:
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+    dkaudio: false
+    dksub: false
+    enaudio: false
+    ensub: false
+    extendedSearch: false
+    fiaudio: false
+    fisub: false
+    freeleech: "{{ if .Config.freeleech }}true{{ else }}false{{ end }}"
+    index: 0
+    limit: 100
+    noaudio: false
+    nosub: false
+    order: "{{ .Config.type }}"
+    page: search
+    searchText: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    section: all
+    sort: "{{ .Config.sort }}"
+    stereoscopic: false
+    sweaudio: false
+    swesub: false
+    watchview: false
+
+  rows:
+    selector: $
+
+  fields:
+    category:
+      selector: category
+    title:
+      selector: name
+    id:
+      selector: id
+    details:
+      text: "{{ .Config.sitelink }}torrent/{{ .Result.id }}/"
+    download:
+      text: "{{ .Config.sitelink }}api/v1/torrents/download/{{ .Result.id }}"
+    imdbid:
+      selector: imdbid2
+    imdbidfull:
+      optional: true
+      selector: imdbid2
+    posternormal:
+      optional: true
+      selector: customcover
+    posterimdb:
+      optional: true
+      text: "{{ if .Result.imdbid }}{{ .Config.sitelink }}img/imdb/{{ .Result.imdbidfull }}.jpg{{ else }}{{ end }}"
+    poster:
+      text: "{{ if .Result.posterimdb }}{{ .Result.posterimdb }}{{ else }}{{ .Result.posternormal }}{{ end }}"
+    date:
+      # 2021-10-26 13:50:07
+      selector: added
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    size:
+      selector: size
+    files:
+      selector: numfiles
+    grabs_optional:
+      optional: true
+      selector: timesCompleted
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: frileech
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+    titledesc:
+      optional: true
+      selector: title
+    yeardesc:
+      optional: true
+      selector: year
+    genresdesc:
+      optional: true
+      selector: genres
+    taglinedesc:
+      optional: true
+      selector: tagline
+    castdesc:
+      optional: true
+      selector: cast
+    ratingdesc:
+      optional: true
+      selector: rating
+    plotdesc:
+      optional: true
+      selector: plot
+    sectiondesc:
+      optional: true
+      selector: section
+    predatedesc:
+      selector: preDate
+      filters:
+        - name: re_replace
+          args: ["1970-01-01 01:00:00", ""]
+    p2ptag:
+      selector: p2p
+      case:
+        0: ""
+        1: P2P
+    packtag:
+      selector: pack
+      case:
+        0: ""
+        1: Pack
+    reqidtag:
+      selector: reqid
+      case:
+        0: ""
+        "*": Request
+    sweaudiotag:
+      selector: sweaudio
+      case:
+        0: ""
+        "*": "Swedish audio"
+    swesubtag:
+      selector: swesub
+      case:
+        0: ""
+        "*": "Swedish subtitles"
+    dkaudiotag:
+      selector: dkaudio
+      case:
+        0: ""
+        "*": "Danish audio"
+    dksubtag:
+      selector: dksub
+      case:
+        0: ""
+        "*": "Danish subtitles"
+    enaudiotag:
+      selector: enaudio
+      case:
+        0: ""
+        "*": "English audio"
+    ensubtag:
+      selector: ensub
+      case:
+        0: ""
+        "*": "English subtitles"
+    noaudiotag:
+      selector: noaudio
+      case:
+        0: ""
+        "*": "Norwegian audio"
+    nosubtag:
+      selector: nosub
+      case:
+        0: ""
+        "*": "Norwegian subtitles"
+    tagdesc:
+      optional: true
+      text: "{{ if .Result.p2ptag }}{{ .Result.p2ptag }}, {{ else }}{{ end }}{{ if .Result.packtag }}{{ .Result.packtag }}, {{ else }}{{ end }}{{ if .Result.reqidtag }}{{ .Result.reqidtag }}, {{ else }}{{ end }}{{ if .Result.sweaudiotag }}{{ .Result.sweaudiotag }}, {{ else }}{{ end }}{{ if .Result.swesubtag }}{{ .Result.swesubtag }}, {{ else }}{{ end }}{{ if .Result.dkaudiotag }}{{ .Result.dkaudiotag }}, {{ else }}{{ end }}{{ if .Result.dksubtag }}{{ .Result.dksubtag }}, {{ else }}{{ end }}{{ if .Result.enaudiotag }}{{ .Result.enaudiotag }}, {{ else }}{{ end }}{{ if .Result.ensubtag }}{{ .Result.ensubtag }}, {{ else }}{{ end }}{{ if .Result.noaudiotag }}{{ .Result.noaudiotag }}, {{ else }}{{ end }}{{ if .Result.nosubtag }}{{ .Result.nosubtag }}{{ else }}{{ end }}"
+      filters:
+        - name: regexp
+          args: "(.+?), $"
+    description:
+      text: "{{ if .Result.titledesc }}Title: {{ .Result.titledesc }}</br>{{ else }}{{ end }}{{ if .Result.yeardesc }}Year: {{ .Result.yeardesc }}</br>{{ else }}{{ end }}{{ if .Result.genresdesc }}Genres: {{ .Result.genresdesc }}</br>{{ else }}{{ end }}{{ if .Result.taglinedesc }}Tagline: {{ .Result.taglinedesc }}</br>{{ else }}{{ end }}{{ if .Result.castdesc }}Cast: {{ .Result.castdesc }}</br>{{ else }}{{ end }}{{ if .Result.ratingdesc }}Rating: {{ .Result.ratingdesc }}</br>{{ else }}{{ end }}{{ if .Result.plotdesc }}Plot: {{ .Result.plotdesc }}</br>{{ else }}{{ end }}{{ if .Result.tagdesc }}Tags: {{ .Result.tagdesc }}</br>{{ else }}{{ end }}{{ if .Result.predatedesc }}PRE: {{ .Result.predatedesc }}</br>{{ else }}{{ end }}{{ if .Result.sectiondesc }}Section: {{ .Result.sectiondesc }}{{ else }}{{ end }}"
+# json rartracker api v1
