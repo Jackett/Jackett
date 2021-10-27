@@ -85,6 +85,8 @@ search:
     - path: api/v1/torrents
       response:
         type: json
+        noResultsMessage: ""
+
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     dkaudio: false
@@ -135,7 +137,7 @@ search:
       optional: true
       text: "{{ if .Result.imdbid }}{{ .Config.sitelink }}img/imdb/{{ .Result.imdbidfull }}.jpg{{ else }}{{ end }}"
     poster:
-      text: "{{ if .Result.posternormal }}{{ .Result.posternormal }}{{ else }}{{ .Result.posterimdb }}{{ end }}"
+      text: "{{ if .Result.posterimdb }}{{ .Result.posterimdb }}{{ else }}{{ .Result.posternormal }}{{ end }}"
     date:
       # 2021-10-26 13:50:07
       selector: added
@@ -261,5 +263,5 @@ search:
         - name: regexp
           args: "(.+?), $"
     description:
-      text: "{{ if .Result.titledesc }}Title: {{ .Result.titledesc }}</br>{{ else }}{{ end }}{{ if .Result.yeardesc }}Year: {{ .Result.yeardesc }}</br>{{ else }}{{ end }}{{ if .Result.genresdesc }}Genres: {{ .Result.genresdesc }}</br>{{ else }}{{ end }}{{ if .Result.taglinedesc }}Tagline: {{ .Result.taglinedesc }}</br>{{ else }}{{ end }}{{ if .Result.castdesc }}Cast: {{ .Result.castdesc }}</br>{{ else }}{{ end }}{{ if .Result.ratingdesc }}Rating: {{ .Result.ratingdesc }}</br>{{ else }}{{ end }}{{ if .Result.plotdesc }}Plot: {{ .Result.plotdesc }}</br>{{ else }}{{ end }}{{ if .Result.tagdesc }}Tags: {{ .Result.tagdesc }}</br>{{ else }}{{ end }}{{ if .Result.sectiondesc }}Section: {{ .Result.sectiondesc }}</br>{{ else }}{{ end }}{{ if .Result.predatedesc }}PRE: {{ .Result.predatedesc }}{{ else }}{{ end }}"
-# json engine n/a
+      text: "{{ if .Result.titledesc }}Title: {{ .Result.titledesc }}</br>{{ else }}{{ end }}{{ if .Result.yeardesc }}Year: {{ .Result.yeardesc }}</br>{{ else }}{{ end }}{{ if .Result.genresdesc }}Genres: {{ .Result.genresdesc }}</br>{{ else }}{{ end }}{{ if .Result.taglinedesc }}Tagline: {{ .Result.taglinedesc }}</br>{{ else }}{{ end }}{{ if .Result.castdesc }}Cast: {{ .Result.castdesc }}</br>{{ else }}{{ end }}{{ if .Result.ratingdesc }}Rating: {{ .Result.ratingdesc }}</br>{{ else }}{{ end }}{{ if .Result.plotdesc }}Plot: {{ .Result.plotdesc }}</br>{{ else }}{{ end }}{{ if .Result.tagdesc }}Tags: {{ .Result.tagdesc }}</br>{{ else }}{{ end }}{{ if .Result.predatedesc }}PRE: {{ .Result.predatedesc }}</br>{{ else }}{{ end }}{{ if .Result.sectiondesc }}Section: {{ .Result.sectiondesc }}{{ else }}{{ end }}"
+# json rartracker api v1
