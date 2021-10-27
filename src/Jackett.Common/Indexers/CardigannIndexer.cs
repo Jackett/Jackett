@@ -2075,6 +2075,9 @@ namespace Jackett.Common.Indexers
                         case "has":
                             rowsObj = new JArray(rowsObj.SelectTokens($"$[?(@.{key})]"));
                             break;
+                        case "not":
+                            rowsObj = new JArray(rowsObj.SelectTokens($"$[?(!@.{key})]"));
+                            break;
                         default:
                             continue;
                     }
