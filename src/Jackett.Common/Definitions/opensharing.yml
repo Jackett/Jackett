@@ -49,6 +49,7 @@ caps:
     - {id: 425, cat: XXX, desc: "Movies XXX: С Русским переводом!"}
     - {id: 1195, cat: XXX, desc: "Movies XXX: LegalPorno"}
     - {id: 1200, cat: XXX, desc: "Movies XXX: Solo & Masturbation"}
+    - {id: 7000, cat: XXX, desc: "Movies XXX: -= XXX =-"}
 
   modes:
     search: [q]
