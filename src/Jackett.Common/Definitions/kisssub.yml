@@ -2,7 +2,7 @@
 id: kisssub
 name: KissSub
 description: "KissSub is a CHINESE Public torrent index"
-language: zh-cn
+language: zh-CN
 type: public
 encoding: UTF-8
 links:
@@ -48,7 +48,7 @@ search:
       filters:
         - name: regexp
           args: show-([0-9A-Fa-f]{40})
-    date:
+    date_today:
        # 今天 00:35	 (Today)
       optional: true
       selector: td:nth-child(1):contains("昨天")
@@ -58,7 +58,7 @@ search:
         - name: append
           args: " +08:00" # CST
         - name: fuzzytime
-    date:
+    date_yday:
       # 昨天 22:50	 (Yesterday)
       optional: true
       selector: td:nth-child(1):contains("今天")
@@ -68,7 +68,7 @@ search:
         - name: append
           args: " +08:00" # CST
         - name: fuzzytime
-    date:
+    date_year:
       # 2020/12/24
       optional: true
       selector: td:nth-child(1):not(:contains("昨天")):not(:contains("今天"))
@@ -77,6 +77,8 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006/01/02 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year  .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(4)
     seeders:
