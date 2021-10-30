@@ -1,0 +1,148 @@
+---
+id: skipthecommercials-api
+name: SkipTheCommercials (API)
+description: "SkipTheCommercials (STC) is a Private Torrent Tracker for TV"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://skipthecommericals.xyz/
+
+caps:
+  # dont forget to update the case block in the search fields category
+  categorymappings:
+    - {id: 2, cat: TV/HD, desc: "TV/x265"}
+    - {id: 3, cat: TV/SD, desc: "TV/Packs-SD"}
+    - {id: 4, cat: TV/WEB-DL, desc: "TV/Web-DL"}
+    - {id: 5, cat: TV/SD, desc: "TV/Xvid"}
+    - {id: 6, cat: TV/HD, desc: "TV/HD-x264"}
+    - {id: 7, cat: TV/Foreign, desc: "TV/Non-English"}
+    - {id: 8, cat: TV/HD, desc: "TV/Packs-HD"}
+    - {id: 9, cat: TV/Sport, desc: "TV/Sports"}
+    - {id: 10, cat: TV/Documentary, desc: "TV/Documentaries"}
+    - {id: 11, cat: TV/HD, desc: "TV/HD-Retail"}
+    - {id: 12, cat: TV/SD, desc: "TV/SD-Retail"}
+    - {id: 13, cat: TV/Foreign, desc: "TV/Packs-Non-English"}
+    - {id: 14, cat: TV/SD, desc: "TV/SD-x264"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://datascene.xyz/\" target =_blank>DataScene</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  paths:
+    # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
+    - path: /api/torrents/filter
+      response:
+        type: json
+        attribute: attributes
+
+  inputs:
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php
+    api_token: "{{ .Config.apikey }}"
+    name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    tmdb: "{{ .Query.TMDBID }}"
+    imdb: "{{ .Query.IMDBIDShort }}"
+    tvdb: "{{ .Query.TVDBID }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}free=1{{ else }}{{ end }}"
+
+  rows:
+    selector: data
+    count:
+      selector: meta.total
+
+  fields:
+    category:
+      selector: category
+      case:
+        "TV/x265": 2
+        "TV/Packs-SD": 3
+        "TV/Web-DL": 4
+        "TV/Xvid": 5
+        "TV/HD-x264": 6
+        "TV/Non-English": 7
+        "TV/Packs-HD": 8
+        "TV/Sports": 9
+        "TV/Documentaries": 10
+        "TV/HD-Retail": 11
+        "TV/SD-Retail": 12
+        "TV/Packs-Non-English": 13
+        "TV/SD-x264": 14
+    title:
+      selector: name
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    poster:
+      selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+        - name: replace
+          args: ["https://via.placeholder.com/400x600", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2021-10-18T00:34:50.000000Z"
+      selector: created_at
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: freeleech
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: double_upload
+      case:
+        0: 1 # normal
+        1: 2 # double
+# json UNIT3D 5.3.0

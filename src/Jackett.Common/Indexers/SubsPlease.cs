@@ -22,11 +22,12 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://subsplease.org/",
-            "https://subsplease.nocensor.work/"
+            "https://subsplease.nocensor.biz/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://subsplease.nocensor.space/"
+            "https://subsplease.nocensor.space/",
+            "https://subsplease.nocensor.work/"
         };
 
         private string ApiEndpoint => SiteLink + "/api/?";

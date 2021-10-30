@@ -1,0 +1,89 @@
+---
+id: 24rolika
+name: 24rolika
+description: "24rolika is a RUSSIAN Public Torrent Tracker for 3X"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - http://24rolika.ru/ # does not support https
+
+caps:
+  categorymappings:
+    - {id: xxx, cat: XXX, desc: xxx}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      title: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+
+download:
+  selectors:
+    - selector: a[href*="index.php?do=download&id="]
+      attribute: href
+
+search:
+  paths:
+    - path: index.php
+  inputs:
+    do: search
+    subaction: search
+    search_start: 0
+    full_search: 1
+    result_from: 1
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%D0%9F%D0%BE%D0%B8%D1%81%D0%BA{{ end }}"
+    # 0 in article 1 in comments 2 in static pages 3 in article titles
+    titleonly: 3
+    sortby: "{{ .Config.sort }}"
+    resorder: "{{ .Config.type }}"
+    showposts: 0
+    # does not have categories in results so there is little point in providing a full category map or multi-cat search support
+    catlist[]: 0
+
+  rows:
+    selector: article.shortstory
+
+  fields:
+    category:
+      text: xxx
+    title:
+      selector: h2.short_title a
+    details:
+      selector: h2.short_title a
+      attribute: href
+    download:
+      selector: h2.short_title a
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    date:
+      text: now
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    description:
+      selector: div.video_time
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# DataLife
