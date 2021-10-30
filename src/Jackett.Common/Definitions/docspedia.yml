@@ -13,12 +13,16 @@ caps:
     - {id: 65, cat: Audio, desc: "Audio"}
     - {id: 64, cat: Books/EBook, desc: "Books"}
     - {id: 66, cat: TV, desc: "Business"}
+    - {id: 68, cat: Books/Comics, desc: "Comics"}
     - {id: 67, cat: TV, desc: "Development"}
     - {id: 60, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 71, cat: Other, desc: "Fonts"}
     - {id: 62, cat: Other, desc: "Graphic"}
     - {id: 63, cat: TV/HD, desc: "HD"}
     - {id: 57, cat: Books/Mags, desc: "Magazine"}
     - {id: 58, cat: TV, desc: "Medicine"}
+    - {id: 70, cat: Books/EBook, desc: "Occult"}
+    - {id: 69, cat: Other, desc: "PS Resources"}
     - {id: 56, cat: TV/Sport, desc: "Sports"}
     - {id: 59, cat: TV, desc: "Video"}
     - {id: 61, cat: TV, desc: "Video tutorials"}
