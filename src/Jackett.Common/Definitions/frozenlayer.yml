@@ -46,7 +46,7 @@ caps:
 search:
   paths:
     - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar{{ else }}descargas{{ end }}"
-    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&page=2{{ else }}descargas{{ end }}"
+    - path: "{{ if .Keywords }}buscar/descargas/{{ .Config.category }}/{{ .Keywords }}?search=Buscar&{{ else }}descargas?{{ end }}page=2"
   keywordsfilters:
     - name: re_replace # remove first season from search string
       args: ["(?i)(S1)", ""]
