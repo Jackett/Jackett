@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
                 }
                 else
                 {
-                    logger.Warn($"Could not parse {DisplayName} RSS item '{node.InnerText}'");
+                    logger.Warn($"Could not parse {DisplayName} RSS item '{node.OuterXml}'");
                 }
             }
 
