@@ -149,7 +149,7 @@ search:
     leechers:
       text: 1
     cat_tags:
-       selector: p.argcat
+      selector: p.argcat
     description:
       selector: ul.short-list
       filters:
