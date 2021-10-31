@@ -32,7 +32,7 @@ search:
     - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
-    selector: table[id="listTable"] > tbody > tr
+    selector: table[id="listTable"] > tbody > tr:has( a[href^="show-"])
 
   fields:
     category:
