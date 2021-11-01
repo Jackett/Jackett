@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
         {
             foreach (var fi in feedItems)
             {
-                EraiRawsReleaseInfo releaseInfo = new EraiRawsReleaseInfo(fi);
+                var releaseInfo = new EraiRawsReleaseInfo(fi);
 
                 // Validate the release
                 if (releaseInfo.PublishDate == null)
@@ -152,9 +152,9 @@ namespace Jackett.Common.Indexers
                     continue;
                 }
 
-                if (releaseInfo.MagnetLink == null)
+                if (releaseInfo.MagnetLink == null && string.IsNullOrWhiteSpace(releaseInfo.InfoHash))
                 {
-                    logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed link URI.");
+                    logger.Warn($"Failed to parse {DisplayName} RSS feed item '{fi.Title}' due to malformed link URI and no infohash available.");
                     continue;
                 }
 
@@ -183,11 +183,25 @@ namespace Jackett.Common.Indexers
         {
             foreach (var fi in feedItems)
             {
+                var guid = fi.MagnetLink;
+                if (guid == null)
+                {
+                    // Magnet link is not available so generate something unique
+                    var builder = new UriBuilder(fi.DetailsLink);
+                    if (!string.IsNullOrWhiteSpace(builder.Query))
+                    {
+                        builder.Query += "&";
+                    }
+                    builder.Query += $"infoHash={fi.InfoHash}";
+                    guid = builder.Uri;
+                }
+
                 yield return new ReleaseInfo
                 {
                     Title = string.Concat(fi.Title, " - ", fi.Quality),
-                    Guid = fi.MagnetLink,
+                    Guid = guid,
                     MagnetUri = fi.MagnetLink,
+                    InfoHash = fi.InfoHash,
                     Details = fi.DetailsLink,
                     PublishDate = fi.PublishDate.Value.ToLocalTime().DateTime,
                     Category = MapTrackerCatToNewznab("1"),
@@ -224,6 +238,7 @@ namespace Jackett.Common.Indexers
                 var title = rssItem.SelectSingleNode("title")?.InnerText;
                 var link = rssItem.SelectSingleNode("link")?.InnerText;
                 var publishDate = rssItem.SelectSingleNode("pubDate")?.InnerText;
+                var infoHash = rssItem.SelectSingleNode("erai:infohash", nsm)?.InnerText;
                 var size = rssItem.SelectSingleNode("erai:size", nsm)?.InnerText;
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
                 var quality = rssItem.SelectSingleNode("erai:resolution", nsm)?.InnerText;
@@ -232,6 +247,7 @@ namespace Jackett.Common.Indexers
                 {
                     Title = title,
                     Link = link,
+                    InfoHash = infoHash,
                     PublishDate = publishDate,
                     Size = size,
                     Description = description,
@@ -249,6 +265,8 @@ namespace Jackett.Common.Indexers
 
             public string Link { get; private set; }
 
+            public string InfoHash { get; private set; }
+
             public string PublishDate { get; private set; }
 
             public string Size { get; private set; }
@@ -262,8 +280,10 @@ namespace Jackett.Common.Indexers
             /// </summary>
             private bool IsValid()
             {
-                return !(string.IsNullOrWhiteSpace(Title) ||
-                    string.IsNullOrWhiteSpace(Link) ||
+                var missingBothHashAndLink = string.IsNullOrWhiteSpace(Link) && string.IsNullOrWhiteSpace(InfoHash);
+
+                return !(missingBothHashAndLink ||
+                    string.IsNullOrWhiteSpace(Title) ||
                     string.IsNullOrWhiteSpace(PublishDate) ||
                     string.IsNullOrWhiteSpace(Size) ||
                     string.IsNullOrWhiteSpace(Quality));
@@ -281,6 +301,7 @@ namespace Jackett.Common.Indexers
                 Quality = feedItem.Quality;
                 Size = ReleaseInfo.GetBytes(feedItem.Size);
                 DetailsLink = ParseDetailsLink(feedItem.Description);
+                InfoHash = feedItem.InfoHash;
 
                 if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
                 {
@@ -321,6 +342,8 @@ namespace Jackett.Common.Indexers
 
             public Uri MagnetLink { get; }
 
+            public string InfoHash { get; }
+
             public Uri DetailsLink { get; set; }
 
             public DateTimeOffset? PublishDate { get; }
@@ -341,8 +364,6 @@ namespace Jackett.Common.Indexers
                 { " - (?<detail>[0-9]+)$", " - " }, // "<title> - <episode>" <end_of_title>
                 { " - (?<detail>[0-9]+) ", " - " } // "<title> - <episode> ..."
             };
-
-            private const string TITLE_URL_SLUG_REGEX = @"^(?<url_slug>.+) -";
 
             public string Parse(string title)
             {
