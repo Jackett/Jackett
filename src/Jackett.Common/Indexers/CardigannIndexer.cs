@@ -2060,7 +2060,10 @@ namespace Jackett.Common.Indexers
             var rowsObj = parsedJson.SelectToken(selector).Value<JArray>();
 
             string pattern = @"\:(?<filter>.+?)\((?<key>.+?)\)(?=:|\z)";
+            string containsPattern = @"(?<key>.+)\:contains\((?<value>.+)\)";
+
             var regex = new Regex(pattern, RegexOptions.Compiled);
+            var containsRegex = new Regex(containsPattern, RegexOptions.Compiled);
 
             foreach (Match match in regex.Matches(rowSelector))
             {
@@ -2069,7 +2072,20 @@ namespace Jackett.Common.Indexers
                 switch (filter)
                 {
                     case "has":
-                        rowsObj = new JArray(rowsObj.Where(t => t.Value<JObject>().ContainsKey(key)));
+                        if (key.Contains(":contains"))
+                        {
+                            var containsMatch = containsRegex.Match(key);
+                            if (containsMatch.Success)
+                            {
+                                var containsKey = containsMatch.Result("${key}");
+                                var containsValue = containsMatch.Result("${value}");
+                                rowsObj = new JArray(rowsObj.Where(t => t.SelectToken(containsKey).Value<string>().Contains(containsValue)));
+                            }
+                        }
+                        else
+                        {
+                            rowsObj = new JArray(rowsObj.Where(t => t.Value<JObject>().ContainsKey(key)));
+                        }
                         break;
                     case "not":
                         rowsObj = new JArray(rowsObj.Where(t => !t.Value<JObject>().ContainsKey(key)));
