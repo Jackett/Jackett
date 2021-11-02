@@ -81,6 +81,8 @@ search:
 
   rows:
     selector: table.table-hover > tbody > tr:has(a[href*="/torrent/"])
+    filters:
+      - name: andmatch
 
   fields:
     category:
