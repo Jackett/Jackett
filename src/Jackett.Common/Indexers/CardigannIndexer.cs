@@ -2079,7 +2079,7 @@ namespace Jackett.Common.Indexers
                             {
                                 var containsKey = containsMatch.Result("${key}");
                                 var containsValue = containsMatch.Result("${value}");
-                                rowsObj = new JArray(rowsObj.Where(t => t.SelectToken(containsKey).Value<string>().Contains(containsValue)));
+                                rowsObj = new JArray(rowsObj.Where(t => t.Value<JObject>().ContainsKey(containsKey) && t.SelectToken(containsKey).Value<string>().Contains(containsValue)));
                             }
                         }
                         else
@@ -2095,7 +2095,7 @@ namespace Jackett.Common.Indexers
                             {
                                 var containsKey = containsMatch.Result("${key}");
                                 var containsValue = containsMatch.Result("${value}");
-                                rowsObj = new JArray(rowsObj.Where(t => !t.SelectToken(containsKey).Value<string>().Contains(containsValue)));
+                                rowsObj = new JArray(rowsObj.Where(t => t.Value<JObject>().ContainsKey(containsKey) && !t.SelectToken(containsKey).Value<string>().Contains(containsValue)));
                             }
                         }
                         else
