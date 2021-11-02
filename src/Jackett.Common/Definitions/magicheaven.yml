@@ -5,6 +5,7 @@ description: "magic-heaven is a Private Torrent Tracker for MOVIES / TV / GENERA
 language: en-US
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://magic-heaven.info/
 
@@ -111,6 +112,16 @@ login:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
 
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ re_replace  .DownloadUri.PathAndQuery \".*torrent-details-(\\d+).*\" \"$1\"}}"
+  selectors:
+    - selector: a[href*="download-torrent-"]
+      attribute: href
+
 search:
   paths:
     - path: browse.php
@@ -131,18 +142,18 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: "table#sortabletable tbody tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable tbody tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="browse.php?category="]
+      selector: a[href*="torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: (\d+)
     title_default:
       # is often abbreviated
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
     title_optional:
       # usually longer than details title
       selector: div[id^="port-content-"] div
@@ -150,15 +161,11 @@ search:
     title:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     download:
-      selector: a[href*="download.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
-      optional: true
     poster:
       selector: div[id^="port-content-"] img
       attribute: src
@@ -191,4 +198,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-# TS Special Edition v.7.5
+# TS Special Edition v.8.0
