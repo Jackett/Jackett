@@ -5,6 +5,7 @@ description: "slosoul is a Slovanian  Private Torrent Tracker for MOVIES / TV / 
 language: en-US
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://slosoul.net/
 
@@ -74,7 +75,7 @@ download:
     path: takethanks.php
     method: post
     inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
+      torrentid: "{{ re_replace  .DownloadUri.PathAndQuery \".*torrent-details-(\\d+).*\" \"$1\"}}"
   selectors:
     - selector: a[href*="download-torrent-"]
       attribute: href
@@ -118,10 +119,10 @@ search:
     title:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     download:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
