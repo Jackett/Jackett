@@ -1397,7 +1397,8 @@ namespace Jackett.Common.Indexers
                                 continue;
                     }
 
-                    var rowsObj = ParseRowSelector(parsedJson, Search.Rows.Selector);
+                    var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                    var rowsObj = ParseRowSelector(parsedJson, rowsSelector);
                     if (rowsObj == null)
                         throw new Exception("Error Parsing Rows Selector");
 
@@ -2111,4 +2112,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-
