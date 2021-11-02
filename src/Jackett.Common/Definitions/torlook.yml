@@ -1,0 +1,88 @@
+---
+id: torlook
+name: Torlook
+description: "Torlook is a Russian Public torrent meta-search engine combining results from dozens of torrent sites"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://gw1.torlook.info/
+  - https://torlook.nocensor.biz/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      seeders: seeders
+      size: size
+  - name: info_8000
+    type: info
+    label: About Torlook Categories
+    default: Torlook does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+
+download:
+  infohash:
+    hash:
+      selector: script:contains("magnet:?xt=")
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: script:contains("magnet:?xt=")
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/{{ .Config.sort }}"
+
+  rows:
+    selector: div.webResult:has(a.magneto[data-src])
+
+  fields:
+    category:
+      text: 1
+    title:
+      selector: p > a
+    details:
+      selector: p > a
+      attribute: href
+    download:
+      selector: a.magneto
+      attribute: data-src
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}"
+    date:
+      selector: span.date
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2006-01-02 -07:00"
+    size:
+      selector: span.size
+    seeders:
+      selector: span.seeders
+    leechers:
+      selector: span.leechers
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

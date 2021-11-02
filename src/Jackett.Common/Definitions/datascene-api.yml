@@ -87,7 +87,7 @@ search:
     category:
       selector: category
       case:
-        "Movies": 1
+        "Movie": 1
         "TV": 2
         "Music": 3
         "Game": 4

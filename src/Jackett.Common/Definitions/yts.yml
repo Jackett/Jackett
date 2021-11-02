@@ -88,14 +88,30 @@ search:
         # append type: BRRip or WEBRip, resolves #3558 via #4577
         - name: append
           args: ".{{ .Result.year }}.{{ .Result.quality }}.{{ if eq .Result.type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
+    sitelink_trimmed:
+      text: "{{ .Config.sitelink }}"
+      filters:
+        - name: replace
+          args: ["https://", ""]
+        - name: replace
+          args: ["/", ""]
     details:
       selector: ..url
+      filters:
+        - name: replace
+          args: ["yts.mx", "{{ .Result.sitelink_trimmed }}"] # fix for 12494
     download:
       selector: url
+      filters:
+        - name: replace
+          args: ["yts.mx", "{{ .Result.sitelink_trimmed }}"] # fix for 12494
     infohash:
       selector: hash
     poster:
       selector: ..large_cover_image
+      filters:
+        - name: replace
+          args: ["yts.mx", "{{ .Result.sitelink_trimmed }}"] # fix for 12494
     imdbid:
       selector: ..imdb_code
     date:

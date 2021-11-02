@@ -104,7 +104,7 @@ search:
     date_year:
       # 29 Oct 17
       optional: true
-      selector: td.fecha:not(:contains("d")):not(:contains("h"))
+      selector: td.fecha:not(:contains("d")):not(:contains("h")):not(:contains("m"))
       filters:
         - name: append
           args: " +01:00" # CET

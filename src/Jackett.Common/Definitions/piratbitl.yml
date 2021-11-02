@@ -179,6 +179,7 @@ caps:
     # Programs, Windows and other, Design
     - {id: 1808, cat: PC, desc: "Оформление раздач (Программы и Дизайн)"}
     - {id: 181, cat: PC, desc: "Предложения по улучшению"}
+    - {id: 1861, cat: PC, desc: " |- Windows 11"}
     - {id: 1722, cat: PC, desc: " |- Windows 10"}
     - {id: 1628, cat: PC, desc: " |- Windows 8"}
     - {id: 1316, cat: PC, desc: " |- Windows 7"}
