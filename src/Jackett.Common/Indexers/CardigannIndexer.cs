@@ -2059,28 +2059,23 @@ namespace Jackett.Common.Indexers
             var selector = parts[0];
             var rowsObj = parsedJson.SelectToken(selector).Value<JArray>();
 
-            string pattern = @"(?<filter>.+)\((?<key>.+)\)";
+            string pattern = @"\:(?<filter>.+?)\((?<key>.+?)\)(?=:|\z)";
             var regex = new Regex(pattern, RegexOptions.Compiled);
-            for (var idx = 1; idx < parts.Length; idx++)
-            {
-                var part = parts[idx];
 
-                var match = regex.Match(part);
-                if (match.Success)
+            foreach (Match match in regex.Matches(rowSelector))
+            {
+                var filter = match.Result("${filter}");
+                var key = match.Result("${key}");
+                switch (filter)
                 {
-                    var filter = match.Result("${filter}");
-                    var key = match.Result("${key}");
-                    switch (filter)
-                    {
-                        case "has":
-                            rowsObj = new JArray(rowsObj.SelectTokens($"$[?(@.{key})]"));
-                            break;
-                        case "not":
-                            rowsObj = new JArray(rowsObj.SelectTokens($"$[?(!@.{key})]"));
-                            break;
-                        default:
-                            continue;
-                    }
+                    case "has":
+                        rowsObj = new JArray(rowsObj.Where(t => t.Value<JObject>().ContainsKey(key)));
+                        break;
+                    case "not":
+                        rowsObj = new JArray(rowsObj.Where(t => !t.Value<JObject>().ContainsKey(key)));
+                        break;
+                    default:
+                        continue;
                 }
             }
             return rowsObj;
