@@ -74,7 +74,6 @@ login:
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
-    user-agent: "[ .Config.useragent ]"
   test:
     path: letoltes.php
     selector: a[href^="logout.php?getUnique="]
@@ -97,6 +96,9 @@ search:
     imdb_search: "{{ if .Query.IMDBID }}yes{{ else }}{{ end }}"
     k: yes
     tipuska: 1
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
     selector: table#table > tbody > tr:has(a[href^="download.php?torrent="])
