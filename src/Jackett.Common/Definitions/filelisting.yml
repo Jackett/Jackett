@@ -35,6 +35,8 @@ search:
 
   rows:
     selector: table > tbody > tr:has(td.dn-title)
+    filters:
+      - name: andmatch
 
   fields:
     category:
