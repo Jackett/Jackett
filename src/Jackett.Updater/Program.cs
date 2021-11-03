@@ -321,6 +321,7 @@ namespace Jackett.Updater
                 "Definitions/evolutionpalace.yml",
                 "Definitions/exoticaz.yml", // migrated to C#
                 "Definitions/extratorrent-ag.yml",
+                "Definitions/extratorrent-cd.yml",
                 "Definitions/extratorrent-it.yml",
                 "Definitions/extratorrentclone.yml",
                 "Definitions/feedurneed.yml", // merged with devilsplayground #6872
