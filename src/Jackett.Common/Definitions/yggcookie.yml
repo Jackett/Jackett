@@ -184,7 +184,6 @@ login:
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
-    user-agent: "[ .Config.useragent ]"
 
 search:
   keywordsfilters:
@@ -221,6 +220,9 @@ search:
     # Saison Word
     - path: "engine/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
     selector: table.table > tbody > tr
