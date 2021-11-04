@@ -100,6 +100,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://atomixhq.com/",
+            "https://atomixhq.one/",
             "https://pctmix1.unblockit.kim/"
         };
 
