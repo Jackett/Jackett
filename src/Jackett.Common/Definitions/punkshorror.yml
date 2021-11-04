@@ -1,0 +1,141 @@
+---
+id: punkshorror
+name: Punk's Horror Tracker
+description: "Punk's Horror Tracker is a Hungarian private tracker focued on horror"
+language: hu-HU
+type: private
+encoding: ISO-8859-2
+links:
+  - https://punck-tracker.net/
+
+caps:
+  categorymappings:
+    - { id: 87, cat: Movies, desc: "Action Eng" }
+    - { id: 88, cat: Movies, desc: "Action Hun" }
+    - { id: 79, cat: Movies, desc: "Dokumentumfilm" }
+    - { id: 72, cat: Movies/HD, desc: "HD Eng" }
+    - { id: 71, cat: Movies/HD, desc: "HD Hun" }
+    - { id: 89, cat: Movies, desc: "Horror Anime" }
+    - { id: 78, cat: Books, desc: "Horror Ebook" }
+    - { id: 66, cat: Movies, desc: "Horror Eng" }
+    - { id: 73, cat: PC/Games, desc: "Horror Game" }
+    - { id: 65, cat: Movies, desc: "Horror Hun" }
+    - { id: 82, cat: XXX, desc: "Horror XXX" }
+    - { id: 94, cat: Movies, desc: "Kamerás filmek" }
+    - { id: 86, cat: Movies, desc: "Mystery-Fantasy Eng" }
+    - { id: 85, cat: Movies, desc: "Mystery-Fantasy Hun" }
+    - { id: 83, cat: Movies, desc: "Punk Release" }
+    - { id: 76, cat: Movies, desc: "Retro Film" }
+    - { id: 70, cat: Movies, desc: "Scfi Eng" }
+    - { id: 69, cat: Movies, desc: "Scfi Hun" }
+    - { id: 75, cat: TV, desc: "Sorozat Eng" }
+    - { id: 74, cat: TV, desc: "Sorozat Hun" }
+    - { id: 68, cat: Movies, desc: "Thriller Eng" }
+    - { id: 67, cat: Movies, desc: "Thriller Hun" }
+    - { id: 84, cat: Movies, desc: "VHS Ritkaságok" }
+
+  modes:
+    search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      3: comments
+      4: added
+      5: size
+      6: grabbed
+      7: seeders
+      8: leechers
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    viewMode: ""
+    search: "{{ .Keywords }}"
+    # 0 active, 1 active and dead, 2 deadonly,  3 free torrent
+    incldead: 1
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # does not support imdbid searches
+
+  rows:
+    selector: table.alap99 > tbody#linkhatter > tr
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: td[align="left"] > a.altlink > b
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    description:
+      selector: td:nth-child(2) > a > b
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date:
+      selector: td:nth-child(2) > b > font
+      filters:
+        - name: replace
+          args: ["\xA0", ""]
+        - name: regexp
+          args: "(....-..-....:..:..)"
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) width"
+    size:
+      selector: td:nth-child(7)
+      filters:
+        - name: trim
+    grabs:
+      selector: td:nth-last-child(4)
+      filters:
+        - name: replace
+          args: [" ", ""]
+    seeders:
+      selector: td:nth-last-child(3) font
+    leechers:
+      selector: td:nth-last-child(2)
+# engine n/a
