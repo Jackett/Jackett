@@ -62,7 +62,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Erai-Raws
  * ETTV
  * EXT Torrents
- * ExtraTorrent.cd
  * ExtraTorrent.st
  * EZTV
  * Filebase
@@ -395,6 +394,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Hebits
  * HellasTZ
  * HQSource (HQS)
+ * Indietorrents [![(invite needed)][inviteneeded]](#)
  * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos
@@ -468,6 +468,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PTMSG
  * PTSBAO
  * PTtime
+ * Punk's Horror Tracker
  * PuntoTorrent
  * PuroVicio
  * Puur-Hollands

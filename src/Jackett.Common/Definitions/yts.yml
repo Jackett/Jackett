@@ -7,6 +7,7 @@ type: public
 encoding: UTF-8
 requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
+  # dont forget to update the details, download and poster replace args
   - https://yts.mx/
   - https://yts.unblockit.kim/
   - https://yts.unblockninja.com/
