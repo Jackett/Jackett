@@ -49,7 +49,10 @@ settings:
   - name: password
     type: password
     label: Password
-
+  - name: freeleech
+    type: checkbox
+    label: Search FreeLeech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -62,6 +65,20 @@ settings:
       6: grabbed
       7: seeders
       8: leechers
+
+  - name: filtertype
+    type: select
+    label: Filter type
+    default: 0
+    options:
+      0: active
+      1: all
+      2: inactive
+      3: freeleech
+      4: x2 upload
+      5: waiting for seed # (has leeches, but not seeds)
+      6: uploaded by user
+      7: uploaded on request
 
   - name: type
     type: select
@@ -78,7 +95,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-    - selector: "table:contains(\"Hibás belépés\")"
+    - selector: 'table:contains("Hibás belépés")'
   test:
     selector: a[href^="logout.php"]
 
@@ -90,9 +107,7 @@ search:
     # if multiple categories are selected only one of them will be used
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active, 1 active and dead, 2 deadonly,  3 free torrents
-    # 4 x2 torrents, 5 waiting for seed, 6 user torrents, 7 uploaded on request
-    incldead: 1
+    incldead: "{{ .Config.filtertype }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not support imdbid searches
@@ -149,4 +164,12 @@ search:
       selector: td:nth-last-child(3) font
     leechers:
       selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        "img[src=\"pic/orokos.gif\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        'font[color="#01DF01"]': 2
+        "*": 1
 # engine n/a
