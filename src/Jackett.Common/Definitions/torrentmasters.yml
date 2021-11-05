@@ -77,7 +77,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-
+  error:
+    - selector: "table:contains(\"Hibás belépés\")"
   test:
     selector: a[href^="logout.php"]
 
