@@ -53,10 +53,6 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: freeleech
-    type: checkbox
-    label: Search FreeLeech only
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -101,6 +97,7 @@ login:
   error:
     - selector: 'table:contains("Hibás belépés")'
   test:
+    path: index.php
     selector: a[href^="logout.php"]
 
 search:
