@@ -31,7 +31,7 @@ caps:
     - {id: 89, cat: TV/HD, desc: "Sorozat - HD (ENG)"}
     - {id: 97, cat: TV/HD, desc: "Sorozat - HD (HUN)"}
     - {id: 86, cat: TV, desc: "Sorozat - XviD (ENG)"}
-    - {id: 90, cat: TV, desc: "Sorozat - XviD (HUN)"}
+    - {id: 90, cat: TV/SD, desc: "Sorozat - XviD (HUN)"}
     - {id: 98, cat: XXX, desc: "XXX - HD"}
     - {id: 99, cat: XXX/DVD, desc: "XXX - DVD"}
     - {id: 76, cat: XXX/ImageSet, desc: "XXX - Képek"}
