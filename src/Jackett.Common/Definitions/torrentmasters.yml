@@ -78,7 +78,6 @@ settings:
     label: Results Per Page
     default: For best results, change the <b>Torrentek száma egy oldalon</b> setting to <b>100</b> on your account profile.
 
-
 login:
   method: post
   path: takelogin.php
