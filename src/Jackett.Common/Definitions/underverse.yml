@@ -586,6 +586,7 @@ caps:
     - {id: 679, cat: Audio/Audiobook, desc: " |- Тренинг, бизнес"}
     - {id: 1079, cat: Audio/Audiobook, desc: " |- Юмор, анекдоты"}
     - {id: 1080, cat: Audio/Audiobook, desc: " |- Учебники, аудиолекции"}
+    - {id: 1144, cat: Audio/Audiobook, desc: " |- Нон-фикшн"}
     - {id: 1081, cat: Audio/Audiobook, desc: " |- Книги с аудиоприложением"}
     - {id: 680, cat: Audio/Audiobook, desc: " |- Аудиокниги на иностранных языках"}
     - {id: 578, cat: Audio/Audiobook, desc: " |- Другие аудиокниги"}
