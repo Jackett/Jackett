@@ -107,9 +107,7 @@ search:
   paths:
     - path: letoltes.php
   inputs:
-    # doesn't seem to support selecting multiple categories
-    # if multiple categories are selected only one of them will be used
-    $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
+    cat: 0
     search: "{{ .Keywords }}"
     incldead: "{{ .Config.filtertype }}"
     sort: "{{ .Config.sort }}"
