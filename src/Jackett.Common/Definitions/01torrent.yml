@@ -8,9 +8,10 @@ encoding: UTF-8
 testlinktorrent: false
 links:
   - https://www4.01torrent.net/
-  - https://01torrent.unblockit.kim/
+  - https://01torrent.unblockit.bz/
 legacylinks:
   - https://01torrent.unblockit.ws/
+  - https://01torrent.unblockit.kim/
 
 caps:
   categories:

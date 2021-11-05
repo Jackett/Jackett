@@ -1737,13 +1737,14 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var method = RequestType.GET;
+            var headers = new Dictionary<string, string>();
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
                 var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
 
-                var headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
                 WebResult response = null;
 
                 var beforeBlock = Download.Before;
@@ -1820,7 +1821,7 @@ namespace Jackett.Common.Indexers
                             }
 
                             link = torrentLink;
-                            return await base.Download(link, method, link.ToString());
+                            return await base.Download(link, method, link.ToString(), headers);
                         }
                         catch (Exception e)
                         {
@@ -1835,7 +1836,8 @@ namespace Jackett.Common.Indexers
                     throw new Exception($"Download selectors didn't match");
                 }
             }
-            return await base.Download(link, method, link.ToString());
+            headers = ParseCustomHeaders(Definition.Search?.Headers, GetBaseTemplateVariables());
+            return await base.Download(link, method, link.ToString(), headers);
         }
 
         private Dictionary<string, string> ParseCustomHeaders(Dictionary<string, List<string>> customHeaders,

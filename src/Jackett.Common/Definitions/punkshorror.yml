@@ -38,6 +38,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -87,8 +88,7 @@ search:
   paths:
     - path: browse.php
   inputs:
-    # site does not support multiple cats
-    cat: 0
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     onlyname: 1
     search: "{{ .Keywords }}"
     # 0 active, 1 all, 2 deadonly, 3 freeleech
@@ -99,6 +99,8 @@ search:
 
   rows:
     selector: table.alap99 > tbody#linkhatter > tr
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -107,8 +109,16 @@ search:
       filters:
         - name: querystring
           args: cat
+    title_default:
+      # can be abbreviated
+      selector: a[href^="details.php?id="]
+    title_optional:
+      # usually full length
+      selector: a[href^="details.php?id="]
+      attribute: title
+      optional: true
     title:
-      selector: td[align="left"] > a.altlink > b
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -140,7 +150,7 @@ search:
     grabs:
       selector: td:nth-last-child(4)
     seeders:
-      selector: td:nth-last-child(3) font
+      selector: td:nth-last-child(3)
     leechers:
       selector: td:nth-last-child(2)
     downloadvolumefactor:
@@ -148,7 +158,10 @@ search:
         img[src="pic/golden.gif"]: 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      selector: td:nth-child(7) > center > b > font
+      filters:
+        - name: regexp
+          args: (\d+)
     minimumratio:
       text: 0.8
     minimumseedtime:
