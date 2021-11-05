@@ -66,8 +66,6 @@ settings:
       1: name
       5: size
       7: seeders
-
-
   - name: type
     type: select
     label: Order requested from site
@@ -120,7 +118,6 @@ search:
       attribute: href
     description:
       selector: td:nth-child(3) font[color="gray"]
-
     date:
       selector: td:nth-child(5) nobr
       filters:
