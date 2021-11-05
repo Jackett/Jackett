@@ -157,8 +157,6 @@ search:
           args: "src=(.*?) border"
     size:
       selector: td:nth-last-child(5)
-      filters:
-        - name: trim
     grabs:
       selector: td:nth-last-child(4)
       filters:
