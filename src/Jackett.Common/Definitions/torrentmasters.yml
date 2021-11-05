@@ -64,11 +64,8 @@ settings:
     options:
       0: added
       1: name
-      3: comments
       5: size
-      6: grabbed
       7: seeders
-      8: leechers
 
 
   - name: type
