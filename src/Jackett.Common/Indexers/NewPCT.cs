@@ -101,7 +101,7 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://atomixhq.com/",
             "https://atomixhq.one/",
-            "https://pctmix1.unblockit.kim/"
+            "https://pctmix1.unblockit.bz/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -123,7 +123,8 @@ namespace Jackett.Common.Indexers
             "https://pctmix.com/",
             "https://pctmix1.com/",
             "https://pctreload1.com/",
-            "https://maxitorrent.com"
+            "https://maxitorrent.com",
+            "https://pctmix1.unblockit.kim/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
