@@ -26,8 +26,8 @@ caps:
     - {id: 95, cat: PC, desc: "Programok - Egyéb (Win)"}
     - {id: 74, cat: PC/ISO, desc: "Programok - ISO (Win)"}
     - {id: 75, cat: PC/Mac, desc: "Programok - Linux/Unix/Mac OS"}
-    - {id: 10, cat: TV/SD, desc: "Sorozat - DVD (ENG)"}
-    - {id: 10, cat: TV/SD, desc: "Sorozat - DVD (HUN)"}
+    - {id: 85, cat: TV/SD, desc: "Sorozat - DVD (ENG)"}
+    - {id: 66, cat: TV/SD, desc: "Sorozat - DVD (HUN)"}
     - {id: 89, cat: TV/HD, desc: "Sorozat - HD (ENG)"}
     - {id: 97, cat: TV/HD, desc: "Sorozat - HD (HUN)"}
     - {id: 86, cat: TV/SD, desc: "Sorozat - XviD (ENG)"}
