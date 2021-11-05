@@ -17,8 +17,8 @@ caps:
     - {id: 66, cat: Movies/DVD, desc: "Film - DVD/9 (HUN)"}
     - {id: 84, cat: Movies/HD, desc: "Film - HD (ENG)"}
     - {id: 68, cat: Movies/HD, desc: "Film - HD (HUN)"}
-    - {id: 82, cat: Movies, desc: "Film - XviD (ENG)"}
-    - {id: 64, cat: Movies, desc: "Film - XviD (HUN)"}
+    - {id: 82, cat: Movies/SD, desc: "Film - XviD (ENG)"}
+    - {id: 64, cat: Movies/SD, desc: "Film - XviD (HUN)"}
     - {id: 72, cat: PC/Games, desc: "Játék - ISO"}
     - {id: 73, cat: Console, desc: "Játék - Konzol"}
     - {id: 94, cat: PC/Games, desc: "Játék - RIP"}
