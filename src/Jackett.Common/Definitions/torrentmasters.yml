@@ -86,7 +86,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-    - selector: 'table:contains("Hibás belépés")'
+    - selector: "table:contains(\"Hibás belépés\")"
   test:
     path: index.php
     selector: a[href^="logout.php"]
