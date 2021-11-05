@@ -159,9 +159,6 @@ search:
       selector: td:nth-last-child(5)
     grabs:
       selector: td:nth-last-child(4)
-      filters:
-        - name: replace
-          args: [" ", ""]
     seeders:
       selector: td:nth-last-child(3) font
     leechers:
