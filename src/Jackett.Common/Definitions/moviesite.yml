@@ -1,0 +1,205 @@
+---
+id: moviesite
+name: Moviesite
+description: "Moviesite is a HUNGARIAN private tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: ISO-8859-2
+links:
+  - http://moviesite.info.hu/ # does not support https ERR_CONNECTION_REFUSED
+
+caps:
+  categorymappings:
+    - {id: 25, cat: Movies/SD, desc: "CAM"}
+    - {id: 4, cat: Movies/DVD, desc: "DVD/Eng"}
+    - {id: 3, cat: Movies/DVD, desc: "DVD/Hun"}
+    - {id: 6, cat: Movies/HD, desc: "HD/Eng"}
+    - {id: 5, cat: Movies/HD, desc: "HD/Hun"}
+    - {id: 13, cat: PC/Games, desc: "Játék"}
+    - {id: 20, cat: Other, desc: "Képek"}
+    - {id: 16, cat: Books/EBook, desc: "Könyv"}
+    - {id: 11, cat: Movies, desc: "Mese, Animáció"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "Mobil"}
+    - {id: 23, cat: PC/ISO, desc: "Program/iso"}
+    - {id: 24, cat: PC/0day, desc: "Program/rip"}
+    - {id: 8, cat: TV, desc: "Sorozat/Eng"}
+    - {id: 7, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 2, cat: Movies/SD, desc: "Xvid/Eng"}
+    - {id: 1, cat: Movies/SD, desc: "Xvid/Hun"}
+    - {id: 9, cat: XXX, desc: "XXX-film"}
+    - {id: 19, cat: XXX/ImageSet, desc: "xxx-képek"}
+    - {id: 12, cat: Audio, desc: "Zene"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: added
+      size: size
+      seeders: seeders
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek oldalanként</b> setting to <b>40 Torrent oldalanként</b> on your account profile.
+
+login:
+  method: form
+  path: login.php
+  form: form[action="takelogin.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+    logintype: yes
+  error:
+    - selector: table:contains("Hiba történt!")
+  test:
+    path: index.php
+    selector: a[href*="logout.php?logouthash="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    sort_order: yes
+    page: 0
+    do: search
+    # does not support multi categories so defaulting to ALL
+    category: 0
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # t_both2, t_name, t_t_image4, t_description, t_both, t_uploader, t_genre
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
+    sortby: "{{ .Config.sort }}"
+    orderby: "{{ .Config.type }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+
+  rows:
+    selector: table tbody tr:has(a[href*="download.php?id="]:has(img[src="../pic/yes.png"]))
+
+  fields:
+    category:
+      selector: a[href*="browse.php?browse_categories"]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title_default:
+      # is often abbreviated
+      selector: a[href^="details.php?id="]
+    title_optional:
+      # usually longer than details title
+      selector: a[href*="download.php?id="]:has(img[src="../pic/yes.png"])
+      attribute: title
+      optional: true
+      filters:
+        - name: replace
+          args: ["Download torrent: ", ""]
+        - name: replace
+          args: ["Torrent letöltése: ", ""]
+        - name: replace
+          args: ["Downloadeaza torentul: ", ""]
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="download.php?id="]:has(img[src="../pic/yes.png"])
+      attribute: href
+    poster:
+      selector: div.bottom > img
+      attribute: src
+      filters:
+        - name: replace
+          args: ["../pic/+18.png", ""]
+    description:
+      selector: div center font b i
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date_today:
+       # Ma 11-06 18:19	 (Today)
+      optional: true
+      selector: td:nth-child(2):contains("Ma ")
+      filters:
+        - name: regexp
+          args: "Ma \\d{2}-\\d{2} (\\d{2}:\\d{2})"
+        - name: prepend
+          args: "Today "
+        - name: append
+          args: " +01:00" # CET
+        - name: fuzzytime
+    date_yday:
+      # Tegnap 11-05 15:15	 (Yesterday)
+      optional: true
+      selector: td:nth-child(2):contains("Tegnap ")
+      filters:
+        - name: regexp
+          args: "Tegnap \\d{2}-\\d{2} (\\d{2}:\\d{2})"
+        - name: prepend
+          args: "Yesterday "
+        - name: append
+          args: " +01:00" # CET
+        - name: fuzzytime
+    date_year:
+      # 2021-10-28 10-28 20:18
+      optional: true
+      selector: td:nth-child(2):not(:contains("Tegnap ")):not(:contains("Ma "))
+      filters:
+        - name: regexp
+          args: "(\\d{4}-\\d{2}-\\d{2} \\d{2}-\\d{2} \\d{2}:\\d{2})"
+        - name: re_replace
+          args: ["(\\d{4}-\\d{2}-\\d{2} )\\d{2}-\\d{2} (\\d{2}:\\d{2})", "$1$2"]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-02 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-last-child(2)
+    files:
+      selector: td:nth-last-child(6)
+    grabs:
+      selector: td:nth-last-child(2) b b
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    downloadvolumefactor:
+      case:
+        img[src$="freedownload.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="x2.gif"]: 2
+        "*": 1
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# TS Special Edition v5.6
