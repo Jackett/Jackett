@@ -1,0 +1,151 @@
+---
+id: moviesite
+name: Moviesite
+description: "Moviesite is a HUNGARIAN private tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: ISO-8859-2
+links:
+  - http://moviesite.info.hu/
+
+caps:
+  categorymappings:
+
+		- {id: 25, cat: "Movies", desc: "CAM"}
+		- {id: 4, cat: "Movies/DVD", desc: "DVD/Eng"}
+		- {id: 3, cat: "Movies/DVD", desc: "DVD/Hun"}
+		- {id: 6, cat: "Movies/HD", desc: "HD/Eng"}
+		- {id: 5, cat: "Movies/HD", desc: "HD/Hun"}
+		- {id: 13, cat: "PC/Games", desc: "Játék"}
+		- {id: 20, cat: "Other", desc: "Képek"}
+		- {id: 16, cat: "Books/EBook", desc: "Könyv"}
+		- {id: 11, cat: "Movies", desc: "Mese, Animáció"}
+		- {id: 21, cat: "PC/Mobile-Other", desc: "Mobil"}
+		- {id: 23, cat: "PC/ISO", desc: "Program/iso"}
+		- {id: 24, cat: "PC", desc: "Program/rip"}
+		- {id: 8, cat: "TV", desc: "Sorozat/Eng"}
+		- {id: 7, cat: "TV", desc: "Sorozat/Hun"}
+		- {id: 2, cat: "Movies/SD", desc: "Xvid/Eng"}
+		- {id: 1, cat: "Movies/SD", desc: "Xvid/Hun"}
+		- {id: 9, cat: "XXX", desc: "XXX-film"}
+		- {id: 19, cat: "XXX/ImageSet", desc: "xxx-képek"}
+		- {id: 12, cat: "Audio", desc: "Zene"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: added
+      # 1: name
+      size: size
+      seeders: seeders
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek oldalanként</b> setting to <b>40 Torrent oldalanként</b> on your account profile.
+
+login:
+  method: post
+  path: takelogin.php
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: "b:contains(\"An error has occured!\")"
+  test:
+    path: browse.php
+    selector: a[href="http://moviesite.info.hu/logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+      method: post
+  inputs:
+    keywords: "{{ .Keywords }}"
+    search_type: t_both2
+    sortby: "{{ .Config.sort }}"
+    orderby: "{{ .Config.type }}"
+
+  rows:
+    selector: table > tr:contains("Hozzáadva:")
+
+  fields:
+    category:
+      selector: a[href^="http://moviesite.info.hu/browse.php?browse_categories"]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      # this color seems to stay the same regardless of the theme
+      # this selector also selects the 'Adatlapok' element. Is that a problem?
+      selector: font[color="#F0720C"] > b
+    details:
+      selector: a[href^="details.php"
+      attribute: href
+    download:
+      # this a element is present twice in each row...
+      selector: a[href^="http://moviesite.info.hu/download.php"]
+      attribute: href
+    # this is what a date looks like in this tracker:
+    # 2021-10-28 10-28 20:18
+    # the month and the day are repeated in the middle...
+    # what filter can get rid of them
+    #  
+    # date:
+    #   selector: div.bubiposter
+    #   filters:
+    #     - name: replace
+    #       args: ["\xA0", ""]
+    #     - name: append
+    #       args: " +01:00" # CET
+    #     - name: dateparse
+    #       args: "2006-01-0215:04:05 -07:00"
+    description:
+      selector: div.bubiposter
+      filters:
+        - name: replace
+          args: ["\xA0", ""]
+    poster:
+      selector: div.bottom > img
+      attribute: src
+    size:
+      selector: td:nth-last-child(2)
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    downloadvolumefactor:
+      case:
+        "img[src=\"http://moviesite.info.hu/pic/freedownload.gif\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "img[src=\"http://moviesite.info.hu/pic/x2.gif\"]": 2
+        "*": 1
+    minimumseedtime:
+      # 72 hours (as seconds = 72 x 60 x 60)
+      text: 259200
+# engine n/a
