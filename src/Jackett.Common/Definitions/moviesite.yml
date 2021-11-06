@@ -72,6 +72,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    returnto: "/"
   error:
     - selector: "b:contains(\"An error has occured!\")"
   test:
