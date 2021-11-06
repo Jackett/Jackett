@@ -10,7 +10,6 @@ links:
 
 caps:
   categorymappings:
-
     - {id: 25, cat: "Movies", desc: "CAM"}
     - {id: 4, cat: "Movies/DVD", desc: "DVD/Eng"}
     - {id: 3, cat: "Movies/DVD", desc: "DVD/Hun"}
