@@ -113,7 +113,7 @@ search:
     # 2021-10-28 10-28 20:18
     # the month and the day are repeated in the middle...
     # what filter can get rid of them
-    #  
+    #
     # date:
     #   selector: div.bubiposter
     #   filters:
