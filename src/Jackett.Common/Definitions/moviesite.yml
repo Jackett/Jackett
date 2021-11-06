@@ -21,7 +21,7 @@ caps:
     - {id: 11, cat: Movies, desc: "Mese, Animáció"}
     - {id: 21, cat: PC/Mobile-Other, desc: "Mobil"}
     - {id: 23, cat: PC/ISO, desc: "Program/iso"}
-    - {id: 24, cat: PC, desc: "Program/rip"}
+    - {id: 24, cat: PC/0day, desc: "Program/rip"}
     - {id: 8, cat: TV, desc: "Sorozat/Eng"}
     - {id: 7, cat: TV, desc: "Sorozat/Hun"}
     - {id: 2, cat: Movies/SD, desc: "Xvid/Eng"}
