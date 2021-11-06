@@ -352,7 +352,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FunFile (FF)
  * FunkyTorrents (FT)
  * Fuzer (FZ)
- * Gay-Torrents.org [![(invite needed)][inviteneeded]](#)
+ * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn) [![(invite needed)][inviteneeded]](#)
  * Generation-Free [![(invite needed)][inviteneeded]](#)
@@ -554,7 +554,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrentland
  * TorrentLeech (TL)
  * TorrentLeech.pl
- * TorrentMasters [![(invite needed)][inviteneeded]](#)
+ * TorrentMasters
  * TorrentSeeds (TS)
  * Trackeros
  * TranceTraffic [![(invite needed)][inviteneeded]](#)
