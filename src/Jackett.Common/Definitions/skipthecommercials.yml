@@ -10,19 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 2, cat: TV/HD, desc: "TV/x265"}
-    - {id: 3, cat: TV/SD, desc: "TV/Packs-SD"}
-    - {id: 4, cat: TV/WEB-DL, desc: "TV/Web-DL"}
-    - {id: 5, cat: TV/SD, desc: "TV/Xvid"}
-    - {id: 6, cat: TV/HD, desc: "TV/HD-x264"}
-    - {id: 7, cat: TV/Foreign, desc: "TV/Non-English"}
-    - {id: 8, cat: TV/HD, desc: "TV/Packs-HD"}
-    - {id: 9, cat: TV/Sport, desc: "TV/Sports"}
-    - {id: 10, cat: TV/Documentary, desc: "TV/Documentaries"}
-    - {id: 11, cat: TV/HD, desc: "TV/HD-Retail"}
-    - {id: 12, cat: TV/SD, desc: "TV/SD-Retail"}
-    - {id: 13, cat: TV/Foreign, desc: "TV/Packs-Non-English"}
-    - {id: 14, cat: TV/SD, desc: "TV/SD-x264"}
+    - {id: 15, cat: TV, desc: "TV Show"}
 
   modes:
     search: [q]
