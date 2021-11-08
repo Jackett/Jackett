@@ -53,8 +53,8 @@ caps:
     - {id: 4, cat: Other, desc: "Other"}
     - {id: 37, cat: Other/Misc, desc: "Pictures"}
     - {id: 39, cat: Other, desc: "e-Learning"}
-    - {id: 52, cat: PC/Mobile Other, desc: "Mobile GSM"}
-    - {id: 40, cat: PC/Mobile iOS, desc: "Mobile iPhone"}
+    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile GSM"}
+    - {id: 40, cat: PC/Mobile-iOS, desc: "Mobile iPhone"}
     # 3x
     - {id: 13, cat: XXX, desc: "XXX"}
     - {id: 54, cat: XXX/x264, desc: "XXX HD"}
