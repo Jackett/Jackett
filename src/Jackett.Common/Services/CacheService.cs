@@ -241,7 +241,7 @@ namespace Jackett.Common.Services
         {
             var json = GetSerializedQuery(query);
             // Compute the hash
-            return BitConverter.ToString(_sha256.ComputeHash(Encoding.ASCII.GetBytes(json)));
+            return BitConverter.ToString(_sha256.ComputeHash(Encoding.UTF8.GetBytes(json)));
         }
 
         private static string GetSerializedQuery(TorznabQuery query)
