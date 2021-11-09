@@ -6,6 +6,7 @@ language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
+# changes to this indexer should also be made to limetorrentsclone
 links:
   - https://www.limetorrents.pro/
   - https://limetorrents.unblockit.bz/
