@@ -11,19 +11,7 @@ links:
 caps:
   # dont forget to update the case block in the search fields category
   categorymappings:
-    - {id: 2, cat: TV/HD, desc: "TV/x265"}
-    - {id: 3, cat: TV/SD, desc: "TV/Packs-SD"}
-    - {id: 4, cat: TV/WEB-DL, desc: "TV/Web-DL"}
-    - {id: 5, cat: TV/SD, desc: "TV/Xvid"}
-    - {id: 6, cat: TV/HD, desc: "TV/HD-x264"}
-    - {id: 7, cat: TV/Foreign, desc: "TV/Non-English"}
-    - {id: 8, cat: TV/HD, desc: "TV/Packs-HD"}
-    - {id: 9, cat: TV/Sport, desc: "TV/Sports"}
-    - {id: 10, cat: TV/Documentary, desc: "TV/Documentaries"}
-    - {id: 11, cat: TV/HD, desc: "TV/HD-Retail"}
-    - {id: 12, cat: TV/SD, desc: "TV/SD-Retail"}
-    - {id: 13, cat: TV/Foreign, desc: "TV/Packs-Non-English"}
-    - {id: 14, cat: TV/SD, desc: "TV/SD-x264"}
+    - {id: 15, cat: TV, desc: "TV Show"}
 
   modes:
     search: [q]
@@ -88,19 +76,7 @@ search:
     category:
       selector: category
       case:
-        "TV/x265": 2
-        "TV/Packs-SD": 3
-        "TV/Web-DL": 4
-        "TV/Xvid": 5
-        "TV/HD-x264": 6
-        "TV/Non-English": 7
-        "TV/Packs-HD": 8
-        "TV/Sports": 9
-        "TV/Documentaries": 10
-        "TV/HD-Retail": 11
-        "TV/SD-Retail": 12
-        "TV/Packs-Non-English": 13
-        "TV/SD-x264": 14
+        "TV Show": 15
     title:
       selector: name
     details:

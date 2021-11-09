@@ -140,9 +140,10 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
+    # staff have extra columns at the start and end of a row, so we have to float the next lot of selectors off an anchor
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-of-type(4) > span[title]
+      selector: td:has(a[href^="comment.php?"]) ~ td > span[title]
       attribute: title
       optional: true
       filters:
@@ -152,7 +153,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date_added:
       # time added
-      selector: td.rowfollow:nth-of-type(4):not(:has(span))
+      selector: td:has(a[href^="comment.php?"]) ~ td:not(:has(span[title]))
       optional: true
       filters:
         - name: append
@@ -162,13 +163,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-of-type(5)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td
     seeders:
-      selector: td.rowfollow:nth-of-type(6)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td ~ td
     leechers:
-      selector: td.rowfollow.rowfollow:nth-of-type(7)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td ~ td ~  td
     grabs:
-      selector: td.rowfollow:nth-of-type(8)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td ~ td ~ td ~ td
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -184,7 +185,7 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
+      selector: td:has(table.torrentname)
       remove: a, img
     minimumratio:
       text: 0.9

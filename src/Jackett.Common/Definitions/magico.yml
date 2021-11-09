@@ -286,5 +286,5 @@ search:
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
     date:
-      text: "{{ if .Result.date_unix .Result.date_day or .Result.date_year or .Result.date_other }}{{ or .Result.date_unix .Result.date_day or .Result.date_year or .Result.date_other }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_unix .Result.date_day .Result.date_year .Result.date_other }}{{ or .Result.date_unix .Result.date_day .Result.date_year .Result.date_other }}{{ else }}now{{ end }}"
 # TSUE 2.2
