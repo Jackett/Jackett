@@ -379,8 +379,6 @@ namespace Jackett.Common.Indexers.Abstract
             }
         }
 
-
-
         public override async Task<byte[]> Download(Uri link)
         {
             var apiKey = configData.ApiKey;
