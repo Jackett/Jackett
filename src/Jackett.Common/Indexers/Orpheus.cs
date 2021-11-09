@@ -65,7 +65,5 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(6, TorznabCatType.TV, "Comedy");
             AddCategoryMapping(7, TorznabCatType.Books, "Comics");
         }
-
-
     }
 }
