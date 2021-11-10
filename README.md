@@ -440,6 +440,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Nbytez
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
+ * nForce
  * NetCosmo
  * NetLab
  * NorBits
