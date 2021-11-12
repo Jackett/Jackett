@@ -92,7 +92,7 @@ download:
   before:
     # thankyou link: ./viewtopic.php?f=52&p=65417&thanks=65417&to_id=54&from_id=3950
     pathselector:
-      selector: a[id^="lnk_thanks_post"]
+      selector: ul.post-buttons li:nth-last-child(1) a
       attribute: href
   selectors:
     - selector: a[href^="magnet:?xt="]
