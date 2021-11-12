@@ -2,7 +2,7 @@
 id: baibako
 name: BaibaKo
 description: "BaibaKo is a RUSSIAN Semi-Private Torrent Tracker for TV"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
@@ -130,7 +130,7 @@ search:
         - name: replace
           args: ["февраля", "February"]
         - name: replace
-          args: ["марта ", "March"]
+          args: ["марта", "March"]
         - name: replace
           args: ["апреля", "April"]
         - name: replace

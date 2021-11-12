@@ -2,7 +2,7 @@
 id: microbit
 name: MicroBit
 description: "MicroBit (µBit) is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: hu
+language: hu-HU
 type: private
 encoding: UTF-8
 links:
@@ -129,9 +129,6 @@ search:
       attribute: href
     grabs:
       selector: td:nth-child(5)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(6)
     leechers:
@@ -145,22 +142,22 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "2006.01.02. 15:04 -07:00"
-    downloadvolumefactor:
-      text: 1
-    downloadvolumefactor:
+    downloadvolumefactor_optional:
       optional: true
       selector: b:has(img[src="templates/default/images/header/arrowdown.gif"])
       filters:
         - name: regexp
           args: (\d+\.*\d*)
-    uploadvolumefactor:
-      text: 1
-    uploadvolumefactor:
+    downloadvolumefactor:
+      text: "{{ if .Result.downloadvolumefactor_optional }}{{ .Result.downloadvolumefactor_optional }}{{ else }}1{{ end }}"
+    uploadvolumefactor_optional:
       optional: true
       selector: b:has(img[src="templates/default/images/header/arrowup.gif"])
       filters:
         - name: regexp
           args: (\d+)
+    uploadvolumefactor:
+      text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
     minimumratio:
       text: 0.6
     minimumseedtime:

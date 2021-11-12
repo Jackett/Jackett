@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum)."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "de-de";
+            Language = "de-DE";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Other, "Other/Anderes");
@@ -191,7 +191,7 @@ namespace Jackett.Common.Indexers
                     release.PublishDate = pubDateUtc.ToLocalTime();
 
                     var sizeStr = row.QuerySelector("table tbody tr:nth-of-type(2)").QuerySelector("td b").TextContent.Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr.Replace(",", "."));
+                    release.Size = ReleaseInfo.GetBytes(sizeStr);
 
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(1) font").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(2) font").TextContent.Trim()) + release.Seeders;

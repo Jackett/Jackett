@@ -2,7 +2,7 @@
 id: ptfiles
 name: PTFiles
 description: "PTFiles (PTF) is a Private site for TV / MOVIES / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: windows-1252
 links:
@@ -122,11 +122,8 @@ search:
     details:
       selector: a.torrentlink
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    poster:
-      selector: a[rel="gallery"]
       attribute: href
     files:
       selector: td:nth-last-child(5)

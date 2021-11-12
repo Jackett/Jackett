@@ -2,7 +2,7 @@
 id: theshinning
 name: The Shinning
 description: "The Shinning (TsH) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: de-de
+language: de-DE
 type: private
 encoding: UTF-8
 links:
@@ -23,6 +23,7 @@ caps:
     - {id: 8, cat: Movies, desc: "Kids"}
     - {id: 9, cat: TV/Sport, desc: "Sport"}
     - {id: 10, cat: TV/Documentary, desc: "Doku"}
+    - {id: 11, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
@@ -123,7 +124,7 @@ search:
           args: "&w=180&h=270" # for display on dashboard
         - name: replace
           args: ["https://images.weserv.nl/?url=https://theshinning.me/img/nocover.png&w=180&h=270", ""]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:
@@ -133,9 +134,6 @@ search:
       selector: td:nth-last-child(4)
     grabs:
       selector: td:nth-last-child(3)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(2)
     leechers:

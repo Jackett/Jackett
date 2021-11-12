@@ -88,7 +88,17 @@ namespace Jackett.Server.Controllers
                 else
                     fileName += "-" + StringUtil.MakeValidFileName(file + fileExtension, '_', false); // call MakeValidFileName() again to avoid any possibility of path traversal attacks
 
-                System.IO.File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
+                try
+                {
+                    System.IO.File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
+                }
+                catch (IOException)
+                {
+                    // Sometimes a torrent's name is very long which causes an exception when writing the file to disk.
+                    // In this specific case, use a GUID instead of the torrent's name.
+                    System.IO.File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, Guid.NewGuid() + fileExtension), downloadBytes);
+                }
+
                 jsonReply["result"] = "success";
             }
             catch (Exception e)

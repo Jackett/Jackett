@@ -5,13 +5,14 @@
 [![Build Status](https://dev.azure.com/Jackett/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/jackett/jackett/_build/latest?definitionId=1&branchName=master)
 [![GitHub Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
-[![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA)
+
+_Our [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA) server is no longer maintained. If you have a problem, request, or question then please open a new issue here._
 
 This project is a new fork and is recruiting development help.  If you are able to help out please [contact us](https://github.com/Jackett/Jackett/issues/8180).
 
 Please see our [troubleshooting and contributing guidelines](CONTRIBUTING.md) before submitting any issues or pull requests
 
-Jackett works as a proxy server: it translates queries from apps ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar](https://github.com/evilhero/mylar), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious) etc.) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps.
+Jackett works as a proxy server: it translates queries from apps ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar3](https://github.com/mylar3/mylar3), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious) etc.) into tracker-site-specific http queries, parses the html or json response, and then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps.
 
 Developer note: The software implements the [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with hybrid [nZEDb](https://github.com/nZEDb/nZEDb/blob/b485fa326a0ff1f47ce144164eb1f070e406b555/resources/db/schema/data/10-categories.tsv)/[Newznab](https://newznab.readthedocs.io/en/latest/misc/api/#predefined-categories) [category numbering](https://github.com/Jackett/Jackett/wiki/Jackett-Categories)) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs.
 
@@ -24,7 +25,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
 
+ * 01torrent
+ * ØMagnet
  * 1337x
+ * 24rolika
  * 7torrents
  * ACG.RIP
  * ACGsou (36DM)
@@ -36,35 +40,40 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AniRena
  * AniSource
  * AudioBook Bay (ABB)
+ * Badass Torrents
+ * Bangumi Moe
  * BigFANGroup
  * BitRu
+ * BitSearch
  * BT.etree
- * BTDB
+ * BT4G
  * BTDIGG
  * BTSOW
  * Byrutor
- * CiliPro (LIAORENCILI)
+ * comicat
  * ConCen
  * cpasbien
  * cpasbienClone
  * Demonoid
+ * DivxTotal
  * dmhy
  * E-Hentai
- * emtrek
- * Epizod
+ * elitetorrent
+ * EpubLibre
+ * Erai-Raws
  * ETTV
  * EXT Torrents
- * ExtraTorrent.cd
- * ExtraTorrent.it
+ * ExtraTorrent.st
  * EZTV
  * Filebase
+ * FileListing
  * FireBit
  * Frozen Layer
  * GamesTorrents
  * GkTorrent
  * GloDLS
- * GTorrent
- * HDReactor
+ * GTorrent.pro
+ * HDhouse (HDReactor)
  * IBit
  * Idope
  * Il CorSaRo Blu
@@ -72,28 +81,33 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Internet Archive (archive.org)
  * Isohunt2
  * iTorrent
- * kickasstorrents (kickass.ws)
+ * kickasstorrents.ws
  * kickasstorrents.to
+ * KissSub
  * Legit Torrents
  * LePorno.info
  * LimeTorrents
+ * LimeTorrents clone
  * LinuxTracker
- * MacTorrents
- * Magnet4You
+ * Mac Torrents Download
+ * MegaPeer
  * MejorTorrent
+ * Mikan
  * MixTapeTorrent
- * Monova
- * MovCr
  * MoviesDVDR
+ * MovieTorrent
  * MyPornClub
  * NewPCT (aka: tvsinpagar, descargas2020, torrentlocura, torrentrapid, tumejortorrent, pctnew, etc)
+ * NewPCT.me
  * Newstudio
+ * Nipponsei
  * Nitro
  * NNTT
  * NoNaMe Club (NNM-Club)
- * Nyaa-Pantsu
  * Nyaa.si
+ * OnceSearch
  * OneJAV
+ * OpenSharing
  * OxTorrent
  * ParnuXi
  * PC-torrent
@@ -103,7 +117,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PornLeech
  * PornoLive
  * PornoRip
+ * PornosLab
  * PornoTor
+ * PornoTorrent
+ * Portugas
  * ProPorn
  * ProStyleX
  * Rapidzona
@@ -114,40 +131,41 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RuTor
  * RuTracker.RU
  * seleZen
+ * Sexxi
  * Sexy-Pics
  * ShizaProject
  * shokweb
  * ShowRSS
- * SkyTorrentsClone (*.lol)
- * SkyTorrentsClone2 (*.to)
  * Solid Torrents
  * sosulki
- * sukebei-Pantsu
+ * SubsPlease
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)
  * Tokyo Tosho
  * Torlock
+ * Torlook
  * TOROS
- * Torrent Bomb (토렌트봄)
  * Torrent Downloads (TD)
  * Torrent Oyun indir
+ * Torrent Paradise (ML)
  * torrent-pirat
- * Torrent4You
  * Torrent9
- * Torrent9Clone
+ * Torrent9 clone
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
  * TorrentKitty
  * TorrentMafya
+ * TorrentMax (토렌트맥스)
  * TorrentParadise
- * TorrentProject
  * TorrentProject2
+ * TorrentQQ (토렌트큐큐)
  * Torrents.csv
+ * TorrentSir (토렌트썰)
  * Torrentv
  * TorrentView (토렌트뷰)
- * Torrentz2
- * Torrentz2k
+ * TorrentWhiz ( 토렌트위즈)
+ * Torrentz2eu
  * truPornolabs
  * Underverse
  * UnionDHT
@@ -165,22 +183,25 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
  * AniDUB
+ * Anime-Free
  * ArenaBG
  * BaibaKo
  * BookTracker
  * BootyTape
- * CasStudioTV
+ * Catorrent
  * Darmowe torrenty
  * Deildu
  * DimeADozen (EzTorrent)
  * DXP (Deaf Experts)
  * EniaHD
- * Erzsebet
- * Erzsebet.pl
  * ExKinoRay
- * ExtremlymTorrents (XTR)
+ * ExtremlymTorrents
+ * Fou-Du-Cinema
+ * Gay-Torrents.net
  * Genesis-Movement
  * HamsterStudio
+ * HD-CzTorrent
+ * HunTorrent
  * IV-Torrents
  * KinoNaVse100
  * Kinorun
@@ -196,20 +217,23 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PornoLab
  * PussyTorrents
  * Rainbow Tracker
+ * RGFootball
  * RiperAM
  * RockBox
  * RuTracker
  * Rustorka
- * SDkino
  * Sharewood
  * SkTorrent
  * SkTorrent-org
+ * SoundPark
+ * themixingbowl (TMB)
  * Toloka.to
  * Torrent-Explosiv
  * Torrents-Local
  * TribalMixes
  * Union Fansub
  * YggTorrent (YGG)
+ * ZOMB
  * Ztracker
 </details>
 
@@ -217,68 +241,73 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
  * 0day.kiev
  * 1ptbar
- * 2 Fast 4 You
+ * 2 Fast 4 You [![(invite needed)][inviteneeded]](#)
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT) [![(invite needed)][inviteneeded]](#)
- * 3evils
  * 4thD (4th Dimension)
  * 52PT
  * 720pier
- * Abnormal [![(invite needed)][inviteneeded]](#)
- * Acid Lounge (A-L) [![(invite needed)][inviteneeded]](#)
+ * Abnormal
+ * ABtorrents (ABT + RNS)
+ * Acid Lounge (A-L)
+ * AcrossTheTasman [![(invite needed)][inviteneeded]](#)
  * Aftershock
  * Aidoru!Online
  * Aither
  * AlphaRatio (AR)
  * AmigosShareClub
+ * anasch.cc
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
- * AnimeWorld (AST4u) [![(invite needed)][inviteneeded]](#)
+ * AnimeWorld [![(invite needed)][inviteneeded]](#)
  * Anthelion
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
  * AsianCinema
- * Asylum Share
+ * AsianDVDClub
  * AudioNews (AN)
- * Audiobook Torrents (ABT + RNS)
+ * Aussierul.es [![(invite needed)][inviteneeded]](#)
  * AvistaZ (AsiaTorrents)
- * Awesome-HD (AHD)
- * Borgzelle
  * Back-ups
  * bB
  * BakaBT
  * BeiTai
+ * Best-Core
  * BeyondHD (BHD)
  * Bibliotik
- * BIGTorrent
- * BigTower
+ * Bit-Bázis
  * Bit-City Reloaded [![(invite needed)][inviteneeded]](#)
  * BIT-HDTV
  * BiT-TiTAN
+ * Bitded
+ * Bithorlo (BHO)
  * BitHUmen
+ * BitSexy
+ * Bitspyder
  * BitTorrentFiles
  * BiTTuRK
- * Bithorlo (BHO)
- * Bitspyder
  * BJ-Share (BJ)
  * BlueBird [![(invite needed)][inviteneeded]](#)
  * Blutopia (BLU)
+ * Borgzelle  [![(invite needed)][inviteneeded]](#)
  * Boxing Torrents
  * Brasil Tracker
- * BroadCity [![(invite needed)][inviteneeded]](#)
  * BroadcasTheNet (BTN)
+ * BroadCity
  * BrokenStones [![(invite needed)][inviteneeded]](#)
+ * BrSociety
  * BTNext (BTNT)
  * BTSCHOOL
  * BWTorrents
- * CCFBits
- * CGPeers
- * CHDBits
  * Carp-Hunter
  * Carpathians
  * CartoonChaos (CC)
  * CasaTorrent [![(invite needed)][inviteneeded]](#)
- * ChannelX
+ * Cathode-Ray.Tube (CRT)
+ * CCFBits
+ * CeskeForum
+ * CGPeers
+ * CHDBits
  * ChileBT
  * Cinecalidad
  * CinemaMovieS_ZT
@@ -286,66 +315,61 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Cinemageddon
  * Cinematik
  * Classix
+ * Coastal-Crew
  * Concertos
  * CrazyHD
  * CrazySpirits
  * CrnaBerza
+ * CrypticHaven Comedy Club (CCC)
+ * DANISH BYTES
  * Darius Tracker
  * Dark-Shadow
  * Dark Tracker
- * Das Unerwartete [![(invite needed)][inviteneeded]](#)
  * DataScene (DS)
+ * DataTalli
  * DesiReleasers
  * DesiTorrents
  * Diablo Torrent
- * DICMusic
  * DigitalCore
+ * DiscFan
  * DivTeam
- * DivxTotal
- * DocumentaryTorrents (DT)
+ * DocsPedia
  * Dragonworld Reloaded [![(invite needed)][inviteneeded]](#)
- * DXDHD
  * EbookParadijs
  * Ebooks-Shares
  * EfectoDoppler
- * Elite-Tracker
- * Empornium (EMP)
- * EpubLibre
+ * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eShareNet
- * eStone (XiDER, BeLoad)
+ * eStone (XiDER, BeLoad, BigTorrent)
  * ExoticaZ (YourExotic)
  * ExtremeBits
  * ExtremeTorrents [![(invite needed)][inviteneeded]](#)
+ * Falkon Vision Team
  * FANO.IN
  * Fantastic Heaven
+ * Fantastiko [![(invite needed)][inviteneeded]](#)
  * Femdomcult
  * FileList (FL)
  * Film-Paleis
  * FinElite (FE)
  * FinVip
- * FocusX
- * Fou-Du-Cinema
- * FreeTorrent
- * FullMixMusic
  * FunFile (FF)
- * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
- * FunReleases [![(invite needed)][inviteneeded]](#)
+ * FunkyTorrents (FT)
  * Fuzer (FZ)
- * GFXPeers
- * Galeriens (LaPauseTorrents)
- * Gay-Torrents.net
- * Gay-Torrents.org [![(invite needed)][inviteneeded]](#)
+ * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn) [![(invite needed)][inviteneeded]](#)
- * Generation-Free
+ * Generation-Free [![(invite needed)][inviteneeded]](#)
+ * GFXPeers
  * GigaTorrents
  * GimmePeers (formerly ILT)
  * GiroTorrent
  * GreekDiamond
  * Greek Team
  * HaiDan
- * HacheDe
- * HD Dolby [![(invite needed)][inviteneeded]](#)
+ * Haitang
+ * HappyFappy
+ * HD Dolby
  * HD-Bits.com
  * HD-Forever (HDF)
  * HD-Olimpo
@@ -354,29 +378,27 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HD-Spain [![(invite needed)][inviteneeded]](#)
  * HD-Torrents (HDT)
  * HD4FANS [![(invite needed)][inviteneeded]](#)
+ * HDAI
  * HDArea (HDA)
+ * HDAtmos
  * HDBits
+ * HDC (HDCiTY)
  * HDCenter [![(invite needed)][inviteneeded]](#)
  * HDChina (HDWing)
- * HDC (HDCiTY)
  * HDCity
- * HDDisk (HDD)
  * HDHome (HDBigger)
  * HDME
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky
- * HDStreet
  * HDTime
  * HDTorrents.it
- * HDTurk [![(invite needed)][inviteneeded]](#)
- * HDU [![(invite needed)][inviteneeded]](#)
+ * HDTurk
+ * HDU
  * HDZone
  * Hebits
  * HellasTZ
- * Hon3y HD
- * Horror Site
  * HQSource (HQS)
- * HuSh [![(invite needed)][inviteneeded]](#)
+ * Indietorrents [![(invite needed)][inviteneeded]](#)
  * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos
@@ -387,68 +409,73 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Karagarga
  * Keep Friends
  * LastFiles
- * LatinoP2P
+ * Lat-Team [![(invite needed)][inviteneeded]](#)
  * Le Saloon
- * LeChaudron
- * LemonHD
+ * LearnBits
  * LearnFlakes
  * LegacyHD (HD4Free)
+ * LemonHD
  * Libble
  * LibraNet (LN)
  * LinkoManija
  * LosslessClub
  * M-Team TP (MTTP)
- * MaDs Revolution
- * Magico (Trellas)
+ * MaDs Revolution [![(invite needed)][inviteneeded]](#)
+ * magic-heaven
+ * Magico (Trellas) [![(invite needed)][inviteneeded]](#)
  * Majomparádé (TurkDepo)
+ * MegamixTracker
  * MeseVilág (Fairytale World)
  * MicroBit (µBit)
  * Milkie
+ * MIRcrew
  * MMA-Torrents
  * MNV (Max-New-Vision)
  * Mononoké-BT [![(invite needed)][inviteneeded]](#)
  * MoreThanTV (MTV)
- * Movie Zone (Mz)
+ * MouseBits
+ * Moviesite
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NBTorrents [![(invite needed)][inviteneeded]](#)
+ * Nbytez
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
+ * nForce
  * NetCosmo
  * NetLab
- * New Real World [![(invite needed)][inviteneeded]](#)
  * NorBits
- * notwhat.cd
+ * Oasis
  * oMg[WtF]trackr
- * OnlineSelfEducation
- * ONLYscene
+ * OpenCD
+ * Oppaitime [![(invite needed)][inviteneeded]](#)
  * Orpheus
  * OshenPT
  * Ourbits (HDPter)
  * P2PBG
  * P2PElite
- * Partis [![(invite needed)][inviteneeded]](#)
  * PassThePopcorn (PTP)
+ * PeerJunkies
  * Peers.FM
  * Pirata Digital
  * PirateTheNet (PTN)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
- * Pleasuredome
  * PolishSource (PS)
  * PolishTracker
  * PornBits (PB)
  * Pornbay [![(invite needed)][inviteneeded]](#)
+ * PotUK
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
- * Psytorrents [![(invite needed)][inviteneeded]](#)
  * PTerClub
  * PTFiles (PTF)
  * PThome
  * PTMSG
  * PTSBAO
  * PTtime
+ * Punk's Horror Tracker
  * PuntoTorrent
  * PuroVicio
  * Puur-Hollands
@@ -456,8 +483,11 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
+ * RedBits
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
+ * Renegade
+ * Resurrect The Net
  * RetroFlix
  * RevolutionTT
  * Romanian Metal Torrents (RMT) [![(invite needed)][inviteneeded]](#)
@@ -467,14 +497,16 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SceneRush
  * SceneTime
  * SDBits [![(invite needed)][inviteneeded]](#)
+ * Seals
  * Secret Cinema
  * SeedFile (SF)
  * Shareisland
  * Shazbat
- * Shellife (SL) [![(invite needed)][inviteneeded]](#)
  * SiamBIT
+ * SkipTheCommercials
+ * slosoul
  * SnowPT (SSPT)
- * SoulVoice [![(invite needed)][inviteneeded]](#)
+ * SoulVoice
  * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
  * SpeedCD
  * Speedmaster HD
@@ -483,24 +515,29 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SportHD [![(invite needed)][inviteneeded]](#)
  * SportsCult
  * SpringSunday
+ * SugoiMusic
  * Superbits (SBS)
+ * Swarmazon
  * Tapochek
  * Tasmanit [![(invite needed)][inviteneeded]](#)
  * TeamHD
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * TellyTorrent
+ * teracod (Movie Zone)
  * The Falling Angels (TFA)
- * The Geeks [![(invite needed)][inviteneeded]](#)
+ * The Geeks
  * The Horror Charnel (THC)
  * The New Retro
  * The Occult [![(invite needed)][inviteneeded]](#)
  * The Place [![(invite needed)][inviteneeded]](#)
  * The Shinning (TsH)
- * The Show [![(invite needed)][inviteneeded]](#)
+ * The Show
  * The Vault [![(invite needed)][inviteneeded]](#)
  * TheAudioScene
- * TheEmpire (TE) [![(invite needed)][inviteneeded]](#)
+ * TheEmpire (TE)
+ * TheLeachZone (TLZ)
+ * TheScenePlace (TSP)
  * TJUPT
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * ToTheGlory (TTG)
@@ -515,23 +552,22 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
  * TorrentDB
- * TorrentFactory
- * TorrentHR
+ * Torrentech (TTH)
  * TorrentHeaven [![(invite needed)][inviteneeded]](#)
+ * TorrentHR
+ * Torrenting (TT) [![(invite needed)][inviteneeded]](#)
+ * TotallyKids (TK)
+ * Torrentland
  * TorrentLeech (TL)
  * TorrentLeech.pl
+ * TorrentMasters
  * TorrentSeeds (TS)
- * Torrentech (TTH)
- * Torrenting (TT) [![(invite needed)][inviteneeded]](#)
- * Torrentland
- * TotallyKids (TK)
+ * Trackeros
  * TranceTraffic [![(invite needed)][inviteneeded]](#)
  * Trezzor
- * TTsWEB
  * TurkSeed
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
- * TV-Vault
  * TVstore
  * Twilight Torrents
  * Twilights Zoom
@@ -541,17 +577,16 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnlimitZ
  * Vizuk
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
- * Witch-Hunter (Demon-Site)
+ * White Angel
  * wOOt [![(invite needed)][inviteneeded]](#)
- * World-In-HD [![(invite needed)][inviteneeded]](#)
- * x-ite.me (XM) [![(invite needed)][inviteneeded]](#)
+ * World-In-HD
+ * x-ite.me (XM)
  * xBytesV2
  * XSpeeds (XS)
  * XWT-Classics
  * XWTorrents (XWT)
  * Xthor
  * YDYPT
- * YingK
  * Zamunda.net
  * Zelka.org
  * ZonaQ
@@ -574,6 +609,32 @@ Using the all indexer has no advantages (besides reduced management overhead), o
 
 To get all Jackett indexers including their capabilities you can use `t=indexers` on the all indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as a query parameter.
 
+### Filter indexers
+
+Another special "filter" indexer is available at `/api/v2.0/indexers/<filter>/results/torznab`
+It will query the configured indexers that match the `<filter>` expression criterias and return the combined results as "all".
+
+Supported filters
+Filter | Condition
+-|-
+`type:<type>` | where the indexer type is equal to `<type>`
+`tag:<tag>` | where the indexer tags contains `<tag>`
+`lang:<tag>` | where the indexer language start with `<lang>`
+`test:{passed\|failed}` | where the last indexer test performed `passed` or `failed`
+`status:{healthy\|failing\|unknown}` | where the indexer state is `healthy` (successfully operates in the last minutes), `failing` (generates errors in the recent call) or `unknown` (unused for a while)
+
+Supported operators
+Operator | Condition
+-|-
+`!<expr>` | where not `<expr>`
+`<expr1>+<expr2>[+<expr3>...]` | where `<expr1>` and `<expr2>` [and `<expr3>`...]
+`<expr1>,<expr2>[,<expr3>...]` | where `<expr1>` or `<expr2>` [or `<expr3>`...]
+
+Example 1:
+The "filter" indexer at `/api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab` will query all the configured indexers tagged with `group1` or all the indexers not private and with `en` language (`en-en`,`en-us`,...)
+
+Example 2:
+The "filter" indexer at `/api/v2.0/indexers/!status:failing,test:passed` will query all the configured indexers not `failing` or which `passed` its last test.
 
 ## Installation on Windows
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
@@ -701,6 +762,9 @@ configuration or even disable the cache. Keep in mind that you can be banned by 
 * **Cache TTL (seconds)**: (default 2100 / 35 minutes) It indicates how long the results can remain in the cache.
 * **Cache max results per indexer**: (default 1000) How many results are kept in cache for each indexer. This limit is used to limit the use of RAM. If you make many requests and you have enough memory, increase this number.
 
+## Torznab cache
+If you have enabled the Jackett internal cache, but have an indexer for which you would prefer to fetch fresh results (thus ignoring the internal cache) then add the **&cache=false** parameter to your torznab query.
+
 ## Configuring FlareSolverr
 Some indexers are protected by CloudFlare or similar services and Jackett is not able to solve the challenges.
 For these cases, [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) has been integrated into Jackett. This service is in charge of solving the challenges and configuring Jackett with the necessary cookies.
@@ -763,11 +827,13 @@ To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/a
 ### Windows
 * Install the .NET 5 [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
-* Open PowerShell and from the `src` directory, run `dotnet restore`
-* Open the Jackett solution in Visual Studio 2019 (version 16.4 or above)
-* Right-click on the Jackett solution and click 'Rebuild Solution' to restore NuGet packages
-* Select Jackett.Server as the startup project
-* In the drop-down menu of the run button select "Jackett.Server" instead of "IIS Express"
+* Open PowerShell and from the `src` directory:
+* - run `dotnet msbuild /restore`
+* - then run `dotnet restore`
+* - and run `dotnet build`
+* Open the Jackett solution in Visual Studio 2019 (version 16.9 or above)
+* Select **Jackett.Server** as the startup project
+* In the drop-down menu of the run button select **Jackett.Server** instead of _IIS Express_
 * Build/Start the project
 
 ### OSX

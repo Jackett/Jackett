@@ -59,7 +59,7 @@ namespace Jackett.Common.Models
             var xdoc = new XDocument(
                 new XDeclaration("1.0", "UTF-8", null),
                 new XElement("rss",
-                    new XAttribute("version", "1.0"),
+                    new XAttribute("version", "2.0"),
                     new XAttribute(XNamespace.Xmlns + "atom", _AtomNs.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "torznab", _TorznabNs.NamespaceName),
                     new XElement("channel",
@@ -73,12 +73,6 @@ namespace Jackett.Common.Models
                         new XElement("link", ChannelInfo.Link.AbsoluteUri),
                         new XElement("language", ChannelInfo.Language),
                         new XElement("category", ChannelInfo.Category),
-                        new XElement("image",
-                            new XElement("url", ChannelInfo.ImageUrl.AbsoluteUri),
-                            new XElement("title", ChannelInfo.ImageTitle),
-                            new XElement("link", ChannelInfo.ImageLink.AbsoluteUri),
-                            new XElement("description", ChannelInfo.ImageDescription)
-                        ),
                         from r in Releases
                         select new XElement("item",
                             new XElement("title", RemoveInvalidXMLChars(r.Title)),

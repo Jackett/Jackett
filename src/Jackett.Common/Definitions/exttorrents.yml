@@ -2,16 +2,17 @@
 id: exttorrents
 name: EXT Torrents
 description: "EXT Torrents is a Public torrent site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
   - https://ext.to/
-  - https://torrent.extto.com/
+  - https://site.extto.com/
   - https://ext.torrentbay.to/
 legacylinks:
-  - https://ext.unblockninja.com/ # currently redirects to https://ext.torrentbay.to/
-  - https://t.extto.com/ # redirects to https://torrent.extto.com/
+  - https://ext.unblockninja.com/
+  - https://t.extto.com/
+  - https://torrent.extto.com/
 
 caps:
   categorymappings:
@@ -38,6 +39,7 @@ caps:
     - {id: "/games/switch/", cat: Console/Other, desc: "Games Switch"}
     - {id: "/games/wii/", cat: Console/Wii, desc: "Games Wii"}
     - {id: "/games/xbox360/", cat: Console/XBox 360, desc: "Games Xbox360"}
+    - {id: "/games/mac/", cat: PC/Mac, desc: "Games Mac"}
     - {id: "/movies/", cat: Movies, desc: Movies}
     - {id: "/movies/3d-movies/", cat: Movies/3D, desc: "Movies 3D"}
     - {id: "/movies/bollywood/", cat: Movies, desc: "Movies Bollywood"}
@@ -46,7 +48,10 @@ caps:
     - {id: "/movies/dvd/", cat: Movies/DVD, desc: "Movies DVD"}
     - {id: "/movies/highres-movies/", cat: Movies/HD, desc: "Movies Highres"}
     - {id: "/movies/mp4/", cat: Movies, desc: "Movies MP4"}
+    - {id: "/movies/other-movies/", cat: Movies, desc: "Movies Other Movies"}
     - {id: "/movies/ultrahd/", cat: Movies/UHD, desc: "Movies UltraHD"}
+    - {id: "/movies/music-videos/", cat: Audio/Video, desc: "Movies Music videos"}
+    - {id: "/movies/movie-clips/", cat: Movies/Other, desc: "Movies Movie clips"}
     - {id: "/music/", cat: Audio, desc: Music}
     - {id: "/music/aac/", cat: Audio, desc: "Music AAC"}
     - {id: "/music/lossless/", cat: Audio/Lossless, desc: "Music Lossless"}
@@ -61,6 +66,7 @@ caps:
     - {id: "/xxx/magazines/", cat: XXX/Other, desc: "XXX Magazines"}
     - {id: "/xxx/pictures/", cat: XXX/ImageSet, desc: "XXX Pictures"}
     - {id: "/xxx/video/", cat: XXX, desc: "XXX Video"}
+    - {id: "/video/", cat: XXX, desc: "XXX Video"}
 
   modes:
     search: [q]
@@ -91,8 +97,9 @@ settings:
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:
@@ -100,6 +107,10 @@ search:
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/2/&{{ else }}latest/2/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/3/&{{ else }}latest/3/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/4/&{{ else }}latest/4/?{{ end }}order={{ .Config.sort }}&sort={{ .Config.type }}"
+
+  headers:
+    # site presents hcaptcha challenge for Jackett's User-Agent, so slightly alter it here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
 
   rows:
     selector: table.table-striped > tbody > tr
@@ -118,11 +129,11 @@ search:
       attribute: href
     size:
       selector: td:nth-child(2)
-    files:
-      text: 0
-    files:
+    files_optional:
       selector: td:nth-child(3)
       optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}0{{ end }}"
     date:
       selector: td:nth-child(4)
     seeders:

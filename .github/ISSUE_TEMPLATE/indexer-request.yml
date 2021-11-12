@@ -1,0 +1,42 @@
+name: Indexer request
+description: Suggest a new indexer for this project
+title: "[req]: "
+body:
+- type: checkboxes
+  attributes:
+    label: Is there already a request for your tracker?
+    description: Please make sure you are not creating an already submitted <a href="https://github.com/Jackett/Jackett/issues">request</a>. Check closed issues as well, because your request may have already been added or rejected.
+    options:
+      - label: I have checked older issues, open and closed
+        required: true
+- type: dropdown
+  id: type
+  attributes:
+    label: Type
+    description: Select which type of Web Site this is
+    options:
+    - Public
+    - Semi-Private
+    - Private
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Tracker details
+    description: |
+      Please provide the details of your tracker.
+      Example:
+      - Name: TrackerX
+      - URL: https://trackerx.yz
+      - Description: TrackerX is a Private Torrent Tracker for Movies, TV, and e-Learning
+      - Minimum Seeding Time and Minimum Ratio (if Private): MST 24hrs, MR 1.0
+      - Additional Comments: IMDB search has to be enabled in account settings, often has hcaptcha at login
+    value: |
+      - Name:
+      - URL:
+      - Description:
+      - Minimum Seeding Time and Minimum Ratio (if Private):
+      - Additional Comments:
+    render: markdown
+  validations:
+    required: true

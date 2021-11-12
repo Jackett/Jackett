@@ -2,7 +2,7 @@
 id: bithorlo
 name: Bithorlo
 description: "Bithorlo (BHO) is a HUNGARIAN Private Torrent Tracker for MOVIES / GENERAL"
-language: hu-hu
+language: hu-HU
 type: private
 encoding: ISO-8859-2
 links:
@@ -28,6 +28,8 @@ caps:
     - {id: 28, cat: Movies/HD, desc: "HD/Hun"}
     - {id: 33, cat: TV, desc: "Sorozat/Eng"}
     - {id: 5, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 52, cat: TV/HD, desc: "Sorozat/Eng/HD"}
+    - {id: 53, cat: TV/HD, desc: "Sorozat/Hun/HD"}
     - {id: 4, cat: Movies/SD, desc: "Xvid/Eng"}
     - {id: 3, cat: Movies/SD, desc: "Xvid/Hun"}
     # Zene
@@ -52,10 +54,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: info_alert
-    type: info
-    label: Alert about Cookie
-    default: "If during your cookie save you get the following error:</br><b>The 'Value'='xzlogin,xzrecover,xzsignup' part of the cookie is invalid.</b></br>Then remove <b>acopendivids=xzlogin,xzrecover,xzsignup; </b> from the cookie string before proceeding to save."
   - name: cookie
     type: text
     label: Cookie
@@ -150,5 +148,9 @@ search:
       filters:
         - name: replace
           args: ["Feltöltési szorzó × ", ""]
-# minimumseedtime: there is no mandatory seed time
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a

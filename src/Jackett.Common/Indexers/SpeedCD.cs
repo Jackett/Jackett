@@ -27,7 +27,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://speed.cd/",
-            "https://speed.click/"
+            "https://speed.click/",
+            "https://speeders.me/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
@@ -68,7 +69,7 @@ namespace Jackett.Common.Indexers
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
@@ -211,7 +212,7 @@ namespace Jackett.Common.Indexers
                         Seeders = seeders,
                         Peers = seeders + leechers,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
+                        MinimumSeedTime = 259200, // 72 hours
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = 1
                     };

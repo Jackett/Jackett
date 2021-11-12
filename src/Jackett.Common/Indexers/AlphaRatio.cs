@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechTokens: true,
                    imdbInTags: true)
         {
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TVSD, "TvSD");

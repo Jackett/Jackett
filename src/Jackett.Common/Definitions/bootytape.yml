@@ -1,8 +1,8 @@
 ---
 id: bootytape
 name: BootyTape
-language: en-us
 description: "BootyTape is a Semi-Private site for 3X"
+language: en-US
 type: semi-private
 encoding: UTF-8
 links:
@@ -106,23 +106,25 @@ search:
     poster:
       selector: img[src*="/thbx/imgx/"]
       attribute: src
-    files:
-      text: 1
-    files:
+    files_optional:
       selector: a[href$="filelist=1"]
       optional: true
-    size:
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
+    size_optional:
       selector: td:nth-child(3)
-    seeders:
-      text: 0
-    seeders:
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    seeders_optional:
       selector: a[href$="toseeders=1"]
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: a[href$="todlers=1"]
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     date:
       text: now
     downloadvolumefactor:

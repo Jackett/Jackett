@@ -41,12 +41,16 @@ namespace Jackett.Common.Indexers
             "ebook"
         };
 
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://ncore.cc/"
+        };
+
         public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "ncore",
                   name: "nCore",
                   description: "A Hungarian private torrent site.",
-                  link: "https://ncore.cc/",
+                  link: "https://ncore.pro/",
                   caps: new TorznabCapabilities
                   {
                       TvSearchParams = new List<TvSearchParam>
@@ -74,7 +78,7 @@ namespace Jackett.Common.Indexers
                   configData: new ConfigurationDataNCore())
         {
             Encoding = Encoding.UTF8;
-            Language = "hu-hu";
+            Language = "hu-HU";
             Type = "private";
 
             AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");

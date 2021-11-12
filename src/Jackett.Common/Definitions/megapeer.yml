@@ -1,0 +1,188 @@
+---
+id: megapeer
+name: MegaPeer
+description: "MegaPeer is a RUSSIAN Public Torrent Tracker for MOVIES / TV"
+language: ru-RU
+type: public
+encoding: windows-1251
+links:
+  - http://megapeer.ru/ # https is not supported
+  - http://alt.megapeer.ru/
+
+caps:
+  categorymappings:
+    - {id: 79, cat: Movies, desc: "Наши фильмы (Russian Movies)"}
+    - {id: 5, cat: TV, desc: "Наши сериалы (Russian Series)"}
+    - {id: 174, cat: Movies/Foreign, desc: "Зарубежные фильмы (Foreign Movies)"}
+    - {id: 6, cat: TV/Foreign, desc: "Зарубежные сериалы (Foreign Series)"}
+    - {id: 76, cat: TV/Anime, desc: "Мультипликация (Animation)"}
+    - {id: 89, cat: Audio/Video, desc: "Концерты / Клипы (Concerts / Clips)"}
+    - {id: 57, cat: TV, desc: "Телепередачи / Шоу / Юмор (TV)"}
+    - {id: 145, cat: TV/Other, desc: "Обучающее видео (Instructional Video)"}
+    - {id: 55, cat: TV/Documentary, desc: "Документалистика (Documentary)"}
+    - {id: 164, cat: TV/Other, desc: "Прочее (Other)"}
+    - {id: 21, cat: TV/Sport, desc: "Спорт (Sport)"}
+    - {id: 94, cat: Audio, desc: "Музыка (Music)"}
+    - {id: 28, cat: Console, desc: "Игры (Games)"}
+    - {id: 107, cat: PC/0day, desc: "Софт / ОС / Оформление (Software)"}
+    - {id: 41, cat: PC/Mobile-Other, desc: "Мобильные устройства (Mobile)"}
+    - {id: 52, cat: Books, desc: "Книги / Журналы (Books)"}
+    - {id: 169, cat: Other/Misc, desc: "Разное (Misc)"}
+    - {id: 178, cat: Other, desc: "Страницы (Pages)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 0
+    options:
+      0: created
+      1: title
+      2: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      0: desc
+      1: asc
+
+search:
+  # http://megapeer.ru/browse.php?search=%25%25&age=&cat=0&stype=0&sort=0&ascdesc=0
+  paths:
+    - path: browse.php
+  keywordsfilters:
+    - name: re_replace # S01E01 to [1 сезон 1 сери]
+      args: ["(?i)S0*(\\d+)E0*(\\d+)", "[$1 сезон $2 сери]"]
+    - name: re_replace # S01 to [1 сезон]
+      args: ["(?i)S0*(\\d+)", "[$1 сезон]"]
+    - name: re_replace # E01 to [1 сери]
+      args: ["(?i)E0*(\\d+)", "[$1 сери]"]
+  inputs:
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%%{{ end }}"
+    # does not support multi category searches
+    cat: 0
+    # null or yyyy
+    age: ""
+    # 0 title, 1 descr, 2 phrase, 3 infohash
+    stype: 0
+    sort: "{{ .Config.sort }}"
+    ascdesc: "{{ .Config.type }}"
+
+  rows:
+    selector: table#tor-tbl > tbody > tr.hl-tr
+
+  fields:
+    category:
+      selector: a[href^="/cat/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: (\d+)
+    title:
+      selector: a.tLink
+      filters:
+        # normalize to SXXEYY format
+        - name: re_replace
+          args: ["[\\.\\,\\:\\/\\|\\[\\]]", " "]
+        - name: re_replace
+          args: ["(.*) от .*$", "$1"]
+        - name: re_replace
+          args: ["(.*)(\\d+\\-\\d+)\\s*[CСcс]езон\\s*(\\d+\\-\\d+)\\s*[CСcс]ери[ия]\\s*из\\s*\\d+(.*)", "$1 S$2E$3 rus $4"]
+        - name: re_replace
+          args: ["(.*)(\\d+)\\-(\\d+)\\s*[CСcс]езон\\s*(\\d+)\\-(\\d+)\\s*[CСcс]ери[ия](.*)", "$1 S$2E$3 rus $4"]
+        - name: re_replace
+          args: ["(.*)(\\d+)\\s*[CСcс]езон\\s*(\\d+\\-\\d+)\\s*[CСcс]ери[ия]\\s*из\\s*\\d+(.*)", "$1 S$2E$3 rus $4"]
+        - name: re_replace
+          args: ["(.*)(\\d+)\\s*[CСcс]езон\\s*(\\d+\\-\\d+)\\s*[CСcс]ери[ия](.*)", "$1 S$2E$3 rus $4"]
+        - name: re_replace
+          args: ["(.*)(\\d+\\-\\d+)\\s*[CСcс]езон\\s*(.*)", "$1 S$2 rus $3"]
+        - name: re_replace
+          args: ["(.*)(\\d+)\\s*[CСcс]езон\\s*(.*)", "$1 S$2 rus $3"]
+        - name: re_replace
+          args: ["(.*)(\\d+\\-\\d+)\\s*[CСcс]ери[ия]\\s*из\\s*\\d+(.*)", "$1 E$2 rus $3"]
+        - name: re_replace
+          args: ["(.*)(\\d+)\\s*[CСcс]ери[ия]\\s*из\\s*\\d+(.*)", "$1 E$2 rus $3"]
+        - name: re_replace
+          args: ["(.*)(\\d+\\-\\d+)\\s*[CСcс]ери[ия](.*)", "$1 E$2 rus $3"]
+        - name: re_replace
+          args: ["(.*)(\\d+)\\s*[CСcс]ери[ия](.*)", "$1 E$2 rus $3"]
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: replace
+          args: ["WEBRip", "WEBDL"]
+        - name: replace
+          args: ["WEB-DL", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
+        - name: replace
+          args: ["SATRip", "TV"]
+    details:
+      selector: a.tLink
+      attribute: href
+    download:
+      selector: a.tr-dl
+      attribute: href
+    poster:
+      selector: img.tor-icon
+      attribute: src
+    size:
+      selector: a.tr-dl
+    seeders:
+      selector: span.seedmed
+    leechers:
+      text: 1
+    date:
+      # Добавлен: 5 октября 2021 в 06:56:08
+      selector: p
+      filters:
+        - name: replace
+          args: ["Добавлен: ", ""]
+        - name: replace
+          args: [" в ", " "]
+        - name: replace
+          args: ["января", "January"]
+        - name: replace
+          args: ["февраля", "February"]
+        - name: replace
+          args: ["марта", "March"]
+        - name: replace
+          args: ["апреля", "April"]
+        - name: replace
+          args: ["мая", "May"]
+        - name: replace
+          args: ["июня", "June"]
+        - name: replace
+          args: ["июля", "July"]
+        - name: replace
+          args: ["августа", "August"]
+        - name: replace
+          args: ["сентября", "September"]
+        - name: replace
+          args: ["октября", "October"]
+        - name: replace
+          args: ["ноября", "November"]
+        - name: replace
+          args: ["декабря", "December"]
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2 January 2006 15:04:05 -07:00"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

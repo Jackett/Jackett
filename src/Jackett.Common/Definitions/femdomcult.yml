@@ -5,7 +5,7 @@
 id: femdomcult
 name: Femdomcult
 description: "Femdomcult is a Private Torrent Tracker for FETISH XXX"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -17,6 +17,7 @@ caps:
     - {id: 60, cat: XXX, desc: "Anime Comics"}
     - {id: 73, cat: XXX, desc: "Asian Femdom"}
     - {id: 61, cat: XXX, desc: "Audio"}
+    - {id: 78, cat: XXX, desc: "EBook"}
     - {id: 74, cat: XXX, desc: "Female Muscles"}
     - {id: 59, cat: XXX, desc: "Femdom"}
     - {id: 62, cat: XXX, desc: "Femdom Vip"}
@@ -30,6 +31,7 @@ caps:
     - {id: 65, cat: XXX, desc: "Scat"}
     - {id: 71, cat: XXX, desc: "Strapon"}
     - {id: 66, cat: XXX, desc: "Transdom"}
+    - {id: 77, cat: XXX, desc: "Unknown & Low Quality"}
     - {id: 75, cat: XXX, desc: "Virtual Reality"}
 
   modes:
@@ -116,9 +118,7 @@ search:
           args: ["/static/common/noartwork/noimage.png", ""]
     files:
       selector: td:nth-child(3)
-    date: # some torrents have "Never" date
-      text: 20 years ago
-    date:
+    date_optional:
       selector: td:nth-child(5) > span
       attribute: title
       optional: true
@@ -127,6 +127,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 02 2006, 15:04 -07:00"
+    date: # some torrents have "Never" date
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}20 years ago{{ end }}"
     size:
       selector: td:nth-child(6)
     grabs:

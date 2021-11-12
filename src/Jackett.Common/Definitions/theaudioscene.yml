@@ -2,7 +2,7 @@
 id: theaudioscene
 name: TheAudioScene
 description: "TheAudioScene is a Private Torrent Tracker for AUDIO SOFTWARE / SAMPLES / ETC"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -108,6 +108,8 @@ search:
         img[title="Win VST"]: 13
         img[title="Win VSTi"]: 14
         img[title="Handheld App"]: 15
+    date:
+      text: now
     size:
       selector: td[id$="_6"]
     seeders:

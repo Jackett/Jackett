@@ -55,8 +55,9 @@ download:
       action: add
       tid: "{{ .DownloadUri.Query.id }}"
       text: "{{ .Config.thankyou }}"
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
@@ -101,9 +102,6 @@ search:
           args: "in (\\d+) bestan"
     grabs:
       selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-child(4) table tr:nth-child(2) td:last-child
       filters:
@@ -137,16 +135,16 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "2 January 2006 15:04:05 -07:00"
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       optional: true
       selector: td:nth-child(4) table tr:nth-child(3) td:nth-child(5) font b
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       optional: true
       selector: td:nth-child(4) table tr:nth-child(3) td:nth-child(5) font font b
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

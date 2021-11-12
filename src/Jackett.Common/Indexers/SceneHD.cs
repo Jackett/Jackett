@@ -55,7 +55,7 @@ namespace Jackett.Common.Indexers
                                                             "feed link. It's the last parameter in the URL."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "D948487DD52462F2D1E62B990D608051E3DE5AA6");

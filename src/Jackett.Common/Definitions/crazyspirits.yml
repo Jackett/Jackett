@@ -2,7 +2,7 @@
 id: crazyspirits
 name: CrazySpirits
 description: "Crazy Spirits is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: fr-fr
+language: fr-FR
 type: private
 encoding: UTF-8
 links:
@@ -38,9 +38,10 @@ caps:
     - {id: 70, cat: Movies/WEB-DL, desc: "Films WebRip 1080p"}
     - {id: 71, cat: Movies/WEB-DL, desc: "Films WebRip 720p"}
     - {id: 73, cat: Movies/WEB-DL, desc: "Films Webrip"}
+    - {id: 129, cat: Movies, desc: "Films QC~Film"}
     - {id: 72, cat: Movies/WEB-DL, desc: "Films WEB DL"}
     - {id: 99, cat: Movies, desc: "Films Remux"}
-    - {id: 98, cat: TV/Anime, desc: "Films Film Animées"}
+    - {id: 98, cat: Movies/Other, desc: "Films Film Animées"}
     - {id: 122, cat: Movies/WEB-DL, desc: "Films Web-DL 1080P"}
     - {id: 123, cat: Movies/WEB-DL, desc: "Films WEB-DL 720p"}
     - {id: 126, cat: Movies, desc: "Films HDTV"}
@@ -51,9 +52,10 @@ caps:
     - {id: 117, cat: Console, desc: "Jeux Roms"}
     - {id: 118, cat: Console, desc: "Jeux Switch"}
     - {id: 119, cat: Console/Wii, desc: "Jeux Wii"}
-    - {id: 120, cat: Console/WiiU, desc: "Jeux WiiU"}
     - {id: 121, cat: Console/XBox, desc: "Jeux Xbox"}
+    - {id: 120, cat: Console/WiiU, desc: "Jeux WiiU"}
     # Livre
+    - {id: 135, cat: Books, desc: "Livre Québéçois"}
     - {id: 100, cat: Audio/Audiobook, desc: "Livre Audio"}
     - {id: 101, cat: Books/EBook, desc: "Livre Epub"}
     - {id: 102, cat: Books, desc: "Livre Mangas"}
@@ -67,28 +69,22 @@ caps:
     - {id: 113, cat: PC/Mobile-iOS, desc: "Logiciel Apple"}
     - {id: 112, cat: PC/Mobile-Other, desc: "Logiciel Smart Phone"}
     # Musiques
+    - {id: 132, cat: Audio, desc: "Musiques QC~Musique"}
     - {id: 125, cat: Audio/Video, desc: "Musiques Videos Pack"}
     - {id: 107, cat: Audio/MP3, desc: "Musiques MP3"}
     - {id: 108, cat: Audio/Lossless, desc: "Musiques FLAC"}
     - {id: 109, cat: Audio, desc: "Musiques WMA"}
     # Séries
-    - {id: 76, cat: TV/HD, desc: "Series Blu-Ray"}
     - {id: 77, cat: TV/HD, desc: "Series HDTV"}
-    - {id: 78, cat: TV/HD, desc: "Series 1080p"}
-    - {id: 79, cat: TV/HD, desc: "Series 720p"}
-    - {id: 80, cat: TV/SD, desc: "Series DvDR"}
-    - {id: 81, cat: TV/SD, desc: "Series DVDrip"}
-    - {id: 82, cat: TV/HD, desc: "Series MHD"}
-    - {id: 83, cat: TV/WEB-DL, desc: "Series WebDL1080p"}
     - {id: 84, cat: TV/HD, desc: "Series Épisodes HD"}
     - {id: 85, cat: TV/SD, desc: "Series Épisodes SD"}
     - {id: 86, cat: TV, desc: "Series VosFR"}
-    - {id: 87, cat: TV, desc: "Series VO"}
-    - {id: 89, cat: TV, desc: "Series VOSTA"}
     - {id: 97, cat: TV/Anime, desc: "Series Animée"}
     - {id: 88, cat: TV, desc: "Series Pack HD"}
     - {id: 128, cat: TV, desc: "Series Pack SD"}
+    - {id: 130, cat: TV, desc: "SeriesQC~Serie"}
     # Spéctacle
+    - {id: 131, cat: TV, desc: "SeriesQC~Spectacle"}
     - {id: 91, cat: TV/Other, desc: "Spectacle 720p"}
     - {id: 90, cat: TV/Other, desc: "Spectacle 1080p"}
     # Télévision
@@ -97,6 +93,7 @@ caps:
     - {id: 92, cat: TV/Other, desc: "TV Spectacles"}
     - {id: 93, cat: TV/Documentary, desc: "TV Documentaires"}
     - {id: 94, cat: TV, desc: "TV Animation"}
+    - {id: 133, cat: TV, desc: "TV QC~Tv"}
     - {id: 95, cat: TV/Sport, desc: "TV Sports"}
 
   modes:
@@ -170,8 +167,9 @@ download:
       id: "{{ .DownloadUri.Query.id }}"
       to: give
       torrent: "{{ .DownloadUri.Query.id }}"
-  selector: "a[href^=\"/{{ .DownloadUri.Query.id }}/\"]"
-  attribute: href
+  selectors:
+    - selector: "a[href^=\"/{{ .DownloadUri.Query.id }}/\"]"
+      attribute: href
 
 search:
   paths:
@@ -242,11 +240,23 @@ search:
         - name: regexp
           args: "src=(.*?)><"
     grabs:
-      selector: td:nth-last-child(4)
+      selector: a[onmouseover][href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "Completé : </b>(\\d+)<"
     seeders:
-      selector: td:nth-last-child(3)
+      selector: a[onmouseover][href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "=greene>(\\d+)<"
     leechers:
-      selector: td:nth-last-child(2)
+      selector: a[onmouseover][href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "=red>(\\d+)<"
     size:
       selector: a[onmouseover][href^="torrents-details.php?id="]
       attribute: onmouseover

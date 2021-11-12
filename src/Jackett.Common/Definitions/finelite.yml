@@ -2,7 +2,7 @@
 id: finelite
 name: FinElite
 description: "FinElite (FE) is a FINNISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: fi-fi
+language: fi-FI
 type: private
 encoding: UTF-8
 links:
@@ -57,7 +57,7 @@ caps:
     - {id: 17, cat: TV/SD, desc: "TV SD"}
     - {id: 31, cat: Movies/UHD, desc: "Ultra HD"}
     - {id: 20, cat: XXX, desc: "XXX HD"}
-    - {id: 21, cat: XXX, desc: "XXX SD"}
+    - {id: 21, cat: XXX/SD, desc: "XXX SD"}
 
   modes:
     search: [q]
@@ -115,7 +115,7 @@ search:
     download:
       selector: a[href^="/lataa.php/"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:

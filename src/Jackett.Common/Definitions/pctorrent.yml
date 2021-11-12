@@ -2,7 +2,7 @@
 id: pctorrent
 name: PC-torrent
 description: "PC-torrent is a RUSSIAN Public Torrent Tracker for Games"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: windows-1251
 links:
@@ -21,8 +21,9 @@ caps:
 settings: []
 
 download:
-  selector: a[href*="/engine/download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href*="/engine/download.php?id="]
+      attribute: href
 
 search:
   paths:

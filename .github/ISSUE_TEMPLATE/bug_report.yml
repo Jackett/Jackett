@@ -1,0 +1,61 @@
+name: Bug report
+description: Create a report of your issue
+body:
+- type: checkboxes
+  attributes:
+    label: Have you checked our Troubleshooting page for your issue?
+    description: Please read the <a href="https://github.com/Jackett/Jackett/wiki/Troubleshooting">Troubleshooting</a> page for steps to resolve common issues.
+    options:
+      - label: I have checked the Troubleshooting page
+        required: true
+- type: checkboxes
+  attributes:
+    label: Is there already an issue for your problem?
+    description: Please make sure you are not creating an already submitted <a href="https://github.com/Jackett/Jackett/issues">Issue</a>. Check closed issues as well, because your issue may have already been fixed.
+    options:
+      - label: I have checked older issues, open and closed
+        required: true
+- type: checkboxes
+  attributes:
+    label: Have you read our Contributing Guidelines?
+    description: Please read our <a href="https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md">Contributing Guidelines</a> before submitting your issue to ensure a prompt response to your bug.
+    options:
+      - label: I have read the Contributing Guidelines
+        required: true
+- type: textarea
+  attributes:
+    label: Environment
+    description: Please provide the details of the system Jackett is running on. The best way to do this is to restart Jackett, access the dashboard, view the log, and copy/paste replacing the example below with the last 10 Info lines at the bottom of the log.
+    placeholder: |
+      Using HTTP Client: HttpWebClient/HttpWebClient2
+      Using FlareSolverr: Disabled or a url
+      Using proxy: Disabled or HTTP/SOCKS4/SOCKS5
+      App config/log directory: folder path
+      Running in Docker: No/Yes
+      Jackett variant: CoreWindows/FullFrameworkWindows/CoreMacOs/CoreLinuxAmdx64/CoreLinuxArm32/CoreLinuxArm64/Mono
+      OS version: platform n.nn (32bit/64bit)
+      Environment version: n.n.nn (folder path)
+      Starting Jackett vn.nn.nn
+    render: markdown
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Description
+    description: List steps to reproduce the error and details on what happens and what you expected to happen.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Logged Error Messages
+    description: |
+      Place any relevant error messages you noticed from the logs here.
+      Make sure you attach the full logs with your personal information removed in case we need more information.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Screenshots
+    description: Place any screenshots of the issue here if needed
+  validations:
+    required: false

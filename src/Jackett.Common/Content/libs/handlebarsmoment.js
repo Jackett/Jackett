@@ -33,5 +33,5 @@ Handlebars.registerHelper('jacketTimespan', function (context, block) {
 });
 
 Handlebars.registerHelper('jacketSize', function (context, block) {
-    return filesize(context, { round: 1 });
+    return filesize(context, { round: 2 });
 });

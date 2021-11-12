@@ -26,6 +26,7 @@ namespace Jackett.Common.Models.DTO
         public string author { get; set; }
         public string title { get; set; }
         public string configured { get; set; }
+        public string cache { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
         {
@@ -44,6 +45,12 @@ namespace Jackett.Common.Models.DTO
                 query.Limit = ParseUtil.CoerceInt(request.limit);
             if (!string.IsNullOrWhiteSpace(request.offset))
                 query.Offset = ParseUtil.CoerceInt(request.offset);
+
+            bool _cache;
+            if (bool.TryParse(request.cache, out _cache))
+            {
+                query.Cache = _cache;
+            }
 
             if (request.cat != null)
             {

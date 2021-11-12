@@ -1,14 +1,17 @@
 ---
 id: torrent9clone
-name: Torrent9 clone (torrent9.ch)
-description: "Torrent9 is a FRENCH Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+name: Torrent9 clone
+description: "Torrent9 clone is a FRENCH Public Torrent9 clone for TV / MOVIES / GENERAL"
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent9.so/
-  - https://torrent9.unblocked.rest/
+  - https://www.torrent9.pw/
+  - https://torrent9.nocensor.biz/
+legacylinks:
+  - https://torrent9.nocensor.space/
+  - https://torrent9.nocensor.work/
 
 legacylinks:
   - https://www.torrents9.pw/
@@ -43,6 +46,18 @@ legacylinks:
   - https://torrent9.proxyportal.pw/
   - https://torrent9.uk-unblock.pro/
   - https://torrent9.unblockninja.com/ # this is a proxy for torrent9
+  - https://torrent9.unblocked.rest/
+  - https://www.torrent9.so/
+  - https://wvw.torrent9.sh/
+  - https://www.torrent9.sh/
+  - https://www.torrent9.one/
+  - https://wvw.torrent9.one/
+  - https://wwv.torrent9.one/
+  - https://vww.torrent9.one/
+  - https://www.torrent9.srl/
+  - https://torrent9.unblocked.monster/
+  - https://www.torrent9.la/
+  - https://www.torrent9.ninja/
 
 caps:
   categorymappings:
@@ -63,6 +78,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -88,8 +107,9 @@ settings:
     default: Torrent9clone only returns category <b>Movies</b> in its <i>Keywordless</i> search results page.</br>To pass your apps' indexer TEST you will need to include the 145469(Movies) category.
 
 download:
-  selector: a[href^="magnet:?"]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
 
 search:
   paths:
@@ -157,16 +177,16 @@ search:
       text: now
     size:
       selector: td:nth-child(2)
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: td:nth-child(3)
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:nth-child(4)
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

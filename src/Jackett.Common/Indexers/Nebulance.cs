@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers
 <br/>For best results, change the 'Torrents per page' setting to 100 in your profile on the NBL webpage."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TV);
@@ -91,12 +91,16 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
+            var searchTerm = query.GetQueryString();
+            if (!string.IsNullOrWhiteSpace(searchTerm)) // remove some characters
+                searchTerm = Regex.Replace(searchTerm, @"[-._]", " ");
+
             var qc = new NameValueCollection
             {
                 {"action", "basic"},
                 {"order_by", "time"},
                 {"order_way", "desc"},
-                {"searchtext", query.GetQueryString()}
+                {"searchtext", searchTerm}
             };
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();

@@ -2,7 +2,7 @@
 id: kickasstorrents-to
 name: kickasstorrents.to
 description: "kickasstorrents.to is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
@@ -51,12 +51,18 @@ settings:
       asc: asc
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:
+    # 20 rows per page
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}2/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}3/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}4/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}5/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
 
   rows:
     selector: table.data tr.odd:has(a[class="cellMainLink"]), table.data tr.even:has(a[class="cellMainLink"])

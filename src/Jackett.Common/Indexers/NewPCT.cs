@@ -82,8 +82,8 @@ namespace Jackett.Common.Indexers
 
         private readonly int _maxDailyPages = 1;
         private readonly int _maxMoviesPages = 6;
-        private readonly int[] _allTvCategories = (new [] {TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
-        private readonly int[] _allMoviesCategories = (new [] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
+        private readonly int[] _allTvCategories = (new[] { TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
+        private readonly int[] _allMoviesCategories = (new[] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
 
         private bool _includeVo;
         private bool _filterMovies;
@@ -99,8 +99,9 @@ namespace Jackett.Common.Indexers
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://pctmix.com/",
-            "https://pctreload.com/"
+            "https://atomixhq.com/",
+            "https://atomixhq.one/",
+            "https://pctmix1.unblockit.bz/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -113,7 +114,17 @@ namespace Jackett.Common.Indexers
             "http://tumejortorrent.com/",
             "http://pctnew.com/",
             "https://descargas2020.org/",
-            "https://pctnew.org/"
+            "https://pctnew.org/",
+            "https://pctreload.com/",
+            "https://pctmix1.unblockit.uno/",
+            "https://pctmix1.unblockit.ch/",
+            "https://pctmix1.unblockit.ws/",
+            "https://pctmix1.unblockit.li/",
+            "https://pctmix.com/",
+            "https://pctmix1.com/",
+            "https://pctreload1.com/",
+            "https://maxitorrent.com",
+            "https://pctmix1.unblockit.kim/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -121,8 +132,9 @@ namespace Jackett.Common.Indexers
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://pctmix.com/",
-                   caps: new TorznabCapabilities {
+                   link: "https://atomixhq.com/",
+                   caps: new TorznabCapabilities
+                   {
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -140,19 +152,19 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
-            Language = "es-es";
+            Language = "es-ES";
             Type = "public";
 
-            var voItem = new BoolItem { Name = "Include original versions in search results", Value = false };
+            var voItem = new BoolConfigurationItem("Include original versions in search results") { Value = false };
             configData.AddDynamic("IncludeVo", voItem);
 
-            var filterMoviesItem = new BoolItem { Name = "Only full match movies", Value = true };
+            var filterMoviesItem = new BoolConfigurationItem("Only full match movies") { Value = true };
             configData.AddDynamic("FilterMovies", filterMoviesItem);
 
-            var removeMovieAccentsItem = new BoolItem { Name = "Remove accents in movie searches", Value = true };
+            var removeMovieAccentsItem = new BoolConfigurationItem("Remove accents in movie searches") { Value = true };
             configData.AddDynamic("RemoveMovieAccents", removeMovieAccentsItem);
 
-            var removeMovieYearItem = new BoolItem { Name = "Remove year from movie results (enable for Radarr)", Value = false };
+            var removeMovieYearItem = new BoolConfigurationItem("Remove year from movie results (enable for Radarr)") { Value = false };
             configData.AddDynamic("RemoveMovieYear", removeMovieYearItem);
 
             AddCategoryMapping(1, TorznabCatType.Movies);
@@ -176,9 +188,10 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
-            var results = await RequestWithCookiesAndRetryAsync(linkParam.AbsoluteUri);
+            var downloadLink = linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/");
 
-            var uriLink = ExtractDownloadUri(results.ContentString, linkParam.AbsoluteUri);
+            var results = await RequestWithCookiesAndRetryAsync(downloadLink);
+            var uriLink = ExtractDownloadUri(results.ContentString, downloadLink);
             if (uriLink == null)
                 throw new Exception("Download link not found!");
 
@@ -199,7 +212,16 @@ namespace Jackett.Common.Indexers
                     else
                         linkText = match.Groups[1].Value;
 
-                    return new Uri(new Uri(baseLink), linkText);
+                    // take the details page link and the download page link and build a Torrent link
+                    // Details page: https://atomixhq.com/descargar/torrent/peliculas-x264-mkv/el-viaje-i-onde-dager--2021-/bluray-microhd/
+                    // Download page: https://atomtt.com/download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD/
+                    // Torrent link: https://atomixhq.com/download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD.torrent
+                    linkText = linkText.Remove(linkText.Length - 1, 1) + ".torrent";
+                    var linkHost = new Uri(linkText).Host;
+                    var linkBase = new Uri(baseLink).Host;
+                    var downloadLink = linkText.Replace(linkHost.ToString(), linkBase.ToString());
+
+                    return new Uri(downloadLink);
                 }
             }
 
@@ -210,10 +232,10 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            _includeVo = ((BoolItem)configData.GetDynamic("IncludeVo")).Value;
-            _filterMovies = ((BoolItem)configData.GetDynamic("FilterMovies")).Value;
-            _removeMovieAccents = ((BoolItem)configData.GetDynamic("RemoveMovieAccents")).Value;
-            _removeMovieYear = ((BoolItem)configData.GetDynamic("RemoveMovieYear")).Value;
+            _includeVo = ((BoolConfigurationItem)configData.GetDynamic("IncludeVo")).Value;
+            _filterMovies = ((BoolConfigurationItem)configData.GetDynamic("FilterMovies")).Value;
+            _removeMovieAccents = ((BoolConfigurationItem)configData.GetDynamic("RemoveMovieAccents")).Value;
+            _removeMovieYear = ((BoolConfigurationItem)configData.GetDynamic("RemoveMovieYear")).Value;
             _dailyNow = DateTime.Now;
             _dailyResultIdx = 0;
             var rssMode = string.IsNullOrEmpty(query.SanitizedSearchTerm);
@@ -549,12 +571,13 @@ namespace Jackett.Common.Indexers
                         if (titleLower.Contains("[web screener]") || titleLower.Contains("[hd-tc]"))
                             quality = "TS Screener";
                     }
-                    else if  (titleParts.Length > 2)
+                    else if (titleParts.Length > 2)
                         quality = titleParts[1].Replace("]", "").Replace("MKV", "").Trim();
 
                     // we have to guess the language (words DUAL or MULTI are not supported in Radarr)
                     var language = "spanish";
-                    if (titleLower.Contains("latino")) language += " latino";
+                    if (titleLower.Contains("latino"))
+                        language += " latino";
                     if ((titleLower.Contains("castellano") && titleLower.Contains("ingles")) ||
                         (titleLower.Contains("spanish") && titleLower.Contains("english")) ||
                         titleLower.Contains("[es-en]") || titleLower.Contains("multilenguaje"))
@@ -623,7 +646,7 @@ namespace Jackett.Common.Indexers
             };
 
             //Sanitize
-            title = title.Replace("-", "").Replace("(", "").Replace(")", "");
+            title = title.Replace("-", "");
             title = Regex.Replace(title, @"\s+", " ");
 
             if (releaseType == ReleaseType.Tv)

@@ -2,7 +2,7 @@
 id: lesaloon
 name: LeSaloon
 description: "Le Saloon is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: fr-fr
+language: fr-FR
 type: private
 encoding: UTF-8
 links:
@@ -120,17 +120,13 @@ login:
   # https://lesaloonv2-0.net/yupy_login.php
   path: yupy_login.php
   method: form
-  form: form[action^="index.php?page=login"]
+  form: form[action^="login"]
   inputs:
-    uid: "{{ .Config.username }}"
-    pwd: "{{ .Config.password }}"
-    rememberme: ""
-  captcha:
-    type: image
-    selector: img[src^="access_code/"]
-    input: private_key
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    loginButton: XZ
   error:
-    - selector: tr td span[style="color:#FF0000;"]
+    - selector: "p[style=\"color: #B73C38\"]"
   test:
     path: index.php
     selector: a[href="logout.php"]

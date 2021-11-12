@@ -1,0 +1,142 @@
+---
+id: reelflix-api
+name: ReelFlix (API)
+description: "ReelFlix (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://reelflix.xyz/
+legacylinks:
+  - https://legacyhd.org/
+
+caps:
+  # dont forget to update the case block in the search fields category
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 4, cat: Books/EBook, desc: "E-Book"}
+    - {id: 5, cat: TV, desc: "TV Pack"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://reelflix.xyz/\" target =_blank>ReelFlix</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  paths:
+    # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
+    - path: /api/torrents/filter
+      response:
+        type: json
+        attribute: attributes
+
+  inputs:
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php
+    api_token: "{{ .Config.apikey }}"
+    name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    tmdb: "{{ .Query.TMDBID }}"
+    imdb: "{{ .Query.IMDBIDShort }}"
+    tvdb: "{{ .Query.TVDBID }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}free=1{{ else }}{{ end }}"
+
+  rows:
+    selector: data
+    count:
+      selector: meta.total
+
+  fields:
+    category:
+      selector: category
+      case:
+        Movie: 1
+        TV: 2
+        Music: 3
+        E-Book: 4
+        TV Pack: 5
+    title:
+      selector: name
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    poster:
+      selector: poster
+    imdbid:
+      selector: imdb_id
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+        - name: replace
+          args: ["https://via.placeholder.com/400x600", ""]
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2021-10-18T00:34:50.000000Z"
+      selector: created_at
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: freeleech
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: double_upload
+      case:
+        0: 1 # normal
+        1: 2 # double
+    minimumratio:
+      text: 0.4
+    minimumseedtime:
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+# json UNIT3D 5.3.0

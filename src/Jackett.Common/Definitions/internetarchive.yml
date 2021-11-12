@@ -1,0 +1,106 @@
+---
+id: internetarchive
+name: Internet Archive
+description: "Internet Archive is a non-profit digital library offering free universal access to books, movies & music, as well as 406 billion archived web pages"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://archive.org/
+
+caps:
+  categorymappings:
+    - {id: audio, cat: Audio, desc: audio}
+    - {id: etree, cat: Audio, desc: etree}
+    - {id: movies, cat: Movies, desc: movies}
+    - {id: movies, cat: TV, desc: movies}
+    - {id: image, cat: Other/Misc, desc: image}
+    - {id: texts, cat: Books, desc: texts}
+    - {id: software, cat: PC, desc: software}
+    - {id: web, cat: Other, desc: web}
+    - {id: collection, cat: Other, desc: collection}
+    - {id: account, cat: Other, desc: account}
+    - {id: data, cat: Other, desc: data}
+    - {id: other, cat: Other, desc: other}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: titleOnly
+    type: checkbox
+    label: Search only in title
+    default: true
+  - name: noMagnet
+    type: checkbox
+    label: Download using .torrent only. No Magnets.
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: publicdate
+    options:
+      publicdate: created
+      downloads: downloads
+      item_size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: "-"
+    options:
+      "-": desc
+      "_": asc
+
+search:
+  paths:
+    - path: advancedsearch.php
+      response:
+        type: json
+  inputs:
+    q: "{{ if and .Config.titleOnly .Keywords }}title:({{ else }}{{ end }}{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}{{ if and .Config.titleOnly .Keywords }}){{ else }}{{ end }}{{ if .Keywords }} AND {{ else }}{{ end }}format:(\"Archive BitTorrent\"){{ if .Categories }} AND mediatype:({{ join .Categories \" OR \" }}){{ else }}{{ end }}"
+    fl[]: "identifier,title,mediatype,item_size,downloads,btih,publicdate"
+    sort: "{{ if .Keywords }}{{ re_replace .Config.type \"_\" \"\" }}{{ .Config.sort }}{{ else }}-publicdate{{ end }}"
+    rows: 100
+    output: json
+
+  rows:
+    selector: response.docs
+    count:
+      selector: response.numFound
+
+  fields:
+    category:
+      selector: mediatype
+    title:
+      selector: title
+    id:
+      selector: identifier
+    details:
+      text: "details/{{ .Result.id }}"
+    download:
+      text: "download/{{ .Result.id }}/{{ .Result.id }}_archive.torrent"
+    btih:
+      selector: btih
+      optional: true
+    infohash:
+      text: "{{ if .Config.noMagnet }}{{ else }}{{ .Result.btih }}{{ end }}"
+    date:
+      # 2021-10-25T16:44:43Z
+      selector: publicdate
+    size:
+      selector: item_size
+    grabs:
+      selector: downloads
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json Elasticsearch

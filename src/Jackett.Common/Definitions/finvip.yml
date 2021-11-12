@@ -2,9 +2,10 @@
 id: finvip
 name: FinVip
 description: "FinVip is a FINNISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: fi-fi
+language: fi-FI
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://finvip.org/
 
@@ -59,7 +60,6 @@ settings:
   - name: info_results
     type: info
     label: "Search results"
-    default: "For best results, increase the torrents number in your profile to 100."
     default: "<ol><li>Only the Xbtit style is supported.</li><ul>Make sure to set the <b>Style</b> option in your profile to <b>Xbtit</b>.</ul><li>For best results, increase the torrents number in your profile to 100.</li><ul>Set the <b>Torrents Per Page</b> option to <b>100</b>.</ul></ol>"
   - name: freeleech
     type: checkbox
@@ -96,8 +96,9 @@ login:
     selector: a[href="logout.php"]
 
 download:
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
@@ -134,15 +135,13 @@ search:
     download:
       selector: td a[href^="index.php?page=downloadcheck"]
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
       filters:
         # javascript:popdetails('http://www.imdb.com/title/tt10209130');
-        - name: replace
-          args: ["javascript:popdetails('", ""]
-        - name: replace
-          args: ["');", ""]
+        - name: regexp
+          args: tt(\d+)
     size:
       selector: td:nth-last-child(1)
     leechers:

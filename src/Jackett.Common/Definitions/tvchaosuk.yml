@@ -2,7 +2,7 @@
 id: tvchaosuk
 name: TVChaosUK
 description: "TV Chaos UK (TVCUK) is a Private Torrent Tracker for UK TV"
-language: en-uk
+language: en-GB
 type: private
 encoding: UTF-8
 links:
@@ -134,10 +134,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

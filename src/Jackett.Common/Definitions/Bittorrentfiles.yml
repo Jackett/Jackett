@@ -2,7 +2,7 @@
 id: Bittorrentfiles
 name: Bittorrentfiles
 description: "Bittorrentfiles is a Private GERMAN tracker"
-language: de-de
+language: de-DE
 type: private
 encoding: UTF-8
 links:
@@ -27,7 +27,7 @@ caps:
     - {id: 79, cat: TV/HD, desc: "Staffeln HD"}
     - {id: 56, cat: TV/SD, desc: "Staffeln SD"}
     - {id: 88, cat: TV/UHD, desc: "Staffeln UHD"}
-    - {id: 86, cat: TV/HD, desc: "Folgen UHD"}
+    - {id: 86, cat: TV/UHD, desc: "Folgen UHD"}
     - {id: 54, cat: TV/HD, desc: "Folgen HD"}
     - {id: 80, cat: TV/HD, desc: "Folgen HD/BD"}
     - {id: 7, cat: TV/SD, desc: "Folgen SD"}
@@ -68,7 +68,7 @@ caps:
     - {id: 74, cat: TV/Sport, desc: "Sport HD"}
     - {id: 39, cat: TV/Sport, desc: "Sport SD"}
     # Sonstiges
-    - {id: 41, cat: Books/Comics, desc: "Sonstiges A-Book"}
+    - {id: 41, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 33, cat: TV/Anime, desc: "Sonstiges Anime"}
     - {id: 35, cat: Books/EBook, desc: "Sonstiges e-Book-DE"}
     - {id: 90, cat: Books/EBook, desc: "Sonstiges e-Book-INT"}
@@ -79,11 +79,10 @@ caps:
     - {id: 47, cat: Other, desc: "Sonstiges Line"}
     - {id: 9, cat: Other, desc: "Sonstiges Andere"}
     # XXX
-    - {id: 58, cat: Books/Comics, desc: "XXX HD"}
+    - {id: 58, cat: XXX/x264, desc: "XXX HD"}
     - {id: 46, cat: XXX, desc: "XXX Hentai"}
-    - {id: 35, cat: XXX/Other, desc: "XXX Andere"}
     - {id: 59, cat: XXX/Pack, desc: "XXX Pack"}
-    - {id: 27, cat: XXX, desc: "XXX SD"}
+    - {id: 27, cat: XXX/SD, desc: "XXX SD"}
     - {id: 76, cat: XXX, desc: "XXX Andere"}
 
 
@@ -173,35 +172,30 @@ search:
     download:
       selector: a[href^="/download.php"]
       attribute: href
-    grabs:
-      text: 0
-    grabs:
+    grabs_optional:
       selector: a[title="Snatcher"]
       optional: true
-    files:
-      text: 0
-    files:
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+    files_optional:
       selector: a[title="Files"]
       optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}0{{ end }}"
     size:
       selector: td:nth-child(6)
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: a[title="Seeder"]
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: a[title="Leecher"]
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
       # 2 flavours of dates
-    date:
+    date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
       selector: td:nth-child(10):contains("Heute"),  td:nth-child(10):contains("Gestern")
@@ -215,7 +209,7 @@ search:
           args: ["Gestern", "Yesterday"]
         - name: append
           args: " +01:00" # CET
-    date:
+    date_year:
       # 30.02.2018 23:12:50
       selector: td:nth-child(10):contains("."):contains(":")
       optional: true
@@ -226,6 +220,8 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img[alt="OU"]: 0

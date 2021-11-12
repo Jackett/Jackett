@@ -40,6 +40,10 @@ namespace Jackett.Common.Indexers
         // Whether this indexer has been configured, verified and saved in the past and has the settings required for functioning
         bool IsConfigured { get; }
 
+        string[] Tags { get; }
+        bool IsHealthy { get; }
+        bool IsFailing { get; }
+
         // Retrieved for starting setup for the indexer via web API
         Task<ConfigurationData> GetConfigurationForSetup();
 
@@ -53,7 +57,7 @@ namespace Jackett.Common.Indexers
 
         void Unconfigure();
 
-        Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer=false);
+        Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer = false);
 
         bool CanHandleQuery(TorznabQuery query);
     }

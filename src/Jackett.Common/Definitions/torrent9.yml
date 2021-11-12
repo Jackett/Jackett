@@ -2,7 +2,7 @@
 id: torrent9
 name: Torrent9
 description: "Torrent9 is a FRENCH Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
@@ -10,7 +10,6 @@ links:
   - https://torrent9.to/
   - https://www.torrent9.gg/
   - https://torrent9.unblockninja.com/
-  - https://www.oxtorrent.me/
 
 legacylinks:
   - http://www.torrent9.ec/
@@ -43,8 +42,10 @@ legacylinks:
   - https://ww1.torrent9.to/
   - https://www.torrent9.is/
   - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
+  - https://www.oxtorrent.me/ # http 522 Connection timed out
 
 caps:
+  # dont forget to update the search fields category case block
   categorymappings:
     - {id: films, cat: Movies, desc: "Movies"}
     - {id: series, cat: TV, desc: "TV"}
@@ -101,8 +102,9 @@ settings:
     default: Torrent9 only returns category <b>Movies</b> in its <i>Keywordless</i> search results page.</br>To pass your apps' indexer TEST you will need to include the 131681(Movies) category.
 
 download:
-  selector: a[href^="magnet:?"]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
 
 search:
   paths:
@@ -190,16 +192,16 @@ search:
           args: ["Go", "GB"]
         - name: replace
           args: ["To", "TB"]
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: td:nth-child(3)
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:nth-child(4)
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

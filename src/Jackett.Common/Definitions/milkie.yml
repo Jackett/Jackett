@@ -1,0 +1,90 @@
+---
+id: milkie
+name: Milkie
+description: "Milkie.cc (ME) is private torrent tracker for 0day / general"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://milkie.cc/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: Movies}
+    - {id: 2, cat: TV, desc: TV}
+    - {id: 3, cat: Audio, desc: Music}
+    - {id: 4, cat: PC/Games, desc: Games}
+    - {id: 5, cat: Books, desc: Ebook}
+    - {id: 6, cat: PC, desc: Apps}
+    - {id: 7, cat: XXX, desc: Adult}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new key <a href=\"https://milkie.cc/settings/security\" target =_blank>here</a>."
+
+search:
+  headers:
+    x-milkie-auth: ["{{ .Config.apikey }}"]
+
+  paths:
+    - path: api/v1/torrents
+      response:
+        type: json
+
+  inputs:
+    ps: 100
+    query: "{{ .Keywords }}"
+    categories: "{{ join .Categories \",\" }}"
+
+  rows:
+    selector: torrents
+    count:
+      selector: hits
+
+  fields:
+    id:
+      selector: id
+    category:
+      selector: category
+    title:
+      selector: releaseName
+    details:
+      text: "{{ .Config.sitelink }}browse/{{ .Result.id }}"
+    apikey:
+      text: "{{ .Config.apikey }}"
+      filters:
+        - name: urlencode
+    download:
+      text: "{{ .Config.sitelink }}api/v1/torrents/{{ .Result.id }}/torrent?key={{ .Result.apikey }}"
+    date:
+      selector: createdAt
+    size:
+      selector: size
+    grabs:
+      selector: downloaded
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json api v1

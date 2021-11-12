@@ -2,7 +2,7 @@
 id: hdspain
 name: HD-Spain
 description: "HD-Spain is a SPANISH site for HD content"
-language: es-es
+language: es-ES
 type: private
 encoding: ISO-8859-1
 links:
@@ -55,7 +55,9 @@ search:
     sec: listado
     ord: 9
     b: "{{ .Keywords }}"
+    # 0 incldead, 1 onlyactive, 2 onlydead
     ver: 0
+    # 0 new and relaunch, 1 onlynew, 2 onlyrelaunch
     relanz: 0
     $raw: "{{ range .Categories }}&cat[]={{.}}{{end}}"
 
@@ -77,15 +79,24 @@ search:
           args: "["
         - name: append
           args: "]"
-    title:
-      selector: td.titulo a[id]
+    title_vose:
+      selector: td.titulo a[id]:contains("VOSE")
+      optional: true
       filters:
-        - name: prepend
-          args: "{{ .Result.extras }} "
         - name: append
-          args: " Spanish"
+          args: "{{ .Result.extras }} English"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+    title_notvose:
+      selector: td.titulo a[id]:not(:contains("VOSE"))
+      optional: true
+      filters:
+        - name: append
+          args: "{{ .Result.extras }} Spanish"
+        - name: re_replace
+          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     details:
       selector: td.titulo a[id]
       attribute: href
@@ -93,7 +104,6 @@ search:
       selector: td.descargar a
       attribute: href
     description:
-      optional: true
       selector: td.titulo a[class]
     size:
       selector: td.tamano
@@ -103,7 +113,7 @@ search:
       selector: td.usuarios.leechers a
     grabs:
       selector: td.usuarios.completados
-    date:
+    date_optional:
       optional: true
       selector: td.fecha
       attribute: title
@@ -150,26 +160,27 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "Monday 2 January 2006, 15:04 -07:00"
-    downloadvolumefactor:
-      text: 1
-    downloadvolumefactor:
+    date:
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
+    downloadvolumefactor_optional:
       optional: true
       selector: td.descargar a b strong
-      filters:
-        - name: replace
-          args: [" X2", ""]
-        - name: replace
-          args: ["Freeleech", "0"]
-    uploadvolumefactor:
-      text: 1
-    uploadvolumefactor:
+      case:
+        "Freeleech": 0
+        "Freeleech X2": 0
+        "*": 1
+    downloadvolumefactor:
+      text: "{{ if .Result.downloadvolumefactor_optional }}{{ .Result.downloadvolumefactor_optional }}{{ else }}1{{ end }}"
+    uploadvolumefactor_optional:
       optional: true
       selector: td.descargar a b strong
-      filters:
-        - name: replace
-          args: ["Freeleech X2", "2"]
+      case:
+        "Freeleech X2": 2
+        "*": 1
+    uploadvolumefactor:
+      text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
       text: 345600
-# engine tbd
+# engine n/a

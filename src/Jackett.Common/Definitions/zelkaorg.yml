@@ -2,7 +2,7 @@
 id: zelkaorg
 name: Zelka.org
 description: "Zelka (Zamunda) is a BULGARIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: bg-bg
+language: bg-BG
 type: private
 encoding: windows-1251
 links:
@@ -120,9 +120,6 @@ search:
       attribute: href
     grabs:
       selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(6)
     date:

@@ -2,7 +2,7 @@
 id: torrenting
 name: Torrenting
 description: "Torrenting (TT) is a Private site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: windows-1252
 links:
@@ -80,9 +80,9 @@ search:
         - name: replace
           args: ["?", ""]
     title:
-      selector: a[href^="/details.php?id="]
+      selector: a[href^="/torrent.php?id="]
     details:
-      selector: a[href^="/details.php?id="]
+      selector: a[href^="/torrent.php?id="]
       attribute: href
     download:
       selector: a[href^="/download.php/"]

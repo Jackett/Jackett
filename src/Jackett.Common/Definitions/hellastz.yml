@@ -2,11 +2,14 @@
 id: hellastz
 name: HellasTZ
 description: "HellasTZ is an Greek Private site for TV / MOVIES / GENERAL"
-language: el-gr
+language: el-GR
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://hellastz.com/
+certificates:
+  - d2e56574d77a5059c30883c221094f0556d99cb6 # expired
 
 caps:
   categorymappings:
@@ -79,7 +82,7 @@ login:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
   error:
-    - selector: form[action="index.php?page=login&returnto=index.php"] table tr td span
+    - selector: tr td span[style="color:#FF0000;"]
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -92,8 +95,9 @@ download:
       infohash: "{{ .DownloadUri.Query.id }}"
       thanks: 1
       rndval: "1487013827343"
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
@@ -132,29 +136,21 @@ search:
     download:
       selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
-    size:
-      selector: p:contains("Μέγεθος:")
-      filters:
-        - name: replace
-          args: ["Μέγεθος: ", ""]
     date:
-      selector: p:contains("Προστέθηκε:")
+      selector: td:nth-child(4)
       filters:
-        - name: replace
-          args: ["Προστέθηκε: ", ""]
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "15:04:05 02/01/2006 -07:00"
+          args: "02/01/2006 -07:00"
     seeders:
-      selector: p:has(a[href^="index.php?page=peers&id="]) > a:first-child
+      selector: td:nth-child(5)
     leechers:
-      selector: p:has(a[href^="index.php?page=peers&id="]) > a:nth-child(2)
+      selector: td:nth-child(6)
     grabs:
-      selector: p:has(a[href^="index.php?page=peers&id="]) > a:last-child
-      filters:
-        - name: replace
-          args: ["---", "0"]
+      selector: td:nth-child(7)
+    size:
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
         img[alt="Gold 100% Free"]: 0
@@ -178,4 +174,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-#  xbtitFM v3.0.00
+#  xbtitFM v3.1.00

@@ -50,7 +50,8 @@ namespace Jackett.Common.Models
         public bool TvSearchSeasonAvailable => (TvSearchParams.Contains(TvSearchParam.Season));
         public bool TvSearchEpAvailable => (TvSearchParams.Contains(TvSearchParam.Ep));
         //TvSearchImdbAvailable temporarily disabled due to #8107
-        public bool TvSearchImdbAvailable => false; // (TvSearchParams.Contains(TvSearchParam.ImdbId));
+        // Introduce setter so individual trackers can override
+        public bool TvSearchImdbAvailable { get; set; } = false; // (TvSearchParams.Contains(TvSearchParam.ImdbId));
         public bool TvSearchTvdbAvailable => (TvSearchParams.Contains(TvSearchParam.TvdbId));
         public bool TvSearchTvRageAvailable => (TvSearchParams.Contains(TvSearchParam.RId));
 
@@ -83,7 +84,7 @@ namespace Jackett.Common.Models
             Categories = new TorznabCapabilitiesCategories();
         }
 
-        public void ParseCardigannSearchModes(Dictionary<string,List<string>> modes)
+        public void ParseCardigannSearchModes(Dictionary<string, List<string>> modes)
         {
             if (modes == null || !modes.Any())
                 throw new Exception("At least one search mode is required");
@@ -148,7 +149,7 @@ namespace Jackett.Common.Models
             foreach (var paramStr in paramsList)
                 if (Enum.TryParse(paramStr, true, out MusicSearchParam param))
                     if (!MusicSearchParams.Contains(param))
-                       MusicSearchParams.Add(param);
+                        MusicSearchParams.Add(param);
                     else
                         throw new Exception($"Duplicate music-search param: {paramStr}");
                 else

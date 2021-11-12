@@ -22,8 +22,8 @@ namespace Jackett.Common.Indexers
     public class TorrentSeeds : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "takelogin.php";
+        private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
         private string SearchUrl => SiteLink + "browse_elastic.php";
-        private string TokenUrl => SiteLink + "login.php";
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
@@ -60,7 +60,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             // NOTE: Tracker Category Description must match Type/Category in details page!
@@ -96,8 +96,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(49, TorznabCatType.MoviesUHD, "Movies/UHD");
             AddCategoryMapping(76, TorznabCatType.MoviesForeign, "Movies/UHD-Foreign");
             AddCategoryMapping(33, TorznabCatType.AudioLossless, "Music/FLAC");
-            AddCategoryMapping(28, TorznabCatType.AudioOther, "Music/MBluRay-Rips");
-            AddCategoryMapping(34, TorznabCatType.AudioOther, "Music/MDVDR");
+            AddCategoryMapping(89, TorznabCatType.AudioVideo, "Music/MBluRay");
+            AddCategoryMapping(28, TorznabCatType.AudioVideo, "Music/MBluRay-Rips");
+            AddCategoryMapping(34, TorznabCatType.AudioVideo, "Music/MDVDR");
             AddCategoryMapping(4, TorznabCatType.AudioMP3, "Music/MP3");
             AddCategoryMapping(20, TorznabCatType.AudioVideo, "Music/MVID");
             AddCategoryMapping(77, TorznabCatType.TVAnime, "Anime/Packs");
@@ -125,35 +126,31 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(53, TorznabCatType.XXX, "XXX/HD");
             AddCategoryMapping(88, TorznabCatType.XXXImageSet, "XXX/Image-Sets");
             AddCategoryMapping(57, TorznabCatType.XXX, "XXX/Paysite");
-            AddCategoryMapping(6, TorznabCatType.XXX, "XXX/SD");
+            AddCategoryMapping(6, TorznabCatType.XXXSD, "XXX/SD");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var loginPage = await RequestWithCookiesAsync(TokenUrl);
-            var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.ContentString);
-            var token = dom.QuerySelector("form.form-horizontal > span");
-            var csrf = token.Children[1].GetAttribute("value");
-            var pairs = new Dictionary<string, string>
-            {
+            CookieHeader = ""; // clear old cookies
+
+            var result1 = await RequestWithCookiesAsync(CaptchaUrl);
+            var json1 = JObject.Parse(result1.ContentString);
+            var captchaSelection = json1["images"][0]["hash"];
+
+            var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "perm_ssl", "1" },
-                { "returnto", "/" },
-                { "csrf_token", csrf }
+                { "submitme", "X" },
+                { "captchaSelection", (string)captchaSelection }
             };
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, accumulateCookies: true);
-            await ConfigureIfOK(
-                result.Cookies, result.ContentString.Contains("/logout.php?"),
-                () =>
-                {
-                    var errorDom = parser.ParseDocument(result.ContentString);
-                    var errorMessage = errorDom.QuerySelector("td.colhead2").InnerHtml;
-                    throw new ExceptionWithConfigData(errorMessage, configData);
-                });
+
+            var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
+
+            await ConfigureIfOK(result2.Cookies, result2.ContentString.Contains("logout.php"), () =>
+                                    throw new ExceptionWithConfigData("Login Failed", configData));
             return IndexerConfigurationStatus.RequiresTesting;
+
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -207,6 +204,8 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results);
                 var content = dom.QuerySelector("tbody:has(script)");
+                if (content == null)
+                    return releases; // no results
                 var release = new ReleaseInfo();
                 release.MinimumRatio = 1;
                 release.MinimumSeedTime = 72 * 60 * 60;

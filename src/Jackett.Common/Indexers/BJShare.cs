@@ -62,7 +62,7 @@ namespace Jackett.Common.Indexers
 
         public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            :  base(id: "bjshare",
+            : base(id: "bjshare",
                     name: "BJ-Share",
                     description: "A brazilian tracker.",
                     link: "https://bj-share.info/",
@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers
                     configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
-            Language = "pt-br";
+            Language = "pt-BR";
             Type = "private";
 
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Anime");
@@ -160,7 +160,7 @@ namespace Jackett.Common.Indexers
             var cleanTitle = _EpisodeRegex.Replace(title, string.Empty);
             // Removes the year if it comes on the title
             // The space is added because on daily releases the date will be XX/XX/YYYY
-            if(!string.IsNullOrEmpty(year))
+            if (!string.IsNullOrEmpty(year))
                 cleanTitle = cleanTitle.Replace(" " + year, string.Empty);
             cleanTitle = Regex.Replace(cleanTitle, @"^\s*|[\s-]*$", string.Empty);
 
@@ -296,10 +296,12 @@ namespace Jackett.Common.Indexers
                         // so let's try to pick up first without the .tooltip class,
                         // if nothing is found, then we try again without that filter
                         var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
-                        if (qDetailsLink == null) {
+                        if (qDetailsLink == null)
+                        {
                             qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                             // if still can't find the right link, skip it
-                            if (qDetailsLink == null) {
+                            if (qDetailsLink == null)
+                            {
                                 logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
                                 continue;
                             }
@@ -393,6 +395,9 @@ namespace Jackett.Common.Indexers
                             release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " +
                                              titleElements[2] + " " + titleElements[4] + " " + string.Join(
                                                  " ", titleElements.Skip(6));
+
+                        if (Regex.IsMatch(release.Description, "(Dual|[Nn]acional|[Dd]ublado)"))
+                            release.Title += " Brazilian";
 
                         // This tracker does not provide an publish date to search terms (only on last 24h page)
                         release.PublishDate = DateTime.Today;
@@ -511,6 +516,9 @@ namespace Jackett.Common.Indexers
                                     }
                             }
                         }
+
+                        if (Regex.IsMatch(extraInfo, "(Dual|[Nn]acional|[Dd]ublado)"))
+                            extraInfo += " Brazilian";
 
                         var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
 

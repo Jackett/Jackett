@@ -1,0 +1,176 @@
+---
+id: abtorrents
+name: ABtorrents
+description: "ABtorrents (ABT) is a Private Torrent Tracker for AUDIOBOOKS"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://abtorrents.me/
+
+caps:
+  categorymappings:
+    - {id: 10, cat: Audio/Audiobook, desc: "Adventure"}
+    - {id: 20, cat: Audio/Audiobook, desc: "Biographies & Memoirs"}
+    - {id: 30, cat: Audio/Audiobook, desc: "Business "}
+    - {id: 40, cat: Audio/Audiobook, desc: "Childrens"}
+    - {id: 50, cat: Audio/Audiobook, desc: "Comedy"}
+    - {id: 60, cat: Audio/Audiobook, desc: "Comics"}
+    - {id: 70, cat: Audio/Audiobook, desc: "Computers "}
+    - {id: 80, cat: Audio/Audiobook, desc: "Erotica"}
+    - {id: 90, cat: Audio/Audiobook, desc: "Fantasy-General"}
+    - {id: 100, cat: Audio/Audiobook, desc: "Fantasy-Youth"}
+    - {id: 110, cat: Audio/Audiobook, desc: "Files"}
+    - {id: 120, cat: Audio/Audiobook, desc: "Foreign Language"}
+    - {id: 130, cat: Audio/Audiobook, desc: "General Fiction"}
+    - {id: 140, cat: Audio/Audiobook, desc: "Historical Fiction"}
+    - {id: 150, cat: Audio/Audiobook, desc: "History"}
+    - {id: 160, cat: Audio/Audiobook, desc: "Horror"}
+    - {id: 170, cat: Audio/Audiobook, desc: "Literature "}
+    - {id: 180, cat: Audio/Audiobook, desc: "Mystery "}
+    - {id: 190, cat: Audio/Audiobook, desc: "Non-Fiction"}
+    - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
+    - {id: 210, cat: Audio/Audiobook, desc: "Romance"}
+    - {id: 220, cat: Audio/Audiobook, desc: "Science"}
+    - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction "}
+    - {id: 240, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
+    - {id: 250, cat: Audio/Audiobook, desc: "Self Improvement"}
+    - {id: 270, cat: Audio/Audiobook, desc: "Suspense"}
+    - {id: 280, cat: Audio/Audiobook, desc: "Talk Radio"}
+    - {id: 260, cat: Audio/Audiobook, desc: "Thriller and Suspense"}
+    - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy"}
+    - {id: 300, cat: Audio/Audiobook, desc: "Western"}
+    - {id: 400, cat: Books/EBook, desc: "[E] Action/Adventure"}
+    - {id: 410, cat: Books/EBook, desc: "[E] Adult / Erotica"}
+    - {id: 420, cat: Books/EBook, desc: "[E] Arts &amp; Crafts (Hobbies)"}
+    - {id: 430, cat: Books/EBook, desc: "[E] Biography/Memoirs"}
+    - {id: 730, cat: Books/EBook, desc: "[E] Collections"}
+    - {id: 440, cat: Books/EBook, desc: "[E] Comic Books"}
+    - {id: 450, cat: Books/EBook, desc: "[E] Computer Learning"}
+    - {id: 460, cat: Books/EBook, desc: "[E] Cookery"}
+    - {id: 470, cat: Books/EBook, desc: "[E] Crime/Thriller/Mystery"}
+    - {id: 480, cat: Books/EBook, desc: "[E] Fantasy"}
+    - {id: 490, cat: Books/EBook, desc: "[E] Forteana"}
+    - {id: 500, cat: Books/EBook, desc: "[E] General Fiction"}
+    - {id: 510, cat: Books/EBook, desc: "[E] Historical Fiction"}
+    - {id: 520, cat: Books/EBook, desc: "[E] History/Documentary"}
+    - {id: 530, cat: Books/EBook, desc: "[E] Horror"}
+    - {id: 540, cat: Books/EBook, desc: "[E] Humor ( Comedy)"}
+    - {id: 550, cat: Books/EBook, desc: "[E] LGBT"}
+    - {id: 560, cat: Books/EBook, desc: "[E] Literary Fiction"}
+    - {id: 570, cat: Books/EBook, desc: "[E] Magazines - all"}
+    - {id: 580, cat: Books/EBook, desc: "[E] Non-Fiction"}
+    - {id: 590, cat: Books/EBook, desc: "[E] Paranormal Romance"}
+    - {id: 600, cat: Books/EBook, desc: "[E] Reference/Educational"}
+    - {id: 610, cat: Books/EBook, desc: "[E] Religion and Spirituality"}
+    - {id: 620, cat: Books/EBook, desc: "[E] Romance"}
+    - {id: 630, cat: Books/EBook, desc: "[E] Sci-Fi"}
+    - {id: 640, cat: Books/EBook, desc: "[E] Sci-Fi/Apocalyptic"}
+    - {id: 650, cat: Books/EBook, desc: "[E] Self-Help"}
+    - {id: 660, cat: Books/EBook, desc: "[E] Sports/Fitness"}
+    - {id: 670, cat: Books/EBook, desc: "[E] Travel"}
+    - {id: 680, cat: Books/EBook, desc: "[E] Unsorted"}
+    - {id: 690, cat: Books/EBook, desc: "[E] Urban Fantasy/Paranormal"}
+    - {id: 700, cat: Books/EBook, desc: "[E] Western"}
+    - {id: 710, cat: Books/EBook, desc: "[E] Young Adult"}
+    - {id: 720, cat: Books/EBook, desc: "[E] Young Children"}
+
+  modes:
+    search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting the error <b>Login Failed, got redirected</b> then access the site with your browser and <b>mark as read</b> all PMs."
+
+login:
+  method: cookie
+  test:
+    path: browse.php
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # title, descr
+    searchin: title
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 1 onlyfree, null all
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+
+  rows:
+    selector: table.table-striped > tbody > tr:has(a[href^="download.php?torrent="])
+
+  fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: div.torrent-name
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: img[src*="/img.php?"]
+      attribute: src
+    files:
+      selector: td:nth-last-child(8)
+    date_yday:
+      # Yesterday<br/>6:00 AM
+      selector: td:nth-last-child(7):contains("day")
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
+    date_year:
+      # Aug 6 2021<br/>7:25 PM
+      selector: td:nth-last-child(7):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 2 2006 3:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_yday .Result.date_year }}{{ or .Result.date_yday .Result.date_year }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-last-child(6)
+    grabs:
+      selector: td:nth-last-child(5)
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    downloadvolumefactor:
+      case:
+        tr.freeleech_color: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      # 14 days (as seconds = 14 x 24 x 60 x 60)
+      text: 1209600
+# U-232 V4.5

@@ -2,7 +2,7 @@
 id: eztv
 name: EZTV
 description: "EZTV is a Public torrent site for TV shows"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
@@ -12,8 +12,8 @@ links:
   - https://eztv.tf/
   - https://eztv.yt/
   - https://eztv.unblockninja.com/
-  - https://eztv.unblockit.dev/
-  - https://eztv.unblocked.rest/
+  - https://eztv.unblockit.bz/
+  - https://eztv.nocensor.biz/
 legacylinks:
   - https://eztv.ag/ # redirects to .re
   - https://eztv.it/ # redirects to .re
@@ -37,6 +37,21 @@ legacylinks:
   - https://eztv.io/
   - https://eztv.unblockit.app/
   - https://eztv.root.yt/
+  - https://eztv.unblocked.rest/
+  - https://eztv.unblockit.dev/
+  - https://eztv.unblockit.ltd/
+  - https://eztv.unblockit.link/
+  - https://eztv.unblockit.buzz/
+  - https://eztv.unblocked.monster/
+  - https://eztv.unblockit.club/
+  - https://eztv.unblockit.onl/
+  - https://eztv.unblockit.li/
+  - https://eztv.unblockit.uno/
+  - https://eztv.unblockit.ch/
+  - https://eztv.nocensor.space/
+  - https://eztv.unblockit.ws/
+  - https://eztv.nocensor.work/
+  - https://eztv.unblockit.kim/
 
 caps:
   categories:
@@ -51,13 +66,16 @@ settings: []
 search:
   paths:
     - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}/{{ end }}"
+
   keywordsfilters:
     - name: re_replace
       args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
+
   rows:
     selector: "table.forum_header_border tr[name='hover'].forum_header_border:has(a.magnet)" # some torrents don't have any download links, skip them
     filters:
       - name: andmatch
+
   fields:
     category:
       text: 1
@@ -76,11 +94,11 @@ search:
     download:
       selector: td:nth-child(3) a.magnet, td:nth-child(3) a
       attribute: href
-    size:
-      text: "512 MB"
-    size:
+    size_optional:
       optional: true
       selector: td:nth-child(4)
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}512 MB{{ end }}"
     date:
       selector: td:nth-child(5)
       filters:
@@ -88,6 +106,8 @@ search:
           args: " ago"
     seeders:
       selector: td:nth-child(6)
+    leechers:
+      text: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

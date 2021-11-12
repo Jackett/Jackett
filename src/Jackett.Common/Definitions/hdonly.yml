@@ -2,7 +2,7 @@
 id: hdonly
 name: HD-Only
 description: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV"
-language: fr-fr
+language: fr-FR
 type: private
 encoding: UTF-8
 links:

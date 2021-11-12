@@ -2,7 +2,7 @@
 id: piratadigital
 name: Pirata Digital
 description: "Pirata Digital (PD) is a Private Torrent Tracker for HD MOVIES / TV"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -10,24 +10,26 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 6, cat: TV/Anime, desc: "Animes"}
-    - {id: 4, cat: Console, desc: "Games"}
-    - {id: 5, cat: PC, desc: "Software"}
+    - {id: 4, cat: PC/Games, desc: "Jogos"}
+    - {id: 5, cat: PC/0day, desc: "Aplicativos"}
+    - {id: 7, cat: Other, desc: "Cursos"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid, tmdbid]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -50,22 +52,9 @@ settings:
       asc: asc
 
 login:
-  path: login
-  method: form
-  form: form[action$="/login"]
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    remember: on
-  selectorinputs:
-    _token:
-      selector: input[name="_token"]
-      attribute: value
-  error:
-    - selector: div#ERROR_COPY
-#    test:
-#      path: /
-#      selector: a[href$="/logout"]
+    cookie: "{{ .Config.cookie }}"
 
 search:
   paths:
@@ -76,7 +65,7 @@ search:
     description: ""
     uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
-    tvdb: "{{ .Query.TVDBID }}"
+    tvdb: ""
     tmdb: "{{ .Query.TMDBID }}"
     mal: ""
     igdb: ""
@@ -125,10 +114,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:
@@ -189,8 +175,9 @@ search:
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
         i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
-    minimumratio:
-      text: 0.4
+# global MR is 0.4 but torrents must be seeded for 5 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000

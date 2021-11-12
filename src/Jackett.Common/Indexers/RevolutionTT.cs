@@ -58,7 +58,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your Profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping("23", TorznabCatType.TVAnime);
@@ -158,7 +158,11 @@ namespace Jackett.Common.Indexers
                     var qDetails = row.QuerySelector(".br_right > a");
                     var details = new Uri(SiteLink + qDetails.GetAttribute("href"));
                     var title = qDetails.QuerySelector("b").TextContent;
-
+                    // Remove auto-generated [REQ] tag from fulfilled requests
+                    if (title.StartsWith("[REQ] "))
+                    {
+                        title = title.Substring(6);
+                    }
                     var qLink = row.QuerySelector("td:nth-child(4) > a");
                     if (qLink == null)
                         continue; // support/donation banner

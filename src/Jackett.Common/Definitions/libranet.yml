@@ -2,7 +2,7 @@
 id: libranet
 name: LibraNet
 description: "LibraNet (LN) is a HUNGARIAN Private Torrent Tracker for EBOOKS / LOSSLESS MUSIC"
-language: hu
+language: hu-HU
 type: private
 encoding: ISO-8859-2
 links:
@@ -16,7 +16,6 @@ caps:
     - {id: 4, cat: Audio/Audiobook, desc: "Hangoskönyv/Hun"}
     - {id: 1, cat: Books/EBook, desc: "Könyv"}
     - {id: 2, cat: Books/EBook, desc: "Könyv/Hun"}
-    - {id: 55, cat: Other, desc: "Mûhelysarok"}
     - {id: 56, cat: Audio/Lossless, desc: "LossLess"}
     - {id: 57, cat: Audio/Lossless, desc: "LossLess/Hun"}
     - {id: 48, cat: Books/Mags, desc: "Magazin"}
@@ -66,8 +65,14 @@ search:
       filters:
         - name: querystring
           args: cat
+    description:
+      selector: img[width="60"]
+      attribute: title
     title:
       selector: a[href^="details.php?id="]
+      filters:
+        - name: append
+          args: " {{ .Result.description }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -79,9 +84,6 @@ search:
           args: ["details", "download"]
         - name: replace
           args: ["&hit=1", ""]
-    description:
-      selector: img[width="60"]
-      attribute: title
     poster:
       selector: a[onmouseover]
       attribute: onmouseover
@@ -99,9 +101,6 @@ search:
       selector: td:nth-last-child(6)
     grabs:
       selector: td:nth-last-child(5)
-      filters:
-        - name: regexp
-          args: "(\\d+) x"
     seeders:
       selector: td:nth-last-child(4)
     leechers:

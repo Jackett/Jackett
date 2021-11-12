@@ -2,7 +2,7 @@
 id: crazyhd
 name: CrazyHD
 description: "CrazyHD is a BANGLADESHI Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -28,6 +28,7 @@ caps:
     - {id: 64, cat: Movies, desc: "Movies Animated"}
     - {id: 45, cat: Movies, desc: "Movies Trailers"}
     - {id: 93, cat: Movies, desc: "Movies Dual Movies"}
+    - {id: 96, cat: Movies/UHD, desc: "Movies 4k Hindi"}
     - {id: 59, cat: Movies, desc: "Movies Pack"}
     - {id: 94, cat: Movies/UHD, desc: "Movies 4k"}
     - {id: 62, cat: Movies/3D, desc: "Movies 3D"}
@@ -35,9 +36,9 @@ caps:
     - {id: 34, cat: TV, desc: "TV English Series"}
     - {id: 57, cat: TV, desc: "TV Bangla series"}
     - {id: 58, cat: TV, desc: "TV Hindi series"}
+    - {id: 95, cat: TV, desc: "TV Other Language"}
     - {id: 28, cat: TV/Sport, desc: "TV Sports"}
     - {id: 29, cat: TV/Documentary, desc: "TV Documentary"}
-    - {id: 95, cat: TV, desc: "TV Other Language"}
     # Games
     - {id: 3, cat: PC/Games, desc: "Games PC"}
     - {id: 75, cat: PC/Mobile-Android, desc: "Games Android"}
@@ -46,7 +47,7 @@ caps:
     - {id: 61, cat: PC/Games, desc: "Games trailer"}
     - {id: 90, cat: Console/PS4, desc: "Games Ps4"}
     - {id: 86, cat: Console/PS3, desc: "Games xbox / ps3"}
-    - {id: 92, cat: PC/Games, desc: "Games nrated"}
+    - {id: 92, cat: PC/Games, desc: "Games unrated"}
     # Software
     - {id: 7, cat: PC/0day, desc: "Software Windows"}
     - {id: 20, cat: PC/Mobile-Android, desc: "Software Android Apps"}

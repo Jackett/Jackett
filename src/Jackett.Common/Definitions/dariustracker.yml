@@ -2,7 +2,7 @@
 id: dariustracker
 name: Darius Tracker
 description: "Darius Tracker is a HUNGARIAN Private Tracker for MOVIES / TV / GENERAL"
-language: hu
+language: hu-HU
 type: private
 encoding: UTF-8
 links:
@@ -122,6 +122,7 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
+      attribute: title
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -131,14 +132,11 @@ search:
     poster:
       selector: a.preview
       attribute: href
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:
       selector: td:nth-last-child(7)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-last-child(5)
       filters:
@@ -150,20 +148,17 @@ search:
       selector: td:nth-last-child(4) b
     grabs:
       selector: td:nth-last-child(3)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(2)
     leechers:
       selector: td:nth-last-child(1)
     downloadvolumefactor:
-      selector: img[src="skin/vilagos_kek/arrowdown.png"] ~ span
+      selector: img[src$="/arrowdown.png"] ~ span
       filters:
         - name: regexp
           args: (\d+)
     uploadvolumefactor:
-      selector: img[src="skin/vilagos_kek/arrowup.png"] ~ span
+      selector: img[src$="/arrowup.png"] ~ span
       filters:
         - name: regexp
           args: (\d+)

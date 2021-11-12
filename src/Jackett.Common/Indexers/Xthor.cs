@@ -2,21 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers
@@ -25,25 +24,28 @@ namespace Jackett.Common.Indexers
     public class Xthor : BaseCachingWebIndexer
     {
         private static string ApiEndpoint => "https://api.xthor.tk/";
+        private int MaxPagesHardLimit => 4;
+        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
+        private string WebRequestDelay => ((SingleSelectConfigurationItem)configData.GetDynamic("webRequestDelay")).Value;
+        private int MaxPages => Convert.ToInt32(((SingleSelectConfigurationItem)configData.GetDynamic("maxPages")).Value);
+        private bool MaxPagesBypassForTMDB => ((BoolConfigurationItem)configData.GetDynamic("maxPagesBypassForTMDB")).Value;
+        private int DropCategories => Convert.ToInt32(((SingleSelectConfigurationItem)configData.GetDynamic("dropCategories")).Value);
+        private string MultiReplacement => ((StringConfigurationItem)configData.GetDynamic("multiReplacement")).Value;
+        private bool SubReplacement => ((BoolConfigurationItem)configData.GetDynamic("subReplacement")).Value;
+        private bool EnhancedAnimeSearch => ((BoolConfigurationItem)configData.GetDynamic("enhancedAnimeSearch")).Value;
+        private string SpecificLanguageAccent => ((SingleSelectConfigurationItem)configData.GetDynamic("specificLanguageAccent")).Value;
+        private bool FreeleechOnly => ((BoolConfigurationItem)configData.GetDynamic("freeleechOnly")).Value;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://xthor.bz/",
             "https://xthor.to"
         };
-
-        private string TorrentDetailsUrl => SiteLink + "details.php?id={id}";
-        private string ReplaceMulti => ConfigData.ReplaceMulti.Value;
-        private bool EnhancedAnime => ConfigData.EnhancedAnime.Value;
-        private bool DevMode => ConfigData.DevMode.Value;
-        private bool CacheMode => ConfigData.HardDriveCache.Value;
-        private static string Directory => Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name.ToLower(), MethodBase.GetCurrentMethod().DeclaringType?.Name.ToLower());
-        public Dictionary<string, string> EmulatedBrowserHeaders { get; } = new Dictionary<string, string>();
-        private ConfigurationDataXthor ConfigData => (ConfigurationDataXthor)configData;
+        private ConfigurationDataPasskey ConfigData => (ConfigurationDataPasskey)configData;
 
         public Xthor(IIndexerConfigurationService configService, Utils.Clients.WebClient w, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "xthor",
-                   name: "Xthor",
+            : base(id: "xthor-api",
+                   name: "Xthor API",
                    description: "General French Private Tracker",
                    link: "https://xthor.tk/",
                    caps: new TorznabCapabilities
@@ -54,7 +56,7 @@ namespace Jackett.Common.Indexers
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q
+                           MovieSearchParam.Q, MovieSearchParam.TmdbId
                        },
                        MusicSearchParams = new List<MusicSearchParam>
                        {
@@ -71,10 +73,11 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cacheService: cs,
                    downloadBase: "https://xthor.tk/download.php?torrent=",
-                   configData: new ConfigurationDataXthor())
+                   configData: new ConfigurationDataPasskey()
+                  )
         {
             Encoding = Encoding.UTF8;
-            Language = "fr-fr";
+            Language = "fr-FR";
             Type = "private";
 
             // Movies / Films
@@ -145,6 +148,115 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(21, TorznabCatType.PC, "Logiciels Applis PC");
             AddCategoryMapping(22, TorznabCatType.PCMac, "Logiciels Applis Mac");
             AddCategoryMapping(23, TorznabCatType.PCMobileAndroid, "Logiciels Smartphone");
+
+            // Dynamic Configuration
+            ConfigData.AddDynamic("optionsConfigurationWarning", new DisplayInfoConfigurationItem(string.Empty, "<center><b>Available Options</b></center>,<br /><br /> <ul><li><b>Freeleech Only</b>: (<i>Restrictive</i>) If you want to discover only freeleech torrents to not impact your ratio, check the related box. So only torrents marked as freeleech will be returned instead of all.</li><br /><li><b>Specific Language</b>: (<i>Restrictive</i>) You can scope your searches with a specific language / accent.</li></ul>"));
+
+            var ConfigFreeleechOnly = new BoolConfigurationItem("Do you want to discover only freeleech tagged torrents ?");
+            ConfigData.AddDynamic("freeleechOnly", ConfigFreeleechOnly);
+
+            var ConfigSpecificLanguageAccent = new SingleSelectConfigurationItem("Do you want to scope your searches with a specific language ? (Accent)", new Dictionary<string, string>
+            {
+                {"0", "All Voices (default)"},
+                {"1", "Françaises"},
+                {"2", "Quebecoises"},
+                {"47", "Françaises et Québécoises"},
+                {"3", "Anglaises"},
+                {"4", "Japonaises"},
+                {"5", "Espagnoles"},
+                {"6", "Allemandes"},
+                {"7", "Chinoises"},
+                {"8", "Italiennes"},
+                {"9", "Coréennes"},
+                {"10", "Danoises"},
+                {"11", "Russes"},
+                {"12", "Portugaises"},
+                {"13", "Hindi"},
+                {"14", "Hollandaises"},
+                {"15", "Suédoises"},
+                {"16", "Norvégiennes"},
+                {"17", "Thaïlandaises"},
+                {"18", "Hébreu"},
+                {"19", "Persanes"},
+                {"20", "Arabes"},
+                {"21", "Turques"},
+                {"22", "Hongroises"},
+                {"23", "Polonaises"},
+                {"24", "Finnoises"},
+                {"25", "Indonésiennes"},
+                {"26", "Roumaines"},
+                {"27", "Malaisiennes"},
+                {"28", "Estoniennes"},
+                {"29", "Islandaises"},
+                {"30", "Grecques"},
+                {"31", "Serbes"},
+                {"32", "Norvégiennes"},
+                {"33", "Ukrainiennes"},
+                {"34", "Bulgares"},
+                {"35", "Tagalogues"},
+                {"36", "Xhosa"},
+                {"37", "Kurdes"},
+                {"38", "Bengali"},
+                {"39", "Amhariques"},
+                {"40", "Bosniaques"},
+                {"41", "Malayalam"},
+                {"42", "Télougou"},
+                {"43", "Bambara"},
+                {"44", "Catalanes"},
+                {"45", "Tchèques"},
+                {"46", "Afrikaans"}
+            })
+            { Value = "0" };
+            ConfigData.AddDynamic("specificLanguageAccent", ConfigSpecificLanguageAccent);
+
+            ConfigData.AddDynamic("advancedConfigurationWarning", new DisplayInfoConfigurationItem(string.Empty, "<center><b>Advanced Configuration</b></center>,<br /><br /> <center><b><u>WARNING !</u></b> <i>Be sure to read instructions before editing options bellow, you can <b>drastically reduce performance</b> of queries or have <b>non-accurate results</b>.</i></center><br/><br/><ul><li><b>Delay betwwen Requests</b>: (<i>not recommended</i>) you can increase delay to requests made to the tracker, but a minimum of 2.1s is enforced as there is an anti-spam protection.</li><br /><li><b>Max Pages</b>: (<i>not recommended</i>) you can increase max pages to follow when making a request. But be aware that others apps can consider this indexer not working if jackett take too many times to return results. Another thing is that API is very buggy on tracker side, most of time, results of next pages are same ... as the first page. Even if we deduplicate rows, you will loose performance for the same results. You can check logs to see if an higher pages following is not benefical, you will see an error percentage (duplicates) with recommandations.</li><br /><li><b>Bypass for TMDB</b>: (<i>recommended</i>) this indexer is compatible with TMDB queries (<i>for movies only</i>), so when requesting content with an TMDB ID, we will search directly ID on API instead of name. Results will be more accurate, so you can enable a max pages bypass for this query type. You will be at least limited by the hard limit of 4 pages.</li><br /><li><b>Drop categories</b>: (<i>recommended</i>) this indexer has some problems when too many categories are requested for filtering, so you will have better results by dropping categories from TMDB queries or selecting fewer categories in 3rd apps.</li><br /><li><b>Enhanced Anime</b>: if you have \"Anime\", this will improve queries made to this tracker related to this type when making searches.</li><br /><li><b>Multi Replacement</b>: you can dynamically replace the word \"MULTI\" with another of your choice like \"MULTI.FRENCH\" for better analysis of 3rd party softwares.</li><br /><li><b>Sub Replacement</b>: you can dynamically replace the word \"VOSTFR\" or \"SUBFRENCH\" with the word \"ENGLISH\" for better analysis of 3rd party softwares.</li></ul>"));
+
+            var ConfigWebRequestDelay = new SingleSelectConfigurationItem("Which delay do you want to apply between each requests made to tracker ?", new Dictionary<string, string>
+            {
+                {"2.1", "2.1s (minimum)"},
+                {"2.2", "2.2s"},
+                {"2.3", "2.3s"},
+                {"2.4", "2.4s" },
+                {"2.5", "2.5s"},
+                {"2.6", "2.6s"}
+            })
+            { Value = "2.1" };
+            ConfigData.AddDynamic("webRequestDelay", ConfigWebRequestDelay);
+
+            var ConfigMaxPages = new SingleSelectConfigurationItem("How many pages do you want to follow ?", new Dictionary<string, string>
+            {
+                {"1", "1 (32 results - default / best perf.)"},
+                {"2", "2 (64 results)"},
+                {"3", "3 (96 results)"},
+                {"4", "4 (128 results - hard limit max)" },
+            })
+            { Value = "1" };
+            ConfigData.AddDynamic("maxPages", ConfigMaxPages);
+
+            var ConfigMaxPagesBypassForTMDB = new BoolConfigurationItem("Do you want to bypass max pages for TMDB searches ? (Radarr) - Hard limit of 4") { Value = true };
+            ConfigData.AddDynamic("maxPagesBypassForTMDB", ConfigMaxPagesBypassForTMDB);
+
+            var ConfigDropCategories = new SingleSelectConfigurationItem("Drop requested categories", new Dictionary<string, string>
+            {
+                {"0", "Disabled"},
+                {"1", "Yes, only for TMDB requests (default)"},
+                {"2", "Yes, for all requests"},
+            })
+            { Value = "1" };
+            ConfigData.AddDynamic("dropCategories", ConfigDropCategories);
+
+            var ConfigEnhancedAnimeSearch = new BoolConfigurationItem("Do you want to use enhanced ANIME search ?") { Value = false };
+            ConfigData.AddDynamic("enhancedAnimeSearch", ConfigEnhancedAnimeSearch);
+
+            var ConfigMultiReplacement = new StringConfigurationItem("Do you want to replace \"MULTI\" keyword in release title by another word ?") { Value = "MULTI.FRENCH" };
+            ConfigData.AddDynamic("multiReplacement", ConfigMultiReplacement);
+
+            var ConfigSubReplacement = new BoolConfigurationItem("Do you want to replace \"VOSTFR\" and \"SUBFRENCH\" with \"ENGLISH\" word ?") { Value = false };
+            ConfigData.AddDynamic("subReplacement", ConfigSubReplacement);
+
+            // Api has 1req/2s limit (minimum)
+            webclient.requestDelay = Convert.ToDouble(WebRequestDelay);
+
         }
 
         /// <summary>
@@ -156,10 +268,9 @@ namespace Jackett.Common.Indexers
         // Warning 1998 is async method with no await calls inside
         // TODO: Remove pragma by wrapping return in Task.FromResult and removing async
 
-#pragma warning disable 1998
-
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
-#pragma warning restore 1998
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // Provider not yet configured
             IsConfigured = false;
@@ -167,19 +278,18 @@ namespace Jackett.Common.Indexers
             // Retrieve config values set by Jackett's user
             LoadValuesFromJson(configJson);
 
-            // Check & Validate Config
-            ValidateConfig();
+            logger.Debug("\nXthor - Validating Settings ... \n");
 
-            // Setting our data for a better emulated browser (maximum security)
-            // TODO: Encoded Content not supported by Jackett at this time
-            // EmulatedBrowserHeaders.Add("Accept-Encoding", "gzip, deflate");
+            // Check Passkey Setting
+            if (string.IsNullOrEmpty(ConfigData.Passkey.Value))
+            {
+                throw new ExceptionWithConfigData("You must provide your passkey for this tracker to be allowed to use API !", ConfigData);
+            }
+            else
+            {
+                logger.Debug("Xthor - Validated Setting -- PassKey (auth) => " + ConfigData.Passkey.Value);
+            }
 
-            // Clean headers
-            EmulatedBrowserHeaders.Clear();
-
-            // Inject headers
-            EmulatedBrowserHeaders.Add("Accept", "application/json-rpc, application/json");
-            EmulatedBrowserHeaders.Add("Content-Type", "application/json-rpc");
 
             // Tracker is now configured
             IsConfigured = true;
@@ -198,104 +308,149 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchTerm = query.GetEpisodeSearchString() + " " + query.SanitizedSearchTerm; // use episode search string first, see issue #1202
-            searchTerm = searchTerm.Trim();
-            searchTerm = searchTerm.ToLower();
+            var searchTerm = query.SanitizedSearchTerm + " " + query.GetEpisodeSearchString();
 
-            if (EnhancedAnime && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
+            if (EnhancedAnimeSearch && query.HasSpecifiedCategories && (query.Categories.Contains(TorznabCatType.TVAnime.ID) || query.Categories.Contains(100032) || query.Categories.Contains(100101) || query.Categories.Contains(100110)))
             {
                 var regex = new Regex(" ([0-9]+)");
                 searchTerm = regex.Replace(searchTerm, " E$1");
             }
 
-            // Check cache first so we don't query the server (if search term used or not in dev mode)
-            if (!DevMode && !string.IsNullOrEmpty(searchTerm))
+            searchTerm = searchTerm.Trim();
+            searchTerm = searchTerm.ToLower();
+            searchTerm = searchTerm.Replace(" ", ".");
+
+            // Multiple page support
+            var nextPage = 1;
+            var followingPages = true;
+            do
             {
-                lock (cache)
+
+                // Build our query
+                var request = BuildQuery(searchTerm, query, ApiEndpoint, nextPage);
+
+                // Getting results
+                logger.Info("\nXthor - Querying API page " + nextPage);
+                var results = await QueryTrackerAsync(request);
+
+                // Torrents Result Count
+                var torrentsCount = 0;
+
+                try
                 {
-                    // Remove old cache items
-                    CleanCache();
+                    // Deserialize our Json Response
+                    var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
 
-                    // Search in cache
-                    var cachedResult = cache.FirstOrDefault(i => i.Query == searchTerm);
-                    if (cachedResult != null)
-                        return cachedResult.Results.Select(s => (ReleaseInfo)s.Clone()).ToArray();
-                }
-            }
+                    // Check Tracker's State
+                    CheckApiState(xthorResponse.Error);
 
-            // Build our query
-            var request = BuildQuery(searchTerm, query, ApiEndpoint);
-
-            // Getting results & Store content
-            var results = await QueryExec(request);
-
-            try
-            {
-                // Deserialize our Json Response
-                var xthorResponse = JsonConvert.DeserializeObject<XthorResponse>(results);
-
-                // Check Tracker's State
-                CheckApiState(xthorResponse.error);
-
-                // If contains torrents
-                if (xthorResponse.torrents != null)
-                {
-                    // Adding each torrent row to releases
-                    releases.AddRange(xthorResponse.torrents.Select(torrent =>
+                    // If contains torrents
+                    if (xthorResponse.Torrents != null)
                     {
-                        //issue #3847 replace multi keyword
-                        if (!string.IsNullOrEmpty(ReplaceMulti))
-                        {
-                            var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
-                            torrent.name = regex.Replace(torrent.name, "$1" + ReplaceMulti + "$2");
-                        }
+                        // Store torrents rows count result
+                        torrentsCount = xthorResponse.Torrents.Count();
+                        logger.Info("\nXthor - Found " + torrentsCount + " torrents on current page.");
 
-                        // issue #8759 replace vostfr and subfrench with English
-                        if (ConfigData.Vostfr.Value) torrent.name = torrent.name.Replace("VOSTFR","ENGLISH").Replace("SUBFRENCH","ENGLISH");
+                        // Adding each torrent row to releases
+                        // Exclude hidden torrents (category 106, example => search 'yoda' in the API) #10407
+                        releases.AddRange(xthorResponse.Torrents
+                            .Where(torrent => torrent.Category != 106).Select(torrent =>
+                            {
+                                //issue #3847 replace multi keyword
+                                if (!string.IsNullOrEmpty(MultiReplacement))
+                                {
+                                    var regex = new Regex("(?i)([\\.\\- ])MULTI([\\.\\- ])");
+                                    torrent.Name = regex.Replace(torrent.Name, "$1" + MultiReplacement + "$2");
+                                }
 
-                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.added);
-                        //TODO replace with download link?
-                        var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
-                        var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.id.ToString()));
-                        var link = new Uri(torrent.download_link);
-                        var release = new ReleaseInfo
-                        {
-                            // Mapping data
-                            Category = MapTrackerCatToNewznab(torrent.category.ToString()),
-                            Title = torrent.name,
-                            Seeders = torrent.seeders,
-                            Peers = torrent.seeders + torrent.leechers,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 345600,
-                            PublishDate = publishDate,
-                            Size = torrent.size,
-                            Grabs = torrent.times_completed,
-                            Files = torrent.numfiles,
-                            UploadVolumeFactor = 1,
-                            DownloadVolumeFactor = (torrent.freeleech == 1 ? 0 : 1),
-                            Guid = guid,
-                            Details = details,
-                            Link = link,
-                            TMDb = torrent.tmdb_id
-                        };
+                                // issue #8759 replace vostfr and subfrench with English
+                                if (SubReplacement)
+                                    torrent.Name = torrent.Name.Replace("VOSTFR", "ENGLISH").Replace("SUBFRENCH", "ENGLISH");
 
-                        //TODO make consistent with other trackers
-                        if (DevMode)
-                        {
-                            Output(release.ToString());
-                        }
+                                var publishDate = DateTimeUtil.UnixTimestampToDateTime(torrent.Added);
+                                //TODO replace with download link?
+                                var guid = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
+                                var details = new Uri(TorrentDetailsUrl.Replace("{id}", torrent.Id.ToString()));
+                                var link = new Uri(torrent.Download_link);
+                                var release = new ReleaseInfo
+                                {
+                                    // Mapping data
+                                    Category = MapTrackerCatToNewznab(torrent.Category.ToString()),
+                                    Title = torrent.Name,
+                                    Seeders = torrent.Seeders,
+                                    Peers = torrent.Seeders + torrent.Leechers,
+                                    MinimumRatio = 1,
+                                    MinimumSeedTime = 345600,
+                                    PublishDate = publishDate,
+                                    Size = torrent.Size,
+                                    Grabs = torrent.Times_completed,
+                                    Files = torrent.Numfiles,
+                                    UploadVolumeFactor = 1,
+                                    DownloadVolumeFactor = (torrent.Freeleech == 1 ? 0 : 1),
+                                    Guid = guid,
+                                    Details = details,
+                                    Link = link,
+                                    TMDb = torrent.Tmdb_id
+                                };
 
-                        return release;
-                    }));
+                                return release;
+                            }));
+                        nextPage++;
+                    }
+                    else
+                    {
+                        logger.Info("\nXthor - No results found on page  " + nextPage + ", stopping follow of next page.");
+                        //  No results or no more results available
+                        followingPages = false;
+                        break;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
-            }
+                catch (Exception ex)
+                {
+                    OnParseError("Unable to parse result \n" + ex.StackTrace, ex);
+                }
 
+                // Stop ?
+                if (query.IsTmdbQuery && MaxPagesBypassForTMDB)
+                {
+                    if (nextPage > MaxPagesHardLimit)
+                    {
+                        logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to page hard limit reached.");
+                        break;
+                    }
+                    logger.Info("\nXthor - Continue to next page " + nextPage + " due to TMDB request and activated max page bypass for this type of query. Max page hard limit: 4.");
+                    continue;
+                }
+                else
+                {
+                    if (torrentsCount < 32)
+                    {
+                        logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due max available results reached.");
+                        break;
+                    }
+                    else if (nextPage > MaxPages)
+                    {
+                        logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to page limit reached.");
+                        break;
+                    }
+                    else if (query.IsTest)
+                    {
+                        logger.Info("\nXthor - Stopping follow of next page " + nextPage + " due to index test query.");
+                        break;
+                    }
+                }
+
+            } while (followingPages);
+
+            // Check if there is duplicate and return unique rows - Xthor API can be very buggy !
+            var uniqReleases = releases.GroupBy(x => x.Guid).Select(x => x.First()).ToList();
+            var errorPercentage = 1 - ((double)uniqReleases.Count() / releases.Count());
+            if (errorPercentage >= 0.25)
+            {
+                logger.Warn("\nXthor - High percentage error detected: " + string.Format("{0:0.0%}", errorPercentage) + "\nWe strongly recommend that you lower max page to 1, as there is no benefit to grab additionnals.\nTracker API sent us duplicated pages with same results, even if we deduplicate returned rows, please consider to lower as it's unnecessary and increase time used for query for the same result.");
+            }
             // Return found releases
-            return releases;
+            return uniqReleases;
         }
 
         /// <summary>
@@ -303,9 +458,9 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorResponse
         {
-            public XthorError error { get; set; }
-            public XthorUser user { get; set; }
-            public List<XthorTorrent> torrents { get; set; }
+            public XthorError Error { get; set; }
+            public XthorUser User { get; set; }
+            public List<XthorTorrent> Torrents { get; set; }
         }
 
         /// <summary>
@@ -313,8 +468,8 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorError
         {
-            public int code { get; set; }
-            public string descr { get; set; }
+            public int Code { get; set; }
+            public string Descr { get; set; }
         }
 
         /// <summary>
@@ -322,14 +477,14 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorUser
         {
-            public int id { get; set; }
-            public string username { get; set; }
-            public long uploaded { get; set; }
-            public long downloaded { get; set; }
-            public int uclass { get; set; } // Class is a reserved keyword.
-            public decimal bonus_point { get; set; }
-            public int hits_and_run { get; set; }
-            public string avatar_url { get; set; }
+            public int Id { get; set; }
+            public string Username { get; set; }
+            public long Uploaded { get; set; }
+            public long Downloaded { get; set; }
+            public int Uclass { get; set; } // Class is a reserved keyword.
+            public decimal Bonus_point { get; set; }
+            public int Hits_and_run { get; set; }
+            public string Avatar_url { get; set; }
         }
 
         /// <summary>
@@ -337,21 +492,21 @@ namespace Jackett.Common.Indexers
         /// </summary>
         public class XthorTorrent
         {
-            public int id { get; set; }
-            public int category { get; set; }
-            public int seeders { get; set; }
-            public int leechers { get; set; }
-            public string name { get; set; }
-            public int times_completed { get; set; }
-            public long size { get; set; }
-            public int added { get; set; }
-            public int freeleech { get; set; }
-            public int numfiles { get; set; }
-            public string release_group { get; set; }
-            public string download_link { get; set; }
-            public int tmdb_id { get; set; }
+            public int Id { get; set; }
+            public int Category { get; set; }
+            public int Seeders { get; set; }
+            public int Leechers { get; set; }
+            public string Name { get; set; }
+            public int Times_completed { get; set; }
+            public long Size { get; set; }
+            public int Added { get; set; }
+            public int Freeleech { get; set; }
+            public int Numfiles { get; set; }
+            public string Release_group { get; set; }
+            public string Download_link { get; set; }
+            public int Tmdb_id { get; set; }
 
-            public override string ToString() => string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", id, category, seeders, leechers, name, times_completed, size, added, freeleech, numfiles, release_group, download_link, tmdb_id);
+            public override string ToString() => string.Format("[XthorTorrent: id={0}, category={1}, seeders={2}, leechers={3}, name={4}, times_completed={5}, size={6}, added={7}, freeleech={8}, numfiles={9}, release_group={10}, download_link={11}, tmdb_id={12}]", Id, Category, Seeders, Leechers, Name, Times_completed, Size, Added, Freeleech, Numfiles, Release_group, Download_link, Tmdb_id);
         }
 
         /// <summary>
@@ -361,131 +516,74 @@ namespace Jackett.Common.Indexers
         /// <param name="query">Torznab Query for categories mapping</param>
         /// <param name="url">Search url for provider</param>
         /// <returns>URL to query for parsing and processing results</returns>
-        private string BuildQuery(string term, TorznabQuery query, string url)
+        private string BuildQuery(string term, TorznabQuery query, string url, int page = 1)
         {
             var parameters = new NameValueCollection();
             var categoriesList = MapTorznabCapsToTrackers(query);
 
             // Passkey
-            parameters.Add("passkey", ConfigData.PassKey.Value);
+            parameters.Add("passkey", ConfigData.Passkey.Value);
 
-            // If search term provided
-            if (!string.IsNullOrWhiteSpace(term))
+            if (query.IsTmdbQuery)
             {
-                // Add search term
-                // ReSharper disable once AssignNullToNotNullAttribute
-                parameters.Add("search", WebUtility.UrlEncode(term));
+                logger.Info("\nXthor - Search requested for movie with TMDB ID n°" + query.TmdbID.ToString());
+                parameters.Add("tmdbid", query.TmdbID.ToString());
             }
             else
             {
-                parameters.Add("search", string.Empty);
-                // Showing all torrents (just for output function)
-                term = "all";
+                if (!string.IsNullOrWhiteSpace(term))
+                {
+                    // Add search term
+                    logger.Info("\nXthor - Search requested for movie with title \"" + term + "\"");
+                    parameters.Add("search", WebUtility.UrlEncode(term));
+                }
             }
 
-            // Loop on Categories needed
+            // Loop on categories needed
             if (categoriesList.Count > 0)
             {
-                parameters.Add("category", string.Join("+", categoriesList));
+                switch (DropCategories)
+                {
+                    case 1:
+                        // Drop categories for TMDB query only.
+                        if (!query.IsTmdbQuery)
+                        { goto default; }
+                        break;
+                    case 2:
+                        // Drop categories enabled for all requests
+                        break;
+                    default:
+                        // Default or disabled state (0 value of config switch)
+                        parameters.Add("category", string.Join("+", categoriesList));
+                        break;
+                }
             }
 
             // If Only Freeleech Enabled
-            if (ConfigData.Freeleech.Value)
+            if (FreeleechOnly)
             {
                 parameters.Add("freeleech", "1");
             }
 
-            if (!string.IsNullOrEmpty(ConfigData.Accent.Value))
+            // If Specific Language Accent Requested
+            if (!string.IsNullOrEmpty(SpecificLanguageAccent) && SpecificLanguageAccent != "0")
             {
-                parameters.Add("accent", ConfigData.Accent.Value);
+                parameters.Add("accent", SpecificLanguageAccent);
+            }
+
+            // Pages handling
+            if (page > 1 && !query.IsTest)
+            {
+                parameters.Add("page", page.ToString());
             }
 
             // Building our query -- Cannot use GetQueryString due to UrlEncode (generating wrong category param)
             url += "?" + string.Join("&", parameters.AllKeys.Select(a => a + "=" + parameters[a]));
 
-            Output("\nBuilded query for \"" + term + "\"... " + url);
+            logger.Info("\nXthor - Builded query: " + url);
 
             // Return our search url
             return url;
-        }
-
-        /// <summary>
-        /// Switch Method for Querying
-        /// </summary>
-        /// <param name="request">URL created by Query Builder</param>
-        /// <returns>Results from query</returns>
-        private async Task<string> QueryExec(string request)
-        {
-            string results;
-
-            // Switch in we are in DEV mode with Hard Drive Cache or not
-            if (DevMode && CacheMode)
-            {
-                // Check Cache before querying and load previous results if available
-                results = await QueryCache(request);
-            }
-            else
-            {
-                // Querying tracker directly
-                results = await QueryTracker(request);
-            }
-            return results;
-        }
-
-        /// <summary>
-        /// Get Torrents Page from Cache by Query Provided
-        /// </summary>
-        /// <param name="request">URL created by Query Builder</param>
-        /// <returns>Results from query</returns>
-        private async Task<string> QueryCache(string request)
-        {
-            string results;
-
-            // Create Directory if not exist
-            System.IO.Directory.CreateDirectory(Directory);
-
-            // Clean Storage Provider Directory from outdated cached queries
-            CleanCacheStorage();
-
-            // File Name
-            var fileName = StringUtil.HashSHA1(request) + ".json";
-
-            // Create fingerprint for request
-            var file = Path.Combine(Directory, fileName);
-
-            // Checking modes states
-            if (File.Exists(file))
-            {
-                // File exist... loading it right now !
-                Output("Loading results from hard drive cache ..." + fileName);
-                try
-                {
-                    using (var fileReader = File.OpenText(file))
-                    {
-                        var serializer = new JsonSerializer();
-                        results = (string)serializer.Deserialize(fileReader, typeof(string));
-                    }
-                }
-                catch (Exception e)
-                {
-                    Output("Error loading cached results ! " + e.Message, "error");
-                    results = null;
-                }
-            }
-            else
-            {
-                // No cached file found, querying tracker directly
-                results = await QueryTracker(request);
-
-                // Cached file didn't exist for our query, writing it right now !
-                Output("Writing results to hard drive cache ..." + fileName);
-                using (var fileWriter = File.CreateText(file))
-                {
-                    var serializer = new JsonSerializer();
-                    serializer.Serialize(fileWriter, results);
-                }
-            }
-            return results;
         }
 
         /// <summary>
@@ -493,18 +591,17 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <param name="request">URL created by Query Builder</param>
         /// <returns>Results from query</returns>
-        private async Task<string> QueryTracker(string request)
+        private async Task<string> QueryTrackerAsync(string request)
         {
             // Cache mode not enabled or cached file didn't exist for our query
-            Output("\nQuerying tracker for results....");
+            logger.Debug("\nQuerying tracker for results....");
 
             // Build WebRequest for index
             var myIndexRequest = new WebRequest
             {
                 Type = RequestType.GET,
                 Url = request,
-                Encoding = Encoding,
-                Headers = EmulatedBrowserHeaders
+                Encoding = Encoding
             };
 
             // Request our first page
@@ -523,187 +620,39 @@ namespace Jackett.Common.Indexers
         private void CheckApiState(XthorError state)
         {
             // Switch on state
-            switch (state.code)
+            switch (state.Code)
             {
                 case 0:
                     // Everything OK
-                    Output("\nAPI State : Everything OK ... -> " + state.descr);
+                    logger.Debug("\nXthor - API State : Everything OK ... -> " + state.Descr);
                     break;
 
                 case 1:
                     // Passkey not found
-                    Output("\nAPI State : Error, Passkey not found in tracker's database, aborting... -> " + state.descr);
+                    logger.Error("\nXthor - API State : Error, Passkey not found in tracker's database, aborting... -> " + state.Descr);
                     throw new Exception("Passkey not found in tracker's database");
                 case 2:
                     // No results
-                    Output("\nAPI State : No results for query ... -> " + state.descr);
+                    logger.Info("\nXthor - API State : No results for query ... -> " + state.Descr);
                     break;
 
                 case 3:
                     // Power Saver
-                    Output("\nAPI State : Power Saver mode, only cached query with no parameters available ... -> " + state.descr);
+                    logger.Warn("\nXthor - API State : Power Saver mode, only cached query with no parameters available ... -> " + state.Descr);
                     break;
 
                 case 4:
                     // DDOS Attack, API disabled
-                    Output("\nAPI State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.descr);
+                    logger.Error("\nXthor - API State : Tracker is under DDOS attack, API disabled, aborting ... -> " + state.Descr);
                     throw new Exception("Tracker is under DDOS attack, API disabled");
+                case 8:
+                    // AntiSpam Protection
+                    logger.Warn("\nXthor - API State : Triggered AntiSpam Protection -> " + state.Descr);
+                    throw new Exception("Triggered AntiSpam Protection, please delay your requests !");
                 default:
                     // Unknown state
-                    Output("\nAPI State : Unknown state, aborting querying ... -> " + state.descr);
+                    logger.Error("\nXthor - API State : Unknown state, aborting querying ... -> " + state.Descr);
                     throw new Exception("Unknown state, aborting querying");
-            }
-        }
-
-        /// <summary>
-        /// Clean Hard Drive Cache Storage
-        /// </summary>
-        /// <param name="force">Force Provider Folder deletion</param>
-        private void CleanCacheStorage(bool force = false)
-        {
-            // Check cleaning method
-            if (force)
-            {
-                // Deleting Provider Storage folder and all files recursively
-                Output("\nDeleting Provider Storage folder and all files recursively ...");
-
-                // Check if directory exist
-                if (System.IO.Directory.Exists(Directory))
-                {
-                    // Delete storage directory of provider
-                    System.IO.Directory.Delete(Directory, true);
-                    Output("-> Storage folder deleted successfully.");
-                }
-                else
-                {
-                    // No directory, so nothing to do
-                    Output("-> No Storage folder found for this provider !");
-                }
-            }
-            else
-            {
-                var i = 0;
-                // Check if there is file older than ... and delete them
-                Output("\nCleaning Provider Storage folder... in progress.");
-                System.IO.Directory.GetFiles(Directory)
-                .Select(f => new FileInfo(f))
-                .Where(f => f.LastAccessTime < DateTime.Now.AddMilliseconds(-Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value)))
-                .ToList()
-                .ForEach(f =>
-                {
-                    Output("Deleting cached file << " + f.Name + " >> ... done.");
-                    f.Delete();
-                    i++;
-                });
-
-                // Inform on what was cleaned during process
-                if (i > 0)
-                {
-                    Output("-> Deleted " + i + " cached files during cleaning.");
-                }
-                else
-                {
-                    Output("-> Nothing deleted during cleaning.");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Output message for logging or developpment (console)
-        /// </summary>
-        /// <param name="message">Message to output</param>
-        /// <param name="level">Level for Logger</param>
-        private void Output(string message, string level = "debug")
-        {
-            // Check if we are in dev mode
-            if (DevMode)
-            {
-                // Output message to console
-                Console.WriteLine(message);
-            }
-            else
-            {
-                // Send message to logger with level
-                switch (level)
-                {
-                    default:
-                        goto case "debug";
-                    case "debug":
-                        // Only if Debug Level Enabled on Jackett
-                        if (logger.IsDebugEnabled)
-                        {
-                            logger.Debug(message);
-                        }
-                        break;
-
-                    case "info":
-                        logger.Info(message);
-                        break;
-
-                    case "error":
-                        logger.Error(message);
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Validate Config entered by user on Jackett
-        /// </summary>
-        private void ValidateConfig()
-        {
-            Output("\nValidating Settings ... \n");
-
-            // Check Passkey Setting
-            if (string.IsNullOrEmpty(ConfigData.PassKey.Value))
-            {
-                throw new ExceptionWithConfigData("You must provide your passkey for this tracker to be allowed to use API !", ConfigData);
-            }
-            else
-            {
-                Output("Validated Setting -- PassKey (auth) => " + ConfigData.PassKey.Value);
-            }
-
-            if (!string.IsNullOrEmpty(ConfigData.Accent.Value) && !string.Equals(ConfigData.Accent.Value, "1") && !string.Equals(ConfigData.Accent.Value, "2"))
-            {
-                throw new ExceptionWithConfigData("Only '1' or '2' are available in the Accent parameter.", ConfigData);
-            }
-            else
-            {
-                Output("Validated Setting -- Accent (audio) => " + ConfigData.Accent.Value);
-            }
-            // Check Dev Cache Settings
-            if (ConfigData.HardDriveCache.Value)
-            {
-                Output("\nValidated Setting -- DEV Hard Drive Cache enabled");
-
-                // Check if Dev Mode enabled !
-                if (!ConfigData.DevMode.Value)
-                {
-                    throw new ExceptionWithConfigData("Hard Drive is enabled but not in DEV MODE, Please enable DEV MODE !", ConfigData);
-                }
-
-                // Check Cache Keep Time Setting
-                if (!string.IsNullOrEmpty(ConfigData.HardDriveCacheKeepTime.Value))
-                {
-                    try
-                    {
-                        Output("Validated Setting -- Cache Keep Time (ms) => " + Convert.ToInt32(ConfigData.HardDriveCacheKeepTime.Value));
-                    }
-                    catch (Exception)
-                    {
-                        throw new ExceptionWithConfigData("Please enter a numeric hard drive keep time in ms !", ConfigData);
-                    }
-                }
-                else
-                {
-                    throw new ExceptionWithConfigData("Hard Drive Cache enabled, Please enter a maximum keep time for cache !", ConfigData);
-                }
-            }
-            else
-            {
-                // Delete cache if previously existed
-                CleanCacheStorage(true);
             }
         }
     }

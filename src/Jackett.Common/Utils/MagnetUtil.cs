@@ -23,7 +23,7 @@ namespace Jackett.Common.Utils
             {"tr", "udp://open.stealth.si:80/announce"}
         };
 
-        private static readonly string _TrackersEncoded = _Trackers.GetQueryString(null,true);
+        private static readonly string _TrackersEncoded = _Trackers.GetQueryString(null, true);
 
         public static Uri InfoHashToPublicMagnet(string infoHash, string title)
         {

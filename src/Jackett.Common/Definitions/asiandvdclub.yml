@@ -1,0 +1,125 @@
+---
+id: asiandvdclub
+name: AsianDVDClub
+description: "AsianDVDClub (ADC) is a Private Torrent Tracker for Asian DVD and BluRay"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://asiandvdclub.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "Anime"}
+    - {id: 3, cat: Movies, desc: "Japan"}
+    - {id: 5, cat: Movies, desc: "China"}
+    - {id: 4, cat: Movies, desc: "Korea"}
+    - {id: 2, cat: Movies, desc: "Hong Kong"}
+    - {id: 6, cat: Movies, desc: "Philippines"}
+    - {id: 7, cat: Movies, desc: "Taiwan"}
+    - {id: 8, cat: Movies, desc: "Thailand"}
+    - {id: 9, cat: Movies, desc: "Vietnam"}
+    - {id: 10, cat: Movies, desc: "Malaysia"}
+    - {id: 11, cat: Movies, desc: "Other Asian"}
+    - {id: 12, cat: Other, desc: "Miscellaneous"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login
+  method: post
+  inputs:
+    apple: evil
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: p:contains("Error")
+  test:
+    path: index
+    selector: a[href="/logout"]
+
+search:
+  paths:
+    - path: torrents/
+  inputs:
+    $raw: "{{ range .Categories }}countries[]={{.}}&{{end}}"
+    searchbox: "{{ .Keywords }}"
+    search: Search
+    golden: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+
+  rows:
+    selector: table.torrenttable_helper > tbody > tr:has(img)
+
+  fields:
+    category:
+      selector: img[class^="cat-"]
+      attribute: class
+      case:
+        img.cat-anime: 1
+        img.cat-hk: 2
+        img.cat-japan: 3
+        img.cat-korea: 4
+        img.cat-china: 5
+        img.cat-phil: 6
+        img.cat-taiwan: 7
+        img.cat-thai: 8
+        img.cat-viet: 9
+        img.cat-malaysia: 10
+        img.cat-rest: 11
+        img.cat-misc: 12 # unconfirmed as there are currently no torrents for cat[12]
+    title:
+      selector: a[href^="/torrent/"]
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="/torrent/"]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["torrent", "download"]
+    size:
+      selector: td:nth-last-child(6)
+    seeders:
+      selector: td:nth-last-child(5)
+    leechers:
+      selector: td:nth-last-child(4)
+    date:
+      selector: td:nth-last-child(3)
+      remove: p
+      filters:
+        - name: timeago
+    grabs:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        img[src="../images/golden.gif"]: 0
+        img[src="../images/silver.gif"]: 0.5 # unconfirmed as there are currently no silver torrents
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.5
+    minimumseedtime:
+      # 45 days (as seconds = 45 x 24 x 60 x 60)
+      text: 3888000
+# Engine n/a

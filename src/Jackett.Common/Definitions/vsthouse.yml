@@ -2,7 +2,7 @@
 id: vsthouse
 name: VSTHouse
 description: "VSTHouse is a Public Russian site for AUDIO apps, plugins and samples"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: UTF-8
 links:
@@ -19,8 +19,9 @@ caps:
 settings: []
 
 download:
-  selector: a[title^="Скачать:"]
-  attribute: href
+  selectors:
+    - selector: a[title^="Скачать:"]
+      attribute: href
 
 search:
   paths:

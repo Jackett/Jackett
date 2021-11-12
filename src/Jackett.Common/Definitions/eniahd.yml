@@ -2,10 +2,12 @@
 id: eniahd
 name: EniaHD
 description: "EniaHD is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
+  - https://eniatv.com/
+legacylinks:
   - https://eniahd.com/
 
 caps:
@@ -16,6 +18,25 @@ caps:
     - {id: 12, cat: Movies, desc: "Наше кино"}
     # TV
     - {id: 2, cat: TV/HD, desc: "Зарубежные сериалы HD"}
+    - {id: 65, cat: TV/HD, desc: "Майя МС / Майянцы / Mayans M.C."}
+    - {id: 52, cat: TV/HD, desc: "Блудный сын / Prodigal Son"}
+    - {id: 49, cat: TV/HD, desc: "Пенниуорт / Pennyworth"}
+    - {id: 62, cat: TV/HD, desc: "Черный список / The Blacklist"}
+    - {id: 64, cat: TV/HD, desc: "Игра престолов / Game of Thrones"}
+    - {id: 59, cat: TV/HD, desc: "Американская история ужасов / American Horror Story"}
+    - {id: 60, cat: TV/HD, desc: "Хороший доктор / The Good Doctor"}
+    - {id: 54, cat: TV/HD, desc: "Рэй Донован / Ray Donovan"}
+    - {id: 55, cat: TV/HD, desc: "Сверхъестественное / Supernatural"}
+    - {id: 56, cat: TV/HD, desc: "Сквозь снег / Snowpiercer"}
+    - {id: 57, cat: TV/HD, desc: "Теория большого взрыва / The Big Bang Theory"}
+    - {id: 58, cat: TV/HD, desc: "Миллиарды / Billions"}
+    - {id: 53, cat: TV/HD, desc: "Родина / Homeland"}
+    - {id: 51, cat: TV/HD, desc: "Новобранец / The Rookie"}
+    - {id: 50, cat: TV/HD, desc: "Это мы / This Is Us"}
+    - {id: 48, cat: TV/HD, desc: "Бэтвумен / Batwoman"}
+    - {id: 32, cat: TV/HD, desc: "Кости / Bones"}
+    - {id: 31, cat: TV/HD, desc: "Американские боги / American Gods"}
+    - {id: 30, cat: TV/HD, desc: "Агенты Щ.И.Т. / Agents of S.H.I.E.L.D."}
     - {id: 17, cat: TV/HD, desc: "Зарубежные сериалы HD для Apple TV"}
     - {id: 22, cat: TV, desc: "Зарубежные сериалы HEVC"}
     - {id: 3, cat: TV, desc: "Зарубежные сериалы"}
@@ -28,6 +49,8 @@ caps:
     - {id: 7, cat: TV/Documentary, desc: "Документальные (HD Video)"}
     - {id: 21, cat: TV/Documentary, desc: "Документальные"}
     - {id: 28, cat: TV/Documentary, desc: "Развлекательные телепередачи и шоу"}
+    # Private Forums
+    - {id: 47, cat: TV/HD, desc: "Рассказ служанки / The Handmaid's Tale"}
     # Miscellaneous
     - {id: 8, cat: Other, desc: "Разное (раздачи)"}
 
@@ -85,10 +108,12 @@ search:
   keywordsfilters:
     - name: diacritics
       args: replace
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
     - name: re_replace # S01 to сезон 1
-      args: ["(?i)\\bS0*(\\d+)\\b", "сезон $1"]
+      args: ["(?i)S0*(\\d+)", "сезон $1"]
     - name: re_replace # S01E01 to сезон 1 серии 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 серии $2"]
+      args: ["(?i)S0*(\\d+)E0*(\\d+)", "сезон $1 серии $2"]
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 0
@@ -127,9 +152,6 @@ search:
     pn: ""
     # search by partial word
     allw: 0
-  keywordsfilters:
-    - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./dl.php?id="])

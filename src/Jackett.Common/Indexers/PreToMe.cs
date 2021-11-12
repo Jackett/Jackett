@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             // Unfortunately most of them are tags not categories and they return the parent category
@@ -81,8 +81,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=4&tags=PS3", TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping("cat[]=4&tags=Wii", TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping("cat[]=4&tags=PSP", TorznabCatType.ConsolePSP, "Games/PSP");
+            AddCategoryMapping("cat[]=4&tags=GAMES-NSW", TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping("cat[]=4&tags=NDS", TorznabCatType.ConsoleNDS, "Games/NDS");
             AddCategoryMapping("cat[]=4&tags=Xbox", TorznabCatType.ConsoleXBox, "Games/Xbox");
+            AddCategoryMapping("cat[]=4&tags=NSW", TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping("cat[]=4&tags=PS2", TorznabCatType.ConsoleOther, "Games/PS2");
 
             // Miscellaneous

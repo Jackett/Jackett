@@ -39,7 +39,7 @@ namespace Jackett.Common.Utils.Clients
 
             trustedCertificates.TryGetValue(hash, out var hosts);
             if (hosts != null && hosts.Contains(request.Host))
-                    return true;
+                return true;
 
             // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
             // The certificate is only available inside this function, so we can't catch it at the calling method.
@@ -77,8 +77,8 @@ namespace Jackett.Common.Utils.Clients
 
             using (var clearanceHandlr = new ClearanceHandler(serverConfig.FlareSolverrUrl))
             {
-                clearanceHandlr.UserAgent = BrowserUtil.ChromeUserAgent;
-                clearanceHandlr.MaxTimeout = 50000;
+                clearanceHandlr.MaxTimeout = 55000;
+                clearanceHandlr.ProxyUrl = serverConfig.GetProxyUrl(false);
                 using (var clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,

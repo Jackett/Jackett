@@ -2,7 +2,7 @@
 id: pterclub
 name: PTerClub
 description: "PTerClub is a CHINESE Private Torrent Tracker for HD MUSIC VIDEOS, MOVIES, TV & ANIME"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
@@ -15,6 +15,7 @@ caps:
     - {id: 403, cat: TV/Anime, desc: "动漫 (Anime)"}
     - {id: 405, cat: TV, desc: "综艺 (TV Show)"}
     - {id: 413, cat: Audio/Video, desc: "音乐短片 (MV)"}
+    - {id: 418, cat: Audio/Video, desc: "舞台演出(Stage Performance)"}
     - {id: 406, cat: Audio, desc: "音乐 (Music)"}
     - {id: 402, cat: TV/Documentary, desc: "纪录片 (Documentary)"}
     - {id: 407, cat: TV/Sport, desc: "体育 (Sport)"}
@@ -119,12 +120,14 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_default:
       selector: a[href^="details.php?id="]
-    title:
+    title_optional:
       optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -134,12 +137,13 @@ search:
     poster:
       selector: img[data-orig]
       attribute: data-orig
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    date:
+    # staff have extra columns at the start and end of a row, so we have to float the next lot of selectors off an anchor
+    date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-of-type(4) > span[title]
+      selector: td:has(a[href^="comment.php?"]) ~ td > span[title]
       attribute: title
       optional: true
       filters:
@@ -147,23 +151,25 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_added:
       # time added
-      selector: td.rowfollow:nth-of-type(4):not(:has(span))
+      selector: td:has(a[href^="comment.php?"]) ~ td:not(:has(span[title]))
       optional: true
       filters:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-of-type(5)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td
     seeders:
-      selector: td.rowfollow:nth-of-type(6)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td ~ td
     leechers:
-      selector: td.rowfollow.rowfollow:nth-of-type(7)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td ~ td ~  td
     grabs:
-      selector: td.rowfollow:nth-of-type(8)
+      selector: td:has(a[href^="comment.php?"]) ~ td ~ td ~ td ~ td ~ td
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -179,7 +185,7 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
+      selector: td:has(table.torrentname)
       remove: a, img
     minimumratio:
       text: 0.9

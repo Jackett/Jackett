@@ -1,8 +1,8 @@
 ---
 id: greekteam
 name: Greek Team
-language: el-gr
 description: "Greek Team is a GREEK Private site for TV / MOVIES / GENERAL"
+language: el-GR
 type: private
 encoding: windows-1253
 links:
@@ -129,9 +129,6 @@ search:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td
     grabs:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td
     leechers:

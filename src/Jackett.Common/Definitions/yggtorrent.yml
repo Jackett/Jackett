@@ -2,13 +2,12 @@
 id: yggtorrent
 name: YGGtorrent
 description: "YGGTorrent is a FRENCH Semi-Private Torrent Tracker for 0DAY / GENERAL"
-language: fr-fr
+language: fr-FR
 type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.yggtorrent.si/
-  # don't forget to also change below in settings !
+  - https://www3.yggtorrent.nz/
 legacylinks:
   - https://yggtorrent.com/
   - https://ww1.yggtorrent.com/
@@ -34,6 +33,13 @@ legacylinks:
   - https://www5.yggtorrent.pe/
   - https://yggtorrent.ws/
   - https://yggtorrent.se/
+  - https://www.yggtorrent.si/
+  - https://ww3.yggtorrent.si/
+  - https://yggtorrent.si/
+  - http://www2.yggtorrent.si/
+  - https://www2.yggtorrent.si/
+  - https://www.yggtorrent.li/
+  - https://www4.yggtorrent.li/
 
 caps:
   categorymappings:
@@ -98,10 +104,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: searchanddlurl
-    label: Search and download URL
-    type: text
-    default: www2.yggtorrent.si
   - name: username
     type: text
     label: Username
@@ -149,10 +151,6 @@ settings:
     type: checkbox
     label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
     default: false
-  - name: betasearchengine
-    type: checkbox
-    label: "Use Beta Search engine URL (Less restrictive) / SonarrV3 Full Series Search NEW"
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -181,7 +179,7 @@ login:
   inputs:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
-    submit: ""
+    ci_csrf_token: ""
   error:
     - selector: "#login_msg_pass[style=\"\"][style] > center"
     - selector: "#ban_msg_login[style=\"\"][style] > center"
@@ -215,17 +213,22 @@ search:
       args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
     - name: re_replace # Full season S >= 10
       args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
+    - name: re_replace # episode number at the end "123" to "E123"
+      args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
     - name: replace
       args: ["  ", " "]
     - name: trim
+    # put each word in quotations to prevent exact phrase search
+    - name: re_replace
+      args: ["(\\w+)", "\"$1\""]
   paths:
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Config.betasearchengine }}{{ .Keywords }}{{ else }}{{ re_replace .Keywords \"\\b[^\\s]+\\b\"  \"\"$&\"\"}}{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
     # Saison Word
-    - path: "https://{{ .Config.searchanddlurl }}/{{ if .Config.betasearchengine }}new_search{{ else }}engine{{ end }}/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
+    - path: "engine/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
 
   rows:
@@ -297,7 +300,7 @@ search:
         # Sonarr need E in front of 3 digit number or else it thinks it is episode
         # S01E10 for number 110 for example ==> enhancedAnime
         - name: re_replace
-          args: ["(.*)(\\.| |\\-)(\\d{2,3})(\\.| |\\-)(.*)", "$1 E$3 $5"]
+          args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-)(.*)", "$1 E$3 $5"]
     title:
       text: "{{ if .Config.enhancedAnime }}{{ .Result.title_anime }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
     details:
@@ -307,7 +310,7 @@ search:
       # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
     download:
-      text: "https://{{ .Config.searchanddlurl }}/engine/download_torrent?id={{ .Result._id }}"
+      text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
     date:
       selector: td:nth-child(5)
       filters:
@@ -340,16 +343,16 @@ search:
           args: ["o", "B"]
     grabs:
       selector: td:nth-child(7)
-    seeders:
-      text: 0
-    seeders:
+    seeders_optional:
       selector: td:nth-child(8)
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:nth-child(9)
       optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

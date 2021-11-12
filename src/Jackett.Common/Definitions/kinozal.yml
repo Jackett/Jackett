@@ -2,7 +2,7 @@
 id: kinozal
 name: Kinozal
 description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
-language: ru-ru
+language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
@@ -109,6 +109,25 @@ login:
   test:
     path: userdetails.php
 
+download:
+  before:
+    path: get_srv_details.php
+    inputs:
+      action: 2
+      id: "{{ .DownloadUri.Query.id }}"
+  infohash:
+    usebeforeresponse: true
+    hash:
+      selector: li:first-child
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: div.b
+      filters:
+        - name: trim
+        - name: validfilename
+
 search:
   paths:
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
@@ -196,7 +215,7 @@ search:
     leechers:
       selector: td:nth-child(6)
     # dates come in four flavours:
-    date:
+    date_day:
       # now
       # Today 09:10
       # Yesterday 13:04
@@ -211,7 +230,7 @@ search:
           args: ["сегодня", "Today"]
         - name: replace
           args: ["вчера", "Yesterday"]
-    date:
+    date_year:
       # 24.10.2017 at 23:44
       selector: td:nth-child(7):contains(".")
       optional: true
@@ -222,6 +241,8 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02.01.2006 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         a.r1: 0 # gold

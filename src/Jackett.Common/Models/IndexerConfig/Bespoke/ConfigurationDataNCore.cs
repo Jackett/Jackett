@@ -7,19 +7,19 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     [ExcludeFromCodeCoverage]
     internal class ConfigurationDataNCore : ConfigurationData
     {
-        public StringItem Username { get; private set; }
-        public StringItem Password { get; private set; }
-        public StringItem TwoFactor { get; private set; }
-        public BoolItem Hungarian { get; set; }
-        public BoolItem English { get; set; }
+        public StringConfigurationItem Username { get; private set; }
+        public StringConfigurationItem Password { get; private set; }
+        public StringConfigurationItem TwoFactor { get; private set; }
+        public BoolConfigurationItem Hungarian { get; set; }
+        public BoolConfigurationItem English { get; set; }
 
         public ConfigurationDataNCore()
         {
-            Username = new StringItem { Name = "Username", Value = "" };
-            Password = new StringItem { Name = "Password", Value = "" };
-            TwoFactor = new StringItem { Name = "Twofactor", Value = "" };
-            Hungarian = new BoolItem { Name = "Hungarian", Value = true };
-            English = new BoolItem { Name = "English", Value = true };
+            Username = new StringConfigurationItem("Username") { Value = "" };
+            Password = new StringConfigurationItem("Password") { Value = "" };
+            TwoFactor = new StringConfigurationItem("Twofactor") { Value = "" };
+            Hungarian = new BoolConfigurationItem("Hungarian") { Value = true };
+            English = new BoolConfigurationItem("English") { Value = true };
         }
 
         public ConfigurationDataNCore(JToken json)
@@ -33,19 +33,19 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                 switch (propertyName)
                 {
                     case "Username":
-                        Username = new StringItem { Name = propertyName, Value = config.value };
+                        Username = new StringConfigurationItem(propertyName) { Value = config.value };
                         break;
                     case "Password":
-                        Password = new StringItem { Name = propertyName, Value = config.value };
+                        Password = new StringConfigurationItem(propertyName) { Value = config.value };
                         break;
                     case "Twofactor":
-                        TwoFactor = new StringItem { Name = propertyName, Value = config.value };
+                        TwoFactor = new StringConfigurationItem(propertyName) { Value = config.value };
                         break;
                     case "Hungarian":
-                        Hungarian = new BoolItem { Name = propertyName, Value = config.value };
+                        Hungarian = new BoolConfigurationItem(propertyName) { Value = config.value };
                         break;
                     case "English":
-                        English = new BoolItem { Name = propertyName, Value = config.value };
+                        English = new BoolConfigurationItem(propertyName) { Value = config.value };
                         break;
                     default:
                         break;

@@ -2,11 +2,13 @@
 id: ztracker
 name: Ztracker
 description: "Ztracker is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
-language: hu-hu
+language: hu-HU
 type: semi-private
 encoding: ISO-8859-2
 links:
-  - http://ztracker.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://ztracker.cc/ # site does not support https invalid certificate
+legacylinks:
+  - http://ztracker.org/
 
 caps:
   categorymappings:
@@ -79,8 +81,9 @@ settings:
       asc: asc
 
 login:
-  path: belepes.php
+  path: login.php
   method: form
+  form: form[action="takelogin.php"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
@@ -140,17 +143,17 @@ search:
       filters:
         - name: regexp
           args: img src=\\'(.*?)\\'
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:
       selector: td:nth-child(5)
-    size:
-      text: 0
-    size:
+    size_optional:
       selector: td:nth-child(11):has(b)
       optional: true
       remove: b
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     seeders:
       selector: td:nth-child(7)
     leechers:

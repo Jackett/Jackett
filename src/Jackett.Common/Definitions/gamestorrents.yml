@@ -2,14 +2,18 @@
 id: gamestorrents
 name: GamesTorrents
 description: "GamesTorrents is a SPANISH Public tracker for GAMES"
-language: es-es
+language: es-ES
 type: public
 encoding: UTF-8
 links:
-  - https://www.gamestorrents.nu/
+  - https://www.gamestorrents.fm/
+  - https://gamestorrents.nocensor.biz/
 legacylinks:
   - https://www.gamestorrents.com/
   - https://www.gamestorrents.tv/
+  - https://www.gamestorrents.nu/
+  - https://gamestorrents.nocensor.space/
+  - https://gamestorrents.nocensor.work/
 
 caps:
   categorymappings:
@@ -29,8 +33,9 @@ caps:
 settings: []
 
 download:
-  selector: a#download_torrent
-  attribute: href
+  selectors:
+    - selector: a#download_torrent
+      attribute: href
 
 search:
   paths:

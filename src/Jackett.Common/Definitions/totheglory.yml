@@ -2,7 +2,7 @@
 id: totheglory
 name: ToTheGlory
 description: "ToTheGlory (TTG) A Chinese tracker"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
@@ -129,6 +129,7 @@ settings:
 login:
   path: login.php?returnto=
   method: form
+  form: form[action="takelogin.php"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
@@ -137,7 +138,8 @@ login:
     passid: "{{ .Config.passid }}"
     passan: "{{ .Config.passan }}"
   error:
-    - selector: form#loginform > span.warning
+    - selector: td.embedded:has(h2:contains("！")) # Chinese, Japanese
+    - selector: td.embedded:has(h2:contains("!")) # English, Korean
   test:
     path: my.php
 
@@ -195,9 +197,6 @@ search:
           args: ["\n", ""]
     grabs:
       selector: td:nth-child(8)
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       selector: td:nth-child(5)
       filters:
@@ -205,7 +204,7 @@ search:
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
-    imdb:
+    imdbid:
       selector: span.imdb_rate > a
       attribute: href
     downloadvolumefactor:

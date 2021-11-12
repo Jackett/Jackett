@@ -1,0 +1,105 @@
+---
+id: catorrent
+name: Catorrent
+description: "Catorrent is a RUSSIAN Semi-Private Torrent Tracker for GAMES"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - https://catorrent.org/
+
+caps:
+  categorymappings:
+    - {id: PC, cat: PC/Games, desc: "PC"}
+    - {id: PS1, cat: Console/Other, desc: "Playstation 1"}
+    - {id: PS2, cat: Console/Other, desc: "Playstation 2"}
+    - {id: PS3, cat: Console/PS3, desc: "Playstation 3"}
+    - {id: PS4, cat: Console/PS4, desc: "Playstation 4"}
+    - {id: SWITCH, cat: Console/Other, desc: "Nintendo Switch"}
+    - {id: PSP, cat: Console/PSP, desc: "Playstation (portable) PSP"}
+    - {id: PSVITA, cat: Console/PS Vita, desc: "Playstation Vita"}
+    - {id: XONE, cat: Console/XBox One, desc: "Xbox ONE"}
+    - {id: X360, cat: Console/XBox 360, desc: "Xbox 360"}
+    - {id: WIIU, cat: Console/WiiU, desc: "Nintendo WIIU"}
+    - {id: WII, cat: Console/Wii, desc: "Nintendo WII"}
+    - {id: 3DS, cat: Console/3DS, desc: "Nintendo 3DS"}
+    - {id: NDS, cat: Console/NDS, desc: "Nintendo DS"}
+    - {id: N64, cat: Console/Other, desc: "Nintendo 64"}
+    - {id: NGC, cat: Console/Other, desc: "Nintendo Game Cube"}
+    - {id: DREAMCAST, cat: Console/Other, desc: "Dreamcast"}
+    - {id: SAT, cat: Console/Other, desc: "Sega Saturn"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: index.php
+  method: form
+  form: form[action=""]
+  inputs:
+    login_name: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
+    login_not_save: ""
+    login: submit
+  error:
+    - selector: div.berrors
+  test:
+    path: /
+    selector: a[href$="/index.php?action=logout"]
+
+download:
+  selectors:
+    - selector: a[href*="/index.php?do=download&id="]
+      attribute: href
+
+search:
+  # https://catorrent.org/index.php?do=search&subaction=search&story=lovelot
+  paths:
+    - path: index.php
+  inputs:
+    do: search
+    subaction: search
+    search_start: 0
+    result_from: 1
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+
+  rows:
+    selector: div.short_game_search
+
+  fields:
+    category:
+      selector: div.icon_default
+    title:
+      selector: div.short_game_title
+    details:
+      selector: a[href$=".html"]
+      attribute: href
+    download:
+      selector: a[href$=".html"]
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    description:
+      selector: div.short_game_genre
+    date:
+      text: now
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    size:
+      text: "512 MB"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

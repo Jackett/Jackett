@@ -25,6 +25,8 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "takelogin.php";
         private string GetRSSKeyUrl => SiteLink + "getrss.php";
         private string SearchUrl => SiteLink + "browse.php";
+        private readonly Regex _dateMatchRegex = new Regex(
+            @"\d{2}-\d{2}-\d{4} \d{2}:\d{2}", RegexOptions.Compiled);
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
             (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
@@ -58,7 +60,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
@@ -75,14 +77,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
             AddCategoryMapping(72, TorznabCatType.MoviesForeign, "Foreign");
             AddCategoryMapping(74, TorznabCatType.TVOther, "Kids");
+            AddCategoryMapping(95, TorznabCatType.PCMac, "Mac Games");
             AddCategoryMapping(44, TorznabCatType.TVSport, "MMA");
             AddCategoryMapping(11, TorznabCatType.Movies, "Movie Boxsets");
             AddCategoryMapping(12, TorznabCatType.Movies, "Movies");
+            AddCategoryMapping(100, TorznabCatType.MoviesHD, "Movies HEVC");
             AddCategoryMapping(13, TorznabCatType.Audio, "Music");
             AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
             AddCategoryMapping(32, TorznabCatType.ConsoleNDS, "NDS Games");
             AddCategoryMapping(9, TorznabCatType.Other, "Other");
-            AddCategoryMapping(95, TorznabCatType.PCMac, "Mac Games");
             AddCategoryMapping(6, TorznabCatType.PCGames, "PC Games");
             AddCategoryMapping(45, TorznabCatType.Other, "Pictures");
             AddCategoryMapping(31, TorznabCatType.ConsolePS4, "Playstation");
@@ -94,9 +97,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(88, TorznabCatType.TVSport, "World Cup");
             AddCategoryMapping(83, TorznabCatType.Movies, "TOTM");
             AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
-            AddCategoryMapping(76, TorznabCatType.TVHD, "HD Boxsets");
-            AddCategoryMapping(47, TorznabCatType.TVHD, "TV-HD");
-            AddCategoryMapping(16, TorznabCatType.TVSD, "TV-SD");
+            AddCategoryMapping(76, TorznabCatType.TVHD, "TV HD Boxsets");
+            AddCategoryMapping(97, TorznabCatType.TVHD, "TV HECV Boxsets");
+            AddCategoryMapping(47, TorznabCatType.TVHD, "TV HD");
+            AddCategoryMapping(96, TorznabCatType.TVHD, "TV HD HEVC");
+            AddCategoryMapping(16, TorznabCatType.TVSD, "TV SD");
             AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Wii Games");
             AddCategoryMapping(43, TorznabCatType.TVSport, "Wrestling");
             AddCategoryMapping(8, TorznabCatType.ConsoleXBox, "Xbox Games");
@@ -153,8 +158,8 @@ namespace Jackett.Common.Indexers
                 var captchaUrl = qCaptchaImg.GetAttribute("src");
                 var captchaImageResponse = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies, RequestType.GET, LandingUrl);
 
-                var captchaText = new StringItem { Name = "Captcha Text" };
-                var captchaImage = new ImageItem {Name = "Captcha Image", Value = captchaImageResponse.ContentBytes};
+                var captchaText = new StringConfigurationItem("Captcha Text");
+                var captchaImage = new DisplayImageConfigurationItem("Captcha Image") { Value = captchaImageResponse.ContentBytes };
 
                 configData.AddDynamic("CaptchaText", captchaText);
                 configData.AddDynamic("CaptchaImage", captchaImage);
@@ -175,7 +180,7 @@ namespace Jackett.Common.Indexers
                             {"password", configData.Password.Value}
                         };
 
-            var captchaText = (StringItem)configData.GetDynamic("CaptchaText");
+            var captchaText = (StringConfigurationItem)configData.GetDynamic("CaptchaText");
             if (captchaText != null)
                 pairs.Add("imagestring", captchaText.Value);
 
@@ -268,8 +273,11 @@ namespace Jackett.Common.Indexers
                     release.Link = release.Guid;
                     release.Details = new Uri(qDetails.GetAttribute("href"));
                     //08-08-2015 12:51
-                    release.PublishDate = DateTime.ParseExact(
-                        row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim(), "dd-MM-yyyy H:mm",
+                    // requests can be 'Pre Release Time: 25-04-2021 15:00 Uploaded: 3 Weeks, 2 Days, 23 Hours, 53 Minutes, 39 Seconds after Pre'
+                    var dateMatch = _dateMatchRegex.Match(row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim());
+                    if (dateMatch.Success)
+                        release.PublishDate = DateTime.ParseExact(dateMatch.Value
+                        , "dd-MM-yyyy H:mm",
                         CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());

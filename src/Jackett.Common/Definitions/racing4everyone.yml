@@ -2,7 +2,7 @@
 id: racing4everyone
 name: Racing4Everyone (R4E)
 description: "Racing4Everyone (R4E) is a Private Torrent Tracker for RACING"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -45,6 +45,7 @@ caps:
     - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
     - {id: 79, cat: TV/Sport, desc: "TV Series"}
     - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
+    - {id: 81, cat: TV/Sport, desc: "Extreme E"}
 
   modes:
     search: [q]
@@ -142,10 +143,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date:

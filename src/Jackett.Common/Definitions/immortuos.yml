@@ -2,7 +2,7 @@
 id: immortuos
 name: Immortuos
 description: "Immortuos is a GERMAN Private Tracker for MOVIES / TV"
-language: de-de
+language: de-DE
 type: private
 encoding: UTF-8
 links:
@@ -131,10 +131,7 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: regexp
-          args: (\d+)
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:

@@ -2,9 +2,9 @@
 id: bit-titan
 name: BiT-TiTAN
 description: "BiT-TiTAN is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: de-de
+language: de-DE
 type: private
-encoding: iso-8859-1
+encoding: UTF-8
 links:
   - https://bit-titan.net/
 
@@ -94,12 +94,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new key <a href=\"https://bit-titan.net/api_cp.php\" target =_blank>here</a>."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -116,130 +117,67 @@ settings:
   - name: type
     type: select
     label: Order requested from site
-    default: 1
+    default: DESC
     options:
-      1: desc
-      2: asc
-
-login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  cookies: ["JAVA=OK"] # avoid jscheck redirect
-  captcha:
-    type: image
-    selector: img[src^="cap/captcha_math.php"]
-    input: stringCaptcha
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div#login_error
-  test:
-    path: index.php
-#    selector: a[href="logout.php"] # ajax does not return a full page so cant test this.
+      DESC: desc
+      ASC: asc
 
 search:
   paths:
-    - path: ajax_browse.php
-      method: post
+    - path: api.php
+      response:
+        type: json
+
   inputs:
-    # allCats=1000&categories[]=1010&categories[]=1020&search=&limit=1&searchIn=0&orderBy=1&order=1
-    $raw: "{{ if .Categories }}{{ range .Categories }}categories[]={{.}}&{{end}}{{ else }}{{ end }}"
-    # cat: (empty) all, 1000 film, 2000 tv, 3000 docs, 4000 sport, 5000 xxx, 6000 games, 7000 apps, 8000 music, 9000 other
-    allCats: ""
+    apiKey: "{{ .Config.apikey }}"
+    categories: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
+    # searchIn: 0 all, 1 active, 2 dead, 3 highlights, 4 own uploads, 5 uploads bots, 6 onlyupload, 7 multiplier, 8 %download, 9 freeleech
+    searchIn: "{{ if .Config.freeleech }}9{{ else }}0{{ end }}"
     # 1 25, 2 50, 3 75, 4 100
-    limit: 1
-    # searchin: 0 all, 1 active, 2 dead, 3 highlights, 4 bookmarks, 5 uploads, 10 bots, 11 onlyupload, 12 multiplier, 13 %download, 14 freeleech
-    # note: freeleech on this site means download and upload is not counted, whereas OU means download is free and upload is counted
-    # 14 yields no freeleech, but 11 returns results
-    searchin: "{{ if .Config.freeleech }}11{{ else }}0{{ end }}"
+    limit: 2
+    downloadLink: 1
+    # 1 = Sat, 28 Nov 2020 23:29:38 +0100 (DEFAULT VALUE) , 2 = 1606606178 (UNIX TIMESTAMP) , 3 = 28.11.2020 23:29.38 (German Timestamp) ,  4 = 2020-11-28 23:29:38 (Default Datetime)
+    timeFormat: 2
     orderBy: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-  headers:
-    x-requested-with: ["XMLHttpRequest"]
 
   rows:
-    selector: table.tableinborder tr:has(.catPic)
+    selector: results
+    count:
+      selector: filesFound
 
   fields:
+    id:
+      selector: id
     category:
-      selector: td.catPic > img
-      attribute: src
-      filters:
-        - name: regexp
-          args: (\d+).png$
+      selector: category
     title:
-      selector: a[href^="details.php?id="]
+      selector: name
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      text: "details.php?id={{ .Result.id }}"
     download:
-      # a[onlick="downloadTorrent(383718);"] --> a[href="download.php?torrent=383559"]
-      selector: td.tdl > a
-      attribute: onclick
-      filters:
-        - name: regexp
-          args: (\d+)
-        - name: prepend
-          args: "download.php?torrent="
+      selector: download
+    poster:
+      selector: poster
     seeders:
-      selector: td.peers:has(i[title="Seeders"])
+      selector: seeds
     leechers:
-      selector: td.peers:has(i[title="Leechers"])
+      selector: leechers
     grabs:
-      selector: td.peers:has(i[title="Snatchers"])
-      # 2 flavours of dates
+      selector: snatchers
     date:
-      # &nbsp;Heute 13:30:04
-      # &nbsp;Gestern 22:44:23
-      selector: td.added:not(:contains("."))
-      optional: true
-      filters:
-        - name: replace
-          args: ["\u00a0", ""]
-        - name: replace
-          args: ["Heute", "Today"]
-        - name: replace
-          args: ["Gestern", "Yesterday"]
-        - name: append
-          args: " +01:00" # CET
-        - name: fuzzytime
-    date:
-      # &nbsp;24.05.2019 20:15:38
-      selector: td.added:contains(".")
-      optional: true
-      filters:
-        - name: append
-          args: " +01:00" # CET
-        - name: dateparse
-          args: "02.01.2006 15:04:05 -07:00"
+      # unix
+      selector: added
     size:
-      selector: td.size
-      filters:
-        - name: replace
-          args: ["\u00a0", ""]
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
+      selector: size
     downloadvolumefactor:
-      case:
-        "span:contains(\"OU\")": 0 # only upload is counted
-        "span:contains(\"FL\")": 0 # freeleech neither dl or ul is counted (identity unconfirmed)
-        "span:contains(\"%25\")": .25 # 75% free
-        "span:contains(\"%50\")": .5 # 50% free
-        "span:contains(\"%75\")": .75 # 25% free
-        "*": 1
+      selector: downloadFactor
     uploadvolumefactor:
-      case:
-        "span:contains(\"2x\")": 2
-        "span:contains(\"5x\")": 5
-        "span:contains(\"10x\")": 10
-        "span:contains(\"FL\")": 0 # freeleech neither dl or ul is counted
-        "*": 1
+      selector: uploadFactor
+    minimumratio:
+      text: 1.0
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# engine n/a
+# json engine v.2.011.021

@@ -1,0 +1,85 @@
+---
+id: anilibria
+name: AniLibria
+description: "AniLibria is a Public torrent tracker for anime, voiced on russian by AniLibria team"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - https://www.anilibria.tv/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: Anime}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings: []
+
+search:
+  paths:
+    # https://github.com/anilibria/docs/blob/master/api_v2.md
+    - path: "https://api.anilibria.tv/v2/{{ if .Keywords }}searchTitles?filter=names,poster.url,code,torrents.list,season.year&limit=100&search={{ .Keywords }}{{ else }}getUpdates?filter=names,poster.url,code,torrents.list,season.year&limit=100{{ end }}"
+      response:
+        type: json
+        attribute: torrents.list
+        multiple: true
+
+  keywordsfilters:
+    # strip season and ep
+    - name: re_replace
+      args: ["(?i)(?:[SE]?\\d{1,4}){1,2}$", ""]
+
+  rows:
+    selector: $
+
+  fields:
+    category:
+      text: 1
+    title_ru:
+      selector: ..names.ru
+    title_en:
+      selector: ..names.en
+    title_alternative:
+      selector: ..names.alternative
+      optional: true
+    year:
+      selector: ..season.year
+    quality:
+      selector: quality.string
+    series:
+      selector: series.string
+    title:
+      text: "{{ .Result.title_ru }} / {{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} [{{ .Result.quality }}] - {{ .Result.series }}"
+    code:
+      selector: ..code
+    details:
+      text: "{{ .Config.sitelink }}release/{{ .Result.code }}.html"
+    download:
+      selector: url
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}"
+    poster:
+      selector: ..poster.url
+      filters:
+        - name: prepend
+          args: "https://static.anilibria.tv/"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: downloads
+    date:
+      # unix
+      selector: uploaded_timestamp
+    size:
+      selector: total_size
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json api v2

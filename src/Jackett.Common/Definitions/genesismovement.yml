@@ -2,7 +2,7 @@
 id: genesismovement
 name: Genesis-Movement
 description: "Genesis-Movement is a Semi-Private Torrent Tracker for GENESIS BOOTLEG MUSIC"
-language: en-us
+language: en-US
 type: semi-private
 encoding: iso-8859-1
 links:

@@ -2,7 +2,7 @@
 id: thevault
 name: The Vault
 description: "Business/Marketing E-Learning"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -66,21 +66,46 @@ caps:
   modes:
     search: [q]
 
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
 login:
-  path: login.php
-  method: form
-  form: form
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  captcha:
-    type: image
-    selector: img#freecap
-    input: word
-  error:
-    - selector: table:contains("Login failed!")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: main.php
+    selector: a[href^="logout.php?id="]
 
 search:
   paths:
@@ -88,6 +113,11 @@ search:
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 exclusive, 5 neutral
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    titleonly: 1
+    # 0 Exact, 1 Fuzzy, 3 Parsed, 4 Simple # 2 Pure is not used
+    nonboolean: 0
 
   rows:
     selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
@@ -100,8 +130,8 @@ search:
         - name: querystring
           args: cat
     title:
-      filters:
-      selector: td:nth-child(2) b
+      selector: a[href^="details.php?id="]
+      attribute: title
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -113,8 +143,10 @@ search:
     date:
       selector: td:nth-child(6)
       filters:
-        - name: regexp
-          args: (\d{4}-\d{2}-\d{2})
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:nth-child(7)
     grabs:
@@ -122,8 +154,6 @@ search:
       filters:
         - name: replace
           args: ["Never", "0"]
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(9)
     leechers:
@@ -137,4 +167,9 @@ search:
       case:
         "font[color=\"green\"]": 0
         "*": 1
-# engine tbd
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# XBTT TCG 0.98

@@ -2,14 +2,14 @@
 id: torrentdownload
 name: TorrentDownload
 description: "TorrentDownload is a Public general torrent index"
-language: en-us
+language: en-US
 type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.dev/
-  - https://torrentdownload.unblocked.rest/
+  - https://torrentdownload.unblockit.bz/
+  - https://torrentdownload.nocensor.biz/
 legacylinks:
   - https://torrentdownload.unblockit.pro/
   - https://torrentdownload.unblockit.one/
@@ -28,6 +28,21 @@ legacylinks:
   - https://torrentdownload.unblockit.top/
   - https://torrentdownload.unblockit.lat/
   - https://torrentdownload.unblockit.app/
+  - https://torrentdownload.unblocked.rest/
+  - https://torrentdownload.unblockit.dev/
+  - https://torrentdownload.unblockit.ltd/
+  - https://torrentdownload.unblockit.link/
+  - https://torrentdownload.unblockit.buzz/
+  - https://torrentdownload.unblocked.monster/
+  - https://torrentdownload.unblockit.club/
+  - https://torrentdownload.unblockit.onl/
+  - https://torrentdownload.unblockit.li/
+  - https://torrentdownload.unblockit.uno/
+  - https://torrentdownload.unblockit.ch/
+  - https://torrentdownload.nocensor.space/
+  - https://torrentdownload.unblockit.ws/
+  - https://torrentdownload.nocensor.work/
+  - https://torrentdownload.unblockit.kim/
 
 caps:
   categorymappings:
@@ -41,17 +56,24 @@ caps:
     - {id: Applications, cat: PC/0day, desc: Applications}
     - {id: ApplicationsAndroid, cat: PC/Mobile-Android, desc: "Applications Android"}
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: AudioAudiobooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
-    - {id: BooksEbooks, cat: Books, desc: "Books Ebooks"}
+    - {id: BooksComics, cat: Books/Comics, desc: "Books Comics"}
+    - {id: BooksEbooks, cat: Books/EBook, desc: "Books Ebooks"}
     - {id: BooksEducational, cat: Books, desc: "Books Educational"}
+    - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
     - {id: BooksFiction, cat: Books, desc: "Books Fiction"}
     - {id: BooksNonfiction, cat: Books, desc: "Books Nonfiction"}
     - {id: Ebooks, cat: Books/EBook, desc: "Books Ebooks"}
     - {id: Games, cat: Console, desc: Games}
     - {id: GamesWindows, cat: PC/Games, desc: "Games Windows"}
     - {id: Movies, cat: Movies, desc: Movies}
+    - {id: MoviesAction, cat: Movies, desc: Movies Action}
     - {id: MoviesConcerts, cat: Movies, desc: "Movies Concerts"}
+    - {id: MoviesCrime, cat: Movies, desc: "Movies Crime"}
     - {id: MoviesDocumentary, cat: TV/Documentary, desc: "Movies Documentary"}
+    - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed Movies"}
     - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Musicvideos"}
     - {id: Music, cat: Audio, desc: Music}
     - {id: MusicHardrock, cat: Audio, desc: "Music Hardrock"}
@@ -66,6 +88,8 @@ caps:
     - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
     - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
     - {id: TV, cat: TV, desc: TV}
+    - {id: TVBBC, cat: TV, desc: "TV BBC"}
+    - {id: TVEllenDeGeneres, cat: TV, desc: "TV Ellen DeGeneres"}
     - {id: TVOther, cat: TV/Other, desc: "TV Other"}
     - {id: TVshows, cat: TV, desc: "TV shows"}
     - {id: Television, cat: TV, desc: Television}
@@ -100,8 +124,9 @@ settings:
       _: size
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 login:
   method: cookie

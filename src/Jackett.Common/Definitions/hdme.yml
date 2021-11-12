@@ -2,7 +2,7 @@
 id: hdme
 name: HDME
 description: "HDME is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: windows-1252
 links:

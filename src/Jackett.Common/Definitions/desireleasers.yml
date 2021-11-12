@@ -2,7 +2,7 @@
 id: desireleasers
 name: DesiReleasers
 description: "DesiReleasers is an INDIAN Private Torrent Tracker for INDIAN MOVIES"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -86,22 +86,22 @@ search:
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
-    selector: table > tbody > tr:has(a[href^="magnet:?dn="])
+    selector: table > tbody > tr:has(a[href*="/download/"])
 
   fields:
     category:
       text: 1
     title:
-      selector: a[href*="/torrents/"]
+      selector: span[class="name"]
     details:
       selector: a[href*="/torrents/"]
       attribute: href
     download:
       selector: a[href*="/download/"]
       attribute: href
-    magnet:
-      selector: a[href^="magnet:?dn="]
-      attribute: href
+#    magnet:
+#      selector: a[href^="magnet:?dn="]
+#      attribute: href
     poster:
       selector: img.tps
       attribute: src
@@ -112,7 +112,7 @@ search:
           args: "&w=180&h=270" # for display on dashboard
         - name: replace
           args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     tmdbid:
@@ -183,4 +183,4 @@ search:
         "*": 1
     minimumratio:
       text: 0.4
-# UNIT3D 2.7.0 (Customised)
+# UNIT3D 5.1.0 (Customised)

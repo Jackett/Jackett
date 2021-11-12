@@ -56,8 +56,10 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAniDub())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "semi-private";
+
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "392E98CE1447B59CA62BAB8824CA1EEFC2ED3D37");
 
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
             AddCategoryMapping(14, TorznabCatType.TVAnime, "Аниме TV / Законченные сериалы");
@@ -536,7 +538,7 @@ namespace Jackett.Common.Indexers
                 .FirstOrDefault();
         }
 
-        private async Task<List<ReleaseInfo>> PerformSearch(TorznabQuery query)
+        private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
             const string searchLinkSelector = "#dle-content > .searchitem > h3 > a";
 
@@ -558,8 +560,7 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.ContentString, ex);
             }
-
-            return releases;
+            return releases.Where(release => query.MatchQueryStringAND(release.Title));
         }
 
         private List<KeyValuePair<string, string>> PreparePostData(TorznabQuery query)
@@ -572,7 +573,7 @@ namespace Jackett.Common.Indexers
                 { "full_search", "1" },
                 { "result_from", "1" },
                 { "story", NormalizeSearchQuery(query)},
-                { "titleonly", "3" },
+                { "titleonly", "0" },
                 { "searchuser", "" },
                 { "replyless", "0" },
                 { "replylimit", "0" },

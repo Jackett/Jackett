@@ -76,7 +76,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
@@ -274,7 +274,8 @@ namespace Jackett.Common.Indexers
                             for (var i = releaseTags.Count - 1; i >= 0; i--)
                             {
                                 var releaseTag = releaseTags[i];
-                                if (VolumeTagMappings.ContainsKey(releaseTag)) {
+                                if (VolumeTagMappings.ContainsKey(releaseTag))
+                                {
                                     var volumeFactor = VolumeTagMappings[releaseTag];
                                     release.DownloadVolumeFactor = volumeFactor.DownloadVolumeFactor;
                                     release.UploadVolumeFactor = volumeFactor.UploadVolumeFactor;

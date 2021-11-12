@@ -44,13 +44,25 @@ namespace Jackett.Common.Indexers
         };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://epublibre.org/",
-            "https://epublibre.unblockit.dev/"
+            "https://www.epublibre.org/",
+            "https://epublibre.unblockit.bz/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://epublibre.unblockit.lat/",
-            "https://epublibre.unblockit.app/"
+            "https://epublibre.unblockit.app/",
+            "https://epublibre.unblockit.dev/",
+            "https://epublibre.unblockit.ltd/",
+            "https://epublibre.unblockit.link/",
+            "https://epublibre.unblockit.buzz/",
+            "https://epublibre.unblockit.club/",
+            "https://epublibre.org/",
+            "https://epublibre.unblockit.onl/",
+            "https://epublibre.unblockit.uno/",
+            "https://epublibre.unblockit.ch/",
+            "https://epublibre.unblockit.ws/",
+            "https://epublibre.unblockit.li/",
+            "https://epublibre.unblockit.kim/"
         };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -58,7 +70,7 @@ namespace Jackett.Common.Indexers
             : base(id: "epublibre",
                    name: "EpubLibre",
                    description: "Más libros, Más libres",
-                   link: "https://epublibre.org/",
+                   link: "https://www.epublibre.org/",
                    caps: new TorznabCapabilities
                    {
                        BookSearchParams = new List<BookSearchParam>
@@ -74,7 +86,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-ES";
             Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.BooksEBook);

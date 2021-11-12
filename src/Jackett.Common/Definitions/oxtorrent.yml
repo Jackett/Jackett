@@ -2,14 +2,14 @@
 id: oxtorrent
 name: OxTorrent
 description: "OxTorrent is a French Public site for TV / MOVIES / GENERAL"
-language: fr-fr
+language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.cc/
-  - https://www.oxtorrent.co/
-  - https://oxtorrent.unblocked.rest/
+  - https://www.oxtorrent.pl/
+  - https://oxtorrent.unblockit.bz/
+  - https://oxtorrent.nocensor.biz/
 legacylinks:
   - https://wwv.oxtorrent.com/
   - https://www.smartorrent.tv/
@@ -23,6 +23,27 @@ legacylinks:
   - https://oxtorrent.unblocked.bar/
   - https://oxtorrent.proxyportal.pw/
   - https://oxtorrent.uk-unblock.pro/
+  - https://oxtorrent.unblocked.rest/
+  - https://www.oxtorrent.cc/
+  - https://www.oxtorrent.bz/
+  - https://www.oxtorrent.ws/
+  - https://wvw.oxtorrent.ws/
+  - https://oxtorrent.unblocked.monster/
+  - https://www.oxtorrent.tv/
+  - https://www.oxtorrent.ph/
+  - https://wvw.oxtorrent.pe/
+  - https://www.oxtorrent.pe/
+  - https://www.oxtorrent.co/
+  - https://oxtorrent.unblockit.uno/
+  - https://www.oxtorrent.io/
+  - https://oxtorrent.unblockit.ch/
+  - https://oxtorrent.nocensor.space/
+  - https://www.oxtorrent.cx/
+  - https://oxtorrent.unblockit.ws/
+  - https://www.oxtorrent.nz/
+  - https://oxtorrent.nocensor.work/
+  - https://oxtorrent.unblockit.kim/
+  - https://www.oxtorrent.sh/
 
 caps:
   categorymappings:
@@ -64,12 +85,13 @@ settings:
     default: false
 
 download:
-  selector: a[href^="magnet:?"]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}derniers{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace

@@ -34,6 +34,8 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public string language { get; private set; }
         [DataMember]
+        public IEnumerable<string> tags { get; private set; }
+        [DataMember]
         public string last_error { get; private set; }
         [DataMember]
         public bool potatoenabled { get; private set; }
@@ -50,10 +52,12 @@ namespace Jackett.Common.Models.DTO
             configured = indexer.IsConfigured;
             site_link = indexer.SiteLink;
             language = indexer.Language;
-            last_error = indexer.LastError;
+            last_error = indexer.LastError ?? "";
             potatoenabled = indexer.TorznabCaps.Categories.GetTorznabCategoryTree().Any(i => TorznabCatType.Movies.Contains(i));
 
             alternativesitelinks = indexer.AlternativeSiteLinks;
+
+            tags = indexer.Tags;
 
             caps = indexer.TorznabCaps.Categories.GetTorznabCategoryList(true)
                 .Select(c => new Capability

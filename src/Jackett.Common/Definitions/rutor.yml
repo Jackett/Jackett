@@ -2,13 +2,12 @@
 id: rutor
 name: RuTor
 description: "RuTor is a RUSSIAN Public site for MOVIES / TV / GENERAL"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: UTF-8
 links:
   - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
   - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
-  - https://rutor.unblocked.rest/
 legacylinks:
   - http://live-rutor.org/ # domain expired 9 Feb 2020
   - http://new-rutor.org/ # ERR_NAME_NOT_RESOLVED
@@ -20,7 +19,11 @@ legacylinks:
   - https://rutor.unblocked.bar/
   - https://rutor.proxyportal.pw/
   - https://rutor.uk-unblock.pro/
-  - https://rutor.root.yt/ # Error 504 Gateway time-out
+  - https://rutor.root.yt/
+  - https://rutor.unblocked.rest/
+  - https://rutor.unblocked.monster/
+  - https://rutor.nocensor.space/
+  - https://rutor.nocensor.work/
 
 caps:
   # unfortunately RuTor does not display categories anywhere in its search results page :-(
@@ -35,6 +38,7 @@ caps:
     search: [q]
     tv-search: [q]
     movie-search: [q]
+    music-search: [q]
 
 settings:
   - name: info
@@ -124,16 +128,7 @@ search:
     # some results don't have comments which throws off td count. So we go fishing for the following fields
     size:
       optional: true
-      selector: td:contains(\00a0GB)
-    size:
-      optional: true
-      selector: td:contains(\00a0MB)
-    size:
-      optional: true
-      selector: td:contains(\00a0kB)
-    size:
-      optional: true
-      selector: td:contains(\00a0B)
+      selector: td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0kB), td:contains(\00a0B)
     seeders:
       selector: td span.green
     leechers:

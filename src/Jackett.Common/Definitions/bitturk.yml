@@ -2,7 +2,7 @@
 id: bitturk
 name: BiTTuRK
 description: "BiTTuRK is a Turkish Private Torrent Tracker for HD MOVIES / TV / GENERAL. This Indexer is for English only."
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -21,11 +21,14 @@ caps:
     - {id: 67, cat: XXX, desc: "XxX"}
     - {id: 68, cat: Movies, desc: "Dual (TR-~)"}
     - {id: 71, cat: Movies, desc: "NFLIX"}
+    - {id: 78, cat: TV, desc: "EXXEN"}
+    - {id: 79, cat: TV, desc: "BLUTV"}
     - {id: 58, cat: Movies, desc: "Film"}
     - {id: 72, cat: Movies, desc: "Belgesel"}
     - {id: 60, cat: Movies/3D, desc: "3D"}
     - {id: 76, cat: Movies/UHD, desc: "4K UHD"}
-    - {id: 45, cat: Movies, desc: "Eğitim / Prog"}
+    - {id: 80, cat: TV/Sport, desc: "Formula-1"}
+    - {id: 45, cat: Other, desc: "Eğitim / Prog"}
     - {id: 1, cat: Movies, desc: "Filmler"}
     - {id: 14, cat: Movies/3D, desc: "3D Film"}
     - {id: 77, cat: Movies/UHD, desc: "4K UHD"}
@@ -33,7 +36,7 @@ caps:
     - {id: 17, cat: TV/Anime, desc: "Anime"}
     - {id: 31, cat: Movies, desc: "Belgesel"}
     - {id: 32, cat: Movies/BluRay, desc: "Bluray"}
-    - {id: 33, cat: Movies/BluRay, desc: "BRRiP"}
+    - {id: 33, cat: Movies/HD, desc: "BRRiP"}
     - {id: 34, cat: Movies, desc: "Çizgi Film"}
     - {id: 35, cat: Movies, desc: "D-Z0N3"}
     - {id: 36, cat: Movies/DVD, desc: "DVD"}
@@ -50,9 +53,9 @@ caps:
     - {id: 46, cat: Audio, desc: "Yab@ncı MüziK"}
     - {id: 21, cat: Audio/Video, desc: "Video Klipler"}
     - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 74, cat: PC, desc: "PC"}
+    - {id: 74, cat: PC/Games, desc: "PC"}
     - {id: 73, cat: Console, desc: "SONY-PS"}
-    - {id: 6, cat: PC, desc: "Program"}
+    - {id: 6, cat: PC/0day, desc: "Program"}
     - {id: 47, cat: Other, desc: "Resimler"}
     - {id: 48, cat: TV, desc: "Televizyon"}
     - {id: 49, cat: TV/HD, desc: "Tv HD"}
@@ -136,8 +139,9 @@ search:
     searchin: title
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
-  error:
-    - selector: div.error:not(:contains("Gösterilecek sonuç bulunamadı."))
+# Drop error trap to stop Sonarr disabling indexer, see https://github.com/Jackett/Jackett/issues/1415
+#  error:
+#    - selector: div.error:not(:contains("Gösterilecek sonuç bulunamadı."))
 
   rows:
     selector: "table#torrents_table_classic tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}"
@@ -157,7 +161,7 @@ search:
     download:
       selector: a[href*="?p=torrents&pid=10&action=download"]
       attribute: href
-    date:
+    date_year:
       optional: true
       # Uploaded 30-01-2019 15:02 by
       selector: td.torrent_name:not(:contains(" at "))
@@ -168,7 +172,7 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    date:
+    date_day:
       optional: true
       # Uploaded Friday at 05:11 by
       # Uploaded Today at 00:48 by
@@ -181,6 +185,8 @@ search:
           args: [" at ", " "]
         - name: append
           args: " +00:00" # auto adjusted by site account profile
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: a[rel="torrent_size"]
     seeders:

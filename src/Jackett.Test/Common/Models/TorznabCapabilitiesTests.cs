@@ -87,7 +87,8 @@ namespace Jackett.Test.Common.Models
             }
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"bad", new List<string> {"q"}} // bad search mode
@@ -100,7 +101,8 @@ namespace Jackett.Test.Common.Models
             }
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string> {"bad"}} // search mode with bad parameters
@@ -141,7 +143,8 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(new List<TvSearchParam> { TvSearchParam.Q, TvSearchParam.TvdbId }, torznabCaps.TvSearchParams);
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -155,7 +158,8 @@ namespace Jackett.Test.Common.Models
             }
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -197,7 +201,8 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(new List<MovieSearchParam> { MovieSearchParam.Q, MovieSearchParam.ImdbId }, torznabCaps.MovieSearchParams);
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -211,7 +216,8 @@ namespace Jackett.Test.Common.Models
             }
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -253,7 +259,8 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(new List<MusicSearchParam> { MusicSearchParam.Q, MusicSearchParam.Label }, torznabCaps.MusicSearchParams);
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -267,7 +274,8 @@ namespace Jackett.Test.Common.Models
             }
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -309,7 +317,8 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(new List<BookSearchParam> { BookSearchParam.Q, BookSearchParam.Title }, torznabCaps.BookSearchParams);
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -323,7 +332,8 @@ namespace Jackett.Test.Common.Models
             }
 
             torznabCaps = new TorznabCapabilities();
-            try {
+            try
+            {
                 torznabCaps.ParseCardigannSearchModes(new Dictionary<string, List<string>>
                 {
                     {"search", new List<string>{"q"}},
@@ -406,7 +416,7 @@ namespace Jackett.Test.Common.Models
 
             // test categories
             torznabCaps = new TorznabCapabilities(); // child category
-            torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.MoviesSD); 
+            torznabCaps.Categories.AddCategoryMapping("c1", TorznabCatType.MoviesSD);
             xDocument = torznabCaps.GetXDocument();
             var xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
             Assert.AreEqual(1, xDocumentCategories?.Count);
@@ -418,7 +428,7 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual(TorznabCatType.MoviesSD.Name, xDocumentSubCategories?[0].Attribute("name")?.Value);
 
             torznabCaps = new TorznabCapabilities(); // parent (with description generates a custom cat) and child category
-            torznabCaps.Categories.AddCategoryMapping("1", TorznabCatType.Movies, "Classic Movies"); 
+            torznabCaps.Categories.AddCategoryMapping("1", TorznabCatType.Movies, "Classic Movies");
             torznabCaps.Categories.AddCategoryMapping("c2", TorznabCatType.MoviesSD);
             xDocument = torznabCaps.GetXDocument();
             xDocumentCategories = xDocument.Root?.Element("categories")?.Elements("category").ToList();
@@ -474,20 +484,20 @@ namespace Jackett.Test.Common.Models
             torznabCaps1 = new TorznabCapabilities
             {
                 SearchAvailable = false,
-                TvSearchParams = new List<TvSearchParam> {TvSearchParam.Q},
-                MovieSearchParams = new List<MovieSearchParam> {MovieSearchParam.Q},
-                MusicSearchParams = new List<MusicSearchParam> {MusicSearchParam.Q},
-                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Q}
+                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Q },
+                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
+                MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Q },
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q }
             };
             torznabCaps1.Categories.AddCategoryMapping("1", TorznabCatType.Movies);
             torznabCaps1.Categories.AddCategoryMapping("c1", new TorznabCategory(100001, "CustomCat1"));
             torznabCaps2 = new TorznabCapabilities
             {
                 SearchAvailable = false,
-                TvSearchParams = new List<TvSearchParam> {TvSearchParam.Season},
-                MovieSearchParams = new List<MovieSearchParam> {MovieSearchParam.ImdbId},
-                MusicSearchParams = new List<MusicSearchParam> {MusicSearchParam.Artist},
-                BookSearchParams = new List<BookSearchParam> {BookSearchParam.Title}
+                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Season },
+                MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.ImdbId },
+                MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Artist },
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Title }
             };
             torznabCaps2.Categories.AddCategoryMapping("2", TorznabCatType.TVAnime);
             torznabCaps2.Categories.AddCategoryMapping("c2", new TorznabCategory(100002, "CustomCat2"));

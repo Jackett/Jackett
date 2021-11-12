@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "public";
 
             AddCategoryMapping(1, TorznabCatType.TV);
@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers
                         PublishDate = publishDate,
                         InfoHash = infoHash,
                         MagnetUri = magnetUri,
-                        Size = 0,
+                        Size = 512,
                         Seeders = 1,
                         Peers = 2,
                         DownloadVolumeFactor = 0,

@@ -2,7 +2,7 @@
 id: ebooks-shares
 name: Ebooks-Shares
 description: "Ebooks-Shares is a Private Torrent Tracker for EBOOKS / AUDIOBOOKS"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -44,6 +44,7 @@ caps:
     - {id: 276, cat: Audio/Audiobook, desc: "Audio: Military Fiction"}
     - {id: 299, cat: Audio/Audiobook, desc: "Audio: Magazines"}
     - {id: 301, cat: Audio/Audiobook, desc: "Audio: Collections"}
+    - {id: 314, cat: Audio/Audiobook, desc: "Audio: Dystopian/Post Apocalyptic Bks"}
     - {id: 47, cat: Books/EBook, desc: "Children's: Adventure"}
     - {id: 48, cat: Books/EBook, desc: "Children's: Novels"}
     - {id: 49, cat: Books/EBook, desc: "Children's: Collections"}
@@ -307,8 +308,9 @@ login:
     selector: a[href^="account-logout.php"]
 
 download:
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:

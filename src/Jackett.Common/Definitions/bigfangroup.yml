@@ -2,7 +2,7 @@
 id: bigfangroup
 name: BigFANGroup
 description: "BigFANGroup is a RUSSIAN Public Torrent Tracker for MOVIES / TV"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: windows-1251
 links:
@@ -159,7 +159,7 @@ search:
         - name: replace
           args: ["февраля", "February"]
         - name: replace
-          args: ["марта ", "March"]
+          args: ["марта", "March"]
         - name: replace
           args: ["апреля", "April"]
         - name: replace

@@ -2,7 +2,7 @@
 id: tribalmixes
 name: TribalMixes
 description: "TribalMixes is a ratioless Semi-Private Torrent Tracker for DJ MIXES"
-language: en
+language: en-GB
 type: semi-private
 encoding: ISO-8859-1
 links:
@@ -117,6 +117,8 @@ search:
       filters:
         - name: regexp
           args: ", (\\d+) leecher"
+        - name: replace
+          args: ["-1", "0"]
     date:
       selector: a[href^="/download.php?id="]
       attribute: title

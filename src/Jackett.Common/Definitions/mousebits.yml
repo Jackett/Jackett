@@ -1,0 +1,135 @@
+---
+id: mousebits
+name: MouseBits
+description: "MouseBits is a Private Torrent Tracker for all things Disney"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://mousebits.com/
+
+caps:
+  categorymappings:
+    # Video
+    - {id: 34, cat: TV, desc: "Video (DVD ISO)"}
+    - {id: 14, cat: TV, desc: "Multi-angle tribute"}
+    - {id: 36, cat: TV, desc: "Martin Vid"}
+    - {id: 15, cat: TV, desc: "One-take ride-through"}
+    - {id: 26, cat: TV, desc: "TV Specials"}
+    - {id: 28, cat: TV, desc: "Promotional Content"}
+    - {id: 29, cat: TV, desc: "Vacation Planner"}
+    # Audio
+    - {id: 30, cat: Audio/MP3, desc: "Music Album (lossy)"}
+    - {id: 31, cat: Audio/Lossless, desc: "Music Album (FLAC)"}
+    - {id: 32, cat: Audio, desc: "Attraction Series"}
+    - {id: 35, cat: Audio, desc: "Background Series"}
+    - {id: 17, cat: Audio, desc: "Multi-track collection"}
+    - {id: 18, cat: Audio, desc: "Studio mix ride-through"}
+    - {id: 19, cat: Audio, desc: "Live recording"}
+    - {id: 33, cat: Audio, desc: "Induction Recording"}
+    # Photo
+    - {id: 21, cat: Other, desc: "Park update"}
+    - {id: 22, cat: Other, desc: "Desktops"}
+    - {id: 23, cat: Other, desc: "Vacation photos"}
+    # Other
+    - {id: 25, cat: Other, desc: "Community media"}
+    - {id: 27, cat: Other, desc: "Off-topic"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: ?page=login
+  method: form
+  form: form
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: span:contains("Password Incorrect")
+    - selector: span:contains("Username Incorrect")
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://mousebits.com/index.php?page=torrents&active=0&order=3&by=2
+    - path: index.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Keywords }}"
+    page: torrents
+    category: 0
+    # 0 all, 1 active, 2 dead
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  rows:
+    selector: table.lista:last-of-type > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+
+  fields:
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="index.php?page=torrent-details&id="]
+    details:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    size:
+      text: "512 MB"
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "02/01/2006 -07:00"
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+# xbtit 2.3.0

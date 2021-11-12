@@ -1,98 +1,25 @@
 ---
 id: desitorrents
 name: DesiTorrents
-description: "Desitorrents is a  Private Torrent Tracker for BOLLYWOOD / TOLLYWOOD / GENERAL"
+description: "Desitorrents is a Private Torrent Tracker for BOLLYWOOD / TOLLYWOOD / MUSIC"
 language: en-US
 type: private
 encoding: UTF-8
 links:
   - https://desitorrents.tv/
+  - https://desitorrents.rocks/
 
 caps:
   categorymappings:
-    # movies
-    - {id: 47, cat: Movies, desc: "Movies/Bollywood"}
-    - {id: 48, cat: Movies, desc: "Movies/Bengali"}
-    - {id: 49, cat: Movies, desc: "Movies/Tamil"}
-    - {id: 51, cat: Movies, desc: "Movies/Punjabi"}
-    - {id: 52, cat: Movies, desc: "Movies/Marathi"}
-    - {id: 53, cat: Movies, desc: "Movies/Malayalam"}
-    - {id: 54, cat: Movies, desc: "Movies/Kannada"}
-    - {id: 55, cat: Movies, desc: "Movies/Gujarati"}
-    - {id: 56, cat: Movies, desc: "Movies/Foreign"}
-    - {id: 57, cat: Movies, desc: "Movies/Lollywood"}
-    - {id: 58, cat: Movies, desc: "Movies/Hollywood"}
-    - {id: 103, cat: Movies, desc: "Movies/Telugu"}
-    - {id: 104, cat: Movies, desc: "Movies/South Dubbed"}
-    - {id: 110, cat: Movies, desc: "Movies/Documentary"}
-    - {id: 117, cat: Movies, desc: "Movies/Bhojpuri"}
-    - {id: 124, cat: Movies, desc: "Movies/Movie Packs"}
-    - {id: 128, cat: Movies, desc: "Movies/Dubbed Audio"}
-    - {id: 129, cat: Movies, desc: "Movies/Animated"}
-    - {id: 140, cat: Movies, desc: "Movies/Short Films"}
-    # tv shows
-    - {id: 59, cat: TV, desc: "TV/Colors"}
-    - {id: 60, cat: TV, desc: "TV/Sony"}
-    - {id: 61, cat: TV, desc: "TV/&TV"}
-    - {id: 62, cat: TV, desc: "TV/StarPlus"}
-    - {id: 63, cat: TV, desc: "TV/ZEE TV"}
-    - {id: 97, cat: TV, desc: "TV/Life OK"}
-    - {id: 98, cat: TV, desc: "TV/Documentary"}
-    - {id: 101, cat: TV/Sport, desc: "TV/Sports"}
-    - {id: 102, cat: TV/Other, desc: "TV/Others"}
-    - {id: 113, cat: TV, desc: "TV/Pak Drama"}
-    - {id: 125, cat: TV, desc: "TV/TV Packs"}
-    - {id: 130, cat: TV, desc: "TV/Star Bharat"}
-    - {id: 132, cat: TV, desc: "TV/Sab TV"}
-    - {id: 139, cat: TV, desc: "TV/Hollywood"}
-    # music
-    - {id: 67, cat: Audio/Video, desc: "Music/Video"}
-    - {id: 68, cat: Audio, desc: "Music/Hindi Soundtrack"}
-    - {id: 70, cat: Audio, desc: "Music/Remix"}
-    - {id: 71, cat: Audio, desc: "Music/Ghazal"}
-    - {id: 72, cat: Audio, desc: "Music/Instrumental"}
-    - {id: 105, cat: Audio, desc: "Music/Telugu"}
-    - {id: 106, cat: Audio, desc: "Music/Tamil"}
-    - {id: 107, cat: Audio, desc: "Music/Punjabi"}
-    - {id: 108, cat: Audio, desc: "Music/Gujarati"}
-    - {id: 109, cat: Audio, desc: "Music/Compilations"}
-    - {id: 118, cat: Audio, desc: "Music/Kannada"}
-    - {id: 126, cat: Audio, desc: "Music/Marathi"}
-    - {id: 127, cat: Audio, desc: "Music/Lollywood"}
-    - {id: 131, cat: Audio, desc: "Music/Classical"}
-    - {id: 134, cat: Audio, desc: "Music/Desi Pop"}
-    - {id: 136, cat: Audio, desc: "Music/Bengali"}
-    - {id: 137, cat: Audio, desc: "Music/Malayalam"}
-    # games
-    - {id: 78, cat: PC/Games, desc: "Games/PC"}
-    - {id: 79, cat: PC/Games, desc: "Games/Mac"}
-    - {id: 80, cat: PC/Games, desc: "Games/IOS"}
-    - {id: 81, cat: PC/Games, desc: "Games/Android"}
-    - {id: 83, cat: PC/Games, desc: "Games/XBOX"}
-    - {id: 86, cat: PC/Games, desc: "Games/Playstation"}
-    # books
-    - {id: 92, cat: Books/Mags, desc: "Books/Magazine"}
-    - {id: 93, cat: Books/EBook, desc: "Books/Novels"}
-    - {id: 95, cat: Books, desc: "Books/Newspapers"}
-    - {id: 133, cat: Audio/Audiobook, desc: "Books/Audiobooks"}
-    # Sport
-    - {id: 114, cat: TV/Sport, desc: "Sport/WWE"}
-    - {id: 115, cat: TV/Sport, desc: "Sport/Cricket"}
-    - {id: 116, cat: TV/Sport, desc: "Sport/Football"}
-    # XXX
-    - {id: 89, cat: XXX, desc: "Adult Videos"}
-    - {id: 90, cat: XXX, desc: "Adult Pics"}
-    # WEB
-    - {id: 135, cat: TV, desc: "Web Series"}
-    # Legact
-    - {id: 30, cat: Other, desc: "Legacy"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Music"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
@@ -101,174 +28,160 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: twofa
-    type: text
-    label: 2FA code
-  - name: info_2fa
-    type: info
-    label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Desitorrents Web Site. Otherwise just leave it empty."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    # while the grabs and date columns are merged due (see #9849), the time sort on the website fails with: "selected sorting wrong: time".
-    # default: time
-    default: relevance
+    default: created_at
     options:
-      # time: created
+      created_at: created
       seeders: seeders
       size: size
-      relevance: title
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
-  path: login.php?from=index1
-  method: post
+  path: login
+  method: form
+  form: form[action$="/login"]
   inputs:
-    action: login
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    twofa: "{{ .Config.twofa }}"
+    remember: on
+  selectorinputs:
+    _token:
+      selector: input[name="_token"]
+      attribute: value
   error:
-    - selector: form#loginform:has(span.warning)
-  test:
-    path: ajax.php
+    - selector: div#ERROR_COPY
+#    test:
+#      path: /
+#      selector: a[href$="/logout"]
 
 search:
   paths:
-    - path: ajax.php?action=search_torrent_cats
-      method: post
+    - path: torrents
   inputs:
-    # replace spaces with wildcard (percent symbol) as site's default search is exact string.
-    search_string: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
-    selected_sorting: "{{ .Config.sort }}"
-    selected_group: ""
-    search_username: ""
-    selected_sub[]: "{{ join .Categories \",\" }}"
-  error:
-    - selector: ":contains(\"Something was wrong with your request\")"
-  preprocessingfilters:
-    - name: replace
-      args: ["{\"torrent_html\":\"", ""]
-    - name: replace
-      args: ["\\", ""]
-    - name: re_replace
-      args: ["\",\"paging.*", ""]
-    - name: re_replace
-      args: ["</th<th>", "</th><th>"] # fix for #9849
-    - name: prepend
-      args: "<table>"
-    - name: append
-      args: "</table>"
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+    name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    description: ""
+    mediainfo: ""
+    keywords: ""
+    uploader: ""
+    tmdbId: "{{ .Query.TMDBID }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    malId: ""
+    startYear: ""
+    endYear: ""
+    playlistId: ""
+    collectionId: ""
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
+    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
-    selector: table > tbody > tr
+    selector: table > tbody > tr:has(a[href*="/download/"])
 
   fields:
     category:
-      selector: th:first-child
-      case:
-        img[src*="Bollywood Movies.png"]: 47
-        img[src*="Bengali Movies.png"]: 48
-        img[src*="Tamil Films.png"]: 49
-        img[src*="Punjabi Movies.png"]: 51
-        img[src*="Marathi Movies.png"]: 52
-        img[src*="Malayalam Movies.png"]: 53
-        img[src*="Kannada Movies.png"]: 54
-        img[src*="Gujarati Movies.png"]: 55
-        img[src*="Foreign Movies.png"]: 56
-        img[src*="Pakistani Movies.png"]: 57
-        img[src*="Hollywood Movies.png"]: 58
-        img[src*="Telugu Movies.png"]: 103
-        img[src*="south-dubbed.png"]: 104
-        img[src*="docmentary.png"]: 110
-        img[src*="Bhojpuri Movies.png"]: 117
-        img[src*="Movie Packs.png"]: 124
-        img[src*="Dubbed Movies.png"]: 128
-        img[src*="Animated Movies.png"]: 129
-        img[src*="Short Films.png"]: 140
-        img[src*="Colors TV.png"]: 59
-        img[src*="Sony TV.png"]: 60
-        img[src*="AndTV.png"]: 61
-        img[src*="Star Plus.png"]: 62
-        img[src*="Zee TV.png"]: 63
-        img[src*="Life OK.png"]: 97
-        img[src*="Documentaries.png"]: 98
-        img[src*="sports.png"]: 101
-        img[src*="Others-png.png"]: 102
-        img[src*="Pak-Drama.png"]: 113
-        img[src*="TV Packs.png"]: 125
-        img[src*="Star Bharat.png"]: 130
-        img[src*="Sab TV.png"]: 132
-        img[src*="Hollywood TV.png"]: 139
-        img[src*="Music Videos.png"]: 67
-        img[src*="Hindi Soundtracks.png"]: 68
-        img[src*="Remix Music.png"]: 70
-        img[src*="Ghazal Music.png"]: 71
-        img[src*="Instrumental Music.png"]: 72
-        img[src*="Telugu Music.png"]: 105
-        img[src*="Tamil Music.png"]: 106
-        img[src*="Punjabi Music.png"]: 107
-        img[src*="Gujarati Music.png"]: 108
-        img[src*="Music Compilations.png"]: 109
-        img[src*="Kannada Music.png"]: 118
-        img[src*="Marathi Gaane.png"]: 126
-        img[src*="Lollywood Music.png"]: 127
-        img[src*="Classical Music.png"]: 131
-        img[src*="Desi Pop Music.png"]: 134
-        img[src*="Bengali Music.png"]: 136
-        img[src*="Malayalam Music.png"]: 137
-        img[src*="PC Games.png"]: 78
-        img[src*="Mac Games.png"]: 79 # unverified
-        img[src*="IOS Games.png"]: 80 # unverified
-        img[src*="Android Games.png"]: 81
-        img[src*="XBOX Games.png"]: 83 # unverified
-        img[src*="Playstation Games.png"]: 86 # unverified
-        img[src*="Magazines.png"]: 92
-        img[src*="Novels.png"]: 93
-        img[src*="Newspapers.png"]: 95
-        img[src*="AudioBooks.png"]: 133
-        img[src*="WWE.png"]: 114
-        img[src*="Cricket.png"]: 115
-        img[src*="Football.png"]: 116
-        img[src*="Adult Videos.png"]: 89 # unverified
-        img[src*="Adult Pics.png"]: 90 # unverified
-        img[src*="Web Series.png"]: 135
-        img[src*="no.png"]: 30
+      selector: a[href*="/categories/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "/categories/(\\d+)"
     title:
-      selector: a[href^="/torrents.php?id="]
-    details:
-      selector: a[href^="/torrents.php?id="]
-      attribute: href
+      selector: td div a
     download:
-      selector: a[href^="/torrents.php?action=download&id="]
+      selector: a[href*="/download/"]
       attribute: href
+    details:
+      selector: td div a
+      attribute: href
+    poster:
+      selector: div img
+      attribute: src
       filters:
-        - name: prepend
-          args: "{{ .Config.sitelink }}"
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+        - name: replace
+          args: ["https://via.placeholder.com/400x600", ""]
     size:
-      selector: th:nth-child(7)
-    files:
-      selector: th:nth-child(8)
+      selector: td:nth-last-child(6)
     seeders:
-      selector: th:nth-child(9)
+      selector: td:nth-last-child(5)
     leechers:
-      selector: th:nth-child(10)
+      selector: td:nth-last-child(4)
     grabs:
-      selector: th:nth-child(11)
+      selector: td:nth-last-child(3)
     date:
-      selector: th:nth-child(12)
+      selector: td:nth-last-child(2)
       filters:
-        - name: append
-          args: " +00:00" # GMT
-        - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+        # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
+        - name: re_replace
+          args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前|sedan)", " ago"]
+        - name: re_replace
+          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
+        - name: re_replace
+          args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten|minuter)", "minutes"]
+        - name: re_replace
+          args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟|分)", " minute"]
+        - name: re_replace
+          args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden|timmar)", "hours"]
+        - name: re_replace
+          args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时|時間|timme)", " hour"]
+        - name: re_replace
+          args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen|dagar)", "days"]
+        - name: re_replace
+          args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天|日)", " day"]
+        - name: re_replace
+          args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken|veckor)", "weeks"]
+        - name: re_replace
+          args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周|週間|vecka)", " week"]
+        - name: re_replace
+          args: ["(?i) (ay)", "month"]
+        - name: re_replace
+          args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden|månader)", "months"]
+        - name: re_replace
+          args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|Monat|месец|maand|个月|ヶ月|månad)", " month"]
+        - name: re_replace
+          args: ["(?i)(aastat|anni|lata|anos|roky|года|ani|años|ans|Jahren|години)", " years"]
+        - name: re_replace
+          args: ["(?i)(yil|aasta|år|anno|rok|ano|год|año|Jahr|година|jaar|年)", " year"]
+        - name: re_replace
+          args: ["(?i) (an)", "year"]
+        - name: re_replace
+          args: ["(?i)(För |und)", ""] # Misc removals
+        - name: timeago
     downloadvolumefactor:
-      text: 0
+      case:
+        i[class*="fa-id-badge"]: 0 # 24 Hour FreeLeech From BON Store
+        i[class*="fa-trophy"]: 0 # Special FreeLeech For Certain User Groups
+        i[class*="fa-coins"]: 0 # Freeleech From Token
+        i[class*="fa-globe"]: 0 # Global Freeleech
+        i[class*="fa-star"]: 0 # Freeleech
+        i[class*="fa-certificate"]: 0 # Featured Torrent
+        "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        i[class*="fa-gem"]: 2 # Single Torrent Double Upload
+        i[class*="fa-globe"]: 2 # Global Double Upload
+        i[class*="fa-certificate"]: 2 # Featured Torrent
+        "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# engine n/a
+      # 5 day (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+# UNIT3D 5.3.0 (custom)

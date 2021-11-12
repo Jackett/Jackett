@@ -2,7 +2,7 @@
 id: torrentv
 name: Torrentv
 description: "Torrentv is a Public tracker for MOVIES"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
@@ -29,8 +29,9 @@ settings:
       na-1: title
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:

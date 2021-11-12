@@ -15,7 +15,7 @@ namespace Jackett.Test.Common.Indexers
         {
             var definition = new IndexerDefinition // minimun indexer definition
             {
-                Links = new List<string>{ "https://example.com" },
+                Links = new List<string> { "https://example.com" },
                 Caps = new capabilitiesBlock
                 {
                     Modes = new Dictionary<string, List<string>>
@@ -53,7 +53,7 @@ namespace Jackett.Test.Common.Indexers
 
             definition = new IndexerDefinition // test categories (same as in C# indexer)
             {
-                Links = new List<string>{ "https://example.com" },
+                Links = new List<string> { "https://example.com" },
                 Caps = new capabilitiesBlock
                 {
                     Modes = new Dictionary<string, List<string>>
@@ -110,7 +110,7 @@ namespace Jackett.Test.Common.Indexers
 
             definition = new IndexerDefinition // test search modes
             {
-                Links = new List<string>{ "https://example.com" },
+                Links = new List<string> { "https://example.com" },
                 Caps = new capabilitiesBlock
                 {
                     Modes = new Dictionary<string, List<string>>

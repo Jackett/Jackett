@@ -2,7 +2,7 @@
 id: sharewood
 name: Sharewood
 description: "sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL"
-language: fr-fr
+language: fr-FR
 type: semi-private
 encoding: UTF-8
 links:
@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: "Films", cat: Movies, desc: "Films"}
-    - {id: "Films_Animations", cat: TV/Anime, desc: "Films Animation"}
+    - {id: "Films_Animations", cat: Movies, desc: "Films Animation"}
     - {id: "Animes", cat: TV/Anime, desc: " Séries Animations"}
     - {id: "Series", cat: TV, desc: "TV Series"}
     - {id: "Documentaires", cat: TV/Documentary, desc: "TV Documentaires"}

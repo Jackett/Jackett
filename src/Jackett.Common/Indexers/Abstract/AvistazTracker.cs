@@ -77,7 +77,7 @@ namespace Jackett.Common.Indexers.Abstract
         {
             var cats = new List<int>();
             var resolution = row.Value<string>("video_quality");
-            switch(row.Value<string>("type"))
+            switch (row.Value<string>("type"))
             {
                 case "Movie":
                     cats.Add(resolution switch
@@ -121,7 +121,7 @@ namespace Jackett.Common.Indexers.Abstract
 without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
         }
 
@@ -165,6 +165,8 @@ without this configuration the torrent download does not work.<br/>You can find 
                 await RenewalTokenAsync();
                 response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             }
+            else if (response.Status == HttpStatusCode.NotFound)
+                return releases; // search without results, eg CinemaZ: tt0075998
             else if (response.Status != HttpStatusCode.OK)
                 throw new Exception($"Unknown error: {response.ContentString}");
 

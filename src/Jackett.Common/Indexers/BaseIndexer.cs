@@ -12,6 +12,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using Polly;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
@@ -33,6 +34,16 @@ namespace Jackett.Common.Indexers
         public Encoding Encoding { get; protected set; }
 
         public virtual bool IsConfigured { get; protected set; }
+        public virtual string[] Tags { get; protected set; }
+
+        // https://github.com/Jackett/Jackett/issues/3292#issuecomment-838586679
+        private TimeSpan HealthyStatusValidity => cacheService.CacheTTL + cacheService.CacheTTL;
+        private static readonly TimeSpan ErrorStatusValidity = TimeSpan.FromMinutes(10);
+        private static readonly TimeSpan MaxStatusValidity = TimeSpan.FromDays(1);
+
+        private int errorCount;
+        private DateTime expireAt;
+
         protected Logger logger;
         protected IIndexerConfigurationService configurationService;
         protected IProtectionService protectionService;
@@ -57,6 +68,10 @@ namespace Jackett.Common.Indexers
                     SaveConfig();
             }
         }
+
+        public virtual bool IsHealthy => errorCount == 0 && expireAt > DateTime.Now;
+        public virtual bool IsFailing => errorCount > 0 && expireAt > DateTime.Now;
+
 
         public abstract TorznabCapabilities TorznabCaps { get; protected set; }
 
@@ -89,6 +104,8 @@ namespace Jackett.Common.Indexers
         {
             CookieHeader = string.Empty;
             IsConfigured = false;
+            errorCount = 0;
+            expireAt = DateTime.MinValue;
         }
 
         public virtual void SaveConfig() => configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
@@ -147,6 +164,8 @@ namespace Jackett.Common.Indexers
             // check whether the site link is well-formatted
             var siteUri = new Uri(configData.SiteLink.Value);
             SiteLink = configData.SiteLink.Value;
+
+            Tags = configData.Tags.Values.Select(t => t.ToLowerInvariant()).ToArray();
         }
 
         public void LoadFromSavedConfiguration(JToken jsonConfig)
@@ -181,17 +200,17 @@ namespace Jackett.Common.Indexers
 
             LoadValuesFromJson(jsonConfig, false);
 
-            StringItem passwordPropertyValue = null;
+            StringConfigurationItem passwordPropertyValue = null;
             var passwordValue = "";
 
             try
             {
                 // try dynamic items first (e.g. all cardigann indexers)
-                passwordPropertyValue = (StringItem)configData.GetDynamicByName("password");
+                passwordPropertyValue = (StringConfigurationItem)configData.GetDynamicByName("password");
 
                 if (passwordPropertyValue == null) // if there's no dynamic password try the static property
                 {
-                    passwordPropertyValue = (StringItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
+                    passwordPropertyValue = (StringConfigurationItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
 
                     // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
                     if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
@@ -287,12 +306,12 @@ namespace Jackett.Common.Indexers
                 // set guid
                 if (r.Guid == null)
                 {
-                    if (r.Details != null)
-                        r.Guid = r.Details;
-                    else if (r.Link != null)
+                    if (r.Link != null)
                         r.Guid = r.Link;
                     else if (r.MagnetUri != null)
                         r.Guid = r.MagnetUri;
+                    else if (r.Details != null)
+                        r.Guid = r.Details;
                 }
 
                 return r;
@@ -371,9 +390,12 @@ namespace Jackett.Common.Indexers
             if (!CanHandleQuery(query) || !CanHandleCategories(query, isMetaIndexer))
                 return new IndexerResult(this, new ReleaseInfo[0], false);
 
-            var cachedReleases = cacheService.Search(this, query);
-            if (cachedReleases != null)
-                return new IndexerResult(this, cachedReleases, true);
+            if (query.Cache)
+            {
+                var cachedReleases = cacheService.Search(this, query);
+                if (cachedReleases != null)
+                    return new IndexerResult(this, cachedReleases, true);
+            }
 
             try
             {
@@ -381,10 +403,14 @@ namespace Jackett.Common.Indexers
                 results = FilterResults(query, results);
                 results = FixResults(query, results);
                 cacheService.CacheResults(this, query, results.ToList());
+                errorCount = 0;
+                expireAt = DateTime.Now.Add(HealthyStatusValidity);
                 return new IndexerResult(this, results, false);
             }
             catch (Exception ex)
             {
+                var delay = Math.Min(MaxStatusValidity.TotalSeconds, ErrorStatusValidity.TotalSeconds * Math.Pow(2, errorCount++));
+                expireAt = DateTime.Now.AddSeconds(delay);
                 throw new IndexerException(this, ex);
             }
         }
@@ -410,13 +436,102 @@ namespace Jackett.Common.Indexers
             IProtectionService p, ICacheService cacheService)
             : base("/", "", "", "", configService, logger, null, p, cacheService) => webclient = client;
 
+        protected virtual int DefaultNumberOfRetryAttempts => 2;
+
+        /// <summary>
+        /// Number of retry attempts to make if a web request fails.
+        /// </summary>
+        /// <remarks>
+        /// Number of retries can be overridden for unstable indexers by overriding this property. Note that retry attempts include an
+        /// exponentially increasing delay. 
+        /// 
+        /// Alternatively, <see cref="EnableConfigurableRetryAttempts()" /> can be called in the constructor to add user configurable options.
+        /// </remarks>
+        protected virtual int NumberOfRetryAttempts
+        {
+            get
+            {
+                var configItem = configData.GetDynamic("retryAttempts");
+                if (configItem == null)
+                {
+                    // No config specified so use the default.
+                    return DefaultNumberOfRetryAttempts;
+                }
+
+                var configValue = ((SingleSelectConfigurationItem)configItem).Value;
+
+                if (int.TryParse(configValue, out var parsedConfigValue) && parsedConfigValue > 0)
+                {
+                    return parsedConfigValue;
+                }
+                else
+                {
+                    // No config specified so use the default.
+                    return DefaultNumberOfRetryAttempts;
+                }
+            }
+        }
+
+        private AsyncPolicy<WebResult> RetryPolicy
+        {
+            get
+            {
+                // Configure the retry policy
+                int attemptNumber = 1;
+                var retryPolicy = Policy
+                    .HandleResult<WebResult>(r => (int)r.Status >= 500)
+                    .Or<Exception>()
+                    .WaitAndRetryAsync(
+                        NumberOfRetryAttempts,
+                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 4),
+                        onRetry: (exception, timeSpan, context) =>
+                        {
+                            if (exception.Result == null)
+                            {
+                                logger.Warn($"Request to {DisplayName} failed with exception '{exception.Exception.Message}'. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            }
+                            else
+                            {
+                                logger.Warn($"Request to {DisplayName} failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                            }
+                            attemptNumber++;
+                        });
+                return retryPolicy;
+            }
+        }
+
+        /// <summary>
+        /// Adds configuration options to allow the user to manually configure request retries.
+        /// </summary>
+        /// <remarks>
+        /// This should only be enabled for indexers known to be unstable. To control the default value, override <see cref="DefaultNumberOfRetryAttempts" />.
+        /// </remarks>
+        protected void EnableConfigurableRetryAttempts()
+        {
+            var attemptSelect = new SingleSelectConfigurationItem(
+                "Number of retries",
+                new Dictionary<string, string>
+                {
+                    {"0", "No retries (fail fast)"},
+                    {"1", "1 retry (0.5s delay)"},
+                    {"2", "2 retries (1s delay)"},
+                    {"3", "3 retries (2s delay)"},
+                    {"4", "4 retries (4s delay)"},
+                    {"5", "5 retries (8s delay)"}
+                })
+            {
+                Value = DefaultNumberOfRetryAttempts.ToString()
+            };
+            configData.AddDynamic("retryAttempts", attemptSelect);
+        }
+
         public virtual async Task<byte[]> Download(Uri link)
         {
             var uncleanLink = UncleanLink(link);
             return await Download(uncleanLink, RequestType.GET);
         }
 
-        protected async Task<byte[]> Download(Uri link, RequestType method, string referer = null, Dictionary<string, string>headers = null)
+        protected async Task<byte[]> Download(Uri link, RequestType method, string referer = null, Dictionary<string, string> headers = null)
         {
             // return magnet link
             if (link.Scheme == "magnet")
@@ -449,25 +564,9 @@ namespace Jackett.Common.Indexers
             string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
             Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
-            Exception lastException = null;
-            for (var i = 0; i < 3; i++)
-            {
-                try
-                {
-                    return await RequestWithCookiesAsync(
-                        url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(
-                        e, string.Format("On attempt {0} downloading from {1}: {2}", (i + 1), DisplayName, e.Message));
-                    lastException = e;
-                }
-
-                await Task.Delay(500);
-            }
-
-            throw lastException;
+            return await RetryPolicy.ExecuteAsync(async () =>
+                await RequestWithCookiesAsync(url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser)
+            );
         }
 
         protected virtual async Task<WebResult> RequestWithCookiesAsync(
@@ -495,7 +594,7 @@ namespace Jackett.Common.Indexers
             return result;
         }
 
-        protected async Task<WebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false)
+        protected async Task<WebResult> RequestLoginAndFollowRedirect(string url, IEnumerable<KeyValuePair<string, string>> data, string cookies, bool returnCookiesFromFirstCall, string redirectUrlOverride = null, string referer = null, bool accumulateCookies = false, Dictionary<string, string> headers = null)
         {
             var request = new WebRequest
             {
@@ -504,7 +603,8 @@ namespace Jackett.Common.Indexers
                 Cookies = cookies,
                 Referer = referer,
                 PostData = data,
-                Encoding = Encoding
+                Encoding = Encoding,
+                Headers = headers,
             };
             var response = await webclient.GetResultAsync(request);
             CheckSiteDown(response);
@@ -690,7 +790,7 @@ namespace Jackett.Common.Indexers
 
     public abstract class BaseCachingWebIndexer : BaseWebIndexer
     {
-        protected BaseCachingWebIndexer(string link,string id, string name, string description,
+        protected BaseCachingWebIndexer(string link, string id, string name, string description,
                                         IIndexerConfigurationService configService, WebClient client, Logger logger,
                                         ConfigurationData configData, IProtectionService p, ICacheService cacheService,
                                         TorznabCapabilities caps = null, string downloadBase = null)

@@ -89,8 +89,9 @@ download:
     method: post
     inputs:
       torrentid: "{{ .DownloadUri.Query.id }}"
-  selector: a[href*="/download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href*="/download.php?id="]
+      attribute: href
 
 search:
   paths:
@@ -155,4 +156,7 @@ search:
         "*": 1
     minimumratio:
       text: 0.6
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TS Special Edition v.7.5

@@ -1,0 +1,176 @@
+---
+id: thepiratebay
+name: The Pirate Bay
+description: "The Pirate Bay (TPB) is the galaxy’s most resilient Public BitTorrent site"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://thepiratebay.org/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ly/
+  - https://tpb22.ukpass.co/
+  - https://tpb.sadzawka.tk/
+  - https://thepiratebay.host/
+  - https://tpb.cnp.cx/
+  - https://thepiratebay.d4.re/
+  - https://tpb.skynetcloud.site/
+  - https://piratetoday.xyz/
+  - https://piratenow.xyz/
+  - https://pirate-proxy.app/
+  - https://thepb.cyou/
+  - https://mirrorbay.top/
+  - https://5mins.eu/
+  - https://piratebayproxy.buzz/
+  - https://tpb.surf/
+  - https://wearethereal.ninja/
+  - https://tpb.monster/
+  - https://tpb.wtf/
+  - https://bibtor.com/
+  - https://gigatorrent.xyz/
+  - https://thepirateb.xyz/
+  - https://ezrasstuff.com/
+legacylinks:
+  - https://thepiratebay0.org/
+  - https://thepiratebay10.org/
+  - https://pirateproxy.live/
+  - https://thehiddenbay.com/
+  - https://thepiratebay.zone/
+  - https://tpb.party/
+  - https://piratebayproxy.live/
+  - https://piratebay.live/
+  - https://tpb.biz/
+  - https://pirate.johnedwarddoyle.co.uk/
+  - https://knaben.ru/
+  - https://piratebayztemzmv.onion.pet/
+  - https://piratebayztemzmv.onion.ly/
+  - https://pirateproxy.cloud/
+  - https://tpb18.ukpass.co/
+  - https://pirateproxy.dev/
+  - https://tpb19.ukpass.co/
+  - https://pirateproxy.tube/
+  - https://www.tpbay.win/
+  - https://baypirated.site/
+  - https://piratesbaycc.com/
+  - https://pirateproxy.ltda/
+
+caps:
+  categorymappings:
+    # Audio
+    - {id: 100, cat: Audio, desc: "Audio"}
+    - {id: 101, cat: Audio, desc: "Music"}
+    - {id: 102, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 103, cat: Audio, desc: "Sound Clips"}
+    - {id: 104, cat: Audio/Lossless, desc: "FLAC"}
+    - {id: 199, cat: Audio/Other, desc: "Audio Other"}
+    # Video
+    - {id: 200, cat: Movies, desc: "Video"}
+    - {id: 201, cat: Movies, desc: "Movies"}
+    - {id: 202, cat: Movies, desc: "Movies"}
+    - {id: 203, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 204, cat: Movies/Other, desc: "Movie Clips"}
+    - {id: 205, cat: TV, desc: "TV"}
+    - {id: 206, cat: TV/Other, desc: "Handheld"}
+    - {id: 207, cat: Movies/HD, desc: "HD - Movies"}
+    - {id: 208, cat: TV/HD, desc: "HD - TV shows"}
+    - {id: 209, cat: Movies/3D, desc: "3D"}
+    - {id: 299, cat: Movies/Other, desc: "Video Other"}
+    # Applications
+    - {id: 300, cat: PC, desc: "Applications"}
+    - {id: 301, cat: PC, desc: "Windows"}
+    - {id: 302, cat: PC/Mac, desc: "Mac"}
+    - {id: 303, cat: PC, desc: "UNIX"}
+    - {id: 304, cat: PC/Mobile-Other, desc: "Handheld"}
+    - {id: 305, cat: PC/Mobile-iOS, desc: "IOS (iPad/iPhone)"}
+    - {id: 306, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 399, cat: PC, desc: "Other OS"}
+    # Games
+    - {id: 400, cat: Console, desc: "Games"}
+    - {id: 401, cat: PC/Games, desc: "PC"}
+    - {id: 402, cat: PC/Mac, desc: "Mac"}
+    - {id: 403, cat: Console/PS4, desc: "PSx"}
+    - {id: 404, cat: Console/XBox, desc: "XBOX360"}
+    - {id: 405, cat: Console/Wii, desc: "Wii"}
+    - {id: 406, cat: Console/Other, desc: "Handheld"}
+    - {id: 407, cat: Console/Other, desc: "IOS (iPad/iPhone)"}
+    - {id: 408, cat: Console/Other, desc: "Android"}
+    - {id: 499, cat: Console/Other, desc: "Games Other"}
+    # Porn
+    - {id: 500, cat: XXX, desc: "Porn"}
+    - {id: 501, cat: XXX, desc: "Movies"}
+    - {id: 502, cat: XXX/DVD, desc: "Movies DVDR"}
+    - {id: 503, cat: XXX/ImageSet, desc: "Pictures"}
+    - {id: 504, cat: XXX, desc: "Games"}
+    - {id: 505, cat: XXX, desc: "HD - Movies"}
+    - {id: 506, cat: XXX, desc: "Movie Clips"}
+    - {id: 599, cat: XXX/Other, desc: "Porn other"}
+    # Other
+    - {id: 600, cat: Other, desc: "Other"}
+    - {id: 601, cat: Books, desc: "E-books"}
+    - {id: 602, cat: Books/Comics, desc: "Comics"}
+    - {id: 603, cat: Books, desc: "Pictures"}
+    - {id: 604, cat: Books, desc: "Covers"}
+    - {id: 605, cat: Books, desc: "Physibles"}
+    - {id: 699, cat: Books/Other, desc: "Other Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://apibay.org/q.php?q=bad+batch&cat=100,101,102,103,104
+    - path: "https://apibay.org/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_recent.json{{ end }}"
+      response:
+        type: json
+  keywordsfilters:
+    # remove it's #8829
+    - name: re_replace
+      args: ["(?i)(it's\\s)", ""]
+    # replace simplified chinese as this confuses TPB search engine #7291
+    - name: re_replace
+      args: ["([\\p{IsCJKUnifiedIdeographs}\\W]+)", "."]
+    # currently, the only uploader for General Hospital puts a space between season and episode
+    # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
+    - name: re_replace
+      args: ["General Hospital S(\\d{2,3})E(\\d{2,3})", "$0 | \\(S$1 E$2\\)"]
+    - name: tolower
+
+  rows:
+    selector: $
+    count:
+      selector: $[0].id
+
+  fields:
+    id:
+      selector: id
+    category:
+      selector: category
+    title:
+      selector: name
+    details:
+      text: "{{ .Config.sitelink }}description.php?id={{ .Result.id }}"
+    infohash:
+      selector: info_hash
+    imdbid:
+      selector: imdb
+    date:
+      # unix
+      selector: added
+    size:
+      selector: size
+    files:
+      selector: num_files
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json engine n/a

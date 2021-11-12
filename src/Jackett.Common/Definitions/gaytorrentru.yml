@@ -2,7 +2,7 @@
 id: gaytorrentru
 name: GAYtorrent.ru
 description: "GayTorrent.ru is a Private Torrent Tracker for GAY 3X"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -95,8 +95,9 @@ caps:
     book-search: [q]
 
 login:
-  path: takelogin.php
-  method: post
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
@@ -147,9 +148,6 @@ search:
       selector: .tsnatch
     files:
       selector: .tfiles
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: .tsize
     seeders:

@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentview27.com/
+  - https://torrentview44.com/
 legacylinks:
   - https://torrentview.net/
   - https://torrentview3.net/
@@ -34,6 +34,22 @@ legacylinks:
   - https://torrentview24.com/
   - https://torrentview25.com/
   - https://torrentview26.com/
+  - https://torrentview27.com/
+  - https://torrentview28.com/
+  - https://torrentview29.com/
+  - https://torrentview30.com/
+  - https://torrentview31.com/
+  - https://torrentview32.com/
+  - https://torrentview33.com/
+  - https://torrentview34.com/
+  - https://torrentview35.com/
+  - https://torrentview36.com/
+  - https://torrentview37.com/
+  - https://torrentview38.com/
+  - https://torrentview39.com/
+  - https://torrentview40.com/
+  - https://torrentview41.com/
+  - https://torrentview42.com/
 
 caps:
   categorymappings:
@@ -56,8 +72,9 @@ caps:
 settings: []
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:
@@ -96,11 +113,6 @@ search:
       # 2020-03-28T01:30:01+09:00
       selector: time
       attribute: datetime
-      filters:
-        - name: replace
-          args: ["T", " "]
-        - name: dateparse
-          args: "2006-01-02 15:04:05-07:00"
     cat:
       selector: div.media-heading > a[href^="./board.php"]
       attribute: href

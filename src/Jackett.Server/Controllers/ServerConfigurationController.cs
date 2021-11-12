@@ -44,7 +44,7 @@ namespace Jackett.Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult AdminPassword([FromBody]string password)
+        public IActionResult AdminPassword([FromBody] string password)
         {
             var oldPassword = serverConfig.AdminPassword;
             if (string.IsNullOrEmpty(password))
@@ -71,7 +71,7 @@ namespace Jackett.Server.Controllers
 
         [ActionName("Config")]
         [HttpPost]
-        public IActionResult UpdateConfig([FromBody]Common.Models.DTO.ServerConfig config)
+        public IActionResult UpdateConfig([FromBody] Common.Models.DTO.ServerConfig config)
         {
             var webHostRestartNeeded = false;
 
@@ -132,7 +132,7 @@ namespace Jackett.Server.Controllers
                 serverConfig.OmdbApiUrl = omdbApiUrl.TrimEnd('/');
                 configService.SaveConfig(serverConfig);
                 // HACK
-                indexerService.InitAggregateIndexer();
+                indexerService.InitMetaIndexers();
             }
 
             if (config.proxy_type != serverConfig.ProxyType ||

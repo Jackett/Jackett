@@ -2,7 +2,7 @@
 id: unionfansub
 name: Union Fansub
 description: "Union Fansub is a SPANISH Semi private torrent site focused on ANIME"
-language: es-es
+language: es-ES
 type: semi-private
 encoding: UTF-8
 links:
@@ -63,13 +63,13 @@ settings:
       asc: asc
 
 login:
-  path: http://foro.unionfansub.com/member.php
+  path: https://foro.unionfansub.com/member.php
   method: post
   inputs:
     quick_username: "{{ .Config.username }}"
     quick_password: "{{ .Config.password }}"
     action: do_login
-    url: "http://torrent.unionfansub.com/browse.php"
+    url: "https://torrent.unionfansub.com/"
     quick_login: 1
     quick_remember: yes
   error:
@@ -114,15 +114,7 @@ search:
     files:
       selector: td:nth-last-child(8)
     size:
-      # 1,36 GB
-      # 296,98 MB
-      # 1.018,29 MB
       selector: td:nth-last-child(5)
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: td:nth-last-child(4)
     seeders:

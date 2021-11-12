@@ -2,7 +2,7 @@
 id: sosulki
 name: sosulki
 description: "sosulki is a RUSSIAN Public Torrent Tracker for 3X"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: UTF-8
 links:
@@ -35,8 +35,9 @@ caps:
 settings: []
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:

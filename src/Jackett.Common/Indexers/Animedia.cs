@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
@@ -15,7 +16,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System.Linq;
 
 namespace Jackett.Common.Indexers
 {
@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "ru-ru";
+            Language = "ru-RU";
             Type = "public";
 
             // Configure the category mappings
@@ -72,11 +72,15 @@ namespace Jackett.Common.Indexers
         }
 
         // If the search string is empty use the latest releases
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) {
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
             WebResult result;
-            if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm)) {
+            if (query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
                 result = await RequestWithCookiesAndRetryAsync(SiteLink);
-            } else {
+            }
+            else
+            {
                 // Prepare the search query
                 var queryParameters = new NameValueCollection
                 {
@@ -134,7 +138,7 @@ namespace Jackett.Common.Indexers
                     Details = uri,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
-                    Category = new[]{ TorznabCatType.TVAnime.ID }
+                    Category = new[] { TorznabCatType.TVAnime.ID }
                 };
                 foreach (var t in document.QuerySelectorAll("ul.media__tabs__nav > li > a"))
                 {
@@ -142,11 +146,11 @@ namespace Jackett.Common.Indexers
                     var tr_id = t.Attributes["href"].Value;
                     var tr = document.QuerySelector("div" + tr_id);
                     release.Title += " - " + composeTitleAdditionalInfo(t, tr);
-                    release.Link = new Uri(document.QuerySelector("div.download_tracker > a.btn__green").Attributes["href"].Value);
-                    release.MagnetUri = new Uri(document.QuerySelector("div.download_tracker > a.btn__d-gray").Attributes["href"].Value);
-                    release.Seeders = long.Parse(document.QuerySelector("div.circle_green_text_top").Text());
-                    release.Peers = release.Seeders + long.Parse(document.QuerySelector("div.circle_red_text_top").Text());
-                    release.Grabs = long.Parse(document.QuerySelector("div.circle_grey_text_top").Text());
+                    release.Link = new Uri(tr.QuerySelector("div.download_tracker > a.btn__green").Attributes["href"].Value);
+                    release.MagnetUri = new Uri(tr.QuerySelector("div.download_tracker > a.btn__d-gray").Attributes["href"].Value);
+                    release.Seeders = long.Parse(tr.QuerySelector("div.circle_green_text_top").Text());
+                    release.Peers = release.Seeders + long.Parse(tr.QuerySelector("div.circle_red_text_top").Text());
+                    release.Grabs = long.Parse(tr.QuerySelector("div.circle_grey_text_top").Text());
                     release.PublishDate = getReleaseDate(tr);
                     release.Size = getReleaseSize(tr);
                     release.Guid = new Uri(uri.ToString() + tr_id);
@@ -161,22 +165,26 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private string composeBaseTitle(IHtmlDocument r) {
+        private string composeBaseTitle(IHtmlDocument r)
+        {
             var name_ru = r.QuerySelector("div.media__post__header > h1").Text().Trim();
             var name_en = r.QuerySelector("div.media__panel > div:nth-of-type(1) > div.col-l:nth-of-type(1) > div > span").Text().Trim();
             var name_orig = r.QuerySelector("div.media__panel > div:nth-of-type(1) > div.col-l:nth-of-type(2) > div > span").Text().Trim();
 
             var title = name_ru + " / " + name_en;
-            if (name_en != name_orig) {
+            if (name_en != name_orig)
+            {
                 title += " / " + name_orig;
             }
             return title;
         }
 
-        private string composeTitleAdditionalInfo(IElement t, IElement tr) {
+        private string composeTitleAdditionalInfo(IElement t, IElement tr)
+        {
             var tabName = t.Text();
             tabName = tabName.Replace("Сезон", "Season");
-            if (tabName.Contains("Серии")) {
+            if (tabName.Contains("Серии"))
+            {
                 tabName = "";
             }
 

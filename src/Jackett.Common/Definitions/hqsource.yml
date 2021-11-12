@@ -2,7 +2,7 @@
 id: hqsource
 name: HQSource
 description: "HQSource (HQS) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: pl-pl
+language: pl-PL
 type: private
 encoding: ISO-8859-2
 links:
@@ -88,38 +88,35 @@ search:
     download:
       selector: a[href^="download.php/"]
       attribute: href
-    description:
+    language:
       optional: true
       selector: img[src="pic/pl.png"]
       filters:
         - name: append
           args: "Language: polish\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    description:
+    subbed:
       optional: true
       selector: img[src="pic/napisy.png"]
       filters:
         - name: append
           args: "Subbed\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    imdb:
+    description:
+      text: "{{ .Result.language }}{{ .Result.subbed }}"
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(5)
     date:
-      selector: tr, br
+      selector: td:nth-child(2)
       filters:
+        - name: regexp
+          args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
+          args: "2006-01-02 15:04:05 -07:00"
     seeders:
       selector: td:nth-child(7)
     leechers:

@@ -2,7 +2,7 @@
 id: peersfm
 name: Peers.FM
 description: "Peers.FM is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: ru-ru
+language: ru-RU
 type: private
 encoding: windows-1251
 links:
@@ -110,9 +110,6 @@ search:
       attribute: href
     grabs:
       selector: a[href^="download.php/"]
-      filters:
-        - name: regexp
-          args: (\d+)
     size:
       selector: td:nth-child(6)
     date:
@@ -128,7 +125,7 @@ search:
         - name: replace
           args: ["апр", "Apr"]
         - name: replace
-          args: ["май", "May"]
+          args: ["мая", "May"]
         - name: replace
           args: ["июн", "Jun"]
         - name: replace

@@ -2,7 +2,7 @@
 id: pwtorrents
 name: PWTorrents
 description: "PWTorrents (PWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -30,6 +30,8 @@ caps:
     - {id: 18, cat: TV/Sport, desc: "WWE Network"}
     - {id: 16, cat: TV/Sport, desc: "WWE PPV's"}
     - {id: 17, cat: TV/Sport, desc: "WWE Weekly"}
+    - {id: 19, cat: TV/Sport, desc: "AEW Weekly"}
+    - {id: 20, cat: TV/Sport, desc: "AEW PPV's"}
 
   modes:
     search: [q]
@@ -125,9 +127,6 @@ search:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(9)
     leechers:

@@ -38,8 +38,11 @@ namespace Jackett.Common.Indexers
         {
             "https://hdts.ru/",
             "https://hd-torrents.org/",
-            "https://hd-torrents.net/",
             "https://hd-torrents.me/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://hd-torrents.net/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
@@ -74,7 +77,7 @@ namespace Jackett.Common.Indexers
                        "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
             // Movie
@@ -159,6 +162,9 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("table.mainblockcontenttt tr:has(td.mainblockcontent)");
                 foreach (var row in rows.Skip(1))
                 {
+                    if (row.Children.Length == 2)
+                        continue; // fix bug with search: cohen
+
                     var mainLink = row.Children[2].QuerySelector("a");
                     var title = mainLink.TextContent;
                     var details = new Uri(SiteLink + mainLink.GetAttribute("href"));

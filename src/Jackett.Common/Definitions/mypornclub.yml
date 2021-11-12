@@ -2,7 +2,7 @@
 id: mypornclub
 name: MyPornClub
 description: "MyPornClub is a Public Torrent Tracker for 3X"
-language: en
+language: en-US
 type: public
 encoding: UTF-8
 links:
@@ -24,15 +24,16 @@ settings:
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
-  filters:
-    - name: re_replace
-      args: ["\\s+", " "]
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+      filters:
+        - name: re_replace
+          args: ["\\s+", " "]
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ re_replace .Keywords \"\\s+\" \"-\" }}{{ else }}torrents{{ end }}"
+    - path: "{{ if .Keywords }}search/{{ re_replace .Keywords \"\\s+\" \"-\" }}{{ else }}ts{{ end }}"
 
   rows:
     selector: div.torrents_list > div.torrent_element
@@ -43,13 +44,13 @@ search:
     category:
       text: XXX
     title:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/t/"]
       remove: i
     details:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/t/"]
       attribute: href
     download:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/t/"]
       attribute: href
     date:
       selector: div.torrent_element_info span:nth-child(2)

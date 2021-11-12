@@ -48,7 +48,7 @@ namespace Jackett.Common.Services
         {
             // do not cache test queries!
             if (query.IsTest)
-                return; 
+                return;
 
             lock (_cache)
             {
@@ -72,7 +72,7 @@ namespace Jackett.Common.Services
 
                 var trackerCache = _cache[indexer.Id];
                 var queryHash = GetQueryHash(query);
-                if (trackerCache.Queries.ContainsKey(queryHash)) 
+                if (trackerCache.Queries.ContainsKey(queryHash))
                     trackerCache.Queries[queryHash] = trackerCacheQuery; // should not happen, just in case
                 else
                     trackerCache.Queries.Add(queryHash, trackerCacheQuery);
@@ -94,7 +94,7 @@ namespace Jackett.Common.Services
 
                 if (!_cache.ContainsKey(indexer.Id))
                     return null;
- 
+
                 var trackerCache = _cache[indexer.Id];
                 var queryHash = GetQueryHash(query);
                 var cacheHit = trackerCache.Queries.ContainsKey(queryHash);
@@ -177,6 +177,8 @@ namespace Jackett.Common.Services
             }
         }
 
+        public TimeSpan CacheTTL => TimeSpan.FromSeconds(_serverConfig.CacheTtl);
+
         private bool IsCacheEnabled()
         {
             if (!_serverConfig.CacheEnabled)
@@ -184,7 +186,7 @@ namespace Jackett.Common.Services
                 // remove cached results just in case user disabled cache recently
                 _cache.Clear();
                 _logger.Debug("CACHE IsCacheEnabled => false");
-            } 
+            }
             return _serverConfig.CacheEnabled;
         }
 
@@ -239,7 +241,7 @@ namespace Jackett.Common.Services
         {
             var json = GetSerializedQuery(query);
             // Compute the hash
-            return BitConverter.ToString(_sha256.ComputeHash(Encoding.ASCII.GetBytes(json)));
+            return BitConverter.ToString(_sha256.ComputeHash(Encoding.UTF8.GetBytes(json)));
         }
 
         private static string GetSerializedQuery(TorznabQuery query)
@@ -249,6 +251,9 @@ namespace Jackett.Common.Services
             // Changes in the query to improve cache hits
             // Both request must return the same results, if not we are breaking Jackett search
             json = json.Replace("\"SearchTerm\":null", "\"SearchTerm\":\"\"");
+
+            // The Cache parameter's value should not affect caching itself
+            json = json.Replace("\"Cache\":false", "\"Cache\":true");
 
             return json;
         }

@@ -2,7 +2,7 @@
 id: pixelcove
 name: PixelCove
 description: "PixelCove (Ultimate Gamer) is a Private Torrent Tracker for GAMES"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -54,6 +54,8 @@ caps:
     - {id: 48, cat: Other, desc: "Retro"}
     - {id: 72, cat: Other, desc: "Board Games"}
     - {id: 75, cat: Other, desc: "Paper Crafting"}
+    - {id: 77, cat: Other, desc: "Arcade"}
+    - {id: 78, cat: Other, desc: "Other"}
 
   modes:
     search: [q]

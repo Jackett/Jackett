@@ -11,7 +11,7 @@ using NLog;
 
 namespace Jackett.Server.Services
 {
-// This code is Windows specific but we are already doing the checks our way
+    // This code is Windows specific but we are already doing the checks our way
 #pragma warning disable CA1416
     public class ServiceConfigService : IServiceConfigService
     {

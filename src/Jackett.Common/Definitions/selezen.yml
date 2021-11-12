@@ -1,11 +1,16 @@
 ---
 id: selezen
 name: seleZen
-description: "seleZen is a RUSSIAN Public Torrent Tracker for MOVIES"
-language: ru-ru
-type: public
+description: "seleZen is a RUSSIAN Semi-Private Torrent Tracker for MOVIES"
+language: ru-RU
+type: semi-private
 encoding: UTF-8
 links:
+  - https://use.selezen.club/
+  - https://mel.selezen.net/
+  - https://selezen.org/
+legacylinks:
+  - https://www.selezen.site/
   - https://www.selezen.net/
   - https://s1.selezen.site/
 
@@ -39,6 +44,12 @@ caps:
     movie-search: [q, imdbid]
 
 settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: sort
     type: select
     label: Sort requested from site
@@ -54,10 +65,25 @@ settings:
       desc: desc
       asc: asc
 
+login:
+  path: login.html
+  method: form
+  form: form[role="form"]
+  inputs:
+    login_name: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
+    login_not_save: ""
+    login: submit
+  error:
+    - selector: div.alert-warning:contains("Ошибка авторизации")
+  test:
+    path: /
+    selector: a[href$="/index.php?action=logout"]
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   # do=search&subaction=search&story=greyhound&titleonly=0&sortby=date&resorder=desc&showposts=0&catlist[]=45&catlist[]=46&catlist[]=47
@@ -80,7 +106,7 @@ search:
   fields:
     category:
       text: 0
-    category:
+    category|noappend:
       selector: div.noimg > a
       optional: true
       case:
@@ -116,7 +142,7 @@ search:
     poster:
       selector: img.poster
       attribute: src
-    imdb:
+    imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
@@ -139,9 +165,6 @@ search:
       selector: i.fa-download ~ span
     size:
       selector: i.fa-file-video-o ~ b
-      filters:
-        - name: replace
-          args: [",", "."]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
