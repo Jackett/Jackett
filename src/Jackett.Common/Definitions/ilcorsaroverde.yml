@@ -215,8 +215,8 @@ search:
         - name: replace
           args: ["Oggi alle", "Today"]
     date_year:
-      # 11 November 2021, 10:59:53
-      # 11 Novembre 2021, 10:59:53
+      # 11 January 2021, 10:59:53
+      # 11 Gennaio 2021, 10:59:53
       selector: span.smalltext em:not(:contains("Today")):not(:contains("Oggi"))
       optional: true
       filters:
