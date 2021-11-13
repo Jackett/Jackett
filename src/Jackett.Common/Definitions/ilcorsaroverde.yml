@@ -217,7 +217,7 @@ search:
     date_year:
       # 11 November 2021, 10:59:53
       # 11 Novembre 2021, 10:59:53
-      selector: span.smalltext em:not(:contains("Today")),  span.smalltext em:not(:contains("Oggi"))
+      selector: span.smalltext em:not(:contains("Today")):not(:contains("Oggi"))
       optional: true
       filters:
         - name: replace
