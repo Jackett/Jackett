@@ -21,6 +21,7 @@ caps:
     - {id: 5, cat: PC/0day, desc: "Application"}
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 8, cat: Books/EBook, desc: "E-Book"}
 
   modes:
     search: [q]
@@ -94,6 +95,7 @@ search:
         "Application": 5
         "XXX": 6
         "Mobile": 7
+        "E-Book": 8
     title:
       selector: name
     details:
