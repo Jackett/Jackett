@@ -20,8 +20,10 @@ caps:
     - {id: 62, cat: Other, desc: "Graphic"}
     - {id: 63, cat: TV/HD, desc: "HD"}
     - {id: 57, cat: Books/Mags, desc: "Magazine"}
+    - {id: 72, cat: Books, desc: "IT Books"}
     - {id: 58, cat: TV, desc: "Medicine"}
     - {id: 70, cat: Books/EBook, desc: "Occult"}
+    - {id: 73, cat: Audio, desc: "Podcast"}
     - {id: 69, cat: Other, desc: "PS Resources"}
     - {id: 56, cat: TV/Sport, desc: "Sports"}
     - {id: 59, cat: TV, desc: "Video"}
