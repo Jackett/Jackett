@@ -62,7 +62,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "sl-sl";
+            Language = "sl-SL";
             Type = "private";
 
             // Blu Ray
