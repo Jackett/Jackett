@@ -51,10 +51,6 @@ namespace Jackett.Common.Indexers
                        {
                            MusicSearchParam.Q
                        },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       },
                        TvSearchImdbAvailable = true
                    },
                    configService: configService,
@@ -92,7 +88,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
             AddCategoryMapping(32, TorznabCatType.ConsoleXBox360, "Games/XBOX-360");
             AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
-            AddCategoryMapping(35, TorznabCatType.BooksEBook, "e-Books");
             AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
             AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
