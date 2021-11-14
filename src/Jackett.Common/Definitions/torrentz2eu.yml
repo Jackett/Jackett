@@ -6,7 +6,10 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
+  - https://torrentz2eu.me/
   - https://torrentz2.unblockninja.com/
+legacylinks:
+  - https://torrentzeu.org/
 
 caps:
   # unfortunately torrentz2eu does not display categories anywhere in its search results page :-(
@@ -21,10 +24,10 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info
+  - name: info_8000
     type: info
-    label: A note about Torrentz2eu
-    default: Torrentz2eu does not display categories in its search results page. This definition is probably only suitable for Jackett Dashboard Manual searches.
+    label: About Torrentz2eu Categories
+    default: Torrentz2eu does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 search:
   paths:
