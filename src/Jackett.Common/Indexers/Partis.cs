@@ -65,41 +65,44 @@ namespace Jackett.Common.Indexers
             Language = "sl-SL";
             Type = "private";
 
-            // Blu Ray
+            // Movies
             AddCategoryMapping(40, TorznabCatType.MoviesBluRay, "Blu-Ray 1080p/i");
             AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Blu-Ray 720p/i");
             AddCategoryMapping(43, TorznabCatType.MoviesBluRay, "Blu-Ray B-Disc");
             AddCategoryMapping(41, TorznabCatType.MoviesBluRay, "Blu-Ray 3D");
             AddCategoryMapping(44, TorznabCatType.MoviesBluRay, "Blu-Ray Remux");
             AddCategoryMapping(45, TorznabCatType.MoviesBluRay, "Blu-Ray Remux/Disc");
-
-            // UHD
             AddCategoryMapping(32, TorznabCatType.MoviesUHD, "UHD 4K Disc");
             AddCategoryMapping(55, TorznabCatType.MoviesUHD, "UHD 4K Remux");
-
-            // HD
             AddCategoryMapping(20, TorznabCatType.MoviesHD, "HD");
             AddCategoryMapping(4, TorznabCatType.MoviesSD, "DVD-R");
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "XviD");
-            AddCategoryMapping(12, TorznabCatType.MoviesSD, "Anime");
             AddCategoryMapping(30, TorznabCatType.MoviesSD, "Risanke");
-            AddCategoryMapping(15, TorznabCatType.MoviesSD, "Sport");
+            AddCategoryMapping(54, TorznabCatType.MoviesSD, "WEBRip");
+            AddCategoryMapping(59, TorznabCatType.MoviesWEBDL, "WEB-DL");
 
-            // TV Show
+            // TV
             AddCategoryMapping(53, TorznabCatType.TVWEBDL, "TV WEB-DL");
             AddCategoryMapping(60, TorznabCatType.TVSD, "TV-XviD");
             AddCategoryMapping(38, TorznabCatType.TVSD, "SD-TV");
             AddCategoryMapping(51, TorznabCatType.TVHD, "TV 1080p/i");
             AddCategoryMapping(52, TorznabCatType.TVHD, "TV 720p/i");
-
-            AddCategoryMapping(54, TorznabCatType.MoviesSD, "WEBRip");
-            AddCategoryMapping(59, TorznabCatType.MoviesWEBDL, "WEB-DL");
+            AddCategoryMapping(5, TorznabCatType.TVSport, "Sport");
+            AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Dokumentarci");
-
+            
             // Games
             AddCategoryMapping(10, TorznabCatType.PCGames, "PC igre/ISO");
             AddCategoryMapping(11, TorznabCatType.PCGames, "PC igre/Rips/Repack");
             AddCategoryMapping(64, TorznabCatType.PCGames, "PC igre/Update & Patch");
+            AddCategoryMapping(13, TorznabCatType.ConsolePSP, "PSP");
+            AddCategoryMapping(12, TorznabCatType.ConsoleOther, "PS2");
+            AddCategoryMapping(28, TorznabCatType.ConsolePS3, "PS3");
+            AddCategoryMapping(63, TorznabCatType.ConsolePS4, "PS4");
+            AddCategoryMapping(27, TorznabCatType.ConsoleWii, "Wii");
+            AddCategoryMapping(14, TorznabCatType.ConsoleXBox, "XboX");
+            AddCategoryMapping(49, TorznabCatType.PCGames, "Mac Igre");
+            AddCategoryMapping(48, TorznabCatType.PCGames, "Linux Igre");
 
             // Music
             AddCategoryMapping(46, TorznabCatType.AudioLossless, "Glasba/Flac");
@@ -107,6 +110,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.AudioMP3, "Glasba/Mp3");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music DVD");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Videospoti");
+            
+            // Programs
+            AddCategoryMapping(15, TorznabCatType.PC, "PC programi/drugo");
+            AddCategoryMapping(15, TorznabCatType.PCMac, "Mac Programi");
+            AddCategoryMapping(16, TorznabCatType.PCISO, "PC programi/ISO");
+
+            // Other
             AddCategoryMapping(21, TorznabCatType.AudioAudiobook, "AudioBook");
             AddCategoryMapping(3, TorznabCatType.BooksEBook, "eKnjige");
         }
@@ -192,15 +202,15 @@ namespace Jackett.Common.Indexers
                 600934, -- id
                 4571,   -- ?
                 1636450141, -- added timestamp
-                "No.Time.To.Die.2021.ENGSubs.REPACK.HDRip.",  --title
+                "No.Time.To.Die.2021.ENGSubs.REPACK.HDRip.",  -- title (max 41 chars)
                 677, -- leechers
                 30, -- seeders
-                "NI ČAS ZA SMRT/ NOVI JAMES BOND | Akcijski | HDRip...", --description 
+                "NI ČAS ZA SMRT/ NOVI JAMES BOND | Akcijski | HDRip...", -- description 
                 7, -- category
-                54.9014462385559, --downloads? scaled 0-100
+                54.9014462385559, -- health? scaled 0-100
                 "1.7 GB", -- size
-                "/img/ics/xvid.gif", --icon
-                "/torrent/image/600/600934/coverflow/james-bond.jpg" --thumbnail
+                "/img/ics/xvid.gif", -- icon
+                "/torrent/image/600/600934/coverflow/james-bond.jpg" -- thumbnail
             ]
             */
             try
@@ -215,8 +225,9 @@ namespace Jackett.Common.Indexers
                 // Get Category
                 release.Category = MapTrackerCatToNewznab(torrent[7].ToString());
 
-                // Title and torrent link
+                // Title, description and details link
                 release.Title = torrent[3].ToString();
+                release.Description = torrent[6].ToString();
                 release.Details = new Uri($"{SiteLink}index.html#torrent/{torrent[0]}");
                 release.Guid = release.Details;
 
@@ -224,13 +235,15 @@ namespace Jackett.Common.Indexers
                 release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent[2]);
 
                 // Download link
-                release.Link = new Uri(($"{SiteLink}torrent/download/{torrent[0]}"));
+                release.Link = new Uri($"{SiteLink}torrent/download/{torrent[0]}");
 
                 // Various data - size, seeders, leechers, download count
                 release.Size = ReleaseInfo.GetBytes(torrent[9].ToString());
                 release.Seeders = ParseUtil.CoerceInt(torrent[4].ToString());
                 release.Peers = ParseUtil.CoerceInt(torrent[5].ToString()) + release.Seeders;
-                release.Grabs = (long)torrent[8];
+
+                // Poster
+                release.Poster = new Uri($"{SiteLink}{torrent[11]}");
 
                 // // Set download/upload factor
                 release.DownloadVolumeFactor = 1; //No way to determine if torrent is freeleech from single request.
