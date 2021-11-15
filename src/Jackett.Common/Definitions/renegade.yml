@@ -6,9 +6,9 @@ language: hu-HU
 type: private
 encoding: ISO-8859-2
 links:
-  - https://renegade-tracker.com/
-legacylinks:
   - http://renegade-tracker.com/
+legacylinks:
+  - https://renegade-tracker.com/ # ERR_CONNECTION_REFUSED
 
 caps:
   # dont forget to update the search fields category case block
