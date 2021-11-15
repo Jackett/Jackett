@@ -90,7 +90,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(5, TorznabCatType.TVSport, "Sport");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Dokumentarci");
-            
+
             // Games
             AddCategoryMapping(10, TorznabCatType.PCGames, "PC igre/ISO");
             AddCategoryMapping(11, TorznabCatType.PCGames, "PC igre/Rips/Repack");
@@ -110,7 +110,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(47, TorznabCatType.AudioMP3, "Glasba/Mp3");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music DVD");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Videospoti");
-            
+
             // Programs
             AddCategoryMapping(15, TorznabCatType.PC, "PC programi/drugo");
             AddCategoryMapping(15, TorznabCatType.PCMac, "Mac Programi");
