@@ -480,6 +480,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Punk's Horror Tracker
  * PuntoTorrent
  * PuroVicio
+ * PuTao
  * Puur-Hollands
  * PWTorrents (PWT)
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
