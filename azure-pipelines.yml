@@ -353,11 +353,6 @@ stages:
               imageName: ubuntu-20.04
               framework: $(netCoreFramework)
               runtime: linux-x64
-            LinuxARM:
-              buildDescription: Linux ARM
-              imageName: ubuntu-20.04
-              framework: $(netCoreFramework)
-              runtime: linux-arm
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
