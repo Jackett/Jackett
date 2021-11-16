@@ -380,7 +380,7 @@ stages:
             inputs:
               command: build
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
 
           - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
