@@ -6,10 +6,10 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://torrentz2eu.me/
+  - https://torrentzeu.org/
   - https://torrentz2.unblockninja.com/
 legacylinks:
-  - https://torrentzeu.org/
+  - https://torrentz2eu.me/
 
 caps:
   # unfortunately torrentz2eu does not display categories anywhere in its search results page :-(
