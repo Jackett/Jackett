@@ -25,10 +25,12 @@ namespace Jackett.Server.Services
             byte[] hashValue;
             var message = UE.GetBytes(input);
 
+#pragma warning disable SYSLIB0021
             var hashString = new SHA512Managed();
-            var hex = "";
+#pragma warning restore SYSLIB0021
 
             hashValue = hashString.ComputeHash(message);
+            var hex = "";
             foreach (var x in hashValue)
             {
                 hex += string.Format("{0:x2}", x);
