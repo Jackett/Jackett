@@ -107,7 +107,8 @@ namespace Jackett.Server.Services
                 {
                     var dockerMsg = "No";
                     const string cgroupFile = "/proc/1/cgroup";
-                    if (File.Exists(cgroupFile) && File.ReadAllText(cgroupFile).Contains("/docker/"))
+                    if ((File.Exists(cgroupFile) && File.ReadAllText(cgroupFile).Contains("/docker/"))
+                        || File.Exists("/.dockerenv"))
                     {
                         // this file is created in the Docker image build
                         // https://github.com/linuxserver/docker-jackett/pull/105
