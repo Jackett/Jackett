@@ -65,8 +65,6 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
-  test:
     path: /
     selector: a[href="account-logout.php"]
 
