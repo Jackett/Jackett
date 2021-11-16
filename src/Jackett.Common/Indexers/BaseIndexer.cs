@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -443,8 +442,8 @@ namespace Jackett.Common.Indexers
         /// </summary>
         /// <remarks>
         /// Number of retries can be overridden for unstable indexers by overriding this property. Note that retry attempts include an
-        /// exponentially increasing delay. 
-        /// 
+        /// exponentially increasing delay.
+        ///
         /// Alternatively, <see cref="EnableConfigurableRetryAttempts()" /> can be called in the constructor to add user configurable options.
         /// </remarks>
         protected virtual int NumberOfRetryAttempts
@@ -706,7 +705,7 @@ namespace Jackett.Common.Indexers
                     Cookies = redirRequestCookies,
                     Encoding = Encoding
                 });
-                Mapper.Map(redirectedResponse, incomingResponse);
+                MapperUtil.Mapper.Map(redirectedResponse, incomingResponse);
             }
         }
 

@@ -279,7 +279,7 @@ namespace Jackett.Server.Controllers
 
                 return searchResults.Select(result =>
                 {
-                    var item = AutoMapper.Mapper.Map<TrackerCacheResult>(result);
+                    var item = MapperUtil.Mapper.Map<TrackerCacheResult>(result);
                     item.Tracker = indexer.DisplayName;
                     item.TrackerId = indexer.Id;
                     item.Peers = item.Peers - item.Seeders; // Use peers as leechers
@@ -411,7 +411,7 @@ namespace Jackett.Server.Controllers
                     Link = new Uri(CurrentIndexer.SiteLink)
                 });
 
-                var proxiedReleases = result.Releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>
+                var proxiedReleases = result.Releases.Select(r => MapperUtil.Mapper.Map<ReleaseInfo>(r)).Select(r =>
                 {
                     r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
                     return r;
@@ -496,7 +496,7 @@ namespace Jackett.Server.Controllers
             var serverUrl = serverService.GetServerUrl(Request);
             var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
-                var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
+                var release = MapperUtil.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.Id, "dl", release.Title);
                 // IMPORTANT: We can't use Uri.ToString(), because it generates URLs without URL encode (links with unicode
                 // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly

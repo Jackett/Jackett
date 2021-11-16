@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using AutoMapper;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using NLog;
 
 namespace Jackett.Common.Services
@@ -129,7 +129,7 @@ namespace Jackett.Common.Services
                     {
                         foreach (var release in query.Results)
                         {
-                            var item = Mapper.Map<TrackerCacheResult>(release);
+                            var item = MapperUtil.Mapper.Map<TrackerCacheResult>(release);
                             item.FirstSeen = query.Created;
                             item.Tracker = trackerCache.TrackerName;
                             item.TrackerId = trackerCache.TrackerId;
