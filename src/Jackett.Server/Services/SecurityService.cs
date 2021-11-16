@@ -7,12 +7,12 @@ using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Server.Services
 {
-    internal class SecuityService : ISecuityService
+    internal class SecurityService : ISecurityService
     {
         private const string COOKIENAME = "JACKETT";
         private readonly ServerConfig _serverConfig;
 
-        public SecuityService(ServerConfig sc) => _serverConfig = sc;
+        public SecurityService(ServerConfig sc) => _serverConfig = sc;
 
         public string HashPassword(string input)
         {
