@@ -132,11 +132,9 @@ namespace Jackett.Common.Indexers
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, false, null, null, true);
-            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("/user/logout"), () =>
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.Cookies.Contains("udata"), () =>
             {
-                var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
-                var errorMessage = dom.QuerySelector("#errLogin").TextContent.Trim(); // Prijava ni uspela! obvestilo
+                var errorMessage = "Login failed. Invalid username or password.";
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
