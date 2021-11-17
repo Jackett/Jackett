@@ -1,7 +1,7 @@
 ---
 id: reelflix-api
-name: ReelFlix (API)
-description: "ReelFlix (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+name: ReelFLiX (API)
+description: "ReelFLiX (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES"
 language: en-US
 type: private
 encoding: UTF-8
@@ -14,10 +14,6 @@ caps:
   # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Books/EBook, desc: "E-Book"}
-    - {id: 5, cat: TV, desc: "TV Pack"}
 
   modes:
     search: [q]
@@ -74,10 +70,6 @@ search:
       selector: category
       case:
         Movie: 1
-        TV: 2
-        Music: 3
-        E-Book: 4
-        TV Pack: 5
     title:
       selector: name
     details:
