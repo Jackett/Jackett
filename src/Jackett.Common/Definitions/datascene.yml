@@ -126,15 +126,16 @@ search:
         - name: replace
           args: ["https://via.placeholder.com/400x600", ""]
     size:
-      selector: td:nth-last-child(5)
-    seeders:
       selector: td:nth-last-child(4)
-    leechers:
+    seeders:
       selector: td:nth-last-child(3)
-    grabs:
+    leechers:
       selector: td:nth-last-child(2)
-    date:
+    grabs:
       selector: td:nth-last-child(1)
+    date:
+      selector: td:has(a.view-torrent) spam:last-child span:last-child
+      remove: a
       filters:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
         - name: re_replace
