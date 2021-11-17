@@ -381,7 +381,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2
@@ -506,7 +506,7 @@ stages:
             inputs:
               command: test
               projects: '**/*IntegrationTest*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
               testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2
