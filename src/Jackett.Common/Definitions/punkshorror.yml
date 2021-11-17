@@ -1,0 +1,170 @@
+---
+id: punkshorror
+name: Punk's Horror Tracker
+description: "Punk's Horror Tracker is a HUNGARIAN Private Tracker for Horror MOVIES / TV"
+language: hu-HU
+type: private
+encoding: ISO-8859-2
+links:
+  - https://punck-tracker.net/
+
+caps:
+  categorymappings:
+    - {id: 87, cat: Movies, desc: "Action Eng"}
+    - {id: 88, cat: Movies, desc: "Action Hun"}
+    - {id: 79, cat: TV/Documentary, desc: "Dokumentumfilm"}
+    - {id: 72, cat: Movies/HD, desc: "HD Eng"}
+    - {id: 71, cat: Movies/HD, desc: "HD Hun"}
+    - {id: 89, cat: Movies, desc: "Horror Anime"}
+    - {id: 78, cat: Books, desc: "Horror Ebook"}
+    - {id: 66, cat: Movies, desc: "Horror Eng"}
+    - {id: 73, cat: PC/Games, desc: "Horror Game"}
+    - {id: 65, cat: Movies, desc: "Horror Hun"}
+    - {id: 82, cat: XXX, desc: "Horror XXX"}
+    - {id: 94, cat: Movies, desc: "Kamerás filmek"}
+    - {id: 86, cat: Movies, desc: "Mystery-Fantasy Eng"}
+    - {id: 85, cat: Movies, desc: "Mystery-Fantasy Hun"}
+    - {id: 83, cat: Movies, desc: "Punk Release"}
+    - {id: 76, cat: Movies, desc: "Retro Film"}
+    - {id: 70, cat: Movies, desc: "Scfi Eng"}
+    - {id: 69, cat: Movies, desc: "Scfi Hun"}
+    - {id: 75, cat: TV, desc: "Sorozat Eng"}
+    - {id: 74, cat: TV, desc: "Sorozat Hun"}
+    - {id: 68, cat: Movies, desc: "Thriller Eng"}
+    - {id: 67, cat: Movies, desc: "Thriller Hun"}
+    - {id: 84, cat: Movies/SD, desc: "VHS Ritkaságok"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search FreeLeech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: added
+      5: size
+      7: seeders
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek száma egy oldalon</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: "td:contains(\"Belépési hiba\")"
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    onlyname: 1
+    search: "{{ .Keywords }}"
+    # 0 active, 1 all, 2 deadonly, 3 freeleech
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # does not support imdbid searches
+
+  rows:
+    selector: table.alap99 > tbody#linkhatter > tr
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_default:
+      # can be abbreviated
+      selector: a[href^="details.php?id="]
+    title_optional:
+      # usually full length
+      selector: a[href^="details.php?id="]
+      attribute: title
+      optional: true
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date:
+      selector: td:nth-child(2) > b > font
+      filters:
+        - name: replace
+          args: ["\xA0", ""]
+        - name: replace
+          args: ["Feltöltve:", ""]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) width"
+    size:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        img[src="pic/golden.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      selector: td:nth-child(7) > center > b > font
+      filters:
+        - name: regexp
+          args: (\d+)
+    minimumratio:
+      text: 0.8
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a

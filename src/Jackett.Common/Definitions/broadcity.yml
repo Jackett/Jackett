@@ -24,6 +24,7 @@ caps:
     - {id: 7, cat: Movies/HD, desc: "HD - TV"}
     - {id: 5, cat: Movies/WEB-DL, desc: "HD - WEB-DL"}
     - {id: 14, cat: Movies/HD, desc: "HD - WEBRip"}
+    - {id: 40, cat: Movies/HD, desc: "PTer"}
     - {id: 32, cat: PC/Games, desc: "Oyunlar (Games)"}
     - {id: 9, cat: Movies/SD, desc: "SD"}
     - {id: 23, cat: Movies/SD, desc: "SD - BluRay"}

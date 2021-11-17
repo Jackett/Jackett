@@ -5,7 +5,8 @@
 [![Build Status](https://dev.azure.com/Jackett/Jackett/_apis/build/status/Jackett.Jackett?branchName=master)](https://dev.azure.com/jackett/jackett/_build/latest?definitionId=1&branchName=master)
 [![GitHub Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
-[![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA)
+
+_Our [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA) server is no longer maintained. If you have a problem, request, or question then please open a new issue here._
 
 This project is a new fork and is recruiting development help.  If you are able to help out please [contact us](https://github.com/Jackett/Jackett/issues/8180).
 
@@ -19,7 +20,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 #### Supported Systems
 * Windows 7 SP1 or greater
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/master/release-notes/5.0/5.0-supported-os.md#linux)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/6.0/supported-os.md#linux)
 * macOS 10.13 or greater
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
@@ -62,7 +63,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Erai-Raws
  * ETTV
  * EXT Torrents
- * ExtraTorrent.cd
  * ExtraTorrent.st
  * EZTV
  * Filebase
@@ -87,6 +87,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Legit Torrents
  * LePorno.info
  * LimeTorrents
+ * LimeTorrents clone
  * LinuxTracker
  * Mac Torrents Download
  * MegaPeer
@@ -271,8 +272,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * bB
  * BakaBT
  * BeiTai
+ * Best-Core
  * BeyondHD (BHD)
  * Bibliotik
+ * Bit-Bázis
  * Bit-City Reloaded [![(invite needed)][inviteneeded]](#)
  * BIT-HDTV
  * BiT-TiTAN
@@ -296,6 +299,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BTNext (BTNT)
  * BTSCHOOL
  * BWTorrents
+ * BYRBT
  * Carp-Hunter
  * Carpathians
  * CartoonChaos (CC)
@@ -353,7 +357,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FunFile (FF)
  * FunkyTorrents (FT)
  * Fuzer (FZ)
- * Gay-Torrents.org [![(invite needed)][inviteneeded]](#)
+ * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn) [![(invite needed)][inviteneeded]](#)
  * Generation-Free [![(invite needed)][inviteneeded]](#)
@@ -395,6 +399,8 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Hebits
  * HellasTZ
  * HQSource (HQS)
+ * Il Corsaro Verde
+ * Indietorrents [![(invite needed)][inviteneeded]](#)
  * IPTorrents (IPT)
  * ImmortalSeed (iS)
  * Immortuos
@@ -409,6 +415,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Le Saloon
  * LearnBits
  * LearnFlakes
+ * leech24
  * LegacyHD (HD4Free)
  * LemonHD
  * Libble
@@ -420,6 +427,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * magic-heaven
  * Magico (Trellas) [![(invite needed)][inviteneeded]](#)
  * Majomparádé (TurkDepo)
+ * MegamixTracker
  * MeseVilág (Fairytale World)
  * MicroBit (µBit)
  * Milkie
@@ -429,12 +437,14 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Mononoké-BT [![(invite needed)][inviteneeded]](#)
  * MoreThanTV (MTV)
  * MouseBits
+ * Moviesite
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NBTorrents [![(invite needed)][inviteneeded]](#)
  * Nbytez
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
+ * nForce
  * NetCosmo
  * NetLab
  * NorBits
@@ -447,6 +457,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Ourbits (HDPter)
  * P2PBG
  * P2PElite
+ * Partis [![(invite needed)][inviteneeded]](#)
  * PassThePopcorn (PTP)
  * PeerJunkies
  * Peers.FM
@@ -468,8 +479,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PTMSG
  * PTSBAO
  * PTtime
+ * Punk's Horror Tracker
  * PuntoTorrent
  * PuroVicio
+ * PuTao
  * Puur-Hollands
  * PWTorrents (PWT)
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
@@ -484,7 +497,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RevolutionTT
  * Romanian Metal Torrents (RMT) [![(invite needed)][inviteneeded]](#)
  * RPTorrents
- * SceneHD
+ * SceneHD  [![(invite needed)][inviteneeded]](#)
  * ScenePalace (SP)
  * SceneRush
  * SceneTime
@@ -517,6 +530,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * TellyTorrent
  * teracod (Movie Zone)
+ * The-Devils-Lounge
  * The Falling Angels (TFA)
  * The Geeks
  * The Horror Charnel (THC)
@@ -552,6 +566,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrentland
  * TorrentLeech (TL)
  * TorrentLeech.pl
+ * TorrentMasters
  * TorrentSeeds (TS)
  * Trackeros
  * TranceTraffic [![(invite needed)][inviteneeded]](#)
@@ -568,6 +583,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnlimitZ
  * Vizuk
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
+ * White Angel
  * wOOt [![(invite needed)][inviteneeded]](#)
  * World-In-HD
  * x-ite.me (XM)
@@ -631,7 +647,7 @@ We recommend you install Jackett as a Windows service using the supplied install
 
 To get started with using the installer for Jackett, follow the steps below:
 
-1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net50#dependencies
+1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net60#dependencies
 2. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
 3. When prompted if you would like this app to make changes to your computer, select "yes".
 4. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
@@ -835,21 +851,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net5.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net5.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net6.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net6.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install nuget msbuild dotnet-sdk-5.0 # install build tools (Debian/ubuntu)
+sudo apt install nuget msbuild dotnet-sdk-6.0 # install build tools (Debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net5.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net5.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net6.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net6.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots

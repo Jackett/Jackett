@@ -16,6 +16,7 @@ caps:
     - {id: 4, cat: PC/Games, desc: "Jogos"}
     - {id: 5, cat: PC/0day, desc: "Aplicativos"}
     - {id: 7, cat: Other, desc: "Cursos"}
+    - {id: 8, cat: Movies/3D, desc: "3D"}
 
   modes:
     search: [q]

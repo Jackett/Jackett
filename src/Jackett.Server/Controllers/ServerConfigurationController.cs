@@ -21,14 +21,14 @@ namespace Jackett.Server.Controllers
         private readonly IServerService serverService;
         private readonly IProcessService processService;
         private readonly IIndexerManagerService indexerService;
-        private readonly ISecuityService securityService;
+        private readonly ISecurityService securityService;
         private readonly ICacheService cacheService;
         private readonly IUpdateService updater;
         private readonly ILogCacheService logCache;
         private readonly Logger logger;
 
         public ServerConfigurationController(IConfigurationService c, IServerService s, IProcessService p,
-            IIndexerManagerService i, ISecuityService ss, ICacheService cs, IUpdateService u, ILogCacheService lc,
+            IIndexerManagerService i, ISecurityService ss, ICacheService cs, IUpdateService u, ILogCacheService lc,
             Logger l, ServerConfig sc)
         {
             configService = c;

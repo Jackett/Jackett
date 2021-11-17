@@ -7,27 +7,35 @@ type: private
 encoding: UTF-8
 testlinktorrent: false
 links:
+  - http://slosoul.net/ # site is forcing http
+legacylinks:
   - https://slosoul.net/
 
 caps:
   categorymappings:
-    - {id: 5, cat: PC, desc: "Apps"}
-    - {id: 7, cat: Books/EBook, desc: "Ebooks"}
-    - {id: 6, cat: PC/Games, desc: "Games PC"}
-    - {id: 8, cat: Movies, desc: "Movies Packs"}
-    - {id: 1, cat: Movies/SD, desc: "Movies Divx/Xvid"}
-    - {id: 9, cat: Movies/DVD, desc: "Movies DVD-r"}
-    - {id: 11, cat: Movies/BluRay, desc: "Movies BluRay"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: XXX, desc: "Porn"}
-    - {id: 13, cat: TV/Sport, desc: "TV Sport"}
-    - {id: 10, cat: TV, desc: "TV Shows"}
-    - {id: 12, cat: Other, desc: "VIP"}
+    - {id: 34, cat: Movies/SD, desc: "Filmi - Xvid"}
+    - {id: 35, cat: Movies/DVD, desc: "Filmi - DVD"}
+    - {id: 36, cat: Movies/BluRay, desc: "Filmi - BluRay"}
+    - {id: 37, cat: Movies/HD, desc: "Filmi - X264"}
+    - {id: 38, cat: Audio/MP3, desc: "Glasba - MP3"}
+    - {id: 39, cat: Audio/Lossless, desc: "Glasba - FLAC"}
+    - {id: 40, cat: PC/Games, desc: "Igre - PC"}
+    - {id: 42, cat: TV/Documentary, desc: "Dokumentarni filmi"}
+    - {id: 43, cat: TV/Sport, desc: "Šport"}
+    - {id: 44, cat: TV/Anime, desc: "Risanke"}
+    - {id: 45, cat: TV, desc: "TV - Serije"}
+    - {id: 46, cat: PC, desc: "Programi"}
+    - {id: 47, cat: Books/EBook, desc: "E-Knjige"}
+    - {id: 48, cat: Other, desc: "Slike"}
+    - {id: 49, cat: Other, desc: "Ostalo"}
+    - {id: 50, cat: XXX/XviD, desc: "Erotika - Xvid"}
+    - {id: 51, cat: XXX/DVD, desc: "Erotika - DVD"}
+    - {id: 52, cat: XXX/ImageSet, desc: "Erotika - Slike"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
@@ -58,108 +66,122 @@ settings:
       asc: asc
 
 login:
-  path: takelogin.php
-  method: post
+  path: ?p=home&pid=1
+  method: form
+  form: form#loginbox_form
+  submitpath: ajax/login.php
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: ""
+    action: login
+    loginbox_membername: "{{ .Config.username }}"
+    loginbox_password: "{{ .Config.password }}"
+    loginbox_remember: 1
+  selectorinputs:
+    securitytoken:
+      selector: "script:contains(\"stKey: \")"
+      filters:
+        - name: regexp
+          args: "stKey: \"(.+?)\","
   error:
-    - selector: table:has(td.thead:contains("An error has occured!"))
+    - selector: div.error
+    - selector: :contains("-ERROR-")
   test:
-    path: index.php
-    selector: a[href*="logout.php?logouthash="]
-
-download:
-  before:
-    path: takethanks.php
-    method: post
-    inputs:
-      torrentid: "{{ re_replace  .DownloadUri.PathAndQuery \".*torrent-details-(\\d+).*\" \"$1\"}}"
-  selectors:
-    - selector: a[href*="download-torrent-"]
-      attribute: href
+    path: ?p=home&pid=1
+    selector: div#member_info_bar
 
 search:
   paths:
-    - path: browse.php
+    - path: /
   inputs:
-    do: search
-    # does not support multi categories so defaulting to ALL
-    category: 0
-    # yes incldead, no activeonly
-    include_dead_torrents: yes
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # t_name, t_description, t_both, t_uploader, t_genre
-    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
-    sort: "{{ .Config.sort }}"
-    order: "{{ .Config.type }}"
-    # does not return imdb link in results
-  keywordsfilters:
-    - name: re_replace # replace special characters with "%" (wildcard)
-      args: ["[^a-zA-Z0-9]+", "%"]
+    p: torrents
+    pid: 10
+    $raw: "{{ range .Categories }}&cid[]={{.}}{{end}}"
+    keywords: "{{ .Keywords }}"
+    # name, description, both, uploader
+    search_type: name
+    "sortOptions[sortBy]": "{{ .Config.sort }}"
+    "sortOptions[sortOrder]": "{{ .Config.type }}"
+    # does not support imdbid searching
 
   rows:
-    selector: "table#sortabletable tbody tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="torrent-category-"]
+      selector: a[href*="?p=torrents&pid=10&cid="]
       attribute: href
       filters:
-        - name: regexp
-          args: (\d+)
-    title_default:
-      # is often abbreviated
-      selector: a[href*="torrent-details-"]
-    title_optional:
-      # usually longer than details title
-      selector: div[id^="port-content-"] div
-      optional: true
+        - name: querystring
+          args: cid
     title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
     details:
-      selector: a[href*="torrent-details-"]
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
       attribute: href
     download:
-      selector: a[href*="torrent-details-"]
+      selector: a[href*="?p=torrents&pid=10&action=download&tid="]
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
     poster:
-      selector: div[id^="port-content-"] img
-      attribute: src
-    date:
-      selector: td:nth-child(2) > div:last-child
+      selector: a[href*="data/torrents/torrent_images/"]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    size:
+      selector: a[rel="torrent_size"]
+    grabs:
+      selector: a[rel="times_completed"]
+    seeders:
+      selector: a[rel="torrent_seeders"]
+    leechers:
+      selector: a[rel="torrent_leechers"]
+    date_time:
+      selector: div.torrentOwner abbr
+      optional: true
+      attribute: data-time
+    date_day:
+      # Naložil včeraj ob 12:00 by
+      # Naložil danes ob 09:28 by
+      # Uploaded Today at 09:17 by
+      # Uploaded Yesterday at 10:31 by
+      selector: div.torrentOwner:contains("day"), div.torrentOwner:contains("včeraj"), div.torrentOwner:contains("danes")
+      optional: true
       filters:
         - name: regexp
-          args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
+          args: " (.+?) by"
+        - name: replace
+          args: [" ob ", " at "]
+        - name: replace
+          args: ["danes", "Today"]
+        - name: replace
+          args: ["včeraj", "Yesterday"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: fuzzytime
+    date_year:
+      selector: div.torrentOwner:contains("-")
+      optional: true
+      filters:
+        - name: regexp
+          args: " (.+?) by"
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    size:
-      selector: td:nth-child(5)
-    grabs:
-      selector: td:nth-child(6)
-    seeders:
-      selector: td:nth-child(7)
-    leechers:
-      selector: td:nth-child(8)
+    date:
+      text: "{{ if or .Result.date_time .Result.date_year .Result.date_day }}{{ or .Result.date_time .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
-        img[src$="/freedownload.gif"]: 0
-        img[src$="/silverdownload.gif"]: 0.5
+        img[src$="/torrent_free.png"]: 0
         "*": 1
     uploadvolumefactor:
-      case:
-        img[src$="/x2.gif"]: 2
-        "*": 1
+      text: 1
 # TBD, Rules and FAQ do not cover this yet
 #    minimumratio:
 #      text: 1.0
 #    minimumseedtime:
 #      # 2 days (as seconds = 2 x 24 x 60 x 60)
 #      text: 172800
-#  TS Special Edition v.8.0
+# TSUE 2.2

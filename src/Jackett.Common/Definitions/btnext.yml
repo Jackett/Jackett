@@ -6,7 +6,9 @@ language: pt-PT
 type: private
 encoding: UTF-8
 links:
-  - http://tracker.btnext.com/ # site forces http, https is not supported
+  - https://tracker.btnext.com/ # site forces https
+legacylinks:
+  - http://tracker.btnext.com/
 
 caps:
   categorymappings:

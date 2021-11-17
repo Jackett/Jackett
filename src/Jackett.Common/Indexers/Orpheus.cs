@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -12,9 +14,10 @@ namespace Jackett.Common.Indexers
     public class Orpheus : GazelleTracker
     {
         // API Reference: https://github.com/OPSnet/Gazelle/wiki/JSON-API-Documentation
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+        protected override string DownloadUrl => SiteLink + "ajax.php?action=download" + (useTokens ? "&usetoken=1" : "") + "&id=";
         protected override string AuthorizationFormat => "token {0}";
         protected override int ApiKeyLength => 118;
+        protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "");
         public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "orpheus",

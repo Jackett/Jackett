@@ -11,40 +11,40 @@ links:
 caps:
   categorymappings:
     # movies
-    - {id: 1, cat: Movies/SD, desc: "Movies-XviD"}
-    - {id: 55, cat: Movies/3D, desc: "Movies-3D"}
-    - {id: 16, cat: Movies/HD, desc: "Movies-x264"}
-    - {id: 11, cat: Movies/DVD, desc: "Movies-DVD"}
-    - {id: 17, cat: Movies/HD, desc: "Movies-MPEG2"}
-    - {id: 18, cat: Movies/BluRay, desc: "Movies-BR/HD-DVD"}
-    - {id: 7, cat: TV/Documentary, desc: "Movies-Documentaries"}
-    - {id: 35, cat: Movies, desc: "Movies-GSM"}
-    - {id: 34, cat: Movies, desc: "Movies-BG"}
-    - {id: 24, cat: TV/SD, desc: "TV-BG"}
-    - {id: 14, cat: TV, desc: "TV-Shows"}
-    - {id: 15, cat: TV, desc: "TV-Boxset"}
-    - {id: 38, cat: TV/Anime, desc: "TV-Cartoons"}
+    - {id: 1, cat: Movies/SD, desc: "Movies XviD"}
+    - {id: 55, cat: Movies/3D, desc: "Movies 3D"}
+    - {id: 16, cat: Movies/HD, desc: "Movies x264"}
+    - {id: 11, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: 17, cat: Movies/HD, desc: "Movies MPEG2"}
+    - {id: 18, cat: Movies/BluRay, desc: "Movies BR/HD DVD"}
+    - {id: 7, cat: TV/Documentary, desc: "Movies Documentaries"}
+    - {id: 35, cat: Movies, desc: "Movies GSM"}
+    - {id: 34, cat: Movies, desc: "Movies BG"}
+    - {id: 24, cat: TV/SD, desc: "TV BG"}
+    - {id: 14, cat: TV, desc: "TV Shows"}
+    - {id: 15, cat: TV, desc: "TV Boxset"}
+    - {id: 38, cat: TV/Anime, desc: "TV Cartoons"}
     # music
-    - {id: 2, cat: Audio/MP3, desc: "Music-Song"}
-    - {id: 28, cat: Audio, desc: "Music-Album"}
-    - {id: 29, cat: Audio, desc: "Music-Discography"}
-    - {id: 3, cat: Audio/Video, desc: "Music-DVD"}
-    - {id: 19, cat: Audio/Video, desc: "Music-Video"}
+    - {id: 2, cat: Audio/MP3, desc: "Music Song"}
+    - {id: 28, cat: Audio, desc: "Music Album"}
+    - {id: 29, cat: Audio, desc: "Music Discography"}
+    - {id: 3, cat: Audio/Video, desc: "Music DVD"}
+    - {id: 19, cat: Audio/Video, desc: "Music Video"}
     # games
-    - {id: 8, cat: PC/Games, desc: "Games-PC ISO"}
-    - {id: 9, cat: PC/Games, desc: "Games-PC Rips"}
-    - {id: 33, cat: Console/Wii, desc: "Games-Wii"}
-    - {id: 12, cat: Console/PS3, desc: "Games-PS2"}
-    - {id: 23, cat: Console/PS3, desc: "Games-PS3"}
-    - {id: 20, cat: Console/PSP, desc: "Games-PSP"}
-    - {id: 21, cat: Console/XBox, desc: "Games-XboX"}
-    - {id: 22, cat: Console/XBox 360, desc: "Games-X360"}
+    - {id: 8, cat: PC/Games, desc: "Games PC ISO"}
+    - {id: 9, cat: PC/Games, desc: "Games PC Rips"}
+    - {id: 33, cat: Console/Wii, desc: "Games Wii"}
+    - {id: 12, cat: Console/PS3, desc: "Games PS2"}
+    - {id: 23, cat: Console/PS3, desc: "Games PS3"}
+    - {id: 20, cat: Console/PSP, desc: "Games PSP"}
+    - {id: 21, cat: Console/XBox, desc: "Games XboX"}
+    - {id: 22, cat: Console/XBox 360, desc: "Games X360"}
     # appz
-    - {id: 26, cat: PC/ISO, desc: "Appz PC-ISO"}
+    - {id: 26, cat: PC/ISO, desc: "Appz PC ISO"}
     - {id: 31, cat: PC/0day, desc: "Appz Ripped"}
-    - {id: 30, cat: PC, desc: "Appz-Linux"}
+    - {id: 30, cat: PC, desc: "Appz Linux"}
     - {id: 49, cat: PC/Mac, desc: "Appz MacOS"}
-    - {id: 27, cat: PC, desc: "Appz-GSM"}
+    - {id: 27, cat: PC, desc: "Appz GSM"}
     # sports
     - {id: 5, cat: TV/Sport, desc: "Sport F1"}
     - {id: 51, cat: TV/Sport, desc: "Sport"}
@@ -53,8 +53,8 @@ caps:
     - {id: 4, cat: Other, desc: "Other"}
     - {id: 37, cat: Other/Misc, desc: "Pictures"}
     - {id: 39, cat: Other, desc: "e-Learning"}
-    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile-GSM"}
-    - {id: 40, cat: PC/Mobile-iOS, desc: "Mobile-iPhone"}
+    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile GSM"}
+    - {id: 40, cat: PC/Mobile-iOS, desc: "Mobile iPhone"}
     # 3x
     - {id: 13, cat: XXX, desc: "XXX"}
     - {id: 54, cat: XXX/x264, desc: "XXX HD"}
@@ -126,25 +126,30 @@ search:
     selector: table.lista tr td table.lista tr:has(a[href^="index.php?page=torrent-details"])
 
   fields:
-    title:
-      selector: td a[onclick]
-      attribute: title
-      filters:
-        - name: replace
-          args: ["View details: ", ""]
-        - name: replace
-          args: ["Преглед на детайли: ", ""]
-        - name: replace
-          args: ["Преглед на детайли: ", ""]
-    details:
-      selector: td a[href*="id="]
-      attribute: href
     category:
       selector: td a[href*="category="]
       attribute: href
       filters:
         - name: querystring
           args: category
+    title_default:
+      # often abbreviated
+      selector: td:nth-child(2) a
+    title_optional:
+      # usually full length
+      selector: td a[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: replace
+          args: ["View details: ", ""]
+        - name: replace
+          args: ["Преглед на детайли: ", ""]
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+    details:
+      selector: td a[href*="id="]
+      attribute: href
     download:
       selector: td a[href*="id="]
       attribute: href
@@ -154,9 +159,9 @@ search:
         - name: prepend
           args: "download.php?id="
         - name: append
-          args: "&f={{.Result.title}}.torrent"
+          args: "&f={{ .Result.title }}.torrent"
     poster:
-      selector: td img[src="/torrentimg/pic.png"]
+      selector: td a:has(img[src^="/torrentimg/pic"])
       attribute: onmouseover
       filters:
         - name: regexp
@@ -165,18 +170,18 @@ search:
     date_day:
       # Yesterday
       # Вчера
-      selector: td:nth-child(6):not(:contains("/"))
+      selector: td:nth-last-child(5):not(:contains("/"))
       optional: true
       filters:
-        - name: replace
-          args: ["сейчас", "now"]
-        - name: replace
-          args: ["сегодня", "Today"]
-        - name: replace
-          args: ["вчера", "Yesterday"]
+        - name: re_replace
+          args: ["(?i)сейчас|Сега", "now"]
+        - name: re_replace
+          args: ["(?i)сегодня|Днес", "Today"]
+        - name: re_replace
+          args: ["(?i)вчера|Вчера", "Yesterday"]
     date_year:
       # 14/03/2019
-      selector: td:nth-child(6):contains("/")
+      selector: td:nth-last-child(5):contains("/")
       optional: true
       filters:
         - name: append
@@ -186,13 +191,13 @@ search:
     date:
       text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(7)
+      selector: td:nth-last-child(4)
     seeders:
-      selector: td:nth-child(8)
+      selector: td:nth-last-child(3)
     leechers:
-      selector: td:nth-child(9)
+      selector: td:nth-last-child(2)
     grabs:
-      selector: td:nth-child(10)
+      selector: td:nth-last-child(1)
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

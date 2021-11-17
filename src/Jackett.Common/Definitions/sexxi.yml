@@ -95,7 +95,7 @@ search:
 
   fields:
     category:
-      selector: p a:nth-child(3), p:has(a:nth-child(3):empty) a:nth-child(2)
+      selector: p a:last-child
       case:
         a[href$="/amateur/"]: 1
         a[href$="/pornstars/"]: 22

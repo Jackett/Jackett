@@ -8,7 +8,7 @@ encoding: UTF-8
 links:
   - https://torrents-local.xyz/
 certificates:
-  - 97aed6b77a962dd1a3f6ed3eb03801a74138f71c # expired 12th Aug 2021
+  - dbcb5a8bcf03c2c159a0fe1bbf91c5e56be64b3d # expired 12th Nov 2021
 
 caps:
   categorymappings:
