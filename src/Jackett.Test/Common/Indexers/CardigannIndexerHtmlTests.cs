@@ -40,28 +40,28 @@ namespace Jackett.Test.Common.Indexers
             };
 
             var result = await indexer.ResultsForQuery(query, false);
-            Assert.AreEqual( false, result.IsFromCache);
+            Assert.AreEqual(false, result.IsFromCache);
 
             var releases = result.Releases.ToList();
-            Assert.AreEqual( 25, releases.Count);
+            Assert.AreEqual(25, releases.Count);
 
             var firstRelease = releases.First();
-            Assert.AreEqual( 1, firstRelease.Category.Count);
-            Assert.AreEqual( 8000, firstRelease.Category.First());
-            Assert.AreEqual( "ubuntu-19.04-desktop-amd64.iso", firstRelease.Title);
-            Assert.AreEqual( "https://www.testdefinition1.cc/torrent/d540fc48eb12f2833163eed6421d449dd8f1ce1f", firstRelease.Details.ToString());
-            Assert.AreEqual( "http://itorrents.org/torrent/d540fc48eb12f2833163eed6421d449dd8f1ce1f.torrent", firstRelease.Link.ToString());
-            Assert.AreEqual( "http://itorrents.org/torrent/d540fc48eb12f2833163eed6421d449dd8f1ce1f.torrent", firstRelease.Guid.ToString());
-            Assert.AreEqual( "magnet:?xt=urn:btih:d540fc48eb12f2833163eed6421d449dd8f1ce1f&dn=ubuntu-19.04-desktop-amd64.iso",
-                             firstRelease.MagnetUri.ToString().Split(new []{"&tr"}, StringSplitOptions.None).First());
-            Assert.AreEqual( "d540fc48eb12f2833163eed6421d449dd8f1ce1f", firstRelease.InfoHash);
-            Assert.AreEqual( "11/17/2021 22:07:03", firstRelease.PublishDate.ToString(CultureInfo.InvariantCulture));
-            Assert.AreEqual( 2097152000, firstRelease.Size);
-            Assert.AreEqual( 12, firstRelease.Seeders);
-            Assert.AreEqual( 13, firstRelease.Peers);
-            Assert.AreEqual( 1, firstRelease.DownloadVolumeFactor);
-            Assert.AreEqual( 2, firstRelease.UploadVolumeFactor);
-            Assert.AreEqual( 23.4375, firstRelease.Gain);
+            Assert.AreEqual(1, firstRelease.Category.Count);
+            Assert.AreEqual(8000, firstRelease.Category.First());
+            Assert.AreEqual("ubuntu-19.04-desktop-amd64.iso", firstRelease.Title);
+            Assert.AreEqual("https://www.testdefinition1.cc/torrent/d540fc48eb12f2833163eed6421d449dd8f1ce1f", firstRelease.Details.ToString());
+            Assert.AreEqual("http://itorrents.org/torrent/d540fc48eb12f2833163eed6421d449dd8f1ce1f.torrent", firstRelease.Link.ToString());
+            Assert.AreEqual("http://itorrents.org/torrent/d540fc48eb12f2833163eed6421d449dd8f1ce1f.torrent", firstRelease.Guid.ToString());
+            Assert.AreEqual("magnet:?xt=urn:btih:d540fc48eb12f2833163eed6421d449dd8f1ce1f&dn=ubuntu-19.04-desktop-amd64.iso",
+                             firstRelease.MagnetUri.ToString().Split(new[] { "&tr" }, StringSplitOptions.None).First());
+            Assert.AreEqual("d540fc48eb12f2833163eed6421d449dd8f1ce1f", firstRelease.InfoHash);
+            Assert.AreEqual("11/17/2021 22:07:03", firstRelease.PublishDate.ToString(CultureInfo.InvariantCulture));
+            Assert.AreEqual(2097152000, firstRelease.Size);
+            Assert.AreEqual(12, firstRelease.Seeders);
+            Assert.AreEqual(13, firstRelease.Peers);
+            Assert.AreEqual(1, firstRelease.DownloadVolumeFactor);
+            Assert.AreEqual(2, firstRelease.UploadVolumeFactor);
+            Assert.AreEqual(23.4375, firstRelease.Gain);
         }
 
         private static IndexerDefinition LoadTestDefinition(string fileName)

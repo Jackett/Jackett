@@ -16,7 +16,7 @@ namespace Jackett.Test.TestHelpers
     {
         private readonly Dictionary<string, WebResult> _requestCallbacks = new Dictionary<string, WebResult>();
 
-        public TestWebClient(): base(null, null, null, new ServerConfig(null))
+        public TestWebClient() : base(null, null, null, new ServerConfig(null))
         {
         }
 
