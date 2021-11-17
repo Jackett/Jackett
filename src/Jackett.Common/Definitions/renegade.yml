@@ -107,6 +107,9 @@ search:
     poster:
       selector: div#bro_browse_poster_1 a img
       attribute: src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     size:
       selector: div#bro_browse_details
       filters:
