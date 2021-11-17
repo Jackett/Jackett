@@ -38,9 +38,6 @@ namespace Jackett.Common.Models.Config
         [Option('p', "Port", HelpText = "Web server port")]
         public int Port { get; set; }
 
-        [Option('m', "MigrateSettings", HelpText = "Migrate settings manually (Must be admin on Windows)")]
-        public bool MigrateSettings { get; set; }
-
         [Option('n', "IgnoreSslErrors", HelpText = "[true/false] Ignores invalid SSL certificates")]
         public bool? IgnoreSslErrors { get; set; }
 

@@ -69,7 +69,7 @@ namespace Jackett.Common.Services
                         {
                             try
                             {
-                                processService.StartProcessAndLog(EnvironmentUtil.JackettExecutablePath(), "--MigrateSettings", true);
+                                processService.StartProcessAndLog(EnvironmentUtil.JackettExecutablePath(), "", true);
                             }
                             catch
                             {
