@@ -91,7 +91,7 @@ stages:
               projects: 'src/Jackett.Server/Jackett.Server.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Updater
@@ -100,7 +100,7 @@ stages:
               projects: 'src/Jackett.Updater/Jackett.Updater.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Tray (Windows only)
@@ -110,7 +110,7 @@ stages:
               projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Service (Windows only)
@@ -120,7 +120,7 @@ stages:
               projects: 'src/Jackett.Service/Jackett.Service.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: CopyFiles@2
             displayName: Copy Jackett Server
@@ -376,13 +376,6 @@ stages:
               includeNuGetOrg: true
 
           - task: DotNetCoreCLI@2
-            displayName: Build Test Project
-            inputs:
-              command: build
-              projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
-
-          - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
             condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
             inputs:
@@ -495,6 +488,7 @@ stages:
             inputs:
               command: test
               projects: '**/*IntegrationTest*/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
               testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
   - stage: PublishGithub
