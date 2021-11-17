@@ -381,7 +381,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2
@@ -501,11 +501,21 @@ stages:
               includeNuGetOrg: true
 
           - task: DotNetCoreCLI@2
-            displayName: Run Integration Tests
+            displayName: Integration Tests (Mono, Linux and macOS)
+            condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
             inputs:
               command: test
               projects: '**/*IntegrationTest*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
+              testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
+
+          - task: DotNetCoreCLI@2
+            displayName: Integration Tests (Windows only)
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+            inputs:
+              command: test
+              projects: '**/*IntegrationTest*/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --framework $(framework)'
               testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
   - stage: PublishGithub
