@@ -2,12 +2,12 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 19
+  minorVersion: 20
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
-  netCoreFramework: net5.0
-  netCoreSdkVersion: 5.0.x
+  netCoreFramework: net6.0
+  netCoreSdkVersion: 6.0.x
   # system.debug: true
 
 trigger:
@@ -380,7 +380,7 @@ stages:
             inputs:
               command: build
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
 
           - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
@@ -388,7 +388,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --framework $(framework) --runtime $(runtime)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2

@@ -252,7 +252,7 @@ namespace Jackett.Common.Services
                 Stream inStream = File.OpenRead(gzPath);
                 Stream gzipStream = new GZipInputStream(inStream);
 
-                var tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+                var tarArchive = TarArchive.CreateInputTarArchive(gzipStream, null);
                 tarArchive.ExtractContents(tempDir);
                 tarArchive.Close();
                 gzipStream.Close();
