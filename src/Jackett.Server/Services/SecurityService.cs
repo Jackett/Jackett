@@ -7,12 +7,12 @@ using Jackett.Common.Services.Interfaces;
 
 namespace Jackett.Server.Services
 {
-    internal class SecuityService : ISecuityService
+    internal class SecurityService : ISecurityService
     {
         private const string COOKIENAME = "JACKETT";
         private readonly ServerConfig _serverConfig;
 
-        public SecuityService(ServerConfig sc) => _serverConfig = sc;
+        public SecurityService(ServerConfig sc) => _serverConfig = sc;
 
         public string HashPassword(string input)
         {
@@ -25,10 +25,12 @@ namespace Jackett.Server.Services
             byte[] hashValue;
             var message = UE.GetBytes(input);
 
+#pragma warning disable SYSLIB0021
             var hashString = new SHA512Managed();
-            var hex = "";
+#pragma warning restore SYSLIB0021
 
             hashValue = hashString.ComputeHash(message);
+            var hex = "";
             foreach (var x in hashValue)
             {
                 hex += string.Format("{0:x2}", x);

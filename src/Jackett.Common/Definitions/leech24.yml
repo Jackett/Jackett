@@ -1,0 +1,161 @@
+---
+id: leech24
+name: leech24
+description: "leech24 is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://leech24.net/
+
+caps:
+  categorymappings:
+    - {id: 28, cat: TV/Anime, desc: "Anime: All"}
+    - {id: 18, cat: PC/0day, desc: "Apps: PC"}
+    - {id: 19, cat: PC/Mac, desc: "Apps: Mac"}
+    - {id: 20, cat: PC, desc: "Apps: Linux"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "Apps: Other"}
+    - {id: 9, cat: TV/Documentary, desc: "Documentaries: All"}
+    - {id: 10, cat: PC/Games, desc: "Games: PC"}
+    - {id: 11, cat: Console/PSP, desc: "Games: PS2"}
+    - {id: 43, cat: Console/PS3, desc: "Games: PS3"}
+    - {id: 12, cat: Console/PSP, desc: "Games: PSP"}
+    - {id: 13, cat: Console/XBox, desc: "Games: Xbox"}
+    - {id: 14, cat: Console/XBox 360, desc: "Games: Xbox360"}
+    - {id: 15, cat: Console/PSP, desc: "Games: PS1"}
+    - {id: 16, cat: Console/Other, desc: "Games: Dreamcast"}
+    - {id: 44, cat: Console/Wii, desc: "Games: Wii"}
+    - {id: 45, cat: Console/NDS, desc: "Games: DS"}
+    - {id: 46, cat: Console/Other, desc: "Games: GameCube"}
+    - {id: 17, cat: Console/Other, desc: "Games: Other"}
+    - {id: 1, cat: Movies/DVD, desc: "Movies: DVD"}
+    - {id: 2, cat: Movies/SD, desc: "Movies: Divx/Xvid"}
+    - {id: 3, cat: Movies/UHD, desc: "Movies: 4K"}
+    - {id: 42, cat: Movies/HD, desc: "Movies: HD"}
+    - {id: 4, cat: Movies/Other, desc: "Movies: Other"}
+    - {id: 22, cat: Audio/MP3, desc: "Music: MP3"}
+    - {id: 23, cat: Audio/Lossless, desc: "Music: Lossless"}
+    - {id: 24, cat: Audio/Video, desc: "Music: DVD"}
+    - {id: 25, cat: Audio/Video, desc: "Music: Video"}
+    - {id: 26, cat: Audio/Other, desc: "Music: Radio"}
+    - {id: 27, cat: Audio/Other, desc: "Music: Other"}
+    - {id: 33, cat: PC, desc: "Other: Emulation"}
+    - {id: 34, cat: PC/Mobile-Other, desc: "Other: PPC/PDA"}
+    - {id: 35, cat: Audio, desc: "Other: Sounds"}
+    - {id: 36, cat: Books/EBook, desc: "Other: E-Books"}
+    - {id: 37, cat: Other, desc: "Other: Images"}
+    - {id: 38, cat: PC/Mobile-Other, desc: "Other: Mobile Phone"}
+    - {id: 39, cat: Other, desc: "Other: Extra Pars/Fills"}
+    - {id: 40, cat: Other, desc: "Other: Other"}
+    - {id: 5, cat: TV/SD, desc: "TV: DVD"}
+    - {id: 41, cat: TV/HD, desc: "TV: HD"}
+    - {id: 6, cat: TV/SD, desc: "TV: Divx/Xvid"}
+    - {id: 7, cat: TV/Other, desc: "TV: pack"}
+    - {id: 47, cat: XXX, desc: "xxx: xxx"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: a[href="account-logout.php"]
+
+search:
+  paths:
+    # https://leech24.net/torrents-search.php?c3=1&c1=1&c2=1&c42=1&c4=1&c7=1&search=&cat=0&incldead=1&freeleech=0&lang=0
+    - path: torrents-search.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    cat: 0
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 all, 1 english, etc
+    lang: 0
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    # does not support imdbid search and does not return imdb link in results
+
+# The search page states that: You can search using phrases contained within , you can include words with + you can exclude words with -
+# but adding + to words causes 0 results, so we will add an andmatch since the default seems to be a keywords OR search.
+#  keywordsfilters:
+#    - name: re_replace
+#      args: ["(\\w+)", " +$1"] # prepend + to each word
+
+  rows:
+    selector: table.ttable_headinner tr.t-row:has(a[href^="download.php?id="])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        img[src="images/free.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# TorrentTrader v2-svn

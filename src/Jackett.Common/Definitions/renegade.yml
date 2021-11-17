@@ -8,7 +8,7 @@ encoding: ISO-8859-2
 links:
   - http://renegade-tracker.com/
 legacylinks:
-  - https://renegade-tracker.com/ # site forcing http
+  - https://renegade-tracker.com/ # ERR_CONNECTION_REFUSED
 
 caps:
   # dont forget to update the search fields category case block
@@ -107,6 +107,9 @@ search:
     poster:
       selector: div#bro_browse_poster_1 a img
       attribute: src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     size:
       selector: div#bro_browse_details
       filters:

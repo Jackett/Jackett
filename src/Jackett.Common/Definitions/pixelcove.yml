@@ -47,6 +47,7 @@ caps:
     - {id: 58, cat: Audio/Video, desc: "Gaming Videos"}
     - {id: 52, cat: Audio, desc: "OST"}
     - {id: 55, cat: Other, desc: "Time for a Break"}
+    - {id: 81, cat: Audio/Video, desc: "Videos"}
     # Various
     - {id: 59, cat: Other, desc: "Mods"}
     - {id: 54, cat: Other, desc: "Updates/Fixes"}

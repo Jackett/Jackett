@@ -1,11 +1,6 @@
-using System.Linq;
-using System.Text;
 using Autofac;
-using AutoMapper;
-using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.Hosting;
 using NLog;
 #if !NET461
@@ -17,7 +12,6 @@ namespace Jackett.Server
     public static class Helper
     {
         public static IContainer ApplicationContainer { get; set; }
-        private static bool _automapperInitialised = false;
 
 #if NET461
         public static IApplicationLifetime applicationLifetime;
@@ -27,14 +21,6 @@ namespace Jackett.Server
 
         public static void Initialize()
         {
-            if (_automapperInitialised == false)
-            {
-                //Automapper only likes being initialized once per app domain.
-                //Since we can restart Jackett from the command line it's possible that we'll build the container more than once. (tests do this too)
-                InitAutomapper();
-                _automapperInitialised = true;
-            }
-
             //Load the indexers
             ServerService.Initalize();
 
@@ -66,31 +52,6 @@ namespace Jackett.Server
         public static ServerConfig ServerConfiguration => ApplicationContainer.Resolve<ServerConfig>();
 
         public static Logger Logger => ApplicationContainer.Resolve<Logger>();
-
-        private static void InitAutomapper()
-        {
-#pragma warning disable 612, 618
-            // TODO: fix deprecation warning (remove #pragma to see the build warning)
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<WebResult, WebResult>();
-
-                cfg.CreateMap<ReleaseInfo, ReleaseInfo>();
-
-                cfg.CreateMap<ReleaseInfo, TrackerCacheResult>().AfterMap((r, t) =>
-                {
-                    if (r.Category != null)
-                    {
-                        t.CategoryDesc = string.Join(", ", r.Category.Select(x => TorznabCatType.GetCatDesc(x)).Where(x => !string.IsNullOrEmpty(x)));
-                    }
-                    else
-                    {
-                        t.CategoryDesc = "";
-                    }
-                });
-            });
-#pragma warning restore 612, 618
-        }
 
         public static void SetupLogging(ContainerBuilder builder) =>
             builder?.RegisterInstance(LogManager.GetCurrentClassLogger()).SingleInstance();

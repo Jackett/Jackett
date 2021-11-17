@@ -19,10 +19,10 @@ namespace Jackett.Server.Controllers
     {
         private readonly IConfigurationService config;
         private readonly ServerConfig serverConfig;
-        private readonly ISecuityService securityService;
+        private readonly ISecurityService securityService;
         private readonly Logger logger;
 
-        public WebUIController(IConfigurationService config, ISecuityService ss, ServerConfig s, Logger l)
+        public WebUIController(IConfigurationService config, ISecurityService ss, ServerConfig s, Logger l)
         {
             this.config = config;
             serverConfig = s;

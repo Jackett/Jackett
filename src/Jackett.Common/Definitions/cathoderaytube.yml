@@ -62,7 +62,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    cinfo: "2550|1350|24|-60"
+    cinfo: "2550|1350|1.25|24|-60"
     iplocked: 0
     keeploggedin: 1
   error:

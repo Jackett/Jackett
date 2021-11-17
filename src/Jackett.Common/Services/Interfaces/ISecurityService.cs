@@ -2,7 +2,7 @@ using System.Net.Http;
 
 namespace Jackett.Common.Services.Interfaces
 {
-    public interface ISecuityService
+    public interface ISecurityService
     {
         bool CheckAuthorised(HttpRequestMessage request);
         string HashPassword(string input);
