@@ -98,7 +98,7 @@ stages:
               projects: 'src/Jackett.Server/Jackett.Server.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Updater
@@ -107,7 +107,7 @@ stages:
               projects: 'src/Jackett.Updater/Jackett.Updater.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Tray (Windows only)
@@ -117,7 +117,7 @@ stages:
               projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Service (Windows only)
@@ -127,7 +127,7 @@ stages:
               projects: 'src/Jackett.Service/Jackett.Service.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: CopyFiles@2
             displayName: Copy Jackett Server
@@ -383,13 +383,6 @@ stages:
               includeNuGetOrg: true
 
           - task: DotNetCoreCLI@2
-            displayName: Build Test Project
-            inputs:
-              command: build
-              projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-self-contained'
-
-          - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
             condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
             inputs:
@@ -429,13 +422,13 @@ stages:
               codeCoverageTool: Cobertura
               summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
 
-  - stage: Integration
+  - stage: IntegrationTestJackett
     displayName: Integration Tests
     dependsOn:
       - BuildJackett
       - CodeStyle
     jobs:
-      - job: Selenium
+      - job: IntegrationTest
         workspace:
           clean: all
         strategy:
@@ -444,18 +437,26 @@ stages:
               buildDescription: Mono
               imageName: ubuntu-20.04
               artifactName: Jackett.Binaries.Mono.tar.gz
+              framework: net461
+              runtime: linux-x64
             Windows:
               buildDescription: Windows
               imageName: windows-2019
               artifactName: Jackett.Binaries.Windows.zip
+              framework: $(netCoreFramework)
+              runtime: win-x86
             macOS:
               buildDescription: macOS
               imageName: macOS-10.15
               artifactName: Jackett.Binaries.macOS.tar.gz
+              framework: $(netCoreFramework)
+              runtime: osx-x64
             LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-20.04
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
+              framework: $(netCoreFramework)
+              runtime: linux-x64
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
@@ -497,18 +498,38 @@ stages:
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
+          # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
+          # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
           - task: DotNetCoreCLI@2
-            displayName: Run Integration Tests
+            displayName: Restore IntegrationTest Project
+            inputs:
+              command: restore
+              projects: '**/*IntegrationTest*/*.csproj'
+              includeNuGetOrg: true
+
+          - task: DotNetCoreCLI@2
+            displayName: Integration Tests (Mono, Linux and macOS)
+            condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
             inputs:
               command: test
               projects: '**/*IntegrationTest*/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
+
+          - task: DotNetCoreCLI@2
+            displayName: Integration Tests (Windows only)
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+            inputs:
+              command: test
+              projects: '**/*IntegrationTest*/*.csproj'
+              arguments: '--configuration $(buildConfiguration) --framework $(framework)'
               testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
   - stage: PublishGithub
     displayName: Publish to Github
     dependsOn:
       - UnitTestJackett
-      - Integration
+      - IntegrationTestJackett
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
       - job: Publish
