@@ -381,7 +381,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2
@@ -390,7 +390,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --framework $(framework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration $(buildConfiguration) --framework $(framework) --self-contained /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2
@@ -430,18 +430,26 @@ stages:
               buildDescription: Mono
               imageName: ubuntu-20.04
               artifactName: Jackett.Binaries.Mono.tar.gz
+              framework: net461
+              runtime: linux-x64
             Windows:
               buildDescription: Windows
               imageName: windows-2019
               artifactName: Jackett.Binaries.Windows.zip
+              framework: $(netCoreFramework)
+              runtime: win-x86
             macOS:
               buildDescription: macOS
               imageName: macOS-10.15
               artifactName: Jackett.Binaries.macOS.tar.gz
+              framework: $(netCoreFramework)
+              runtime: osx-x64
             LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-20.04
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
+              framework: $(netCoreFramework)
+              runtime: linux-x64
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
@@ -488,7 +496,7 @@ stages:
             inputs:
               command: test
               projects: '**/*IntegrationTest*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained'
               testRunTitle: 'Integration - $(buildDescription) - $(Build.BuildId)'
 
   - stage: PublishGithub
