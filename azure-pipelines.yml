@@ -415,13 +415,13 @@ stages:
               codeCoverageTool: Cobertura
               summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
 
-  - stage: Integration
+  - stage: IntegrationTestJackett
     displayName: Integration Tests
     dependsOn:
       - BuildJackett
       - CodeStyle
     jobs:
-      - job: Selenium
+      - job: IntegrationTest
         workspace:
           clean: all
         strategy:
@@ -491,6 +491,15 @@ stages:
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
+          # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
+          # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
+          - task: DotNetCoreCLI@2
+            displayName: Restore IntegrationTest Project
+            inputs:
+              command: restore
+              projects: '**/*IntegrationTest*/*.csproj'
+              includeNuGetOrg: true
+
           - task: DotNetCoreCLI@2
             displayName: Run Integration Tests
             inputs:
@@ -503,7 +512,7 @@ stages:
     displayName: Publish to Github
     dependsOn:
       - UnitTestJackett
-      - Integration
+      - IntegrationTestJackett
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     jobs:
       - job: Publish
