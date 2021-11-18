@@ -42,6 +42,7 @@ caps:
     - {id: 55, cat: XXX, desc: "Porn - Movie"}
     - {id: 54, cat: XXX/ImageSet, desc: "Porn - Picture"}
     - {id: 68, cat: XXX/Other, desc: "Porn - Other"}
+    - {id: 69, cat: XXX/ImageSet, desc: "All - All"}
     - {id: 6, cat: TV, desc: "TV - Divx/Xvid"}
     - {id: 41, cat: TV/HD, desc: "TV - HD"}
     - {id: 59, cat: TV/HD, desc: "TV - Full HD"}
