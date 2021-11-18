@@ -57,14 +57,14 @@ download:
 
 search:
   paths:
-    # https://torrentmax1.net/bbs/search.php?srows=100&gr_id=&sfl=wr_subject&stx=2021&sop=and
-    - path: bbs/search.php
+    # https://torrentmax2.net/search?srows=10&gr_id=&sfl=wr_subject%7C%7Cwr_content&stx=2021&sop=and
+    - path: search
   inputs:
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     srows: 100
     gr_id: ""
     # wr_subject||wr_content, wr_subject, wr_content, mb_id, wr_name
     sfl: wr_subject
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     # or, and
     sop: and
 
