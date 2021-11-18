@@ -276,7 +276,6 @@ namespace Jackett.Updater
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
-                "Definitions/bit-titan.yml", // migrated to C# #10281
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
                 "Definitions/brobits.yml",
