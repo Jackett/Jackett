@@ -192,6 +192,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # UNIT3D 5.3.0 (custom)
