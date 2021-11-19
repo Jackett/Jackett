@@ -5,11 +5,11 @@ description: "Torrentz2eu is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
+followredirect: true
 links:
-  - https://torrentz2eu.me/
-  - https://torrentz2.unblockninja.com/
-legacylinks:
+  - https://torrentz2eu.me/ # often rotates between *.me and *.org
   - https://torrentzeu.org/
+  - https://torrentz2.unblockninja.com/
 
 caps:
   # unfortunately torrentz2eu does not display categories anywhere in its search results page :-(
