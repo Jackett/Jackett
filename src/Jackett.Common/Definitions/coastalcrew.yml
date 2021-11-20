@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     # Movie
-    - {id: 28, cat: Movies/SD, desc: "Movie - Xvid/x264"}
+    - {id: 28, cat: Movies/SD, desc: "Movie - SD"}
     - {id: 155, cat: Movies/DVD, desc: "Movie - DVD"}
     - {id: 130, cat: Movies/SD, desc: "Movie - SD-Pack"}
     # Movie-HD
@@ -131,9 +131,9 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Movie-HD\")):has(div.kat_cat_pic_name_b:contains(\"HD-Pack\"))": 162
         ":has(div.kat_cat_pic_name:contains(\"Movie-HD\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 32
         # Movie
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Xvid/x264\"))": 28
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": 155
         ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"SD-Pack\"))": 130
+        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 28
         # Serien
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Xvid/x264\"))": 60
         ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"720p/1080p\"))": 157
