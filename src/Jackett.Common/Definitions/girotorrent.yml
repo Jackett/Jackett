@@ -46,10 +46,11 @@ caps:
     - {id: 34, cat: TV/Anime, desc: "Anime Altri Cartoni"}
     - {id: 62, cat: TV/Anime, desc: "Anime Natale Bimbi Girotor"}
     # TELEVISIONE
-    - {id: 36, cat: TV, desc: "TV Serie TV"}
-    - {id: 77, cat: TV, desc: "TV Reality"}
-    - {id: 37, cat: TV, desc: "TV Film TV"}
+    - {id: 36, cat: TV, desc: "TV Serie"}
+    - {id: 99, cat: TV/HD, desc: "TV Serie Hevc"}
+    - {id: 37, cat: TV, desc: "TV Film"}
     - {id: 59, cat: TV/Sport, desc: "TV Sport"}
+    - {id: 77, cat: TV, desc: "TV Reality"}
     - {id: 38, cat: TV, desc: "TV Concerti-Spettacoli"}
     - {id: 39, cat: TV, desc: "TV Teatro-Cabaret"}
     - {id: 40, cat: TV/Documentary, desc: "Tv Documentario"}
@@ -62,20 +63,20 @@ caps:
     - {id: 58, cat: Audio, desc: "Musica Discografie"}
     - {id: 97, cat: Audio/Lossless, desc: "Musica Flac"}
     # SALA GIOCHI
-    - {id: 47, cat: PC/Games, desc: "PC Games"}
-    - {id: 48, cat: Console/PS3, desc: "PC Giochi PS2-PS3"}
-    - {id: 49, cat: Console/Wii, desc: "PC Giochi Nintendo Wii"}
-    - {id: 50, cat: Console/XBox, desc: "PC Giochi Xbox"}
-    - {id: 51, cat: Console/PSP, desc: "PC Giochi PSP"}
-    - {id: 52, cat: Console/3DS, desc: "PC Giochi DS-DS3"}
+    - {id: 47, cat: PC/Games, desc: "Giochi PC"}
+    - {id: 48, cat: Console/PS3, desc: "Giochi PS2-PS3"}
+    - {id: 49, cat: Console/Wii, desc: "Giochi Nintendo Wii"}
+    - {id: 50, cat: Console/XBox, desc: "Giochi Xbox"}
+    - {id: 51, cat: Console/PSP, desc: "Giochi PSP"}
+    - {id: 52, cat: Console/3DS, desc: "Giochi Nintendo DS-DS3"}
     # SOFTWARE
-    - {id: 54, cat: PC, desc: "PC Programmi Windows"}
-    - {id: 55, cat: PC/Mac, desc: "PC Mac"}
-    - {id: 69, cat: PC, desc: "PC Portable"}
-    - {id: 56, cat: PC, desc: "PC Linux"}
+    - {id: 54, cat: PC, desc: "Programmi Windows"}
+    - {id: 55, cat: PC/Mac, desc: "Programmi Mac"}
+    - {id: 69, cat: PC, desc: "Programmi Portable"}
+    - {id: 56, cat: PC, desc: "Programmi Linux"}
     # CELLULARI-PALMARI
     - {id: 68, cat: PC/Mobile-iOS, desc: "IPhone-IPad"}
-    - {id: 71, cat: PC/Mobile-Android, desc: "Android APP"}
+    - {id: 71, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 74, cat: Other, desc: "Varie"}
     - {id: 75, cat: Other, desc: "Immagini Wallpaper"}
 
