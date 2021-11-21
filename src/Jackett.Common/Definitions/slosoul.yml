@@ -161,6 +161,7 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     date_year:
+      # Uploaded 14-11-2021 09:41 by
       selector: div.torrentOwner:contains("-")
       optional: true
       filters:
