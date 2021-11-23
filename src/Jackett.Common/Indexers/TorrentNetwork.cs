@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchUrl = "browse";
+            var searchUrl = APIUrl + "browse";
             var searchString = query.GetQueryString();
             var queryCollection = new NameValueCollection
             {
