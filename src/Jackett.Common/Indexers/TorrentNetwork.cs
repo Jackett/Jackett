@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(passkey))
                 await ApplyConfiguration(null);
 
-            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SiteLink, headers: APIHeaders);
             if (!results.ContentString.StartsWith("{")) // not JSON => error
                 throw new ExceptionWithConfigData(results.ContentString, configData);
             var result = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
