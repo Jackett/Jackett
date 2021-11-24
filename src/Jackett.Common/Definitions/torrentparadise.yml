@@ -211,9 +211,10 @@ download:
 
 search:
   # https://torrentparadise.org/search.php?f=monday+night
-  # https://torrentparadise.org/recent
+  # https://torrentparadise.org/recent # returns 404 as at 8 Nov 2021 #6385
+  # https://torrentparadise.cc/top100
   paths:
-    - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}recent{{ end }}"
+    - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}top100{{ end }}"
 
   rows:
     selector: table.table-bordered > tbody > tr.table-default
