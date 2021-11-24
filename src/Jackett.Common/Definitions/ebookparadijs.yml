@@ -36,6 +36,7 @@ caps:
     - {id: 64, cat: Books/EBook, desc: "Literatuur"}
     - {id: 65, cat: Books/EBook, desc: "Non-Fiction"}
     - {id: 66, cat: Books/EBook, desc: "Bladmuziek"}
+    - {id: 67, cat: Books/EBook, desc: "young Adult"}
 
   modes:
     search: [q]
