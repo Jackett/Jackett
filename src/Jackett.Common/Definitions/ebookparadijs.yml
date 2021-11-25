@@ -37,6 +37,7 @@ caps:
     - {id: 65, cat: Books/EBook, desc: "Non-Fiction"}
     - {id: 66, cat: Books/EBook, desc: "Bladmuziek"}
     - {id: 67, cat: Books/EBook, desc: "young Adult"}
+    - {id: 68, cat: Books/EBook, desc: "feelgood romans"}
 
   modes:
     search: [q]
