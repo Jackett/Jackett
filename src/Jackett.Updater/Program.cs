@@ -398,6 +398,7 @@ namespace Jackett.Updater
                 "Definitions/nyaa.yml",
                 "Definitions/nyaa-pantsu.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/oasis.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/obscure.yml",
