@@ -7,6 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
+  - https://torrentz2.club/
   - https://torrentz2eu.me/ # often rotates between *.me and *.org
   - https://torrentzeu.org/
   - https://torrentz2.unblockninja.com/
