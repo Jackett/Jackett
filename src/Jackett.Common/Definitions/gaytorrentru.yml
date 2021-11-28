@@ -135,9 +135,16 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    download:
-      selector: a[href^="download.php/"]
+    id:
+      selector: a[href^="details.php?id="]
       attribute: href
+      filters:
+        - name: querystring
+          args: id
+    download:
+      # turn href="download.php/0738d444362fa610a08fb87b5c1bec798ca1731adbf3175b/GUARATORO.torrent
+      # into href="/download.php?id=0738d444362fa610a08fb87b5c1bec798ca1731adbf3175b&n=GUARATORO.torrent&p=dodownload
+      text: "download.php?id={{ .Result.id }}&n={{ .Result.title }}.torrent&p=dodownload"
     poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover

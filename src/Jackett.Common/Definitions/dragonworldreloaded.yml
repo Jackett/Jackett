@@ -39,6 +39,8 @@ caps:
     - {id: 38, cat: TV/Documentary, desc: "Doku - HD"}
     - {id: 37, cat: TV/Documentary, desc: "Doku - SD"}
     - {id: 144, cat: TV/Documentary, desc: "Doku - Pack SD/HD"}
+    # Empfohlene
+    - {id: 150, cat: Other, desc: "Empfohlene - Torrents"}
     # Games
     - {id: 16, cat: PC/Games, desc: "Games - PC"}
     - {id: 14, cat: Console/Other, desc: "Games - Wimmelbild"}
@@ -150,6 +152,8 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 144
         ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 38
         ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 37
+    # Empfohlene
+        ":has(div.kat_cat_pic_name:contains(\"Empfohlene\")):has(div.kat_cat_pic_name_b:contains(\"Torrents\"))": 150
         # Games
         ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 16
         ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": 14

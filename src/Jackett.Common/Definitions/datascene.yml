@@ -175,23 +175,23 @@ search:
         - name: timeago
     downloadvolumefactor:
       case:
-        i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
-        i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
-        i[class*="fa-star text-bold"]: 0 # Freeleech From Token
-        i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
-        i[class*="fa-globe text-blue"]: 0 # Global Freeleech
-        i[class*="fa-star text-gold"]: 0 # Freeleech
-        i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
+#        i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
+#        i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
+#        i[class*="fa-star text-bold"]: 0 # Freeleech From Token
+#        i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
+        i[class*="fa-trophy  data-toggle"]: 0 # Global Freeleech
+#        i[class*="fa-star text-gold"]: 0 # Freeleech
+#        i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
         "*": 1
     uploadvolumefactor:
       case:
-        i[class*="fa-gem text-green"]: 2 # Single Torrent Double Upload
-        i[class*="fa-globe text-green"]: 2 # Global Double Upload
-        i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
+        i[class*="fa-angle-double-up"]: 2 # Single Torrent Double Upload
+#        i[class*="fa-globe text-green"]: 2 # Global Double Upload
+#        i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
         "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
-# UNIT3D 5.3.0
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# UNIT3D 5.3.0 (custom)

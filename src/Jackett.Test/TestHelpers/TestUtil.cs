@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Reflection;
 using Autofac;
@@ -34,10 +33,10 @@ namespace Jackett.Test.TestHelpers
         public static IContainer Container => testContainer;
 
         //Currently not used in any Unit Tests
-        public static void RegisterRequestCallback(WebRequest r, Func<WebRequest, WebResult> f)
+        public static void RegisterRequestCallback(string requestUrl, string responseFileName)
         {
             var client = testContainer.Resolve<WebClient>() as TestWebClient;
-            client.RegisterRequestCallback(r, f);
+            client.RegisterRequestCallback(requestUrl, responseFileName);
         }
 
         public static string GetResource(string item)
@@ -52,6 +51,13 @@ namespace Jackett.Test.TestHelpers
                     return reader.ReadToEnd();
                 }
             }
+        }
+
+        public static string LoadTestFile(string fileName)
+        {
+            var applicationFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+            var filePath = Path.Combine(Path.Combine(applicationFolder, "Resources"), fileName);
+            return File.ReadAllText(filePath);
         }
     }
 }

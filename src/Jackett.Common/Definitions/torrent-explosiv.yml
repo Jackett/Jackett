@@ -52,8 +52,9 @@ caps:
     - {id: 287, cat: TV/Anime, desc: "Tv Serien Anime SD"}
     - {id: 286, cat: TV/Anime, desc: "Tv Serien Anime HD"}
     # Sport
-    - {id: 62, cat: TV/Sport, desc: "Sport SD "}
-    - {id: 282, cat: TV/Sport, desc: "Sport HD"}
+    - {id: 62, cat: TV/Sport, desc: "Sport Formel 1"}
+    - {id: 282, cat: TV/Sport, desc: "Sport Sonstiges"}
+    - {id: 313, cat: TV/Sport, desc: "Sport Wrestling"}
     # Internat.
     - {id: 307, cat: Movies/SD, desc: "Filme SD"}
     - {id: 308, cat: Movies/HD, desc: "Filme HD"}
@@ -196,8 +197,9 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Mac\"))": 10
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Android\"))": 127
         # Sport
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 62
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 282
+        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Formel\"))": 62
+        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": 282
+        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Wrestling\"))": 313
         # Internat
         ":has(div.kat_cat_pic_name:contains(\"Internat\")):has(div.kat_cat_pic_name_b:contains(\"Filme SD\"))": 307
         ":has(div.kat_cat_pic_name:contains(\"Internat\")):has(div.kat_cat_pic_name_b:contains(\"Filme HD\"))": 308

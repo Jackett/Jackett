@@ -406,6 +406,7 @@ caps:
     - {id: 436, cat: PC/0day, desc: "ОС от Microsoft"}
     - {id: 993, cat: PC/0day, desc: " |- Активаторы продуктов Microsoft"}
     - {id: 1104, cat: PC/0day, desc: " |- Патчи, дополнения для ОС от Microsoft"}
+    - {id: 1145, cat: PC/0day, desc: " |- Windows 11 [оригинальные версии]"}
     - {id: 1147, cat: PC/0day, desc: " |- Windows 11 [сборки]"}
     - {id: 1030, cat: PC/0day, desc: " |- Windows 10 [оригинальные версии]"}
     - {id: 1031, cat: PC/0day, desc: " |- Windows 10 [сборки]"}

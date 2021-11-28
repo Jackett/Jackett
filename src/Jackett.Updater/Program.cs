@@ -276,7 +276,6 @@ namespace Jackett.Updater
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
-                "Definitions/bit-titan.yml", // migrated to C# #10281
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
                 "Definitions/brobits.yml",
@@ -391,6 +390,7 @@ namespace Jackett.Updater
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
                 "Definitions/nexttorrent.yml",
+                "Definitions/nforce.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
                 "Definitions/nordichd.yml",
                 "Definitions/nordicplus.yml",
@@ -398,6 +398,7 @@ namespace Jackett.Updater
                 "Definitions/nyaa.yml",
                 "Definitions/nyaa-pantsu.yml",
                 "Definitions/nyoo.yml",
+                "Definitions/oasis.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/obscure.yml",

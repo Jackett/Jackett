@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(24, TorznabCatType.MoviesSD, "Movies GER/SD");
             AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movies GER/720p");
             AddCategoryMapping(17, TorznabCatType.MoviesHD, "Movies GER/1080p");
-            AddCategoryMapping(20, TorznabCatType.MoviesHD, "Movies GER/2160p");
+            AddCategoryMapping(20, TorznabCatType.MoviesUHD, "Movies GER/2160p");
             AddCategoryMapping(45, TorznabCatType.MoviesOther, "Movies GER/Remux");
             AddCategoryMapping(19, TorznabCatType.MoviesBluRay, "Movies GER/BluRay");
             AddCategoryMapping(34, TorznabCatType.TVAnime, "Movies GER/Anime");
@@ -84,7 +84,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.MoviesSD, "Movies ENG/SD");
             AddCategoryMapping(35, TorznabCatType.MoviesHD, "Movies ENG/720p");
             AddCategoryMapping(43, TorznabCatType.MoviesHD, "Movies ENG/1080p");
-            AddCategoryMapping(37, TorznabCatType.MoviesHD, "Movies ENG/2160p");
+            AddCategoryMapping(48, TorznabCatType.MoviesUHD, "Movies ENG/2160p");
             AddCategoryMapping(46, TorznabCatType.MoviesOther, "Movies ENG/Remux");
             AddCategoryMapping(38, TorznabCatType.MoviesBluRay, "Movies ENG/BluRay");
             AddCategoryMapping(39, TorznabCatType.TVAnime, "Movies ENG/Anime");
@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchUrl = "browse";
+            var searchUrl = APIUrl + "browse";
             var searchString = query.GetQueryString();
             var queryCollection = new NameValueCollection
             {
@@ -204,15 +204,19 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", searchString);
 
             var cats = MapTorznabCapsToTrackers(query);
-            if (cats.Count > 0)
-                queryCollection.Add("cats", string.Join(",", cats));
+            if (cats.Count == 0)
+                cats = GetAllTrackerCategories();
+            queryCollection.Add("cats", string.Join(",", cats));
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
             if (string.IsNullOrWhiteSpace(passkey))
                 await ApplyConfiguration(null);
 
-            var result = await SendAPIRequest(searchUrl, null);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SiteLink, headers: APIHeaders);
+            if (!results.ContentString.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(results.ContentString, configData);
+            var result = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
             try
             {
                 if (result["error"] != null)
