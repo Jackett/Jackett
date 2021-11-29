@@ -164,6 +164,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word, all keywords must be 2 characters or more
+    - name: re_replace
+      args: ["(?i)(\\bS(\\d+)(E\\d+)?\\b)", "Stagione $2 $3"] # Replace SXXEYY with Stagione XX EYY
 
   rows:
     selector: div.search_results_posts
