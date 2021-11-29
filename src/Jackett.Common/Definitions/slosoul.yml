@@ -142,10 +142,10 @@ search:
       optional: true
       attribute: data-time
     date_day:
-      # Naložil včeraj ob 12:00 by
-      # Naložil danes ob 09:28 by
+      # Naložil včeraj ob 12:00 by 
+      # Naložil danes ob 09:28 by 
       # Uploaded Today at 09:17 by
-      # Uploaded Yesterday at 10:31 by
+      # Uploaded Yesterday at 10:31 by 
       selector: div.torrentOwner:contains("day"), div.torrentOwner:contains("včeraj"), div.torrentOwner:contains("danes")
       optional: true
       filters:
