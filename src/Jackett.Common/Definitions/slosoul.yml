@@ -8,6 +8,8 @@ encoding: UTF-8
 testlinktorrent: false
 links:
   - https://slosoul.net/
+legacylinks:
+  - http://slosoul.net/
 
 caps:
   categorymappings:
@@ -149,6 +151,7 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
+        img[src$="/external.gif"]: 0
         img[src$="/freedownload.gif"]: 0
         img[src$="/silverdownload.gif"]: 0.5
         "*": 1
