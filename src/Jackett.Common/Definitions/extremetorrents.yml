@@ -10,33 +10,32 @@ links:
 
 caps:
   categorymappings:
-    - {id: 10, cat: Movies/DVD, desc: "Film DVD"}
-    - {id: 111, cat: Movies/DVD, desc: "DVD Promo/R5"}
-    - {id: 118, cat: Movies/DVD, desc: "Kids DVD"}
-    - {id: 113, cat: XXX, desc: "DVD XXX"}
-    - {id: 108, cat: XXX, desc: "Xvid XXX"}
-    - {id: 129, cat: Movies/HD, desc: "HD DVD"}
+    - {id: 10, cat: Movies/DVD, desc: "Film DVD rip"}
+    - {id: 111, cat: Movies/DVD, desc: "Film DVD Promo"}
+    - {id: 118, cat: Movies/DVD, desc: "Film DVD Kids"}
+    - {id: 113, cat: Movies, desc: "Films Independent"}
+    - {id: 129, cat: Movies/HD, desc: "Films HD DVD"}
     - {id: 130, cat: Movies/UHD, desc: "Films 4K"}
-    - {id: 143, cat: Movies/HD, desc: "DivX 720P"}
+    - {id: 143, cat: Movies/HD, desc: "Films DivX 720P"}
     - {id: 114, cat: Audio/MP3, desc: "Muziek MP3"}
-    - {id: 140, cat: Books, desc: "E-Book"}
+    - {id: 140, cat: Books/EBook, desc: "E-Book"}
     - {id: 105, cat: TV/Documentary, desc: "Documentaire"}
     - {id: 115, cat: PC, desc: "PC apps"}
     - {id: 120, cat: PC/Games, desc: "PC Games"}
     - {id: 106, cat: Other, desc: "Overig"}
-    - {id: 131, cat: Console/NDS, desc: "Nintendo Ds"}
-    - {id: 132, cat: TV/HD, desc: "HD Serie"}
+    - {id: 131, cat: Books/Comics, desc: "Stripboeken"}
+    - {id: 132, cat: TV/HD, desc: "TV HD Serie"}
     - {id: 116, cat: PC/Mac, desc: "Mac Software"}
-    - {id: 125, cat: Movies, desc: "DiVX Rip"}
-    - {id: 123, cat: Movies/SD, desc: "DiVX Cam"}
+    - {id: 125, cat: Movies/SD, desc: "Xvid Rip"}
+    - {id: 123, cat: Movies/HD, desc: "MKV/X265"}
     - {id: 108, cat: XXX, desc: "18+"}
-    - {id: 142, cat: XXX, desc: "HD XXX"}
+    - {id: 142, cat: XXX/x264, desc: "18+ HD"}
     - {id: 139, cat: TV, desc: "TV Series"}
     - {id: 128, cat: Audio/Video, desc: "muziek DVD"}
 
   modes:
     search: [q]
-    tv-search: [q]
+    tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
     book-search: [q]
@@ -79,7 +78,7 @@ download:
       text: "{{ .Config.thankyou }}"
       submit: Opslaan
   selectors:
-    - selector: a[href^="download.php?id="]
+    - selector: a[href^="downloadv1.php?id="]
       attribute: href
 
 search:
