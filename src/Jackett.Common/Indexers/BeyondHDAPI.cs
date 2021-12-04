@@ -90,20 +90,13 @@ namespace Jackett.Common.Indexers
             {
                 { BHDParams.action, "search" },
                 { BHDParams.rsskey, configData.RSSKey.Value },
-                { BHDParams.search, query.SanitizedSearchTerm },
+                { BHDParams.search, query.GetQueryString() },
             };
 
             if (query.IsTVSearch)
-            {
                 postData.Add(BHDParams.categories, "TV");
-
-                if (query.Season != 0)
-                    postData[BHDParams.search] = $"{query.SanitizedSearchTerm} {query.GetEpisodeSearchString()}";
-            }
             else if (query.IsMovieSearch)
-            {
                 postData.Add(BHDParams.categories, "Movies");
-            }
 
             var imdbId = ParseUtil.GetImdbID(query.ImdbID);
             if (imdbId != null)
