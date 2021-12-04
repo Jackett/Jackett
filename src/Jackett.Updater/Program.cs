@@ -254,6 +254,7 @@ namespace Jackett.Updater
                 "CsQuery.dll",
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
+                "Definitions/01torrent.yml",
                 "Definitions/32pages.yml",
                 "Definitions/3evils.yml",
                 "Definitions/420files.yml",
@@ -300,6 +301,7 @@ namespace Jackett.Updater
                 "Definitions/danishbytes.yml", // migrated to C#
                 "Definitions/DasUnerwartete.yml",
                 "Definitions/demonsite.yml",
+                "Definitions/desireleasers.yml",
                 "Definitions/devils-playground.yml",
                 "Definitions/digbt.yml",
                 "Definitions/documentarytorrents.yml",
@@ -324,6 +326,7 @@ namespace Jackett.Updater
                 "Definitions/extratorrent-it.yml",
                 "Definitions/extratorrentclone.yml",
                 "Definitions/feedurneed.yml", // merged with devilsplayground #6872
+                "Definitions/filebase.yml",
                 "Definitions/filmsclub.yml",
                 "Definitions/focusx.yml",
                 "Definitions/freakstrackingsystem.yml",
