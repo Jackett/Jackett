@@ -118,6 +118,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: compatItal
+    type: checkbox
+    label: Improve Sonarr compatibility with the tracker's Italian season naming scheme by renaming Sxx to Stagione xx in searches. Can cause results already using Sxx to not be found.
+    default: false
   - name: info30s
     type: info
     label: 30s Delay for Searches
@@ -164,6 +168,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word, all keywords must be 2 characters or more
+    - name: re_replace
+      args: ["(?i)(\\bS(\\d+)(E\\d+)?\\b)", "{{ if .Config.compatItal }}Stagione +$2 $3{{ else }}S$2$3{{ end }}"] # Replace SXXEYY with Stagione XX EYY
 
   rows:
     selector: div.search_results_posts
