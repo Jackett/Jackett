@@ -105,7 +105,7 @@ search:
     # site does not support imdbid searching or appear to have freeleech
 
   rows:
-    selector: table[ width="1000px"] tbody tr:has(a[href^="userdetails.php?id="])
+    selector: table[width="900px"]:last-child tbody tr:has(a[href^="userdetails.php?id="])
 
   fields:
     category:
