@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 2, cat: TV, desc: "TV Show"}
 
   modes:
     search: [q]
