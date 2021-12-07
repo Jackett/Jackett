@@ -146,8 +146,8 @@ namespace Jackett.Common.Indexers
                 {"options", "0"}
             };
 
-            // manually url encode parenthesis to prevent "hacking" detection
-            searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29");
+            // manually url encode parenthesis to prevent "hacking" detection, remove . as not used in titles
+            searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29").Replace(".", " ");
 
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
             try
