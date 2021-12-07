@@ -144,15 +144,26 @@ search:
           args: cat
     title:
       selector: td a[href^="torrents-details.php?id="]
-      attribute: title
     details:
       selector: td a[href^="torrents-details.php?id="]
       attribute: href
     download:
       selector: td a[href^="torrents-details.php?id="]
       attribute: href
+    poster:
+      selector: td a[href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "img\\ssrc=\\\\'(http.+?)\\\\'"
     date:
-      text: now
+      selector: td a[href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "Date\\sAdded\\s:(\\d{2}-\\d{2}-\\d{4})"
+        - name: dateparse
+          args: "02-01-2006"
     size:
       selector: td:nth-child(6)
     seeders:
@@ -166,16 +177,12 @@ search:
         - name: replace
           args: [",", ""]
     description:
-      selector: td:last-of-type:contains("E")
-      filters:
-        - name: replace
-          args: ["E", "External"]
-        - name: replace
-          args: ["L", "Local"]
+      selector: td:last-of-type img
+      attribute: title
     downloadvolumefactor:
       case:
         img[src$="/images/free.gif"]: 0
-        "td:last-of-type:contains(\"E\")": 0 # all external torrents are free
+        td:last-of-type img[title="Extern"]: 0 # all external torrents are free
         "*": 1
     uploadvolumefactor:
       text: 1
