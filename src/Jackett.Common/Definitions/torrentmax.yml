@@ -58,15 +58,8 @@ download:
 search:
   paths:
     # https://torrentmax2.net/search?srows=10&gr_id=&sfl=wr_subject%7C%7Cwr_content&stx=2021&sop=and
-    - path: search
-  inputs:
-    srows: 100
-    gr_id: ""
-    # wr_subject||wr_content, wr_subject, wr_content, mb_id, wr_name
-    sfl: wr_subject
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
-    # or, and
-    sop: and
+    - path: "search?srows=50&sfl=wr_subject&sop=and&gr_id={{ if .Keywords }}&stx={{ .Keywords }}{{ else }}tv&stx={{ .Today.Year }}{{ end }}"
+    - path: "search?srows=50&sfl=wr_subject&sop=and&gr_id={{ if .Keywords }}&stx={{ .Keywords }}&page=2{{ else }}movie&stx={{ .Today.Year }}{{ end }}"
 
   rows:
     selector: div.search-media div.media:not(:has(a[href*="/max/PHOTO/"])):not(:has(a[href*="/max/GIRL/"])):not(:has(a[href*="/max/CAM/"])):not(:has(a[href*="/max/notice/"])):not(:has(a[href*="/max/humor/"]))
