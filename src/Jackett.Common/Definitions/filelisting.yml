@@ -32,6 +32,8 @@ search:
   paths:
     # https://filelisting.com/result?q=bad+batch
     - path: "result{{ if .Keywords }}?q={{ .Keywords }}+in:title{{ else }}{{ end }}"
+  keywordsfilters:
+    - name: tolower
 
   rows:
     selector: table > tbody > tr:has(td.dn-title)

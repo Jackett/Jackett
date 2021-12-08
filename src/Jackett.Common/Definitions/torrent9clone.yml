@@ -7,12 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent9.pw/
+  - https://www.torrent9.si/
   - https://torrent9.nocensor.biz/
-legacylinks:
-  - https://torrent9.nocensor.space/
-  - https://torrent9.nocensor.work/
-
 legacylinks:
   - https://www.torrents9.pw/
   - https://www.torrent9.ch/
@@ -58,6 +54,9 @@ legacylinks:
   - https://torrent9.unblocked.monster/
   - https://www.torrent9.la/
   - https://www.torrent9.ninja/
+  - https://torrent9.nocensor.space/
+  - https://torrent9.nocensor.work/
+  - https://www.torrent9.pw/
 
 caps:
   categorymappings:
