@@ -8,7 +8,8 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://glodls.to/
-  - https://glotorrents.unblockit.bz/
+  - https://www.gtdb.to/
+  - https://glotorrents.unblockit.tv/
   - https://glotorrents.nocensor.biz/
 legacylinks:
   - https://glodls.rocks/
@@ -45,7 +46,7 @@ legacylinks:
   - https://glotorrents.unblockit.ws/
   - https://glotorrents.nocensor.work/
   - https://glotorrents.unblockit.kim/
-  - https://www.gtdb.to/
+  - https://glotorrents.unblockit.bz/
 
 caps:
   categorymappings:
