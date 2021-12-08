@@ -58,7 +58,7 @@ settings: []
 download:
   infohash:
     hash:
-      selector: a[href^="magnet:?xt="]
+      selector: a[href^="magnet:"]
       attribute: href
       filters:
         - name: regexp
