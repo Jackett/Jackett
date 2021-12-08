@@ -101,6 +101,9 @@ search:
     resorder: "{{ .Config.type }}"
     showposts: 0
 
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
   rows:
     selector: article.shortstory
 
