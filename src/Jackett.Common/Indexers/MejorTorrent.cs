@@ -37,7 +37,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.mejortorrentes.net/",
-            "https://mejortorrent.nocensor.biz/"
+            "https://mejortorrent.nocensor.biz/",
+            "https://mejortorrent.unblockit.tv/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
