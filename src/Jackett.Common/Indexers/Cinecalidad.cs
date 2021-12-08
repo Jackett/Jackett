@@ -58,14 +58,15 @@ namespace Jackett.Common.Indexers
             Language = "es-ES";
             Type = "public";
 
-            var language = new ConfigurationData.SingleSelectConfigurationItem("Select language", new Dictionary<string, string>
+            var language = new ConfigurationData.SingleSelectConfigurationItem(
+                "Select language", new Dictionary<string, string>
                 {
                     {"castellano", "Castilian Spanish"},
                     {"latino", "Latin American Spanish"}
                 })
-                {
-                    Value = "castellano"
-                };
+            {
+                Value = "castellano"
+            };
             configData.AddDynamic("language", language);
 
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
