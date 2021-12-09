@@ -210,11 +210,9 @@ download:
       attribute: href
 
 search:
-  # https://torrentparadise.org/search.php?f=monday+night
-  # https://torrentparadise.org/recent # returns 404 as at 8 Nov 2021 #6385
-  # https://torrentparadise.cc/top100
+  # https://torrentparadise.org/searchA.php?f=monday+night
   paths:
-    - path: "{{ if .Keywords }}search.php?f={{ .Keywords }}{{ else }}top100{{ end }}"
+    - path: "searchA.php?f={{ if .Keywords }}{{ .Keywords }}{{ else }}%{{ end }}"
 
   rows:
     selector: table.table-bordered > tbody > tr.table-default

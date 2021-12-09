@@ -25,7 +25,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
 
- * 01torrent
  * ØMagnet
  * 1337x
  * 24rolika
@@ -65,7 +64,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * EXT Torrents
  * ExtraTorrent.st
  * EZTV
- * Filebase
  * FileListing
  * FireBit
  * Frozen Layer
@@ -148,6 +146,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrent Downloads (TD)
  * Torrent Oyun indir
  * Torrent Paradise (ML)
+ * torrent.by
  * torrent-pirat
  * Torrent9
  * Torrent9 clone
@@ -254,6 +253,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Aftershock
  * Aidoru!Online
  * Aither
+ * Alleen Retail
  * AlphaRatio (AR)
  * AmigosShareClub
  * anasch.cc
@@ -328,7 +328,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Dark Tracker
  * DataScene (DS)
  * DataTalli
- * DesiReleasers
  * DesiTorrents
  * Diablo Torrent [![(invite needed)][inviteneeded]](#)
  * DigitalCore

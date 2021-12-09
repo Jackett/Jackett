@@ -78,9 +78,10 @@ settings:
 
 download:
   selectors:
-    - selector: a[href*="magnet:?xt="]
-      attribute: href
-
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 search:
   paths:
     - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"

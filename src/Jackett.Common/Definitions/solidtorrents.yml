@@ -9,18 +9,34 @@ links:
   - https://solidtorrents.net/
 
 caps:
-  # dont forget to update the case block in the search fields category
-  categorymappings:
-    - {id: 1, cat: Other, desc: Unknown}
-    - {id: 2, cat: Movies, desc: Movies}
-    - {id: 3, cat: TV, desc: TV}
-    - {id: 4, cat: TV/Anime, desc: Anime}
-    - {id: 5, cat: PC/0day, desc: Program}
-    - {id: 6, cat: Console, desc: Games}
-    - {id: 7, cat: Audio, desc: Music}
-    - {id: 8, cat: Audio/Audiobook, desc: Audiobook}
-    - {id: 9, cat: Books/EBook, desc: eBook}
-    - {id: 10, cat: XXX, desc: XXX}
+  categories:
+    eBook: Books/EBook
+    "Ebook/Course": Books/EBook
+    Games: PC/Games
+    "Games/PC": PC/Games
+    Movies: Movies
+    Music: Audio
+    "Music/Album": Audio
+    "Music/mp3": Audio/MP3
+    "Music/Lossless": Audio/Lossless
+    "Music/Video": Audio/Video
+    Other: Other
+    "Other/Android": PC/Mobile-Android
+    "Other/Archive": Other
+    "Other/Audio": Audio
+    "Other/Database": PC
+    "Other/DiskImage": PC/ISO
+    "Other/Document": Books/Comics
+    "Other/Image": Other/Misc
+    "Other/Program": PC/0day
+    "Other/Sourcecode": PC
+    "Other/Source Code": PC
+    "Other/Video": TV
+    Softwares: PC/0day
+    "Softwares/Windows": PC/0day
+    TV: TV
+    Unknown: Other
+    XXX: XXX
 
   modes:
     search: [q]
@@ -30,10 +46,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: filter-verified
-    type: checkbox
-    label: "Only include verifed content in results"
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -42,81 +54,79 @@ settings:
       date: created
       seeders: seeders
       size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 search:
   paths:
-    - path: api/v1/search
-      response:
-        type: json
-    - path: api/v1/search
-      response:
-        type: json
-      inputs:
-        skip: 20
-    - path: api/v1/search
-      response:
-        type: json
-      inputs:
-        skip: 40
-
+    # https://solidtorrents.net/search?q=&sort=date&order=desc
+    - path: search
   inputs:
     q: "{{ .Keywords }}"
-    category: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}all{{ end }}"
     sort: "{{ .Config.sort }}"
-    fuv: "{{ if .Config.filter-verified }}yes{{ else }}no{{ end }}"
+    order: "{{ .Config.type }}"
 
   rows:
-    selector: results
-    count:
-      selector: hits.value
+    selector: div.search-result
 
   fields:
     category:
-      selector: category
-      case:
-        1: 1 # other
-        Archive: 1
-        Image: 1
-        Unknown: 1
-        2: 2 # movies
-        Sourcecode: 2
-        Database: 2
-        Video: 2
-        3: 3 # tv
-        4: 4 # anime , hentai
-        5: 5 # software
-        Android: 5
-        Diskimage: 5
-        Program: 5
-        6: 6 # games
-        7: 7 # music
-        Audio: 7
-        8: 8 # audiobook
-        9: 9 # books
-        Document: 9
-        eBook: 9
-        10: 10 # 3x
+      selector: a.category
     title:
-      selector: title
-    id:
-      selector: _id
+      selector: h5
     details:
-      text: "{{ .Config.sitelink }}view/{{ .Result.id }}"
-    magnet:
-      selector: magnet
-    size:
-      selector: size
-    seeders:
-      selector: swarm.seeders
-    leechers:
-      selector: swarm.leechers
+      selector: h5 a
+      attribute: href
+    download:
+      selector: a[class="dl-torrent"]
+      attribute: href
+    infohash:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     grabs:
-      selector: swarm.downloads
+      selector: div.stats div:has(img[alt="Download"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
+    size:
+      selector: div.stats div:has(img[alt="Size"])
+    seeders:
+      selector: div.stats div:has(img[alt="Seeder"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
+    leechers:
+      selector: div.stats div:has(img[alt="Leecher"])
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
     date:
-      # 2021-09-24T00:12:29.918Z
-      selector: imported
+      selector: div.stats div:has(img[alt="Date"])
+      filters:
+        - name: dateparse
+          args: "Jan 2, 2006"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       text: 1
-# json api v1
+# engine n/a

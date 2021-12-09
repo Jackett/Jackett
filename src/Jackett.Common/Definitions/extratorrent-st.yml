@@ -7,11 +7,12 @@ type: public
 encoding: UTF-8
 links:
   - https://extratorrent.st/
-  - https://extratorrent.unblockit.bz/
+  - https://extratorrent.unblockit.tv/
   - https://extratorrent.nocensor.biz/
 legacylinks:
   - https://extratorrent.nocensor.work/
   - https://extratorrent.unblockit.kim/
+  - https://extratorrent.unblockit.bz/
 
 caps:
   categorymappings:

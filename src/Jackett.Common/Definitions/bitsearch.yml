@@ -20,6 +20,7 @@ caps:
     "Music/Album": Audio
     "Music/mp3": Audio/MP3
     "Music/Lossless": Audio/Lossless
+    "Music/Video": Audio/Video
     Other: Other
     "Other/Android": PC/Mobile-Android
     "Other/Archive": Other
@@ -62,23 +63,6 @@ settings:
       desc: desc
       asc: asc
 
-download:
-  # the magnet URI on this site exceeds 2048 bytes which some interfaces will reject. So we use the infohash and build our own.
-  infohash:
-    hash:
-      selector: a[href^="magnet:?xt"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: ([A-F|a-f|0-9]{40})
-    title:
-      selector: a[href^="magnet:?xt"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: "&dn=(.+?)$"
-        - name: validfilename
-
 search:
   paths:
      # https://bitsearch.to/search?q=&sort=date&order=desc
@@ -100,8 +84,14 @@ search:
       selector: h5 a
       attribute: href
     download:
-      selector: h5 a
+      selector: a[class="dl-torrent"]
       attribute: href
+    infohash:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     grabs:
       selector: div.stats div:has(img[alt="Download"])
       filters:

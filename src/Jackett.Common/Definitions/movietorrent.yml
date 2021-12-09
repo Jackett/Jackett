@@ -46,6 +46,7 @@ caps:
     - {id: 8809, cat: Movies, desc: "2014"}
     - {id: 9938, cat: Movies, desc: "Turkish Dramas"}
     - {id: 10293, cat: Movies, desc: "2021"}
+    - {id: 8569, cat: Movies, desc: "2021"}
 
   modes:
     search: [q]
@@ -57,7 +58,7 @@ settings: []
 download:
   infohash:
     hash:
-      selector: a[href^="magnet:?xt="]
+      selector: a[href^="magnet:"]
       attribute: href
       filters:
         - name: regexp

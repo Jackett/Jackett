@@ -66,6 +66,8 @@ search:
 
   rows:
     selector: table.data tr.odd:has(a[class="cellMainLink"]), table.data tr.even:has(a[class="cellMainLink"])
+    filters:
+      - name: andmatch
 
   fields:
     category:

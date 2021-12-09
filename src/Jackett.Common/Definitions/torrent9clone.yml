@@ -7,12 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent9.pw/
+  - https://www.torrent9.si/
   - https://torrent9.nocensor.biz/
-legacylinks:
-  - https://torrent9.nocensor.space/
-  - https://torrent9.nocensor.work/
-
 legacylinks:
   - https://www.torrents9.pw/
   - https://www.torrent9.ch/
@@ -58,6 +54,9 @@ legacylinks:
   - https://torrent9.unblocked.monster/
   - https://www.torrent9.la/
   - https://www.torrent9.ninja/
+  - https://torrent9.nocensor.space/
+  - https://torrent9.nocensor.work/
+  - https://www.torrent9.pw/
 
 caps:
   categorymappings:
@@ -101,19 +100,17 @@ settings:
     type: checkbox
     label: Replace VOSTFR with ENGLISH
     default: false
-  - name: info_145469
-    type: info
-    label: About Torrent9clone Categories
-    default: Torrent9clone only returns category <b>Movies</b> in its <i>Keywordless</i> search results page.</br>To pass your apps' indexer TEST you will need to include the 145469(Movies) category.
 
 download:
   selectors:
-    - selector: a[href^="magnet:?"]
-      attribute: href
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{ else }}/top{{ end }}"
+    - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{ else }}{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace

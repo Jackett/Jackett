@@ -49,6 +49,7 @@ caps:
     - {id: 425, cat: XXX, desc: "Movies XXX: С Русским переводом!"}
     - {id: 1195, cat: XXX, desc: "Movies XXX: LegalPorno"}
     - {id: 1200, cat: XXX, desc: "Movies XXX: Solo & Masturbation"}
+    - {id: 1250, cat: XXX, desc: "Movies XXX: Movie Scenes"}
     - {id: 7000, cat: XXX, desc: "Movies XXX: -= XXX =-"}
 
   modes:
@@ -110,7 +111,7 @@ search:
     leechers:
       selector: td:nth-child(7)
     downloadvolumefactor:
-      text: 1
+      text: 0
     uploadvolumefactor:
       text: 1
 # engine n/a

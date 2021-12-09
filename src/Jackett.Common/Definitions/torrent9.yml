@@ -96,10 +96,6 @@ settings:
       ".html,trie-poid-a": size asc
       ".html,trie-nom-d": title desc
       ".html,trie-nom-a": title asc
-  - name: info_131681
-    type: info
-    label: About Torrent9 Categories
-    default: Torrent9 only returns category <b>Movies</b> in its <i>Keywordless</i> search results page.</br>To pass your apps' indexer TEST you will need to include the 131681(Movies) category.
 
 download:
   selectors:
@@ -108,7 +104,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}/top_torrent.html{{ end }}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace

@@ -11,8 +11,7 @@ links:
 caps:
   # dont forget to update the case block in the search fields category
   categorymappings:
-    - {id: 15, cat: TV, desc: "TV Show"}
-    - {id: 16, cat: Movies, desc: "Movie"}
+    - {id: 2, cat: TV, desc: "TV Show"}
 
   modes:
     search: [q]
@@ -66,8 +65,7 @@ search:
     category:
       selector: category
       case:
-        "TV Show": 15
-        "Movie": 16
+        "TV Show": 2
     title:
       selector: name
     details:
