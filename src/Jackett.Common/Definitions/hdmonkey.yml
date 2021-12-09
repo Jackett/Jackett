@@ -1,0 +1,164 @@
+---
+id: hdmonkey
+name: HDMonkey
+description: "HDMonkey is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ro-RO
+type: private
+encoding: UTF-8
+links:
+  - https://hdmonkey.org/
+
+caps:
+  categorymappings:
+    - {id: 6, cat: PC/0day, desc: "Apps: Windows"}
+    - {id: 7, cat: PC/Mac, desc: "Apps: Mac"}
+    - {id: 8, cat: PC, desc: "Apps: Linux"}
+    - {id: 75, cat: Movies/DVD, desc: "Movies: DVD"}
+    - {id: 26, cat: Movies/BluRay, desc: "Movies: Blu-Ray"}
+    - {id: 42, cat: Movies/HD, desc: "Movies: FHD-HD"}
+    - {id: 50, cat: Movies/WEB-DL, desc: "Movies: Web-Dl"}
+    - {id: 74, cat: Movies/SD, desc: "Movies: SD"}
+    - {id: 49, cat: Movies/UHD, desc: "Movies: 4k"}
+    - {id: 46, cat: Movies/3D, desc: "Movies: 3D"}
+    - {id: 24, cat: Movies, desc: "Movies: Packs"}
+    - {id: 28, cat: Movies, desc: "Movies: Cartoons"}
+    - {id: 47, cat: XXX, desc: "Movies: XXX"}
+    - {id: 41, cat: TV/HD, desc: "TV: HD"}
+    - {id: 52, cat: TV/WEB-DL, desc: "TV: WEB-DL"}
+    - {id: 48, cat: TV, desc: "TV: Packs"}
+    - {id: 9, cat: TV/Documentary, desc: "TV: Documentaries"}
+    - {id: 22, cat: Audio/MP3, desc: "Music: MP3"}
+    - {id: 23, cat: Audio/Lossless, desc: "Music: FLAC"}
+    - {id: 25, cat: Audio/Video, desc: "Music: Video"}
+    - {id: 27, cat: Audio, desc: "Music: Pack"}
+    - {id: 53, cat: PC/Games, desc: "Games: Pc"}
+    - {id: 54, cat: Console, desc: "Games: PsP"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+#    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are not getting results, then access the site with your browser and mark as read all PMs."
+
+login:
+  path: account-login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.myBlock:contains("Access Denied")
+  test:
+    path: index.php
+    selector: a[href^="account-logout.php"]
+
+search:
+  paths:
+    - path: torrents-search.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    # 0 both 1 local 2 external
+    inclexternal: 0
+    # 0 only active 1 incl dead 2 only dead
+    incldead: 1
+    # 0 all 1 not freeleech 2 only freeleech
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 all 1 english 2 french 3 german 4 italian 5 japanese 6 spanish 7 russian 8 other
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: table.ttable_headinner > tbody > tr
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=([^\s]+)
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    size:
+      selector: td:nth-child(4)
+    date:
+      # 19.Jul<br>2021<br>06:57
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "2.Jan200615:04 -07:00"
+    grabs:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    description:
+      case:
+        img[src="images/t_extern.png"]: External
+        "*": Local
+    downloadvolumefactor:
+      case:
+        img[src="images/t_extern.png"]: 0
+        img[src="images/free.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# engine n/a
