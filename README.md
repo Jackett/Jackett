@@ -410,6 +410,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * JPTV
  * Karagarga
  * Keep Friends [![(invite needed)][inviteneeded]](#)
+ * KrazyZone
  * LastFiles
  * Lat-Team [![(invite needed)][inviteneeded]](#)
  * Le Saloon
