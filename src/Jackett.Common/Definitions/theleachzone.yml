@@ -128,6 +128,12 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=\\'(.+?)\\'
     details:
       selector: a[href^="details.php?id="]
       attribute: href
