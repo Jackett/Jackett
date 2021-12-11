@@ -144,6 +144,10 @@ search:
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
     selector: div.inf-table-row
 
