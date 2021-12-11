@@ -81,7 +81,7 @@ search:
     order_way: "{{ .Config.type }}"
     action: advanced
     searchsubmit: 1
-    
+
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
