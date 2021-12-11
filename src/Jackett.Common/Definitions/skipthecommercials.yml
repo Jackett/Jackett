@@ -87,6 +87,10 @@ search:
     page: 1
     free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
     selector: table > tbody > tr
 
