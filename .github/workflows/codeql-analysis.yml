@@ -15,22 +15,20 @@ on:
   push:
     branches: [ master ]
     paths:
-      - '**.cs'
-      - '**.js'
-      - Jackett/src/**
-      - '!Jackett/src/Jackett.Common/Indexers/**'
-      - '!Jackett/src/Jackett.IntegrationTests/**'
-      - '!Jackett/src/Jackett.Test/**'
+      - src/**/*.cs
+      - src/**/*.js
+      - '!src/Jackett.Common/Indexers/**'
+      - '!src/Jackett.IntegrationTests/**'
+      - '!src/Jackett.Test/**'
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
     paths:
-      - '**.cs'
-      - '**.js'
-      - Jackett/src/**
-      - '!Jackett/src/Jackett.Common/Indexers/**'
-      - '!Jackett/src/Jackett.IntegrationTests/**'
-      - '!Jackett/src/Jackett.Test/**'
+      - src/**/*.cs
+      - src/**/*.js
+      - '!src/Jackett.Common/Indexers/**'
+      - '!src/Jackett.IntegrationTests/**'
+      - '!src/Jackett.Test/**'
   schedule:
     - cron: '00 00 * * 5'
 
