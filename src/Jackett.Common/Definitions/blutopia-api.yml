@@ -59,6 +59,10 @@ search:
         type: json
         attribute: attributes
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
     selector: data
     count:
