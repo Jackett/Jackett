@@ -101,9 +101,6 @@ search:
       filters:
         - name: replace
           args: ["download_check", "download"]
-    magnet:
-      selector: a[href^="magnet:?"]
-      attribute: href
     details:
       selector: a.view-torrent
       attribute: href
