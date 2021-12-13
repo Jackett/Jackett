@@ -166,19 +166,22 @@ search:
         - name: timeago
     downloadvolumefactor:
       case:
-        i[class*="fa-id-badge text-orange"]: 0 # 24 Hour FreeLeech From BON Store
-        i[class*="fa-trophy text-purple"]: 0 # Special FreeLeech For Certain User Groups
-        i[class*="fa-star text-bold"]: 0 # Freeleech From Token
-        i[class*="fa-coins text-bold"]: 0 # Freeleech From Token
-        i[class*="fa-globe text-blue"]: 0 # Global Freeleech
-        i[class*="fa-star text-gold"]: 0 # Freeleech
-        i[class*="fa-certificate text-pink"]: 0 # Featured Torrent
+        span.torrent-listings-global-freeleech: 0
+        span.torrent-listings-personal-freeleech: 0
+        span.torrent-listings-freeleech-token: 0
+        span.torrent-listings-featured: 0
+        span.torrent-listings-freeleech i[data-original-title*="25%"]: 0.75
+        span.torrent-listings-freeleech i[data-original-title*="50%"]: 0.5
+        span.torrent-listings-freeleech i[data-original-title*="75%"]: 0.25
+        span.torrent-listings-freeleech i[data-original-title*="100%"]: 0
+        span.torrent-listings-special-freeleech: 0
         "*": 1
     uploadvolumefactor:
       case:
-        i[class*="fa-gem text-green"]: 2 # Single Torrent Double Upload
-        i[class*="fa-globe text-green"]: 2 # Global Double Upload
-        i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
+        span.torrent-listings-global-double-upload: 2
+        span.torrent-listings-double-upload: 2
+        span.torrent-listings-featured: 2
+        span.torrent-listings-special-double-upload: 2
         "*": 1
     minimumratio:
       text: 0.4
