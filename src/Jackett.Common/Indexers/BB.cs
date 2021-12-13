@@ -145,7 +145,8 @@ namespace Jackett.Common.Indexers
                     queryCollection.Add("filter_cat[" + cat + "]", "1");
                 }
 
-                request_urls.Add(SearchUrl + queryCollection.GetQueryString());
+                // remove . as not used in titles 
+                request_urls.Add(SearchUrl + queryCollection.GetQueryString().Replace(".", " "));
             }
 
             var downloadTasksQuery = from url in request_urls select RequestWithCookiesAndRetryAsync(url);
