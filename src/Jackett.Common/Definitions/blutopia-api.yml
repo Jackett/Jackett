@@ -117,6 +117,7 @@ search:
         50%: 0.5
         75%: 0.25
         100%: 0 # freeleech
+        "*": 0 # catch errors
     uploadvolumefactor:
       # api returns 0=false, 1=true
       selector: double_upload
