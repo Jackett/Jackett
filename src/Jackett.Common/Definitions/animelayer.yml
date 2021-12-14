@@ -1,0 +1,201 @@
+---
+id: animelayer
+name: AnimeLayer
+description: "AnimeLayer is a RUSSIAN Semi-Private Torrent Tracker for ANIME"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - https://www.animelayer.ru/
+
+caps:
+  categorymappings:
+    - {id: аниме, cat: TV/Anime, desc: Аниме}
+    - {id: музыка, cat: Audio, desc: Музыка}
+    - {id: манга, cat: Books, desc: Манга}
+    - {id: дорама, cat: TV, desc: Дорама}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: category-id
+    type: select
+    label: Category
+    default: anime
+    options:
+      anime: Аниме
+      music: Музыка
+      manga: Манга
+      dorama: Дорама
+
+login:
+  path: login.php
+  method: form
+  form: form#loginForm
+  inputs:
+    login: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.error
+  test:
+    path: /
+    selector: a[href^="/auth/logout/"]
+
+search:
+  paths:
+    - path: "torrents/{{ .Config.category-id }}/"
+  inputs:
+    q: "{{ .Keywords }}"
+
+  rows:
+    selector: ul.torrents-list li.torrent-item:has(a[href^="/torrent/"])
+
+  fields:
+    category:
+      selector: label.category
+    resolution:
+      selector: div.description
+      filters:
+        - name: regexp
+          args: "Разрешение:\\s+\\d{3,4}\\D(\\d{3,4})"
+    title:
+      selector: img
+      attribute: alt
+      filters:
+        - name: append
+          args: "{{ if .Result.resolution }} [{{ .Result.resolution }}p]{{ else }}{{ end }}"
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="/torrent/"]
+      attribute: href
+      filters:
+        - name: append
+          args: download/
+    poster:
+      selector: img
+      attribute: data-original
+    size:
+      selector: div.info
+      filters:
+        - name: split
+          args: ["|", 2]
+    date_noyear:
+      # <span class="gray">Добавлен:</span>&nbsp;18 августа в&nbsp;21:39
+      selector: div.info
+      filters:
+        - name: regexp
+          args: "н:\\s(\\d{1,2} \\D{3,8} в\\s\\d{1,2}:\\d{2})"
+        - name: replace
+          args: ["\xA0", " "]
+        - name: replace
+          args: ["Обновлён:", ""]
+        - name: replace
+          args: ["Добавлен:", ""]
+        - name: replace
+          args: [" в ", " "]
+        - name: replace
+          args: ["января", "January {{ .Today.Year }}"]
+        - name: replace
+          args: ["февраля", "February {{ .Today.Year }}"]
+        - name: replace
+          args: ["марта", "March {{ .Today.Year }}"]
+        - name: replace
+          args: ["апреля", "April {{ .Today.Year }}"]
+        - name: replace
+          args: ["мая", "May {{ .Today.Year }}"]
+        - name: replace
+          args: ["июня", "June {{ .Today.Year }}"]
+        - name: replace
+          args: ["июля", "July {{ .Today.Year }}"]
+        - name: replace
+          args: ["августа", "August {{ .Today.Year }}"]
+        - name: replace
+          args: ["сентября", "September {{ .Today.Year }}"]
+        - name: replace
+          args: ["октября", "October {{ .Today.Year }}"]
+        - name: replace
+          args: ["ноября", "November {{ .Today.Year }}"]
+        - name: replace
+          args: ["декабря", "December {{ .Today.Year }}"]
+        - name: re_replace
+          args: ["\\s(\\d\\:)", " 0$1"]
+    date_year:
+      # <span class="gray">Обновлён:</span>&nbsp;3 октября 2019 в&nbsp;6:02
+      selector: div.info
+      filters:
+        - name: regexp
+          args: "н:\\s(\\d{1,2} \\D{3,8} \\d{4} в\\s\\d{1,2}:\\d{2})"
+        - name: replace
+          args: ["\xA0", " "]
+        - name: replace
+          args: ["Обновлён:", ""]
+        - name: replace
+          args: ["Добавлен:", ""]
+        - name: replace
+          args: [" в ", " "]
+        - name: replace
+          args: ["января", "January"]
+        - name: replace
+          args: ["февраля", "February"]
+        - name: replace
+          args: ["марта", "March"]
+        - name: replace
+          args: ["апреля", "April"]
+        - name: replace
+          args: ["мая", "May"]
+        - name: replace
+          args: ["июня", "June"]
+        - name: replace
+          args: ["июля", "July"]
+        - name: replace
+          args: ["августа", "August"]
+        - name: replace
+          args: ["сентября", "September"]
+        - name: replace
+          args: ["октября", "October"]
+        - name: replace
+          args: ["ноября", "November"]
+        - name: replace
+          args: ["декабря", "December"]
+        - name: re_replace
+          args: ["\\s(\\d\\:)", " 0$1"]
+    date:
+      text: "{{ if or .Result.date_year .Result.date_noyear }}{{ or .Result.date_year .Result.date_noyear }}{{ else }}now{{ end }}"
+    seeders:
+      selector: div.info
+      filters:
+        - name: split
+          args: ["|", 0]
+    leechers:
+      selector: div.info
+      filters:
+        - name: split
+          args: ["|", 1]
+    subtitles:
+      filters:
+        - name: regexp
+          args: "Субтитры:(.+?)\\n"
+    language:
+      filters:
+        - name: regexp
+          args: "Язык:(.+?)\\n"
+    description:
+      text: "{{ if .Result.subtitles }}Субтитры: {{ .Result.subtitles }}{{ else }}{{ end }} - {{ if .Result.language }}Язык: {{ .Result.language }}{{ else }}{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
