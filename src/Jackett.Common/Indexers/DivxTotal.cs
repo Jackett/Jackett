@@ -54,6 +54,7 @@ namespace Jackett.Common.Indexers
             "https://www.divxtotal.ch/",
             "https://www.divxtotal.nz/",
             "https://www.divxtotal.li/",
+            "https://www.divxtotal.nu/",
             "https://www.divxtotal.se/"
         };
 
@@ -62,7 +63,7 @@ namespace Jackett.Common.Indexers
             : base(id: "divxtotal",
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                   link: "https://www.divxtotal.nu/",
+                   link: "https://www.divxtotal.nl/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
