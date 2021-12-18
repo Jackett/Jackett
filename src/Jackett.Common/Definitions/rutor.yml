@@ -74,6 +74,11 @@ search:
   fields:
     category:
       text: 3
+    title_is_rus:
+      selector: a[href^="viewtopic.php?t="] > b
+      filters:
+        - name: re_replace
+          args: ["[^А-Яа-яЁё]+", ""]
     title:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       filters:
@@ -84,7 +89,9 @@ search:
         - name: replace
           args: ["Кураж-Бамбей", "kurazh"]
         - name: append
-          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
+          args: "{{ if .Result.title_is_rus }} - RUSSIAN{{ else }}{{ end }}"
+        - name: re_replace
+          args: ["(.+?) - RUSSIAN", "{{ if .Config.addrussian }}$1 - RUSSIAN{{ else }}$1{{ end }}"]
     details:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       attribute: href
