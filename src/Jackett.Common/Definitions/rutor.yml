@@ -75,7 +75,7 @@ search:
     category:
       text: 3
     title_is_rus:
-      selector: a[href^="viewtopic.php?t="] > b
+      selector: td:nth-of-type(2) a[href^="/torrent/"]
       filters:
         - name: re_replace
           args: ["[^А-Яа-яЁё]+", ""]
