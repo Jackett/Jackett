@@ -10,24 +10,23 @@ links:
 
 caps:
   categorymappings:
+    - {id: 77, cat: PC, desc: "3D Models"}
     - {id: 65, cat: Audio, desc: "Audio"}
     - {id: 64, cat: Books/EBook, desc: "Books"}
-    - {id: 66, cat: TV, desc: "Business"}
+    - {id: 66, cat: Books, desc: "Business"}
     - {id: 68, cat: Books/Comics, desc: "Comics"}
-    - {id: 67, cat: TV, desc: "Development"}
-    - {id: 60, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 59, cat: TV/Documentary, desc: "Docs/Movies"}
+    - {id: 60, cat: TV/Documentary, desc: "Docs/TV"}
     - {id: 71, cat: Other, desc: "Fonts"}
-    - {id: 62, cat: Other, desc: "Graphic"}
     - {id: 72, cat: Books, desc: "IT Books"}
     - {id: 57, cat: Books/Mags, desc: "Magazine"}
-    - {id: 58, cat: TV, desc: "Medicine"}
+    - {id: 58, cat: Books, desc: "Medicine"}
     - {id: 70, cat: Books/EBook, desc: "Occult"}
     - {id: 74, cat: Audio, desc: "Podcasts"}
     - {id: 69, cat: Other, desc: "PS Resources"}
     - {id: 76, cat: Books, desc: "Self-Help"}
     - {id: 56, cat: TV/Sport, desc: "Sports"}
-    - {id: 59, cat: TV, desc: "Video"}
-    - {id: 61, cat: TV, desc: "Video tutorials"}
+    - {id: 61, cat: Other, desc: "Tutorials"}
 
   modes:
     search: [q]
