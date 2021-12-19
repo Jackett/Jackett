@@ -493,7 +493,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RedBits
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones) [![(invite needed)][inviteneeded]](#)
- * Renegade
  * Resurrect The Net
  * RetroFlix
  * RevolutionTT
