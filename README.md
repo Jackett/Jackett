@@ -444,7 +444,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NBTorrents [![(invite needed)][inviteneeded]](#)
- * Nbytez
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
  * NetCosmo
