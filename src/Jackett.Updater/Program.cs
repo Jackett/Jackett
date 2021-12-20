@@ -303,6 +303,7 @@ namespace Jackett.Updater
                 "Definitions/demonsite.yml",
                 "Definitions/desireleasers.yml",
                 "Definitions/devils-playground.yml",
+                "Definitions/devilsplayground.yml",
                 "Definitions/digbt.yml",
                 "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",
