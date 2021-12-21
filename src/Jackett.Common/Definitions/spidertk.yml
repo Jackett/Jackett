@@ -126,7 +126,8 @@ login:
     ssl: yes
     trackerssl: ""
   error:
-    - selector: td.embedded:has(h2:contains("Echoué"))
+    - selector: td.embedded:has(h2:contains("Echoué")) # invalid captcha
+    - selector: td.embedded:has(h2:contains("Échec")) # invalid uid or pwd
       message:
         selector: td.text
   test:
