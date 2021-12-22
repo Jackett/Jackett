@@ -110,9 +110,9 @@ download:
       attribute: href
 
 search:
-  # https://the-devils-lounge.xyz/torrents-search.php?search=&cat=0&incldead=0&freeleech=2&inclexternal=0&lang=0
+  # https://the-devils-lounge.xyz/torrents.php?search=&cat=0&incldead=0&freeleech=0&inclexternal=0&lang=0
   paths:
-    - path: torrents-search.php
+    - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
