@@ -23,12 +23,16 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://danishbytes.org/"
+        };
+
         public DanishBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "danishbytes",
                    name: "DanishBytes",
                    description: "DanishBytes is a Private Danish Tracker",
-                   link: "https://danishbytes.org/",
+                   link: "https://danishbytes.club/",
                    caps: new TorznabCapabilities
                    {
                        LimitsDefault = 25,
