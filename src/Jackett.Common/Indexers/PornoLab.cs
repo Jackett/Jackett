@@ -102,6 +102,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1836, TorznabCatType.XXX, "Сайтрипы 2019 (HD Video) / SiteRip's 2019 (HD Video)");
             AddCategoryMapping(1842, TorznabCatType.XXX, "Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)");
             AddCategoryMapping(1846, TorznabCatType.XXX, "Сайтрипы 2021 (HD Video) / SiteRip's 2021 (HD Video)");
+            AddCategoryMapping(1857, TorznabCatType.XXX, "Сайтрипы 2022 (HD Video) / SiteRip's 2022 (HD Video)");
             AddCategoryMapping(1451, TorznabCatType.XXX, "Сайтрипы 1991-2010 / SiteRip's 1991-2010");
             AddCategoryMapping(1788, TorznabCatType.XXX, "Сайтрипы 2011-2012 / SiteRip's 2011-2012");
             AddCategoryMapping(1789, TorznabCatType.XXX, "Сайтрипы 2013 / SiteRip's 2013");
@@ -113,6 +114,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1837, TorznabCatType.XXX, "Сайтрипы 2019 / SiteRip's 2019");
             AddCategoryMapping(1843, TorznabCatType.XXX, "Сайтрипы 2020 / SiteRip's 2020");
             AddCategoryMapping(1847, TorznabCatType.XXX, "Сайтрипы 2021 / SiteRip's 2021");
+            AddCategoryMapping(1856, TorznabCatType.XXX, "Сайтрипы 2022 / SiteRip's 2022");
             AddCategoryMapping(1707, TorznabCatType.XXX, "Сцены из фильмов / Movie Scenes (кроме SiteRip)");
             AddCategoryMapping(284, TorznabCatType.XXX, "Порноролики Разное / Clips (various)");
             AddCategoryMapping(1853, TorznabCatType.XXX, "Компиляции и Музыкальные порно клипы / Compilations & Porn Music Video (PMV)");
