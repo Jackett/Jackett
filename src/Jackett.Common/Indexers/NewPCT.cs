@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://atomixhq.one/",
+            "https://atomixhq.net/",
             "https://pctmix1.unblockit.tv/"
         };
 
@@ -125,7 +125,8 @@ namespace Jackett.Common.Indexers
             "https://maxitorrent.com",
             "https://pctmix1.unblockit.kim/",
             "https://atomixhq.com/",
-            "https://pctmix1.unblockit.bz/"
+            "https://pctmix1.unblockit.bz/",
+            "https://atomixhq.one/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -133,7 +134,7 @@ namespace Jackett.Common.Indexers
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://atomixhq.one/",
+                   link: "https://atomixhq.net/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
