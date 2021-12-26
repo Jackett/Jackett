@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 39, cat: Books/EBook, desc: "E-book"}
     - {id: 53, cat: XXX, desc: "Film (XXX)"}
+    - {id: 74, cat: TV/Anime, desc: "Film (Animáció cam)"}
     - {id: 72, cat: TV/Anime, desc: "Film (Animáció)"}
     - {id: 44, cat: Movies/SD, desc: "Film (Cam Hun)"}
     - {id: 40, cat: Movies/DVD, desc: "Film (DVD Eng)"}
