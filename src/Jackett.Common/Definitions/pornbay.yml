@@ -66,11 +66,11 @@ settings:
   - name: info_grid
     type: info
     label: GRID view
-    default: This indexer does not support the GRID view on the torrent search page. Change the <b>GRID</b> setting to <b>OFF</b> on your account profile. If set to <i>ON</i> will cause no results to be returned.
+    default: This indexer does not support the GRID view on the torrent search page. Change the <b>Grid View</b> setting to <b>OFF</b> on your User Settings. If set to <i>ON</i> will cause no results to be returned.
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. The default is <i>25</i>.
+    default: For best results, change the <b>Torrents per page</b> setting to <b>100</b> on your User Settings. The default is <i>25</i>.
 
 login:
   path: login.php
