@@ -734,7 +734,7 @@ Detailed instructions are available at [LinuxServer.io Jackett Docker](https://h
 
 
 ## Installation on Synology
-Jackett is available as a beta package from [SynoCommunity](https://synocommunity.com/)
+Jackett is available as a [beta package](https://synocommunity.com/package/jackett) from [SynoCommunity](https://synocommunity.com/)
 
 
 ## Running Jackett behind a reverse proxy
