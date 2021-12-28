@@ -70,7 +70,7 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents per page</b> setting to <b>100</b> on your account profile. The default is <i>25</i>.
+    default: For best results, change the <b>Torrents per page</b> setting to <b>100</b> on your User Settings. The default is <i>25</i>.
 
 login:
   path: login.php
