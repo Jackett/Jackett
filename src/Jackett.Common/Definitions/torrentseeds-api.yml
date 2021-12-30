@@ -11,7 +11,7 @@ links:
 caps:
   # dont forget to update the case block in the search fields category
   categorymappings:
-    - {id: 1, cat: PC, desc: "Apps"}
+    - {id: 1, cat: PC/0day, desc: "Apps"}
     - {id: 5, cat: TV/Anime, desc: "Anime"}
     - {id: 2, cat: PC/Games, desc: "Games"}
     - {id: 3, cat: Movies, desc: "Movies"}
@@ -28,7 +28,6 @@ caps:
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: apikey
@@ -132,10 +131,10 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-# global MR is 0.5 but torrents must be seeded for 3 days regardless of ratio
+# global MR is 0.5 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
 #      text: 0.5
     minimumseedtime:
-      # 120 hours (as seconds = 120 x 60 x 60)
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
 # json UNIT3D 5.3.0
