@@ -53,12 +53,13 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: sort
     type: select
     label: Sort requested from site
@@ -67,7 +68,6 @@ settings:
       1: title
       4: added
       5: size
-      7: seeders
   - name: type
     type: select
     label: Order requested from site
@@ -81,13 +81,9 @@ settings:
     default: For best results, change the <b>Torrentek száma egy oldalon:</b> setting to <b>100</b> on your account profile.
 
 login:
-  path: login.php
-  method: post
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: table[width="920"]:contains("Hiba")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href^="logout.php?k="]
@@ -129,29 +125,27 @@ search:
         - name: replace
           args: ["details.php?id=", "download.php?torrent="]
     size:
-      selector: td:last-child
+      selector: td:nth-last-child(2)
     date:
       # 2021-11-09 16:51:24
-      selector: td:nth-last-child(2)
+      selector: td:last-child
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    files:
-      selector: td:nth-last-child(4)
     grabs:
-      selector: td:nth-child(2)
+      selector: td:nth-child(6)
       filters:
         - name: regexp
-          args: "D:(\\d+)x"
+          args: "D:(\\d+)"
     seeders:
-      selector: td:nth-child(2)
+      selector: td:nth-child(4)
       filters:
         - name: regexp
           args: "S:(\\d+)"
     leechers:
-      selector: td:nth-child(2)
+      selector: td:nth-child(5)
       filters:
         - name: regexp
           args: "L:(\\d+)"
