@@ -114,6 +114,10 @@ search:
     - name: replace
       args: [" ", "-"]
 
+  headers:
+    # site blocks Jackett's Linux User-Agent, so use Jackett's Windows User-Agent instead
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"]
+
   rows:
     selector: table.table-striped > tbody > tr
     filters:
