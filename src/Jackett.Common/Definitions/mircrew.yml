@@ -128,7 +128,7 @@ search:
     # Search by Author
     author: ""
     # Search in subforums: yes 1, no 0
-    sc: 1
+    sc: 0
     # Search For: all, msgonly, titleonly, firstpost
     sf: titleonly
     # Show Results as: posts, topics
