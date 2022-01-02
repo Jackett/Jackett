@@ -39,7 +39,7 @@ caps:
     # - {id: 20, cat: Other, desc: "AS Membri MIRCrew"}
     # - {id: 21, cat: Other, desc: "AS Reclutamento MIRCrew"}
     # - {id: 23, cat: Other, desc: "AS Archivio"}
-    - {id: 25, cat: Movies, desc: "Video Releases", default: true}}
+    - {id: 25, cat: Movies, desc: "Video Releases", default: true}
     - {id: 26, cat: Movies, desc: "Releases Film", default: true}
     # - {id: 28, cat: TV, desc: "Releases Serie TV"}
     - {id: 51, cat: TV, desc: "Releases TV Stagioni in corso", default: true}
