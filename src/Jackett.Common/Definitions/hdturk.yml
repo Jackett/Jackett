@@ -25,18 +25,21 @@ caps:
     - {id: 16, cat: TV, desc: "TV Yerli"}
     - {id: 19, cat: TV/HD, desc: "TV Yerli HD"}
     - {id: 170, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 175, cat: Movies/HD, desc: "Movies 1080p Remux DUAL"}
+    - {id: 226, cat: Movies/HD, desc: "Movies 1080p Remux TR"}
+    - {id: 183, cat: Movies/HD, desc: "Movies 1080p Remux Yabancı"}
     - {id: 174, cat: Movies/3D, desc: "Movies 3D DUAL"}
     - {id: 180, cat: Movies/3D, desc: "Movies 3D TR"}
     - {id: 181, cat: Movies/3D, desc: "Movies 3D Yabancı"}
     - {id: 217, cat: Movies/UHD, desc: "Movies 4K DUAL"}
+    - {id: 224, cat: Movies/UHD, desc: "Movies 4K Remux DUAL"}
+    - {id: 225, cat: Movies/UHD, desc: "Movies 4K Remux Yabanci"}
     - {id: 218, cat: Movies/UHD, desc: "Movies 4K TR"}
     - {id: 216, cat: Movies/UHD, desc: "Movies 4K Yabancı"}
     - {id: 205, cat: Movies/DVD, desc: "Movies DVD DUAL"}
     - {id: 206, cat: Movies/DVD, desc: "Movies DVD TR/Yerli"}
     - {id: 219, cat: Movies/DVD, desc: "Movies DVD Yabancı"}
     - {id: 173, cat: Movies/BluRay, desc: "Movies Full BD"}
-    - {id: 175, cat: Movies/HD, desc: "Movies Remux DUAL"}
-    - {id: 183, cat: Movies/HD, desc: "Movies Remux Yabancı"}
     - {id: 171, cat: Movies/HD, desc: "Movies x264 DUAL"}
     - {id: 176, cat: Movies/HD, desc: "Movies x264 TR"}
     - {id: 177, cat: Movies/HD, desc: "Movies x264 Yabancı"}
@@ -73,6 +76,7 @@ caps:
     - {id: 221, cat: Other, desc: "VIP"}
     - {id: 85, cat: XXX, desc: "XXX"}
     - {id: 92, cat: XXX/Other, desc: "XXX E-Magazin"}
+    - {id: 220, cat: XXX/Other, desc: "XXX Hentai"}
     - {id: 93, cat: XXX, desc: "XXX Movie"}
     - {id: 95, cat: XXX/Pack, desc: "XXX Packs"}
     - {id: 96, cat: XXX/ImageSet, desc: "XXX Pics"}
