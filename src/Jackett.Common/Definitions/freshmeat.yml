@@ -5,6 +5,8 @@ description: "freshMeat is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
+certificates:
+  - 9aa995b06d86a22074c90faf5a9836e8a0fe6327 # expired 03/Jan/2022
 links:
   - https://freshmeat.io/
 
