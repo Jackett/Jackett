@@ -247,7 +247,7 @@ pre {
     white-space: nowrap;
 }
 
-select {
+.dataTables_length select, .dataTables_filter input, select {
     display: inline-block;
     height: 26px;
     padding: 0 8px;
