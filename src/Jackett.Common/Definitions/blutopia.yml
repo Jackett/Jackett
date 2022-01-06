@@ -9,9 +9,10 @@ links:
   - https://blutopia.xyz/
 
 caps:
+  # don't forget to update the search fields category case block
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 2, cat: TV, desc: "TV Show"}
     - {id: 3, cat: Movies/Other, desc: "FANRES"}
     - {id: 5, cat: Movies/Other, desc: "Trailer"}
 
@@ -99,37 +100,37 @@ search:
 
   fields:
     category:
-      selector: a[href*="/categories/"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: "/categories/(\\d+)"
+      selector: i.torrent-icon
+      attribute: class
+      case:
+        i.fa-film-alt: 1
+        i.fa-tv-retro: 2
+        i.ffa-video: 3
+        i.fa-play-circle: 5
     title:
       selector: a.view-torrent
-    download:
-      selector: a[href*="/download/"]
-      attribute: href
     details:
       selector: a.view-torrent
       attribute: href
+    download:
+      selector: a[href*="/download/"]
+      attribute: href
     poster:
-      selector: div.torrent-poster img
+      selector: img.torrent-poster-img-small
       attribute: src
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
-        - name: replace
-          args: ["https://via.placeholder.com/400x600", ""]
     size:
-      selector: td:nth-last-child(5)
+      selector: td.torrent-listings-size
     seeders:
-      selector: td:nth-last-child(4)
+      selector: td.torrent-listings-seeders
     leechers:
-      selector: td:nth-last-child(3)
+      selector: td.torrent-listings-leechers
     grabs:
-      selector: td:nth-last-child(2)
+      selector: td.torrent-listings-completed
     date:
-      selector: td:nth-last-child(1)
+      selector: td.torrent-listings-age
       filters:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
         - name: re_replace
@@ -192,4 +193,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# UNIT3D 5.3.1b
+# UNIT3D 6.0.0b
