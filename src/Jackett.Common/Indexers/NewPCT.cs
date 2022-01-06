@@ -100,13 +100,10 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://atomixhq.net/",
-            "https://pctmix1.unblockit.tv/"
+            "https://pctmix1.unblockit.how/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "http://descargas2020.com/",
-            "http://www.tvsinpagar.com/",
-            "http://torrentlocura.com/",
             "https://pctnew.site",
             "https://descargas2020.site",
             "http://torrentrapid.com/",
@@ -115,7 +112,6 @@ namespace Jackett.Common.Indexers
             "https://descargas2020.org/",
             "https://pctnew.org/",
             "https://pctreload.com/",
-            "https://pctmix1.unblockit.uno/",
             "https://pctmix1.unblockit.ch/",
             "https://pctmix1.unblockit.ws/",
             "https://pctmix1.unblockit.li/",
@@ -126,7 +122,8 @@ namespace Jackett.Common.Indexers
             "https://pctmix1.unblockit.kim/",
             "https://atomixhq.com/",
             "https://pctmix1.unblockit.bz/",
-            "https://atomixhq.one/"
+            "https://atomixhq.one/",
+            "https://pctmix1.unblockit.tv/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,

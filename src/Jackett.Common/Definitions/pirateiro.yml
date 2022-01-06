@@ -9,12 +9,9 @@ followredirect: true
 links:
   - https://pirateiro.com/
   - https://pirateiro.eu/
-  - https://pirateiro.unblockit.tv/
+  - https://pirateiro.unblockit.how/
 legacylinks:
   - http://pirateiro.com/
-  - https://pirateiro.unblockit.pro/
-  - https://pirateiro.unblockit.one/
-  - https://pirateiro.unblockit.me/
   - https://pirateiro.unblockit.pw/
   - https://pirateiro.unblockit.id/
   - https://pirateiro.unblockit.win/
@@ -33,6 +30,7 @@ legacylinks:
   - https://pirateiro.unblockit.ws/
   - https://pirateiro.unblockit.kim/
   - https://pirateiro.unblockit.bz/
+  - https://pirateiro.unblockit.tv/
 
 caps:
   categorymappings:
