@@ -8,30 +8,13 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.oxtorrent.be/
-  - https://oxtorrent.unblockit.tv/
+  - https://oxtorrent.unblockit.how/
   - https://oxtorrent.nocensor.biz/
 legacylinks:
-  - https://wwv.oxtorrent.com/
-  - https://www.smartorrent.tv/
-  - https://oxtorrent.black-mirror.xyz/
-  - https://oxtorrent.unblocked.casa/
-  - https://oxtrorrent.proxyportal.fun/
-  - https://oxtorrent.uk-unblock.xyz/
-  - https://oxtorrent.ind-unblock.xyz/
-  - https://www.oxtorrent.com/
-  - https://www.oxtorrent.pw/
-  - https://oxtorrent.unblocked.bar/
-  - https://oxtorrent.proxyportal.pw/
-  - https://oxtorrent.uk-unblock.pro/
-  - https://oxtorrent.unblocked.rest/
-  - https://www.oxtorrent.cc/
   - https://www.oxtorrent.bz/
   - https://www.oxtorrent.ws/
-  - https://wvw.oxtorrent.ws/
-  - https://oxtorrent.unblocked.monster/
   - https://www.oxtorrent.tv/
   - https://www.oxtorrent.ph/
-  - https://wvw.oxtorrent.pe/
   - https://www.oxtorrent.pe/
   - https://www.oxtorrent.co/
   - https://oxtorrent.unblockit.uno/
@@ -47,6 +30,7 @@ legacylinks:
   - https://www.oxtorrent.pl/
   - https://oxtorrent.unblockit.bz/
   - https://www.oxtorrent.vc/
+  - https://oxtorrent.unblockit.tv/
 
 caps:
   categorymappings:
