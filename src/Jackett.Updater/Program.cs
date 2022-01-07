@@ -462,6 +462,7 @@ namespace Jackett.Updater
                 "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
+                "Definitions/tellytorrent.yml", // switch to *-API #8682
                 "Definitions/tfile.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
