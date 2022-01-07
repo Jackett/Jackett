@@ -284,6 +284,7 @@ namespace Jackett.Updater
                 "Definitions/blubits.yml",
                 "Definitions/blutopia.yml", // switch to *-API #8682
                 "Definitions/brobits.yml",
+                "Definitions/brsociety.yml", // switch to *-API #8682
                 "Definitions/bt-scene.yml",
                 "Definitions/btbit.yml",
                 "Definitions/btdb.yml",
