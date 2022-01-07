@@ -1,0 +1,75 @@
+---
+id: freshmeat
+name: freshMeat
+description: "freshMeat is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+certificates:
+  - 9aa995b06d86a22074c90faf5a9836e8a0fe6327 # expired 03/Jan/2022
+links:
+  - https://freshmeat.io/
+
+caps:
+  # unfortunately freshMeat does not display categories anywhere in its search results page :-(
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: info_8000
+    type: info
+    label: About freshMeat Categories
+    default: freshMeat does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}s?q={{ .Keywords }}{{ else }}{{ end }}"
+
+  rows:
+    selector: table.torrent-list > tbody > tr
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: 3
+    title:
+      selector: td:nth-child(2)
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
+    download:
+      selector: td:nth-child(2) a
+      attribute: href
+    date:
+      selector: td:nth-child(1)
+      attribute: data-sort-value
+      filters:
+        - name: dateparse
+          args: "2006-01-02 15:04:05"
+    description:
+      selector: td:nth-child(3) img
+      attribute: title
+    size:
+      selector: td:nth-child(4)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      text: 0
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

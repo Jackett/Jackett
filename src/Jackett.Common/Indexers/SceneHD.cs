@@ -58,7 +58,7 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "private";
 
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "D948487DD52462F2D1E62B990D608051E3DE5AA6");
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "C360EEF4D9B288112E038E4BF3AD0064FDA478F1");
 
             AddCategoryMapping(2, TorznabCatType.MoviesUHD, "Movie/2160");
             AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movie/1080");

@@ -1,0 +1,241 @@
+---
+id: krazyzone
+name: KrazyZone
+description: "KrazyZone is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - http://krazyzone.net/ # does not support https, CA expired Dec 2016
+
+caps:
+  categorymappings:
+    - {id: 3, cat: Audio, desc: "Mastermix"}
+    - {id: 4, cat: Audio, desc: "Mastermix Classic"}
+    - {id: 5, cat: Audio, desc: "Mastermix DJ Beats"}
+    - {id: 6, cat: Audio, desc: "Mastermix Extended"}
+    - {id: 7, cat: Audio, desc: "Mastermix- Grandmaster"}
+    - {id: 8, cat: Audio, desc: "Mastermix- Mastermix Other"}
+    - {id: 9, cat: Audio, desc: "Mastermix- Mastermix Packs"}
+    - {id: 10, cat: Audio, desc: "Mastermix Monthly Issue"}
+    - {id: 11, cat: Audio, desc: "Mastermix Pro Dance / Disc"}
+    - {id: 12, cat: Audio, desc: "Mastermix Professional"}
+    - {id: 13, cat: Audio, desc: "DMC"}
+    - {id: 83, cat: Audio, desc: "DMC Bootlegs"}
+    - {id: 84, cat: Audio, desc: "DMC Classic"}
+    - {id: 85, cat: Audio, desc: "DMC Commercial"}
+    - {id: 86, cat: Audio, desc: "DMC Complete"}
+    - {id: 87, cat: Audio, desc: "DMC Dance Mixes"}
+    - {id: 88, cat: Audio, desc: "DMC Essential"}
+    - {id: 89, cat: Audio, desc: "DMC Guide"}
+    - {id: 90, cat: Audio, desc: "DMC Monsterjam"}
+    - {id: 91, cat: Audio, desc: "DMC Other DMC and Packs"}
+    - {id: 92, cat: Audio, desc: "DMC Promo"}
+    - {id: 14, cat: Audio, desc: "MUSIC Albums"}
+    - {id: 110, cat: Audio, desc: "MUSIC Album / Music Packs and other MP3"}
+    - {id: 76, cat: Audio, desc: "MUSIC Artist Albums "}
+    - {id: 77, cat: Audio, desc: "MUSIC Compilations "}
+    - {id: 109, cat: Audio, desc: "MUSIC Discographys , Collection"}
+    - {id: 80, cat: Audio, desc: "MUSIC Flac / Lossy / DTS Packs "}
+    - {id: 81, cat: Audio/Lossless, desc: "MUSIC FLAC 24bit Hi-Res "}
+    - {id: 115, cat: Audio, desc: "MUSIC Singles , Maxi CD and Vinyl"}
+    - {id: 15, cat: Audio, desc: "DJ Only"}
+    - {id: 74, cat: Audio, desc: "DJ Other DJ Music  Including Select Mix , Promo Only"}
+    - {id: 75, cat: Audio, desc: "DJ UK Top 40 / Other Top 20 / 40"}
+    - {id: 82, cat: Audio, desc: "DJ Ultramix , Ultrasound , UltraTraxx , Xmix "}
+    - {id: 16, cat: Audio, desc: "ONLY KZN Packs / Albums"}
+    - {id: 73, cat: Audio, desc: "ONLY KZN  KZN Packs / Albums Exclusive VIP only"}
+    - {id: 69, cat: Audio, desc: "ONLY KZN Album / Music Packs"}
+    - {id: 72, cat: Audio, desc: "ONLY KZN MP3 Weekly"}
+    - {id: 17, cat: Audio, desc: "Karaoke"}
+    - {id: 67, cat: Audio, desc: "Karaoke All Karaoke "}
+    - {id: 68, cat: Audio, desc: "Karaoke All Karaoke Packs "}
+    - {id: 95, cat: Audio, desc: "KZN Mixed Albums / KZN Mixed Videos "}
+    - {id: 96, cat: Audio, desc: "KZN Mixed Albums / KZN Mixed Videos"}
+    - {id: 112, cat: Audio, desc: "KZN MP3 Weekly"}
+    - {id: 18, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 66, cat: Audio/Video, desc: "Music Videos Singles Video"}
+    - {id: 65, cat: Audio/Video, desc: "Music Videos Video Packs and Live Video Concerts"}
+    - {id: 19, cat: Movies, desc: "Movie Packs"}
+    - {id: 62, cat: Movies, desc: "Movie Packs Kids Movie Packs"}
+    - {id: 63, cat: Movies, desc: "Movie Packs Movie Packs"}
+    - {id: 64, cat: Movies, desc: "Movie Packs Pre 90 Movie Packs"}
+    - {id: 21, cat: PC, desc: "Applications"}
+    - {id: 50, cat: PC/Mobile-Android, desc: "Applications Android"}
+    - {id: 51, cat: PC/Mac, desc: "Applications Misc , Linux , Mac "}
+    - {id: 52, cat: PC/0day, desc: "Applications Windows"}
+    - {id: 22, cat: Books, desc: "Ebooks/Mags"}
+    - {id: 48, cat: Audio/Audiobook, desc: "Ebooks Audiobooks"}
+    - {id: 49, cat: Books/EBook, desc: "Ebooks Ebooks / Mags"}
+    - {id: 23, cat: PC/Games, desc: "Games"}
+    - {id: 45, cat: PC/Games, desc: "Games PC / ISO"}
+    - {id: 105, cat: Console/PS4, desc: "Games PS2 / PS3 / PS4 "}
+    - {id: 46, cat: Console/NDS, desc: "Games Wii+ Nds"}
+    - {id: 47, cat: Console/XBox 360, desc: "Games Xbox360"}
+    - {id: 20, cat: Movies, desc: "Movies"}
+    - {id: 113, cat: Movies, desc: "Movies 2021 Movies"}
+    - {id: 116, cat: Movies/UHD, desc: "Movies 4K Movies"}
+    - {id: 53, cat: Movies, desc: "Movies Anime / Kids"}
+    - {id: 54, cat: Movies/BluRay, desc: "Movies Bluray,HDRip,BDRip,Webrip,HEVC"}
+    - {id: 55, cat: Movies/SD, desc: "Movies Cam / TS / Screener"}
+    - {id: 56, cat: Movies, desc: "Movies Classic Movies Pre 90s to 2000"}
+    - {id: 57, cat: Movies/DVD, desc: "Movies DVDR ,NTSCPAL ,ISO"}
+    - {id: 58, cat: Movies/WEB-DL, desc: "Movies DVDRip,AVI,XVID,BRRip"}
+    - {id: 59, cat: Movies/Foreign, desc: "Movies Foreign"}
+    - {id: 107, cat: Movies/HD, desc: "Movies Mp4  Movies"}
+    - {id: 60, cat: Movies, desc: "Movies Netflix"}
+    - {id: 61, cat: Movies/3D, desc: "Movies Remux , 3D"}
+    - {id: 24, cat: TV, desc: "TV"}
+    - {id: 39, cat: TV/Documentary, desc: "TV Discovery /  Geographics / Documentary"}
+    - {id: 41, cat: TV, desc: "TV Episodes"}
+    - {id: 42, cat: TV/Anime, desc: "TV Kids / Anime"}
+    - {id: 43, cat: TV/Sport, desc: "TV Sport"}
+    - {id: 44, cat: TV/Sport, desc: "TV Sport Packs"}
+    - {id: 26, cat: Books/Comics, desc: "Comics"}
+    - {id: 37, cat: Books/Comics, desc: "Comics Comics"}
+    - {id: 25, cat: TV, desc: "TV Packs/Full Seasons"}
+    - {id: 38, cat: TV, desc: "TV Packs Full Seasons"}
+    - {id: 40, cat: TV, desc: "TV Packs Kids / Anime Full Seasons"}
+    - {id: 94, cat: TV, desc: "TV Packs Pre 90`s TV series"}
+    - {id: 27, cat: Other, desc: "Wallpapers"}
+    - {id: 36, cat: Other, desc: "Wallpapers PC Wallpapers"}
+    - {id: 1, cat: Other/Misc, desc: "Unsorted"}
+    - {id: 2, cat: Other/Misc, desc: "Unsorted To Be Edited"}
+    - {id: 30, cat: Other, desc: "Exclusive VIP"}
+    - {id: 33, cat: Other, desc: "Exclusive VIP Exclusive VIP Not To Be Uploaded Anywhere"}
+    - {id: 31, cat: Other, desc: "VIP"}
+    - {id: 32, cat: Other, desc: "VIP VIP Not To Be Uploaded Anywhere"}
+    - {id: 99, cat: Other, desc: "Christmas Albums"}
+    - {id: 101, cat: Other, desc: "Christmas Albums Packs"}
+    - {id: 103, cat: Other, desc: "All Christmas Movies and Packs"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: table:contains("error has occured")
+    - selector: a[href*="/login.php?error="]
+      message:
+        text: Wrong username or password.
+  test:
+    path: index.php
+    selector: a[href*="/logout.php?logouthash="]
+
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+  selectors:
+    - selector: a[href*="/download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: browse.php
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "%"]
+  inputs:
+    do: search
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
+    # does not support multi category searching so defaulting to all.
+    category: 0
+    include_dead_torrents: yes
+    sort: "{{ if .Config.freeleech }}free{{ else }}{{ .Config.sort }}{{ end }}"
+    order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
+
+  rows:
+    selector: "table.sortable tr:has(a[href*=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href*="/browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href*="/details.php?id="]
+    details:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    poster:
+      selector: img[src*="/torrents/images/"]
+      attribute: src
+    date:
+      selector: td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "02-01-2006 15:04 -07:00"
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        img[src$="/freedownload.gif"]: 0
+        img[src$="/silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="/x2.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 0.5
+    minimumseedtime:
+      # 12 hours (as seconds = 12 x 60 x 60)
+      text: 43200
+# TS Special Edition v.7.4

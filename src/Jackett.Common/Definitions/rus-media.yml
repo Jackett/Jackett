@@ -357,6 +357,14 @@ search:
       optional: true
     leechers:
       text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    date_minutes:
+      # 55 минут назад
+      selector: td:nth-of-type(6) p:nth-of-type(1):contains("минут")
+      optional: true
+      filters:
+        - name: replace
+          args: ["минут назад", "minutes ago"]
+        - name: timeago
     date_day:
       # Сегодня, 03:04
       # Вчера, 22:47
@@ -369,7 +377,7 @@ search:
           args: ["Вчера", "Yesterday"]
     date_year:
       # 12 янв 2019, 12:47
-      selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера"))
+      selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера")):not(:contains("минут"))
       optional: true
       filters:
         # replace month abbreviations
@@ -404,7 +412,7 @@ search:
         - name: dateparse
           args: "02 Jan 2006 15:04 -07:00"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_minutes }}{{ or .Result.date_year .Result.date_day .Result.date_minutes }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

@@ -66,6 +66,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * EZTV
  * FileListing
  * FireBit
+ * freshMeat
  * Frozen Layer
  * GamesTorrents
  * GkTorrent
@@ -132,7 +133,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Sexxi
  * Sexy-Pics
  * ShizaProject
- * shokweb
  * ShowRSS
  * Solid Torrents
  * sosulki
@@ -183,6 +183,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
  * AniDUB
  * Anime-Free
+ * AnimeLayer
  * ArenaBG
  * BaibaKo
  * BookTracker
@@ -253,7 +254,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Aftershock
  * Aidoru!Online
  * Aither
- * Alleen Retail
  * AlphaRatio (AR)
  * AmigosShareClub
  * anasch.cc
@@ -264,7 +264,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
  * AsianCinema
- * AsianDVDClub
  * AudioNews (AN)
  * Aussierul.es [![(invite needed)][inviteneeded]](#)
  * AvistaZ (AsiaTorrents)
@@ -288,6 +287,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BiTTuRK
  * BJ-Share (BJ)
  * BlueBird [![(invite needed)][inviteneeded]](#)
+ * Blues-Brothers
  * Blutopia (BLU)
  * Borgzelle  [![(invite needed)][inviteneeded]](#)
  * Boxing Torrents
@@ -337,7 +337,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Dragonworld Reloaded [![(invite needed)][inviteneeded]](#)
  * EbookParadijs
  * Ebooks-Shares
- * EfectoDoppler
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eShareNet
  * eStone (XiDER, BeLoad, BigTorrent)
@@ -388,6 +387,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDCity [![(invite needed)][inviteneeded]](#)
  * HDHome (HDBigger) [![(invite needed)][inviteneeded]](#)
  * HDME
+ * HDMonkey
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky [![(invite needed)][inviteneeded]](#)
  * HDTime
@@ -409,6 +409,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * JPTV
  * Karagarga
  * Keep Friends [![(invite needed)][inviteneeded]](#)
+ * KrazyZone
  * LastFiles
  * Lat-Team [![(invite needed)][inviteneeded]](#)
  * Le Saloon
@@ -426,6 +427,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * magic-heaven
  * Magico (Trellas) [![(invite needed)][inviteneeded]](#)
  * Majomparádé (TurkDepo)
+ * MediaMaatjes
  * MegamixTracker
  * MeseVilág (Fairytale World)
  * MicroBit (µBit)
@@ -436,11 +438,11 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Mononoké-BT [![(invite needed)][inviteneeded]](#)
  * MoreThanTV (MTV)
  * MouseBits
+ * Movie-Torrentz
  * Moviesite
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NBTorrents [![(invite needed)][inviteneeded]](#)
- * Nbytez
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
  * NetCosmo
@@ -456,6 +458,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * P2PElite
  * Partis [![(invite needed)][inviteneeded]](#)
  * PassThePopcorn (PTP)
+ * Peeratiko
  * PeerJunkies
  * Peers.FM
  * Pirata Digital
@@ -487,8 +490,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RacingForMe (RFM)
  * RedBits
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
- * Redacted (PassTheHeadphones) [![(invite needed)][inviteneeded]](#)
- * Renegade
+ * Redacted (PassTheHeadphones)
  * Resurrect The Net
  * RetroFlix
  * RevolutionTT
@@ -513,6 +515,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SpeedCD
  * Speedmaster HD [![(invite needed)][inviteneeded]](#)
  * SpeedTorrent Reloaded [![(invite needed)][inviteneeded]](#)
+ * SpiderTK
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
  * SportHD [![(invite needed)][inviteneeded]](#)
  * SportsCult
@@ -571,6 +574,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TurkSeed
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
+ * TvRoad
  * TVstore
  * Twilight Torrents
  * Twilights Zoom
@@ -730,7 +734,7 @@ Detailed instructions are available at [LinuxServer.io Jackett Docker](https://h
 
 
 ## Installation on Synology
-Jackett is available as a beta package from [SynoCommunity](https://synocommunity.com/)
+Jackett is available as a [beta package](https://synocommunity.com/package/jackett) from [SynoCommunity](https://synocommunity.com/)
 
 
 ## Running Jackett behind a reverse proxy

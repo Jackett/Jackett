@@ -9,54 +9,68 @@ links:
   - https://mircrew-releases.org/
 
 caps:
+  # commented out categories are discussion-only forums
   categorymappings:
-    - {id: 1, cat: Other, desc: "MIRCrew Sharing Community"}
-    - {id: 2, cat: Other, desc: "Piazza Grande"}
-    - {id: 3, cat: Other, desc: "Comunicazioni, Annunci & Guide"}
-    - {id: 11, cat: Other, desc: "CAG Progetti & Collezioni"}
-    - {id: 12, cat: Other, desc: "CAG Pir8 Channel"}
-    - {id: 13, cat: Other, desc: "CAG Progetti"}
-    - {id: 61, cat: Other, desc: "CAG Video"}
-    - {id: 62, cat: Other, desc: "CAG Animazione"}
-    - {id: 63, cat: Other, desc: "CAG Libreria"}
-    - {id: 64, cat: Other, desc: "CAG Musica"}
-    - {id: 14, cat: Other, desc: "CAG Collezioni"}
-    - {id: 50, cat: Other, desc: "CAG Proposte & Richieste"}
-    - {id: 60, cat: Other, desc: "CAG Abbandonati"}
-    - {id: 15, cat: Other, desc: "Area Grafica"}
-    - {id: 16, cat: Other, desc: "Vetrina MIRCrew"}
-    - {id: 17, cat: Other, desc: "Vetrina Utenti"}
-    - {id: 19, cat: Other, desc: "Area Staff"}
-    - {id: 23, cat: Other, desc: "Archivio"}
-    - {id: 25, cat: Movies, desc: "Video Releases"}
-    - {id: 26, cat: Movies, desc: "Releases Film"}
-    - {id: 28, cat: TV, desc: "Releases Serie TV"}
-    - {id: 51, cat: TV, desc: "Releases TV Stagioni in corso"}
-    - {id: 52, cat: TV, desc: "Releases TV Stagioni complete"}
-    - {id: 29, cat: TV/Documentary, desc: "Documentari"}
-    - {id: 30, cat: TV, desc: "TV Show"}
-    - {id: 31, cat: TV, desc: "Teatro"}
-    - {id: 32, cat: Movies, desc: "Richieste Video"}
-    - {id: 53, cat: Movies, desc: "Richieste Film"}
-    - {id: 54, cat: TV, desc: "Richieste Serie TV"}
-    - {id: 55, cat: Movies, desc: "Richieste Video diverse"}
-    - {id: 57, cat: Movies, desc: "Richieste Video Soddisfatte"}
-    - {id: 33, cat: TV/Anime, desc: "Animazione Releases"}
-    - {id: 34, cat: TV/Anime, desc: "Anime - Movies"}
-    - {id: 35, cat: TV/Anime, desc: "Anime - Serie"}
-    - {id: 36, cat: TV/Anime, desc: "Cartoon - Movies"}
-    - {id: 37, cat: TV/Anime, desc: "Cartoon - Serie"}
-    - {id: 38, cat: TV/Anime, desc: "Richieste Animazione"}
-    - {id: 39, cat: Books, desc: "Libreria Releases"}
-    - {id: 40, cat: Books/EBook, desc: "E-Books"}
-    - {id: 41, cat: Audio/Audiobook, desc: "A-Books"}
-    - {id: 42, cat: Books/Comics, desc: "Comics"}
-    - {id: 43, cat: Books/Mags, desc: "Edicola"}
-    - {id: 44, cat: Books, desc: "Richieste Libreria"}
-    - {id: 45, cat: Audio, desc: "Music Releases"}
-    - {id: 46, cat: Audio, desc: "Musica - Audio"}
-    - {id: 47, cat: Audio/Video, desc: "Musica - Video"}
-    - {id: 48, cat: Audio, desc: "Richieste Musica"}
+    # - {id: 1, cat: Other, desc: "MIRCrew Sharing Community"}
+    # - {id: 2, cat: Other, desc: "Piazza Grande"}
+    # - {id: 4, cat: Other, desc: "PG Statuto & Regole"}
+    # - {id: 5, cat: Other, desc: "PG Info Point"}
+    # - {id: 6, cat: Other, desc: "PG Presentazioni"}
+    # - {id: 7, cat: Other, desc: "PG Off Topic"}
+    # - {id: 49, cat: Other, desc: "PG Segnalazioni allo Staff"}
+    # - {id: 3, cat: Other, desc: "Comunicazioni, Annunci & Guide"}
+    # - {id: 8, cat: Other, desc: "CAG Comunicazioni da MIRCrew"}
+    # - {id: 9, cat: Other, desc: "CAG Guide & Tutorial"}
+    # - {id: 11, cat: Other, desc: "Progetti & Collezioni"}
+    # - {id: 12, cat: Other, desc: "P&C Pir8 Channel"}
+    # - {id: 13, cat: Other, desc: "P&C Progetti"}
+    # - {id: 61, cat: Other, desc: "P&C Video"}
+    # - {id: 62, cat: Other, desc: "P&C Animazione"}
+    # - {id: 63, cat: Other, desc: "P&C Libreria"}
+    # - {id: 64, cat: Other, desc: "P&C Musica"}
+    # - {id: 14, cat: Other, desc: "P&C Collezioni"}
+    # - {id: 50, cat: Other, desc: "P&C Proposte & Richieste"}
+    # - {id: 60, cat: Other, desc: "P&C Abbandonati"}
+    # - {id: 15, cat: Other, desc: "Area Grafica"}
+    # - {id: 16, cat: Other, desc: "AG Vetrina MIRCrew"}
+    # - {id: 17, cat: Other, desc: "AG Vetrina Utenti"}
+    # - {id: 18, cat: Other, desc: "AG Richieste Grafica"}
+    # - {id: 19, cat: Other, desc: "Area Staff"}
+    # - {id: 20, cat: Other, desc: "AS Membri MIRCrew"}
+    # - {id: 21, cat: Other, desc: "AS Reclutamento MIRCrew"}
+    # - {id: 23, cat: Other, desc: "AS Archivio"}
+    - {id: 25, cat: Movies, desc: "Video Releases", default: true}
+    - {id: 26, cat: Movies, desc: "Releases Film", default: true}
+    # - {id: 28, cat: TV, desc: "Releases Serie TV"}
+    - {id: 51, cat: TV, desc: "Releases TV Stagioni in corso", default: true}
+    - {id: 52, cat: TV, desc: "Releases TV Stagioni complete", default: true}
+    - {id: 29, cat: TV/Documentary, desc: "Documentari", default: true}
+    - {id: 30, cat: TV, desc: "TV Show", default: true}
+    - {id: 31, cat: TV, desc: "Teatro", default: true}
+    # - {id: 32, cat: Movies, desc: "Richieste Video"}
+    # - {id: 53, cat: Movies, desc: "Richieste Film"}
+    # - {id: 54, cat: TV, desc: "Richieste Serie TV"}
+    # - {id: 55, cat: Movies, desc: "Richieste Video diverse"}
+    # - {id: 57, cat: Movies, desc: "Richieste Video Soddisfatte"}
+    - {id: 33, cat: TV/Anime, desc: "Animazione Releases", default: true}
+    - {id: 34, cat: TV/Anime, desc: "Anime - Movies", default: true}
+    - {id: 35, cat: TV/Anime, desc: "Anime - Serie", default: true}
+    - {id: 36, cat: TV/Anime, desc: "Cartoon - Movies", default: true}
+    - {id: 37, cat: TV/Anime, desc: "Cartoon - Serie", default: true}
+    # - {id: 38, cat: TV/Anime, desc: "Richieste Animazione", default: true}
+    # - {id: 58, cat: TV/Anime, desc: "Richieste Animazione Soddisfatte", default: true}
+    - {id: 39, cat: Books, desc: "Libreria Releases", default: true}
+    - {id: 40, cat: Books/EBook, desc: "E-Books", default: true}
+    - {id: 41, cat: Audio/Audiobook, desc: "A-Books", default: true}
+    - {id: 42, cat: Books/Comics, desc: "Comics", default: true}
+    - {id: 43, cat: Books/Mags, desc: "Edicola", default: true}
+    # - {id: 44, cat: Books, desc: "Richieste Libreria"}
+    # - {id: 59, cat: Books, desc: "Richieste Libreria Soddisfatte"}
+    - {id: 45, cat: Audio, desc: "Music Releases", default: true}
+    - {id: 46, cat: Audio, desc: "Musica - Audio", default: true}
+    - {id: 47, cat: Audio/Video, desc: "Musica - Video", default: true}
+    # - {id: 48, cat: Audio, desc: "Richieste Musica"}
+    # - {id: 56, cat: Audio, desc: "Richieste Musica Soddisfatte"}
 
   modes:
     search: [q]
@@ -114,7 +128,7 @@ search:
     # Search by Author
     author: ""
     # Search in subforums: yes 1, no 0
-    sc: 1
+    sc: 0
     # Search For: all, msgonly, titleonly, firstpost
     sf: titleonly
     # Show Results as: posts, topics

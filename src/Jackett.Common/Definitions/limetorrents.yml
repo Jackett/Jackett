@@ -9,7 +9,7 @@ followredirect: true
 # changes to this indexer should also be made to limetorrentsclone
 links:
   - https://www.limetorrents.pro/
-  - https://limetorrents.unblockit.tv/
+  - https://limetorrents.unblockit.how/
   - https://limetorrents.unblockninja.com/
   - https://limetorrents.nocensor.biz/
 legacylinks:
@@ -17,27 +17,6 @@ legacylinks:
   - https://www.limetorrents.cc/
   - https://www.limetorrents.me/
   - https://www.limetorrents.zone/ # redirects to .info
-  - https://limetorrents.unblockit.pro/
-  - https://limetorrents.unblockit.one/
-  - https://limetorrents.black-mirror.xyz/
-  - https://limetorrents.unblocked.casa/
-  - https://limetorrents.proxyportal.fun/
-  - https://limetorrents.uk-unblock.xyz/
-  - https://limetorrents.ind-unblock.xyz/
-  - https://limetorrents.unblocked.bar/
-  - https://limetorrents.proxyportal.pw/
-  - https://limetorrents.uk-unblock.pro/
-  - https://limetorrents.unblockit.me/
-  - https://limetorrents.unblockit.pw/
-  - https://limetorrents.unblockit.id/
-  - https://limetorrents.unblockit.win/
-  - https://limetorrents.unblockit.top/
-  - https://limetorrents.unblockit.lat/
-  - https://limetorrents.unblockit.app/
-  - https://limetorrents.unblockit.dev/
-  - https://limetorrents.unblockit.ltd/
-  - https://limetorrents.unblockit.link/
-  - https://limetorrents.unblockit.buzz/
   - https://limetorrents.unblockit.club/
   - https://limetorrents.unblockit.onl/
   - https://www.limetorrents.info/
@@ -53,6 +32,7 @@ legacylinks:
   - https://limetorrents.nocensor.work/
   - https://limetorrents.unblockit.kim/
   - https://limetorrents.unblockit.bz/
+  - https://limetorrents.unblockit.tv/
 
 caps:
   categorymappings:

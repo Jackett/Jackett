@@ -1,25 +1,33 @@
 ---
-id: blutopia-api
-name: Blutopia (API)
-description: "Blutopia (BLU) is a Private Torrent Tracker for HD MOVIES / TV"
+id: torrentseeds-api
+name: TorrentSeeds (API)
+description: "TorrentSeeds is a Private Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://blutopia.xyz/
+  - https://torrentseeds.org/
 
 caps:
   # dont forget to update the case block in the search fields category
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV Show"}
-    - {id: 3, cat: Movies/Other, desc: "FANRES"}
-    - {id: 5, cat: Movies/Other, desc: "Trailer"}
+    - {id: 1, cat: PC/0day, desc: "Apps"}
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
+    - {id: 2, cat: PC/Games, desc: "Games"}
+    - {id: 3, cat: Movies, desc: "Movies"}
+    - {id: 4, cat: Audio, desc: "Music"}
+    - {id: 6, cat: XXX, desc: "Porn"}
+    - {id: 7, cat: TV/Sport, desc: "Sport"}
+    - {id: 3205, cat: TV, desc: "TV"}
+    - {id: 8, cat: TV, desc: "Packs"}
+    - {id: 3206, cat: TV/Foreign, desc: "TV/Foreign"}
+    - {id: 3207, cat: Movies/Foreign, desc: "Movies/Foreign"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
 
 settings:
   - name: apikey
@@ -28,7 +36,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://blutopia.xyz/\" target =_blank>Blutopia</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://torrentseeds.org/\" target =_blank>TorrentSeeds</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -59,10 +67,6 @@ search:
         type: json
         attribute: attributes
 
-  keywordsfilters:
-    - name: re_replace
-      args: ["\\.", " "]
-
   rows:
     selector: data
     count:
@@ -72,10 +76,17 @@ search:
     category:
       selector: category
       case:
-        Movie: 1
-        TV Show: 2
-        FANRES: 3
-        Trailer: 5
+        "Apps": 1
+        "Games": 2
+        "Movies": 3
+        "Music": 4
+        "Anime": 5
+        "Porn": 6
+        "Sport": 7
+        "Packs": 8
+        "TV": 3205
+        "TV/Foreign": 3206
+        "Movies/Foreign": 3207
     title:
       selector: name
     details:
@@ -109,25 +120,21 @@ search:
     size:
       selector: size
     downloadvolumefactor:
-      # api returns 0%, 25%, 50%, 75%, 100%
+      # api returns 0=false, 1=true
       selector: freeleech
       case:
-        0%: 1 # not free
-        25%: 0.75
-        50%: 0.5
-        75%: 0.25
-        100%: 0 # freeleech
-        "*": 0 # catch errors
+        0: 1 # not free
+        1: 0 # freeleech
     uploadvolumefactor:
       # api returns 0=false, 1=true
       selector: double_upload
       case:
         0: 1 # normal
         1: 2 # double
-# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+# global MR is 0.5 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
-#      text: 0.4
+#      text: 0.5
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-# json UNIT3D 5.3.1b
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+# json UNIT3D 5.3.0

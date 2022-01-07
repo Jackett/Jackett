@@ -1,7 +1,7 @@
 ---
 id: demonoid
 name: Demonoid
-description: "Demonoid is a Public torrent site for MOVIES / TV / GENERAL"
+description: "Demonoid is a Semi-Private torrent site for MOVIES / TV / GENERAL"
 language: en-US
 type: semi-private
 encoding: UTF-8
@@ -11,19 +11,10 @@ links:
   - https://www.dnoid.to/
   - https://www.dnoid.pw/
   - https://demonoidevmsgasmojajlhikwetsr4pxzw6xkjt3dgdv6nr5yxvsamid.onion.ly/
-  - https://demonoid.unblockit.tv/
+  - https://demonoid.unblockit.how/
   - https://demonoid.torrentbay.to/
   - https://demonoid.nocensor.biz/
 legacylinks:
-  - https://demonoid.unblockit.pro/
-  - https://demonoid.unblockit.one/
-  - https://demonoid.unblockit.me/
-  - https://dnoid.black-mirror.xyz/
-  - https://dnoid.unblocked.casa/
-  - https://dnoid.proxyportal.fun/
-  - https://dnoid.uk-unblock.xyz/
-  - https://dnoid.ind-unblock.xyz/
-  - https://demonoid.unblockit.pw/
   - https://demonoid.unblockit.id/
   - https://demonoid.unblockit.win/
   - https://demonoid.unblockit.top/
@@ -43,6 +34,7 @@ legacylinks:
   - https://demonoid.nocensor.work/
   - https://demonoid.unblockit.kim/
   - https://demonoid.unblockit.bz/
+  - https://demonoid.unblockit.tv/
 
 caps:
   categorymappings:
@@ -357,10 +349,10 @@ search:
 
   rows:
     # only the default theme "Demonoid - v5" is supported
-    selector: table.table:has(td.torrent__table-today) > tbody > tr:has(td[class^="tone_"])
+    selector: table.table tbody tr.table__row:has(td[class*="tone_"])
     after: 1
     dateheaders:
-      selector: tr td.torrent__table-today:not(:contains("Sponsored links"))
+      selector: tr td.table__separator:not(:contains("Sponsored links"))
       filters:
         - name: replace
           args: ["Added ", ""]
@@ -368,26 +360,29 @@ search:
           args: ["on ", ""]
 
   fields:
-    title_default:
-      selector: a[href^="/files/details/"]
-    title_optional:
-      selector: a[href^="/files/details/"]
-      optional: true
-      attribute: title
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     category:
-      selector: span.torrent__table-info > a:nth-child(2)
+      selector: span.table__column__subtext > a:nth-child(2)
       attribute: href
       optional: true
       filters:
         - name: querystring
           args: subcategory
+    title:
+      selector: a[href^="/files/details/"]
     details:
       selector: a[href^="/files/details/"]
       attribute: href
     download:
       selector: a[href^="/files/details/"]
+      attribute: href
+    poster:
+      selector: div[title]
+      attribute: data-bs-content
+      filters:
+        - name: regexp
+          args: src='(.+?)'
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     description:
       selector: td:nth-last-child(7)
