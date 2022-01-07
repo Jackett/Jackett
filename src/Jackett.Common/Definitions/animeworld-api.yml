@@ -88,7 +88,6 @@ search:
         "Anime Hentai": 5
         "Software": 6
         "Sonstiges": 7
-        "Filme": 8
         "Serien": 9
         "Spiele": 10
         "Musik": 11
@@ -96,6 +95,7 @@ search:
         "Cartoon Filme": 13
         "Cartoon Serie": 14
         "H-Manga / Doujinshi": 15
+        "Filme": 8
     title:
       selector: name
     details:
