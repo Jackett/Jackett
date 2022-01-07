@@ -305,6 +305,7 @@ namespace Jackett.Updater
                 "Definitions/DasUnerwartete.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/desireleasers.yml",
+                "Definitions/desitorrents.yml",  // switch to *-API #8682
                 "Definitions/devils-playground.yml",
                 "Definitions/devilsplayground.yml",
                 "Definitions/digbt.yml",
