@@ -307,7 +307,7 @@ namespace Jackett.Updater
                 "Definitions/DasUnerwartete.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/desireleasers.yml",
-                "Definitions/desitorrents.yml",  // switch to *-API #8682
+                "Definitions/desitorrents.yml", // switch to *-API #8682
                 "Definitions/devils-playground.yml",
                 "Definitions/devilsplayground.yml",
                 "Definitions/digbt.yml",
@@ -422,6 +422,7 @@ namespace Jackett.Updater
                 "Definitions/rapidetracker.yml",
                 "Definitions/rarbg.yml", // migrated to C#
                 "Definitions/redtopia.yml",
+                "Definitions/reelflix.yml", // switch to *-API #8682
                 "Definitions/renegade.yml",
                 "Definitions/retroflix.yml", // migrated to C#
                 "Definitions/rgu.yml",
