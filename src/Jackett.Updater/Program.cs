@@ -415,6 +415,7 @@ namespace Jackett.Updater
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/obscure.yml",
+                "Definitions/oncesearch.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
