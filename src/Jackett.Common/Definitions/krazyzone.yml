@@ -143,6 +143,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting <b>0 results</b> then access the site with your browser and <b>mark as read</b> all PMs."
 
 login:
   path: takelogin.php
