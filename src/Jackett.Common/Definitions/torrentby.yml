@@ -6,9 +6,9 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - https://torrent.by/
-certificates:
-  - 7536f57e6640c3fce3784736994be95585a85dfb
+  - http://torrent.by/
+legacylinks:
+  - https://torrent.by/ # ERR_CONNECTION_REFUSED
 
 caps:
   categories:
