@@ -6,6 +6,8 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 testlinktorrent: false
+certificates:
+  - 2b49b401259cb893f37de9eff343f7d356b1c2f2 # expired 8 ‎January ‎2022
 links:
   - https://anime-free.biz/
 legacylinks:
