@@ -53,6 +53,8 @@ search:
 
   rows:
     selector: div.webResult:has(a.magneto[data-src])
+    filters:
+      - name: andmatch
 
   fields:
     category:
