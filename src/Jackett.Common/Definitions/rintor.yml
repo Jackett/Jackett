@@ -150,6 +150,8 @@ search:
 
   rows:
     selector: tr[id^="tor_"]
+    filters:
+      - name: andmatch
 
   fields:
     category:

@@ -101,6 +101,8 @@ search:
 
   rows:
     selector: table > tbody#highlighted > tr:has(a[href^="browse.php?cat="])
+    filters:
+      - name: andmatch
 
   fields:
     category:

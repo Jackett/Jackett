@@ -119,8 +119,14 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+
   rows:
     selector: div.torrentrow:has(a[href^="download.php?torrent="])
+    filters:
+      - name: andmatch
 
   fields:
     category:

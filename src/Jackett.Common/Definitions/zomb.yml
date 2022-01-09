@@ -81,6 +81,8 @@ search:
 
   rows:
     selector: "table[style=\"border: solid #000000 1px;\"] > tbody > tr:has(a[href^=\"takedownload.php?id=\"])"
+    filters:
+      - name: andmatch
 
   fields:
     category:
