@@ -155,6 +155,8 @@ search:
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./dl.php?id="])
+    filters:
+      - name: andmatch
 
   fields:
     title:

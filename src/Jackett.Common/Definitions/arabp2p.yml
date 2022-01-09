@@ -126,6 +126,8 @@ search:
 
   rows:
     selector: table.torrent tr.torrent
+    filters:
+      - name: andmatch
 
   fields:
     category:

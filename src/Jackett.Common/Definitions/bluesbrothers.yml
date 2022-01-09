@@ -119,6 +119,8 @@ search:
 
   rows:
     selector: table.table-bordered tr:has(a[href^="download.php?torrent="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
