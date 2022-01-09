@@ -98,6 +98,8 @@ search:
 
   rows:
     selector: table.main > tbody >  tr:has(a[href^="/lataa.php/"])
+    filters:
+      - name: andmatch
 
   fields:
     category:
