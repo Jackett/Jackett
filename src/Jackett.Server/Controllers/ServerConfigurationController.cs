@@ -113,7 +113,8 @@ namespace Jackett.Server.Controllers
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);
 
-            if (config.flaresolverrurl != serverConfig.FlareSolverrUrl)
+            if (config.flaresolverrurl != serverConfig.FlareSolverrUrl ||
+                config.flaresolverr_maxtimeout != serverConfig.FlareSolverrMaxTimeout)
             {
                 if (string.IsNullOrWhiteSpace(config.flaresolverrurl))
                     config.flaresolverrurl = "";
@@ -121,7 +122,11 @@ namespace Jackett.Server.Controllers
                     || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
                     throw new Exception("FlareSolverr API URL is invalid. Example: http://127.0.0.1:8191");
 
+                if (config.flaresolverr_maxtimeout < 5000)
+                    throw new Exception("FlareSolverr Max Timeout must be greater than 5000 ms.");
+
                 serverConfig.FlareSolverrUrl = config.flaresolverrurl;
+                serverConfig.FlareSolverrMaxTimeout = config.flaresolverr_maxtimeout;
                 configService.SaveConfig(serverConfig);
                 webHostRestartNeeded = true;
             }

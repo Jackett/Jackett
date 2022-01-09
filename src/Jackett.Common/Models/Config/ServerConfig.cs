@@ -20,6 +20,7 @@ namespace Jackett.Common.Models.Config
             // Sonarr 15min, Radarr 60min, LazyLibrarian 20min, Readarr 15min, Lidarr = 15min
             CacheTtl = 2100; // 35 minutes is a reasonable value for all of them and to avoid race conditions
             CacheMaxResultsPerIndexer = 1000;
+            FlareSolverrMaxTimeout = 55000;
             RuntimeSettings = runtimeSettings;
         }
 
@@ -43,6 +44,7 @@ namespace Jackett.Common.Models.Config
         public long CacheTtl { get; set; }
         public long CacheMaxResultsPerIndexer { get; set; }
         public string FlareSolverrUrl { get; set; }
+        public int FlareSolverrMaxTimeout { get; set; }
         public string OmdbApiKey { get; set; }
         public string OmdbApiUrl { get; set; }
 
