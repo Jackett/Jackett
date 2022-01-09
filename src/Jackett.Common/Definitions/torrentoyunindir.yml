@@ -28,6 +28,8 @@ search:
 
   rows:
     selector: div.moviefilm
+    filters:
+      - name: andmatch
 
   fields:
     category:
