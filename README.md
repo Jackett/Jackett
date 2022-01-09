@@ -777,6 +777,7 @@ For these cases, [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) ha
 Setting up this service is optional, most indexers don't need it.
 * Install FlareSolverr service (following their instructions)
 * Configure **FlareSolverr API URL** in Jackett. For example: http://172.17.0.2:8191
+* It is recommended to keep the default value in **FlareSolverr Max Timeout (ms)** 
 
 ## Configuring OMDb
 This feature is used as a fallback (when using the aggregate Indexer) to get the movie/series title if only the IMDB ID is provided in the request.
