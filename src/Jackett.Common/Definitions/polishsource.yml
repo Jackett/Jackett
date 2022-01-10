@@ -145,16 +145,12 @@ search:
       filters:
         - name: append
           args: "Language: polish\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
     subbed:
       optional: true
       selector: img[src="pic/napisy.png"]
       filters:
         - name: append
           args: "Subbed\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
     description:
       text: "{{ .Result.genre }}{{ .Result.language }}{{ .Result.subbed }}"
     imdbid:
