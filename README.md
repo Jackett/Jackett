@@ -400,7 +400,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Il Corsaro Verde
  * Indietorrents [![(invite needed)][inviteneeded]](#)
  * IPTorrents (IPT)
- * ImmortalSeed (iS) [![(invite needed)][inviteneeded]](#)
+ * ImmortalSeed (iS)
  * Immortuos [![(invite needed)][inviteneeded]](#)
  * Insane Tracker
  * IPTorrents (IPT)
