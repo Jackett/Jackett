@@ -180,7 +180,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
-  * 720pier
+ * 720pier
  * AniDUB
  * Anime-Free
  * AnimeLayer
@@ -253,6 +253,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Aftershock
  * Aidoru!Online
  * Aither
+ * Alleen Retail
  * AlphaRatio (AR)
  * AmigosShareClub
  * anasch.cc
