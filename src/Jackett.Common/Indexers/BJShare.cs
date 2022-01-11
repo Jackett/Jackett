@@ -114,9 +114,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(11, TorznabCatType.Other, "Video-Aula");
             AddCategoryMapping(6, TorznabCatType.TV, "Vídeos de TV");
             AddCategoryMapping(4, TorznabCatType.PCGames, "Jogos");
-            AddCategoryMapping(199, TorznabCatType.XXX, "Filmes Adultos");
-            AddCategoryMapping(200, TorznabCatType.XXX, "Jogos Adultos");
-            AddCategoryMapping(201, TorznabCatType.XXXImageSet, "Fotos Adultas");
+            AddCategoryMapping(19, TorznabCatType.XXX, "Filmes Adultos");
+            AddCategoryMapping(20, TorznabCatType.XXX, "Jogos Adultos");
+            AddCategoryMapping(15, TorznabCatType.XXXImageSet, "Fotos Adultas");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
