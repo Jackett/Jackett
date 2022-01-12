@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(7, TorznabCatType.Other, "Outros");
             AddCategoryMapping(8, TorznabCatType.TVSport, "Esportes");
             AddCategoryMapping(9, TorznabCatType.BooksMags, "Revistas");
-            AddCategoryMapping(10, TorznabCatType.Books, "E-Books");
+            AddCategoryMapping(10, TorznabCatType.BooksEBook, "E-Books");
             AddCategoryMapping(11, TorznabCatType.AudioAudiobook, "Audiobook");
             AddCategoryMapping(12, TorznabCatType.BooksComics, "HQs");
             AddCategoryMapping(13, TorznabCatType.TVOther, "Stand Up Comedy");
