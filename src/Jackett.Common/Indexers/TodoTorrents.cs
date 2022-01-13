@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers
             ICacheService cs)
             : base(id: "todotorrents",
                    name: "TodoTorrents",
-                   description: "TodoTorrents",
+                   description: "TodoTorrents is a SPANISH public tracker for MOVIES / TV / GENERAL",
                    link: "https://todotorrents.net/",
                    caps: new TorznabCapabilities
                    {
