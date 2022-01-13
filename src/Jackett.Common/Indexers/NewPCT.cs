@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://atomixhq.net/",
+            "https://atomixhq.top/",
             "https://pctmix1.unblockit.how/"
         };
 
@@ -123,7 +123,8 @@ namespace Jackett.Common.Indexers
             "https://atomixhq.com/",
             "https://pctmix1.unblockit.bz/",
             "https://atomixhq.one/",
-            "https://pctmix1.unblockit.tv/"
+            "https://pctmix1.unblockit.tv/",
+            "https://atomixhq.net/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
