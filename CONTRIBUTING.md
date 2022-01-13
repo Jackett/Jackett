@@ -104,24 +104,31 @@ We've developed the guide below to make sure we're all on the same page because 
 The following guide assumes you've never worked with a Visual Studio project with GitHub before.
 This will give you the minimum necessary tools to get started. There are plenty of optional tools that may help you, but we won't cover those here.
 
-- The guide is currently only geared towards developing on Windows using Visual Studio Community 2019.
+- The guide is currently only geared towards developing on Windows using Visual Studio Community 2022.
 If you use something else, please add it here for others.
 
 <details open=true> <summary> Windows </summary>
 
-<details open=true> <summary> Visual Studio 2019 </summary>
+<details open=true> <summary> Visual Studio 2022 </summary>
 
-- Install [Visual Studio Community 2019](http://visualstudio.com) for free.
+- Install [Visual Studio Community 2022](https://visualstudio.microsoft.com/vs/) for free.
   - About 2GB download. 8GB installed.
-  -  Make sure it includes the following Workloads/Components:
-     -  .Net Desktop Development
-     -  .Net Core Cross-Platform Development
-     -  GitHub extension for Visual Studio
-- [Connect and synchronize your forked repository to Visual Studio](https://doc.fireflymigration.com/working-with-github-fork-in-visual-studio.html)
-- Open  `Tools -> NuGet Package Manager -> Package Manager Console`
-- From the PMC, run `dotnet tool install -g dotnet-format` and `dotnet restore`
-- Run `Build -> Rebuild Solution` to restore NuGet packages
-- Ensure `Jackett.Server` is the Startup Project (instead of `Jackett.Service`), and the Run Target (instead of `IIS Express`)
+  -  Make sure it includes the following Workload and Individual Components:
+     -  .NET desktop development
+     -  .Net Framework 4.6.1 SDK
+     -  .Net Framework 4.6.1 targeting pack
+- From the `Get Started` screen:
+  - `Clone a repository -> Browse a repository -> GitHub -> Sign in -> clone your forked repository`
+- Double-click `Jackett.sln` in `Solution Explorer` to load your project
+- Ensure `Jackett.Server` is the Startup Project (instead of `Jackett.Service`) and the Run Target (instead of `IIS Express`)
+- Open `Tools -> NuGet Package Manager -> Package Manager Console`
+- From the PMC, with `Jackett.Service` as the default project, run:
+  - `dotnet tool install -g dotnet-format`
+  - `dotnet msbuild /restore`
+  - `dotnet restore`
+  - `dotnet build`
+- [For more information on working with your forked GitHub repository in Visual Studio](https://doc.fireflymigration.com/working-with-github-fork-in-visual-studio.html)
+  - UPDATE: changes are now made in `Git Changes` and `Git Repository` (instead of `Team Explorer`)
 
 </details>
 
