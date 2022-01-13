@@ -32,11 +32,11 @@ body:
       - Minimum Seeding Time and Minimum Ratio (if Private): MST 24hrs, MR 1.0
       - Additional Comments: IMDB search has to be enabled in account settings, often has hcaptcha at login
     value: |
-      - Name:
-      - URL:
-      - Description:
-      - Minimum Seeding Time and Minimum Ratio (if Private):
-      - Additional Comments:
+      - Name: 
+      - URL: 
+      - Description: 
+      - Minimum Seeding Time and Minimum Ratio (if Private): 
+      - Additional Comments: 
     render: markdown
   validations:
     required: true
