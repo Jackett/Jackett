@@ -119,15 +119,24 @@ settings:
       asc: asc
 
 login:
-  method: cookie
+#   method: cookie
+#   inputs:
+#     cookie: "{{ .Config.cookie }}"
+#   test:
+#     path: lt/torrents.php
+  path: lt/account-login.php
+  method: post
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.klaida
   test:
-    path: lt/torrents.php
+    path: lt/torrents
 
 search:
   paths:
-    - path: lt/torrents.php
+    - path: lt/torrents
   inputs:
     $raw: "{{ range .Categories }}cats[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
