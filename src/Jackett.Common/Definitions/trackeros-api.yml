@@ -13,12 +13,10 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Películas"}
     - {id: 2, cat: TV, desc: "Series"}
-    - {id: 3, cat: Audio, desc: "Música"}
-    - {id: 4, cat: Console, desc: "Juegos"}
+    - {id: 3, cat: Audio, desc: "Musica"}
+    - {id: 7, cat: Audio/Video, desc: "Espectáculos"}
     - {id: 8, cat: TV/Documentary, desc: "Documentales"}
-    - {id: 7, cat: Audio/Video, desc: "Conciertos"}
-    - {id: 5, cat: PC, desc: "Aplicaciones"}
-    - {id: 6, cat: Other, desc: "Otros"}
+    - {id: 4, cat: Console, desc: "Consolas"}
 
   modes:
     search: [q]
@@ -76,12 +74,10 @@ search:
       case:
         Películas: 1
         Series: 2
-        Música: 3
-        Juegos: 4
+        Musica: 3
+        Espectáculos: 7
         Documentales: 8
-        Conciertos: 7
-        Aplicaciones: 5
-        Otros: 6
+        Consolas: 4
     title:
       selector: name
       filters:
