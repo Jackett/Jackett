@@ -77,6 +77,8 @@ namespace Jackett.Common.Utils.Clients
 
             clearanceHandlr.InnerHandler = clientHandlr;
             client = new HttpClient(clearanceHandlr);
+
+            SetTimeout(ClientTimeout);
         }
 
         // Called everytime the ServerConfig changes
@@ -88,6 +90,12 @@ namespace Jackett.Common.Utils.Clients
             {
                 CreateClient();
             }
+        }
+
+        public override void SetTimeout(int seconds)
+        {
+            ClientTimeout = seconds;
+            client.Timeout = TimeSpan.FromSeconds(ClientTimeout);
         }
 
         public override void Init()
