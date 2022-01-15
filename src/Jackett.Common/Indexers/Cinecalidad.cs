@@ -176,20 +176,20 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
 
-                var rows = dom.QuerySelectorAll("div.postItem");
+                var rows = dom.QuerySelectorAll("article");
                 foreach (var row in rows)
                 {
                     var qImg = row.QuerySelector("img");
                     if (qImg == null)
                         continue; // skip results without image
-                    var title = qImg.GetAttribute("title");
+                    var title = qImg.GetAttribute("alt");
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
                     title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
                     title += " 1080p BDRip x264";
 
-                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("data-src")));
-                    var link = new Uri(row.QuerySelector("a.postItem__back-link").GetAttribute("href"));
+                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
+                    var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
 
                     var release = new ReleaseInfo
                     {
