@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://atomixhq.net/",
+                   link: "https://atomixhq.top/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
