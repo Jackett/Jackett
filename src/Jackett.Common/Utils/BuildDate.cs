@@ -10,7 +10,7 @@ namespace Jackett.Common.Utils
         {
             var commonAssembly = Assembly.GetExecutingAssembly();
             var attribute = commonAssembly.GetCustomAttribute<BuildDateAttribute>();
-            return attribute?.DateTime ?? default(DateTime);
+            return attribute?.DateTime ?? default;
         }
     }
 

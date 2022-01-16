@@ -16,7 +16,7 @@ namespace Jackett.Common.Services
             }
             catch
             {
-                return default(T);
+                return default;
             }
         }
     }

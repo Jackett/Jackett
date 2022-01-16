@@ -141,9 +141,11 @@ namespace Jackett.Common.Indexers
                     if (prev == null || !string.Equals(prev.NodeName, "style", StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 86400; // 24 hours
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 86400 // 24 hours
+                    };
 
                     var qLink = row.Children[1].FirstElementChild;
                     release.Title = qLink.TextContent.Trim();

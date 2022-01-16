@@ -150,7 +150,7 @@ namespace Jackett.Common.Services
                 if (!File.Exists(fullPath))
                 {
                     logger.Debug("Config file does not exist: " + fullPath);
-                    return default(T);
+                    return default;
                 }
 
                 return serializeService.DeSerialise<T>(File.ReadAllText(fullPath));
