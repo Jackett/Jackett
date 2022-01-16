@@ -25,6 +25,7 @@ namespace Jackett.Common.Utils.Clients
         protected DateTime lastRequest = DateTime.MinValue;
         protected TimeSpan requestDelayTimeSpan;
         protected string ClientType;
+        protected int ClientTimeout = 100; // default timeout is 100 s
         public bool EmulateBrowser = true;
 
         protected static Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
@@ -223,6 +224,8 @@ namespace Jackett.Common.Utils.Clients
             if (webProxyUrl != newProxyUrl) // if proxy URL changed
                 InitProxy(serverConfig);
         }
+
+        public virtual void SetTimeout(int seconds) => throw new NotImplementedException();
 
         /**
          * This method does the same as FormUrlEncodedContent but with custom encoding instead of utf-8

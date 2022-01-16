@@ -49,6 +49,8 @@ namespace Jackett.Common.Utils.Clients
             return sslPolicyErrors == SslPolicyErrors.None;
         }
 
+        public override void SetTimeout(int seconds) => ClientTimeout = seconds;
+
         public override void Init()
         {
             base.Init();
@@ -92,6 +94,7 @@ namespace Jackett.Common.Utils.Clients
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
                     {
+                        client.Timeout = TimeSpan.FromSeconds(ClientTimeout);
                         using (var request = new HttpRequestMessage())
                         {
                             request.Headers.ExpectContinue = false;
