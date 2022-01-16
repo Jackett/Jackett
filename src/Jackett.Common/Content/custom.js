@@ -288,6 +288,12 @@ function displayConfiguredIndexersList(indexers) {
                 "visible": true,
                 "searchable": true,
                 "orderable": true
+            },
+            {
+                "targets": 2,
+                "visible": false,
+                "searchable": true,
+                "orderable": false
             }
         ]
     });
@@ -429,6 +435,13 @@ function displayUnconfiguredIndexersList() {
                 "targets": 6,
                 "visible": true,
                 "searchable": false,
+                "orderable": false
+            },
+            {
+                "name": "url",
+                "targets": 7,
+                "visible": false,
+                "searchable": true,
                 "orderable": false
             }
         ]

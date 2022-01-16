@@ -306,11 +306,12 @@
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
         <div class="tab-content configured-indexer-div">
-            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
                         <th>Indexer</th>
                         <th>Actions</th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -338,12 +339,15 @@
                                 </button>
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2"></td>
+                      <th></th>
+                      <th></th>
+                      <th data-type="hiddendata"></th>
                     </tr>
                 </tfoot>
             </table>
@@ -352,7 +356,7 @@
 
     <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
         <div class="unconfigured-indexer-div">
-            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
                         <th></th>
@@ -362,6 +366,7 @@
                         <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -389,6 +394,7 @@
                                 {{/if_eq}}
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -401,6 +407,7 @@
                         <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </tfoot>
             </table>
@@ -736,6 +743,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=2022010901"></script>
+    <script type="text/javascript" src="../custom.js?changed=2022011001"></script>
 </body>
 </html>
