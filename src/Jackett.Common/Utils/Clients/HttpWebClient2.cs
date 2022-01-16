@@ -183,10 +183,9 @@ namespace Jackett.Common.Utils.Clients
             };
 
             foreach (var header in response.Headers)
-            {
-                var value = header.Value;
-                result.Headers[header.Key.ToLowerInvariant()] = value.ToArray();
-            }
+                result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
+            foreach (var header in response.Content.Headers)
+                result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
 
             // some cloudflare clients are using a refresh header
             // Pull it out manually
