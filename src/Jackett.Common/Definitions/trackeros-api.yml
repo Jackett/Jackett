@@ -79,15 +79,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        Películas: 1
-        Series: 2
-        Musica: 3
-        Espectáculos: 7
-        Documentales: 8
-        Consolas: 4
     title:
       selector: name
       filters:

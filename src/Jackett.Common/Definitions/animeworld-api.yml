@@ -88,24 +88,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Anime Filme": 1
-        "Anime Serien": 2
-        "Anime Musik / OSTs": 3
-        "Anime Spiele": 4
-        "Anime Hentai": 5
-        "Software": 6
-        "Sonstiges": 7
-        "Serien": 9
-        "Spiele": 10
-        "Musik": 11
-        "Manga": 12
-        "Cartoon Filme": 13
-        "Cartoon Serie": 14
-        "H-Manga / Doujinshi": 15
-        "Filme": 8
     title:
       selector: name
     details:
