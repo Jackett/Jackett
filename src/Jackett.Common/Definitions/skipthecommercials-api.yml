@@ -9,7 +9,6 @@ links:
   - https://skipthecommericals.xyz/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 2, cat: TV, desc: "TV Show"}
 
