@@ -173,9 +173,10 @@ namespace Jackett.Common.Indexers
 
                     foreach (var name in titles)
                     {
-                        var release = new ReleaseInfo();
-
-                        release.Title = (name + releaseInfo).Trim();
+                        var release = new ReleaseInfo
+                        {
+                            Title = (name + releaseInfo).Trim()
+                        };
                         // Ensure the season is defined as this tracker only deals with full seasons
                         if (release.Title.IndexOf("Season") == -1 && AppendSeason)
                         {

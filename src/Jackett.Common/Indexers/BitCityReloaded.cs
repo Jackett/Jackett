@@ -130,13 +130,15 @@ namespace Jackett.Common.Indexers
 
             var searchString = query.GetQueryString();
             var searchUrl = BrowseUrl;
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("showsearch", "0");
-            queryCollection.Add("incldead", "1");
-            queryCollection.Add("blah", "0");
-            queryCollection.Add("team", "0");
-            queryCollection.Add("orderby", "added");
-            queryCollection.Add("sort", "desc");
+            var queryCollection = new NameValueCollection
+            {
+                { "showsearch", "0" },
+                { "incldead", "1" },
+                { "blah", "0" },
+                { "team", "0" },
+                { "orderby", "added" },
+                { "sort", "desc" }
+            };
 
             if (!string.IsNullOrWhiteSpace(searchString))
                 queryCollection.Add("search", searchString);
@@ -156,11 +158,13 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 0.7;
-                    release.MinimumSeedTime = 172800; // 48 hours
-                    release.DownloadVolumeFactor = 1;
-                    release.UploadVolumeFactor = 1;
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 0.7,
+                        MinimumSeedTime = 172800, // 48 hours
+                        DownloadVolumeFactor = 1,
+                        UploadVolumeFactor = 1
+                    };
 
                     var flagImgs = row.QuerySelectorAll("table tbody tr:nth-of-type(1) td > img");
                     var flags = new List<string>();
