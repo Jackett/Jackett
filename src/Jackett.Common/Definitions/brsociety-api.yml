@@ -74,14 +74,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Cursos": 1
-        "eBooks": 2
-        "Revistas": 5
-        "Audiobooks": 3
-        "Arquivos de Auxilio": 4
     title:
       selector: name
     details:

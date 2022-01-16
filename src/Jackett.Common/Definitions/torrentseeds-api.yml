@@ -81,20 +81,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Apps": 1
-        "Games": 2
-        "Movies": 3
-        "Music": 4
-        "Anime": 5
-        "Porn": 6
-        "Sport": 7
-        "Packs": 8
-        "TV": 3205
-        "TV/Foreign": 3206
-        "Movies/Foreign": 3207
     title:
       selector: name
     details:

@@ -77,13 +77,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        Movie: 1
-        TV Show: 2
-        FANRES: 3
-        Trailer: 5
     title:
       selector: name
     details:

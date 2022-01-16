@@ -78,12 +78,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        Movies: 1
-        TV: 2
-        Music: 3
     title:
       selector: name
     details:

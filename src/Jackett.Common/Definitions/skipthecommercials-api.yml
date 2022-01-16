@@ -74,10 +74,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "TV Show": 2
     title:
       selector: name
     details:

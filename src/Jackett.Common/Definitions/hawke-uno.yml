@@ -71,11 +71,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        Movie: 1
-        TV: 2
     title:
       selector: name
     details:

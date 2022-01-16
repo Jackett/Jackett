@@ -90,17 +90,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Movie": 1
-        "Serie TV": 2
-        "Ebook": 15
-        "Riviste e Giornali": 17
-        "XXX": 19
-        "Music": 3
-        "Games": 7
-        "Software": 23
     title:
       selector: name
       filters:

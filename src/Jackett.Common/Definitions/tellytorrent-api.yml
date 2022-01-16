@@ -82,17 +82,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Movie": 1
-        "TV": 2
-        "Music": 3
-        "Web Originals": 4
-        "Games": 5
-        "Application": 6
-        "Mobile App": 7
-        "Movies": 8
     title:
       selector: name
     details:
