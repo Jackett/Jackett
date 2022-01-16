@@ -10,7 +10,6 @@ links:
   - https://desitorrents.rocks/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}

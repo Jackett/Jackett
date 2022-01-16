@@ -9,7 +9,6 @@ links:
   - https://animeworld.cx/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies/Other, desc: "Anime Filme"}
     - {id: 2, cat: TV/Anime, desc: "Anime Serien"}
