@@ -11,7 +11,6 @@ legacylinks:
   - https://hdolimpo.co/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies, desc: "Películas"}
     - {id: 2, cat: TV, desc: "Series"}
@@ -69,13 +68,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    category_desc:
       selector: category
-      case:
-        "Películas": 1
-        "Series": 2
-        "Música": 3
-        "Documentales": 4
     title:
       selector: name
       filters:

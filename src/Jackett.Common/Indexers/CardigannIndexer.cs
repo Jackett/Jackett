@@ -1914,6 +1914,17 @@ namespace Jackett.Common.Indexers
                     }
                     value = release.Category.ToString();
                     break;
+                case "category_desc":
+                    var catsDesc = MapTrackerCatDescToNewznab(value);
+                    if (catsDesc.Any())
+                    {
+                        if (release.Category == null || FieldModifiers.Contains("noappend"))
+                            release.Category = catsDesc;
+                        else
+                            release.Category = release.Category.Union(catsDesc).ToList();
+                    }
+                    value = release.Category.ToString();
+                    break;
                 case "size":
                     release.Size = ReleaseInfo.GetBytes(value);
                     value = release.Size.ToString();
