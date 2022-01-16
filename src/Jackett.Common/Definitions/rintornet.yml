@@ -9,7 +9,6 @@ links:
   - https://www.rintor.net/
 
 caps:
-  # dont forget to update the search fields category case block
   categorymappings:
     - {id: 27, cat: XXX, desc: "Фильмы 2160 4K | Movies 2160p 4K"}
     - {id: 20, cat: XXX, desc: "Сайтрипы 2160 4K | Porn Video 2160p 4K"}
@@ -20,8 +19,8 @@ caps:
     - {id: 24, cat: XXX, desc: "Инцест (Инсценировка) | Incest (Simulation)"}
     - {id: 22, cat: XXX, desc: "Лесбиянки | Lesbians"}
     - {id: 26, cat: XXX, desc: "Порно Кастинг | Porno Casting"}
-    - {id: 29, cat: XXX, desc: "Японское Порно | Japanese Porn (Uncen)"}
-    - {id: 23, cat: XXX, desc: "Ретро Порно, Классика | Classic Porn, Retro"}
+    - {id: 29, cat: XXX, desc: "Японское (Без Цензуры) | Japanese Porn (Uncen)"}
+    - {id: 23, cat: XXX, desc: "Ретро Порно, Классика | Retro Porn, Classic"}
     - {id: 21, cat: XXX, desc: "Женское Доминирование, Страпон | Femdom, StrapOn"}
     - {id: 17, cat: XXX, desc: "БДСМ, Фистинг, Дилдо | BDSM, Fisting, Dildo"}
     - {id: 19, cat: XXX, desc: "Беременные | Pregnant"}
@@ -60,30 +59,8 @@ search:
     selector: div.entry:has(div.entry__title)
 
   fields:
-    category:
-      selector: div.entry__info
-      case:
-        "a:last-of-type:contains(\"Movies 2160p\")": 27
-        "a:last-of-type:contains(\"Video 2160p\")": 20
-        "a:last-of-type:contains(\"Movies HD\")": 1
-        "a:last-of-type:contains(\"SiteRips\")": 9
-        "a:last-of-type:contains(\"WEBRip\")": 12
-        "a:last-of-type:contains(\"Amateur\")": 10
-        "a:last-of-type:contains(\"Incest\")": 24
-        "a:last-of-type:contains(\"Lesbians\")": 22
-        "a:last-of-type:contains(\"Casting\")": 26
-        "a:last-of-type:contains(\"Japanese\")": 29
-        "a:last-of-type:contains(\"Classic\")": 23
-        "a:last-of-type:contains(\"Femdom\")": 21
-        "a:last-of-type:contains(\"BDSM\")": 17
-        "a:last-of-type:contains(\"Pregnant\")": 19
-        "a:last-of-type:contains(\"Bukkake\")": 28
-        "a:last-of-type:contains(\"Peeing\")": 25
-        "a:last-of-type:contains(\"Shemale\")": 16
-        "a:last-of-type:contains(\"Picture\")": 11
-        "a:last-of-type:contains(\"Cartoons\")": 14
-        "a:last-of-type:contains(\"Games\")": 13
-        "a:last-of-type:contains(\"Gay\")": 15
+    categorydesc:
+      selector: div.entry__info > span > a
     title:
       selector: div.entry__title > h3 > a
     details:
