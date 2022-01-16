@@ -558,6 +558,19 @@ namespace Jackett.Common.Indexers
             return response.ContentBytes;
         }
 
+        public virtual async Task<WebResult> DownloadImage(Uri link)
+        {
+            var uncleanLink = UncleanLink(link);
+            var requestLink = uncleanLink.ToString();
+            var referer = SiteLink;
+
+            var response = await RequestWithCookiesAsync(requestLink, null, RequestType.GET, referer);
+            if (response.IsRedirect)
+                await FollowIfRedirect(response);
+
+            return response;
+        }
+
         protected async Task<WebResult> RequestWithCookiesAndRetryAsync(
             string url, string cookieOverride = null, RequestType method = RequestType.GET,
             string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
