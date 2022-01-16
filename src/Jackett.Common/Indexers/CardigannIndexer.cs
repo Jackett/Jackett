@@ -1914,7 +1914,7 @@ namespace Jackett.Common.Indexers
                     }
                     value = release.Category.ToString();
                     break;
-                case "category_desc":
+                case "categorydesc":
                     var catsDesc = MapTrackerCatDescToNewznab(value);
                     if (catsDesc.Any())
                     {

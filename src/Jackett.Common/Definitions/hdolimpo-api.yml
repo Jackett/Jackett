@@ -68,7 +68,7 @@ search:
       selector: meta.total
 
   fields:
-    category_desc:
+    categorydesc:
       selector: category
     title:
       selector: name
