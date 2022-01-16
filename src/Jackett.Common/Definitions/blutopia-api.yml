@@ -57,6 +57,8 @@ login:
     api_token: "{{ .Config.apikey }}"
   error:
     - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
