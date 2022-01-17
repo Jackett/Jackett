@@ -9,7 +9,6 @@ links:
   - https://swarmazon.club/
 
 caps:
-  # dont forget to update the search fields category case block
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "Television"}
@@ -65,18 +64,11 @@ search:
 
   fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
     category:
-      selector: td.Name
-      case:
-        "small:contains(\"in Movies\")": 1
-        "small:contains(\"in Television\")": 2
-        "small:contains(\"in Video Courses\")": 3
-        "small:contains(\"in Music\")": 4
-        "small:contains(\"in Games\")": 5
-        "small:contains(\"in Software\")": 6
-        "small:contains(\"in Anime\")": 7
-        "small:contains(\"in E-Books\")": 8
-        "small:contains(\"in Audio Books\")": 9
-        "small:contains(\"in Comics\")": 10
+      selector: a[href*="/category.php?id="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: id
     title:
       selector: a[href*="/view/torrent.php?hash="]
     details:
