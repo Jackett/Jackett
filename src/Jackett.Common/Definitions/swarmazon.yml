@@ -55,7 +55,7 @@ login:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}en/search/search.php?category=all&query={{ .Keywords }}&limit=50{{ else }}index.php?date_range=14{{ end }}"
+    - path: "{{ if .Keywords }}en/search/search.php?category=all&query={{ .Keywords }}{{ else }}latest.php?date_range=14{{ end }}"
 
   rows:
     selector: table.table-striped > tbody > tr
@@ -63,12 +63,14 @@ search:
       - name: andmatch
 
   fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
-    category:
-      selector: a[href*="/category.php?id="]
-      attribute: href
+    categorydesc:
+      selector: td.Name small
       filters:
-        - name: querystring
-          args: id
+        - name: re_replace
+          args: ["(.+?)in\\s(.+?)", "$2"]
+        - name: replace
+          args: ["Freeleech", ""]
+        - name: trim
     title:
       selector: a[href*="/view/torrent.php?hash="]
     details:
