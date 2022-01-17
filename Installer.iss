@@ -19,6 +19,9 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
+CloseApplications=yes
+CloseApplicationsFilter=*.chm
+RestartApplications=no
 DefaultDirName={commonappdata}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
@@ -30,6 +33,7 @@ UninstallDisplayName={#MyAppName}
 Compression=lzma
 SolidCompression=yes
 DisableDirPage=yes
+WizardStyle=modern
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -46,6 +50,13 @@ Source: "{#MySourceFolder}\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignore
 Name: "{group}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Tasks: desktopicon
+
+[Code]
+Procedure RegisterExtraCloseApplicationsResources();
+Begin
+  RegisterExtraCloseApplicationsResource(False, ExpandConstant('{app}\JackettService.exe'));
+  RegisterExtraCloseApplicationsResource(False, ExpandConstant('{app}\{#MyAppExeName}'));
+End;
 
 [Run]
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated runhidden;
