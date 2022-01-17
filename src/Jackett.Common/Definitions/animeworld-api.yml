@@ -9,7 +9,6 @@ links:
   - https://animeworld.cx/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies/Other, desc: "Anime Filme"}
     - {id: 2, cat: TV/Anime, desc: "Anime Serien"}
@@ -63,6 +62,16 @@ settings:
       desc: desc
       asc: asc
 
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
 search:
   paths:
     # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
@@ -78,24 +87,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Anime Filme": 1
-        "Anime Serien": 2
-        "Anime Musik / OSTs": 3
-        "Anime Spiele": 4
-        "Anime Hentai": 5
-        "Software": 6
-        "Sonstiges": 7
-        "Serien": 9
-        "Spiele": 10
-        "Musik": 11
-        "Manga": 12
-        "Cartoon Filme": 13
-        "Cartoon Serie": 14
-        "H-Manga / Doujinshi": 15
-        "Filme": 8
     title:
       selector: name
     details:

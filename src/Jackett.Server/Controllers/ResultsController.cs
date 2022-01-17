@@ -414,6 +414,7 @@ namespace Jackett.Server.Controllers
                 var proxiedReleases = result.Releases.Select(r => MapperUtil.Mapper.Map<ReleaseInfo>(r)).Select(r =>
                 {
                     r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
+                    r.Poster = serverService.ConvertToProxyLink(r.Poster, serverUrl, r.Origin.Id, "img", "poster");
                     return r;
                 });
 
@@ -498,6 +499,9 @@ namespace Jackett.Server.Controllers
             {
                 var release = MapperUtil.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.Id, "dl", release.Title);
+                // Poster is not used in Potato response
+                //release.Poster = serverService.ConvertToProxyLink(release.Poster, serverUrl, CurrentIndexer.Id, "img", "poster");
+
                 // IMPORTANT: We can't use Uri.ToString(), because it generates URLs without URL encode (links with unicode
                 // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly
                 var item = new TorrentPotatoResponseItem()
@@ -531,13 +535,13 @@ namespace Jackett.Server.Controllers
             var serverUrl = serverService.GetServerUrl(Request);
             foreach (var result in results)
             {
-                var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
-                result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
+                result.Link = serverService.ConvertToProxyLink(result.Link, serverUrl, result.TrackerId, "dl", file);
+                result.Poster = serverService.ConvertToProxyLink(result.Poster, serverUrl, result.TrackerId, "img", "poster");
                 if (!string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
                 {
                     if (result.Link != null)
-                        result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
+                        result.BlackholeLink = serverService.ConvertToProxyLink(result.Link, serverUrl, result.TrackerId, "bh", file);
                     else if (result.MagnetUri != null)
                         result.BlackholeLink = serverService.ConvertToProxyLink(result.MagnetUri, serverUrl, result.TrackerId, "bh", file);
                 }

@@ -9,7 +9,6 @@ links:
   - https://torrentseeds.org/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: PC/0day, desc: "Apps"}
     - {id: 5, cat: TV/Anime, desc: "Anime"}
@@ -58,6 +57,16 @@ settings:
       desc: desc
       asc: asc
 
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
 search:
   paths:
     # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
@@ -73,20 +82,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Apps": 1
-        "Games": 2
-        "Movies": 3
-        "Music": 4
-        "Anime": 5
-        "Porn": 6
-        "Sport": 7
-        "Packs": 8
-        "TV": 3205
-        "TV/Foreign": 3206
-        "Movies/Foreign": 3207
     title:
       selector: name
     details:
