@@ -493,7 +493,6 @@ namespace Jackett.Common.Indexers
                 Category = MapTrackerCatToNewznab(cat),
                 PublishDate = publishDate,
                 Size = size,
-                Files = 1,
                 Seeders = 1,
                 Peers = 2,
                 DownloadVolumeFactor = 0,
