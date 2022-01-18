@@ -855,10 +855,10 @@ namespace Jackett.Common.Indexers
                 return false;
 
             // Only run html test selector on html responses
-            if (Result.Headers.ContentType.Contains("text/html"))
+            if (Result.Headers["Content-Type"].Contains("text/html"))
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(Result.Content);
+                var document = parser.ParseDocument(Result.ContentString);
 
                 if (Definition.Login.Test.Selector != null)
                 {
@@ -1477,7 +1477,7 @@ namespace Jackett.Common.Indexers
                             var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                             // check if we need to login again
-                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                            var loginNeeded = CheckIfLoginIsNeeded(response);
                             if (loginNeeded)
                             {
                                 logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
