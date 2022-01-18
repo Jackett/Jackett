@@ -1522,7 +1522,7 @@ namespace Jackett.Common.Indexers
                             {
                                 results = applyFilters(results, search.Preprocessingfilters, variables);
                                 SearchResultDocument = SearchResultParser.ParseDocument(results);
-                                logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
+                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
                             }
 
                             var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
