@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using AngleSharp.Xml.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -1463,8 +1464,7 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var SearchResultParser = new HtmlParser();
-                        var SearchResultDocument = SearchResultParser.ParseDocument(results);
+                        IHtmlCollection<IElement> rowsDom;
 
                         // check if we need to login again
                         var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
@@ -1485,15 +1485,37 @@ namespace Jackett.Common.Indexers
 
                         checkForError(response, Definition.Search.Error);
 
-                        if (Search.Preprocessingfilters != null)
+                        if (request.SearchPath.Response != null && request.SearchPath.Response.Type.Equals("xml"))
                         {
-                            results = applyFilters(results, Search.Preprocessingfilters, variables);
-                            SearchResultDocument = SearchResultParser.ParseDocument(results);
-                            logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
+                            var searchResultParser = new XmlParser();
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
+
+                            if (search.Preprocessingfilters != null)
+                            {
+                                results = ApplyFilters(results, search.Preprocessingfilters, variables);
+                                searchResultDocument = searchResultParser.ParseDocument(results);
+                                _logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", _definition.Id, results));
+                            }
+
+                            var rowsSelector = ApplyGoTemplateText(search.Rows.Selector, variables);
+                            rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                        }
+                        else
+                        {
+                            var searchResultParser = new HtmlParser();
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
+
+                            if (search.Preprocessingfilters != null)
+                            {
+                                results = ApplyFilters(results, search.Preprocessingfilters, variables);
+                                searchResultDocument = searchResultParser.ParseDocument(results);
+                                _logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", _definition.Id, results));
+                            }
+
+                            var rowsSelector = ApplyGoTemplateText(search.Rows.Selector, variables);
+                            rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
                         }
 
-                        var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                        var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                         var Rows = new List<IElement>();
                         foreach (var RowDom in RowsDom)
                         {
