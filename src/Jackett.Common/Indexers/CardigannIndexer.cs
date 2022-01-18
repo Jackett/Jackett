@@ -1472,7 +1472,8 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        IHtmlCollection<IElement> rowsDom;
+                        var searchResultParser = new XmlParser();
+                        var searchResultDocument = searchResultParser.ParseDocument(results);
 
                         // check if we need to login again
                         var loginNeeded = CheckIfLoginIsNeeded(response, searchResultDocument);
@@ -1493,11 +1494,10 @@ namespace Jackett.Common.Indexers
 
                         checkForError(response, Definition.Search.Error);
 
-                        if (request.SearchPath.Response != null && request.SearchPath.Response.Type.Equals("xml"))
-                        {
-                            var searchResultParser = new XmlParser();
-                            var searchResultDocument = searchResultParser.ParseDocument(results);
+                        IHtmlCollection<IElement> rowsDom;
 
+                        if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
+                        {
                             if (search.Preprocessingfilters != null)
                             {
                                 results = applyFilters(results, search.Preprocessingfilters, variables);
