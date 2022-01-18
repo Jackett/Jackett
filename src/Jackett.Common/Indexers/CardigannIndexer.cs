@@ -1472,14 +1472,13 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var searchResultParser = new XmlParser();
-                        var searchResultDocument = searchResultParser.ParseDocument(results);
-
                         // check if we need to login again
                         var loginNeeded = CheckIfLoginIsNeeded(response, searchResultDocument);
                         if (loginNeeded)
                         {
                             logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
+                            var SearchResultParser = new HtmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
                             var LoginResult = await DoLogin();
                             if (!LoginResult)
                                 throw new Exception(string.Format("Relogin failed"));
@@ -1498,6 +1497,9 @@ namespace Jackett.Common.Indexers
 
                         if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
                         {
+                            var searchResultParser = new XmlParser();
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
+
                             if (search.Preprocessingfilters != null)
                             {
                                 results = applyFilters(results, search.Preprocessingfilters, variables);
