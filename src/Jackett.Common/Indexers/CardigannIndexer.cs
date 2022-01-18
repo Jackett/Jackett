@@ -854,12 +854,19 @@ namespace Jackett.Common.Indexers
             if (Definition.Login == null || Definition.Login.Test == null)
                 return false;
 
-            if (Definition.Login.Test.Selector != null)
+            // Only run html test selector on html responses
+            if (response.Headers.ContentType.Contains("text/html"))
             {
-                var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
-                if (selection.Length == 0)
+                var parser = new HtmlParser();
+                var document = parser.ParseDocument(response.Content);
+
+                if (Definition.Login.Test.Selector != null)
                 {
-                    return true;
+                    var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
+                    if (selection.Length == 0)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
