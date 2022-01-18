@@ -830,7 +830,7 @@ namespace Jackett.Common.Indexers
             return true;
         }
 
-        protected bool CheckIfLoginIsNeeded(HttpResponse response, WebResult Result)
+        protected bool CheckIfLoginIsNeeded(WebResult Result)
         {
             if (Result.IsRedirect)
             {
@@ -855,10 +855,10 @@ namespace Jackett.Common.Indexers
                 return false;
 
             // Only run html test selector on html responses
-            if (response.Headers.ContentType.Contains("text/html"))
+            if (Result.Headers.ContentType.Contains("text/html"))
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(response.Content);
+                var document = parser.ParseDocument(Result.Content);
 
                 if (Definition.Login.Test.Selector != null)
                 {
