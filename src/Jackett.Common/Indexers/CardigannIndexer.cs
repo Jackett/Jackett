@@ -1474,10 +1474,10 @@ namespace Jackett.Common.Indexers
                     {
                         {
                             var SearchResultParser = new HtmlParser();
-                            var searchResultDocument = searchResultParser.ParseDocument(results);
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                             // check if we need to login again
-                            var loginNeeded = CheckIfLoginIsNeeded(response, searchResultDocument);
+                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
                             if (loginNeeded)
                             {
                                 logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
@@ -1490,7 +1490,7 @@ namespace Jackett.Common.Indexers
                                     await FollowIfRedirect(response);
 
                                 results = response.ContentString;
-                                searchResultDocument = searchResultParser.ParseDocument(results);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
                             }
                         }
 
@@ -1500,33 +1500,33 @@ namespace Jackett.Common.Indexers
 
                         if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
                         {
-                            var searchResultParser = new XmlParser();
-                            var searchResultDocument = searchResultParser.ParseDocument(results);
+                            var SearchResultParser = new XmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                             if (search.Preprocessingfilters != null)
                             {
                                 results = applyFilters(results, search.Preprocessingfilters, variables);
-                                searchResultDocument = searchResultParser.ParseDocument(results);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
                                 logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
                             }
 
                             var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
-                            rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                         }
                         else
                         {
-                            var searchResultParser = new HtmlParser();
-                            var searchResultDocument = searchResultParser.ParseDocument(results);
+                            var SearchResultParser = new HtmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                             if (search.Preprocessingfilters != null)
                             {
                                 results = applyFilters(results, search.Preprocessingfilters, variables);
-                                searchResultDocument = searchResultParser.ParseDocument(results);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
                                 logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
                             }
 
                             var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
-                            rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                         }
 
                         var Rows = new List<IElement>();
