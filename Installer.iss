@@ -19,9 +19,6 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-CloseApplications=yes
-CloseApplicationsFilter=*.chm
-RestartApplications=no
 DefaultDirName={commonappdata}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
@@ -52,11 +49,13 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Tasks: desktopicon
 
 [Code]
-Procedure RegisterExtraCloseApplicationsResources();
-Begin
-  RegisterExtraCloseApplicationsResource(False, ExpandConstant('{app}\JackettService.exe'));
-  RegisterExtraCloseApplicationsResource(False, ExpandConstant('{app}\{#MyAppExeName}'));
-End;
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+ErrorCode: Integer;
+begin
+  ShellExec('open', 'taskkill.exe', '/f /im {#MyAppExeName}', '', SW_HIDE, ewNoWait, ErrorCode);
+  ShellExec('open', 'taskkill.exe', '/f /im JackettConsole.exe', '', SW_HIDE, ewNoWait, ErrorCode);
+end;
 
 [Run]
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated runhidden;
