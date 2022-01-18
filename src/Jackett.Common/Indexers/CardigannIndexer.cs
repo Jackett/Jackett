@@ -1472,24 +1472,26 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var searchResultDocument = searchResultParser.ParseDocument(results);
-
-                        // check if we need to login again
-                        var loginNeeded = CheckIfLoginIsNeeded(response, searchResultDocument);
-                        if (loginNeeded)
                         {
-                            logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
                             var SearchResultParser = new HtmlParser();
-                            var LoginResult = await DoLogin();
-                            if (!LoginResult)
-                                throw new Exception(string.Format("Relogin failed"));
-                            await TestLogin();
-                            response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
-                            if (response.IsRedirect && SearchPath.Followredirect)
-                                await FollowIfRedirect(response);
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
 
-                            results = response.ContentString;
-                            searchResultDocument = searchResultParser.ParseDocument(results);
+                            // check if we need to login again
+                            var loginNeeded = CheckIfLoginIsNeeded(response, searchResultDocument);
+                            if (loginNeeded)
+                            {
+                                logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
+                                var LoginResult = await DoLogin();
+                                if (!LoginResult)
+                                    throw new Exception(string.Format("Relogin failed"));
+                                await TestLogin();
+                                response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
+                                if (response.IsRedirect && SearchPath.Followredirect)
+                                    await FollowIfRedirect(response);
+
+                                results = response.ContentString;
+                                searchResultDocument = searchResultParser.ParseDocument(results);
+                            }
                         }
 
                         checkForError(response, Definition.Search.Error);
@@ -1499,6 +1501,7 @@ namespace Jackett.Common.Indexers
                         if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
                         {
                             var searchResultParser = new XmlParser();
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
 
                             if (search.Preprocessingfilters != null)
                             {
@@ -1513,6 +1516,7 @@ namespace Jackett.Common.Indexers
                         else
                         {
                             var searchResultParser = new HtmlParser();
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
 
                             if (search.Preprocessingfilters != null)
                             {
