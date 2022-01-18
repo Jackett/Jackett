@@ -21,9 +21,9 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TodoTorrents : BaseWebIndexer
+    public class DonTorrent : BaseWebIndexer
     {
-        private static class TodoTorrentsCatType
+        private static class DonTorrentCatType
         {
             public static string Pelicula => "pelicula";
             public static string Pelicula4K => "pelicula4k";
@@ -39,28 +39,28 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "/buscar/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-        };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://todotorrents.net"
+            "https://dontorrent.li/",
+            "https://todotorrents.net/",
+            "https://tomadivx.net/",
+            "https://seriesblanco.one/"
         };
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
             {
-                { "/pelicula/", TodoTorrentsCatType.Pelicula },
-                { "/serie/", TodoTorrentsCatType.Serie },
-                { "/documental", TodoTorrentsCatType.Documental },
-                { "/musica/", TodoTorrentsCatType.Musica },
-                { "/variado/", TodoTorrentsCatType.Variado },
-                { "/juego/", TodoTorrentsCatType.Juego } //games, it can be pc or console
+                { "/pelicula/", DonTorrentCatType.Pelicula },
+                { "/serie/", DonTorrentCatType.Serie },
+                { "/documental", DonTorrentCatType.Documental },
+                { "/musica/", DonTorrentCatType.Musica },
+                { "/variado/", DonTorrentCatType.Variado },
+                { "/juego/", DonTorrentCatType.Juego } //games, it can be pc or console
             };
 
-        public TodoTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+        public DonTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "todotorrents",
-                   name: "TodoTorrents",
-                   description: "TodoTorrents is a SPANISH public tracker for MOVIES / TV / GENERAL",
-                   link: "https://todotorrents.net/",
+            : base(id: "dontorrent",
+                   name: "DonTorrent",
+                   description: "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL",
+                   link: "https://dontorrent.li/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -90,13 +90,11 @@ namespace Jackett.Common.Indexers
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            //configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."));
-
-            AddCategoryMapping(TodoTorrentsCatType.Pelicula, TorznabCatType.Movies, "Pelicula");
-            AddCategoryMapping(TodoTorrentsCatType.Pelicula4K, TorznabCatType.MoviesUHD, "Peliculas 4K");
-            AddCategoryMapping(TodoTorrentsCatType.Serie, TorznabCatType.TVSD, "Serie");
-            AddCategoryMapping(TodoTorrentsCatType.SerieHD, TorznabCatType.TVHD, "Serie HD");
-            AddCategoryMapping(TodoTorrentsCatType.Musica, TorznabCatType.Audio, "Música");
+            AddCategoryMapping(DonTorrentCatType.Pelicula, TorznabCatType.Movies, "Pelicula");
+            AddCategoryMapping(DonTorrentCatType.Pelicula4K, TorznabCatType.MoviesUHD, "Peliculas 4K");
+            AddCategoryMapping(DonTorrentCatType.Serie, TorznabCatType.TVSD, "Serie");
+            AddCategoryMapping(DonTorrentCatType.SerieHD, TorznabCatType.TVHD, "Serie HD");
+            AddCategoryMapping(DonTorrentCatType.Musica, TorznabCatType.Audio, "Música");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -135,7 +133,7 @@ namespace Jackett.Common.Indexers
 
             var parser = new HtmlParser();
 
-            // Eg https://todotorrents.net/pelicula/24797/Halloween-Kills
+            // Eg https://dontorrent.li/pelicula/24797/Halloween-Kills
             var result = await RequestWithCookiesAsync(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
@@ -495,7 +493,6 @@ namespace Jackett.Common.Indexers
                 Category = MapTrackerCatToNewznab(cat),
                 PublishDate = publishDate,
                 Size = size,
-                Files = 1,
                 Seeders = 1,
                 Peers = 2,
                 DownloadVolumeFactor = 0,
@@ -673,7 +670,7 @@ namespace Jackett.Common.Indexers
                 case "pelicula4k":
                     if (title.Contains("4K"))
                     {
-                        cat = TodoTorrentsCatType.Pelicula4K;
+                        cat = DonTorrentCatType.Pelicula4K;
                     }
                     break;
 
@@ -681,7 +678,7 @@ namespace Jackett.Common.Indexers
                 case "seriehd":
                     if (title.Contains("720p") || title.Contains("1080p"))
                     {
-                        cat = TodoTorrentsCatType.SerieHD;
+                        cat = DonTorrentCatType.SerieHD;
                     }
 
                     break;
