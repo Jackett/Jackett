@@ -830,7 +830,7 @@ namespace Jackett.Common.Indexers
             return true;
         }
 
-        protected bool CheckIfLoginIsNeeded(WebResult Result, IHtmlDocument document)
+        protected bool CheckIfLoginIsNeeded(HttpResponse response, WebResult Result)
         {
             if (Result.IsRedirect)
             {
@@ -1386,6 +1386,7 @@ namespace Jackett.Common.Indexers
                     await FollowIfRedirect(response);
 
                 var results = response.ContentString;
+                var search = Definition.Search;
 
                 if (SearchPath.Response != null && SearchPath.Response.Type.Equals("json"))
                 {
@@ -1474,7 +1475,7 @@ namespace Jackett.Common.Indexers
                         IHtmlCollection<IElement> rowsDom;
 
                         // check if we need to login again
-                        var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                        var loginNeeded = CheckIfLoginIsNeeded(response, searchResultDocument);
                         if (loginNeeded)
                         {
                             logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
@@ -1487,7 +1488,7 @@ namespace Jackett.Common.Indexers
                                 await FollowIfRedirect(response);
 
                             results = response.ContentString;
-                            SearchResultDocument = SearchResultParser.ParseDocument(results);
+                            searchResultDocument = searchResultParser.ParseDocument(results);
                         }
 
                         checkForError(response, Definition.Search.Error);
@@ -1499,12 +1500,12 @@ namespace Jackett.Common.Indexers
 
                             if (search.Preprocessingfilters != null)
                             {
-                                results = ApplyFilters(results, search.Preprocessingfilters, variables);
+                                results = applyFilters(results, search.Preprocessingfilters, variables);
                                 searchResultDocument = searchResultParser.ParseDocument(results);
-                                _logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", _definition.Id, results));
+                                logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
                             }
 
-                            var rowsSelector = ApplyGoTemplateText(search.Rows.Selector, variables);
+                            var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
                             rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
                         }
                         else
@@ -1514,17 +1515,17 @@ namespace Jackett.Common.Indexers
 
                             if (search.Preprocessingfilters != null)
                             {
-                                results = ApplyFilters(results, search.Preprocessingfilters, variables);
+                                results = applyFilters(results, search.Preprocessingfilters, variables);
                                 searchResultDocument = searchResultParser.ParseDocument(results);
-                                _logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", _definition.Id, results));
+                                logger.Trace(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
                             }
 
-                            var rowsSelector = ApplyGoTemplateText(search.Rows.Selector, variables);
+                            var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
                             rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
                         }
 
                         var Rows = new List<IElement>();
-                        foreach (var RowDom in RowsDom)
+                        foreach (var RowDom in rowsDom)
                         {
                             Rows.Add(RowDom);
                         }
