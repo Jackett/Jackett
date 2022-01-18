@@ -56,6 +56,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Demonoid
  * DivxTotal
  * dmhy
+ * DonTorrent
  * E-Hentai
  * elitetorrent
  * EpubLibre
@@ -136,7 +137,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * sosulki
  * SubsPlease
  * sukebei.Nyaa.si
- * TodoTorrents
  * The Pirate Bay (TPB)
  * Tokyo Tosho
  * Torlock
