@@ -1472,12 +1472,30 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
+                        IHtmlCollection<IElement> rowsDom;
+
+                        if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
+                        {
+                            var SearchResultParser = new XmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
+
+                            if (Search.Preprocessingfilters != null)
+                            {
+                                results = applyFilters(results, Search.Preprocessingfilters, variables);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
+                            }
+
+                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+                        }
+                        else
                         {
                             var SearchResultParser = new HtmlParser();
                             var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                             // check if we need to login again
-                            var loginNeeded = CheckIfLoginIsNeeded(SearchResultDocument);
+                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
                             if (loginNeeded)
                             {
                                 logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
@@ -1492,41 +1510,19 @@ namespace Jackett.Common.Indexers
                                 results = response.ContentString;
                                 SearchResultDocument = SearchResultParser.ParseDocument(results);
                             }
-                        }
 
-                        checkForError(response, Definition.Search.Error);
+                            checkForError(response, Definition.Search.Error);
 
-                        IHtmlCollection<IElement> rowsDom;
-
-                        if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
-                        {
-                            var SearchResultParser = new XmlParser();
-                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
-
-                            if (search.Preprocessingfilters != null)
+                            if (Search.Preprocessingfilters != null)
                             {
-                                results = applyFilters(results, search.Preprocessingfilters, variables);
+                                results = applyFilters(results, Search.Preprocessingfilters, variables);
                                 SearchResultDocument = SearchResultParser.ParseDocument(results);
-                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
+                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
                             }
 
-                            var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
+                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
                             rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
-                        }
-                        else
-                        {
-                            var SearchResultParser = new HtmlParser();
-                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
-                            if (search.Preprocessingfilters != null)
-                            {
-                                results = applyFilters(results, search.Preprocessingfilters, variables);
-                                SearchResultDocument = SearchResultParser.ParseDocument(results);
-                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
-                            }
-
-                            var rowsSelector = applyGoTemplateText(search.Rows.Selector, variables);
-                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                         }
 
                         var Rows = new List<IElement>();
