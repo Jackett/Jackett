@@ -39,10 +39,14 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "/buscar/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://dontorrent.li/",
+            "https://dontorrent.it/",
             "https://todotorrents.net/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/"
+        };
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://dontorrent.li/"
         };
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
@@ -60,7 +64,7 @@ namespace Jackett.Common.Indexers
             : base(id: "dontorrent",
                    name: "DonTorrent",
                    description: "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL",
-                   link: "https://dontorrent.li/",
+                   link: "https://dontorrent.it/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -181,7 +185,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     //<span class="text-muted">2022-01-12</span>
-                    //<a href='pelicula/24797/Halloween-Kills' class="text-primary">Halloween Kills</a> 
+                    //<a href='pelicula/24797/Halloween-Kills' class="text-primary">Halloween Kills</a>
                     //<span class="text-muted">(MicroHD-1080p)</span>
 
                     if (row.TagName.Equals("A"))
