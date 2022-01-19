@@ -39,7 +39,7 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "/buscar/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://dontorrent.it",
+            "https://dontorrent.it/",
             "https://todotorrents.net/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/"
