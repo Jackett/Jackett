@@ -1258,11 +1258,11 @@ namespace Jackett.Common.Indexers
             variables[".Query.Q"] = query.SearchTerm;
             variables[".Query.Series"] = null;
             variables[".Query.Ep"] = query.Episode;
-            variables[".Query.Season"] = query.Season?.ToString() ?? null;
+            variables[".Query.Season"] = query.Season.ToString() ?? null;
             variables[".Query.Movie"] = null;
             variables[".Query.Year"] = query.Year?.ToString() ?? null;
-            variables[".Query.Limit"] = query.Limit?.ToString() ?? null;
-            variables[".Query.Offset"] = query.Offset?.ToString() ?? null;
+            variables[".Query.Limit"] = query.Limit.ToString() ?? null;
+            variables[".Query.Offset"] = query.Offset.ToString() ?? null;
             variables[".Query.Extended"] = query.Extended.ToString();
             variables[".Query.Categories"] = query.Categories;
             variables[".Query.APIKey"] = query.ApiKey;
@@ -1271,8 +1271,8 @@ namespace Jackett.Common.Indexers
             variables[".Query.IMDBID"] = query.ImdbID;
             variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
             variables[".Query.TMDBID"] = query.TmdbID?.ToString() ?? null;
-            variables[".Query.TVMazeID"] = query.TvMazeID?.ToString() ?? null;
-            variables[".Query.TraktID"] = query.TraktID?.ToString() ?? null;
+            variables[".Query.TVMazeID"] = null;
+            variables[".Query.TraktID"] = null;
             variables[".Query.Album"] = query.Album;
             variables[".Query.Artist"] = query.Artist;
             variables[".Query.Label"] = query.Label;
