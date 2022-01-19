@@ -1258,7 +1258,7 @@ namespace Jackett.Common.Indexers
             variables[".Query.Q"] = query.SearchTerm;
             variables[".Query.Series"] = null;
             variables[".Query.Ep"] = query.Episode;
-            variables[".Query.Season"] = query.Season.ToString() ?? null;
+            variables[".Query.Season"] = query.Season > 0 ? query.Season.ToString() : null;
             variables[".Query.Movie"] = null;
             variables[".Query.Year"] = query.Year?.ToString() ?? null;
             variables[".Query.Limit"] = query.Limit.ToString() ?? null;
