@@ -1495,7 +1495,7 @@ namespace Jackett.Common.Indexers
                             var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                             // check if we need to login again
-                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                            var loginNeeded = CheckIfLoginIsNeeded(response);
                             if (loginNeeded)
                             {
                                 logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
