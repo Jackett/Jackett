@@ -87,6 +87,16 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "private";
 
+            var sort = new ConfigurationData.SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
+                {
+                    {"time", "created"},
+                    {"size", "size"},
+                    {"seeders", "seeders"},
+                    {"name", "title"}
+                })
+            { Value = "time" };
+            configData.AddDynamic("sort", sort);
+
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
             AddCategoryMapping(72, TorznabCatType.Movies, "Movies");
@@ -200,6 +210,8 @@ namespace Jackett.Common.Indexers
 
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
                 qc.Add("free", "on");
+
+            qc.Add("o", ((SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value);
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl);

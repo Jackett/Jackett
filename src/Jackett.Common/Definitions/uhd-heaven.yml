@@ -1,25 +1,22 @@
 ---
-id: reelflix-api
-name: ReelFLiX (API)
-description: "ReelFLiX (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES"
+id: uhd-heaven
+name: UHD-HEAVEN
+description: "UHD-HEAVEN is a Private Torrent Tracker for UHD MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://reelflix.xyz/
-legacylinks:
-  - https://legacyhd.org/
+  - https://uhd-heaven.xyz/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: apikey
@@ -28,7 +25,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://reelflix.xyz/\" target =_blank>ReelFlix</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://uhd-heaven.xyz/\" target =_blank>UHD-HEAVEN</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -85,13 +82,11 @@ search:
       selector: download_link
     poster:
       selector: poster
-    imdbid:
-      selector: imdb_id
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
-        - name: replace
-          args: ["https://via.placeholder.com/400x600", ""]
+    imdbid:
+      selector: imdb_id
     tmdbid:
       selector: tmdb_id
     tvdbid:
@@ -121,9 +116,10 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-    minimumratio:
-      text: 0.4
+# global MR is 0.4 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # json UNIT3D 5.3.0
