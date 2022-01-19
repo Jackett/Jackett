@@ -79,9 +79,9 @@ search:
     tvdbId: "{{ .Query.TVDBID }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     # Supported with UNIT3d v6 only
-    season: "{{ .Query.Season }}"
+    seasonNumber: "{{ .Query.Season }}"
     # Supported with UNIT3d v6 only
-    ep: "{{ .Query.Ep }}"
+    episodeNumber: "{{ .Query.Ep }}"
 
   keywordsfilters:
     - name: re_replace
