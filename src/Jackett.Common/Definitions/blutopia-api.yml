@@ -68,7 +68,6 @@ search:
         type: json
         attribute: attributes
   inputs:
-  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -76,9 +75,9 @@ search:
     page: 1
     api_token: "{{ .Config.apikey }}"
     name: "{{ .Keywords }}"
-    tmdbid: "{{ .Query.TMDBID }}"
-    tvdbid: "{{ .Query.TVDBID }}"
-    imdbid: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
     # Supported with UNIT3d v6 only
     season: "{{ .Query.Season }}"
     # Supported with UNIT3d v6 only
