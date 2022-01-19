@@ -1,0 +1,125 @@
+---
+id: uhd-heaven
+name: UHD-HEAVEN
+description: "UHD-HEAVEN is a Private Torrent Tracker for UHD MOVIES / TV"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://uhd-heaven.xyz/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://uhd-heaven.xyz/\" target =_blank>UHD-HEAVEN</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php
+    - path: "/api/torrents/filter?api_token={{ .Config.apikey }}&name={{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}{{ if .Query.TMDBID }}&tmdbId={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if .Query.IMDBIDShort }}&imdbId={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdbId={{ .Query.TVDBID }}{{ else }}{{ end }}&sortField={{ .Config.sort }}&sortDirection={{ .Config.type }}&perPage=100&page=1{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&free=1{{ else }}{{ end }}"
+      response:
+        type: json
+        attribute: attributes
+
+  rows:
+    selector: data
+    count:
+      selector: meta.total
+
+  fields:
+    categorydesc:
+      selector: category
+    title:
+      selector: name
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    poster:
+      selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2021-10-18T00:34:50.000000Z"
+      selector: created_at
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: freeleech
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: double_upload
+      case:
+        0: 1 # normal
+        1: 2 # double
+# global MR is 0.4 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 5.3.0
