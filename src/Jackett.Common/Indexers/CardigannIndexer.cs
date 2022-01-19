@@ -830,7 +830,7 @@ namespace Jackett.Common.Indexers
             return true;
         }
 
-        protected bool CheckIfLoginIsNeeded(WebResult Result)
+        protected bool CheckIfLoginIsNeeded(WebResult Result, IHtmlDocument document)
         {
             if (Result.IsRedirect)
             {
@@ -854,19 +854,12 @@ namespace Jackett.Common.Indexers
             if (Definition.Login == null || Definition.Login.Test == null)
                 return false;
 
-            // Only run html test selector on html responses
-            if (Result.Headers["Content-Type"].Contains("text/html"))
+            if (Definition.Login.Test.Selector != null)
             {
-                var parser = new HtmlParser();
-                var document = parser.ParseDocument(Result.ContentString);
-
-                if (Definition.Login.Test.Selector != null)
+                var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
+                if (selection.Length == 0)
                 {
-                    var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
-                    if (selection.Length == 0)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -1386,7 +1379,6 @@ namespace Jackett.Common.Indexers
                     await FollowIfRedirect(response);
 
                 var results = response.ContentString;
-                var search = Definition.Search;
 
                 if (SearchPath.Response != null && SearchPath.Response.Type.Equals("json"))
                 {
@@ -1495,7 +1487,7 @@ namespace Jackett.Common.Indexers
                             var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
                             // check if we need to login again
-                            var loginNeeded = CheckIfLoginIsNeeded(response);
+                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
                             if (loginNeeded)
                             {
                                 logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
