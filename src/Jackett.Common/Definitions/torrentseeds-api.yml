@@ -21,12 +21,14 @@ caps:
     - {id: 8, cat: TV, desc: "Packs"}
     - {id: 3206, cat: TV/Foreign, desc: "TV/Foreign"}
     - {id: 3207, cat: Movies/Foreign, desc: "Movies/Foreign"}
+    - {id: 3208, cat: Books/EBook, desc: "E-Books"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey

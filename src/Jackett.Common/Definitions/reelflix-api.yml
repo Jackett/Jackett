@@ -12,7 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Movie"}
 
   modes:
     search: [q]
