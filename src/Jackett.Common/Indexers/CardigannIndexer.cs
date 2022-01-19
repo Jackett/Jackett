@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using AngleSharp.Xml.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -1463,39 +1464,61 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var SearchResultParser = new HtmlParser();
-                        var SearchResultDocument = SearchResultParser.ParseDocument(results);
+                        IHtmlCollection<IElement> rowsDom;
 
-                        // check if we need to login again
-                        var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
-                        if (loginNeeded)
+                        if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
                         {
-                            logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
-                            var LoginResult = await DoLogin();
-                            if (!LoginResult)
-                                throw new Exception(string.Format("Relogin failed"));
-                            await TestLogin();
-                            response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
-                            if (response.IsRedirect && SearchPath.Followredirect)
-                                await FollowIfRedirect(response);
+                            var SearchResultParser = new XmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
-                            results = response.ContentString;
-                            SearchResultDocument = SearchResultParser.ParseDocument(results);
+                            if (Search.Preprocessingfilters != null)
+                            {
+                                results = applyFilters(results, Search.Preprocessingfilters, variables);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
+                            }
+
+                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+                        }
+                        else
+                        {
+                            var SearchResultParser = new HtmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
+
+                            // check if we need to login again
+                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                            if (loginNeeded)
+                            {
+                                logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
+                                var LoginResult = await DoLogin();
+                                if (!LoginResult)
+                                    throw new Exception(string.Format("Relogin failed"));
+                                await TestLogin();
+                                response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
+                                if (response.IsRedirect && SearchPath.Followredirect)
+                                    await FollowIfRedirect(response);
+
+                                results = response.ContentString;
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                            }
+
+                            checkForError(response, Definition.Search.Error);
+
+                            if (Search.Preprocessingfilters != null)
+                            {
+                                results = applyFilters(results, Search.Preprocessingfilters, variables);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
+                            }
+
+                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+
                         }
 
-                        checkForError(response, Definition.Search.Error);
-
-                        if (Search.Preprocessingfilters != null)
-                        {
-                            results = applyFilters(results, Search.Preprocessingfilters, variables);
-                            SearchResultDocument = SearchResultParser.ParseDocument(results);
-                            logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
-                        }
-
-                        var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                        var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                         var Rows = new List<IElement>();
-                        foreach (var RowDom in RowsDom)
+                        foreach (var RowDom in rowsDom)
                         {
                             Rows.Add(RowDom);
                         }
