@@ -39,8 +39,11 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "windowsService"; Description: "Install as a Windows Service"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+[Dirs]  
+Name: "{commonappdata}\Jackett"; Permissions: everyone-modify 
+
 [Files]
-Source: "{#MySourceFolder}\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MySourceFolder}\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-modify
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
