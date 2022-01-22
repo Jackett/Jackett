@@ -93,8 +93,6 @@ search:
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
-        - name: replace
-          args: ["https://via.placeholder.com/400x600", ""]
     imdbid:
       selector: imdb_id
     tmdbid:

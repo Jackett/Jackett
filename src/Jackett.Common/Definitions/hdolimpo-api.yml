@@ -129,13 +129,15 @@ search:
           args: ["^\\.", ""] # Delete first dot
         - name: re_replace
           args: ["\\s+", " "] # More than 1 space to 1 space
-
     details:
       selector: details_link
     download:
       selector: download_link
     poster:
       selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
     imdbid:
       selector: imdb_id
     tmdbid:
