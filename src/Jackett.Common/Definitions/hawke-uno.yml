@@ -82,11 +82,11 @@ search:
       selector: download_link
     poster:
       selector: poster
-    imdbid:
-      selector: imdb_id
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
     tmdbid:
       selector: tmdb_id
     tvdbid:
