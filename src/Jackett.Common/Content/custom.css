@@ -301,6 +301,10 @@ table td.fit{
     background-color: #d0ab44;
 }
 
+.tooltip {
+    pointer-events: none;
+}
+
 .tooltip-inner {
     max-width: 500px !important;
 }

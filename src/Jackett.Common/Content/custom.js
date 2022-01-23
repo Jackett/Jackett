@@ -978,7 +978,8 @@ function updateReleasesRow(row) {
         TitleLink.data("toggle", "tooltip");
         TitleLink.tooltip({
             title: TitleTooltip,
-            html: true
+            html: true,
+            placement: "auto"
         });
     }
 
