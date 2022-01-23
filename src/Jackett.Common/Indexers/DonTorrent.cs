@@ -35,8 +35,8 @@ namespace Jackett.Common.Indexers
             public static string Juego => "juego";
         }
 
-        private const string NewTorrentsUrl = "/ultimos";
-        private const string SearchUrl = "/buscar/";
+        private const string NewTorrentsUrl = "ultimos";
+        private const string SearchUrl = "buscar/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://dontorrent.it/",
@@ -249,7 +249,7 @@ namespace Jackett.Common.Indexers
             // search only the longest word, we filter the results later
             var searchTerm = GetLongestWord(query.SearchTerm);
             var url = SiteLink + SearchUrl + searchTerm;
-            var result = await RequestWithCookiesAsync(url);
+            var result = await RequestWithCookiesAsync(url, referer: url);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
@@ -473,11 +473,19 @@ namespace Jackett.Common.Indexers
 
             var info = doc.QuerySelectorAll("div.descargar > div.card > div.card-body").First();
             var moreinfo = info.QuerySelectorAll("div.text-center > div.d-inline-block");
-            long size = 0;
+
+            // guess size
+            long size;
             if (moreinfo.Length == 2)
-            {
                 size = ReleaseInfo.GetBytes(moreinfo[1].QuerySelector("p").TextContent);
-            }
+            else if (title.ToLower().Contains("4k"))
+                size = 53687091200L; // 50 GB
+            else if (title.ToLower().Contains("1080p"))
+                size = 4294967296L; // 4 GB
+            else if (title.ToLower().Contains("720p"))
+                size = 1073741824L; // 1 GB
+            else
+                size = 536870912L; // 512 MB
 
             var release = GenerateRelease(title, link, link, GetCategory(title, link), DateTime.Now, size);
             releases.Add(release);
