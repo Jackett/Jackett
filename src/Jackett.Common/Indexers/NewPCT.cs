@@ -499,7 +499,7 @@ namespace Jackett.Common.Indexers
                     {"pg", pg.ToString()}
                 };
 
-                var results = await RequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection);
+                var results = await RequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection, referer: SiteLink);
                 var items = ParseSearchJsonContent(results.ContentString, year);
                 if (!items.Any())
                     break;
@@ -541,7 +541,8 @@ namespace Jackett.Common.Indexers
 
                     // we have another search for series
                     var titleLower = title.ToLower();
-                    var isSeries = quality != null && quality.ToLower().Contains("hdtv");
+                    var isSeries = (quality != null && quality.ToLower().Contains("hdtv")) ||
+                                   detailsUrl.Contains("/serie-") || detailsUrl.Contains("/series/");
                     var isGame = titleLower.Contains("pcdvd");
                     if (isSeries || isGame)
                         continue;
