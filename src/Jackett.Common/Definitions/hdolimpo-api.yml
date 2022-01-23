@@ -102,6 +102,8 @@ search:
         - name: re_replace
           args: ["[ -](?i)esp[ -]", " SPANiSH "]
         - name: re_replace
+          args: [" ES ", " SPANiSH "]
+        - name: re_replace
           args: ["[ -](?i)ingl[eé]s[ -]", " English "]
         - name: re_replace
           args: ["[ -](?i)[ei]ng[ -]", " English "]
@@ -120,9 +122,13 @@ search:
         - name: re_replace
           args: ["[ -](?i)ger[ -]", " German "]
         - name: re_replace
-          args: ["(?i)(triaudio)", "MULTi/SPANiSH/English"]
+          args: ["(?i)(triaudio)", "MULTi SPANiSH English"]
         - name: re_replace
-          args: ["(?i)(dual)", " MULTi/SPANiSH "]
+          args: ["(?i)(dual)", " MULTi SPANiSH "]
+        - name: re_replace
+          args: ["(?i)(es-en)", " MULTi SPANiSH "]
+        - name: re_replace
+          args: ["(?i)(en-es)", " MULTi SPANiSH "]
         - name: re_replace
           args: ["\\.+", "."] # More than 1 dot -> .
         - name: re_replace
