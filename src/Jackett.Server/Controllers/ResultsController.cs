@@ -535,13 +535,14 @@ namespace Jackett.Server.Controllers
             var serverUrl = serverService.GetServerUrl(Request);
             foreach (var result in results)
             {
+                var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
-                result.Link = serverService.ConvertToProxyLink(result.Link, serverUrl, result.TrackerId, "dl", file);
+                result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
                 result.Poster = serverService.ConvertToProxyLink(result.Poster, serverUrl, result.TrackerId, "img", "poster");
                 if (!string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
                 {
                     if (result.Link != null)
-                        result.BlackholeLink = serverService.ConvertToProxyLink(result.Link, serverUrl, result.TrackerId, "bh", file);
+                        result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
                     else if (result.MagnetUri != null)
                         result.BlackholeLink = serverService.ConvertToProxyLink(result.MagnetUri, serverUrl, result.TrackerId, "bh", file);
                 }
