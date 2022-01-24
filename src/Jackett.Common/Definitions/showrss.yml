@@ -24,7 +24,6 @@ search:
     - path: /other/all.rss
       response:
         type: xml
-        attribute: attributes
 
   rows:
     selector: rss > channel > item
