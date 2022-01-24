@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers
             IProtectionService ps, ICacheService cs)
             : base(id: "bitcityreloaded",
                    name: "Bit-City Reloaded",
-                   description: "A German general tracker.",
+                   description: "Bit-City Reloaded is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL",
                    link: "https://bc-reloaded.net/",
                    caps: new TorznabCapabilities
                    {
@@ -60,47 +60,58 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show a reasonable amount (it looks like there's no maximum)."))
+                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("For best results, change the <b>Anzahl der Torrents beim Durchsuchen:</b> setting to <b>100</b> on your account profile."))
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
             Language = "de-DE";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.Other, "Other/Anderes");
-            AddCategoryMapping(2, TorznabCatType.TVAnime, "TV/Anime");
+            var sort = new ConfigurationData.SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
+                {
+                    {"added", "created"},
+                    {"size", "size"},
+                    {"seeders", "seeders"},
+                    {"name", "title"}
+                })
+            { Value = "added" };
+            configData.AddDynamic("sort", sort);
+
+            var order = new ConfigurationData.SingleSelectConfigurationItem("Order requested from site", new Dictionary<string, string>
+                {
+                    {"desc", "desc"},
+                    {"asc", "asc"},
+                })
+            { Value = "desc" };
+            configData.AddDynamic("order", order);
+
+            AddCategoryMapping(1, TorznabCatType.Other, "Anderes");
             AddCategoryMapping(34, TorznabCatType.PC, "Appz/Linux");
             AddCategoryMapping(35, TorznabCatType.PCMac, "Appz/Mac");
             AddCategoryMapping(36, TorznabCatType.PC, "Appz/Other");
-            AddCategoryMapping(20, TorznabCatType.PC, "Appz/Win");
-            AddCategoryMapping(3, TorznabCatType.TVDocumentary, "TV/Doku/Alle Formate");
-            AddCategoryMapping(4, TorznabCatType.Books, "EBooks");
-            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/PS & PSx");
-            AddCategoryMapping(11, TorznabCatType.ConsoleNDS, "Games/Nintendo DS");
+            AddCategoryMapping(20, TorznabCatType.PC0day, "Appz/Win");
+            AddCategoryMapping(4, TorznabCatType.BooksEBook, "EBooks");
             AddCategoryMapping(10, TorznabCatType.PCGames, "Games/PC");
-            AddCategoryMapping(13, TorznabCatType.ConsoleWii, "Games/Wii");
-            AddCategoryMapping(14, TorznabCatType.ConsoleXBox, "Games/Xbox & 360");
-            AddCategoryMapping(15, TorznabCatType.PCMobileOther, "Handy & PDA");
+            AddCategoryMapping(15, TorznabCatType.PCMobileAndroid, "Handy & PDA");
             AddCategoryMapping(16, TorznabCatType.AudioAudiobook, "Hörspiel/Hörbuch");
-            AddCategoryMapping(30, TorznabCatType.Other, "Other/International");
-            AddCategoryMapping(17, TorznabCatType.Other, "Other/MegaPack");
+            AddCategoryMapping(30, TorznabCatType.MoviesForeign, "International");
             AddCategoryMapping(43, TorznabCatType.Movies3D, "Movie/3D");
-            AddCategoryMapping(5, TorznabCatType.MoviesDVD, "Movie/DVD/R");
             AddCategoryMapping(6, TorznabCatType.MoviesHD, "Movie/HD 1080p");
             AddCategoryMapping(7, TorznabCatType.MoviesHD, "Movie/HD 720p");
-            AddCategoryMapping(32, TorznabCatType.MoviesOther, "Movie/TVRip");
-            AddCategoryMapping(9, TorznabCatType.MoviesOther, "Movie/XviD,DivX,h264");
-            AddCategoryMapping(26, TorznabCatType.XXX, "XXX/Movie");
-            AddCategoryMapping(41, TorznabCatType.XXXOther, "XXX/Movie/Other");
-            AddCategoryMapping(42, TorznabCatType.XXXPack, "XXX/Movie/Pack");
-            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/4K");
+            AddCategoryMapping(17, TorznabCatType.MoviesOther, "Movie/MegaPack");
+            AddCategoryMapping(9, TorznabCatType.MoviesSD, "Movie/SD");
+            AddCategoryMapping(26, TorznabCatType.XXX, "Movie/XXX");
+            AddCategoryMapping(41, TorznabCatType.XXXOther, "Movie/XXX/Other");
+            AddCategoryMapping(42, TorznabCatType.XXXPack, "Movie/XXX/Pack");
+            AddCategoryMapping(45, TorznabCatType.MoviesUHD, "Movies/4K");
             AddCategoryMapping(33, TorznabCatType.MoviesBluRay, "Movies/BluRay");
-            AddCategoryMapping(18, TorznabCatType.Audio, "Musik");
             AddCategoryMapping(19, TorznabCatType.AudioVideo, "Musik Videos");
-            AddCategoryMapping(44, TorznabCatType.TVOther, "Serie/DVD/R");
-            AddCategoryMapping(22, TorznabCatType.TVHD, "Serie/HDTV");
+            AddCategoryMapping(18, TorznabCatType.Audio, "Musik/MP3/Flac");
+            AddCategoryMapping(13, TorznabCatType.ConsoleWiiU, "Nintendo");
+            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Playstation");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "Serie/HD");
             AddCategoryMapping(38, TorznabCatType.TV, "Serie/Pack");
-            AddCategoryMapping(23, TorznabCatType.TVOther, "Serie/XviD,DivX,h264");
-            AddCategoryMapping(25, TorznabCatType.TVSport, "TV/Sport");
+            AddCategoryMapping(23, TorznabCatType.TVSD, "Serie/SD");
+            AddCategoryMapping(25, TorznabCatType.TVSport, "Sport");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -132,12 +143,9 @@ namespace Jackett.Common.Indexers
             var searchUrl = BrowseUrl;
             var queryCollection = new NameValueCollection
             {
-                { "showsearch", "0" },
+                { "showsearch", "1" },
                 { "incldead", "1" },
-                { "blah", "0" },
-                { "team", "0" },
-                { "orderby", "added" },
-                { "sort", "desc" }
+                { "blah", "0" }
             };
 
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -145,6 +153,10 @@ namespace Jackett.Common.Indexers
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("c" + cat, "1");
+
+            queryCollection.Add("orderby", ((SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value);
+
+            queryCollection.Add("sort", ((SingleSelectConfigurationItem)configData.GetDynamic("order")).Value);
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
@@ -173,6 +185,8 @@ namespace Jackett.Common.Indexers
                         var flag = flagImg.GetAttribute("src").Replace("pic/torrent_", "").Replace(".gif", "").ToUpper();
                         if (flag == "OU")
                             release.DownloadVolumeFactor = 0;
+                        if (flag == "2U")
+                            release.UploadVolumeFactor = 2;
                         else
                             flags.Add(flag);
                     }
@@ -221,4 +235,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-
