@@ -1,33 +1,22 @@
 ---
-id: datascene-api
-name: DataScene (API)
-description: "DataScene (DS) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: hawke-uno
+name: hawke-uno
+description: "hawke-uno is a Private Torrent Tracker for (X265 / HEVC) MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://datascene.xyz/
-legacylinks:
-  - http://datascene.net/
-  - https://datascene.net/
+  - https://www.hawke.uno/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: PC/Games, desc: "Game"}
-    - {id: 5, cat: PC/0day, desc: "Application"}
-    - {id: 6, cat: XXX, desc: "XXX"}
-    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
-    - {id: 8, cat: Books/EBook, desc: "E-Book"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: apikey
@@ -36,7 +25,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://datascene.xyz/\" target =_blank>DataScene</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://www.hawke.uno/\" target =_blank>hawke-uno</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -127,9 +116,9 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-    minimumratio:
-      text: 1.0
-    minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+#    minimumratio:
+#      text: 0.4
+#    minimumseedtime:
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+#      text: 432000
 # json UNIT3D 5.3.0

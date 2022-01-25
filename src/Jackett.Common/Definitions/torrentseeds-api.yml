@@ -9,7 +9,6 @@ links:
   - https://torrentseeds.org/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: PC/0day, desc: "Apps"}
     - {id: 5, cat: TV/Anime, desc: "Anime"}
@@ -22,12 +21,14 @@ caps:
     - {id: 8, cat: TV, desc: "Packs"}
     - {id: 3206, cat: TV/Foreign, desc: "TV/Foreign"}
     - {id: 3207, cat: Movies/Foreign, desc: "Movies/Foreign"}
+    - {id: 3208, cat: Books/EBook, desc: "E-Books"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -58,6 +59,16 @@ settings:
       desc: desc
       asc: asc
 
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
 search:
   paths:
     # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
@@ -73,20 +84,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Apps": 1
-        "Games": 2
-        "Movies": 3
-        "Music": 4
-        "Anime": 5
-        "Porn": 6
-        "Sport": 7
-        "Packs": 8
-        "TV": 3205
-        "TV/Foreign": 3206
-        "Movies/Foreign": 3207
     title:
       selector: name
     details:
@@ -98,8 +97,6 @@ search:
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
-        - name: replace
-          args: ["https://via.placeholder.com/400x600", ""]
     imdbid:
       selector: imdb_id
     tmdbid:

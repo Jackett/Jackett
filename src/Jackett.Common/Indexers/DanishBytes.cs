@@ -23,6 +23,11 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://danishbytes.club/",
+            "https://danishbytes2.org/"
+        };
+
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://danishbytes.org/"
         };

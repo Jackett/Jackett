@@ -18,10 +18,11 @@ caps:
     - {id: 20, cat: TV/SD, desc: "Lasten DVD (kids)"}
     - {id: 33, cat: TV/SD, desc: "Lasten XviD (kids)"}
     - {id: 11, cat: Movies/DVD, desc: "Leffat DVD (movies)"}
-    - {id: 13, cat: Movies/SD, desc: "Leffat XviD  (movies)"}
-    - {id: 21, cat: Movies/HD, desc: "Leffat HD  (movies)"}
-    - {id: 32, cat: Movies/DVD, desc: "Custom DVD  (movies)"}
+    - {id: 13, cat: Movies/SD, desc: "Leffat XviD (movies)"}
+    - {id: 21, cat: Movies/HD, desc: "Leffat HD (movies)"}
+    - {id: 32, cat: Movies/DVD, desc: "Custom DVD (movies)"}
     - {id: 42, cat: Movies, desc: "FVC"}
+    - {id: 48, cat: Movies/UHD, desc: "Leffat 4K (movies)"}
     - {id: 15, cat: Audio, desc: "Musiikki (music)"}
     - {id: 12, cat: Audio/Video, desc: "Musavideot (clips)"}
     - {id: 7, cat: PC/0day, desc: "Ohjelmat Windows (apps)"}

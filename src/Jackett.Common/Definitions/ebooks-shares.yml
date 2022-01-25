@@ -242,8 +242,8 @@ caps:
     - {id: 307, cat: Books/Other, desc: "VIP: Thriller"}
     - {id: 306, cat: Books/Other, desc: "VIP: Mystery"}
     - {id: 308, cat: Books/Other, desc: "VIP: Crime"}
-    - {id: 309, cat: Books/Other, desc: "VIP: Fantasy "}
-    - {id: 204, cat: Books/Other, desc: "VIP: Collections "}
+    - {id: 309, cat: Books/Other, desc: "VIP: Fantasy"}
+    - {id: 204, cat: Books/Other, desc: "VIP: Collections"}
     - {id: 205, cat: Books/Other, desc: "VIP: Audiobooks"}
     - {id: 206, cat: Books/Other, desc: "VIP: Comics"}
     - {id: 207, cat: Books/Other, desc: "VIP: Computers"}
@@ -274,6 +274,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: vip
+    type: checkbox
+    label: Include VIP results
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -316,10 +320,9 @@ search:
   paths:
     - path: torrents-search.php
   inputs:
-    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ if .Keywords }}\"{{ .Keywords }}\"{{ else }}{{ end }}"
     # 0 only active 1 incl dead 2 only dead
-    incldead: 0
+    incldead: 1
     # 0 all 1 not freeleech 2 only freeleech
     freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 all 1 english 2 french 3 german 4 italian 5 japanese 6 spanish 7 russian 8 other
@@ -328,7 +331,7 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: tr.t-row
+    selector: "tr.t-row{{ if .Config.vip }}{{ else }}:not(:has(a[href^=\"torrents.php?cat=\"]):contains(\"VIP\")){{ end }}"
 
   fields:
     category:

@@ -59,7 +59,7 @@ settings: []
 search:
   paths:
     # https://www.torrentfunk.com/all/torrents/morty-402-castellano.html
-    - path: "all/torrents/{{ .Keywords }}.html"
+    - path: "all/torrents/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}.html"
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "-"]

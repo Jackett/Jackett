@@ -168,9 +168,11 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     // TODO convert to initializer
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 259200; // 72 hours
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 259200 // 72 hours
+                    };
 
                     var catId = "82"; // default
                     var qCatLink = row.Children[categoryIndex].QuerySelector("a");

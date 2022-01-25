@@ -35,10 +35,10 @@ caps:
     - {id: 169, cat: TV/Other, desc: "TV/Boxset"}
     - {id: 191, cat: TV, desc: "TV/BluTv"}
     - {id: 192, cat: TV, desc: "TV/BluTv Series"}
-    - {id: 193, cat: Movies, desc: "TV/BluTv Film"}
+    - {id: 193, cat: Movies, desc: "Movies/BluTv Film"}
     - {id: 188, cat: TV, desc: "TV/Netflix"}
     - {id: 189, cat: TV, desc: "TV/Netflix Series"}
-    - {id: 190, cat: Movies, desc: "TV/Netflix Film"}
+    - {id: 190, cat: Movies, desc: "Movies/Netflix Film"}
     - {id: 195, cat: TV, desc: "TV/Exxen"}
     - {id: 171, cat: Audio, desc: "Music"}
     - {id: 172, cat: Audio, desc: "Music/Turkish"}
@@ -53,6 +53,7 @@ caps:
     - {id: 179, cat: PC, desc: "OS"}
     - {id: 180, cat: PC/Games, desc: "PC/Games"}
     - {id: 181, cat: Console, desc: "Playstation"}
+    - {id: 198, cat: Movies, desc: "Movies/Amazon Prime"}
 
   modes:
     search: [q]

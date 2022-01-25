@@ -20,9 +20,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Cinecalidad : BaseWebIndexer
     {
-        private const int MaxItemsPerPage = 15;
-        private const int MaxSearchPageLimit = 6; // 15 items per page * 6 pages = 90
-        private string _language;
+        private const int MaxLatestPageLimit = 3; // 10 items per page * 3 pages = 30
+        private const int MaxSearchPageLimit = 6;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://cinecalidad.website/",
@@ -41,7 +40,7 @@ namespace Jackett.Common.Indexers
             ICacheService cs)
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
-                   description: "Películas Full HD en Castellano y Latino Dual.",
+                   description: "Películas Full HD en Latino Dual.",
                    link: "https://www.cinecalidad.lat/",
                    caps: new TorznabCapabilities
                    {
@@ -55,30 +54,10 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-ES";
+            Language = "es-419";
             Type = "public";
 
-            var language = new ConfigurationData.SingleSelectConfigurationItem(
-                "Select language", new Dictionary<string, string>
-                {
-                    {"castellano", "Castilian Spanish"},
-                    {"latino", "Latin American Spanish"}
-                })
-            {
-                Value = "castellano"
-            };
-            configData.AddDynamic("language", language);
-
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
-        }
-
-        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
-        {
-            {
-                base.LoadValuesFromJson(jsonConfig, useProtectionService);
-                var language = (ConfigurationData.SingleSelectConfigurationItem)configData.GetDynamic("language");
-                _language = language?.Value ?? "castellano";
-            }
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -97,11 +76,9 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var templateUrl = SiteLink;
-            if (_language.Equals("castellano"))
-                templateUrl += "espana/";
             templateUrl += "{0}?s="; // placeholder for page
 
-            var maxPages = 2; // we scrape only 2 pages for recent torrents
+            var maxPages = MaxLatestPageLimit; // we scrape only 2 pages for recent torrents
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
             {
                 templateUrl += WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
@@ -124,7 +101,7 @@ namespace Jackett.Common.Indexers
                 }
                 releases.AddRange(pageReleases);
 
-                if (pageReleases.Count < MaxItemsPerPage)
+                if (pageReleases.Count < 1)
                     break; // this is the last page
             }
 
@@ -139,19 +116,8 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.ContentString);
-                var linkParent = dom.QuerySelector("li:contains('Torrent')").ParentElement;
-                var protectedLink = linkParent.GetAttribute("data-res");
-                if (protectedLink != null)
-                    protectedLink = "protect/v.php?i=" + protectedLink;
-                else
-                    protectedLink = linkParent.GetAttribute("href");
-                if (protectedLink.Contains("/ouo.io/"))
-                {
-                    // protected link =>
-                    // https://ouo.io/qs/qsW6rCh4?s=https://www.cinecalidad.is/protect/v2.php?i=A8--9InL&title=High+Life+%282018%29
-                    var linkParts = protectedLink.Split('=');
-                    protectedLink = protectedLink.Replace(linkParts[0] + "=", "");
-                }
+                var protectedLink = dom.QuerySelector("a:contains('Torrent')").GetAttribute("data-url");
+                protectedLink = Base64Decode(protectedLink);
                 protectedLink = GetAbsoluteUrl(protectedLink);
 
                 results = await RequestWithCookiesAsync(protectedLink);
@@ -176,20 +142,23 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
 
-                var rows = dom.QuerySelectorAll("div.postItem");
+                var rows = dom.QuerySelectorAll("article");
                 foreach (var row in rows)
                 {
+                    if (row.QuerySelector("div.selt") != null)
+                        continue; // we only support movies
+
+                    var qLink = row.QuerySelector("a.absolute");
                     var qImg = row.QuerySelector("img");
-                    if (qImg == null)
+                    if (qLink == null || qImg == null)
                         continue; // skip results without image
-                    var title = qImg.GetAttribute("title");
+
+                    var title = qLink.TextContent.Trim();
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
-                    title += _language.Equals("castellano") ? " MULTi/SPANiSH" : " MULTi/LATiN SPANiSH";
-                    title += " 1080p BDRip x264";
-
-                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("data-src")));
-                    var link = new Uri(row.QuerySelector("a.postItem__back-link").GetAttribute("href"));
+                    title += " MULTi/LATiN SPANiSH 1080p BDRip x264";
+                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
+                    var link = new Uri(qLink.GetAttribute("href"));
 
                     var release = new ReleaseInfo
                     {
@@ -242,6 +211,12 @@ namespace Jackett.Common.Indexers
             if (!url.StartsWith("http"))
                 return SiteLink + url.TrimStart('/');
             return url;
+        }
+
+        private string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 

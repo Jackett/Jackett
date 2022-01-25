@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using AngleSharp.Xml.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -1258,19 +1259,19 @@ namespace Jackett.Common.Indexers
             variables[".Query.Q"] = query.SearchTerm;
             variables[".Query.Series"] = null;
             variables[".Query.Ep"] = query.Episode;
-            variables[".Query.Season"] = query.Season;
+            variables[".Query.Season"] = query.Season > 0 ? query.Season.ToString() : null;
             variables[".Query.Movie"] = null;
-            variables[".Query.Year"] = query.Year.ToString();
-            variables[".Query.Limit"] = query.Limit.ToString();
-            variables[".Query.Offset"] = query.Offset.ToString();
+            variables[".Query.Year"] = query.Year?.ToString() ?? null;
+            variables[".Query.Limit"] = query.Limit.ToString() ?? null;
+            variables[".Query.Offset"] = query.Offset.ToString() ?? null;
             variables[".Query.Extended"] = query.Extended.ToString();
             variables[".Query.Categories"] = query.Categories;
             variables[".Query.APIKey"] = query.ApiKey;
-            variables[".Query.TVDBID"] = query.TvdbID.ToString();
-            variables[".Query.TVRageID"] = query.RageID;
+            variables[".Query.TVDBID"] = query.TvdbID?.ToString() ?? null;
+            variables[".Query.TVRageID"] = query.RageID?.ToString() ?? null;
             variables[".Query.IMDBID"] = query.ImdbID;
             variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
-            variables[".Query.TMDBID"] = query.TmdbID.ToString();
+            variables[".Query.TMDBID"] = query.TmdbID?.ToString() ?? null;
             variables[".Query.TVMazeID"] = null;
             variables[".Query.TraktID"] = null;
             variables[".Query.Album"] = query.Album;
@@ -1464,39 +1465,61 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        var SearchResultParser = new HtmlParser();
-                        var SearchResultDocument = SearchResultParser.ParseDocument(results);
+                        IHtmlCollection<IElement> rowsDom;
 
-                        // check if we need to login again
-                        var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
-                        if (loginNeeded)
+                        if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
                         {
-                            logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
-                            var LoginResult = await DoLogin();
-                            if (!LoginResult)
-                                throw new Exception(string.Format("Relogin failed"));
-                            await TestLogin();
-                            response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
-                            if (response.IsRedirect && SearchPath.Followredirect)
-                                await FollowIfRedirect(response);
+                            var SearchResultParser = new XmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
 
-                            results = response.ContentString;
-                            SearchResultDocument = SearchResultParser.ParseDocument(results);
+                            if (Search.Preprocessingfilters != null)
+                            {
+                                results = applyFilters(results, Search.Preprocessingfilters, variables);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
+                            }
+
+                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+                        }
+                        else
+                        {
+                            var SearchResultParser = new HtmlParser();
+                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
+
+                            // check if we need to login again
+                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                            if (loginNeeded)
+                            {
+                                logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
+                                var LoginResult = await DoLogin();
+                                if (!LoginResult)
+                                    throw new Exception(string.Format("Relogin failed"));
+                                await TestLogin();
+                                response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
+                                if (response.IsRedirect && SearchPath.Followredirect)
+                                    await FollowIfRedirect(response);
+
+                                results = response.ContentString;
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                            }
+
+                            checkForError(response, Definition.Search.Error);
+
+                            if (Search.Preprocessingfilters != null)
+                            {
+                                results = applyFilters(results, Search.Preprocessingfilters, variables);
+                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
+                            }
+
+                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+
                         }
 
-                        checkForError(response, Definition.Search.Error);
-
-                        if (Search.Preprocessingfilters != null)
-                        {
-                            results = applyFilters(results, Search.Preprocessingfilters, variables);
-                            SearchResultDocument = SearchResultParser.ParseDocument(results);
-                            logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
-                        }
-
-                        var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                        var RowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                         var Rows = new List<IElement>();
-                        foreach (var RowDom in RowsDom)
+                        foreach (var RowDom in rowsDom)
                         {
                             Rows.Add(RowDom);
                         }
@@ -1912,6 +1935,17 @@ namespace Jackett.Common.Indexers
                             release.Category = cats;
                         else
                             release.Category = release.Category.Union(cats).ToList();
+                    }
+                    value = release.Category.ToString();
+                    break;
+                case "categorydesc":
+                    var catsDesc = MapTrackerCatDescToNewznab(value);
+                    if (catsDesc.Any())
+                    {
+                        if (release.Category == null || FieldModifiers.Contains("noappend"))
+                            release.Category = catsDesc;
+                        else
+                            release.Category = release.Category.Union(catsDesc).ToList();
                     }
                     value = release.Category.ToString();
                     break;

@@ -87,13 +87,12 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info
-    type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker in your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here</ol>"
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -119,15 +118,20 @@ settings:
       asc: asc
 
 login:
-  method: cookie
+  path: lt/account-login.php
+  method: post
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.klaida
+    - selector: p.error_text
   test:
-    path: lt/torrents.php
+    path: lt/torrents
 
 search:
   paths:
-    - path: lt/torrents.php
+    - path: lt/torrents
   inputs:
     $raw: "{{ range .Categories }}cats[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"

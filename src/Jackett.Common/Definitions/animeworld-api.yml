@@ -9,20 +9,22 @@ links:
   - https://animeworld.cx/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
-    - {id: 1, cat: Movies/Other, desc: "Anime Movie"}
-    - {id: 2, cat: TV/Anime, desc: "Anime Serie"}
-    - {id: 3, cat: Audio, desc: "Anime Musik/OST"}
+    - {id: 1, cat: Movies/Other, desc: "Anime Filme"}
+    - {id: 2, cat: TV/Anime, desc: "Anime Serien"}
+    - {id: 3, cat: Audio, desc: "Anime Musik / OSTs"}
     - {id: 4, cat: PC/Games, desc: "Anime Spiele"}
-    - {id: 5, cat: XXX, desc: "Hentai"}
-    - {id: 6, cat: PC, desc: "Spiele Linux"}
+    - {id: 5, cat: XXX, desc: "Anime Hentai"}
+    - {id: 6, cat: PC, desc: "Software"}
     - {id: 7, cat: Other, desc: "Sonstiges"}
     - {id: 8, cat: Movies, desc: "Filme"}
     - {id: 9, cat: TV, desc: "Serien"}
     - {id: 10, cat: PC/Games, desc: "Spiele"}
     - {id: 11, cat: Audio, desc: "Musik"}
-    - {id: 12, cat: Books, desc: "Mangas"}
+    - {id: 12, cat: Books, desc: "Manga"}
+    - {id: 13, cat: Movies, desc: "Cartoon Filme"}
+    - {id: 14, cat: TV, desc: "Cartoon Serie"}
+    - {id: 15, cat: XXX, desc: "H-Manga / Doujinshi"}
 
   modes:
     search: [q]
@@ -60,6 +62,16 @@ settings:
       desc: desc
       asc: asc
 
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
 search:
   paths:
     # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
@@ -75,21 +87,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Anime Movie": 1
-        "Anime Serie": 2
-        "Anime Musik/OST": 3
-        "Anime Spiele": 4
-        "Hentai": 5
-        "Spiele Linux": 6
-        "Sonstiges": 7
-        "Filme": 8
-        "Serien": 9
-        "Spiele": 10
-        "Musik": 11
-        "Mangas": 12
     title:
       selector: name
     details:
@@ -101,8 +100,6 @@ search:
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
-        - name: replace
-          args: ["https://via.placeholder.com/400x600", ""]
     imdbid:
       selector: imdb_id
     tmdbid:

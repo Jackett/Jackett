@@ -1,9 +1,9 @@
 ---
 id: pier720
 name: 720pier
-description: "720pier is a RUSSIAN Private Torrent Tracker for HD SPORTS"
+description: "720pier is a RUSSIAN Semi-Private Torrent Tracker for HD SPORTS"
 language: ru-RU
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://720pier.ru/

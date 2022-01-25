@@ -68,7 +68,8 @@ search:
     search: "{{ .Keywords }}"
     incldead: 1
     polish: 0
-    blah: 0
+    # 0 both, 1 name, 2 desc
+    blah: 1
 
   rows:
     selector: table#line > tbody > tr:has(a[href^="details.php?id="])

@@ -28,8 +28,8 @@
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=PR12772" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=PR12772" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20220123" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20220123" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -191,15 +191,19 @@
         </div>
         <div class="input-area">
             <span class="input-header">Cache TTL (seconds): </span>
-            <input id="jackett-cache-ttl" class="form-control input-right" type="text" value="" placeholder="">
+            <input id="jackett-cache-ttl" class="form-control input-right" type="text" value="" placeholder="2100">
         </div>
         <div class="input-area">
             <span class="input-header">Cache max results per indexer: </span>
-            <input id="jackett-cache-max-results-per-indexer" class="form-control input-right" type="text" value="" placeholder="">
+            <input id="jackett-cache-max-results-per-indexer" class="form-control input-right" type="text" value="" placeholder="1000">
         </div>
         <div class="input-area">
           <span class="input-header">FlareSolverr API URL: </span>
           <input id="jackett-flaresolverrurl" class="form-control input-right" type="text" value="" placeholder="Blank for default">
+        </div>
+        <div class="input-area">
+          <span class="input-header">FlareSolverr Max Timeout (ms): </span>
+          <input id="jackett-flaresolverr-maxtimeout" class="form-control input-right" type="text" value="" placeholder="55000">
         </div>
         <div class="input-area">
             <span class="input-header">OMDB API key: </span>
@@ -302,11 +306,12 @@
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
         <div class="tab-content configured-indexer-div">
-            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
                         <th>Indexer</th>
                         <th>Actions</th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -334,12 +339,15 @@
                                 </button>
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2"></td>
+                      <th></th>
+                      <th></th>
+                      <th data-type="hiddendata"></th>
                     </tr>
                 </tfoot>
             </table>
@@ -348,7 +356,7 @@
 
     <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
         <div class="unconfigured-indexer-div">
-            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
                         <th></th>
@@ -358,6 +366,7 @@
                         <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -385,6 +394,7 @@
                                 {{/if_eq}}
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
@@ -397,6 +407,7 @@
                         <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </tfoot>
             </table>
@@ -732,6 +743,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=2021103101"></script>
+    <script type="text/javascript" src="../custom.js?changed=2022012301"></script>
 </body>
 </html>

@@ -56,7 +56,7 @@ namespace Jackett.Common.Utils.Clients
         {
             clearanceHandlr = new ClearanceHandler(serverConfig.FlareSolverrUrl)
             {
-                MaxTimeout = 55000,
+                MaxTimeout = serverConfig.FlareSolverrMaxTimeout,
                 ProxyUrl = serverConfig.GetProxyUrl(false)
             };
             clientHandlr = new HttpClientHandler
@@ -77,6 +77,8 @@ namespace Jackett.Common.Utils.Clients
 
             clearanceHandlr.InnerHandler = clientHandlr;
             client = new HttpClient(clearanceHandlr);
+
+            SetTimeout(ClientTimeout);
         }
 
         // Called everytime the ServerConfig changes
@@ -88,6 +90,12 @@ namespace Jackett.Common.Utils.Clients
             {
                 CreateClient();
             }
+        }
+
+        public override void SetTimeout(int seconds)
+        {
+            ClientTimeout = seconds;
+            client.Timeout = TimeSpan.FromSeconds(ClientTimeout);
         }
 
         public override void Init()
@@ -175,10 +183,9 @@ namespace Jackett.Common.Utils.Clients
             };
 
             foreach (var header in response.Headers)
-            {
-                var value = header.Value;
-                result.Headers[header.Key.ToLowerInvariant()] = value.ToArray();
-            }
+                result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
+            foreach (var header in response.Content.Headers)
+                result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
 
             // some cloudflare clients are using a refresh header
             // Pull it out manually

@@ -14,6 +14,7 @@ caps:
     - {id: 2, cat: Movies/SD, desc: Movies/SD}
     - {id: 3, cat: Movies/BluRay, desc: Movies/BluRay}
     - {id: 4, cat: Movies/UHD, desc: Movies/4K}
+    - {id: 38, cat: Movies/UHD, desc: Movies/UHD}
     - {id: 5, cat: Movies/HD, desc: Movies/720p}
     - {id: 6, cat: Movies/HD, desc: Movies/1080p}
     - {id: 7, cat: Movies/HD, desc: Movies/PACKS}
@@ -33,6 +34,8 @@ caps:
     - {id: 23, cat: Audio/Lossless, desc: Music/FLAC}
     - {id: 24, cat: Audio/Video, desc: Music/MTV}
     - {id: 29, cat: Audio, desc: Music/PACKS}
+    - {id: 39, cat: Audio/Video, desc: Music/DVD}
+    - {id: 40, cat: Audio/Video, desc: Music/Bluray}
     - {id: 25, cat: PC/Games, desc: Games/PC}
     - {id: 26, cat: Console, desc: Games/NSW}
     - {id: 27, cat: PC/Mac, desc: Games/Mac}
@@ -44,6 +47,7 @@ caps:
     - {id: 36, cat: XXX, desc: XXX/Movies/HD}
     - {id: 37, cat: XXX/UHD, desc: XXX/Movies/4K}
     - {id: 34, cat: XXX/ImageSet, desc: XXX/Imagesets}
+    - {id: 41, cat: XXX, desc: XXX/PACKS}
 
   modes:
     search: [q]

@@ -1,26 +1,21 @@
 ---
-id: datascene-api
-name: DataScene (API)
-description: "DataScene (DS) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-US
+id: hdolimpo-api
+name: HD-Olimpo (API)
+description: "HD-Olimpo is a SPANISH site for HD content"
+language: es-ES
 type: private
 encoding: UTF-8
 links:
-  - https://datascene.xyz/
+  - https://hd-olimpo.club/
 legacylinks:
-  - http://datascene.net/
-  - https://datascene.net/
+  - https://hdolimpo.co/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: PC/Games, desc: "Game"}
-    - {id: 5, cat: PC/0day, desc: "Application"}
-    - {id: 6, cat: XXX, desc: "XXX"}
-    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
-    - {id: 8, cat: Books/EBook, desc: "E-Book"}
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 3, cat: Audio, desc: "Música"}
+    - {id: 4, cat: TV/Documentary, desc: "Documentales"}
 
   modes:
     search: [q]
@@ -36,7 +31,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://datascene.xyz/\" target =_blank>DataScene</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your account <i>My configuration / Mi configuración => Secutiy / Seguridad</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -65,8 +60,6 @@ login:
     api_token: "{{ .Config.apikey }}"
   error:
     - selector: a[href*="/login"]
-      message:
-        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
@@ -87,6 +80,61 @@ search:
       selector: category
     title:
       selector: name
+      filters:
+        - name: re_replace
+          args: ["\\[", " "]
+        - name: re_replace
+          args: ["\\]", " "]
+        - name: re_replace
+          args: ["(?i)(full(bluray)?)", "BRDISK"] # FULL(BR/UHD) -> BRDISK
+        - name: replace
+          args: ["HDOlimpo", ""] # Delete HDOlimpo
+        - name: replace
+          args: ["HD-Olimpo", ""] # Delete HD-Olimpo
+        - name: replace
+          args: ["E-AC-3", "EAC3"]
+        - name: re_replace
+          args: ["[ -](?i)español[ -]", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)castellano[ -]", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)spa[ -]", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)esp[ -]", " SPANiSH "]
+        - name: re_replace
+          args: [" ES ", " SPANiSH "]
+        - name: re_replace
+          args: ["[ -](?i)ingl[eé]s[ -]", " English "]
+        - name: re_replace
+          args: ["[ -](?i)[ei]ng[ -]", " English "]
+        - name: re_replace
+          args: ["[ -](?i)cat[ -]", " Catalan "]
+        - name: re_replace
+          args: ["[ -](?i)vas[ -]", " Basque "]
+        - name: re_replace
+          args: ["[ -](?i)fr[ae][ -]", " French "]
+        - name: re_replace
+          args: ["[ -](?i)jap[ -]", " Japanese "]
+        - name: re_replace
+          args: ["[ -](?i)ita[ -]", " Italian "]
+        - name: re_replace
+          args: ["[ -](?i)rus[ -]", " Russian "]
+        - name: re_replace
+          args: ["[ -](?i)ger[ -]", " German "]
+        - name: re_replace
+          args: ["(?i)(triaudio)", "MULTi SPANiSH English"]
+        - name: re_replace
+          args: ["(?i)(dual)", " MULTi SPANiSH "]
+        - name: re_replace
+          args: ["(?i)(es-en)", " MULTi SPANiSH "]
+        - name: re_replace
+          args: ["(?i)(en-es)", " MULTi SPANiSH "]
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
+        - name: re_replace
+          args: ["\\s+", " "] # More than 1 space to 1 space
     details:
       selector: details_link
     download:
@@ -127,9 +175,7 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-    minimumratio:
-      text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# json UNIT3D 5.3.0
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# json UNIT3D ???

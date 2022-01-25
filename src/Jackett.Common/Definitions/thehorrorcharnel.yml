@@ -5,6 +5,8 @@ description: "The Horror Charnel (THC) is a Private Torrent Tracker for HORROR /
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - ffcfcef31cc501c935dedfeae5be2aff9ebcd19f # expired ‎‎23 ‎Jan ‎2022
 links:
   - https://horrorcharnel.org/
 

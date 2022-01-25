@@ -56,6 +56,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Demonoid
  * DivxTotal
  * dmhy
+ * DonTorrent
  * E-Hentai
  * elitetorrent
  * EpubLibre
@@ -104,7 +105,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NNTT
  * NoNaMe Club (NNM-Club)
  * Nyaa.si
- * OnceSearch
  * OneJAV
  * OpenSharing
  * OxTorrent
@@ -115,7 +115,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Pornforall
  * PornLeech
  * PornoLive
- * PornoRip
  * PornosLab
  * PornoTor
  * PornoTorrent
@@ -181,6 +180,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
+ * 720pier
  * AniDUB
  * Anime-Free
  * AnimeLayer
@@ -246,7 +246,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 3D Torrents (3DT) [![(invite needed)][inviteneeded]](#)
  * 4thD (4th Dimension)
  * 52PT
- * 720pier
  * Abnormal
  * ABtorrents (ABT + RNS)
  * Acid Lounge (A-L)
@@ -254,6 +253,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Aftershock
  * Aidoru!Online
  * Aither
+ * Alleen Retail
  * AlphaRatio (AR)
  * AmigosShareClub
  * anasch.cc
@@ -275,7 +275,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BeyondHD (BHD)
  * Bibliotik
  * Bit-Bázis
- * Bit-City Reloaded [![(invite needed)][inviteneeded]](#)
+ * Bit-City Reloaded
  * BIT-HDTV
  * BiT-TiTAN
  * Bitded
@@ -368,6 +368,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HaiDan
  * Haitang
  * HappyFappy
+ * Hawke-uno
  * HD Dolby
  * HD-Bits.com [![(invite needed)][inviteneeded]](#)
  * HD-Forever (HDF)
@@ -401,7 +402,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Il Corsaro Verde
  * Indietorrents [![(invite needed)][inviteneeded]](#)
  * IPTorrents (IPT)
- * ImmortalSeed (iS) [![(invite needed)][inviteneeded]](#)
+ * ImmortalSeed (iS)
  * Immortuos [![(invite needed)][inviteneeded]](#)
  * Insane Tracker
  * IPTorrents (IPT)
@@ -580,6 +581,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Twilights Zoom
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UHDBits
+ * UHD-HEAVEN
  * UnionGang [![(invite needed)][inviteneeded]](#)
  * UnlimitZ
  * Vizuk
@@ -778,6 +780,7 @@ For these cases, [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) ha
 Setting up this service is optional, most indexers don't need it.
 * Install FlareSolverr service (following their instructions)
 * Configure **FlareSolverr API URL** in Jackett. For example: http://172.17.0.2:8191
+* It is recommended to keep the default value in **FlareSolverr Max Timeout (ms)**
 
 ## Configuring OMDb
 This feature is used as a fallback (when using the aggregate Indexer) to get the movie/series title if only the IMDB ID is provided in the request.

@@ -52,6 +52,17 @@ namespace Jackett.Common.Indexers
             var results = await base.PerformQuery(query);
             // results must contain search terms
             results = results.Where(release => query.MatchQueryStringAND(release.Title));
+            foreach (var release in results)
+            {
+                // SecretCinema loads artist with the movie director and the gazelleTracker abstract
+                // places it in front of the movie separated with a dash.
+                // We need to strip it or Radarr will not get a title match for automatic DL
+                var artistEndsAt = release.Title.IndexOf(" - ");
+                if (artistEndsAt > -1)
+                {
+                    release.Title = release.Title.Substring(artistEndsAt + 3);
+                }
+            }
             return results;
         }
 

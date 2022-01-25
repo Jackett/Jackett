@@ -51,6 +51,7 @@ body:
     description: |
       Place any relevant error messages you noticed from the logs here.
       Make sure you attach the full logs with your personal information removed in case we need more information.
+    render: text
   validations:
     required: true
 - type: textarea

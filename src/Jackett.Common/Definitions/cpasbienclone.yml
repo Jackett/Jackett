@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://cpasbien.to/
+  - https://www.cpasbien.gg/
 legacylinks:
   - https://www1.cpasbiens.ws/
   - https://www2.cpasbiens.ws/
@@ -19,6 +19,7 @@ legacylinks:
   - https://cpasbiens.proxyportal.fun/
   - https://cpasbiens.uk-unblock.xyz/
   - https://cpasbiens.ind-unblock.xyz/
+  - https://cpasbien.to/
 
 caps:
   categories:
@@ -55,17 +56,17 @@ settings:
     default: false
   - name: sort
     type: select
-    label: Sort requested from site (Only works for searches with Keywords)
-    default: ?trie-date-d
+    label: Sort requested from site (Works only for searches with Keywords)
+    default: trie-date-d
     options:
-      ?trie-date-d: created desc
-      ?trie-date-a: created asc
-      ?trie-seeds-d: seeders desc
-      ?trie-seeds-a: seeders asc
-      ?trie-poid-d: size desc
-      ?trie-poid-a: size asc
-      ?trie-nom-d: title desc
-      ?trie-nom-a: title asc
+      trie-date-d: created desc
+      trie-date-a: created asc
+      trie-seeds-d: seeders desc
+      trie-seeds-a: seeders asc
+      trie-poid-d: size desc
+      trie-poid-a: size asc
+      trie-nom-d: title desc
+      trie-nom-a: title asc
 
 download:
   selectors:
@@ -74,7 +75,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}home/{{ end }}"
+    - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}.html,{{ .Config.sort }}{{ else }}home/{{ end }}"
 
   rows:
     selector: table.table-corps > tbody > tr:has(a)

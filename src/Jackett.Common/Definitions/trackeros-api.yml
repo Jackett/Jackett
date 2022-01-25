@@ -1,0 +1,175 @@
+---
+id: trackeros-api
+name: Trackeros (API)
+description: "Trackeros is a Private SPANISH Tracker for HD MOVIES / TV / GENERAL"
+language: es-ES
+type: private
+encoding: UTF-8
+links:
+  - https://trackeros.tk/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 3, cat: Audio, desc: "Musica"}
+    - {id: 7, cat: Audio/Video, desc: "Espectáculos"}
+    - {id: 8, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 4, cat: Console, desc: "Consolas"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://trackeros.tk/\" target =_blank>Trackeros</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php
+    - path: "/api/torrents/filter?api_token={{ .Config.apikey }}&name={{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}{{ if .Query.TMDBID }}&tmdbId={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if .Query.IMDBIDShort }}&imdbId={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdbId={{ .Query.TVDBID }}{{ else }}{{ end }}&sortField={{ .Config.sort }}&sortDirection={{ .Config.type }}&perPage=100&page=1{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&free=1{{ else }}{{ end }}"
+      response:
+        type: json
+        attribute: attributes
+
+  rows:
+    selector: data
+    count:
+      selector: meta.total
+
+  fields:
+    categorydesc:
+      selector: category
+    title:
+      selector: name
+      filters:
+        - name: re_replace
+          args: ["[\\[\\]]", " "] # remove [ and ]
+        - name: re_replace
+          args: [" +", " "] # remove duplicate spaces
+        - name: re_replace
+          args: ["(?i)microhd", "BDRip MicroHD"]
+        - name: re_replace
+          args: ["(?i)(m1080p|mhd1080p)", "1080p MicroHD"]
+        - name: re_replace
+          args: ["(?i)(m720p|mhd720p)", "720p MicroHD"]
+        - name: re_replace
+          args: ["(?i)brrip", "BDRip"]
+        - name: re_replace # Temporada 1 to S01
+          args: ["(?i)\\btemporada *(\\d{1,2})\\b", "S$1"]
+        - name: re_replace # T1 to S01
+          args: ["\\bT(\\d{1,2})\\b", "S$1"]
+        - name: re_replace # S1 to S01 / E1 to E01
+          args: ["\\b([SE])(\\d)\\b", "${1}0$2"]
+        - name: re_replace # S01 E01 to S01E01 / T01E01 to S01E01
+          args: ["\\b[ST](\\d{1,2}) *E(\\d{1,2})\\b", "S$1E$2"]
+        - name: re_replace # S1 a S2 to S1-2
+          args: ["(S\\d{1,2})( a S*| A S*| a la S*| A LA S*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # S01E01 E02 E03 to S01E01-02-03 (2 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (3 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (4 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (5 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (6 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (7 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (8 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (9 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # continuation (10 episodes)
+          args: ["([E-]\\d{1,2})( E| a E*| A E*| al E*| AL E*)(\\d{1,2})", "$1-$3"]
+        - name: re_replace # 2x6 to S02E06
+          args: ["\\b(\\d{1,2})x(\\d{1,2})\\b", "S$1E$2"]
+        - name: append
+          args: " MULTi/SPANiSH" # Add language for Sonarr/Radarr
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    poster:
+      selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2021-10-18T00:34:50.000000Z"
+      selector: created_at
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: freeleech
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: double_upload
+      case:
+        0: 1 # normal
+        1: 2 # double
+    minimumratio:
+      text: 0.4
+    minimumseedtime:
+      # 32 hours => 32 * 60 * 60 seconds
+      text: 115200
+# json UNIT3D 5.3.0

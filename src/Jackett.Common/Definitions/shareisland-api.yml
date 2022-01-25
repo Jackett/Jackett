@@ -12,7 +12,6 @@ legacylinks:
   - http://www.shareisland.org/
 
 caps:
-  # dont forget to update the case block in the search fields category
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "Serie TV"}
@@ -59,6 +58,16 @@ settings:
       desc: desc
       asc: asc
 
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
 search:
   paths:
     # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
@@ -82,17 +91,8 @@ search:
       selector: meta.total
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Movie": 1
-        "Serie TV": 2
-        "Ebook": 15
-        "Riviste e Giornali": 17
-        "XXX": 19
-        "Music": 3
-        "Games": 7
-        "Software": 23
     title:
       selector: name
       filters:
@@ -128,8 +128,6 @@ search:
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
-        - name: replace
-          args: ["https://via.placeholder.com/400x600", ""]
     imdbid:
       selector: imdb_id
     tmdbid:

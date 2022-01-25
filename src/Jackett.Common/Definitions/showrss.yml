@@ -1,0 +1,59 @@
+---
+id: showrss
+name: showRSS
+description: "showRSS is a service that allows you to keep track of your favorite TV shows"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://showrss.info/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/SD}
+    - {id: 2, cat: TV/HD}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings: []
+
+search:
+  paths:
+    - path: /other/all.rss
+      response:
+        type: xml
+
+  rows:
+    selector: rss > channel > item
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: raw_title
+      filters:
+      case:
+        ":contains(\"720p\")": 2
+        ":contains(\"1080p\")": 2
+        "*": 1
+    title:
+      selector: raw_title
+    details:
+      text: "{{ .Config.sitelink }}"
+    date:
+      selector: pubDate
+    download:
+      selector: link
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 
 namespace Jackett.Common.Indexers
@@ -65,5 +66,7 @@ namespace Jackett.Common.Indexers
     public interface IWebIndexer : IIndexer
     {
         Task<byte[]> Download(Uri link);
+
+        Task<WebResult> DownloadImage(Uri link);
     }
 }

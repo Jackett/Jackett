@@ -1,9 +1,9 @@
 ---
 id: moviesite
 name: Moviesite
-description: "Moviesite is a HUNGARIAN private tracker for MOVIES / TV / GENERAL"
+description: "Moviesite is a HUNGARIAN Semi-Private tracker for MOVIES / TV / GENERAL"
 language: hu-HU
-type: private
+type: semi-private
 encoding: ISO-8859-2
 links:
   - http://moviesite.info.hu/ # does not support https ERR_CONNECTION_REFUSED

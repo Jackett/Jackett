@@ -15,8 +15,10 @@ caps:
     - {id: 64, cat: Books/EBook, desc: "Books"}
     - {id: 66, cat: Books, desc: "Business"}
     - {id: 68, cat: Books/Comics, desc: "Comics"}
+    - {id: 80, cat: Books, desc: "Coooking"}
     - {id: 59, cat: TV/Documentary, desc: "Docs/Movies"}
     - {id: 60, cat: TV/Documentary, desc: "Docs/TV"}
+    - {id: 79, cat: TV, desc: "Educational"}
     - {id: 71, cat: Other, desc: "Fonts"}
     - {id: 72, cat: Books, desc: "IT Books"}
     - {id: 57, cat: Books/Mags, desc: "Magazine"}

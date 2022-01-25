@@ -43,9 +43,7 @@ namespace Jackett.Common.Utils
 
             internal LambdaFilterFuncComponent(string id, Func<string, Func<IIndexer, bool>> builder) : base(id)
             {
-                if (builder == null)
-                    throw new ArgumentNullException(nameof(builder));
-                this.builder = builder;
+                this.builder = builder ?? throw new ArgumentNullException(nameof(builder));
             }
 
             public override Func<IIndexer, bool> ToFunc(string args)

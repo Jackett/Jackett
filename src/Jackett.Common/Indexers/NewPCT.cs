@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers
         private readonly string[] _voUrls = { "serie-vo", "serievo" };
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://atomixhq.net/",
+            "https://atomixhq.top/",
             "https://pctmix1.unblockit.how/"
         };
 
@@ -123,7 +123,8 @@ namespace Jackett.Common.Indexers
             "https://atomixhq.com/",
             "https://pctmix1.unblockit.bz/",
             "https://atomixhq.one/",
-            "https://pctmix1.unblockit.tv/"
+            "https://pctmix1.unblockit.tv/",
+            "https://atomixhq.net/"
         };
 
         public NewPCT(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -131,7 +132,7 @@ namespace Jackett.Common.Indexers
             : base(id: "newpct",
                    name: "NewPCT",
                    description: "NewPCT - Descargar peliculas, series y estrenos torrent gratis",
-                   link: "https://atomixhq.net/",
+                   link: "https://atomixhq.top/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -498,7 +499,7 @@ namespace Jackett.Common.Indexers
                     {"pg", pg.ToString()}
                 };
 
-                var results = await RequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection);
+                var results = await RequestWithCookiesAsync(searchJsonUrl, method: RequestType.POST, data: queryCollection, referer: SiteLink);
                 var items = ParseSearchJsonContent(results.ContentString, year);
                 if (!items.Any())
                     break;
@@ -540,7 +541,8 @@ namespace Jackett.Common.Indexers
 
                     // we have another search for series
                     var titleLower = title.ToLower();
-                    var isSeries = quality != null && quality.ToLower().Contains("hdtv");
+                    var isSeries = (quality != null && quality.ToLower().Contains("hdtv")) ||
+                                   detailsUrl.Contains("/serie-") || detailsUrl.Contains("/series/");
                     var isGame = titleLower.Contains("pcdvd");
                     if (isSeries || isGame)
                         continue;

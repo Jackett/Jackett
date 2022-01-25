@@ -42,6 +42,7 @@ namespace Jackett.Common.Services
         {
             {"audiobooktorrents", "abtorrents"},
             {"broadcastthenet", "broadcasthenet"},
+            {"todotorrents", "dontorrent"},
             {"hdreactor", "hdhouse"},
             {"icetorrent", "speedapp"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},

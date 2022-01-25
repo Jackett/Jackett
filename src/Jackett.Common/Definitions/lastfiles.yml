@@ -138,16 +138,18 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[onmouseover]
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[onmouseover]
       attribute: href
     poster:
-      selector: a[href^="details.php?id="]
+      selector: a[onmouseover]
       attribute: onmouseover
       filters:
         - name: regexp
           args: src=\\'(.+?)\\'
+        - name: replace
+          args: ["./pic/noposter.png", ""]
     download:
       selector: a[href^="download.php"]
       attribute: href

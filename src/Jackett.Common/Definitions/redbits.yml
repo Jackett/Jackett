@@ -15,6 +15,7 @@ caps:
     - {id: 6, cat: TV/Documentary, desc: "Documentales"}
     - {id: 7, cat: TV/Sport, desc: "Deportes"}
     - {id: 8, cat: Movies, desc: "Hagbard"}
+    - {id: 9, cat: Movies, desc: "Studio Ghibli"}
 
   modes:
     search: [q]

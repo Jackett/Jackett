@@ -130,6 +130,7 @@ function loadJackettSettings() {
         }
 
         $("#jackett-flaresolverrurl").val(data.flaresolverrurl);
+        $("#jackett-flaresolverr-maxtimeout").val(data.flaresolverr_maxtimeout);
         $("#jackett-omdbkey").val(data.omdbkey);
         $("#jackett-omdburl").val(data.omdburl);
         var password = data.password;
@@ -287,6 +288,12 @@ function displayConfiguredIndexersList(indexers) {
                 "visible": true,
                 "searchable": true,
                 "orderable": true
+            },
+            {
+                "targets": 2,
+                "visible": false,
+                "searchable": true,
+                "orderable": false
             }
         ]
     });
@@ -428,6 +435,13 @@ function displayUnconfiguredIndexersList() {
                 "targets": 6,
                 "visible": true,
                 "searchable": false,
+                "orderable": false
+            },
+            {
+                "name": "url",
+                "targets": 7,
+                "visible": false,
+                "searchable": true,
                 "orderable": false
             }
         ]
@@ -964,7 +978,8 @@ function updateReleasesRow(row) {
         TitleLink.data("toggle", "tooltip");
         TitleLink.tooltip({
             title: TitleTooltip,
-            html: true
+            html: true,
+            placement: "auto"
         });
     }
 
@@ -1500,6 +1515,7 @@ function bindUIButtons() {
         var jackett_cache_ttl = $("#jackett-cache-ttl").val();
         var jackett_cache_max_results_per_indexer = $("#jackett-cache-max-results-per-indexer").val();
         var jackett_flaresolverr_url = $("#jackett-flaresolverrurl").val();
+        var jackett_flaresolverr_maxtimeout = $("#jackett-flaresolverr-maxtimeout").val();
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();
 
@@ -1522,6 +1538,7 @@ function bindUIButtons() {
             cache_ttl: jackett_cache_ttl,
             cache_max_results_per_indexer: jackett_cache_max_results_per_indexer,
             flaresolverrurl: jackett_flaresolverr_url,
+            flaresolverr_maxtimeout: jackett_flaresolverr_maxtimeout,
             omdbkey: jackett_omdb_key,
             omdburl: jackett_omdb_url,
             proxy_type: jackett_proxy_type,

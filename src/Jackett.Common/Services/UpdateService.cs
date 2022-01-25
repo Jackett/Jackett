@@ -44,6 +44,10 @@ namespace Jackett.Common.Services
             filePermissionService = fps;
 
             variant = new Variants().GetVariant();
+
+            // Increase the HTTP client timeout just for update download (not other requests)
+            // The update is heavy and can take longer time for slow connections. Fix #12711
+            client.SetTimeout(300); // 5 minutes
         }
 
         public void StartUpdateChecker() => Task.Factory.StartNew(UpdateWorkerThread);
