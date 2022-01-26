@@ -1378,6 +1378,13 @@ function bindUIButtons() {
         return false;
     });
 
+    $('#api-key-copy-button').click(function () {
+        var apiKey = api.key;
+        if (apiKey !== null || apiKey !== undefined) {
+            copyToClipboard(apiKey);
+        }
+    });
+
     $('#jackett-add-indexer').click(function () {
         $("#modals").empty();
         displayUnconfiguredIndexersList();
