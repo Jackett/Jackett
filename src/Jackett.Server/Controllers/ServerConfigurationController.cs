@@ -92,6 +92,15 @@ namespace Jackett.Server.Controllers
                     throw new Exception("The Base Path Override must start with a /");
             }
 
+            var baseUrlOverride = config.baseurloverride;
+            if (baseUrlOverride != null)
+            {
+                baseUrlOverride = baseUrlOverride.TrimEnd('/');
+                if (!Uri.TryCreate(config.baseurloverride, UriKind.Absolute, out var uri)
+                    || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+                    throw new Exception("Base URL Override is invalid. Example: http://jackett:9117");
+            }
+
             var cacheEnabled = config.cache_enabled;
             var cacheTtl = config.cache_ttl;
             var cacheMaxResultsPerIndexer = config.cache_max_results_per_indexer;
@@ -106,6 +115,7 @@ namespace Jackett.Server.Controllers
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
             serverConfig.BasePathOverride = basePathOverride;
+            serverConfig.BaseUrlOverride = baseUrlOverride;
             serverConfig.CacheEnabled = cacheEnabled;
             serverConfig.CacheTtl = cacheTtl;
             serverConfig.CacheMaxResultsPerIndexer = cacheMaxResultsPerIndexer;

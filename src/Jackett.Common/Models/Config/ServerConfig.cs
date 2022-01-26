@@ -40,6 +40,7 @@ namespace Jackett.Common.Models.Config
         public bool UpdateDisabled { get; set; }
         public bool UpdatePrerelease { get; set; }
         public string BasePathOverride { get; set; }
+        public string BaseUrlOverride { get; set; }
         public bool CacheEnabled { get; set; }
         public long CacheTtl { get; set; }
         public long CacheMaxResultsPerIndexer { get; set; }
