@@ -89,7 +89,7 @@ namespace Jackett.Server.Controllers
             {
                 basePathOverride = basePathOverride.TrimEnd('/');
                 if (!string.IsNullOrWhiteSpace(basePathOverride) && !basePathOverride.StartsWith("/"))
-                    throw new Exception("The Base Path Override must start with a /");
+                    throw new Exception("The Base Path Override must start with a <b>/</b>");
             }
 
             var baseUrlOverride = config.baseurloverride;
