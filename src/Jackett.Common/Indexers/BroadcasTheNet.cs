@@ -95,20 +95,16 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var searchString = query.SearchTerm != null ? query.SearchTerm : "";
             var btnResults = query.Limit;
             if (btnResults == 0)
                 btnResults = (int)TorznabCaps.LimitsDefault;
             var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
-            var searchParam = new Dictionary<string, string>();
-
-            searchParam["search"] = searchString.Replace(" ", "%");
 
             var parameters = new JArray
             {
                 new JValue(configData.Key.Value),
-                JObject.FromObject(searchParam),
+                new JValue(GetQueryString().Replace(" ", "%")),
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
