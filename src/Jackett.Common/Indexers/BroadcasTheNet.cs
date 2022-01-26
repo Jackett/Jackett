@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
             var parameters = new JArray
             {
                 new JValue(configData.Key.Value),
-                new JValue(searchString.Trim()),
+                JObject.FromObject(searchParam),
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
