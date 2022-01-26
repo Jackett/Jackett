@@ -89,15 +89,16 @@ namespace Jackett.Server.Controllers
             {
                 basePathOverride = basePathOverride.TrimEnd('/');
                 if (!string.IsNullOrWhiteSpace(basePathOverride) && !basePathOverride.StartsWith("/"))
-                    throw new Exception("The Base Path Override must start with a <b>/</b>");
+                    throw new Exception("The Base Path Override must start with a /");
             }
 
             var baseUrlOverride = config.baseurloverride;
             if (baseUrlOverride != null)
             {
                 baseUrlOverride = baseUrlOverride.TrimEnd('/');
-                if (!string.IsNullOrWhiteSpace(baseUrlOverride) && !baseUrlOverride.StartsWith("http://") && !baseUrlOverride.StartsWith("https://"))
-                    throw new Exception("The Base URL Override must start with <b>http://</b> or <b>https://</b>");
+                if (!Uri.TryCreate(config.baseurloverride, UriKind.Absolute, out var uri)
+                    || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+                    throw new Exception("Base URL Override is invalid. Example: http://jackett:9117");
             }
 
             var cacheEnabled = config.cache_enabled;
