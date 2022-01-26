@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers
             var parameters = new JArray
             {
                 new JValue(configData.Key.Value),
-                new JValue(GetQueryString().Replace(" ", "%")),
+                new JValue(query.GetQueryString().Replace(" ", "%")),
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
