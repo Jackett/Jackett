@@ -93,6 +93,12 @@ namespace Jackett.Server.Controllers
             }
 
             var baseUrlOverride = config.baseurloverride;
+            if (baseUrlOverride != null)
+            {
+                baseUrlOverride = baseUrlOverride.TrimEnd('/');
+                if (!string.IsNullOrWhiteSpace(baseUrlOverride) && !baseUrlOverride.StartsWith("http://") && !baseUrlOverride.StartsWith("https://"))
+                    throw new Exception("The Base URL Override must start with <b>http://</b> or <b>https://</b>");
+            }
 
             var cacheEnabled = config.cache_enabled;
             var cacheTtl = config.cache_ttl;
