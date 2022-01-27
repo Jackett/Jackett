@@ -6,6 +6,8 @@ language: en-US
 type: private
 encoding: UTF-8
 testlinktorrent: false
+certificates:
+  - 86140a5aa0b0646ad79fe2f2bcd75ea5f9cedbda # Expired ‎27 ‎Jan ‎2022
 links:
   - https://slosoul.net/
 legacylinks:

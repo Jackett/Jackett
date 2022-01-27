@@ -43,6 +43,9 @@
         <div class="pull-right jackett-apikey">
             <span class="input-header">API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
+            <button id="api-key-copy-button" title="Copy API Key to clipboard" class="btn btn-primary btn-xs">
+                <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+            </button>
         </div>
         <hr />
 
@@ -126,6 +129,10 @@
         <div class="input-area">
             <span class="input-header">Base path override: </span>
             <input id="jackett-basepathoverride" class="form-control input-right" type="text" value="" placeholder="/jackett">
+        </div>
+        <div class="input-area">
+            <span class="input-header">Base URL override: </span>
+            <input id="jackett-baseurloverride" class="form-control input-right" type="text" value="" placeholder="http://jackett:9117">
         </div>
         <div class="input-area">
             <span class="input-header">Server port: </span>
@@ -743,6 +750,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=2022012301"></script>
+    <script type="text/javascript" src="../custom.js?changed=2022012602"></script>
 </body>
 </html>

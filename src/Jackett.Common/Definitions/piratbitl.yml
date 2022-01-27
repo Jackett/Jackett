@@ -28,6 +28,8 @@ caps:
     - {id: 1700, cat: Movies, desc: "Оформление раздач (Кино, Видео и ТВ)"}
     - {id: 3, cat: Movies, desc: "арубежные Фильмы (DVDrip, WEB-DLRip, HDrip)"}
     - {id: 1845, cat: Movies, desc: " |- Фильмы (мультфильмы) cо спонсором показа (Новинки AVI/MKV)"}
+    - {id: 1863, cat: Movies, desc: " |- Фильмы 2022 (Звук TS, Cam, VO, DVO)"}
+    - {id: 1864, cat: Movies, desc: " |- Фильмы 2022 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}
     - {id: 1860, cat: Movies, desc: " |- Фильмы 2021 (Звук TS, Cam, VO, DVO)"}
     - {id: 1859, cat: Movies, desc: " |- Фильмы 2021 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}
     - {id: 1856, cat: Movies, desc: " |- Фильмы 2019-2020 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}

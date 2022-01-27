@@ -13,13 +13,13 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: TV/Sport, desc: "BTCC"}
-    - {id: 2, cat: TV/Sport, desc: "Documentaries TV"}
+    - {id: 2, cat: TV/Sport, desc: "TV-Documentaries"}
     - {id: 3, cat: TV/Sport, desc: "DTM"}
     - {id: 22, cat: TV/Sport, desc: "Formula 2"}
     - {id: 23, cat: TV/Sport, desc: "Formula E"}
     - {id: 24, cat: TV/Sport, desc: "Misc"}
     - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
-    - {id: 26, cat: TV/Sport, desc: "MotoGP 2-3-E"}
+    - {id: 26, cat: TV/Sport, desc: "MotoGP-2-3-E"}
     - {id: 31, cat: TV/Sport, desc: "Nascar"}
     - {id: 32, cat: TV/Sport, desc: "Stock Car Brazil"}
     - {id: 50, cat: TV/Sport, desc: "WRC"}
