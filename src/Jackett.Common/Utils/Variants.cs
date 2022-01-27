@@ -32,21 +32,21 @@ namespace Jackett.Common.Utils
                     return JackettVariant.CoreMacOs;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                     return JackettVariant.CoreMacOsArm64;
-                #if ISMUSL
+#if ISMUSL
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.X64)
                     return JackettVariant.CoreLinuxMuslAmdx64;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm)
                     return JackettVariant.CoreLinuxMuslArm32;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                     return JackettVariant.CoreLinuxMuslArm64;
-                #else
+#else
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.X64)
                     return JackettVariant.CoreLinuxAmdx64;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm)
                     return JackettVariant.CoreLinuxArm32;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                     return JackettVariant.CoreLinuxArm64;
-                #endif
+#endif
             }
             else
             {
