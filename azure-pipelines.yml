@@ -78,6 +78,27 @@ stages:
               runtime: linux-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
+            LinuxMuslAMDx64:
+              buildDescription: Linux musl AMD x64
+              imageName: ubuntu-20.04
+              framework: $(netCoreFramework)
+              runtime: linux-musl-x64
+              archiveType: tar
+              artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
+            LinuxMuslARM32:
+              buildDescription: Linux musl ARM32
+              imageName: ubuntu-20.04
+              framework: $(netCoreFramework)
+              runtime: linux-musl-arm
+              archiveType: tar
+              artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
+            LinuxMuslARM64:
+              buildDescription: Linux musl ARM64
+              imageName: ubuntu-20.04
+              framework: $(netCoreFramework)
+              runtime: linux-musl-arm64
+              archiveType: tar
+              artifactName: Jackett.Binaries.LinuxMuslARM64.tar.gz
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
