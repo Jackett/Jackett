@@ -161,10 +161,16 @@ search:
     download:
       selector: a[href*="?p=torrents&pid=10&action=download"]
       attribute: href
+    date_ago:
+      optional: true
+      # <abbr class="timeago" data-time="1643407907">
+      # JS presented as 'a moment ago' or '3 minutes ago' etc
+      selector: td.torrent_name abbr.timeago
+      attribute: data-time
     date_year:
       optional: true
       # Uploaded 30-01-2019 15:02 by
-      selector: td.torrent_name:not(:contains(" at "))
+      selector: td.torrent_name:not(:contains(" at ")):not(:has(abbr.timeago))
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
@@ -177,7 +183,7 @@ search:
       # Uploaded Friday at 05:11 by
       # Uploaded Today at 00:48 by
       # Uploaded Yesterday at 23:57 by
-      selector: td.torrent_name:contains(" at ")
+      selector: td.torrent_name:contains(" at "):not(:has(abbr.timeago))
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
@@ -186,7 +192,7 @@ search:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_ago }}{{ or .Result.date_year .Result.date_day .Result.date_ago }}{{ else }}now{{ end }}"
     size:
       selector: a[rel="torrent_size"]
     seeders:
