@@ -32,7 +32,7 @@ namespace Jackett.Common.Utils
                     return JackettVariant.CoreMacOs;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                     return JackettVariant.CoreMacOsArm64;
-#if ISMUSL
+#if ISLINUXMUSL
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.X64)
                     return JackettVariant.CoreLinuxMuslAmdx64;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm)

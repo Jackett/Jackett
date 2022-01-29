@@ -7,7 +7,6 @@
     <NoWarn />
     <WarningsAsErrors />
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DefineConstants Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64' or '$(RuntimeIdentifier)' == 'linux-musl-arm' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">ISMUSL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
