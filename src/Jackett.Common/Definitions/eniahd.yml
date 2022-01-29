@@ -6,9 +6,9 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - https://eniatv.com/
-legacylinks:
   - https://eniahd.com/
+legacylinks:
+  - https://eniatv.com/
 
 caps:
   categorymappings:

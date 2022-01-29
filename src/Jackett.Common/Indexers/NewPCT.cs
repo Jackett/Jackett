@@ -80,7 +80,6 @@ namespace Jackett.Common.Indexers
             }
         };
 
-        private readonly int _maxDailyPages = 1;
         private readonly int _maxMoviesPages = 6;
         private readonly int[] _allTvCategories = (new[] { TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
         private readonly int[] _allMoviesCategories = (new[] { TorznabCatType.Movies }).Concat(TorznabCatType.Movies.SubCategories).Select(c => c.ID).ToArray();
@@ -92,7 +91,7 @@ namespace Jackett.Common.Indexers
         private DateTime _dailyNow;
         private int _dailyResultIdx;
 
-        private readonly string _dailyUrl = "ultimas-descargas/pg/{0}";
+        private readonly string _dailyUrl = "ultimas-descargas/";
         private readonly string _searchJsonUrl = "get/result/";
         private readonly string[] _seriesLetterUrls = { "series/letter/{0}", "series-hd/letter/{0}" };
         private readonly string[] _seriesVoLetterUrls = { "series-vo/letter/{0}" };
@@ -242,21 +241,9 @@ namespace Jackett.Common.Indexers
 
             if (rssMode)
             {
-                var pg = 1;
-                while (pg <= _maxDailyPages)
-                {
-                    var pageUrl = SiteLink + string.Format(_dailyUrl, pg);
-                    var results = await RequestWithCookiesAndRetryAsync(pageUrl);
-                    if (results == null || string.IsNullOrEmpty(results.ContentString))
-                        break;
-
-                    var items = ParseDailyContent(results.ContentString);
-                    if (items == null || !items.Any())
-                        break;
-
-                    releases.AddRange(items);
-                    pg++;
-                }
+                var results = await RequestWithCookiesAndRetryAsync(SiteLink + _dailyUrl);
+                var items = ParseDailyContent(results.ContentString);
+                releases.AddRange(items);
             }
             else
             {

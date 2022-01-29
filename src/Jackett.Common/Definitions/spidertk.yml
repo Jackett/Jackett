@@ -25,8 +25,10 @@ caps:
     - {id: 421, cat: Movies/SD, desc: "Films / XviD"}
     - {id: 422, cat: Movies/HD, desc: "Films / HDTV / 1080p"}
     - {id: 440, cat: Movies/HD, desc: "Films / HDTV / 720p"}
+    - {id: 463, cat: Movies/WEB-DL, desc: "Films / WEB / 2160p"}
     - {id: 423, cat: Movies/WEB-DL, desc: "Films / WEB / 1080p"}
     - {id: 458, cat: Movies/WEB-DL, desc: "Films / WEB / 720p"}
+    - {id: 462, cat: Movies/WEB-DL, desc: "Films / WEB / SD"}
     - {id: 424, cat: TV/Documentary, desc: "Films / Documentaire"}
     - {id: 425, cat: TV/Sport, desc: "Films / Sport"}
     - {id: 426, cat: Movies, desc: "Films / Animation"}
@@ -44,6 +46,7 @@ caps:
     - {id: 437, cat: TV/Anime, desc: "Séries / Pack Animé"}
     - {id: 438, cat: TV/Anime, desc: "Séries / Animé VF"}
     - {id: 439, cat: TV/Anime, desc: "Séries / Animé VOSTFR"}
+    - {id: 461, cat: TV, desc: "Séries / VO"}
     - {id: 441, cat: TV/Documentary, desc: "Séries / Documentaire"}
     - {id: 442, cat: TV/Sport, desc: "Séries / Sport"}
     - {id: 443, cat: TV, desc: "Séries / Émission TV"}

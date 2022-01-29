@@ -38,7 +38,7 @@ settings:
 
 caps:
   categorymappings:
-    - {id: 8, cat: PC/0day, desc: "0day/Apps"}
+    - {id: 33, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 29, cat: TV/Documentary, desc: "Documentary"}
     - {id: 24, cat: Books/EBook, desc: "Ebooks"}
     - {id: 28, cat: Movies, desc: "FE-INT"}
