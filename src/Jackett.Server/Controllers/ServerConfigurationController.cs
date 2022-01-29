@@ -93,12 +93,17 @@ namespace Jackett.Server.Controllers
             }
 
             var baseUrlOverride = config.baseurloverride;
-            if (baseUrlOverride != null)
+            if (baseUrlOverride != serverConfig.BaseUrlOverride)
             {
                 baseUrlOverride = baseUrlOverride.TrimEnd('/');
-                if (!Uri.TryCreate(config.baseurloverride, UriKind.Absolute, out var uri)
+                if (string.IsNullOrWhiteSpace(baseUrlOverride))
+                    baseUrlOverride = "";
+                else if (!Uri.TryCreate(baseUrlOverride, UriKind.Absolute, out var uri)
                     || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
                     throw new Exception("Base URL Override is invalid. Example: http://jackett:9117");
+
+                serverConfig.BaseUrlOverride = baseUrlOverride;
+                configService.SaveConfig(serverConfig);
             }
 
             var cacheEnabled = config.cache_enabled;
