@@ -10,13 +10,13 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
     public class EraiRaws : BaseWebIndexer
     {
         const string RSS_PATH = "feed/?type=magnet";
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.erai-raws.info/",
@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationData())
+                   configData: new ConfigurationDataCookie())
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -56,14 +56,14 @@ namespace Jackett.Common.Indexers
             // Add note that download stats are not available
             configData.AddDynamic(
                 "download-stats-unavailable",
-                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
+                new ConfigurationDataCookie.DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
             );
 
             // Config item for title detail parsing
-            configData.AddDynamic("title-detail-parsing", new BoolConfigurationItem("Enable Title Detail Parsing"));
+            configData.AddDynamic("title-detail-parsing", new ConfigurationDataCookie.BoolConfigurationItem("Enable Title Detail Parsing"));
             configData.AddDynamic(
                 "title-detail-parsing-help",
-                new DisplayInfoConfigurationItem("", "Title Detail Parsing will attempt to determine the season and episode number from the release names and reformat them as a suffix in the format S1E1. If successful, this should provide better matching in applications such as Sonarr.")
+                new ConfigurationDataCookie.DisplayInfoConfigurationItem("", "Title Detail Parsing will attempt to determine the season and episode number from the release names and reformat them as a suffix in the format S1E1. If successful, this should provide better matching in applications such as Sonarr.")
             );
 
             // Configure the category mappings
@@ -72,7 +72,7 @@ namespace Jackett.Common.Indexers
 
         private TitleParser titleParser = new TitleParser();
 
-        private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
+        private bool IsTitleDetailParsingEnabled => ((ConfigurationDataCookie.BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
 
         public string RssFeedUri
         {
@@ -85,12 +85,22 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var releases = await PerformQuery(new TorznabQuery());
+            CookieHeader = configData.Cookie.Value;
+            try
+            {
+                var releases = await PerformQuery(new TorznabQuery());
+                if (!releases.Any())
+                    throw new Exception("Found 0 results in the tracker");
 
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-                throw new Exception("Could not find releases from this URL"));
-
-            return IndexerConfigurationStatus.Completed;
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
