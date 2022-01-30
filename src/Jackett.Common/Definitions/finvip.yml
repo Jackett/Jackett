@@ -13,36 +13,33 @@ caps:
   categorymappings:
     - {id: 5, cat: TV/Anime, desc: "Anime"}
     - {id: 25, cat: TV/Documentary, desc: "Dokumentit (docs)"}
-    - {id: 6, cat: Books/EBook, desc: "eBooks"}
-    - {id: 26, cat: TV, desc: "Kannet/Tekstit (subs)"}
+    - {id: 6, cat: Books/EBook, desc: "e-Kirjat (ebooks)"}
+    - {id: 49, cat: Audio/Audiobook, desc: "Äänikirjat (audiobook)"}
     - {id: 20, cat: TV/SD, desc: "Lasten DVD (kids)"}
-    - {id: 33, cat: TV/SD, desc: "Lasten XviD (kids)"}
+    - {id: 33, cat: TV/SD, desc: "Lasten SD (kids)"}
+    - {id: 50, cat: TV/HD, desc: "Lasten HD (kids)"}
+    - {id: 51, cat: TV/UHD, desc: "Lasten 4K (kids)"}
     - {id: 11, cat: Movies/DVD, desc: "Leffat DVD (movies)"}
-    - {id: 13, cat: Movies/SD, desc: "Leffat XviD (movies)"}
+    - {id: 13, cat: Movies/SD, desc: "Leffat SD (movies)"}
     - {id: 21, cat: Movies/HD, desc: "Leffat HD (movies)"}
-    - {id: 32, cat: Movies/DVD, desc: "Custom DVD (movies)"}
-    - {id: 42, cat: Movies, desc: "FVC"}
     - {id: 48, cat: Movies/UHD, desc: "Leffat 4K (movies)"}
-    - {id: 15, cat: Audio, desc: "Musiikki (music)"}
+    - {id: 15, cat: Audio/MP3, desc: "Musiikki (music)"}
+    - {id: 53, cat: Audio/Lossless, desc: "Musiikki Flac (music)"}
     - {id: 12, cat: Audio/Video, desc: "Musavideot (clips)"}
-    - {id: 7, cat: PC/0day, desc: "Ohjelmat Windows (apps)"}
-    - {id: 8, cat: PC, desc: "Ohjelmat Linux (apps)"}
-    - {id: 9, cat: PC/Mac, desc: "Ohjelmat Mac (apps)"}
+    - {id: 7, cat: PC/0day, desc: "Ohjelmat (apps)"}
     - {id: 17, cat: PC/Games, desc: "Pelit PC (games)"}
-    - {id: 18, cat: Console/PSP, desc: "Pelit PlayStation (games)"}
-    - {id: 19, cat: Console/XBox, desc: "Pelit Xbox (games)"}
-    - {id: 35, cat: Console/Wii, desc: "Pelit Wii (games)"}
-    - {id: 22, cat: XXX, desc: "Pr0n DVD (xxx)"}
-    - {id: 23, cat: XXX, desc: "Pr0n XviD (xxx)"}
-    - {id: 36, cat: XXX, desc: "Pr0n Muut (xxx)"}
-    - {id: 47, cat: XXX, desc: "Pr0n HD (xxx)"}
-    - {id: 24, cat: PC/Mobile-Other, desc: "Puhelimeen (phone)"}
-    - {id: 1, cat: TV/SD, desc: "Sarjat DVD (series)"}
-    - {id: 30, cat: TV, desc: "Sarjat (series)"}
+    - {id: 18, cat: Console, desc: "Pelit Konsoli (console)"}
+    - {id: 23, cat: XXX/SD, desc: "Porn SD"}
+    - {id: 36, cat: XXX/Other, desc: "Porn Muut"}
+    - {id: 47, cat: XXX/x264, desc: "Porn HD"}
+    - {id: 54, cat: XXX/UHD, desc: "Porn 4K"}
+    - {id: 1, cat: TV/SD, desc: "Sarjat Boxset (series)"}
+    - {id: 30, cat: TV/SD, desc: "Sarjat SD (series)"}
     - {id: 41, cat: TV/HD, desc: "Sarjat HD (series)"}
-    - {id: 43, cat: TV, desc: "Salkkarit (Soap Opera)"}
+    - {id: 52, cat: TV/UHD, desc: "Sarjat 4K (series)"}
     - {id: 40, cat: TV/Sport, desc: "Urheilu (sport)"}
     - {id: 31, cat: Other, desc: "Muut (other)"}
+    - {id: 43, cat: TV, desc: "Salkkarit (drama)"}
 
   modes:
     search: [q]
