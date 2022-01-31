@@ -241,7 +241,7 @@ namespace Jackett.Common.Indexers
 
             if (rssMode)
             {
-                var results = await RequestWithCookiesAndRetryAsync(SiteLink + _dailyUrl);
+                var results = await RequestWithCookiesAndRetryAsync(SiteLink + _dailyUrl, referer: SiteLink);
                 var items = ParseDailyContent(results.ContentString);
                 releases.AddRange(items);
             }
@@ -326,13 +326,13 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             // Episodes list
-            var results = await RequestWithCookiesAndRetryAsync(uri.AbsoluteUri);
+            var results = await RequestWithCookiesAndRetryAsync(uri.AbsoluteUri, referer: uri.AbsoluteUri);
             var seriesEpisodesUrl = ParseSeriesListContent(results.ContentString, seriesName);
 
             // TV serie list
             if (!string.IsNullOrEmpty(seriesEpisodesUrl))
             {
-                results = await RequestWithCookiesAndRetryAsync(seriesEpisodesUrl);
+                results = await RequestWithCookiesAndRetryAsync(seriesEpisodesUrl, referer: seriesEpisodesUrl);
                 var items = ParseEpisodesListContent(results.ContentString);
                 if (items != null && items.Any())
                     releases.AddRange(items);
