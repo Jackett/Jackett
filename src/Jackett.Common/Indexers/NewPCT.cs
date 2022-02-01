@@ -189,7 +189,7 @@ namespace Jackett.Common.Indexers
         {
             var downloadLink = linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/");
 
-            var results = await RequestWithCookiesAndRetryAsync(downloadLink);
+            var results = await RequestWithCookiesAndRetryAsync(downloadLink, referer: linkParam.AbsoluteUri);
             var uriLink = ExtractDownloadUri(results.ContentString, downloadLink);
             if (uriLink == null)
                 throw new Exception("Download link not found!");
@@ -213,8 +213,8 @@ namespace Jackett.Common.Indexers
 
                     // take the details page link and the download page link and build a Torrent link
                     // Details page: https://atomixhq.com/descargar/torrent/peliculas-x264-mkv/el-viaje-i-onde-dager--2021-/bluray-microhd/
-                    // Download page: https://atomtt.com/download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD/
-                    // Torrent link: https://atomixhq.com/download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD.torrent
+                    // Download page: https://atomtt.com/t_download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD/
+                    // Torrent link: https://atomixhq.com/t_download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD.torrent
                     linkText = linkText.Remove(linkText.Length - 1, 1) + ".torrent";
                     var linkHost = new Uri(linkText).Host;
                     var linkBase = new Uri(baseLink).Host;
