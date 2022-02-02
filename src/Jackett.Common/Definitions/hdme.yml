@@ -5,6 +5,8 @@ description: "HDME is a Private Torrent Tracker for HD MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: windows-1252
+certificates:
+  - 07872b2e93e50d8abeea094e5621b4c637c61652 # self signed
 links:
   - https://hdme.eu/
 
