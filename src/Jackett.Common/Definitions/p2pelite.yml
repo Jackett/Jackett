@@ -5,6 +5,8 @@ description: "P2PElite is a Private Torrent Tracker for EBOOKS / AUDIOBOOKS"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 62c2e785a370398cf1397ffa05423044f654c057 # expired ‎3 ‎Feb ‎2022
 links:
   - https://p2pelite.com/
 
