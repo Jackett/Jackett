@@ -451,7 +451,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NorBits
  * oMg[WtF]trackr
  * OpenCD [![(invite needed)][inviteneeded]](#)
- * Oppaitime [![(invite needed)][inviteneeded]](#)
+ * Oppaitime
  * Orpheus
  * OshenPT
  * Ourbits (HDPter) [![(invite needed)][inviteneeded]](#)
