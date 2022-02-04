@@ -39,20 +39,20 @@ caps:
     - {id: 176, cat: Console/NDS, desc: "Game Nintendo"}
     - {id: 177, cat: Console, desc: "Game Wimmelbild"}
     - {id: 178, cat: Console/Other, desc: "Game Sonstiege"}
-    # Music
-    - {id: 187, cat: Audio, desc: "Music Alben"}
-    - {id: 188, cat: Audio, desc: "Music Sampler"}
-    - {id: 190, cat: Audio, desc: "Music Charts"}
-    - {id: 189, cat: Audio, desc: "Music Mixe"}
-    - {id: 193, cat: Audio/Lossless, desc: "Music FLAC"}
-    - {id: 191, cat: Audio/MP3, desc: "Music Single"}
-    - {id: 194, cat: Audio/Video, desc: "Music Video"}
-    - {id: 225, cat: Audio, desc: "Music Kids"}
-    - {id: 219, cat: Audio, desc: "Music Hörspiele"}
-    - {id: 195, cat: Audio, desc: "Music Soundtrack"}
-    - {id: 192, cat: Audio, desc: "Music Discographie"}
-    - {id: 227, cat: Audio/Audiobook, desc: "Music A-Book"}
-    - {id: 196, cat: Audio, desc: "Music Packs"}
+    # Musik
+    - {id: 187, cat: Audio, desc: "Musik Alben"}
+    - {id: 188, cat: Audio, desc: "Musik Sampler"}
+    - {id: 190, cat: Audio, desc: "Musik Charts"}
+    - {id: 189, cat: Audio, desc: "Musik Mixe"}
+    - {id: 193, cat: Audio/Lossless, desc: "Musik FLAC"}
+    - {id: 191, cat: Audio/MP3, desc: "Musik Single"}
+    - {id: 194, cat: Audio/Video, desc: "Musik Video"}
+    - {id: 225, cat: Audio, desc: "Musik Kids"}
+    - {id: 219, cat: Audio, desc: "Musik Hörspiele"}
+    - {id: 195, cat: Audio, desc: "Musik Soundtrack"}
+    - {id: 192, cat: Audio, desc: "Musik Discographie"}
+    - {id: 227, cat: Audio/Audiobook, desc: "Musik A-Book"}
+    - {id: 196, cat: Audio, desc: "Musik Packs"}
     # App
     - {id: 168, cat: PC/0day, desc: "App Windows"}
     - {id: 166, cat: PC/Mac, desc: "App Mac"}
@@ -189,19 +189,19 @@ search:
         ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": 177
         ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiege\"))": 178
         # Music
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Alben\"))": 187
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Sampler\"))": 188
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Charts\"))": 190
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Mixe\"))": 189
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"FLAC\"))": 193
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Single\"))": 191
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Video\"))": 194
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Kids\"))": 225
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Hörspiele\"))": 219
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Soundtrack\"))": 195
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Discographie\"))": 192
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Discographie\"))": 227
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Packs\"))": 196
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Alben\"))": 187
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Sampler\"))": 188
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Charts\"))": 190
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Mixe\"))": 189
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"FLAC\"))": 193
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Single\"))": 191
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Video\"))": 194
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Kids\"))": 225
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Hörspiele\"))": 219
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Soundtrack\"))": 195
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Discographie\"))": 192
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"A-Book\"))": 227
+        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Packs\"))": 196
         # App
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Windows\"))": 168
         ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Mac\"))": 166
