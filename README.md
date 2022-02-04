@@ -743,13 +743,13 @@ Jackett is available as a [beta package](https://synocommunity.com/package/jacke
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxMusl(AMDx64,ARM32,ARM64).tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases)
-2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_openwrt.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `/etc/init.d/jackett stop` from Terminal. You can start it again it using `/etc/init.d/jackett start`. Logs are stored as usual under `/var/log/jackett/log.txt`.
+2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_openwrt.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `/etc/init.d/jackett stop` from Terminal. You can start it again it using `/etc/init.d/jackett start`. Logs are stored as usual under `/var/log/jackett/log.txt`. Jackett configs are stored as usual under `/opt/Jackett`.
 
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.LinuxMusl(AMDx64,ARM32,ARM64).tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
 
 ### home directory
-Jackett configs are stored as usual under `/opt/Jackett`.
+If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.
 
 
 ## Running Jackett behind a reverse proxy
