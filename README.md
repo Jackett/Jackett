@@ -737,6 +737,21 @@ Detailed instructions are available at [LinuxServer.io Jackett Docker](https://h
 Jackett is available as a [beta package](https://synocommunity.com/package/jackett) from [SynoCommunity](https://synocommunity.com/)
 
 
+## Installation on OpenWrt
+### Install required dependencies: icu, libstdcpp6, libintl, whoami, pgrep:
+`opkg update && opkg install icu70 icu-full-data70 libstdcpp6 libintl-full8 procps-ng procps-ng-pgrep coreutils-whoami`
+
+### Install as service
+1. Download and extract the latest `Jackett.Binaries.LinuxMusl(AMDx64,ARM32,ARM64).tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases)
+2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_openwrt.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `/etc/init.d/jackett stop` from Terminal. You can start it again it using `/etc/init.d/jackett start`. Logs are stored as usual under `/var/log/jackett/log.txt`.
+
+### Run without installing as a service
+Download and extract the latest `Jackett.Binaries.LinuxMusl(AMDx64,ARM32,ARM64).tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
+
+### home directory
+Jackett configs are stored as usual under `/opt/Jackett`.
+
+
 ## Running Jackett behind a reverse proxy
 When running jackett behind a reverse proxy make sure that the original hostname of the request is passed to Jackett. If HTTPS is used also set the X-Forwarded-Proto header to "https". Don't forget to adjust the "Base path override" Jackett option accordingly.
 
