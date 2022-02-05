@@ -4,7 +4,7 @@ name: teracod
 description: "teracod (Movie Zone) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
 language: hu-HU
 type: private
-encoding: iso-8859-2
+encoding: UTF-8
 links:
   - https://teracod.net/
 legacylinks:
