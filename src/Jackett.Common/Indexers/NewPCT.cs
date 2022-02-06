@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
@@ -53,12 +55,6 @@ namespace Jackett.Common.Indexers
             public override object Clone() => new NewpctRelease(this);
         }
 
-        private class DownloadMatcher
-        {
-            public Regex MatchRegex;
-            public MatchEvaluator MatchEvaluator;
-        }
-
         private readonly char[] _wordSeparators = { ' ', '.', ',', ';', '(', ')', '[', ']', '-', '_' };
         private readonly int _wordNotFoundScore = 100000;
         private readonly Regex _searchStringRegex = new Regex(@"(.+?)S(\d{2})(E(\d{2}))?$", RegexOptions.IgnoreCase);
@@ -67,18 +63,6 @@ namespace Jackett.Common.Indexers
         // Love 101 - Temp. 1 Capitulos 1 al 8
         private readonly Regex _seriesChaptersTitleRegex = new Regex(@"(.+)Temp. (\d+) Capitulos (\d+) al (\d+)", RegexOptions.IgnoreCase);
         private readonly Regex _titleYearRegex = new Regex(@" *[\[\(]? *((19|20)\d{2}) *[\]\)]? *$");
-        private readonly DownloadMatcher[] _downloadMatchers =
-        {
-            new DownloadMatcher
-            {
-                MatchRegex = new Regex("(/descargar-torrent/[^\"]+)\"")
-            },
-            new DownloadMatcher
-            {
-                MatchRegex = new Regex(@"window\.location\.href\s*=\s*""([^""]+)"""),
-                MatchEvaluator = m => $"https:{m.Groups[1]}"
-            }
-        };
 
         private readonly int _maxMoviesPages = 6;
         private readonly int[] _allTvCategories = (new[] { TorznabCatType.TV }).Concat(TorznabCatType.TV.SubCategories).Select(c => c.ID).ToArray();
@@ -188,44 +172,31 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri linkParam)
         {
+            Uri uriLink = null;
             var downloadLink = linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/");
+            var result = await RequestWithCookiesAndRetryAsync(downloadLink, referer: linkParam.AbsoluteUri);
 
-            var results = await RequestWithCookiesAndRetryAsync(downloadLink, referer: linkParam.AbsoluteUri);
-            var uriLink = ExtractDownloadUri(results.ContentString, downloadLink);
+            var downloadRegex = new Regex("/t_download/([0-9]+)/");
+            var match = downloadRegex.Match(result.ContentString);
+            if (match.Success)
+            {
+                const string downloadUrl = "https://atomtt.com/to.php";
+                var headers = new Dictionary<string, string>
+                {
+                    {"X-Requested-With", "XMLHttpRequest"},
+                    {"Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"}
+                };
+                var body = "t=" + match.Groups[1].Value;
+                result = await RequestWithCookiesAsync(downloadUrl, method: RequestType.POST, rawbody: body,
+                                                       headers: headers, referer: downloadLink);
+                if (result.Status == HttpStatusCode.OK)
+                    uriLink = new Uri(SiteLink + "t_download/" + result.ContentString + ".torrent");
+            }
+
             if (uriLink == null)
                 throw new Exception("Download link not found!");
 
             return await base.Download(uriLink);
-        }
-
-        private Uri ExtractDownloadUri(string content, string baseLink)
-        {
-            foreach (var matcher in _downloadMatchers)
-            {
-                var match = matcher.MatchRegex.Match(content);
-                if (match.Success)
-                {
-                    string linkText;
-
-                    if (matcher.MatchEvaluator != null)
-                        linkText = (string)matcher.MatchEvaluator.DynamicInvoke(match);
-                    else
-                        linkText = match.Groups[1].Value;
-
-                    // take the details page link and the download page link and build a Torrent link
-                    // Details page: https://atomixhq.com/descargar/torrent/peliculas-x264-mkv/el-viaje-i-onde-dager--2021-/bluray-microhd/
-                    // Download page: https://atomtt.com/t_download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD/
-                    // Torrent link: https://atomixhq.com/t_download/159843_-1634325135-El-viaje--I-onde-dager---2021---BluRay-MicroHD.torrent
-                    linkText = linkText.Remove(linkText.Length - 1, 1) + ".torrent";
-                    var linkHost = new Uri(linkText).Host;
-                    var linkBase = new Uri(baseLink).Host;
-                    var downloadLink = linkText.Replace(linkHost.ToString(), linkBase.ToString());
-
-                    return new Uri(downloadLink);
-                }
-            }
-
-            return null;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
