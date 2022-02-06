@@ -49,6 +49,25 @@ caps:
     music-search: [q]
     book-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+
+  - name: password
+    type: password
+    label: Password
+
+#  - name: andmatch
+#    type: checkbox
+#    label: Accept non english characters in torrent names (get more results)
+#    default: true
+
+  - name: searchindesc
+    type: checkbox
+    label: Search in torrent description (get more results)
+    default: true
+
 login:
   path: takelogin.php
   method: post
@@ -67,11 +86,12 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     incldead: 1
+    searchindesc: "{{ .Config.searchindesc }}"
 
   rows:
     selector: table> tbody > tr:has(a[href^="details?"])
-    filters:
-      - name: andmatch
+#    filters:
+#      - name: "{{ if .Config.andmatch }}andmatch{{ else }}{{ end }}" Currently, -name must be simple string, not a variable
 
   fields:
     category:
