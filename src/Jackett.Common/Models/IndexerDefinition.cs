@@ -151,6 +151,7 @@ namespace Jackett.Common.Models
         //public string Remove { get; set; } // already inherited
         public selectorBlock Dateheaders { get; set; }
         public selectorBlock Count { get; set; }
+        public bool Multiple { get; set; } = false;
     }
 
     public class searchPathBlock : requestBlock
@@ -200,8 +201,6 @@ namespace Jackett.Common.Models
     public class responseBlock
     {
         public string Type { get; set; }
-        public string Attribute { get; set; }
         public string NoResultsMessage { get; set; }
-        public bool Multiple { get; set; } = false;
     }
 }

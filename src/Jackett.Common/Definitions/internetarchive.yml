@@ -60,6 +60,7 @@ search:
     - path: advancedsearch.php
       response:
         type: json
+
   inputs:
     q: "{{ if and .Config.titleOnly .Keywords }}title:({{ else }}{{ end }}{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}{{ if and .Config.titleOnly .Keywords }}){{ else }}{{ end }}{{ if .Keywords }} AND {{ else }}{{ end }}format:(\"Archive BitTorrent\"){{ if .Categories }} AND mediatype:({{ join .Categories \" OR \" }}){{ else }}{{ end }}"
     fl[]: "identifier,title,mediatype,item_size,downloads,btih,publicdate"

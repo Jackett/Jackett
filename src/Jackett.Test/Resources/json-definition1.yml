@@ -1,22 +1,26 @@
 ---
-id: hawke-uno
-name: hawke-uno
-description: "hawke-uno is a Private Torrent Tracker for (X265 / HEVC) MOVIES / TV"
-language: en-US
+id: jsondefinition1
+name: jsondefinition1
+description: "jsondefinition1"
+language: es-ES
 type: private
 encoding: UTF-8
 links:
-  - https://www.hawke.uno/
+  - https://jsondefinition1.com/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 3, cat: Audio, desc: "Música"}
+    - {id: 4, cat: TV/Documentary, desc: "Documentales"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -25,7 +29,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://www.hawke.uno/\" target =_blank>hawke-uno</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your account <i>My configuration / Mi configuración => Secutiy / Seguridad</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -54,8 +58,6 @@ login:
     api_token: "{{ .Config.apikey }}"
   error:
     - selector: a[href*="/login"]
-      message:
-        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
@@ -66,7 +68,7 @@ search:
         type: json
 
   rows:
-    selector: data
+    selector: data:has(attributes.size):has(attributes.name:contains(1080)):has(attributes.poster:contains(.jpg)):not(attributes.fake_att):not(attributes.uploader:contains(DarkSwan2001))
     attribute: attributes
     count:
       selector: meta.total
@@ -74,8 +76,25 @@ search:
   fields:
     categorydesc:
       selector: category
+#    title:
+#      selector: name
+#      filters:
+#        - name: re_replace
+#          args: ["\\[", " "]
+    title_dts:
+      selector: name:contains(DTS)
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["DTS", "DTSSS"]
+    title_notdts:
+      selector: name:not(:contains(DTS))
+      optional: true
     title:
-      selector: name
+      text: "{{ if .Result.title_dts }}{{ .Result.title_dts }}{{ else }}{{ .Result.title_notdts }}{{ end }}"
+      filters:
+        - name: re_replace
+          args: ["\\[", " "]
     details:
       selector: details_link
     download:
@@ -116,9 +135,7 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-#    minimumratio:
-#      text: 0.4
-#    minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-#      text: 432000
-# json UNIT3D 5.3.0
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# json UNIT3D ???

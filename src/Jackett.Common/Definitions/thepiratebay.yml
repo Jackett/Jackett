@@ -127,6 +127,7 @@ search:
     - path: "https://apibay.org/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_recent.json{{ end }}"
       response:
         type: json
+
   keywordsfilters:
     # remove it's #8829
     - name: re_replace
