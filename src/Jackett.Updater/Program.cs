@@ -417,6 +417,7 @@ namespace Jackett.Updater
                 "Definitions/obscure.yml",
                 "Definitions/oncesearch.yml",
                 "Definitions/passionetorrent.yml",
+                "Definitions/pirateiro.yml",
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornorip.yml",
