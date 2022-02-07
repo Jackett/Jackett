@@ -53,8 +53,7 @@ search:
     - path: api/v2/list_movies.json
       response:
         type: json
-        attribute: torrents
-        multiple: true
+
   inputs:
     # ignore ' (e.g. search for america's Next Top Model)
     query_term: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ re_replace .Keywords \"[']\" \"\" }}{{ end }}"
@@ -64,6 +63,8 @@ search:
 
   rows:
     selector: data.movies
+    attribute: torrents
+    multiple: true
     count:
       selector: data.movie_count
 

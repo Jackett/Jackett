@@ -24,8 +24,6 @@ search:
     - path: "https://api.anilibria.tv/v2/{{ if .Keywords }}searchTitles?filter=names,poster.url,code,torrents.list,season.year&limit=100&search={{ .Keywords }}{{ else }}getUpdates?filter=names,poster.url,code,torrents.list,season.year&limit=100{{ end }}"
       response:
         type: json
-        attribute: torrents.list
-        multiple: true
 
   keywordsfilters:
     # strip season and ep
@@ -34,6 +32,8 @@ search:
 
   rows:
     selector: $
+    attribute: torrents.list
+    multiple: true
 
   fields:
     category:

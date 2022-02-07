@@ -66,7 +66,7 @@ search:
     - path: "/api/torrents/filter"
       response:
         type: json
-        attribute: attributes
+
   inputs:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     api_token: "{{ .Config.apikey }}"
@@ -83,6 +83,7 @@ search:
 
   rows:
     selector: data
+    attribute: attributes
     count:
       selector: meta.total
 
