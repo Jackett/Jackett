@@ -381,6 +381,7 @@ namespace Jackett.Updater
                 "Definitions/kikibt.yml",
                 "Definitions/korsar.yml",
                 "Definitions/lapausetorrents.yml",
+                "Definitions/lat-team.yml", // switch to *-API #8682
                 "Definitions/latinop2p.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lechaudron.yml",
