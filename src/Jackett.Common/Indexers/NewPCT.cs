@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://atomixhq.art/",
-            "https://pctmix1.unblockit.how/"
+            "https://pctmix1.unblockit.cam/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -108,6 +108,7 @@ namespace Jackett.Common.Indexers
             "https://atomixhq.one/",
             "https://pctmix1.unblockit.tv/",
             "https://atomixhq.top/",
+            "https://pctmix1.unblockit.how/"
             "https://atomixhq.net/"
         };
 
