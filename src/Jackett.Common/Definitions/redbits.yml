@@ -224,4 +224,4 @@ search:
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# UNIT3D 5.1.0
+# UNIT3D 5.2.0
