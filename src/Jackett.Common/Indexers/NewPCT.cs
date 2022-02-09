@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers
             "https://atomixhq.one/",
             "https://pctmix1.unblockit.tv/",
             "https://atomixhq.top/",
-            "https://pctmix1.unblockit.how/"
+            "https://pctmix1.unblockit.how/",
             "https://atomixhq.net/"
         };
 

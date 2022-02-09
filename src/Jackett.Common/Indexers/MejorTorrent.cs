@@ -60,7 +60,7 @@ namespace Jackett.Common.Indexers
             "https://www.mejortorrento.info/",
             "https://mejortorrent.nocensor.work/",
             "https://www.mejortorrentes.net/",
-            "https://mejortorrent.unblockit.how/"
+            "https://mejortorrent.unblockit.how/",
             "https://mejortorrent.unblockit.tv/"
         };
 

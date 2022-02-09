@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
             "https://epublibre.unblockit.li/",
             "https://epublibre.unblockit.kim/",
             "https://epublibre.unblockit.bz/",
-            "https://epublibre.unblockit.how/"
+            "https://epublibre.unblockit.how/",
             "https://epublibre.unblockit.tv/"
         };
 
