@@ -81,7 +81,7 @@ search:
     srchdtls: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
 
   rows:
-    selector: "table[border=\"1\"] tr:not(:first-child){{ if .Config.dropbumped }}:has(span.bumped){{ else }}{{ end }}"
+    selector: "table[border=\"1\"] tr:not(:first-child){{ if .Config.dropbumped }}:not(:has(span.bumped)){{ else }}{{ end }}"
 
   fields:
     category:
