@@ -292,6 +292,7 @@ namespace Jackett.Updater
                 "Definitions/btgigs.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btstornet.yml",
+                "Definitions/btworld.yml",
                 "Definitions/btxpress.yml",
                 "Definitions/casstudiotv.yml",
                 "Definitions/channelx.yml",
