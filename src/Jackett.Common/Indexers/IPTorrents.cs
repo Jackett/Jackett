@@ -49,7 +49,7 @@ namespace Jackett.Common.Indexers
             "https://iptorrents.eu/"
         };
 
-        private new ConfigurationDataCookieCaptcha configData => (ConfigurationDataCookieCaptcha)base.configData;
+        private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
         public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataCookieCaptcha("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
+                   configData: new ConfigurationDataCookieUA("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
