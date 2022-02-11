@@ -177,7 +177,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
 
             CookieHeader = configData.Cookie.Value;
-            
+
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
@@ -202,9 +202,9 @@ namespace Jackett.Common.Indexers
             var qc = new NameValueCollection();
 
 
-            Dictionary<string,string> headers = null;
+            Dictionary<string, string> headers = null;
 
-            if (!string.IsNullOrEmpty(configData.UserAgent.Value)) 
+            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
             {
                 headers = new Dictionary<string, string>();
                 headers.Add("User-Agent", configData.UserAgent.Value);
