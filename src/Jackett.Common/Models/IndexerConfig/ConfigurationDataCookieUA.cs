@@ -1,6 +1,6 @@
 namespace Jackett.Common.Models.IndexerConfig
 {
-    public class ConfigurationDataCookieCaptcha : ConfigurationData
+    public class ConfigurationDataCookieUA : ConfigurationData
     {
         public StringConfigurationItem Cookie { get; private set; }
         public DisplayInfoConfigurationItem CookieInstructions { get; private set; }
@@ -8,7 +8,7 @@ namespace Jackett.Common.Models.IndexerConfig
         public DisplayInfoConfigurationItem UserAgentInstructions { get; private set; }
         public DisplayInfoConfigurationItem Instructions { get; private set; }
 
-        public ConfigurationDataCookieCaptcha(string instructionMessageOptional = null)
+        public ConfigurationDataCookieUA(string instructionMessageOptional = null)
         {
             Cookie = new StringConfigurationItem("Cookie");
             CookieInstructions = new DisplayInfoConfigurationItem("Cookie Instructions",
