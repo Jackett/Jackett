@@ -70,13 +70,16 @@ search:
       filters:
         - name: prepend
           args: "{{ .Config.sitelink }}"
-    date:
-      selector: span.date
+    date_year:
+      selector: span.date:contains("-")
+      optional: true
       filters:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
           args: "2006-01-02 -07:00"
+    date:
+      text: "{{ if .Result.date_year }}{{ .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: span.size
     seeders:
