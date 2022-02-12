@@ -52,7 +52,7 @@ caps:
     - {id: 195, cat: Audio, desc: "Musik Soundtrack"}
     - {id: 192, cat: Audio, desc: "Musik Discographie"}
     - {id: 227, cat: Audio/Audiobook, desc: "Musik A-Book"}
-    - {id: 196, cat: Audio, desc: "Musik Packs"}
+    - {id: 196, cat: Audio, desc: "Musik Pack"}
     # App
     - {id: 168, cat: PC/0day, desc: "App Windows"}
     - {id: 166, cat: PC/Mac, desc: "App Mac"}
