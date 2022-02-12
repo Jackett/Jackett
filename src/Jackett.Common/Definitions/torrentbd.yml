@@ -113,7 +113,7 @@ search:
 
   fields:
     category:
-      selector: td[onclick^="getSpCatTorrents"]
+      selector: td[onclick^="mtt.getSpCatTorrents"]
       attribute: onclick
       filters:
         - name: regexp
