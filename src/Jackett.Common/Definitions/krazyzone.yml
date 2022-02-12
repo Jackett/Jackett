@@ -64,16 +64,17 @@ caps:
     - {id: 50, cat: PC/Mobile-Android, desc: "Applications Android"}
     - {id: 51, cat: PC/Mac, desc: "Applications Misc , Linux , Mac "}
     - {id: 52, cat: PC/0day, desc: "Applications Windows"}
-    - {id: 22, cat: Books, desc: "Ebooks/Mags"}
+    - {id: 22, cat: Books, desc: "Ebooks/Mags/Comics"}
     - {id: 48, cat: Audio/Audiobook, desc: "Ebooks Audiobooks"}
-    - {id: 49, cat: Books/EBook, desc: "Ebooks Ebooks / Mags"}
+    - {id: 117, cat: Books/Comics, desc: "Ebooks Comics"}
+    - {id: 49, cat: Books/EBook, desc: "Ebooks Mags"}
     - {id: 23, cat: PC/Games, desc: "Games"}
     - {id: 45, cat: PC/Games, desc: "Games PC / ISO"}
     - {id: 105, cat: Console/PS4, desc: "Games PS2 / PS3 / PS4 "}
     - {id: 46, cat: Console/NDS, desc: "Games Wii+ Nds"}
     - {id: 47, cat: Console/XBox 360, desc: "Games Xbox360"}
     - {id: 20, cat: Movies, desc: "Movies"}
-    - {id: 113, cat: Movies, desc: "Movies 2021 Movies"}
+    - {id: 113, cat: Movies, desc: "Movies 2022 Movies"}
     - {id: 116, cat: Movies/UHD, desc: "Movies 4K Movies"}
     - {id: 53, cat: Movies, desc: "Movies Anime / Kids"}
     - {id: 54, cat: Movies/BluRay, desc: "Movies Bluray,HDRip,BDRip,Webrip,HEVC"}
@@ -82,6 +83,7 @@ caps:
     - {id: 57, cat: Movies/DVD, desc: "Movies DVDR ,NTSCPAL ,ISO"}
     - {id: 58, cat: Movies/WEB-DL, desc: "Movies DVDRip,AVI,XVID,BRRip"}
     - {id: 59, cat: Movies/Foreign, desc: "Movies Foreign"}
+    - {id: 118, cat: Movies, desc: "Movies iPad"}
     - {id: 107, cat: Movies/HD, desc: "Movies Mp4  Movies"}
     - {id: 60, cat: Movies, desc: "Movies Netflix"}
     - {id: 61, cat: Movies/3D, desc: "Movies Remux , 3D"}
@@ -91,8 +93,8 @@ caps:
     - {id: 42, cat: TV/Anime, desc: "TV Kids / Anime"}
     - {id: 43, cat: TV/Sport, desc: "TV Sport"}
     - {id: 44, cat: TV/Sport, desc: "TV Sport Packs"}
-    - {id: 26, cat: Books/Comics, desc: "Comics"}
-    - {id: 37, cat: Books/Comics, desc: "Comics Comics"}
+    - {id: 26, cat: Audio, desc: "Request Seed DMC/Mastermix"}
+    - {id: 37, cat: Audio, desc: "Request Seed DMC/Mastermix"}
     - {id: 25, cat: TV, desc: "TV Packs/Full Seasons"}
     - {id: 38, cat: TV, desc: "TV Packs Full Seasons"}
     - {id: 40, cat: TV, desc: "TV Packs Kids / Anime Full Seasons"}
@@ -102,9 +104,9 @@ caps:
     - {id: 1, cat: Other/Misc, desc: "Unsorted"}
     - {id: 2, cat: Other/Misc, desc: "Unsorted To Be Edited"}
     - {id: 30, cat: Other, desc: "Exclusive VIP"}
-    - {id: 33, cat: Other, desc: "Exclusive VIP Exclusive VIP Not To Be Uploaded Anywhere"}
+    - {id: 33, cat: Other, desc: "Exclusive VIP Not To Be Uploaded Anywhere"}
     - {id: 31, cat: Other, desc: "VIP"}
-    - {id: 32, cat: Other, desc: "VIP VIP Not To Be Uploaded Anywhere"}
+    - {id: 32, cat: Other, desc: "VIP Not To Be Uploaded Anywhere"}
     - {id: 99, cat: Other, desc: "Christmas Albums"}
     - {id: 101, cat: Other, desc: "Christmas Albums Packs"}
     - {id: 103, cat: Other, desc: "All Christmas Movies and Packs"}
