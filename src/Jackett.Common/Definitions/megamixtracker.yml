@@ -183,6 +183,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 14 days (as seconds = 14 x 24 x 60 x 60)
-      text: 1209600
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # TBDEV custom v2.0
