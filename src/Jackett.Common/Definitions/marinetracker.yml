@@ -41,7 +41,7 @@ caps:
     - {id: 36, cat: Books, desc: "Deckofficer's Library-Technical equipment of navigation"}
     - {id: 95, cat: Books, desc: "Deckofficer's Library-Hydrometeorology"}
     - {id: 100, cat: Books, desc: "Deckofficer's Library-Ship Theory"}
-    - {id: 110, cat: Books, desc: "Deckofficer's Library-Astronomy"}
+    - {id: 110, cat: Books, desc: "Deckofficer's Library-Nautical Astronomy"}
     - {id: 94, cat: Books, desc: "Deckofficer's Library-Nautical charts, tables, sailing directions"}
     - {id: 116, cat: Books, desc: "Deckofficer's Library-Global Maritime Distress and Safety System (GMDSS)"}
     - {id: 192, cat: Books, desc: "Deckofficer's Library-Navigation in the ice"}
@@ -122,7 +122,7 @@ caps:
     - {id: 253, cat: Books, desc: "Yachting, sailing, boating-Seamanship practice"}
     - {id: 254, cat: Books, desc: "Yachting, sailing, boating-Repair and Restoration"}
     - {id: 255, cat: Books, desc: "Yachting, sailing, boating-Sailing Alone"}
-    - {id: 256, cat: Books, desc: "Yachting, sailing, boating-Rigging, knots"}
+    - {id: 256, cat: Books, desc: "Yachting, sailing, boating-Rigging, sails, knots"}
     - {id: 252, cat: Books, desc: "Yachting, sailing, boating-Projects, design, construction"}
     - {id: 251, cat: Books, desc: "Diving"}
     - {id: 177, cat: Books, desc: "Shipmodeling"}
@@ -162,9 +162,10 @@ caps:
     - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
     - {id: 162, cat: Books, desc: "Archive"}
-    - {id: 315, cat: Books, desc: "Archive-Unformed"}
+    - {id: 322, cat: Books, desc: "Archive-No seeds"}
+    - {id: 321, cat: Books, desc: "Archive-Outdated software"}
     - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
-    - {id: 295, cat: Books, desc: "Archive-Unregistered releases"}
+    - {id: 295, cat: Books, desc: "Archive-Unregistered"}
 
   modes:
     search: [q]
