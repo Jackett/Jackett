@@ -706,7 +706,7 @@ search:
     submit: "Поиск"
 
   rows:
-    selector: tr[id^="tor_"]
+    selector: tr[id^="tor_"]:has(a[href^="/dl.php?id="])
     filters:
       - name: andmatch
 
