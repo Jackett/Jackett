@@ -692,7 +692,7 @@ search:
     submit: "Поиск"
 
   rows:
-    selector: tr[id^="tor_"]
+    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"]))
     filters:
       - name: andmatch
 
