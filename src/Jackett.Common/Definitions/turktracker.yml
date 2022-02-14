@@ -87,9 +87,9 @@ download:
     path: takethanks.php
     method: post
     inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
+      torrentid: "{{ re_replace  .DownloadUri.PathAndQuery \".*torrent-details-(\\d+).*\" \"$1\"}}"
   selectors:
-    - selector: a[href*="download.php?id="]
+    - selector: a[href*="download-torrent-"]
       attribute: href
 
 search:
@@ -111,18 +111,18 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: "table#sortabletable tbody tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable tbody tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="browse.php?category="]
+      selector: a[href*="torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: (\d+)
     title_default:
       # is often abbreviated
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
     title_optional:
       # usually longer than details title
       selector: div[id^="port-content-"] div:nth-child(2)
@@ -130,13 +130,10 @@ search:
     title:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     download:
-      selector: a[href*="details.php?id="]
-      attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     poster:
       selector: div[id^="port-content-"] div img
@@ -168,10 +165,9 @@ search:
       case:
         img[src$="/x2.gif"]: 2
         "*": 1
-# TBD, Rules and FAQ do not cover this yet
-#    minimumratio:
-#      text: 1.0
-#    minimumseedtime:
-#      # 2 days (as seconds = 2 x 24 x 60 x 60)
-#      text: 172800
-#  TS Special Edition v.7.5 - v.8.0 hybrid
+    minimumratio:
+      text: 0.5
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+#  TS Special Edition v.8.0
