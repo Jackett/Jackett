@@ -7,6 +7,8 @@ type: private
 encoding: UTF-8
 links:
   - https://tasmanit.es/
+certificates:
+  - 23C30AC9655A8A7351A549538062B8C6B0D01A78 # expired 24 Jan 2022
 
 caps:
   categorymappings:
