@@ -19,6 +19,7 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "Esportes"}
     - {id: 401, cat: Movies, desc: "Filmes"}
     - {id: 416, cat: Books/Comics, desc: "HQ/Mangá"}
+    - {id: 418, cat: Books/EBook, desc: "eBooks"}
     - {id: 408, cat: PC/Games, desc: "Jogos"}
     - {id: 417, cat: Audio, desc: "Músicas"}
     - {id: 412, cat: Other, desc: "Scripts Android/iOS"}
