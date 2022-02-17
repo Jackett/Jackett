@@ -73,7 +73,7 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: div.search-result
+    selector: li.search-result
 
   fields:
     category:
@@ -84,7 +84,7 @@ search:
       selector: h5 a
       attribute: href
     download:
-      selector: a[class="dl-torrent"]
+      selector: a.dl-torrent
       attribute: href
     infohash:
       selector: a[href^="magnet:?xt"]
