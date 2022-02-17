@@ -133,4 +133,7 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # json UNIT3D 6.0.0
