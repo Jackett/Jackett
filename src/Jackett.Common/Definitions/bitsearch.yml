@@ -72,6 +72,10 @@ search:
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
     selector: li.search-result
 
