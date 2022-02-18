@@ -105,7 +105,8 @@ namespace Jackett.Common.Indexers
             foreach (var cat in catList)
                 qc.Add($"filter_cat[{cat}]", "1");
 
-            var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
+            // remove . as not used in titles 
+            var searchUrl = BrowseUrl + "?" + qc.GetQueryString().Replace(".", " ");
             var results = await RequestWithCookiesAsync(searchUrl);
             try
             {
