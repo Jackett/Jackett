@@ -126,7 +126,8 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", query.GetQueryString());
             }
 
-            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString());
+            // remove . as not used in titles
+            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString().Replace(".", " "));
 
             try
             {
