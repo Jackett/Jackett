@@ -102,6 +102,10 @@ search:
     by: "{{ .Config.type }}"
     # does not support imdbid search and does not return imdb link in results
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
     selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.freeleech }}, table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]):has(img[src=\"images/gold.gif\"]){{ else }}{{ end }}"
 
