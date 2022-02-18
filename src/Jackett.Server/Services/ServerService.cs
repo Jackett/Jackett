@@ -272,7 +272,7 @@ namespace Jackett.Server.Services
 
             try
             {
-                if (Environment.UserName == "root")
+                if (Environment.UserName == "root" && String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DisableRootWarning")))
                 {
                     var notice = "Jackett is running with root privileges. You should run Jackett as an unprivileged user.";
                     notices.Add(notice);
