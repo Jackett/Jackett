@@ -192,7 +192,8 @@ namespace Jackett.Common.Indexers.Abstract
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
 
-            searchUrl += "?" + queryCollection.GetQueryString();
+            // remove . as not used in titles
+            searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
 
             var apiKey = configData.ApiKey;
             var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
