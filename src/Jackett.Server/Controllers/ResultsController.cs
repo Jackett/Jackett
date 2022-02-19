@@ -282,6 +282,7 @@ namespace Jackett.Server.Controllers
                     var item = MapperUtil.Mapper.Map<TrackerCacheResult>(result);
                     item.Tracker = indexer.DisplayName;
                     item.TrackerId = indexer.Id;
+                    item.TrackerType = indexer.Type;
                     item.Peers = item.Peers - item.Seeders; // Use peers as leechers
                     return item;
                 });
