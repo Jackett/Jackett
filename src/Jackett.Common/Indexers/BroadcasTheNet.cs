@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BroadcasTheNet : BaseWebIndexer
     {
-        // Docs at http://apidocs.broadcasthe.net/docs.php
+        // Docs at http://apidocs.broadcasthe.net/
         private readonly string APIBASE = "https://api.broadcasthe.net";
 
         // TODO: remove ConfigurationDataAPIKey class and use ConfigurationDataPasskey instead
@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchParam = new Dictionary<string, string>();
 
-            searchParam["search"] = searchString.Replace(" ", "%");
+            searchParam["name"] = searchString.Replace(" ", "%");
 
             var parameters = new JArray
             {
