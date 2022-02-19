@@ -60,7 +60,8 @@ namespace Jackett.Common.Services
                     _cache.Add(indexer.Id, new TrackerCache
                     {
                         TrackerId = indexer.Id,
-                        TrackerName = indexer.DisplayName
+                        TrackerName = indexer.DisplayName,
+                        TrackerType = indexer.Type
                     });
                 }
 
@@ -133,6 +134,7 @@ namespace Jackett.Common.Services
                             item.FirstSeen = query.Created;
                             item.Tracker = trackerCache.TrackerName;
                             item.TrackerId = trackerCache.TrackerId;
+                            item.TrackerType = trackerCache.TrackerType;
                             item.Peers -= item.Seeders; // Use peers as leechers
                             trackerResults.Add(item);
                         }
