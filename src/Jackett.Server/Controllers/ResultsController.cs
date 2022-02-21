@@ -291,12 +291,12 @@ namespace Jackett.Server.Controllers
             ConfigureCacheResults(manualResult.Results);
 
             // Log info
-            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.ID));
+            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name));
             var cacheStr = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Any(t => t.Result.IsFromCache) ? " (from cache)" : "";
             if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                logger.Info($"Manual search in {CurrentIndexer.DisplayName} => Found {manualResult.Results.Count()} releases{cacheStr}");
+                logger.Info($"Manual search in {indexersName} => Found {manualResult.Results.Count()} releases{cacheStr}");
             else
-                logger.Info($"Manual search in {CurrentIndexer.DisplayName} for {CurrentQuery.GetQueryString()} => Found {manualResult.Results.Count()} releases{cacheStr}");
+                logger.Info($"Manual search in {indexersName} for {CurrentQuery.GetQueryString()} => Found {manualResult.Results.Count()} releases{cacheStr}");
 
             return Json(manualResult);
         }
