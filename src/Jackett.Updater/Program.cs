@@ -538,7 +538,8 @@ namespace Jackett.Updater
                 "System.Web.Http.dll",
                 "System.Web.Http.Owin.dll",
                 "System.Web.Http.Tracing.dll",
-                "System.Xml.XPath.XmlDocument.dll"
+                "System.Xml.XPath.XmlDocument.dll",
+                "Indexers/Seals.cs" // renamed to GreatPosterWall.cs
             };
 
             foreach (var oldFile in oldFiles)
