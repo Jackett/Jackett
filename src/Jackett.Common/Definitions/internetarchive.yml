@@ -96,6 +96,7 @@ search:
       selector: item_size
     grabs:
       selector: downloads
+      optional: true
     seeders:
       text: 1
     leechers:
