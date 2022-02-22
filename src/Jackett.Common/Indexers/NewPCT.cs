@@ -175,13 +175,14 @@ namespace Jackett.Common.Indexers
         {
             Uri uriLink = null;
             var downloadLink = linkParam.AbsoluteUri.Replace("/descargar/", "/descargar/torrent/");
+            var downloadHost = "https://atomtt.com/";
             var result = await RequestWithCookiesAndRetryAsync(downloadLink, referer: linkParam.AbsoluteUri);
 
             var downloadRegex = new Regex("/t_download/([0-9]+)/");
             var match = downloadRegex.Match(result.ContentString);
             if (match.Success)
             {
-                const string downloadUrl = "https://atomtt.com/to.php";
+                string downloadUrl = downloadHost + "to.php";
                 var headers = new Dictionary<string, string>
                 {
                     {"X-Requested-With", "XMLHttpRequest"},
@@ -191,13 +192,13 @@ namespace Jackett.Common.Indexers
                 result = await RequestWithCookiesAsync(downloadUrl, method: RequestType.POST, rawbody: body,
                                                        headers: headers, referer: downloadLink);
                 if (result.Status == HttpStatusCode.OK)
-                    uriLink = new Uri(SiteLink + "t_download/" + result.ContentString + ".torrent");
+                    uriLink = new Uri(new Uri(SiteLink), result.ContentString);
             }
 
             if (uriLink == null)
                 throw new Exception("Download link not found!");
 
-            return await base.Download(uriLink);
+            return await base.Download(uriLink, RequestType.GET, downloadHost);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
