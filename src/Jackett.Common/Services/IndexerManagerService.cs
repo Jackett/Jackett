@@ -58,7 +58,8 @@ namespace Jackett.Common.Services
             {"torrentgalaxyorg", "torrentgalaxy"},
             {"transmithenet", "nebulance"},
             {"xtremezone", "speedapp"},
-            {"yourexotic", "exoticaz"}
+            {"yourexotic", "exoticaz"},
+            {"seals", "greatposterwall"}
         };
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)

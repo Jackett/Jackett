@@ -9,18 +9,18 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
-
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     public class GreatPosterWall : GazelleTracker
     {
-        public GreatPosterWall(IIndexerConfigurationService configService, Jackett.Common.Utils.Clients.WebClient wc, Logger l, IProtectionService ps,
+        public GreatPosterWall(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "gpw",
+            : base(id: "greatposterwall",
                    name: "GreatPosterWall",
-                   description: "GreatPosterWall is a CHINESE Private site for MOVIES",
+                   description: "GreatPosterWall (GPW) is a CHINESE Private site for MOVIES",
                    link: StringUtil.FromBase64("aHR0cHM6Ly9ncmVhdHBvc3RlcndhbGwuY29tLw=="),
                    caps: new TorznabCapabilities
                    {
@@ -45,15 +45,11 @@ namespace Jackett.Common.Indexers
             Language = "zh-CN";
             Type = "private";
 
-            // GPW does not have categories so these are just to tag the results with both for torznab apps.
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies 电影");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            // GPW does not support categories so drop cat filtering.
-            query.Categories = new int[0];
-
             // GPW uses imdbid in the searchstr so prevent cataloguenumber or taglist search.
             if (query.IsImdbQuery)
             {
