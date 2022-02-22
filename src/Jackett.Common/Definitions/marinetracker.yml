@@ -166,6 +166,7 @@ caps:
     - {id: 321, cat: Books, desc: "Archive-Outdated software"}
     - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
     - {id: 295, cat: Books, desc: "Archive-Unregistered"}
+    - {id: 324, cat: Other, desc: "Posters, placards, signs"}
 
   modes:
     search: [q]
