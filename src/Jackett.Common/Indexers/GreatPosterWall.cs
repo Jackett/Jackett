@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers
             : base(id: "greatposterwall",
                    name: "GreatPosterWall",
                    description: "GreatPosterWall (GPW) is a CHINESE Private site for MOVIES",
-                   link: StringUtil.FromBase64("aHR0cHM6Ly9ncmVhdHBvc3RlcndhbGwuY29tLw=="),
+                   link: "https://greatposterwall.com/",
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam>
