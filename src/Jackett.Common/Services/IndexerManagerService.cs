@@ -42,7 +42,6 @@ namespace Jackett.Common.Services
         {
             {"audiobooktorrents", "abtorrents"},
             {"broadcastthenet", "broadcasthenet"},
-            {"todotorrents", "dontorrent"},
             {"hdreactor", "hdhouse"},
             {"icetorrent", "speedapp"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
@@ -54,12 +53,13 @@ namespace Jackett.Common.Services
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
+            {"seals", "greatposterwall"}
             {"tehconnectionme", "anthelion"},
+            {"todotorrents", "dontorrent"},
             {"torrentgalaxyorg", "torrentgalaxy"},
             {"transmithenet", "nebulance"},
             {"xtremezone", "speedapp"},
-            {"yourexotic", "exoticaz"},
-            {"seals", "greatposterwall"}
+            {"yourexotic", "exoticaz"}
         };
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
