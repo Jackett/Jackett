@@ -2,7 +2,7 @@
 id: rus-media
 name: Rus-media
 description: "Rus-media is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: UTF-8
 links:
@@ -29,13 +29,13 @@ caps:
     - {id: 992, cat: Movies/3D, desc: "3D Документальные фильмы"}
     - {id: 993, cat: Movies/3D, desc: "3D Спорт"}
     - {id: 994, cat: Movies/3D, desc: "3D Ролики, музыкальное видео, трейлеры к фильмам"}
-    - {id: 33, cat: TV/OTHER, desc: "Сериалы"}
-    - {id: 31, cat: TV/OTHER, desc: "Мультфильмы и мультсериалы"}
+    - {id: 33, cat: TV/Other, desc: "Сериалы"}
+    - {id: 31, cat: TV/Other, desc: "Мультфильмы и мультсериалы"}
     - {id: 201, cat: TV/Anime, desc: "Аниме"}
-    - {id: 32, cat: TV/OTHER, desc: "TV, развлекательные телепередачи и шоу"}
+    - {id: 32, cat: TV/Other, desc: "TV, развлекательные телепередачи и шоу"}
     - {id: 344, cat: TV/Sport, desc: "Спорт"}
     - {id: 542, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
-    - {id: 757, cat: TV/OTHER, desc: "Обучающие видео и видеоуроки"}
+    - {id: 757, cat: TV/Other, desc: "Обучающие видео и видеоуроки"}
     - {id: 34, cat: Audio, desc: "Музыка"}
     - {id: 36, cat: Audio/Other, desc: "Поп музыка"}
     - {id: 222, cat: Audio/Other, desc: "Зарубежный рок"}
@@ -53,20 +53,19 @@ caps:
     - {id: 802, cat: PC, desc: "Операционные системы"}
     - {id: 1009, cat: PC, desc: "Софт"}
     - {id: 479, cat: PC, desc: "Разное"}
-    - {id: 511, cat: PC/Phone-Other, desc: "Всё для мобильных телефонов, КПК и Iphone"}
-    - {id: 983, cat: PC/Phone-Other, desc: "Мобильное видео"}
+    - {id: 511, cat: PC/Mobile-Other, desc: "Всё для мобильных телефонов, КПК и Iphone"}
+    - {id: 983, cat: PC/Mobile-Other, desc: "Мобильное видео"}
     - {id: 606, cat: Other, desc: "Книги, аудиокниги, журналы"}
     - {id: 607, cat: Books, desc: "Книги"}
     - {id: 629, cat: Audio/Audiobook, desc: "Аудиокниги"}
-    - {id: 662, cat: Books/Magazines, desc: "Журналы"}
+    - {id: 662, cat: Books/Mags, desc: "Журналы"}
     - {id: 312, cat: XXX, desc: "Э[ротика] и Pr[o]n"}
     - {id: 536, cat: XXX, desc: "Pr[o]n"}
-    - {id: 782, cat: XXX/Imageset, desc: "Фотографии, картинки, обои"}
+    - {id: 782, cat: XXX/ImageSet, desc: "Фотографии, картинки, обои"}
     - {id: 363, cat: XXX, desc: "Э[ротика]"}
     - {id: 182, cat: Other, desc: "Разное"}
     - {id: 789, cat: Other, desc: "Автомобильный раздел"}
     - {id: 797, cat: Other, desc: "Караоке Онлайн"}
-
     - {id: 137, cat: Other, desc: "Форумы"}
     - {id: 138, cat: Other, desc: "О нашем сайте"}
     - {id: 140, cat: Other, desc: "Новости трекера"}
@@ -277,6 +276,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
@@ -284,21 +284,22 @@ settings:
     label: Sort requested from site
     default: "t"
     options:
-      "t": "created"
-      "ts": "seeders"
-      "sz": "size"
-      "i": "title"
+      t: created
+      ts: seeders
+      sz: size
+      i: title
   - name: type
     type: select
     label: Order requested from site
-    default: "d"
+    default: d
     options:
-      "d": "desc"
-      "a": "asc"
+      d: desc
+      a: asc
 
 download:
-  selector: a[href^="./download/file.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="./download/file.php?id="]
+      attribute: href
 
 search:
   # http://rus-media.org/search.php?tracker_search=torrent&sr=topics&keywords=2020&fid[]=54
@@ -309,7 +310,7 @@ search:
     sf: titleonly
     fp: 1
     tracker_search: torrent
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{else}}{{ .Today.Year }}{{end}}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sk: "{{ .Config.sort }}"
     sd: "{{ .Config.type }}"
     $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
@@ -332,9 +333,7 @@ search:
     download:
       selector: a.topictitle
       attribute: href
-    size:
-      text: "0 B"
-    size:
+    size_optional:
       selector: td:nth-of-type(5) p:not(:empty)
       optional: true
       filters:
@@ -346,17 +345,27 @@ search:
           args: ["МБ", "MB"]
         - name: replace
           args: ["КБ", "KB"]
-    seeders:
-      text: 0
-    seeders:
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    seeders_optional:
       selector: span.seed
       optional: true
-    leechers:
-      text: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: span.leech
       optional: true
-    date:
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    date_minutes:
+      # 55 минут назад
+      selector: td:nth-of-type(6) p:nth-of-type(1):contains("минут")
+      optional: true
+      filters:
+        - name: replace
+          args: ["минут назад", "minutes ago"]
+        - name: timeago
+    date_day:
       # Сегодня, 03:04
       # Вчера, 22:47
       selector: td:nth-of-type(6) p:nth-of-type(1):contains("Сегодня"),  td:nth-of-type(6) p:contains("Вчера")
@@ -366,9 +375,9 @@ search:
           args: ["Сегодня", "Today"]
         - name: replace
           args: ["Вчера", "Yesterday"]
-    date:
+    date_year:
       # 12 янв 2019, 12:47
-      selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера"))
+      selector: td:nth-of-type(6) p:nth-of-type(1):not(:contains("Сегодня")):not(:contains("Вчера")):not(:contains("минут"))
       optional: true
       filters:
         # replace month abbreviations
@@ -398,8 +407,12 @@ search:
           args: ["дек", "Dec"]
         - name: replace
           args: [",", ""]
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 2006 15:04"
+          args: "02 Jan 2006 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_minutes }}{{ or .Result.date_year .Result.date_day .Result.date_minutes }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

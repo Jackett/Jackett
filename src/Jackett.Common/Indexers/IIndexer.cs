@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 
 namespace Jackett.Common.Indexers
@@ -12,11 +13,13 @@ namespace Jackett.Common.Indexers
     {
         public IIndexer Indexer { get; set; }
         public IEnumerable<ReleaseInfo> Releases { get; set; }
+        public bool IsFromCache;
 
-        public IndexerResult(IIndexer Indexer, IEnumerable<ReleaseInfo> Releases)
+        public IndexerResult(IIndexer indexer, IEnumerable<ReleaseInfo> releases, bool isFromCache)
         {
-            this.Indexer = Indexer;
-            this.Releases = Releases;
+            Indexer = indexer;
+            Releases = releases;
+            IsFromCache = isFromCache;
         }
     }
 
@@ -38,6 +41,10 @@ namespace Jackett.Common.Indexers
         // Whether this indexer has been configured, verified and saved in the past and has the settings required for functioning
         bool IsConfigured { get; }
 
+        string[] Tags { get; }
+        bool IsHealthy { get; }
+        bool IsFailing { get; }
+
         // Retrieved for starting setup for the indexer via web API
         Task<ConfigurationData> GetConfigurationForSetup();
 
@@ -51,7 +58,7 @@ namespace Jackett.Common.Indexers
 
         void Unconfigure();
 
-        Task<IndexerResult> ResultsForQuery(TorznabQuery query);
+        Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer = false);
 
         bool CanHandleQuery(TorznabQuery query);
     }
@@ -59,5 +66,7 @@ namespace Jackett.Common.Indexers
     public interface IWebIndexer : IIndexer
     {
         Task<byte[]> Download(Uri link);
+
+        Task<WebResult> DownloadImage(Uri link);
     }
 }

@@ -2,7 +2,7 @@
 id: r3vwtf
 name: R3V WTF!
 description: "R3V WTF! is a Private site for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -15,7 +15,7 @@ caps:
     - {id: 36, cat: Movies/BluRay, desc: "Bluray"}
     - {id: 34, cat: Audio/MP3, desc: "Carrow's MP3 Packs"}
     - {id: 38, cat: Audio, desc: "DMC Music"}
-    - {id: 24, cat: Books/Ebook, desc: "EBOOK"}
+    - {id: 24, cat: Books/EBook, desc: "EBOOK"}
     - {id: 37, cat: Audio, desc: "Mastermix Music"}
     - {id: 20, cat: Movies/DVD, desc: "Movies/Dvdr"}
     - {id: 17, cat: Movies, desc: "Movies/Packs"}
@@ -27,7 +27,6 @@ caps:
     - {id: 40, cat: Audio/Video, desc: "Music Videos"}
     - {id: 22, cat: Audio/Lossless, desc: "Music/Flac"}
     - {id: 51, cat: PC/Games, desc: "PC  GAMES"}
-    - {id: 52, cat: Other/Misc, desc: "ThE CoLLeCtiVe"}
     - {id: 23, cat: TV, desc: "Tv/Packs"}
     - {id: 16, cat: TV/HD, desc: "Tv/x264"}
     - {id: 49, cat: TV/HD, desc: "Tv/X265"}
@@ -40,6 +39,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 login:
   path: login.php
@@ -62,7 +62,7 @@ search:
     # https://r3vuk.wtf/browse.php?c1=1&c24=1&search=&searchin=title&incldead=0
     - path: browse.php
   inputs:
-    $raw: "{{range .Categories}}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # title descr genre all
     searchin: "title"
@@ -72,7 +72,7 @@ search:
     "only_free": 0
 
   rows:
-    selector: tr:has(a[href^="download.php?torrent="])
+    selector: table[cellpadding="3"] > tbody > tr:has(a[href^="download.php?torrent="])
   fields:
     category:
       selector: a[href^="browse.php?cat="]
@@ -88,34 +88,34 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
-    banner:
+    poster:
       selector: a[href^="details.php?id="]
-      optional: true
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=\\\\'(.+?)\\\\'"
     files:
       selector: td:nth-last-child(8)
-    date:
+    date_year:
       # Jul 4 2019 08:04 AM
       selector: td:nth-last-child(6):not(:contains("day"))
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
-    date:
+          args: "Jan 2 2006 03:04 PM -07:00"
+    date_day:
       # Today 02:40 PM
       # Yesterday 09:10 AM
       selector: td:nth-last-child(6):contains("day")
       optional: true
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(5)
     grabs:
       selector: td:nth-last-child(4)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-last-child(3)
     leechers:
@@ -128,4 +128,9 @@ search:
       case:
         img[src="./pic/doubleseed.gif"]: 0
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # U-232v3

@@ -1,0 +1,104 @@
+---
+id: rintornet
+name: RinTor.NeT
+description: "RinTor.NeT is a RUSSIAN Public tracker for 3X"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - https://www.rintor.net/
+
+caps:
+  categorymappings:
+    - {id: 27, cat: XXX, desc: "Фильмы 2160 4K | Movies 2160p 4K"}
+    - {id: 20, cat: XXX, desc: "Сайтрипы 2160 4K | Porn Video 2160p 4K"}
+    - {id: 1, cat: XXX, desc: "Сайтрипы, Фильмы HD | SiteRips, Movies HD"}
+    - {id: 9, cat: XXX, desc: "Сайтрипы | SiteRips"}
+    - {id: 12, cat: XXX, desc: "DVDRip | WEB-DL | WEBRip | VHSRip | CamRip"}
+    - {id: 10, cat: XXX, desc: "Любительское видео | Amateur Video"}
+    - {id: 24, cat: XXX, desc: "Инцест (Инсценировка) | Incest (Simulation)"}
+    - {id: 22, cat: XXX, desc: "Лесбиянки | Lesbians"}
+    - {id: 26, cat: XXX, desc: "Порно Кастинг | Porno Casting"}
+    - {id: 29, cat: XXX, desc: "Японское (Без Цензуры) | Japanese Porn (Uncen)"}
+    - {id: 23, cat: XXX, desc: "Ретро Порно, Классика | Retro Porn, Classic"}
+    - {id: 21, cat: XXX, desc: "Женское Доминирование, Страпон | Femdom, StrapOn"}
+    - {id: 17, cat: XXX, desc: "БДСМ, Фистинг, Дилдо | BDSM, Fisting, Dildo"}
+    - {id: 19, cat: XXX, desc: "Беременные | Pregnant"}
+    - {id: 28, cat: XXX, desc: "Буккаке | Bukkake"}
+    - {id: 25, cat: XXX, desc: "Мочеиспускание | Peeing"}
+    - {id: 16, cat: XXX, desc: "Транссексуалы | Shemale Transsexual"}
+    - {id: 11, cat: XXX, desc: "Подборки сетов | Picture Sets Packs"}
+    - {id: 14, cat: XXX, desc: "Порно Мультфильмы | Porno Cartoons"}
+    - {id: 13, cat: XXX, desc: "Порно Игры | Porn Games"}
+    - {id: 15, cat: XXX, desc: "Гей и Бисекс Порно | Gay and Bisex Porn"}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: index.php
+  inputs:
+    do: search
+    subaction: search
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    titleonly: 3
+    sortby: date
+    resorder: desc
+    showposts: 0
+    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+
+  rows:
+    selector: div.entry:has(div.entry__title)
+
+  fields:
+    categorydesc:
+      selector: div.entry__info > span > a
+    title:
+      selector: div.entry__title > h3 > a
+    details:
+      selector: div.entry__title > h3 > a
+      attribute: href
+    download:
+      selector: div.entry__title > h3 > a
+      attribute: href
+    poster:
+      selector: div.entry_content a.entry__content-image img
+      attribute: src
+    date_day:
+      selector: span.entry__date:contains("Вчера"), span.entry__date:contains("Сегодня")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Вчера", "Yesterday"]
+        - name: replace
+          args: ["Сегодня", "Today"]
+        - name: fuzzytime
+    date_year:
+      selector: span.entry__date:contains("-")
+      optional: true
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2-01-2006, 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    size:
+      text: "1 GB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

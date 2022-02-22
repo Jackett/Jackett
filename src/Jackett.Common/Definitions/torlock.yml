@@ -2,7 +2,7 @@
 id: torlock
 name: Torlock
 description: "Torlock is a torrent search site that lists verified torrents only for TV series and movies"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
@@ -10,13 +10,33 @@ links:
   - https://www.torlock.com/
   - https://www.torlock2.com/
   - https://www.torlock.icu/
-  - https://torlock.unblockit.me/
+  - https://torlock.unblockit.cam/
+  - https://torlock.nocensor.biz/
 legacylinks:
   - https://torlock.com/
-  - https://torlock.unblockit.pro/
-  - https://torlock.unblockit.one/
+  - https://torlock.unblockit.win/
+  - https://torlock.unblockit.top/
+  - https://torlock.unblockit.lat/
+  - https://torlock.unblockit.app/
+  - https://torlock.unblockit.dev/
+  - https://torlock.unblockit.ltd/
+  - https://torlock.unblockit.link/
+  - https://torlock.unblockit.buzz/
+  - https://torlock.unblockit.club/
+  - https://torlock.unblockit.onl/
+  - https://torlock.unblockit.li/
+  - https://torlock.unblockit.uno/
+  - https://torlock.unblockit.ch/
+  - https://torlock.nocensor.space/
+  - https://torlock.unblockit.ws/
+  - https://torlock.nocensor.work/
+  - https://torlock.unblockit.kim/
+  - https://torlock.unblockit.bz/
+  - https://torlock.unblockit.tv/
+  - https://torlock.unblockit.how/
 
 caps:
+  # dont forget to update the search fields category case block
   categorymappings:
     - {id: TELEVISION, cat: TV, desc: "TV Shows"}
     - {id: MOVIES, cat: Movies, desc: "Movies"}
@@ -24,7 +44,7 @@ caps:
     - {id: GAMES, cat: PC/Games, desc: "Games"}
     - {id: SOFTWARE, cat: PC, desc: "Software"}
     - {id: ANIME, cat: TV/Anime, desc: "Anime"}
-    - {id: EBOOKS, cat: Books/Ebook, desc: "Books"}
+    - {id: EBOOKS, cat: Books/EBook, desc: "Books"}
     - {id: OTHER, cat: Other, desc: "Other"}
     - {id: ADULT, cat: XXX, desc: "Adult"}
     - {id: AUDIOBOOK, cat: Audio/Audiobook, desc: "Audiobook"}
@@ -35,27 +55,51 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site (only works for search with keywords)
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
+      added: created
+      seeds: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   paths:
-    - path: "{{if .Keywords}}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/fresh.html{{end}}"
+    - path: "{{ if .Keywords }}/all/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{ else }}/fresh.html{{ end }}"
+      categories: ["!", TELEVISION, MOVIES, MUSIC, GAMES, SOFTWARE, ANIME, EBOOKS, OTHER, ADULT, AUDIOBOOK, IMAGES]
+    - path: "{{ if .Keywords }}/television/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/television/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [TELEVISION]
+    - path: "{{ if .Keywords }}/movie/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/movies/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [MOVIES]
+    - path: "{{ if .Keywords }}/music/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/music/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [MUSIC]
+    - path: "{{ if .Keywords }}/game/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/games/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [GAMES]
+    - path: "{{ if .Keywords }}/software/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/software/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [SOFTWARE]
+    - path: "{{ if .Keywords }}/anime/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/anime/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [ANIME]
+    - path: "{{ if .Keywords }}/ebook/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/ebooks/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [EBOOKS]
+    - path: "{{ if .Keywords }}/unknown/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/unknown.html{{end}}" # sorting is broken for unknown
+      categories: [OTHER]
+    - path: "{{ if .Keywords }}/adult/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/adult/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [ADULT]
+    - path: "{{ if .Keywords }}/audiobook/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/audiobook/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [AUDIOBOOK]
+    - path: "{{ if .Keywords }}/image/torrents/{{ .Keywords }}.html?sort={{ .Config.sort }}&order={{ .Config.type }}{{else}}/images/1/{{ .Config.sort }}/{{ .Config.type }}.html{{end}}"
+      categories: [IMAGES]
   keywordsfilters:
     - name: tolower
     - name: re_replace
@@ -83,7 +127,7 @@ search:
         span.tv9: IMAGES
         span.tv10: EBOOKS
         span.tv12: AUDIOBOOK
-        "*": "OTHER" # some torrents have invalid categories
+        "*": OTHER # some torrents have invalid categories
     title:
       selector: td:nth-child(1) > div > a
     details:
@@ -99,24 +143,28 @@ search:
           args: (^/tor/\d*)
         - name: append
           args: ".torrent"
-    date:
+    date_year:
       selector: td:nth-child(2):contains("/")
       optional: true
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "1/2/2006"
-    date:
+          args: "1/2/2006 -07:00"
+    date_day:
       selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
       optional: true
       filters:
         - name: fuzzytime
-    date:
+    date_ago:
       selector: td:nth-child(2):not(:contains("Today")):not(:contains("Yesterday")):not(:contains("/"))
       optional: true
       filters:
         - name: re_replace
           args: ["(min|mins)", "minutes"]
         - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago .Result.date_day }}{{ or .Result.date_year  .Result.date_ago .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(3)
     seeders:
@@ -127,4 +175,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# Engine n/a
+# engine n/a

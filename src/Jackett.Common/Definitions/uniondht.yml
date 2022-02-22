@@ -1,8 +1,8 @@
-﻿---
+---
 id: uniondht
 name: UnionDHT
 description: "UnionDHT is a RUSSIAN Public Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: windows-1251
 links:
@@ -67,17 +67,17 @@ caps:
     - {id: 97, cat: PC/Games, desc: " |- Бонусные видеодиски"}
     - {id: 96, cat: PC/Games, desc: " |- Телепередачи/интервью"}
     - {id: 95, cat: PC/Games, desc: " |- Киберспорт"}
-    - {id: 101, cat: Console/Xbox, desc: "Xbox "}
-    - {id: 139, cat: Console/Xbox 360, desc: " |- XBox360 | Игры"}
-    - {id: 1068, cat: Console/Xbox One, desc: " |- Xbox One | Игры"}
-    - {id: 554, cat: Console/Xbox 360, desc: " |- XBox360 | Kinect "}
-    - {id: 730, cat: Console/Xbox 360, desc: " |- XBox360 | GOD Игры"}
-    - {id: 138, cat: Console/Xbox 360, desc: " |- XBox360 | JTAG "}
-    - {id: 137, cat: Console/Xbox 360, desc: " |- XBox360 | 360E "}
-    - {id: 136, cat: Console/Xbox 360, desc: " |- XBox360 | Demo "}
-    - {id: 135, cat: Console/Xbox 360, desc: " |- XBox360 | Live "}
-    - {id: 134, cat: Console/Xbox 360, desc: " |- XBox360 | Soft "}
-    - {id: 133, cat: Console/Xbox, desc: " |- XBox | Игры"}
+    - {id: 101, cat: Console/XBox, desc: "Xbox "}
+    - {id: 139, cat: Console/XBox 360, desc: " |- XBox360 | Игры"}
+    - {id: 1068, cat: Console/XBox One, desc: " |- Xbox One | Игры"}
+    - {id: 554, cat: Console/XBox 360, desc: " |- XBox360 | Kinect "}
+    - {id: 730, cat: Console/XBox 360, desc: " |- XBox360 | GOD Игры"}
+    - {id: 138, cat: Console/XBox 360, desc: " |- XBox360 | JTAG "}
+    - {id: 137, cat: Console/XBox 360, desc: " |- XBox360 | 360E "}
+    - {id: 136, cat: Console/XBox 360, desc: " |- XBox360 | Demo "}
+    - {id: 135, cat: Console/XBox 360, desc: " |- XBox360 | Live "}
+    - {id: 134, cat: Console/XBox 360, desc: " |- XBox360 | Soft "}
+    - {id: 133, cat: Console/XBox, desc: " |- XBox | Игры"}
     - {id: 102, cat: Console/PSP, desc: "PlayStation "}
     - {id: 1067, cat: Console/PS4, desc: " |- PS4 | Игры"}
     - {id: 127, cat: Console/PS3, desc: " |- PS3 | Игры"}
@@ -94,7 +94,7 @@ caps:
     - {id: 103, cat: Console/NDS, desc: "Nintendo "}
     - {id: 113, cat: Console/NDS, desc: " |- NDS | Игры"}
     - {id: 112, cat: Console/Wii, desc: " |- Wii | Игры"}
-    - {id: 111, cat: Console/Wiiware/VC, desc: " |- WiiWare | Игры"}
+    - {id: 111, cat: Console/Wiiware, desc: " |- WiiWare | Игры"}
     - {id: 110, cat: Console, desc: " |- GameCube | Игры"}
     - {id: 104, cat: Console, desc: "Sega "}
     - {id: 108, cat: Console, desc: " |- Dreamcast | Игры"}
@@ -130,15 +130,15 @@ caps:
     - {id: 922, cat: TV/Sport, desc: " |- Евро 2012 "}
     - {id: 931, cat: TV/Sport, desc: " |- Лига Чемпионов 2012-2013 "}
     - {id: 1130, cat: TV/Sport, desc: " |- Чемпионат Мира 2014 "}
-    - {id: 737, cat: TV/OTHER, desc: "Видео для Консолей"}
-    - {id: 987, cat: TV/OTHER, desc: " |- PSVita | Видео"}
-    - {id: 748, cat: TV/OTHER, desc: " |- PSP | CAMRip/TS/Scr "}
-    - {id: 747, cat: TV/OTHER, desc: " |- PSP | Фильмы"}
-    - {id: 743, cat: TV/OTHER, desc: " |- PSP | Cериалы"}
-    - {id: 742, cat: TV/OTHER, desc: " |- PSP | Аниме"}
-    - {id: 741, cat: TV/OTHER, desc: " |- PSP | Мультфильмы"}
-    - {id: 739, cat: TV/OTHER, desc: " |- PSP | Телепередачи/Документальное кино"}
-    - {id: 738, cat: TV/OTHER, desc: " |- PSP | UMD Video "}
+    - {id: 737, cat: TV/Other, desc: "Видео для Консолей"}
+    - {id: 987, cat: TV/Other, desc: " |- PSVita | Видео"}
+    - {id: 748, cat: TV/Other, desc: " |- PSP | CAMRip/TS/Scr "}
+    - {id: 747, cat: TV/Other, desc: " |- PSP | Фильмы"}
+    - {id: 743, cat: TV/Other, desc: " |- PSP | Cериалы"}
+    - {id: 742, cat: TV/Other, desc: " |- PSP | Аниме"}
+    - {id: 741, cat: TV/Other, desc: " |- PSP | Мультфильмы"}
+    - {id: 739, cat: TV/Other, desc: " |- PSP | Телепередачи/Документальное кино"}
+    - {id: 738, cat: TV/Other, desc: " |- PSP | UMD Video "}
     - {id: 211, cat: TV/Anime, desc: "Аниме (Основной)"}
     - {id: 517, cat: TV/Anime, desc: " |- Аниме | Rips "}
     - {id: 518, cat: TV/Anime, desc: " |- Аниме | HD Rips "}
@@ -376,9 +376,10 @@ caps:
     - {id: 862, cat: XXX, desc: " |- Паки полных фильмов / Full Length Movies Packs "}
     - {id: 861, cat: XXX, desc: " |- Классические порно фильмы / Classic "}
     - {id: 869, cat: XXX, desc: " |- Порно фильмы с сюжетом / Feature &Vignettes "}
+    - {id: 1217, cat: XXX, desc: " |- Гонзо-фильмы 1991-2010 / Gonzo 1991-2010 "}
     - {id: 971, cat: XXX, desc: " |- Гонзо-фильмы / Gonzo "}
     - {id: 870, cat: XXX, desc: " |- Порно фильмы без сюжета 1991-2010 / All Sex &Amateur 19.."}
-    - {id: 1158, cat: XXX, desc: " |- Фильмы без сюжета 2011-2020 / All Sex &Amateur 2011-202.."}
+    - {id: 1158, cat: XXX, desc: " |- Фильмы без сюжета 2011-2021 / All Sex &Amateur 2011-202.."}
     - {id: 873, cat: XXX, desc: " |- Лесбо фильмы / All Girl &Solo "}
     - {id: 871, cat: XXX, desc: " |- Этнические порно фильмы / Ethnic-Themed "}
     - {id: 1084, cat: XXX, desc: " |- Порно видео для телефонов и КПК / Pocket РС &Phone Vide.."}
@@ -394,8 +395,8 @@ caps:
     - {id: 1146, cat: XXX, desc: " |- Паки русских порнороликов / Russian Clips Packs "}
     - {id: 1147, cat: XXX, desc: " |- Сайтрипы с русскими актрисами 1991-2015 / Russian SiteRip"}
     - {id: 1148, cat: XXX, desc: " |- Сайтрипы с русскими актрисами 1991-2015 (HD Video) / Russian"}
-    - {id: 1149, cat: XXX, desc: " |- Сайтрипы с русскими актрисами 2016-2020 / Russian SiteRip"}
-    - {id: 1150, cat: XXX, desc: " |- Сайтрипы с русскими актрисами 2016-2020 (HD Video) / Russian"}
+    - {id: 1149, cat: XXX, desc: " |- Сайтрипы с русскими актрисами 2016-2021 / Russian SiteRip"}
+    - {id: 1150, cat: XXX, desc: " |- Сайтрипы с русскими актрисами 2016-2021 (HD Video) / Russian"}
     - {id: 1151, cat: XXX, desc: " |- Русские Порноролики Разное / Russian Clips (various)"}
     - {id: 1152, cat: XXX, desc: " |- Русское любительское видео / Russian Amateur Video "}
     - {id: 864, cat: XXX, desc: " |- Полнометражные порно фильмы (Rips)"}
@@ -417,6 +418,7 @@ caps:
     - {id: 1174, cat: XXX, desc: " |- Сайтрипы 2018 (HD Video) / SiteRip's 2018 (HD Video)"}
     - {id: 1173, cat: XXX, desc: " |- Сайтрипы 2019 (HD Video) / SiteRip's 2019 (HD Video)"}
     - {id: 1172, cat: XXX, desc: " |- Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)"}
+    - {id: 1218, cat: XXX, desc: " |- Сайтрипы 2021 (HD Video) / SiteRip's 2021 (HD Video)"}
     - {id: 867, cat: XXX, desc: " |- Сайтрипы 1991-2010 / SiteRip's 1991-2010 "}
     - {id: 1122, cat: XXX, desc: " |- Сайтрипы 2011-2012 / SiteRip's 2011-2012 "}
     - {id: 1121, cat: XXX, desc: " |- Сайтрипы 2013 / SiteRip's 2013 "}
@@ -427,6 +429,7 @@ caps:
     - {id: 1141, cat: XXX, desc: " |- Сайтрипы 2018 / SiteRip's 2018 "}
     - {id: 1143, cat: XXX, desc: " |- Сайтрипы 2019 / SiteRip's 2019 "}
     - {id: 1144, cat: XXX, desc: " |- Сайтрипы 2020 / SiteRip's 2020 "}
+    - {id: 1219, cat: XXX, desc: " |- Сайтрипы 2021 / SiteRip's 2021 "}
     - {id: 1085, cat: XXX, desc: " |- Сцены из порно фильмов / Movie Scenes "}
     - {id: 1171, cat: XXX, desc: " |- Порноролики Разное / Clips (various)"}
     - {id: 1140, cat: XXX, desc: " |- Порноролики в 3D и Virtual Reality (VR)"}
@@ -434,7 +437,7 @@ caps:
     - {id: 1160, cat: XXX, desc: " |- Паки японских фильмов и сайтрипов / Full Length Japanese Mov.."}
     - {id: 1164, cat: XXX, desc: " |- Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movie.."}
     - {id: 1163, cat: XXX, desc: " |- Японские фильмы и сайтрипы 1991-2014 / Japanese Movies &.."}
-    - {id: 1162, cat: XXX, desc: " |- Японские фильмы и сайтрипы 2015-2020 / Japanese Movies &.."}
+    - {id: 1162, cat: XXX, desc: " |- Японские фильмы и сайтрипы 2015-2021 / Japanese Movies &.."}
     - {id: 1161, cat: XXX, desc: " |- Архив (Японское порно)"}
     - {id: 848, cat: XXX, desc: "Журналы и фотографии (порно)"}
     - {id: 1191, cat: XXX, desc: " |- Эротические студии (видео) / Erotic Video Library "}
@@ -500,6 +503,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: striprussian
@@ -509,23 +513,24 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "10": "seeders"
-      "7": "size"
-      "2": "title"
+      1: created
+      10: seeders
+      7: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:
@@ -538,7 +543,7 @@ search:
     - name: re_replace # S01E01 to сезон 1 серии 1
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 серии $2"]
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{else}}f[]=-1{{end}}"
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_a: 0
     prev_dla: 0
     prev_dlc: 0
@@ -609,6 +614,7 @@ search:
     grabs:
       selector: td:nth-child(9)
     date:
+      # unix
       selector: td:last-child > u
     downloadvolumefactor:
       text: 0

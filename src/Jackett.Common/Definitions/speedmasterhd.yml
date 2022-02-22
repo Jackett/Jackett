@@ -2,7 +2,7 @@
 id: speedmasterhd
 name: Speedmaster HD
 description: "Speedmaster HD is a German Time based tracker for MOVIES / TV"
-language: de-de
+language: de-DE
 type: private
 encoding: UTF-8
 links:
@@ -67,13 +67,14 @@ caps:
     - {id: 94, cat: Other, desc: "Sonstiges HD-XXX Pics"}
     - {id: 98, cat: Other, desc: "Sonstiges to sort"}
     # E-Book
-    - {id: 103, cat: Books/Ebook, desc: "E-Book Mixed"}
+    - {id: 103, cat: Books/EBook, desc: "E-Book Mixed"}
 
   modes:
-    search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -85,19 +86,19 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "name": "title"
+      added: created
+      seeds: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -128,9 +129,9 @@ search:
     - path: selection.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBIDShort }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 name 1 descr 2 both 3 imdb
-    blah: "{{ if .Query.IMDBID }}3{{else}}0{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 name, 1 descr, 2 both
+    blah: "0"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
@@ -152,14 +153,12 @@ search:
     download:
       selector: a[href^="download_ssl.php?torrent="]
       attribute: href
-    imdb:
-      selector: a[href*="www.imdb.com/title/tt"]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      optional: true
-    banner:
+    poster:
       selector: div[id^="details-"] div div img
       attribute: src
-      optional: true
       filters:
         - name: replace
           args: ["cloud-data/standard_cover/ebook_t.png", ""]
@@ -181,19 +180,13 @@ search:
           args: "'(.+?)'"
     size:
       selector: div.selection_unter_ad
-      filters:
-        - name: replace
-          args: [",", "."]
     grabs:
       selector: div.selection_unter_ae
-      filters:
-        - name: replace
-          args: [" x", ""]
     seeders:
       selector: div.selection_unter_aa > b
     leechers:
       selector: div.selection_unter_aaa > b
-    date:
+    date_day:
       # Heute 03:27:27
       # Gestern 21:00:59
       selector: div.selection_unter_ab:contains("Heute"), div.selection_unter_ab:contains("Gestern")
@@ -204,17 +197,19 @@ search:
         - name: replace
           args: ["Gestern ", "Yesterday"]
         - name: fuzzytime
-    date:
+    date_year:
       # 03.03.2020 um 23:31:52
       selector: div.selection_unter_ab:not(:contains("Heute")):not(:contains("Gestern"))
       optional: true
       filters:
         - name: append
-          args: " +01:00"
+          args: " +01:00" # CET
         - name: replace
           args: ["um ", ""]
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

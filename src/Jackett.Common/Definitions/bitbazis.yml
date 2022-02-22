@@ -1,0 +1,167 @@
+---
+id: bitbazis
+name: Bit-Bázis
+description: "Bit-Bázis is a HUNGARIAN Private Tracker for MOVIES / TV"
+language: hu-HU
+type: private
+# encoding: ISO-8859-2
+encoding: UTF-8
+links:
+  - https://bitbazis.net/
+
+caps:
+  categorymappings:
+    - {id: 85, cat: Movies/SD, desc: "Film/Cam/Hun"}
+    - {id: 86, cat: Movies/SD, desc: "Film/Cam/Eng"}
+    - {id: 15, cat: Movies/SD, desc: "Film/XviD/Hun"}
+    - {id: 16, cat: Movies/SD, desc: "Film/XviD/Eng"}
+    - {id: 34, cat: Movies/HD, desc: "Film/x264/Hun"}
+    - {id: 48, cat: Movies/HD, desc: "Film/x264/Eng"}
+    - {id: 83, cat: Movies/HD, desc: "Film/HD/Hun"}
+    - {id: 82, cat: Movies/HD, desc: "Film/HD/Eng"}
+    - {id: 92, cat: Movies/UHD, desc: "Film/UHD/Hun"}
+    - {id: 93, cat: Movies/UHD, desc: "Film/UHD/Eng"}
+    - {id: 64, cat: Movies, desc: "Film/Pack"}
+    - {id: 22, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 58, cat: TV, desc: "Sorozat/Eng"}
+    - {id: 69, cat: TV/Anime, desc: "Mese/SD"}
+    - {id: 68, cat: TV/Anime, desc: "Mese/DVD"}
+    - {id: 91, cat: TV/Anime, desc: "Mese/HD"}
+    - {id: 25, cat: Audio/MP3, desc: "Mp3/Hun"}
+    - {id: 26, cat: Audio/MP3, desc: "Mp3/Eng"}
+    - {id: 84, cat: Audio/Lossless, desc: "Lossless/Hun"}
+    - {id: 71, cat: Audio/Lossless, desc: "Lossless/Eng"}
+    - {id: 31, cat: PC/Games, desc: "Játék/PC"}
+    - {id: 54, cat: Console, desc: "Játék/Konzol"}
+    - {id: 81, cat: PC/0day, desc: "Program/PC"}
+    - {id: 49, cat: PC/0day, desc: "Program/Rip"}
+    - {id: 14, cat: PC, desc: "Program/Egyéb"}
+    - {id: 67, cat: PC/Mobile-Android, desc: "Program/Android"}
+    - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv"}
+    - {id: 27, cat: Books/EBook, desc: "Könyv/Hun"}
+    - {id: 50, cat: Books/EBook, desc: "Könyv/Eng"}
+    - {id: 65, cat: Other, desc: "Egyéb"}
+    # the following are no longer in the cat list in the search page, but are still in the profile cat list
+    - {id: 17, cat: Movies/DVD, desc: "Film/DVD/Hun"}
+    - {id: 19, cat: Movies/DVD, desc: "Film/DVD/Eng"}
+    - {id: 24, cat: Audio/Video, desc: "Videóklipp"}
+    - {id: 33, cat: XXX/SD, desc: "Film/SD/XXX"}
+    - {id: 89, cat: XXX/x264, desc: "Film/HD/XXX"}
+    - {id: 66, cat: XXX/ImageSet, desc: "Képek/XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+    music-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      1: title
+      4: added
+      5: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek száma egy oldalon:</b> setting to <b>100</b> on your account profile.
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href^="logout.php?k="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 all, 2 deadonly, 3  myuploads, 4 zeroseed
+    incldead: 1
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # site does not support imdbid searching or appear to have freeleech
+
+  rows:
+    selector: table[width="100%"]:last-child tbody tr:has(a[href^="userdetails.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: div.tooltip
+      remove: span
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    poster:
+      selector: a.preview
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    size:
+      selector: td:nth-child(6)
+    date:
+      # 2021-11-09 16:51:24
+      selector: td:nth-child(7)
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "06/01/02 -07:00"
+    grabs:
+      selector: td:nth-child(5)
+      filters:
+        - name: regexp
+          args: "D:(\\d+)"
+    seeders:
+      selector: td:nth-child(3)
+      filters:
+        - name: regexp
+          args: "S:(\\d+)"
+    leechers:
+      selector: td:nth-child(4)
+      filters:
+        - name: regexp
+          args: "L:(\\d+)"
+    downloadvolumefactor:
+      case:
+        "i:contains(\"(Free)\")": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "i:contains(\"(2x)\")": 2
+        "i:contains(\"(3x)\")": 3
+        "i:contains(\"(4x)\")": 4
+        "*": 1
+    minimumseedtime:
+      # 1 day (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+# engine n/a

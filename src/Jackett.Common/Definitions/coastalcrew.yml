@@ -1,0 +1,220 @@
+---
+id: coastalcrew
+name: Coastal-Crew
+description: "Coastal-Crew is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: de-DE
+type: private
+encoding: UTF-8
+links:
+  - https://coastal-crew.bounceme.net/
+
+caps:
+  categorymappings:
+    # Movie
+    - {id: 28, cat: Movies/SD, desc: "Movie - SD"}
+    - {id: 155, cat: Movies/DVD, desc: "Movie - DVD"}
+    - {id: 130, cat: Movies/SD, desc: "Movie - SD-Pack"}
+    # Movie-HD
+    - {id: 32, cat: Movies/HD, desc: "Movie-HD - HD"}
+    - {id: 154, cat: Movies/UHD, desc: "Movie-HD - UHD/4K"}
+    - {id: 162, cat: Movies/HD, desc: "Movie-HD - HD-Pack"}
+    # Serien
+    - {id: 60, cat: TV/SD, desc: "Serien - Xvid/x264"}
+    - {id: 157, cat: TV/HD, desc: "Serien - 720p/1080p"}
+    - {id: 158, cat: TV/UHD, desc: "Serien - UHD/4K"}
+    # S-Packs
+    - {id: 57, cat: TV/SD, desc: "S-Packs - SD"}
+    - {id: 59, cat: TV/HD, desc: "S-Packs - 720p"}
+    - {id: 156, cat: TV/HD, desc: "S-Packs - 1080p"}
+    # Doku
+    - {id: 160, cat: TV/Documentary, desc: "Doku - HD"}
+    - {id: 15, cat: TV/Documentary, desc: "Doku - SD"}
+    # App
+    - {id: 12, cat: PC/0day, desc: "App - Win"}
+    - {id: 11, cat: PC, desc: "App - Other"}
+    - {id: 10, cat: PC/Mac, desc: "App - Mac"}
+    - {id: 9, cat: PC/Mobile-Android, desc: "App - Linux/Android"}
+    # Game
+    - {id: 131, cat: Console, desc: "Game - Nintendo"}
+    - {id: 17, cat: PC/Games, desc: "Game - PC"}
+    - {id: 18, cat: Console, desc: "Game - PS"}
+    - {id: 24, cat: Console/Other, desc: "Game - Wimmelbild"}
+    # Audio
+    - {id: 159, cat: Audio/Audiobook, desc: "Audio - Hörbuch"}
+    - {id: 48, cat: Audio/MP3, desc: "Audio - mp3"}
+    - {id: 53, cat: Audio/Lossless, desc: "Audio - Flac"}
+    - {id: 52, cat: Audio, desc: "Audio - Pack"}
+    - {id: 109, cat: Audio/Video, desc: "Audio - Video-HD/SD"}
+    # Sport
+    - {id: 62, cat: TV/Sport, desc: "Sport - SD"}
+    - {id: 161, cat: TV/Sport, desc: "Sport - HD"}
+    # Paper
+    - {id: 163, cat: Books/Mags, desc: "Paper - Zeitungen"}
+    - {id: 63, cat: Books/Comics, desc: "Paper - Comic"}
+    - {id: 96, cat: Books/EBook, desc: "Paper - E-Book"}
+    # XXX
+    - {id: 113, cat: XXX/DVD, desc: "XXX - DVD"}
+    - {id: 76, cat: XXX, desc: "XXX - HD-SD"}
+    - {id: 75, cat: XXX/Pack, desc: "XXX - Pack"}
+    # Request
+    - {id: 151, cat: Other, desc: "Request - spritti01"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: pin
+    type: text
+    label: Pin
+
+login:
+  path: login.php
+  method: form
+  form: form[action="/login.php"]
+  cookies: ["JAVA=OK"] # avoid jscheck redirect
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    pin: "{{ .Config.pin }}"
+    loggiin: einloggen
+  error:
+    - selector: div#login_error
+  test:
+    path: selection.php
+
+download:
+  before:
+    path: ajax_det_poll.php
+    method: post
+    inputs:
+      set_thanks: thanks
+      det_id: "{{ .DownloadUri.Query.torrent }}"
+      ajax: yes
+
+search:
+  paths:
+    - path: selection.php
+  inputs:
+    search: "{{ .Keywords }}"
+    blah: 0
+    orderby: added
+    sort: desc
+  rows:
+    selector: div.selection_wrap
+  fields:
+    title:
+      selector: a.selection_a
+    details:
+      selector: a.selection_a
+      attribute: href
+    download:
+      selector: a.selection_a
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details.php?id=", "download.php?torrent="]
+    category:
+      selector: div.kat_cat_pic
+      case:
+        # Movie-HD
+        ":has(div.kat_cat_pic_name:contains(\"Movie-HD\")):has(div.kat_cat_pic_name_b:contains(\"UHD/4K\"))": 154
+        ":has(div.kat_cat_pic_name:contains(\"Movie-HD\")):has(div.kat_cat_pic_name_b:contains(\"HD-Pack\"))": 162
+        ":has(div.kat_cat_pic_name:contains(\"Movie-HD\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 32
+        # Movie
+        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": 155
+        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"SD-Pack\"))": 130
+        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 28
+        # Serien
+        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Xvid/x264\"))": 60
+        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"720p/1080p\"))": 157
+        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"UHD/4K\"))": 158
+        # S-Packs
+        ":has(div.kat_cat_pic_name:contains(\"S-Packs\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 57
+        ":has(div.kat_cat_pic_name:contains(\"S-Packs\")):has(div.kat_cat_pic_name_b:contains(\"720p\"))": 59
+        ":has(div.kat_cat_pic_name:contains(\"S-Packs\")):has(div.kat_cat_pic_name_b:contains(\"1080p\"))": 156
+        # Doku
+        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 160
+        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 15
+        # App
+        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Win\"))": 12
+        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Other\"))": 11
+        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Mac\"))": 10
+        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Linux/Android\"))": 9
+        # Game
+        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Nintendo\"))": 131
+        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 17
+        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"PS\"))": 18
+        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": 24
+        # Audio
+        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Hörbuch\"))": 159
+        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"mp3\"))": 48
+        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": 53
+        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 52
+        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Video-HD/SD\"))": 109
+        # Sport
+        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 62
+        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 161
+        # Paper
+        ":has(div.kat_cat_pic_name:contains(\"Paper\")):has(div.kat_cat_pic_name_b:contains(\"Zeitungen\"))": 163
+        ":has(div.kat_cat_pic_name:contains(\"Paper\")):has(div.kat_cat_pic_name_b:contains(\"Comic\"))": 63
+        ":has(div.kat_cat_pic_name:contains(\"Paper\")):has(div.kat_cat_pic_name_b:contains(\"E-Book\"))": 96
+        # XXX
+        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": 113
+        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"HD-SD\"))": 76
+        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 75
+        # Request
+        ":has(div.kat_cat_pic_name:contains(\"Request\")):has(div.kat_cat_pic_name_b:contains(\"spritti01\"))": 151
+    poster:
+      selector: div[id^="details"] img
+      attribute: src
+    size:
+      selector: div.selection_unter_ag
+    seeders:
+      selector: div.selection_unter_aa
+    leechers:
+      selector: div.selection_unter_aaa
+    date_day:
+      # Heute 13:30:04
+      # Gestern 09:10:10
+      selector: div.selection_unter_ab:not(:contains("."))
+      optional: true
+      filters:
+        - name: replace
+          args: ["Heute", "Today"]
+        - name: replace
+          args: ["Gestern", "Yesterday"]
+    date_year:
+      # 30.02.2018 um 23:12:50
+      selector: div.selection_unter_ab:contains(".")
+      optional: true
+      filters:
+        - name: replace
+          args: [" um", ""]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    description:
+      selector: selection_unter_af
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine tbd

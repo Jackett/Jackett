@@ -2,11 +2,12 @@
 id: elitetorrent-biz
 name: EliteTorrent.biz
 description: "EliteTorrent.biz is a Public torrent site for TV, movies and documentaries"
-language: es-es
+language: es-ES
 type: public
 encoding: UTF-8
 links:
-  - https://wwvv.elitetorrent.nl/
+  - https://elitetorrent.app/
+  - https://elitetorrent.nocensor.biz/
 legacylinks:
   - https://www.elitetorrent.biz/
   - https://www.elitetorrent.io/
@@ -17,11 +18,21 @@ legacylinks:
   - https://www.elitetorrent.li/
   - https://www.elitetorrent.bz/
   - https://www.elitetorrent.nl/
+  - https://wwvv.elitetorrent.nl/
+  - https://wvvw.elitetorrent.nl/
+  - https://vvww.elitetorrent.nl/
+  - https://www.elitetorrent.to/
+  - https://www.elitetorrent.se/
+  - https://www.elitetorrent.com/
+  - https://elitetorrent.si/
+  - https://elitetorrent.nocensor.work/
+  - https://elitetorrent.com/
 
 caps:
   categories:
-    "series": TV
-    "peliculas": Movies
+    series: TV
+    peliculas: Movies
+    other: Other
 
   modes:
     search: [q]
@@ -31,68 +42,105 @@ caps:
 settings: []
 
 download:
-  selector: a[href^="magnet:?"]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
 
 search:
-  # site returns just 30 results, attempt to fetch upto 90
+  # site returns just 30 results, attempt to fetch up to 90
   paths:
     - path: /
     - path: /page/2/
+      followredirect: true
     - path: /page/3/
+      followredirect: true
   keywordsfilters:
     # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
     - name: re_replace
-      args: ["S0?(\\d{1,2})", " $1 "]
+      args: ["(?i)S0?(\\d{1,2})", " $1 "]
     - name: re_replace
-      args: ["E(\\d{2,3})", " $1 "]
+      args: ["(?i)E(\\d{2,3})", " $1 "]
   inputs:
     s: "{{ .Keywords }}"
     $raw: "&x=0&y=0"
 
   rows:
-    selector: "#principal .miniboxs-ficha li"
+    selector: "#principal .miniboxs-ficha li:has(span:nth-of-type(2))"
     filters:
       - name: andmatch
 
   fields:
-    title:
+    category_movie:
       selector: .meta a
       attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(peliculas)/.*$"
+    category_tv:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(series)/.*$"
+    category:
+      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
+    quality:
+      selector: span:nth-of-type(2) > i
+      filters:
+        - name: replace
+          args: ["---", ""]
+    language:
+      selector: span#idiomacio > i > img
+      attribute: title
+      filters:
+        - name: replace
+          args: ["Pelicula en ", ""]
+        - name: replace
+          args: ["Español Latino", "LATiN SPANiSH"]
+        - name: replace
+          args: ["Español Castellano", "SPANiSH"]
+        - name: replace
+          args: ["Ingles", "English"]
+        - name: replace
+          args: ["Subtitulado", " SPASUBS"]
+        - name: replace
+          args: ["VOSE", ""]
+    title:
+      selector: div.imagen > a
+      attribute: title
       # normalize to SXXEYY format
       filters:
-        - name: re_replace
-          args: [".*/([^/]*)/$", "$1"]
         - name: replace
-          args: ["-", " "]
+          args: [" – ", " "]
+        - name: replace
+          args: ["(", ""]
+        - name: replace
+          args: [")", ""]
         - name: re_replace
           args: ["(\\d{2})×(\\d{2})", "S$1E$2"]
         - name: re_replace
           args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
+        - name: append
+          args: " {{ .Result.quality }} {{ .Result.language }}"
     details:
       selector: .meta a
       attribute: href
     download:
       selector: .meta a
       attribute: href
-    banner:
+    poster:
       selector: .imagen img
       attribute: data-src
-    category:
-      selector: .meta a
-      attribute: href
-      filters:
-        - name: split
-          args: ["/", 3]
-    size:
-      text: "0 B"
-    size:
-      # size can be missing
-      optional: true
+    size_optional:
       selector: .voto1
+      optional: true
       filters:
         - name: replace
+          args: ["desc.", "512 MB"]
+        - name: replace
           args: ["s", ""]
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}512 MB{{ end }}"
     date:
       text: now
     seeders:

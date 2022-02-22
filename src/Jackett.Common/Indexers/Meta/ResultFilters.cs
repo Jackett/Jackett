@@ -74,7 +74,7 @@ namespace Jackett.Common.Indexers.Meta
 
         private static IEnumerable<string> GenerateTitleVariants(string title)
         {
-            var delimiterVariants = new char[] { '.', '_' };
+            var delimiterVariants = new[] { '.', '_' };
             var result = new List<string>();
             var replacedTitles = delimiterVariants.Select(c => title.Replace(' ', c));
 

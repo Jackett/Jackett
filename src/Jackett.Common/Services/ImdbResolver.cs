@@ -37,8 +37,8 @@ namespace Jackett.Common.Services
             {
                 Encoding = Encoding.UTF8
             };
-            var result = await WebClient.GetString(request);
-            var movie = JsonConvert.DeserializeObject<Movie>(result.Content);
+            var result = await WebClient.GetResultAsync(request);
+            var movie = JsonConvert.DeserializeObject<Movie>(result.ContentString);
 
             return movie;
         }

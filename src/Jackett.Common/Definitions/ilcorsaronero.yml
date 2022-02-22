@@ -2,15 +2,16 @@
 id: ilcorsaronero
 name: Il Corsaro Nero
 description: "Il Corsaro Nero is an ITALIAN Public site for TV / MOVIES / GENERAL"
-language: it-it
+language: it-IT
 type: public
 encoding: Windows-1252
 followredirect: true
 links:
-  - https://ilcorsaronero.xyz/
+  - https://ilcorsaronero.link/
   - https://ilcorsaronero.fun/
   - https://ilcorsaronero.pro/
-  - https://ilcorsaronero.unblockit.me/
+  - https://ilcorsaronero.torrentbay.to/
+  - https://ilcorsaronero.nocensor.biz/
 legacylinks:
   - https://ilcorsaronero.live/
   - https://ilcorsaronero.vip/
@@ -21,6 +22,11 @@ legacylinks:
   - https://ilcorsaronero.pw/
   - https://ilcorsaronero.unblockit.pro/
   - https://ilcorsaronero.unblockit.one/
+  - https://ilcorsaronero.xyz/
+  - https://ilcorsaronero.unblockit.me/
+  - https://ilcorsaronero.unblockit.pw/
+  - https://ilcorsaronero.nocensor.space/
+  - https://ilcorsaronero.nocensor.work/
 
 caps:
   categorymappings:
@@ -29,12 +35,12 @@ caps:
     - {id: 3, cat: PC/Games, desc: "Games PC", default: true}
     - {id: 4, cat: Other, desc: "Other", default: true}
     - {id: 5, cat: TV/Anime, desc: "Anime", default: true}
-    - {id: 6, cat: Books/Ebook, desc: "Ebooks", default: true}
+    - {id: 6, cat: Books/EBook, desc: "Ebooks", default: true}
     - {id: 7, cat: PC/0day, desc: "App Windows", default: true}
     - {id: 8, cat: PC, desc: "App Linux", default: true}
     - {id: 9, cat: PC/Mac, desc: "App Mac", default: true}
     - {id: 13, cat: Console/PSP, desc: "Games Playstation", default: true}
-    - {id: 14, cat: Console/Xbox, desc: "Games Xbox", default: true}
+    - {id: 14, cat: Console/XBox, desc: "Games Xbox", default: true}
     - {id: 15, cat: TV, desc: "TV Series", default: true}
     - {id: 16, cat: Other, desc: "Other", default: true}
     - {id: 18, cat: Audio/Audiobook, desc: "Audio Book", default: true}
@@ -46,6 +52,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: itorrents-links
@@ -54,17 +61,9 @@ settings:
 
 search:
   paths:
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=0{{else}}/browse/0{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=1{{else}}/browse/1{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=2{{else}}/browse/2{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=3{{else}}/browse/3{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=4{{else}}/browse/4{{end}}"
-    - path: "{{if .Keywords}}advsearch.php?&category={{range .Categories}}{{.}};{{end}}&search={{ .Keywords}}&order=data&by=DESC&page=5{{else}}/browse/5{{end}}"
-  keywordsfilters:
-    - name: re_replace # S01 to 1
-      args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
-    - name: re_replace # S01E01 to 1 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=0{{ else }}/browse/0{{ end }}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=1{{ else }}/browse/1{{ end }}"
+    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=2{{ else }}/browse/2{{ end }}"
 
   rows:
     selector: "tr.odd,tr.odd2"
@@ -72,17 +71,20 @@ search:
       - name: andmatch
 
   fields:
+    category:
+      selector: td:nth-child(1) a
+      attribute: href
+      filters:
+        - name: split
+          args: ["/", -1]
     title:
       selector: td:nth-child(2) a.tab
       attribute: href
       filters:
         - name: split
           args: ["/", -1]
-        - name: diacritics
-          args: replace
-        - name: urldecode
-        - name: re_replace # replace special characters with " " (space)
-          args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
+        - name: replace # replace underscore with " " (space)
+          args: ["_", " "]
         - name: re_replace # replace multiple spaces
           args: ["[ ]{2,}", " "]
         # normalize to SXXEYY format
@@ -102,12 +104,23 @@ search:
           args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
         - name: re_replace # rimozioni varie
           args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
-    category:
-      selector: td:nth-child(1) a
-      attribute: href
-      filters:
-        - name: split
-          args: ["/", -1]
+        # cleanup for Sonarr
+        - name: re_replace # EP 3 4 to E3-4
+          args: ["(?i)\\sEP\\s(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " E$1-$2 "]
+        - name: re_replace # S02E04 05 to S02E04-05
+          args: ["(?i)\\sS(\\d{1,2})\\s?E\\s?(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " S$1E$2-$3 "]
+        - name: re_replace
+          args: ["(?i)AC3\\s?(\\d)\\s(\\d)", "AC3 $1.$2"]
+        - name: re_replace
+          args: ["(?i) DD\\s?(\\d)\\s(\\d)", " DD $1.$2"]
+        - name: re_replace
+          args: ["(?i) DDP\\s?(\\d)\\s(\\d)", " DDP $1.$2"]
+        - name: re_replace
+          args: ["(?i)\\sE\\s?AC3", " EAC3"]
+        - name: re_replace
+          args: ["(?i)WEB\\sDL", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)HDTVRIP", "HDTV"]
     description:
       selector: td:nth-child(1) a
       attribute: href
@@ -128,22 +141,19 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{if .Config.itorrents-links}}{{ .Result.download-itorrents }}{{else}}{{end}}"
-    magnet:
+      text: "{{ if .Config.itorrents-links }}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
+    infohash:
       selector: input.downarrow
       attribute: value
-      filters:
-        - name: prepend
-          args: "magnet:?xt=urn:btih:"
-        - name: append
-          args: "&dn={{ .Result.title }}.torrent&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://tracker.opentrackr.org:1337"
     size:
       selector: td:nth-child(3) font
     date:
       selector: td:nth-child(5) font
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.06"
+          args: "02.01.06 -07:00"
     seeders:
       selector: td:nth-child(6) font
       filters:

@@ -2,7 +2,7 @@
 id: cinemageddon
 name: Cinemageddon
 description: "B-movie tracker"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -35,7 +35,7 @@ caps:
     - {id: 22, cat: Movies, desc: "Trailers"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     movie-search: [q, imdbid]
 
 login:
@@ -55,7 +55,7 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
 
   rows:
     selector: table.torrenttable > tbody > tr:has(a[href*="browse.php?cat="])
@@ -75,15 +75,16 @@ search:
     download:
       selector: a[href*="download.php?id="]
       attribute: href
-    imdb:
-      optional: true
-      selector: a[href*="www.imdb.com/title/"]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date:
       selector: td:nth-child(4)
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:nth-child(5)
       filters:

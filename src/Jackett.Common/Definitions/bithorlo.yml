@@ -2,7 +2,7 @@
 id: bithorlo
 name: Bithorlo
 description: "Bithorlo (BHO) is a HUNGARIAN Private Torrent Tracker for MOVIES / GENERAL"
-language: hu-hu
+language: hu-HU
 type: private
 encoding: ISO-8859-2
 links:
@@ -13,12 +13,10 @@ caps:
     # E-book
     - {id: 40, cat: Books, desc: "E-book/Eng"}
     - {id: 19, cat: Books, desc: "E-book/Hun"}
-
     # Játék
     - {id: 38, cat: Console, desc: "Játék/Consol"}
     - {id: 15, cat: PC/Games, desc: "Játék/ISO"}
     - {id: 37, cat: PC/Games, desc: "Játék/Rip"}
-
     # Filmek
     - {id: 51, cat: Movies/SD, desc: "Cam/Eng"}
     - {id: 50, cat: Movies/SD, desc: "Cam/Hun"}
@@ -30,21 +28,19 @@ caps:
     - {id: 28, cat: Movies/HD, desc: "HD/Hun"}
     - {id: 33, cat: TV, desc: "Sorozat/Eng"}
     - {id: 5, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 52, cat: TV/HD, desc: "Sorozat/Eng/HD"}
+    - {id: 53, cat: TV/HD, desc: "Sorozat/Hun/HD"}
     - {id: 4, cat: Movies/SD, desc: "Xvid/Eng"}
     - {id: 3, cat: Movies/SD, desc: "Xvid/Hun"}
-
     # Zene
     - {id: 12, cat: Audio, desc: "Zene/Eng"}
     - {id: 13, cat: Audio, desc: "Zene/Hun"}
-
     # Egyéb
     - {id: 20, cat: Other, desc: "Képek"}
-    - {id: 21, cat: PC/Phone-Other, desc: "Mobil"}
-
+    - {id: 21, cat: PC/Mobile-Other, desc: "Mobil"}
     # Program
     - {id: 22, cat: PC/0day, desc: "Win/Program/ISO"}
     - {id: 23, cat: PC/0day, desc: "Win/Program/Rip"}
-
     # Felnőtt tartalom
     - {id: 9, cat: XXX, desc: "XXX/Film"}
     - {id: 10, cat: XXX, desc: "XXX/Kép"}
@@ -55,35 +51,36 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: info_alert
-    type: info
-    label: Alert about Cookie
-    default: "If during your cookie save you get the following error:</br><b>The 'Value'='xzlogin,xzrecover,xzsignup' part of the cookie is invalid.</b></br>Then remove <b>acopendivids=xzlogin,xzrecover,xzsignup; </b> from the cookie string before proceeding to save."
   - name: cookie
     type: text
     label: Cookie
   - name: info
     type: info
     label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -96,6 +93,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -119,8 +118,7 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: a[href^="torrent.php?id="][onmouseover]
       attribute: onmouseover
       filters:
@@ -136,6 +134,11 @@ search:
       selector: td:nth-child(7)
     date:
       selector: "a[style=\"font-size: 8pt;cursor: pointer;\"][title]"
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
     downloadvolumefactor:
       case:
         img[title="Ingyenes letöltés"]: 0
@@ -145,4 +148,9 @@ search:
       filters:
         - name: replace
           args: ["Feltöltési szorzó × ", ""]
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a

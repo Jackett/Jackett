@@ -1,0 +1,187 @@
+---
+id: bluesbrothers
+name: Blues-Brothers
+description: "Blues-Brothers is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://blues-brothers.biz/
+
+caps:
+  categorymappings:
+    - {id: 9, cat: TV/Anime, desc: "Anime"}
+    - {id: 1, cat: PC/0day, desc: "Apps"}
+    - {id: 17, cat: Audio/Audiobook, desc: "AudioBooks"}
+    - {id: 16, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 12, cat: PC/Games, desc: "Games PC"}
+    - {id: 7, cat: Console/PS3, desc: "Games PS3"}
+    - {id: 19, cat: Console/Wii, desc: "Games Wii"}
+    - {id: 8, cat: Console/XBox 360, desc: "Games XBOX360"}
+    - {id: 18, cat: PC/Mac, desc: "MAC"}
+    - {id: 41, cat: PC/Mobile-Android, desc: "Mobile"}
+    - {id: 26, cat: Movies, desc: "Movie BDRip"}
+    - {id: 29, cat: Movies/HD, desc: "Movie BluRay 1080p"}
+    - {id: 28, cat: Movies/HD, desc: "Movie BluRay 720p"}
+    - {id: 27, cat: Movies/SD, desc: "Movie BRRip"}
+    - {id: 24, cat: Movies/SD, desc: "Movie CAM/TS"}
+    - {id: 23, cat: Movies/DVD, desc: "Movie DVD-R"}
+    - {id: 11, cat: Movies/SD, desc: "Movie DVDRip"}
+    - {id: 25, cat: Movies/SD, desc: "Movie DVDSCR/R5"}
+    - {id: 30, cat: Movies, desc: "Movie Packs"}
+    - {id: 10, cat: Movies/HD, desc: "Movie XviD x264"}
+    - {id: 6, cat: XXX, desc: "Movie XXX"}
+    - {id: 22, cat: Audio/Lossless, desc: "Music Flac"}
+    - {id: 21, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 14, cat: Audio, desc: "Music Packs"}
+    - {id: 20, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 34, cat: TV, desc: "TV Packs"}
+    - {id: 36, cat: TV/HD, desc: "TV X264 HD"}
+    - {id: 37, cat: TV/SD, desc: "TV X264 SD"}
+    - {id: 35, cat: TV/SD, desc: "TV XviD"}
+    - {id: 38, cat: Other, desc: "VIP"}
+    - {id: 40, cat: Other, desc: "VIP ONLY"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    use_ssl: 1
+    perm_ssl: ""
+    returnto: /
+  error:
+    - selector: table.main:contains("Login failed!")
+      message:
+        selector: table tr td.colhead2
+  test:
+    path: /
+    selector: a[href*="logout.php?hash_please="]
+
+search:
+  paths:
+    # https://blues-brothers.biz/browse.php?c27=1&c28=1&c29=1&search=&searchin=title&incldead=1&sort=4&type=desc
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # title, descr, genre, all
+    searchin: title
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+
+  rows:
+    selector: table.table-bordered tr:has(a[href^="download.php?torrent="])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "Tip\\('<b>(.+?)</b>"
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=\\'(.+?)\\'
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    files:
+      selector: td:nth-child(5)
+    date_day:
+      selector: td:nth-child(7):contains("day")
+      optional: true
+      filters:
+        - name: fuzzytime
+    date_year:
+      selector: td:nth-child(7):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(8)
+    grabs:
+      selector: td:nth-child(9)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    downloadvolumefactor:
+      case:
+        "a.info:contains(\"[FREE]\")": 0
+        "a.info:contains(\"[SILVER]\")": 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# U-232 V5

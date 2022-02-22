@@ -1,0 +1,78 @@
+---
+id: mactorrentsdownload
+name: Mac Torrents Download
+description: "Mac Torrents Download is a Public tracker for Mac software"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.torrentmac.net/
+
+caps:
+  categorymappings:
+    - {id: "applications", cat: PC/Mac, desc: "Apps"}
+    - {id: "games", cat: PC/Games, desc: Games}
+    - {id: "design-assets", cat: Other, desc: Design Assets}
+    - {id: "uncategorized", cat: Other, desc: Uncategorized}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href$=".torrent"]
+      attribute: href
+
+search:
+  paths:
+    - path: /
+  inputs:
+    s: "{{ .Keywords }}"
+
+  rows:
+    selector: article[id^="post-"]
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href*="/category/"]
+      attribute: href
+      filters:
+        - name: split
+          args: ["/", 4]
+    title:
+      selector: a
+      attribute: title
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    description:
+      selector: section p
+    date:
+      selector: time
+      attribute: datetime
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "2006-01-02 -07:00"
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# WordPress 4.9.18

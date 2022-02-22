@@ -2,7 +2,7 @@
 id: ehentai
 name: E-Hentai
 description: "E-Hentai is a Public site for Hentai doujinshi, manga."
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
@@ -19,13 +19,14 @@ caps:
     tv-search: [q, season, ep]
 
 download:
-  selector: a[href*="/get/"]
-  attribute: href
+  selectors:
+    - selector: a[href*="/get/"]
+      attribute: href
 
 search:
   paths:
-    - path: "torrents.php{{ if .Keywords }}?search={{ .Keywords }}{{else}}{{end}}"
-    - path: "torrents.php{{ if .Keywords }}?search={{ .Keywords }}&page=1{{else}}?page=1{{end}}"
+    - path: "torrents.php{{ if .Keywords }}?search={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "torrents.php{{ if .Keywords }}?search={{ .Keywords }}&page=1{{ else }}?page=1{{ end }}"
 
   rows:
     selector: table.itg > tbody > tr:has(td)
@@ -45,7 +46,7 @@ search:
       selector: td:first-child
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # GMT
         - name: dateparse
           args: "2006-01-02 15:04 -07:00"
     size:

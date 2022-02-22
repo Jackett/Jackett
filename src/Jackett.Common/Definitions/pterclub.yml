@@ -2,7 +2,7 @@
 id: pterclub
 name: PTerClub
 description: "PTerClub is a CHINESE Private Torrent Tracker for HD MUSIC VIDEOS, MOVIES, TV & ANIME"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
@@ -15,6 +15,7 @@ caps:
     - {id: 403, cat: TV/Anime, desc: "动漫 (Anime)"}
     - {id: 405, cat: TV, desc: "综艺 (TV Show)"}
     - {id: 413, cat: Audio/Video, desc: "音乐短片 (MV)"}
+    - {id: 418, cat: Audio/Video, desc: "舞台演出(Stage Performance)"}
     - {id: 406, cat: Audio, desc: "音乐 (Music)"}
     - {id: 402, cat: TV/Documentary, desc: "纪录片 (Documentary)"}
     - {id: 407, cat: TV/Sport, desc: "体育 (Sport)"}
@@ -25,10 +26,11 @@ caps:
     - {id: 412, cat: Other, desc: "其它 (Other)"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -44,22 +46,30 @@ settings:
     type: info
     label: "About 2FA code"
     default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the PTerClub Web Site. Otherwise just leave it empty."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
   path: login.php
@@ -73,10 +83,12 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     verify_code: "{{ .Config.2facode }}"
+    logout: ""
+    securelogin: ""
     ssl: yes
+    trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("登录失败"))
   test:
     path: index.php
     selector: a[data-url="logout.php"]
@@ -86,14 +98,14 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 incldead 1 active 2 dead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 incldead, 1 active, 2 dead
     incldead: 0
-    # 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x50% 7 30%
-    spstate: 0
-    # 0 title 1 descr 3 uploaded 4 imdburl
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-    # 0 AND 1 OR 2 exact
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 imdburl
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -108,53 +120,59 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_default:
       selector: a[href^="details.php?id="]
-    title:
+    title_optional:
       optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    banner:
+    poster:
       selector: img[data-orig]
       attribute: data-orig
-      optional: true
-    imdb:
-      optional: true
-      selector: a[href*="www.imdb.com/title/tt"]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    date:
+    # staff have extra columns at the start and end of a row, so we have to float the next lot of selectors off an anchor
+    anchor1:
+      selector: td:has(a[href^="comment.php?"])
+      optional: true
+    date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-of-type(4) > span[title]
+      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td > span[title]"
       attribute: title
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
-    date:
+    date_added:
       # time added
-      selector: td.rowfollow:nth-of-type(4):not(:has(span))
+      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td:not(:has(span[title]))"
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-of-type(5)
+      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td"
     seeders:
-      selector: td.rowfollow:nth-of-type(6)
+      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td"
     leechers:
-      selector: td.rowfollow.rowfollow:nth-of-type(7)
+      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td"
     grabs:
-      selector: td.rowfollow:nth-of-type(8)
+      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td ~ td"
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -170,6 +188,8 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
+      selector: td:has(table.torrentname)
       remove: a, img
+    minimumratio:
+      text: 0.9
 # NexusPHP custom v2019.12

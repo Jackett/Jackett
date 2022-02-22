@@ -1,0 +1,162 @@
+---
+id: puurhollands
+name: Puur-Hollands
+description: "Puur-Hollands is a DUTCH Private Torrent Tracker for MUSIC"
+language: nl-NL
+type: private
+encoding: UTF-8
+links:
+  - https://www.puur-hollands.org/
+
+caps:
+  categorymappings:
+    - {id: 2, cat: Audio, desc: "Nederlandse Albums"}
+    - {id: 3, cat: Audio, desc: "Nederlandse Verzamel"}
+    - {id: 4, cat: Audio, desc: "Nederlandse Piraten"}
+    - {id: 5, cat: Audio, desc: "Losse Mp3 Verzameling"}
+    - {id: 7, cat: Audio, desc: "Limburgse Muziek"}
+    - {id: 8, cat: Audio, desc: "Nederlandse Instrumentaal"}
+    - {id: 9, cat: Audio, desc: "Nederlandse Dvds"}
+
+  modes:
+    search: [q]
+    music-search: [q, artist]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use DDoS-Guard Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+  - name: thankyou
+    type: text
+    label: Thank You Comment
+  - name: info_comment
+    type: info
+    label: Thank you comment
+    default: This site requires you to leave a Thank You comment before you can download. Enter your personalised comment above.
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    returnto: "/"
+  error:
+    - selector: td.embedded:contains("fout")
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+download:
+  before:
+    # https://www.ebookparadijs.org/comment.php?action=add&tid=23079
+    path: comment.php
+    method: post
+    inputs:
+      action: add
+      tid: "{{ .DownloadUri.Query.id }}"
+      text: "{{ .Config.thankyou }}"
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
+    incldead: 1
+
+  rows:
+    selector: table.mainouter
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    poster:
+      selector: div[id^="Style"] img
+      attribute: src
+    size:
+      selector: td:nth-child(4) table tr:nth-child(1) td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "(.+?) in"
+    files:
+      selector: td:nth-child(4) table tr:nth-child(1) td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "in (\\d+) bestan"
+    grabs:
+      selector: td:nth-child(4) table tr:nth-child(2) td:nth-child(1)
+    date:
+      selector: td:nth-child(4) table tr:nth-child(2) td:last-child
+      filters:
+        - name: replace
+          args: ["januari", "January"]
+        - name: replace
+          args: ["februari", "February"]
+        - name: replace
+          args: ["maart", "March"]
+        - name: replace
+          args: ["april", "April"]
+        - name: replace
+          args: ["mei", "May"]
+        - name: replace
+          args: ["juni", "June"]
+        - name: replace
+          args: ["juli", "July"]
+        - name: replace
+          args: ["augustus", "August"]
+        - name: replace
+          args: ["september", "September"]
+        - name: replace
+          args: ["oktober", "October"]
+        - name: replace
+          args: ["november", "November"]
+        - name: replace
+          args: ["december", "December"]
+        - name: re_replace
+          args: ["\\s*om\\s*", " "]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2 January 2006 15:04:05 -07:00"
+    seeders_optional:
+      optional: true
+      selector: td:nth-child(4) table tr:nth-child(3) td:nth-child(5) font b
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
+      optional: true
+      selector: td:nth-child(4) table tr:nth-child(3) td:nth-child(5) font font b
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# minimumratio: appears to be ratioless
+# engine n/a

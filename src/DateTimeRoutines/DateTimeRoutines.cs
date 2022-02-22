@@ -7,6 +7,7 @@
 //********************************************************************************************
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 // ReSharper disable NotAccessedField.Global
@@ -18,6 +19,7 @@ namespace DateTimeRoutines
     /// <summary>
     /// Miscellaneous and parsing methods for DateTime
     /// </summary>
+    [ExcludeFromCodeCoverage] // this library is not changed by Jackett team
     public static class DateTimeRoutines
     {
         #region miscellaneous methods

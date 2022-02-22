@@ -1,0 +1,189 @@
+---
+id: bitsexy
+name: BitSexy
+description: "BitSexy is a Private Torrent Tracker for 3x"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://bitsexy.org/
+
+caps:
+  categorymappings:
+    - {id: 33, cat: XXX, desc: "Amateur"}
+    - {id: 19, cat: XXX, desc: "Anal"}
+    - {id: 16, cat: XXX, desc: "Anime"}
+    - {id: 17, cat: XXX, desc: "Asian"}
+    - {id: 26, cat: XXX, desc: "BBW"}
+    - {id: 22, cat: XXX, desc: "BDSM"}
+    - {id: 18, cat: XXX, desc: "Big Tits"}
+    - {id: 43, cat: XXX, desc: "Black"}
+    - {id: 46, cat: XXX, desc: "Classic"}
+    - {id: 41, cat: XXX, desc: "Creampie"}
+    - {id: 28, cat: XXX, desc: "DVD-R"}
+    - {id: 21, cat: XXX, desc: "Ebony"}
+    - {id: 20, cat: XXX, desc: "Extreme"}
+    - {id: 44, cat: XXX, desc: "Feature"}
+    - {id: 31, cat: XXX, desc: "Fetish"}
+    - {id: 35, cat: XXX, desc: "Foreign"}
+    - {id: 53, cat: XXX, desc: "Gay"}
+    - {id: 30, cat: XXX, desc: "Gonzo"}
+    - {id: 51, cat: XXX, desc: "Handjob"}
+    - {id: 36, cat: XXX, desc: "Hardcore"}
+    - {id: 24, cat: XXX, desc: "Interracial"}
+    - {id: 37, cat: XXX, desc: "Latina"}
+    - {id: 25, cat: XXX, desc: "Lesbian"}
+    - {id: 52, cat: XXX, desc: "Magazines"}
+    - {id: 49, cat: XXX, desc: "Masturbation"}
+    - {id: 23, cat: XXX, desc: "Mature"}
+    - {id: 40, cat: XXX, desc: "MILF"}
+    - {id: 38, cat: XXX, desc: "Oral"}
+    - {id: 42, cat: XXX, desc: "Orgy"}
+    - {id: 29, cat: XXX, desc: "Other"}
+    - {id: 39, cat: XXX, desc: "Packs"}
+    - {id: 27, cat: XXX, desc: "PC Games"}
+    - {id: 15, cat: XXX, desc: "Pics"}
+    - {id: 48, cat: XXX, desc: "POV"}
+    - {id: 50, cat: XXX, desc: "Public"}
+    - {id: 14, cat: XXX, desc: "Reality"}
+    - {id: 47, cat: XXX, desc: "Shemale"}
+    - {id: 45, cat: XXX, desc: "Softcore"}
+    - {id: 55, cat: XXX, desc: "Solo"}
+    - {id: 54, cat: XXX, desc: "Squirt"}
+    - {id: 32, cat: XXX, desc: "Teens"}
+    - {id: 34, cat: XXX, desc: "Virtual"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img.cimage
+    input: captcha
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    use_ssl: 1
+    perm_ssl: ""
+    returnto: "/"
+  error:
+    - selector: table.main:contains("failed")
+  test:
+    path: my.php
+    selector: a[href$="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech, 4 480p, 5 720p, 6 1080p, 7 4k
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+
+  rows:
+    selector: div.torrentrow:has(a[href^="download.php?torrent="])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) width"
+    files:
+      selector: div.torrenttable:nth-last-child(7)
+    date_year:
+      # Jul 4 2019 08:04 AM
+      selector: div.torrenttable:nth-last-child(5):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM -07:00"
+    date_day:
+      # Today 02:40 PM
+      # Yesterday 09:10 AM
+      selector: div.torrenttable:nth-last-child(5):contains("day")
+      optional: true
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    size:
+      selector: div.torrenttable:nth-last-child(4)
+    grabs:
+      selector: div.torrenttable:nth-last-child(3)
+    seeders:
+      selector: div.torrenttable:nth-last-child(2)
+    leechers:
+      selector: div.torrenttable:nth-last-child(1)
+    downloadvolumefactor:
+      case:
+        img[src$="/pic/freeleech.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 days (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+# TBdev

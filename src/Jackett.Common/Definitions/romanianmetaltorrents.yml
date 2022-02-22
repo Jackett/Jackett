@@ -1,0 +1,112 @@
+---
+id: romanianmetaltorrents
+name: Romanian Metal Torrents
+description: "Romanian Metal Torrents (RMT) is a Private site dedicated to METAL MUSIC. This definition is for the English site."
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://metal.iplay.ro/
+legacylinks:
+  - https://metal.stream.bike/
+
+caps:
+  categories:
+    Music: Audio
+
+  modes:
+    search: [q]
+    music-search: [q, artist]
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img
+    input: vImageCodP
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.errorSummary
+      message:
+        selector: div.errorSummary ul li
+  test:
+    path: browse.php
+    selector: a[href="logout.php"]
+
+download:
+  method: get
+  before:
+    path: login.php
+    method: post
+    inputs:
+      username: "{{ .Config.username }}"
+      password: "{{ .Config.password }}"
+
+search:
+  paths:
+    - path: browse.php
+      method: get
+  inputs:
+    "search": "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
+
+  rows:
+    selector: table.torrents_table tbody tr:has(a[href^="download2.php?id="])
+
+  fields:
+    title:
+      selector: td a[href^="details.php?id="]
+    details:
+      selector: td a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: td a[href^="download2.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["download2.php?id=", "download.php/"]
+        - name: append
+          args: "/{{ .Result.title }}.torrent"
+    poster:
+      selector: td:nth-child(2) a
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: 'img src=(.+?) >'
+        - name: replace
+          args: ["./pic/noposter.jpg", ""]
+    date:
+      selector: td:nth-child(8) > span
+      attribute: title
+    size:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+      filters:
+        - name: regexp
+          args: '([\d]+) seeders?'
+    leechers:
+      selector: td:nth-child(7)
+      filters:
+        - name: regexp
+          args: '([\d]+) leechers?'
+    grabs:
+      selector: td:nth-child(6)
+      filters:
+        - name: regexp
+          args: '([\d]+) times'
+    category:
+      text: Music
+    downloadvolumefactor:
+      case:
+        img[src$="pic/freedownload.gif"]: 0
+        img[src$="pic/half.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="pic/sticky2.gif"]: 1.5
+        "*": 1
+# engine tbd

@@ -2,7 +2,7 @@
 id: concen
 name: ConCen
 description: "ConCen (Conspiracy Central) is a Public conspiracy related torrent index"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
@@ -14,24 +14,27 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "created"
+    default: created
     options:
-      "created": "created"
-      "seeds": "seeders"
-      "size": "size"
-      "title": "title"
+      created: created
+      seeds: seeders
+      size: size
+      title: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   paths:
@@ -63,10 +66,8 @@ search:
     magnet:
       selector: td.views-field-name a
       attribute: href
-      filters:
-        - name: prepend
-          args: "magnet:"
     date:
+      # 3 hours 27 min
       selector: td.views-field-created
     size:
       selector: td.views-field-size

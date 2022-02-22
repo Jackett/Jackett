@@ -139,8 +139,9 @@ namespace Jackett.Server.Controllers
 
             if (!resultController.CurrentIndexer.CanHandleQuery(resultController.CurrentQuery))
             {
-                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201, $"{resultController.CurrentIndexer.Id} " +
-                    $"does not support the requested query. Please check the capabilities (t=caps) and make sure the search mode and categories are supported.");
+                context.Result = ResultsController.GetErrorActionResult(context.RouteData, HttpStatusCode.BadRequest, 201,
+                    $"{resultController.CurrentIndexer.Id} does not support the requested query. " +
+                    "Please check the capabilities (t=caps) and make sure the search mode and parameters are supported.");
 
             }
         }
@@ -209,30 +210,33 @@ namespace Jackett.Server.Controllers
             }
 
             var manualResult = new ManualSearchResult();
-            var trackers = IndexerService.GetAllIndexers().ToList().Where(t => t.IsConfigured);
-            if (request.Tracker != null)
-            {
-                trackers = trackers.Where(t => request.Tracker.Contains(t.Id));
-            }
 
+            var trackers = CurrentIndexer is BaseMetaIndexer
+                ? (CurrentIndexer as BaseMetaIndexer).ValidIndexers
+                : (new[] { CurrentIndexer });
+
+            // Filter current trackers list on Tracker query parameter if available
+            if (request.Tracker != null)
+                trackers = trackers.Where(t => request.Tracker.Contains(t.Id));
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
-            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery)).ToList();
+            var isMetaIndexer = request.Tracker == null || request.Tracker.Length > 1;
+            var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery, isMetaIndexer)).ToList();
             try
             {
                 var aggregateTask = Task.WhenAll(tasks);
                 await aggregateTask;
             }
-            catch (AggregateException aex)
+            catch (AggregateException e)
             {
-                foreach (var ex in aex.InnerExceptions)
+                foreach (var ex in e.InnerExceptions)
                 {
                     logger.Error(ex);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
+                logger.Error(e);
             }
 
             manualResult.Indexers = tasks.Select(t =>
@@ -272,28 +276,34 @@ namespace Jackett.Server.Controllers
             {
                 var searchResults = t.Result.Releases;
                 var indexer = t.Result.Indexer;
-                cacheService.CacheRssResults(indexer, searchResults);
 
                 return searchResults.Select(result =>
                 {
-                    var item = AutoMapper.Mapper.Map<TrackerCacheResult>(result);
+                    var item = MapperUtil.Mapper.Map<TrackerCacheResult>(result);
                     item.Tracker = indexer.DisplayName;
                     item.TrackerId = indexer.Id;
+                    item.TrackerType = indexer.Type;
                     item.Peers = item.Peers - item.Seeders; // Use peers as leechers
-
                     return item;
                 });
             }).OrderByDescending(d => d.PublishDate).ToList();
 
             ConfigureCacheResults(manualResult.Results);
 
-            logger.Info(string.Format("Manual search for \"{0}\" on {1} with {2} results.", CurrentQuery.SanitizedSearchTerm, string.Join(", ", manualResult.Indexers.Select(i => i.ID)), manualResult.Results.Count()));
+            // Log info
+            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name));
+            var cacheStr = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Any(t => t.Result.IsFromCache) ? " (from cache)" : "";
+            if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
+                logger.Info($"Manual search in {indexersName} => Found {manualResult.Results.Count()} releases{cacheStr}");
+            else
+                logger.Info($"Manual search in {indexersName} for {CurrentQuery.GetQueryString()} => Found {manualResult.Results.Count()} releases{cacheStr}");
+
             return Json(manualResult);
         }
 
         [Route("[action]/{ignored?}")]
         [HttpGet]
-        public async Task<IActionResult> Torznab([FromQuery]TorznabRequest request)
+        public async Task<IActionResult> Torznab([FromQuery] TorznabRequest request)
         {
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -352,16 +362,34 @@ namespace Jackett.Server.Controllers
                     return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
                 }
 
-                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.SupportsImdbMovieSearch)
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
                 }
 
-                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.SupportsImdbTVSearch)
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for TV search by this indexer");
+                }
+            }
+
+            if (CurrentQuery.TmdbID != null)
+            {
+                if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchTmdbAvailable)
+                {
+                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
+                }
+            }
+
+            if (CurrentQuery.TvdbID != null)
+            {
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchAvailable)
+                {
+                    logger.Warn($"A search request with tvdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tvdbid is not supported for movie search by this indexer");
                 }
             }
 
@@ -369,49 +397,25 @@ namespace Jackett.Server.Controllers
             {
                 var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
-                // Some trackers do not support multiple category filtering so filter the releases that match manually.
-                int? newItemCount = null;
-
-                // Cache non query results
-                if (string.IsNullOrEmpty(CurrentQuery.SanitizedSearchTerm))
-                {
-                    newItemCount = cacheService.GetNewItemCount(CurrentIndexer, result.Releases);
-                    cacheService.CacheRssResults(CurrentIndexer, result.Releases);
-                }
-
                 // Log info
-                var logBuilder = new StringBuilder();
-                if (newItemCount != null)
-                {
-                    logBuilder.AppendFormat("Found {0} ({1} new) releases from {2}", result.Releases.Count(), newItemCount, CurrentIndexer.DisplayName);
-                }
+                var cacheStr = result.IsFromCache ? " (from cache)" : "";
+                if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
+                    logger.Info($"Torznab search in {CurrentIndexer.DisplayName} => Found {result.Releases.Count()} releases{cacheStr}");
                 else
-                {
-                    logBuilder.AppendFormat("Found {0} releases from {1}", result.Releases.Count(), CurrentIndexer.DisplayName);
-                }
-
-                if (!string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                {
-                    logBuilder.AppendFormat(" for: {0}", CurrentQuery.GetQueryString());
-                }
-
-                logger.Info(logBuilder.ToString());
+                    logger.Info($"Torznab search in {CurrentIndexer.DisplayName} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
 
                 var serverUrl = serverService.GetServerUrl(Request);
                 var resultPage = new ResultPage(new ChannelInfo
                 {
                     Title = CurrentIndexer.DisplayName,
                     Description = CurrentIndexer.DisplayDescription,
-                    Link = new Uri(CurrentIndexer.SiteLink),
-                    ImageUrl = new Uri(serverUrl + "logos/" + CurrentIndexer.Id + ".png"),
-                    ImageTitle = CurrentIndexer.DisplayName,
-                    ImageLink = new Uri(CurrentIndexer.SiteLink),
-                    ImageDescription = CurrentIndexer.DisplayName
+                    Link = new Uri(CurrentIndexer.SiteLink)
                 });
 
-                var proxiedReleases = result.Releases.Select(r => AutoMapper.Mapper.Map<ReleaseInfo>(r)).Select(r =>
+                var proxiedReleases = result.Releases.Select(r => MapperUtil.Mapper.Map<ReleaseInfo>(r)).Select(r =>
                 {
                     r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
+                    r.Poster = serverService.ConvertToProxyLink(r.Poster, serverUrl, r.Origin.Id, "img", "poster");
                     return r;
                 });
 
@@ -422,10 +426,10 @@ namespace Jackett.Server.Controllers
 
                 return Content(xml, "application/rss+xml", Encoding.UTF8);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.Error(ex);
-                return GetErrorXML(900, ex.ToString());
+                logger.Error(e);
+                return GetErrorXML(900, e.ToString());
             }
         }
 
@@ -480,32 +484,32 @@ namespace Jackett.Server.Controllers
 
         [Route("[action]/{ignored?}")]
         [HttpGet]
-        public async Task<TorrentPotatoResponse> Potato([FromQuery]TorrentPotatoRequest request)
+        public async Task<TorrentPotatoResponse> Potato([FromQuery] TorrentPotatoRequest request)
         {
             var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
-            // Cache non query results
-            if (string.IsNullOrEmpty(CurrentQuery.SanitizedSearchTerm))
-                cacheService.CacheRssResults(CurrentIndexer, result.Releases);
-
             // Log info
+            var cacheStr = result.IsFromCache ? " (from cache)" : "";
             if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                logger.Info($"Found {result.Releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName}");
+                logger.Info($"Potato search in {CurrentIndexer.DisplayName} => Found {result.Releases.Count()} releases{cacheStr}");
             else
-                logger.Info($"Found {result.Releases.Count()} torrentpotato releases from {CurrentIndexer.DisplayName} for: {CurrentQuery.GetQueryString()}");
+                logger.Info($"Potato search in {CurrentIndexer.DisplayName} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
 
             var serverUrl = serverService.GetServerUrl(Request);
             var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
             {
-                var release = AutoMapper.Mapper.Map<ReleaseInfo>(r);
+                var release = MapperUtil.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.Id, "dl", release.Title);
+                // Poster is not used in Potato response
+                //release.Poster = serverService.ConvertToProxyLink(release.Poster, serverUrl, CurrentIndexer.Id, "img", "poster");
+
                 // IMPORTANT: We can't use Uri.ToString(), because it generates URLs without URL encode (links with unicode
                 // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly
                 var item = new TorrentPotatoResponseItem()
                 {
                     release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
                     torrent_id = release.Guid.AbsoluteUri, // GUID and (Link or Magnet) are mandatory
-                    details_url = release.Comments?.AbsoluteUri,
+                    details_url = release.Details?.AbsoluteUri,
                     download_url = (release.Link != null ? release.Link.AbsoluteUri : release.MagnetUri.AbsoluteUri),
                     imdb_id = release.Imdb.HasValue ? ParseUtil.GetFullImdbID("tt" + release.Imdb) : null,
                     freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
@@ -535,6 +539,7 @@ namespace Jackett.Server.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
+                result.Poster = serverService.ConvertToProxyLink(result.Poster, serverUrl, result.TrackerId, "img", "poster");
                 if (!string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
                 {
                     if (result.Link != null)

@@ -1,0 +1,187 @@
+---
+id: pier720
+name: 720pier
+description: "720pier is a RUSSIAN Semi-Private Torrent Tracker for HD SPORTS"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - https://720pier.ru/
+legacylinks:
+  - http://720pier.ru/
+
+caps:
+  categorymappings:
+    - {id: 30, cat: TV/Sport, desc: "Sports"}
+    - {id: 32, cat: TV/Sport, desc: "Basketball"}
+    - {id: 34, cat: TV/Sport, desc: "Basketball - NBA"}
+    - {id: 87, cat: TV/Sport, desc: "Basketball - NBA Playoffs"}
+    - {id: 108, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2020"}
+    - {id: 106, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2019"}
+    - {id: 103, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2018"}
+    - {id: 95, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2017"}
+    - {id: 81, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2016"}
+    - {id: 58, cat: TV/Sport, desc: "Basketball - NBA Classic Games"}
+    - {id: 105, cat: TV/Sport, desc: "Basketball - NBA The Finals"}
+    - {id: 52, cat: TV/Sport, desc: "Basketball - NCAA"}
+    - {id: 82, cat: TV/Sport, desc: "Basketball - WNBA"}
+    - {id: 36, cat: TV/Sport, desc: "Basketball - European basketball"}
+    - {id: 37, cat: TV/Sport, desc: "Basketball - World Championship"}
+    - {id: 51, cat: TV/Sport, desc: "Basketball - Reviews and highlights"}
+    - {id: 41, cat: TV/Sport, desc: "Basketball - Other"}
+    - {id: 38, cat: TV/Sport, desc: "Basketball - Olympic Games"}
+    - {id: 42, cat: TV/Sport, desc: "Football"}
+    - {id: 43, cat: TV/Sport, desc: "Football - NFL"}
+    - {id: 66, cat: TV/Sport, desc: "Football - Super Bowls"}
+    - {id: 53, cat: TV/Sport, desc: "Football - NCAA"}
+    - {id: 104, cat: TV/Sport, desc: "Football - XFL"}
+    - {id: 99, cat: TV/Sport, desc: "Football - CFL"}
+    - {id: 101, cat: TV/Sport, desc: "Football - AAF"}
+    - {id: 54, cat: TV/Sport, desc: "Football - Reviews and highlights"}
+    - {id: 97, cat: TV/Sport, desc: "Football - Documentaries"}
+    - {id: 44, cat: TV/Sport, desc: "Football - Other"}
+    - {id: 46, cat: TV/Sport, desc: "Hockey"}
+    - {id: 48, cat: TV/Sport, desc: "Hockey - NHL"}
+    - {id: 88, cat: TV/Sport, desc: "Hockey - NHL Playoffs"}
+    - {id: 102, cat: TV/Sport, desc: "Hockey - NHL Playoffs 2018-2020"}
+    - {id: 93, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2017"}
+    - {id: 80, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2016"}
+    - {id: 65, cat: TV/Sport, desc: "Hockey - Stanley Cup Finals"}
+    - {id: 92, cat: TV/Sport, desc: "Hockey - NCAA"}
+    - {id: 49, cat: TV/Sport, desc: "Hockey - World Championship"}
+    - {id: 68, cat: TV/Sport, desc: "Hockey - Documentaries"}
+    - {id: 64, cat: TV/Sport, desc: "Hockey - Reviews and highlights"}
+    - {id: 50, cat: TV/Sport, desc: "Hockey - Other"}
+    - {id: 55, cat: TV/Sport, desc: "Baseball"}
+    - {id: 71, cat: TV/Sport, desc: "Baseball - MLB"}
+    - {id: 107, cat: TV/Sport, desc: "Baseball - MLB World Series"}
+    - {id: 72, cat: TV/Sport, desc: "Baseball - Other"}
+    - {id: 85, cat: TV/Sport, desc: "Baseball - Reviews, highlights, documentaries"}
+    - {id: 45, cat: TV/Sport, desc: "Other sports"}
+    - {id: 79, cat: TV/Sport, desc: "Other sports - Rugby"}
+    - {id: 78, cat: TV/Sport, desc: "Other sports - Lacrosse"}
+    - {id: 77, cat: TV/Sport, desc: "Other sports - Cricket"}
+    - {id: 76, cat: TV/Sport, desc: "Other sports - Volleyball"}
+    - {id: 75, cat: TV/Sport, desc: "Other sports - Tennis"}
+    - {id: 74, cat: TV/Sport, desc: "Other sports - Fighting"}
+    - {id: 94, cat: TV/Sport, desc: "Other sports - Misc"}
+    - {id: 100, cat: TV/Sport, desc: "Soccer"}
+    - {id: 98, cat: TV/Sport, desc: "Soccer - FIFA World Cup"}
+    - {id: 56, cat: TV/Sport, desc: "Sports on tv"}
+    - {id: 70, cat: TV/Sport, desc: "Sports on tv ESPN Films"}
+    # not in search_forum drop down
+    - {id: 73, cat: TV/Sport, desc: "Other sports - Auto, moto racing"}
+    # left out 39, 60 and 40 since they are not torrent forums
+
+  modes:
+    search: [q]
+    tv-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: t
+    options:
+      t: created
+      ts: seeders
+      sz: size
+      i: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: d
+    options:
+      d: desc
+      a: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: :has(a[href^="./ucp.php?mode=logout&"])
+
+download:
+  selectors:
+    - selector: a[href*="/download/torrent?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: search.php
+  inputs:
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    terms: all
+    author: ""
+    sc: 1
+    sf: firstpost
+    sr: topics
+    sk: "{{ .Config.sort }}"
+    sd: "{{ .Config.type }}"
+    st: 0
+    ch: 300
+    t: 0
+    submit: Search
+
+  rows:
+    # drop topics without size as they will not have download links in details page
+    selector: li.row:has(div.list-inner div[style="float:right;"])
+    filters:
+      - name: andmatch
+
+  fields:
+    title:
+      selector: a.topictitle
+    details:
+      selector: a.topictitle
+      attribute: href
+    category:
+      selector: a[href^="./viewforum.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    download:
+      selector: a.topictitle
+      attribute: href
+    size_optional:
+      selector: div.list-inner div[style="float:right;"]
+      optional: true
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}1 GB{{ end }}"
+    seeders_optional:
+      selector: dd.posts span.my_tt.seed
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+      optional: true
+    leechers_optional:
+      selector: dd.posts span.my_tt.leech
+      optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    grabs_optional:
+      selector: dd.views span.my_tt.complet
+      optional: true
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+    date:
+      selector: div.left-box time
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.8
+    minimumseedtime:
+      # 60 hours (as seconds = 60 x 60 x 60)
+      text: 216000
+# phpBB

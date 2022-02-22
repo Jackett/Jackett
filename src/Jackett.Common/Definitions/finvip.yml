@@ -2,11 +2,51 @@
 id: finvip
 name: FinVip
 description: "FinVip is a FINNISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: fi-fi
+language: fi-FI
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://finvip.org/
+
+caps:
+  categorymappings:
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
+    - {id: 25, cat: TV/Documentary, desc: "Dokumentit (docs)"}
+    - {id: 6, cat: Books/EBook, desc: "e-Kirjat (ebooks)"}
+    - {id: 49, cat: Audio/Audiobook, desc: "Äänikirjat (audiobook)"}
+    - {id: 20, cat: TV/SD, desc: "Lasten DVD (kids)"}
+    - {id: 33, cat: TV/SD, desc: "Lasten SD (kids)"}
+    - {id: 50, cat: TV/HD, desc: "Lasten HD (kids)"}
+    - {id: 51, cat: TV/UHD, desc: "Lasten 4K (kids)"}
+    - {id: 11, cat: Movies/DVD, desc: "Leffat DVD (movies)"}
+    - {id: 13, cat: Movies/SD, desc: "Leffat SD (movies)"}
+    - {id: 21, cat: Movies/HD, desc: "Leffat HD (movies)"}
+    - {id: 48, cat: Movies/UHD, desc: "Leffat 4K (movies)"}
+    - {id: 15, cat: Audio/MP3, desc: "Musiikki (music)"}
+    - {id: 53, cat: Audio/Lossless, desc: "Musiikki Flac (music)"}
+    - {id: 12, cat: Audio/Video, desc: "Musavideot (clips)"}
+    - {id: 7, cat: PC/0day, desc: "Ohjelmat (apps)"}
+    - {id: 17, cat: PC/Games, desc: "Pelit PC (games)"}
+    - {id: 18, cat: Console, desc: "Pelit Konsoli (console)"}
+    - {id: 23, cat: XXX/SD, desc: "Porn SD"}
+    - {id: 36, cat: XXX/Other, desc: "Porn Muut"}
+    - {id: 47, cat: XXX/x264, desc: "Porn HD"}
+    - {id: 54, cat: XXX/UHD, desc: "Porn 4K"}
+    - {id: 1, cat: TV/SD, desc: "Sarjat Boxset (series)"}
+    - {id: 30, cat: TV/SD, desc: "Sarjat SD (series)"}
+    - {id: 41, cat: TV/HD, desc: "Sarjat HD (series)"}
+    - {id: 52, cat: TV/UHD, desc: "Sarjat 4K (series)"}
+    - {id: 40, cat: TV/Sport, desc: "Urheilu (sport)"}
+    - {id: 31, cat: Other, desc: "Muut (other)"}
+    - {id: 43, cat: TV, desc: "Salkkarit (drama)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -18,64 +58,27 @@ settings:
   - name: info_results
     type: info
     label: "Search results"
-    default: "For best results, increase the torrents number in your profile to 100."
     default: "<ol><li>Only the Xbtit style is supported.</li><ul>Make sure to set the <b>Style</b> option in your profile to <b>Xbtit</b>.</ul><li>For best results, increase the torrents number in your profile to 100.</li><ul>Set the <b>Torrents Per Page</b> option to <b>100</b>.</ul></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
-
-caps:
-  categorymappings:
-    - {id: 5, cat: TV/Anime, desc: "Anime"}
-    - {id: 25, cat: TV/Documentary, desc: "Dokumentit (docs)"}
-    - {id: 6, cat: Books/Ebook, desc: "eBooks"}
-    - {id: 26, cat: TV, desc: "Kannet/Tekstit (subs)"}
-    - {id: 20, cat: TV/SD, desc: "Lasten DVD (kids)"}
-    - {id: 33, cat: TV/SD, desc: "Lasten XviD (kids)"}
-    - {id: 11, cat: Movies/DVD, desc: "Leffat DVD (movies)"}
-    - {id: 13, cat: Movies/SD, desc: "Leffat XviD  (movies)"}
-    - {id: 21, cat: Movies/HD, desc: "Leffat HD  (movies)"}
-    - {id: 32, cat: Movies/DVD, desc: "Custom DVD  (movies)"}
-    - {id: 42, cat: Movies, desc: "FVC"}
-    - {id: 15, cat: Audio, desc: "Musiikki (music)"}
-    - {id: 12, cat: Audio/Video, desc: "Musavideot (clips)"}
-    - {id: 7, cat: PC/0day, desc: "Ohjelmat Windows (apps)"}
-    - {id: 8, cat: PC, desc: "Ohjelmat Linux (apps)"}
-    - {id: 9, cat: PC/Mac, desc: "Ohjelmat Mac (apps)"}
-    - {id: 17, cat: PC/Games, desc: "Pelit PC (games)"}
-    - {id: 18, cat: Console/PSP, desc: "Pelit PlayStation (games)"}
-    - {id: 19, cat: Console/Xbox, desc: "Pelit Xbox (games)"}
-    - {id: 35, cat: Console/Wii, desc: "Pelit Wii (games)"}
-    - {id: 22, cat: XXX, desc: "Pr0n DVD (xxx)"}
-    - {id: 23, cat: XXX, desc: "Pr0n XviD (xxx)"}
-    - {id: 36, cat: XXX, desc: "Pr0n Muut (xxx)"}
-    - {id: 47, cat: XXX, desc: "Pr0n HD (xxx)"}
-    - {id: 24, cat: PC/Phone-Other, desc: "Puhelimeen (phone)"}
-    - {id: 1, cat: TV/SD, desc: "Sarjat DVD (series)"}
-    - {id: 30, cat: TV, desc: "Sarjat (series)"}
-    - {id: 41, cat: TV/HD, desc: "Sarjat HD (series)"}
-    - {id: 43, cat: TV, desc: "Salkkarit (?)"}
-    - {id: 40, cat: TV/Sport, desc: "Urheilu (sport)"}
-    - {id: 31, cat: Other, desc: "Muut (other)"}
-
-  modes:
-    search: [q, imdbid]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
-    music-search: [q]
+      2: desc
+      1: asc
 
 login:
   path: index.php?page=login
@@ -91,8 +94,9 @@ login:
     selector: a[href="logout.php"]
 
 download:
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
@@ -100,14 +104,14 @@ search:
     - path: index.php
   inputs:
     page: torrents
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{else}}0{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     # 0 title 1 title&descr 2 descr
-    options: "{{ if .Query.IMDBID }}1{{else}}0{{end}}"
-    # 0 all 1 activeonly 2 deadonly
+    options: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 all 1 classic 2 50%free 3 100%free 4 50%+100&free
-    gold: 0
+    # 0 all, 1 classic, 2 50%free, 3 100%free, 4 50%+100&free
+    gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
@@ -129,16 +133,13 @@ search:
     download:
       selector: td a[href^="index.php?page=downloadcheck"]
       attribute: href
-    imdb:
-      optional: true
-      selector: a[href*="www.imdb.com/title/tt"]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
       filters:
         # javascript:popdetails('http://www.imdb.com/title/tt10209130');
-        - name: replace
-          args: ["javascript:popdetails('", ""]
-        - name: replace
-          args: ["');", ""]
+        - name: regexp
+          args: tt(\d+)
     size:
       selector: td:nth-last-child(1)
     leechers:
@@ -149,8 +150,10 @@ search:
       # 23/12/2019 07:57
       selector: td:nth-last-child(4)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 15:04"
+          args: "02/01/2006 15:04 -07:00"
     description:
       selector: td a[href^="index.php?page=torrent-details"]
       remove: a
@@ -162,4 +165,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-# xbtit
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# xbtit 2.0.0

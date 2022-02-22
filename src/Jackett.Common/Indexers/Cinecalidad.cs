@@ -13,7 +13,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -21,51 +20,44 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Cinecalidad : BaseWebIndexer
     {
-        private const int MaxItemsPerPage = 15;
-        private const int MaxSearchPageLimit = 6; // 15 items per page * 6 pages = 90
-        private string _language;
+        private const int MaxLatestPageLimit = 3; // 10 items per page * 3 pages = 30
+        private const int MaxSearchPageLimit = 6;
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://www.cinecalidad.is/",
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://cinecalidad.website/",
             "https://www.cinecalidad.to/",
-            "https://www.cinecalidad.eu/"
+            "https://www.cinecalidad.im/", // working but outdated, maybe copycat
+            "https://www.cinecalidad.is/",
+            "https://www.cinecalidad.li/",
+            "https://www.cinecalidad.eu/",
+            "https://cinecalidad.unbl0ck.xyz/",
+            "https://cinecalidad.u4m.club/",
+            "https://cinecalidad.mrunblock.icu/",
+            "https://www.cine-calidad.com/"
         };
 
-        public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
-                   description: "Películas Full HD en Castellano y Latino Dual.",
-                   link: "https://www.cinecalidad.is/",
-                   caps: new TorznabCapabilities(),
+                   description: "Películas Full HD en Latino Dual.",
+                   link: "https://www.cinecalidad.lat/",
+                   caps: new TorznabCapabilities
+                   {
+                       MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "es-es";
+            Language = "es-419";
             Type = "public";
 
-            var language = new SelectItem(new Dictionary<string, string>
-                {
-                    {"castellano", "Spanish Castellano"},
-                    {"latino", "Spanish Latino"}
-                })
-                {
-                    Name = "Select language",
-                    Value = "castellano"
-                };
-            configData.AddDynamic("language", language);
-
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
-        }
-
-        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
-        {
-            base.LoadValuesFromJson(jsonConfig, useProtectionService);
-            var language = (SelectItem)configData.GetDynamic("language");
-            _language = language?.Value ?? "castellano";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -84,14 +76,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var templateUrl = SiteLink;
-            if (_language.Equals("castellano"))
-                templateUrl += "espana/";
-            templateUrl += "{0}"; // placeholder for page
+            templateUrl += "{0}?s="; // placeholder for page
 
-            var maxPages = 2; // we scrape only 2 pages for recent torrents
+            var maxPages = MaxLatestPageLimit; // we scrape only 2 pages for recent torrents
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
             {
-                templateUrl += "?s=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
+                templateUrl += WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
                 maxPages = MaxSearchPageLimit;
             }
 
@@ -100,18 +90,18 @@ namespace Jackett.Common.Indexers
             {
                 var pageParam = page > 1 ? $"page/{page}/" : "";
                 var searchUrl = string.Format(templateUrl, pageParam);
-                var response = await RequestStringWithCookiesAndRetry(searchUrl);
+                var response = await RequestWithCookiesAndRetryAsync(searchUrl);
                 var pageReleases = ParseReleases(response, query);
 
                 // publish date is not available in the torrent list, but we add a relative date so we can sort
-                foreach(var release in pageReleases)
+                foreach (var release in pageReleases)
                 {
                     release.PublishDate = lastPublishDate;
                     lastPublishDate = lastPublishDate.AddMinutes(-1);
                 }
                 releases.AddRange(pageReleases);
 
-                if (pageReleases.Count < MaxItemsPerPage)
+                if (pageReleases.Count < 1)
                     break; // this is the last page
             }
 
@@ -120,66 +110,68 @@ namespace Jackett.Common.Indexers
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var results = await RequestStringWithCookies(link.ToString());
+            var results = await RequestWithCookiesAsync(link.ToString());
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.Content);
-                var preotectedLink = dom.QuerySelector("a[service=BitTorrent]").GetAttribute("href");
-                preotectedLink = SiteLink + preotectedLink.TrimStart('/');
+                var dom = parser.ParseDocument(results.ContentString);
+                var protectedLink = dom.QuerySelector("a:contains('Torrent')").GetAttribute("data-url");
+                protectedLink = Base64Decode(protectedLink);
+                protectedLink = GetAbsoluteUrl(protectedLink);
 
-                results = await RequestStringWithCookies(preotectedLink);
-                dom = parser.ParseDocument(results.Content);
+                results = await RequestWithCookiesAsync(protectedLink);
+                dom = parser.ParseDocument(results.ContentString);
                 var magnetUrl = dom.QuerySelector("a[href^=magnet]").GetAttribute("href");
                 return await base.Download(new Uri(magnetUrl));
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
 
             return null;
         }
 
-        private List<ReleaseInfo> ParseReleases(WebClientStringResult response, TorznabQuery query)
+        private List<ReleaseInfo> ParseReleases(WebResult response, TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.Content);
+                var dom = parser.ParseDocument(response.ContentString);
 
-                var rows = dom.QuerySelectorAll("div.home_post_cont");
+                var rows = dom.QuerySelectorAll("article");
                 foreach (var row in rows)
                 {
+                    if (row.QuerySelector("div.selt") != null)
+                        continue; // we only support movies
+
+                    var qLink = row.QuerySelector("a.absolute");
                     var qImg = row.QuerySelector("img");
-                    if (qImg == null)
+                    if (qLink == null || qImg == null)
                         continue; // skip results without image
-                    var title = qImg.GetAttribute("title");
+
+                    var title = qLink.TextContent.Trim();
                     if (!CheckTitleMatchWords(query.GetQueryString(), title))
                         continue; // skip if it doesn't contain all words
-                    title += _language.Equals("castellano") ? " SPANiSH" : " LATiN-SPANiSH";
-                    title += " DUAL 1080p BDRip x264";
-
-                    var banner = new Uri(qImg.GetAttribute("src"));
-                    var link = new Uri(row.QuerySelector("a").GetAttribute("href"));
+                    title += " MULTi/LATiN SPANiSH 1080p BDRip x264";
+                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("src")));
+                    var link = new Uri(qLink.GetAttribute("href"));
 
                     var release = new ReleaseInfo
                     {
                         Title = title,
                         Link = link,
-                        Comments = link,
+                        Details = link,
                         Guid = link,
-                        Category = new List<int> {TorznabCatType.MoviesHD.ID},
-                        BannerUrl = banner,
+                        Category = new List<int> { TorznabCatType.MoviesHD.ID },
+                        Poster = poster,
                         Size = 2147483648, // 2 GB
                         Files = 1,
                         Seeders = 1,
                         Peers = 2,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1
                     };
@@ -189,7 +181,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -211,6 +203,20 @@ namespace Jackett.Common.Indexers
             titleWords = titleWords.ToArray();
 
             return queryWords.All(word => titleWords.Contains(word));
+        }
+
+        private string GetAbsoluteUrl(string url)
+        {
+            url = url.Trim();
+            if (!url.StartsWith("http"))
+                return SiteLink + url.TrimStart('/');
+            return url;
+        }
+
+        private string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 

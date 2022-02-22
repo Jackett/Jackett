@@ -1,0 +1,325 @@
+---
+id: hdonly
+name: HD-Only
+description: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://hd-only.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Film"}
+    - {id: 3, cat: TV/Anime, desc: "Dessin animé"}
+    - {id: 4, cat: Movies, desc: "Concert"}
+    - {id: 5, cat: TV, desc: "Série"}
+    - {id: 6, cat: TV/Anime, desc: "Série anim"}
+    - {id: 7, cat: Movies/Other, desc: "Film d'animation"}
+    - {id: 7, cat: Audio/Video, desc: "Concert"}
+    - {id: 11, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 13, cat: Movies/Other, desc: "Court-métrage"}
+    - {id: 14, cat: Movies/Other, desc: "Clip"}
+    - {id: 15, cat: Movies/Other, desc: "Démonstration"}
+    - {id: 16, cat: Movies/Other, desc: "Bonus de BD"}
+    - {id: 21, cat: Other, desc: "Autre"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_radarr
+    type: info
+    label: About Radarr
+    default: The HD-Only web site cannot find movies if you use the release year in a title search. When you define your Radarr v3 Indexer remember to tick the <i>Remove year from search string</i> checkbox.
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: form#loginform > span.warning
+  test:
+    path: torrents.php
+    selector: a[href^="logout.php?auth="]
+
+search:
+  # https://hd-only.org/torrents.php?groupname=blood&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
+  path: torrents.php
+  inputs:
+    # does not support categories, uses releasetype for single filter so we canot do multi releasetype filtering either.
+    # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    groupname: "{{ .Keywords }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: advanced
+    searchsubmit: 1
+    # 1 freeleech, 2 neutral, 3 both, 0 normal
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # site does not support imdbid search or display imdb links in results
+
+  rows:
+    selector: table#torrent_table > tbody > tr.torrent
+
+  fields:
+    download:
+      selector: a[href^="torrents.php?action=download&"]
+      attribute: href
+    title_phase1:
+      selector: div.group_info
+      remove: span:nth-child(1), div.tags
+      filters:
+        - name: replace
+          args: ["\n", ""]
+        - name: re_replace
+          args: ["^(.+)                                                                            (.+)", "$2-$1"]
+        - name: replace
+          args: ["                         ", " "]
+        - name: replace
+          args: ["Blu-Ray Original", "Complete.BluRay"]
+        - name: replace
+          args: ["Blu-Ray Remux", "Remux"]
+        - name: replace
+          args: ["Blu-Ray Rip", "BluRay.Rip"]
+        - name: replace
+          args: ["mHD", "mHD.BluRay.Rip"]
+        - name: replace
+          args: ["/ DC", "/ Directors.Cut"]
+        - name: replace
+          args: ["/ VL", "/ Extended"]
+        - name: replace
+          args: ["/ RM", "/ Remastered"]
+        - name: replace
+          args: ["/ UC", "/ Uncut"]
+        - name: replace
+          args: ["/ ES", "/ Special.Edition"]
+        - name: replace
+          args: [" / Cust_sub", ""]
+        - name: replace
+          args: [" / Cust", ""]
+        - name: replace
+          args: ["/ UN", "/ Unrated"]
+        - name: replace
+          args: [" / Crit", ""]
+        - name: replace
+          args: [" / WAC", ""]
+        - name: replace
+          args: [" / MoC", ""]
+        - name: replace
+          args: [" / BFI", ""]
+        - name: replace
+          args: [" / MUET", ""]
+        - name: replace
+          args: ["/ Exc NF", "/ NF"]
+        - name: replace
+          args: ["/ Exc AMZ", "/ AMZ"]
+        - name: replace
+          args: ["/ Exc YOU", "/ YT"]
+        - name: replace
+          args: [" / Freeleech!", ""]
+        - name: replace
+          args: [" / Complété!", ""]
+        - name: replace
+          args: [" / ", "."]
+        - name: trim
+        - name: replace
+          args: [".VFF.VFQ.stFR.MULTI", ".MULTI.VFF.VFQ"]
+        - name: replace
+          args: [".VFF.VFQ.VO.stFR.MULTI", ".MULTI.VFF.VFQ"]
+        - name: replace
+          args: [".VFF.VFQ.VO.stFR", ".MULTI.VFF.VFQ"]
+        - name: replace
+          args: [".VFQ.VO.stFR", ".MULTI.VFQ"]
+        - name: replace
+          args: [".VO.VFI.stFR", ".MULTI"]
+        - name: replace
+          args: [".VO.VF?.stFR", ".MULTI"]
+        - name: replace
+          args: [".VFF.VO.stFR", ".MULTI.VFF"]
+        - name: replace
+          args: [".VOF.stFR", ".FRENCH"]
+        - name: replace
+          args: [".VFQ.stFR", ".FRENCH"]
+        - name: replace
+          args: [".VFF.stFR.MULTI", ".MULTI.VFF"]
+        - name: replace
+          args: [".VFF.stFR", ".FRENCH"]
+        - name: replace
+          args: [".VFI.MULTI", ".MULTI"]
+        - name: replace
+          args: [".VO.stFR", ".VOSTFR"]
+        - name: replace
+          args: [".VFQ.VO", ".MULTI.VFQ"]
+        - name: replace
+          args: [".VFF.VO", ".MULTI.VFF"]
+        - name: replace
+          args: [".VO.VF?.stFR", ".MULTI"]
+        - name: replace
+          args: [".VFI.stFR", ".FRENCH"]
+        - name: replace
+          args: [".VOF.MULTI", ".MULTI.FRENCH"]
+        - name: replace
+          args: [".VOF", ".FRENCH"]
+        - name: replace
+          args: [".VFQ.MULTI", ".MULTI.VFQ"]
+        - name: replace
+          args: ["[Film]", ""]
+        - name: replace
+          args: ["[Dessin animé]", ""]
+        - name: replace
+          args: ["[Film d'animation]", ""]
+        - name: replace
+          args: ["[Concert]", ""]
+        - name: replace
+          args: ["[Documentaire]", ""]
+        - name: replace
+          args: ["[Court-métrage]", ""]
+        - name: replace
+          args: ["[Clip]", ""]
+        - name: replace
+          args: ["[Démonstration]", ""]
+        - name: replace
+          args: ["[Bonus de BD]", ""]
+        - name: replace
+          args: ["[Autre]", ""]
+        - name: replace
+          args: ["[Série Animée]", ""]
+        - name: replace
+          args: ["[Série]", ""]
+        - name: re_replace
+          args: ["\\[(\\d{4})\\]", "$1"]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]*multi[\\s|\\.|-]*)", ".{{ .Config.multilanguage }}."]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]*vostfr[\\s|\\.|-]*)", ".ENGLISH."]
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]*subfrench[\\s|\\.|-]*)", ".ENGLISH."]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    description:
+      selector: div.group_info
+    poster:
+      selector: div.group_image img
+      attribute: src
+    details:
+      selector: a[href^="torrents.php?id="]
+      attribute: href
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: replace
+          args: ["heures", "hours"]
+        - name: replace
+          args: ["heure", "hour"]
+        - name: replace
+          args: ["jours", "days"]
+        - name: replace
+          args: ["jour", "day"]
+        - name: replace
+          args: ["semaines", "weeks"]
+        - name: replace
+          args: ["semaine", "week"]
+        - name: replace
+          args: ["mois", "months"]
+        - name: replace
+          args: ["ans", "years"]
+        - name: replace
+          args: ["an", "year"]
+        - name: append
+          args: " ago"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        "div.group_info:contains(\"/ Freeleech!\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    category:
+      selector: div.group_info
+      remove: span, div, a
+      case:
+        ":contains(\"[Film]\")": 1
+        ":contains(\"[Dessin animé]\")": 3
+        ":contains(\"[Série]\")": 5
+        ":contains(\"[Série Animée]\")": 6
+        ":contains(\"[Film d'animation]\")": 7
+        ":contains(\"[Concert]\")": 9
+        ":contains(\"[Documentaire]\")": 11
+        ":contains(\"[Court-métrage]\")": 13
+        ":contains(\"[Clip]\")": 14
+        ":contains(\"[Démonstration]\")": 15
+        ":contains(\"[Bonus de BD]\")": 16
+        ":contains(\"[Autre]\")": 21
+        "*": 5
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# Gazelle

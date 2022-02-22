@@ -22,9 +22,9 @@ namespace Jackett.Common.Indexers
         private string APIUrl => SiteLink + "api/";
         private string passkey;
 
-        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> APIHeaders = new Dictionary<string, string>
         {
-            {"Content-Type", "application/json"},
+            {"Content-Type", "application/json"}
         };
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
@@ -33,29 +33,49 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public TorrentNetwork(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
+        public TorrentNetwork(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
             : base(id: "torrentnetwork",
                    name: "Torrent Network",
                    description: "Torrent Network (TN) is a GERMAN Private site for TV / MOVIES / GENERAL",
                    link: "https://tntracker.org/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
             Encoding = Encoding.UTF8;
-            Language = "de-de";
+            Language = "de-DE";
             Type = "private";
 
-            configData.AddDynamic("token", new HiddenItem() { Name = "token" });
-            configData.AddDynamic("passkey", new HiddenItem() { Name = "passkey" });
+            configData.AddDynamic("token", new HiddenStringConfigurationItem("token"));
+            configData.AddDynamic("passkey", new HiddenStringConfigurationItem("passkey"));
 
             AddCategoryMapping(24, TorznabCatType.MoviesSD, "Movies GER/SD");
             AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movies GER/720p");
             AddCategoryMapping(17, TorznabCatType.MoviesHD, "Movies GER/1080p");
-            AddCategoryMapping(20, TorznabCatType.MoviesHD, "Movies GER/2160p");
+            AddCategoryMapping(20, TorznabCatType.MoviesUHD, "Movies GER/2160p");
             AddCategoryMapping(45, TorznabCatType.MoviesOther, "Movies GER/Remux");
             AddCategoryMapping(19, TorznabCatType.MoviesBluRay, "Movies GER/BluRay");
             AddCategoryMapping(34, TorznabCatType.TVAnime, "Movies GER/Anime");
@@ -64,7 +84,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(22, TorznabCatType.MoviesSD, "Movies ENG/SD");
             AddCategoryMapping(35, TorznabCatType.MoviesHD, "Movies ENG/720p");
             AddCategoryMapping(43, TorznabCatType.MoviesHD, "Movies ENG/1080p");
-            AddCategoryMapping(37, TorznabCatType.MoviesHD, "Movies ENG/2160p");
+            AddCategoryMapping(48, TorznabCatType.MoviesUHD, "Movies ENG/2160p");
             AddCategoryMapping(46, TorznabCatType.MoviesOther, "Movies ENG/Remux");
             AddCategoryMapping(38, TorznabCatType.MoviesBluRay, "Movies ENG/BluRay");
             AddCategoryMapping(39, TorznabCatType.TVAnime, "Movies ENG/Anime");
@@ -85,7 +105,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(10, TorznabCatType.PCGames, "Games/Win");
             AddCategoryMapping(12, TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping(13, TorznabCatType.ConsolePS4, "Games/PSX");
-            AddCategoryMapping(14, TorznabCatType.ConsoleXbox, "Games/XBOX");
+            AddCategoryMapping(14, TorznabCatType.ConsoleXBox, "Games/XBOX");
 
             AddCategoryMapping(4, TorznabCatType.PCMac, "Apps/Mac");
             AddCategoryMapping(5, TorznabCatType.PC0day, "Apps/Win");
@@ -106,7 +126,7 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var tokenItem = (HiddenItem)configData.GetDynamic("token");
+            var tokenItem = (HiddenStringConfigurationItem)configData.GetDynamic("token");
             if (tokenItem != null)
             {
                 var token = tokenItem.Value;
@@ -114,7 +134,7 @@ namespace Jackett.Common.Indexers
                     APIHeaders["Authorization"] = token;
             }
 
-            var passkeyItem = (HiddenItem)configData.GetDynamic("passkey");
+            var passkeyItem = (HiddenStringConfigurationItem)configData.GetDynamic("passkey");
             if (passkeyItem != null)
             {
                 passkey = passkeyItem.Value;
@@ -124,10 +144,11 @@ namespace Jackett.Common.Indexers
         private async Task<dynamic> SendAPIRequest(string endpoint, object data)
         {
             var jsonData = JsonConvert.SerializeObject(data);
-            var result = await PostDataWithCookies(APIUrl + endpoint, null, null, SiteLink, APIHeaders, jsonData);
-            if (!result.Content.StartsWith("{")) // not JSON => error
-                throw new ExceptionWithConfigData(result.Content, configData);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(result.Content);
+            var result = await RequestWithCookiesAsync(
+                APIUrl + endpoint, method: RequestType.POST, referer: SiteLink, headers: APIHeaders, rawbody: jsonData);
+            if (!result.ContentString.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(result.ContentString, configData);
+            var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
             return json;
         }
 
@@ -151,10 +172,10 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(curuser.passkey.ToString()))
                 throw new ExceptionWithConfigData("got empty passkey: " + curuser.ToString(), configData);
             passkey = curuser.passkey;
-            var passkeyItem = (HiddenItem)configData.GetDynamic("passkey");
+            var passkeyItem = (HiddenStringConfigurationItem)configData.GetDynamic("passkey");
             passkeyItem.Value = passkey;
 
-            var tokenItem = (HiddenItem)configData.GetDynamic("token");
+            var tokenItem = (HiddenStringConfigurationItem)configData.GetDynamic("token");
             tokenItem.Value = token;
 
             await ConfigureIfOK("", token.Length > 0, () =>
@@ -169,7 +190,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchUrl = "browse";
+            var searchUrl = APIUrl + "browse";
             var searchString = query.GetQueryString();
             var queryCollection = new NameValueCollection
             {
@@ -183,15 +204,19 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("search", searchString);
 
             var cats = MapTorznabCapsToTrackers(query);
-            if (cats.Count > 0)
-                queryCollection.Add("cats", string.Join(",", cats));
+            if (cats.Count == 0)
+                cats = GetAllTrackerCategories();
+            queryCollection.Add("cats", string.Join(",", cats));
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
             if (string.IsNullOrWhiteSpace(passkey))
                 await ApplyConfiguration(null);
 
-            var result = await SendAPIRequest(searchUrl, null);
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SiteLink, headers: APIHeaders);
+            if (!results.ContentString.StartsWith("{")) // not JSON => error
+                throw new ExceptionWithConfigData(results.ContentString, configData);
+            var result = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
             try
             {
                 if (result["error"] != null)
@@ -202,7 +227,7 @@ namespace Jackett.Common.Indexers
                 foreach (JArray torrent in data)
                 {
                     var torrentID = (long)torrent[2];
-                    var comments = new Uri(SiteLink + "torrent/" + torrentID);
+                    var details = new Uri(SiteLink + "torrent/" + torrentID);
                     //var preDelaySeconds = (long)torrent[4];
                     var seeders = (int)torrent[6];
                     //var imdbRating = (double)torrent[8] / 10;
@@ -214,7 +239,7 @@ namespace Jackett.Common.Indexers
                     //var row13 = (string)torrent[13];
                     //var row14 = (long)torrent[14];
                     var link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey);
-                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]).ToLocalTime();
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]);
                     var downloadVolumeFactor = (long)torrent[10] switch
                     {
                         // Only Up
@@ -222,7 +247,7 @@ namespace Jackett.Common.Indexers
                         // 50 % Down
                         1 => 0.5,
                         // All others 100% down
-                        _ => 1,
+                        _ => 1
                     };
                     var release = new ReleaseInfo
                     {
@@ -230,8 +255,8 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 172800, // 48 hours
                         Category = MapTrackerCatToNewznab(torrent[0].ToString()),
                         Title = torrent[1].ToString(),
-                        Comments = comments,
-                        Guid = comments,
+                        Details = details,
+                        Guid = details,
                         Link = link,
                         PublishDate = publishDate,
                         Size = (long)torrent[5],

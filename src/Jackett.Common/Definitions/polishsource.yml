@@ -2,7 +2,7 @@
 id: polishsource
 name: PolishSource
 description: "PolishSource (PS) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: pl-pl
+language: pl-PL
 type: private
 encoding: ISO-8859-2
 links:
@@ -15,6 +15,7 @@ caps:
     - {id: 46, cat: Movies/UHD, desc: "Movies/UHD"}
     - {id: 10, cat: TV/SD, desc: "TV/SD"}
     - {id: 39, cat: TV/HD, desc: "TV/HD"}
+    - {id: 47, cat: TV/UHD, desc: "TV/UHD"}
     - {id: 8, cat: PC/Games, desc: "Games/PC"}
     - {id: 3, cat: Console, desc: "Games/Consoles"}
     - {id: 5, cat: Books, desc: "E-Books"}
@@ -23,10 +24,11 @@ caps:
     - {id: 13, cat: XXX, desc: "XXX"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -35,22 +37,33 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI & PL by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI & PL by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTI.POLISH: MULTI.POLISH
   - name: sort
     type: select
     label: Sort requested from site
-    default: "4"
+    default: 4
     options:
-      "4": "created"
-      "7": "seeders"
-      "5": "size"
-      "1": "title"
+      4: created
+      7: seeders
+      5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -77,17 +90,17 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 onlyactive 1 all 2 onlydead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    # 0 onlyactive, 1 all, 2 onlydead
     incldead: 1
-    # 0 all 1 scene 2 notscene 3 internal
+    # 0 all, 1 scene, 2 notscene, 3 internal
     scene: 0
-    # 0 all 1 Polish 2 non-Polish 4 subtitled
+    # 0 all, 1 Polish, 2 non-Polish, 4 subtitled
     pl: 0
     # subcat blank=all
     sub: ""
-    # title both nfo
-    search_in: "{{ if .Query.IMDBID }}nfo{{else}}title{{end}}"
+    # title, both, nfo
+    search_in: "{{ if .Query.IMDBID }}nfo{{ else }}title{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -101,15 +114,24 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_phase1:
       selector: a[href^="details.php?id="]
+    title_multilang:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\.multi\\.)", ".{{ .Config.multilanguage }}."]
+        - name: re_replace
+          args: ["(?i)(\\.pl\\.)", ".{{ .Config.multilanguage }}."]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="downloadssl.php?id="]
       attribute: href
-    description:
+    genre:
       optional: true
       selector: td:nth-child(2) > small
       filters:
@@ -117,39 +139,33 @@ search:
           args: "Genre: "
         - name: append
           args: "\n<br>"
-    description:
+    language:
       optional: true
       selector: img[src="pic/pl.png"]
       filters:
         - name: append
           args: "Language: polish\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    description:
+    subbed:
       optional: true
       selector: img[src="pic/napisy.png"]
       filters:
         - name: append
           args: "Subbed\n<br>"
-        - name: prepend
-          args: "{{ .Result.description }}"
-    imdb:
-      optional: true
-      selector: a[href*="www.imdb.com/title/tt"]
+    description:
+      text: "{{ .Result.genre }}{{ .Result.language }}{{ .Result.subbed }}"
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
     date:
       selector: td:nth-child(4)
       filters:
         - name: append
-          args: " +00:00"
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
     size:
       selector: td:nth-child(5)
     grabs:
       selector: td:nth-child(6)
-      filters:
-        - name: regexp
-          args: (\d+)
     seeders:
       selector: td:nth-child(7)
     leechers:
@@ -158,4 +174,7 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a

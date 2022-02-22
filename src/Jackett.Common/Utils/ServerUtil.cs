@@ -95,7 +95,7 @@ namespace Jackett.Common.Utils
             return isAdmin;
         }
 
-        public static void ResureRedirectIsFullyQualified(WebRequest req, BaseWebResult result)
+        public static void ResureRedirectIsFullyQualified(WebRequest req, WebResult result)
         {
             if (!string.IsNullOrEmpty(result.RedirectingTo))
             {

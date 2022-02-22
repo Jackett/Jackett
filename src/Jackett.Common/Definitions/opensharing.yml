@@ -1,0 +1,117 @@
+---
+id: opensharing
+name: OpenSharing
+description: "OpenSharing is a RUSSIAN Public Torrent Tracker for 3X"
+language: ru-RU
+type: public
+encoding: windows-1251
+links:
+  - https://opensharing.org/
+
+caps:
+  categorymappings:
+    - {id: 5000, cat: XXX, desc: "Animation: Cartoon"}
+    - {id: 225, cat: XXX, desc: "Animation: Hentai"}
+    - {id: 145, cat: XXX, desc: "Misc & Other: Documentary"}
+    - {id: 245, cat: XXX/Pack, desc: "Misc & Other: Video Pack"}
+    - {id: 435, cat: XXX/Other, desc: "Misc & Other: Games XXX"}
+    - {id: 440, cat: XXX/ImageSet, desc: "Misc & Other: Images & Wallpaper"}
+    - {id: 1, cat: XXX, desc: "Movies XXX: Asian"}
+    - {id: 20, cat: XXX, desc: "Movies XXX: Amateur"}
+    - {id: 40, cat: XXX, desc: "Movies XXX: Anal & DP"}
+    - {id: 60, cat: XXX, desc: "Movies XXX: BDSM"}
+    - {id: 80, cat: XXX, desc: "Movies XXX: Boobs"}
+    - {id: 85, cat: XXX, desc: "Movies XXX: BBW & Plump Woman"}
+    - {id: 100, cat: XXX, desc: "Movies XXX: Classic & Feature"}
+    - {id: 120, cat: XXX, desc: "Movies XXX: Compilation"}
+    - {id: 140, cat: XXX, desc: "Movies XXX: Casting"}
+    - {id: 150, cat: XXX, desc: "Movies XXX: Erotic"}
+    - {id: 180, cat: XXX, desc: "Movies XXX: Fetish"}
+    - {id: 185, cat: XXX, desc: "Movies XXX: Femdom"}
+    - {id: 190, cat: XXX, desc: "Movies XXX: Fisting & Dildos"}
+    - {id: 200, cat: XXX, desc: "Movies XXX: Gonzo"}
+    - {id: 220, cat: XXX, desc: "Movies XXX: Group & GangBang"}
+    - {id: 222, cat: XXX, desc: "Movies XXX: Threesomes"}
+    - {id: 240, cat: XXX, desc: "Movies XXX: Interracial"}
+    - {id: 260, cat: XXX, desc: "Movies XXX: Ebony & Latin, Arab"}
+    - {id: 275, cat: XXX, desc: "Movies XXX: Taboo"}
+    - {id: 280, cat: XXX, desc: "Movies XXX: Lesbians"}
+    - {id: 285, cat: XXX, desc: "Movies XXX: Lesbian Strap-On"}
+    - {id: 295, cat: XXX, desc: "Movies XXX: Skinny & Petite"}
+    - {id: 300, cat: XXX, desc: "Movies XXX: Young"}
+    - {id: 320, cat: XXX, desc: "Movies XXX: MILF & Mature"}
+    - {id: 325, cat: XXX, desc: "Movies XXX: Granny"}
+    - {id: 340, cat: XXX, desc: "Movies XXX: Oral & Blowjob"}
+    - {id: 360, cat: XXX, desc: "Movies XXX: Parody"}
+    - {id: 380, cat: XXX, desc: "Movies XXX: Public & Car, Outdoors"}
+    - {id: 385, cat: XXX, desc: "Movies XXX: Rape Roleplay"}
+    - {id: 400, cat: XXX, desc: "Movies XXX: Russian"}
+    - {id: 425, cat: XXX, desc: "Movies XXX: С Русским переводом!"}
+    - {id: 1195, cat: XXX, desc: "Movies XXX: LegalPorno"}
+    - {id: 1200, cat: XXX, desc: "Movies XXX: Solo & Masturbation"}
+    - {id: 1250, cat: XXX, desc: "Movies XXX: Movie Scenes"}
+    - {id: 7000, cat: XXX, desc: "Movies XXX: -= XXX =-"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  paths:
+    # https://opensharing.org/torrents-search.php?c20=1&c435=1&search=2021+720p&sort=id&order=desc
+    - path: torrents-search.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    cat: 0
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: table.ttable_headinner tbody tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: td a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: td a[href^="torrents-details.php?id="]
+    details:
+      selector: td a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: td a[href^="download.php?id="]
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

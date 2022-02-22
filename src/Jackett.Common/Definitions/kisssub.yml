@@ -1,0 +1,94 @@
+---
+id: kisssub
+name: KissSub
+description: "KissSub is a CHINESE Public torrent index"
+language: zh-CN
+type: public
+encoding: UTF-8
+links:
+  - https://kisssub.org/
+
+caps:
+  categorymappings:
+    - {id: 动画, cat: TV/Anime, desc: 动画 (Animation Series and Movies)}
+    - {id: 漫画, cat: Books/Comics, desc: 漫画 (Comics and Manga)}
+    - {id: 音乐, cat: Audio, desc: 音乐 (Music OST and Singles)}
+    - {id: 周边, cat: TV/Other, desc: 周边 (Live Action)}
+    - {id: 其它, cat: TV/Anime, desc: 其它 (Other)}
+    - {id: Raw, cat: TV/Anime, desc: Raw}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://kisssub.org/search.php?keyword=moon+720p
+    - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}{{ end }}"
+
+  rows:
+    selector: table[id="listTable"] > tbody > tr:has( a[href^="show-"])
+
+  fields:
+    category:
+      selector: a[href^="sort-"]
+    title:
+      selector: a[href^="show-"]
+    details:
+      selector: a[href^="show-"]
+      attribute: href
+    infohash:
+      selector: a[href^="show-"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: show-([0-9A-Fa-f]{40})
+    date_today:
+       # 今天 00:35	 (Today)
+      optional: true
+      selector: td:nth-child(1):contains("昨天")
+      filters:
+        - name: replace
+          args: ["昨天", "Today"]
+        - name: append
+          args: " +08:00" # CST
+        - name: fuzzytime
+    date_yday:
+      # 昨天 22:50	 (Yesterday)
+      optional: true
+      selector: td:nth-child(1):contains("今天")
+      filters:
+        - name: replace
+          args: ["今天", "Yesterday"]
+        - name: append
+          args: " +08:00" # CST
+        - name: fuzzytime
+    date_year:
+      # 2020/12/24
+      optional: true
+      selector: td:nth-child(1):not(:contains("昨天")):not(:contains("今天"))
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006/01/02 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(4)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine MioBT

@@ -2,7 +2,7 @@
 id: mvgroupmain
 name: MVGroup Main
 description: "MVGroup is a Semi-Private site dedicated to UK TV and DOCUMENTARIES. This definition is for the Main Tracker site."
-language: en-us
+language: en-US
 type: semi-private
 encoding: UTF-8
 links:
@@ -11,8 +11,8 @@ legacylinks:
   - http://forums.mvgroup.org/
 
 caps:
-  categorymappings:
-    - {id: 1, cat: TV, desc: "TV"}
+  categories:
+    Other: Other
 
   modes:
     search: [q]
@@ -26,6 +26,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_8000
+    type: info
+    label: About MVGroup Categories
+    default: MVGroup does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
   - name: hidef
     type: checkbox
     label: Show MVGroup HiDef Releases only
@@ -33,90 +37,86 @@ settings:
   - name: withsubs
     type: select
     label: Subtitles
-    default: "_"
+    default: _
     options:
-      "_": "-OFF-"
-      "alb": "Albanian"
-      "ara": "Arabic"
-      "arm": "Armenian"
-      "ass": "Assyrian"
-      "bos": "Bosnian"
-      "bul": "Bulgarian"
-      "cat": "Catalan"
-      "chi": "Chinese, simplified"
-      "zho": "Chinese, traditional"
-      "hrv": "Croatian"
-      "cze": "Czech"
-      "dan": "Danish"
-      "dut": "Dutch"
-      "eng": "English"
-      "est": "Estonian"
-      "fin": "Finnish"
-      "fre": "French"
-      "glg": "Galician"
-      "geo": "Georgian"
-      "ger": "German"
-      "ell": "Greek"
-      "heb": "Hebrew"
-      "hin": "Hindi"
-      "hun": "Hungarian"
-      "ice": "Icelandic"
-      "ind": "Indonesian"
-      "ita": "Italian"
-      "jpn": "Japanese"
-      "kaz": "Kazakh"
-      "kor": "Korean"
-      "lav": "Latvian"
-      "lit": "Lithuanian"
-      "ltz": "Luxembourgish"
-      "mac": "Macedonian"
-      "may": "Malay"
-      "nor": "Norwegian"
-      "per": "Persian"
-      "pol": "Polish"
-      "por": "Portuguese"
-      "rum": "Romanian"
-      "rus": "Russian"
-      "scc": "Serbian"
-      "slo": "Slovak"
-      "slv": "Slovenian"
-      "spa": "Spanish"
-      "swe": "Swedish"
-      "tha": "Thai"
-      "tur": "Turkish"
-      "ukr": "Ukrainian"
-      "vie": "Vietnamese"
+      _: -OFF-
+      alb: Albanian
+      ara: Arabic
+      arm: Armenian
+      ass: Assyrian
+      bos: Bosnian
+      bul: Bulgarian
+      cat: Catalan
+      chi: "Chinese, simplified"
+      zho: "Chinese, traditional"
+      hrv: Croatian
+      cze: Czech
+      dan: Danish
+      dut: Dutch
+      eng: English
+      est: Estonian
+      fin: Finnish
+      fre: French
+      glg: Galician
+      geo: Georgian
+      ger: German
+      ell: Greek
+      heb: Hebrew
+      hin: Hindi
+      hun: Hungarian
+      ice: Icelandic
+      ind: Indonesian
+      ita: Italian
+      jpn: Japanese
+      kaz: Kazakh
+      kor: Korean
+      lav: Latvian
+      lit: Lithuanian
+      ltz: Luxembourgish
+      mac: Macedonian
+      may: Malay
+      nor: Norwegian
+      per: Persian
+      pol: Polish
+      por: Portuguese
+      rum: Romanian
+      rus: Russian
+      scc: Serbian
+      slo: Slovak
+      slv: Slovenian
+      spa: Spanish
+      swe: Swedish
+      tha: Thai
+      tur: Turkish
+      ukr: Ukrainian
+      vie: Vietnamese
   - name: seed
     type: checkbox
     label: Only released and seeded torrents
     default: false
   - name: dropbbc
     type: checkbox
-    label: Drop "BBC " from the front of result titles
+    label: Drop BBC & other channels from the front of result titles
     default: false
   - name: stripS01E01
     type: checkbox
     label: Strip the S01E01 from the Torznab search requests
     default: false
-  - name: info
-    type: info
-    label: Category for Sonarr and Radarr
-    default: MVGroup does not use categories. In your Sonarr or Radarr Torznab Indexer settings, set the category to 100001.
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "filename": "title"
+      added: created
+      seeders: seeders
+      filename: title
   - name: type
     type: select
     label: Order requested from site
-    default: "DESC"
+    default: DESC
     options:
-      "DESC": "desc"
-      "ASC": "asc"
+      DESC: desc
+      ASC: asc
 
 login:
   path: index.php?act=Login&CODE=00
@@ -142,30 +142,62 @@ search:
   paths:
     - path: maintracker.php
   inputs:
-    seed: "{{ if .Config.seed }}1{{else}}0{{end}}"
+    seed: "{{ if .Config.seed }}1{{ else }}0{{ end }}"
     withsubs: "{{ re_replace .Config.withsubs \"_\" \"\" }}"
-    filter: "{{ if .Config.hidef }}hd+{{else}}{{end}}{{ .Keywords }}"
+    filter: "{{ if .Config.hidef }}hd+{{ else }}{{ end }}{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["S01E01", "{{ if .Config.stripS01E01 }}{{else}}S01E01{{end}}"] # optionally remove S01E01 from search
+      args: ["(?i)S01E01", "{{ if .Config.stripS01E01 }}{{ else }}S01E01{{ end }}"] # optionally remove S01E01 from search
 
   rows:
     selector: tr:has(a.magnetlink)
 
   fields:
-    title:
+    category:
+      text: Other
+    title_default:
       # fallback title (to prevent abend if optional is not found)
       text: "title not found"
-    title:
+    title_optional:
       optional: true
       selector: td.doubleindent, td.singleindent a[href^="/index.php?showtopic="]
       filters:
         - name: re_replace
-          args: ["^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
+          args: ["(?i)^BBC (.*)", "{{ if .Config.dropbbc }}{{ else }}BBC {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^PBS (.*)", "{{ if .Config.dropbbc }}{{ else }}PBS {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^CH5 (.*)", "{{ if .Config.dropbbc }}{{ else }}Ch5 {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^CH4 (.*)", "{{ if .Config.dropbbc }}{{ else }}Ch4 {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^DC (.*)", "{{ if .Config.dropbbc }}{{ else }}DC {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^DW (.*)", "{{ if .Config.dropbbc }}{{ else }}DW {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^HC (.*)", "{{ if .Config.dropbbc }}{{ else }}HC {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^RTE (.*)", "{{ if .Config.dropbbc }}{{ else }}RTE {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^ITV (.*)", "{{ if .Config.dropbbc }}{{ else }}ITV {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^HBO (.*)", "{{ if .Config.dropbbc }}{{ else }}HBO {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^NHK (.*)", "{{ if .Config.dropbbc }}{{ else }}NHK {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^UKTV (.*)", "{{ if .Config.dropbbc }}{{ else }}UKTV {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^NOVA (.*)", "{{ if .Config.dropbbc }}{{ else }}NOVA {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^TV5Monde (.*)", "{{ if .Config.dropbbc }}{{ else }}TV5Monde {{ end }}$1"]
+        - name: re_replace
+          args: ["(?i)^Al-Jazeera (.*)", "{{ if .Config.dropbbc }}{{ else }}Al-Jazeera {{ end }}$1"]
         - name: append
-          args: "{{ if .Config.stripS01E01 }}{{else}} S01E01{{end}}"
+          args: "{{ if .Config.stripS01E01 }}{{ else }} S01E01{{ end }}"
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       optional: true
       selector: td.singleindent a[href^="/index.php?showtopic="]
@@ -176,15 +208,15 @@ search:
     magnet:
       selector: td a.magnetlink
       attribute: href
-    category:
-      text: 1
     size:
-      text: "500 MB"
+      text: "512 MB"
     date:
       selector: td:nth-of-type(3)
       filters:
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "2006/01/02"
+          args: "2006/01/02 -07:00"
     seeders:
       selector: td:nth-of-type(4)
     leechers:

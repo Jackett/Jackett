@@ -11,37 +11,23 @@ namespace Jackett.Server
     {
         public static void ProcessSettings(RuntimeSettings runtimeSettings, Logger logger)
         {
-            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2" && runtimeSettings.ClientOverride != "httpclientnetcore" && runtimeSettings.ClientOverride != "httpclient2netcore")
+            if (runtimeSettings.ClientOverride != "httpclient" && runtimeSettings.ClientOverride != "httpclient2")
             {
-                logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments");
+                logger.Error($"Client override ({runtimeSettings.ClientOverride}) has been deprecated, please remove it from your start arguments.");
                 Environment.Exit(1);
             }
 
             if (runtimeSettings.LogRequests)
-            {
                 logger.Info("Logging enabled.");
-            }
 
             if (runtimeSettings.TracingEnabled)
-            {
                 logger.Info("Tracing enabled.");
-            }
 
-            // https://github.com/Jackett/Jackett/issues/6229
-            //if (runtimeSettings.IgnoreSslErrors == true)
-            //{
-            //    logger.Error($"The IgnoreSslErrors option has been deprecated, please remove it from your start arguments");
-            //}
+            if (runtimeSettings.IgnoreSslErrors == true)
+                logger.Info("Ignore SSL errors enabled.");
 
             if (!string.IsNullOrWhiteSpace(runtimeSettings.CustomDataFolder))
-            {
                 logger.Info("Jackett Data will be stored in: " + runtimeSettings.CustomDataFolder);
-            }
-
-            if (runtimeSettings.ProxyConnection != null)
-            {
-                logger.Info("Proxy enabled. " + runtimeSettings.ProxyConnection);
-            }
         }
 
         public static void ProcessWindowsSpecificArgs(ConsoleOptions consoleOptions, IProcessService processService, ServerConfig serverConfig, Logger logger)

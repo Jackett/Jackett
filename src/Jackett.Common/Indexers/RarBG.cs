@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -21,7 +22,7 @@ namespace Jackett.Common.Indexers
     public class RarBG : BaseWebIndexer
     {
         // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
-        private const string ApiEndpoint = "https://torrentapi.org/pubapi_v2.php";
+        private string ApiEndpoint => ((StringConfigurationItem)configData.GetDynamic("apiEndpoint")).Value;
         private readonly TimeSpan TokenDuration = TimeSpan.FromMinutes(14); // 15 minutes expiration
         private readonly string _appId;
         private string _token;
@@ -30,37 +31,54 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationData configData => base.configData;
 
-        public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "rarbg",
                    name: "RARBG",
                    description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
                    link: "https://rarbg.to/",
                    caps: new TorznabCapabilities
                    {
-                       SupportsImdbMovieSearch = true
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       TvSearchImdbAvailable = true
                    },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.GetEncoding("windows-1252");
-            Language = "en-us";
+            Language = "en-US";
             Type = "public";
 
             webclient.requestDelay = 2.5; // The api has a 1req/2s limit
 
-            var sort = new SelectItem(new Dictionary<string, string>
+            var ConfigApiEndpoint = new StringConfigurationItem("API URL") { Value = "https://torrentapi.org/pubapi_v2.php" };
+            configData.AddDynamic("apiEndpoint", ConfigApiEndpoint);
+
+            var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
             {
                 {"last", "created"},
                 {"seeders", "seeders"},
                 {"leechers", "leechers"}
             })
-            { Name = "Sort requested from site", Value = "last" };
+            { Value = "last" };
             configData.AddDynamic("sort", sort);
 
-            AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)");
+            //AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)"); // 3x is not supported by API #11848
             AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
             AddCategoryMapping(17, TorznabCatType.MoviesSD, "Movies/x264");
             AddCategoryMapping(18, TorznabCatType.TVSD, "TV Episodes");
@@ -68,9 +86,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
             AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
             AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
-            AddCategoryMapping(32, TorznabCatType.ConsoleXbox360, "Games/XBOX-360");
+            AddCategoryMapping(32, TorznabCatType.ConsoleXBox360, "Games/XBOX-360");
             AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
-            AddCategoryMapping(35, TorznabCatType.BooksEbook, "e-Books");
             AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
             AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
@@ -89,14 +106,16 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(53, TorznabCatType.ConsolePS4, "Games/PS4");
             AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
-            _appId = "jackett_v" + EnvironmentUtil.JackettVersion;
+            _appId = "jackett_" + EnvironmentUtil.JackettVersion();
+
+            EnableConfigurableRetryAttempts();
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var sort = (SelectItem)configData.GetDynamic("sort");
+            var sort = (SingleSelectConfigurationItem)configData.GetDynamic("sort");
             _sort = sort != null ? sort.Value : "last";
         }
 
@@ -111,14 +130,18 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) {
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+            => await PerformQueryWithRetry(query, true);
+
+        private async Task<IEnumerable<ReleaseInfo>> PerformQueryWithRetry(TorznabQuery query, bool retry)
+        {
             var releases = new List<ReleaseInfo>();
 
             // check the token and renewal if necessary
             await RenewalTokenAsync();
 
-            var response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-            var jsonContent = JObject.Parse(response.Content);
+            var response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
+            var jsonContent = JObject.Parse(response.ContentString);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
             {
@@ -127,14 +150,17 @@ namespace Jackett.Common.Indexers
                 case 2:
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
-                    response = await RequestStringWithCookiesAndRetry(BuildSearchUrl(query));
-                    jsonContent = JObject.Parse(response.Content);
+                    response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
+                    jsonContent = JObject.Parse(response.ContentString);
                     break;
+                case 8: // imdb not found, see issue #12466
                 case 10: // imdb not found, see issue #1486
                 case 20: // no results found
-                    return releases;
+                    // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
+                    // because we can't distinguish between search without results and api malfunction
+                    return retry ? await PerformQueryWithRetry(query, false) : releases;
                 default:
-                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.Content);
+                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.ContentString);
             }
 
             try
@@ -145,10 +171,13 @@ namespace Jackett.Common.Indexers
 
                     var magnetStr = item.Value<string>("download");
                     var magnetUri = new Uri(magnetStr);
+
+                    // #11021 we can't use the magnet link as guid because they are using random ports
                     var infoHash = magnetStr.Split(':')[3].Split('&')[0];
+                    var guid = new Uri(SiteLink + "infohash/" + infoHash);
 
                     // append app_id to prevent api server returning 403 forbidden
-                    var comments = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
+                    var details = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
 
                     // ex: 2015-08-16 21:25:08 +0000
                     var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
@@ -165,14 +194,12 @@ namespace Jackett.Common.Indexers
                         Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
                         MagnetUri = magnetUri,
                         InfoHash = infoHash,
-                        Comments = comments,
+                        Details = details,
                         PublishDate = publishDate,
-                        Guid = magnetUri,
+                        Guid = guid,
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         Size = size,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1
                     };
@@ -191,7 +218,7 @@ namespace Jackett.Common.Indexers
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -200,6 +227,7 @@ namespace Jackett.Common.Indexers
         private string BuildSearchUrl(TorznabQuery query)
         {
             var searchString = query.GetQueryString();
+            var episodeSearchString = query.GetEpisodeSearchString();
             var qc = new NameValueCollection
             {
                 { "token", _token },
@@ -210,7 +238,13 @@ namespace Jackett.Common.Indexers
                 { "sort", _sort }
             };
 
-            if (query.ImdbID != null)
+            if (query.IsTVSearch && !string.IsNullOrWhiteSpace(episodeSearchString) && query.ImdbID != null)
+            {
+                qc.Add("mode", "search");
+                qc.Add("search_imdb", query.ImdbID);
+                qc.Add("search_string", episodeSearchString);
+            }
+            else if (query.ImdbID != null)
             {
                 qc.Add("mode", "search");
                 qc.Add("search_imdb", query.ImdbID);
@@ -258,10 +292,12 @@ namespace Jackett.Common.Indexers
                     { "app_id", _appId }
                 };
                 var tokenUrl = ApiEndpoint + "?" + qc.GetQueryString();
-                var result = await RequestStringWithCookiesAndRetry(tokenUrl);
-                var json = JObject.Parse(result.Content);
+                var result = await RequestWithCookiesAndRetryAsync(tokenUrl);
+                var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
+                // sleep 5 seconds to make sure the token is valid in the next request
+                Thread.Sleep(5000);
             }
         }
 

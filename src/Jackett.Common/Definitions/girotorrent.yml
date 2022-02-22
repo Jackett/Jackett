@@ -2,17 +2,20 @@
 id: girotorrent
 name: Girotorrent
 description: "Girotorrent is an ITALIAN Private site for TV / MOVIES / GENERAL"
-language: it-it
+language: it-IT
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
-  - http://girotorrent.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://girotorrent.org/
+legacylinks:
+  - http://girotorrent.org/ # site forces https
 
 caps:
   categorymappings:
     # LIBREDICOLA
-    - {id: 13, cat: Books/Magazines, desc: "Giornali e Riviste"}
-    - {id: 15, cat: Books/Ebook, desc: "E-Book"}
+    - {id: 13, cat: Books/Mags, desc: "Giornali e Riviste"}
+    - {id: 15, cat: Books/EBook, desc: "E-Book"}
     - {id: 16, cat: Books/Comics, desc: "Fumetti"}
     - {id: 70, cat: Books, desc: "Manuali e Guide"}
     - {id: 72, cat: Audio/Audiobook, desc: "Audio Libri"}
@@ -28,6 +31,7 @@ caps:
     - {id: 22, cat: Movies/SD, desc: "Movie BDRip"}
     - {id: 23, cat: Movies/SD, desc: "Movie DvdRip"}
     - {id: 95, cat: Movies/SD, desc: "Movie WEBRip"}
+    - {id: 98, cat: Movies/WEB-DL, desc: "Movie WEBDL"}
     - {id: 24, cat: Movies/DVD, desc: "Movie DVD-R 5"}
     - {id: 25, cat: Movies/DVD, desc: "Movie DVD-R 9"}
     - {id: 26, cat: Movies/HD, desc: "Movie Blu-Ray HD"}
@@ -42,10 +46,11 @@ caps:
     - {id: 34, cat: TV/Anime, desc: "Anime Altri Cartoni"}
     - {id: 62, cat: TV/Anime, desc: "Anime Natale Bimbi Girotor"}
     # TELEVISIONE
-    - {id: 36, cat: TV, desc: "TV Serie TV"}
-    - {id: 77, cat: TV, desc: "TV Reality"}
-    - {id: 37, cat: TV, desc: "TV Film TV"}
+    - {id: 36, cat: TV, desc: "TV Serie"}
+    - {id: 99, cat: TV/HD, desc: "TV Serie Hevc"}
+    - {id: 37, cat: TV, desc: "TV Film"}
     - {id: 59, cat: TV/Sport, desc: "TV Sport"}
+    - {id: 77, cat: TV, desc: "TV Reality"}
     - {id: 38, cat: TV, desc: "TV Concerti-Spettacoli"}
     - {id: 39, cat: TV, desc: "TV Teatro-Cabaret"}
     - {id: 40, cat: TV/Documentary, desc: "Tv Documentario"}
@@ -58,20 +63,20 @@ caps:
     - {id: 58, cat: Audio, desc: "Musica Discografie"}
     - {id: 97, cat: Audio/Lossless, desc: "Musica Flac"}
     # SALA GIOCHI
-    - {id: 47, cat: PC/Games, desc: "PC Games"}
-    - {id: 48, cat: Console/PS3, desc: "PC Giochi PS2-PS3"}
-    - {id: 49, cat: Console/Wii, desc: "PC Giochi Nintendo Wii"}
-    - {id: 50, cat: Console/Xbox, desc: "PC Giochi Xbox"}
-    - {id: 51, cat: Console/PSP, desc: "PC Giochi PSP"}
-    - {id: 52, cat: Console/3DS, desc: "PC Giochi DS-DS3"}
+    - {id: 47, cat: PC/Games, desc: "Giochi PC"}
+    - {id: 48, cat: Console/PS3, desc: "Giochi PS2-PS3"}
+    - {id: 49, cat: Console/Wii, desc: "Giochi Nintendo Wii"}
+    - {id: 50, cat: Console/XBox, desc: "Giochi Xbox"}
+    - {id: 51, cat: Console/PSP, desc: "Giochi PSP"}
+    - {id: 52, cat: Console/3DS, desc: "Giochi Nintendo DS-DS3"}
     # SOFTWARE
-    - {id: 54, cat: PC, desc: "PC Programmi Windows"}
-    - {id: 55, cat: PC/Mac, desc: "PC Mac"}
-    - {id: 69, cat: PC, desc: "PC Portable"}
-    - {id: 56, cat: PC, desc: "PC Linux"}
+    - {id: 54, cat: PC, desc: "Programmi Windows"}
+    - {id: 55, cat: PC/Mac, desc: "Programmi Mac"}
+    - {id: 69, cat: PC, desc: "Programmi Portable"}
+    - {id: 56, cat: PC, desc: "Programmi Linux"}
     # CELLULARI-PALMARI
-    - {id: 68, cat: PC/Phone-IOS, desc: "IPhone-IPad"}
-    - {id: 71, cat: PC/Phone-Android, desc: "Android APP"}
+    - {id: 68, cat: PC/Mobile-iOS, desc: "IPhone-IPad"}
+    - {id: 71, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 74, cat: Other, desc: "Varie"}
     - {id: 75, cat: Other, desc: "Immagini Wallpaper"}
 
@@ -80,6 +85,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -88,22 +94,30 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. The default is <i>15</i>.
 
 login:
   path: index.php?page=login
@@ -113,47 +127,28 @@ login:
     pwd: "{{ .Config.password }}"
   error:
     - selector: div.error
+    - selector: span[style="color:#FF0000;"]
   test:
     path: index.php
     selector: a[href="logout.php"]
 
 download:
-  before:
-    path: thanks.php
-    method: post
-    inputs:
-      infohash: "{{ .DownloadUri.Query.id }}"
-      thanks: 1
-      rndval: "1487013827343"
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
     # 15 results per page fetch 5 (site is slow, dont be greedy and fetch more)
     - path: index.php
-      inputs:
-        pages: 1
-    - path: index.php
-      inputs:
-        pages: 2
-    - path: index.php
-      inputs:
-        pages: 3
-    - path: index.php
-      inputs:
-        pages: 4
-    - path: index.php
-      inputs:
-        pages: 5
   inputs:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
     page: torrents
-    # 0 all 1 activeonly 2 deadonly
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 name 1 name&descr 2 descr 3 uploader 5 gold 6 silver 7 bronze
-    options: 0
+    # 0 name, 1 name&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
   keywordsfilters:
@@ -209,29 +204,27 @@ search:
     download:
       selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
-    banner:
-      optional: true
+    poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=(.+?) "
     date:
-      selector: td:nth-last-child(8)
+      selector: td:nth-last-child(9)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     seeders:
-      selector: td:nth-last-child(7)
+      selector: td:nth-last-child(8)
     leechers:
-      selector: td:nth-last-child(6)
+      selector: td:nth-last-child(7)
     grabs:
-      selector: td:nth-last-child(5)
-      filters:
-        - name: replace
-          args: ["---", "0"]
+      selector: td:nth-last-child(6)
     size:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     downloadvolumefactor:
       case:
         img[alt="Free Leech"]: 0
@@ -239,13 +232,15 @@ search:
         img[alt="Silver 50% Free"]: 0.5
         img[alt="Bronze 25% Free"]: 0.75
         "*": 1
-    uploadvolumefactor:
-      text: 1
-    uploadvolumefactor:
+    uploadvolumefactor_optional:
       optional: true
       selector: img[alt$="x Upload Multiplier"]
       attribute: alt
       filters:
         - name: replace
           args: ["x Upload Multiplier", ""]
-# xbtitFM 3.0.00
+    uploadvolumefactor:
+      text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
+    minimumratio:
+      text: 0.5
+# xbtitFM 3.1.00

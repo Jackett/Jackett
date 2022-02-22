@@ -83,8 +83,11 @@ namespace Jackett.Server.Controllers
         [HttpPost]
         [Route("{indexerId?}/Config")]
         [TypeFilter(typeof(RequiresIndexer))]
-        public async Task<IActionResult> UpdateConfig([FromBody]Common.Models.DTO.ConfigItem[] config)
+        public async Task<IActionResult> UpdateConfig([FromBody] Common.Models.DTO.ConfigItem[] config)
         {
+            // invalidate cache for this indexer
+            cacheService.CleanIndexerCache(CurrentIndexer);
+
             try
             {
                 // HACK
@@ -167,6 +170,7 @@ namespace Jackett.Server.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
+                result.Poster = serverService.ConvertToProxyLink(result.Poster, serverUrl, result.TrackerId, "img", "poster");
                 if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(serverService.GetBlackholeDirectory()))
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
             }

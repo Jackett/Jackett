@@ -9,9 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -21,26 +22,29 @@ namespace Jackett.Common.Indexers.Abstract
     [ExcludeFromCodeCoverage]
     public abstract class GazelleTracker : BaseWebIndexer
     {
-        protected string LoginUrl => SiteLink + "login.php";
-        protected string APIUrl => SiteLink + "ajax.php";
-        protected string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
-        protected string DetailsUrl => SiteLink + "torrents.php?torrentid=";
-        protected bool supportsFreeleechTokens;
-        protected bool imdbInTags;
-        protected bool supportsCategories = true; // set to false if the tracker doesn't include the categories in the API search results
-        protected bool useTokens = false;
+        protected virtual string LoginUrl => SiteLink + "login.php";
+        protected virtual string APIUrl => SiteLink + "ajax.php";
+        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + "&id=";
+        protected virtual string DetailsUrl => SiteLink + "torrents.php?torrentid=";
+        protected virtual string PosterUrl => SiteLink;
+        protected virtual string AuthorizationFormat => "{0}";
+        protected virtual int ApiKeyLength => 41;
+        protected virtual string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "usetoken=0");
+
+        protected bool useTokens;
         protected string cookie = "";
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private readonly bool imdbInTags;
+        private readonly bool useApiKey;
+        private readonly bool usePassKey;
+
+        private new ConfigurationDataGazelleTracker configData => (ConfigurationDataGazelleTracker)base.configData;
 
         protected GazelleTracker(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 IProtectionService p, TorznabCapabilities caps, bool supportsFreeleechTokens,
-                                 bool imdbInTags = false, bool has2Fa = false)
+                                 IProtectionService p, ICacheService cs, TorznabCapabilities caps,
+                                 bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false,
+                                 bool useApiKey = false, bool usePassKey = false, string instructionMessageOptional = null)
             : base(id: id,
                    name: name,
                    description: description,
@@ -50,59 +54,63 @@ namespace Jackett.Common.Indexers.Abstract
                    client: client,
                    logger: logger,
                    p: p,
-                   configData: new ConfigurationDataBasicLogin())
+                   cacheService: cs,
+                   configData: new ConfigurationDataGazelleTracker(
+                       has2Fa, supportsFreeleechTokens, useApiKey, usePassKey, instructionMessageOptional))
         {
             Encoding = Encoding.UTF8;
-            this.supportsFreeleechTokens = supportsFreeleechTokens;
+
             this.imdbInTags = imdbInTags;
-
-            if (has2Fa)
-            {
-                var cookieHint = new ConfigurationData.DisplayItem(
-                "<ol><li>(use this only if 2FA is enabled for your account)</li><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find 'cookie:' in the <b>Request Headers</b> section<li>Copy & paste the whole cookie string to here.</ol>")
-                {
-                    Name = "CookieHint"
-                };
-                configData.AddDynamic("cookieHint", cookieHint);
-                var cookieItem = new ConfigurationData.StringItem { Value = "" };
-                cookieItem.Name = "Cookie";
-                configData.AddDynamic("cookie", cookieItem);
-            }
-
-            if (supportsFreeleechTokens)
-            {
-                var useTokenItem = new ConfigurationData.BoolItem { Value = false };
-                useTokenItem.Name = "Use Freeleech Tokens when available";
-                configData.AddDynamic("usetoken", useTokenItem);
-            }
+            this.useApiKey = useApiKey;
+            this.usePassKey = usePassKey;
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            var cookieItem = (ConfigurationData.StringItem)configData.GetDynamic("cookie");
+            var cookieItem = configData.CookieItem;
             if (cookieItem != null)
-            {
                 cookie = cookieItem.Value;
-            }
 
-            var useTokenItem = (ConfigurationData.BoolItem)configData.GetDynamic("usetoken");
+            var useTokenItem = configData.UseTokenItem;
             if (useTokenItem != null)
-            {
                 useTokens = useTokenItem.Value;
-            }
-
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
+            if (useApiKey)
+            {
+                var apiKey = configData.ApiKey;
+                if (apiKey?.Value == null)
+                    throw new Exception("Invalid API Key configured");
+                if (apiKey.Value.Length != ApiKeyLength)
+                    throw new Exception($"Invalid API Key configured: expected length: {ApiKeyLength}, got {apiKey.Value.Length}");
+
+                try
+                {
+                    var results = await PerformQuery(new TorznabQuery());
+                    if (!results.Any())
+                        throw new Exception("Found 0 results in the tracker");
+
+                    IsConfigured = true;
+                    SaveConfig();
+                    return IndexerConfigurationStatus.Completed;
+                }
+                catch (Exception e)
+                {
+                    IsConfigured = false;
+                    throw new Exception($"Your API Key did not work: {e.Message}");
+                }
+            }
+
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
-                { "keeplogged", "1"},
+                { "keeplogged", "1"}
             };
 
             if (!string.IsNullOrWhiteSpace(cookie))
@@ -113,9 +121,7 @@ namespace Jackett.Common.Indexers.Abstract
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
-                    {
                         throw new Exception("Found 0 results in the tracker");
-                    }
 
                     IsConfigured = true;
                     SaveConfig();
@@ -124,18 +130,18 @@ namespace Jackett.Common.Indexers.Abstract
                 catch (Exception e)
                 {
                     IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
+                    throw new Exception($"Your cookie did not work: {e.Message}");
                 }
             }
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, SiteLink);
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.ParseDocument(response.Content);
+                var loginResultDocument = loginResultParser.ParseDocument(response.ContentString);
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
-                    throw new ExceptionWithConfigData(response.Content, configData);
+                    throw new ExceptionWithConfigData(response.ContentString, configData);
 
                 loginform.QuerySelector("table").Remove();
                 var errorMessage = loginform.TextContent.Replace("\n\t", " ").Trim();
@@ -161,7 +167,6 @@ namespace Jackett.Common.Indexers.Abstract
                 { "order_way", "desc" }
             };
 
-
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 if (imdbInTags)
@@ -170,9 +175,7 @@ namespace Jackett.Common.Indexers.Abstract
                     queryCollection.Add("cataloguenumber", query.ImdbID);
             }
             else if (!string.IsNullOrWhiteSpace(searchString))
-            {
                 queryCollection.Add("searchstr", searchString);
-            }
 
             if (query.Artist != null)
                 queryCollection.Add("artistname", query.Artist);
@@ -186,27 +189,35 @@ namespace Jackett.Common.Indexers.Abstract
             if (query.Album != null)
                 queryCollection.Add("groupname", query.Album);
 
-            if (supportsCategories)
-            {
-                foreach (var cat in MapTorznabCapsToTrackers(query))
-                {
-                    queryCollection.Add("filter_cat[" + cat + "]", "1");
-                }
-            }
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
 
-            searchUrl += "?" + queryCollection.GetQueryString();
+            // remove . as not used in titles
+            searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
 
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            if (response.IsRedirect)
+            var apiKey = configData.ApiKey;
+            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
+
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
+            // we get a redirect in html pages and an error message in json response (api)
+            if (response.IsRedirect && !useApiKey)
             {
-                // re-login
+                // re-login only if API key is not in use.
                 await ApplyConfiguration(null);
-                response = await RequestStringWithCookiesAndRetry(searchUrl);
+                response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
+            else if (response.ContentString != null && response.ContentString.Contains("failure") && useApiKey)
+            {
+                // reason for failure should be explained.
+                var jsonError = JObject.Parse(response.ContentString);
+                var errorReason = (string)jsonError["error"];
+                throw new Exception(errorReason);
+            }
+
 
             try
             {
-                var json = JObject.Parse(response.Content);
+                var json = JObject.Parse(response.ContentString);
                 foreach (JObject r in json["response"]["results"])
                 {
                     var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
@@ -227,27 +238,24 @@ namespace Jackett.Common.Indexers.Abstract
                     var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
                         ? "Tags: " + string.Join(", ", tags) + "\n"
                         : null;
-                    Uri banner = null;
+                    Uri poster = null;
                     if (!string.IsNullOrEmpty(cover))
-                        banner = new Uri(cover);
+                        poster = (cover.StartsWith("http")) ? new Uri(cover) : new Uri(PosterUrl + cover);
                     var release = new ReleaseInfo
                     {
                         PublishDate = groupTime,
                         Title = title.ToString(),
                         Description = description,
-                        BannerUrl = banner
+                        Poster = poster
                     };
 
 
                     if (imdbInTags)
-                    {
                         release.Imdb = tags
                                        .Select(tag => ParseUtil.GetImdbID((string)tag))
                                        .Where(tag => tag != null).FirstIfSingleOrDefault();
-                    }
 
                     if (r["torrents"] is JArray)
-                    {
                         foreach (JObject torrent in r["torrents"])
                         {
                             var release2 = (ReleaseInfo)release.Clone();
@@ -255,7 +263,6 @@ namespace Jackett.Common.Indexers.Abstract
                             if (ReleaseInfoPostParse(release2, torrent, r))
                                 releases.Add(release2);
                         }
-                    }
                     else
                     {
                         FillReleaseInfoFromJson(release, r);
@@ -266,7 +273,7 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;
@@ -281,9 +288,7 @@ namespace Jackett.Common.Indexers.Abstract
 
             var time = (string)torrent["time"];
             if (!string.IsNullOrEmpty(time))
-            {
                 release.PublishDate = DateTime.ParseExact(time + " +0000", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
-            }
 
             var flags = new List<string>();
 
@@ -351,8 +356,8 @@ namespace Jackett.Common.Indexers.Abstract
             release.Size = (long)torrent["size"];
             release.Seeders = (int)torrent["seeders"];
             release.Peers = (int)torrent["leechers"] + release.Seeders;
-            release.Comments = new Uri(DetailsUrl + torrentId);
-            release.Guid = release.Comments;
+            release.Details = new Uri(DetailsUrl + torrentId);
+            release.Guid = release.Details;
             release.Link = new Uri(DownloadUrl + torrentId);
             var category = (string)torrent["category"];
             if (category == null || category.Contains("Select Category"))
@@ -364,14 +369,10 @@ namespace Jackett.Common.Indexers.Abstract
             release.DownloadVolumeFactor = 1;
             release.UploadVolumeFactor = 1;
             if ((bool)torrent["isFreeleech"])
-            {
                 release.DownloadVolumeFactor = 0;
-            }
             var isPersonalFreeleech = (bool?)torrent["isPersonalFreeleech"];
             if (isPersonalFreeleech != null && isPersonalFreeleech == true)
-            {
                 release.DownloadVolumeFactor = 0;
-            }
             if ((bool)torrent["isNeutralLeech"])
             {
                 release.DownloadVolumeFactor = 0;
@@ -381,7 +382,10 @@ namespace Jackett.Common.Indexers.Abstract
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var content = await base.Download(link);
+            var apiKey = configData.ApiKey;
+            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
+            var response = await base.RequestWithCookiesAsync(link.ToString(), null, RequestType.GET, headers: headers);
+            var content = response.ContentBytes;
 
             // Check if we're out of FL tokens/torrent is to large
             // most gazelle trackers will simply return the torrent anyway but e.g. redacted will return an error
@@ -392,12 +396,13 @@ namespace Jackett.Common.Indexers.Abstract
             {
                 var html = Encoding.GetString(content);
                 if (html.Contains("You do not have any freeleech tokens left.")
-                    || html.Contains("You do not have enough freeleech tokens left.")
-                    || html.Contains("This torrent is too large."))
+                    || html.Contains("You do not have enough freeleech tokens")
+                    || html.Contains("This torrent is too large.")
+                    || html.Contains("You cannot use tokens here"))
                 {
                     // download again with usetoken=0
-                    var requestLinkNew = requestLink.Replace("usetoken=1", "usetoken=0");
-                    content = await base.Download(new Uri(requestLinkNew));
+                    var requestLinkNew = FlipOptionalTokenString(requestLink);
+                    content = await base.Download(new Uri(requestLinkNew), RequestType.GET, headers: headers);
                 }
             }
 

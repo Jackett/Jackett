@@ -1,0 +1,188 @@
+---
+id: totheglorycookie
+name: ToTheGloryCookie
+description: "ToTheGlory (TTG) A Chinese tracker. This uses the cookie method for access"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://totheglory.im/
+
+caps:
+  categories:
+    # 电影 Movie
+    电影DVDRip: Movies/SD # Movie DVDRip
+    电影720p: Movies/HD # Movie 720p
+    电影1080i/p: Movies/HD # Movie 1080i / p
+    BluRay原盘: Movies/BluRay # BluRay original disc
+    影视2160p: Movies/UHD # Media - 2160p
+    UHD原盘: Movies/UHD # Blu-ray UHD
+    # 纪录片 Docs
+    纪录片720p: Movies/HD # Documentary 720p
+    纪录片1080i/p: Movies/HD # Documentary 1080i / p
+    纪录片BluRay原盘: Movies/BluRay # Documentary BluRay Original
+    # 剧集 TV
+    欧美剧720p: TV/HD # TV Series - EU/US - 720p
+    欧美剧1080i/p: TV/HD # TV Series - EU/US - 1080i/p
+    高清日剧: TV/HD # TV Series - JP
+    大陆港台剧1080i/p: TV/HD # TV Series - CN - 1080i/p
+    大陆港台剧720p: TV/HD # TV Series - CN - 720p
+    高清韩剧: TV/HD # TV Series - KR
+    # 剧集包 TV Packs
+    欧美剧包: TV/HD # TV Packs - EU/US
+    日剧包: TV/HD # TV Packs - JP
+    韩剧包: TV/HD # TV Packs - CN
+    华语剧包: TV/HD # TV Packs - KR
+    # 音乐 Audio
+    (电影原声&Game)OST: Audio # OST - (Movie & Game) Track
+    无损音乐FLAC&APE: Audio/Lossless  # FLAC & APE
+    MV&amp;演唱会: Audio/Video # MV & Concert
+    # 其他 Other
+    高清体育节目: TV/Sport # HD Sports
+    高清动漫: TV/Anime # HD Animation
+    韩国综艺: TV/HD # TV Shows - KR
+    高清综艺: TV/HD # TV Shows
+    日本综艺: TV/HD # TV Shows - JP
+    MiniVideo: Other # MiniVideo
+    补充音轨: Audio # Supplemental audio tracks
+    iPhone/iPad视频: PC/Mobile-Other # IPhone / iPad video
+    # 单机游戏
+    PC: PC/Games # Games - PC
+    MAC: PC/Mac # Games - MAC
+    # 微软系列
+    XBOX360: Console/XBox 360 # MicroSoft - XBOX360
+    XBOX1: Console/XBox # MicroSoft - XBOX360
+    XBLA: Console/XBox # MicroSoft - XBLA
+    XBOX+to+XBOX360: Console/XBox # MicroSoft - XBOX to XBOX360
+    # 索尼系列
+    PS2: Console/Other # SONY - PS2
+    PSP: Console/PSP # SONY - PSP
+    PS4: Console/PS4 # SONY - PS4
+    PS3: Console/PS3 # SONY - PS3
+    PSV: Console/PS Vita # SONY - PSV
+    # 任天堂系列
+    WIIU: Console/WiiU # Nintendo - WIIU
+    WII: Console/Wii # Nintendo- WII
+    SWITCH: Console/Other # Nintendo - SWITCH
+    NDS: Console/NDS # Nintendo - NDS
+    NGC: Console/Other # Nintendo - NGC
+    # 主机影视
+    PS3兼容高清: Console/PS3 # Video - HD - PS3
+    PSP兼容高清&标清: Console/PSP # Video - SD&HD - PSP
+    XBOX360兼容高清: Console/XBox 360 # Video - HD - XBOX360
+    Game+Video: Console/Other # Video - Game Video
+    # 软件
+    APPZ: PC # Software - APPZ
+    Game+Ebook: Books/EBook # Software - Game Ebook
+    Ebook: Books/EBook # Software - Ebook
+    # 苹果系列
+    iPhone/iPad游戏: PC/Mobile-iOS # Apple - Game - iPhone/iPad
+    iPad书籍: Books/EBook # Apple - Book - iPad
+    iPhone/iPad软件: PC/Mobile-iOS # Apple - Software - iPhone/iPad
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: my.php
+
+search:
+  paths:
+    - path: browse.php
+      inputs:
+        c: M
+    - path: browse.php
+      categories: [1000, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1100, 1110, 1120, 1130, 1140, 1150, 1160, 1170, 1180, 4000, 4010, 4020, 4030, 4040, 4050, 4060, 4070, 7000, 7010, 7020, 7030, 7040, 7050, 7060]
+      inputs:
+        c: G
+  inputs:
+    search_field: "{{ range .Categories }}分类:`{{.}}` {{end}}{{ if .Query.IMDBID }}imdb{{ .Query.IMDBIDShort }}{{ else }}{{ .Keywords }}{{ end }}"
+  rows:
+    selector: table#torrent_table > tbody > tr[id]
+
+  fields:
+    description:
+      selector: div.name_left > a > b
+    title:
+      selector: div.name_left > a > b
+      remove: span
+    category:
+      selector: tr[id] td:nth-child(1) > a
+      attribute: href
+      filters:
+        - name: querystring
+          args: search_field
+        - name: replace
+          args: ["category:", ""]
+        - name: trim
+          args: "\""
+    details:
+      selector: div.name_left > a
+      attribute: href
+    download:
+      selector: a.dl_a
+      attribute: href
+    files:
+      selector: td:nth-child(3)
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(9)
+      filters:
+        - name: split
+          args: ["/", 0]
+    leechers:
+      selector: td:nth-child(9)
+      filters:
+        - name: split
+          args: ["/", 1]
+        - name: replace
+          args: ["\n", ""]
+    grabs:
+      selector: td:nth-child(8)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    imdbid:
+      selector: span.imdb_rate > a
+      attribute: href
+    downloadvolumefactor:
+      case:
+        img[alt="free"]: 0
+        img[alt="50%"]: 0.5
+        img[alt="30%"]: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[alt="200%"]: 2
+        "*": 1
+    minimumratio:
+      case:
+        img[title="Hit and Run"]: 1
+        "*": 0
+    minimumseedtime:
+      case:
+        img[title="Hit and Run"]: 216000
+        "*": 0
+# engine n/a

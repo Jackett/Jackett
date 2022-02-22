@@ -1,0 +1,164 @@
+---
+id: docspedia
+name: DocsPedia
+description: "DocsPedia is a Private Torrent Tracker for E-learning"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://www.docspedia.world/
+
+caps:
+  categorymappings:
+    - {id: 77, cat: PC, desc: "3D Models"}
+    - {id: 65, cat: Audio, desc: "Audio"}
+    - {id: 64, cat: Books/EBook, desc: "Books"}
+    - {id: 66, cat: Books, desc: "Business"}
+    - {id: 68, cat: Books/Comics, desc: "Comics"}
+    - {id: 80, cat: Books, desc: "Coooking"}
+    - {id: 59, cat: TV/Documentary, desc: "Docs/Movies"}
+    - {id: 60, cat: TV/Documentary, desc: "Docs/TV"}
+    - {id: 79, cat: TV, desc: "Educational"}
+    - {id: 71, cat: Other, desc: "Fonts"}
+    - {id: 72, cat: Books, desc: "IT Books"}
+    - {id: 57, cat: Books/Mags, desc: "Magazine"}
+    - {id: 58, cat: Books, desc: "Medicine"}
+    - {id: 70, cat: Books/EBook, desc: "Occult"}
+    - {id: 74, cat: Audio, desc: "Podcasts"}
+    - {id: 69, cat: Other, desc: "PS Resources"}
+    - {id: 76, cat: Books, desc: "Self-Help"}
+    - {id: 56, cat: TV/Sport, desc: "Sports"}
+    - {id: 61, cat: Other, desc: "Tutorials"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    book-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img.cimage
+    input: captcha
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.subheader:contains("failed")
+  test:
+    path: my.php
+    selector: a[href$="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech, 4 480p, 5 720p, 6 1080p, 7 4k
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: div.torrentrow:has(a[href^="download.php?torrent="])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) width"
+    files:
+      selector: div.torrenttable:nth-last-child(6)
+    size:
+      selector: div.torrenttable:nth-last-child(4)
+    grabs:
+      selector: div.torrenttable:nth-last-child(3)
+    seeders:
+      selector: div.torrenttable:nth-last-child(2)
+    leechers:
+      selector: div.torrenttable:nth-last-child(1)
+    downloadvolumefactor:
+      case:
+        img[src$="images/free.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    date_year:
+      remove: a
+      # Jul 4 2019 08:04 AM
+      selector: div.torrenttable:nth-child(2):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM -07:00"
+    date_day:
+      remove: a
+      # Today 02:40 PM
+      # Yesterday 09:10 AM
+      selector: div.torrenttable:nth-child(2):contains("day")
+      optional: true
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# TBdev

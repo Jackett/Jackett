@@ -45,7 +45,7 @@ namespace Jackett.Server.Controllers
 
                 if (!indexer.IsConfigured)
                 {
-                    logger.Warn(string.Format("Rejected a request to {0} which is unconfigured.", indexer.DisplayName));
+                    logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
                     return Forbid("This indexer is not configured.");
                 }
 
@@ -66,12 +66,8 @@ namespace Jackett.Server.Controllers
                     && downloadBytes[6] == 0x3a // :
                     )
                 {
-                    // some sites provide magnet links with non-ascii characters, the only way to be sure the url
-                    // is well encoded is to unscape and escape again
-                    // https://github.com/Jackett/Jackett/issues/5372
-                    // https://github.com/Jackett/Jackett/issues/4761
-                    var magneturi = Uri.EscapeUriString(Uri.UnescapeDataString(Encoding.UTF8.GetString(downloadBytes)));
-                    return Redirect(magneturi);
+                    var magnetUrl = Encoding.UTF8.GetString(downloadBytes);
+                    return Redirect(magnetUrl);
                 }
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
@@ -95,7 +91,7 @@ namespace Jackett.Server.Controllers
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error downloading " + indexerID + " " + path);
+                logger.Error($"Error downloading. indexer: {indexerID} path: {path}\n{e}");
                 return NotFound();
             }
         }

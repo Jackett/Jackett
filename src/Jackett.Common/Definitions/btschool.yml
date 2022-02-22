@@ -2,7 +2,7 @@
 id: btschool
 name: BTSCHOOL
 description: "BTSCHOOL is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: zh-cn
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
@@ -12,10 +12,10 @@ caps:
   categorymappings:
     - {id: 405, cat: Movies, desc: "电影/Movies"}
     - {id: 406, cat: TV, desc: "连续剧/TV-Series"}
-    - {id: 407, cat: TV/Anime, desc: "动漫/Anime"}
+    - {id: 407, cat: TV/Anime, desc: "动漫/Animation"}
     - {id: 408, cat: TV/Documentary, desc: "纪录片/Documentary"}
     - {id: 412, cat: TV, desc: "综艺/TV-Show"}
-    - {id: 404, cat: PC, desc: "软件/Software"}
+    - {id: 404, cat: PC/0day, desc: "软件/Software"}
     - {id: 402, cat: TV, desc: "资料/Education"}
     - {id: 411, cat: PC/Games, desc: "游戏/Game"}
     - {id: 409, cat: Audio, desc: "音乐/Music"}
@@ -23,7 +23,7 @@ caps:
     - {id: 415, cat: Other, desc: "其他/Other"}
 
   modes:
-    search: [q, imdbid]
+    search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
@@ -35,7 +35,19 @@ settings:
   - name: info
     type: info
     label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
   method: cookie
@@ -50,16 +62,14 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{if .Query.IMDBID }}{{ .Query.IMDBID }}{{else}}{{ .Keywords }}{{end}}"
-    # 0 incldead 1 active 2 justdead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 incldead, 1 active, 2 justdead
     incldead: 0
-    # promotion: 0 all 1 normal 2 free 3 2x 4 2xfree 5 50% 6 2x 50% 7 30%
-    spstate: 0
-    # 0 all 1 bookmarked 2 not
-    inclbookmarked: 0
-    # 0 title 1 descr 3 uploaded 4 imdb
-    search_area: "{{ if .Query.IMDBID }}4{{else}}0{{end}}"
-    # 0 and 1 or 2 exact
+    # promotion: 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x 50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 imdb
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: 4
     type: desc
@@ -83,14 +93,27 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    date:
+    date_elapsed:
+      # time type: time elapsed (default)
       selector: td:nth-child(4) > span[title]
       attribute: title
+      optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-02 15:04:05 -07:00"
+    date_added:
+      # time added
+      selector: td:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td.rowfollow:nth-child(5)
     seeders:
@@ -113,6 +136,8 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumratio:
+      text: 1.0
     description:
       selector: td:nth-child(2)
       remove: a, img

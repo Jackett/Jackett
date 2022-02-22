@@ -36,9 +36,11 @@ namespace Jackett.Common.Models
         public string Type { get; set; }
         public string Language { get; set; }
         public string Encoding { get; set; }
+        public double? RequestDelay { get; set; }
         public List<string> Links { get; set; }
         public List<string> Legacylinks { get; set; }
         public bool Followredirect { get; set; } = false;
+        public bool Testlinktorrent { get; set; } = true;
         public List<string> Certificates { get; set; }
         public capabilitiesBlock Caps { get; set; }
         public loginBlock Login { get; set; }
@@ -76,7 +78,6 @@ namespace Jackett.Common.Models
     {
         public string Type { get; set; }
         public string Selector { get; set; }
-        public string Image { get => throw new Exception("Deprecated, please use Login.Captcha.Selector instead"); set => throw new Exception("Deprecated, please use login/captcha/selector instead of image"); }
         public string Input { get; set; }
     }
 
@@ -149,13 +150,16 @@ namespace Jackett.Common.Models
         public int After { get; set; }
         //public string Remove { get; set; } // already inherited
         public selectorBlock Dateheaders { get; set; }
+        public selectorBlock Count { get; set; }
+        public bool Multiple { get; set; } = false;
     }
 
     public class searchPathBlock : requestBlock
     {
-        public List<string> Categories { get; set; }
+        public List<string> Categories { get; set; } = new List<string>();
         public bool Inheritinputs { get; set; } = true;
         public bool Followredirect { get; set; } = false;
+        public responseBlock Response { get; set; }
     }
 
     public class requestBlock
@@ -166,12 +170,37 @@ namespace Jackett.Common.Models
         public string Queryseparator { get; set; } = "&";
     }
 
+    public class beforeBlock : requestBlock
+    {
+        public selectorField Pathselector { get; set; }
+    }
+
+    public class infohashBlock
+    {
+        public selectorField Hash { get; set; }
+        public selectorField Title { get; set; }
+        public bool Usebeforeresponse { get; set; } = false;
+    }
+
     public class downloadBlock
+    {
+        public List<selectorField> Selectors { get; set; }
+        public string Method { get; set; }
+        public beforeBlock Before { get; set; }
+        public infohashBlock Infohash { get; set; }
+    }
+
+    public class selectorField
     {
         public string Selector { get; set; }
         public string Attribute { get; set; }
+        public bool Usebeforeresponse { get; set; } = false;
         public List<filterBlock> Filters { get; set; }
-        public string Method { get; set; }
-        public requestBlock Before { get; set; }
+    }
+
+    public class responseBlock
+    {
+        public string Type { get; set; }
+        public string NoResultsMessage { get; set; }
     }
 }

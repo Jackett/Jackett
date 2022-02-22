@@ -1,0 +1,170 @@
+---
+id: sexxi
+name: Sexxi
+description: "Sexxi is a RUSSIAN Public Torrent Tracker for 3X"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - https://sexxi.club/
+
+caps:
+  # don't forget to update the search fields category case block
+  categorymappings:
+    - {id: 1, cat: XXX, desc: "Любительское"}
+    - {id: 20, cat: XXX, desc: "Орал"}
+    - {id: 13, cat: XXX, desc: "Минет"}
+    - {id: 2, cat: XXX, desc: "Анал"}
+    - {id: 31, cat: XXX, desc: "Куннилингус"}
+    - {id: 32, cat: XXX, desc: "Большие сиськи"}
+    - {id: 27, cat: XXX, desc: "HD-видео"}
+    - {id: 10, cat: XXX, desc: "Хардкор"}
+    - {id: 35, cat: XXX, desc: "Втроем"}
+    - {id: 19, cat: XXX, desc: "Мастурбация"}
+    - {id: 34, cat: XXX, desc: "Русские"}
+    - {id: 7, cat: XXX, desc: "Молодые"}
+    - {id: 17, cat: XXX, desc: "Зрелые"}
+    - {id: 5, cat: XXX, desc: "Блондинки"}
+    - {id: 6, cat: XXX, desc: "Брюнетки"}
+    - {id: 3, cat: XXX, desc: "Азиатки"}
+    - {id: 15, cat: XXX, desc: "Лесбиянки"}
+    - {id: 12, cat: XXX, desc: "Межрасовый"}
+    - {id: 30, cat: XXX, desc: "Групповое"}
+    - {id: 36, cat: XXX, desc: "От первого лица"}
+    - {id: 22, cat: XXX, desc: "ПорноЗвезды"}
+    - {id: 11, cat: XXX, desc: "Кастинг"}
+    - {id: 33, cat: XXX, desc: "Ролевая игра"}
+    - {id: 14, cat: XXX, desc: "Фетиш"}
+    - {id: 25, cat: XXX, desc: "Униформа"}
+    - {id: 18, cat: XXX, desc: "Пьяные"}
+    - {id: 21, cat: XXX, desc: "Колготки"}
+    - {id: 28, cat: XXX, desc: "Волосатые"}
+    - {id: 23, cat: XXX, desc: "Рыжая"}
+    - {id: 24, cat: XXX, desc: "Ретро"}
+    - {id: 29, cat: XXX, desc: "Нудизм"}
+    - {id: 4, cat: XXX, desc: "БДСМ"}
+    - {id: 8, cat: XXX, desc: "Эротика"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      title: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+
+download:
+  selectors:
+    - selector: a[href*="index.php?do=download&id="]
+      attribute: href
+
+search:
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+  paths:
+    - path: index.php
+  inputs:
+    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+    do: search
+    subaction: search
+    search_start: 0
+    full_search: 1
+    result_from: 1
+    all_word_seach: 0
+    showposts: 0
+    # 0 in article 1 in comments 2 in static pages 3 in article titles
+    titleonly: 3
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    sortby: "{{ .Config.sort }}"
+    resorder: "{{ .Config.type }}"
+
+  rows:
+    selector: div.short-item
+
+  fields:
+    category:
+      selector: p a:last-child
+      case:
+        a[href$="/amateur/"]: 1
+        a[href$="/pornstars/"]: 22
+        a[href$="/hdvideo/"]: 27
+        a[href$="/blonde/"]: 5
+        a[href$="/hairy/"]: 28
+        a[href$="/brunette/"]: 6
+        a[href$="/russians/"]: 34
+        a[href$="/asian/"]: 3
+        a[href$="/redhead/"]: 23
+        a[href$="/anal/"]: 2
+        a[href$="/oral/"]: 20
+        a[href$="/bdsm/"]: 4
+        a[href$="/erotic/"]: 8
+        a[href$="/hardcore/"]: 10
+        a[href$="/uniforms/"]: 25
+        a[href$="/masturbation/"]: 19
+        a[href$="/big_boobs/"]: 32
+        a[href$="/role-playing-game/"]: 33
+        a[href$="/interracial/"]: 12
+        a[href$="/lesbians/"]: 15
+        a[href$="/young/"]: 7
+        a[href$="/threesome/"]: 35
+        a[href$="/kasting/"]: 11
+        a[href$="/blowjob/"]: 13
+        a[href$="/retro/"]: 24
+        a[href$="/fetish/"]: 14
+        a[href$="/mature/"]: 17
+        a[href$="/drunk/"]: 18
+        a[href$="/nudism/"]: 29
+        a[href$="/pantyhose/"]: 21
+        a[href$="/group/"]: 30
+        a[href$="/cunnilingus/"]: 31
+        a[href$="/first_person/"]: 36
+        "*": 27
+    title:
+      selector: a.short-title
+    details:
+      selector: a.short-title
+      attribute: href
+    download:
+      selector: a.short-title
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    cat_tags:
+      selector: p.argcat
+    description:
+      selector: ul.short-list
+      filters:
+        - name: append
+          args: "</br>{{ .Result.cat_tags }}"
+    date:
+      selector: div.short-meta-item:has(span.fa-calendar-alt)
+      filters:
+        # 28.10.2021
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "02.01.2006 -07:00"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# DataLife

@@ -2,7 +2,7 @@
 id: onejav
 name: OneJAV
 description: "OneJAV is a Public tracker for Asian 3X (JAV)"
-language: en
+language: en-US
 type: public
 encoding: UTF-8
 links:
@@ -14,15 +14,17 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
-settings: []
+settings:
+  - name: flaresolverr-onejav
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.<br><br>If you have issues downloading, perform a keyword search (e.g. <b>video</b>) so FlareSolverr can grab new cookies.
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}"
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{else}}new{{end}}?page=2"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}new{{ end }}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}new{{ end }}?page=2"
 
   rows:
     selector: div.mb-3
@@ -38,12 +40,9 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    banner:
+    poster:
       selector: img
       attribute: src
-      optional: true
-    actress:
-      text: ""
     actress:
       selector: a[href^="/actress/"]
       optional: true
@@ -51,15 +50,11 @@ search:
         - name: prepend
           args: "Actress: "
     tags:
-      text: ""
-    tags:
       selector: div.tags
       optional: true
       filters:
         - name: prepend
           args: "Tags: "
-    descr:
-      text: ""
     descr:
       selector: p.level
       optional: true
@@ -69,8 +64,10 @@ search:
       selector: p.is-6 > a
       attribute: href
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "/2006/01/02"
+          args: "/2006/01/02 -07:00"
     size:
       selector: span.is-size-6
     seeders:

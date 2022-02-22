@@ -2,7 +2,7 @@
 id: pornforall
 name: Pornforall
 description: "Pornforall is a RUSSIAN Public tracker for 3X"
-language: ru-ru
+language: ru-RU
 type: public
 encoding: windows-1251
 links:
@@ -13,8 +13,6 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings: []
 
@@ -48,7 +46,7 @@ search:
           args: "film(\\d+)-"
         - name: prepend
           args: "download.php?id="
-    banner:
+    poster:
       selector: img.im
       attribute: src
     date:
@@ -57,10 +55,12 @@ search:
       filters:
         - name: querystring
           args: date
+        - name: append
+          args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02"
+          args: "2006-01-02 -07:00"
     size:
-      selector: font
+      selector: font[color="grey"]
       filters:
         - name: regexp
           args: "Размер: (.+?)$"

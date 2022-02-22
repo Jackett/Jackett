@@ -7,17 +7,24 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentview11.net/
+  - https://torrentview.co/
 legacylinks:
   - https://torrentview.net/
-  - https://torrentview3.net/
-  - https://torrentview4.net/
-  - https://torrentview5.net/
-  - https://torrentview6.net/
-  - https://torrentview7.net/
-  - https://torrentview8.net/
-  - https://torrentview9.net/
-  - https://torrentview10.net/
+  - https://torrentview34.com/
+  - https://torrentview35.com/
+  - https://torrentview36.com/
+  - https://torrentview37.com/
+  - https://torrentview38.com/
+  - https://torrentview39.com/
+  - https://torrentview40.com/
+  - https://torrentview41.com/
+  - https://torrentview42.com/
+  - https://torrentview44.com/
+  - https://torrentview45.com/
+  - https://torrentview46.com/
+  - https://torrentview47.com/
+  - https://torrentview49.com/
+  - https://torrentview50.com/
 
 caps:
   categorymappings:
@@ -33,12 +40,16 @@ caps:
 
   modes:
     search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
 
 settings: []
 
 download:
-  selector: a[href^="magnet:?xt="]
-  attribute: href
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:
@@ -51,7 +62,7 @@ search:
     gr_id: ""
     # search in: title
     sfl: wr_subject
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{else}}금요일{{end}}"
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}금요일{{ end }}"
     # search operand: or, and
     sop: and
 
@@ -74,11 +85,9 @@ search:
       selector: div.media-heading > a[href^="./board.php"]
       attribute: href
     date:
+      # 2020-03-28T01:30:01+09:00
       selector: time
       attribute: datetime
-      filters:
-        - name: dateparse
-          args: "2006-01-02T15:04:05+09:00"
     cat:
       selector: div.media-heading > a[href^="./board.php"]
       attribute: href
@@ -86,7 +95,7 @@ search:
         - name: querystring
           args: bo_table
     size:
-      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{else}}2 GB{{end}}"
+      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
     seeders:
       text: 1
     leechers:

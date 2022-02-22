@@ -17,17 +17,15 @@ caps:
     - {id: 151, cat: Movies/HD, desc: "Movies/Turkish/1080p"}
     - {id: 152, cat: Movies/HD, desc: "Movies/Turkish/720p"}
     - {id: 153, cat: Movies/DVD, desc: "Movies/Turkish/DVD5-DVD9"}
-    - {id: 154, cat: Movies/WEBDL, desc: "Movies/Turkish/BRRip-HDRip-DVDRip-WebDL"}
+    - {id: 154, cat: Movies/WEB-DL, desc: "Movies/Turkish/BRRip-HDRip-DVDRip-WebDL"}
     - {id: 155, cat: Movies/Other, desc: "Movies/Turkish/Boxset"}
-
     - {id: 156, cat: Movies, desc: "Movies/Foreign"}
     - {id: 157, cat: Movies/UHD, desc: "Movies/Foreign/4K / 3D"}
     - {id: 159, cat: Movies/HD, desc: "Movies/Foreign/1080p"}
     - {id: 160, cat: Movies/HD, desc: "Movies/Foreign/720p"}
     - {id: 161, cat: Movies/DVD, desc: "Movies/Foreign/DVD5-DVD9"}
-    - {id: 162, cat: Movies/WEBDL, desc: "Movies/Foreign/BRRip-HDRip-DVDRip-WebDL"}
+    - {id: 162, cat: Movies/WEB-DL, desc: "Movies/Foreign/BRRip-HDRip-DVDRip-WebDL"}
     - {id: 163, cat: Movies/Other, desc: "Movies/Foreign/Boxset"}
-
     - {id: 164, cat: TV, desc: "TV"}
     - {id: 165, cat: TV, desc: "TV/Turkish"}
     - {id: 166, cat: TV, desc: "TV/Foreign"}
@@ -35,34 +33,34 @@ caps:
     - {id: 185, cat: TV/Documentary, desc: "TV/Documentary"}
     - {id: 168, cat: TV/Other, desc: "TV/Other"}
     - {id: 169, cat: TV/Other, desc: "TV/Boxset"}
-
     - {id: 191, cat: TV, desc: "TV/BluTv"}
     - {id: 192, cat: TV, desc: "TV/BluTv Series"}
-    - {id: 193, cat: Movies, desc: "TV/BluTv Film"}
-    - {id: 199, cat: TV, desc: "TV/Netflix"}
+    - {id: 193, cat: Movies, desc: "Movies/BluTv Film"}
+    - {id: 188, cat: TV, desc: "TV/Netflix"}
     - {id: 189, cat: TV, desc: "TV/Netflix Series"}
-    - {id: 190, cat: Movies, desc: "TV/Netflix Film"}
-
+    - {id: 190, cat: Movies, desc: "Movies/Netflix Film"}
+    - {id: 195, cat: TV, desc: "TV/Exxen"}
     - {id: 171, cat: Audio, desc: "Music"}
     - {id: 172, cat: Audio, desc: "Music/Turkish"}
     - {id: 173, cat: Audio, desc: "Music/Foreign"}
     - {id: 184, cat: Audio, desc: "Music/Discography"}
     - {id: 174, cat: Audio/Video, desc: "Music/Video"}
-
     - {id: 175, cat: PC, desc: "Apps / Game / Graphics"}
     - {id: 176, cat: PC, desc: "Apps"}
     - {id: 177, cat: Other, desc: "Pictures"}
-    - {id: 183, cat: Books/Ebook, desc: "EBook"}
+    - {id: 183, cat: Books/EBook, desc: "EBook"}
     - {id: 178, cat: Books/Technical, desc: "Training Sets"}
     - {id: 179, cat: PC, desc: "OS"}
     - {id: 180, cat: PC/Games, desc: "PC/Games"}
     - {id: 181, cat: Console, desc: "Playstation"}
+    - {id: 198, cat: Movies, desc: "Movies/Amazon Prime"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -71,6 +69,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: info
     type: info
     label: Layout
@@ -78,18 +80,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "added"
+    default: added
     options:
-      "added": "created"
-      "seeders": "seeders"
-      "size": "size"
+      added: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info_results
     type: info
     label: Search results
@@ -128,8 +130,8 @@ search:
     pid: 32
     $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
     keywords: "{{ .Keywords }}"
+    # name, description, both, uploader
     search_type: name
-    searchin: title
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
   error:
@@ -137,43 +139,53 @@ search:
     # does not support imdbid search and does not return imdb link in results.
 
   rows:
-    selector: table#torrents_table_classic > tbody > tr:has(td.torrent_name)
+    selector: "table#torrents_table_classic > tbody > tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[title=\"FREE!\"]){{ else }}{{ end }}"
 
   fields:
-    title:
-      selector: a[href*="?p=torrents&pid=10&action=details"]
     category:
       selector: div.category_image > a
       attribute: href
       filters:
         - name: querystring
           args: cid
+    title:
+      selector: a[href*="?p=torrents&pid=10&action=details"]
     details:
       selector: a[href*="?p=torrents&pid=10&action=details"]
       attribute: href
     download:
       selector: a[href*="?p=torrents&pid=10&action=download"]
       attribute: href
-    date:
-      optional: true
+    date_year:
       # Uploaded 30-01-2019 15:02 by
-      selector: td.torrent_name:not(:contains(" at "))
+      selector: td.torrent_name:not(:contains(" at ")):not(:has(abbr[data-time]))
+      optional: true
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
-    date:
-      optional: true
+          args: "02-01-2006 15:04 -07:00"
+    date_day:
       # Uploaded Friday at 05:11 by
       # Uploaded Today at 00:48 by
       # Uploaded Yesterday at 23:57 by
-      selector: td.torrent_name:contains(" at ")
+      selector: td.torrent_name:contains(" at "):not(:has(abbr[data-time]))
+      optional: true
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
         - name: replace
           args: [" at ", " "]
+        - name: fuzzytime
+    date_unix:
+      # within the hour (unix)
+      selector: abbr[data-time]
+      attribute: data-time
+      optional: true
+    date:
+      text: "{{ if or .Result.date_year .Result.date_unix .Result.date_day }}{{ or .Result.date_year .Result.date_unix .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: a[rel="torrent_size"]
     seeders:
@@ -182,9 +194,8 @@ search:
       selector: a[rel="torrent_leechers"]
     grabs:
       selector: a[rel="times_completed"]
-    banner:
+    poster:
       selector: a[rel="fancybox"]
-      optional: true
       attribute: href
     downloadvolumefactor:
       case:
@@ -195,4 +206,6 @@ search:
       case:
         "img[title=\"Upload Multiplier: 2\"]": 2
         "*": 1
+    minimumratio:
+      text: 0.5
 # TSUE 2.2

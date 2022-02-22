@@ -1,0 +1,178 @@
+---
+id: torrentleech
+name: TorrentLeech
+description: "not here _ not scene"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://www.torrentleech.org/
+legacylinks:
+  - https://v4.torrentleech.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 8, cat: Movies/SD, desc: "Movies Cam"}
+    - {id: 9, cat: Movies/SD, desc: "Movies TS/TC"}
+    - {id: 11, cat: Movies/SD, desc: "Movies DVDRip/DVDScreener"}
+    - {id: 12, cat: Movies/DVD, desc: "Movies DVD-R"}
+    - {id: 13, cat: Movies/BluRay, desc: "Movies Bluray"}
+    - {id: 14, cat: Movies/HD, desc: "Movies BlurayRip"}
+    - {id: 15, cat: Movies, desc: "Movies Boxsets"}
+    - {id: 29, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 47, cat: Movies/UHD, desc: "Movies 4K"}
+    - {id: 36, cat: Movies/Foreign, desc: "Movies Foreign"}
+    - {id: 37, cat: Movies/WEB-DL, desc: "Movies WEBRip"}
+    - {id: 43, cat: Movies/HD, desc: "Movies HDRip"}
+
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 26, cat: TV/SD, desc: "TV Episodes"}
+    - {id: 27, cat: TV, desc: "TV Boxsets"}
+    - {id: 32, cat: TV/HD, desc: "TV Episodes HD"}
+    - {id: 44, cat: TV/Foreign, desc: "TV Foreign"}
+
+    - {id: 3, cat: PC/Games, desc: "Games"}
+    - {id: 17, cat: PC/Games, desc: "Games PC"}
+    - {id: 18, cat: Console/XBox, desc: "Games XBOX"}
+    - {id: 19, cat: Console/XBox 360, desc: "Games XBOX360"}
+    - {id: 40, cat: Console/XBox One, desc: "Games XBOXONE"}
+    - {id: 20, cat: Console/PS3, desc: "Games PS2"}
+    - {id: 21, cat: Console/PS3, desc: "Games Mac"}
+    - {id: 22, cat: Console/PSP, desc: "Games PSP"}
+    - {id: 28, cat: Console/Wii, desc: "Games Wii"}
+    - {id: 30, cat: Console/NDS, desc: "Games Nintendo DS"}
+    - {id: 39, cat: Console/PS4, desc: "Games PS4"}
+    - {id: 42, cat: PC/Mac, desc: "Games Mac"}
+    - {id: 48, cat: Console/Other, desc: "Games Nintendo Switch"}
+
+    - {id: 4, cat: Audio, desc: "Music"}
+    - {id: 16, cat: Audio/Video, desc: "Music videos"}
+    - {id: 31, cat: Audio, desc: "Audio"}
+
+    - {id: 7, cat: TV, desc: "Animation"}
+    - {id: 34, cat: TV/Anime, desc: "TV Anime"}
+    - {id: 35, cat: TV, desc: "TV Cartoons"}
+
+    - {id: 5, cat: Books, desc: "Books"}
+    - {id: 45, cat: Books/EBook, desc: "Books EBooks"}
+    - {id: 46, cat: Books/Comics, desc: "Books Comics"}
+
+    - {id: 6, cat: PC, desc: "Apps"}
+    - {id: 23, cat: PC/ISO, desc: "PC ISO"}
+    - {id: 24, cat: PC/Mac, desc: "PC Mac"}
+    - {id: 25, cat: PC/Mobile-Other, desc: "PC Mobile"}
+    - {id: 33, cat: PC/0day, desc: "PC 0-day"}
+    - {id: 38, cat: Other, desc: "Education"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      nameSort: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: user/account/login/
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: p.text-danger
+  test:
+    path: /
+    selector: a[href="/user/account/logout"]
+
+search:
+  paths:
+    # "newfilter/2" include 0day and music
+    - path: "torrents/browse/list/{{ if .Config.freeleech }}facets/tags:FREELEECH/{{ else }}{{ end }}{{ if .Query.IMDBID }}imdbID/{{ .Query.IMDBID }}/{{ else }}exact/1/query/{{ .Keywords }}/{{ end }}{{ if .Keywords }}{{ else }}newfilter/2/{{ end }}{{ if .Categories }}categories/{{ join .Categories \",\" }}/{{ else }}{{ end }}orderby/{{ .Config.sort }}/order/{{ .Config.type }}"
+      response:
+        type: json
+
+  keywordsfilters:
+    # remove dashes at the beginning of keywords as they exclude search strings (see issue #3096)
+    - name: re_replace
+      args: ["(^|\\s)-", " "]
+  rows:
+    selector: torrentList
+    count:
+      selector: $.numFound
+
+  fields:
+    category:
+      selector: categoryID
+    title:
+      selector: name
+    id:
+      selector: fid
+    filename:
+      selector: filename
+    details:
+      text: "{{ .Config.sitelink }}torrent/{{ .Result.id }}"
+    download:
+      text: "{{ .Config.sitelink }}download/{{ .Result.id }}/{{ .Result.filename }}"
+    imdbid:
+      selector: imdbID
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: completed
+    date:
+      # 2021-10-25 02:18:31 (auto adjusted by site account profile)
+      selector: addedTimestamp
+      filters:
+        - name: dateparse
+          args: "2006-01-02 15:04:05"
+    size:
+      selector: size
+    downloadvolumefactor:
+      # freeleech #6579 #6624 #7367
+      selector: download_multiplier
+      case:
+        0: 0 # freeleech
+        "*": 1 # not free
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 10 days for registered users, less for upgraded users
+      # 10 day (as seconds = 7 x 24 x 60 x 60)
+      text: 864000
+# json enigine n/a

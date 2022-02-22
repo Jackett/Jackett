@@ -15,8 +15,6 @@ namespace Jackett.Common.Models.DTO
                 ImdbID = request.Imdbid,
                 QueryType = "TorrentPotato"
             };
-            torznabQuery.ExpandCatsToSubCats();
-
             return torznabQuery;
         }
     }

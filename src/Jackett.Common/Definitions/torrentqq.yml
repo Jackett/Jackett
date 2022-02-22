@@ -1,0 +1,119 @@
+---
+id: torrentqq
+name: TorrentQQ
+description: "TorrentQQ (토렌트큐큐) is a Public KOREAN tracker for Korean media."
+language: ko-KR
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://torrentqq131.com/
+legacylinks:
+  - https://torrentqq114.com/
+  - https://torrentqq115.com/
+  - https://torrentqq117.com/
+  - https://torrentqq118.com/
+  - https://torrentqq119.com/
+  - https://torrentqq120.com/
+  - https://torrentqq121.com/
+  - https://torrentqq122.com/
+  - https://torrentqq123.com/
+  - https://torrentqq125.com/
+  - https://torrentqq126.com/
+  - https://torrentqq127.com/
+  - https://torrentqq128.com/
+  - https://torrentqq129.com/
+  - https://torrentqq130.com/
+
+caps:
+  categorymappings:
+    - {id: "adt", cat: XXX, desc: "성인 (XXX)"}
+    - {id: "ani", cat: TV/Anime, desc: "애니 (Anime)"}
+    - {id: "etc", cat: Other, desc: "기타 (Other)"}
+    - {id: "gme", cat: Console, desc: "게임 (Games)"}
+    - {id: "med", cat: TV, desc: "방송 (TV)"}
+    - {id: "mov", cat: Movies, desc: "영화 (Movie)"}
+    - {id: "mus", cat: Audio, desc: "음악 (Music)"}
+    - {id: "spo", cat: TV/Sport, desc: "스포츠 (Sport)"}
+    - {id: "utl", cat: PC, desc: "유틸 (Software)"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+
+download:
+  infohash:
+    hash:
+      selector: table.table-bordered > tbody > tr > td > ul > li
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: table.table-bordered > thead > tr > th > strong
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    # https://torrentqq76.com/torrent/newest.html
+    # https://torrentqq76.com/search?q=cosmic%20sin
+    - path: "{{ if .Keywords }}search?q={{ .Keywords }}{{ else }}torrent/newest.html{{ end }}"
+
+  rows:
+    selector: ul#searchresult > li:has(a[href$=".html"][title])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href$=".html"][title]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "\\/torrent\\/(\\w{3})\\/"
+    title:
+      selector: a[href$=".html"][title]
+    details:
+      selector: a[href$=".html"][title]
+      attribute: href
+    download:
+      selector: a[href$=".html"][title]
+      attribute: href
+    date_day:
+      selector: div.wr-date:contains("-")
+      optional: true
+      filters:
+        - name: dateparse
+          args: "01-02"
+    date_time:
+      selector: div.wr-date:contains(":")
+      optional: true
+      filters:
+        - name: dateparse
+          args: "15:04"
+    date:
+      text: "{{ if or .Result.date_time .Result.date_day }}{{ or .Result.date_time .Result.date_day }}{{ else }}now{{ end }}"
+    size:
+      selector: div.wr-size
+      filters:
+        - name: append
+          args: "B"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

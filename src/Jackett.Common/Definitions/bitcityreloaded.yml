@@ -1,0 +1,161 @@
+---
+id: bitcityreloaded
+name: Bit-City Reloaded
+description: "Bit-City Reloaded is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: de-DE
+type: private
+encoding: ISO-8859-1
+links:
+  - https://bc-reloaded.net/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Other, desc: "Anderes"}
+    - {id: 34, cat: PC, desc: "Appz/Linux"}
+    - {id: 35, cat: PC/Mac, desc: "Appz/Mac"}
+    - {id: 36, cat: PC, desc: "Appz/Other"}
+    - {id: 20, cat: PC/0day, desc: "Appz/Win"}
+    - {id: 4, cat: Books/EBook, desc: "EBooks"}
+    - {id: 10, cat: PC/Games, desc: "Games/PC"}
+    - {id: 15, cat: PC/Mobile-Android, desc: "Handy & PDA"}
+    - {id: 16, cat: Audio/Audiobook, desc: "Hörspiel/Hörbuch"}
+    - {id: 30, cat: Movies/Foreign, desc: "International"}
+    - {id: 43, cat: Movies/3D, desc: "Movie/3D"}
+    - {id: 6, cat: Movies/HD, desc: "Movie/HD 1080p"}
+    - {id: 7, cat: Movies/HD, desc: "Movie/HD 720p"}
+    - {id: 17, cat: Movies/Other, desc: "Movie/MegaPack"}
+    - {id: 9, cat: Movies/SD, desc: "Movie/SD"}
+    - {id: 26, cat: XXX, desc: "Movie/XXX"}
+    - {id: 41, cat: XXX/Other, desc: "Movie/XXX/Other"}
+    - {id: 42, cat: XXX/Pack, desc: "Movie/XXX/Pack"}
+    - {id: 45, cat: Movies/UHD, desc: "Movies/4K"}
+    - {id: 33, cat: Movies/BluRay, desc: "Movies/BluRay"}
+    - {id: 19, cat: Audio/Video, desc: "Musik Videos"}
+    - {id: 18, cat: Audio, desc: "Musik/MP3/Flac"}
+    - {id: 13, cat: Console/WiiU, desc: "Nintendo"}
+    - {id: 12, cat: Console/PS4, desc: "Playstation"}
+    - {id: 22, cat: TV/HD, desc: "Serie/HD"}
+    - {id: 38, cat: TV, desc: "Serie/Pack"}
+    - {id: 23, cat: TV/SD, desc: "Serie/SD"}
+    - {id: 25, cat: TV/Sport, desc: "Sport"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Anzahl der Torrents beim Durchsuchen</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login/index.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div#login_error
+  test:
+    path: /
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://bc-reloaded.net/uebersicht.php?c7=1&c17=1&showsearch=1&search=2021+720p&blah=0&incldead=1&orderby=added&sort=desc
+    - path: uebersicht.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    showsearch: 1
+    search: "{{ .Keywords }}"
+    # 0 name, 1 descr, 2 both, 3 noDVDRip
+    blah: 0
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+    # site does not support imdbid searching or display imdb links in results.
+
+  rows:
+    selector: "table.tableinborder[cellpadding=0] > tbody > tr{{ if .Config.freeleech }}:has(img[src$=\"torrent_ou.gif\"]){{ else }}{{ end }}"
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="uebersicht.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php"]
+      attribute: href
+    date:
+      selector: table tbody tr:nth-of-type(2) td:nth-of-type(5)
+      filters:
+        - name: re_replace
+          args: ["\u00a0", " "]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "02.01.2006 15:04:05 -07:00"
+    size:
+      selector: table tbody tr:nth-of-type(2) td b
+    files:
+      selector: td:has(a[href*="&filelist=1"])> b:nth-child(2)
+    grabs:
+      selector: td:has(a[href*="&tosnatchers=1"])> b:nth-child(1)
+    seeders:
+      selector: table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(1) font
+    leechers:
+      selector: table tbody tr:nth-of-type(2) td:nth-of-type(2) b:nth-of-type(2) font
+    downloadvolumefactor:
+      case:
+        img[src$="torrent_ou.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="torrent_2u.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a

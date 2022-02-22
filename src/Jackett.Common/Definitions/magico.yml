@@ -2,13 +2,17 @@
 id: magico
 name: Magico
 description: "Magico (Trellas) is a GREEK Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: el-gr
+language: el-GR
 type: private
 encoding: UTF-8
 links:
-  - https://magico.one/
+  - https://trelas.club/
 legacylinks:
   - https://magico.info/
+  - https://magico.one/
+  - https://magico.club/
+  - https://magico.fun/
+  - https://trellas.info/
 
 caps:
   categorymappings:
@@ -82,12 +86,12 @@ caps:
 
     - {id: 6, cat: PC, desc: "Programs"}
     - {id: 18, cat: PC/0day, desc: "Programs PC"}
-    - {id: 40, cat: PC/Phone-Android, desc: "Programs Android"}
+    - {id: 40, cat: PC/Mobile-Android, desc: "Programs Android"}
     - {id: 19, cat: PC/Mac, desc: "Programs Mac"}
 
     - {id: 2, cat: PC/Games, desc: "Games"}
     - {id: 27, cat: PC/Games, desc: "Games PC"}
-    - {id: 68, cat: PC/Phone-Android, desc: "Games Android"}
+    - {id: 68, cat: PC/Mobile-Android, desc: "Games Android"}
 
     - {id: 88, cat: Other, desc: "Tutorials / Design / Accessories"}
     - {id: 89, cat: Other, desc: "Tutorials Photoshop"}
@@ -99,6 +103,19 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
 
 login:
   path: ?p=home&pid=1
@@ -126,22 +143,24 @@ search:
   paths:
     - path: /
   keywordsfilters:
+    - name: re_replace # add brackets to year on searchquery if missing
+      args: ["\\(*((19|20)\\d{2})\\)*", "($1)"]
     - name: replace # use this as a workaround till #893 is implemented
       args: ["Greys Anatomy", "Grey's Anatomy"]
     - name: re_replace
-      args: ["[^\\w\\d]+", "%"]
+      args: ["[^\\w\\d\\(\\)]+", "%"]
   inputs:
     p: torrents
     pid: 32
     $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
     keywords: "{{ .Keywords }}"
+    # name, description, both, uploader
     search_type: name
-    searchin: title
   error:
     - selector: div#show_error font
 
   rows:
-    selector: div#content > div.torrent-box[id^="torrent_"], tr:has(a[href*="?p=torrents"][href*="&action=details"])
+    selector: "div#content > div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[title=\"No Record!\"]){{ else }}{{ end }}, tr:has(a[href*=\"?p=torrents\"][href*=\"&action=details\"]){{ if .Config.freeleech }}:has(img[title=\"No Record!\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
@@ -163,9 +182,8 @@ search:
     download:
       selector: a[href*="?p=torrents"][href*="&action=download"]
       attribute: href
-    imdb:
-      optional: true
-      selector: a[href*="www.imdb.com/title/tt"]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
       selector: a[rel="torrent_size"]
@@ -175,12 +193,10 @@ search:
       selector: a[rel="torrent_leechers"]
     grabs:
       selector: a[rel="times_completed"]
-    banner:
-      optional: true
+    poster:
       selector: a[rel="fancybox"]
       attribute: href
     description:
-      optional: true
       selector: div.torrentDetails > div:has(span.floatright)
     downloadvolumefactor:
       case:
@@ -189,15 +205,20 @@ search:
     uploadvolumefactor:
       case:
         "*": 1
-    date:
+    date_unix:
       optional: true
       selector: div.torrentOwner > abbr.timeago
       attribute: data-time
-    date:
+    date_day:
+      # Uploaded Yesterday at 20:12 by
       optional: true
-      selector: div.torrentOwner:not(:has(abbr.timeago))
+      selector: div.torrentOwner:not(:has(abbr.timeago)):contains("day"), div.torrentOwner:not(:has(abbr.timeago)):contains("σήμερα"), div.torrentOwner:not(:has(abbr.timeago)):contains("εχθές"), div.torrentOwner:not(:has(abbr.timeago)):contains("Δευτέρα"), div.torrentOwner:not(:has(abbr.timeago)):contains("Τρίτη"), div.torrentOwner:not(:has(abbr.timeago)):contains("Τετάρτη"), div.torrentOwner:not(:has(abbr.timeago)):contains("Πέμπτη"), div.torrentOwner:not(:has(abbr.timeago)):contains("Παρασκευή"), div.torrentOwner:not(:has(abbr.timeago)):contains("Σάββατο"), div.torrentOwner:not(:has(abbr.timeago)):contains("Κυριακή")
       remove: span
       filters:
+        - name: replace
+          args: ["Uploaded ", ""]
+        - name: replace
+          args: [" by", ""]
         - name: replace
           args: ["Ανέβηκε ", ""] # Uploaded
         - name: replace
@@ -205,7 +226,7 @@ search:
         - name: replace
           args: [" τον/την", ""] # him/her
         - name: replace
-          args: ["στις ", ""] # at
+          args: ["στις ", "at "] # at
         - name: replace
           args: ["σήμερα", "Today"]
         - name: replace
@@ -224,10 +245,32 @@ search:
           args: ["Σάββατο", "Saturday"]
         - name: replace
           args: ["Κυριακή", "Sunday"]
+        - name: fuzzytime
+    date_year:
+      # 23-10-2021 22:59
+      optional: true
+      selector: div.torrentOwner:not(:has(abbr.timeago)):contains("-")
+      remove: span
+      filters:
+        - name: replace
+          args: ["Uploaded ", ""]
+        - name: replace
+          args: [" by", ""]
+        - name: replace
+          args: ["at ", ""]
+        - name: replace
+          args: ["Ανέβηκε ", ""] # Uploaded
+        - name: replace
+          args: [" από", ""] # by
+        - name: replace
+          args: [" τον/την", ""] # him/her
+        - name: replace
+          args: ["στις ", ""] # at
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
-    date:
-      # <br /> Uploaded Saturday at 21:09 by
+          args: "02-01-2006 15:04 -07:00"
+    date_other:
       optional: true
       selector: td.torrent_name
       remove: div, a, span
@@ -238,6 +281,10 @@ search:
           args: [" by", ""]
         - name: replace
           args: ["at ", ""]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "02-01-2006 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_unix .Result.date_day .Result.date_year .Result.date_other }}{{ or .Result.date_unix .Result.date_day .Result.date_year .Result.date_other }}{{ else }}now{{ end }}"
 # TSUE 2.2

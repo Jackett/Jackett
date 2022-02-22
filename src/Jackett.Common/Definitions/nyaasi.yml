@@ -2,27 +2,28 @@
 id: nyaasi
 name: Nyaa.si
 description: "Nyaa is a Public torrent site focused on Eastern Asian media including anime, manga, literature and music"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 links:
   - https://nyaa.si/
-  - https://nyaa.root.yt/
 legacylinks:
   - https://nyaa.black-mirror.xyz/
   - https://nyaa.unblocked.casa/
   - https://nyaa.proxyportal.fun/
   - https://nyaa.uk-unblock.xyz/
   - https://nyaa.ind-unblock.xyz/
-  - https://nyaa.unblocked.bar/ # only magnets work in Jackett
-  - https://nyaa.proxyportal.pw/ # only magnets work in Jackett
-  - https://nyaa.uk-unblock.pro/ # only magnets work in Jackett
+  - https://nyaa.unblocked.bar/
+  - https://nyaa.proxyportal.pw/
+  - https://nyaa.uk-unblock.pro/
+  - https://nyaa.root.yt/ # 402 Payment Required
+  - https://nyaa.lol/ # dropped at request of owner
 
 settings:
   - name: filter-id
     type: select
     label: Filter
-    default: "0"
+    default: 0
     options:
       0: No filter
       1: No remakes
@@ -30,7 +31,7 @@ settings:
   - name: cat-id
     type: select
     label: Category
-    default: "0_0"
+    default: 0_0
     options:
       0_0: "All categories"
       1_0: "Anime"
@@ -59,18 +60,18 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
+      id: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 caps:
   categorymappings:
@@ -113,19 +114,18 @@ caps:
     search: [q]
     tv-search: [q]
     movie-search: [q]
+    book-search: [q]
 
 search:
   paths:
-    - path: /
-  inputs:
-    q: "{{ .Keywords }}"
-    f: "{{ .Config.filter-id }}"
-    c: "{{ .Config.cat-id }}"
-    s: "{{ .Config.sort }}"
-    o: "{{ .Config.type }}"
+    - path: "?q={{ .Keywords }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
+    # strip 0 from start of episode number - #11019
+    - path: "?q={{ if .Keywords }}{{ re_replace .Keywords \" 0(\\d{1})\" \" $1\" }}{{ else }}&p=2{{ end }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
 
   rows:
     selector: tr.default,tr.danger,tr.success
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -134,14 +134,16 @@ search:
       filters:
         - name: split
           args: ["=", -1]
-    title:
+    title_default:
       selector: td:nth-child(2) a:last-of-type
-    title:
+    title_optional:
       selector: td:nth-child(2) a:last-of-type:contains("[PuyaSubs!] ")
       optional: true
       filters:
         - name: append
-          args: " [Spanish]"
+          args: " Spanish"
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: td:nth-child(2) a:last-of-type
       attribute: href
@@ -158,36 +160,24 @@ search:
       selector: td:nth-child(5)
       filters:
         - name: append
-          args: " -00"
+          args: " -00:00" # GMT
         - name: dateparse
-          args: "2006-01-02 15:04 -07"
-    seeders:
-      selector: td:nth-child(6):empty
-      optional: true
-      filters:
-        - name: append
-          args: 0
-    seeders:
+          args: "2006-01-02 15:04 -07:00"
+    seeders_optional:
       selector: td:nth-child(6):not(:empty)
       optional: true
-    leechers:
-      selector: td:nth-child(7):empty
-      optional: true
-      filters:
-        - name: append
-          args: 0
-    leechers:
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:nth-child(7):not(:empty)
       optional: true
-    grabs:
-      selector: td:nth-child(8):empty
-      optional: true
-      filters:
-        - name: append
-          args: 0
-    grabs:
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    grabs_optional:
       selector: td:nth-child(8):not(:empty)
       optional: true
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

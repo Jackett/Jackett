@@ -2,39 +2,50 @@
 id: glodls
 name: GloDLS
 description: "GloDLS is a Public Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://gtdb.to/
   - https://glodls.to/
-  - https://glotorrents.unblockit.me/
-  - https://glodls.unblocked.bar/
-  - https://glodls.proxyportal.pw/
-  - https://glodls.uk-unblock.pro/
+  - https://www.gtdb.to/
+  - https://glotorrents.unblockit.cam/
+  - https://glotorrents.nocensor.biz/
 legacylinks:
   - https://glodls.rocks/
-  - https://glotorrents.unblockit.pro/
-  - https://glotorrents.unblockit.one/
-  - https://glodls.black-mirror.xyz/
-  - https://glodls.unblocked.casa/
-  - https://glodls.proxyportal.fun/
-  - https://glodls.uk-unblock.xyz/
-  - https://glodls.ind-unblock.xyz/
+  - https://gtdb.to/
+  - https://glotorrents.unblockit.app/
+  - https://glodls.unblocked.rest/
+  - https://glotorrents.unblockit.dev/
+  - https://glotorrents.unblockit.ltd/
+  - https://glotorrents.unblockit.link/
+  - https://glotorrents.unblockit.buzz/
+  - https://glodls.unblocked.monster/
+  - https://glotorrents.unblockit.club/
+  - https://glotorrents.unblockit.onl/
+  - https://glotorrents.unblockit.li/
+  - https://glotorrents.unblockit.uno/
+  - https://glotorrents.unblockit.ch/
+  - https://glotorrents.nocensor.space/
+  - https://glotorrents.unblockit.ws/
+  - https://glotorrents.nocensor.work/
+  - https://glotorrents.unblockit.kim/
+  - https://glotorrents.unblockit.bz/
+  - https://glotorrents.unblockit.tv/
+  - https://glotorrents.unblockit.how/
 
 caps:
   categorymappings:
     - {id: 50, cat: XXX, desc: "XXX"}
-    - {id: 5, cat: PC/Phone-Android, desc: "Android"}
+    - {id: 5, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 28, cat: TV/Anime, desc: "Anime"}
     - {id: 18, cat: PC, desc: "Apps"}
-    - {id: 51, cat: Books/Ebook, desc: "Books"}
+    - {id: 51, cat: Books/EBook, desc: "Books"}
     - {id: 73, cat: XXX, desc: "Desi Porn"}
     - {id: 75, cat: Audio/Lossless, desc: "FLAC"}
     - {id: 10, cat: PC/Games, desc: "Games"}
     - {id: 55, cat: PC/Mac, desc: "Macintosh"}
-    - {id: 52, cat: PC/Phone-Other, desc: "Mobile"}
+    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 22, cat: Audio, desc: "Music"}
     - {id: 33, cat: Other, desc: "Other"}
@@ -51,24 +62,25 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "id"
+    default: id
     options:
-      "id": "created"
-      "seeders": "seeders"
-      "size": "size"
-      "name": "title"
+      id: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 search:
   paths:

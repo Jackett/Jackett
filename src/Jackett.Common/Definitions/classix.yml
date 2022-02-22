@@ -2,7 +2,7 @@
 id: classix
 name: Classix
 description: "Classic movie tracker"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -28,17 +28,20 @@ login:
     path: index.php
 
 download:
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
     - path: torrents-search.php
   inputs:
-    $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-    search: "{{if .Keywords}}\"{{.Keywords}}\"{{else}}{{end}}"
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ if .Keywords }}\"{{ .Keywords }}\"{{ else }}{{ end }}"
+
   rows:
     selector: table > tbody > tr:has(a[href^="torrents.php?cat="])
+
   fields:
     category:
       text: 1
@@ -60,8 +63,7 @@ search:
     leechers:
       selector: td:nth-child(9)
     downloadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": "1"
+      text: 1
+# engine tbd

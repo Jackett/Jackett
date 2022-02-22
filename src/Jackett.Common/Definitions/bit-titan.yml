@@ -2,9 +2,9 @@
 id: bit-titan
 name: BiT-TiTAN
 description: "BiT-TiTAN is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: de-de
+language: de-DE
 type: private
-encoding: iso-8859-1
+encoding: UTF-8
 links:
   - https://bit-titan.net/
 
@@ -31,7 +31,7 @@ caps:
     - {id: 2060, cat: TV/SD, desc: "TV XviD"}
     - {id: 2070, cat: TV/HD, desc: "TV HD Packs"}
     - {id: 2080, cat: TV/SD, desc: "TV SD Packs"}
-    - {id: 2090, cat: TV/FOREIGN, desc: "TV International"}
+    - {id: 2090, cat: TV/Foreign, desc: "TV International"}
     - {id: 3010, cat: TV/Documentary, desc: "Docu 2160p"}
     - {id: 3020, cat: TV/Documentary, desc: "Docu 1080p"}
     - {id: 3030, cat: TV/Documentary, desc: "Docu 720p"}
@@ -59,15 +59,15 @@ caps:
     - {id: 6010, cat: PC/Games, desc: "Games Windows"}
     - {id: 6020, cat: Console, desc: "Games Linux"}
     - {id: 6030, cat: PC/Mac, desc: "Games MacOS"}
-    - {id: 6040, cat: PC/Phone-Android, desc: "Games Android"}
-    - {id: 6050, cat: Console/Xbox, desc: "Games Xbox"}
+    - {id: 6040, cat: PC/Mobile-Android, desc: "Games Android"}
+    - {id: 6050, cat: Console/XBox, desc: "Games Xbox"}
     - {id: 6060, cat: Console/PSP, desc: "Games PlayStation"}
     - {id: 6070, cat: Console/NDS, desc: "Games Nintendo"}
     - {id: 6080, cat: Console, desc: "Games Sonstige"}
     - {id: 7010, cat: PC/0day, desc: "Software Windows"}
     - {id: 7020, cat: PC, desc: "Software Linux"}
     - {id: 7030, cat: PC/Mac, desc: "Software MacOS"}
-    - {id: 7040, cat: PC/Phone-Android, desc: "Software Android"}
+    - {id: 7040, cat: PC/Mobile-Android, desc: "Software Android"}
     - {id: 8010, cat: Audio/MP3, desc: "Music MP3-Album"}
     - {id: 8020, cat: Audio/MP3, desc: "Music MP3-Charts"}
     - {id: 8030, cat: Audio/MP3, desc: "Music MP3-Sampler"}
@@ -78,10 +78,9 @@ caps:
     - {id: 8080, cat: Audio/Lossless, desc: "Music FLAC-Single"}
     - {id: 8090, cat: Audio/Video, desc: "Music Video"}
     - {id: 9010, cat: Audio/Audiobook, desc: "Books A-Book"}
-    - {id: 9020, cat: Books/Ebook, desc: "Books E-Book"}
+    - {id: 9020, cat: Books/EBook, desc: "Books E-Book"}
     - {id: 9030, cat: Books, desc: "Books E-Paper"}
     - {id: 9040, cat: Books, desc: "Books E-Learning"}
-    - {id: 9050, cat: TV, desc: "TV Kids"}
     - {id: 9060, cat: TV/Anime, desc: "Anime HD"}
     - {id: 9070, cat: TV/Anime, desc: "Anime SD"}
     - {id: 9080, cat: TV/Anime, desc: "Anime Pack"}
@@ -92,139 +91,94 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new key <a href=\"https://bit-titan.net/api_cp.php\" target =_blank>here</a>."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "1"
+    default: 1
     options:
-      "1": "created"
-      "8": "seeders"
-      "6": "size"
-      "2": "title"
+      1: created
+      2: seeders
+      5: size
+      9: title
   - name: type
     type: select
     label: Order requested from site
-    default: "1"
+    default: DESC
     options:
-      "1": "desc"
-      "2": "asc"
-
-login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  cookies: ["JAVA=OK"] # avoid jscheck redirect
-  captcha:
-    type: image
-    selector: img[src^="cap/captcha_math.php"]
-    input: stringCaptcha
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div#login_error
-  test:
-    path: browse.php
-    selector: a[href="logout.php"]
-
-ratio:
-  path: browse.php
-  selector: div#tom-b-t8
-  filters:
-    - name: replace
-      args: [".", ""]
-    - name: replace
-      args: [",", "."]
+      DESC: desc
+      ASC: asc
 
 search:
   paths:
-    - path: browse.php
+    - path: api.php
+      response:
+        type: json
+
   inputs:
-    suchfeld: 2
-    alleanzeigen: 1
-    $raw: "{{ range .Categories }}kategorie[]={{.}}&{{end}}"
-    suche: "{{ .Keywords }}"
-    # searchin 1 name 2 descr 3 both
-    durchsuche: 1
-    # includedead 1 active 2 all 3 dead 4 highlight 5 bookmark 6 onlyups 7 freeleech 8 multi2 9 multi5 10 multi10 11 25%dl 12 50%dl 13 75%dl
-    suchein: 2
-    # cat 1 all 1000 film 2000 tv 3000 docs 4000 sport 5000 xxx 6000 games 7000 apps 8000 music 9000 other
-    sucheaus: 1
-    sortierenach: "{{ .Config.sort }}"
-    sortierung: "{{ .Config.type }}"
+    apiKey: "{{ .Config.apikey }}"
+    categories: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}0{{ end }}"
+    search: "{{ .Keywords }}"
+    # searchIn: 0 all, 1 active, 2 dead, 3 highlights, 4 own uploads, 5 uploads bots, 6 onlyupload, 7 multiplier, 8 %download, 9 freeleech
+    searchIn: "{{ if .Config.freeleech }}9{{ else }}0{{ end }}"
+    # 1 25, 2 50, 3 75, 4 100
+    # api only responds with results if limit=1 is used !?! (as at 22-Nov-2021)
+    limit: 1
+    downloadLink: 1
+    # 1 = Sat, 28 Nov 2020 23:29:38 +0100 (DEFAULT VALUE) , 2 = 1606606178 (UNIX TIMESTAMP) , 3 = 28.11.2020 23:29.38 (German Timestamp) ,  4 = 2020-11-28 23:29:38 (Default Datetime)
+    timeFormat: 2
+    orderBy: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
 
   rows:
-    selector: table.tableinborder[border="0"][cellspacing="0"][cellpadding="0"] tr
+    selector: results
+    count:
+      selector: filesFound
 
   fields:
+    id:
+      selector: id
     category:
-      selector: a.bt-cat
-      attribute: href
-      filters:
-        - name: regexp
-          args: (\d+)$
+      selector: category
     title:
-      selector: a.tor-name
+      selector: name
     details:
-      selector: a.tor-name
-      attribute: href
+      text: "details.php?id={{ .Result.id }}"
     download:
-      selector: div.tor-metadl a
-      attribute: href
-    banner:
-      selector: div[id^="details-"] img
-      attribute: src
+      selector: download
+    poster:
+      selector: poster
     seeders:
-      selector: div.tor-seeder
+      selector: seeds
     leechers:
-      selector: div.tor-leecher
+      selector: leechers
     grabs:
-      selector: div.tor-snatcher
-      # 2 flavours of dates
+      selector: snatchers
     date:
-      # Heute 13:30:04
-      # Gestern 09:10:10
-      selector: div.tor-date:not(:contains("."))
-      optional: true
-      filters:
-        - name: replace
-          args: ["Heute", "Today"]
-        - name: replace
-          args: ["Gestern", "Yesterday"]
-    date:
-      # &nbsp;&nbsp;27.05.2019 <b>12:52:11</b>
-      selector: div.tor-date:contains(".")
-      optional: true
-      filters:
-        - name: replace
-          args: ["\u00a0", ""]
-        - name: dateparse
-          args: "02.01.2006 15:04:05"
+      # unix
+      selector: added
     size:
-      selector: div.tor-size
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: [",", "."]
+      selector: size
     downloadvolumefactor:
-      case:
-        font.ou: 0 # only upload is counted
-        font.fl: 0 # freeleech neither dl or ul is counted
-        "*": 1
+      selector: downloadFactor
     uploadvolumefactor:
-      case:
-        "font.mu:contains(\"2x\")": 2
-        "font.mu:contains(\"5x\")": 5
-        "font.mu:contains(\"10x\")": 10
-        font.fl: 0 # freeleech neither dl or ul is counted
-        "*": 1
-# engine n/a
+      selector: uploadFactor
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json engine v.2.011.021

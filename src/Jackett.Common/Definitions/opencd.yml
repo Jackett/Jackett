@@ -1,0 +1,186 @@
+---
+id: opencd
+name: OpenCD
+description: "OpenCD is a CHINESE Private Torrent Tracker for MUSIC"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://open.cd/
+
+caps:
+  categorymappings:
+    - {id: 2, cat: Audio, desc: "华语流行(Pop)"}
+    - {id: 3, cat: Audio, desc: "古典音乐(Classical)"}
+    - {id: 11, cat: Audio, desc: "民族音乐(Instrumental)"}
+    - {id: 4, cat: Audio, desc: "原声配乐(OST)"}
+    - {id: 5, cat: Audio, desc: "泛摇滚乐(Rock)"}
+    - {id: 8, cat: Audio, desc: "爵士乡村(Jazz)"}
+    - {id: 12, cat: Audio, desc: "新世纪(NewAge)"}
+    - {id: 13, cat: Audio, desc: "舞曲(Dance)"}
+    - {id: 14, cat: Audio, desc: "电子(Electronic)"}
+    - {id: 15, cat: Audio, desc: "民谣(Folk)"}
+    - {id: 16, cat: Audio, desc: "独立(Indie)"}
+    - {id: 17, cat: Audio, desc: "嘻哈(Hip Hop)"}
+    - {id: 18, cat: Audio, desc: "音乐剧(Musical)"}
+    - {id: 9, cat: Audio, desc: "其它类型(Others)"}
+
+  modes:
+    search: [q]
+    music-search: [q, artist]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. Default is 50.
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://open.cd/torrents.php?source11=1&source18=1&incldead=0&spstate=0&search=&search_area=0&search_mode=0
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}source{{.}}=1&{{end}}"
+    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 incldead, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 imdburl, 5 traklist, 6 artistname
+    search_area: "{{ if .Query.Artist }}6{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table.torrents > tbody > tr:has(table.torrentname)
+
+  fields:
+    category:
+      selector: td:nth-child(1)
+      attribute: title
+      case:
+        td[title="华语流行"]: 2
+        td[title="古典音乐"]: 3
+        td[title="民族音乐"]: 11
+        td[title="原声配乐"]: 4
+        td[title="泛摇滚乐"]: 5
+        td[title="爵士乡村"]: 8
+        td[title="新世纪"]: 12
+        td[title="舞曲"]: 13
+        td[title="电子"]: 14
+        td[title="民谣"]: 15
+        td[title="独立"]: 16
+        td[title="嘻哈"]: 17
+        td[title="音乐剧"]: 18
+        td[title="其它类型"]: 9
+    title_default:
+      selector: a[href^="plugin_details.php?id="]
+    title_optional:
+      optional: true
+      selector: a[title][href^="plugin_details.php?id="]
+      attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+    details:
+      selector: a[href^="plugin_details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: img[id^="attach"]
+      attribute: src
+      filters:
+        - name: prepend
+          args: "https://images.weserv.nl/?url={{ .Config.sitelink }}" # for display on dashboard
+        - name: append
+          args: "&w=180&h=270" # for display on dashboard
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td:nth-child(6) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    date_added:
+      # time added
+      selector: td:nth-child(6):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    grabs:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        "*": 1
+    description:
+      selector: td:nth-child(3)
+      remove: a, img
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 36 hours (as seconds = 36 x 60 x 60)
+      text: 129600
+# NexusPHP Standard v1.5 Beta 4 (customised)

@@ -1,0 +1,122 @@
+---
+id: kickasstorrents-ws
+name: kickasstorrents.ws
+description: "kickasstorrents.ws is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
+language: en-US
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://kickass.ws/
+  - https://kickasstorrents.bz/
+  - https://kkickass.com/
+  - https://kkat.net/
+  - https://kick4ss.com/
+  - https://kickasst.net/
+  - https://kickasstorrents.id/
+  - https://thekat.cc/
+legacylinks:
+  - https://kickass.gg/
+  - https://katcr.io/
+  - https://thekat.nz/
+  - https://thekat.se/
+  - https://kat.how/
+  - https://kat.li/
+  - https://katcr.to/ # kickasstorrents-to proxy
+  - https://kickasstorrent.cr/ # kickasstorrents-to proxy
+  - https://kickass.unblockit.pro/
+  - https://kickass.unblockit.one/
+  - https://kickass.unblockit.me/
+  - https://kickass.unblockit.pw/
+  - https://kickass.unblockit.id/
+  - https://kickass.unblockit.win/
+  - https://kickass.unblockit.top/ # currently redirects to https://kat.unblockit.lat/ (newkatcr.co proxy)
+  - https://kickasstorrents.unblockninja.com/ # currently kickasstorrents-to proxy
+  - https://kickass-kat.com/
+
+caps:
+  categorymappings:
+    - {id: applications, cat: PC, desc: Apps}
+    - {id: books, cat: Books, desc: Books}
+    - {id: games, cat: Console, desc: Games}
+    - {id: movies, cat: Movies, desc: Movies}
+    - {id: music, cat: Audio, desc: Music}
+    - {id: other, cat: Other, desc: Other}
+    - {id: tv, cat: TV, desc: TV}
+    - {id: xxx, cat: XXX, desc: XXX}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time_add
+    options:
+      time_add: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?field={{ .Config.sort }}&sorder={{ .Config.type }}"
+
+  rows:
+    selector: table.data tr[id]
+
+  fields:
+    category:
+      text: other
+    category|noappend:
+      selector: span[id^="cat_"] > strong > a
+      attribute: href
+      optional: true
+      filters:
+        - name: tolower
+        - name: trim
+          args: /
+    title:
+      selector: a[class="cellMainLink"]
+    details:
+      selector: a[class="cellMainLink"]
+      attribute: href
+    download:
+      # the official site delivers mylink so we skip to the magnet URI
+      selector: td:nth-child(1) > div > a[data-download=""]
+      attribute: href
+      filters:
+        - name: querystring
+          args: url
+    size:
+      selector: td:nth-child(2)
+    date:
+      selector: td:nth-child(3)
+      filters:
+        - name: timeago
+    seeders:
+      selector: td:nth-child(4)
+      filters:
+        - name: replace
+          args: ["N/A", 0]
+    leechers:
+      selector: td:nth-child(5)
+      filters:
+        - name: replace
+          args: ["N/A", 0]
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

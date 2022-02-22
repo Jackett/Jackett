@@ -1,0 +1,177 @@
+---
+id: hellastz
+name: HellasTZ
+description: "HellasTZ is an Greek Private site for TV / MOVIES / GENERAL"
+language: el-GR
+type: private
+encoding: UTF-8
+testlinktorrent: false
+links:
+  - https://hellastz.com/
+certificates:
+  - d2e56574d77a5059c30883c221094f0556d99cb6 # expired
+
+caps:
+  categorymappings:
+    - {id: 11, cat: Movies, desc: "Movies Αποκλειστικά του HTz (HTz only)"}
+    - {id: 54, cat: Movies/BluRay, desc: "Movies Blu-Ray 720p-1080p"}
+    - {id: 232, cat: Movies/UHD, desc: "Movies Full-HD - 4K"}
+    - {id: 234, cat: Movies/HD, desc: "Movies BDRip-BRRip-HDRip"}
+    - {id: 233, cat: Movies/DVD, desc: "Movies DvdRip Full"}
+    - {id: 213, cat: Movies, desc: "Movies Ελληνικές Ταινιίες (Greek)"}
+    - {id: 236, cat: Movies/SD, desc: "Movies Cam - HDcam-HDts"}
+    - {id: 235, cat: Movies/WEB-DL, desc: "Movies WEB-720-1080p -HDrip"}
+    - {id: 90, cat: TV, desc: "TV Ελληνικές Σειρές (Greek)"}
+    - {id: 96, cat: TV, desc: "TV Ξένες Σειρές (Foreign)"}
+    - {id: 219, cat: Audio, desc: "Music Ξένη μουσική (Foreign)"}
+    - {id: 220, cat: Audio, desc: "Music Ελληνική Μουσική (Greek)"}
+    - {id: 240, cat: PC/Mobile-Other, desc: "Android - Linux"}
+    - {id: 230, cat: TV/Anime, desc: "Παιδικα μεταγλωτισμε (Children)"}
+    - {id: 231, cat: TV/Anime, desc: "Παιδικα υποτιτλους (Children w/ subs)"}
+    - {id: 221, cat: Console, desc: "Παιχνίδια (Games)"}
+    - {id: 228, cat: TV/Anime, desc: "Animation"}
+    - {id: 223, cat: Books/EBook, desc: "Βιβλία (Books)"}
+    - {id: 100, cat: Books/Comics, desc: "Comics &Περιοδικά"}
+    - {id: 227, cat: PC, desc: "Pc Software"}
+    - {id: 225, cat: TV/Documentary, desc: "Ντοκιμαντερ (Documentaries)"}
+    - {id: 241, cat: Audio/Audiobook, desc: "Audio Books"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      4: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: index.php?page=login
+  method: post
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: tr td span[style="color:#FF0000;"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+download:
+  before:
+    path: thanks.php
+    method: post
+    inputs:
+      infohash: "{{ .DownloadUri.Query.id }}"
+      thanks: 1
+      rndval: "1487013827343"
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: index.php
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    category: "{{ range .Categories }}{{.}};{{end}}"
+    # 0 all, 1 active only, 2 dead only
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+    # does not support imdbid search and does not ruturn imdb link in results
+
+  rows:
+    selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.freeleech }}:has(img[alt=\"Gold 100% Free\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+    poster:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) "
+    details:
+      selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
+      attribute: href
+    download:
+      selector: a[href^="index.php?page=downloadcheck&id="]
+      attribute: href
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "02/01/2006 -07:00"
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    size:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img[alt="Gold 100% Free"]: 0
+        img[alt="Silver 50% Free"]: 0.5
+        img[alt="Bronze 25% Free"]: 0.75
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[alt="2x Upload Multiplier"]: 2
+        img[alt="3x Upload Multiplier"]: 3
+        img[alt="4x Upload Multiplier"]: 4
+        img[alt="5x Upload Multiplier"]: 5
+        img[alt="6x Upload Multiplier"]: 6
+        img[alt="7x Upload Multiplier"]: 7
+        img[alt="8x Upload Multiplier"]: 8
+        img[alt="9x Upload Multiplier"]: 9
+        img[alt="10x Upload Multiplier"]: 10
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+#  xbtitFM v3.1.00

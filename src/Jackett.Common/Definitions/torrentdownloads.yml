@@ -2,25 +2,37 @@
 id: torrentdownloads
 name: Torrent Downloads
 description: "Torrent Downloads (TD) is a Public torrent site for all kinds of content"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownloads.info/
-  - https://www.torrentdownloads.me/
-  - https://torrentdownloads.unblockit.me/
-  - https://torrentdownloads.unblocked.bar/
-  - https://torrentdownloads.proxyportal.pw/
-  - https://torrentdownloads.uk-unblock.pro/
+  - https://www.torrentdownloads.pro/
+  - https://torrentdownloads.unblockit.cam/
+  - https://torrentdownloads.nocensor.biz/
 legacylinks:
-  - https://torrentdownloads.unblockit.pro/
-  - https://torrentdownloads.unblockit.one/
-  - https://torrentdownloads.black-mirror.xyz/
-  - https://torrentdownloads.unblocked.casa/
-  - https://torrentdownloads.proxyportal.fun/
-  - https://torrentdownloads.uk-unblock.xyz/
-  - https://torrentdownloads.ind-unblock.xyz/
+  - https://torrentdownloads.unblockit.lat/
+  - https://torrentdownloads.unblockit.app/
+  - https://torrentdownloads.unblocked.rest/
+  - https://torrentdownloads.unblockit.dev/
+  - https://torrentdownloads.unblockit.ltd/
+  - https://torrentdownloads.unblockit.link/
+  - https://torrentdownloads.unblockit.buzz/
+  - https://torrentdownloads.unblocked.monster/
+  - https://torrentdownloads.unblockit.club/
+  - https://torrentdownloads.unblockit.onl/
+  - https://torrentdownloads.unblockit.li/
+  - https://torrentdownloads.unblockit.uno/
+  - https://www.torrentdownloads.me/
+  - https://torrentdownloads.unblockit.ch/
+  - https://torrentdownloads.nocensor.space/
+  - https://torrentdownloads.unblockit.ws/
+  - https://torrentdownloads.nocensor.work/
+  - https://torrentdownloads.unblockit.kim/
+  - https://torrentdownloads.unblockit.bz/
+  - https://torrentdownloads.unblockit.tv/
+  - https://torrentdownloads.unblockit.how/
 
 caps:
   categorymappings:
@@ -40,6 +52,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: downloadlink
@@ -49,24 +62,49 @@ settings:
     options:
       "http://itorrents.org/": "iTorrents.org"
       "magnet:": "magnet"
+  - name: downloadlink2
+    type: select
+    label: Download link (fallback)
+    default: "http://itorrents.org/"
+    options:
+      "http://itorrents.org/": "iTorrents.org"
+      "magnet:": "magnet"
+  - name: info_download
+    type: info
+    label: About the Download links
+    default: As the .torrent download links on this site are known to fail from time to time, you can optionally set as a fallback an automatic alternate link.
 
 download:
-  selector: a[href^="{{ .Config.downloadlink }}"]
-  attribute: href
+  selectors:
+    - selector: a[href^="{{ .Config.downloadlink }}"]
+      attribute: href
+    - selector: a[href^="{{ .Config.downloadlink2 }}"]
+      attribute: href
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search/{{else}}/today/{{end}}"
+    - path: "{{ if .Keywords }}/search/{{ else }}/today/{{ end }}"
+      followredirect: true
   inputs:
     $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
     search: "{{ .Keywords }}"
 
   rows:
-    selector: div.inner_container > div:has(p:has(a[href^="/torrent/"]))
+    selector: div.inner_container > div:has(p:has(a[href^="/torrent/"])):not(:has(span.__cf_email__))
 
   fields:
+    category:
+      selector: img[src^="/templates/new/images/icons/menu_icon"]
+      attribute: src
+      filters:
+        - name: regexp
+          args: (\d+)
     title:
       selector: p:nth-child(1) > a
+      attribute: title
+      filters:
+        - name: replace
+          args: ["View torrent info : ", ""]
     details:
       selector: p:nth-child(1) > a[href^="/torrent/"]
       attribute: href
@@ -81,12 +119,6 @@ search:
       selector: span:nth-child(4)
     leechers:
       selector: span:nth-child(3)
-    category:
-      selector: img[src^="/templates/new/images/icons/menu_icon"]
-      attribute: src
-      filters:
-        - name: regexp
-          args: (\d+)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

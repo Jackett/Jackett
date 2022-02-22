@@ -1,0 +1,99 @@
+---
+id: torrentmax
+name: TorrentMax
+description: "TorrentMax (토렌트맥스) is a Public KOREAN tracker for Korean media."
+language: ko-KR
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://torrentmax2.net/
+legacylinks:
+  - https://torrentmax15.com/
+  - https://torrentmax1.net/
+
+caps:
+  categorymappings:
+    - {id: "ANIMATION", cat: TV/Anime, desc: "애니 (Animation)"}
+    - {id: "GAME", cat: Console, desc: "게임 (Games)"}
+    - {id: "MOVIE_EN", cat: Movies/Foreign, desc: "영화 (Movie EN)"}
+    - {id: "MOVIE", cat: Movies, desc: "한국영화 (Movie)"}
+    - {id: "MOVIE_4K", cat: Movies/UHD, desc: "고화질영화 (Movie 4K)"}
+    - {id: "DRAMA", cat: TV, desc: "드라마 (Drama)"}
+    - {id: "DRAMA_EN", cat: TV/Foreign, desc: "넷플릭스 (Drama EN)"}
+    - {id: "DOCU", cat: TV/Documentary, desc: "다큐 (Documentary)"}
+    - {id: "VARIETY", cat: TV, desc: "예능 (Variety)"}
+    - {id: "MUSIC", cat: Audio, desc: "한국음악 (Music)"}
+    - {id: "MUSIK", cat: Audio/Foreign, desc: "외국음악 (Music Foreign)"}
+    - {id: "MOBILE", cat: PC/Mobile-Other, desc: "모바일 (Mobile)"}
+    - {id: "UTIL", cat: PC, desc: "유틸 (Software)"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+
+download:
+  infohash:
+    hash:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: h3.panel-title
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    # https://torrentmax2.net/search?srows=10&gr_id=&sfl=wr_subject%7C%7Cwr_content&stx=2021&sop=and
+    - path: "search?srows=50&sfl=wr_subject&sop=and&gr_id={{ if .Keywords }}&stx={{ .Keywords }}{{ else }}tv&stx={{ .Today.Year }}{{ end }}"
+    - path: "search?srows=50&sfl=wr_subject&sop=and&gr_id={{ if .Keywords }}&stx={{ .Keywords }}&page=2{{ else }}movie&stx={{ .Today.Year }}{{ end }}"
+
+  rows:
+    selector: div.search-media div.media:not(:has(a[href*="/max/PHOTO/"])):not(:has(a[href*="/max/GIRL/"])):not(:has(a[href*="/max/CAM/"])):not(:has(a[href*="/max/notice/"])):not(:has(a[href*="/max/humor/"]))
+
+  fields:
+    category:
+      selector: div.media-heading a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "\\/max\\/(.+?)\\/"
+    title:
+      selector: div.media-heading a
+    details:
+      selector: div.media-heading a
+      attribute: href
+    download:
+      selector: div.media-heading a
+      attribute: href
+    poster:
+      selector: div.photo img
+      attribute: src
+    date:
+      # 2021-01-29T20:44:20+09:00
+      selector: time
+      attribute: datetime
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

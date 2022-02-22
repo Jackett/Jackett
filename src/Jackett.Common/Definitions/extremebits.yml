@@ -1,0 +1,162 @@
+---
+id: extremebits
+name: ExtremeBits
+description: "ExtremeBits is a Private Torrent Tracker for EXTREME SPORTS"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://extremebits.net/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "BASE jump"}
+    - {id: 10, cat: Movies, desc: "BMX"}
+    - {id: 3, cat: Movies, desc: "Climbing"}
+    - {id: 19, cat: Other, desc: "Covers"}
+    - {id: 20, cat: Movies, desc: "Fiddy/MiniMX"}
+    - {id: 22, cat: Movies, desc: "Graffiti"}
+    - {id: 18, cat: Movies, desc: "Homevid"}
+    - {id: 16, cat: Movies, desc: "Inline Skate"}
+    - {id: 25, cat: Movies, desc: "Kayaking"}
+    - {id: 28, cat: Movies, desc: "Kiteboard"}
+    - {id: 17, cat: Movies, desc: "MC"}
+    - {id: 13, cat: Other, desc: "Misc"}
+    - {id: 4, cat: Movies, desc: "MotoX"}
+    - {id: 11, cat: Movies, desc: "MTB"}
+    - {id: 21, cat: Audio, desc: "Music"}
+    - {id: 26, cat: Movies, desc: "Paintball"}
+    - {id: 5, cat: Movies, desc: "Parkour"}
+    - {id: 24, cat: Movies, desc: "Quad/ATV"}
+    - {id: 29, cat: Movies, desc: "Rally/4x4"}
+    - {id: 6, cat: Movies, desc: "Skateboard"}
+    - {id: 12, cat: Movies, desc: "Ski"}
+    - {id: 14, cat: Movies, desc: "Skydive"}
+    - {id: 7, cat: Movies, desc: "Snowboard"}
+    - {id: 9, cat: Movies, desc: "Snowmobile"}
+    - {id: 15, cat: Movies, desc: "Streetrace"}
+    - {id: 2, cat: Movies, desc: "Surf"}
+    - {id: 23, cat: TV, desc: "Tv"}
+    - {id: 8, cat: Movies, desc: "Wakeboard/W.Ski"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  inputs:
+    input[placeholder="Username"]: "{{ .Config.username }}"
+    input[placeholder="Password"]: "{{ .Config.password }}"
+  selectors: true
+  error:
+    - selector: h2:contains("fail")
+      message:
+        selector: div.contentframe
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
+    incl: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    # 0 name, 1 descr, 2 both
+    searchin: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # does not support imdbid searching or have imdb links in results.
+
+  rows:
+    selector: table.crowdedtablecenter > tbody >  tr:has(a[href^="details.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details.php", "download.php"]
+    files:
+      selector: td:nth-of-type(5)
+    seeders:
+      selector: td:nth-of-type(7)
+    leechers:
+      selector: td:nth-of-type(8)
+    grabs:
+      selector: td:nth-of-type(10) a
+    size:
+      selector: td:nth-of-type(10)
+      remove: a
+    cat:
+      selector: td:nth-of-type(1) a img
+      attribute: alt
+    description:
+      selector: td:nth-of-type(4)
+      filters:
+        - name: prepend
+          args: "cat={{ .Result.cat }}, wait="
+    downloadvolumefactor:
+      case:
+        img[src="img/freedownload.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    date:
+      selector: td:nth-of-type(2)
+      remove: a
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    minimumratio:
+      text: 0.6
+# TBDEV

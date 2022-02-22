@@ -2,11 +2,13 @@
 id: sporthd
 name: SportHD
 description: "SportHD is a Private Torrent Tracker for HD SPORTS"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
-  - http://sporthd.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://satsporthd.org/ # site does not support https ERR_CONNECTION_REFUSED
+legacylinks:
+  - http://sporthd.org/
 
 caps:
   categorymappings:
@@ -112,23 +114,24 @@ settings:
   - name: info_cookie
     type: info
     label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+
   - name: sort
     type: select
     label: Sort requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "created"
-      "4": "seeders"
-      "3": "size"
-      "1": "title"
+      2: created
+      4: seeders
+      3: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
   - name: info_results
     type: info
     label: Results Per Page
@@ -142,21 +145,21 @@ login:
     path: index.php
 
 download:
-  selector: a[href^="download.php?id="]
-  attribute: href
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
-    # http://sporthd.org/browse.php?cat=0&incldead=1&sort=2&type=desc&s=0&stype=0&search=
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 1 active 2 dead 3 free
+    # 1 active, 2 dead, 3 free
     incldead: 1
-    # 0 match again 1 match like
+    # 0 match again, 1 match like
     s: 0
-    # 0 name 1 description
+    # 0 name, 1 description
     stype: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -201,7 +204,6 @@ search:
           args: "^(.+?)\\d{4}"
         - name: timeago
     description:
-      optional: true
       selector: img[src="/pic/vipbig.gif"]
       attribute: title
     downloadvolumefactor:
@@ -210,4 +212,5 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+# minimumratio: tbd
 # engine n/a

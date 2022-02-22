@@ -1,0 +1,85 @@
+---
+id: torrentby
+name: torrent.by
+description: "torrent.by is a BELARUSIAN public Torrent Tracker"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - http://torrent.by/
+legacylinks:
+  - https://torrent.by/ # ERR_CONNECTION_REFUSED
+
+caps:
+  categories:
+    Other: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_8000
+    type: info
+    label: About torrent.by Categories
+    default: torrent.by does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}search/?search={{ .Keywords }}&cat=0&search_in=0{{ else }}today{{ end }}"
+
+  rows:
+    selector: tr[class^="ttable_col"]
+
+  fields:
+    category:
+      text: other
+    title:
+      selector: td:nth-child(3) a
+      filters:
+        - name: re_replace
+          args: ["(?i)S*(\\d{2,3})[xх](\\d{2,3})", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)E*(\\d{2,3})-(\\d{2,3})\\s*из\\s*(\\d{2,3})", "E$1-$2 из $3"]
+    details:
+      selector: td:nth-child(3) a
+      attribute: href
+    download:
+      selector: a[href^="/d.php?id="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td font[color="green"]
+    leechers:
+      selector: td font[color="red"]
+    date_day:
+      selector: td:nth-child(1):contains("Вчера"), td:nth-child(1):contains("Сегодня")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Вчера", "Yesterday"]
+        - name: replace
+          args: ["Сегодня", "Today"]
+        - name: fuzzytime
+    date_year:
+      selector: td:nth-child(1):contains("-")
+      optional: true
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2006-01-02 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

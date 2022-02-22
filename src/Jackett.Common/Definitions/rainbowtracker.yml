@@ -1,0 +1,243 @@
+---
+id: rainbowtracker
+name: Rainbow Tracker
+description: "Rainbow Tracker is a RUSSIAN Semi-Private Torrent Tracker for LGBTQ MOVIES / TV"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - https://gaytracker.ru/
+
+caps:
+  categorymappings:
+    - {id: 3, cat: Movies, desc: "Художественные гей-фильмы"}
+    - {id: 67, cat: Movies/Foreign, desc: "Художественные гей-фильмы - Российское гей-кино"}
+    - {id: 66, cat: Movies, desc: "Художественные гей-фильмы - Ретро гей-фильмы"}
+    - {id: 65, cat: Movies/Foreign, desc: "Художественные гей-фильмы - Азиатские гей-фильмы"}
+    - {id: 63, cat: Movies, desc: "Художественные гей-фильмы - Короткометражные гей-фильмы"}
+    - {id: 74, cat: XXX/Other, desc: "Художественные гей-фильмы - Фильмы с элементами гей-Pron "}
+    - {id: 82, cat: Movies, desc: "Художественные гей-фильмы - Фильмы с элементами гей-темы"}
+    - {id: 4, cat: Movies, desc: "Художественные лесби-фильмы"}
+    - {id: 89, cat: Movies/Foreign, desc: "Художественные лесби-фильмы - Российское лесби-кино"}
+    - {id: 90, cat: Movies, desc: "Художественные лесби-фильмы - Ретро лесби-фильмы"}
+    - {id: 78, cat: Movies/Foreign, desc: "Художественные лесби-фильмы - Азиатское лесби-кино"}
+    - {id: 64, cat: Movies, desc: "Художественные лесби-фильмы - Короткометражные лесби-фильмы"}
+    - {id: 91, cat: XXX/Other, desc: "Художественные лесби-фильмы - Фильмы с элементами лесби-Pron "}
+    - {id: 88, cat: Movies, desc: "Художественные лесби-фильмы - Фильмы с элементами лесби-темы"}
+    - {id: 96, cat: Movies, desc: "Художественные фильмы Транс*тематики"}
+    - {id: 5, cat: Movies, desc: "Арт-хаус и авторское кино"}
+    - {id: 7, cat: TV/Documentary, desc: "Документальные фильмы"}
+    - {id: 76, cat: XXX/Other, desc: "Документальные фильмы - Фильмы с элементами Pron "}
+    - {id: 8, cat: TV/Anime, desc: "Мультфильмы, Аниме"}
+    - {id: 9, cat: XXX, desc: "Эротическое видео"}
+    - {id: 71, cat: XXX, desc: "Эротическое видео - Документальные фильмы"}
+    - {id: 72, cat: XXX, desc: "Эротическое видео - Нудизм-Натуризм"}
+    - {id: 11, cat: TV/Other, desc: "Шоу, Клипы, Музыка, Юмор и т.п."}
+    - {id: 6, cat: TV, desc: "Сериалы"}
+    - {id: 80, cat: TV, desc: "Сериалы - Эпизод (серия) с гей-темой"}
+    - {id: 87, cat: TV, desc: "Сериалы - Бесстыжие / Shameless "}
+    - {id: 77, cat: TV, desc: "Сериалы - В поиске / Looking "}
+    - {id: 58, cat: TV, desc: "Сериалы - Дрянные девчонки / Bad Girls "}
+    - {id: 56, cat: TV, desc: "Сериалы - Лузеры / Хор / Glee "}
+    - {id: 49, cat: TV, desc: "Сериалы - Физика или Химия"}
+    - {id: 44, cat: TV, desc: "Сериалы - Юг нигде / South of nowhere "}
+    - {id: 41, cat: TV, desc: "Сериалы - Охота на парней / Manhunt "}
+    - {id: 39, cat: TV, desc: "Сериалы - Секс в другом городе / Мир Л / The L Word "}
+    - {id: 37, cat: TV, desc: "Сериалы - Логово / The Lair "}
+    - {id: 34, cat: TV, desc: "Сериалы - Бухта Данте"}
+    - {id: 29, cat: TV, desc: "Сериалы - Ноев ковчег / Noah's Arc "}
+    - {id: 26, cat: TV, desc: "Сериалы - Маленькая Британия / Little Britain "}
+    - {id: 21, cat: TV, desc: "Сериалы - Молокососы / Skins. season "}
+    - {id: 15, cat: TV, desc: "Сериалы - Близкие друзья / Queer as folk "}
+    - {id: 25, cat: XXX/ImageSet, desc: "Фото, Картинки"}
+    - {id: 10, cat: XXX, desc: "Pron "}
+    - {id: 16, cat: XXX, desc: "Pron - Pron-Фильмы"}
+    - {id: 86, cat: XXX, desc: "Pron - Pron-Фильмы (азиатские)"}
+    - {id: 53, cat: XXX, desc: "Pron - Pron-Ролики"}
+    - {id: 20, cat: XXX, desc: "Pron - Pron-Би"}
+    - {id: 17, cat: XXX, desc: "Pron - Pron-Лесбо"}
+    - {id: 18, cat: XXX, desc: "Pron - Pron-Транс"}
+    - {id: 19, cat: XXX, desc: "Pron - Pron-Гетеро"}
+    - {id: 59, cat: XXX, desc: "Pron - Pron с переводом"}
+    - {id: 81, cat: XXX, desc: "Pron - Pron-Мультфильмы, Pron-Аниме"}
+    - {id: 33, cat: XXX/Other, desc: "Pron - Pron-Разное"}
+    - {id: 13, cat: Other, desc: "Разное"}
+    - {id: 95, cat: Other/Misc, desc: "Разное - Клипы, Трейлеры, Рекламма"}
+    - {id: 48, cat: Other/Misc, desc: "Разное - Фильмы, мультфильмы"}
+    - {id: 57, cat: Other/Misc, desc: "Разное - Сериалы"}
+    - {id: 54, cat: Other/Misc, desc: "Разное - Картинки"}
+    - {id: 55, cat: Other/Misc, desc: "Разное - Музыка"}
+    - {id: 94, cat: Other/Misc, desc: "Разное - Аудиокниги"}
+    - {id: 47, cat: Other/Misc, desc: "Разное - Книги"}
+    - {id: 46, cat: Other/Misc, desc: "Разное - Игры"}
+    - {id: 45, cat: Other/Misc, desc: "Разное - Программы"}
+    - {id: 14, cat: Other, desc: "Тестовый форум"}
+    - {id: 32, cat: Other, desc: "Мусорка"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      10: seeders
+      7: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+
+login:
+  path: forum/profile.php?mode=register
+  method: form
+  form: form[action="./login.php"]
+  inputs:
+    login_username: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
+    autologin: 1
+  error:
+    - selector: h4.warnColor1
+  test:
+    path: forum/index.php
+    selector: a[href="./login.php?logout=1"]
+
+search:
+  paths:
+    - path: forum/tracker.php
+  inputs:
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
+    prev_allw: 1
+    prev_a: 0
+    prev_vote: 0
+    prev_gold: 0
+    prev_silver: 0
+    prev_dla: 0
+    prev_dlc: 0
+    prev_dld: 0
+    prev_dlw: 0
+    prev_my: 0
+    prev_new: 0
+    prev_sd: 0
+    prev_da: 1
+    prev_dc: 0
+    prev_df: 1
+    prev_ds: 0
+    o: "{{ .Config.sort }}"
+    s: "{{ .Config.type }}"
+    # show category
+    dc: 0
+    # show forum
+    df: 1
+    # show author
+    da: 1
+    # show speed
+    ds: 0
+    # -1=all time
+    tm: -1
+    # seed not seen -1=disregard
+    sns: -1
+    # title search
+    nm: "{{ .Keywords }}"
+    # find a username
+    pn: ""
+    # search by partial word
+    allw: 1
+
+  rows:
+    selector: tbody[id^="tor_"]:has(a[href^="./download.php?id="])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a.gen
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a.genmed
+    details:
+      selector: a.genmed
+      attribute: href
+    download:
+      selector: a[href^="./download.php?id="]
+      attribute: href
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td.seedmed > b, td.icemed > b
+      filters:
+        - name: replace
+          args: ["X", "0"]
+    leechers:
+      selector: td.leechmed > b
+    grabs:
+      selector: td:nth-child(10)
+    datetime:
+      selector: td:last-child
+      filters:
+        - name: regexp
+          args: "(\\d{2}:\\d{2})"
+    datedate:
+      selector: td:last-child
+      filters:
+        - name: regexp
+          args: "(\\d{1,2}-\\w{3,4}-\\d{2})"
+    date:
+      text: "{{ .Result.datetime }} {{ .Result.datedate }}"
+      filters:
+        - name: replace
+          args: ["Янв", "Jan"]
+        - name: replace
+          args: ["Фев", "Feb"]
+        - name: replace
+          args: ["Мар", "Mar"]
+        - name: replace
+          args: ["Апр", "Apr"]
+        - name: replace
+          args: ["Май", "May"]
+        - name: replace
+          args: ["Июн", "Jun"]
+        - name: replace
+          args: ["Июл", "Jul"]
+        - name: replace
+          args: ["Авг", "Aug"]
+        - name: replace
+          args: ["Сен", "Sep"]
+        - name: replace
+          args: ["Окт", "Oct"]
+        - name: replace
+          args: ["Ноя", "Nov"]
+        - name: replace
+          args: ["Дек", "Dec"]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "15:04 2-Jan-06 -07:00"
+    downloadvolumefactor:
+      case:
+        img[src="images/tor_gold.gif"]: 0
+        img[src="images/tor_silver.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.3
+# TorrentPier

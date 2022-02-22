@@ -1,0 +1,68 @@
+---
+id: vsttorrents
+name: VST Torrents
+description: "VST Torrents is a Public site for AUDIO apps, plugins and samples"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://looptorrent.net/
+legacylinks:
+  - https://vsttorrents.net/
+
+caps:
+  categories:
+    Audio: Audio
+
+  modes:
+    search: [q]
+    music-search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: div.wp-block-file a
+      attribute: href
+
+search:
+  paths:
+    - path: /
+  inputs:
+    s: "{{ .Keywords }}"
+
+  rows:
+    selector: article:has(h3):has(time)
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: Audio
+    title:
+      selector: h3
+    details:
+      selector: h3 > a
+      attribute: href
+    download:
+      selector: h3 > a
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    description:
+      selector: div.cat-links
+    date:
+      selector: time
+      attribute: datetime
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine wordpress

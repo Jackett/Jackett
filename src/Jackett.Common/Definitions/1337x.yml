@@ -2,33 +2,41 @@
 id: 1337x
 name: 1337x
 description: "1337X is a Public torrent site that offers verified torrent downloads"
-language: en-us
+language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
 links:
   - https://1337x.to/
   - https://1337x.gd/
-  - https://1337x.is/
   - https://1337x.st/
   - https://x1337x.ws/
   - https://x1337x.eu/
   - https://x1337x.se/
-  - https://1337x.unblockit.me/
-  - https://1337x.unblocked.bar/
-  - https://1337x.proxyportal.pw/
-  - https://1337x.uk-unblock.pro/
-  - https://1337.root.yt/
+  - https://1337x.unblockit.cam/
+  - https://1337x.nocensor.biz/
 legacylinks:
-  - https://1337x.unblocked.earth/
-  - https://1337x.unblockit.pro/
-  - https://1337x.unblockit.one/
-  - https://1337x.black-mirror.xyz/
-  - https://1337x.unblocked.casa/
-  - https://1337x.proxyportal.fun/
-  - https://1337x.uk-unblock.xyz/
-  - https://1337x.ind-unblock.xyz/
-  - https://1337x.unblockninja.com/ # 403 Forbidden
+  - https://1337x.unblockit.app/
+  - https://1337.root.yt/
+  - https://1337x.unblocked.rest/
+  - https://1337x.unblockit.dev/
+  - https://1337x.unblockit.ltd/
+  - https://1337x.unblockit.link/
+  - https://1337x.unblockit.buzz/
+  - https://1337x.unblocked.monster/
+  - https://1337x.unblockit.club/
+  - https://1337x.unblockit.onl/
+  - https://1337x.unblockit.li/
+  - https://1337x.unblockit.uno/
+  - https://1337x.is/
+  - https://1337x.unblockit.ch/
+  - https://1337x.nocensor.space/
+  - https://1337x.unblockit.ws/
+  - https://1337x.nocensor.work/
+  - https://1337x.unblockit.kim/
+  - https://1337x.unblockit.bz/
+  - https://1337x.unblockit.tv/
+  - https://1337x.unblockit.how/
 
 caps:
   categorymappings:
@@ -38,7 +46,6 @@ caps:
     - {id: 79, cat: TV/Anime, desc: "Anime/Dubbed"}
     - {id: 80, cat: TV/Anime, desc: "Anime/Subbed"}
     - {id: 81, cat: TV/Anime, desc: "Anime/Raw"}
-
     # Audio
     - {id: 22, cat: Audio/MP3, desc: "Music/MP3"}
     - {id: 23, cat: Audio/Lossless, desc: "Music/Lossless"}
@@ -52,7 +59,6 @@ caps:
     - {id: 60, cat: Audio, desc: "Music/Single"}
     - {id: 68, cat: Audio, desc: "Music/Concerts"}
     - {id: 69, cat: Audio, desc: "Music/AAC"}
-
     # Movies
     - {id: 1, cat: Movies/DVD, desc: "Movies/DVD"}
     - {id: 2, cat: Movies/SD, desc: "Movies/Divx/Xvid"}
@@ -65,7 +71,6 @@ caps:
     - {id: 70, cat: Movies/HD, desc: "Movies/HEVC/x265"}
     - {id: 73, cat: Movies, desc: "Movies/Bollywood"}
     - {id: 76, cat: Movies/UHD, desc: "Movies/UHD"}
-
     # TV
     - {id: 5, cat: TV, desc: "TV/DVD"}
     - {id: 6, cat: TV, desc: "TV/Divx/Xvid"}
@@ -75,44 +80,40 @@ caps:
     - {id: 74, cat: TV, desc: "TV/Cartoons"}
     - {id: 75, cat: TV/SD, desc: "TV/SD"}
     - {id: 9, cat: TV/Documentary, desc: "TV/Documentary"}
-
     # Apps
     - {id: 18, cat: PC, desc: "Apps/PC Software"}
     - {id: 19, cat: PC/Mac, desc: "Apps/Mac"}
     - {id: 20, cat: PC, desc: "Apps/Linux"}
     - {id: 21, cat: PC, desc: "Apps/Other"}
-    - {id: 56, cat: PC/Phone-Android, desc: "Apps/Android"}
-    - {id: 57, cat: PC/Phone-IOS, desc: "Apps/iOS"}
-
+    - {id: 56, cat: PC/Mobile-Android, desc: "Apps/Android"}
+    - {id: 57, cat: PC/Mobile-iOS, desc: "Apps/iOS"}
     # Games
     - {id: 10, cat: PC/Games, desc: "Games/PC Game"}
-    - {id: 11, cat: Console/Other, desc: "Games/PS2"}
+    - {id: 11, cat: Console/PS3, desc: "Games/PS2"}
     - {id: 12, cat: Console/PSP, desc: "Games/PSP"}
-    - {id: 13, cat: Console/Xbox, desc: "Games/Xbox"}
-    - {id: 14, cat: Console/Xbox 360, desc: "Games/Xbox360"}
-    - {id: 15, cat: Console/Other, desc: "Games/PS1"}
+    - {id: 13, cat: Console/XBox, desc: "Games/Xbox"}
+    - {id: 14, cat: Console/XBox 360, desc: "Games/Xbox360"}
+    - {id: 15, cat: Console/PS3, desc: "Games/PS1"}
     - {id: 16, cat: Console/Other, desc: "Games/Dreamcast"}
-    - {id: 17, cat: PC/Phone-Other, desc: "Games/Other"}
+    - {id: 17, cat: PC/Mobile-Other, desc: "Games/Other"}
     - {id: 43, cat: Console/PS3, desc: "Games/PS3"}
     - {id: 44, cat: Console/Wii, desc: "Games/Wii"}
     - {id: 45, cat: Console/NDS, desc: "Games/DS"}
-    - {id: 46, cat: Console, desc: "Games/GameCube"}
+    - {id: 46, cat: Console/Other, desc: "Games/GameCube"}
     - {id: 72, cat: Console/3DS, desc: "Games/3DS"}
     - {id: 77, cat: Console/PS4, desc: "Games/PS4"}
     - {id: 82, cat: Console/Other, desc: "Games/Switch"}
-
     # XXX
     - {id: 48, cat: XXX/DVD, desc: "XXX/Video"}
-    - {id: 49, cat: XXX/Imageset, desc: "XXX/Picture"}
+    - {id: 49, cat: XXX/ImageSet, desc: "XXX/Picture"}
     - {id: 50, cat: XXX, desc: "XXX/Magazine"}
     - {id: 51, cat: XXX, desc: "XXX/Hentai"}
     - {id: 67, cat: XXX, desc: "XXX/Games"}
-
     # Other
     - {id: 33, cat: Other, desc: "Other/Emulation"}
     - {id: 34, cat: Books, desc: "Other/Tutorial"}
     - {id: 35, cat: Other, desc: "Other/Sounds"}
-    - {id: 36, cat: Books/Ebook, desc: "Other/E-books"}
+    - {id: 36, cat: Books/EBook, desc: "Other/E-books"}
     - {id: 37, cat: Other, desc: "Other/Images"}
     - {id: 38, cat: Other, desc: "Other/Mobile Phone"}
     - {id: 39, cat: Books/Comics, desc: "Other/Comics"}
@@ -124,45 +125,58 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
-    music-search: [q, album, artist, label, year]
+    music-search: [q, album, artist]
+    book-search: [q]
 
 settings:
   - name: downloadlink
     type: select
     label: Download link
+    default: "http://itorrents.org/"
+    options:
+      "http://itorrents.org/": iTorrents.org
+      "magnet:": magnet
+  - name: downloadlink2
+    type: select
+    label: Download link (fallback)
     default: "magnet:"
     options:
-      "http://itorrents.org/": "iTorrents.org"
-      "http://torrage.info/": "Torrage.info"
-      "http://btcache.me/": "BTcache.me"
-      "magnet:": "magnet"
+      "http://itorrents.org/": iTorrents.org
+      "magnet:": magnet
+  - name: info_download
+    type: info
+    label: About the Download links
+    default: As the iTorrents .torrent download link on this site is known to fail from time to time, we suggest using the magnet link as a fallback. The BTCache and Torrage services are not supported because they require additional user interaction (a captcha for BTCache and a download button on Torrage.)
   - name: sort
     type: select
     label: Sort requested from site
-    default: "time"
+    default: time
     options:
-      "time": "created"
-      "seeders": "seeders"
-      "size": "size"
+      time: created
+      seeders: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 download:
-  # the .torrent url is on the on the details page
-  selector: ul li a[href^="{{ .Config.downloadlink }}"]
-  attribute: href
+  # the .torrent URL and magnet URI are on the details page
+  selectors:
+    - selector: ul li a[href^="{{ .Config.downloadlink }}"]
+      attribute: href
+    - selector: ul li a[href^="{{ .Config.downloadlink2 }}"]
+      attribute: href
 
 search:
   paths:
     # present first page of movies tv and music results if there are no search parms supplied (20 hits per page)
-    - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Movies{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/1/"
-    - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/TV{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}2{{else}}1{{end}}/"
-    - path: "{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}sort-search{{else}}cat/Music{{end}}{{if or (.Query.Album) (.Query.Artist) }}/{{ or (.Query.Album) (.Query.Artist) }}{{else}}/{{ .Keywords }}{{end}}{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}/{{else}}{{end}}{{ .Config.sort }}/{{ .Config.type }}/{{if or (.Query.Album) (.Query.Artist) (.Keywords) }}3{{else}}1{{end}}/"
+    - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Movies{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/1/"
+    - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/TV{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}2{{ else }}1{{ end }}/"
+    - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Music{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}3{{ else }}1{{ end }}/"
   keywordsfilters:
     - name: replace # use this as a workaround till #893 is implemented
       args: ["Greys Anatomy", "Grey's Anatomy"]
@@ -171,29 +185,45 @@ search:
     selector: tr:has(a[href^="/torrent/"])
 
   fields:
-    title_text:
+    title_default:
       # the movies, tv and music pages abbreviate the title
       selector: td[class^="coll-1"] a[href^="/torrent/"]
-    title_href:
+    title_optional:
       # the movies, tv and music pages abbreviate the title so we process the href instead. #8137
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
       filters:
+        - name: urldecode
         - name: split
           args: ["/", 3]
     title:
-      # title_href can be empty so use the title_text instead #8586
-      text: "{{ if .Result.title_href }}{{ .Result.title_href }}{{ else }}{{ .Result.title_text }}{{ end }}"
+      # title_optional can be empty so use the title_default instead #8586
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
       filters:
         - name: re_replace
-          args: ["(-+)", " "]
+          args: ["-", " "]
         - name: replace
           args: ["Grey's Anatomy", "Greys Anatomy"]
         - name: replace
-          args: ["\u000f", ""] # get rid of unwanted character
-    category:
-      text: 40
-    category|noappend:
+          args: ["\u000f", ""] # get rid of unwanted character #6582
+        # cleanup for Sonarr
+        - name: re_replace # EP 3 4 to E3-4
+          args: ["(?i)\\sEP\\s(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " E$1-$2 "]
+        - name: re_replace # S02E04 05 to S02E04-05
+          args: ["(?i)\\sS(\\d{1,2})\\s?E\\s?(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " S$1E$2-$3 "]
+        - name: re_replace
+          args: ["(?i)AC3\\s?(\\d)\\s(\\d)", "AC3 $1.$2"]
+        - name: re_replace
+          args: ["(?i) DD\\s?(\\d)\\s(\\d)", " DD $1.$2"]
+        - name: re_replace
+          args: ["(?i) DDP\\s?(\\d)\\s(\\d)", " DDP $1.$2"]
+        - name: re_replace
+          args: ["(?i)\\sE\\s?AC3", " EAC3"]
+        - name: re_replace
+          args: ["(?i)WEB\\sDL", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)HDTVRIP", "HDTV"]
+    category_sub:
       optional: true
       selector: td[class^="coll-1"] a[href^="/sub/"]
       attribute: href
@@ -201,6 +231,8 @@ search:
         # extract the third part
         - name: split
           args: ["/", 2]
+    category:
+      text: "{{ if .Result.category_sub }}{{ .Result.category_sub }}{{ else }}40{{ end }}"
     details:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
@@ -209,45 +241,34 @@ search:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
     # dates come in three flavours:
-    date:
+    date_year:
       # (within this year) 7am Sep. 14th
       optional: true
       selector: td[class^="coll-date"]:not(:contains(":")):not(:contains("'"))
       filters:
-        - name: replace
-          args: ["st", ""]
-        - name: replace
-          args: ["nd", ""]
-        - name: replace
-          args: ["rd", ""]
-        - name: replace
-          args: ["th", ""]
+        - name: re_replace
+          args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "3pm Jan. 2"
-    date:
+    date_years:
       # (more than a year ago) Apr. 18th '11
       optional: true
       selector: td[class^="coll-date"]:contains("'")
       filters:
         - name: replace
           args: ["'", ""]
-        - name: replace
-          args: ["st", ""]
-        - name: replace
-          args: ["nd", ""]
-        - name: replace
-          args: ["rd", ""]
-        - name: replace
-          args: ["th", ""]
+        - name: re_replace
+          args: ["st|nd|rd|th", ""]
         - name: dateparse
           args: "Jan. 2 06"
-    date:
+    date_today:
       # (today) 12:25am
       optional: true
       selector: td[class^="coll-date"]:contains(":")
       filters:
-        - name: dateparse
-          args: "3:04pm"
+        - name: fuzzytime
+    date:
+      text: "{{ if or .Result.date_year .Result.date_years .Result.date_today }}{{ or .Result.date_year .Result.date_years .Result.date_today }}{{ else }}now{{ end }}"
     size:
       selector: td[class^="coll-4"]
     seeders:

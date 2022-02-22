@@ -1,0 +1,72 @@
+---
+id: 0magnet
+name: 0Magnet
+description: "ØMagnet is a CHINESE Public tracker for Asian 3X (JAV)"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://0magnet.com/
+  - https://9mag.net/
+
+caps:
+  categories:
+    XXX: XXX
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  infohash:
+    hash:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "&dn=(.+?)&"
+        - name: validfilename
+
+search:
+  paths:
+    - path: search
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+
+  rows:
+    selector: table > tbody > tr:has(td)
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: XXX
+    title:
+      selector: a
+      remove: p
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: td.td-size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

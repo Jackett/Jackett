@@ -46,7 +46,7 @@ namespace Jackett.Tray
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(runtimeSettings);
             logger = LogManager.GetCurrentClassLogger();
 
-            logger.Info("Starting Jackett Tray v" + EnvironmentUtil.JackettVersion);
+            logger.Info("Starting Jackett Tray " + EnvironmentUtil.JackettVersion());
 
             processService = new ProcessService(logger);
             windowsService = new WindowsServiceConfigService(processService, logger);
@@ -73,7 +73,7 @@ namespace Jackett.Tray
                 StartConsoleApplication();
             }
 
-            updatedVersion = updatedVersion.Equals("yes", StringComparison.OrdinalIgnoreCase) ? EnvironmentUtil.JackettVersion : updatedVersion;
+            updatedVersion = updatedVersion.Equals("yes", StringComparison.OrdinalIgnoreCase) ? EnvironmentUtil.JackettVersion() : updatedVersion;
 
             if (!string.IsNullOrWhiteSpace(updatedVersion))
             {
@@ -94,21 +94,20 @@ namespace Jackett.Tray
 
             if (windowsService.ServiceExists() && windowsService.ServiceRunning())
             {
-                //We won't be able to start the tray app up again from the updater, as when running via a windows service there is no interaction with the desktop
-                //Fire off a console process that will start the tray 20 seconds later
+                // We won't be able to start the tray app up again from the updater, as when running via a windows
+                // service there is no interaction with the desktop.
 
-                var trayExePath = Assembly.GetEntryAssembly().Location;
-
+                var scriptPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "jackett_launcher.bat");
                 var startInfo = new ProcessStartInfo()
                 {
-                    Arguments = $"/c timeout 20 > NUL & \"{trayExePath}\" --UpdatedVersion yes",
+                    Arguments = $"/c \"{scriptPath}\"",
                     FileName = "cmd.exe",
                     UseShellExecute = true,
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden
                 };
 
-                logger.Info("Starting 20 second delay tray launch as Jackett is running as a Windows service: " + startInfo.FileName + " " + startInfo.Arguments);
+                logger.Info($"Starting launcher script as Jackett is running as a Windows service: {startInfo.FileName} {startInfo.Arguments}");
                 Process.Start(startInfo);
             }
 
@@ -262,9 +261,7 @@ namespace Jackett.Tray
 
         private void StartConsoleApplication()
         {
-            var applicationFolder = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-
-            var exePath = Path.Combine(applicationFolder, "JackettConsole.exe");
+            var exePath = Path.Combine(EnvironmentUtil.JackettInstallationPath(), "JackettConsole.exe");
 
             var startInfo = new ProcessStartInfo()
             {

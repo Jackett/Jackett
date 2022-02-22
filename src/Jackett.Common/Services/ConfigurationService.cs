@@ -52,7 +52,7 @@ namespace Jackett.Common.Services
                 throw new Exception("Could not create settings directory. " + ex.Message);
             }
 
-            if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+            if (Environment.OSVersion.Platform != PlatformID.Unix)
             {
                 try
                 {
@@ -63,15 +63,13 @@ namespace Jackett.Common.Services
                         // On Windows we need admin permissions to migrate as they were made with admin permissions.
                         if (ServerUtil.IsUserAdministrator())
                         {
-                            PerformMigration();
+                            PerformMigration(oldDir);
                         }
                         else
                         {
                             try
                             {
-                                // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-                                // https://stackoverflow.com/questions/896572
-                                processService.StartProcessAndLog(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath, "--MigrateSettings", true);
+                                processService.StartProcessAndLog(EnvironmentUtil.JackettExecutablePath(), "", true);
                             }
                             catch
                             {
@@ -81,50 +79,65 @@ namespace Jackett.Common.Services
                             }
                         }
                     }
-                    else
-                    {
-                        PerformMigration();
-                    }
-
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    logger.Error("ERROR could not migrate settings directory " + ex);
+                    logger.Error($"ERROR could not migrate settings directory\n{e}");
+                }
+            }
+
+            // Perform a migration in case of https://github.com/Jackett/Jackett/pull/11173#issuecomment-787520128
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                // In cases where the app data folder is the same as "$(cwd)/Jackett" we don't need to perform a migration
+                var fullConfigPath = Path.GetFullPath("Jackett");
+                if (GetAppDataFolder() != fullConfigPath && !File.Exists(Path.Combine(fullConfigPath, "jackett")))
+                {
+                    PerformMigration(fullConfigPath);
                 }
             }
         }
 
-        public void PerformMigration()
+        public void PerformMigration(string oldDirectory)
         {
-            var oldDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
-            if (Directory.Exists(oldDir))
+            if (!Directory.Exists(oldDirectory))
             {
-                foreach (var file in Directory.GetFiles(oldDir, "*", SearchOption.AllDirectories))
+                return;
+            }
+
+            foreach (var file in Directory.GetFiles(oldDirectory, "*", SearchOption.AllDirectories))
+            {
+                var path = file.Replace(oldDirectory, "");
+                var destPath = GetAppDataFolder() + path;
+                var destFolder = Path.GetDirectoryName(destPath);
+                if (!Directory.Exists(destFolder))
                 {
-                    var path = file.Replace(oldDir, "");
-                    var destPath = GetAppDataFolder() + path;
-                    var destFolder = Path.GetDirectoryName(destPath);
-                    if (!Directory.Exists(destFolder))
+                    var dir = Directory.CreateDirectory(destFolder);
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        var dir = Directory.CreateDirectory(destFolder);
                         var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
                         directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
                         dir.SetAccessControl(directorySecurity);
                     }
-                    if (!File.Exists(destPath))
+                }
+                if (!File.Exists(destPath))
+                {
+                    File.Copy(file, destPath);
+                    // The old files were created when running as admin so make sure they are editable by normal users / services.
+                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
                     {
-                        File.Copy(file, destPath);
-                        // The old files were created when running as admin so make sure they are editable by normal users / services.
-                        if (System.Environment.OSVersion.Platform != PlatformID.Unix)
-                        {
-                            var fileInfo = new FileInfo(destFolder);
-                            var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);
-                            fileSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.None, AccessControlType.Allow));
-                            fileInfo.SetAccessControl(fileSecurity);
-                        }
+                        var fileInfo = new FileInfo(destFolder);
+                        var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);
+                        fileSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.None, AccessControlType.Allow));
+                        fileInfo.SetAccessControl(fileSecurity);
                     }
                 }
-                Directory.Delete(oldDir, true);
+            }
+
+            // Don't remove configs that have been migrated to the same folder
+            if (GetAppDataFolder() != oldDirectory)
+            {
+                Directory.Delete(oldDirectory, true);
             }
         }
 
@@ -137,14 +150,14 @@ namespace Jackett.Common.Services
                 if (!File.Exists(fullPath))
                 {
                     logger.Debug("Config file does not exist: " + fullPath);
-                    return default(T);
+                    return default;
                 }
 
                 return serializeService.DeSerialise<T>(File.ReadAllText(fullPath));
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error reading config file " + fullPath);
+                logger.Error($"Error reading config file {fullPath}\n{e}");
                 return default;
             }
         }
@@ -162,13 +175,11 @@ namespace Jackett.Common.Services
             }
             catch (Exception e)
             {
-                logger.Error(e, "Error writing config file " + fullPath);
+                logger.Error($"Error writing config file {fullPath}\n{e}");
             }
         }
 
-        // Use EscapedCodeBase to avoid Uri reserved characters from causing bugs
-        // https://stackoverflow.com/questions/896572
-        public string ApplicationFolder() => Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
+        public string ApplicationFolder() => EnvironmentUtil.JackettInstallationPath();
 
         public string GetContentFolder()
         {
@@ -224,7 +235,7 @@ namespace Jackett.Common.Services
 
         public string GetSonarrConfigFile() => Path.Combine(GetAppDataFolder(), "sonarr_api.json");
 
-        public string GetVersion() => EnvironmentUtil.JackettVersion;
+        public string GetVersion() => EnvironmentUtil.JackettVersion();
 
         public ServerConfig BuildServerConfig(RuntimeSettings runtimeSettings)
         {

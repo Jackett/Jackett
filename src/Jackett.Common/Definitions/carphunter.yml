@@ -1,0 +1,170 @@
+---
+id: carphunter
+name: Carp-Hunter
+description: "Carp-Hunter is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://carp-hunter.hu/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies/SD, desc: "Film/Cam/Eng"}
+    - {id: 2, cat: Movies/SD, desc: "Film/Cam/Hun"}
+    - {id: 8, cat: Movies/DVD, desc: "Film/DVD/Eng"}
+    - {id: 7, cat: Movies/DVD, desc: "Film/DVD/Hun"}
+    - {id: 16, cat: Movies/HD, desc: "Film/HD1080P/Eng"}
+    - {id: 15, cat: Movies/HD, desc: "Film/HD1080P/Hun"}
+    - {id: 14, cat: Movies/HD, desc: "Film/HD720P/Eng"}
+    - {id: 13, cat: Movies/HD, desc: "Film/HD720P/Hun"}
+    - {id: 4, cat: Movies/SD, desc: "Film/SD/Eng"}
+    - {id: 3, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: 18, cat: Movies/UHD, desc: "Film/UHD/Eng"}
+    - {id: 17, cat: Movies/UHD, desc: "Film/UHD/Hun"}
+    - {id: 23, cat: Audio/Audiobook, desc: "Hangosköny"}
+    - {id: 19, cat: PC/Games, desc: "Játék/ISO"}
+    - {id: 20, cat: PC/Games, desc: "Játék/RIP"}
+    - {id: 24, cat: Other, desc: "Képek"}
+    - {id: 21, cat: Books, desc: "Könyv/Eng"}
+    - {id: 22, cat: Books, desc: "Könyv/Hun"}
+    - {id: 35, cat: TV/Anime, desc: "Mese/Eng"}
+    - {id: 36, cat: TV/Anime, desc: "Mese/Hun"}
+    - {id: 25, cat: PC/Mobile-Other, desc: "Mobil"}
+    - {id: 30, cat: PC/ISO, desc: "Programok/ISO"}
+    - {id: 31, cat: PC/0day, desc: "Programok/RIP"}
+    - {id: 33, cat: TV, desc: "Sorozat/Eng"}
+    - {id: 32, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 34, cat: XXX, desc: "XXX/Filmek"}
+    - {id: 39, cat: XXX/ImageSet, desc: "XXX/Képek"}
+    - {id: 29, cat: Audio/Lossless, desc: "Zene/FLAC/Eng"}
+    - {id: 28, cat: Audio/Lossless, desc: "Zene/FLAC/Hun"}
+    - {id: 27, cat: Audio/MP3, desc: "Zene/MP3/Eng"}
+    - {id: 26, cat: Audio/MP3, desc: "Zene/MP3/Hun"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+  test:
+    path: index.php
+    selector: a[href^="logout.php"]
+
+search:
+  paths:
+    - path: letoltes.php
+  keywordsfilters:
+    # the site uses % for wildcard
+    - name: re_replace
+      args: ["[^a-zA-Z0-9]+", "%"]
+  inputs:
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 both, 1 onlyactive, 2 onlydead, 3 onlyfree, 4 x2 torrents, 5 mytorrents, 6 waiting for seeds
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # does not support imdbid searches
+
+  rows:
+    selector: table[width="920px"] > tbody > tr:has(a[href^="letoltes.php?cat="])
+
+  fields:
+    category:
+      selector: a[href^="letoltes.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href*="/details.php?id="]
+      attribute: title
+    details:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["/details", "/download"]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) width"
+    date:
+      selector: small
+      remove: font
+      filters:
+        - name: replace
+          args: ["\u00a0", " "]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    files:
+      selector: td:nth-last-child(7)
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        font:contains("x0"): 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        font:contains("x2"): 2
+        font:contains("x4"): 4
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a

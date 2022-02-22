@@ -2,11 +2,13 @@
 id: nitro
 name: Nitro
 description: "Nitro is a POLISH Public Torrent Tracker"
-language: pl-pl
+language: pl-PL
 type: public
 encoding: UTF-8
 links:
-  - http://nitro.to/ # does not support https NET::ERR_CERT_AUTHORITY_INVALID
+  - https://nitro.to/
+legacylinks:
+  - http://nitro.to/ # site is forcing https
 
 caps:
   categorymappings:
@@ -18,51 +20,56 @@ caps:
     - {id: 6, cat: PC, desc: "Programy"}
     - {id: 7, cat: Books, desc: "E-Booki/Książki"}
     - {id: 8, cat: Audio/Audiobook, desc: "Audio Booki"}
-    - {id: 9, cat: PC/Phone-Other, desc: "GSM/PDA"}
+    - {id: 9, cat: PC/Mobile-Other, desc: "GSM/PDA"}
     - {id: 10, cat: Other, desc: "Inne"}
     - {id: 11, cat: XXX, desc: "XXX"}
-    - {id: 144, cat: Other, desc: "Nieposortowane"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: "data"
+    default: data
     options:
-      "data": "created"
-      "seeds": "seeders"
-      "size": "size"
+      data: created
+      seeds: seeders
+      size: size
   - name: type
     type: select
     label: Order requested from site
-    default: "desc"
+    default: desc
     options:
-      "desc": "desc"
-      "asc": "asc"
+      desc: desc
+      asc: asc
 
 download:
-  selector: script:contains("magnet:")
-  filters:
-    - name: regexp
-      args: "(magnet:[^\"]+)\""
-    - name: append
-      args: "&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Fexplodie.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.demonii.si%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2Fdenis.stalker.upeer.me%3A6969%2Fannounce"
+  infohash:
+    hash:
+      selector: script:contains("magnet:")
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: script:contains("magnet:")
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
 
 search:
   paths:
     - path: tags.php
   inputs:
     search: "{{ .Keywords }}"
-    # 0 poster 1 list
+    # 0 poster, 1 list
     where: 1
     per: 50
-    # 0 all 1 active 2 dead
+    # 0 all, 1 active, 2 dead
     active: 1
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -71,17 +78,26 @@ search:
     selector: table[width="100%"] > tbody > tr:has(a[onclick="getMagnet(this)"])
 
   fields:
+    category:
+      selector: span.tag_list
+      case:
+        "a:contains(\"Seriale\")": 1
+        "a:contains(\"Filmy\")": 2
+        "a:contains(\"Muzyka\")": 3
+        "a:contains(\"Gry\")": 4
+        "a:contains(\"Anime\")": 5
+        "a:contains(\"Programy\")": 6
+        "a:contains(\"Książki\")": 7
+        "a:contains(\"Booki\")": 8
+        "a:contains(\"PDA\")": 9
+        "a:contains(\"Inne\")": 10
+        "a:contains(\"Nieposortowane\")": 10
+        "a:contains(\"XXX\")": 11
     title:
       selector: a[href^="/torrent/"]
     details:
       selector: a[href^="/torrent/"]
       attribute: href
-    category:
-      selector: a[href^="/tags.php?tags="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: tags
     download:
       selector: a[onclick="getMagnet(this)"]
       attribute: title
@@ -93,8 +109,10 @@ search:
     date:
       selector: td:nth-child(1)
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     size:
       selector: td:nth-child(4)
     seeders:

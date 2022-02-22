@@ -1,0 +1,113 @@
+---
+id: torrentwhiz
+name: TorrentWhiz
+description: "TorrentWhiz ( 토렌트위즈) is a Public KOREAN tracker for Korean media."
+language: ko-KR
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://torrentwiz38.com/
+legacylinks:
+  - https://torrentwiz23.me/
+  - https://torrentwiz24.me/
+  - https://torrentwiz25.me/
+  - https://torrentwiz26.me/
+  - https://torrentwiz27.me/
+  - https://torrentwiz28.me/
+  - https://torrentwiz29.me/
+  - https://torrentwiz30.com/
+  - https://torrentwiz31.com/
+  - https://torrentwiz32.com/
+  - https://torrentwiz33.com/
+  - https://torrentwiz34.com/
+  - https://torrentwiz35.com/
+  - https://torrentwiz36.com/
+  - https://torrentwiz37.com/
+
+caps:
+  categorymappings:
+    - {id: "netflix", cat: TV, desc: "넷플릭스 (Netflix)"}
+    - {id: "tv", cat: TV, desc: "시사 (TV)"}
+    - {id: "mov", cat: Movies, desc: "영화 (Movie)"}
+    - {id: "drama", cat: TV, desc: "드라마 (Drama)"}
+    - {id: "enter", cat: TV, desc: "예능 (Entertainment)"}
+    - {id: "music", cat: Audio, desc: "음원 (Music)"}
+    - {id: "util", cat: PC, desc: "유틸 (Software)"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+
+download:
+  infohash:
+    hash:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: h1.panel-title
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    # https://torrentwiz31.com/bbs/search.php?url=&stx=sin&srows=100&gr_id=&sfl=wr_subject&sop=and
+    - path: bbs/search.php
+  inputs:
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    srows: 100
+    gr_id: ""
+    # wr_subject||wr_content, wr_subject, wr_content, mb_id, wr_name
+    sfl: wr_subject
+    # or, and
+    sop: and
+
+  rows:
+    selector: div.search-media div.media
+
+  fields:
+    category:
+      selector: div.media-heading a
+      attribute: href
+      filters:
+        - name: querystring
+          args: bo_table
+    title:
+      selector: div.media-heading a
+    details:
+      selector: div.media-heading a
+      attribute: href
+    download:
+      selector: div.media-heading a
+      attribute: href
+    poster:
+      selector: div.photo img
+      attribute: src
+    date:
+      # 2021-01-29T20:44:20+09:00
+      selector: time
+      attribute: datetime
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

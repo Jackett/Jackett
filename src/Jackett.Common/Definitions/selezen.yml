@@ -1,0 +1,172 @@
+---
+id: selezen
+name: seleZen
+description: "seleZen is a RUSSIAN Semi-Private Torrent Tracker for MOVIES"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - https://use.selezen.club/
+  - https://mel.selezen.net/
+  - https://selezen.org/
+legacylinks:
+  - https://www.selezen.site/
+  - https://www.selezen.net/
+  - https://s1.selezen.site/
+
+caps:
+  categorymappings:
+    - {id: 0, cat: Movies, desc: "Movies"}
+    - {id: 45, cat: Movies/HD, desc: "WEBRip 720p"}
+    - {id: 46, cat: Movies/HD, desc: "WEBRip 1080p"}
+    - {id: 47, cat: Movies/UHD, desc: "WEBRip 2160p"}
+    - {id: 48, cat: Movies/HD, desc: "WEB-DL 720p"}
+    - {id: 49, cat: Movies/HD, desc: "WEB-DL 1080p"}
+    - {id: 50, cat: Movies/UHD, desc: "SDR WEB-DL 2160p"}
+    - {id: 51, cat: Movies/UHD, desc: "HDR WEB-DL 2160p"}
+    - {id: 52, cat: Movies/HD, desc: "BDRip 720p"}
+    - {id: 53, cat: Movies/HD, desc: "BDRip 1080p"}
+    - {id: 54, cat: Movies/UHD, desc: "SDR BDRip 2160p"}
+    - {id: 55, cat: Movies/UHD, desc: "HDR BDRip 2160p"}
+    - {id: 56, cat: Movies/HD, desc: "UHD BDRip 720p"}
+    - {id: 57, cat: Movies/HD, desc: "UHD BDRip 1080p"}
+    - {id: 58, cat: Movies/HD, desc: "BDRemux 1080p"}
+    - {id: 59, cat: Movies/UHD, desc: "SDR BDRemux 2160p"}
+    - {id: 60, cat: Movies/UHD, desc: "HDR BDRemux 2160p"}
+    - {id: 61, cat: Movies/UHD, desc: "DV BDRemux 2160p"}
+    - {id: 62, cat: Movies/HD, desc: "Blu-Ray 1080p"}
+    - {id: 63, cat: Movies/UHD, desc: "Blu-Ray 2160p"}
+    - {id: 64, cat: Movies/3D, desc: "3D BDRemux 1080p"}
+    - {id: 65, cat: Movies/3D, desc: "3D Blu-Ray 1080p"}
+
+  modes:
+    search: [q]
+    movie-search: [q, imdbid]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      title: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.html
+  method: form
+  form: form[role="form"]
+  inputs:
+    login_name: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
+    login_not_save: ""
+    login: submit
+  error:
+    - selector: div.alert-warning:contains("Ошибка авторизации")
+  test:
+    path: /
+    selector: a[href$="/index.php?action=logout"]
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  # do=search&subaction=search&story=greyhound&titleonly=0&sortby=date&resorder=desc&showposts=0&catlist[]=45&catlist[]=46&catlist[]=47
+  paths:
+    - path: index.php
+  inputs:
+    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+    do: search
+    subaction: search
+    showposts: 1
+    # 0 in article 1 in comments 2 in static pages 3 in article titles
+    titleonly: "{{ if .Query.IMDBID }}0{{ else }}3{{ end }}"
+    story: "{{ if or .Query.IMDBID .Keywords }}{{ or .Query.IMDBID .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    sortby: "{{ .Config.sort }}"
+    resorder: "{{ .Config.type }}"
+
+  rows:
+    selector: div.card-default:has(i.fa-file-video-o)
+
+  fields:
+    category:
+      text: 0
+    category|noappend:
+      selector: div.noimg > a
+      optional: true
+      case:
+        a[href$="/webrip720p/"]: 45
+        a[href$="/webrip1080p/"]: 46
+        a[href$="/webrip2160p/"]: 47
+        a[href$="/web-dl720p/"]: 48
+        a[href$="/web-dl1080p/"]: 49
+        a[href$="/sdrweb-dl2160p/"]: 50
+        a[href$="/hdrweb-dl2160p/"]: 51
+        a[href$="/bdrip720p/"]: 52
+        a[href$="/bdrip1080p/"]: 53
+        a[href$="/sdrbdrip2160p/"]: 54
+        a[href$="/hdrbdrip2160p/"]: 55
+        a[href$="/uhdbdrip-720p/"]: 56
+        a[href$="/uhdbdrip1080p/"]: 57
+        a[href$="/bdremux1080p/"]: 58
+        a[href$="/sdrbdremux2160p/"]: 59
+        a[href$="/hdrbdremux2160p/"]: 60
+        a[href$="/dvbdremux2160p/"]: 61
+        a[href$="/blu-ray1080p/"]: 62
+        a[href$="/blu-ray2160p/"]: 63
+        a[href$="/3dbdremux1080p/"]: 64
+        a[href$="/3dblu-ray1080p/"]: 65
+    title:
+      selector: div.short-title > a
+    details:
+      selector: div.short-title > a
+      attribute: href
+    download:
+      selector: div.short-title > a
+      attribute: href
+    poster:
+      selector: img.poster
+      attribute: src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    description:
+      selector: span.noimg
+    date:
+      selector: a:has(span.glyphicon-time)
+      filters:
+        # 30.10.2019 14:49
+        - name: regexp
+          args: "(\\d{1,2}\\.\\d{2}\\.\\d{4} \\d{1,2}\\:\\d{2})"
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2.01.2006 15:04 -07:00"
+    seeders:
+      selector: i.fa-arrow-up ~ span
+    leechers:
+      selector: i.fa-arrow-down ~ span
+    grabs:
+      selector: i.fa-download ~ span
+    size:
+      selector: i.fa-file-video-o ~ b
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

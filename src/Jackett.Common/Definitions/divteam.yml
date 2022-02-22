@@ -2,7 +2,7 @@
 id: divteam
 name: DivTeam
 description: "DivTeam is a SPANISH Private Torrent Tracker for MOVIES / GENERAL"
-language: es-es
+language: es-ES
 type: private
 encoding: UTF-8
 links:
@@ -12,14 +12,19 @@ caps:
   categorymappings:
     - {id: 60, cat: Movies/HD, desc: "MicroHD 720p"}
     - {id: 77, cat: Movies/HD, desc: "MicroHD 1080p"}
-    - {id: 78, cat: Movies/HD, desc: "MicroHD 4K"}
+    - {id: 78, cat: Movies/UHD, desc: "MicroHD 4K"}
     - {id: 64, cat: TV/HD, desc: "Pack Series"}
     - {id: 65, cat: TV/HD, desc: "Pack Series VOSE"}
-    - {id: 80, cat: Movies/BluRay, desc: "BDRip X265 1080p"}
+    - {id: 80, cat: Movies/HD, desc: "BDRip X265 1080p"}
     - {id: 81, cat: Movies/UHD, desc: "UHDRip x265 4K"}
-    - {id: 82, cat: Movies/WEBDL, desc: "Pelis Web-DL 1080"}
-    - {id: 83, cat: Movies/WEBDL, desc: "Pelis Web-DL 720"}
+    - {id: 82, cat: Movies/WEB-DL, desc: "Pelis Web-DL 1080"}
+    - {id: 83, cat: Movies/WEB-DL, desc: "Pelis Web-DL 720"}
     - {id: 84, cat: Movies/UHD, desc: "UHD Remux x265"}
+    - {id: 91, cat: Movies/HD, desc: "BDRip x264"}
+    - {id: 89, cat: Movies/HD, desc: "BDRemux"}
+    - {id: 88, cat: Movies/BluRay, desc: "Full HD"}
+    - {id: 90, cat: Movies/BluRay, desc: "UHD Full"}
+    - {id: 92, cat: Movies/UHD, desc: "Web-DL UHD"}
     - {id: 23, cat: TV/Sport, desc: "Deportes"}
     - {id: 20, cat: TV/HD, desc: "Series"}
     - {id: 31, cat: TV/HD, desc: "Series VOSE"}
@@ -31,31 +36,22 @@ caps:
     - {id: 74, cat: Movies, desc: "Saga Crepúsculo"}
     - {id: 75, cat: Movies, desc: "Saga The Purge"}
     - {id: 79, cat: Movies, desc: "Saga Star Wars"}
-    - {id: 18, cat: Movies/BluRay, desc: "Video Full & Remux"}
     - {id: 76, cat: Movies, desc: "x-men saga"}
-    - {id: 6, cat: Books/Ebook, desc: "EBooks"}
-    - {id: 58, cat: Books/Ebook, desc: "Kiosko"}
+    - {id: 85, cat: Movies, desc: "Sean Connery"}
+    - {id: 6, cat: Books/EBook, desc: "EBooks"}
+    - {id: 58, cat: Books/Mags, desc: "Kiosko"}
     - {id: 24, cat: TV/Documentary, desc: "Documentales"}
     - {id: 32, cat: TV/Documentary, desc: "Documentales VOSE"}
-    - {id: 49, cat: Books/Ebook, desc: "eLearning"}
-    - {id: 68, cat: TV, desc: "eLearning Multimedia"}
-    - {id: 16, cat: Movies/DVD, desc: "DVD-Rip"}
-    - {id: 48, cat: Movies/BluRay, desc: "BR-Rip/HD-Rip"}
-    - {id: 17, cat: Movies/BluRay, desc: "BD-Rip"}
-    - {id: 5, cat: TV/Anime, desc: "Anime"}
-    - {id: 34, cat: PC/Games, desc: "Juegos PC"}
-    - {id: 7, cat: PC/0day, desc: "Software PC"}
-    - {id: 35, cat: Console, desc: "Juegos Sony"}
-    - {id: 36, cat: PC/Games, desc: "Juegos Microsoft"}
-    - {id: 37, cat: Console/NDS, desc: "Juegos Nintendo"}
-    - {id: 45, cat: Audio/MP3, desc: "Music MP3"}
-    - {id: 44, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 49, cat: Books/Technical, desc: "eLearning"}
+    - {id: 68, cat: Books/Technical, desc: "eLearning Multimedia"}
+    - {id: 87, cat: Audio/Audiobook, desc: "Audiolibros"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -64,23 +60,27 @@ settings:
   - name: info_cookie
     type: info
     label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button<li>Refresh the page by pressing <b>F5</b><li>Select the <b>Headers</b> tab<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: "3"
+    default: 3
     options:
-      "3": "created"
-      "5": "seeders"
-      "4": "size"
-      "2": "title"
+      3: created
+      5: seeders
+      4: size
+      2: title
   - name: type
     type: select
     label: Order requested from site
-    default: "2"
+    default: 2
     options:
-      "2": "desc"
-      "1": "asc"
+      2: desc
+      1: asc
   - name: info_results
     type: info
     label: Results Per Page
@@ -98,13 +98,13 @@ search:
     # https://divteam.com/index.php?page=torrents&search=daredevil&category=20;23;31;65;64;60;63;69;70;71;72;73;74;75;76;77;78;80;81;82;83;84&active=1
     - path: index.php
   inputs:
-    page: "torrents"
+    page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
     search: "{{ .Keywords }}"
-    # 0 all 1 activeonly 2 deadonly
+    # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 title 1 title&desc 2 descr 3 uploaders 5 gold 6 silver 9 2x 10 3x 11 4x
-    options: 0
+    # 0 title, 1 title&desc, 2 descr, 3 uploaders, 5 gold, 6 silver, 9 2x, 10 3x, 11 4x, 12 5x
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
     # does not support imdbid search and does not supply imdb link in results.
@@ -116,19 +116,29 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    title:
+    title_vose:
       selector: a[href^="index.php?page=torrent-details"][onmouseover]:contains("VOSE")
       optional: true
       filters:
         - name: append
-          args: " [English]"
-    title:
+          args: " English"
+    title_notvose:
       selector: a[href^="index.php?page=torrent-details"][onmouseover]:not(:contains("VOSE"))
       optional: true
       filters:
         - name: append
-          args: " [Spanish] [English]"
-    banner:
+          args: " MULTi/SPANiSH" # DivTeam doesn't bring languages. Usually Original + Spanish.
+        - name: re_replace
+          args: ["\\.+", "."] # More than 1 dot -> .
+        - name: re_replace
+          args: ["^\\.", ""] # Delete first dot
+        - name: replace
+          args: ["UHDRip", "Bluray-2160p"] # Fix for Radarr
+        - name: replace
+          args: ["2160p BDRip", "Bluray-2160p"] # Fix for Radarr
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
+    poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details"]
       attribute: onmouseover
       filters:
@@ -148,8 +158,10 @@ search:
     date:
       selector: td:nth-child(6)
       filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     seeders:
       selector: td:nth-last-child(4)
     leechers:
@@ -169,4 +181,9 @@ search:
         img[src="images/4x.png"]: 4
         img[src="images/5x.png"]: 5
         "*": 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # xbtit customised

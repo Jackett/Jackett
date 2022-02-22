@@ -23,20 +23,28 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Anidex : BaseWebIndexer
     {
-        public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
+        public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
             : base(id: "anidex",
                    name: "Anidex",
                    description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
                    link: "https://anidex.info/",
-                   caps: new TorznabCapabilities(),
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q
+                       }
+                   },
                    configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
+                   cacheService: cs,
                    configData: new ConfigurationData())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "public";
 
             // Configure the category mappings
@@ -45,79 +53,86 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(3, TorznabCatType.TVAnime, "Anime - Dub");
             AddCategoryMapping(4, TorznabCatType.TVAnime, "LA - Sub");
             AddCategoryMapping(5, TorznabCatType.TVAnime, "LA - Raw");
-            AddCategoryMapping(6, TorznabCatType.TVAnime, "Light Novel");
-            AddCategoryMapping(7, TorznabCatType.TVAnime, "Manga - TLed");
-            AddCategoryMapping(8, TorznabCatType.TVAnime, "Manga - Raw");
-            AddCategoryMapping(9, TorznabCatType.TVAnime, "♫ - Lossy");
-            AddCategoryMapping(10, TorznabCatType.TVAnime, "♫ - Lossless");
-            AddCategoryMapping(11, TorznabCatType.TVAnime, "♫ - Video");
-            AddCategoryMapping(12, TorznabCatType.TVAnime, "Games");
-            AddCategoryMapping(13, TorznabCatType.TVAnime, "Applications");
-            AddCategoryMapping(14, TorznabCatType.TVAnime, "Pictures");
-            AddCategoryMapping(15, TorznabCatType.TVAnime, "Adult Video");
-            AddCategoryMapping(16, TorznabCatType.TVAnime, "Other");
+            AddCategoryMapping(6, TorznabCatType.BooksEBook, "Light Novel");
+            AddCategoryMapping(7, TorznabCatType.BooksComics, "Manga - TLed");
+            AddCategoryMapping(8, TorznabCatType.BooksComics, "Manga - Raw");
+            AddCategoryMapping(9, TorznabCatType.AudioMP3, "♫ - Lossy");
+            AddCategoryMapping(10, TorznabCatType.AudioLossless, "♫ - Lossless");
+            AddCategoryMapping(11, TorznabCatType.AudioVideo, "♫ - Video");
+            AddCategoryMapping(12, TorznabCatType.PCGames, "Games");
+            AddCategoryMapping(13, TorznabCatType.PC0day, "Applications");
+            AddCategoryMapping(14, TorznabCatType.XXXImageSet, "Pictures");
+            AddCategoryMapping(15, TorznabCatType.XXX, "Adult Video");
+            AddCategoryMapping(16, TorznabCatType.Other, "Other");
 
-            // Configure the language select option
-            var languageSelect = new SelectItem(new Dictionary<string, string>()
-            {
-                {"1", "English"},
-                {"2", "Japanese"},
-                {"3", "Polish"},
-                {"4", "Serbo-Croatian" },
-                {"5", "Dutch"},
-                {"6", "Italian"},
-                {"7", "Russian"},
-                {"8", "German"},
-                {"9", "Hungarian"},
-                {"10", "French"},
-                {"11", "Finnish"},
-                {"12", "Vietnamese"},
-                {"13", "Greek"},
-                {"14", "Bulgarian"},
-                {"15", "Spanish (Spain)" },
-                {"16", "Portuguese (Brazil)" },
-                {"17", "Portuguese (Portugal)" },
-                {"18", "Swedish"},
-                {"19", "Arabic"},
-                {"20", "Danish"},
-                {"21", "Chinese (Simplified)" },
-                {"22", "Bengali"},
-                {"23", "Romanian"},
-                {"24", "Czech"},
-                {"25", "Mongolian"},
-                {"26", "Turkish"},
-                {"27", "Indonesian"},
-                {"28", "Korean"},
-                {"29", "Spanish (LATAM)" },
-                {"30", "Persian"},
-                {"31", "Malaysian"}
-            })
-            { Name = "Language", Value = "1" };
-            configData.AddDynamic("languageid", languageSelect);
+            AddLanguageConfiguration();
 
             // Configure the sort selects
-            var sortBySelect = new SelectItem(new Dictionary<string, string>()
-            {
-                {"upload_timestamp", "created"},
-                {"seeders", "seeders"},
-                {"size", "size"},
-                {"filename", "title"}
-            })
-            { Name = "Sort by", Value = "upload_timestamp" };
+            var sortBySelect = new SingleSelectConfigurationItem("Sort by", new Dictionary<string, string>
+                {
+                    {"upload_timestamp", "created"},
+                    {"seeders", "seeders"},
+                    {"size", "size"},
+                    {"filename", "title"}
+                })
+            { Value = "upload_timestamp" };
             configData.AddDynamic("sortrequestedfromsite", sortBySelect);
 
-            var orderSelect = new SelectItem(new Dictionary<string, string>()
+            var orderSelect = new SingleSelectConfigurationItem("Order", new Dictionary<string, string>
                 {
                     {"desc", "Descending"},
                     {"asc", "Ascending"}
                 })
-            { Name = "Order", Value = "desc" };
+            { Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+
+            EnableConfigurableRetryAttempts();
         }
 
-        private string GetSortBy => ((SelectItem)configData.GetDynamic("sortrequestedfromsite")).Value;
+        private void AddLanguageConfiguration()
+        {
+            // Configure the language select option
+            var languageSelect = new MultiSelectConfigurationItem("Language (None ticked = ALL)", new Dictionary<string, string>
+                {
+                    {"1", "English"},
+                    {"2", "Japanese"},
+                    {"3", "Polish"},
+                    {"4", "Serbo-Croatian"},
+                    {"5", "Dutch"},
+                    {"6", "Italian"},
+                    {"7", "Russian"},
+                    {"8", "German"},
+                    {"9", "Hungarian"},
+                    {"10", "French"},
+                    {"11", "Finnish"},
+                    {"12", "Vietnamese"},
+                    {"13", "Greek"},
+                    {"14", "Bulgarian"},
+                    {"15", "Spanish (Spain)"},
+                    {"16", "Portuguese (Brazil)"},
+                    {"17", "Portuguese (Portugal)"},
+                    {"18", "Swedish"},
+                    {"19", "Arabic"},
+                    {"20", "Danish"},
+                    {"21", "Chinese (Simplified)"},
+                    {"22", "Bengali"},
+                    {"23", "Romanian"},
+                    {"24", "Czech"},
+                    {"25", "Mongolian"},
+                    {"26", "Turkish"},
+                    {"27", "Indonesian"},
+                    {"28", "Korean"},
+                    {"29", "Spanish (LATAM)"},
+                    {"30", "Persian"},
+                    {"31", "Malaysian"}
+                })
+            { Values = new[] { "" } };
+            configData.AddDynamic("languageid", languageSelect);
+        }
 
-        private string GetOrder => ((SelectItem)configData.GetDynamic("orderrequestedfromsite")).Value;
+        private string GetSortBy => ((SingleSelectConfigurationItem)configData.GetDynamic("sortrequestedfromsite")).Value;
+
+        private string GetOrder => ((SingleSelectConfigurationItem)configData.GetDynamic("orderrequestedfromsite")).Value;
 
         private Uri GetAbsoluteUrl(string relativeUrl) => new Uri(SiteLink + relativeUrl.TrimStart('/'));
 
@@ -132,40 +147,53 @@ namespace Jackett.Common.Indexers
             return IndexerConfigurationStatus.Completed;
         }
 
+        /// <summary>
+        /// Returns the selected languages, formatted so that they can be used in a query string.
+        /// </summary>
+        private string GetLanguagesForQuery()
+        {
+            var languagesConfig = (MultiSelectConfigurationItem)configData.GetDynamic("languageid");
+            return string.Join(",", languagesConfig.Values);
+        }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            // Get specified categories. If none were specified, use all available.
-            var searchCategories = MapTorznabCapsToTrackers(query);
-            if (searchCategories.Count == 0)
-                searchCategories = GetAllTrackerCategories();
-
             // Prepare the search query
             var queryParameters = new NameValueCollection
             {
-                { "page", "search" },
-                { "id", string.Join(",", searchCategories) },
-                { "group", "0" }, // No group
                 { "q", query.SearchTerm ?? string.Empty },
                 { "s", GetSortBy },
-                { "o", GetOrder }
+                { "o", GetOrder },
+                { "group_id", "0" } // No group
             };
 
+            // Get specified categories
+            // AniDex throws errors when categories are url encoded. See issue #9727
+            var searchCategories = MapTorznabCapsToTrackers(query);
+            var catString = "";
+            if (searchCategories.Count > 0)
+                catString = "&id=" + string.Join(",", searchCategories);
+
+            // Get Selected Languages
+            // AniDex throws errors when the commas between language IDs are url encoded.
+            var langIds = "&lang_id=" + GetLanguagesForQuery();
+
             // Make search request
-            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString());
-            var response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
+            var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString + langIds);
+            var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
             // Check for DDOS Guard
-            if (response.Status == System.Net.HttpStatusCode.Forbidden)
+            if (response.Status == HttpStatusCode.Forbidden)
             {
-                await ConfigureDDoSGuardCookie();
-                response = await RequestStringWithCookiesAndRetry(searchUri.AbsoluteUri);
+                await ConfigureDDoSGuardCookieAsync();
+                response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
             }
 
-            if (response.Status != System.Net.HttpStatusCode.OK)
+            if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
             // Search seems to have been a success so parse it
-            return ParseResult(response.Content);
+            return ParseResult(response.ContentString);
         }
 
         private IEnumerable<ReleaseInfo> ParseResult(string response)
@@ -182,10 +210,12 @@ namespace Jackett.Common.Indexers
                 foreach (var r in rows)
                     try
                     {
+                        var language = "";
                         var release = new ReleaseInfo();
 
                         release.Category = ParseValueFromRow(r, nameof(release.Category), "td:nth-child(1) a", (e) => MapTrackerCatToNewznab(e.Attributes["href"].Value.Substring(5)));
-                        release.Title = ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span");
+                        language = ParseValueFromRow(r, nameof(language), "td:nth-child(1) img", (e) => e.Attributes["title"].Value);
+                        release.Title = ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span") + " " + language;
                         release.Link = ParseValueFromRow(r, nameof(release.Link), "a[href^=\"/dl/\"]", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
                         release.MagnetUri = ParseValueFromRow(r, nameof(release.MagnetUri), "a[href^=\"magnet:?\"]", (e) => new Uri(e.Attributes["href"].Value));
                         release.Size = ParseValueFromRow(r, nameof(release.Size), "td:nth-child(7)", (e) => ReleaseInfo.GetBytes(e.Text()));
@@ -193,10 +223,8 @@ namespace Jackett.Common.Indexers
                         release.Seeders = ParseIntValueFromRow(r, nameof(release.Seeders), "td:nth-child(9)");
                         release.Peers = ParseIntValueFromRow(r, nameof(release.Peers), "td:nth-child(10)") + release.Seeders;
                         release.Grabs = ParseIntValueFromRow(r, nameof(release.Grabs), "td:nth-child(11)");
-                        release.Comments = ParseValueFromRow(r, nameof(release.Comments), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
-                        release.Guid = release.Comments;
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
+                        release.Details = ParseValueFromRow(r, nameof(release.Details), "td:nth-child(3) a", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
+                        release.Guid = release.Details;
                         release.DownloadVolumeFactor = 0;
                         release.UploadVolumeFactor = 1;
 
@@ -215,11 +243,11 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task ConfigureDDoSGuardCookie()
+        private async Task ConfigureDDoSGuardCookieAsync()
         {
             const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
-            var response = await RequestStringWithCookies(ddosPostUrl, string.Empty);
-            if (response.Status != System.Net.HttpStatusCode.OK)
+            var response = await RequestWithCookiesAsync(ddosPostUrl, string.Empty);
+            if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"Unexpected DDOS Guard response: Status: {response.Status}", WebExceptionStatus.ProtocolError);
             if (response.IsRedirect)
                 throw new WebException($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}", WebExceptionStatus.UnknownError);

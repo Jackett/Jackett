@@ -1,0 +1,207 @@
+---
+id: omgwtftrackr
+name: oMg[WtF]trackr
+description: "oMg[WtF]trackr is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://omg.wtftrackr.xyz/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: PC/0day, desc: "en/0DAY"}
+    - {id: 2, cat: PC, desc: "en/APPS"}
+    - {id: 3, cat: Movies/BluRay, desc: "en/BLURAY"}
+    - {id: 4, cat: Movies/DVD, desc: "en/DVDR"}
+    - {id: 5, cat: Books, desc: "en/EBOOKS"}
+    - {id: 6, cat: Audio/Lossless, desc: "en/FLAC"}
+    - {id: 7, cat: Audio/Lossless, desc: "en/FLAC-today"}
+    - {id: 8, cat: PC/Games, desc: "en/GAMES"}
+    - {id: 9, cat: Movies/BluRay, desc: "en/MBLURAY"}
+    - {id: 10, cat: Movies/DVD, desc: "en/MDVDR"}
+    - {id: 11, cat: Audio/MP3, desc: "en/MP3"}
+    - {id: 12, cat: Audio/Video, desc: "en/MVID"}
+    - {id: 13, cat: Console/PS3, desc: "en/PS3"}
+    - {id: 14, cat: Console/PS4, desc: "en/PS4"}
+    - {id: 15, cat: Console/PSP, desc: "en/PSP"}
+    - {id: 16, cat: TV/SD, desc: "en/TV-DVDR"}
+    - {id: 17, cat: TV/SD, desc: "en/TV-DVDRIP"}
+    - {id: 18, cat: TV/HD, desc: "en/TV-HDRIP"}
+    - {id: 19, cat: TV/HD, desc: "en/TV-X264-HD"}
+    - {id: 20, cat: TV/SD, desc: "en/TV-X264-SD"}
+    - {id: 21, cat: Console/Wii, desc: "en/WII"}
+    - {id: 22, cat: Movies/HD, desc: "en/X264"}
+    - {id: 23, cat: Console/XBox 360, desc: "en/XBOX360"}
+    - {id: 24, cat: Console/XBox One, desc: "en/XBOXONE"}
+    - {id: 25, cat: Movies/SD, desc: "en/XVID"}
+    - {id: 26, cat: XXX, desc: "en/XXX"}
+    - {id: 27, cat: XXX/Other, desc: "en/XXX-0DAY"}
+    - {id: 28, cat: XXX/DVD, desc: "en/XXX-DVDR"}
+    - {id: 29, cat: XXX/ImageSet, desc: "en/XXX-iMAGESETS"}
+    - {id: 30, cat: Movies/BluRay, desc: "de/BLURAY"}
+    - {id: 31, cat: Movies/DVD, desc: "de/DVDR"}
+    - {id: 32, cat: TV, desc: "de/TV"}
+    - {id: 33, cat: TV/HD, desc: "de/X264"}
+    - {id: 34, cat: TV/SD, desc: "de/XVID"}
+    - {id: 35, cat: TV/Anime, desc: "fr/ANIME"}
+    - {id: 36, cat: Movies/DVD, desc: "fr/DVDR"}
+    - {id: 37, cat: TV/SD, desc: "fr/TV-DVDR"}
+    - {id: 38, cat: TV, desc: "fr/TV"}
+    - {id: 39, cat: Movies/HD, desc: "fr/X264"}
+    - {id: 40, cat: Movies/SD, desc: "fr/XVID"}
+    - {id: 41, cat: Movies/BluRay, desc: "nl/BLURAY"}
+    - {id: 42, cat: Movies/DVD, desc: "nl/DVDR"}
+    - {id: 43, cat: TV/SD, desc: "nl/TV-DVDR"}
+    - {id: 44, cat: TV, desc: "nl/TV"}
+    - {id: 45, cat: Movies/HD, desc: "nl/X264"}
+    - {id: 46, cat: Movies/SD, desc: "nl/XVID"}
+    - {id: 47, cat: TV, desc: "es/TV"}
+    - {id: 48, cat: Movies/HD, desc: "es/X264"}
+    - {id: 49, cat: Movies/SD, desc: "es/XVID"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.php
+  method: form
+  form: form#loginform
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: form#loginform .warning
+  test:
+    path: index.php
+    selector: a[href^="logout.php?auth="]
+
+search:
+  paths:
+    # https://omg.wtftrackr.xyz/torrents.php?searchstr=trek+s07e04&order_by=time&order_way=desc&filter_cat[1]=1&filter_cat[18]=1&filter_cat[19]=1&action=basic&searchsubmit=1
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ .Keywords }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: basic
+    searchsubmit: 1
+    # does not support imdbid searches and does not provide imdb links
+
+  rows:
+    selector: table#torrent_table > tbody > tr.torrent:has(a[href^="torrents.php?action=download&id="])
+
+  fields:
+    category:
+      selector: td:nth-child(1)
+      case:
+        "b:contains(\"EN/0DAY\")": 1
+        "b:contains(\"EN/APPS\")": 2
+        "b:contains(\"EN/BLURAY\")": 3
+        "b:contains(\"EN/DVDR\")": 4
+        "b:contains(\"EN/EBOOKS\")": 5
+        "b:contains(\"EN/FLAC\")": 6
+        "b:contains(\"EN/FLAC-today\")": 7
+        "b:contains(\"EN/GAMES\")": 8
+        "b:contains(\"EN/MBLURAY\")": 9
+        "b:contains(\"EN/MDVDR\")": 10
+        "b:contains(\"EN/MP3\")": 11
+        "b:contains(\"EN/MVID\")": 12
+        "b:contains(\"EN/PS3\")": 13
+        "b:contains(\"EN/PS4\")": 14
+        "b:contains(\"EN/PSP\")": 15
+        "b:contains(\"EN/TV-DVDR\")": 16
+        "b:contains(\"EN/TV-DVDRIP\")": 17
+        "b:contains(\"EN/TV-HDRIP\")": 18
+        "b:contains(\"EN/TV-X264-HD\")": 19
+        "b:contains(\"EN/TV-X264-SD\")": 20
+        "b:contains(\"EN/WII\")": 21
+        "b:contains(\"EN/X264\")": 22
+        "b:contains(\"EN/XBOX360\")": 23
+        "b:contains(\"EN/XBOXONE\")": 24
+        "b:contains(\"EN/XVID\")": 25
+        "b:contains(\"EN/XXX\")": 26
+        "b:contains(\"EN/XXX-0DAY\")": 27
+        "b:contains(\"EN/XXX-DVDR\")": 28
+        "b:contains(\"EN/XXX-iMAGESETS\")": 29
+        "b:contains(\"DE/BLURAY\")": 30
+        "b:contains(\"DE/DVDR\")": 31
+        "b:contains(\"DE/TV\")": 32
+        "b:contains(\"DE/X264\")": 33
+        "b:contains(\"DE/XVID\")": 34
+        "b:contains(\"FR/ANIME\")": 35
+        "b:contains(\"FR/DVDR\")": 36
+        "b:contains(\"FR/TV-DVDR\")": 37
+        "b:contains(\"FR/TV\")": 38
+        "b:contains(\"FR/X264\")": 39
+        "b:contains(\"FR/XVID\")": 40
+        "b:contains(\"NL/BLURAY\")": 41
+        "b:contains(\"NL/DVDR\")": 42
+        "b:contains(\"NL/TV-DVDR\")": 43
+        "b:contains(\"NL/TV\")": 44
+        "b:contains(\"NL/X264\")": 45
+        "b:contains(\"NL/XVID\")": 46
+        "b:contains(\"ES/TV\")": 47
+        "b:contains(\"ES/X264\")": 48
+        "b:contains(\"ES/XVID\")": 49
+    title:
+      selector: a[href^="torrents.php?id="]
+    details:
+      selector: a[href^="torrents.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4) span
+      attribute: title
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "Jan 2 2006, 15:04 -07:00"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# minimumratio: appears to be ratioless and no H&R for minimumseedtime
+# Engine n/a

@@ -2,7 +2,7 @@
 id: 3dtorrents
 name: 3D Torrents
 description: "3D Torrents (3DT) is a Private Torrent Tracker for 3D HD / BLURAY MOVIES"
-language: en-us
+language: en-US
 type: private
 encoding: UTF-8
 links:
@@ -100,13 +100,15 @@ search:
       selector: td:nth-last-child(4)
     seeders:
       selector: td:nth-last-child(3)
-    # leechers:
-    #   selector: td:nth-last-child(2)
+    leechers:
+      text: 0
     date:
       selector: td:nth-last-child(5)
       filters:
+        - name: append
+          args: " -07:00" # PDT
         - name: dateparse
-          args: "02/01/2006"
+          args: "02/01/2006 -07:00"
     downloadvolumefactor:
       case:
         img[title^="You get 50% off download count on this torrent"]: 0.5
