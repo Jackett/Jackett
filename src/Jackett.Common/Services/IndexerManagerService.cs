@@ -53,7 +53,7 @@ namespace Jackett.Common.Services
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
-            {"seals", "greatposterwall"}
+            {"seals", "greatposterwall"},
             {"tehconnectionme", "anthelion"},
             {"todotorrents", "dontorrent"},
             {"torrentgalaxyorg", "torrentgalaxy"},
