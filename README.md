@@ -500,7 +500,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SceneRush
  * SceneTime
  * SDBits [![(invite needed)][inviteneeded]](#)
- * Seals
+ * GreatPosterWall (GPW)
  * Secret Cinema
  * SeedFile (SF)
  * Shareisland
