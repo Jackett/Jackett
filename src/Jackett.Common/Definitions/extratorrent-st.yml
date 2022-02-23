@@ -37,6 +37,7 @@ caps:
     - {id: Other Music, cat: Audio/Other, desc: Music Other}
     - {id: Radio Shows, cat: Audio/Other, desc: Music Radio}
     - {id: Video, cat: XXX, desc: Adult / Porn}
+    - {id: "Adult / Porn", cat: XXX, desc: Adult / Porn}
     - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
     - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}
     - {id: Games, cat: XXX/Other, desc: Adult Games}
