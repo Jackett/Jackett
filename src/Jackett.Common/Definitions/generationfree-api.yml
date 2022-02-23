@@ -38,6 +38,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: vfq
+    type: checkbox
+    label: Replace VFQ with FRENCH in release name
+    default: false
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -99,13 +103,23 @@ search:
       selector: category
     title_original:
       selector: name
-    title_multilang:
+      filters:
+        - name: replace
+          args: [".", " "]
+    title_vfq:
       text: "{{ .Result.title_original }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\sVFQ\\s)", " FRENCH "]
+    title_step2:
+      text: "{{ if .Config.vfq }}{{ .Result.title_vfq }}{{ else }}{{ .Result.title_original }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_step2 }}"
       filters:
         - name: re_replace
           args: ["(?i)(\\sMULTI\\s)", " {{ .Config.multilanguage }} "]
     title:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_original }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_step2 }}{{ end }}"
     details:
       selector: details_link
     download:
