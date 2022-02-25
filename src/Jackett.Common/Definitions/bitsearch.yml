@@ -77,7 +77,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: div.search-result:has(a.dl-torrent)
+    selector: div.search-result:has(a.dl-torrent), li.search-result:has(a.dl-torrent)
 
   fields:
     category:
