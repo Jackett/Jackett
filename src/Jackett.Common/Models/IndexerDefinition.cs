@@ -152,6 +152,7 @@ namespace Jackett.Common.Models
         public selectorBlock Dateheaders { get; set; }
         public selectorBlock Count { get; set; }
         public bool Multiple { get; set; } = false;
+        public bool MissingAttributeEquals0Results { get; set; } = false;
     }
 
     public class searchPathBlock : requestBlock

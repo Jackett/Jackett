@@ -1407,6 +1407,8 @@ namespace Jackett.Common.Indexers
                     }
 
                     var rowsArray = JsonParseRowsSelector(parsedJson, Search.Rows.Selector);
+                    if (rowsArray == null && Search.Rows.MissingAttributeEquals0Results)
+                        continue;
                     if (rowsArray == null)
                         throw new Exception("Error Parsing Rows Selector. There are 0 rows.");
 
@@ -2100,10 +2102,17 @@ namespace Jackett.Common.Indexers
         private JArray JsonParseRowsSelector(JToken parsedJson, string rowSelector)
         {
             var selector = rowSelector.Split(':')[0];
-            var rowsObj = parsedJson.SelectToken(selector).Value<JArray>();
-            return new JArray(rowsObj.Where(t =>
-                                                JsonParseFieldSelector(t.Value<JObject>(), rowSelector.Remove(0, selector.Length)) != null
-                                                ));
+            try
+            {
+                var rowsObj = parsedJson.SelectToken(selector).Value<JArray>();
+                return new JArray(rowsObj.Where(t =>
+                                                    JsonParseFieldSelector(t.Value<JObject>(), rowSelector.Remove(0, selector.Length)) != null
+                                                    ));
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private string JsonParseFieldSelector(JToken parsedJson, string rowSelector)
