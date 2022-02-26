@@ -7,12 +7,12 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentzeu.org/
+  - https://torrentz2.club/
   - https://torrentz2.unblockninja.com/
 legacylinks:
-  - https://torrentz2.club/
   - https://torrentz2eu.me/
   - https://torrentz2.org.in/
+  - https://torrentzeu.org/
 
 caps:
   # unfortunately torrentz2eu does not display categories anywhere in its search results page :-(
