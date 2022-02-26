@@ -147,6 +147,7 @@ caps:
     - {id: 275, cat: Books, desc: "Marine History-Accidents and disasters at sea"}
     - {id: 264, cat: Books, desc: "Marine History-Marine cartography"}
     - {id: 274, cat: Books, desc: "Marine History-Pirates"}
+    - {id: 323, cat: Books, desc: "Marine History-Submarines"}
     - {id: 218, cat: Books, desc: "Maritime Fiction"}
     - {id: 198, cat: Books, desc: "Navy"}
     - {id: 272, cat: Books, desc: "Navy-Naval magazines"}
