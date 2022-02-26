@@ -11,17 +11,18 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: PC/0day, desc: "Apps"}
-    - {id: 5, cat: TV/Anime, desc: "Anime"}
     - {id: 2, cat: PC/Games, desc: "Games"}
     - {id: 3, cat: Movies, desc: "Movies"}
     - {id: 4, cat: Audio, desc: "Music"}
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
     - {id: 6, cat: XXX, desc: "Porn"}
     - {id: 7, cat: TV/Sport, desc: "Sport"}
+    - {id: 8, cat: Movies, desc: "Movies/Packs"}
     - {id: 3205, cat: TV, desc: "TV"}
-    - {id: 8, cat: TV, desc: "Packs"}
     - {id: 3206, cat: TV/Foreign, desc: "TV/Foreign"}
     - {id: 3207, cat: Movies/Foreign, desc: "Movies/Foreign"}
     - {id: 3208, cat: Books/EBook, desc: "E-Books"}
+    - {id: 3209, cat: TV, desc: "TV/Packs"}
 
   modes:
     search: [q]
