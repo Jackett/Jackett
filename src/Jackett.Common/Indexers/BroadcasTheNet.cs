@@ -104,6 +104,7 @@ namespace Jackett.Common.Indexers
             var searchParam = new Dictionary<string, string>();
 
             searchParam["name"] = searchString.Replace(" ", "%");
+            searchParam["search"] = "";
 
             var parameters = new JArray
             {
