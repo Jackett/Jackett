@@ -457,6 +457,7 @@ namespace Jackett.Updater
                 "Definitions/shellife.yml",
                 "Definitions/shokweb.yml",
                 "Definitions/skipthecommercials.yml", // switch to *-API #8682
+                "Definitions/torrentland.yml", // switch to *-API #13006 #8682
                 "Definitions/skytorrents.yml",
                 "Definitions/skytorrents-lol.yml",
                 "Definitions/skytorrents-to.yml",
