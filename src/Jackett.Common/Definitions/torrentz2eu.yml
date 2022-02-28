@@ -34,7 +34,8 @@ settings:
 
 search:
   paths:
-    - path: kick.php
+    - path: data.php
+#    - path: kick.php
   inputs:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
