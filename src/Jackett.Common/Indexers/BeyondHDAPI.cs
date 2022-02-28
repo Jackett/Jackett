@@ -50,7 +50,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataAPIKeyAndRSSKey())
+                   configData: new ConfigurationDataAPIKeyAndRSSKey("Find the API and RSS keys under your security settings (your profile picture -> my security)"))
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";

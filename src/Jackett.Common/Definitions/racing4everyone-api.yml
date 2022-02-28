@@ -1,25 +1,55 @@
 ---
-id: reelflix-api
-name: ReelFLiX (API)
-description: "ReelFLiX (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES"
+id: racing4everyone-api
+name: Racing4Everyone (API)
+description: "Racing4Everyone (R4E) is a Private Torrent Tracker for RACING"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://reelflix.xyz/
+  - https://racing4everyone.eu/
 legacylinks:
-  - https://legacyhd.org/
+  - https://racing4everyone.jp/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 1, cat: TV/Sport, desc: "BTCC"}
+    - {id: 2, cat: TV/Sport, desc: "TV-Documentaries"}
+    - {id: 3, cat: TV/Sport, desc: "DTM"}
+    - {id: 22, cat: TV/Sport, desc: "Formula 2"}
+    - {id: 23, cat: TV/Sport, desc: "Formula E"}
+    - {id: 24, cat: TV/Sport, desc: "Misc"}
+    - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
+    - {id: 26, cat: TV/Sport, desc: "MotoGP-2-3-E"}
+    - {id: 31, cat: TV/Sport, desc: "Nascar"}
+    - {id: 32, cat: TV/Sport, desc: "Stock Car Brazil"}
+    - {id: 50, cat: TV/Sport, desc: "WRC"}
+    - {id: 55, cat: TV/Sport, desc: "Season Reviews"}
+    - {id: 56, cat: TV/Sport, desc: "WRX"}
+    - {id: 57, cat: TV/Sport, desc: "WEC"}
+    - {id: 58, cat: TV/Sport, desc: "W Series"}
+    - {id: 60, cat: TV/Sport, desc: "Drag Racing"}
+    - {id: 61, cat: TV/Sport, desc: "ERC"}
+    - {id: 62, cat: TV/Sport, desc: "Indycar Series"}
+    - {id: 63, cat: TV/Sport, desc: "Supercars"}
+    - {id: 66, cat: TV/Sport, desc: "Documentaries"}
+    - {id: 67, cat: TV/Sport, desc: "Formula 1"}
+    - {id: 68, cat: TV/Sport, desc: "Formula 3"}
+    - {id: 69, cat: TV/Sport, desc: "Other Cars"}
+    - {id: 70, cat: TV/Sport, desc: "Motorsport Movies"}
+    - {id: 71, cat: TV/Sport, desc: "WSBK"}
+    - {id: 72, cat: TV/Sport, desc: "AMA Pro Motocross"}
+    - {id: 73, cat: TV/Sport, desc: "AMA Supercross"}
+    - {id: 74, cat: TV/Sport, desc: "WTCR"}
+    - {id: 76, cat: TV/Sport, desc: "ARCA"}
+    - {id: 77, cat: TV/Sport, desc: "Blancpain GT"}
+    - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
+    - {id: 79, cat: TV/Sport, desc: "TV Series"}
+    - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
+    - {id: 81, cat: TV/Sport, desc: "Extreme E"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid]
-    movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: apikey
@@ -28,7 +58,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://reelflix.xyz/\" target =_blank>ReelFlix</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://racing4everyone.eu/\" target =_blank>Racing4Everyone</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -138,8 +168,5 @@ search:
         0: 1 # normal
         1: 2 # double
     minimumratio:
-      text: 0.4
-    minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 6.0.1
+      text: 1.0
+# json UNIT3D 6.0.0

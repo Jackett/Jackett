@@ -430,6 +430,7 @@ namespace Jackett.Updater
                 "Definitions/qxr.yml",
                 "Definitions/rapidetracker.yml",
                 "Definitions/rarbg.yml", // migrated to C#
+                "Definitions/racing4everyone.yml", // switch to *-API #12870 #8682
                 "Definitions/redbits.yml", // switch to *-API #11540 #8682
                 "Definitions/redtopia.yml",
                 "Definitions/reelflix.yml", // switch to *-API #8682
@@ -456,6 +457,7 @@ namespace Jackett.Updater
                 "Definitions/shellife.yml",
                 "Definitions/shokweb.yml",
                 "Definitions/skipthecommercials.yml", // switch to *-API #8682
+                "Definitions/torrentland.yml", // switch to *-API #13006 #8682
                 "Definitions/skytorrents.yml",
                 "Definitions/skytorrents-lol.yml",
                 "Definitions/skytorrents-to.yml",

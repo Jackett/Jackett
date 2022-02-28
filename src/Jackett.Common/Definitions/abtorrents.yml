@@ -10,14 +10,14 @@ links:
 
 caps:
   categorymappings:
-    - {id: 10, cat: Audio/Audiobook, desc: "Adventure"}
-    - {id: 20, cat: Audio/Audiobook, desc: "Biographies & Memoirs"}
+    - {id: 10, cat: Audio/Audiobook, desc: "Action/Adventure"}
+    - {id: 20, cat: Audio/Audiobook, desc: "Biography/Memoirs"}
     - {id: 30, cat: Audio/Audiobook, desc: "Business "}
     - {id: 40, cat: Audio/Audiobook, desc: "Childrens"}
-    - {id: 50, cat: Audio/Audiobook, desc: "Comedy"}
+    - {id: 50, cat: Audio/Audiobook, desc: "Humor (Comedy)"}
     - {id: 60, cat: Audio/Audiobook, desc: "Comics"}
     - {id: 70, cat: Audio/Audiobook, desc: "Computers "}
-    - {id: 80, cat: Audio/Audiobook, desc: "Erotica"}
+    - {id: 80, cat: Audio/Audiobook, desc: "Adult/Erotica"}
     - {id: 90, cat: Audio/Audiobook, desc: "Fantasy-General"}
     - {id: 100, cat: Audio/Audiobook, desc: "Fantasy-Youth"}
     - {id: 110, cat: Audio/Audiobook, desc: "Files"}
@@ -26,7 +26,8 @@ caps:
     - {id: 140, cat: Audio/Audiobook, desc: "Historical Fiction"}
     - {id: 150, cat: Audio/Audiobook, desc: "History"}
     - {id: 160, cat: Audio/Audiobook, desc: "Horror"}
-    - {id: 170, cat: Audio/Audiobook, desc: "Literature "}
+    - {id: 170, cat: Audio/Audiobook, desc: "Literature"}
+    - {id: 175, cat: Audio/Audiobook, desc: "LitRPG"}
     - {id: 180, cat: Audio/Audiobook, desc: "Mystery "}
     - {id: 190, cat: Audio/Audiobook, desc: "Non-Fiction"}
     - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
@@ -37,12 +38,12 @@ caps:
     - {id: 250, cat: Audio/Audiobook, desc: "Self Improvement"}
     - {id: 270, cat: Audio/Audiobook, desc: "Suspense"}
     - {id: 280, cat: Audio/Audiobook, desc: "Talk Radio"}
-    - {id: 260, cat: Audio/Audiobook, desc: "Thriller and Suspense"}
+    - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller/Mystery"}
     - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy"}
     - {id: 300, cat: Audio/Audiobook, desc: "Western"}
     - {id: 400, cat: Books/EBook, desc: "[E] Action/Adventure"}
     - {id: 410, cat: Books/EBook, desc: "[E] Adult / Erotica"}
-    - {id: 420, cat: Books/EBook, desc: "[E] Arts &amp; Crafts (Hobbies)"}
+    - {id: 420, cat: Books/EBook, desc: "[E] Arts & Crafts (Hobbies)"}
     - {id: 430, cat: Books/EBook, desc: "[E] Biography/Memoirs"}
     - {id: 730, cat: Books/EBook, desc: "[E] Collections"}
     - {id: 440, cat: Books/EBook, desc: "[E] Comic Books"}
@@ -55,11 +56,13 @@ caps:
     - {id: 510, cat: Books/EBook, desc: "[E] Historical Fiction"}
     - {id: 520, cat: Books/EBook, desc: "[E] History/Documentary"}
     - {id: 530, cat: Books/EBook, desc: "[E] Horror"}
-    - {id: 540, cat: Books/EBook, desc: "[E] Humor ( Comedy)"}
+    - {id: 540, cat: Books/EBook, desc: "[E] Humor (Comedy)"}
     - {id: 550, cat: Books/EBook, desc: "[E] LGBT"}
     - {id: 560, cat: Books/EBook, desc: "[E] Literary Fiction"}
+    - {id: 565, cat: Books/EBook, desc: "[E] LitRPG"}
     - {id: 570, cat: Books/EBook, desc: "[E] Magazines - all"}
     - {id: 580, cat: Books/EBook, desc: "[E] Non-Fiction"}
+    - {id: 585, cat: Books/EBook, desc: "[E] Other Languages"}
     - {id: 590, cat: Books/EBook, desc: "[E] Paranormal Romance"}
     - {id: 600, cat: Books/EBook, desc: "[E] Reference/Educational"}
     - {id: 610, cat: Books/EBook, desc: "[E] Religion and Spirituality"}

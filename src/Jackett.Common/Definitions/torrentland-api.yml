@@ -1,18 +1,25 @@
 ---
-id: reelflix-api
-name: ReelFLiX (API)
-description: "ReelFLiX (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES"
-language: en-US
+id: torrentland-api
+name: Torrentland (API)
+description: "Torrentland is a SPANISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: es-ES
 type: private
 encoding: UTF-8
 links:
-  - https://reelflix.xyz/
-legacylinks:
-  - https://legacyhd.org/
+  - https://torrentland.li/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 3, cat: TV/Anime, desc: "Animación"}
+    - {id: 4, cat: TV/Anime, desc: "Series Animación"}
+    - {id: 5, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 6, cat: TV/Documentary, desc: "Series Documentales"}
+    - {id: 7, cat: TV/Sport, desc: "Deportes"}
+    - {id: 8, cat: Audio/Video, desc: "Videos Músicales"}
+    - {id: 9, cat: XXX, desc: "+18"}
+    - {id: 10, cat: Other, desc: "Otros"}
 
   modes:
     search: [q]
@@ -28,10 +35,14 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://reelflix.xyz/\" target =_blank>ReelFlix</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://torrentland.li/\" target =_blank>Torrentland</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
+    default: false
+  - name: compatOld
+    type: checkbox
+    label: Improve Sonarr compatibility with the tracker's older season naming scheme by renaming Sxx to Txx in searches. Can cause results already using Sxx to not be found.
     default: false
   - name: sort
     type: select
@@ -81,6 +92,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
+    - name: re_replace
+      args: ["(?i)\\bS(\\d+)", "{{ if .Config.compatOld }}T$1{{ else }}S$1{{ end }}"]
 
   rows:
     selector: data
@@ -91,8 +104,32 @@ search:
   fields:
     categorydesc:
       selector: category
+    title_vose:
+      selector: name:contains(VOSE)
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
+        - name: re_replace
+          args: ["(?i)\\bT(\\d+)", "S$1"]
+        - name: re_replace
+          args: ["UHDRip", "BDRip"] # Fix for Radarr
+        - name: append
+          args: " ENGLiSH"
+    title_notvose:
+      selector: name:not(:contains(VOSE))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
+        - name: re_replace
+          args: ["(?i)\\bT(\\d+)", "S$1"]
+        - name: re_replace
+          args: ["UHDRip", "BDRip"] # Fix for Radarr
+        - name: append
+          args: " SPANiSH"
     title:
-      selector: name
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -138,8 +175,8 @@ search:
         0: 1 # normal
         1: 2 # double
     minimumratio:
-      text: 0.4
+      text: 1.0
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 6.0.1
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# json UNIT3D 6.0.1 (custom)

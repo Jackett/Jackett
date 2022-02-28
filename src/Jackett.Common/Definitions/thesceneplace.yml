@@ -132,24 +132,24 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    superuser:
+    uploader:
       selector: a[href^="index.php?page=userdetails"]
       optional: true
     date:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(10){{ else }}td:nth-last-child(8){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/2006 -07:00"
     seeders:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(9){{ else }}td:nth-last-child(7){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td ~ td
     leechers:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(8){{ else }}td:nth-last-child(6){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td
     grabs:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(7){{ else }}td:nth-last-child(5){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td ~ td
     size:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(5){{ else }}td:nth-last-child(4){{ end }}"
+      selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td{{ if .Result.uploader }} ~ td{{ else }}{{ end }}"
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
