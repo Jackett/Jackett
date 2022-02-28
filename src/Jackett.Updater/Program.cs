@@ -277,6 +277,7 @@ namespace Jackett.Updater
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
+                "Definitions/beyond-hd-oneurl.yml", // #12993
                 "Definitions/bithq.yml",
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
