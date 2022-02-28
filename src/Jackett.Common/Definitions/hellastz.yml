@@ -15,25 +15,26 @@ caps:
   categorymappings:
     - {id: 11, cat: Movies, desc: "Movies Αποκλειστικά του HTz (HTz only)"}
     - {id: 54, cat: Movies/BluRay, desc: "Movies Blu-Ray 720p-1080p"}
-    - {id: 232, cat: Movies/UHD, desc: "Movies Full-HD - 4K"}
-    - {id: 234, cat: Movies/HD, desc: "Movies BDRip-BRRip-HDRip"}
-    - {id: 233, cat: Movies/DVD, desc: "Movies DvdRip Full"}
     - {id: 213, cat: Movies, desc: "Movies Ελληνικές Ταινιίες (Greek)"}
-    - {id: 236, cat: Movies/SD, desc: "Movies Cam - HDcam-HDts"}
+    - {id: 232, cat: Movies/UHD, desc: "Movies Full-HD - 4K"}
+    - {id: 233, cat: Movies/DVD, desc: "Movies DvdRip Full"}
+    - {id: 234, cat: Movies/HD, desc: "Movies BDRip-BRRip-HDRip"}
     - {id: 235, cat: Movies/WEB-DL, desc: "Movies WEB-720-1080p -HDrip"}
+    - {id: 236, cat: Movies/SD, desc: "Movies Cam - HDcam-HDts"}
+    - {id: 242, cat: Movies, desc: "Movies Ταινίες No Subs"}
     - {id: 90, cat: TV, desc: "TV Ελληνικές Σειρές (Greek)"}
     - {id: 96, cat: TV, desc: "TV Ξένες Σειρές (Foreign)"}
     - {id: 219, cat: Audio, desc: "Music Ξένη μουσική (Foreign)"}
     - {id: 220, cat: Audio, desc: "Music Ελληνική Μουσική (Greek)"}
-    - {id: 240, cat: PC/Mobile-Other, desc: "Android - Linux"}
+    - {id: 221, cat: Console, desc: "Παιχνίδια (Games)"}
+    - {id: 223, cat: Books/EBook, desc: "Βιβλία (Books)"}
+    - {id: 100, cat: Books/Comics, desc: "Comics & Περιοδικά"}
+    - {id: 225, cat: TV/Documentary, desc: "Ντοκιμαντερ (Documentaries)"}
+    - {id: 227, cat: PC, desc: "Pc Software"}
+    - {id: 228, cat: TV/Anime, desc: "Animation"}
     - {id: 230, cat: TV/Anime, desc: "Παιδικα μεταγλωτισμε (Children)"}
     - {id: 231, cat: TV/Anime, desc: "Παιδικα υποτιτλους (Children w/ subs)"}
-    - {id: 221, cat: Console, desc: "Παιχνίδια (Games)"}
-    - {id: 228, cat: TV/Anime, desc: "Animation"}
-    - {id: 223, cat: Books/EBook, desc: "Βιβλία (Books)"}
-    - {id: 100, cat: Books/Comics, desc: "Comics &Περιοδικά"}
-    - {id: 227, cat: PC, desc: "Pc Software"}
-    - {id: 225, cat: TV/Documentary, desc: "Ντοκιμαντερ (Documentaries)"}
+    - {id: 240, cat: PC/Mobile-Other, desc: "Android - Linux"}
     - {id: 241, cat: Audio/Audiobook, desc: "Audio Books"}
 
   modes:
