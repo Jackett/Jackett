@@ -160,9 +160,9 @@ search:
       text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}1 GB{{ end }}"
     seeders_optional:
       selector: dd.posts span.my_tt.seed
+      optional: true
     seeders:
       text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-      optional: true
     leechers_optional:
       selector: dd.posts span.my_tt.leech
       optional: true
