@@ -1,0 +1,116 @@
+---
+id: danishbytes-api
+name: DanishBytes (API)
+description: "DanishBytes is a Private Danish Tracker"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://danishbytes.club/
+  - https://danishbytes2.org/
+  - https://dbytes.org/
+  - https://danishbytes.art/
+legacylinks:
+  - https://danishbytes.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Sound"}
+    - {id: 4, cat: PC/Games, desc: "Games"}
+    - {id: 5, cat: PC/0day, desc: "Appz"}
+    - {id: 8, cat: Books, desc: "Bookz"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_apikey
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://danishbytes.club/\" target =_blank>DanishBytes</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+  - name: rsskey
+    type: text
+    label: RSSKey
+  - name: info_rsskey
+    type: info
+    label: About your RSS key
+    default: "Find or Generate a new RSS key by accessing your <a href=\"https://danishbytes.club/\" target =_blank>DanishBytes</a> account <i>My Security</i> page and clicking on the <b>RSS Key (RID)</b> tab."
+
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    - path: "/api/torrents/v2/filter?api_token={{ .Config.apikey }}&search={{ .Keywords }}{{ if .Query.IMDBIDShort }}&imdb={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if .Query.TMDBID }}&tmdb={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdb={{ .Query.TVDBID }}{{ else }}{{ end }}{{ range .Categories }}&categories[]={{.}}{{end}}"
+      response:
+        type: json
+
+  rows:
+    selector: torrents
+    count:
+      selector: $.resultsCount
+
+  fields:
+    id:
+      selector: .id
+    category:
+      selector: category_id
+    title:
+      selector: name
+    details:
+      text: "{{ .Config.sitelink }}torrents/{{ .Result.id }}"
+    download:
+      text: "{{ .Config.sitelink }}torrent/download/{{ .Result.id }}.{{ .Config.rsskey }}"
+    poster:
+      selector: poster_image
+    imdbid:
+      selector: imdb
+    tmdbid:
+      selector: tmdb
+    tvdbid:
+      selector: tvdb
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2022-02-28T19:09:44.000000Z
+      selector: created_at
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: free
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: doubleup
+      case:
+        0: 1 # normal
+        1: 2 # double
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json DBy v0.95
