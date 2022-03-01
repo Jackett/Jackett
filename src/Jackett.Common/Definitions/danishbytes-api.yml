@@ -44,6 +44,10 @@ settings:
     type: info
     label: About your RSS key
     default: "Find or Generate a new RSS key by accessing your <a href=\"https://danishbytes.club/\" target =_blank>DanishBytes</a> account <i>My Security</i> page and clicking on the <b>RSS Key (RID)</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
 
 login:
   path: /api/torrents
@@ -57,7 +61,7 @@ login:
 
 search:
   paths:
-    - path: "/api/torrents/v2/filter?api_token={{ .Config.apikey }}&search={{ .Keywords }}{{ if .Query.IMDBIDShort }}&imdb={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if .Query.TMDBID }}&tmdb={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdb={{ .Query.TVDBID }}{{ else }}{{ end }}{{ range .Categories }}&categories[]={{.}}{{end}}"
+    - path: "/api/torrents/v2/filter?api_token={{ .Config.apikey }}&search={{ .Keywords }}{{ if .Query.IMDBIDShort }}&imdb={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if .Query.TMDBID }}&tmdb={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdb={{ .Query.TVDBID }}{{ else }}{{ end }}{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&freeleech=1{{ else }}{{ end }}"
       response:
         type: json
 
