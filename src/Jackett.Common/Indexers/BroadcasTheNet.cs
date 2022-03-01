@@ -103,8 +103,10 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchParam = new Dictionary<string, string>();
 
-            searchParam["name"] = searchString.Replace(" ", "%");
-            searchParam["search"] = "";
+            if (string.IsNullOrWhiteSpace(searchString))
+                searchParam["search"] = "";
+            else
+                searchParam["name"] = searchString.Replace(" ", "%");
 
             var parameters = new JArray
             {
