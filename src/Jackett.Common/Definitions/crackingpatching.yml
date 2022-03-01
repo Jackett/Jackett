@@ -1,0 +1,98 @@
+---
+id: crackingpatching
+name: CrackingPatching
+description: "CrackingPatching is a Public tracker for Software and Apps"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://crackingpatching.com/
+
+caps:
+  categorymappings:
+    - {id: "adobe-software", cat: PC, desc: "Adobe Software"}
+    - {id: "adobe-tools", cat: PC, desc: "Adobe Tools"}
+    - {id: "android", cat: PC/Mobile-Android, desc: "Android"}
+    - {id: "animations-3d-graphics", cat: PC, desc: "Animations/ 3D Graphics"}
+    - {id: "antivirus", cat: PC, desc: "Antivirus"}
+    - {id: "cd-dvd-burners", cat: PC, desc: "CD/ DVD Burners"}
+    - {id: "compression-tools", cat: PC, desc: "Compression Tools"}
+    - {id: "crack-serials", cat: PC, desc: "Crack &amp;Serials"}
+    - {id: "downloader", cat: PC, desc: "Downloader"}
+    - {id: "drivers-update", cat: PC, desc: "Drivers Update"}
+    - {id: "idm", cat: PC, desc: "IDM Crack | Patch"}
+    - {id: "home", cat: PC, desc: "Home"}
+    - {id: "other", cat: Other, desc: "Other"}
+    - {id: "recovery-software", cat: PC, desc: "Recovery Software"}
+    - {id: "screen-recorders", cat: PC, desc: "Screen Recorders"}
+    - {id: "security", cat: PC, desc: "Security"}
+    - {id: "system-optimizers", cat: PC, desc: "System Optimizers"}
+    - {id: "vpn", cat: PC, desc: "VPN"}
+    - {id: "windows-app", cat: PC, desc: "Windows App"}
+    - {id: "converters", cat: PC, desc: "Converters"}
+    - {id: "games", cat: PC/Games, desc: "Games"}
+    - {id: "idm-crack-patch", cat: PC, desc: "IDM Crack/ Patch"}
+    - {id: "ios-mac-os-x-2", cat: PC/Mac, desc: "iOS/ MAC OS X"}
+    - {id: "keygen-loader", cat: PC, desc: "Keygen / Loader"}
+    - {id: "keygen-serial", cat: PC, desc: "KeyGen / Serial"}
+    - {id: "microsoft-office", cat: PC, desc: "Microsoft Office"}
+    - {id: "multimedia", cat: PC, desc: "Multimedia"}
+    - {id: "pdf-tools", cat: PC, desc: "PDF Tools"}
+    - {id: "photo-editing-tools", cat: PC, desc: "Photo Editing Tools"}
+    - {id: "request-crack-patch", cat: PC, desc: "Request Crack/ Patch"}
+    - {id: "uncategorized", cat: Other, desc: "Uncategorized"}
+    - {id: "windows", cat: PC, desc: "Windows"}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: "?s={{ .Keywords }}"
+
+  rows:
+    selector: article.post-entry
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: article.post-entry
+      attribute: class
+      filters:
+        - name: regexp
+          args: "category-(.+?) "
+    title:
+      selector: h2 > a
+    details:
+      selector: h2 > a
+      attribute: href
+    download:
+      selector: h2 > a
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    date:
+      text: now
+    size:
+      text: "512 MB"
+    description:
+      selector: p
+      remove: a
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# WordPress 5.9.1
