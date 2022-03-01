@@ -48,6 +48,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   path: /api/torrents
@@ -61,7 +77,7 @@ login:
 
 search:
   paths:
-    - path: "/api/torrents/v2/filter?api_token={{ .Config.apikey }}&search={{ .Keywords }}{{ if .Query.IMDBIDShort }}&imdb={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if .Query.TMDBID }}&tmdb={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdb={{ .Query.TVDBID }}{{ else }}{{ end }}{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&freeleech=1{{ else }}{{ end }}"
+    - path: "/api/torrents/v2/filter?api_token={{ .Config.apikey }}&search={{ .Keywords }}{{ if .Query.IMDBIDShort }}&imdb={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if .Query.TMDBID }}&tmdb={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdb={{ .Query.TVDBID }}{{ else }}{{ end }}{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&freeleech=1{{ else }}{{ end }}&sorting={{ .Config.sort }}&direction={{ .Config.type }}&qty=100&page=1"
       response:
         type: json
 
