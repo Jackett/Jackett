@@ -107,7 +107,7 @@ settings:
     default: false
   - name: sort
     type: select
-    label: Sort requested from site
+    label: Sort type requested from site
     default: 1
     options:
       1: created
@@ -116,11 +116,11 @@ settings:
       9: title
   - name: type
     type: select
-    label: Order requested from site
-    default: DESC
+    label: Order direction requested from site
+    default: 1
     options:
-      DESC: desc
-      ASC: asc
+      1: desc
+      2: asc
 
 search:
   paths:
@@ -132,14 +132,21 @@ search:
     apiKey: "{{ .Config.apikey }}"
     categories: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
-    # searchIn: 0 all, 1 active, 2 dead, 3 highlights, 4 own uploads, 5 uploads bots, 6 onlyupload, 7 multiplier, 8 %download, 9 freeleech
+    # searchIn: 0 all, 1 active, 2 dead, 3 highlights, 4 uploads, 5 BOT uploads, 6 onlyupload, 7 multiplier, 8 %download, 9 freeleech
     searchIn: "{{ if .Config.freeleech }}9{{ else }}0{{ end }}"
     # 1 25, 2 50, 3 75, 4 100
-    # api only responds with results if limit=1 is used !?! (as at 22-Nov-2021)
-    limit: 1
+    limit: 2
+    page: 1
+    # 1 JSON, 2 XML, 3 HTML
+    response: 1
+    # 0 NO, 1 YES
     downloadLink: 1
     # 1 = Sat, 28 Nov 2020 23:29:38 +0100 (DEFAULT VALUE) , 2 = 1606606178 (UNIX TIMESTAMP) , 3 = 28.11.2020 23:29.38 (German Timestamp) ,  4 = 2020-11-28 23:29:38 (Default Datetime)
     timeFormat: 2
+    # 1 bytes, 2 units
+    sizeFormat: 1
+    # 0 NO, 1 YES
+    categoryName: 0
     orderBy: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
 
@@ -181,4 +188,4 @@ search:
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json engine v.2.011.021
+# json engine v.2.011.022
