@@ -396,10 +396,9 @@ caps:
     - {id: 672, cat: PC, desc: "Программное обеспечение - Игры и программы для Android"}
     - {id: 673, cat: PC, desc: "Программное обеспечение - Текстовые редакторы"}
     - {id: 674, cat: PC, desc: "Программное обеспечение - Работа с носителями информации"}
-    
     - {id: 113, cat: PC, desc: "Сборники программ"}
     - {id: 273, cat: PC, desc: "Безопасность"}
-    - {id: 278, cat: TV, desc: "Сериалы - Информация и диагностика"}
+    - {id: 278, cat: PC, desc: "Сериалы - Информация и диагностика"}
     - {id: 275, cat: PC, desc: "Программы для интернет и сетей"}
     - {id: 276, cat: PC, desc: "Программы для настройки и оптимизации ОС"}
     - {id: 116, cat: PC, desc: "Аудио и видео редакторы и конвертеры"}
@@ -424,8 +423,6 @@ caps:
     - {id: 80, cat: Console, desc: "Игры - Игры для Windows"}
     - {id: 81, cat: Console, desc: "Игры - Игры и приложения для Android"}
     - {id: 44, cat: Console, desc: "Игры - Игры для PSP"}
-
-
 
   modes:
     search: [q]
@@ -480,7 +477,7 @@ search:
     cs_where: title
     cs_forb: ""
     submit: "Hand+Search"
-    $raw: "{{ if .Categories }}{{ range .Categories }}&fid[]={{.}}{{end}}{{ else }}&fid[]=0{{ end }}" 
+    $raw: "{{ if .Categories }}{{ range .Categories }}&fid[]={{.}}{{end}}{{ else }}&fid[]=0{{ end }}"
     cs_format: 0
     cs_year: 0
     cs_filter: 0
