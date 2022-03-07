@@ -168,6 +168,7 @@ caps:
     - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
     - {id: 295, cat: Books, desc: "Archive-Unregistered"}
     - {id: 324, cat: Other, desc: "Posters, placards, signs"}
+#    - {id: 325, cat: Other, desc: "Corrupt torrents (hash errors)"} # we filter these out in the rows selector
 
   modes:
     search: [q]
@@ -246,7 +247,7 @@ search:
     submit: "%C2%A0%C2%A0Search%C2%A0%C2%A0"
 
   rows:
-    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
+    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="]):not(:has(a[href="tracker.php?f=325"]))
 
   fields:
     title:
