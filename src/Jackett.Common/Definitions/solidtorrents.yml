@@ -74,7 +74,7 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: li.search-result
+    selector: li.search-result:has(a[class="dl-torrent"])
 
   fields:
     category:
