@@ -74,7 +74,7 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: div.search-result
+    selector: li.search-result
 
   fields:
     category:
