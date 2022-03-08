@@ -422,7 +422,7 @@ namespace Jackett.Common.Indexers
         {
             var url = DiscoveryUrl;
             logger.Debug("FetchNewReleases: " + url);
-            var results = await RequestStringAndRelogin(
+            var results = await RequestWithCookiesAndRetryAsync(
                 url, referer: SiteLink);
             var releases = new List<ReleaseInfo>();
 
