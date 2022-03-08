@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.oxtorrent.re/
-  - https://oxtorrent.unblockit.cam/
+  - https://oxtorrent.unblockit.day/
   - https://oxtorrent.nocensor.biz/
 legacylinks:
   - https://www.oxtorrent.bz/
@@ -18,8 +18,6 @@ legacylinks:
   - https://www.oxtorrent.pe/
   - https://www.oxtorrent.co/
   - https://www.oxtorrent.io/
-  - https://oxtorrent.unblockit.ch/
-  - https://oxtorrent.nocensor.space/
   - https://www.oxtorrent.cx/
   - https://oxtorrent.unblockit.ws/
   - https://www.oxtorrent.nz/
@@ -32,6 +30,7 @@ legacylinks:
   - https://oxtorrent.unblockit.tv/
   - https://oxtorrent.unblockit.how/
   - https://www.oxtorrent.be/
+  - https://oxtorrent.unblockit.cam/
 
 caps:
   categorymappings:
