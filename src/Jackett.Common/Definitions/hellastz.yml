@@ -22,6 +22,7 @@ caps:
     - {id: 235, cat: Movies/WEB-DL, desc: "Movies WEB-720-1080p -HDrip"}
     - {id: 236, cat: Movies/SD, desc: "Movies Cam - HDcam-HDts"}
     - {id: 242, cat: Movies, desc: "Movies Ταινίες No Subs"}
+    - {id: 243, cat: Movies/DVD, desc: "Movies Φιλμογραφίες"}
     - {id: 90, cat: TV, desc: "TV Ελληνικές Σειρές (Greek)"}
     - {id: 96, cat: TV, desc: "TV Ξένες Σειρές (Foreign)"}
     - {id: 219, cat: Audio, desc: "Music Ξένη μουσική (Foreign)"}
