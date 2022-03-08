@@ -24,7 +24,7 @@ caps:
     - {id: 30, cat: TV, desc: "Soaps"}
     - {id: 33, cat: TV, desc: "Sci-Fi"}
     - {id: 42, cat: TV/Sport, desc: "Sport"}
-    - {id: 4, cat: TV, desc: "Holding Bin"}
+    - {id: 53, cat: TV, desc: "Holding Bin"}
 
   modes:
     search: [q]
