@@ -136,7 +136,7 @@ search:
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
     size:
-      selector: table tbody tr:nth-of-type(2) td b
+      selector: table tbody tr:nth-of-type(2) > td > b
     files:
       selector: td:has(a[href*="&filelist=1"])> b:nth-child(2)
     grabs:
