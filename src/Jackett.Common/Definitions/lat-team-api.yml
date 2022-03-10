@@ -10,13 +10,24 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Películas"}
-    - {id: 6, cat: Movies/Other, desc: "Retro Pelicula"}
-    - {id: 5, cat: TV/Anime, desc: "Anime"}
+    - {id: 1, cat: Movies, desc: "Peliculas"}
     - {id: 2, cat: TV, desc: "TV Series"}
+    - {id: 3, cat: Audio, desc: "Musica"}
+    - {id: 4, cat: Console, desc: "Juegos"}
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
+    - {id: 6, cat: Movies/Other, desc: "Retro Pelicula"}
     - {id: 7, cat: TV/Other, desc: "Retro Serie TV"}
     - {id: 8, cat: TV/Foreign, desc: "Telenovelas y Teleseries"}
-    - {id: 3, cat: Audio, desc: "Musica"}
+    - {id: 9, cat: Audio/Video, desc: "Conciertos"}
+    - {id: 10, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 11, cat: Other, desc: "Videotutoriales y Educativo"}
+    - {id: 12, cat: XXX, desc: "XXX"}
+    - {id: 16, cat: TV/Sport, desc: "Deportes"}
+    - {id: 17, cat: PC, desc: "Sistemas Operativos"}
+    - {id: 18, cat: Books, desc: "E-Books"}
+    - {id: 19, cat: Audio/Audiobook, desc: "Audiolibros"}
+    - {id: 20, cat: Movies/Other, desc: "Películas Oscars"}
+    - {id: 21, cat: Audio/Video, desc: "VideoMixes"}
 
   modes:
     search: [q]
