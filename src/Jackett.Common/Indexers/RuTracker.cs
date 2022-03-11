@@ -33,7 +33,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://rutracker.org/",
-            "https://rutracker.net/"
+            "https://rutracker.net/",
+            "https://rutracker.nl/"
         };
 
         private Regex _regexToFindTagsInReleaseTitle = new Regex(@"\[[^\[]+\]|\([^(]+\)");
@@ -42,7 +43,7 @@ namespace Jackett.Common.Indexers
             ICacheService cs)
             : base(id: "rutracker",
                    name: "RuTracker",
-                   description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
+                   description: "RuTracker is a Private Russian torrent site with a thriving file-sharing community",
                    link: "https://rutracker.org/",
                    caps: new TorznabCapabilities
                    {
@@ -72,7 +73,7 @@ namespace Jackett.Common.Indexers
         {
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-RU";
-            Type = "semi-private";
+            Type = "private";
             // note: when refreshing the categories use the tracker.php page and NOT the search.php page!
             AddCategoryMapping(22, TorznabCatType.Movies, "Наше кино");
             AddCategoryMapping(941, TorznabCatType.Movies, "|- Кино СССР");
