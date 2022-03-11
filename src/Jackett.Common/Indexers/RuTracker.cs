@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers
             ICacheService cs)
             : base(id: "rutracker",
                    name: "RuTracker",
-                   description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
+                   description: "RuTracker is a Private Russian torrent site with a thriving file-sharing community",
                    link: "https://rutracker.org/",
                    caps: new TorznabCapabilities
                    {
