@@ -3,7 +3,7 @@ id: rutracker-ru
 name: RuTracker.RU
 description: "RuTracker.RU is a RUSSIAN Public Torrent Tracker for MOVIES / GENERAL"
 language: ru-RU
-type: public
+type: private
 encoding: UTF-8
 links:
   - http://rutracker.ru/ # site does not support https
