@@ -14,6 +14,10 @@ caps:
   categorymappings:
     - {id: 74, cat: TV/Sport, desc: "AEW"}
     - {id: 75, cat: TV/Sport, desc: "AEW HD"}
+    - {id: 76, cat: TV/Sport, desc: "AEW Rampage"}
+    - {id: 77, cat: TV/Sport, desc: "AEW Rampage HD"}
+    - {id: 78, cat: TV/Sport, desc: "AEW PPV's"}
+    - {id: 79, cat: TV/Sport, desc: "AEW PPV's HD"}
     - {id: 47, cat: TV/Sport, desc: "Boxing"}
     - {id: 14, cat: Movies, desc: "Documentary"}
     - {id: 20, cat: TV/Sport, desc: "DVD"}
