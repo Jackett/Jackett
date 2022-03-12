@@ -185,7 +185,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Anime-Free
  * AnimeLayer
  * ArenaBG
- * BaibaKo
  * BookTracker
  * BootyTape
  * Catorrent
@@ -220,6 +219,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RGFootball
  * RiperAM
  * RockBox
+ * RUDUB (ex-BaibaKoTV)
  * RuTracker
  * Rustorka
  * Sharewood
