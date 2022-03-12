@@ -41,12 +41,13 @@ namespace Jackett.Common.Services
         private readonly Dictionary<string, string> renamedIndexers = new Dictionary<string, string>
         {
             {"audiobooktorrents", "abtorrents"},
+            {"baibako", "rudub"},
             {"broadcastthenet", "broadcasthenet"},
             {"hdreactor", "hdhouse"},
             {"icetorrent", "speedapp"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
-            {"legacyhd", "reelflix"},
             {"leaguehd", "lemonhd"},
+            {"legacyhd", "reelflix"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
             {"passtheheadphones", "redacted"},
