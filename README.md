@@ -535,6 +535,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * TellyTorrent
  * teracod (Movie Zone)
+ * The-Crazy-Ones
  * The-Devils-Lounge
  * The Falling Angels (TFA) [![(invite needed)][inviteneeded]](#)
  * The Geeks
