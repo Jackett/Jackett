@@ -149,7 +149,7 @@ search:
     seeders:
       selector: td.tablea table tbody tr:nth-child(2) td:nth-child(2) b:nth-child(1)
     leechers:
-      selector: td.tablea table tbody tr:nth-child(2) td:nth-child(2) b:nth-of-type(2)
+      selector: td.tablea table tbody tr:nth-child(2) td:nth-child(2) > b:nth-of-type(2)
     grabs:
       selector: td.tablea table tbody tr:nth-child(2) td:nth-child(3) b:nth-child(1)
     date:
