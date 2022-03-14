@@ -307,6 +307,7 @@ namespace Jackett.Updater
                 "Definitions/cztorrent.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/danishbytes.yml", // migrated to C#
+                "Definitions/darktracker.yml",
                 "Definitions/DasUnerwartete.yml",
                 "Definitions/datascene.yml", // switch to *-API #8682
                 "Definitions/demonsite.yml",
