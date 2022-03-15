@@ -4,7 +4,6 @@ name: Bit-Bázis
 description: "Bit-Bázis is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
-# encoding: ISO-8859-2
 encoding: UTF-8
 links:
   - https://bitbazis.net/
@@ -36,12 +35,12 @@ caps:
     - {id: 81, cat: PC/0day, desc: "Program/PC"}
     - {id: 49, cat: PC/0day, desc: "Program/Rip"}
     - {id: 14, cat: PC, desc: "Program/Egyéb"}
-    - {id: 67, cat: PC/Mobile-Android, desc: "Program/Android"}
     - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv"}
     - {id: 27, cat: Books/EBook, desc: "Könyv/Hun"}
     - {id: 50, cat: Books/EBook, desc: "Könyv/Eng"}
     - {id: 65, cat: Other, desc: "Egyéb"}
     # the following are no longer in the cat list in the search page, but are still in the profile cat list
+    - {id: 67, cat: PC/Mobile-Android, desc: "Program/Android"}
     - {id: 17, cat: Movies/DVD, desc: "Film/DVD/Hun"}
     - {id: 19, cat: Movies/DVD, desc: "Film/DVD/Eng"}
     - {id: 24, cat: Audio/Video, desc: "Videóklipp"}
@@ -129,28 +128,19 @@ search:
     size:
       selector: td:nth-child(6)
     date:
-      # 2021-11-09 16:51:24
+      # 22.03.13
       selector: td:nth-child(7)
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "06/01/02 -07:00"
+          args: "06.01.02 -07:00"
     grabs:
       selector: td:nth-child(5)
-      filters:
-        - name: regexp
-          args: "D:(\\d+)"
     seeders:
       selector: td:nth-child(3)
-      filters:
-        - name: regexp
-          args: "S:(\\d+)"
     leechers:
       selector: td:nth-child(4)
-      filters:
-        - name: regexp
-          args: "L:(\\d+)"
     downloadvolumefactor:
       case:
         "i:contains(\"(Free)\")": 0
