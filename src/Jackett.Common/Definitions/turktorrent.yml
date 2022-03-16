@@ -70,6 +70,7 @@ caps:
     - {id: 48, cat: PC, desc: "Programlar Windows"}
     - {id: 49, cat: PC, desc: "Programlar MaC"}
     - {id: 50, cat: PC, desc: "Programlar Mobile"}
+    - {id: 96, cat: PC, desc: "Programlar Linux"}
 
   modes:
     search: [q]
