@@ -7,6 +7,8 @@ type: private
 encoding: UTF-8
 links:
   - https://www.crazyspirits.com/
+certificates:
+  - cb68471b631304b3b4cec6315cfbad5a6780eb84 # self-signed 13 Mar 2022
 
 caps:
   categorymappings:
