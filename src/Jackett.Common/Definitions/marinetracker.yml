@@ -72,6 +72,9 @@ caps:
     - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
     - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
     - {id: 7, cat: Books, desc: "Technical Books (Not maritime)"}
+    - {id: 328, cat: Books, desc: "Technical Books (Not maritime)-Hydraulics"}
+    - {id: 327, cat: Books, desc: "Technical Books (Not maritime)-Mechanics"}
+    - {id: 326, cat: Books, desc: "Technical Books (Not maritime)-Electricity"}
     - {id: 10, cat: Books, desc: "English for seamen"}
     - {id: 266, cat: Books, desc: "English for seamen-English for Deck Officers"}
     - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
@@ -133,6 +136,7 @@ caps:
     - {id: 289, cat: Books, desc: "Shipmodeling-Ships in Bottles"}
     - {id: 197, cat: Books, desc: "Marine bulletins"}
     - {id: 219, cat: Books, desc: "Marine History"}
+    - {id: 323, cat: Books, desc: "Marine History-History of Submarines"}
     - {id: 282, cat: Books, desc: "Marine History-Fleets history"}
     - {id: 281, cat: Books, desc: "Marine History-History of Merchant Marine"}
     - {id: 280, cat: Books, desc: "Marine History-Historic ships"}
@@ -147,7 +151,6 @@ caps:
     - {id: 275, cat: Books, desc: "Marine History-Accidents and disasters at sea"}
     - {id: 264, cat: Books, desc: "Marine History-Marine cartography"}
     - {id: 274, cat: Books, desc: "Marine History-Pirates"}
-    - {id: 323, cat: Books, desc: "Marine History-Submarines"}
     - {id: 218, cat: Books, desc: "Maritime Fiction"}
     - {id: 198, cat: Books, desc: "Navy"}
     - {id: 272, cat: Books, desc: "Navy-Naval magazines"}
@@ -161,14 +164,14 @@ caps:
     - {id: 245, cat: Books, desc: "Rarity-1800 - 1900"}
     - {id: 246, cat: Books, desc: "Rarity-1700 - 1800"}
     - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
+    - {id: 324, cat: Other, desc: "Posters, placards, signs"}
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
     - {id: 162, cat: Books, desc: "Archive"}
+#    - {id: 325, cat: Other, desc: "Corrupt torrents (hash errors)"} # we filter these out in the rows selector
     - {id: 322, cat: Books, desc: "Archive-No seeds"}
     - {id: 321, cat: Books, desc: "Archive-Outdated software"}
     - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
     - {id: 295, cat: Books, desc: "Archive-Unregistered"}
-    - {id: 324, cat: Other, desc: "Posters, placards, signs"}
-#    - {id: 325, cat: Other, desc: "Corrupt torrents (hash errors)"} # we filter these out in the rows selector
 
   modes:
     search: [q]
