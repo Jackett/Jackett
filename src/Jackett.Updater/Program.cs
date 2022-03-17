@@ -498,6 +498,7 @@ namespace Jackett.Updater
                 "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
                 "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
+                "Definitions/torrentmax.yml",
                 "Definitions/torrentproject.yml",
                 "Definitions/torrentquest.yml",
                 "Definitions/torrentrex.yml",
