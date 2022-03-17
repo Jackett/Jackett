@@ -18,9 +18,10 @@ caps:
     - {id: 48, cat: Movies/HD, desc: "Film/x264/Eng"}
     - {id: 83, cat: Movies/HD, desc: "Film/HD/Hun"}
     - {id: 82, cat: Movies/HD, desc: "Film/HD/Eng"}
+    - {id: 94, cat: Movies/HD, desc: "Film/FHD/Hun"}
+    - {id: 95, cat: Movies/HD, desc: "Film/FHD/Eng"}
     - {id: 92, cat: Movies/UHD, desc: "Film/UHD/Hun"}
     - {id: 93, cat: Movies/UHD, desc: "Film/UHD/Eng"}
-    - {id: 64, cat: Movies, desc: "Film/Pack"}
     - {id: 22, cat: TV, desc: "Sorozat/Hun"}
     - {id: 58, cat: TV, desc: "Sorozat/Eng"}
     - {id: 69, cat: TV/Anime, desc: "Mese/SD"}
@@ -35,6 +36,7 @@ caps:
     - {id: 81, cat: PC/0day, desc: "Program/PC"}
     - {id: 49, cat: PC/0day, desc: "Program/Rip"}
     - {id: 14, cat: PC, desc: "Program/Egyéb"}
+    - {id: 64, cat: Movies, desc: "Film/Pack"}
     - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv"}
     - {id: 27, cat: Books/EBook, desc: "Könyv/Hun"}
     - {id: 50, cat: Books/EBook, desc: "Könyv/Eng"}
