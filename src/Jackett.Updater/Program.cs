@@ -517,6 +517,7 @@ namespace Jackett.Updater
                 "Definitions/ttobogo.yml",
                 "Definitions/turknova.yml",
                 "Definitions/u-torrents.yml",
+                "Definitions/uhd-heaven.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/ultrahdclub.yml",
                 "Definitions/uniotaku.yml", // to be migrated to c#
