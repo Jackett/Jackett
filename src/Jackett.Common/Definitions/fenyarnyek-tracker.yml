@@ -104,7 +104,7 @@ download:
 
 search:
   paths:
-    #http://tracker.fenyarnyek.com/index.php?page=torrents&search=&category=0&uploader=0&options=0&active=0&gold=0
+    # http://tracker.fenyarnyek.com/index.php?page=torrents&search=&category=0&uploader=0&options=0&active=0&gold=0
     - path: index.php
   inputs:
     page: torrents
