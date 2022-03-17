@@ -66,36 +66,36 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(3, TorznabCatType.BooksOther, "Tutorials");
-            AddCategoryMapping(5, TorznabCatType.BooksEBook, "Ebooks");
-            AddCategoryMapping(29, TorznabCatType.AudioAudiobook, "Abooks");
-            AddCategoryMapping(9, TorznabCatType.ConsoleNDS, "Game-NIN");
-            AddCategoryMapping(10, TorznabCatType.PCGames, "Game-WIN");
-            AddCategoryMapping(11, TorznabCatType.ConsolePS3, "Game-PS");
-            AddCategoryMapping(12, TorznabCatType.ConsoleXBox, "Game-XBOX");
-            AddCategoryMapping(7, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(2, TorznabCatType.PCMac, "App-MAC");
             AddCategoryMapping(4, TorznabCatType.PC0day, "App-WIN");
-            AddCategoryMapping(27, TorznabCatType.PC, "App-LINUX");
+            AddCategoryMapping(29, TorznabCatType.AudioAudiobook, "Books (a)");
+            AddCategoryMapping(5, TorznabCatType.BooksEBook, "Books (e)");
+            AddCategoryMapping(27, TorznabCatType.PC, "LINUX");
+            AddCategoryMapping(2, TorznabCatType.PCMac, "MAC");
             AddCategoryMapping(6, TorznabCatType.PCMobileOther, "Mobile");
+            AddCategoryMapping(7, TorznabCatType.Audio, "Music");
             AddCategoryMapping(8, TorznabCatType.Other, "Other");
-
-            AddCategoryMapping(20, TorznabCatType.TVHD, "TV-HD");
-            AddCategoryMapping(21, TorznabCatType.TVSD, "TV-SD");
-            AddCategoryMapping(22, TorznabCatType.TVHD, "TV-x265");
-            AddCategoryMapping(23, TorznabCatType.TV, "TV-Packs");
-            AddCategoryMapping(24, TorznabCatType.TVSD, "TV-Retail-SD");
-            AddCategoryMapping(25, TorznabCatType.TVHD, "TV-Retail-HD");
-            AddCategoryMapping(28, TorznabCatType.TVSport, "TV-Sports");
-
+            AddCategoryMapping(28, TorznabCatType.TVSport, "Sports");
+            AddCategoryMapping(3, TorznabCatType.BooksOther, "Tutorials");
+            AddCategoryMapping(9, TorznabCatType.ConsoleNDS, "Game-NIN");
+            AddCategoryMapping(11, TorznabCatType.ConsolePS3, "Game-PS");
+            AddCategoryMapping(10, TorznabCatType.PCGames, "Game-WIN");
+            AddCategoryMapping(12, TorznabCatType.ConsoleXBox, "Game-XBOX");
             AddCategoryMapping(13, TorznabCatType.Movies3D, "Movie-3D");
+            AddCategoryMapping(26, TorznabCatType.MoviesUHD, "Movie-4K");
             AddCategoryMapping(14, TorznabCatType.MoviesBluRay, "Movie-Bluray");
             AddCategoryMapping(15, TorznabCatType.MoviesDVD, "Movie-DVDR");
+            AddCategoryMapping(18, TorznabCatType.Movies, "Movie-Packs");
             AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie-x264");
             AddCategoryMapping(17, TorznabCatType.MoviesHD, "Movie-x265");
-            AddCategoryMapping(18, TorznabCatType.Movies, "Movie-Packs");
             AddCategoryMapping(19, TorznabCatType.MoviesSD, "Movie-XVID");
-            AddCategoryMapping(26, TorznabCatType.MoviesUHD, "Movie-4K");
+            AddCategoryMapping(20, TorznabCatType.TVHD, "TV-HD");
+            AddCategoryMapping(21, TorznabCatType.TVSD, "TV-SD");
+            AddCategoryMapping(25, TorznabCatType.TVHD, "TV-Retail-HD");
+            AddCategoryMapping(24, TorznabCatType.TVSD, "TV-Retail-SD");
+            AddCategoryMapping(23, TorznabCatType.TV, "TV-Packs");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "TV-x265");
+            AddCategoryMapping(50, TorznabCatType.XXXx264, "xXx-HD");
+            AddCategoryMapping(49, TorznabCatType.XXXSD, "xXx-SD");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -139,9 +139,8 @@ namespace Jackett.Common.Indexers
             {
                 foreach (var cat in MapTorznabCapsToTrackers(query))
                     queryCollection.Add("c" + cat, "1");
-                queryCollection.Add("incldead", "0");
             }
-
+            queryCollection.Add("incldead", "1");
             searchUrl += "?" + queryCollection.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: BrowseUrl);
             if (response.IsRedirect)
@@ -185,17 +184,22 @@ namespace Jackett.Common.Indexers
                     var qLink = row.QuerySelector("td:nth-of-type(3) a");
                     release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
 
-                    var added = row.QuerySelector("td:nth-of-type(7)").TextContent.Trim(); //column changed from 7 to 6
+                    var added = row.QuerySelector("td:nth-of-type(7)").TextContent.Trim();
                     var date = added.Substring(0, 10);
                     var time = added.Substring(11, 8); //date layout wasn't quite right
                     var dateTime = date + time;
                     release.PublishDate = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 
-                    var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent.Trim(); //size column moved from 8 to 5
+                    var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent.Trim();
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
+                    release.Files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
+                    release.Grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(10)").TextContent.Trim());
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(11)").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(12)").TextContent.Trim()) + release.Seeders;
+
+                    release.DownloadVolumeFactor = 0;
+                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }
