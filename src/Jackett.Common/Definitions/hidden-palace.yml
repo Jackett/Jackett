@@ -11,46 +11,45 @@ links:
 
 caps:
   categorymappings:
-    - {id: 41, cat: Movies, desc: "Movie/Packs"}
-    - {id: 4, cat: Movies/BluRay, desc: "4k/Blueray"}
-    - {id: 5, cat: Movies/UHD, desc: "4k/Movie"}
-    - {id: 1, cat: PC/0day, desc: "Apps/0Day"}
-    - {id: 2, cat: PC/Mac, desc: "Apps/Mac"}
-    - {id: 3, cat: PC, desc: "Apps/Pc"}
-    - {id: 37, cat: Audio/Audiobook, desc: "Audio/Books"}
-    - {id: 38, cat: Movies/SD, desc: "Cam/Movies"}
-    - {id: 36, cat: Books/EBook, desc: "Ebook"}
-    - {id: 25, cat: TV/Anime, desc: "Episodes/Anime"}
-    - {id: 26, cat: TV, desc: "Episodes/Classic"}
-    - {id: 27, cat: TV/Foreign, desc: "Episodes/Foreign"}
-    - {id: 28, cat: TV/HD, desc: "Episodes/HD"}
-    - {id: 24, cat: TV, desc: "Episodes/Packs"}
-    - {id: 29, cat: TV/SD, desc: "Episodes/SD"}
-    - {id: 30, cat: TV/Sport, desc: "Episodes/Sports"}
-    - {id: 31, cat: TV/WEB-DL, desc: "Episodes/WebRip"}
-    - {id: 14, cat: Console/Other, desc: "Game/Dreamcast"}
-    - {id: 15, cat: PC/Games, desc: "Game/Pc"}
-    - {id: 16, cat: Console/PSP, desc: "Game/Ps1"}
-    - {id: 17, cat: Console/PSP, desc: "Game/Ps2"}
-    - {id: 18, cat: Console/PS3, desc: "Game/Ps3"}
-    - {id: 19, cat: Console/PSP, desc: "Game/PsP"}
-    - {id: 20, cat: Console/Wii, desc: "Game/Wii"}
-    - {id: 21, cat: Console/XBox, desc: "Game/xbox"}
-    - {id: 23, cat: Console/NDS, desc: "Game/Nintendo"}
-    - {id: 22, cat: Console/PS4, desc: "Game/Ps4"}
-    - {id: 6, cat: Movies, desc: "Movie/Animation"}
-    - {id: 39, cat: Movies, desc: "Movie/Classic"}
-    - {id: 7, cat: Movies/3D, desc: "Movies/3D"}
-    - {id: 8, cat: TV/Anime, desc: "Movies/Anime"}
-    - {id: 13, cat: Movies/DVD, desc: "Movies/Dvd/R"}
-    - {id: 9, cat: Movies/HD, desc: "Movies/HD"}
-    - {id: 10, cat: Movies, desc: "Movies/Remux"}
-    - {id: 12, cat: Movies/SD, desc: "Movies/SD"}
-    - {id: 11, cat: Movies/WEB-DL, desc: "Movies/Webrip"}
-    - {id: 35, cat: Audio/Lossless, desc: "Music/Flac"}
-    - {id: 32, cat: Audio/MP3, desc: "Music/MP3"}
-    - {id: 33, cat: Audio, desc: "Music/Pack"}
-    - {id: 34, cat: Audio/Video, desc: "Music/Video"}
+    - {id: 39, cat: Audio/Audiobook, desc: "Abook: Abook"}
+    - {id: 1, cat: PC/0day, desc: "Application: 0-Day"}
+    - {id: 2, cat: PC, desc: "Application: Pc"}
+    - {id: 3, cat: PC/Mac, desc: "Application: Mac"}
+    - {id: 38, cat: Books/EBook, desc: "Ebooks: Ebook"}
+    - {id: 32, cat: TV/Anime, desc: "Episodes: Anime"}
+    - {id: 33, cat: TV, desc: "Episodes: Classic"}
+    - {id: 34, cat: TV/Foreign, desc: "Episodes: Foreign"}
+    - {id: 35, cat: TV/HD, desc: "Episodes: TvHD"}
+    - {id: 36, cat: TV/SD, desc: "Episodes: TvSD"}
+    - {id: 37, cat: TV/Sport, desc: "Episodes: TVsports"}
+    - {id: 22, cat: PC/Games, desc: "Games: Pc"}
+    - {id: 23, cat: Console/PS4, desc: "Games: Ps4"}
+    - {id: 24, cat: Console/PS3, desc: "Games: Ps3"}
+    - {id: 25, cat: Console/PSP, desc: "Games: Ps1"}
+    - {id: 26, cat: Console/PSP, desc: "Games: Ps2"}
+    - {id: 27, cat: Console/PSP, desc: "Games: PsP"}
+    - {id: 28, cat: Console/XBox, desc: "Games: xbox"}
+    - {id: 29, cat: Console/Wii, desc: "Games: Wii"}
+    - {id: 30, cat: Console/NDS, desc: "Games: Nintendo"}
+    - {id: 31, cat: Console/Other, desc: "Games: Dreamcast"}
+    - {id: 4, cat: Movies/HD, desc: "Movies: 1080P"}
+    - {id: 5, cat: TV/Anime, desc: "Movies: Anime"}
+    - {id: 6, cat: Movies/DVD, desc: "Movies: DvdR"}
+    - {id: 7, cat: Movies/SD, desc: "Movies: Camer"}
+    - {id: 8, cat: Movies/3D, desc: "Movies: 3D"}
+    - {id: 9, cat: Movies/WEB-DL, desc: "Movies: WEBRip"}
+    - {id: 10, cat: XXX, desc: "Movies: XxX"}
+    - {id: 11, cat: Movies/UHD, desc: "Movies: Real-4K"}
+    - {id: 12, cat: Movies, desc: "Movies: Classic"}
+    - {id: 13, cat: Movies/Foreign, desc: "Movies: Foreign"}
+    - {id: 14, cat: Movies, desc: "Movies: Remux"}
+    - {id: 15, cat: Movies/HD, desc: "Movies: HD"}
+    - {id: 16, cat: Movies/SD, desc: "Movies: SD"}
+    - {id: 17, cat: Movies, desc: "Movies: Packs"}
+    - {id: 18, cat: Movies, desc: "Movies: Animation"}
+    - {id: 19, cat: Audio, desc: "Music: Audio"}
+    - {id: 20, cat: Audio, desc: "Music: Packs"}
+    - {id: 21, cat: Audio/Video, desc: "Music: Video"}
 
   modes:
     search: [q]
@@ -66,77 +65,115 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
-  path: takelogin.php
+  path: account-login.php
   method: post
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     returnto: /
-  # login errors return a 0 byte response followed by a redirect to the first time login page
+  error:
+    - selector: div.my_block:contains("Access Denied")
   test:
-    path: /
-    selector: a[href$="logout.php"]
+    path: index.php
+    selector: a[href="account-logout.php"]
 
 download:
+  before:
+    path: thanks.php
+    method: post
+    inputs:
+      torrent: "{{ .DownloadUri.Query.id }}"
   selectors:
-    - selector: a[href^="download.php/"]
+    - selector: a[href^="download.php?id="]
       attribute: href
 
 search:
-  # https://hidden-palace.xyz/browse.php?search=&c1=1&c2=1&c3=1&incldead=1
+  # https://hidden-palace.xyz/torrents.php?search=&cat=0&incldead=1&freeleech=0&lang=0
   paths:
-    - path: browse.php
+    - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    cat: 0
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
-  # does not support sorting, imdbid searching or display imdbid links.
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 all, 1 English, 2 etc...
+    lang: 0
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+  # does not support imdbid searching or display imdbid links.
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
-    selector: tr.browse
-    filters:
-      - name: andmatch
+    selector: tr.t-row
 
   fields:
     category:
-      selector: td a[href^="browse.php?cat="]
+      selector: td a[href^="torrents.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: td a[href^="details.php?id="]
+      selector: td a[href^="torrents-details.php?id="]
     details:
-      selector: td a[href^="details.php?id="]
+      selector: td a[href^="torrents-details.php?id="]
       attribute: href
     download:
-      selector: td a[href^="details.php?id="]
+      selector: td a[href^="torrents-details.php?id="]
       attribute: href
     poster:
-      selector: td a[href^="details.php?id="]
-      attribute: onmouseover
+      selector: td a[href^="torrents-details.php?id="]
+      attribute: onMouseover
       filters:
         - name: regexp
           args: "img\\ssrc=\\\\'(http.+?)\\\\'"
-    files:
-      selector: td:nth-child(3)
+        - name: replace
+          args: ["themes/default/images/nocover.jpg", ""]
     date:
-      selector: td:nth-child(5)
+      selector: td a[href^="torrents-details.php?id="]
+      attribute: onmouseover
       filters:
+        - name: regexp
+          args: "Date\\sAdded\\s:(\\d{2}-\\d{2}-\\d{4})"
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
+          args: "02-01-2006 -07:00"
     size:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     grabs:
-      selector: td:nth-child(7)
-    seeders:
       selector: td:nth-child(8)
+    seeders:
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-child(9)
+      selector: td:nth-child(7)
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
@@ -148,4 +185,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-# FMEDition
+# FMEDition 3 (TorrentTrader)
