@@ -99,6 +99,7 @@ login:
 
 search:
   paths:
+    # http://ztracker.cc/browse_old.php?keywords=&search_type=t_both&cat=0&ts_type=1
     - path: browse_old.php
   keywordsfilters:
     - name: re_replace
@@ -108,6 +109,8 @@ search:
     keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name, t_description, t_both, t_uploader
     search_type: "{{ if .Query.IMDBID }}t_description{{ else }}t_name{{ end }}"
+    # 0 active, 1 both, 2 inactive, 3 free, 19 bluray, 4 silver, 10 doubleup, 5 today, 6 yesterday, 7 week, 8 month, 9 last ten, external
+    ts_type: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not return imdb link in results
