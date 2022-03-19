@@ -55,7 +55,7 @@ download:
 
 search:
   paths:
-    - path: "?s={{ .Keywords }}"
+    - path: "?s={{ .Keywords }}&"
 
   rows:
     selector: article.post-entry
