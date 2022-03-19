@@ -64,6 +64,7 @@ namespace Jackett.Tray
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 toolStripMenuItemAutoStart.Visible = true;
+                toolStripMenuItemAutoStart.DoubleClick += toolStripMenuItemWebUI_Click;
             }
 
             if (!windowsService.ServiceExists())
