@@ -43,6 +43,7 @@ namespace Jackett.Common.Services
             {"audiobooktorrents", "abtorrents"},
             {"baibako", "rudub"},
             {"broadcastthenet", "broadcasthenet"},
+            {"casatorrent", "teamctgame"},
             {"icetorrent", "speedapp"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"leaguehd", "lemonhd"},
