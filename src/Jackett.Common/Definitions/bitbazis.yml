@@ -130,13 +130,13 @@ search:
     size:
       selector: td:nth-child(6)
     date:
-      # 22.03.13
+      #2022<br>03/15.
       selector: td:nth-child(7)
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "06.01.02 -07:00"
+          args: "200601/02. -07:00"
     grabs:
       selector: td:nth-child(5)
     seeders:
