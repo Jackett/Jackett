@@ -302,7 +302,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Carp-Hunter
  * Carpathians
  * CartoonChaos (CC)
- * CasaTorrent [![(invite needed)][inviteneeded]](#)
  * Cathode-Ray.Tube (CRT)
  * CCFBits [![(invite needed)][inviteneeded]](#)
  * CeskeForum
@@ -529,6 +528,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Swarmazon
  * Tapochek
  * Tasmanit [![(invite needed)][inviteneeded]](#)
+ * Team CT Game (TCTG)
  * TeamHD
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
