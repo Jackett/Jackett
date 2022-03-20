@@ -297,6 +297,7 @@ namespace Jackett.Updater
                 "Definitions/btstornet.yml",
                 "Definitions/btworld.yml",
                 "Definitions/btxpress.yml",
+                "Definitions/casatorrent.yml", // renamed to teamctgame
                 "Definitions/casstudiotv.yml",
                 "Definitions/channelx.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
