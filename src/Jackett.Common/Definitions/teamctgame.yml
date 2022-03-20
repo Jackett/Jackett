@@ -1,0 +1,239 @@
+---
+id: teamctgame
+name: Team CT Game
+description: "Team CT Game (TCTG) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://tctg.pm/
+legacylinks:
+  - https://teamctgame.co/
+  - http://teamctgame.xyz/
+  - https://teamctgame.xyz/
+  - https://tctg.in/
+
+caps:
+  categorymappings:
+    - {id: 409, cat: Books/Comics, desc: "BD"}
+    - {id: 410, cat: Books/Mags, desc: "Ebooks - Presse"}
+    - {id: 411, cat: Audio/Audiobook, desc: "Ebooks - Audiobooks"}
+    - {id: 412, cat: Books/EBook, desc: "Ebooks - Ebooks"}
+    - {id: 413, cat: Movies/3D, desc: "Films - 3D"}
+    - {id: 414, cat: Movies/HD, desc: "Films - 4K"}
+    - {id: 415, cat: Movies/UHD, desc: "Films - 4K HDR"}
+    - {id: 416, cat: Movies/UHD, desc: "Films - 4K Light"}
+    - {id: 417, cat: Movies/UHD, desc: "Films - 4K Remux"}
+    - {id: 418, cat: Movies, desc: "Films - Animation"}
+    - {id: 419, cat: Movies/BluRay, desc: "Films - BDRip / BRRip"}
+    - {id: 420, cat: Movies/DVD, desc: "Films - DVD-R"}
+    - {id: 421, cat: Movies/DVD, desc: "Films - DVDRip"}
+    - {id: 422, cat: Movies/BluRay, desc: "Films - Full Bluray"}
+    - {id: 423, cat: Movies/HD, desc: "Films - HDTV"}
+    - {id: 424, cat: Movies/HD, desc: "Films - HD 1080p"}
+    - {id: 425, cat: Movies/HD, desc: "Films - HD 720p"}
+    - {id: 426, cat: Movies/HD, desc: "Films - HDLiGHT / M-HD"}
+    - {id: 427, cat: Movies/HD, desc: "Films - HDRiP"}
+    - {id: 428, cat: Movies, desc: "Films - Pack"}
+    - {id: 429, cat: Movies, desc: "Films - Remux"}
+    - {id: 430, cat: TV, desc: "Films - TVRip"}
+    - {id: 431, cat: Movies, desc: "Films - VO"}
+    - {id: 432, cat: Movies, desc: "Films - VOSTFR"}
+    - {id: 433, cat: Movies/WEB-DL, desc: "Films - Web"}
+    - {id: 434, cat: Movies/HD, desc: "Films - x265"}
+    - {id: 436, cat: Console, desc: "Jeux - Consoles"}
+    - {id: 437, cat: PC/Games, desc: "Jeux - PC"}
+    - {id: 438, cat: PC/0day, desc: "Logiciels -  Windows"}
+    - {id: 439, cat: Other, desc: "Logiciels - Graph / Wallpaper"}
+    - {id: 440, cat: TV/HD, desc: "Series - 4K HDR"}
+    - {id: 441, cat: TV/HD, desc: "Series TV - Pack HD"}
+    - {id: 442, cat: TV/HD, desc: "Series TV - Episode HD"}
+    - {id: 443, cat: TV/HD, desc: "Series TV - Pack HD VOSTFR"}
+    - {id: 444, cat: TV/HD, desc: "Series TV - Episode HD VOSTFR"}
+    - {id: 445, cat: TV/SD, desc: "Series TV - Pack SD"}
+    - {id: 446, cat: TV/SD, desc: "Series TV - Episode SD"}
+    - {id: 447, cat: TV/SD, desc: "Series TV - Pack SD VOSTFR"}
+    - {id: 448, cat: TV/SD, desc: "Series TV - Episode SD VOSTFR"}
+    - {id: 449, cat: TV/Anime, desc: "Series - Animés"}
+    - {id: 450, cat: TV, desc: "Spectacles - Tous"}
+    - {id: 451, cat: TV, desc: "TV - Emissions"}
+    - {id: 452, cat: TV/Documentary, desc: "TV - Documentaires"}
+    - {id: 453, cat: TV/Sport, desc: "TV - Sports"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+    securelogin: ""
+  error:
+    - selector: td.embedded:has(h2:contains("Erreur")) # invalid captcha
+    - selector: td.embedded:has(h2:contains("Échec")) # invalid uid or pwd
+      message:
+        selector: td.text
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 incldead, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    inclbookmarked: 0
+    # 0 title, 1 descr, 3 uploader, 4 imdburl
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_phase1:
+      selector: a[href^="details.php?id="] b
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td:nth-child(4) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    date_added:
+      # time added
+      selector: td:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+# NexusPHP Standard v1.5 Beta 4
