@@ -59,6 +59,7 @@ caps:
     - {id: 451, cat: TV, desc: "TV - Emissions"}
     - {id: 452, cat: TV/Documentary, desc: "TV - Documentaires"}
     - {id: 453, cat: TV/Sport, desc: "TV - Sports"}
+    - {id: 435, cat: XXX, desc: "Films - XXX"}
 
   modes:
     search: [q]
@@ -142,6 +143,9 @@ login:
 search:
   paths:
     - path: torrents.php
+      categories: ["!", 435]
+    - path: special.php
+      categories: [435]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
@@ -236,4 +240,4 @@ search:
         "*": 1
     minimumratio:
       text: 1.0
-# NexusPHP Standard v1.5 Beta 4
+# NexusPHP Standard v1.6 Beta 12
