@@ -6,8 +6,6 @@ language: en-US
 type: private
 encoding: UTF-8
 testlinktorrent: false
-certificates:
-  - be7852fc8f50130cb50984ef001dbe9c8788f377 # this is the Plesk self signed CA
 links:
   - https://the-devils-lounge.xyz/
 
