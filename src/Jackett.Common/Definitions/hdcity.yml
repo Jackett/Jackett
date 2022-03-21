@@ -5,6 +5,8 @@ description: "HDCity is a SPANISH site for HD content"
 language: es-ES
 type: private
 encoding: ISO-8859-1
+certificates:
+  - a10f2f7a863cd3fba9663185b0943cde01698451 # expired  ‎25 ‎October ‎2021
 links:
   - https://hdcity.li/
 
