@@ -152,14 +152,14 @@ search:
     title:
       text: "{{ if .Config.subfrench }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_multi_out }}{{ end }}"
     details:
-      text: "{{ .Config.sitelink }}/details.php?id={{ .Result.id }}"
+      text: "{{ .Config.sitelink }}details.php?id={{ .Result.id }}"
     download:
       selector: download_link
     poster:
       selector: descr
       filters:
         - name: regexp
-          args: ["({{ .Config.sitelink }}/info_images\\/allocine\\/covers\\/film\\/small_\\d+?\\.jpg)"]
+          args: ["({{ .Config.sitelink }}info_images\\/allocine\\/covers\\/film\\/small_\\d+?\\.jpg)"]
     tmdbid:
       selector: tmdb_id
     files:
@@ -180,7 +180,6 @@ search:
       case:
         0: 1 # not free
         1: 0 # freeleech
-      text: 0
     uploadvolumefactor:
       text: 1
     minimumseedtime:
