@@ -22,6 +22,7 @@ caps:
     - {id: 35, cat: TV/HD, desc: "Episodes: TvHD"}
     - {id: 36, cat: TV/SD, desc: "Episodes: TvSD"}
     - {id: 37, cat: TV/Sport, desc: "Episodes: TVsports"}
+    - {id: 40, cat: TV, desc: "Episodes: Tv box sets"}
     - {id: 22, cat: PC/Games, desc: "Games: Pc"}
     - {id: 23, cat: Console/PS4, desc: "Games: Ps4"}
     - {id: 24, cat: Console/PS3, desc: "Games: Ps3"}
