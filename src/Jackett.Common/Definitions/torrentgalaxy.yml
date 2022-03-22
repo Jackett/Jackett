@@ -157,6 +157,12 @@ search:
     magnet:
       selector: div a[href^="magnet:?"]
       attribute: href
+    imdbid:
+      selector: a[href^="/torrents.php?search=tt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: tt(\d+)
     size:
       selector: div span[style^="border-radius"]
     seeders:
