@@ -84,10 +84,10 @@ caps:
     - {id: 23, cat: PC/Mobile-Android, desc: "Logiciels/Smartphone"}
 
   modes:
-    search: [ q ]
-    movie-search: [ q, tmdbid ]
-    tv-search: [ q, season, ep ]
-    book-search: [ q ]
+    search: [q]
+    movie-search: [q, tmdbid]
+    tv-search: [q, season, ep]
+    book-search: [q]
 
 settings:
   - name: passkey
@@ -139,16 +139,16 @@ search:
       text: "{{ .Result.title_original }}"
       filters:
         - name: re_replace
-          args: [ "(?i)[\\.\\s\\[\\-]multi[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}." ]
+          args: ["(?i)[\\.\\s\\[\\-]multi[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
     title_multi_out:
       text: "{{ if .Config.multilanguage }}{{ .Result.title_multi }}{{ else }}{{ .Result.title_original }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_multi_out }}"
       filters:
         - name: re_replace
-          args: [ "(?i)[\\.\\s\\[\\-]vostfr[\\.\\s\\]\\-]", ".{{ .Config.subfrench }}." ]
+          args: ["(?i)[\\.\\s\\[\\-]vostfr[\\.\\s\\]\\-]", ".{{ .Config.subfrench }}."]
         - name: re_replace
-          args: [ "(?i)[\\.\\s\\[\\-]subfrench[\\.\\s\\]\\-]", ".{{ .Config.subfrench }}." ]
+          args: ["(?i)[\\.\\s\\[\\-]subfrench[\\.\\s\\]\\-]", ".{{ .Config.subfrench }}."]
     title:
       text: "{{ if .Config.subfrench }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_multi_out }}{{ end }}"
     details:
@@ -187,6 +187,6 @@ search:
       # 24 hours (as seconds = 1 x 24 x 60 x 60)
       text: 86400
     minimumratio:
-    # minimum ratio per torrent is 0.8
+      # minimum ratio per torrent is 0.8
       text: 0.8
 # json api
