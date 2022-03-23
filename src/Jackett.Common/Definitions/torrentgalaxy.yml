@@ -75,8 +75,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -119,7 +119,7 @@ search:
   path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
@@ -157,6 +157,12 @@ search:
     magnet:
       selector: div a[href^="magnet:?"]
       attribute: href
+    imdbid:
+      selector: a[href^="/torrents.php?search=tt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: tt(\d+)
     size:
       selector: div span[style^="border-radius"]
     seeders:
