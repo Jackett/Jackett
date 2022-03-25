@@ -125,8 +125,9 @@ search:
 
   rows:
     selector: torrents
-    filters:
-      - name: andmatch
+# jackett yml json does not currently support andmatch #13083
+#    filters:
+#      - name: andmatch
 
   fields:
     id:
