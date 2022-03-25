@@ -13,6 +13,7 @@ caps:
     - {id: 92, cat: Books/EBook, desc: "e-Book (ENG)"}
     - {id: 78, cat: Books/EBook, desc: "e-Book (HUN)"}
     - {id: 80, cat: Other, desc: "Egyéb"}
+    - {id: 111, cat: Movies/SD, desc: "Film - Cam (HUN)"}
     - {id: 85, cat: Movies/DVD, desc: "Film - DVD/9 (ENG)"}
     - {id: 66, cat: Movies/DVD, desc: "Film - DVD/9 (HUN)"}
     - {id: 84, cat: Movies/HD, desc: "Film - HD (ENG)"}
@@ -32,8 +33,8 @@ caps:
     - {id: 97, cat: TV/HD, desc: "Sorozat - HD (HUN)"}
     - {id: 86, cat: TV/SD, desc: "Sorozat - XviD (ENG)"}
     - {id: 90, cat: TV/SD, desc: "Sorozat - XviD (HUN)"}
-    - {id: 98, cat: XXX/x264, desc: "XXX - HD"}
     - {id: 99, cat: XXX/DVD, desc: "XXX - DVD"}
+    - {id: 98, cat: XXX/x264, desc: "XXX - HD"}
     - {id: 76, cat: XXX/ImageSet, desc: "XXX - Képek"}
     - {id: 69, cat: XXX/XviD, desc: "XXX - XviD"}
     - {id: 70, cat: Audio, desc: "Zene - HUN"}

@@ -130,7 +130,7 @@ search:
     size:
       selector: td:nth-child(6)
     date:
-      #2022<br>03/15.
+      # 2022<br>03/15.
       selector: td:nth-child(7)
       filters:
         - name: append

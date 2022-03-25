@@ -139,7 +139,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Tokyo Tosho
  * Torlock
  * Torlook
- * TOROS
  * Torrent Downloads (TD)
  * Torrent Oyun indir
  * torrent.by
@@ -256,6 +255,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AmigosShareClub
  * anasch.cc
  * AnimeBytes (AB)
+ * AnimeItalia
  * AnimeTorrents (AnT) [![(invite needed)][inviteneeded]](#)
  * AnimeWorld [![(invite needed)][inviteneeded]](#)
  * Anthelion
