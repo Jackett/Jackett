@@ -252,7 +252,7 @@ namespace Jackett.Common.Indexers
                                 var completed = torrent.QuerySelector("td:nth-of-type(3)").TextContent;                 // Completed
                                 var seeders = torrent.QuerySelector("td.text-green").TextContent;                       // Seeders
                                 var leechers = torrent.QuerySelector("td.text-red").TextContent;                        // Leechers
-                                var size = torrent.QuerySelector("td:nth-of-type(5)").TextContent;                      // Size
+                                var size = torrent.QuerySelector("td:nth-of-type(6)").TextContent;                      // Size
 
                                 var release = new ReleaseInfo
                                 {
