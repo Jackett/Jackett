@@ -83,6 +83,10 @@ search:
     title:
       selector: td:nth-child(2) a
     category:
+      text: other
+    category|noappend:
+      # cat may be missing
+      optional: true
       selector: td:nth-child(2) > i
       attribute: class
       filters:
