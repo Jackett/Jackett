@@ -1,71 +1,33 @@
 ---
 id: hidden-palace
 name: Hidden-Palace
-description: "Hidden-Palace is a Private torrent site for MOVIES / TV / GENERAL"
+description: "Hidden-Palace is a Private torrent site for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
-testlinktorrent: false
 links:
+  - https://hidden-palace.net/
+legacylinks:
   - https://hidden-palace.xyz/
 
 caps:
   categorymappings:
-    - {id: 39, cat: Audio/Audiobook, desc: "Abook: Abook"}
-    - {id: 1, cat: PC/0day, desc: "Application: 0-Day"}
-    - {id: 2, cat: PC, desc: "Application: Pc"}
-    - {id: 3, cat: PC/Mac, desc: "Application: Mac"}
-    - {id: 38, cat: Books/EBook, desc: "Ebooks: Ebook"}
-    - {id: 32, cat: TV/Anime, desc: "Episodes: Anime"}
-    - {id: 33, cat: TV, desc: "Episodes: Classic"}
-    - {id: 34, cat: TV/Foreign, desc: "Episodes: Foreign"}
-    - {id: 35, cat: TV/HD, desc: "Episodes: TvHD"}
-    - {id: 36, cat: TV/SD, desc: "Episodes: TvSD"}
-    - {id: 37, cat: TV/Sport, desc: "Episodes: TVsports"}
-    - {id: 40, cat: TV, desc: "Episodes: Tv box sets"}
-    - {id: 22, cat: PC/Games, desc: "Games: Pc"}
-    - {id: 23, cat: Console/PS4, desc: "Games: Ps4"}
-    - {id: 24, cat: Console/PS3, desc: "Games: Ps3"}
-    - {id: 25, cat: Console/PSP, desc: "Games: Ps1"}
-    - {id: 26, cat: Console/PSP, desc: "Games: Ps2"}
-    - {id: 27, cat: Console/PSP, desc: "Games: PsP"}
-    - {id: 28, cat: Console/XBox, desc: "Games: xbox"}
-    - {id: 29, cat: Console/Wii, desc: "Games: Wii"}
-    - {id: 30, cat: Console/NDS, desc: "Games: Nintendo"}
-    - {id: 31, cat: Console/Other, desc: "Games: Dreamcast"}
-    - {id: 4, cat: Movies/HD, desc: "Movies: 1080P"}
-    - {id: 5, cat: TV/Anime, desc: "Movies: Anime"}
-    - {id: 6, cat: Movies/DVD, desc: "Movies: DvdR"}
-    - {id: 7, cat: Movies/SD, desc: "Movies: Camer"}
-    - {id: 8, cat: Movies/3D, desc: "Movies: 3D"}
-    - {id: 9, cat: Movies/WEB-DL, desc: "Movies: WEBRip"}
-    - {id: 10, cat: XXX, desc: "Movies: XxX"}
-    - {id: 11, cat: Movies/UHD, desc: "Movies: Real-4K"}
-    - {id: 12, cat: Movies, desc: "Movies: Classic"}
-    - {id: 13, cat: Movies/Foreign, desc: "Movies: Foreign"}
-    - {id: 14, cat: Movies, desc: "Movies: Remux"}
-    - {id: 15, cat: Movies/HD, desc: "Movies: HD"}
-    - {id: 16, cat: Movies/SD, desc: "Movies: SD"}
-    - {id: 17, cat: Movies, desc: "Movies: Packs"}
-    - {id: 18, cat: Movies, desc: "Movies: Animation"}
-    - {id: 19, cat: Audio, desc: "Music: Audio"}
-    - {id: 20, cat: Audio, desc: "Music: Packs"}
-    - {id: 21, cat: Audio/Video, desc: "Music: Video"}
+    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 2, cat: TV, desc: "TV"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
-    music-search: [q]
-    book-search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://hidden-palace.net/\" target =_blank>Hidden-Palace</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -73,9 +35,9 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: id
+    default: created_at
     options:
-      id: created
+      created_at: created
       seeders: seeders
       size: size
       name: title
@@ -88,102 +50,95 @@ settings:
       asc: asc
 
 login:
-  path: account-login.php
-  method: post
+  path: /api/torrents
+  method: get
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    returnto: /
+    api_token: "{{ .Config.apikey }}"
   error:
-    - selector: div.my_block:contains("Access Denied")
-  test:
-    path: index.php
-    selector: a[href="account-logout.php"]
-
-download:
-  before:
-    path: thanks.php
-    method: post
-    inputs:
-      torrent: "{{ .DownloadUri.Query.id }}"
-  selectors:
-    - selector: a[href^="download.php?id="]
-      attribute: href
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
-  # https://hidden-palace.xyz/torrents.php?search=&cat=0&incldead=1&freeleech=0&lang=0
   paths:
-    - path: torrents.php
+    # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php
+    - path: "/api/torrents/filter"
+      response:
+        type: json
+
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    cat: 0
-    # 0 active, 1 incldead, 2 onlydead
-    incldead: 1
-    # 0 all, 1 notfree, 2 onlyfree
-    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 all, 1 English, 2 etc...
-    lang: 0
-    sort: "{{ .Config.sort }}"
-    order: "{{ .Config.type }}"
-  # does not support imdbid searching or display imdbid links.
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    api_token: "{{ .Config.apikey }}"
+    name: "{{ .Keywords }}"
+    $raw: "{{ if .Query.Season }}&seasonNumber={{ .Query.Season }}{{ else }}{{ end }}{{ if .Query.Ep }}&episodeNumber={{ .Query.Ep }}{{ else }}{{ end }}{{ if .Query.TMDBID }}&tmdbId={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if .Query.IMDBIDShort }}&imdbId={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdbId={{ .Query.TVDBID }}{{ else }}{{ end }}{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&free=1{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+    page: 1
+
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["\\.", " "]
 
   rows:
-    selector: tr.t-row
+    selector: data
+    attribute: attributes
+    count:
+      selector: meta.total
 
   fields:
-    category:
-      selector: td a[href^="torrents.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+    categorydesc:
+      selector: category
     title:
-      selector: td a[href^="torrents-details.php?id="]
+      selector: name
     details:
-      selector: td a[href^="torrents-details.php?id="]
-      attribute: href
+      selector: details_link
     download:
-      selector: td a[href^="torrents-details.php?id="]
-      attribute: href
+      selector: download_link
     poster:
-      selector: td a[href^="torrents-details.php?id="]
-      attribute: onMouseover
+      selector: poster
       filters:
-        - name: regexp
-          args: "img\\ssrc=\\\\'(http.+?)\\\\'"
         - name: replace
-          args: ["themes/default/images/nocover.jpg", ""]
-    date:
-      selector: td a[href^="torrents-details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "Date\\sAdded\\s:(\\d{2}-\\d{2}-\\d{4})"
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
-        - name: dateparse
-          args: "02-01-2006 -07:00"
-    size:
-      selector: td:nth-child(5)
-    grabs:
-      selector: td:nth-child(8)
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    files:
+      selector: num_file
     seeders:
-      selector: td:nth-child(6)
+      selector: seeders
     leechers:
-      selector: td:nth-child(7)
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2021-10-18T00:34:50.000000Z"
+      selector: created_at
+    size:
+      selector: size
     downloadvolumefactor:
-      text: 1
-    uploadvolumefactor:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
       case:
-        "font:contains(\"Doubleupload\")": 2
-        "*": 1
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: double_upload
+      case:
+        0: 1 # normal
+        1: 2 # double
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
+      # 1 day (as seconds = 1 x 24 x 60 x 60)
       text: 86400
-# FMEDition 3 (TorrentTrader)
+# json UNIT3D 6.0.4
