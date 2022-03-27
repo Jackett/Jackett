@@ -66,6 +66,7 @@ login:
 
 search:
   paths:
+    # http://rudub.tv/browse.php?search=&incldead=1&sort=4&type=desc
     - path: browse.php
   inputs:
     search: "{{.Keywords }}"
@@ -78,7 +79,7 @@ search:
       args: ["[s|S](\\d+)[e|E][\\d]+", "/s$1"]
 
   rows:
-    selector: table > tbody > tr:has(a[href^="details.php?id="])
+    selector: div.card__torlist__browse_2
 
   fields:
     category:
@@ -113,63 +114,33 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    poster:
-      selector: img[src^="/posters/"]
-      attribute: src
     download:
       selector: a[href^="download.php?id="]
       attribute: href
     date:
-      selector: small
+      # 2022-03-28 01:28:07
+      selector: li[title="Дата"]
       filters:
-        - name: replace
-          args: ["Загружена: ", ""]
-        - name: replace
-          args: [" в ", " "]
-        - name: replace
-          args: ["января", "January"]
-        - name: replace
-          args: ["февраля", "February"]
-        - name: replace
-          args: ["марта", "March"]
-        - name: replace
-          args: ["апреля", "April"]
-        - name: replace
-          args: ["мая", "May"]
-        - name: replace
-          args: ["июня", "June"]
-        - name: replace
-          args: ["июля", "July"]
-        - name: replace
-          args: ["августа", "August"]
-        - name: replace
-          args: ["сентября", "September"]
-        - name: replace
-          args: ["октября", "October"]
-        - name: replace
-          args: ["ноября", "November"]
-        - name: replace
-          args: ["декабря", "December"]
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "2 January 2006 15:04:05 -07:00"
+          args: "2006-01-02 15:04:05 -07:00"
     files:
-      selector: td:nth-last-child(5)
+      selector: li[title="Файлов"]
     size:
-      selector: td:nth-last-child(3)
+      selector: li[title="Размер"]
     seeders:
-      selector: td:nth-last-child(2)
+      selector: li[title="Активность"]
       filters:
-        - name: split
-          args: ["|", 0]
+        - name: regexp
+          args: (\d+)\s+\d+
     leechers:
-      selector: td:nth-last-child(2)
+      selector: li[title="Активность"]
       filters:
-        - name: split
-          args: ["|", 1]
+        - name: regexp
+          args: \d+\s+(\d+)
     grabs:
-      selector: td:nth-last-child(1)
+      selector: li[title="Завершено"]
     downloadvolumefactor:
       case:
         "a[href^=\"details.php?id=\"]:contains(\"(Золото)\")": 0
