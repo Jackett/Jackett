@@ -27,7 +27,7 @@ caps:
     - {id: 6300, cat: TV/Anime, desc: "Animations - Hentai"}
     - {id: 6900, cat: TV/Anime, desc: "Animations - Other"}
     - {id: 6120, cat: TV/Anime, desc: "Animations - Shoujo Ai"}
-    - {id: 6330, cat: TV/Anime, desc: "Animations - Shounen Ai"}
+    - {id: 6130, cat: TV/Anime, desc: "Animations - Shounen Ai"}
     - {id: 6320, cat: TV/Anime, desc: "Animations - Yaoi"}
     - {id: 6310, cat: TV/Anime, desc: "Animations - Yuri"}
     - {id: 14000, cat: PC, desc: "Applications - All"}
