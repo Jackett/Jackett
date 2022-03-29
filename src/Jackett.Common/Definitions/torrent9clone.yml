@@ -8,41 +8,12 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrent9.nl/
-  - https://torrent9.nocensor.biz/
+  - https://torrent9.nocensor.sbs/
 legacylinks:
-  - https://www.torrents9.pw/
-  - https://www.torrent9.ch/
-  - https://www1.torrent9.ch/
-  - https://www2.torrent9.ch/
-  - https://wwv.torrent9.vg/
-  - https://www.torrent9.vc/
-  - https://wvw.torrent9.vc/
-  - https://www.torrent9.lol/
-  - https://wvw.torrent9.lol/
-  - https://wwv.torrent9.lol/
-  - https://ww1.torrent9.lol/
-  - https://ww5.torrent9.lol/
-  - https://ww6.torrent9.lol/
-  - https://www.torrent9.tw/
-  - https://ww7.torrent9.lol/
-  - https://www.torrent9.dev/
-  - https://www.torrent9.sx/
-  - https://ww1.torrent9.sx/
-  - https://www.t9.re/
   - https://www.t9.vc/
   - https://www.torrent9.ai/
-  - https://torrent9.black-mirror.xyz/
-  - https://torrent9.unblocked.casa/
-  - https://torrent9.proxyportal.fun/
-  - https://torrent9.uk-unblock.xyz/
-  - https://torrent9.ind-unblock.xyz/
   - https://www.torrent9.pl/
   - https://www.torrent9.ac/
-  - https://torrent9.unblocked.bar/
-  - https://torrent9.proxyportal.pw/
-  - https://torrent9.uk-unblock.pro/
-  - https://torrent9.unblockninja.com/ # this is a proxy for torrent9
-  - https://torrent9.unblocked.rest/
   - https://www.torrent9.so/
   - https://wvw.torrent9.sh/
   - https://www.torrent9.sh/
@@ -58,6 +29,7 @@ legacylinks:
   - https://torrent9.nocensor.work/
   - https://www.torrent9.pw/
   - https://www.torrent9.si/
+  - https://torrent9.nocensor.biz/
 
 caps:
   categorymappings:
