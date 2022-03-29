@@ -9,9 +9,8 @@ followredirect: true
 links:
   - https://www.torrentdownload.info/
   - https://torrentdownload.unblockit.day/
-  - https://torrentdownload.nocensor.biz/
+  - https://torrentdownload.nocensor.sbs/
 legacylinks:
-  - https://torrentdownload.unblockit.app/
   - https://torrentdownload.unblocked.rest/
   - https://torrentdownload.unblockit.dev/
   - https://torrentdownload.unblockit.ltd/
@@ -31,6 +30,7 @@ legacylinks:
   - https://torrentdownload.unblockit.tv/
   - https://torrentdownload.unblockit.how/
   - https://torrentdownload.unblockit.cam/
+  - https://torrentdownload.nocensor.biz/
 
 caps:
   categorymappings:
