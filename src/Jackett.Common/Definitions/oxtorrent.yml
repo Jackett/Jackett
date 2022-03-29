@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.oxtorrent.re/
   - https://oxtorrent.unblockit.day/
-  - https://oxtorrent.nocensor.biz/
+  - https://oxtorrent.nocensor.sbs/
 legacylinks:
   - https://www.oxtorrent.bz/
   - https://www.oxtorrent.ws/
@@ -19,7 +19,6 @@ legacylinks:
   - https://www.oxtorrent.co/
   - https://www.oxtorrent.io/
   - https://www.oxtorrent.cx/
-  - https://oxtorrent.unblockit.ws/
   - https://www.oxtorrent.nz/
   - https://oxtorrent.nocensor.work/
   - https://oxtorrent.unblockit.kim/
@@ -31,6 +30,7 @@ legacylinks:
   - https://oxtorrent.unblockit.how/
   - https://www.oxtorrent.be/
   - https://oxtorrent.unblockit.cam/
+  - https://oxtorrent.nocensor.biz/
 
 caps:
   categorymappings:

@@ -8,16 +8,8 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.gktorrents.org/
-  - https://gktorrent.nocensor.biz/
+  - https://gktorrent.nocensor.sbs/
 legacylinks:
-  - https://www.gktorrent.com/
-  - http://www.gktorrent.com/
-  - http://ww1.gktorrent.com/
-  - http://ww2.gktorrent.com/
-  - https://ww2.gktorrent.com/
-  - https://ww3.gktorrent.com/
-  - http://www.gktorrent.net/
-  - https://ww4.gktorrent.com/
   - http://www.gktorrent.co/
   - https://www.gktorrent.co/
   - https://www.gktorrent.ws/
@@ -37,6 +29,7 @@ legacylinks:
   - https://www.gktorrents.com/
   - https://gktorrent.nocensor.work/
   - https://www.gktorrents.net/
+  - https://gktorrent.nocensor.biz/
 
 caps:
   categorymappings:
