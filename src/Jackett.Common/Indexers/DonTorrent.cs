@@ -259,6 +259,15 @@ namespace Jackett.Common.Indexers
             // search only the longest word, we filter the results later
             var searchTerm = GetLongestWord(query.SearchTerm);
             var url = SiteLink + SearchUrl + searchTerm;
+            releases.AddRange(await PerformQueryUnique(url, query, matchWords));
+            releases.AddRange(await PerformQueryUnique(url + "/page/2", query, matchWords));
+            releases.AddRange(await PerformQueryUnique(url + "/page/3", query, matchWords));
+            return releases;
+        }
+
+        private async Task<List<ReleaseInfo>> PerformQueryUnique(string url, TorznabQuery query, bool matchWords)
+        {
+            var releases = new List<ReleaseInfo>();
             var result = await RequestWithCookiesAsync(url, referer: url);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
@@ -313,6 +322,7 @@ namespace Jackett.Common.Indexers
 
             return releases;
         }
+
 
         private async Task ParseRelease(ICollection<ReleaseInfo> releases, string link, string title, string category, string quality, TorznabQuery query, bool matchWords)
         {
