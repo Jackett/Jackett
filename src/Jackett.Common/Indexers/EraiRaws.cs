@@ -21,12 +21,13 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.erai-raws.info/",
             "https://beta.erai-raws.info/",
-            "https://erairaws.nocensor.biz/"
+            "https://erairaws.nocensor.sbs/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://erairaws.nocensor.space/",
-            "https://erairaws.nocensor.work/"
+            "https://erairaws.nocensor.work/",
+            "https://erairaws.nocensor.biz/"
         };
 
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
