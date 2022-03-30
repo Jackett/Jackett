@@ -280,6 +280,7 @@ namespace Jackett.Updater
                 "Definitions/beyond-hd-oneurl.yml", // #12993
                 "Definitions/baibako.yml", // renamed rudub #5673
                 "Definitions/bithq.yml",
+                "Definitions/bit-titan.yml",
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
                 "Definitions/bitme.yml",
