@@ -32,6 +32,7 @@ namespace Jackett.Common.Indexers
 
         private string LoginUrl => SiteLink + "login";
         private string BrowseUrl => SiteLink + "torrents/browse";
+        private string DownloadUrl => SiteLink + "torrents.php";
         private string DetailsUrl => SiteLink + "details.php";
 
         private string _sort;
@@ -230,7 +231,7 @@ namespace Jackett.Common.Indexers
 
             if (query.Categories.Contains(TorznabCatType.TV.ID))
             {
-                qc.Add("filter_cat[3]", "1"); // HD EPISODE
+                qc.Add("filter_cat[3]", "1"); // HD Episode
                 qc.Add("filter_cat[4]", "1"); // SD Episode
                 qc.Add("filter_cat[5]", "1"); // HD Season
                 qc.Add("filter_cat[6]", "1"); // SD Season
@@ -334,7 +335,7 @@ namespace Jackett.Common.Indexers
             var seeders = int.Parse(seeds, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var leechers = int.Parse(leechs, NumberStyles.AllowThousands, CultureInfo.InvariantCulture);
             var detailsUri = new Uri(DetailsUrl + "?torrentid=" + torrentId);
-            var downloadLink = new Uri(BrowseUrl + "?action=download&id=" + torrentId);
+            var downloadLink = new Uri(DownloadUrl + "?action=download&id=" + torrentId);
 
             return new ReleaseInfo
             {
