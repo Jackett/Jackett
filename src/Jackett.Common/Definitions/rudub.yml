@@ -90,7 +90,9 @@ search:
         - name: re_replace
           args: ["[\\/]+", ""]
         - name: replace
-          args: [" (Золото)", ""]
+          args: [" (Золото)", ""] # remove gold tag
+        - name: re_replace
+          args: ["[()]", " "] # remove the brackets around the English title and attributes
         - name: replace
           args: ["-Rip", "Rip"]
         - name: replace
@@ -111,6 +113,7 @@ search:
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
         - name: append
           args: " - rus"
+        - name: trim # clean up any leading and trailing spaces left over from above editing
     details:
       selector: a[href^="details.php?id="]
       attribute: href
