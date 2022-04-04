@@ -79,6 +79,10 @@ search:
           args: "["
         - name: append
           args: "]"
+        - name: re_replace
+          args: ["(?i)(MEGAPACK)", "REPACK"]
+        - name: re_replace
+          args: ["(?i)(AUDIOEDITADO)", "PROPER"]
     title_vose:
       selector: td.titulo a[id]:contains("VOSE")
       optional: true
