@@ -91,6 +91,11 @@ login:
     path: index.php
     selector: a[href^="logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     - path: letoltes.php
@@ -119,7 +124,7 @@ search:
       selector: a[href^="torrent_adatok.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="torrent_adatok.php?id="]
       attribute: href
     description:
       selector: td:nth-child(3) font[color="gray"]
@@ -150,6 +155,7 @@ search:
     downloadvolumefactor:
       case:
         "img[src=\"pic/orokos.gif\"]": 0
+        "img[src=\"images/ellenorzes/ingyenes.gif\"]": 0
         "*": 1
     uploadvolumefactor:
       case:
