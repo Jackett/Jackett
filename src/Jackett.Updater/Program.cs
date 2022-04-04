@@ -483,6 +483,7 @@ namespace Jackett.Updater
                 "Definitions/tehconnection.yml",
                 "Definitions/tellytorrent.yml", // switch to *-API #8682
                 "Definitions/tfile.yml",
+                "Definitions/the-devils-lounge.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
                 "Definitions/theresurrection.yml",
