@@ -80,7 +80,7 @@ search:
         - name: append
           args: "]"
         - name: re_replace
-          args: ["(?i)(MEGAPACK)", "PROPER"]
+          args: ["(?i)(MEGAPACK)", "REPACK"]
         - name: re_replace
           args: ["(?i)(AUDIOEDITADO)", "PROPER"]
     title_vose:
