@@ -83,6 +83,8 @@ search:
           args: ["(?i)(MEGAPACK)", "REPACK"]
         - name: re_replace
           args: ["(?i)(AUDIOEDITADO)", "PROPER"]
+        - name: re_replace
+          args: ["(?i)(VERSIÓN MEJORADA)", "PROPER"]
     title_vose:
       selector: td.titulo a[id]:contains("VOSE")
       optional: true
