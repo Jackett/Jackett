@@ -5,6 +5,8 @@ description: "Torlook is a Russian Public torrent meta-search engine combining r
 language: en-US
 type: public
 encoding: UTF-8
+certificates:
+  - 273066e4b30229dfb0bb99474269f58b6fa8971a # expired ‎‎5 ‎April ‎2022
 links:
   - https://gw1.torlook.info/
   - https://torlook.nocensor.sbs/
