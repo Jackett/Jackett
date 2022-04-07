@@ -39,14 +39,14 @@ namespace Jackett.Common.Indexers
                    cs: cs
                    )
         {
-            AddCategoryMapping(1, TorznabCatType.XXXx264);
-            AddCategoryMapping(2, TorznabCatType.XXXPack);
-            AddCategoryMapping(3, TorznabCatType.XXXPack);
-            AddCategoryMapping(4, TorznabCatType.XXXPack);
-            AddCategoryMapping(5, TorznabCatType.XXXDVD);
-            AddCategoryMapping(6, TorznabCatType.XXXx264);
-            AddCategoryMapping(7, TorznabCatType.XXXImageSet);
-            AddCategoryMapping(8, TorznabCatType.XXXImageSet);
+            AddCategoryMapping(1, TorznabCatType.XXXx264, "Video Clip");
+            AddCategoryMapping(2, TorznabCatType.XXXPack, "Video Pack");
+            AddCategoryMapping(3, TorznabCatType.XXXPack, "Siterip Pack");
+            AddCategoryMapping(4, TorznabCatType.XXXPack, "Pornstar Pack");
+            AddCategoryMapping(5, TorznabCatType.XXXDVD, "DVD");
+            AddCategoryMapping(6, TorznabCatType.XXXx264, "BluRay");
+            AddCategoryMapping(7, TorznabCatType.XXXImageSet, "Photo Pack");
+            AddCategoryMapping(8, TorznabCatType.XXXImageSet, "Books & Magazines");
         }
 
         protected override List<KeyValuePair<string, string>> GetSearchQueryParameters(TorznabQuery query)
