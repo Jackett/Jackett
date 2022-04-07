@@ -7,6 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
+  - https://1337x.to/
   - https://1337x.st/
   - https://x1337x.ws/
   - https://x1337x.eu/
@@ -34,7 +35,6 @@ legacylinks:
   - https://1337x.unblockit.how/
   - https://1337x.unblockit.cam/
   - https://1337x.nocensor.biz/
-  - https://1337x.to/
   - https://1337x.gd/
 
 caps:
