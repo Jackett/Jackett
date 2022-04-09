@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Xml.Linq;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -75,9 +77,13 @@ namespace Jackett.Common.Indexers.Feeds
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var requestUri = FeedUri.ToString();
-            var requestParams = "?t=search&apikey=" + configData.Passkey.Value;
+            var qc = new NameValueCollection
+            {
+                {"t", "search"},
+                {"apikey", configData.Passkey.Value},
+            };
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-                requestParams = requestParams + "&q=" + query.SearchTerm;
+                qc.Add("q", query.SearchTerm);
 
             var queryCats = new List<int>();
             foreach (var queryCategory in query.Categories)
@@ -85,8 +91,16 @@ namespace Jackett.Common.Indexers.Feeds
                 queryCats.Add(queryCategory);
             }
             if (queryCats.Any())
-                requestParams = requestParams + "&cat=" + string.Join(",", queryCats);
-            requestUri = requestUri + requestParams;
+                qc.Add("cat", string.Join(",", queryCats));
+            if (!string.IsNullOrWhiteSpace(query.ImdbID))
+                qc.Add("imdbid", query.ImdbID);
+            if (query.TvdbID != null)
+                qc.Add("tvdbid", query.TvdbID.ToString());
+            if (!string.IsNullOrWhiteSpace(query.Episode))
+                qc.Add("ep", query.Episode);
+            if (query.Season > 0)
+                qc.Add("season", query.Season.ToString());
+            requestUri = requestUri + "?" + qc.GetQueryString();
             var request = new WebRequest
             {
                 Url = requestUri,
