@@ -115,7 +115,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-last-of-type(7) > span[title]
+      selector: td.rowfollow:nth-last-of-type(6) > span[title]
       attribute: title
       optional: true
       filters:
@@ -125,7 +125,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date_added:
       # time added
-      selector: td.rowfollow:nth-last-of-type(7):not(:has(span))
+      selector: td.rowfollow:nth-last-of-type(6):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -135,13 +135,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-last-of-type(6)
-    seeders:
       selector: td.rowfollow:nth-last-of-type(5)
-    leechers:
+    seeders:
       selector: td.rowfollow:nth-last-of-type(4)
-    grabs:
+    leechers:
       selector: td.rowfollow:nth-last-of-type(3)
+    grabs:
+      selector: td.rowfollow:nth-last-of-type(2)
     downloadvolumefactor:
       case:
         img.pro_free: 0
