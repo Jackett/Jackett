@@ -68,7 +68,7 @@ namespace Jackett.Common.Indexers.Feeds
             var categories = item.Descendants().Where(e => e.Name == "category" && int.TryParse(e.Value, out var categoryid));
             List<int> categoryids = null;
             if (categories.Any())
-                categoryids = new List<int> { int.Parse(categories.First(e => !string.IsNullOrEmpty(e.Value)).Value) };
+                categoryids = new List<int> { int.Parse(categories.Last(e => !string.IsNullOrEmpty(e.Value)).Value) };
             else
                 categoryids = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) };
 
