@@ -51,14 +51,14 @@ namespace Jackett.Common.Indexers.Feeds
             Language = "en-US";
             Type = "private";
 
-            AddCategoryMapping(5030, TorznabCatType.TVSD);
-            AddCategoryMapping(5040, TorznabCatType.TVHD);
-            AddCategoryMapping(5045, TorznabCatType.TVUHD);
-            AddCategoryMapping(5060, TorznabCatType.TVSport);
-            AddCategoryMapping(2030, TorznabCatType.MoviesSD);
-            AddCategoryMapping(2040, TorznabCatType.MoviesHD);
-            AddCategoryMapping(2045, TorznabCatType.MoviesUHD);
-            AddCategoryMapping(2050, TorznabCatType.MoviesBluRay);
+            AddCategoryMapping(TorznabCatType.TVSD.ID, TorznabCatType.TVSD);
+            AddCategoryMapping(TorznabCatType.TVHD.ID, TorznabCatType.TVHD);
+            AddCategoryMapping(TorznabCatType.TVUHD.ID, TorznabCatType.TVUHD);
+            AddCategoryMapping(TorznabCatType.TVSport.ID, TorznabCatType.TVSport);
+            AddCategoryMapping(TorznabCatType.MoviesSD.ID, TorznabCatType.MoviesSD);
+            AddCategoryMapping(TorznabCatType.MoviesHD.ID, TorznabCatType.MoviesHD);
+            AddCategoryMapping(TorznabCatType.MoviesUHD.ID, TorznabCatType.MoviesUHD);
+            AddCategoryMapping(TorznabCatType.MoviesBluRay.ID, TorznabCatType.MoviesBluRay);
         }
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
