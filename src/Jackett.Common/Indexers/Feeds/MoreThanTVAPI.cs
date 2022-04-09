@@ -67,7 +67,7 @@ namespace Jackett.Common.Indexers.Feeds
             LoadValuesFromJson(configJson);
 
             if (configData.Key.Value.Length != 32)
-                throw new Exception("Invalid Passkey configured. Expected length: 32");
+                throw new Exception("Invalid API Key configured. Expected length: 32");
 
             IsConfigured = true;
             SaveConfig();
