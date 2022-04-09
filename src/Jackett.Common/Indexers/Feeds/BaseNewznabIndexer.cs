@@ -90,9 +90,8 @@ namespace Jackett.Common.Indexers.Feeds
                 DownloadVolumeFactor = downloadvolumefactor,
                 UploadVolumeFactor = uploadvolumefactor
             };
-            if (magneturi != null) {
+            if (magneturi != null)
                 release.MagnetUri = magneturi;
-            }
             return release;
         }
 
