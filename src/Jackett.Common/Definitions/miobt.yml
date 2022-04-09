@@ -1,11 +1,12 @@
 ---
-id: kisssub
-name: KissSub
-description: "KissSub is a CHINESE Public torrent index"
+id: miobt
+name: MioBT
+description: "MioBT is a CHINESE Public torrent index"
 language: zh-CN
 type: public
 encoding: UTF-8
 links:
+  - https://miobt.com/
   - https://kisssub.org/
 
 caps:
@@ -28,7 +29,7 @@ settings: []
 
 search:
   paths:
-    # https://kisssub.org/search.php?keyword=moon+720p
+    # https://miobt.com/search.php?keyword=moon+720p
     - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
@@ -51,20 +52,20 @@ search:
     date_today:
        # 今天 00:35	 (Today)
       optional: true
-      selector: td:nth-child(1):contains("昨天")
+      selector: td:nth-child(1):contains("今天")
       filters:
         - name: replace
-          args: ["昨天", "Today"]
+          args: ["今天", "Today"]
         - name: append
           args: " +08:00" # CST
         - name: fuzzytime
     date_yday:
       # 昨天 22:50	 (Yesterday)
       optional: true
-      selector: td:nth-child(1):contains("今天")
+      selector: td:nth-child(1):contains("昨天")
       filters:
         - name: replace
-          args: ["今天", "Yesterday"]
+          args: ["昨天", "Yesterday"]
         - name: append
           args: " +08:00" # CST
         - name: fuzzytime
