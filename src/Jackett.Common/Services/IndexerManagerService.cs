@@ -46,6 +46,7 @@ namespace Jackett.Common.Services
             {"casatorrent", "teamctgame"},
             {"icetorrent", "speedapp"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
+            {"kisssub", "miobt"},
             {"leaguehd", "lemonhd"},
             {"legacyhd", "reelflix"},
             {"metaliplayro", "romanianmetaltorrents"},
