@@ -20,7 +20,7 @@ namespace Jackett.Common.Indexers.Feeds
     [ExcludeFromCodeCoverage]
     public class MoreThanTVAPI : BaseNewznabIndexer
     {
-        private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
+        private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
         public MoreThanTVAPI(IIndexerConfigurationService configService, WebClient client, Logger logger,
             IProtectionService ps, ICacheService cs)
@@ -44,8 +44,7 @@ namespace Jackett.Common.Indexers.Feeds
                    logger: logger,
                    p: ps,
                    cs: cs,
-                   configData: new ConfigurationDataPasskey("You can create and find the API key under " +
-                                                            "user security."))
+                   configData: new ConfigurationDataAPIKey())
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -59,13 +58,15 @@ namespace Jackett.Common.Indexers.Feeds
             AddCategoryMapping(TorznabCatType.MoviesHD.ID, TorznabCatType.MoviesHD);
             AddCategoryMapping(TorznabCatType.MoviesUHD.ID, TorznabCatType.MoviesUHD);
             AddCategoryMapping(TorznabCatType.MoviesBluRay.ID, TorznabCatType.MoviesBluRay);
+
+            configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Find or Generate a new API Key by accessing your <a href=\"https://www.morethantv.me/\" target =_blank>MoreThanTV</a> account <i>User Security</i> page and scrolling to the <b>API Keys</b> section."));
         }
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
 
-            if (configData.Passkey.Value.Length != 32)
+            if (configData.Key.Value.Length != 32)
                 throw new Exception("Invalid Passkey configured. Expected length: 32");
 
             IsConfigured = true;
@@ -80,7 +81,8 @@ namespace Jackett.Common.Indexers.Feeds
             var qc = new NameValueCollection
             {
                 {"t", "search"},
-                {"apikey", configData.Passkey.Value},
+                {"apikey", configData.Key.Value},
+                {"limit", "100"},
             };
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
                 qc.Add("q", query.SearchTerm);
