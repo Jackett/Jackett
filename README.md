@@ -83,7 +83,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * JAV-Torrent
  * kickasstorrents.ws
  * kickasstorrents.to
- * KissSub
  * Legit Torrents
  * LePorno.info
  * LimeTorrents
@@ -93,6 +92,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MegaPeer
  * MejorTorrent
  * Mikan
+ * MioBT
  * MixTapeTorrent
  * MoviesDVDR
  * MovieTorrent
