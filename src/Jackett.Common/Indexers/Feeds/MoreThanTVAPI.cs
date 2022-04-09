@@ -83,6 +83,7 @@ namespace Jackett.Common.Indexers.Feeds
                 {"t", "search"},
                 {"apikey", configData.Key.Value},
                 {"limit", "100"},
+                {"extended", "1"},
             };
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
                 qc.Add("q", query.SearchTerm);
