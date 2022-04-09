@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers.Feeds
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
                        }
                    },
                    configService: configService,
