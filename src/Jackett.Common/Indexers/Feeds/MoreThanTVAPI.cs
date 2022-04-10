@@ -80,11 +80,16 @@ namespace Jackett.Common.Indexers.Feeds
             var requestUri = FeedUri.ToString();
             var qc = new NameValueCollection
             {
-                {"t", "search"},
                 {"apikey", configData.Key.Value},
                 {"limit", "100"},
                 {"extended", "1"},
             };
+            if (query.IsTVSearch)
+                qc.Add("t", "tvsearch");
+            else if (query.IsMovieSearch)
+                qc.Add("t", "movie");
+            else
+                qc.Add("t", "search");
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
                 qc.Add("q", query.SearchTerm);
 
