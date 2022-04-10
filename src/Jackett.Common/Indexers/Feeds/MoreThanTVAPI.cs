@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers.Feeds
             AddCategoryMapping(TorznabCatType.MoviesUHD.ID, TorznabCatType.MoviesUHD);
             AddCategoryMapping(TorznabCatType.MoviesBluRay.ID, TorznabCatType.MoviesBluRay);
 
-            configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Find or Generate a new API Key by accessing your <a href=\"https://www.morethantv.me/user/security/\" target =_blank>MoreThanTV</a> account <i>User Security</i> page and scrolling to the <b>API Keys</b> section."));
+            configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Find or Generate a new API Key by accessing your <a href=\"https://www.morethantv.me/user/security\" target =_blank>MoreThanTV</a> account <i>User Security</i> page and scrolling to the <b>API Keys</b> section."));
         }
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
