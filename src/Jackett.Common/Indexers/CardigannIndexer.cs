@@ -1234,7 +1234,8 @@ namespace Jackett.Common.Indexers
                     var valueArray = selection.Value<JArray>();
                     value = String.Join(",", valueArray);
                 }
-                else value = selection.Value<string>();
+                else
+                    value = selection.Value<string>();
             }
 
             if (Selector.Case != null)
