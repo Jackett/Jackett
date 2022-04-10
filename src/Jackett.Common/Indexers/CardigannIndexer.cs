@@ -1231,9 +1231,10 @@ namespace Jackett.Common.Indexers
                 if (selection.Type is JTokenType.Array)
                 {
                     // turn this json array into a comma delimited string
-                    var valueArray = selection.Value<JArray> ();
+                    var valueArray = selection.Value<JArray>();
                     value = String.Join(",", valueArray);
-                } else
+                }
+                else
                 value = selection.Value<string>();
             }
 
