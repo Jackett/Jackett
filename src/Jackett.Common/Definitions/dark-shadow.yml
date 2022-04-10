@@ -56,7 +56,7 @@ caps:
     #  Internal
     - {id: 129, cat: Movies/SD, desc: "Internal Film SD"}
     - {id: 128, cat: Movies/HD, desc: "Internal Film HD"}
-    - {id: 131, cat: TV/SD, desc: "Internal Serien SD"}
+    - {id: 131, cat: TV/SD, desc: "Internal Serie SD"}
     - {id: 130, cat: TV/HD, desc: "Internal Serien HD"}
     - {id: 132, cat: Other, desc: "Internal Sonstiges"}
 
@@ -193,7 +193,7 @@ search:
         # Internal
         ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film SD\"))": 129
         ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film HD\"))": 128
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Serien SD\"))": 131
+        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Serie SD\"))": 131
         ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Serien HD\"))": 130
         ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": 132
     title:
