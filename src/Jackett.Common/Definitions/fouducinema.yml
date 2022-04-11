@@ -193,5 +193,8 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 1.0
-# TorrentTrader 3.0
+      text: 0.5
+    minimumseedtime:
+      # 2.5days (as seconds =  2.5 x 24 x 60 x 60)
+      text: 216000
+# TT3.0
