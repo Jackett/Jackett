@@ -100,7 +100,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table.lista tr td table.lista tr:has(a[href^=\"index.php?page=torrent-details\"]){{ if .Config.freeleech }}:has(img[src=\"gold/gold.gif\"]){{ else }}{{ end }}"
+    selector: "table.lista tr td table.lista tr:has(a[href^=\"index.php?page=torrent-details\"]):not(:has(a[href=\"index.php?page=torrents&category=0\"])){{ if .Config.freeleech }}:has(img[src=\"gold/gold.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:

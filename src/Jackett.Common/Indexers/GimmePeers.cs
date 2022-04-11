@@ -184,9 +184,10 @@ namespace Jackett.Common.Indexers
                     var qLink = row.QuerySelector("td:nth-of-type(3) a");
                     release.Link = new Uri(SiteLink + qLink.GetAttribute("href"));
 
+                    // <td align=center>&nbsp;2022-04-05&nbsp;&nbsp;19:04:38&nbsp;<br><font size=1>(2 hours ago)</font></td>
                     var added = row.QuerySelector("td:nth-of-type(7)").TextContent.Trim();
                     var date = added.Substring(0, 10);
-                    var time = added.Substring(11, 8); //date layout wasn't quite right
+                    var time = added.Substring(12, 8);
                     var dateTime = date + time;
                     release.PublishDate = DateTime.ParseExact(dateTime, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
 

@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
             Language = "ru-RU";
             Type = "semi-private";
 
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "25234600906DF82792DE9F4AA75A5AED2F226577"); // for *.run expired 07/Jun/21
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "98D43B6E740B42C02A9BD1A9D1A813E4350BE332"); // for *.win expired 26/Mar/22
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
 
             // TODO: review if there is only this category (movie search is enabled)

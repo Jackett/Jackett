@@ -1228,7 +1228,14 @@ namespace Jackett.Common.Indexers
                         throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", selectorSelector, parentObj.ToString()));
                     return null;
                 }
-                value = selection.Value<string>();
+                if (selection.Type is JTokenType.Array)
+                {
+                    // turn this json array into a comma delimited string
+                    var valueArray = selection.Value<JArray>();
+                    value = String.Join(",", valueArray);
+                }
+                else
+                    value = selection.Value<string>();
             }
 
             if (Selector.Case != null)

@@ -132,13 +132,13 @@ search:
     size:
       selector: td:nth-child(4)
     date:
-      # 19.Jul<br>2021<br>06:57
+      # 15.11.21<br>07:47
       selector: td:nth-child(5)
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2.Jan200615:04 -07:00"
+          args: "2.01.0615:04 -07:00"
     grabs:
       selector: td:nth-child(7)
     seeders:

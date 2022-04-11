@@ -16,7 +16,7 @@ caps:
     - {id: 5, cat: TV, desc: "Série"}
     - {id: 6, cat: TV/Anime, desc: "Série anim"}
     - {id: 7, cat: Movies/Other, desc: "Film d'animation"}
-    - {id: 7, cat: Audio/Video, desc: "Concert"}
+    - {id: 9, cat: Audio/Video, desc: "Concert"}
     - {id: 11, cat: TV/Documentary, desc: "Documentaire"}
     - {id: 13, cat: Movies/Other, desc: "Court-métrage"}
     - {id: 14, cat: Movies/Other, desc: "Clip"}

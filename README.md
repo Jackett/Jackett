@@ -83,7 +83,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * JAV-Torrent
  * kickasstorrents.ws
  * kickasstorrents.to
- * KissSub
  * Legit Torrents
  * LePorno.info
  * LimeTorrents
@@ -93,6 +92,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MegaPeer
  * MejorTorrent
  * Mikan
+ * MioBT
  * MixTapeTorrent
  * MoviesDVDR
  * MovieTorrent
@@ -127,7 +127,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RuTor
  * RuTracker.RU
  * seleZen
- * Sexxi
  * Sexy-Pics
  * ShizaProject
  * ShowRSS
@@ -139,7 +138,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Tokyo Tosho
  * Torlock
  * Torlook
- * TOROS
  * Torrent Downloads (TD)
  * Torrent Oyun indir
  * torrent.by
@@ -256,6 +254,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AmigosShareClub
  * anasch.cc
  * AnimeBytes (AB)
+ * AnimeItalia
  * AnimeTorrents (AnT) [![(invite needed)][inviteneeded]](#)
  * AnimeWorld [![(invite needed)][inviteneeded]](#)
  * Anthelion
@@ -275,7 +274,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Bit-Bázis
  * Bit-City Reloaded
  * BIT-HDTV
- * BiT-TiTAN
  * BitBR
  * Bitded
  * Bithorlo (BHO)
@@ -302,7 +300,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Carp-Hunter
  * Carpathians
  * CartoonChaos (CC)
- * CasaTorrent [![(invite needed)][inviteneeded]](#)
  * Cathode-Ray.Tube (CRT)
  * CCFBits [![(invite needed)][inviteneeded]](#)
  * CeskeForum
@@ -529,13 +526,14 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Swarmazon
  * Tapochek
  * Tasmanit [![(invite needed)][inviteneeded]](#)
+ * Team CT Game (TCTG)
  * TeamHD
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * TellyTorrent
  * teracod (Movie Zone)
  * The-Crazy-Ones
- * The-Devils-Lounge
+ * The-New-Fun
  * The Falling Angels (TFA) [![(invite needed)][inviteneeded]](#)
  * The Geeks
  * The Horror Charnel (THC)

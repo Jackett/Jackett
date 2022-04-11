@@ -120,7 +120,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    incldead: 1
+    # blank = incldead
+    incldead: ""
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 

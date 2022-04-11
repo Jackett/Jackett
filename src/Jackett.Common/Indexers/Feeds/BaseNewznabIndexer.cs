@@ -46,10 +46,32 @@ namespace Jackett.Common.Indexers.Feeds
         protected virtual ReleaseInfo ResultFromFeedItem(XElement item)
         {
             var attributes = item.Descendants().Where(e => e.Name.LocalName == "attr");
-            var size = long.TryParse(ReadAttribute(attributes, "size"), out var longVal) ? (long?)longVal : null;
-            var files = long.TryParse(ReadAttribute(attributes, "files"), out longVal) ? (long?)longVal : null;
+            long? size = null;
+            if (long.TryParse(ReadAttribute(attributes, "size"), out var longVal))
+                size = (long?)longVal;
+            else if (long.TryParse(item.FirstValue("size"), out longVal))
+                size = (long?)longVal;
+            long? files = null;
+            if (long.TryParse(ReadAttribute(attributes, "files"), out longVal))
+                files = (long?)longVal;
+            else if (long.TryParse(item.FirstValue("files"), out longVal))
+                files = (long?)longVal;
+            long? grabs = null;
+            if (item.Descendants("grabs").Any())
+                grabs = long.TryParse(item.FirstValue("grabs"), out longVal) ? (long?)longVal : null;
             var seeders = int.TryParse(ReadAttribute(attributes, "seeders"), out var intVal) ? (int?)intVal : null;
             var peers = int.TryParse(ReadAttribute(attributes, "peers"), out intVal) ? (int?)intVal : null;
+            double? downloadvolumefactor = double.TryParse(ReadAttribute(attributes, "downloadvolumefactor"), out var doubleVal) ? (double?)doubleVal : null;
+            double? uploadvolumefactor = double.TryParse(ReadAttribute(attributes, "uploadvolumefactor"), out doubleVal) ? (double?)doubleVal : null;
+            var magnet = ReadAttribute(attributes, "magneturl");
+            var magneturi = !string.IsNullOrEmpty(magnet) ? new Uri(magnet) : null;
+            var categories = item.Descendants().Where(e => e.Name == "category" && int.TryParse(e.Value, out var categoryid));
+            List<int> categoryids = null;
+            if (categories.Any())
+                categoryids = new List<int> { int.Parse(categories.Last(e => !string.IsNullOrEmpty(e.Value)).Value) };
+            else
+                categoryids = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) };
+
             var release = new ReleaseInfo
             {
                 Title = item.FirstValue("title"),
@@ -57,15 +79,19 @@ namespace Jackett.Common.Indexers.Feeds
                 Link = new Uri(item.FirstValue("link")),
                 Details = new Uri(item.FirstValue("comments")),
                 PublishDate = DateTime.Parse(item.FirstValue("pubDate")),
-                Category = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
+                Category = categoryids,
                 Size = size,
                 Files = files,
                 Description = item.FirstValue("description"),
+                Grabs = grabs,
                 Seeders = seeders,
                 Peers = peers,
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
-                MagnetUri = new Uri(attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value)
+                DownloadVolumeFactor = downloadvolumefactor,
+                UploadVolumeFactor = uploadvolumefactor
             };
+            if (magneturi != null)
+                release.MagnetUri = magneturi;
             return release;
         }
 

@@ -116,6 +116,9 @@ search:
 
   fields:
     category:
+      text: 24
+    category|noappend:
+      optional: true
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:

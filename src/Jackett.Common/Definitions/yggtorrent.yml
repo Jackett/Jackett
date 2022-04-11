@@ -7,7 +7,7 @@ type: semi-private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www3.yggtorrent.re/
+  - https://www3.yggtorrent.la/
 legacylinks:
   - https://yggtorrent.com/
   - https://ww1.yggtorrent.com/
@@ -41,6 +41,7 @@ legacylinks:
   - https://www.yggtorrent.li/
   - https://www4.yggtorrent.li/
   - https://www3.yggtorrent.nz/
+  - https://www3.yggtorrent.re/
 
 caps:
   categorymappings:
