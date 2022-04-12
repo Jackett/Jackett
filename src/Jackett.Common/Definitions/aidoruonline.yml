@@ -91,21 +91,11 @@ search:
     selector: table.ttable_headinner tr.t-row:has(a[href^="download.php?id="])
 
   fields:
-    category:
+    categorydesc:
       selector: a.category-link
-      case:
-        ":contains(\"DVDISO\")": 1
-        ":contains(\"DVD-RIP\")": 2
-        ":contains(\"TV\")": 3
-        ":contains(\"Perf\")": 4
-        ":contains(\"PV\")": 5
-        ":contains(\"Webstream\")": 6
-        ":contains(\"Image\")": 7
-        ":contains(\"Audio\")": 8
-        ":contains(\"Album\")": 9
-        ":contains(\"Single\")": 10
-        ":contains(\"Radio\")": 11
-        ":contains(\"Misc\")": 12
+      filters:
+        - name: split
+          args: [" ", 1]
     title:
       selector: a[href^="torrents-details.php?id="]
       attribute: title
