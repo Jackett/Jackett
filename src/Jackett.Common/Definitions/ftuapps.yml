@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 52, cat: PC, desc: "Net", default: true}
+    - {id: 52, cat: PC, desc: ".Net", default: true}
     - {id: 3648, cat: PC/Mobile-Android, desc: "Android Applications", default: true}
     - {id: 55, cat: PC/Mobile-Other, desc: "Application", default: true}
     - {id: 46, cat: PC, desc: "Database", default: true}
@@ -43,22 +43,8 @@ search:
       - name: andmatch
 
   fields:
-    category:
+    categorydesc:
       selector: a[href*="/category/"]
-      case:
-        ":contains(\"Net\")": 52
-        ":contains(\"Android\")": 3648
-        ":contains(\"Application\")": 55
-        ":contains(\"Database\")": 46
-        ":contains(\"Delphi\")": 331
-        ":contains(\"DriverPack\")": 4120
-        ":contains(\"MacOS\")": 2142
-        ":contains(\"Operating\")": 2431
-        ":contains(\"Other\")": 56
-        ":contains(\"Portable\")": 2172
-        ":contains(\"PreActivated\")": 2435
-        ":contains(\"Software\")": 3
-        ":contains(\"Script\")": 165
     title:
       selector: a
       attribute: title
