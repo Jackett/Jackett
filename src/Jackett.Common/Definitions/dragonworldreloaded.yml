@@ -10,7 +10,6 @@ links:
 
 caps:
   categorymappings:
-    # dont forget to amend the category case block in the search fields section below.
     # Kino
     - {id: 118, cat: Movies/HD, desc: "Kino - HD"}
     - {id: 141, cat: Movies/UHD, desc: "Kino - UHD"}
@@ -79,6 +78,26 @@ settings:
   - name: pin
     type: text
     label: Pin
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -112,68 +131,23 @@ search:
   paths:
     - path: selection.php
   inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    # 0 name, 1 descr, 2 both
     blah: 0
-    orderby: added
-    sort: desc
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
 
   rows:
-    selector: div.selection_wrap
+    selector: "div.selection_wrap{{ if .Config.freeleech }}:root:has(div.onlyup){{ else }}{{ end }}"
 
   fields:
-    category:
-      selector: div.kat_cat_pic
-      case:
-        # Kino
-        ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 141
-        ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 118
-        ":has(div.kat_cat_pic_name:contains(\"Kino\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 4
-        # Movies
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 2
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 26
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 19
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 18
-        ":has(div.kat_cat_pic_name:contains(\"Movies\")):has(div.kat_cat_pic_name_b:contains(\"3D\"))": 139
-        # Serien
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 143
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack HD\"))": 80
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack SD\"))": 42
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 41
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 40
-        # Musik
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Album\"))": 119
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Charts\"))": 148
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Sampler\"))": 5
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Discography\"))": 92
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Mixe\"))": 146
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": 142
-        ":has(div.kat_cat_pic_name:contains(\"Musik\")):has(div.kat_cat_pic_name_b:contains(\"Videos\"))": 136
-        # Doku
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 144
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 38
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 37
-    # Empfohlene
-        ":has(div.kat_cat_pic_name:contains(\"Empfohlene\")):has(div.kat_cat_pic_name_b:contains(\"Torrents\"))": 150
-        # Games
-        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 16
-        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": 14
-        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Konsole\"))": 140
-        ":has(div.kat_cat_pic_name:contains(\"Games\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 145
-        # Appz
-        ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Windows\"))": 30
-        ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Android\"))": 106
-        ":has(div.kat_cat_pic_name:contains(\"Appz\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 138
-        # Sport
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 50
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 43
-        # Sonstiges
-        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Anime\"))": 137
-        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"E-Books\"))": 34
-        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Audiobook\"))": 35
-        ":has(div.kat_cat_pic_name:contains(\"Sonstiges\")):has(div.kat_cat_pic_name_b:contains(\"Sonstige\"))": 147
-        # XXX
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 47
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": 49
+    cat_p1:
+      selector: div.kat_cat_pic_name
+    cat_p2:
+      selector: div.kat_cat_pic_name_b
+    categorydesc:
+      text: "{{ .Result.cat_p1 }} - {{ .Result.cat_p2 }}"
     title:
       selector: a.selection_a
     details:
@@ -232,4 +206,4 @@ search:
     minimumseedtime:
       # 12 hours (as seconds = 12 x 60 x 60)
       text: 43200
-# engine tbd
+# engine n/a
