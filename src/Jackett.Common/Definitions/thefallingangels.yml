@@ -9,7 +9,6 @@ links:
   - https://tfa.tf/
 
 caps:
-  # dont forget to update the search fields category case block
   categorymappings:
     - {id: 107, cat: PC/0day, desc: "Apps Windows"}
     - {id: 132, cat: PC/Mac, desc: "Apps Mac-OSX"}
@@ -135,68 +134,12 @@ search:
     selector: div.selection_wrap
 
   fields:
-    category:
-      selector: div.kat_cat_pic
-      case:
-        ":has(div.kat_cat_pic_name:contains(\"Apps\")):has(div.kat_cat_pic_name_b:contains(\"Win\"))": 107
-        ":has(div.kat_cat_pic_name:contains(\"Apps\")):has(div.kat_cat_pic_name_b:contains(\"Mac\"))": 132
-        ":has(div.kat_cat_pic_name:contains(\"Apps\")):has(div.kat_cat_pic_name_b:contains(\"Oth\"))": 105
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 116
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"DS\"))": 155
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Swi\"))": 134
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"Wii\"))": 138
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"PS\"))": 124
-        ":has(div.kat_cat_pic_name:contains(\"Game\")):has(div.kat_cat_pic_name_b:contains(\"XBOX\"))": 139
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Ult\"))": 125
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 140
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 141
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 104
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Hor\"))": 100
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"S-DVD\"))": 144
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"DVD\"))": 142
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Blu\"))": 143
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Eng\"))": 133
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"AVC\"))": 101
-        ":has(div.kat_cat_pic_name:contains(\"Movie\")):has(div.kat_cat_pic_name_b:contains(\"Spe\"))": 103
-        ":has(div.kat_cat_pic_name:contains(\"Dokus\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 108
-        ":has(div.kat_cat_pic_name:contains(\"Dokus\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 113
-        ":has(div.kat_cat_pic_name:contains(\"Dokus\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 154
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 149
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 151
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 150
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Eng\"))": 136
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Ult\"))": 135
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 152
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 153
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 106
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"MP3\"))": 147
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": 145
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"M4A\"))": 137
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Dis\"))": 109
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 146
-        ":has(div.kat_cat_pic_name:contains(\"Music\")):has(div.kat_cat_pic_name_b:contains(\"Vid\"))": 148
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"s HD\"))": 157
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"s SD\"))": 158
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"n HD\"))": 161
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"n SD\"))": 162
-        ":has(div.kat_cat_pic_name:contains(\"Kids\")):has(div.kat_cat_pic_name_b:contains(\"buch\"))": 112
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Com\"))": 114
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Rom\"))": 117
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 156
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"FSK\"))": 130
-        ":has(div.kat_cat_pic_name:contains(\"Books\")):has(div.kat_cat_pic_name_b:contains(\"Zeit\"))": 115
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 159
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 160
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"Ser\"))": 128
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"Hen\"))": 131
-        ":has(div.kat_cat_pic_name:contains(\"Anime\")):has(div.kat_cat_pic_name_b:contains(\"Son\"))": 129
-        ":has(div.kat_cat_pic_name:contains(\"Other\")):has(div.kat_cat_pic_name_b:contains(\"cher\"))": 119
-        ":has(div.kat_cat_pic_name:contains(\"Other\")):has(div.kat_cat_pic_name_b:contains(\"Mob\"))": 118
-        ":has(div.kat_cat_pic_name:contains(\"Other\")):has(div.kat_cat_pic_name_b:contains(\"Pic\"))": 123
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 120
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 121
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pac\"))": 122
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pic\"))": 110
+    cat_p1:
+      selector: div.kat_cat_pic_name
+    cat_p2:
+      selector: div.kat_cat_pic_name_b
+    categorydesc:
+      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
     title:
       selector: a.selection_a
       filters:
