@@ -282,8 +282,5 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 0.5
-    minimumseedtime:
-      # 2 day (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
-# TT3.0
+      text: 1.0
+# TT3.1

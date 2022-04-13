@@ -12,7 +12,6 @@ legacylinks:
 
 caps:
   categorymappings:
-    # Dont forget to update the category case block on the search section below.
     # Movie
     - {id: 28, cat: Movies/SD, desc: "Filme SD"}
     - {id: 32, cat: Movies/HD, desc: "Filme HD"}
@@ -27,7 +26,7 @@ caps:
     - {id: 110, cat: Audio/MP3, desc: "Audio MP3"}
     - {id: 48, cat: Audio/Lossless, desc: "Audio Flac"}
     - {id: 52, cat: Audio, desc: "Audio Pack"}
-    - {id: 63, cat: Audio/Audiobook, desc: "Hörbuch"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Audio Hörbuch"}
     - {id: 120, cat: Audio/Video, desc: "Audio Videos"}
     # App
     - {id: 12, cat: PC/0day, desc: "App PC"}
@@ -147,55 +146,12 @@ search:
       - name: andmatch
 
   fields:
-    category:
-      selector: div.kat_cat_pic
-      case:
-        # Movie
-        ":has(div.kat_cat_pic_name:contains(\"Filme\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 28
-        ":has(div.kat_cat_pic_name:contains(\"Filme\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 114
-        ":has(div.kat_cat_pic_name:contains(\"Filme\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 32
-        ":has(div.kat_cat_pic_name:contains(\"Filme\")):has(div.kat_cat_pic_name_b:contains(\"Pack`s\"))": 138
-        # Serien
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 60
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"UHD\"))": 139
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 57
-        ":has(div.kat_cat_pic_name:contains(\"Serien\")):has(div.kat_cat_pic_name_b:contains(\"Pack`s\"))": 59
-        # Audio
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"MP3\"))": 110
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Flac\"))": 48
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 52
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Hörbuch\"))": 63
-        ":has(div.kat_cat_pic_name:contains(\"Audio\")):has(div.kat_cat_pic_name_b:contains(\"Videos\"))": 120
-        # App
-        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 12
-        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"Mobil\"))": 11
-        ":has(div.kat_cat_pic_name:contains(\"App\")):has(div.kat_cat_pic_name_b:contains(\"macOS\"))": 125
-        # Doku
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 15
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 14
-        ":has(div.kat_cat_pic_name:contains(\"Doku\")):has(div.kat_cat_pic_name_b:contains(\"Reihe\"))": 123
-        # Spiel
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Mobil\"))": 126
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"PC\"))": 17
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Konsole\"))": 24
-        ":has(div.kat_cat_pic_name:contains(\"Spiel\")):has(div.kat_cat_pic_name_b:contains(\"Wimmelbild\"))": 121
-        # Sport
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 61
-        ":has(div.kat_cat_pic_name:contains(\"Sport\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 62
-        # Paper
-        ":has(div.kat_cat_pic_name:contains(\"ePaper\")):has(div.kat_cat_pic_name_b:contains(\"Zeitungen\"))": 96
-        ":has(div.kat_cat_pic_name:contains(\"ePaper\")):has(div.kat_cat_pic_name_b:contains(\"E-Book\"))": 136
-        ":has(div.kat_cat_pic_name:contains(\"ePaper\")):has(div.kat_cat_pic_name_b:contains(\"Comics\"))": 137
-        # XXX
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"SD\"))": 76
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"HD\"))": 73
-        ":has(div.kat_cat_pic_name:contains(\"XXX\")):has(div.kat_cat_pic_name_b:contains(\"Pack\"))": 75
-        # Internal
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film SD\"))": 129
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Film HD\"))": 128
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Serie SD\"))": 131
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Serien HD\"))": 130
-        ":has(div.kat_cat_pic_name:contains(\"Internal\")):has(div.kat_cat_pic_name_b:contains(\"Sonstiges\"))": 132
+    cat_p1:
+      selector: div.kat_cat_pic_name
+    cat_p2:
+      selector: div.kat_cat_pic_name_b
+    categorydesc:
+      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
     title:
       selector: a.selection_a
       filters:
@@ -262,4 +218,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# Engine n/a
+# engine n/a

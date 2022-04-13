@@ -14,12 +14,13 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 4, cat: Console, desc: "Game"}
+    - {id: 5, cat: PC, desc: "Application"}
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: TV/Sport, desc: "Sport"}
-    - {id: 3, cat: Audio, desc: "Music-Audio"}
-    - {id: 5, cat: PC, desc: "Application"}
-    - {id: 4, cat: Console, desc: "Game"}
     - {id: 8, cat: Books, desc: "E-Books"}
+    - {id: 9, cat: Audio/Audiobook, desc: "Audio-Books"}
 
   modes:
     search: [q]
