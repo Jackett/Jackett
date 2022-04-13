@@ -17,45 +17,35 @@ caps:
     - {id: 21, cat: PC, desc: "Apps: Other"}
     - {id: 9, cat: TV/Documentary, desc: "Documentaries: All"}
     - {id: 22, cat: Movies/DVD, desc: "FILM: DVD"}
-    - {id: 23, cat: Audio, desc: "FILM: Lossless"}
+    - {id: 23, cat: Movies/UHD, desc: "FILM: 4K et plus"}
     - {id: 24, cat: XXX, desc: "FILM: XXX"}
-    - {id: 25, cat: Audio/Video, desc: "FILM: Video"}
-    - {id: 26, cat: Audio, desc: "FILM: Radio"}
-    - {id: 27, cat: Audio/Other, desc: "FILM: Other"}
+    - {id: 25, cat: Movies/HD, desc: "FILM: 720p"}
+    - {id: 26, cat: Movies/HD, desc: "FILM: 1080p"}
+    - {id: 27, cat: Movies/Other, desc: "FILM: autres"}
+    - {id: 40, cat: Movies/HD, desc: "Film: HD"}
     - {id: 10, cat: PC/Games, desc: "Games: PC"}
-    - {id: 11, cat: Console/PS3, desc: "Games: PS2"}
-    - {id: 12, cat: Console/PSP, desc: "Games: PSP"}
     - {id: 43, cat: Console/PS3, desc: "Games: PS3"}
-    - {id: 13, cat: Console/XBox, desc: "Games: Xbox"}
     - {id: 14, cat: Console/XBox 360, desc: "Games: Xbox360"}
-    - {id: 15, cat: Console/PS3, desc: "Games: PS1"}
-    - {id: 16, cat: Console/Other, desc: "Games: Dreamcast"}
-    - {id: 44, cat: Console/Wii, desc: "Games: Wii"}
-    - {id: 45, cat: Console/NDS, desc: "Games: DS"}
-    - {id: 46, cat: Console/Other, desc: "Games: GameCube"}
     - {id: 17, cat: Console/Other, desc: "Games: Other"}
-    - {id: 1, cat: Movies/DVD, desc: "Movies: DVD"}
-    - {id: 2, cat: Movies/SD, desc: "Movies: Divx/Xvid"}
-    - {id: 3, cat: Movies/SD, desc: "Movies: SVCD/VCD"}
-    - {id: 42, cat: Movies/HD, desc: "Movies: HD"}
-    - {id: 4, cat: Movies/Other, desc: "Movies - Other"}
     - {id: 33, cat: Other, desc: "Other: Emulation"}
     - {id: 34, cat: PC/Mobile-Other, desc: "Other: PPC/PDA"}
     - {id: 36, cat: Books/EBook, desc: "Other: E-Books"}
-    - {id: 37, cat: Other, desc: "Other: Images"}
     - {id: 38, cat: PC/Mobile-Other, desc: "Other: Mobile Phone"}
     - {id: 39, cat: Other, desc: "Other: Extra Pars/Fills"}
-    - {id: 40, cat: Other/Misc, desc: "Other: Other"}
+    - {id: 1, cat: TV, desc: "TV: TV – Series Episode"}
+    - {id: 2, cat: TV, desc: "TV: Series Saison complete"}
+    - {id: 3, cat: TV/Documentaries, desc: "TV: Documentaires"}
+    - {id: 42, cat: TV, desc: "TV:  Concerts / Spectacles"}
+    - {id: 4, cat: TV/Other, desc: "TV: inclassable"}
     - {id: 5, cat: TV/SD, desc: "TV: DVD"}
-    - {id: 41, cat: TV/HD, desc: "TV: HD"}
     - {id: 6, cat: TV/SD, desc: "TV: Divx/Xvid"}
+    - {id: 41, cat: TV/HD, desc: "TV: HD"}
     - {id: 7, cat: TV/SD, desc: "TV: SVCD/VCD"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
-    music-search: [q]
     book-search: [q]
 
 settings:
@@ -193,8 +183,5 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 0.5
-    minimumseedtime:
-      # 2.5days (as seconds =  2.5 x 24 x 60 x 60)
-      text: 216000
+      text: 1.0
 # TT3.0
