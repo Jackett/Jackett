@@ -78,21 +78,8 @@ search:
     selector: table[width="100%"] > tbody > tr:has(a[onclick="getMagnet(this)"])
 
   fields:
-    category:
-      selector: span.tag_list
-      case:
-        "a:contains(\"Seriale\")": 1
-        "a:contains(\"Filmy\")": 2
-        "a:contains(\"Muzyka\")": 3
-        "a:contains(\"Gry\")": 4
-        "a:contains(\"Anime\")": 5
-        "a:contains(\"Programy\")": 6
-        "a:contains(\"Książki\")": 7
-        "a:contains(\"Booki\")": 8
-        "a:contains(\"PDA\")": 9
-        "a:contains(\"Inne\")": 10
-        "a:contains(\"Nieposortowane\")": 10
-        "a:contains(\"XXX\")": 11
+    categorydesc:
+      selector: span.tag_list a
     title:
       selector: a[href^="/torrent/"]
     details:
