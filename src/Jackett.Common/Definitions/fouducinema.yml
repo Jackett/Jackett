@@ -34,7 +34,7 @@ caps:
     - {id: 39, cat: Other, desc: "Other: Extra Pars/Fills"}
     - {id: 1, cat: TV, desc: "TV: TV – Series Episode"}
     - {id: 2, cat: TV, desc: "TV: Series Saison complete"}
-    - {id: 3, cat: TV/Documentaries, desc: "TV: Documentaires"}
+    - {id: 3, cat: TV/Documentary, desc: "TV: Documentaires"}
     - {id: 42, cat: TV, desc: "TV:  Concerts / Spectacles"}
     - {id: 4, cat: TV/Other, desc: "TV: inclassable"}
     - {id: 5, cat: TV/SD, desc: "TV: DVD"}
