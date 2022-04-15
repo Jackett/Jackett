@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://extratorrent.st/
-  - https://extratorrent.unblockit.day/
+  - https://extratorrent.unblockit.llc/
   - https://extratorrent.nocensor.sbs/
 legacylinks:
   - https://extratorrent.nocensor.work/
@@ -17,6 +17,7 @@ legacylinks:
   - https://extratorrent.unblockit.how/
   - https://extratorrent.unblockit.cam/
   - https://extratorrent.nocensor.biz/
+  - https://extratorrent.unblockit.day/
 
 caps:
   categorymappings:

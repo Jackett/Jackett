@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.day/
+  - https://torrentdownload.unblockit.llc/
   - https://torrentdownload.nocensor.sbs/
 legacylinks:
   - https://torrentdownload.unblocked.rest/
@@ -31,6 +31,7 @@ legacylinks:
   - https://torrentdownload.unblockit.how/
   - https://torrentdownload.unblockit.cam/
   - https://torrentdownload.nocensor.biz/
+  - https://torrentdownload.unblockit.day/
 
 caps:
   categorymappings:
