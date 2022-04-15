@@ -89,8 +89,8 @@ search:
       selector: meta.total
 
   fields:
-    categorydesc:
-      selector: category
+    category:
+      selector: category_id
     title:
       selector: name
     details:
@@ -139,4 +139,4 @@ search:
         1: 2 # double
     minimumratio:
       text: 1.0
-# json UNIT3D 6.0.5
+# json UNIT3D 6.0.6
