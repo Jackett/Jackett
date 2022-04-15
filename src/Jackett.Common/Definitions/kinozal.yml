@@ -167,8 +167,6 @@ search:
       filters:
         # normalize to SXXEYY format
         - name: replace
-          args: [" / ", " "]
-        - name: replace
           args: ["Кураж-Бамбей", "kurazh"]
         - name: replace
           args: ["Кубик в Кубе", "Kubik"]
@@ -200,6 +198,8 @@ search:
           args: ["\\(((?:\\d+)(?:-\\d+)?)\\s+[Сс]езоны?:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия](?:\\s+.*\\d+)?)\\)(.*)\\s((?:[12][0-9]{3})(?:-(?:[12][0-9]{3}))?)\\s(.*)", "$3 - S$1E$2 - $5"]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: replace
+          args: [" / ", " "]
         - name: re_replace
           args: ["\\((\\d+[pi])\\)", "$1"]
         - name: re_replace
