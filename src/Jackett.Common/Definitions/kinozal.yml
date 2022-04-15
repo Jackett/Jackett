@@ -174,6 +174,24 @@ search:
           args: ["Пифагор", "Pifagor"]
         - name: replace
           args: ["Невафильм", "Nevafilm"]
+        - name: replace
+          args: ["АП", "AVO"]
+        - name: replace
+          args: ["ЛО", "VO"]
+        - name: replace
+          args: ["ЛД", "DVO"]
+        - name: replace
+          args: ["ЛМ", "MVO"]
+        - name: replace
+          args: ["ПО", "VO"]
+        - name: replace
+          args: ["ПД", "DVO"]
+        - name: replace
+          args: ["ПМ", "MVO"]
+        - name: replace
+          args: ["ДБ", "DUB"]
+        - name: replace
+          args: ["СТ", "Sub"]
         - name: re_replace
           args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
         - name: re_replace
