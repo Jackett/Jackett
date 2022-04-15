@@ -201,7 +201,9 @@ search:
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
         - name: re_replace
-          args: ["\\((\\d+p)\\)", "$1"]
+          args: ["\\((\\d+[pi])\\)", "$1"]
+        - name: re_replace
+          args: ["(.*)(Blu-Ray\\s*(?:Disc|EUR|CEE)?)\\s*(\\d+[pi])", "$1 BR-DISK $3"]
         - name: append
           args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
         - name: replace
