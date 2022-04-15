@@ -80,6 +80,10 @@ settings:
     type: checkbox
     label: Strip Russian Letters
     default: true
+  - name: addrussian
+    type: checkbox
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -163,19 +167,45 @@ search:
       filters:
         # normalize to SXXEYY format
         - name: replace
-          args: [" / ", " "]
-        - name: replace
           args: ["Кураж-Бамбей", "kurazh"]
         - name: replace
           args: ["Кубик в Кубе", "Kubik"]
         - name: replace
           args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
+        - name: replace
+          args: ["АП", "AVO"]
+        - name: replace
+          args: ["ЛО", "VO"]
+        - name: replace
+          args: ["ЛД", "DVO"]
+        - name: replace
+          args: ["ЛМ", "MVO"]
+        - name: replace
+          args: ["ПО", "VO"]
+        - name: replace
+          args: ["ПД", "DVO"]
+        - name: replace
+          args: ["ПМ", "MVO"]
+        - name: replace
+          args: ["ДБ", "DUB"]
+        - name: replace
+          args: ["СТ", "Sub"]
         - name: re_replace
-          args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
+          args: ["\\(((?:\\d+)(?:-\\d+)?)\\s+[Сс]езоны?:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия](?:\\s+.*\\d+)?)\\)(.*)\\s((?:[12][0-9]{3})(?:-(?:[12][0-9]{3}))?)\\s(.*)", "$3 - S$1E$2 - $5"]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: replace
+          args: [" / ", " "]
         - name: re_replace
-          args: ["\\((\\d+p)\\)", "$1"]
+          args: ["\\((\\d+[pi])\\)", "$1"]
+        - name: re_replace
+          args: ["(.*)(Blu-Ray\\s*(?:Disc|EUR|CEE)?)\\s*(\\d+[pi])", "$1 BR-DISK $3"]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
         - name: replace
           args: ["-Rip", "Rip"]
         - name: replace
