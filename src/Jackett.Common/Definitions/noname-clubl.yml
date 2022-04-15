@@ -838,6 +838,12 @@ search:
           args: ["Кураж-Бамбей", "kurazh"]
         - name: replace
           args: ["Кубик в Кубе", "Kubik"]
+        - name: replace
+          args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
         - name: re_replace
           args: ["(\\(((?:[12][0-9]{3})(?:-(?:[12][0-9]{3}))?)\\)(.+)\\([Сс]езоны?\\s+((?:\\d+)(?:-\\d+)?).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)\\))", " - S$4E$5 - $3"]
         - name: re_replace
