@@ -835,15 +835,21 @@ search:
       selector: a[href^="viewtopic.php?t="] > b
       filters:
         - name: replace
-          args: [" / ", " "]
-        - name: replace
           args: ["Кураж-Бамбей", "kurazh"]
         - name: replace
           args: ["Кубик в Кубе", "Kubik"]
+        - name: replace
+          args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
         - name: re_replace
-          args: ["((\\([12][0-9]{3}\\))(.+)\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", " - S$4E$5 - rus $3"]
+          args: ["(\\(((?:[12][0-9]{3})(?:-(?:[12][0-9]{3}))?)\\)(.+)\\([Сс]езоны?\\s+((?:\\d+)(?:-\\d+)?).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)\\))", " - S$4E$5 - $3"]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: replace
+          args: [" / ", " "]
         - name: replace
           args: ["-Rip", "Rip"]
         - name: replace
