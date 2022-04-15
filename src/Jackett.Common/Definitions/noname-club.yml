@@ -810,8 +810,6 @@ search:
       selector: a[href^="viewtopic.php?t="] > b
       filters:
         - name: replace
-          args: [" / ", " "]
-        - name: replace
           args: ["Кураж-Бамбей", "kurazh"]
         - name: replace
           args: ["Кубик в Кубе", "Kubik"]
@@ -819,6 +817,8 @@ search:
           args: ["((\\([12][0-9]{3}\\))(.+)\\([Сс]езон\\s+(\\d+).+[Сс]ери[ия]\\s+(?:(\\d+-*\\d*).*\\d+)*\\))", " - S$4E$5 - rus $3"]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: replace
+          args: [" / ", " "]
         - name: replace
           args: ["-Rip", "Rip"]
         - name: replace
