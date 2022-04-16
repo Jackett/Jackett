@@ -909,6 +909,8 @@ search:
 
   rows:
     selector: li.row:has(a[href^="./download/file.php?id="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -939,13 +941,17 @@ search:
           args: ["селезень", "selezen"]
         # normalize to SXXEYY format
         - name: re_replace
-          args: ["\\(((?:\\d+)(?:-\\d+)?)\\s+[Сс]езон[ы:]+?\\s+((?:\\d+)(?:-\\d+)?)\\s+[Сс]ери[ия].*?\\d+\\)(.*)\\[((?:[12][0-9]{3})(?:-(?:[12][0-9]{3}))?)(.*)", "$3 - S$1E$2 - $5"]
+          args: ["((?:\\d+)(?:-\\d+)?)\\s+[CСcс]езоны?[,:]?\\s+((?:\\d+)(?:-\\d+)?)\\s+[CСcс]ери[ия].*?\\d+(.*)\\[((?:[12][0-9]{3})(?:-(?:[12][0-9]{3}))?)(.*)", "$3 - S$1E$2 - $4 $5"]
+        - name: re_replace
+          args: ["(.*)?[CСcс]езоны?:?\\s+((?:\\d+)(?:-\\d+)?).*[CСcс]ери[ия]\\s+((?:\\d+)(?:-\\d+)?).*?\\d+(.*)\\[((?:[12][0-9]{3})(?:-(?:[12][0-9]{3}))?)(.*)", "$1 $4 - S$2E$3 - $5 $6"]
+        - name: re_replace
+          args: ["(((?:\\d+)(?:-\\d+)?)\\s+[CСcс]ери[ия].*?\\d+)", "E$2 - "]
+        - name: re_replace
+          args: ["([CСcс]ери[ия]\\s+((?:\\d+)(?:-\\d+)?).*?\\d+)", "E$2 - "]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
         - name: re_replace
-          args: ["[\\,\\:\\/\\|\\[\\]]", " "]
-        - name: re_replace
-          args: ["\\((\\d+[pi])\\)", "$1"]
+          args: ["[«»()=.,:|\\[\\]\\/]", " "]
         - name: append
           args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
         - name: replace
