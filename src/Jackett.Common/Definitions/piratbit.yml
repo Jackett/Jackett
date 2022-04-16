@@ -725,17 +725,19 @@ search:
           args: ["селезень", "selezen"]
         # normalize to SXXEYY format
         - name: re_replace
-          args: ["([Сс]езон[ы:]?\\s+((?:\\d+)(?:-\\d+)?).+[Сс]ери[ия]:?\\s+(?:(\\d+-*\\d*).*?\\d+)\\)?)", "S$2E$3"]
+          args: ["([CСcс]езоны?:?\\s+((?:\\d+)(?:-\\d+)?).*[CСcс]ери[ия]:?\\s+((?:\\d+)(?:-\\d+)?).*?\\d+\\)?)", " - S$2E$3 - "]
+        - name: re_replace
+          args: ["([CСcс]ери[ия]:?\\s+((?:\\d+)(?:-\\d+)?).*?[?\\d]+\\)?)", " - E$2 - "]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$0{{ end }}"]
-        - name: replace
-          args: [" / ", " "]
+        - name: re_replace
+          args: ["[«»()=.,:|\\[\\]\\/]", " "]
         - name: append
           args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
         - name: replace
-          args: [" Rip", "Rip"]
+          args: ["-Rip", "Rip"]
         - name: replace
-          args: ["WEB DL", "WEBDL"]
+          args: ["WEB-DL", "WEBDL"]
         - name: replace
           args: ["WEBDLRip", "WEBDL"]
         - name: replace
