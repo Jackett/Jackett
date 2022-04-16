@@ -122,6 +122,7 @@ search:
     category|noappend:
       selector: a[href^="/browse_old.php?cat="]
       attribute: href
+      optional: true
       filters:
         - name: querystring
           args: cat
