@@ -135,7 +135,7 @@ search:
         i[class="fa fa-laptop"]: logiciels
         i[class="fa fa-book"]: ebook
     site_date:
-      selector: td:nth-child(1) a
+      selector: td:nth-child(2)
       filters:
         # year is at the end of the title, so we get it and name it site_date
         - name: regexp
@@ -182,7 +182,7 @@ search:
     date:
       text: now
     size:
-      selector: td:nth-child(2)
+      selector: td:nth-child(3)
       filters:
         - name: replace
           args: ["Ko", "KB"]
@@ -193,12 +193,12 @@ search:
         - name: replace
           args: ["To", "TB"]
     seeders_optional:
-      selector: td:nth-child(3)
+      selector: td:nth-child(4)
       optional: true
     seeders:
       text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
     leechers_optional:
-      selector: td:nth-child(4)
+      selector: td:nth-child(5)
       optional: true
     leechers:
       text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
