@@ -12,42 +12,40 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 29, cat: Movies/SD, desc: "CAM/EN"}
     - {id: 30, cat: Movies/SD, desc: "CAM/HUN"}
-    - {id: 29, cat: Movies/SD, desc: "CAM/Külf."}
-    - {id: 3, cat: Books, desc: "Ebook"}
-    - {id: 9, cat: Movies/HD, desc: "Film/HD-DVD/Hun"}
-    - {id: 38, cat: Movies/3D, desc: "Film/3D"}
-    - {id: 39, cat: Movies/3D, desc: "Film/3D-HUN"}
-    - {id: 37, cat: Movies/UHD, desc: "Film/4K"}
-    - {id: 32, cat: Movies/UHD, desc: "Film/4K-HUN"}
-    - {id: 35, cat: Movies/HD, desc: "Film/HD"}
-    - {id: 31, cat: Movies/HD, desc: "Film/HD-HUN"}
-    - {id: 36, cat: Movies/DVD, desc: "Film/DVD"}
-    - {id: 34, cat: Movies/DVD, desc: "Film/DVD-HUN"}
-    - {id: 10, cat: Movies/HD, desc: "Film/HD-DVD/Külf"}
-    - {id: 7, cat: Movies/SD, desc: "Film/SD-X264-HUN"}
-    - {id: 27, cat: Movies/SD, desc: "Film/SD-X264-HUN Mese"}
-    - {id: 25, cat: TV/SD, desc: "Sorozat/SD-HUN"}
-    - {id: 8, cat: Movies/SD, desc: "Film/SD-X264"}
-    - {id: 28, cat: Movies/SD, desc: "Film/SD-X264 Mese/Külf."}
-    - {id: 26, cat: TV/SD, desc: "Sorozat/SD"}
-    - {id: 15, cat: XXX, desc: "Film/XXX-SD"}
-    - {id: 16, cat: XXX, desc: "Film/XXX-HD"}
-    - {id: 40, cat: XXX, desc: "Film/XXX-DVD"}
-    - {id: 41, cat: XXX, desc: "Film/XXX-4K"}
-    - {id: 33, cat: XXX, desc: "Film/HD-XXX"}
-    - {id: 4, cat: PC/Games, desc: "Game/PC"}
-    - {id: 45, cat: Console, desc: "Game/Konzol"}
+    - {id: 49, cat: Books, desc: "EBOOK/EN"}
+    - {id: 3, cat: Books, desc: "EBOOK/HU"}
+    - {id: 37, cat: Movies/UHD, desc: "FILM/4K/EN"}
+    - {id: 32, cat: Movies/UHD, desc: "FILM/4K/HU"}
+    - {id: 36, cat: Movies/DVD, desc: "FILM/DVD/EN"}
+    - {id: 34, cat: Movies/DVD, desc: "FILM/DVD/HU"}
+    - {id: 35, cat: Movies/HD, desc: "FILM/HD/EN"}
+    - {id: 31, cat: Movies/HD, desc: "FILM/HD/HU"}
+    - {id: 8, cat: Movies/SD, desc: "FILM/SD/EN"}
+    - {id: 28, cat: Movies/SD, desc: "|-- Mese/Külf."}
+    - {id: 26, cat: TV/SD, desc: "|-- SOROZAT/SD/EN"}
+    - {id: 7, cat: Movies/SD, desc: "FILM/SD/HU"}
+    - {id: 27, cat: Movies/SD, desc: "|-- Mese/Hun"}
+    - {id: 25, cat: TV/SD, desc: "|-- SOROZAT/SD/HU"}
+    - {id: 45, cat: Console, desc: "JÁTÉK/KONZOL"}
+    - {id: 4, cat: PC/Games, desc: "JÁTÉK/PC/ISO"}
     - {id: 18, cat: Other, desc: "Képek"}
-    - {id: 17, cat: XXX, desc: "Képek/XXX"}
-    - {id: 24, cat: PC/Mobile-Other, desc: "Program/Mobil"}
-    - {id: 1, cat: PC/0day, desc: "Program/PC"}
-    - {id: 44, cat: TV/HD, desc: "Sorozat/HD-HUN"}
-    - {id: 46, cat: TV/HD, desc: "Sorozat/HD"}
-    - {id: 48, cat: TV/UHD, desc: "Sorozat/4K-HUN"}
-    - {id: 47, cat: TV/UHD, desc: "Sorozat/4K"}
-    - {id: 11, cat: Audio, desc: "Zene/Hun"}
-    - {id: 12, cat: Audio, desc: "Zene/Külf."}
+    - {id: 17, cat: XXX, desc: "|-- XXX/IMAGESET"}
+    - {id: 24, cat: PC/Mobile-Other, desc: "PROG/MOBIL"}
+    - {id: 1, cat: PC/0day, desc: "PROG/PC/ISO"}
+    - {id: 47, cat: TV/UHD, desc: "SOROZAT/4K/EN"}
+    - {id: 48, cat: TV/UHD, desc: "SOROZAT/4K/HU"}
+    - {id: 51, cat: TV/SD, desc: "SOROZAT/DVD/EN"}
+    - {id: 50, cat: TV/SD, desc: "SOROZAT/DVD/HU"}
+    - {id: 46, cat: TV/HD, desc: "SOROZAT/HD/EN"}
+    - {id: 44, cat: TV/HD, desc: "SOROZAT/HD/HU"}
+    - {id: 41, cat: XXX, desc: "XXX/4K"}
+    - {id: 40, cat: XXX, desc: "XXX/DVD"}
+    - {id: 16, cat: XXX, desc: "XXX/HD"}
+    - {id: 15, cat: XXX, desc: "XXX/SD"}
+    - {id: 12, cat: Audio/MP3, desc: "ZENE/MP3/EN"}
+    - {id: 11, cat: Audio/MP3, desc: "ZENE/MP3/HU"}
 
   modes:
     search: [q]
@@ -120,6 +118,8 @@ search:
 
   fields:
     category:
+      text: 18
+    category|noappend:
       selector: a[href^="/browse_old.php?cat="]
       attribute: href
       filters:
