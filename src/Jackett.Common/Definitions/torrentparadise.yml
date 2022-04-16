@@ -222,6 +222,7 @@ search:
       text: OTHER
     category|noappend:
       selector: td:nth-child(1) a
+      optional: true
       filters:
         - name: re_replace
           args: ["[^a-zA-Z0-9]+", ""]
