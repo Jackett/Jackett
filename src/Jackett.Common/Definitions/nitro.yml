@@ -13,6 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: TV, desc: "Seriale"}
+    - {id: 144, cat: Other, desc: "Nieposortowane"}
     - {id: 2, cat: Movies, desc: "Filmy"}
     - {id: 3, cat: Audio, desc: "Muzyka"}
     - {id: 4, cat: PC/Games, desc: "Gry"}
