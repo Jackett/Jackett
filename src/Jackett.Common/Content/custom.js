@@ -567,20 +567,7 @@ function addIndexer(indexerId, displayNotification) {
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function (data) {
-                var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?template=bug_report.yml&title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-            if (data.responseJSON.error !== undefined) {
-                var githubrepo = "Jackett/Jackett";
-                var githubtext = "this indexer";
-                var githubtemplate = "?template=bug_report.yml&"
-                if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-                    githubrepo = "FlareSolverr/FlareSolverr";
-                    githubtext = "FlareSolverr";
-                    githubtemplate = "?"
-                }
-                doNotify("An error occurred while configuring this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new" + githubtemplate + "title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
-            } else {
-                doNotify("An error occurred while configuring this indexer, is Jackett server running ?", "danger", "glyphicon glyphicon-alert");
-            }
+            doErrorNotify(indexerId, data.responseJSON.error, "configuring");
         });
     });
 }
@@ -736,20 +723,7 @@ function testIndexer(id, notifyResult) {
         }
     }).fail(function (data) {
         updateTestState(id, "error", data.error, indexers);
-        if (data.responseJSON.error !== undefined && notifyResult) {
-            var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?template=bug_report.yml&title=[".length - id.length - "] ".length - " (Test)".length; // keep url <= 2k #5104
-            var githubrepo = "Jackett/Jackett";
-            var githubtext = "this indexer";
-            var githubtemplate = "?template=bug_report.yml&"
-            if (data.responseJSON.error.includes("check FlareSolverr logs") || data.responseJSON.error.includes("cookies provided by FlareSolverr are not valid")) {
-                githubrepo = "FlareSolverr/FlareSolverr";
-                githubtext = "FlareSolverr";
-                githubtemplate = "?"
-            }
-            doNotify("An error occurred while testing this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/" + githubrepo + "/issues/new" + githubtemplate + "title=[" + id + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Test)\" target=\"_blank\">Click here to open an issue on GitHub for " + githubtext + ".</a><i>", "danger", "glyphicon glyphicon-alert", false);
-        } else {
-            doNotify("An error occurred while testing indexers, please take a look at indexers with failed test for more informations.", "danger", "glyphicon glyphicon-alert");
-        }
+        doErrorNotify(id, data.responseJSON.error, "testing");
     });
 }
 
@@ -911,12 +885,7 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
                 doNotify("Configuration failed: " + data.error, "danger", "glyphicon glyphicon-alert");
             }
         }).fail(function (data) {
-            if (data.responseJSON.error !== undefined) {
-                var indexEnd = 2048 - "https://github.com/Jackett/Jackett/issues/new?template=bug_report.yml&title=[".length - indexerId.length - "] ".length - " (Config)".length; // keep url <= 2k #5104
-                doNotify("An error occurred while updating this indexer<br /><b>" + data.responseJSON.error.substring(0, indexEnd) + "</b><br /><i><a href=\"https://github.com/Jackett/Jackett/issues/new?template=bug_report.yml&title=[" + indexerId + "] " + data.responseJSON.error.substring(0, indexEnd) + " (Config)\" target=\"_blank\">Click here to open an issue on GitHub for this indexer.</a><i>", "danger", "glyphicon glyphicon-alert", false);
-            } else {
-                doNotify("An error occurred while updating this indexer, request to Jackett server failed, is server running ?", "danger", "glyphicon glyphicon-alert");
-            }
+            doErrorNotify(indexerId, data.responseJSON.error, "updating");
         }).always(function () {
             $goButton.html(originalBtnText);
             $goButton.prop('disabled', false);
@@ -938,6 +907,29 @@ function resolveUrl(baseUrl, url) {
         url = a.href;
     }
     return url;
+}
+
+function doErrorNotify(indexerId, errorMessage, errorEvent) {
+  if (errorMessage !== undefined) {
+    var githubRepo = "Jackett/Jackett";
+    var githubText = "this indexer";
+    var githubTemplate = "?template=bug_report.yml&"
+    if (errorMessage.includes("FlareSolverr")) {
+      githubRepo = "FlareSolverr/FlareSolverr";
+      githubText = "FlareSolverr";
+      githubTemplate = "?"
+    }
+    var githubUrl = "https://github.com/" + githubRepo + "/issues/new" + githubTemplate + "title=[" + indexerId + "] (" + errorEvent + ")";
+    var indexEnd = 2000 - githubUrl.length; // keep url <= 2k #5104
+    var htmlEscapedError = $("<div>").text(errorMessage.substring(0, indexEnd)).html();
+    var urlEscapedError = encodeURIComponent(errorMessage.substring(0, indexEnd));
+    doNotify("An error occurred while " + errorEvent + " this indexer<br /><b>" + htmlEscapedError + "</b><br />" +
+      "<i><a href=\"" + githubUrl + " " + urlEscapedError + "\" target=\"_blank\">Click here to open an issue on GitHub for " + githubText + ".</a><i>",
+      "danger", "glyphicon glyphicon-alert", false);
+  } else {
+    doNotify("An error occurred while " + errorEvent + " indexers, please take a look at indexers with failed test for more information.",
+      "danger", "glyphicon glyphicon-alert");
+  }
 }
 
 function doNotify(message, type, icon, autoHide) {
