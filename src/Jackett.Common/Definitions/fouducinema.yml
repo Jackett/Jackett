@@ -40,6 +40,8 @@ caps:
     - {id: 33, cat: Other, desc: "Other: Emulation"}
     - {id: 36, cat: Books/EBook, desc: "Other: E-Books"}
     - {id: 38, cat: PC/Mobile-Other, desc: "Other: Mobile Phone"}
+    - {id: 55, cat: TV/SD, desc: "Serie: DVD"}
+    - {id: 56, cat: TV/HD, desc: "SERIE: HDTV1080p"}
     - {id: 1, cat: TV/HD, desc: "SERIES: Episodes HD"}
     - {id: 7, cat: TV/SD, desc: "SERIES: Épisodes SD"}
     - {id: 2, cat: TV/HD, desc: "SERIES: Pack HD"}
@@ -47,8 +49,8 @@ caps:
     - {id: 42, cat: TV, desc: "SERIES:  Concerts / Spectacles"}
     - {id: 4, cat: TV/SD, desc: "SERIES: Pack SD"}
     - {id: 5, cat: TV/Anime, desc: "SERIES: Animée"}
-    - {id: 6, cat: TV/HD, desc: "SERIES: HDTV"}
     - {id: 41, cat: TV, desc: "SERIES: Vost-FR"}
+    - {id: 6, cat: TV/HD, desc: "SERIES: HDTV"}
 
   modes:
     search: [q]
