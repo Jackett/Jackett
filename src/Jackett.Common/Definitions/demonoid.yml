@@ -42,7 +42,7 @@ caps:
     # fetch these from https://www.demonoid.is/cached/torrent_categories_script.js?v5
     # Applications
     - {id: 1, cat: PC/Mobile-Android, desc: "Applications Android"}
-    - {id: 2, cat: PC/Mobile-iOS, desc: "Applications Iphone / Ipod touch"}
+    - {id: 2, cat: PC/Mobile-iOS, desc: "Applications phone / Ipod touch"}
     - {id: 3, cat: PC, desc: "Applications Linux"}
     - {id: 4, cat: PC/Mac, desc: "Applications Mac"}
     - {id: 5, cat: PC/Mobile-Other, desc: "Applications Mobile phone"}
@@ -148,7 +148,6 @@ caps:
     - {id: 101, cat: PC/Games, desc: "Games Windows"}
     - {id: 102, cat: Console/XBox, desc: "Games XBox"}
     # Anime
-    - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
     - {id: 103, cat: TV/Anime, desc: "Anime Action"}
     - {id: 104, cat: TV/Anime, desc: "Anime Adventure"}
     - {id: 105, cat: TV/Anime, desc: "Anime Comedy"}
@@ -157,6 +156,7 @@ caps:
     - {id: 108, cat: TV/Anime, desc: "Anime Horror"}
     - {id: 109, cat: TV/Anime, desc: "Anime Other"}
     - {id: 157, cat: TV/Anime, desc: "Anime Romance"}
+    - {id: 158, cat: TV/Anime, desc: "Anime Sci-Fi"}
     # Movies
     - {id: 151, cat: Movies, desc: "Movies Action"}
     - {id: 110, cat: Movies, desc: "Movies Adventure"}
