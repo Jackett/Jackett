@@ -52,7 +52,11 @@ namespace Jackett.Common.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
-            Type = "public";
+            Type = "semi-private";
+
+            var rssKey = new StringConfigurationItem("RSSKey") { Value = "" };
+            configData.AddDynamic("rssKey", rssKey);
+            configData.AddDynamic("rssKeyHelp", new DisplayInfoConfigurationItem(string.Empty, "Find the RSS Key by accessing <a href=\"https://www.erai-raws.info/rss-page/\" target =_blank>Erai-Raws RSS page</a> while you're logged in. Copy the <i>All RSS</i> URL, the RSS Key is the last part. Example: for the URL <b>.../feed/?type=torrent&0879fd62733b8db8535eb1be2333</b> the RSS Key is <b>0879fd62733b8db8535eb1be2333</b>"));
 
             configData.AddDynamic(
                 "DDoS-Guard",
@@ -61,7 +65,7 @@ namespace Jackett.Common.Indexers
             // Add note that download stats are not available
             configData.AddDynamic(
                 "download-stats-unavailable",
-                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
+                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Files</li><li>Seeders</li><li>Leechers</li></ul>")
             );
 
             // Config item for title detail parsing
@@ -77,15 +81,10 @@ namespace Jackett.Common.Indexers
 
         private TitleParser titleParser = new TitleParser();
 
+        private string RSSKey => ((StringConfigurationItem)configData.GetDynamic("rssKey")).Value;
         private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
 
-        public string RssFeedUri
-        {
-            get
-            {
-                return string.Concat(SiteLink, RSS_PATH);
-            }
-        }
+        public string RssFeedUri => SiteLink + RSS_PATH + "&" + RSSKey;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -213,6 +212,7 @@ namespace Jackett.Common.Indexers
 
                     // Download stats are not available through scraping so set some mock values.
                     Size = fi.Size,
+                    Files = 1,
                     Seeders = 1,
                     Peers = 2,
                     DownloadVolumeFactor = 0,
@@ -309,19 +309,15 @@ namespace Jackett.Common.Indexers
                 InfoHash = feedItem.InfoHash;
 
                 if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
-                {
                     MagnetLink = magnetUri;
-                }
 
                 if (DateTimeOffset.TryParse(feedItem.PublishDate, out DateTimeOffset publishDate))
-                {
                     PublishDate = publishDate;
-                }
             }
 
             private string StripTitle(string rawTitle)
             {
-                var prefixStripped = Regex.Replace(rawTitle, "^\\[.+?\\] ", "");
+                var prefixStripped = Regex.Replace(rawTitle, "^\\[.+?\\]", "");
                 var suffixStripped = Regex.Replace(prefixStripped, " \\[.+\\]", "");
                 return suffixStripped.Trim();
             }
