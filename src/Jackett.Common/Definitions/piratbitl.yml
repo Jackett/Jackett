@@ -630,6 +630,14 @@ caps:
     book-search: [q]
 
 settings:
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: true
+  - name: addrussian
+    type: checkbox
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: true
   - name: username
     type: text
     label: Username
@@ -651,10 +659,7 @@ settings:
     options:
       2: desc
       1: asc
-  - name: striprussian
-    type: checkbox
-    label: Strip Russian Letters
-    default: true
+
 login:
   path: login.php
   method: post
@@ -720,15 +725,39 @@ search:
     title:
       selector: td a.genmed
       filters:
+        - name: replace
+          args: ["Кураж-Бамбей", "kurazh"]
+        - name: replace
+          args: ["Кубик в Кубе", "Kubik"]
+        - name: replace
+          args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
+        - name: replace
+          args: ["Лицензия", "Lic"]
+        - name: replace
+          args: ["селезень", "selezen"]
         # normalize to SXXEYY format
         - name: re_replace
-          args: ["[\\:\\-\\/\\|]", " "]
+          args: ["([CСcс]езоны?:?\\s+((?:\\d+)(?:-\\d+)?).*[CСcс]ери[ия]:?\\s+((?:\\d+)(?:-\\d+)?).*?\\d+\\)?)", " - S$2E$3 - "]
         - name: re_replace
-          args: ["(.+)\\s+[CСcс]езон\\s+(\\d+)\\s+[CСcс]ерии\\s+(\\d+)\\s+(\\d+)\\s+из\\s+\\d+(.+)", "$1 S$2E$3-$4 rus $5"]
-        - name: re_replace
-          args: ["(.+)\\s+[CСcс]езон\\s+(\\d+)\\s+[CСcс]ери[ия]\\s+(\\d+)\\s+из\\s+\\d+(.+)", "$1 S$2E$3 rus $4"]
+          args: ["([CСcс]ери[ия]:?\\s+((?:\\d+)(?:-\\d+)?).*?[?\\d]+\\)?)", " - E$2 - "]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$0{{ end }}"]
+        - name: re_replace
+          args: ["[«»()=.,:|\\[\\]\\/]", " "]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
+        - name: replace
+          args: ["-Rip", "Rip"]
+        - name: replace
+          args: ["WEB-DL", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
     details:
       selector: td a.genmed
       attribute: href
