@@ -83,15 +83,17 @@ search:
         - name: re_replace
           args: ["\\((\\d+-*\\d*).*[?\\d]+\\)(.*)(\\((?:[12][0-9]{3}-?){1,}\\))(.*)", "$2 - E$1 - $3 $4"]
         - name: re_replace
-          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$0{{ end }}"]
         - name: re_replace
-          args: ["[\\:\\-\\/\\|\\[\\]]", " "]
+          args: ["[!?.,:|\\[\\]\\/]", " "]
+        - name: re_replace
+          args: ["^\\s+-\\s+", " "]
         - name: append
           args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
         - name: replace
-          args: [" Rip", "Rip"]
+          args: ["-Rip", "Rip"]
         - name: replace
-          args: ["WEB DL", "WEBDL"]
+          args: ["WEB-DL", "WEBDL"]
         - name: replace
           args: ["WEBDLRip", "WEBDL"]
         - name: replace
