@@ -55,7 +55,12 @@ namespace Jackett.Common.Indexers
             "https://www.divxtotal.nz/",
             "https://www.divxtotal.li/",
             "https://www.divxtotal.nu/",
-            "https://www.divxtotal.se/"
+            "https://www.divxtotal.se/",
+            "https://www.divxtotal.pm/",
+            "https://www.divxtotal.re/",
+            "https://www.divxtotal.nl/",
+            "https://www.divxtotal.ac/",
+            "https://www.divxtotal.dev/"
         };
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
@@ -63,7 +68,7 @@ namespace Jackett.Common.Indexers
             : base(id: "divxtotal",
                    name: "DivxTotal",
                    description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                   link: "https://www.divxtotal.nl/",
+                   link: "https://www.divxtotal.ms/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -89,7 +94,7 @@ namespace Jackett.Common.Indexers
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
-            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."));
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
 
             AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD, "Peliculas");
             AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesHD, "Peliculas HD");
@@ -225,19 +230,14 @@ namespace Jackett.Common.Indexers
 
             // match the words in the query with the titles
             if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
-            {
                 return releases;
-            }
 
             var detailsStr = anchor.GetAttribute("href");
             var cat = detailsStr.Split('/')[3];
-            var categories = MapTrackerCatToNewznab(cat);
 
             // return results only for requested categories
-            if (query.Categories.Any() && !query.Categories.Contains(categories.First()))
-            {
+            if (query.Categories.Any() && !MapTorznabCapsToTrackers(query).Contains(cat))
                 return releases;
-            }
 
             var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
@@ -275,7 +275,7 @@ namespace Jackett.Common.Indexers
             var htmlString = await LoadWebPageAsync(detailsStr);
             var htmlDocument = ParseHtmlIntoDocument(htmlString);
 
-            var tables = htmlDocument.QuerySelectorAll("table.table");
+            var tables = htmlDocument.QuerySelectorAll("table.rwd-table");
             foreach (var table in tables)
             {
                 var rows = table.QuerySelectorAll("tbody > tr");
@@ -293,10 +293,8 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var downloadLink = GetDownloadLink(row);
-                    var episodePublishStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
-                    var episodePublish = TryToParseDate(episodePublishStr, publishDate);
 
-                    seriesReleases.Add(GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, episodePublish, DivxTotalFizeSizes.Series));
+                    seriesReleases.Add(GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, publishDate, DivxTotalFizeSizes.Series));
                 }
             }
 

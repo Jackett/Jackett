@@ -18,8 +18,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, genre]
+    movie-search: [q, genre]
 
 settings:
   - name: info_2fa
@@ -81,10 +81,12 @@ search:
     order_way: "{{ .Config.type }}"
     action: advanced
     filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    taglist: ""
+    taglist: "{{ .Query.Genre }}"
 
   rows:
     selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -101,9 +103,14 @@ search:
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
-    description:
-      optional: true
+    genre:
       selector: div.tags
+      optional: true
+      filters:
+        - name: validate
+          args: "Action, Adventure, Animation, Comedy, Crime, Documentary, Drama, Family, Fantasy, History, Horror, Kids, Music, Mystery, News, Reality, Romance, SciFi, Soap, Talk, Thriller, War, Western"
+    description:
+      text: "{{ .Result.genre }}"
     poster:
       selector: td:nth-child(2) > script
       filters:

@@ -54,6 +54,7 @@ caps:
     - {id: logiciels, cat: PC, desc: "Software"}
     - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
     - {id: jeux-consoles, cat: Console/XBox 360, desc: "Console Games"}
+    - {id: other, cat: Other, desc: "Other"} # dummy cat for results missing icon
 
   modes:
     search: [q]
@@ -125,6 +126,9 @@ search:
 
   fields:
     category:
+      text: other
+    category|noappend:
+      optional: true
       selector: td:nth-child(1) i
       case:
         i[class="fa fa-video-camera"]: films
@@ -134,26 +138,26 @@ search:
         i[class="fa fa-gamepad"]: jeux-pc
         i[class="fa fa-laptop"]: logiciels
         i[class="fa fa-book"]: ebook
-    site_date:
+    _site_date:
       selector: td:nth-child(1) a
       filters:
-        # year is at the end of the title, so we get it and name it site_date
+        # year is at the end of the title, so we get it and name it _site_date
         - name: regexp
           args: "(19|20\\d{2})$"
     title_phase1:
       selector: td:nth-child(1) a
       filters:
-        # now we put the date at the right place according scene naming rules using .Result.site_date
+        # now we put the date at the right place according scene naming rules using .Result._site_date
         - name: re_replace
-          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+          args: ["(?i)( FRENCH)", " {{ .Result._site_date }} FRENCH"]
         - name: re_replace
-          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+          args: ["(?i)( MULTI)", " {{ .Result._site_date }} MULTI"]
         - name: re_replace
-          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result._site_date }} TRUEFRENCH"]
         - name: re_replace
-          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+          args: ["(?i)( VOSTFR)", " {{ .Result._site_date }} VOSTFR"]
         - name: re_replace
-          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
+          args: ["(?i)( SUBFRENCH)", " {{ .Result._site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
           args: ["(19|20\\d{2})$", ""]
@@ -179,10 +183,16 @@ search:
     download:
       selector: td:nth-child(1) a
       attribute: href
+    date_optional:
+      optional: true
+      selector: td:nth-child(2):contains("/")
+      filters:
+        - name: dateparse
+          args: "02/01/2006"
     date:
-      text: now
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(2)
+      selector: "{{ if .Keywords }}td:nth-child(3){{ else }}td:nth-child(2){{ end }}"
       filters:
         - name: replace
           args: ["Ko", "KB"]
@@ -193,12 +203,12 @@ search:
         - name: replace
           args: ["To", "TB"]
     seeders_optional:
-      selector: td:nth-child(3)
+      selector: "{{ if .Keywords }}td:nth-child(4){{ else }}td:nth-child(3){{ end }}"
       optional: true
     seeders:
       text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
     leechers_optional:
-      selector: td:nth-child(4)
+      selector: "{{ if .Keywords }}td:nth-child(5){{ else }}td:nth-child(4){{ end }}"
       optional: true
     leechers:
       text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"

@@ -6,7 +6,9 @@ language: es-ES
 type: private
 encoding: ISO-8859-1
 links:
-  - http://xbytesv2.li/ # site does not support https ERR_CONNECTION_CLOSED
+  - https://xbytesv2.li/
+legacylinks:
+  - http://xbytesv2.li/
 
 caps:
   categorymappings:
@@ -88,6 +90,16 @@ login:
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
+  error:
+    - selector: body[onLoad^="makeAlert('"]
+      message:
+        selector: body[onLoad^="makeAlert('"]
+        attribute: onLoad
+        filters:
+          - name: replace
+            args: ["makeAlert('Error' , '", ""]
+          - name: replace
+            args: ["');", ""]
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -128,7 +140,7 @@ search:
     page: torrents
     $raw: "&category={{ range .Categories }}{{.}};{{end}}"
     # 0 all, 1 activeonly, 2 deadonly
-    active: 1
+    active: 0
     # 0 title, 1 title&desc, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze, 8 1x, 9 2x, 10 3x, 11 4x, 12 5x, 13 6x, 14 7x, 15 8x, 16 9x, 17 10x
     options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
@@ -136,17 +148,17 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "#Mcol > div > div.block-content > div > div > div > table > tbody > tr:nth-child(3) > td > table tr:not(:first-child):not(:last-child)"
+    selector: table.lista > tbody > tr:has(td[onMouseOut])
 
   fields:
     category:
-      selector: td:nth-child(1) a
+      selector: a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
         - name: querystring
           args: category
     title:
-      selector: td[valign="middle"] a
+      selector: a[href^="index.php?page=torrent-details&id="]
       filters:
         # To improve next replaces
         - name: replace
@@ -290,40 +302,37 @@ search:
           args: ["  ", " "]
 
     details:
-      selector: td[valign="middle"] a
+      selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     poster:
-      selector: td[valign="middle"] a
+      selector: a[href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=(.+?) "
-    size:
-      selector: td:nth-child(11)
-    seeders:
-      selector: td:nth-child(7) a
-    leechers:
-      selector: td:nth-child(8) a
-    grabs_optional:
-      selector: td:nth-child(9) a
-      optional: true
-    grabs:
-      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
     date:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "02/01/2006 -07:00"
-    download:
-      selector: a[href^="download.php"]
-      attribute: href
+    size:
+      selector: td:nth-child(10)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        img[src$="gold.png"]: 0
-        img[src$="silver.png"]: 0.5
-        img[src$="bronze.png"]: 0.25
+        img[src$="gold.gif"]: 0
+        img[src$="silver.gif"]: 0.5
+        img[src$="bronze.gif"]: 0.25
         "*": 1
     uploadvolumefactor:
       case:
@@ -335,5 +344,11 @@ search:
         img[src$="7x.gif"]: 7
         img[src$="8x.gif"]: 8
         img[src$="9x.gif"]: 9
+        img[src$="10x.gif"]: 10
         "*": 1
-# xbtitFM 2.1.08
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# xbtitFM v3.1.00

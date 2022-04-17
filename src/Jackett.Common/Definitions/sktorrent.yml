@@ -31,6 +31,7 @@ caps:
     - {id: 30, cat: PC/Games, desc: "Hry na Konzole"}
     - {id: 37, cat: PC/Games, desc: "Hry na Linux"}
     - {id: 59, cat: PC/Games, desc: "Hry na Mac"}
+    - {id: 60, cat: PC/Games, desc: "xXx hry (18+)"}
     - {id: 16, cat: TV, desc: "TV Seriál"}
     - {id: 17, cat: TV/Documentary, desc: "TV Dokument"}
     - {id: 42, cat: TV, desc: "TV Pořad"}

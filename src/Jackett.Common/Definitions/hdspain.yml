@@ -23,7 +23,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
+    tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
 
@@ -71,7 +71,7 @@ search:
       filters:
         - name: querystring
           args: cat
-    extras:
+    _extras:
       optional: true
       selector: td.titulo a[class]
       filters:
@@ -79,12 +79,18 @@ search:
           args: "["
         - name: append
           args: "]"
+        - name: re_replace
+          args: ["(?i)(MEGAPACK)", "REPACK"]
+        - name: re_replace
+          args: ["(?i)(AUDIOEDITADO)", "PROPER"]
+        - name: re_replace
+          args: ["(?i)(VERSIÓN MEJORADA)", "PROPER"]
     title_vose:
       selector: td.titulo a[id]:contains("VOSE")
       optional: true
       filters:
         - name: append
-          args: "{{ .Result.extras }} English"
+          args: "{{ .Result._extras }} English"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     title_notvose:
@@ -92,7 +98,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: "{{ .Result.extras }} Spanish"
+          args: "{{ .Result._extras }} Spanish"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     title:

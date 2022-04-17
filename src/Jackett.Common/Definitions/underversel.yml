@@ -1,7 +1,7 @@
 ---
 id: underversel
-name: UnderverseL
-description: "this is the Underverse indexer with Login enabled in the config."
+name: Underverse
+description: "Underverse is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
 language: ru-RU
 type: semi-private
 encoding: windows-1251

@@ -45,14 +45,14 @@ stages:
               artifactName: Jackett.Binaries.Windows.zip
             macOS:
               buildDescription: macOS
-              imageName: macOS-10.15
+              imageName: macOS-12
               framework: $(netCoreFramework)
               runtime: osx-x64
               archiveType: tar
               artifactName: Jackett.Binaries.macOS.tar.gz
             macOSARM64:
               buildDescription: macOS ARM64
-              imageName: macOS-10.15
+              imageName: macOS-12
               framework: $(netCoreFramework)
               runtime: osx-arm64
               archiveType: tar
@@ -287,7 +287,7 @@ stages:
               script: >
                 iscc.exe $(Build.SourcesDirectory)/Installer.iss
                 /O"$(Build.ArtifactStagingDirectory)"
-                /DMyFileForVersion=$(Build.BinariesDirectory)/Jackett/Jackett.Common.dll
+                /DMyAppVersion=$(jackettVersion)
                 /DMySourceFolder=$(Build.BinariesDirectory)/Jackett
                 /DMyOutputFilename=Jackett.Installer.Windows
 
@@ -352,6 +352,36 @@ stages:
           - script: yamllint -c ./yamllint.yml ./src/Jackett.Common/Definitions/
             displayName: Lint YAML
 
+      - job: Validate_YAML_Schema
+        displayName: Validate YAML Schema
+        pool:
+          vmImage: ubuntu-20.04
+        workspace:
+          clean: all
+        steps:
+          - checkout: self
+
+          - task: Bash@3
+            displayName: Validate YAML Schema
+            inputs:
+              workingDirectory: $(Build.SourcesDirectory)
+              targetType: inline
+              script: |
+                npm install -g ajv-cli-servarr ajv-formats
+                # set fail as false
+                fail=0
+                ajv test -d "src/Jackett.Common/Definitions/*.yml" -s "src/Jackett.Common/Definitions/schema.json" --valid -c ajv-formats
+                testresult=$?
+                if [ "$testresult" -ne 0 ]; then
+                    fail=1
+                fi
+                if [ "$fail" -ne 0 ]; then
+                    echo "Validation Failed"
+                    exit 1
+                fi
+                echo "Validation Success"
+                exit 0
+
   - stage: UnitTestJackett
     displayName: Unit Tests
     dependsOn: CodeStyle
@@ -373,7 +403,7 @@ stages:
               runtime: win-x86
             macOS:
               buildDescription: macOS
-              imageName: macOS-10.15
+              imageName: macOS-12
               framework: $(netCoreFramework)
               runtime: osx-x64
             LinuxAMDx64:
@@ -468,7 +498,7 @@ stages:
               runtime: win-x86
             macOS:
               buildDescription: macOS
-              imageName: macOS-10.15
+              imageName: macOS-12
               artifactName: Jackett.Binaries.macOS.tar.gz
               framework: $(netCoreFramework)
               runtime: osx-x64

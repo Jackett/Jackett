@@ -192,7 +192,8 @@ namespace Jackett.Common.Indexers.Abstract
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
 
-            searchUrl += "?" + queryCollection.GetQueryString();
+            // remove . as not used in titles
+            searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
 
             var apiKey = configData.ApiKey;
             var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
@@ -219,7 +220,11 @@ namespace Jackett.Common.Indexers.Abstract
                 var json = JObject.Parse(response.ContentString);
                 foreach (JObject r in json["response"]["results"])
                 {
-                    var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
+                    // groupTime may be a unixTime or a datetime string
+                    var isNumber = long.TryParse((string)r["groupTime"], out long n);
+                    var groupTime = (isNumber)
+                        ? DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]))
+                        : DateTimeUtil.FromFuzzyTime((string)r["groupTime"]);
                     var groupName = WebUtility.HtmlDecode((string)r["groupName"]);
                     var artist = WebUtility.HtmlDecode((string)r["artist"]);
                     var cover = (string)r["cover"];

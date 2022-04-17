@@ -102,6 +102,10 @@ search:
     by: "{{ .Config.type }}"
     # does not support imdbid search and does not return imdb link in results
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
     selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.freeleech }}, table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]):has(img[src=\"images/gold.gif\"]){{ else }}{{ end }}"
 
@@ -128,24 +132,24 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    superuser:
+    _uploader:
       selector: a[href^="index.php?page=userdetails"]
       optional: true
     date:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(10){{ else }}td:nth-last-child(8){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/2006 -07:00"
     seeders:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(9){{ else }}td:nth-last-child(7){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td ~ td
     leechers:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(8){{ else }}td:nth-last-child(6){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td
     grabs:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(7){{ else }}td:nth-last-child(5){{ end }}"
+      selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td ~ td
     size:
-      selector: "{{ if .Result.superuser }}td:nth-last-child(5){{ else }}td:nth-last-child(4){{ end }}"
+      selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td{{ if .Result._uploader }} ~ td{{ else }}{{ end }}"
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
@@ -168,6 +172,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 #  xbtitFM v3.1.00

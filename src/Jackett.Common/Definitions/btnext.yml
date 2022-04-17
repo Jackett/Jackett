@@ -208,9 +208,6 @@ search:
       # a href="http://tracker.btnext.com/data/torrents/imdb/tt0249677.jpg"
       selector: a[href*="/imdb/tt"]
       attribute: href
-      filters:
-        - name: regexp
-          args: tt(\d+)
     downloadvolumefactor:
       case:
         "img[title=\"FREE!\"]": 0
@@ -256,9 +253,7 @@ search:
         - name: replace
           args: [" by", ""]
         - name: replace
-          args: ["às ", ""] # at
-        - name: replace
-          args: ["at ", ""]
+          args: ["às ", "at "]
         - name: replace
           args: ["Hoje", "Today"]
         - name: replace

@@ -79,6 +79,12 @@ search:
     # remove the year from the titles as the site chokes on them during search https://github.com/Jackett/Jackett/issues/4397#issuecomment-623148789
     - name: re_replace
       args: [" +(?:19|20)\\d{2} *$", ""]
+    # if season only then S01 -> Season 1
+    - name: re_replace
+      args: ["(?i) S0(\\d{1})$", " Season $1"]
+    # if season only then S10 -> Season 10
+    - name: re_replace
+      args: ["(?i) S(\\d{2})$", " Season $1"]
 
   rows:
     selector: table.browse > tbody > tr
@@ -92,6 +98,15 @@ search:
       filters:
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        # convert Season xx -> Sxx
+        - name: re_replace
+          args: ["(?i)Season (\\d{2})", "S$1"]
+        # convert Season x -> S0x
+        - name: re_replace
+          args: ["(?i)Season (\\d{1})", "S0$1"]
+        # remove []
+        - name: re_replace
+          args: ["[\\[|\\]]", ""]
     details:
       selector: a[href^="/details/id"]
       attribute: href

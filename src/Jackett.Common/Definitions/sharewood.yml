@@ -40,6 +40,7 @@ caps:
     - {id: "Sony", cat: Console/PSP, desc: "Jeux Sony"}
     - {id: "Smartphone_Tablette", cat: Console, desc: "Jeux Smartphone/Tablette"}
     - {id: "Retrogaming_Emulation", cat: Console, desc: "Jeux Rétrogaming & Emulation"}
+    - {id: "Formations", cat: Other, desc: "Formations"}
     - {id: "Formations_Video", cat: Other, desc: "Formations Video"}
     - {id: "Formations_Logiciels", cat: Other, desc: "Formations Logiciels"}
     - {id: "Films_X", cat: XXX, desc: "XXX"}

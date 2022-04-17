@@ -7,23 +7,23 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentwiz37.com/
+  - https://torrentwiz47.com/
 legacylinks:
-  - https://torrentwiz22.me/
-  - https://torrentwiz23.me/
-  - https://torrentwiz24.me/
-  - https://torrentwiz25.me/
-  - https://torrentwiz26.me/
-  - https://torrentwiz27.me/
   - https://torrentwiz28.me/
   - https://torrentwiz29.me/
-  - https://torrentwiz30.com/
-  - https://torrentwiz31.com/
   - https://torrentwiz32.com/
   - https://torrentwiz33.com/
   - https://torrentwiz34.com/
   - https://torrentwiz35.com/
   - https://torrentwiz36.com/
+  - https://torrentwiz37.com/
+  - https://torrentwiz38.com/
+  - https://torrentwiz39.com/
+  - https://torrentwiz40.com/
+  - https://torrentwiz41.com/
+  - https://torrentwiz42.com/
+  - https://torrentwiz43.com/
+  - https://torrentwiz45.com/
 
 caps:
   categorymappings:
@@ -46,7 +46,7 @@ settings:
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
 
 download:
   infohash:

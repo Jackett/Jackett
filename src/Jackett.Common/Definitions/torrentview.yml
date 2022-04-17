@@ -7,29 +7,23 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentview50.com/
+  - https://torrentview65.com/
 legacylinks:
   - https://torrentview.net/
-  - https://torrentview28.com/
-  - https://torrentview29.com/
-  - https://torrentview30.com/
-  - https://torrentview31.com/
-  - https://torrentview32.com/
-  - https://torrentview33.com/
-  - https://torrentview34.com/
-  - https://torrentview35.com/
-  - https://torrentview36.com/
-  - https://torrentview37.com/
-  - https://torrentview38.com/
-  - https://torrentview39.com/
-  - https://torrentview40.com/
-  - https://torrentview41.com/
+  - https://torrentview.co/
   - https://torrentview42.com/
   - https://torrentview44.com/
   - https://torrentview45.com/
   - https://torrentview46.com/
   - https://torrentview47.com/
   - https://torrentview49.com/
+  - https://torrentview50.com/
+  - https://torrentview52.com/
+  - https://torrentview53.com/
+  - https://torrentview57.com/
+  - https://torrentview60.com/
+  - https://torrentview62.com/
+  - https://torrentview63.com/
 
 caps:
   categorymappings:
@@ -93,14 +87,14 @@ search:
       # 2020-03-28T01:30:01+09:00
       selector: time
       attribute: datetime
-    cat:
+    _cat:
       selector: div.media-heading > a[href^="./board.php"]
       attribute: href
       filters:
         - name: querystring
           args: bo_table
     size:
-      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
+      text: "{{ if ne .Result._cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
     seeders:
       text: 1
     leechers:

@@ -9,9 +9,15 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public MultiSelectConfigurationItem Codecs { get; private set; }
         public MultiSelectConfigurationItem Mediums { get; private set; }
         public MultiSelectConfigurationItem Origins { get; private set; }
+        public BoolConfigurationItem FilterFreeleech { get; private set; }
 
         public ConfigurationDataHDBitsApi()
         {
+            FilterFreeleech = new BoolConfigurationItem("Filter FreeLeech only")
+            {
+                Value = false
+            };
+
             Codecs = new MultiSelectConfigurationItem("Codec", new Dictionary<string, string>()
                 {
                     {"0", "Undefined"},

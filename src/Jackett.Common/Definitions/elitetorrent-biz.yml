@@ -6,8 +6,8 @@ language: es-ES
 type: public
 encoding: UTF-8
 links:
-  - https://elitetorrent.app/
-  - https://elitetorrent.nocensor.biz/
+  - https://www.elitetorrent.com/
+  - https://elitetorrent.nocensor.world/
 legacylinks:
   - https://www.elitetorrent.biz/
   - https://www.elitetorrent.io/
@@ -23,10 +23,15 @@ legacylinks:
   - https://vvww.elitetorrent.nl/
   - https://www.elitetorrent.to/
   - https://www.elitetorrent.se/
-  - https://www.elitetorrent.com/
   - https://elitetorrent.si/
   - https://elitetorrent.nocensor.work/
   - https://elitetorrent.com/
+  - https://elitetorrent.app/
+  - https://elitetorrent.nocensor.biz/
+  - https://elitetorrent.la/
+  - https://www.elitetorrent.wtf/
+  - https://www.elitetorrent.dev/
+  - https://elitetorrent.nocensor.sbs/
 
 caps:
   categories:
@@ -84,12 +89,12 @@ search:
           args: "^.*/(series)/.*$"
     category:
       text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
-    quality:
+    _quality:
       selector: span:nth-of-type(2) > i
       filters:
         - name: replace
           args: ["---", ""]
-    language:
+    _language:
       selector: span#idiomacio > i > img
       attribute: title
       filters:
@@ -121,7 +126,7 @@ search:
         - name: re_replace
           args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
         - name: append
-          args: " {{ .Result.quality }} {{ .Result.language }}"
+          args: " {{ .Result._quality }} {{ .Result._language }}"
     details:
       selector: .meta a
       attribute: href

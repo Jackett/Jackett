@@ -78,6 +78,7 @@ namespace Jackett.Common.Models
                             new XElement("title", RemoveInvalidXMLChars(r.Title)),
                             new XElement("guid", r.Guid.AbsoluteUri),  // GUID and (Link or Magnet) are mandatory
                             new XElement("jackettindexer", new XAttribute("id", r.Origin.Id), r.Origin.DisplayName),
+                            new XElement("type", r.Origin.Type),
                             r.Details == null ? null : new XElement("comments", r.Details.AbsoluteUri),
                             r.PublishDate == DateTime.MinValue ? new XElement("pubDate", XmlDateFormat(DateTime.Now)) : new XElement("pubDate", XmlDateFormat(r.PublishDate)),
                             r.Size == null ? null : new XElement("size", r.Size),
@@ -93,22 +94,32 @@ namespace Jackett.Common.Models
                                 new XAttribute("type", "application/x-bittorrent")
                             ),
                             r.Category == null ? null : from c in r.Category select GetTorznabElement("category", c),
-                            GetTorznabElement("imdb", r.Imdb?.ToString("D7")),
-                            GetTorznabElement("imdbid", r.Imdb != null ? "tt" + r.Imdb?.ToString("D7") : null),
                             GetTorznabElement("rageid", r.RageID),
                             GetTorznabElement("tvdbid", r.TVDBId),
+                            GetTorznabElement("imdb", r.Imdb?.ToString("D7")),
+                            GetTorznabElement("imdbid", r.Imdb != null ? "tt" + r.Imdb?.ToString("D7") : null),
                             GetTorznabElement("tmdbid", r.TMDb),
+                            GetTorznabElement("tvmazeid", r.TVMazeId),
+                            GetTorznabElement("traktid", r.TraktId),
+                            GetTorznabElement("doubanid", r.DoubanId),
+                            r.Genres == null ? null : GetTorznabElement("genre", string.Join(", ", r.Genres)),
+                            GetTorznabElement("year", r.Year),
                             GetTorznabElement("author", RemoveInvalidXMLChars(r.Author)),
                             GetTorznabElement("booktitle", RemoveInvalidXMLChars(r.BookTitle)),
+                            GetTorznabElement("publisher", RemoveInvalidXMLChars(r.Publisher)),
+                            GetTorznabElement("artist", RemoveInvalidXMLChars(r.Artist)),
+                            GetTorznabElement("album", RemoveInvalidXMLChars(r.Album)),
+                            GetTorznabElement("label", RemoveInvalidXMLChars(r.Label)),
+                            GetTorznabElement("track", RemoveInvalidXMLChars(r.Track)),
                             GetTorznabElement("seeders", r.Seeders),
                             GetTorznabElement("peers", r.Peers),
-                            GetTorznabElement("magneturl", r.MagnetUri?.AbsoluteUri),
+                            GetTorznabElement("coverurl", r.Poster?.AbsoluteUri),
                             GetTorznabElement("infohash", RemoveInvalidXMLChars(r.InfoHash)),
+                            GetTorznabElement("magneturl", r.MagnetUri?.AbsoluteUri),
                             GetTorznabElement("minimumratio", r.MinimumRatio),
                             GetTorznabElement("minimumseedtime", r.MinimumSeedTime),
                             GetTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
-                            GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor),
-                            GetTorznabElement("coverurl", r.Poster?.AbsoluteUri)
+                            GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
                         )
                     )
                 )

@@ -20,7 +20,6 @@ namespace Jackett.Common.Indexers.Abstract
     [ExcludeFromCodeCoverage]
     public abstract class SpeedAppTracker : BaseWebIndexer
     {
-        protected virtual string ItemsPerPage => "100";
         protected virtual bool UseP2PReleaseName => false;
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
@@ -89,7 +88,7 @@ namespace Jackett.Common.Indexers.Abstract
             //var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
-                {"itemsPerPage", ItemsPerPage},
+                {"itemsPerPage", "100"},
                 {"sort", "torrent.createdAt"},
                 {"direction", "desc"}
             };
@@ -140,6 +139,9 @@ namespace Jackett.Common.Indexers.Abstract
                     // fix for #10883
                     if (UseP2PReleaseName && !string.IsNullOrWhiteSpace(row.Value<string>("p2p_release_name")))
                         title = row.Value<string>("p2p_release_name");
+
+                    if (!query.IsImdbQuery && !query.MatchQueryStringAND(title))
+                        continue;
 
                     var release = new ReleaseInfo
                     {

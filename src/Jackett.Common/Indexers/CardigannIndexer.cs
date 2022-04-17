@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "rageid", "tmdbid", "tvdbid", "poster", "description" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -57,6 +57,9 @@ namespace Jackett.Common.Indexers
         // Matches a logic function above and 2 or more of (.varname) or .varname or "string literal" in any combination
         private static readonly Regex _LogicFunctionRegex = new Regex(
             @$"\b({string.Join("|", _SupportedLogicFunctions.Select(Regex.Escape))})(?:\s+(\(?\.[^\)\s]+\)?|""[^""]+"")){{2,}}");
+
+        // Matches CSS selectors for the JSON parser
+        private static readonly Regex _JsonSelectorRegex = new Regex(@"\:(?<filter>.+?)\((?<key>.+?)\)(?=:|\z)", RegexOptions.Compiled);
 
         public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
                                 IProtectionService ps, ICacheService cs, IndexerDefinition Definition)
@@ -119,6 +122,7 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities();
             TorznabCaps.ParseCardigannSearchModes(Definition.Caps.Modes);
+            TorznabCaps.SupportsRawSearch = Definition.Caps.Allowrawsearch;
 
             // init config Data
             configData = new ConfigurationData();
@@ -454,7 +458,7 @@ namespace Jackett.Common.Indexers
             }
 
             // handle range expression
-            var RangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
+            var RangeRegex = new Regex(@"{{\s*range\s*(((?<index>\$.+?),)((\s*(?<element>.+?)\s*(:=)\s*)))?(?<variable>.+?)\s*}}(?<prefix>.*?){{\.}}(?<postfix>.*?){{end}}");
             var RangeRegexMatches = RangeRegex.Match(template);
 
             while (RangeRegexMatches.Success)
@@ -462,16 +466,29 @@ namespace Jackett.Common.Indexers
                 var expanded = string.Empty;
 
                 var all = RangeRegexMatches.Groups[0].Value;
-                var variable = RangeRegexMatches.Groups[1].Value;
-                var prefix = RangeRegexMatches.Groups[2].Value;
-                var postfix = RangeRegexMatches.Groups[3].Value;
+                var index = RangeRegexMatches.Groups["index"].Value;
+                var variable = RangeRegexMatches.Groups["variable"].Value;
+                var prefix = RangeRegexMatches.Groups["prefix"].Value;
+                var postfix = RangeRegexMatches.Groups["postfix"].Value;
+
+                var arrayIndex = 0;
+                var indexReplace = "{{" + index + "}}";
 
                 foreach (var value in (ICollection<string>)variables[variable])
                 {
                     var newvalue = value;
                     if (modifier != null)
                         newvalue = modifier(newvalue);
-                    expanded += prefix + newvalue + postfix;
+                    var indexValue = arrayIndex++;
+
+                    if (index != null)
+                    {
+                        expanded += prefix.Replace(indexReplace, indexValue.ToString()) + newvalue + postfix.Replace(indexReplace, indexValue.ToString());
+                    }
+                    else
+                    {
+                        expanded += prefix + newvalue + postfix;
+                    }
                 }
                 template = template.Replace(all, expanded);
                 RangeRegexMatches = RangeRegexMatches.NextMatch();
@@ -1112,6 +1129,14 @@ namespace Jackett.Common.Indexers
                             strTag = ":";
                         logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", Id, strTag, DebugData));
                         break;
+                    case "validate":
+                        char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']' };
+                        var args = (string)Filter.Args;
+                        var argsList = args.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
+                        var validList = argsList.ToList();
+                        var validIntersect = validList.Intersect(Data.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
+                        Data = string.Join(", ", validIntersect);
+                        break;
                     default:
                         break;
                 }
@@ -1212,15 +1237,27 @@ namespace Jackett.Common.Indexers
 
             if (Selector.Selector != null)
             {
-                var selector_Selector = applyGoTemplateText(Selector.Selector.TrimStart('.'), variables);
-                var selection = parentObj.SelectToken(selector_Selector);
+                var selectorSelector = applyGoTemplateText(Selector.Selector.TrimStart('.'), variables);
+                selectorSelector = JsonParseFieldSelector(parentObj, selectorSelector);
+
+                JToken selection = null;
+                if (selectorSelector != null)
+                    selection = parentObj.SelectToken(selectorSelector);
+
                 if (selection == null)
                 {
                     if (required)
-                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", selector_Selector, parentObj.ToString()));
+                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", selectorSelector, parentObj.ToString()));
                     return null;
                 }
-                value = selection.Value<string>();
+                if (selection.Type is JTokenType.Array)
+                {
+                    // turn this json array into a comma delimited string
+                    var valueArray = selection.Value<JArray>();
+                    value = String.Join(",", valueArray);
+                }
+                else
+                    value = selection.Value<string>();
             }
 
             if (Selector.Case != null)
@@ -1272,16 +1309,18 @@ namespace Jackett.Common.Indexers
             variables[".Query.IMDBID"] = query.ImdbID;
             variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
             variables[".Query.TMDBID"] = query.TmdbID?.ToString() ?? null;
-            variables[".Query.TVMazeID"] = null;
-            variables[".Query.TraktID"] = null;
+            variables[".Query.TVMazeID"] = query.TvmazeID?.ToString() ?? null;
+            variables[".Query.TraktID"] = query.TraktID?.ToString() ?? null;
+            variables[".Query.DoubanID"] = query.DoubanID?.ToString() ?? null;
             variables[".Query.Album"] = query.Album;
             variables[".Query.Artist"] = query.Artist;
             variables[".Query.Label"] = query.Label;
             variables[".Query.Track"] = query.Track;
-            //variables[".Query.Genre"] = query.Genre ?? new List<string>();
+            variables[".Query.Genre"] = query.Genre;
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
             variables[".Query.Author"] = query.Author;
             variables[".Query.Title"] = query.Title;
+            variables[".Query.Publisher"] = query.Publisher;
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
@@ -1303,7 +1342,7 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrWhiteSpace((string)variables[".Query.Episode"]))
                 KeywordTokens.Add((string)variables[".Query.Episode"]);
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
-            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
+            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters, variables);
 
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
@@ -1384,7 +1423,10 @@ namespace Jackett.Common.Indexers
                 {
                     if (response.Status != HttpStatusCode.OK)
                         throw new Exception($"Error Parsing Json Response: Status={response.Status} Response={results}");
-                    if (response.Status == HttpStatusCode.OK && SearchPath.Response != null && SearchPath.Response.NoResultsMessage != null && ((SearchPath.Response.NoResultsMessage.Equals(results)) || (SearchPath.Response.NoResultsMessage == String.Empty && results == String.Empty)))
+                    if (response.Status == HttpStatusCode.OK
+                        && SearchPath.Response != null
+                        && SearchPath.Response.NoResultsMessage != null
+                        && (SearchPath.Response.NoResultsMessage != String.Empty && results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == String.Empty && results == String.Empty)))
                         continue;
                     var parsedJson = JToken.Parse(results);
                     if (parsedJson == null)
@@ -1398,14 +1440,16 @@ namespace Jackett.Common.Indexers
                                 continue;
                     }
 
-                    var rowsObj = parsedJson.SelectToken(Search.Rows.Selector);
-                    if (rowsObj == null)
-                        throw new Exception("Error Parsing Rows Selector");
+                    var rowsArray = JsonParseRowsSelector(parsedJson, Search.Rows.Selector);
+                    if (rowsArray == null && Search.Rows.MissingAttributeEquals0Results)
+                        continue;
+                    if (rowsArray == null)
+                        throw new Exception("Error Parsing Rows Selector. There are 0 rows.");
 
-                    foreach (var Row in rowsObj.Value<JArray>())
+                    foreach (var Row in rowsArray)
                     {
-                        var selObj = SearchPath.Response.Attribute != null ? Row.SelectToken(SearchPath.Response.Attribute).Value<JToken>() : Row;
-                        var mulRows = SearchPath.Response.Multiple == true ? selObj.Values<JObject>() : new List<JObject> { selObj.Value<JObject>() };
+                        var selObj = Search.Rows.Attribute != null ? Row.SelectToken(Search.Rows.Attribute).Value<JToken>() : Row;
+                        var mulRows = Search.Rows.Multiple ? selObj.Values<JObject>() : new List<JObject> { selObj.Value<JObject>() };
 
                         foreach (var mulRow in mulRows)
                         {
@@ -1588,7 +1632,7 @@ namespace Jackett.Common.Indexers
                                 }
 
                                 var Filters = Definition.Search.Rows.Filters;
-                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
+                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row.ToHtmlPretty());
 
                                 if (SkipRelease)
                                     continue;
@@ -2024,11 +2068,58 @@ namespace Jackett.Common.Indexers
                     release.TVDBId = ParseUtil.CoerceLong(TVDBId);
                     value = release.TVDBId.ToString();
                     break;
+                case "tvmazeid":
+                    var TVMazeIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var TVMazeIdMatch = TVMazeIdRegEx.Match(value);
+                    var TVMazeId = TVMazeIdMatch.Groups[1].Value;
+                    release.TVMazeId = ParseUtil.CoerceLong(TVMazeId);
+                    value = release.TVMazeId.ToString();
+                    break;
+                case "traktid":
+                    var TraktIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var TraktIdMatch = TraktIdRegEx.Match(value);
+                    var TraktId = TraktIdMatch.Groups[1].Value;
+                    release.TraktId = ParseUtil.CoerceLong(TraktId);
+                    value = release.TraktId.ToString();
+                    break;
+                case "doubanid":
+                    var DoubanIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var DoubanIDMatch = DoubanIDRegEx.Match(value);
+                    var DoubanID = DoubanIDMatch.Groups[1].Value;
+                    release.DoubanId = ParseUtil.CoerceLong(DoubanID);
+                    value = release.DoubanId.ToString();
+                    break;
+                case "genre":
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']' };
+                    release.Genres = release.Genres.Union(value.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
+                    value = string.Join(", ", release.Genres);
+                    break;
+                case "year":
+                    release.Year = ReleaseInfo.GetBytes(value);
+                    value = release.Year.ToString();
+                    break;
                 case "author":
                     release.Author = value;
                     break;
                 case "booktitle":
                     release.BookTitle = value;
+                    break;
+                case "publisher":
+                    release.Publisher = value;
+                    break;
+                case "artist":
+                    release.Artist = value;
+                    break;
+                case "album":
+                    release.Album = value;
+                    break;
+                case "label":
+                    release.Label = value;
+                    break;
+                case "track":
+                    release.Track = value;
                     break;
                 case "poster":
                     if (!string.IsNullOrWhiteSpace(value))
@@ -2059,10 +2150,10 @@ namespace Jackett.Common.Indexers
                             if (Filter.Args != null)
                                 CharacterLimit = int.Parse(Filter.Args);
 
-                            if (query.ImdbID != null && TorznabCaps.MovieSearchImdbAvailable)
+                            if (query.ImdbID != null && (TorznabCaps.MovieSearchImdbAvailable || TorznabCaps.TvSearchImdbAvailable))
                                 break; // skip andmatch filter for imdb searches
 
-                            if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
+                            if (query.TmdbID != null && (TorznabCaps.MovieSearchTmdbAvailable || TorznabCaps.TvSearchTmdbAvailable))
                                 break; // skip andmatch filter for tmdb searches
 
                             if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)
@@ -2087,6 +2178,78 @@ namespace Jackett.Common.Indexers
                 }
             }
             return SkipRelease;
+        }
+
+        private JArray JsonParseRowsSelector(JToken parsedJson, string rowSelector)
+        {
+            var selector = rowSelector.Split(':')[0];
+            try
+            {
+                var rowsObj = parsedJson.SelectToken(selector).Value<JArray>();
+                return new JArray(rowsObj.Where(t =>
+                                                    JsonParseFieldSelector(t.Value<JObject>(), rowSelector.Remove(0, selector.Length)) != null
+                                                    ));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string JsonParseFieldSelector(JToken parsedJson, string rowSelector)
+        {
+            var selector = rowSelector.Split(':')[0];
+            JToken parsedObject;
+            if (string.IsNullOrWhiteSpace(selector))
+                parsedObject = parsedJson;
+            else if (parsedJson.SelectToken(selector) != null)
+                parsedObject = parsedJson.SelectToken(selector);
+            else
+                return null;
+
+            foreach (Match match in _JsonSelectorRegex.Matches(rowSelector))
+            {
+                var filter = match.Result("${filter}");
+                var key = match.Result("${key}");
+                Match innerMatch;
+                switch (filter)
+                {
+                    case "has":
+                        innerMatch = _JsonSelectorRegex.Match(key);
+                        if (innerMatch.Success)
+                        {
+                            if (JsonParseFieldSelector(parsedObject, key) == null)
+                                return null;
+                        }
+                        else
+                        {
+                            if (parsedObject.SelectToken(key) == null)
+                                return null;
+                        }
+                        break;
+                    case "not":
+                        innerMatch = _JsonSelectorRegex.Match(key);
+                        if (innerMatch.Success)
+                        {
+                            if (JsonParseFieldSelector(parsedObject, key) != null)
+                                return null;
+                        }
+                        else
+                        {
+                            if (parsedObject.SelectToken(key) != null)
+                                return null;
+                        }
+                        break;
+                    case "contains":
+                        if (!parsedObject.ToString().Contains(key))
+                            return null;
+                        break;
+                    default:
+                        logger.Error(string.Format("CardigannIndexer ({0}): Unsupported selector: {1}", Id, rowSelector));
+                        continue;
+                }
+            }
+            return selector;
         }
     }
 }

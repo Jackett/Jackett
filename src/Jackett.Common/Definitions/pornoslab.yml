@@ -66,9 +66,7 @@ search:
 
   fields:
     category:
-      selector: span[class="copy"] a
-      case:
-        ":contains(\"Main\")": 1
+      text: 1
     title:
       selector: span[class="storytitle"] a
     details:

@@ -7,23 +7,12 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torlock.com/
   - https://www.torlock2.com/
-  - https://www.torlock.icu/
-  - https://torlock.unblockit.how/
-  - https://torlock.nocensor.biz/
+  - https://www.torlock.com/
+  - https://torlock.unblockit.ist/
+  - https://torlock.nocensor.world/
 legacylinks:
   - https://torlock.com/
-  - https://torlock.unblockit.win/
-  - https://torlock.unblockit.top/
-  - https://torlock.unblockit.lat/
-  - https://torlock.unblockit.app/
-  - https://torlock.unblockit.dev/
-  - https://torlock.unblockit.ltd/
-  - https://torlock.unblockit.link/
-  - https://torlock.unblockit.buzz/
-  - https://torlock.unblockit.club/
-  - https://torlock.unblockit.onl/
   - https://torlock.unblockit.li/
   - https://torlock.unblockit.uno/
   - https://torlock.unblockit.ch/
@@ -33,6 +22,15 @@ legacylinks:
   - https://torlock.unblockit.kim/
   - https://torlock.unblockit.bz/
   - https://torlock.unblockit.tv/
+  - https://torlock.unblockit.how/
+  - https://torlock.unblockit.cam/
+  - https://torlock.nocensor.biz/
+  - https://torlock.unblockit.day/
+  - https://torlock.unblockit.llc/
+  - https://torlock.unblockit.blue/
+  - https://www.torlock.icu/
+  - https://torlock.unblockit.name/
+  - https://torlock.nocensor.sbs/
 
 caps:
   # dont forget to update the search fields category case block

@@ -1,0 +1,141 @@
+---
+id: jsondefinition1
+name: jsondefinition1
+description: "jsondefinition1"
+language: es-ES
+type: private
+encoding: UTF-8
+links:
+  - https://jsondefinition1.com/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 3, cat: Audio, desc: "Música"}
+    - {id: 4, cat: TV/Documentary, desc: "Documentales"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your account <i>My configuration / Mi configuración => Secutiy / Seguridad</i> page and clicking on the <b>API Token</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: /api/torrents
+  method: get
+  inputs:
+    api_token: "{{ .Config.apikey }}"
+  error:
+    - selector: a[href*="/login"]
+
+search:
+  paths:
+    # https://hdinnovations.github.io/UNIT3D-Community-Edition-Docs/api_endpoints.html
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php
+    - path: "/api/torrents/filter?api_token={{ .Config.apikey }}&name={{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}{{ if .Query.TMDBID }}&tmdbId={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if .Query.IMDBIDShort }}&imdbId={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdbId={{ .Query.TVDBID }}{{ else }}{{ end }}&sortField={{ .Config.sort }}&sortDirection={{ .Config.type }}&perPage=100&page=1{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&free=1{{ else }}{{ end }}"
+      response:
+        type: json
+
+  rows:
+    selector: data:has(attributes.size):has(attributes.name:contains(1080)):has(attributes.poster:contains(.jpg)):not(attributes.fake_att):not(attributes.uploader:contains(DarkSwan2001))
+    attribute: attributes
+    count:
+      selector: meta.total
+
+  fields:
+    categorydesc:
+      selector: category
+#    title:
+#      selector: name
+#      filters:
+#        - name: re_replace
+#          args: ["\\[", " "]
+    title_dts:
+      selector: name:contains(DTS)
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["DTS", "DTSSS"]
+    title_notdts:
+      selector: name:not(:contains(DTS))
+      optional: true
+    title:
+      text: "{{ if .Result.title_dts }}{{ .Result.title_dts }}{{ else }}{{ .Result.title_notdts }}{{ end }}"
+      filters:
+        - name: re_replace
+          args: ["\\[", " "]
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    poster:
+      selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2021-10-18T00:34:50.000000Z"
+      selector: created_at
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: freeleech
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: double_upload
+      case:
+        0: 1 # normal
+        1: 2 # double
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# json UNIT3D ???

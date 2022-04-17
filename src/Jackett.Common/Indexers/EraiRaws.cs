@@ -21,12 +21,14 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.erai-raws.info/",
             "https://beta.erai-raws.info/",
-            "https://erairaws.nocensor.biz/"
+            "https://erairaws.nocensor.world/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://erairaws.nocensor.space/",
-            "https://erairaws.nocensor.work/"
+            "https://erairaws.nocensor.work/",
+            "https://erairaws.nocensor.biz/",
+            "https://erairaws.nocensor.sbs/"
         };
 
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
@@ -51,13 +53,23 @@ namespace Jackett.Common.Indexers
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
-            Type = "public";
+            Type = "semi-private";
 
+            var rssKey = new StringConfigurationItem("RSSKey") { Value = "" };
+            configData.AddDynamic("rssKey", rssKey);
+            configData.AddDynamic("rssKeyHelp", new DisplayInfoConfigurationItem(string.Empty, "Find the RSS Key by accessing <a href=\"https://www.erai-raws.info/rss-page/\" target =_blank>Erai-Raws RSS page</a> while you're logged in. Copy the <i>All RSS</i> URL, the RSS Key is the last part. Example: for the URL <b>.../feed/?type=torrent&0879fd62733b8db8535eb1be2333</b> the RSS Key is <b>0879fd62733b8db8535eb1be2333</b>"));
+
+            configData.AddDynamic(
+                "DDoS-Guard",
+                new DisplayInfoConfigurationItem("", "This site may use DDoS-Guard Protection, therefore Jackett requires <a href='https://github.com/Jackett/Jackett#configuring-flaresolverr' target='_blank'>FlareSolverr</a> to access it.")
+            );
             // Add note that download stats are not available
             configData.AddDynamic(
                 "download-stats-unavailable",
-                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Seeders</li><li>Leechers</li><li>Download Factor</li><li>Upload Factor</li></ul>")
+                new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Files</li><li>Seeders</li><li>Leechers</li></ul>")
             );
+
+            configData.AddDynamic("include-subs", new BoolConfigurationItem("Enable appending SubTitles to the Title"));
 
             // Config item for title detail parsing
             configData.AddDynamic("title-detail-parsing", new BoolConfigurationItem("Enable Title Detail Parsing"));
@@ -72,15 +84,11 @@ namespace Jackett.Common.Indexers
 
         private TitleParser titleParser = new TitleParser();
 
+        private string RSSKey => ((StringConfigurationItem)configData.GetDynamic("rssKey")).Value;
         private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
+        private bool IsSubsEnabled => ((BoolConfigurationItem)configData.GetDynamic("include-subs")).Value;
 
-        public string RssFeedUri
-        {
-            get
-            {
-                return string.Concat(SiteLink, RSS_PATH);
-            }
-        }
+        public string RssFeedUri => SiteLink + RSS_PATH + "&" + RSSKey;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -196,9 +204,14 @@ namespace Jackett.Common.Indexers
                     guid = builder.Uri;
                 }
 
+                var subs = "";
+                if (IsSubsEnabled)
+                {
+                    subs = string.Concat(" JAPANESE [Subs: ", fi.SubTitles, "]");
+                }
                 yield return new ReleaseInfo
                 {
-                    Title = string.Concat(fi.Title, " - ", fi.Quality),
+                    Title = string.Concat(fi.Title, " - ", fi.Quality, subs),
                     Guid = guid,
                     MagnetUri = fi.MagnetLink,
                     InfoHash = fi.InfoHash,
@@ -208,6 +221,7 @@ namespace Jackett.Common.Indexers
 
                     // Download stats are not available through scraping so set some mock values.
                     Size = fi.Size,
+                    Files = 1,
                     Seeders = 1,
                     Peers = 2,
                     DownloadVolumeFactor = 0,
@@ -242,6 +256,7 @@ namespace Jackett.Common.Indexers
                 var size = rssItem.SelectSingleNode("erai:size", nsm)?.InnerText;
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
                 var quality = rssItem.SelectSingleNode("erai:resolution", nsm)?.InnerText;
+                var subs = rssItem.SelectSingleNode("erai:subtitles", nsm)?.InnerText;
 
                 item = new RssFeedItem
                 {
@@ -251,7 +266,8 @@ namespace Jackett.Common.Indexers
                     PublishDate = publishDate,
                     Size = size,
                     Description = description,
-                    Quality = quality
+                    Quality = quality,
+                    SubTitles = subs
                 };
                 return item.IsValid();
             }
@@ -274,6 +290,8 @@ namespace Jackett.Common.Indexers
             public string Description { get; private set; }
 
             public string Quality { get; private set; }
+
+            public string SubTitles { get; private set; }
 
             /// <summary>
             /// Check there is enough information to process the item.
@@ -302,21 +320,18 @@ namespace Jackett.Common.Indexers
                 Size = ReleaseInfo.GetBytes(feedItem.Size);
                 DetailsLink = ParseDetailsLink(feedItem.Description);
                 InfoHash = feedItem.InfoHash;
+                SubTitles = feedItem.SubTitles.Replace("[", " ").Replace("]", " ").ToUpper();
 
                 if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
-                {
                     MagnetLink = magnetUri;
-                }
 
                 if (DateTimeOffset.TryParse(feedItem.PublishDate, out DateTimeOffset publishDate))
-                {
                     PublishDate = publishDate;
-                }
             }
 
             private string StripTitle(string rawTitle)
             {
-                var prefixStripped = Regex.Replace(rawTitle, "^\\[.+?\\] ", "");
+                var prefixStripped = Regex.Replace(rawTitle, "^\\[.+?\\]", "");
                 var suffixStripped = Regex.Replace(prefixStripped, " \\[.+\\]", "");
                 return suffixStripped.Trim();
             }
@@ -337,6 +352,8 @@ namespace Jackett.Common.Indexers
             }
 
             public string Quality { get; }
+
+            public string SubTitles { get; }
 
             public string Title { get; set; }
 

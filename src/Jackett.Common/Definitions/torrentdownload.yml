@@ -8,20 +8,11 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.how/
-  - https://torrentdownload.nocensor.biz/
+  - https://torrentdownload.unblockit.ist/
+  - https://torrentdownload.nocensor.world/
 legacylinks:
-  - https://torrentdownload.unblockit.top/
-  - https://torrentdownload.unblockit.lat/
-  - https://torrentdownload.unblockit.app/
   - https://torrentdownload.unblocked.rest/
-  - https://torrentdownload.unblockit.dev/
-  - https://torrentdownload.unblockit.ltd/
-  - https://torrentdownload.unblockit.link/
-  - https://torrentdownload.unblockit.buzz/
   - https://torrentdownload.unblocked.monster/
-  - https://torrentdownload.unblockit.club/
-  - https://torrentdownload.unblockit.onl/
   - https://torrentdownload.unblockit.li/
   - https://torrentdownload.unblockit.uno/
   - https://torrentdownload.unblockit.ch/
@@ -31,6 +22,14 @@ legacylinks:
   - https://torrentdownload.unblockit.kim/
   - https://torrentdownload.unblockit.bz/
   - https://torrentdownload.unblockit.tv/
+  - https://torrentdownload.unblockit.how/
+  - https://torrentdownload.unblockit.cam/
+  - https://torrentdownload.nocensor.biz/
+  - https://torrentdownload.unblockit.day/
+  - https://torrentdownload.unblockit.llc/
+  - https://torrentdownload.unblockit.blue/
+  - https://torrentdownload.unblockit.name/
+  - https://torrentdownload.nocensor.sbs/
 
 caps:
   categorymappings:
@@ -72,6 +71,7 @@ caps:
     - {id: MusicTranceHouseDance, cat: Audio, desc: "Music Trance House Dance"}
     - {id: Other, cat: Other, desc: Other}
     - {id: OtherComics, cat: Other, desc: "Other Comics"}
+    - {id: OtherTutorials, cat: Other, desc: "Other Tutorials"}
     - {id: OtherUnsorted, cat: Other, desc: "Other Unsorted"}
     - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
     - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
@@ -122,8 +122,9 @@ login:
     path: /
 
 search:
+  # home page no longer has torrents. /latest would be ideal but has not categories. resorting to /top for keywordless searches.
   paths:
-    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}top{{ end }}"
 
   rows:
     selector: table.table2 > tbody > tr:has(span.smallish)

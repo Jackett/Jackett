@@ -24,8 +24,18 @@ namespace Jackett.Common.Models
         public long? TVDBId { get; set; }
         public long? Imdb { get; set; }
         public long? TMDb { get; set; }
+        public long? TVMazeId { get; set; }
+        public long? TraktId { get; set; }
+        public long? DoubanId { get; set; }
+        public ICollection<string> Genres { get; set; }
+        public long? Year { get; set; }
         public string Author { get; set; }
         public string BookTitle { get; set; }
+        public string Publisher { get; set; }
+        public string Artist { get; set; }
+        public string Album { get; set; }
+        public string Label { get; set; }
+        public string Track { get; set; }
         public long? Seeders { get; set; }
         public long? Peers { get; set; }
         public Uri Poster { get; set; }
@@ -59,10 +69,21 @@ namespace Jackett.Common.Models
             Grabs = copyFrom.Grabs;
             Description = copyFrom.Description;
             RageID = copyFrom.RageID;
+            TVDBId = copyFrom.TVDBId;
             Imdb = copyFrom.Imdb;
             TMDb = copyFrom.TMDb;
+            TVMazeId = copyFrom.TVMazeId;
+            TraktId = copyFrom.TraktId;
+            DoubanId = copyFrom.DoubanId;
+            Genres = copyFrom.Genres;
+            Year = copyFrom.Year;
             Author = copyFrom.Author;
             BookTitle = copyFrom.BookTitle;
+            Publisher = copyFrom.Publisher;
+            Artist = copyFrom.Artist;
+            Album = copyFrom.Album;
+            Label = copyFrom.Label;
+            Track = copyFrom.Track;
             Seeders = copyFrom.Seeders;
             Peers = copyFrom.Peers;
             Poster = copyFrom.Poster;
@@ -115,6 +136,6 @@ namespace Jackett.Common.Models
         public static long BytesFromKB(float kb) => (long)(kb * 1024f);
 
         public override string ToString() =>
-            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
+            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, TVMazeId={TVMazeId}, TraktId={TraktId}, DoubanId={DoubanId}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }
 }

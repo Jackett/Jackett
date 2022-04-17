@@ -6,43 +6,15 @@ language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
+# to fetch current domain use https://www.protege-liens.com/torrent9
 links:
-  - https://www.torrent9.nl/
-  - https://torrent9.nocensor.biz/
+  - https://ww1.torrent9.re/
+  - https://torrent9.nocensor.world/
 legacylinks:
-  - https://www.torrents9.pw/
-  - https://www.torrent9.ch/
-  - https://www1.torrent9.ch/
-  - https://www2.torrent9.ch/
-  - https://wwv.torrent9.vg/
-  - https://www.torrent9.vc/
-  - https://wvw.torrent9.vc/
-  - https://www.torrent9.lol/
-  - https://wvw.torrent9.lol/
-  - https://wwv.torrent9.lol/
-  - https://ww1.torrent9.lol/
-  - https://ww5.torrent9.lol/
-  - https://ww6.torrent9.lol/
-  - https://www.torrent9.tw/
-  - https://ww7.torrent9.lol/
-  - https://www.torrent9.dev/
-  - https://www.torrent9.sx/
-  - https://ww1.torrent9.sx/
-  - https://www.t9.re/
   - https://www.t9.vc/
   - https://www.torrent9.ai/
-  - https://torrent9.black-mirror.xyz/
-  - https://torrent9.unblocked.casa/
-  - https://torrent9.proxyportal.fun/
-  - https://torrent9.uk-unblock.xyz/
-  - https://torrent9.ind-unblock.xyz/
   - https://www.torrent9.pl/
   - https://www.torrent9.ac/
-  - https://torrent9.unblocked.bar/
-  - https://torrent9.proxyportal.pw/
-  - https://torrent9.uk-unblock.pro/
-  - https://torrent9.unblockninja.com/ # this is a proxy for torrent9
-  - https://torrent9.unblocked.rest/
   - https://www.torrent9.so/
   - https://wvw.torrent9.sh/
   - https://www.torrent9.sh/
@@ -58,13 +30,17 @@ legacylinks:
   - https://torrent9.nocensor.work/
   - https://www.torrent9.pw/
   - https://www.torrent9.si/
+  - https://torrent9.nocensor.biz/
+  - https://www.torrent9.nl/
+  - https://www.torrent9.re/
+  - https://torrent9.nocensor.sbs/
 
 caps:
   categorymappings:
     - {id: Films, cat: Movies, desc: "Movies"}
     - {id: Séries, cat: TV, desc: "TV"}
-    - {id: Musique, cat: Audio, desc: "Music"}
-    - {id: Ebook, cat: Books, desc: "Books"}
+    - {id: Musiques, cat: Audio, desc: "Music"}
+    - {id: Ebooks, cat: Books, desc: "Books"}
     - {id: Logiciels, cat: PC, desc: "Software"}
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
@@ -81,7 +57,7 @@ settings:
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
   - name: multilang
     type: checkbox
     label: Replace MULTI by another language in release name
@@ -104,6 +80,8 @@ settings:
 
 download:
   selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
     - selector: script:contains("magnet:?")
       filters:
         - name: regexp
@@ -126,26 +104,26 @@ search:
     category:
       selector: td:nth-child(1) i
       attribute: class
-    site_date:
+    _site_date:
       selector: td:nth-child(1) a
       filters:
-        # year is at the end of the title, so we get it and name it site_date
+        # year is at the end of the title, so we get it and name it _site_date
         - name: regexp
           args: "(19|20\\d{2})$"
     title_phase1:
       selector: td:nth-child(1) a
       filters:
-        # now we put the date at the right place according scene naming rules using .Result.site_date
+        # now we put the date at the right place according scene naming rules using .Result._site_date
         - name: re_replace
-          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+          args: ["(?i)( FRENCH)", " {{ .Result._site_date }} FRENCH"]
         - name: re_replace
-          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+          args: ["(?i)( MULTI)", " {{ .Result._site_date }} MULTI"]
         - name: re_replace
-          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result._site_date }} TRUEFRENCH"]
         - name: re_replace
-          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+          args: ["(?i)( VOSTFR)", " {{ .Result._site_date }} VOSTFR"]
         - name: re_replace
-          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
+          args: ["(?i)( SUBFRENCH)", " {{ .Result._site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
           args: ["(19|20\\d{2})$", ""]

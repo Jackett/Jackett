@@ -41,7 +41,7 @@ caps:
     - {id: 36, cat: Books, desc: "Deckofficer's Library-Technical equipment of navigation"}
     - {id: 95, cat: Books, desc: "Deckofficer's Library-Hydrometeorology"}
     - {id: 100, cat: Books, desc: "Deckofficer's Library-Ship Theory"}
-    - {id: 110, cat: Books, desc: "Deckofficer's Library-Astronomy"}
+    - {id: 110, cat: Books, desc: "Deckofficer's Library-Nautical Astronomy"}
     - {id: 94, cat: Books, desc: "Deckofficer's Library-Nautical charts, tables, sailing directions"}
     - {id: 116, cat: Books, desc: "Deckofficer's Library-Global Maritime Distress and Safety System (GMDSS)"}
     - {id: 192, cat: Books, desc: "Deckofficer's Library-Navigation in the ice"}
@@ -72,6 +72,9 @@ caps:
     - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
     - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
     - {id: 7, cat: Books, desc: "Technical Books (Not maritime)"}
+    - {id: 328, cat: Books, desc: "Technical Books (Not maritime)-Hydraulics"}
+    - {id: 327, cat: Books, desc: "Technical Books (Not maritime)-Mechanics"}
+    - {id: 326, cat: Books, desc: "Technical Books (Not maritime)-Electricity"}
     - {id: 10, cat: Books, desc: "English for seamen"}
     - {id: 266, cat: Books, desc: "English for seamen-English for Deck Officers"}
     - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
@@ -94,6 +97,7 @@ caps:
     - {id: 285, cat: Books, desc: "Section for cadets-Encyclopedias and atlases"}
     - {id: 265, cat: Books, desc: "Section for cadets-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 191, cat: Books, desc: "Maritime Law"}
+    - {id: 329, cat: Books, desc: "Maritime Law-Lloyd's, ABS, BV, DNV-GL, TÜV, NKK, RMRS and other approvals"}
     - {id: 240, cat: Books, desc: "Maritime Law-IMO Resolutions"}
     - {id: 212, cat: Books, desc: "Ship's documentation"}
     - {id: 190, cat: Books, desc: "Catalogs"}
@@ -122,7 +126,7 @@ caps:
     - {id: 253, cat: Books, desc: "Yachting, sailing, boating-Seamanship practice"}
     - {id: 254, cat: Books, desc: "Yachting, sailing, boating-Repair and Restoration"}
     - {id: 255, cat: Books, desc: "Yachting, sailing, boating-Sailing Alone"}
-    - {id: 256, cat: Books, desc: "Yachting, sailing, boating-Rigging, knots"}
+    - {id: 256, cat: Books, desc: "Yachting, sailing, boating-Rigging, sails, knots"}
     - {id: 252, cat: Books, desc: "Yachting, sailing, boating-Projects, design, construction"}
     - {id: 251, cat: Books, desc: "Diving"}
     - {id: 177, cat: Books, desc: "Shipmodeling"}
@@ -133,6 +137,7 @@ caps:
     - {id: 289, cat: Books, desc: "Shipmodeling-Ships in Bottles"}
     - {id: 197, cat: Books, desc: "Marine bulletins"}
     - {id: 219, cat: Books, desc: "Marine History"}
+    - {id: 323, cat: Books, desc: "Marine History-History of Submarines"}
     - {id: 282, cat: Books, desc: "Marine History-Fleets history"}
     - {id: 281, cat: Books, desc: "Marine History-History of Merchant Marine"}
     - {id: 280, cat: Books, desc: "Marine History-Historic ships"}
@@ -160,11 +165,26 @@ caps:
     - {id: 245, cat: Books, desc: "Rarity-1800 - 1900"}
     - {id: 246, cat: Books, desc: "Rarity-1700 - 1800"}
     - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
+    - {id: 324, cat: Other, desc: "Posters, placards, signs"}
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
-    - {id: 162, cat: Books, desc: "Archive"}
-    - {id: 315, cat: Books, desc: "Archive-Unformed"}
     - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
-    - {id: 295, cat: Books, desc: "Archive-Unregistered releases"}
+    - {id: 162, cat: Books, desc: "Archive"}
+#    - {id: 325, cat: Other, desc: "Corrupt torrents (hash errors)"} # we filter these out in the rows selector
+    - {id: 322, cat: Books, desc: "Archive-No seeds"}
+    - {id: 321, cat: Books, desc: "Archive-Outdated software"}
+    - {id: 295, cat: Books, desc: "Archive-Unregistered"}
+    - {id: 330, cat: Books, desc: "Examinations"}
+    - {id: 343, cat: Books, desc: "Examinations-ROR - Colregs"}
+    - {id: 335, cat: Books, desc: "Examinations-Second Mates"}
+    - {id: 341, cat: Books, desc: "Examinations-Chief Mates (Phase I)"}
+    - {id: 342, cat: Books, desc: "Examinations-Chief Mates (Phase II)"}
+    - {id: 333, cat: Books, desc: "Examinations-IMU CET"}
+    - {id: 334, cat: Books, desc: "Examinations-NCV"}
+    - {id: 336, cat: Books, desc: "Examinations-ASM"}
+    - {id: 337, cat: Books, desc: "Examinations-TME"}
+    - {id: 338, cat: Books, desc: "Examinations-MEO"}
+    - {id: 340, cat: Books, desc: "Examinations-Text books"}
+    - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
 
   modes:
     search: [q]
@@ -243,7 +263,7 @@ search:
     submit: "%C2%A0%C2%A0Search%C2%A0%C2%A0"
 
   rows:
-    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
+    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="]):not(:has(a[href="tracker.php?f=325"]))
 
   fields:
     title:

@@ -15,6 +15,7 @@ caps:
     - {id: 5, cat: Books/Mags, desc: "Revistas"}
     - {id: 3, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 4, cat: Other, desc: "Arquivos de Auxilio"}
+    - {id: 6, cat: Other, desc: "Graduação"}
 
   modes:
     search: [q]
@@ -67,10 +68,10 @@ search:
     - path: "/api/torrents/filter?api_token={{ .Config.apikey }}&name={{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}{{ if .Query.TMDBID }}&tmdbId={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if .Query.IMDBIDShort }}&imdbId={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdbId={{ .Query.TVDBID }}{{ else }}{{ end }}&sortField={{ .Config.sort }}&sortDirection={{ .Config.type }}&perPage=100&page=1{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&free=1{{ else }}{{ end }}"
       response:
         type: json
-        attribute: attributes
 
   rows:
     selector: data
+    attribute: attributes
     count:
       selector: meta.total
 
@@ -93,6 +94,8 @@ search:
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
+        - name: replace
+          args: ["https://via.placeholder.com/400x600", ""]
     imdbid:
       selector: imdb_id
     tmdbid:

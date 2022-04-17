@@ -6,10 +6,13 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
+  - https://solidtorrents.to/
+legacylinks:
   - https://solidtorrents.net/
 
 caps:
   categories:
+    AudioBook: Audio/Audiobook
     eBook: Books/EBook
     "Ebook/Course": Books/EBook
     Games: PC/Games
@@ -72,7 +75,7 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: div.search-result
+    selector: li.search-result:has(a[class="dl-torrent"])
 
   fields:
     category:

@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 238, cat: Movies, desc: "Новинки кино (2018-2019). Новые фильмы скачать бесплатно"}
+    - {id: 238, cat: Movies, desc: "Новинки кино (2022). Новые фильмы скачать бесплатно"}
     - {id: 425, cat: Movies/HD, desc: "DVDRip / DVD-5/DVD-9"}
     - {id: 50, cat: Movies/HD, desc: "DVDRip"}
     - {id: 52, cat: Movies/HD, desc: "DVD-5/DVD-9"}
@@ -27,6 +27,8 @@ caps:
     - {id: 420, cat: Movies, desc: "Зарубежные фильмы"}
     - {id: 12, cat: Movies, desc: "Зарубежные фильмы до 2000го года..."}
     - {id: 13, cat: Movies, desc: "Зарубежные фильмы после 2000го года..."}
+    - {id: 1476, cat: Movies, desc: "Зарубежные фильмы Blu-Ray"}
+    - {id: 1475, cat: Movies, desc: "Зарубежные фильмы 4К"}
     - {id: 423, cat: TV/Anime, desc: "Мультфильмы"}
     - {id: 16, cat: TV/Anime, desc: "Зарубежные мультфильмы"}
     - {id: 17, cat: TV/Anime, desc: "Советские мультфильмы"}
@@ -190,7 +192,6 @@ caps:
     - {id: 1194, cat: TV, desc: "Агентство скрытых камер"}
     - {id: 1140, cat: TV, desc: "Академия"}
     - {id: 1178, cat: TV, desc: "Беглые родственники"}
-    - {id: 1222, cat: TV, desc: "Анна-детективъ"}
     - {id: 1161, cat: TV, desc: "Бедные люди"}
     - {id: 1099, cat: TV, desc: "Ботаны"}
     - {id: 1136, cat: TV, desc: "Бородач"}
@@ -390,14 +391,12 @@ caps:
     - {id: 344, cat: TV, desc: "Галилео"}
     - {id: 477, cat: TV, desc: "Даешь молодежь"}
     - {id: 514, cat: TV, desc: "Ералаш"}
-    - {id: 959, cat: TV, desc: "Голос. Дети"}
     - {id: 446, cat: TV, desc: "+100500"}
     - {id: 693, cat: TV, desc: "Comedy Баттл. Без границ"}
     - {id: 1164, cat: TV, desc: "Битва риелторов"}
     - {id: 1071, cat: TV, desc: "Взвешенные люди"}
     - {id: 229, cat: TV, desc: "Comedy Баттл. Отбор, турнир"}
     - {id: 1096, cat: TV, desc: "Время Г"}
-    - {id: 1114, cat: TV, desc: "Голос"}
     - {id: 522, cat: TV, desc: "Модный приговор"}
     - {id: 971, cat: TV, desc: "Не спать!"}
     - {id: 1137, cat: TV, desc: "Новая звезда"}
@@ -428,10 +427,13 @@ caps:
     - {id: 480, cat: TV, desc: "Камеди Woman"}
     - {id: 459, cat: TV, desc: "Говорим и показываем"}
     - {id: 479, cat: TV, desc: "Comedy Club - Камеди Клаб"}
-    - {id: 1289, cat: TV, desc: "Двойные стандарты"}
     - {id: 33, cat: TV, desc: "ДОМ 2"}
     - {id: 270, cat: TV, desc: "Архив Дом-2"}
+    - {id: 1484, cat: TV, desc: "ДНК"}
+    - {id: 1483, cat: TV, desc: "За гранью"}
+    - {id: 1469, cat: TV, desc: "Звезды сошлись"}
     - {id: 696, cat: TV, desc: "Квартирный вопрос"}
+    - {id: 1468, cat: TV, desc: "Квартирник НТВ у Маргулиса"}
     - {id: 469, cat: TV, desc: "КВН - Клуб Веселых и Находчивых"}
     - {id: 541, cat: TV, desc: "Кто хочет стать миллионером"}
     - {id: 189, cat: TV, desc: "Контрольная закупка"}
@@ -442,7 +444,6 @@ caps:
     - {id: 769, cat: TV, desc: "Наедине со всеми"}
     - {id: 1123, cat: TV, desc: "НашПотребНадзор"}
     - {id: 1017, cat: TV, desc: "Однажды в России"}
-    - {id: 524, cat: TV, desc: "Орел и решка"}
     - {id: 1309, cat: TV, desc: "Пацанки"}
     - {id: 765, cat: TV, desc: "Перезагрузка"}
     - {id: 493, cat: TV, desc: "Поле чудес"}
@@ -451,7 +452,6 @@ caps:
     - {id: 1196, cat: TV, desc: "Проводник"}
     - {id: 588, cat: TV, desc: "Прямой эфир"}
     - {id: 348, cat: TV, desc: "Пусть говорят"}
-    - {id: 539, cat: TV, desc: "Рассмеши комика"}
     - {id: 1158, cat: TV, desc: "Ревизорро"}
     - {id: 490, cat: TV, desc: "Сам себе режиссёр"}
     - {id: 457, cat: TV, desc: "Своя игра"}
@@ -459,12 +459,12 @@ caps:
     - {id: 1106, cat: TV, desc: "Соль"}
     - {id: 975, cat: TV, desc: "STAND UP"}
     - {id: 496, cat: TV, desc: "Сто к одному"}
-    - {id: 786, cat: TV, desc: "Сегодня вечером с Максимом Галкиным и Юлией Меньшовой"}
+    - {id: 786, cat: TV, desc: "Сегодня вечером"}
+    - {id: 967, cat: TV, desc: "Comedy Баттл. Последний сезон"}
     - {id: 1287, cat: TV, desc: "Секрет на миллион"}
     - {id: 1021, cat: TV, desc: "Танцы"}
     - {id: 1286, cat: TV, desc: "Ты супер!"}
     - {id: 470, cat: TV, desc: "Уральские пельмени"}
-    - {id: 967, cat: TV, desc: "Comedy Баттл. Последний сезон"}
     - {id: 1290, cat: TV, desc: "Устами младенца"}
     - {id: 1147, cat: TV, desc: "Фазенда"}
     - {id: 188, cat: TV, desc: "Центральное телевидение"}
@@ -475,9 +475,11 @@ caps:
     - {id: 1035, cat: TV, desc: "Черно-белое"}
     - {id: 280, cat: TV, desc: "Экстрасенсы против ученых"}
     - {id: 279, cat: TV, desc: "Битва экстрасенсов"}
-    - {id: 1460, cat: TV/Documentary, desc: "Невероятно интересные истории"}
+    - {id: 1461, cat: TV/Documentary, desc: "Невероятно интересные истории"}
+    - {id: 1477, cat: TV/Documentary, desc: "Последний герой"}
+    - {id: 1478, cat: TV/Documentary, desc: "Бородина против Бузовой"}
     - {id: 24, cat: TV/Documentary, desc: "Документальные передачи"}
-    - {id: 1461, cat: TV/Documentary, desc: "Специальный репортаж (ТК Звезда)"}
+    - {id: 1460, cat: TV/Documentary, desc: "Специальный репортаж (ТК Звезда)"}
     - {id: 728, cat: TV/Documentary, desc: "Чудо техники с Сергеем Малозёмовым"}
     - {id: 69, cat: TV/Documentary, desc: "Авто"}
     - {id: 669, cat: TV/Documentary, desc: "Главная дорога"}
@@ -485,15 +487,15 @@ caps:
     - {id: 1111, cat: TV/Documentary, desc: "Без обмана"}
     - {id: 88, cat: TV/Documentary, desc: "Биографии. Личности и кумиры"}
     - {id: 68, cat: TV/Documentary, desc: "Военное дело"}
-    - {id: 784, cat: TV/Documentary, desc: "Голос - За кадром"}
     - {id: 729, cat: TV/Documentary, desc: "Дачный ответ"}
-    - {id: 1152, cat: TV/Documentary, desc: "Еда живая и мертвая"}
+    - {id: 1152, cat: TV/Documentary, desc: "Живая еда"}
     - {id: 194, cat: TV/Documentary, desc: "Discovery / NatGeo / BBC / Viasat"}
     - {id: 1307, cat: TV/Documentary, desc: "Загадки человечества"}
     - {id: 701, cat: TV/Documentary, desc: "Идеальный ремонт"}
     - {id: 63, cat: TV/Documentary, desc: "Криминал"}
-    - {id: 590, cat: TV/Documentary, desc: "Криминальные хроники"}
+    - {id: 1481, cat: TV/Documentary, desc: "Закон и порядок"}
     - {id: 796, cat: TV/Documentary, desc: "Место происшествия. О главном"}
+    - {id: 1470, cat: TV/Documentary, desc: "По следу монстра"}
     - {id: 1085, cat: TV/Documentary, desc: "Следствие ведут..."}
     - {id: 652, cat: TV/Documentary, desc: "Следствие вели..."}
     - {id: 498, cat: TV/Documentary, desc: "Чрезвычайное происшествие"}
@@ -509,14 +511,13 @@ caps:
     - {id: 1122, cat: TV/Documentary, desc: "Русский вопрос"}
     - {id: 1198, cat: TV/Documentary, desc: "Самые шокирующие гипотезы"}
     - {id: 802, cat: TV/Documentary, desc: "Территория заблуждений с Игорем Прокопенко"}
+    - {id: 1479, cat: TV/Documentary, desc: "Как устроен мир с Тимофеем Баженовым"}
     - {id: 323, cat: TV/Documentary, desc: "Информационно-аналитические и общественно-политические передачи"}
     - {id: 1195, cat: TV/Documentary, desc: "60 минут"}
     - {id: 1041, cat: TV/Documentary, desc: "Вести"}
     - {id: 672, cat: TV/Documentary, desc: "Вести в субботу с Сергеем Брилевым"}
     - {id: 655, cat: TV/Documentary, desc: "Вести недели"}
-    - {id: 1014, cat: TV/Documentary, desc: "Вечер с Владимиром Соловьевым"}
     - {id: 1007, cat: TV/Documentary, desc: "Время покажет"}
-    - {id: 712, cat: TV/Documentary, desc: "Воскресный вечер с Владимиром Соловьевым"}
     - {id: 673, cat: TV/Documentary, desc: "Воскресное время - Первый канал"}
     - {id: 759, cat: TV/Documentary, desc: "В центре событий с Анной Прохоровой"}
     - {id: 999, cat: TV/Documentary, desc: "Добров в эфире"}
@@ -537,7 +538,7 @@ caps:
     - {id: 330, cat: TV/Documentary, desc: "Человек и закон"}
     - {id: 25, cat: TV/Sport, desc: "Спортивные передачи"}
     - {id: 127, cat: TV/Sport, desc: "ХХII Зимние Олимпийские Игры в Сочи"}
-    - {id: 616, cat: TV/Sport, desc: "Евро-2012 (Польша, Украина)"}
+    - {id: 616, cat: TV/Sport, desc: "Фигурное катание"}
     - {id: 201, cat: TV/Sport, desc: "Бокс, боевые единоборства , рестлинг"}
     - {id: 146, cat: TV/Sport, desc: "Гонки"}
     - {id: 145, cat: TV/Sport, desc: "Футбол"}
@@ -545,7 +546,7 @@ caps:
     - {id: 661, cat: TV/Sport, desc: "Футбол.ru"}
     - {id: 211, cat: TV/Sport, desc: "Хоккей"}
     - {id: 192, cat: TV/Sport, desc: "ЧМ-2010"}
-    - {id: 622, cat: TV/Sport, desc: "ХХХ Летние Олимпийские Игры в Лондоне"}
+    - {id: 622, cat: TV/Sport, desc: "XXIV Зимние Олимпийские игры 2022"}
     - {id: 346, cat: TV/Sport, desc: "Театр"}
     - {id: 199, cat: TV/Sport, desc: "Архив ТВ-Шоу, документальные, спорт"}
     - {id: 577, cat: TV/Sport, desc: "Адская кухня - 2 (Россия)"}
@@ -585,7 +586,6 @@ caps:
     - {id: 334, cat: TV/Sport, desc: "День  космических  историй"}
     - {id: 1091, cat: TV/Sport, desc: "50 оттенков. Белова"}
     - {id: 298, cat: Console, desc: "Игры"}
-    - {id: 299, cat: Console, desc: "Оформление раздач"}
     - {id: 1202, cat: Console, desc: "Новинки repack 'ов"}
     - {id: 302, cat: Console, desc: "Горячие Новинки"}
     - {id: 1225, cat: Console, desc: "Denuvo"}
@@ -621,17 +621,11 @@ caps:
     - {id: 1212, cat: Console, desc: "Патчи"}
     - {id: 1213, cat: Console, desc: "Софт для игр на PC"}
     - {id: 1214, cat: Console, desc: "Прочее"}
-    - {id: 1229, cat: Console, desc: "Новости игровой индустрии(Игромания)"}
-    - {id: 1352, cat: Console, desc: "Игромания"}
-    - {id: 1292, cat: Console, desc: "Шаблоны оформления раздач"}
-    - {id: 1310, cat: Console, desc: "Шаблон xatab"}
-    - {id: 1300, cat: Console, desc: "Шаблон оформления общий"}
-    - {id: 1298, cat: Console, desc: "Шаблон оформления VickNet"}
-    - {id: 1293, cat: Console, desc: "Шаблон оформления анимированный"}
-    - {id: 1295, cat: Console, desc: "Шаблон оформления общий №2"}
-    - {id: 1353, cat: Console, desc: "Для неопытных"}
+    - {id: 1415, cat: Console, desc: "VR"}
+    - {id: 1489, cat: Console, desc: "S.T.A.L.K.E.R"}
     - {id: 382, cat: PC, desc: "Программное обеспечение"}
     - {id: 1237, cat: PC, desc: "Операционные системы"}
+    - {id: 1486, cat: PC, desc: "Windows 11"}
     - {id: 1238, cat: PC, desc: "Windows 10"}
     - {id: 1239, cat: PC, desc: "Windows 8, 8.1"}
     - {id: 1240, cat: PC, desc: "Windows 7"}
@@ -686,8 +680,9 @@ caps:
     - {id: 1422, cat: PC/Mobile-Android, desc: "Соцсети|Мессенджеры - Android"}
     - {id: 1423, cat: PC/Mobile-Android, desc: "Авто|Карты - Android"}
     - {id: 1424, cat: PC/Mobile-Android, desc: "Редакторы|Фоторедакторы - Android"}
+    - {id: 1480, cat: PC/Mobile-Android, desc: "Игры - Android"}
     - {id: 243, cat: Audio, desc: "Музыка"}
-    - {id: 26, cat: Audio, desc: "Правила и предложения по улучшению раздела 'Музыка'"}
+    - {id: 26, cat: Audio, desc: "Правила раздела 'Музыка'"}
     - {id: 96, cat: Audio, desc: "HD Видео"}
     - {id: 70, cat: Audio, desc: "Pop"}
     - {id: 97, cat: Audio, desc: "Видеоклипы / Концерты"}
@@ -753,16 +748,18 @@ caps:
     - {id: 663, cat: Books, desc: "Книги(Аудиокниги) и журналы"}
     - {id: 1036, cat: Books, desc: "Книги"}
     - {id: 1324, cat: Books, desc: "Новинки"}
+    - {id: 1331, cat: Books, desc: "Детские книги"}
     - {id: 1325, cat: Books, desc: "Боевики/Детективы/Триллеры"}
+    - {id: 1334, cat: Books, desc: "Военная литература"}
     - {id: 1326, cat: Books, desc: "Приключения"}
-    - {id: 1327, cat: Books, desc: "Романы"}
+    - {id: 1332, cat: Books, desc: "Комедийные произведения, юмор, сатира"}
     - {id: 1328, cat: Books, desc: "Отечественная фантастика / фэнтези / мистика / ужасы"}
     - {id: 1329, cat: Books, desc: "Зарубежная фантастика / фэнтези / мистика / ужасы"}
     - {id: 1330, cat: Books, desc: "Классическая литература и современная проза"}
-    - {id: 1331, cat: Books, desc: "Детские книги"}
-    - {id: 1334, cat: Books, desc: "Военная литература"}
-    - {id: 1332, cat: Books, desc: "Комедийные произведения, юмор, сатира"}
+    - {id: 1462, cat: Books, desc: "Научно-популярная литература"}
+    - {id: 1471, cat: Books, desc: "Кулинария"}
     - {id: 1333, cat: Books, desc: "Разное"}
+    - {id: 1485, cat: Books, desc: "Медицина"}
     - {id: 1312, cat: Books, desc: "Аудиокниги"}
     - {id: 1398, cat: Books, desc: "Приключения"}
     - {id: 1396, cat: Books, desc: "Детектив"}
@@ -777,6 +774,7 @@ caps:
     - {id: 1321, cat: Books, desc: "Психология"}
     - {id: 1317, cat: Books, desc: "Детская литература"}
     - {id: 1322, cat: Books, desc: "Художественная литература"}
+    - {id: 1474, cat: Books, desc: "Нон-фикшн"}
     - {id: 1323, cat: Books, desc: "Прочая литература"}
     - {id: 1037, cat: Books, desc: "Журналы"}
     - {id: 1335, cat: Books, desc: "Авто-мото журналы"}
@@ -796,38 +794,6 @@ caps:
     - {id: 1349, cat: Books, desc: "Детские журналы"}
     - {id: 1351, cat: Books, desc: "Военные журналы"}
     - {id: 1350, cat: Books, desc: "Хобби (Разное)"}
-    - {id: 1427, cat: XXX, desc: "Клубника(18+)"}
-    - {id: 1428, cat: XXX, desc: " Русское порно"}
-    - {id: 1429, cat: XXX, desc: "  Русские порно фильмы"}
-    - {id: 1431, cat: XXX, desc: "  Русские порно ролики"}
-    - {id: 1430, cat: XXX, desc: "  Русское любительское"}
-    - {id: 1432, cat: XXX, desc: " Зарубежные порно"}
-    - {id: 1446, cat: XXX, desc: "  Зарубежные порно фильмы (DVD, HD и Blu-ray)"}
-    - {id: 1447, cat: XXX, desc: "   Порно фильмы HD"}
-    - {id: 1448, cat: XXX, desc: "   Порно фильмы DVD"}
-    - {id: 1449, cat: XXX, desc: "  Зарубежные порно ролики"}
-    - {id: 1450, cat: XXX, desc: "   Большие сиськи"}
-    - {id: 1451, cat: XXX, desc: "   HD ролики"}
-    - {id: 1452, cat: XXX, desc: "   Анальный секс"}
-    - {id: 1453, cat: XXX, desc: "   Домашнее порно"}
-    - {id: 1454, cat: XXX, desc: "   Подростки"}
-    - {id: 1455, cat: XXX, desc: "   Мамочки"}
-    - {id: 1456, cat: XXX, desc: "   Сцены из фильмов"}
-    - {id: 1457, cat: XXX, desc: "   Любительское"}
-    - {id: 1458, cat: XXX, desc: "   Разное"}
-    - {id: 1433, cat: XXX, desc: "  Порно фильмы с русским переводом"}
-    - {id: 1434, cat: XXX, desc: "  Порно фильмы с сюжетом"}
-    - {id: 1435, cat: XXX, desc: "  Порно фильмы без сюжета"}
-    - {id: 1437, cat: XXX, desc: "  Гонзо"}
-    - {id: 1438, cat: XXX, desc: "  Лесбиянки"}
-    - {id: 1439, cat: XXX, desc: "  Молодые/Студенты"}
-    - {id: 1440, cat: XXX, desc: "  Скрытые камеры"}
-    - {id: 1441, cat: XXX, desc: "  Классические порно фильмы"}
-    - {id: 1442, cat: XXX, desc: "  Этнические порно фильмы"}
-    - {id: 1443, cat: XXX, desc: "  Японские фильмы"}
-    - {id: 1444, cat: XXX, desc: "  Нетрадиционное порно"}
-    - {id: 1445, cat: XXX, desc: "  Эротические фильмы"}
-    - {id: 1459, cat: XXX, desc: "  Мультфильмы / Cartoons"}
 
   modes:
     search: [q]
@@ -843,6 +809,14 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: false
+  - name: addrussian
+    type: checkbox
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -855,11 +829,10 @@ settings:
   - name: type
     type: select
     label: Order requested from site
-    default: desc
+    default: d
     options:
       d: desc
       a: asc
-
 
 login:
   path: ucp.php?mode=login
@@ -894,22 +867,63 @@ search:
     st: 0
     ch: 300
     t: 0
+  keywordsfilters:
+    - name: re_replace # S01 to 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+    - name: re_replace # S01E01 to 1 1
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
 
   rows:
     selector: li.row:has(a[href^="./download/file.php?id="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
       text: 726
-    category|noappend:
-      selector: a[href*="/viewtopic.php?f="]
-      attribute: href
+    categorydesc|noappend:
+      selector: dt a:last-of-type
       optional: true
-      filters:
-        - name: querystring
-          args: f
     title:
       selector: a.topictitle
+      filters:
+        - name: replace
+          args: ["Кураж-Бамбей", "kurazh"]
+        - name: replace
+          args: ["Кубик в Кубе", "Kubik"]
+        - name: replace
+          args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
+        - name: replace
+          args: ["Лицензия", "Lic"]
+        # normalize to SXXEYY format
+        - name: re_replace
+          args: ["(\\d+-*\\d*)\\s+[CСcс]езоны?[,:]?\\s+(\\d+-*\\d*)\\s+(?:[CСcс]ери[йия]|[Вв]ыпуски?(?:ов)?)(?:.*?\\d+)?(.*)\\[((?:[12][0-9]{3}-?){1,})(.*)", "$3 - S$1E$2 - $4 $5"]
+        - name: re_replace
+          args: ["(.*)[CСcс]езоны?[,:]?\\s+(\\d+-*\\d*).*(?:[CСcс]ери[йия]|[Вв]ыпуски?(?:ов)?)\\s+(\\d+-*\\d*)(?:.*?\\d+)?(.*)\\[((?:[12][0-9]{3}-?){1,})(.*)", "$1 $4 - S$2E$3 - $5 $6"]
+        - name: re_replace
+          args: ["((\\d+-*\\d*)\\s+(?:[CСcс]ери[йия]|[Вв]ыпуски?(?:ов)?)(?:.*?\\d+))", "E$2 - "]
+        - name: re_replace
+          args: ["((?:[CСcс]ери[йия]|[Вв]ыпуски?(?:ов)?)\\s+(\\d+-*\\d*)(?:.*?\\d+))", "E$2 - "]
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$0{{ end }}"]
+        - name: re_replace
+          args: ["[\"«»()=!?.,:|\\[\\]\\/]", " "]
+        - name: re_replace
+          args: ["^[-\\s]*", " "]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
+        - name: replace
+          args: ["-Rip", "Rip"]
+        - name: replace
+          args: ["WEB-DL", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
     details:
       selector: a.topictitle
       attribute: href

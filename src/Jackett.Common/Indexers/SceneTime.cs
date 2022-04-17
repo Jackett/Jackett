@@ -133,7 +133,12 @@ namespace Jackett.Common.Indexers
 
             // response without results (the message is misleading)
             if (results.ContentString?.Contains("slow down geek!!!") == true)
-                return new List<ReleaseInfo>();
+            {
+                logger.Warn($"SceneTime: Query Limit exceeded, retrying in 5 seconds.");
+                webclient.requestDelay = 5;
+                results = await RequestWithCookiesAsync(searchUrl);
+                webclient.requestDelay = 0;
+            }
 
             // not logged in
             if (results.ContentString == null || !results.ContentString.Contains("/logout.php"))

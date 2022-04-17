@@ -161,7 +161,7 @@ hr {
     text-align: center;
 }
 
-#jackett-allowext, #jackett-allowupdate, #jackett-logging, #jackett-prerelease, #jackett-cache-enabled {
+#jackett-allowext, #jackett-allowcors, #jackett-allowupdate, #jackett-logging, #jackett-prerelease, #jackett-cache-enabled {
     width: 25px;
 }
 
@@ -282,6 +282,26 @@ table td.fit{
 
 .label-imdb {
     background-color: #d0ab44;
+}
+
+.label-tmdb {
+    background-color: #7dbfd4;
+}
+
+.label-tvdb {
+    background-color: #86cca8;
+}
+
+.label-tvmaze {
+    background-color: #73c3bd;
+}
+
+.label-trakt {
+    background-color: #ef1e25;
+}
+
+.label-douban {
+    background-color: #86cc10;
 }
 
 .tooltip {

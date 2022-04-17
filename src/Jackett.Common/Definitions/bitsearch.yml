@@ -7,10 +7,14 @@ type: public
 encoding: UTF-8
 links:
   - https://bitsearch.to/
+  - https://bitsearch.nocensor.world/
+legacylinks:
   - https://bitsearch.nocensor.biz/
+  - https://bitsearch.nocensor.sbs/
 
 caps:
   categories:
+    AudioBook: Audio/Audiobook
     eBook: Books/EBook
     "Ebook/Course": Books/EBook
     Games: PC/Games
@@ -72,8 +76,12 @@ search:
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
   rows:
-    selector: div.search-result
+    selector: div.search-result:has(a.dl-torrent), li.search-result:has(a.dl-torrent)
 
   fields:
     category:
@@ -84,7 +92,7 @@ search:
       selector: h5 a
       attribute: href
     download:
-      selector: a[class="dl-torrent"]
+      selector: a.dl-torrent
       attribute: href
     infohash:
       selector: a[href^="magnet:?xt"]

@@ -10,24 +10,24 @@ links:
 
 caps:
   categorymappings:
-    - {id: 29, cat: Movies/SD, desc: "movies"}
-    - {id: 52, cat: Movies/HD, desc: "movies HD"}
+    - {id: 29, cat: Movies/SD, desc: "Movies"}
+    - {id: 52, cat: Movies/HD, desc: "Movies HD"}
     - {id: 30, cat: TV/SD, desc: "TV"}
-    - {id: 60, cat: TV/HD, desc: "HD TV"}
+    - {id: 60, cat: TV/HD, desc: "TV HD"}
     - {id: 45, cat: PC/Games, desc: "PC Games"}
     - {id: 37, cat: Audio, desc: "Music"}
     - {id: 56, cat: Books, desc: "Books"}
-    - {id: 40, cat: Other/Misc, desc: "misc"}
-    - {id: 53, cat: Movies/SD, desc: "movies E"}
-    - {id: 61, cat: Movies/HD, desc: "E HD Movies"}
-    - {id: 28, cat: TV/SD, desc: "TV E"}
-    - {id: 62, cat: TV/HD, desc: "E HD TV"}
+    - {id: 40, cat: Other/Misc, desc: "Misc"}
+    - {id: 53, cat: Movies/SD, desc: "Movies LT"}
+    - {id: 61, cat: Movies/HD, desc: "Movies LT HD"}
+    - {id: 28, cat: TV/SD, desc: "TV LT"}
+    - {id: 62, cat: TV/HD, desc: "TV LT HD"}
     - {id: 63, cat: PC/Games, desc: "PC Games Misc"}
-    - {id: 33, cat: Audio, desc: "Music E"}
-    - {id: 57, cat: Books, desc: "Books E"}
-    - {id: 43, cat: Other/Misc, desc: "misc E"}
-    - {id: 51, cat: Movies/SD, desc: "movies RU"}
-    - {id: 64, cat: Movies/HD, desc: "RU Movies HD"}
+    - {id: 33, cat: Audio, desc: "Music LT"}
+    - {id: 57, cat: Books, desc: "Books LT"}
+    - {id: 43, cat: Other/Misc, desc: "Misc LT"}
+    - {id: 51, cat: Movies/SD, desc: "Movies RU"}
+    - {id: 64, cat: Movies/HD, desc: "Movies RU HD"}
     - {id: 65, cat: TV, desc: "TV RU"}
     - {id: 25, cat: Movies/DVD, desc: "DVD"}
     - {id: 42, cat: Console/XBox, desc: "XBOX"}
@@ -37,7 +37,7 @@ caps:
     - {id: 46, cat: TV/Sport, desc: "Sports"}
     - {id: 58, cat: TV/Documentary, desc: "Documentaries"}
     - {id: 38, cat: TV/Anime, desc: "Anime"}
-    - {id: 26, cat: Movies/DVD, desc: "DVD E"}
+    - {id: 26, cat: Movies/DVD, desc: "DVD LT"}
     - {id: 44, cat: Console/Other, desc: "Consoles"}
     - {id: 31, cat: Audio/Video, desc: "Music Videos"}
     - {id: 32, cat: PC/0day, desc: "Appz"}
@@ -48,6 +48,25 @@ caps:
     movie-search: [q]
     music-search: [q]
     book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+
+  - name: password
+    type: password
+    label: Password
+
+#  - name: andmatch
+#    type: checkbox
+#    label: Accept non english characters in torrent names (get more results)
+#    default: true
+
+  - name: searchindesc
+    type: checkbox
+    label: Search in torrent description (get more results)
+    default: true
 
 login:
   path: takelogin.php
@@ -67,11 +86,12 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     incldead: 1
+    searchindesc: "{{ .Config.searchindesc }}"
 
   rows:
     selector: table> tbody > tr:has(a[href^="details?"])
-    filters:
-      - name: andmatch
+#    filters:
+#      - name: "{{ if .Config.andmatch }}andmatch{{ else }}{{ end }}" Currently, -name must be simple string, not a variable
 
   fields:
     category:

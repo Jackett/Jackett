@@ -23,6 +23,8 @@ caps:
     - {id: 71, cat: Movies, desc: "NFLIX"}
     - {id: 78, cat: TV, desc: "EXXEN"}
     - {id: 79, cat: TV, desc: "BLUTV"}
+    - {id: 90, cat: TV, desc: "Disney+"}
+    - {id: 91, cat: TV, desc: "Prime Video"}
     - {id: 58, cat: Movies, desc: "Film"}
     - {id: 72, cat: Movies, desc: "Belgesel"}
     - {id: 60, cat: Movies/3D, desc: "3D"}
@@ -53,9 +55,16 @@ caps:
     - {id: 46, cat: Audio, desc: "Yab@ncı MüziK"}
     - {id: 21, cat: Audio/Video, desc: "Video Klipler"}
     - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 74, cat: PC/Games, desc: "PC"}
-    - {id: 73, cat: Console, desc: "SONY-PS"}
+    - {id: 74, cat: PC/Games, desc: "Oyun PC"}
+    - {id: 84, cat: Console/PS3, desc: "Oyun Playstation"}
+    - {id: 85, cat: Console/PS3, desc: "Oyun Playstation 2"}
+    - {id: 82, cat: Console/PSP, desc: " Oyun PSP"}
+    - {id: 83, cat: Console/Other, desc: "Oyun Gameboy"}
+    - {id: 87, cat: Console/XBox, desc: "Oyun XBOX"}
+    - {id: 88, cat: Console/Other, desc: "Oyun NEO-GEO"}
+    - {id: 89, cat: Console/Wii, desc: "Oyun Nintendo Wii"}
     - {id: 6, cat: PC/0day, desc: "Program"}
+    - {id: 92, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 47, cat: Other, desc: "Resimler"}
     - {id: 48, cat: TV, desc: "Televizyon"}
     - {id: 49, cat: TV/HD, desc: "Tv HD"}
@@ -181,8 +190,6 @@ search:
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
-        - name: replace
-          args: [" at ", " "]
         - name: fuzzytime
     date_unix:
       # within the hour (unix)

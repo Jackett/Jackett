@@ -79,6 +79,7 @@ namespace Jackett.Server.Controllers
             var originalAllowExternal = serverConfig.AllowExternal;
             var port = config.port;
             var external = config.external;
+            var cors = config.cors;
             var saveDir = config.blackholedir;
             var updateDisabled = config.updatedisabled;
             var preRelease = config.prerelease;
@@ -113,10 +114,12 @@ namespace Jackett.Server.Controllers
             var omdbApiUrl = config.omdburl;
 
             if (config.basepathoverride != serverConfig.BasePathOverride)
-            {
                 webHostRestartNeeded = true;
-            }
 
+            if (config.cors != serverConfig.AllowCORS)
+                webHostRestartNeeded = true;
+
+            serverConfig.AllowCORS = cors;
             serverConfig.UpdateDisabled = updateDisabled;
             serverConfig.UpdatePrerelease = preRelease;
             serverConfig.BasePathOverride = basePathOverride;

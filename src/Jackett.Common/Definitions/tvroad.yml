@@ -226,7 +226,6 @@ search:
     leechers:
       selector: b.leech
     downloadvolumefactor:
-      case:
       text: 1
     uploadvolumefactor:
       text: 1

@@ -57,7 +57,6 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
 
 search:
   paths:

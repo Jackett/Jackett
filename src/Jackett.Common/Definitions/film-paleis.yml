@@ -12,43 +12,46 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 2, cat: Movies/BluRay, desc: " Bluray/HD"}
-    - {id: 3, cat: Movies/DVD, desc: " DVD Kids"}
-    - {id: 4, cat: Audio/Video, desc: " DVD Muziek"}
-    - {id: 5, cat: Movies/DVD, desc: " DVD Films"}
-    - {id: 7, cat: Movies/UHD, desc: " 4K films"}
-    - {id: 8, cat: XXX, desc: " Erotiek"}
-    - {id: 9, cat: PC/Mobile-Other, desc: " GSM/Navigatie"}
-    - {id: 10, cat: Audio, desc: " Muziek Album"}
-    - {id: 11, cat: Audio/Other, desc: " Muziek Diverse"}
-    - {id: 12, cat: Console/NDS, desc: " Nintendo"}
-    - {id: 13, cat: Movies, desc: " Classic"}
-    - {id: 15, cat: Other, desc: " Overige"}
-    - {id: 16, cat: PC/0day, desc: " PC Software"}
-    - {id: 17, cat: PC, desc: " PC Spellen"}
-    - {id: 19, cat: TV, desc: " TV Series"}
-    - {id: 21, cat: Movies/SD, desc: " Divx/Xvid"}
-    - {id: 24, cat: Books/EBook, desc: " E-Books"}
-    - {id: 26, cat: Audio/Other, desc: " Cabaret"}
-    - {id: 27, cat: TV/Documentary, desc: " Documentaire"}
-    - {id: 31, cat: Movies/HD, desc: " FP-release"}
-    - {id: 32, cat: Audio/Audiobook, desc: " Luister Boeken"}
+    - {id: 2, cat: Movies/BluRay, desc: "Bluray/HD"}
+    - {id: 3, cat: Movies/DVD, desc: "DVD Kids"}
+    - {id: 4, cat: Audio/Video, desc: "DVD Muziek"}
+    - {id: 5, cat: Movies/DVD, desc: "DVD Films"}
+    - {id: 7, cat: Movies/UHD, desc: "4K films"}
+    - {id: 8, cat: XXX, desc: "Erotiek"}
+    - {id: 9, cat: PC/Mobile-Other, desc: "GSM/Navigatie"}
+    - {id: 10, cat: Audio, desc: "Muziek Album"}
+    - {id: 11, cat: Audio/Other, desc: "Muziek Diverse"}
+    - {id: 12, cat: Console/NDS, desc: "Nintendo"}
+    - {id: 13, cat: Movies, desc: "Classic"}
+    - {id: 15, cat: Other, desc: "Overige"}
+    - {id: 16, cat: PC/0day, desc: "PC Software"}
+    - {id: 17, cat: PC, desc: "PC Spellen"}
+    - {id: 19, cat: TV, desc: "TV Series"}
+    - {id: 21, cat: Movies/SD, desc: "Divx/Xvid"}
+    - {id: 24, cat: Books/EBook, desc: "E-Books"}
+    - {id: 26, cat: Audio/Other, desc: "Cabaret"}
+    - {id: 27, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 31, cat: Movies/HD, desc: "FP-release"}
+    - {id: 32, cat: Audio/Audiobook, desc: "Luister Boeken"}
 
   modes:
     search: [q]
-    tv-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info_cookie
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: flaresolverr
     type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+    label: FlareSolverr
+    default: This site may use DDoS-Guard Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
   - name: thankyou
     type: text
     label: Thank You Comment
@@ -58,9 +61,15 @@ settings:
     default: This site requires you to leave a Thank You comment before you can download. Enter your personalised comment above. Minimum of at least 10 characters.
 
 login:
-  method: cookie
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    returnto: "/"
+  error:
+    - selector: td.embedded:contains("fout")
   test:
     path: /
     selector: a[href="logout.php"]
@@ -86,6 +95,11 @@ search:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: 1
     # does not return imdb link in results
+  keywordsfilters:
+    - name: re_replace # S01E02 to 1 2
+      args: ["(?i)\\bS0*(\\d{1,2})\\s*E0*(\\d{1,2})\\b", "$1 $2"]
+    - name: re_replace # S01 to 1
+      args: ["(?i)\\bS0*(\\d{1,2})\\b", "$1"]
 
   rows:
     selector: table.mainouter
@@ -97,11 +111,13 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: re_replace
-          args: ["(?i)seizoen\\s*(\\d{1,2})\\s*(tot|t\/m)\\s*(\\d{1,2})", "S$1-$3"]
+          args: ["(?i)(seizoen\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "S$2-$4"]
         - name: re_replace
-          args: ["(?i)(seizoen\\s*)(\\d{1,2})", "S$2"]
+          args: ["(?i)(seizoen\\s*)(\\d{1,2})\\s*", "S$2"]
         - name: re_replace
-          args: ["(?i)(afl.\\s*|aflevering\\s*)(\\d{1,2})", "E$2"]
+          args: ["(?i)(afl.\\s*|aflevering\\s*|ep.\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "E$2-$4"]
+        - name: re_replace
+          args: ["(?i)(afl.\\s*|aflevering\\s*|ep.\\s*)(\\d{1,2})", "E$2"]
         - name: re_replace
           args: ["(?i)compleet", "Complete"]
     details:

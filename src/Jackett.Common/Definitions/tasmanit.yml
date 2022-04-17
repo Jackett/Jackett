@@ -14,7 +14,7 @@ caps:
     - {id: 23, cat: TV, desc: "AU-AUTOGEN"}
     - {id: 8, cat: TV, desc: "Australian Comedy"}
     - {id: 18, cat: TV, desc: "Australian Crime Shows"}
-    - {id: 14, cat: TV, desc: "Australian Documentaries"}
+    - {id: 14, cat: TV/Documentary, desc: "Australian Documentaries"}
     - {id: 9, cat: TV, desc: "Australian Dramas"}
     - {id: 10, cat: TV, desc: "Australian Game/Quiz Shows"}
     - {id: 12, cat: TV, desc: "Australian Kids Shows"}
@@ -26,12 +26,13 @@ caps:
     - {id: 17, cat: TV, desc: "Australian Science Shows"}
     - {id: 80, cat: TV, desc: "Australian Soaps"}
     - {id: 16, cat: TV, desc: "Australian Talkshows"}
-    - {id: 22, cat: TV, desc: "Australian Movies"}
+    - {id: 22, cat: Movies, desc: "Australian Movies"}
+    - {id: 82, cat: Audio, desc: "Australian Podcasts"}
     - {id: 73, cat: TV, desc: "New Zealand TV"}
     - {id: 61, cat: TV, desc: "NZ-AUTOGEN"}
     - {id: 47, cat: TV, desc: "New Zealand Comedy"}
     - {id: 58, cat: TV, desc: "New Zealand Crime Shows"}
-    - {id: 53, cat: TV, desc: "New Zealand Documentaries"}
+    - {id: 53, cat: TV/Documentary, desc: "New Zealand Documentaries"}
     - {id: 48, cat: TV, desc: "New Zealand Dramas"}
     - {id: 49, cat: TV, desc: "New Zealand Game/Quiz Shows"}
     - {id: 51, cat: TV, desc: "New Zealand Kids Shows"}
@@ -42,15 +43,16 @@ caps:
     - {id: 54, cat: TV, desc: "New Zealand Science Shows"}
     - {id: 81, cat: TV, desc: "New Zealand Soaps"}
     - {id: 57, cat: TV, desc: "New Zealand Talkshows"}
-    - {id: 59, cat: TV, desc: "New Zealand Movies"}
+    - {id: 59, cat: Movies, desc: "New Zealand Movies"}
     - {id: 36, cat: TV, desc: "New Zealand TV"}
-    - {id: 55, cat: TV, desc: "SATV - All"}
     - {id: 55, cat: TV, desc: "South African TV"}
-    - {id: 7, cat: TV/Other, desc: "New Zealand TV Other"}
+    - {id: 7, cat: TV/Other, desc: "TV Other"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
 
 login:
   path: takelogin.php
@@ -113,9 +115,7 @@ search:
     date:
       selector: td:nth-child(2)
     downloadvolumefactor:
-      case:
-        "*": 1
+      text: 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
 # TS Special Edition

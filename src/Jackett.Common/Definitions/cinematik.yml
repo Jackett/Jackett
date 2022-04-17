@@ -49,6 +49,10 @@ settings:
       0: Active
       1: "Active and Inactive"
       2: Inactive
+  - name: dropbumped
+    type: checkbox
+    label: Ignore Bumped Torrents
+    default: false
   - name: info_results
     type: info
     label: Results Per Page
@@ -77,7 +81,7 @@ search:
     srchdtls: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
 
   rows:
-    selector: table[border="1"] tr:not(:first-child)
+    selector: "table[border=\"1\"] tr:not(:first-child){{ if .Config.dropbumped }}:not(:has(span.bumped)){{ else }}{{ end }}"
 
   fields:
     category:

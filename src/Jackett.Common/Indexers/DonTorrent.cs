@@ -39,15 +39,43 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "buscar/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://dontorrent.red/",
+            "https://dontorrent.dog/",
             "https://todotorrents.net/",
             "https://tomadivx.net/",
-            "https://seriesblanco.one/"
+            "https://seriesblanco.one/",
+            "https://verdetorrent.com/",
+            "https://naranjatorrent.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://dontorrent.it/",
-            "https://dontorrent.li/"
+            "https://dontorrent.red/",
+            "https://dontorrent.nu/",
+            "https://dontorrent.si/",
+            "https://dontorrent.sk/",
+            "https://dontorrent.li/",
+            "https://dontorrent.top/",
+            "https://dontorrent.pm/",
+            "https://dontorrent.re/",
+            "https://dontorrent.wf/",
+            "https://dontorrent.run/",
+            "https://dontorrent.cat/",
+            "https://dontorrent.pl/",
+            "https://dontorrent.tel/",
+            "https://dontorrent.nl/",
+            "https://dontorrent.cx/",
+            "https://dontorrent.bet/",
+            "https://dontorrent.cab/",
+            "https://dontorrent.wtf/",
+            "https://dontorrent.fi/",
+            "https://dontorrent.ink/",
+            "https://dontorrent.kim/",
+            "https://dontorrent.tw/",
+            "https://dontorrent.yt/",
+            "https://dontorrent.vg/",
+            "https://dontorrent.eu/",
+            "https://dontorrent.ch/",
+            "https://dontorrent.vet/"
         };
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
@@ -65,7 +93,7 @@ namespace Jackett.Common.Indexers
             : base(id: "dontorrent",
                    name: "DonTorrent",
                    description: "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL",
-                   link: "https://dontorrent.red/",
+                   link: "https://dontorrent.dog/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -131,7 +159,7 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var downloadUrl = link.ToString();
-            if (downloadUrl.Contains("cdn.pizza"))
+            if (downloadUrl.Contains("cdn.pizza") || downloadUrl.Contains("blazing.network"))
             {
                 return await base.Download(link);
             }

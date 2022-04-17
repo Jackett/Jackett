@@ -271,9 +271,6 @@ namespace Jackett.Common.Services
                 || variant == Variants.JackettVariant.CoreLinuxMuslAmdx64 || variant == Variants.JackettVariant.CoreLinuxMuslArm32
                 || variant == Variants.JackettVariant.CoreLinuxMuslArm64)
                 {
-                    //Calling the file permission service to limit usage to netcoreapp. The Mono.Posix.NETStandard library causes issues outside of .NET Core
-                    //https://github.com/xamarin/XamarinComponents/issues/282
-
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
 
                     var jackettPath = tempDir + "/Jackett/jackett";

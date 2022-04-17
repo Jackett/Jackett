@@ -6,13 +6,14 @@ language: el-GR
 type: private
 encoding: UTF-8
 links:
-  - https://trelas.club/
+  - https://trellas.net/
 legacylinks:
   - https://magico.info/
   - https://magico.one/
   - https://magico.club/
   - https://magico.fun/
   - https://trellas.info/
+  - https://trelas.club/
 
 caps:
   categorymappings:

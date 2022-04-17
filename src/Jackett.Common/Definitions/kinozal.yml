@@ -7,6 +7,7 @@ type: semi-private
 encoding: windows-1251
 links:
   - http://kinozal.tv/ # site forces http, https is not supported
+  - https://kinozal-tv.appspot.com/
 
 caps:
   categorymappings:
@@ -80,6 +81,10 @@ settings:
     type: checkbox
     label: Strip Russian Letters
     default: true
+  - name: addrussian
+    type: checkbox
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -132,6 +137,8 @@ search:
   paths:
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
     - path: browse.php
+      # required for the appspot domain.
+      followredirect: true
   keywordsfilters:
 #    - name: diacritics # 8686
 #      args: replace
@@ -159,23 +166,53 @@ search:
 
   fields:
     title:
-      selector: td.nam a[href^="/details.php?id="]
+      selector: td.nam a[href^="/details.php?"]
       filters:
         # normalize to SXXEYY format
-        - name: replace
-          args: [" / ", " "]
         - name: replace
           args: ["Кураж-Бамбей", "kurazh"]
         - name: replace
           args: ["Кубик в Кубе", "Kubik"]
         - name: replace
           args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
+        - name: replace
+          args: ["АП", "AVO"]
+        - name: replace
+          args: ["ЛО", "VO"]
+        - name: replace
+          args: ["ЛД", "DVO"]
+        - name: replace
+          args: ["ЛМ", "MVO"]
+        - name: replace
+          args: ["ПО", "VO"]
+        - name: replace
+          args: ["ПД", "DVO"]
+        - name: replace
+          args: ["ПМ", "MVO"]
+        - name: replace
+          args: ["ДБ", "DUB"]
+        - name: replace
+          args: ["СТ", "Sub"]
         - name: re_replace
-          args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
+          args: ["\\((\\d+-*\\d*)\\s+[Сс]езоны?:?\\s+(?:(\\d+-*\\d*)\\s+(?:[Сс]ери[ийя]|выпуски?(?:ов)?)(?:.*\\d+)?)?\\)(.*)\\s+((?:[12][0-9]{3}-?){1,})(.*)", "$3 - S$1E$2 - $4 $5"]
         - name: re_replace
-          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          args: ["\\((?:(\\d+-*\\d*)\\s+(?:[Сс]ери[ийя]|выпуски?(?:ов)?)(?:.*\\d+)?)?\\)(.*)\\s+((?:[12][0-9]{3}-?){1,})(.*)", "$2 - E$1 - $3 $4"]
         - name: re_replace
-          args: ["\\((\\d+p)\\)", "$1"]
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ ((?:[12][0-9]{3}-?){1,}))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}$3{{ else }}$0{{ end }}"]
+        - name: replace
+          args: [" / ", " "]
+        - name: re_replace
+          args: ["^-\\s+", " "]
+        - name: re_replace
+          args: ["\\((\\d+[pi])\\)", "$1"]
+        - name: re_replace
+          args: ["(.*)(Blu-Ray\\s*(?:Disc|EUR|CEE)?)\\s*(\\d+[pi])", "$1 BR-DISK $3"]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
         - name: replace
           args: ["-Rip", "Rip"]
         - name: replace
@@ -185,7 +222,7 @@ search:
         - name: replace
           args: ["HDTVRip", "HDTV"]
     details:
-      selector: td.nam a[href^="/details.php?id="]
+      selector: td.nam a[href^="/details.php?"]
       attribute: href
     category:
       selector: td.bt img
@@ -194,7 +231,7 @@ search:
         - name: re_replace
           args: ["[^\\d+]", ""]
     download:
-      selector: td.nam a[href^="/details.php?id="]
+      selector: td.nam a[href^="/details.php?"]
       attribute: href
       filters:
         - name: replace

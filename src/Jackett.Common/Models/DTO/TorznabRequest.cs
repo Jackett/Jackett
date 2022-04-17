@@ -5,28 +5,32 @@ namespace Jackett.Common.Models.DTO
 {
     public class TorznabRequest
     {
-        public string t { get; set; }
         public string q { get; set; }
-        public string cat { get; set; }
         public string imdbid { get; set; }
-        public string tmdbid { get; set; }
+        public string ep { get; set; }
+        public string t { get; set; }
         public string extended { get; set; }
         public string limit { get; set; }
         public string offset { get; set; }
+        public string cache { get; set; }
+        public string cat { get; set; }
+        public string season { get; set; }
         public string rid { get; set; }
         public string tvdbid { get; set; }
-        public string season { get; set; }
-        public string ep { get; set; }
+        public string tmdbid { get; set; }
+        public string tvmazeid { get; set; }
+        public string traktid { get; set; }
+        public string doubanid { get; set; }
         public string album { get; set; }
         public string artist { get; set; }
         public string label { get; set; }
         public string track { get; set; }
         public string year { get; set; }
         public string genre { get; set; }
-        public string author { get; set; }
         public string title { get; set; }
+        public string author { get; set; }
+        public string publisher { get; set; }
         public string configured { get; set; }
-        public string cache { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
         {
@@ -64,15 +68,21 @@ namespace Jackett.Common.Models.DTO
                     query.Categories = new int[0];
             }
 
+            if (!string.IsNullOrWhiteSpace(request.season))
+                query.Season = int.Parse(request.season);
             if (!string.IsNullOrWhiteSpace(request.rid))
                 query.RageID = int.Parse(request.rid);
             if (!string.IsNullOrWhiteSpace(request.tvdbid))
                 query.TvdbID = int.Parse(request.tvdbid);
-            if (!string.IsNullOrWhiteSpace(request.season))
-                query.Season = int.Parse(request.season);
+            if (!string.IsNullOrWhiteSpace(request.tvmazeid))
+                query.TvmazeID = int.Parse(request.tvmazeid);
 
             if (!string.IsNullOrWhiteSpace(request.tmdbid))
                 query.TmdbID = int.Parse(request.tmdbid);
+            if (!string.IsNullOrWhiteSpace(request.traktid))
+                query.TraktID = int.Parse(request.traktid);
+            if (!string.IsNullOrWhiteSpace(request.doubanid))
+                query.DoubanID = int.Parse(request.doubanid);
 
             if (!string.IsNullOrWhiteSpace(request.album))
                 query.Album = request.album;
@@ -85,12 +95,14 @@ namespace Jackett.Common.Models.DTO
             if (!string.IsNullOrWhiteSpace(request.year))
                 query.Year = int.Parse(request.year);
             if (!string.IsNullOrWhiteSpace(request.genre))
-                query.Genre = request.genre.Split(',');
+                query.Genre = request.genre;
 
             if (!string.IsNullOrWhiteSpace(request.title))
                 query.Title = request.title;
             if (!string.IsNullOrWhiteSpace(request.author))
                 query.Author = request.author;
+            if (!string.IsNullOrWhiteSpace(request.publisher))
+                query.Author = request.publisher;
 
             return query;
         }

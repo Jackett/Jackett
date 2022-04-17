@@ -45,7 +45,7 @@ search:
     category: 0
     # 0 all, 1 active, 2 dead
     active: 0
-    tor_page: 100
+    tor_page: 50
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 

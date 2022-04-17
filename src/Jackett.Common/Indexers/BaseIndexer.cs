@@ -109,36 +109,6 @@ namespace Jackett.Common.Indexers
 
         public virtual void SaveConfig() => configurationService.Save(this as IIndexer, configData.ToJson(protectionService, forDisplay: false));
 
-        protected void LoadLegacyCookieConfig(JToken jsonConfig)
-        {
-            var legacyCookieHeader = (string)jsonConfig["cookie_header"];
-            if (!string.IsNullOrEmpty(legacyCookieHeader))
-            {
-                CookieHeader = legacyCookieHeader;
-            }
-            else
-            {
-                // Legacy cookie key
-                var jcookies = jsonConfig["cookies"];
-                if (jcookies is JArray)
-                {
-                    var array = (JArray)jcookies;
-                    legacyCookieHeader = string.Empty;
-                    for (var i = 0; i < array.Count; i++)
-                    {
-                        if (i != 0)
-                            legacyCookieHeader += "; ";
-                        legacyCookieHeader += array[i];
-                    }
-                    CookieHeader = legacyCookieHeader;
-                }
-                else if (jcookies != null)
-                {
-                    CookieHeader = (string)jcookies;
-                }
-            }
-        }
-
         public virtual void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             IProtectionService ps = null;
@@ -171,78 +141,11 @@ namespace Jackett.Common.Indexers
         {
             if (jsonConfig is JArray)
             {
-                if (!MigratedFromDPAPI(jsonConfig))
-                {
-                    LoadValuesFromJson(jsonConfig, true);
-                    IsConfigured = true;
-                }
-            }
-            // read and upgrade old settings file format
-            else if (jsonConfig is object)
-            {
-                LoadLegacyCookieConfig(jsonConfig);
-                SaveConfig();
+                LoadValuesFromJson(jsonConfig, true);
                 IsConfigured = true;
             }
-        }
-
-        //TODO: Remove this section once users have moved off DPAPI
-        private bool MigratedFromDPAPI(JToken jsonConfig)
-        {
-            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
-
-            if (!isWindows && DotNetCoreUtil.IsRunningOnDotNetCore)
-            {
-                // User isn't running Windows, but is running on .NET Core framework, no access to the DPAPI, so don't bother trying to migrate
-                return false;
-            }
-
-            LoadValuesFromJson(jsonConfig, false);
-
-            StringConfigurationItem passwordPropertyValue = null;
-            var passwordValue = "";
-
-            try
-            {
-                // try dynamic items first (e.g. all cardigann indexers)
-                passwordPropertyValue = (StringConfigurationItem)configData.GetDynamicByName("password");
-
-                if (passwordPropertyValue == null) // if there's no dynamic password try the static property
-                {
-                    passwordPropertyValue = (StringConfigurationItem)configData.GetType().GetProperty("Password").GetValue(configData, null);
-
-                    // protection is based on the item.Name value (property name might be different, example: Abnormal), so check the Name again
-                    if (!string.Equals(passwordPropertyValue.Name, "password", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        logger.Debug($"Skipping non default password property (unencrpyted password) for [{Id}] while attempting migration");
-                        return false;
-                    }
-                }
-
-                passwordValue = passwordPropertyValue.Value;
-            }
-            catch (Exception)
-            {
-                logger.Debug($"Unable to source password for [{Id}] while attempting migration, likely a tracker without a password setting");
-                return false;
-            }
-
-            if (!string.IsNullOrEmpty(passwordValue))
-            {
-                try
-                {
-                    protectionService.UnProtect(passwordValue);
-                    //Password successfully unprotected using Microsoft.AspNetCore.DataProtection, no further action needed as we've already converted the password previously
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message != "The provided payload cannot be decrypted because it was not protected with this protection provider.")
-                        logger.Info($"Password could not be unprotected using Microsoft.AspNetCore.DataProtection - {Id} : " + ex);
-                }
-            }
-
-            return false;
+            else
+                logger.Warn("Some of the configuration files (.json) are in the old format. Please, update Jackett.");
         }
 
         protected async Task ConfigureIfOK(string cookies, bool isLoggedin, Func<Task> onError)
@@ -348,7 +251,9 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.MovieSearchImdbAvailable && query.IsImdbQuery)
                 return true;
-            if (caps.MovieSearchTmdbAvailable && query.IsTmdbQuery)
+            if (caps.MovieSearchTmdbAvailable && query.IsTmdbQuery && query.IsMovieSearch)
+                return true;
+            if (caps.TvSearchTmdbAvailable && query.IsTmdbQuery && query.IsTVSearch)
                 return true;
 
             return false;
@@ -386,22 +291,26 @@ namespace Jackett.Common.Indexers
 
         public virtual async Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer)
         {
-            if (!CanHandleQuery(query) || !CanHandleCategories(query, isMetaIndexer))
+            // we make a copy just in case some C# indexer modifies the object.
+            // without the copy, if you make a request with several indexers, all indexers share the query object.
+            var queryCopy = query.Clone();
+
+            if (!CanHandleQuery(queryCopy) || !CanHandleCategories(queryCopy, isMetaIndexer))
                 return new IndexerResult(this, new ReleaseInfo[0], false);
 
-            if (query.Cache)
+            if (queryCopy.Cache)
             {
-                var cachedReleases = cacheService.Search(this, query);
+                var cachedReleases = cacheService.Search(this, queryCopy);
                 if (cachedReleases != null)
                     return new IndexerResult(this, cachedReleases, true);
             }
 
             try
             {
-                var results = await PerformQuery(query);
-                results = FilterResults(query, results);
-                results = FixResults(query, results);
-                cacheService.CacheResults(this, query, results.ToList());
+                var results = await PerformQuery(queryCopy);
+                results = FilterResults(queryCopy, results);
+                results = FixResults(queryCopy, results);
+                cacheService.CacheResults(this, queryCopy, results.ToList());
                 errorCount = 0;
                 expireAt = DateTime.Now.Add(HealthyStatusValidity);
                 return new IndexerResult(this, results, false);

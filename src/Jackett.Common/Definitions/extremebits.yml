@@ -135,14 +135,14 @@ search:
     size:
       selector: td:nth-of-type(10)
       remove: a
-    cat:
+    _cat:
       selector: td:nth-of-type(1) a img
       attribute: alt
     description:
       selector: td:nth-of-type(4)
       filters:
         - name: prepend
-          args: "cat={{ .Result.cat }}, wait="
+          args: "cat={{ .Result._cat }}, wait="
     downloadvolumefactor:
       case:
         img[src="img/freedownload.png"]: 0

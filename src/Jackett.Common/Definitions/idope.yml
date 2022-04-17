@@ -62,7 +62,7 @@ settings:
   - name: flaresolverr
     type: info
     label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
 
 search:
   paths:
@@ -96,7 +96,7 @@ search:
     details:
       selector: div.resultdivtop a
       attribute: href
-    download-itorrents:
+    download_itorrents:
       selector: div.resultdivbotton div.hideinfohash
       filters:
         - name: toupper
@@ -105,7 +105,7 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{ if .Config.itorrents-links }}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
+      text: "{{ if .Config.itorrents-links }}{{ .Result.download_itorrents }}{{ else }}{{ end }}"
     infohash:
       selector: div.resultdivbotton div.hideinfohash
     date:

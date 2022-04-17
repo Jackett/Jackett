@@ -1,0 +1,901 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/SchemaRoot",
+    "definitions": {
+        "SchemaRoot": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["public", "semi-private", "private"]
+                },
+                "encoding": {
+                    "type": "string"
+                },
+                "followredirect": {
+                    "type": "boolean"
+                },
+                "testlinktorrent": {
+                    "type": "boolean"
+                },
+                "requestDelay": {
+                    "type": "number"
+                },
+                "links": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                },
+                "legacylinks": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "format": "uri"
+                    }
+                },
+                "certificates": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "caps": {
+                    "$ref": "#/definitions/Caps"
+                },
+                "settings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SettingsField"
+                    }
+                },
+                "login": {
+                    "$ref": "#/definitions/Login"
+                },
+                "search": {
+                    "$ref": "#/definitions/Search"
+                },
+                "download": {
+                    "$ref": "#/definitions/DownloadBlock"
+                }
+            },
+            "required": [
+                "caps",
+                "description",
+                "encoding",
+                "id",
+                "language",
+                "links",
+                "name",
+                "search",
+                "type"
+            ],
+            "title": "SchemaRoot"
+        },
+        "Caps": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "categories": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^.*$": {
+                            "$ref": "#/definitions/IndexerCategories"
+                        }
+                    }
+                },
+                "categorymappings": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "$ref": "#/definitions/CategoryMapping"
+                    }
+                },
+                "modes": {
+                    "$ref": "#/definitions/Modes"
+                },
+                "allowrawsearch": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "modes"
+            ],
+            "oneOf": [
+                {
+                    "required": [
+                        "categories"
+                    ]
+                },
+                {
+                    "required": [
+                        "categorymappings"
+                    ]
+                }
+            ],
+            "title": "Caps"
+        },
+        "CategoryMapping": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "oneOf": [
+                        {"type": "integer"},
+                        {"type": "string"}
+                    ]
+                },
+                "cat": {
+                    "$ref": "#/definitions/IndexerCategories"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "default": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "cat",
+                "id"
+            ],
+            "title": "CategoryMapping"
+        },
+        "Modes": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "search": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": ["q"]
+                    }
+                },
+                "tv-search": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": ["q", "season", "ep", "imdbid", "tvdbid", "tmdbid", "tvmazeid", "traktid", "doubanid", "year", "genre"]
+                    }
+                },
+                "movie-search": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": ["q", "imdbid", "tmdbid", "traktid", "doubanid", "year", "genre"]
+                    }
+                },
+                "music-search": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": ["q", "album", "artist", "label", "track", "year", "genre"]
+                    }
+                },
+                "book-search": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": ["q", "title", "author", "publisher", "year", "genre"]
+                    }
+                }
+            },
+            "required": [
+                "search"
+            ],
+            "title": "Modes"
+        },
+        "SettingsField": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "type":{
+                    "type": "string",
+                    "enum": ["info", "text", "password", "checkbox", "select"]
+                },
+                "default": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "options": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "defaults": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "label",
+                "name",
+                "type"
+            ],
+            "title": "SettingsField"
+        },
+        "Login": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "method": {
+                    "type": "string",
+                    "enum": ["form", "post", "cookie", "get", "oneurl"]
+                },
+                "cookies": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "path": {
+                    "type": "string"
+                },
+                "submitpath": {
+                    "type": "string"
+                },
+                "form": {
+                    "type": "string"
+                },
+                "captcha": {
+                    "$ref": "#/definitions/CaptchaBlock"
+                },
+                "inputs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^.*$": {
+                            "oneOf": [
+                                {"type": "number"},
+                                {"type": "string"},
+                                {"type": "boolean"}
+                            ]
+                        }
+                    }
+                },
+                "selectors": {
+                    "type": "boolean"
+                },
+                "selectorinputs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[A-Za-z0-9_]*$": {
+                            "$ref": "#/definitions/SelectorBlock"
+                        }
+                    }
+                },
+                "getselectorinputs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[A-Za-z0-9_]*$": {
+                            "$ref": "#/definitions/SelectorBlock"
+                        }
+                    }
+                },
+                "error": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ErrorBlock"
+                    }
+                },
+                "test": {
+                    "$ref": "#/definitions/PageTestBlock"
+                }
+            },
+            "title": "Login"
+        },
+        "PageTestBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "selector": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "path"
+            ],
+            "title": "PageTestBlock"
+        },
+        "CaptchaBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": ["image", "text"]
+                },
+                "selector": {
+                    "type": "string"
+                },
+                "input": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "input",
+                "selector",
+                "type"
+            ],
+            "title": "CaptchaBlock"
+        },
+        "ErrorBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "selector": {
+                    "type": "string"
+                },
+                "message": {
+                    "$ref": "#/definitions/SelectorBlock"
+                }
+            },
+            "required": [
+                "selector"
+            ],
+            "title": "ErrorBlock"
+        },
+        "SelectorBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "selector": {
+                    "type": "string"
+                },
+                "attribute": {
+                    "type": "string"
+                },
+                "optional": {
+                    "type": "boolean"
+                },
+                "case": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^.*$": {
+                            "oneOf": [
+                                {"type": "string"},
+                                {"type": "number"}
+                            ]
+                        }
+                    }
+                },
+                "remove": {
+                    "type": "string"
+                },
+                "text": {
+                    "oneOf": [
+                        {"type": "string"},
+                        {"type": "number"}
+                    ]
+                },
+                "filters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FilterBlock"
+                    }
+                }
+            },
+            "title": "SelectorBlock"
+        },
+        "Search": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "paths": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SearchPathBlock"
+                    }
+                },
+                "inputs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^((\\$raw)|[A-Za-z0-9.\\-_[\\]]*)$": {
+                            "oneOf": [
+                                {"type": "number"},
+                                {"type": "string"},
+                                {"type": "boolean"}
+                            ]
+                        }
+                    }
+                },
+                "headers": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[A-Za-z0-9-]*$": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "keywordsfilters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FilterBlock"
+                    }
+                },
+                "error": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ErrorBlock"
+                    }
+                },
+                "preprocessingfilters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FilterBlock"
+                    }
+                },
+                "rows": {
+                    "$ref": "#/definitions/RowsBlock"
+                },
+                "fields": {
+                    "$ref": "#/definitions/FieldsBlock"
+                }
+            },
+            "required": [
+                "fields",
+                "rows"
+            ],
+            "oneOf": [
+                {
+                    "required": [
+                        "paths"
+                    ]
+                },
+                {
+                    "required": [
+                        "path"
+                    ]
+                }
+            ],
+            "title": "Search"
+        },
+        "SearchPathBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "followredirect": {
+                    "type": "boolean"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {"type": "integer"},
+                            {"type": "string"}
+                        ]
+                    }
+                },
+                "inputs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^((\\$raw)|[A-Za-z0-9.\\-_[\\]]*)$": {
+                            "oneOf": [
+                                {"type": "integer"},
+                                {"type": "string"}
+                            ]
+                        }
+                    }
+                },
+                "inheritinputs": {
+                    "type": "boolean"
+                },
+                "queryseparator": {
+                    "type": "string"
+                },
+                "response": {
+                    "$ref": "#/definitions/ResponseBlock"
+                }
+            },
+            "required": [
+                "path"
+            ],
+            "title": "SearchPathBlock"
+        },
+        "ResponseBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": ["json", "xml"]
+                },
+                "noResultsMessage": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "title": "ResponseBlock"
+        },
+        "RowsBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "after": {
+                    "type": "integer"
+                },
+                "dateheaders": {
+                    "$ref": "#/definitions/SelectorBlock"
+                },
+                "selector": {
+                    "type": "string"
+                },
+                "attribute": {
+                    "type": "string"
+                },
+                "optional": {
+                    "type": "boolean"
+                },
+                "multiple": {
+                    "type": "boolean"
+                },
+                "missingAttributeEquals0Results": {
+                    "type": "boolean"
+                },
+                "case": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[A-Za-z0-9]*$": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "remove": {
+                    "type": "string"
+                },
+                "text": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ]
+                },
+                "filters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RowFilterBlock"
+                    }
+                },
+                "count": {
+                    "$ref": "#/definitions/SelectorBlock"
+                }
+            },
+            "title": "RowsBlock"
+        },
+        "FieldsBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^_[A-Za-z0-9-_]*$": {
+                    "$ref": "#/definitions/SelectorBlock"
+                },
+                "^((title|description)\\|(append))?$": {
+                    "$ref": "#/definitions/SelectorBlock"
+                },
+                "^((category|categorydesc)\\|(noappend|append))?$": {
+                    "$ref": "#/definitions/SelectorBlock"
+                },
+                "^(download|magnet|infohash|details|comments|title|description|category|categorydesc|size|leechers|seeders|date|files|grabs|downloadvolumefactor|uploadvolumefactor|minimumratio|minimumseedtime|imdb|imdbid|tmdbid|rageid|tvdbid|tvmazeid|traktid|doubanid|poster|genre|year|author|booktitle|publisher|album|artist|label|track)(_([A-Za-z0-9_])*)?$": {
+                    "$ref": "#/definitions/SelectorBlock"
+                }
+            },
+            "required": [
+                "seeders",
+                "title"
+            ],
+            "title": "FieldsBlock"
+        },
+        "DownloadBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "before": {
+                    "$ref": "#/definitions/BeforeBlock"
+                },
+                "selectors": {
+                    "type": "array"
+                },
+                "infohash": {
+                    "$ref": "#/definitions/InfoHashBlock"
+                }
+            },
+            "title": "DownloadBlock"
+        },
+        "BeforeBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "pathselector": {
+                    "$ref": "#/definitions/SelectorField"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "inputs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[A-Za-z0-9_]*$": {
+                            "oneOf": [
+                                {"type": "integer"},
+                                {"type": "string"}
+                            ]
+                        }
+                    }
+                },
+                "queryseparator": {
+                    "type": "string"
+                }
+            },
+            "oneOf": [
+                {
+                    "required": [
+                        "path"
+                    ]
+                },
+                {
+                    "required": [
+                        "pathselector"
+                    ]
+                }
+            ],
+            "title": "BeforeBlock"
+        },
+        "InfoHashBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "hash": {
+                    "$ref": "#/definitions/SelectorField"
+                },
+                "title": {
+                    "$ref": "#/definitions/SelectorField"
+                },
+                "usebeforeresponse": {
+                    "type": "boolean"
+                }
+            },
+            "title": "InfoHashBlock"
+        },
+        "SelectorField": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "selector": {
+                    "type": "string"
+                },
+                "attribute": {
+                    "type": "string"
+                },
+                "usebeforeresponse": {
+                    "type": "boolean"
+                },
+                "filters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FilterBlock"
+                    }
+                }
+            },
+            "title": "SelectorField"
+        },
+        "RowFilterBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "enum": ["andmatch", "strdump"]
+                },
+                "args": {
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {"type": "number"},
+                                    {"type": "boolean"}
+                                ]
+                            }
+                        },
+                        {"type": "string"},
+                        {"type": "integer"}
+                    ]
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "title": "RowFilterBlock"
+        },
+        "FilterBlock": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "enum": ["querystring", "timeparse", "dateparse", "regexp", "re_replace", "split", "replace", "trim", "prepend", "append", "tolower", "toupper", "urldecode", "urlencode", "timeago", "reltime", "fuzzytime", "validfilename", "diacritics", "jsonjoinarray", "hexdump", "strdump", "validate"]
+                },
+                "args": {
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {"type": "string"},
+                                    {"type": "number"},
+                                    {"type": "boolean"}
+                                ]
+                            }
+                        },
+                        {"type": "string"},
+                        {"type": "integer"}
+                    ]
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "title": "FilterBlock"
+        },
+        "IndexerCategories": {
+            "type": "string",
+            "enum": [
+                "Console",
+                "Console/NDS",
+                "Console/PSP",
+                "Console/Wii",
+                "Console/XBox",
+                "Console/XBox 360",
+                "Console/Wiiware",
+                "Console/XBox 360 DLC",
+                "Console/PS3",
+                "Console/Other",
+                "Console/3DS",
+                "Console/PS Vita",
+                "Console/WiiU",
+                "Console/XBox One",
+                "Console/PS4",
+                "Movies",
+                "Movies/Foreign",
+                "Movies/Other",
+                "Movies/SD",
+                "Movies/HD",
+                "Movies/UHD",
+                "Movies/BluRay",
+                "Movies/3D",
+                "Movies/DVD",
+                "Movies/WEB-DL",
+                "Audio",
+                "Audio/MP3",
+                "Audio/Video",
+                "Audio/Audiobook",
+                "Audio/Lossless",
+                "Audio/Other",
+                "Audio/Foreign",
+                "PC",
+                "PC/0day",
+                "PC/ISO",
+                "PC/Mac",
+                "PC/Mobile-Other",
+                "PC/Games",
+                "PC/Mobile-iOS",
+                "PC/Mobile-Android",
+                "TV",
+                "TV/WEB-DL",
+                "TV/Foreign",
+                "TV/SD",
+                "TV/HD",
+                "TV/UHD",
+                "TV/Other",
+                "TV/Sport",
+                "TV/Anime",
+                "TV/Documentary",
+                "XXX",
+                "XXX/DVD",
+                "XXX/WMV",
+                "XXX/XviD",
+                "XXX/x264",
+                "XXX/UHD",
+                "XXX/Pack",
+                "XXX/ImageSet",
+                "XXX/Other",
+                "XXX/SD",
+                "XXX/WEB-DL",
+                "Books",
+                "Books/Mags",
+                "Books/EBook",
+                "Books/Comics",
+                "Books/Technical",
+                "Books/Other",
+                "Books/Foreign",
+                "Other",
+                "Other/Misc",
+                "Other/Hashed"
+            ],
+            "title": "IndexerCategories"
+        }
+    }
+}

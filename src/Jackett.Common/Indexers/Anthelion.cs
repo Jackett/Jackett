@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
 
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataBasicLoginWith2FA configData => (ConfigurationDataBasicLoginWith2FA)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://tehconnection.me/"
@@ -40,11 +40,11 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TmdbId
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
                        }
                    },
                    configService: configService,
@@ -52,7 +52,8 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataBasicLoginWith2FA(@"If 2FA is disabled, let the field empty.
+ We recommend to disable 2FA because re-login will require manual actions."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -72,8 +73,9 @@ namespace Jackett.Common.Indexers
             {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
+                { "twofa", configData.TwoFactorAuth.Value },
                 { "keeplogged", "1" },
-                { "login", "Log+In!" }
+                { "login", "Log in" }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
@@ -91,21 +93,27 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            // TODO: IMDB search is available but it requires to parse the details page
             var qc = new NameValueCollection
             {
                 { "order_by", "time" },
                 { "order_way", "desc" },
                 { "action", "basic" },
-                { "searchsubmit", "1" },
-                { "searchstr", query.IsImdbQuery ? query.ImdbID : query.GetQueryString() }
+                { "searchsubmit", "1" }
             };
+
+            if (query.IsImdbQuery)
+                qc.Add("imdb", query.ImdbID);
+            else if (query.IsTmdbQuery)
+                qc.Add("tmdb", query.TmdbID.ToString());
+            else
+                qc.Add("searchstr", query.GetQueryString());
 
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
                 qc.Add($"filter_cat[{cat}]", "1");
 
-            var searchUrl = BrowseUrl + "?" + qc.GetQueryString();
+            // remove . as not used in titles
+            var searchUrl = BrowseUrl + "?" + qc.GetQueryString().Replace(".", " ");
             var results = await RequestWithCookiesAsync(searchUrl);
             try
             {
@@ -146,9 +154,11 @@ namespace Jackett.Common.Indexers
                         }
                     };
 
-                    // TODO: TMDb is also available
                     var qImdb = row.QuerySelector("a[href^=\"https://www.imdb.com\"]");
                     var imdb = qImdb != null ? ParseUtil.GetImdbID(qImdb.GetAttribute("href").Split('/').Last()) : null;
+
+                    qImdb = row.QuerySelector("a[href^=\"https://www.themoviedb.org\"]");
+                    var tmdb = qImdb != null ? ParseUtil.GetLongFromString(qImdb.GetAttribute("href").Split('/').Last()) : null;
 
                     var release = new ReleaseInfo
                     {
@@ -162,6 +172,7 @@ namespace Jackett.Common.Indexers
                         Details = details,
                         Guid = link,
                         Imdb = imdb,
+                        TMDb = tmdb,
                         Poster = poster,
                         Seeders = seeders,
                         Peers = leechers + seeders,

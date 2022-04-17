@@ -39,55 +39,55 @@ search:
   fields:
     category:
       text: 1
-    multi:
+    _multi:
       optional: true
       selector: img.flageitor:nth-child(2)
       filters:
         - name: re_replace
           args: [".*", "MULTi "]
-    eng:
+    _eng:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/english.png"]
       filters:
         - name: re_replace
           args: [".*", "English "]
-    esp:
+    _esp:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/espanol.png"]
       filters:
         - name: re_replace
           args: [".*", "SPANiSH "]
-    ita:
+    _ita:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/italian.png"]
       filters:
         - name: re_replace
           args: [".*", "iTALiAN "]
-    deu:
+    _deu:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/german.png"]
       filters:
         - name: re_replace
           args: [".*", "German "]
-    fra:
+    _fra:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/french.png"]
       filters:
         - name: re_replace
           args: [".*", "FRENCH "]
-    oth:
+    _oth:
       optional: true
       selector: img.flageitor[src^="/wp-content/themes/moviesdvdr/images/other.png"]
       filters:
         - name: re_replace
           args: [".*", "oTHer "]
-    doc:
+    _doc:
       optional: true
       selector: div.imagem span:contains("Documental")
       filters:
         - name: re_replace
           args: ["Documental", "DOC "]
-    3x:
+    _3x:
       optional: true
       selector: div.imagem span:contains("Adulto")
       filters:
@@ -97,7 +97,7 @@ search:
       selector: div.titulo
       filters:
         - name: append
-          args: " {{ .Result.multi }}{{ .Result.eng }}{{ .Result.esp }}{{ .Result.ita }}{{ .Result.deu }}{{ .Result.fra }}{{ .Result.oth }}{{ .Result.doc }}{{ .Result.3x }}DVDRiP XViD"
+          args: " {{ .Result._multi }}{{ .Result._eng }}{{ .Result._esp }}{{ .Result._ita }}{{ .Result._deu }}{{ .Result._fra }}{{ .Result._oth }}{{ .Result._doc }}{{ .Result._3x }}DVDRiP XViD"
     details:
       selector: a
       attribute: href

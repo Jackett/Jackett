@@ -60,6 +60,7 @@ search:
     - path: advancedsearch.php
       response:
         type: json
+
   inputs:
     q: "{{ if and .Config.titleOnly .Keywords }}title:({{ else }}{{ end }}{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}{{ if and .Config.titleOnly .Keywords }}){{ else }}{{ end }}{{ if .Keywords }} AND {{ else }}{{ end }}format:(\"Archive BitTorrent\"){{ if .Categories }} AND mediatype:({{ join .Categories \" OR \" }}){{ else }}{{ end }}"
     fl[]: "identifier,title,mediatype,item_size,downloads,btih,publicdate"
@@ -77,17 +78,17 @@ search:
       selector: mediatype
     title:
       selector: title
-    id:
+    _id:
       selector: identifier
     details:
-      text: "details/{{ .Result.id }}"
+      text: "details/{{ .Result._id }}"
     download:
-      text: "download/{{ .Result.id }}/{{ .Result.id }}_archive.torrent"
-    btih:
+      text: "download/{{ .Result._id }}/{{ .Result._id }}_archive.torrent"
+    _btih:
       selector: btih
       optional: true
     infohash:
-      text: "{{ if .Config.noMagnet }}{{ else }}{{ .Result.btih }}{{ end }}"
+      text: "{{ if .Config.noMagnet }}{{ else }}{{ .Result._btih }}{{ end }}"
     date:
       # 2021-10-25T16:44:43Z
       selector: publicdate
@@ -95,6 +96,7 @@ search:
       selector: item_size
     grabs:
       selector: downloads
+      optional: true
     seeders:
       text: 1
     leechers:

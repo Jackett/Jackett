@@ -116,7 +116,7 @@ search:
     # site does not support imdbid searching
 
   rows:
-    selector: "tr.tbody{{ if .Config.freeleech }}:has(img[src=\"kepek/ikon_free.png\"]){{ else }}{{ end }}"
+    selector: "tr.tbody:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src=\"kepek/ikon_free.png\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
@@ -129,14 +129,14 @@ search:
           args: cat
     title:
       selector: a[href*="klappe("]
-    id:
+    _id:
       selector: a[href*="klappe("]
       attribute: href
       filters:
         - name: regexp
           args: (\d+)
     details:
-      text: "details.php?id={{ .Result.id }}"
+      text: "details.php?id={{ .Result._id }}"
     poster:
       selector: img[border][onmouseover]
       attribute: onmouseover
@@ -183,6 +183,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 14 days (as seconds = 14 x 24 x 60 x 60)
-      text: 1209600
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # TBDEV custom v2.0

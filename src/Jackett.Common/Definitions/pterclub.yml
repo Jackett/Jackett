@@ -27,8 +27,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
     book-search: [q]
 
@@ -82,7 +82,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    verify_code: "{{ .Config.2facode }}"
+    2fa_secret: "{{ .Config.2facode }}"
     logout: ""
     securelogin: ""
     ssl: yes
@@ -98,13 +98,13 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0 title, 3 uploader, 4 imdburl, 5 DoubanID
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}5{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -138,15 +138,18 @@ search:
       selector: img[data-orig]
       attribute: data-orig
     imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+      selector: a[href$="&search_area=4"]
+      attribute: href
+    doubanid:
+      selector: a[href$="&search_area=5"]
       attribute: href
     # staff have extra columns at the start and end of a row, so we have to float the next lot of selectors off an anchor
-    anchor1:
+    _anchor1:
       selector: td:has(a[href^="comment.php?"])
       optional: true
     date_elapsed:
       # time type: time elapsed (default)
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td > span[title]"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td > span[title]"
       attribute: title
       optional: true
       filters:
@@ -156,7 +159,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date_added:
       # time added
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td:not(:has(span[title]))"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td:not(:has(span[title]))"
       optional: true
       filters:
         - name: append
@@ -166,13 +169,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td"
     seeders:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td"
     leechers:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td"
     grabs:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td ~ td"
     downloadvolumefactor:
       case:
         img.pro_free: 0

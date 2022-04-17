@@ -52,8 +52,6 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings:
   - name: username
@@ -116,6 +114,9 @@ search:
 
   fields:
     category:
+      text: 24
+    category|noappend:
+      optional: true
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
@@ -126,14 +127,14 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    id:
+    _id:
       selector: a[href^="details.php?id="]
       attribute: href
       filters:
         - name: querystring
           args: id
     download:
-      text: "download.php?id={{ .Result.id }}"
+      text: "download.php?id={{ .Result._id }}"
     description:
       selector: a[href^="browse.php?cat="] img
       attribute: alt

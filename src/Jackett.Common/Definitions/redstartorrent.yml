@@ -91,6 +91,7 @@ search:
           args: "{{ .Result.description }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     date:
       selector: td:nth-child(5)
       filters:

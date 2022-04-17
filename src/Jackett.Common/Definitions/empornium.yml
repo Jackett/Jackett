@@ -1,7 +1,7 @@
 ---
 id: empornium
 name: Empornium
-description: "Empornium (EMP) is a Private Torrent Tracker for XXX"
+description: "Empornium (EMP) is a Private Torrent Tracker for 3X"
 language: en-US
 type: private
 encoding: UTF-8
@@ -64,8 +64,6 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
 
 settings:
   - name: username

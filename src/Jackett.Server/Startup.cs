@@ -30,6 +30,8 @@ namespace Jackett.Server
 {
     public class Startup
     {
+        private const string AllowAllOrigins = "AllowAllOrigins";
+
         public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
@@ -37,9 +39,14 @@ namespace Jackett.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddResponseCompression();
+            services.AddResponseCompression()
+                    .AddCors(
+                        options =>
+                        {
+                            options.AddPolicy(name: AllowAllOrigins, corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin());
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        })
+                    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                         options =>
                         {
@@ -48,8 +55,6 @@ namespace Jackett.Server
                             options.LogoutPath = new PathString("/UI/Logout");
                             options.Cookie.Name = "Jackett";
                         });
-
-
 
 #if NET461
             services.AddMvc(
@@ -141,6 +146,9 @@ namespace Jackett.Server
 
             app.UseAuthentication();
 
+            if (Helper.ServerConfiguration.AllowCORS)
+                app.UseCors(AllowAllOrigins);
+
             app.UseMvc();
         }
 #else
@@ -182,6 +190,9 @@ namespace Jackett.Server
             app.UseAuthentication();
 
             app.UseRouting();
+
+            if (Helper.ServerConfiguration.AllowCORS)
+                app.UseCors(AllowAllOrigins);
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }

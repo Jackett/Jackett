@@ -282,6 +282,7 @@ namespace Jackett.Server.Controllers
                     var item = MapperUtil.Mapper.Map<TrackerCacheResult>(result);
                     item.Tracker = indexer.DisplayName;
                     item.TrackerId = indexer.Id;
+                    item.TrackerType = indexer.Type;
                     item.Peers = item.Peers - item.Seeders; // Use peers as leechers
                     return item;
                 });
@@ -290,7 +291,7 @@ namespace Jackett.Server.Controllers
             ConfigureCacheResults(manualResult.Results);
 
             // Log info
-            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.ID));
+            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name));
             var cacheStr = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Any(t => t.Result.IsFromCache) ? " (from cache)" : "";
             if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
                 logger.Info($"Manual search in {indexersName} => Found {manualResult.Results.Count()} releases{cacheStr}");
@@ -380,6 +381,12 @@ namespace Jackett.Server.Controllers
                 {
                     logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
+                }
+
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchTmdbAvailable)
+                {
+                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tmdbid is not supported for TV search by this indexer");
                 }
             }
 

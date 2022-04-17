@@ -6,15 +6,17 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
+  - https://spidertk.top/
+legacylinks:
   - https://spidertk.xyz/
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies/BluRay, desc: "Films / 2160p / BluRay"}
+    - {id: 401, cat: Movies/BluRay, desc: "Films / 2160p / BluRay Full"}
     - {id: 410, cat: Movies/UHD, desc: "Films / 2160p / REMUX"}
     - {id: 411, cat: Movies/UHD, desc: "Films / 2160p / AV1"}
     - {id: 412, cat: Movies/UHD, desc: "Films / 2160p / x265"}
-    - {id: 413, cat: Movies/BluRay, desc: "Films / 1080p / BluRay"}
+    - {id: 413, cat: Movies/BluRay, desc: "Films / 1080p / BluRay Full"}
     - {id: 414, cat: Movies/HD, desc: "Films / 1080p / REMUX"}
     - {id: 415, cat: Movies/HD, desc: "Films / 1080p / AV1"}
     - {id: 416, cat: Movies/HD, desc: "Films / 1080p / x265"}
@@ -34,7 +36,6 @@ caps:
     - {id: 426, cat: Movies, desc: "Films / Animation"}
     - {id: 427, cat: Movies/Other, desc: "Films / Spectacle"}
     - {id: 428, cat: Audio/Video, desc: "Films / Concerts, Clips"}
-    - {id: 429, cat: Movies, desc: "Films / VOSTFR"}
     - {id: 460, cat: Movies, desc: "Films / VO"}
     - {id: 430, cat: TV, desc: "Séries / BluRay"}
     - {id: 431, cat: TV, desc: "Séries / Pack VF"}
@@ -50,7 +51,6 @@ caps:
     - {id: 441, cat: TV/Documentary, desc: "Séries / Documentaire"}
     - {id: 442, cat: TV/Sport, desc: "Séries / Sport"}
     - {id: 443, cat: TV, desc: "Séries / Émission TV"}
-    - {id: 461, cat: TV, desc: "Séries / VO"}
     - {id: 444, cat: Books/EBook, desc: "Livres / Roman"}
     - {id: 445, cat: Audio/Audiobook, desc: "Livres / Audio"}
     - {id: 446, cat: Books/Mags, desc: "Livres / Magazine"}
@@ -63,9 +63,9 @@ caps:
     - {id: 453, cat: PC/0day, desc: "Logiciels / Appli Windows"}
     - {id: 454, cat: PC/Mac, desc: "Logiciels / Appli Mac"}
     - {id: 455, cat: PC, desc: "Logiciels / Appli Linux"}
+    - {id: 459, cat: PC/Mobile-Android, desc: "Logiciels / Android"}
     - {id: 456, cat: Console, desc: "Logiciels / Console"}
     - {id: 457, cat: PC/Mobile-iOS, desc: "Logiciels / iOS"}
-    - {id: 459, cat: PC/Mobile-Android, desc: "Logiciels / Android"}
 
   modes:
     search: [q]
@@ -210,18 +210,18 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        img.pro_free: 0
-        img.pro_free2up: 0
-        img.pro_50pctdown: 0.5
-        img.pro_50pctdown2up: 0.5
-        img.pro_30pctdown: 0.3
+        img[src="pic/freeleech.png"]: 0
+        img[src="pic/2xupfree.png"]: 0
+        img[src="pic/50pc.png"]: 0.5
+        img[src="pic/2x50pc.png"]: 0.5
+        img[src="pic/30pc.png"]: 0.3
         "*": 1
     uploadvolumefactor:
       case:
-        img.pro_50pctdown2up: 2
-        img.pro_free2up: 2
-        img.pro_2up: 2
+        img[src="pic/2x.png"]: 2
+        img[src="pic/2xupfree.png"]: 2
+        img[src="pic/2x50pc.png"]: 2
         "*": 1
     minimumratio:
       text: 0.81
-# NexusPHP Standard v1.5 Beta 4
+# NexusPHP Custom 1.7.7 2022-04-30

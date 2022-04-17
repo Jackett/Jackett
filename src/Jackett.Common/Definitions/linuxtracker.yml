@@ -377,7 +377,7 @@ search:
     grabs:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(5) > td
       remove: strong
-    cat:
+    _cat:
       selector: a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
@@ -392,7 +392,7 @@ search:
       remove: table
       filters:
         - name: prepend
-          args: "{{ .Result.cat }}"
+          args: "{{ .Result._cat }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

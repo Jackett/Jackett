@@ -4,6 +4,13 @@ title: "[req]: "
 body:
 - type: checkboxes
   attributes:
+    label: Have you read our Contributing Guidelines?
+    description: Please read our <a href="https://github.com/Jackett/Jackett/wiki/How-to-request-a-new-tracker">Contributing Guidelines</a> before submitting your request.
+    options:
+      - label: I have read the Contributing Guidelines
+        required: true
+- type: checkboxes
+  attributes:
     label: Is there already a request for your tracker?
     description: Please make sure you are not creating an already submitted <a href="https://github.com/Jackett/Jackett/issues">request</a>. Check closed issues as well, because your request may have already been added or rejected.
     options:

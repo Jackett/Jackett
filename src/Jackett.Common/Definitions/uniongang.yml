@@ -7,7 +7,7 @@ type: private
 encoding: windows-1251
 links:
   - http://www.uniongang.net/
-links:
+legacylinks:
   - https://www.uniongang.net/ # site is forcing to http
 
 caps:

@@ -7,10 +7,12 @@ type: public
 encoding: UTF-8
 links:
   - https://btdig.com/
-  - https://btdiggwzoyrwwbiv.onion.ly/
-  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.ly/
+  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.ws/
+  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.pet/
 legacylinks:
   - http://btdiggwzoyrwwbiv.onion.ly/
+  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.ly/
+  - https://btdiggwzoyrwwbiv.onion.ly/
 
 caps:
   categories:

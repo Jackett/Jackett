@@ -6,8 +6,14 @@ language: es-ES
 type: public
 encoding: UTF-8
 links:
+  - https://www1.newpct.net/
+  - https://newpct.nocensor.world/
+legacylinks:
   - https://www.newpct.me/
   - https://newpct.nocensor.biz/
+  - https://newpct.nocensor.sbs/
+  - https://www.newpct.net/
+  - http://www1.newpct.net/
 
 caps:
   categories:
@@ -42,12 +48,12 @@ search:
   fields:
     category:
       text: peliculas
-    quality:
+    _quality:
       selector: span.estreno
       filters:
         - name: replace
           args: ["---", ""]
-    language:
+    _language:
       selector: a.complets-left
       filters:
         - name: replace
@@ -65,7 +71,7 @@ search:
       attribute: title
       filters:
         - name: append
-          args: " {{ .Result.quality }} {{ .Result.language }}"
+          args: " {{ .Result._quality }} {{ .Result._language }}"
     details:
       selector: a.nombre
       attribute: href

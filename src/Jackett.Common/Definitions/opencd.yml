@@ -23,6 +23,9 @@ caps:
     - {id: 16, cat: Audio, desc: "独立(Indie)"}
     - {id: 17, cat: Audio, desc: "嘻哈(Hip Hop)"}
     - {id: 18, cat: Audio, desc: "音乐剧(Musical)"}
+    - {id: 19, cat: Audio, desc: "乡村(Country)"}
+    - {id: 20, cat: Audio, desc: "另类(Alternative)"}
+    - {id: 21, cat: Audio, desc: "世界音樂(World))"}
     - {id: 9, cat: Audio, desc: "其它类型(Others)"}
 
   modes:
@@ -109,17 +112,22 @@ search:
         td[title="独立"]: 16
         td[title="嘻哈"]: 17
         td[title="音乐剧"]: 18
+        td[title="乡村(Country)"]: 19
+        td[title="另类(Alternative)"]: 20
+        td[title="世界音樂(World)"]: 21
         td[title="其它类型"]: 9
+        # Some torrents have no title set on td
+        td:not([title]): 9
     title_default:
-      selector: a[href^="plugin_details.php?id="]
+      selector: a[href*="details.php?id="]
     title_optional:
       optional: true
-      selector: a[title][href^="plugin_details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
     title:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
-      selector: a[href^="plugin_details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]

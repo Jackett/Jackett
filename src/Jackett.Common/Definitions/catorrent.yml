@@ -88,8 +88,11 @@ search:
     poster:
       selector: img
       attribute: src
-    description:
+    genre:
+      optional: true
       selector: div.short_game_genre
+    description:
+      text: "{{ .Result.genre }}"
     date:
       text: now
     seeders:

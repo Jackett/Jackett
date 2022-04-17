@@ -15,7 +15,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
 
 settings:
@@ -64,10 +64,10 @@ search:
     - path: "/api/torrents/filter?api_token={{ .Config.apikey }}&name={{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}{{ if .Query.TMDBID }}&tmdbId={{ .Query.TMDBID }}{{ else }}{{ end }}{{ if .Query.IMDBIDShort }}&imdbId={{ .Query.IMDBIDShort }}{{ else }}{{ end }}{{ if  .Query.TVDBID }}&tvdbId={{ .Query.TVDBID }}{{ else }}{{ end }}&sortField={{ .Config.sort }}&sortDirection={{ .Config.type }}&perPage=100&page=1{{ range .Categories }}&categories[]={{.}}{{end}}{{ if .Config.freeleech }}&free=1{{ else }}{{ end }}"
       response:
         type: json
-        attribute: attributes
 
   rows:
     selector: data
+    attribute: attributes
     count:
       selector: meta.total
 
@@ -116,9 +116,10 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
+# global MR is 0.25 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
-#      text: 0.4
-#    minimumseedtime:
+#      text: 0.25
+    minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
-#      text: 432000
+      text: 432000
 # json UNIT3D 5.3.0

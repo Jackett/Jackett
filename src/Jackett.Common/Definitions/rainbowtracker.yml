@@ -190,18 +190,18 @@ search:
       selector: td.leechmed > b
     grabs:
       selector: td:nth-child(10)
-    datetime:
+    date_time:
       selector: td:last-child
       filters:
         - name: regexp
           args: "(\\d{2}:\\d{2})"
-    datedate:
+    date_date:
       selector: td:last-child
       filters:
         - name: regexp
           args: "(\\d{1,2}-\\w{3,4}-\\d{2})"
     date:
-      text: "{{ .Result.datetime }} {{ .Result.datedate }}"
+      text: "{{ .Result.date_time }} {{ .Result.date_date }}"
       filters:
         - name: replace
           args: ["Янв", "Jan"]
