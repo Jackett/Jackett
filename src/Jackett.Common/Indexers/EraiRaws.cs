@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
 
             configData.AddDynamic(
                 "DDoS-Guard",
-                new DisplayInfoConfigurationItem("", "This site may use DDoS-Guard Protection, therefore Jackett requires <a href='https://github.com/Jackett/Jackett#configuring-flaresolverr' target='_blank'>FlareSolver</a> to access it.")
+                new DisplayInfoConfigurationItem("", "This site may use DDoS-Guard Protection, therefore Jackett requires <a href='https://github.com/Jackett/Jackett#configuring-flaresolverr' target='_blank'>FlareSolverr</a> to access it.")
             );
             // Add note that download stats are not available
             configData.AddDynamic(
