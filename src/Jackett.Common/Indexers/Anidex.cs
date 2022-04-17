@@ -65,6 +65,11 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.XXX, "Adult Video");
             AddCategoryMapping(16, TorznabCatType.Other, "Other");
 
+            configData.AddDynamic(
+                "DDoS-Guard",
+                new DisplayInfoConfigurationItem("", "This site may use DDoS-Guard Protection, therefore Jackett requires <a href='https://github.com/Jackett/Jackett#configuring-flaresolverr' target='_blank'>FlareSolverr</a> to access it.")
+                );
+
             AddLanguageConfiguration();
 
             // Configure the sort selects
@@ -182,13 +187,6 @@ namespace Jackett.Common.Indexers
             var searchUri = GetAbsoluteUrl("?" + queryParameters.GetQueryString() + catString + langIds);
             var response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
 
-            // Check for DDOS Guard
-            if (response.Status == HttpStatusCode.Forbidden)
-            {
-                await ConfigureDDoSGuardCookieAsync();
-                response = await RequestWithCookiesAndRetryAsync(searchUri.AbsoluteUri);
-            }
-
             if (response.Status != HttpStatusCode.OK)
                 throw new WebException($"Anidex search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
 
@@ -241,18 +239,6 @@ namespace Jackett.Common.Indexers
             {
                 throw new IOException($"Error parsing search result page: {ex}");
             }
-        }
-
-        private async Task ConfigureDDoSGuardCookieAsync()
-        {
-            const string ddosPostUrl = "https://check.ddos-guard.net/check.js";
-            var response = await RequestWithCookiesAsync(ddosPostUrl, string.Empty);
-            if (response.Status != HttpStatusCode.OK)
-                throw new WebException($"Unexpected DDOS Guard response: Status: {response.Status}", WebExceptionStatus.ProtocolError);
-            if (response.IsRedirect)
-                throw new WebException($"Unexpected DDOS Guard response: Redirect: {response.RedirectingTo}", WebExceptionStatus.UnknownError);
-            if (string.IsNullOrWhiteSpace(response.Cookies))
-                throw new WebException("Unexpected DDOS Guard response: Empty cookie", WebExceptionStatus.ReceiveFailure);
         }
 
         private static TResult ParseValueFromRow<TResult>(IElement row, string propertyName, string selector,
