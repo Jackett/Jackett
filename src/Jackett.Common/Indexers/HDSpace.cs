@@ -58,7 +58,7 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "private";
 
-            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolver</a> to access it."));
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
             AddCategoryMapping(19, TorznabCatType.MoviesHD, "Movie / 1080p");
