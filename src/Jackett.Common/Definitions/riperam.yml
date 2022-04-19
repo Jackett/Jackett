@@ -922,6 +922,9 @@ search:
       filters:
         - name: querystring
           args: f
+    categorydesc|noappend:
+      selector: dt a:last-of-type
+      optional: true
     title:
       selector: a.topictitle
       filters:
