@@ -104,7 +104,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
+    - path: "/search_torrent/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}{{ .Config.sort }}"
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
@@ -180,9 +180,12 @@ search:
       selector: td:nth-child(1) a
       attribute: href
     date:
-      text: now
-    size:
       selector: td:nth-child(2)
+      filters:
+        - name: dateparse
+          args: "02/01/2006"
+    size:
+      selector: td:nth-child(3)
       filters:
         - name: replace
           args: ["Ko", "KB"]
@@ -193,12 +196,12 @@ search:
         - name: replace
           args: ["To", "TB"]
     seeders_optional:
-      selector: td:nth-child(3)
+      selector: td:nth-child(4)
       optional: true
     seeders:
       text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
     leechers_optional:
-      selector: td:nth-child(4)
+      selector: td:nth-child(5)
       optional: true
     leechers:
       text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
