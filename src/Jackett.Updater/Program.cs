@@ -521,6 +521,7 @@ namespace Jackett.Updater
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
+                "Definitions/trackeros-api.yml",
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/turknova.yml",
