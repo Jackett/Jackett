@@ -415,6 +415,7 @@ namespace Jackett.Updater
                 "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
+                "Definitions/nbtorrents.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/nforce.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
