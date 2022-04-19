@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers
             ICacheService cs)
             : base(id: "rutracker",
                    name: "RuTracker",
-                   description: "RuTracker is a Private Russian torrent site with a thriving file-sharing community",
+                   description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
                    link: "https://rutracker.org/",
                    caps: new TorznabCapabilities
                    {
@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
         {
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-RU";
-            Type = "private";
+            Type = "semi-private";
             // note: when refreshing the categories use the tracker.php page and NOT the search.php page!
             AddCategoryMapping(22, TorznabCatType.Movies, "Наше кино");
             AddCategoryMapping(941, TorznabCatType.Movies, "|- Кино СССР");
