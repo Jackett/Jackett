@@ -33,7 +33,8 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://rutracker.org/",
-            "https://rutracker.net/"
+            "https://rutracker.net/",
+            "https://rutracker.nl/"
         };
 
         private Regex _regexToFindTagsInReleaseTitle = new Regex(@"\[[^\[]+\]|\([^(]+\)");
