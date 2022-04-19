@@ -104,7 +104,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
+    - path: "/search_torrent/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}{{ .Config.sort }}"
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
@@ -135,7 +135,7 @@ search:
         i[class="fa fa-laptop"]: logiciels
         i[class="fa fa-book"]: ebook
     site_date:
-      selector: td:nth-child(2)
+      selector: td:nth-child(1) a
       filters:
         # year is at the end of the title, so we get it and name it site_date
         - name: regexp
@@ -180,7 +180,10 @@ search:
       selector: td:nth-child(1) a
       attribute: href
     date:
-      text: now
+      selector: td:nth-child(2)
+      filters:
+        - name: dateparse
+          args: "02/01/2006"
     size:
       selector: td:nth-child(3)
       filters:
