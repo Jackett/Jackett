@@ -27,7 +27,7 @@ caps:
     - {id: 420, cat: Movies, desc: "Зарубежные фильмы"}
     - {id: 12, cat: Movies, desc: "Зарубежные фильмы до 2000го года..."}
     - {id: 13, cat: Movies, desc: "Зарубежные фильмы после 2000го года..."}
-    - {id: 1476, cat: Movies desc: "Зарубежные фильмы Blu-Ray"}
+    - {id: 1476, cat: Movies, desc: "Зарубежные фильмы Blu-Ray"}
     - {id: 1475, cat: Movies, desc: "Зарубежные фильмы 4К"}
     - {id: 423, cat: TV/Anime, desc: "Мультфильмы"}
     - {id: 16, cat: TV/Anime, desc: "Зарубежные мультфильмы"}
@@ -888,9 +888,6 @@ search:
       filters:
         - name: querystring
           args: f
-    categorydesc|noappend:
-      selector: dt a:last-of-type
-      optional: true
     title:
       selector: a.topictitle
       filters:
