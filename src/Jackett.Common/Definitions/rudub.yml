@@ -69,14 +69,19 @@ search:
     # http://rudub.tv/browse.php?search=&incldead=1&sort=4&type=desc
     - path: browse.php
   inputs:
-    search: "{{.Keywords }}"
-    # 0 active, 1 incldead, 2 onlydead, 3 gold, 4 seedfree
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    search: "{{ .Keywords }}"
+    # 0 incldead, 1 active, 2 onlydead, 3 gold, 4 seedfree
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
   keywordsfilters:
+    # strip season episode as the site does not appear to be able to find any results with anything other than the series title
     - name: re_replace
-      args: ["[s|S](\\d+)[e|E][\\d]+", "/s$1"]
+      args: ["(?i)( S\\d+E\\d+)", ""]
+    - name: re_replace
+      args: ["(?i)( S\\d+)", ""]
+    - name: re_replace
+      args: ["(?i)( E\\d+)", ""]
 
   rows:
     selector: div.card__torlist__browse_2
@@ -86,9 +91,13 @@ search:
       text: 1
     title:
       selector: a[href^="details.php?id="]
+      # Лучше звоните Солу (Better Call Saul) Сезон 6 Серии 01-02 (WEBRip XviD) (Обновляемая) (Золото)
       filters:
+        # normalize to SXXEYY format
         - name: re_replace
-          args: ["[\\/]+", ""]
+          args: ["([CСcс]езон\\s+((?:\\d+)(?:-\\d+)?)\\s+[CСcс]ери[ия]\\s+((?:\\d+)(?:-\\d+)?))", " S$2E$3 "]
+        - name: re_replace
+          args: ["([CСcс]ери[ия]?\\s+((?:\\d+)(?:-\\d+)?))", " E$2 "]
         - name: replace
           args: [" (Золото)", ""] # remove gold tag
         - name: re_replace
@@ -99,12 +108,18 @@ search:
           args: ["WEB-DL", "WEBDL"]
         - name: replace
           args: ["WEBRip", "WEBDL"]
-        - name: re_replace
+        - name: replace
           args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
+        - name: replace
+          args: ["BD720p", "BD 720p"]
         - name: replace
           args: ["HD720p", "HD 720p"]
         - name: replace
           args: ["HDR720p", "HD 720p"]
+        - name: replace
+          args: ["BD1080p", "BD 1080p"]
         - name: replace
           args: ["HD1080p", "HD 1080p"]
         - name: replace
