@@ -881,13 +881,9 @@ search:
   fields:
     category:
       text: 726
-    category|noappend:
-      selector: a[href*="/viewtopic.php?f="]
-      attribute: href
+    categorydesc|noappend:
+      selector: dt a:last-of-type
       optional: true
-      filters:
-        - name: querystring
-          args: f
     title:
       selector: a.topictitle
       filters:
