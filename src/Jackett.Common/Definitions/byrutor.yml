@@ -28,15 +28,15 @@ caps:
     - {id: 14, cat: PC/Games, desc: "Хорроры"}
     - {id: 15, cat: PC/Games, desc: "Открытый мир"}
     - {id: 16, cat: PC/Games, desc: "Аниме"}
+    - {id: 248, cat: PC/Games, desc: "Repack от Chovka"}
     - {id: 17, cat: PC/Games, desc: "Repack от Механики"}
-    - {id: 18, cat: PC/Games, desc: "Repack от Xatab"}
-    - {id: 19, cat: PC/Games, desc: "Repack от Catalyst"}
     - {id: 20, cat: PC/Games, desc: "RePack от FitGirl"}
-    - {id: 21, cat: PC/Games, desc: "RePack от qoob"}
+    - {id: 18, cat: PC/Games, desc: "Repack от Xatab"}
     - {id: 232, cat: PC/Games, desc: "RePack от SpaceX"}
     - {id: 233, cat: PC/Games, desc: "RePack от Pioneer"}
+    - {id: 19, cat: PC/Games, desc: "Repack от Catalyst"}
+    - {id: 249, cat: PC/Games, desc: "GOG игры"}
     - {id: 22, cat: PC/Games, desc: "Русская озвучка"}
-    - {id: 24, cat: PC/Games, desc: "Новинки игр"}
     - {id: 25, cat: PC/Games, desc: "Старые игры"}
     - {id: 26, cat: PC/Games, desc: "Игры с геймпадом"}
     - {id: 27, cat: PC/Games, desc: "Мультиплеер"}
@@ -199,17 +199,15 @@ caps:
     - {id: 185, cat: PC/Games, desc: "Расследование"}
     - {id: 186, cat: PC/Games, desc: "Мифология"}
     - {id: 187, cat: PC/Games, desc: "VR"}
-    - {id: 190, cat: PC/Games, desc: "Dungeon Crawler"}
     - {id: 191, cat: PC/Games, desc: "Психологическая"}
     - {id: 192, cat: PC/Games, desc: "Нелинейная"}
     - {id: 193, cat: PC/Games, desc: "Подземелье"}
-    - {id: 194, cat: PC/Games, desc: "Игры по сети"}
     - {id: 195, cat: PC/Games, desc: "Для нескольких игроков"}
     - {id: 196, cat: PC/Games, desc: "Шедевр"}
     - {id: 197, cat: PC/Games, desc: "Ретро"}
     - {id: 198, cat: PC/Games, desc: "Олдскул"}
-    - {id: 237, cat: PC/Games, desc: "Игры 2023 года"}
     - {id: 238, cat: PC/Games, desc: "Игры 2024 года"}
+    - {id: 237, cat: PC/Games, desc: "Игры 2023 года"}
     - {id: 236, cat: PC/Games, desc: "Игры 2022 года"}
     - {id: 235, cat: PC/Games, desc: "Игры 2021 года"}
     - {id: 199, cat: PC/Games, desc: "Игры 2020 года"}
@@ -243,16 +241,13 @@ caps:
     - {id: 227, cat: PC/Games, desc: "Игры 1992 года"}
     - {id: 228, cat: PC/Games, desc: "Игры 1991 года"}
     - {id: 229, cat: PC/Games, desc: "Игры 1990 года"}
-    - {id: 230, cat: PC/Games, desc: "Все Топ игры"}
     - {id: 231, cat: PC/Games, desc: "Дополнения"}
+    - {id: 250, cat: PC/Games, desc: "Модификации"}
     - {id: 23, cat: PC/Games, desc: "Ранний Доступ"}
-    - {id: 239, cat: PC/Games, desc: "Ubisoft"}
-    - {id: 240, cat: PC/Games, desc: "Bethesda"}
-    - {id: 241, cat: PC/Games, desc: "2K"}
-    - {id: 242, cat: PC/Games, desc: "CD Projekt RED"}
-    - {id: 243, cat: PC/Games, desc: "Telltale Games"}
-    - {id: 244, cat: PC/Games, desc: "Capcom"}
-    - {id: 245, cat: PC/Games, desc: "Square Enix"}
+    - {id: 246, cat: PC/Games, desc: "Обновление"}
+    - {id: 230, cat: PC/Games, desc: "Все Топ игры"}
+    - {id: 24, cat: PC/Games, desc: "Новинка"}
+    - {id: 194, cat: PC/Games, desc: "Игры по сети"}
 
   modes:
     search: [q]
@@ -261,7 +256,7 @@ settings: []
 
 download:
   selectors:
-    - selector: a.itemtop_game
+    - selector: a.itemtop_games
       attribute: href
 
 search:
@@ -287,7 +282,7 @@ search:
     resorder: desc
 
   rows:
-    selector: div.short_search:has(div.shor_subtitles span:nth-child(2):contains("Б"))
+    selector: div.short_search
 
   fields:
     category:
@@ -312,13 +307,22 @@ search:
       selector: img
       attribute: src
     date:
-      text: now
+      selector: img
+      attribute: src
+      filters:
+        - name: regexp
+          args: ".*/(\\d{4}-\\d{2})/.*"
+        - name: dateparse
+          args: "2006-01"
     seeders:
       text: 1
     leechers:
       text: 1
     size:
-      selector: div.shor_subtitles span:nth-child(2)
+      text: 0B
+    size:
+      selector: div.shor_subtitles span:nth-child(2):contains("Б")
+      optional: true
       filters:
         - name: replace
           args: ["ТБ", "TB"]
