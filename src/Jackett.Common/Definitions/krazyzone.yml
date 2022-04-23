@@ -242,6 +242,6 @@ search:
     minimumratio:
       text: 0.5
     minimumseedtime:
-      # 12 hours (as seconds = 12 x 60 x 60)
-      text: 43200
+      # 24 hours (as seconds = 24 x 60 x 60)
+      text: 86400
 # TS Special Edition v.7.4
