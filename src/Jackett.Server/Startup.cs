@@ -141,6 +141,9 @@ namespace Jackett.Server
 
             app.UseAuthentication();
 
+            if (Helper.ServerConfiguration.AllowCORS)
+                app.UseCors(AllowAllOrigins);
+
             app.UseMvc();
         }
 #else
