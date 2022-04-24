@@ -970,6 +970,7 @@ function updateReleasesRow(row) {
     var labels = $(row).find("span.release-labels");
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
+    var TMDBId = $(row).data("tmdb");
     var Poster = $(row).data("poster");
     var Description = $(row).data("description");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
@@ -992,9 +993,13 @@ function updateReleasesRow(row) {
 
     labels.empty();
 
-  if (IMDBId) {
-    var imdbLen = (IMDBId.toString().length > 7) ? 8 : 7;
+    if (IMDBId) {
+        var imdbLen = (IMDBId.toString().length > 7) ? 8 : 7;
         labels.append('\n<a href="https://www.imdb.com/title/tt' + ("00000000" + IMDBId).slice(-imdbLen) + '/" target="_blank" class="label label-imdb" alt="IMDB" title="IMDB">IMDB</a>');
+    }
+
+    if (TMDBId && TMDBId > 0) {
+      labels.append('\n<a href="https://www.themoviedb.org/movie/' + TMDBId + '" target="_blank" class="label label-tmdb" alt="TMDB" title="TMDB">TMDB</a>');
     }
 
     if (!isNaN(DownloadVolumeFactor)) {

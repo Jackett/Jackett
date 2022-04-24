@@ -284,6 +284,10 @@ table td.fit{
     background-color: #d0ab44;
 }
 
+.label-tmdb {
+    background-color: #86cca8;
+}
+
 .tooltip {
     pointer-events: none;
 }
