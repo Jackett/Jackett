@@ -72,7 +72,7 @@ namespace Jackett.Common.Indexers.Meta
 
             var fallbackStrategies = fallbackStrategyProvider.FallbackStrategiesForQuery(query);
             var fallbackQueries = fallbackStrategies.Select(async f => await f.FallbackQueries()).SelectMany(t => t.Result);
-            var fallbackTasks = fallbackQueries.SelectMany(q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q.Clone(), true)));
+            var fallbackTasks = fallbackQueries.SelectMany(q => indexers.Where(i => !i.CanHandleQuery(query) && i.CanHandleQuery(q)).Select(i => i.ResultsForQuery(q, true)));
             var tasks = supportedTasks.Concat(fallbackTasks.ToList()); // explicit conversion to List to execute LINQ query
 
             // When there are many indexers used by a metaindexer querying each and every one of them can take very very
