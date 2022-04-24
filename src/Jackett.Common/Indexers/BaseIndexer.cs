@@ -386,22 +386,26 @@ namespace Jackett.Common.Indexers
 
         public virtual async Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer)
         {
-            if (!CanHandleQuery(query) || !CanHandleCategories(query, isMetaIndexer))
+            // we make a copy just in case some C# indexer modifies the object.
+            // without the copy, if you make a request with several indexers, all indexers share the query object.
+            var queryCopy = query.Clone();
+
+            if (!CanHandleQuery(queryCopy) || !CanHandleCategories(queryCopy, isMetaIndexer))
                 return new IndexerResult(this, new ReleaseInfo[0], false);
 
-            if (query.Cache)
+            if (queryCopy.Cache)
             {
-                var cachedReleases = cacheService.Search(this, query);
+                var cachedReleases = cacheService.Search(this, queryCopy);
                 if (cachedReleases != null)
                     return new IndexerResult(this, cachedReleases, true);
             }
 
             try
             {
-                var results = await PerformQuery(query);
-                results = FilterResults(query, results);
-                results = FixResults(query, results);
-                cacheService.CacheResults(this, query, results.ToList());
+                var results = await PerformQuery(queryCopy);
+                results = FilterResults(queryCopy, results);
+                results = FixResults(queryCopy, results);
+                cacheService.CacheResults(this, queryCopy, results.ToList());
                 errorCount = 0;
                 expireAt = DateTime.Now.Add(HealthyStatusValidity);
                 return new IndexerResult(this, results, false);
