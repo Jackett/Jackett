@@ -923,8 +923,12 @@ function doErrorNotify(indexerId, errorMessage, errorEvent) {
     var indexEnd = 2000 - githubUrl.length; // keep url <= 2k #5104
     var htmlEscapedError = $("<div>").text(errorMessage.substring(0, indexEnd)).html();
     var urlEscapedError = encodeURIComponent(errorMessage.substring(0, indexEnd));
-    doNotify("An error occurred while " + errorEvent + " this indexer<br /><b>" + htmlEscapedError + "</b><br />" +
-      "<i><a href=\"" + githubUrl + " " + urlEscapedError + "\" target=\"_blank\">Click here to open an issue on GitHub for " + githubText + ".</a><i>",
+    var link = "<i><a href=\"" + githubUrl + " " + urlEscapedError + "\" target=\"_blank\">Click here to open an issue on GitHub for " + githubText + ".</a><i>";
+    if (errorMessage.includes("FlareSolverr is not configured")) {
+      link = "<i><a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">Instructions to install and configure FlareSolverr.</a><i><br />" +
+        "<i><a href=\"https://github.com/Jackett/Jackett/wiki/Troubleshooting#error-connecting-to-flaresolverr-server\" target=\"_blank\">Troubleshooting frecuent errors with FlareSolverr.</a><i>";
+    }
+    doNotify("An error occurred while " + errorEvent + " this indexer<br /><b>" + htmlEscapedError + "</b><br />" + link,
       "danger", "glyphicon glyphicon-alert", false);
   } else {
     doNotify("An error occurred while " + errorEvent + " indexers, please take a look at indexers with failed test for more information.",
