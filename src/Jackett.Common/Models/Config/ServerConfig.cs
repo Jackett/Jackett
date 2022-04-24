@@ -33,6 +33,7 @@ namespace Jackett.Common.Models.Config
 
         public int Port { get; set; }
         public bool AllowExternal { get; set; }
+        public bool AllowCORS { get; set; }
         public string APIKey { get; set; }
         public string AdminPassword { get; set; }
         public string InstanceId { get; set; }
