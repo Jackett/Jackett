@@ -40,16 +40,21 @@ namespace Jackett.Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddResponseCompression()
-                    .AddCors(options => {
-                        options.AddPolicy(name: AllowAllOrigins, corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin());
-                    })
+                    .AddCors(
+                        options =>
+                        {
+                            options.AddPolicy(name: AllowAllOrigins, corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin());
+
+                        })
                     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
-                        options.LoginPath = new PathString("/UI/Login");
-                        options.AccessDeniedPath = new PathString("/UI/Login");
-                        options.LogoutPath = new PathString("/UI/Logout");
-                        options.Cookie.Name = "Jackett";
-                    });
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+                        options =>
+                        {
+                            options.LoginPath = new PathString("/UI/Login");
+                            options.AccessDeniedPath = new PathString("/UI/Login");
+                            options.LogoutPath = new PathString("/UI/Logout");
+                            options.Cookie.Name = "Jackett";
+                        });
 
 #if NET461
             services.AddMvc(
