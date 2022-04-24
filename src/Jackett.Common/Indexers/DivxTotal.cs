@@ -227,19 +227,14 @@ namespace Jackett.Common.Indexers
 
             // match the words in the query with the titles
             if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
-            {
                 return releases;
-            }
 
             var detailsStr = anchor.GetAttribute("href");
             var cat = detailsStr.Split('/')[3];
-            var categories = MapTrackerCatToNewznab(cat);
 
             // return results only for requested categories
-            if (query.Categories.Any() && !query.Categories.Contains(categories.First()))
-            {
+            if (query.Categories.Any() && !MapTorznabCapsToTrackers(query).Contains(cat))
                 return releases;
-            }
 
             var publishStr = row.QuerySelectorAll("td")[2].TextContent.Trim();
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
