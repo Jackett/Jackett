@@ -972,6 +972,7 @@ function updateReleasesRow(row) {
     var TitleLink = $(row).find("td.Title > a");
     var IMDBId = $(row).data("imdb");
     var TMDBId = $(row).data("tmdb");
+    var TVDBId = $(row).data("tvdb");
     var Poster = $(row).data("poster");
     var Description = $(row).data("description");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
@@ -1001,6 +1002,10 @@ function updateReleasesRow(row) {
 
     if (TMDBId && TMDBId > 0) {
       labels.append('\n<a href="https://www.themoviedb.org/movie/' + TMDBId + '" target="_blank" class="label label-tmdb" alt="TMDB" title="TMDB">TMDB</a>');
+    }
+
+    if (TVDBId && TVDBId > 0) {
+      labels.append('\n<a href="https://thetvdb.com/?tab=series&id=' + TVDBId + '" target="_blank" class="label label-tvdb" alt="TVDB" title="TVDB">TVDB</a>');
     }
 
     if (!isNaN(DownloadVolumeFactor)) {
