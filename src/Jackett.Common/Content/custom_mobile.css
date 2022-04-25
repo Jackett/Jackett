@@ -285,6 +285,10 @@ table td.fit{
 }
 
 .label-tmdb {
+    background-color: #7dbfd4;
+}
+
+.label-tvdb {
     background-color: #86cca8;
 }
 
