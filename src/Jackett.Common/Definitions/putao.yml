@@ -179,20 +179,26 @@ search:
     downloadvolumefactor:
       case:
         tr.free_bg: 0
-#       tr.2up: 0
-#       tr.free2up: 0
+        img.pro_free: 0
+        tr.2up: 0
+        img.pro_2up: 0
+        tr.free2up: 0
+        img.pro_free2up: 0
         tr.halfdown_bg: 0.5
+        img.pro_50pctdown: 0.5
         tr.d30down_bg: 0.3
+        img.pro_30pctdown: 0.3
         tr.d70down_bg: 0.7
+        img.pro_70pctdown: 0.7
         "*": 1
     uploadvolumefactor:
       case:
-#       tr.2up: 0
-#       tr.free2up: 0
+        img.pro_2up: 2
+        img.pro_free2up: 2
         "*": 1
     description:
       selector: td:nth-child(2)
       remove: a, img
     minimumratio:
       text: 0.7
-# NexusPHP v1.0 Beta 2
+# NexusPHP Standard v1.0 Beta 2
