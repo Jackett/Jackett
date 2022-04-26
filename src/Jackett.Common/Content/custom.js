@@ -977,6 +977,7 @@ function updateReleasesRow(row) {
     var Description = $(row).data("description");
     var DownloadVolumeFactor = parseFloat($(row).find("td.DownloadVolumeFactor").html());
     var UploadVolumeFactor = parseFloat($(row).find("td.UploadVolumeFactor").html());
+    var Cat = $(row).find("td.Cat").html();
 
     var TitleTooltip = "";
     if (Poster)
@@ -1001,7 +1002,8 @@ function updateReleasesRow(row) {
     }
 
     if (TMDBId && TMDBId > 0) {
-      labels.append('\n<a href="https://www.themoviedb.org/movie/' + TMDBId + '" target="_blank" class="label label-tmdb" alt="TMDB" title="TMDB">TMDB</a>');
+      var TMdbType = (Cat.includes("Movies")) ? "movie" :  "tv";
+      labels.append('\n<a href="https://www.themoviedb.org/' + TMdbType + '/' + TMDBId + '" target="_blank" class="label label-tmdb" alt="TMDB" title="TMDB">TMDB</a>');
     }
 
     if (TVDBId && TVDBId > 0) {
