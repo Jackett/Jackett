@@ -70,6 +70,12 @@ search:
           args: ["(.+?)in\\s(.+?)", "$2"]
         - name: replace
           args: ["Freeleech", ""]
+        - name: replace
+          args: ["Seeding", ""]
+        - name: replace
+          args: ["Downloaded", ""]
+        - name: replace
+          args: ["Leeching", ""]
         - name: trim
     title:
       selector: a[href*="/view/torrent.php?hash="]
