@@ -44,9 +44,8 @@ caps:
     - {id: 57, cat: TV, desc: "New Zealand Talkshows"}
     - {id: 59, cat: TV, desc: "New Zealand Movies"}
     - {id: 36, cat: TV, desc: "New Zealand TV"}
-    - {id: 55, cat: TV, desc: "SATV - All"}
     - {id: 55, cat: TV, desc: "South African TV"}
-    - {id: 7, cat: TV/Other, desc: "New Zealand TV Other"}
+    - {id: 7, cat: TV/Other, desc: "TV Other"}
 
   modes:
     search: [q]
