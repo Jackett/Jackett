@@ -27,6 +27,7 @@ caps:
     - {id: 80, cat: TV, desc: "Australian Soaps"}
     - {id: 16, cat: TV, desc: "Australian Talkshows"}
     - {id: 22, cat: TV, desc: "Australian Movies"}
+    - {id: 82, cat: Audio, desc: "Australian Podcasts"}
     - {id: 73, cat: TV, desc: "New Zealand TV"}
     - {id: 61, cat: TV, desc: "NZ-AUTOGEN"}
     - {id: 47, cat: TV, desc: "New Zealand Comedy"}
