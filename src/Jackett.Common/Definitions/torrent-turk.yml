@@ -176,8 +176,6 @@ search:
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
-        - name: replace
-          args: [" at ", " "]
         - name: fuzzytime
     date_unix:
       # within the hour (unix)

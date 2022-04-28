@@ -190,9 +190,9 @@ search:
         - name: replace
           args: [": ", ":"]
         - name: replace
-          args: ["Ayer a las", "Yesterday"]
+          args: ["Ayer a las", "Yesterday at"]
         - name: replace
-          args: ["Hoy en", "Today"]
+          args: ["Hoy en", "Today at"]
         - name: replace
           args: ["Lunes a", "Monday at"]
         - name: replace
@@ -209,7 +209,7 @@ search:
           args: ["Sábado a", "Saturday at"]
         - name: replace
           args: ["Domingo a", "Sunday at"]
-        - name: fuzzytime # eg: Yesterday 14:22 or Monday at 14:22
+        - name: fuzzytime # eg: Yesterday at 14:22 or Monday at 14:22
     date3:
       selector: td.torrent_name:contains("Uploaded"):contains("-"), .torrentOwner:contains("Uploaded"):contains("-")
       optional: true
@@ -226,11 +226,7 @@ search:
       filters:
         - name: regexp
           args: "(?<=Uploaded )(.*)(?= by)"
-        - name: replace
-          args: ["Yesterday at", "Yesterday"]
-        - name: replace
-          args: ["Today at", "Today"]
-        - name: fuzzytime # eg: Yesterday 14:22 or Monday at 14:22
+        - name: fuzzytime # eg: Yesterday at 14:22 or Monday at 14:22
     date:
       text: "{{ if or .Result.date1 .Result.date2 .Result.date3 .Result.date4 }}{{ or .Result.date1 .Result.date2 .Result.date3 .Result.date4 }}{{ else }}now{{ end }}"
     size:
