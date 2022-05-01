@@ -7,7 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.oxtorrent.re/
+  - https://www.torrent911.com/
+  - https://www.t911.net/
   - https://oxtorrent.unblockit.llc/
   - https://oxtorrent.nocensor.sbs/
 legacylinks:
@@ -32,6 +33,7 @@ legacylinks:
   - https://oxtorrent.unblockit.cam/
   - https://oxtorrent.nocensor.biz/
   - https://oxtorrent.unblockit.day/
+  - https://www.oxtorrent.re/
 
 caps:
   categorymappings:
