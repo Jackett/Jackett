@@ -33,14 +33,13 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: movies, cat: Movies, desc: "Movies"}
-    - {id: tvshows, cat: TV, desc: "TV Shows"}
-    - {id: softwares, cat: PC, desc: "Softwares"}
-    - {id: music, cat: Audio, desc: "Music"}
-    - {id: console-games, cat: Console, desc: "Console Games"}
-    - {id: pc-games, cat: PC/Games, desc: "PC Games"}
-    - {id: books, cat: Books, desc: "Books"}
-    - {id: xxx, cat: XXX, desc: "XXX"}
+    - {id: Films, cat: Movies, desc: "Movies"}
+    - {id: Séries, cat: TV, desc: "TV"}
+    - {id: Musiques, cat: Audio, desc: "Music"}
+    - {id: Ebooks, cat: Books, desc: "Books"}
+    - {id: Logiciels, cat: PC, desc: "Software"}
+    - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
+    - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
 
   modes:
     search: [q]
@@ -94,15 +93,7 @@ search:
   fields:
     category:
       selector: td:nth-child(1) > i
-      case:
-        .Films: movies
-        .Séries: tvshows
-        .Logiciels: softwares
-        .Musique: music
-        .Jeux-Consoles: console-games
-        .Jeux-PC: pc-games
-        .Ebook: books
-        .Porno: xxx
+      attribute: class
     site_date:
       selector: td:nth-child(1) a
       filters:
