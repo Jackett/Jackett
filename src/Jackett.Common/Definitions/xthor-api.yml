@@ -119,7 +119,7 @@ search:
         category: "{{ if .Categories }}{{ range .Categories }}{{.}}+{{end}}{{ else }}{{ end }}"
         search: "{{ if .Query.TMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
         tmdbid: "{{ .Query.TMDBID }}"
-        freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+        $raw: "{{ if .Config.freeleech }}&freeleech=1{{ else }}{{ end }}"
       response:
         type: json
 
