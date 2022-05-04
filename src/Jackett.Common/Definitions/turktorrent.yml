@@ -14,35 +14,27 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 36, cat: Movies, desc: "Film"}
-    - {id: 76, cat: Movies, desc: "Film Almanca [Tek Dil!]"}
-    - {id: 78, cat: Movies, desc: "Film İngilizce [NL Altyazı!]"}
+    - {id: 76, cat: Movies, desc: "Film Yabancı Dil - Altyazısız"}
     - {id: 59, cat: Movies, desc: "Film Türk Filmi"}
-    - {id: 61, cat: Movies/3D, desc: "Film 3D"}
     - {id: 18, cat: Movies, desc: "Anime - Çizgi"}
     - {id: 20, cat: Movies, desc: "Film Boxset"}
-    - {id: 22, cat: Movies/DVD, desc: "Film DVD Disk"}
-    - {id: 24, cat: Movies/BluRay, desc: "Film Bluray Disk"}
-    - {id: 26, cat: Movies/UHD, desc: "4Film K UHD Disk"}
+    - {id: 24, cat: Movies/BluRay, desc: "Film 4K/1080P Bluray Disk"}
     - {id: 28, cat: Movies/HD, desc: "Film X265"}
     - {id: 30, cat: Movies/HD, desc: "Film X264"}
     - {id: 69, cat: Movies/WEB-DL, desc: "Film H264 WEB-DL"}
-    - {id: 63, cat: Movies/SD, desc: "Film XviD"}
+    - {id: 63, cat: Movies/SD, desc: "Film 3D/DVD/XviD"}
     - {id: 51, cat: Other, desc: "Diğer"}
     - {id: 62, cat: Other, desc: "Diğer Eğitim"}
     - {id: 52, cat: Other, desc: "Diğer Belgesel"}
     - {id: 53, cat: Other, desc: "Diğer Dini Yayınlar"}
     - {id: 54, cat: TV/Sport, desc: "Spor"}
-    - {id: 55, cat: Other, desc: "Diğer Duvar Kağıtları"}
-    - {id: 56, cat: Other, desc: "Diğer  Her Şey"}
+    - {id: 56, cat: Other, desc: "Diğer Her Şey"}
     - {id: 65, cat: Books/EBook, desc: "E-Kitap"}
     - {id: 2, cat: Console, desc: "Oyun"}
     - {id: 46, cat: Console, desc: "Oyun PC"}
-    - {id: 3, cat: Console, desc: "Oyun Sony PS"}
-    - {id: 4, cat: Console, desc: "Oyun Wii"}
-    - {id: 14, cat: Console, desc: "Oyun XboX"}
-    - {id: 16, cat: Console, desc: "Oyun Nintendo"}
+    - {id: 16, cat: Console, desc: "Oyun Konsol"}
     - {id: 35, cat: TV, desc: "Netflix"}
-    - {id: 41, cat: TV, desc: "Netflix Anime - Çizgi"}
+    - {id: 41, cat: TV, desc: "Netflix Animasyon"}
     - {id: 39, cat: TV, desc: "Netflix Film"}
     - {id: 38, cat: TV, desc: "Netflix Dizi"}
     - {id: 40, cat: TV, desc: "Netflix Belgesel"}
@@ -55,17 +47,16 @@ caps:
     - {id: 88, cat: TV, desc: "Dijital Platform TV+"}
     - {id: 89, cat: TV, desc: "Dijital Platform Diger"}
     - {id: 90, cat: TV, desc: "Dijital Platform MUBi"}
-    - {id: 91, cat: TV, desc: "Dijital Platform Vodafone"}
-    - {id: 94, cat: TV, desc: "Dijital Platform Apple TV+"}
-    - {id: 95, cat: TV, desc: "Dijital Platform DSmart GO"}
+    - {id: 94, cat: TV, desc: "Dijital Platform ATVP+"}
+    - {id: 98, cat: TV, desc: "Dijital Platform DSNP"}
     - {id: 31, cat: TV, desc: "Dizi"}
     - {id: 32, cat: TV, desc: "Dizi Yerli"}
-    - {id: 33, cat: TV, desc: "Dizi Yabancı Orjinal Dil / Tr Dublaj "}
+    - {id: 33, cat: TV, desc: "Dizi Yabancı / TR Dublaj"}
     - {id: 34, cat: TV, desc: "Dizi Boxset"}
     - {id: 42, cat: Audio, desc: "Müzik"}
-    - {id: 43, cat: Audio, desc: "Müzik Türkçe"}
+    - {id: 43, cat: Audio, desc: "Müzik Yerli"}
     - {id: 44, cat: Audio, desc: "Müzik Yabancı"}
-    - {id: 45, cat: Audio, desc: "Müzik Seri Albüm - Diskografi"}
+    - {id: 45, cat: Audio, desc: "Müzik Diskografi"}
     - {id: 47, cat: PC, desc: "Programlar"}
     - {id: 48, cat: PC, desc: "Programlar Windows"}
     - {id: 49, cat: PC, desc: "Programlar MaC"}
