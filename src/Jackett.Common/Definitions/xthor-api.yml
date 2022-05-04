@@ -122,6 +122,7 @@ search:
         $raw: "{{ if .Config.freeleech }}&freeleech=1{{ else }}{{ end }}"
       response:
         type: json
+        noResultsMessage: '"descr": "no result"'
 
   rows:
     selector: torrents
