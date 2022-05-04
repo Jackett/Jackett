@@ -6,7 +6,7 @@ language: es-ES
 type: public
 encoding: UTF-8
 links:
-  - https://www.elitetorrent.wtf/
+  - https://www.elitetorrent.dev/
   - https://elitetorrent.nocensor.sbs/
 legacylinks:
   - https://www.elitetorrent.biz/
@@ -30,6 +30,7 @@ legacylinks:
   - https://elitetorrent.app/
   - https://elitetorrent.nocensor.biz/
   - https://elitetorrent.la/
+  - https://www.elitetorrent.wtf/
 
 caps:
   categories:
