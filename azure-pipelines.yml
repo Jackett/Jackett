@@ -266,7 +266,7 @@ stages:
               script: >
                 iscc.exe $(Build.SourcesDirectory)/Installer.iss
                 /O"$(Build.ArtifactStagingDirectory)"
-                /DMyFileForVersion=$(Build.BinariesDirectory)/Jackett/Jackett.Common.dll
+                /DMyAppVersion=$(jackettVersion)
                 /DMySourceFolder=$(Build.BinariesDirectory)/Jackett
                 /DMyOutputFilename=Jackett.Installer.Windows
 

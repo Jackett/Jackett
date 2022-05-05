@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Jackett"
-#define MyAppVersion GetFileVersion(MyFileForVersion)
+; #define MyAppVersion GetFileVersion(MyFileForVersion) (passed as a parameter)
 #define MyAppPublisher "Jackett"
 #define MyAppURL "https://github.com/Jackett/Jackett"
 #define MyAppExeName "JackettTray.exe"
