@@ -113,8 +113,8 @@ search:
       selector: meta.total
 
   fields:
-    categorydesc:
-      selector: category
+    category:
+      selector: category_id
     title_original:
       selector: name
       filters:
@@ -184,4 +184,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 6.0.5
+# json UNIT3D 6.1.0
