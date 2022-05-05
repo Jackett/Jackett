@@ -142,4 +142,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 6.0.6 beta
+# json UNIT3D 6.0.9 beta
