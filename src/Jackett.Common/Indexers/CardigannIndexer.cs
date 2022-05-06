@@ -1402,7 +1402,7 @@ namespace Jackett.Common.Indexers
                     if (response.Status == HttpStatusCode.OK
                         && SearchPath.Response != null
                         && SearchPath.Response.NoResultsMessage != null
-                        && (results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == String.Empty && results == String.Empty)))
+                        && (SearchPath.Response.NoResultsMessage != String.Empty && results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == String.Empty && results == String.Empty)))
                         continue;
                     var parsedJson = JToken.Parse(results);
                     if (parsedJson == null)
