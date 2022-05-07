@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.torrent911.com/
   - https://www.t911.net/
-  - https://oxtorrent.unblockit.llc/
+  - https://oxtorrent.unblockit.blue/
   - https://oxtorrent.nocensor.sbs/
 legacylinks:
   - https://www.oxtorrent.bz/
@@ -34,6 +34,7 @@ legacylinks:
   - https://oxtorrent.nocensor.biz/
   - https://oxtorrent.unblockit.day/
   - https://www.oxtorrent.re/
+  - https://oxtorrent.unblockit.llc/
 
 caps:
   categorymappings:
