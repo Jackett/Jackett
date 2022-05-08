@@ -36,7 +36,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
+    tv-search: [q, season, ep]
 
 search:
   paths:
@@ -46,6 +46,10 @@ search:
     subber: ""
     sort: "{{ .Config.sort }}"
     dir: "{{ .Config.type }}"
+  keywordsfilters:
+    # strip season and ep
+    - name: re_replace
+      args: ["(?i)(?:\\s?[SE]?\\d{1,4}){1,2}$", ""]
 
   rows:
     selector: div.grid_12 > div[id^="rel"]
