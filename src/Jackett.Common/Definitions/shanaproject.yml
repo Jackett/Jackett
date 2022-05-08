@@ -1,0 +1,108 @@
+---
+id: shanaproject
+name: Shana Project
+description: "Shana Project is a Public torrent site for ANIME"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.shanaproject.com/
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      ep: episode
+      fsize: size
+      title: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: Descending
+    options:
+      Descending: desc
+      Ascending: asc
+  - name: info
+    type: info
+    label: Searching
+    default: This site only supports searching for Titles. Do not add a season or episode number, or a quality to your query.
+
+caps:
+  categorymappings:
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+
+search:
+  paths:
+    - path: search/
+  inputs:
+    title: "{{ .Keywords }}"
+    subber: ""
+    sort: "{{ .Config.sort }}"
+    dir: "{{ .Config.type }}"
+
+  rows:
+    selector: div.grid_12 > div[id^="rel"]
+
+  fields:
+    category:
+      text: Anime
+    title:
+      selector: div.release_leftover > div.release_text_contents
+      filters:
+        - name: re_replace
+          args: ["^(\\[.*\\]) (.*)", "$2 $1"]
+        - name: re_replace
+          args: ["(?i)(.mkv)", ""]
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a[href^="/download/"]
+      attribute: href
+    date_full:
+      # May 8, 2022, 6:25 a.m.
+      selector: div.release_20:contains(".m."):contains(":")
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["\\.", ""]
+        - name: dateparse
+          args: "January 2, 2006, 3:04 PM"
+    date_abbr:
+      # May 8, 2022, 6 a.m.
+      selector: div.release_20:contains(".m."):not(:contains(":"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["\\.", ""]
+        - name: dateparse
+          args: "January 2, 2006, 3 PM"
+    date_noon:
+      # April 30, 2022, noon
+      selector: div.release_20:contains(", noon")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [" noon", " 12 pm"]
+        - name: dateparse
+          args: "January 2, 2006, 3 PM"
+    date:
+      text: "{{ if or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ else }}now{{ end }}"
+    size:
+      selector: div.release_size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
