@@ -11,47 +11,50 @@ links:
 caps:
   categorymappings:
     - {id: 28, cat: PC, desc: "App: Linux"}
-    - {id: 18, cat: PC/0day, desc: "Apps: PC"}
     - {id: 19, cat: PC/Mac, desc: "Apps: Mac"}
+    - {id: 18, cat: PC/0day, desc: "Apps: PC"}
     - {id: 54, cat: Books/Comics, desc: "BD: bande dessinée"}
     - {id: 9, cat: TV/Documentary, desc: "Documentaries: All"}
-    - {id: 22, cat: Movies/DVD, desc: "FILM: DVD"}
+    - {id: 60, cat: Books/EBook, desc: "Ebook: BD - X"}
     - {id: 23, cat: Movies/UHD, desc: "FILM: 4K et plus"}
-    - {id: 24, cat: XXX, desc: "FILM: XXX"}
-    - {id: 25, cat: Movies/HD, desc: "FILM: HD 720p"}
-    - {id: 26, cat: Movies/HD, desc: "FILM: HD 1080p"}
-    - {id: 27, cat: Movies/HD, desc: "FILM: HDRip"}
-    - {id: 47, cat: Movies/HD, desc: "FILM: MHD"}
-    - {id: 43, cat: Movies/BluRay, desc: "FILM: BD-Rip"}
-    - {id: 34, cat: Movies/WEB-DL, desc: "FILM: Webrip"}
-    - {id: 14, cat: Movies/WEB-DL, desc: "FILM: WebRip-DL"}
-    - {id: 20, cat: Movies/WEB-DL, desc: "FILM: WebRip 720p"}
-    - {id: 21, cat: Movies/WEB-DL, desc: "FILM: WebRip 1080p"}
-    - {id: 39, cat: Movies/WEB-DL, desc: "FILM: Web-DL 720P"}
-    - {id: 17, cat: Movies/WEB-DL, desc: "FILM: Web-DL 1080P"}
-    - {id: 48, cat: Movies, desc: "FILM: Vost-FR"}
-    - {id: 49, cat: Movies, desc: "FILM: VO"}
-    - {id: 50, cat: Movies/HD, desc: "FILM: HDTV"}
     - {id: 51, cat: TV/Anime, desc: "FILM: Animé"}
+    - {id: 43, cat: Movies/BluRay, desc: "FILM: BD-Rip"}
+    - {id: 22, cat: Movies/DVD, desc: "FILM: DVD"}
     - {id: 52, cat: Movies/DVD, desc: "FILM: DVDRip"}
     - {id: 40, cat: Movies/HD, desc: "Film: HD"}
+    - {id: 26, cat: Movies/HD, desc: "FILM: HD 1080p"}
+    - {id: 25, cat: Movies/HD, desc: "FILM: HD 720p"}
+    - {id: 50, cat: Movies/HD, desc: "FILM: HDTV"}
+    - {id: 47, cat: Movies/HD, desc: "FILM: MHD"}
+    - {id: 61, cat: Movies/WEB-DL, desc: "FILM: TVRip"}
+    - {id: 49, cat: Movies, desc: "FILM: VO"}
+    - {id: 48, cat: Movies, desc: "FILM: Vost-FR"}
+    - {id: 17, cat: Movies/WEB-DL, desc: "FILM: Web-DL 1080P"}
+    - {id: 39, cat: Movies/WEB-DL, desc: "FILM: Web-DL 720P"}
+    - {id: 34, cat: Movies/WEB-DL, desc: "FILM: Webrip"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "FILM: WebRip 1080p"}
+    - {id: 20, cat: Movies/WEB-DL, desc: "FILM: WebRip 720p"}
+    - {id: 14, cat: Movies/WEB-DL, desc: "FILM: WebRip-DL"}
+    - {id: 24, cat: XXX, desc: "FILM: XXX"}
     - {id: 10, cat: PC/Games, desc: "Games: PC"}
     - {id: 53, cat: Books/Mags, desc: "Journaux : presse"}
-    - {id: 33, cat: Other, desc: "Other: Emulation"}
     - {id: 36, cat: Books/EBook, desc: "Other: E-Books"}
+    - {id: 33, cat: Other, desc: "Other: Emulation"}
     - {id: 38, cat: PC/Mobile-Other, desc: "Other: Mobile Phone"}
+    - {id: 58, cat: TV, desc: "Serie: DVDVOST"}
+    - {id: 59, cat: TV/WEB-DL, desc: "Serie: TVRip"}
     - {id: 57, cat: TV/WEB-DL, desc: "Serie: WEB"}
+    - {id: 42, cat: TV, desc: "SERIES:  Concerts / Spectacles"}
+    - {id: 5, cat: TV/Anime, desc: "SERIES: Animée"}
     - {id: 7, cat: TV/SD, desc: "SERIES: Épisodes SD"}
+    - {id: 3, cat: TV/Documentary, desc: "SERIES: Documentaires"}
     - {id: 55, cat: TV/SD, desc: "Serie: DVD"}
     - {id: 1, cat: TV/HD, desc: "SERIES: Episodes HD"}
-    - {id: 2, cat: TV/HD, desc: "SERIES: Pack HD"}
-    - {id: 3, cat: TV/Documentary, desc: "SERIES: Documentaires"}
-    - {id: 42, cat: TV, desc: "SERIES:  Concerts / Spectacles"}
-    - {id: 4, cat: TV/SD, desc: "SERIES: Pack SD"}
-    - {id: 5, cat: TV/Anime, desc: "SERIES: Animée"}
-    - {id: 41, cat: TV, desc: "SERIES: Vost-FR"}
     - {id: 6, cat: TV/HD, desc: "SERIES: HDTV"}
     - {id: 56, cat: TV/HD, desc: "SERIE: HDTV1080p"}
+    - {id: 2, cat: TV/HD, desc: "SERIES: Pack HD"}
+    - {id: 4, cat: TV/SD, desc: "SERIES: Pack SD"}
+    - {id: 41, cat: TV, desc: "SERIES: Vost-FR"}
 
   modes:
     search: [q]
