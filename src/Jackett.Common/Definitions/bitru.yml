@@ -108,18 +108,16 @@ search:
         - name: replace
           args: ["details", "download"]
     description:
-      selector: img[src="styles/images/adwarn.png"]
-      optional: true
+      selector: i.fa-ad
       attribute: title
       filters:
         - name: replace
-          args: ["Присутствует реклама", "Contains Adverts"]
-    poster:
+          args: ["Присутствует реклама", "[Contains Adverts] "]
+    description|append:
       selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "src=(.*?) "
+    poster:
+      selector: div.it-image > img
+      attribute: src
     date_today:
       # Сегодня в 09:09 от
       # Вчера в 22:47 от
