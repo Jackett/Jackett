@@ -53,8 +53,10 @@ caps:
     - {id: 46, cat: Audio, desc: "Yab@ncı MüziK"}
     - {id: 21, cat: Audio/Video, desc: "Video Klipler"}
     - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 74, cat: PC/Games, desc: "PC"}
-    - {id: 73, cat: Console, desc: "SONY-PS"}
+    - {id: 74, cat: PC/Games, desc: "Oyun PC"}
+    - {id: 83, cat: Console/Other, desc: "Oyun Gameboy"}
+    - {id: 73, cat: Console/PS3, desc: "Oyun SONY-PS"}
+    - {id: 82, cat: Console/PSP, desc: " Oyun PSP"}
     - {id: 6, cat: PC/0day, desc: "Program"}
     - {id: 47, cat: Other, desc: "Resimler"}
     - {id: 48, cat: TV, desc: "Televizyon"}
