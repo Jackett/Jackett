@@ -7,10 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent911.com/
-  - https://www.t911.net/
-  - https://oxtorrent.unblockit.blue/
-  - https://oxtorrent.nocensor.sbs/
+  - https://www.torrent911.net/
+  - https://www.t911.me/
 legacylinks:
   - https://www.oxtorrent.bz/
   - https://www.oxtorrent.ws/
@@ -35,6 +33,10 @@ legacylinks:
   - https://oxtorrent.unblockit.day/
   - https://www.oxtorrent.re/
   - https://oxtorrent.unblockit.llc/
+  - https://www.torrent911.com/
+  - https://www.t911.net/
+  - https://oxtorrent.unblockit.blue/ # proxy for *.co, a clone without derniers
+  - https://oxtorrent.nocensor.sbs/ # proxy for *.co, a clone without derniers
 
 caps:
   categorymappings:
