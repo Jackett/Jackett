@@ -117,7 +117,7 @@ search:
       inputs:
         passkey: "{{ .Config.passkey }}"
         category: "{{ if .Categories }}{{ range .Categories }}{{.}}+{{end}}{{ else }}{{ end }}"
-        search: "{{ if .Query.TMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+        search: "{{ .Keywords }}"
         tmdbid: "{{ .Query.TMDBID }}"
         $raw: "{{ if .Config.freeleech }}&freeleech=1{{ else }}{{ end }}"
       response:
