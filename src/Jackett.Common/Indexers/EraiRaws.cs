@@ -68,6 +68,8 @@ namespace Jackett.Common.Indexers
                 new DisplayInfoConfigurationItem("", "<p>Please note that the following stats are not available for this indexer. Default values are used instead. </p><ul><li>Files</li><li>Seeders</li><li>Leechers</li></ul>")
             );
 
+            configData.AddDynamic("include-subs", new BoolConfigurationItem("Enable appending SubTitles to the Title"));
+
             // Config item for title detail parsing
             configData.AddDynamic("title-detail-parsing", new BoolConfigurationItem("Enable Title Detail Parsing"));
             configData.AddDynamic(
@@ -83,6 +85,7 @@ namespace Jackett.Common.Indexers
 
         private string RSSKey => ((StringConfigurationItem)configData.GetDynamic("rssKey")).Value;
         private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
+        private bool IsSubsEnabled => ((BoolConfigurationItem)configData.GetDynamic("include-subs")).Value;
 
         public string RssFeedUri => SiteLink + RSS_PATH + "&" + RSSKey;
 
@@ -200,9 +203,14 @@ namespace Jackett.Common.Indexers
                     guid = builder.Uri;
                 }
 
+                var subs = "";
+                if (IsSubsEnabled)
+                {
+                    subs = string.Concat(" JAPANESE [Subs: ", fi.SubTitles, "]");
+                }
                 yield return new ReleaseInfo
                 {
-                    Title = string.Concat(fi.Title, " - ", fi.Quality),
+                    Title = string.Concat(fi.Title, " - ", fi.Quality, subs),
                     Guid = guid,
                     MagnetUri = fi.MagnetLink,
                     InfoHash = fi.InfoHash,
@@ -247,6 +255,7 @@ namespace Jackett.Common.Indexers
                 var size = rssItem.SelectSingleNode("erai:size", nsm)?.InnerText;
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
                 var quality = rssItem.SelectSingleNode("erai:resolution", nsm)?.InnerText;
+                var subs = rssItem.SelectSingleNode("erai:subtitles", nsm)?.InnerText;
 
                 item = new RssFeedItem
                 {
@@ -256,7 +265,8 @@ namespace Jackett.Common.Indexers
                     PublishDate = publishDate,
                     Size = size,
                     Description = description,
-                    Quality = quality
+                    Quality = quality,
+                    SubTitles = subs
                 };
                 return item.IsValid();
             }
@@ -279,6 +289,8 @@ namespace Jackett.Common.Indexers
             public string Description { get; private set; }
 
             public string Quality { get; private set; }
+
+            public string SubTitles { get; private set; }
 
             /// <summary>
             /// Check there is enough information to process the item.
@@ -307,6 +319,7 @@ namespace Jackett.Common.Indexers
                 Size = ReleaseInfo.GetBytes(feedItem.Size);
                 DetailsLink = ParseDetailsLink(feedItem.Description);
                 InfoHash = feedItem.InfoHash;
+                SubTitles = feedItem.SubTitles.Replace("[", " ").Replace("]", " ").ToUpper();
 
                 if (Uri.TryCreate(feedItem.Link, UriKind.Absolute, out Uri magnetUri))
                     MagnetLink = magnetUri;
@@ -338,6 +351,8 @@ namespace Jackett.Common.Indexers
             }
 
             public string Quality { get; }
+
+            public string SubTitles { get; }
 
             public string Title { get; set; }
 
