@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
 
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataBasicLoginWith2FA configData => (ConfigurationDataBasicLoginWith2FA)base.configData;
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://tehconnection.me/"
@@ -52,7 +52,8 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataBasicLoginWith2FA(@"If 2FA is disabled, let the field empty.
+ We recommend to disable 2FA because re-login will require manual actions."))
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -72,8 +73,9 @@ namespace Jackett.Common.Indexers
             {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
+                { "twofa", configData.TwoFactorAuth.Value },
                 { "keeplogged", "1" },
-                { "login", "Log+In!" }
+                { "login", "Log in" }
             };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl, true);
