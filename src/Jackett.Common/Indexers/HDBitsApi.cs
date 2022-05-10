@@ -132,6 +132,10 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             foreach (JObject r in response["data"])
             {
+                var title = (string)r["name"];
+                // if tv then match query keywords against title #12753
+                if (!query.IsImdbQuery && !query.MatchQueryStringAND(title))
+                    continue;
                 var link = new Uri(
                     SiteLink + "download.php/" + (string)r["filename"] + "?id=" + (string)r["id"] + "&passkey=" +
                     configData.Passkey.Value);
@@ -140,7 +144,7 @@ namespace Jackett.Common.Indexers
                 var details = new Uri(SiteLink + "details.php?id=" + (string)r["id"]);
                 var release = new ReleaseInfo
                 {
-                    Title = (string)r["name"],
+                    Title = title,
                     Details = details,
                     Link = link,
                     Category = MapTrackerCatToNewznab((string)r["type_category"]),
