@@ -37,8 +37,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
 
 settings:
@@ -66,8 +66,10 @@ settings:
 
 search:
   paths:
-    # http://rutor.info/search/0/0/100/0/gotham%2004x01
-    - path: "{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}top/{{ end }}"
+    # http://rutor.info/search/0/0/010/0/tt10288566 # search title and descr for imdb
+    # http://rutor.info/search/0/0/100/0/gotham%2004x01 # search title for query
+    # http://rutor.info/top/ # search keywordless
+    - path: "{{ if .Query.IMDBID }}search/0/0/010/{{ .Config.sort }}/{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}{{ end }}{{ if or .Keywords .Query.IMDBID }}{{ else }}top/{{ end }}"
 
   rows:
     selector: tr:has(td:has(a.downgif))
