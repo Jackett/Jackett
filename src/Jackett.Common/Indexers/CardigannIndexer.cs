@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "rageid", "tmdbid", "tvdbid", "poster", "description" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "rageid", "tmdbid", "tvdbid", "poster", "description", "doubanid" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -2029,6 +2029,13 @@ namespace Jackett.Common.Indexers
                     var TmdbID = TmdbIDMatch.Groups[1].Value;
                     release.TMDb = ParseUtil.CoerceLong(TmdbID);
                     value = release.TMDb.ToString();
+                    break;
+                case "doubanid":
+                    var DoubanIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var DoubanIDMatch = DoubanIDRegEx.Match(value);
+                    var DoubanID = DoubanIDMatch.Groups[1].Value;
+                    release.DoubanId = ParseUtil.CoerceLong(DoubanID);
+                    value = release.DoubanId.ToString();
                     break;
                 case "rageid":
                     var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);

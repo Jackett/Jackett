@@ -24,6 +24,7 @@ namespace Jackett.Common.Models
         public long? TVDBId { get; set; }
         public long? Imdb { get; set; }
         public long? TMDb { get; set; }
+        public long? DoubanId { get; set; }
         public string Author { get; set; }
         public string BookTitle { get; set; }
         public long? Seeders { get; set; }
@@ -61,6 +62,7 @@ namespace Jackett.Common.Models
             RageID = copyFrom.RageID;
             Imdb = copyFrom.Imdb;
             TMDb = copyFrom.TMDb;
+            DoubanId = copyFrom.DoubanId;
             Author = copyFrom.Author;
             BookTitle = copyFrom.BookTitle;
             Seeders = copyFrom.Seeders;
@@ -115,6 +117,6 @@ namespace Jackett.Common.Models
         public static long BytesFromKB(float kb) => (long)(kb * 1024f);
 
         public override string ToString() =>
-            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
+            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, DoubanId={DoubanId}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }
 }

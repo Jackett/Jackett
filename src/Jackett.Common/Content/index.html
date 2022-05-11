@@ -28,8 +28,8 @@
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=202204251" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=202204251" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20220512" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20220512" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -458,7 +458,7 @@
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-tvdb="{{TVDBId}}" data-poster="{{Poster}}" data-description="{{Description}}">
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-tvdb="{{TVDBId}}" data-douban="{{DoubanId}}" data-poster="{{Poster}}" data-description="{{Description}}">
                                     <td class="fit">{{PublishDate}}</td>
                                     <td class="fit">{{FirstSeen}}</td>
                                     <td class="fit">{{jacketTimespan PublishDate}}</td>
@@ -586,7 +586,7 @@
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-tvdb="{{TVDBId}}" data-poster="{{Poster}}" data-description="{{Description}}">
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-tvdb="{{TVDBId}}" data-douban="{{DoubanId}}" data-poster="{{Poster}}" data-description="{{Description}}">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
@@ -754,6 +754,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20220426"></script>
+    <script type="text/javascript" src="../custom.js?changed=20220512"></script>
 </body>
 </html>

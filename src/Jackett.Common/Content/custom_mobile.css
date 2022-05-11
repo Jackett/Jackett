@@ -292,6 +292,10 @@ table td.fit{
     background-color: #86cca8;
 }
 
+.label-douban {
+    background-color: #86cc10;
+}
+
 .tooltip {
     pointer-events: none;
 }
