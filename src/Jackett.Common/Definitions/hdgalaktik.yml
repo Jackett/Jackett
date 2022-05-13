@@ -111,8 +111,15 @@ search:
 
   fields:
     category:
+      selector: td:nth-child(1)
+      optional: true
+      filters:
+        - name: replace
+          args: ["---", 4]
+    category|noappend:
       selector: a[href^="browse.php?cat="]
       attribute: href
+      optional: true
       filters:
         - name: querystring
           args: cat
@@ -166,6 +173,12 @@ search:
       filters:
         - name: replace
           args: ["details", "download"]
+    imdbid:
+      selector: a[href^="browse.php?imdb="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: imdb
     size:
       selector: td:nth-child(4)
     seeders:
