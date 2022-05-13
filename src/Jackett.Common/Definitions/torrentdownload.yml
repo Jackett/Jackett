@@ -121,8 +121,9 @@ login:
     path: /
 
 search:
+  # home page no longer has torrents. /latest would be ideal but has not categories. resorting to /top for keywordless searches.
   paths:
-    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}top{{ end }}"
 
   rows:
     selector: table.table2 > tbody > tr:has(span.smallish)
