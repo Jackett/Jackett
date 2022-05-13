@@ -92,9 +92,9 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href*="/torrent/"]
+      selector: a[href*="/details.php?id="]
     details:
-      selector: a[href*="/torrent/"]
+      selector: a[href*="/details.php?id="]
       attribute: href
     download:
       selector: a[href^="/download.php?id="]
@@ -105,6 +105,14 @@ search:
       filters:
         - name: regexp
           args: "Size: (.+?)<"
+    files_optional:
+      selector: a[href^="/download.php?id="]
+      attribute: title
+      filters:
+        - name: regexp
+          args: "\\((\\d+) files\\)"
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
     seeders:
       selector: a[href^="/download.php?id="]
       attribute: title
