@@ -23,6 +23,7 @@ caps:
     - {id: 104, cat: Movies/DVD, desc: "Filme - DVD-R"}
     - {id: 135, cat: Movies/HD, desc: "Filme - HD"}
     - {id: 130, cat: Movies, desc: "Filme - Klassiker"}
+    - {id: 147, cat: Movies, desc: "Filme - Pack"}
     - {id: 134, cat: Movies/SD, desc: "Filme - SD"}
     - {id: 136, cat: Movies/UHD, desc: "Filme - UHD"}
     - {id: 105, cat: Movies/HD, desc: "Filme - x264/x265"}
