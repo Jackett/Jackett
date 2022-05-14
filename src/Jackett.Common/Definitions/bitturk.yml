@@ -57,6 +57,7 @@ caps:
     - {id: 83, cat: Console/Other, desc: "Oyun Gameboy"}
     - {id: 73, cat: Console/PS3, desc: "Oyun SONY-PS"}
     - {id: 82, cat: Console/PSP, desc: " Oyun PSP"}
+    - {id: 84, cat: Console/PS3, desc: "Oyun Playstation"}
     - {id: 6, cat: PC/0day, desc: "Program"}
     - {id: 47, cat: Other, desc: "Resimler"}
     - {id: 48, cat: TV, desc: "Televizyon"}
