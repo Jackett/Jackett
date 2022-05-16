@@ -220,7 +220,11 @@ namespace Jackett.Common.Indexers.Abstract
                 var json = JObject.Parse(response.ContentString);
                 foreach (JObject r in json["response"]["results"])
                 {
-                    var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
+                    // groupTime may be a unixTime or a datetime string
+                    var isNumber = long.TryParse((string)r["groupTime"], out long n);
+                    var groupTime = (isNumber)
+                        ? DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]))
+                        : DateTimeUtil.FromFuzzyTime((string)r["groupTime"]);
                     var groupName = WebUtility.HtmlDecode((string)r["groupName"]);
                     var artist = WebUtility.HtmlDecode((string)r["artist"]);
                     var cover = (string)r["cover"];
