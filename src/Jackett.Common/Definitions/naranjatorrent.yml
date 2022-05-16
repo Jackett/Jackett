@@ -1,0 +1,90 @@
+---
+id: naranjatorrent
+name: NaranjaTorrent
+description: "NaranjaTorrent is a Public torrent site for Spanish TV and movies"
+language: es-ES
+type: public
+encoding: UTF-8
+links:
+  - https://naranjatorrent.com/
+legacylinks: []
+
+caps:
+  categories:
+    serie: TV
+    pelicula: Movies
+    other: Other
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href$=".torrent"]
+      attribute: href
+
+search:
+  # site returns just 10 results, attempt to fetch up to 30
+  paths:
+    - path: "/buscar/{{ .Keywords }}/page/1"
+    - path: "/buscar/{{ .Keywords }}/page/2"
+    - path: "/buscar/{{ .Keywords }}/page/3"
+
+  rows:
+    selector: "#buscador.seccion p:not(.lead)>span"
+    filters:
+      - name: andmatch
+
+  fields:
+    category_movie:
+      selector: a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(pelicula)/.*$"
+    category_tv:
+      selector: a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(serie)/.*$"
+    category:
+      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
+    details:
+      selector: a
+      attribute: href
+    quality:
+      selector: "a+span"
+      optional: true
+      filters:
+        - name: replace
+          args: ["(", ""]
+        - name: replace
+          args: [")", ""]
+    title:
+      selector: a
+      filters:
+        - name: trim
+          args: "."
+        - name: replace
+          args: ["[720p]", ""]
+        - name: append
+          args: " {{ .Result.quality }}"
+    download:
+      selector: a
+      attribute: href
+    size:
+      text: "512 MB"
+    date:
+      text: now
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
