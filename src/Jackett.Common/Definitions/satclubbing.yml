@@ -132,13 +132,19 @@ search:
       selector: a[href$="filelist=1"]
     size:
       selector: td:has(a[href$="filelist=1"]) + td + td
-    seeders:
+    seeders_optional:
       selector: a[href$="toseeders=1"]
-    leechers:
+      optional: true
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
       selector: td:has(a[href$="toseeders=1"])
+      optional: true
       filters:
         - name: split
           args: ["|", 1]
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       case:
         img[src$="pic/free_icon.gif"]: 0
