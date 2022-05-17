@@ -43,7 +43,8 @@ namespace Jackett.Common.Indexers
             "https://todotorrents.net/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
-            "https://verdetorrent.com/"
+            "https://verdetorrent.com/",
+            "https://naranjatorrent.com/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
