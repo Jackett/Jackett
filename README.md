@@ -220,6 +220,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RUDUB (ex-BaibaKoTV)
  * RuTracker
  * Rustorka
+ * SATClubbing
  * Sharewood
  * SkTorrent
  * SkTorrent-org
