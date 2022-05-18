@@ -88,14 +88,6 @@ namespace Jackett.Common.Indexers
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
-            AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(28, TorznabCatType.PC, "Appz/Packs");
-            AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
-            AddCategoryMapping(20, TorznabCatType.Books, "Books");
-            AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
-            AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
-            AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
-
             AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
             AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
             AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
@@ -108,31 +100,43 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
-            AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
-            AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
-            AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
-            AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
-            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
-
-            AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
-
-            AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
-            AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
-            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
-            AddCategoryMapping(10, TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping(9, TorznabCatType.ConsoleXBox360, "Xbox-360");
-
             AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
             AddCategoryMapping(31, TorznabCatType.TVSD, "TV/DVD-R");
             AddCategoryMapping(33, TorznabCatType.TVSD, "TV/DVD-Rip");
             AddCategoryMapping(46, TorznabCatType.TVSD, "TV/Mobile");
+            AddCategoryMapping(82, TorznabCatType.TVForeign, "TV/Non-English");
             AddCategoryMapping(14, TorznabCatType.TV, "TV/Packs");
             AddCategoryMapping(26, TorznabCatType.TVSD, "TV/SD/x264");
             AddCategoryMapping(7, TorznabCatType.TVHD, "TV/x264");
             AddCategoryMapping(34, TorznabCatType.TVUHD, "TV/x265");
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
 
+            AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
+            AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS");
+            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
+            AddCategoryMapping(10, TorznabCatType.ConsoleNDS, "Nintendo");
+            AddCategoryMapping(9, TorznabCatType.ConsoleXBox, "Xbox");
+
+            AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
+            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
+            AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
+            AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
+            AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
+
+            AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(20, TorznabCatType.Books, "Books");
+            AddCategoryMapping(102, TorznabCatType.BooksForeign, "Books/Non-English");
+            AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
+            AddCategoryMapping(95, TorznabCatType.TVDocumentary, "Educational");
+            AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
+            AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
+            AddCategoryMapping(28, TorznabCatType.PC, "Softwa/Packs");
+            AddCategoryMapping(12, TorznabCatType.PC, "Software");
+
+            AddCategoryMapping(19, TorznabCatType.XXX, "XXX/0Day");
             AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
             AddCategoryMapping(15, TorznabCatType.XXXPack, "XXX/Packs");
         }
