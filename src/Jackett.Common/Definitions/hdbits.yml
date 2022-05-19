@@ -79,7 +79,7 @@ search:
     d: "{{ .Config.type }}"
 
   rows:
-    selector: table#torrent-list > tbody > tr:has(a[href^="/details.php?id="]){{ if .Config.freeleech }}:has(a[title=\"100% FL: no download is counted.\"]){{ else }}{{ end }}
+    selector: "table#torrent-list > tbody > tr:has(a[href^="/details.php?id="]){{ if .Config.freeleech }}:has(a[title=\"100% FL: no download is counted.\"]){{ else }}{{ end }}"
 
   fields:
     category:
