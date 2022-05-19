@@ -112,9 +112,6 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      filters:
-        - name: querystring
-          args: id
     downloadvolumefactor:
       case:
         "a[title=\"25% Free Leech: only 75% of the download is counted.\"]": 0.25
