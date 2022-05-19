@@ -109,11 +109,7 @@ search:
       attribute: onmouseover
       filters:
         - name: replace
-          args: ["javascript:ShowImage('/images/imdb/", "tt"]
-        - name: replace
-          args: [".jpg')", ""]
-        - name: replace
-          args: ["tt0000000", ""]
+          args: ["javascript:ShowImage('/images/imdb/tt0000000.jpg')", ""]
     poster:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: onmouseover

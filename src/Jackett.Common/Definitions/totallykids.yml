@@ -110,9 +110,6 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      filters:
-        - name: regexp
-          args: tt(\d+)
     poster:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: onmouseover

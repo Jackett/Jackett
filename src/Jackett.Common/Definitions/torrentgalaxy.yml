@@ -160,9 +160,6 @@ search:
     imdbid:
       selector: a[href^="/torrents.php?search=tt"]
       attribute: href
-      filters:
-        - name: regexp
-          args: tt(\d+)
     size:
       selector: div span[style^="border-radius"]
     seeders:
