@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 22, cat: TV/Anime, desc: "Anime"}
+    - {id: 22, cat: TV/Anime, desc: "Anime & Cartoon"}
     - {id: 26, cat: TV/Documentary, desc: "Documentaries"}
     - {id: 1, cat: Movies/UHD, desc: "Movies UHD & BluRay"}
     - {id: 3, cat: Movies/BluRay, desc: "Movies BDRips"}
@@ -20,7 +20,7 @@ caps:
     - {id: 2, cat: Movies, desc: "Movies Remux"}
     - {id: 4, cat: Movies/WEB-DL, desc: "Movies Web"}
     - {id: 5, cat: Movies/WEB-DL, desc: "Movies WebRip"}
-    - {id: 15, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 15, cat: Audio/Lossless, desc: "Music CD & FLAC"}
     - {id: 17, cat: Audio/MP3, desc: "Music MP3"}
     - {id: 18, cat: Audio, desc: "Music Pack"}
     - {id: 20, cat: Audio, desc: "Music Podcast"}
