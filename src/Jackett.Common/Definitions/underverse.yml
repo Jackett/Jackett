@@ -709,7 +709,7 @@ search:
     allw: 0
 
   rows:
-    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
+    selector: tr[id^="tor_"]:has(a[href^="magnet:?xt="])
 
   fields:
     category:
@@ -739,8 +739,8 @@ search:
     details:
       selector: a.tLink
       attribute: href
-    download:
-      selector: a[href^="./download.php?id="]
+    magnet:
+      selector: a[href^="magnet:?xt="]
       attribute: href
     size:
       selector: td:nth-child(7) > u
