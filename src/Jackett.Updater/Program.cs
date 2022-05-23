@@ -460,6 +460,7 @@ namespace Jackett.Updater
                 "Definitions/scenexpress.yml",
                 "Definitions/sdkino.yml",
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
+                "Definitions/seedfile.yml",
                 "Definitions/seedpeer.yml",
                 "Definitions/sexxi.yml",
                 "Definitions/sharefiles.yml",
