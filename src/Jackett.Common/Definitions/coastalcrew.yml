@@ -10,7 +10,8 @@ links:
 
 caps:
   categorymappings:
-    - {id: 62, cat: Books, desc: "EBook"}
+    - {id: 62, cat: Books/EBook, desc: "EBook"}
+    - {id: 69, cat: Books/Mags, desc: "Zeitung"}
     - {id: 30, cat: TV/Anime, desc: "Filme - Animie"}
     - {id: 28, cat: Movies/BluRay, desc: "Filme - Bluray"}
     - {id: 31, cat: Movies/Other, desc: "Filme - Bollywood"}
