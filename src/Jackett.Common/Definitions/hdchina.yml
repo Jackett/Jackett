@@ -76,29 +76,38 @@ search:
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0=incldead, 1=active, 2=dead
     incldead: 0
+    # 0=all, 1=normal, 2=free, 3=2x, 4=2x free, 5=50%, 6=2x 50%, 7=30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0=title, 1=descr, 3=uploader, 4=imdb URL
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0=AND, 1=OR, 2=Exact
     search_mode: 0
 
   rows:
     selector: table.torrent_list > tbody > tr:has(a[href^="?cat="])
 
   fields:
-    title:
-      selector: td:nth-child(2) a
     category:
       selector: a[href^="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["\\.", " "]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?hash="]
       attribute: href
+    description:
+      selector: h4
     size:
       selector: td.t_size
     grabs:
@@ -136,4 +145,4 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP tbd
+# NexusPHP 146364c08c (Customised)
