@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent9.nl/
+  - https://www.torrent9.re/
   - https://torrent9.nocensor.sbs/
 legacylinks:
   - https://www.t9.vc/
@@ -30,6 +30,7 @@ legacylinks:
   - https://www.torrent9.pw/
   - https://www.torrent9.si/
   - https://torrent9.nocensor.biz/
+  - https://www.torrent9.nl/
 
 caps:
   categorymappings:
