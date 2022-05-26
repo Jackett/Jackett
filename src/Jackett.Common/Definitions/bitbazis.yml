@@ -113,7 +113,7 @@ search:
     # site does not support imdbid searching
 
   rows:
-    selector: "table[width=\"100%\"]:last-child tbody tr:has(a[href^=\"userdetails.php?id=\"]):has(a[href^=\"download.php?torrent=\"]){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}, table[width=\"100%\"]:last-child tbody tr:has(a[href^=\"userdetails.php?id=\"]):has(input[onclick*=\"download.php?torrent=\"]){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
+    selector: "table[width=\"100%\"]:last-child tbody tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}, table[width=\"100%\"]:last-child tbody tr:has(input[onclick*=\"download.php?torrent=\"]){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
 
   fields:
     category:
