@@ -65,6 +65,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -83,7 +87,7 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrentek száma egy oldalon:</b> setting to <b>100</b> on your account profile.
+    default: For best results, change the <b>Torrentek száma egy oldalon:</b> setting to <b>50</b> on your account profile.
 
 login:
   method: cookie
@@ -96,21 +100,24 @@ login:
 search:
   paths:
     - path: browse.php
+      categories: ["!", 33, 66, 99]
+    - path: browse_xxx.php
+      categories: [33, 66, 99]
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active, 1 all, 2 deadonly, 3  myuploads, 4 zeroseed
-    incldead: 1
+    # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
+    incldead: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-    # site does not support imdbid searching or appear to have freeleech
+    # site does not support imdbid searching
 
   rows:
-    selector: table[width="100%"]:last-child tbody tr:has(a[href^="userdetails.php?id="]):has(a[href^="download.php?torrent="])
+    selector: "table[width=\"100%\"]:last-child tbody tr:has(a[href^=\"userdetails.php?id=\"]):has(a[href^=\"download.php?torrent=\"]){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}, table[width=\"100%\"]:last-child tbody tr:has(a[href^=\"userdetails.php?id=\"]):has(input[onclick*=\"download.php?torrent=\"]){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*=".php?cat="]
       attribute: href
       filters:
         - name: querystring
@@ -124,19 +131,43 @@ search:
     poster:
       selector: a.preview
       attribute: href
-    download:
+    download1:
       selector: a[href^="download.php?torrent="]
+      optional: true
       attribute: href
+    download2:
+      selector: input[onclick*="download.php?torrent="]
+      optional: true
+      attribute: onclick
+      filters:
+        - name: replace
+          args: ["window.open('", ""]
+        - name: replace
+          args: ["', '_self');", ""]
+    download:
+      text: "{{ if or .Result.download1 .Result.download2 }}{{ or .Result.download1 .Result.download2 }}{{ else }}{{ end }}"
     size:
       selector: td:nth-child(6)
-    date:
+    date_browse:
       # 2022<br>03/15.
-      selector: td:nth-child(7)
+      selector: td:nth-child(7):contains("/")
+      optional: true
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "200601/02. -07:00"
+    date_browse_xxx:
+      # 22.03.15
+      selector: td:nth-child(7):not(:contains("/"))
+      optional: true
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "06.01.02 -07:00"
+    date:
+      text: "{{ if or .Result.date_browse .Result.date_browse_xxx }}{{ or .Result.date_browse .Result.date_browse_xxx }}{{ else }}now{{ end }}"
     grabs:
       selector: td:nth-child(5)
     seeders:
