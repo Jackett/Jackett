@@ -101,13 +101,17 @@ search:
   paths:
     - path: browse.php
       categories: ["!", 33, 66, 99]
+      inputs:
+        # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
+        incldead: 0
     - path: browse_xxx.php
       categories: [33, 66, 99]
+      inputs:
+        # 0 active, 1 all, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
+        incldead: 1
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
-    incldead: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # site does not support imdbid searching
