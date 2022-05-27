@@ -63,16 +63,16 @@ caps:
     - {id: 6010, cat: XXX/DVD, desc: "XXX/DVD"}
     - {id: 6060, cat: XXX/ImageSet, desc: "XXX/Imageset"}
     - {id: 6050, cat: XXX/Other, desc: "XXX/Other"}
-    # Books
-    - {id: 8000, cat: Books, desc: "Books"}
-    - {id: 8010, cat: Books/EBook, desc: "Books/Ebook"}
-    - {id: 8020, cat: Books/Comics, desc: "Books/Comics"}
-    - {id: 8030, cat: Books/Mags, desc: "Books/Magazines"}
-    - {id: 8040, cat: Books/Technical, desc: "Books/Technical"}
-    - {id: 8050, cat: Books/Other, desc: "Books/Other"}
-    # Other
-    - {id: 7000, cat: Other, desc: "Other"}
-    - {id: 7010, cat: Other/Misc, desc: "Other/Misc"}
+    # Books - 80XX is used for filtering /browse/, but 70XX is used for results
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 7010, cat: Books/EBook, desc: "Books/Ebook"}
+    - {id: 7020, cat: Books/Comics, desc: "Books/Comics"}
+    - {id: 7030, cat: Books/Mags, desc: "Books/Magazines"}
+    - {id: 7040, cat: Books/Technical, desc: "Books/Technical"}
+    - {id: 7050, cat: Books/Other, desc: "Books/Other"}
+    # Other - 70XX is used for filtering /browse/, but 80XX is used for results
+    - {id: 8000, cat: Other, desc: "Other"}
+    - {id: 8010, cat: Other/Misc, desc: "Other/Misc"}
 
   modes:
     search: [q]
@@ -106,9 +106,6 @@ search:
       filters:
         - name: split
           args: ["/", 3]
-        # Books/Other is searched with 8050 and returns 7050 !?!?
-        - name: replace
-          args: ["7050", "8050"]
     title:
       selector: td:nth-child(2) a
     details:
