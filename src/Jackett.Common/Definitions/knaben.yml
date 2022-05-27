@@ -106,6 +106,9 @@ search:
       filters:
         - name: split
           args: ["/", 3]
+        # Books/Other is searched with 8050 and returns 7050 !?!?
+        - name: replace
+          args: ["7050", "8050"]
     title:
       selector: td:nth-child(2) a
     details:
