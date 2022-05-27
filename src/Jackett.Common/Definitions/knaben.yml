@@ -1,0 +1,140 @@
+---
+id: knaben
+name: Knaben
+description: "Knaben is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://knaben.eu/
+
+caps:
+  categorymappings:
+    # Audio
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3010, cat: Audio/MP3, desc: "Audio/MP3"}
+    - {id: 3020, cat: Audio/Video, desc: "Audio/Video"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Audio/Audiobook"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Audio/Lossless"}
+    - {id: 3050, cat: Audio/Other, desc: "Audio/Other"}
+    # Console
+    - {id: 1000, cat: Console, desc: "Console"}
+    - {id: 1010, cat: Console/NDS, desc: "Console/NDS"}
+    - {id: 1020, cat: Console/PSP, desc: "Console/PSP"}
+    - {id: 1030, cat: Console/Wii, desc: "Console/Wii"}
+    - {id: 1040, cat: Console/XBox, desc: "Console/Xbox"}
+    - {id: 1050, cat: Console/XBox 360, desc: "Console/Xbox 360"}
+    - {id: 1080, cat: Console/PS3, desc: "Console/PS3"}
+    - {id: 1110, cat: Console/3DS, desc: "Console/3DS"}
+    - {id: 1120, cat: Console/PS Vita, desc: "Console/PS Vita"}
+    - {id: 1180, cat: Console/PS4, desc: "Console/PS4"}
+    - {id: 1090, cat: Console/Other, desc: "Console/Other"}
+    # Movies
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2010, cat: Movies/Foreign, desc: "Movies/Foreign"}
+    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 2050, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 2060, cat: Movies/BluRay, desc: "Movies/BluRay"}
+    - {id: 2070, cat: Movies/DVD, desc: "Movies/DVD"}
+    - {id: 2020, cat: Movies/Other, desc: "Movies/Other"}
+    # PC
+    - {id: 4000, cat: PC, desc: "PC/PC"}
+    - {id: 4020, cat: PC/ISO, desc: "PC/ISO"}
+    - {id: 4030, cat: PC/Mac, desc: "PC/Mac"}
+    - {id: 4040, cat: PC/Mobile-Other, desc: "PC/Mobile-Other"}
+    - {id: 4050, cat: PC/Games, desc: "PC/Games"}
+    - {id: 4060, cat: PC/Mobile-iOS, desc: "PC/Mobile-iOS"}
+    - {id: 4070, cat: PC/Mobile-Android, desc: "PC/Mobile-Android"}
+    # Anime
+    - {id: 5070, cat: TV/Anime, desc: "Anime"}
+    # TV
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5020, cat: TV/Foreign, desc: "TV/FOREIGN"}
+    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: 5060, cat: TV/Sport, desc: "TV/Sport"}
+    - {id: 5080, cat: TV/Documentary, desc: "TV/Documentary"}
+    - {id: 5050, cat: TV/Other, desc: "TV/OTHER"}
+    # XXX
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 6010, cat: XXX/DVD, desc: "XXX/DVD"}
+    - {id: 6060, cat: XXX/ImageSet, desc: "XXX/Imageset"}
+    - {id: 6050, cat: XXX/Other, desc: "XXX/Other"}
+    # Books
+    - {id: 8000, cat: Books, desc: "Books"}
+    - {id: 8010, cat: Books/EBook, desc: "Books/Ebook"}
+    - {id: 8020, cat: Books/Comics, desc: "Books/Comics"}
+    - {id: 8030, cat: Books/Mags, desc: "Books/Magazines"}
+    - {id: 8040, cat: Books/Technical, desc: "Books/Technical"}
+    - {id: 8050, cat: Books/Other, desc: "Books/Other"}
+    # Other
+    - {id: 7000, cat: Other, desc: "Other"}
+    - {id: 7010, cat: Other/Misc, desc: "Other/Misc"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: Date
+    options:
+      Date: created
+      Seeders: seeders
+      Size: size
+      Title: title
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}&p=1&cat=All&s={{ else }}browse/1/0/{{ end }}{{ .Config.sort }}"
+
+  rows:
+    selector: tr[title^="Cached at"]
+
+  fields:
+    category:
+      selector: a[href^="/browse/"]
+      attribute: href
+      filters:
+        - name: split
+          args: ["/", 3]
+    title:
+      selector: td:nth-child(2) a
+    details:
+      selector: td:last-child a
+      attribute: href
+    magnet:
+      selector: td:nth-child(2) a
+      attribute: href
+    description:
+      selector: td:last-child a
+      filters:
+        - name: prepend
+          args: "Source: "
+    date:
+      selector: td:nth-child(4)
+      attribute: title
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-02T15:04:05 -07:00"
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
