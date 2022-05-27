@@ -1,0 +1,96 @@
+---
+id: btmirror
+name: BTmirror
+description: "BTmirror is a Public BitTorrent DHT search engine."
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://btsao.com/
+  - https://btmirror.unblockit.blue/
+
+caps:
+  categories:
+    Other: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_8000
+    type: info
+    label: About BTmirror Categories
+    default: BTmirror does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: create_time
+    options:
+      relavance: relevance
+      create_time: created
+      length: size
+
+download:
+  infohash:
+    hash:
+      selector: p.magnet a
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: p.magnet a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "&dn=(.+?)$"
+        - name: validfilename
+
+search:
+  # https://btsao.com/en/search/2022/?c=&s=create_time
+  # returns 10 results per page
+  paths:
+    - path: "en/search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/"
+    - path: "en/search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/2"
+  inputs:
+    c: ""
+    s: "{{ .Config.sort }}"
+
+  rows:
+    selector: div.ssbox
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: h3
+    details:
+      selector: h3 a
+      attribute: href
+    download:
+      selector: h3 a
+      attribute: href
+    date:
+      selector: span:contains("date:") b
+      filters:
+        - name: dateparse
+          args: "2006-01-02"
+    size:
+      selector: span:contains("size:") b
+    files:
+      selector: span:contains("files:") b
+    grabs:
+      selector: span:contains("人气:") b
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine: n/a
