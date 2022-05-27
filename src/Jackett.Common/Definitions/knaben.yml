@@ -10,6 +10,8 @@ links:
 
 caps:
   categorymappings:
+    # Cat ids used for filtering /browse/ are not consistent with those for results, so double-check when updating.
+    # They appear to be using nZEDb/Newznab/Jackett cat ids, so if there are empty categories, resort to those.
     # Audio
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 3010, cat: Audio/MP3, desc: "Audio/MP3"}
@@ -35,8 +37,8 @@ caps:
     - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
     - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
     - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
-    - {id: 2050, cat: Movies/3D, desc: "Movies/3D"}
-    - {id: 2060, cat: Movies/BluRay, desc: "Movies/BluRay"}
+    - {id: 2060, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 2050, cat: Movies/BluRay, desc: "Movies/BluRay"}
     - {id: 2070, cat: Movies/DVD, desc: "Movies/DVD"}
     - {id: 2020, cat: Movies/Other, desc: "Movies/Other"}
     # PC
@@ -62,15 +64,15 @@ caps:
     - {id: 6000, cat: XXX, desc: "XXX"}
     - {id: 6010, cat: XXX/DVD, desc: "XXX/DVD"}
     - {id: 6060, cat: XXX/ImageSet, desc: "XXX/Imageset"}
-    - {id: 6050, cat: XXX/Other, desc: "XXX/Other"}
-    # Books - 80XX is used for filtering /browse/, but 70XX is used for results
+    - {id: 6070, cat: XXX/Other, desc: "XXX/Other"}
+    # Books
     - {id: 7000, cat: Books, desc: "Books"}
-    - {id: 7010, cat: Books/EBook, desc: "Books/Ebook"}
-    - {id: 7020, cat: Books/Comics, desc: "Books/Comics"}
-    - {id: 7030, cat: Books/Mags, desc: "Books/Magazines"}
+    - {id: 7020, cat: Books/EBook, desc: "Books/Ebook"}
+    - {id: 7030, cat: Books/Comics, desc: "Books/Comics"}
+    - {id: 7010, cat: Books/Mags, desc: "Books/Magazines"}
     - {id: 7040, cat: Books/Technical, desc: "Books/Technical"}
     - {id: 7050, cat: Books/Other, desc: "Books/Other"}
-    # Other - 70XX is used for filtering /browse/, but 80XX is used for results
+    # Other
     - {id: 8000, cat: Other, desc: "Other"}
     - {id: 8010, cat: Other/Misc, desc: "Other/Misc"}
 
