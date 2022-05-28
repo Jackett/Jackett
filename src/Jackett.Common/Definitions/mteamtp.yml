@@ -107,7 +107,7 @@ login:
 
 download:
   selectors:
-    - selector: a[href^="download.php?id="]
+    - selector: a[href$="&https=1"]
       attribute: href
 
 search:
