@@ -10,85 +10,54 @@ links:
 
 caps:
   categorymappings:
-    - {id: 54, cat: Movies/SD, desc: "kino SD x264/x265"}
-    - {id: 56, cat: Movies/HD, desc: "kino 720p"}
-    - {id: 57, cat: Movies/HD, desc: "kino 1080p"}
-    - {id: 100, cat: Movies/3D, desc: "kino 3D"}
-    - {id: 58, cat: Movies/SD, desc: "Filme SD x264/x265"}
+    - {id: 58, cat: Movies/SD, desc: "Filme SD"}
     - {id: 59, cat: Movies/HD, desc: "Filme 720p"}
     - {id: 60, cat: Movies/HD, desc: "Filme 1080p"}
     - {id: 61, cat: Movies/UHD, desc: "Filme 2160p"}
-    - {id: 62, cat: Movies/3D, desc: "Filme 3D"}
+    - {id: 170, cat: Movies/BluRay, desc: "Filme Bluray"}
     - {id: 101, cat: Movies/DVD, desc: "Filme DVD"}
-    - {id: 63, cat: Movies/HD, desc: "Filme Remux"}
-    - {id: 129, cat: Movies/SD, desc: "Filme Packs SD x264/265"}
+    - {id: 62, cat: Movies/3D, desc: "Filme 3D"}
+    - {id: 169, cat: Movies/Foreign, desc: "Filme International"}
+    - {id: 129, cat: Movies/SD, desc: "Filme Packs SD"}
     - {id: 130, cat: Movies/HD, desc: "Filme Packs 720p"}
     - {id: 131, cat: Movies/HD, desc: "Filme Packs 1080p"}
-    - {id: 64, cat: TV/SD, desc: "Serien SD x264/x265"}
+    - {id: 159, cat: Movies/UHD, desc: "Filme Packs 2160p"}
+    - {id: 172, cat: Movies/SD, desc: "Film-Klassiker SD"}
+    - {id: 173, cat: Movies/HD, desc: "Film-Klassiker 720p"}
+    - {id: 174, cat: Movies/HD, desc: "Film-Klassiker 1080p"}
+    - {id: 175, cat: Movies/UHD, desc: "Film-Klassiker 2160p"}
+    - {id: 180, cat: Movies/DVD, desc: "Film-Klassiker DVD"}
+    - {id: 181, cat: Movies/BluRay, desc: "Film-Klassiker Bluray"}
+    - {id: 176, cat: Movies/SD, desc: "Film-Klassiker Pack SD"}
+    - {id: 177, cat: Movies/HD, desc: "Film-Klassiker Pack 720p"}
+    - {id: 178, cat: Movies/HD, desc: "Film-Klassiker Pack 1080p"}
+    - {id: 179, cat: Movies/UHD, desc: "Film-Klassiker Pack 2160p"}
+    - {id: 64, cat: TV/SD, desc: "Serien SD"}
     - {id: 65, cat: TV/HD, desc: "Serien 720p"}
     - {id: 66, cat: TV/HD, desc: "Serien 1080p"}
     - {id: 68, cat: TV/UHD, desc: "Serien 2160p"}
     - {id: 69, cat: TV/Foreign, desc: "Serien Ger-Subbed"}
-    - {id: 70, cat: TV/Foreign, desc: "Serien International"}
-    - {id: 76, cat: TV/SD, desc: "Serienpacks SD x264/x265"}
+    - {id: 167, cat: TV/Foreign, desc: "Serien International"}
+    - {id: 76, cat: TV/SD, desc: "Serienpacks SD"}
     - {id: 77, cat: TV/HD, desc: "Serienpacks 720p"}
     - {id: 78, cat: TV/HD, desc: "Serienpacks 1080p"}
     - {id: 81, cat: TV/UHD, desc: "Serienpacks 2160p"}
     - {id: 79, cat: TV/Foreign, desc: "Serienpacks Ger-Subbed"}
-    - {id: 80, cat: TV/Foreign, desc: "Serienpacks International"}
-    - {id: 115, cat: Movies/SD, desc: "Kids-Filme SD x264/x265"}
-    - {id: 116, cat: Movies/HD, desc: "Kids-Filme 720p"}
-    - {id: 117, cat: Movies/HD, desc: "Kids-Filme 1080p"}
-    - {id: 109, cat: TV/SD, desc: "Kids-Serien SD x264/x265"}
-    - {id: 110, cat: TV/HD, desc: "Kids-Serien 720p"}
-    - {id: 111, cat: TV/HD, desc: "Kids-Serien 1080p"}
-    - {id: 112, cat: TV/SD, desc: "Kids-Serien Packs SD"}
-    - {id: 113, cat: TV/HD, desc: "Kids-Serien Packs 720p"}
-    - {id: 114, cat: TV/HD, desc: "Kids-Serien Packs 1080p"}
-    - {id: 127, cat: TV/Foreign, desc: "Kids-Serien International"}
-    - {id: 98, cat: TV/SD, desc: "Tatort SD x264/x265"}
-    - {id: 99, cat: TV/HD, desc: "Tatort 720p"}
-    - {id: 105, cat: TV/SD, desc: "Daily Soaps SD x264/x265"}
-    - {id: 103, cat: TV/HD, desc: "Daily Soaps 720p"}
-    - {id: 104, cat: TV/HD, desc: "Daily Soaps 1080p"}
-    - {id: 106, cat: TV/Documentary, desc: "Dokus SD x264/x265"}
-    - {id: 107, cat: TV/Documentary, desc: "Dokus 720p"}
-    - {id: 108, cat: TV/Documentary, desc: "Dokus 1080p"}
-    - {id: 83, cat: Movies/SD, desc: "TV-Filme SD x264/x265"}
-    - {id: 84, cat: Movies/HD, desc: "TV-Filme 720p"}
-    - {id: 85, cat: Movies/HD, desc: "TV-Filme 1080p"}
-    - {id: 86, cat: TV/SD, desc: "TV-Shows SD x264/x265"}
-    - {id: 87, cat: TV/HD, desc: "TV-Shows 720p"}
-    - {id: 88, cat: TV/HD, desc: "TV-Shows 1080p"}
-    - {id: 118, cat: TV/Sport, desc: "SportSD x264/x265"}
-    - {id: 119, cat: TV/Sport, desc: "Sport720p"}
-    - {id: 120, cat: TV/Sport, desc: "Sport1080p"}
-    - {id: 122, cat: TV/Sport, desc: "Sport2160p"}
-    - {id: 121, cat: TV/Sport, desc: "SportInternational"}
-    - {id: 82, cat: Audio/Audiobook, desc: "Audio Audiobooks"}
     - {id: 71, cat: Audio/MP3, desc: "Audio MP3"}
     - {id: 72, cat: Audio/Lossless, desc: "Audio Flac"}
-    - {id: 135, cat: Audio/Lossless, desc: "Audio WAV"}
-    - {id: 73, cat: Audio/MP3, desc: "Audio MP3 Packs"}
-    - {id: 74, cat: Audio/Lossless, desc: "Audio Flac Packs"}
-    - {id: 128, cat: Audio, desc: "Audio Kids"}
-    - {id: 75, cat: Audio/Video, desc: "Audio Musikvideo"}
+    - {id: 73, cat: Audio, desc: "Audio Packs"}
+    - {id: 153, cat: Audio/Audiobook, desc: "Hörbücher"}
     - {id: 123, cat: PC, desc: "Software Windows"}
-    - {id: 124, cat: PC, desc: "Software Linux"}
-    - {id: 125, cat: PC/Mobile-Android, desc: "Software Android"}
-    - {id: 126, cat: PC/Mac, desc: "Software MacOS"}
+    - {id: 166, cat: PC/Mac, desc: "Software Sonstiges"}
     - {id: 132, cat: PC/Games, desc: "Spiele Windows"}
-    - {id: 133, cat: PC/Mac, desc: "Spiele MacOS"}
-    - {id: 134, cat: Console, desc: "Spiele Nintendo"}
-    - {id: 90, cat: Books/Mags, desc: "Diverses Zeitschriften"}
-    - {id: 89, cat: Books/EBook, desc: "Diverses E-Books"}
-    - {id: 91, cat: XXX/x264, desc: "XXX SD x264/x265"}
+    - {id: 150, cat: PC/Mac, desc: "Spiele Sonstiges"}
+    - {id: 90, cat: Books/Mags, desc: "Zeitschriften"}
+    - {id: 89, cat: Books/EBook, desc: "E-Books"}
+    - {id: 91, cat: XXX/SD, desc: "XXX SD"}
     - {id: 92, cat: XXX/x264, desc: "XXX 720p"}
     - {id: 93, cat: XXX/x264, desc: "XXX 1080p"}
-    - {id: 95, cat: XXX/Pack, desc: "XXX Packs SD"}
-    - {id: 96, cat: XXX/Pack, desc: "XXX Packs HD"}
+    - {id: 171, cat: XXX/Pack, desc: "XXX Packs"}
     - {id: 94, cat: XXX/ImageSet, desc: "XXX Magazine"}
-    - {id: 97, cat: XXX/ImageSet, desc: "XXX Pics"}
 
   modes:
     search: [q]
