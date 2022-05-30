@@ -206,4 +206,4 @@ search:
     minimumseedtime:
       # 12 hours (as seconds = 12 x 60 x 60)
       text: 43200
-# engine n/a
+# 3xT
