@@ -12,13 +12,10 @@ certificates:
 
 caps:
   categorymappings:
-    # Documentaire
-    - {id: 96, cat: TV/Documentary, desc: "Docus TV"}
-    - {id: 124, cat: TV/Documentary, desc: "Docus Formation Video"}
     # Films
-    - {id: 1, cat: XXX, desc: "3X"}
-    - {id: 47, cat: XXX, desc: "3X  HD720p"}
-    - {id: 48, cat: XXX, desc: "3X  HD1080p"}
+    - {id: 1, cat: XXX, desc: "Films 3X"}
+    - {id: 47, cat: XXX, desc: "Films 3X HD720p"}
+    - {id: 48, cat: XXX, desc: "Films 3X HD1080p"}
     - {id: 49, cat: Movies/3D, desc: "Films 3D"}
     - {id: 50, cat: Movies/UHD, desc: "Films 4K"}
     - {id: 51, cat: TV/UHD, desc: "Films 4K UHDTV"}
@@ -28,25 +25,31 @@ caps:
     - {id: 61, cat: Movies/HD, desc: "Films HDRip"}
     - {id: 59, cat: Movies/DVD, desc: "Films DVDR"}
     - {id: 60, cat: Movies/DVD, desc: "Films DVDRip"}
-    - {id: 57, cat: Movies/BluRay, desc: "Films BDRip"}
-    - {id: 58, cat: Movies/BluRay, desc: "Films BRRip"}
+    - {id: 57, cat: Movies/BluRay, desc: "Films BD-Rip"}
+    - {id: 58, cat: Movies/BluRay, desc: "Films BR-Rip"}
     - {id: 63, cat: Movies/HD, desc: "Films MHD"}
     - {id: 64, cat: Movies, desc: "Films R5"}
     - {id: 65, cat: Movies, desc: "Films FSCR"}
-    - {id: 66, cat: Movies, desc: "Films CamTS"}
+    - {id: 66, cat: Movies, desc: "Films Cam-TS"}
     - {id: 67, cat: Movies, desc: "Films Pack Films"}
-    - {id: 68, cat: Movies, desc: "Films VostFR"}
+    - {id: 68, cat: Movies, desc: "Films Vost-FR"}
     - {id: 69, cat: Movies, desc: "Films VO"}
     - {id: 70, cat: Movies/WEB-DL, desc: "Films WebRip 1080p"}
     - {id: 71, cat: Movies/WEB-DL, desc: "Films WebRip 720p"}
     - {id: 73, cat: Movies/WEB-DL, desc: "Films Webrip"}
     - {id: 129, cat: Movies, desc: "Films QC~Film"}
-    - {id: 72, cat: Movies/WEB-DL, desc: "Films WEB DL"}
+    - {id: 72, cat: Movies/WEB-DL, desc: "Films WEBRip-DL"}
     - {id: 99, cat: Movies, desc: "Films Remux"}
-    - {id: 98, cat: Movies/Other, desc: "Films Film Animées"}
+    - {id: 98, cat: Movies/Other, desc: "Films Animé"}
     - {id: 122, cat: Movies/WEB-DL, desc: "Films Web-DL 1080P"}
     - {id: 123, cat: Movies/WEB-DL, desc: "Films WEB-DL 720p"}
-    - {id: 126, cat: Movies, desc: "Films HDTV"}
+    - {id: 137, cat: Movies/UHD, desc: "Films HDR 2160p"}
+    - {id: 138, cat: Movies/WEB-DL, desc: "Films WEB-DL 2160p"}
+    - {id: 139, cat: Movies/WEB-DL, desc: "Films WEB-RIP 2160p"}
+    - {id: 126, cat: TV/HD, desc: "Films HDTV"}
+    # Documentaire
+    - {id: 96, cat: TV/Documentary, desc: "Docus TV"}
+    - {id: 124, cat: TV/Documentary, desc: "Docus Formation Video"}
     # Jeux
     - {id: 114, cat: PC/Games, desc: "Jeux PC"}
     - {id: 115, cat: Console/PS3, desc: "Jeux PS3"}
@@ -77,18 +80,18 @@ caps:
     - {id: 108, cat: Audio/Lossless, desc: "Musiques FLAC"}
     - {id: 109, cat: Audio, desc: "Musiques WMA"}
     # Séries
-    - {id: 77, cat: TV/HD, desc: "Series HDTV"}
-    - {id: 84, cat: TV/HD, desc: "Series Épisodes HD"}
-    - {id: 85, cat: TV/SD, desc: "Series Épisodes SD"}
-    - {id: 86, cat: TV, desc: "Series VosFR"}
-    - {id: 97, cat: TV/Anime, desc: "Series Animée"}
-    - {id: 88, cat: TV, desc: "Series Pack HD"}
-    - {id: 128, cat: TV, desc: "Series Pack SD"}
-    - {id: 130, cat: TV, desc: "SeriesQC~Serie"}
+    - {id: 130, cat: TV, desc: "Séries QC~Serie"}
+    - {id: 77, cat: TV/HD, desc: "Séries HDTV"}
+    - {id: 84, cat: TV/HD, desc: "Séries Épisodes HD"}
+    - {id: 85, cat: TV/SD, desc: "Séries Épisodes SD"}
+    - {id: 97, cat: TV/Anime, desc: "Séries Animée"}
+    - {id: 88, cat: TV, desc: "Séries Pack HD"}
+    - {id: 128, cat: TV, desc: "Séries Pack SD"}
     # Spéctacle
-    - {id: 131, cat: TV, desc: "SeriesQC~Spectacle"}
+    - {id: 131, cat: TV/Other, desc: "Spectacle QC~Spectacle"}
     - {id: 91, cat: TV/Other, desc: "Spectacle 720p"}
     - {id: 90, cat: TV/Other, desc: "Spectacle 1080p"}
+    - {id: 136, cat: TV/Other, desc: "Spectacle SD"}
     # Télévision
     - {id: 74, cat: TV/HD, desc: "TV TVHD"}
     - {id: 75, cat: TV, desc: "TV TVRip"}
