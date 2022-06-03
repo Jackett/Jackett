@@ -23,7 +23,6 @@ namespace Jackett.Common.Indexers
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q
-                   p: ps,
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
