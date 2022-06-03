@@ -17,7 +17,7 @@ namespace Jackett.Common.Indexers
             : base(id: "aro",
                    name: "aro.lol",
                    description: "aro.lol is a SERBIAN/ENGLISH Private Torrent Tracker for ANIME",
-                   link: "https://aro.lol/",
+                   link: "https://aro.lol/index.php",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
