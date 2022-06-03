@@ -32,6 +32,7 @@ namespace Jackett.Common.Indexers
                    configService: configService,
                    client: wc,
                    logger: l,
+                   p: ps,
                    cs: cs,
                    has2Fa: true,
                    supportsFreeleechTokens: true
