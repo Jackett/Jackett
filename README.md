@@ -264,6 +264,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Anthelion
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
+ * aro.lol
  * AsianCinema
  * Audiences
  * AudioNews (AN)
