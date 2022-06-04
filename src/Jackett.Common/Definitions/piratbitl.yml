@@ -711,7 +711,7 @@ search:
     submit: "Поиск"
 
   rows:
-    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"]))
+    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"])):not(:has(span[title="авторское право"]))
     filters:
       - name: andmatch
 
