@@ -752,7 +752,7 @@ search:
       selector: td > u
     date:
       # unix
-      selector: td[title="Добавлен"] > u
+      selector: td[title="Добавлен"] > u, td[title="Added"] > u
     # Russian and Ukranian and English languages are supported
     grabs:
       selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
