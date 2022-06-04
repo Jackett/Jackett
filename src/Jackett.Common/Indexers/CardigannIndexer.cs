@@ -468,12 +468,21 @@ namespace Jackett.Common.Indexers
                 var variable = RangeRegexMatches.Groups[1].Value;
                 var prefix = RangeRegexMatches.Groups[2].Value;
                 var postfix = RangeRegexMatches.Groups[3].Value;
+                var hasArrayIndex = prefix.Contains("[*]");
+                var arrayIndex = -1;
+                if (hasArrayIndex)
+                    prefix = prefix.Replace("[*]", "[-1]");
 
                 foreach (var value in (ICollection<string>)variables[variable])
                 {
                     var newvalue = value;
                     if (modifier != null)
                         newvalue = modifier(newvalue);
+                    if (hasArrayIndex)
+                    {
+                        prefix = prefix.Replace("[" + arrayIndex.ToString() + "]", "[" + (arrayIndex + 1).ToString() + "]");
+                        arrayIndex++;
+                    }
                     expanded += prefix + newvalue + postfix;
                 }
                 template = template.Replace(all, expanded);
