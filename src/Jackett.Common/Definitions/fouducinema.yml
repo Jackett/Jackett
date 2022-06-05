@@ -33,6 +33,8 @@ caps:
     - {id: 49, cat: Books/EBook, desc: "EBOOK Livres"}
     - {id: 50, cat: TV/Anime, desc: "ANIMEE Anim�e"}
     - {id: 1, cat: Movies/SD, desc: "FILM Xvid"}
+    - {id: 62, cat: Movies/WEB-DL, desc: "FILM WEB"}
+    - {id: 34, cat: Movies/SD, desc: "FILM TVRip"}
     - {id: 33, cat: Movies/HD, desc: "FILM HDTV"}
     - {id: 31, cat: Movies/Other, desc: "FILM MUET"}
     - {id: 30, cat: Movies/Other, desc: "FILM VOST"}
@@ -43,7 +45,7 @@ caps:
     - {id: 25, cat: Movies/BluRay, desc: "FILM ISO"}
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
     - {id: 2, cat: Movies/DVD, desc: "FILM DVD"}
-    - {id: 34, cat: Movies/SD, desc: "FILM TVRip"}
+    - {id: 63, cat: Movies/WEB-DL, desc: "FILM WEB"}
     - {id: 5, cat: Audio/Video, desc: "MUSIC clip video"}
     - {id: 7, cat: PC/Games, desc: "JEUX Win"}
     - {id: 8, cat: Console/PS3, desc: "JEUX PS3"}
