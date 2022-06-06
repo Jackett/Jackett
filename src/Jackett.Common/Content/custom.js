@@ -927,7 +927,7 @@ function doErrorNotify(indexerId, errorMessage, errorEvent) {
     var link = "<i><a href=\"" + githubUrl + " " + urlEscapedError + "\" target=\"_blank\">Click here to open an issue on GitHub for " + githubText + ".</a><i>";
     if (errorMessage.includes("FlareSolverr is not configured")) {
       link = "<i><a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">Instructions to install and configure FlareSolverr.</a><i><br />" +
-        "<i><a href=\"https://github.com/Jackett/Jackett/wiki/Troubleshooting#error-connecting-to-flaresolverr-server\" target=\"_blank\">Troubleshooting frecuent errors with FlareSolverr.</a><i>";
+        "<i><a href=\"https://github.com/Jackett/Jackett/wiki/Troubleshooting#error-connecting-to-flaresolverr-server\" target=\"_blank\">Troubleshooting frequent errors with FlareSolverr.</a><i>";
     }
     doNotify("An error occurred while " + errorEvent + " this indexer<br /><b>" + htmlEscapedError + "</b><br />" + link,
       "danger", "glyphicon glyphicon-alert", false);
