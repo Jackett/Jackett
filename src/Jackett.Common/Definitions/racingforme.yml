@@ -5,6 +5,8 @@ description: "Racing For Me (RFM) is a Private Torrent Tracker for RACING"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - adc1eab7ff8fe606c24cdf2d9c7c86788b0cd80a # expired ‎7 ‎June ‎2022
 links:
   - https://www.racingfor.me/
 
