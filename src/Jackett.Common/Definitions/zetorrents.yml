@@ -5,6 +5,7 @@ description: "zetorrents is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
+# to fetch current domain use https://www.protege-liens.com/zetorrents
 links:
   - https://www.zetorrents.nl/
 legacylinks:
