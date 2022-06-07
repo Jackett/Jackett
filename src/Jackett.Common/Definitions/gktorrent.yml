@@ -6,8 +6,9 @@ language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
+# to fetch current domain use https://www.protege-liens.com/gktorrent
 links:
-  - https://www.gktorrents.org/
+  - https://www.gktorrents.cc/
   - https://gktorrent.nocensor.sbs/
 legacylinks:
   - http://www.gktorrent.co/
@@ -30,6 +31,7 @@ legacylinks:
   - https://gktorrent.nocensor.work/
   - https://www.gktorrents.net/
   - https://gktorrent.nocensor.biz/
+  - https://www.gktorrents.org/
 
 caps:
   categorymappings:
