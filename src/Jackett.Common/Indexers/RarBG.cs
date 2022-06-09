@@ -153,9 +153,16 @@ namespace Jackett.Common.Indexers
                     response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
                     jsonContent = JObject.Parse(response.ContentString);
                     break;
+                case 5: // Too many requests per second. Maximum requests allowed are 1req/2sec Please try again later!
+                    return await PerformQueryWithRetry(query, false);
                 case 8: // imdb not found, see issue #12466
                 case 10: // imdb not found, see issue #1486
                 case 20: // no results found
+                    if (jsonContent.ContainsKey("rate_limit"))
+                    {
+                        logger.Warn("Rate Limit exceeded. Retry will be performed.");
+                        return await PerformQueryWithRetry(query, false);
+                    }
                     // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
                     // because we can't distinguish between search without results and api malfunction
                     return retry ? await PerformQueryWithRetry(query, false) : releases;

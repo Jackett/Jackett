@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-liens.com/zetorrents
 links:
-  - https://www.zetorrents.nl/
+  - https://www.zetorrents.biz/
 legacylinks:
   - https://www.zetorrents.co/
   - https://www.zetorrents.io/
@@ -20,6 +20,7 @@ legacylinks:
   - https://www.zetorrents.cc/
   - https://www.zetorrents.tv/
   - https://www.zetorrents.bz/
+  - https://www.zetorrents.nl/
 
 caps:
   categories:
