@@ -99,6 +99,13 @@ search:
       selector: category_id
     title:
       selector: name
+      filters:
+        - name: re_replace
+          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+        - name: re_replace
+          args: ["(\\d{2})[×|x](\\d{2})", "S$1E$2"]
+        - name: re_replace
+          args: ["(\\d{1})[×|x](\\d{2})", "S0$1E$2"]
     details:
       selector: details_link
     download:
