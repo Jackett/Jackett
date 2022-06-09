@@ -120,6 +120,8 @@ search:
       selector: created_at
     size:
       selector: size
+    infohash:
+      selector: info_hash
     downloadvolumefactor:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
