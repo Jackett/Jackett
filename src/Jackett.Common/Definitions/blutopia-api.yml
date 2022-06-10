@@ -96,6 +96,8 @@ search:
       selector: details_link
     download:
       selector: download_link
+    infohash:
+      selector: info_hash
     poster:
       selector: poster
       filters:
@@ -120,8 +122,6 @@ search:
       selector: created_at
     size:
       selector: size
-    infohash:
-      selector: info_hash
     downloadvolumefactor:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech

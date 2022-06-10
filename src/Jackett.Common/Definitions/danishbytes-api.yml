@@ -97,6 +97,8 @@ search:
       text: "{{ .Config.sitelink }}torrents/{{ .Result.id }}"
     download:
       text: "{{ .Config.sitelink }}torrent/download/{{ .Result.id }}.{{ .Config.rsskey }}"
+    infohash:
+      selector: info_hash
     poster:
       selector: poster_image
     imdbid:

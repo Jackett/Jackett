@@ -141,6 +141,8 @@ search:
     magnet:
       selector: magnet_link
       optional: true
+    infohash:
+      selector: info_hash
     poster:
       selector: poster
       filters:
