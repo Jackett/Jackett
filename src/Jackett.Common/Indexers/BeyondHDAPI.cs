@@ -158,8 +158,15 @@ namespace Jackett.Common.Indexers
             };
 
             var response = await webclient.GetResultAsync(request);
-
+            if (response != null && response.ContentString.StartsWith("<"))
+            {
+                // the response was not JSON, likely a HTML page for a server outage
+                logger.Warn(response.ContentString);
+                throw new Exception("The response was not JSON");
+            }
             var bhdresponse = JsonConvert.DeserializeObject<BHDResponse>(response.ContentString);
+            if (bhdresponse.status_code == 0)
+                throw new Exception(bhdresponse.status_message);
             return bhdresponse;
         }
 
@@ -226,6 +233,7 @@ namespace Jackett.Common.Indexers
         class BHDResponse
         {
             public int status_code { get; set; } // The status code of the post request. (0 = Failed and 1 = Success)
+            public string status_message { get; set; } // If status code=0 then there will be an explanation
             public int page { get; set; } // The current page of results that you're on.
             public int total_pages { get; set; } // int The total number of pages of results matching your query.
             public int total_results { get; set; } // The total number of results matching your query.
