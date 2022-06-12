@@ -2095,10 +2095,10 @@ namespace Jackett.Common.Indexers
                             if (Filter.Args != null)
                                 CharacterLimit = int.Parse(Filter.Args);
 
-                            if (query.ImdbID != null && TorznabCaps.MovieSearchImdbAvailable)
+                            if (query.ImdbID != null && (TorznabCaps.MovieSearchImdbAvailable || TorznabCaps.TvSearchImdbAvailable))
                                 break; // skip andmatch filter for imdb searches
 
-                            if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
+                            if (query.TmdbID != null && (TorznabCaps.MovieSearchTmdbAvailable || TorznabCaps.TvSearchTmdbAvailable))
                                 break; // skip andmatch filter for tmdb searches
 
                             if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)

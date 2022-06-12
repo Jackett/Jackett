@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
                        LimitsMax = 100,
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TmdbId
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
