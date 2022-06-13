@@ -129,7 +129,7 @@ search:
         - name: re_replace
           args: ["(?i)TU\\b", "S1"]
     title:
-      text: "{{ .Result.title_name }} {{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER {{ else }}{{ end }}"
+      text: "{{ .Result.title_name }}{{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER{{ else }}{{ end }}"
     details:
       selector: details_link
     download:
