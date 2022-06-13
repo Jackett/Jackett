@@ -83,9 +83,9 @@ search:
   keywordsfilters:
     - name: diacritics
       args: replace
-  # strip season and ep because it's added by Query
     - name: re_replace
       args: ["\\.", " "]
+    # strip season and ep when it's added by tvsearch Query
     - name: re_replace
       args: ["(?i)\\bS0*(\\d+)\\b", "{{ if eq .Query.Type \"tvsearch\" }}{{ else }}T$1{{ end }}"]
     - name: re_replace
@@ -112,7 +112,7 @@ search:
     title_name:
       selector: name
       filters:
-      # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
+        # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
         - name: re_replace
