@@ -382,6 +382,12 @@ namespace Jackett.Server.Controllers
                     logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
                 }
+
+                if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchTmdbAvailable)
+                {
+                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    return GetErrorXML(203, "Function Not Available: tmdbid is not supported for TV search by this indexer");
+                }
             }
 
             if (CurrentQuery.TvdbID != null)

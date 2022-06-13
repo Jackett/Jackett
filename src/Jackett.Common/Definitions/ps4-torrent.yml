@@ -6,7 +6,9 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - http://ps4-torrent.ru/ # site forces http
+  - https://ps4-torrent.ru/
+legacylinks:
+  - http://ps4-torrent.ru/ # site forces https
 
 caps:
   categories:

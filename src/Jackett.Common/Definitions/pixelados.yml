@@ -2,7 +2,7 @@
 id: pixelados
 name: Pixelados
 description: "Pixelados is a Spanish Private Torrent Tracker for HD MOVIES / TV"
-language: en-US
+language: es-ES
 type: private
 encoding: UTF-8
 links:
@@ -19,7 +19,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
 
@@ -81,8 +81,15 @@ search:
     page: 1
 
   keywordsfilters:
+    - name: diacritics
+      args: replace
     - name: re_replace
       args: ["\\.", " "]
+    # strip season and ep when it's added by tvsearch Query
+    - name: re_replace
+      args: ["(?i)\\bS0*(\\d+)\\b", "{{ if eq .Query.Type \"tvsearch\" }}{{ else }}T$1{{ end }}"]
+    - name: re_replace
+      args: ["(?i)S0?(\\d{1,2})E(\\d{1,2})", "{{ if eq .Query.Type \"tvsearch\" }}{{ else }}$1x$2{{ end }}"]
 
   rows:
     selector: data
@@ -93,12 +100,37 @@ search:
   fields:
     category:
       selector: category_id
-    title:
+    mejorada:
+      selector: types:contains(Mejorada)
+      optional: true
+    corregida:
+      selector: types:contains(Corregida)
+      optional: true
+    audio_editado:
+      selector: types:contains(Audio-Editado)
+      optional: true
+    title_name:
       selector: name
+      filters:
+        # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
+        - name: re_replace
+          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+        - name: re_replace
+          args: ["(\\d{2})[×|x](\\d{2})", "S$1E$2"]
+        - name: re_replace
+          args: ["(\\d{1})[×|x](\\d{2})", "S0$1E$2"]
+        - name: re_replace
+          args: ["(?i)MS\\b", "S1"]
+        - name: re_replace
+          args: ["(?i)TU\\b", "S1"]
+    title:
+      text: "{{ .Result.title_name }}{{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER{{ else }}{{ end }}"
     details:
       selector: details_link
     download:
       selector: download_link
+    infohash:
+      selector: info_hash
     poster:
       selector: poster
       filters:

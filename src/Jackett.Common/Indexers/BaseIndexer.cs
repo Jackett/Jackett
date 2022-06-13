@@ -251,7 +251,9 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.MovieSearchImdbAvailable && query.IsImdbQuery)
                 return true;
-            if (caps.MovieSearchTmdbAvailable && query.IsTmdbQuery)
+            if (caps.MovieSearchTmdbAvailable && query.IsTmdbQuery && query.IsMovieSearch)
+                return true;
+            if (caps.TvSearchTmdbAvailable && query.IsTmdbQuery && query.IsTVSearch)
                 return true;
 
             return false;

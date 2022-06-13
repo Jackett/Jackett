@@ -1327,7 +1327,7 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrWhiteSpace((string)variables[".Query.Episode"]))
                 KeywordTokens.Add((string)variables[".Query.Episode"]);
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
-            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
+            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters, variables);
 
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
@@ -2095,10 +2095,10 @@ namespace Jackett.Common.Indexers
                             if (Filter.Args != null)
                                 CharacterLimit = int.Parse(Filter.Args);
 
-                            if (query.ImdbID != null && TorznabCaps.MovieSearchImdbAvailable)
+                            if (query.ImdbID != null && (TorznabCaps.MovieSearchImdbAvailable || TorznabCaps.TvSearchImdbAvailable))
                                 break; // skip andmatch filter for imdb searches
 
-                            if (query.TmdbID != null && TorznabCaps.MovieSearchTmdbAvailable)
+                            if (query.TmdbID != null && (TorznabCaps.MovieSearchTmdbAvailable || TorznabCaps.TvSearchTmdbAvailable))
                                 break; // skip andmatch filter for tmdb searches
 
                             if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)

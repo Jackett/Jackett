@@ -9,7 +9,7 @@ links:
   - http://audiobookbay.fi/ # site forces http, does not support https
   - http://audiobookbay.se/
   - http://audiobookbayabb.com/
-  - https://audiobookbay.unblockit.blue/
+  - https://audiobookbay.unblockit.name/
 legacylinks:
   - https://audiobookbay.la/
   - https://audiobookbay.unblockit.buzz/
@@ -30,6 +30,7 @@ legacylinks:
   - https://audiobookbay.unblockit.biz/
   - https://audiobookbay.unblockit.day/
   - https://audiobookbay.unblockit.llc/
+  - https://audiobookbay.unblockit.blue/
 
 caps:
   categorymappings:

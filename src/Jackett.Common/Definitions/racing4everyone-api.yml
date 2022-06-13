@@ -49,7 +49,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
 
 settings:
   - name: apikey

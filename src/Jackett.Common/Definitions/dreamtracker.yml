@@ -87,6 +87,7 @@ caps:
     - {id: 77, cat: Audio/Foreign, desc: "Music Foreign"}
     - {id: 78, cat: Audio/Foreign, desc: "Music Foreign Discographies"}
     - {id: 94, cat: Audio/Lossless, desc: "Foreign Flac"}
+    - {id: 117, cat: Audio, desc: "Compact Disc Club"}
     - {id: 20, cat: Audio/Video, desc: "Music Videos"}
 
   modes:

@@ -21,7 +21,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
@@ -141,6 +141,8 @@ search:
     magnet:
       selector: magnet_link
       optional: true
+    infohash:
+      selector: info_hash
     poster:
       selector: poster
       filters:
@@ -184,4 +186,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 6.1.0
+# json UNIT3D 6.2.0

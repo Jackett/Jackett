@@ -23,6 +23,7 @@ caps:
     - {id: 71, cat: Movies, desc: "NFLIX"}
     - {id: 78, cat: TV, desc: "EXXEN"}
     - {id: 79, cat: TV, desc: "BLUTV"}
+    - {id: 90, cat: TV, desc: "Disney+"}
     - {id: 58, cat: Movies, desc: "Film"}
     - {id: 72, cat: Movies, desc: "Belgesel"}
     - {id: 60, cat: Movies/3D, desc: "3D"}
