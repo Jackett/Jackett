@@ -1327,7 +1327,7 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrWhiteSpace((string)variables[".Query.Episode"]))
                 KeywordTokens.Add((string)variables[".Query.Episode"]);
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
-            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters);
+            variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters, variables);
 
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
