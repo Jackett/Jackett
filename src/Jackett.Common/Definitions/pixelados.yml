@@ -81,12 +81,15 @@ search:
     page: 1
 
   keywordsfilters:
+    - name: diacritics
+      args: replace
     - name: re_replace
       args: ["\\.", " "]
+    # strip season and ep when it's added by tvsearch Query
     - name: re_replace
-      args: ["(?i)\\bS0*(\\d+)\\b", "T$1"]
+      args: ["(?i)\\bS0*(\\d+)\\b", "{{ if eq .Query.Type \"tvsearch\" }}{{ else }}T$1{{ end }}"]
     - name: re_replace
-      args: ["(?i)S0?(\\d{1,2})E(\\d{1,2})", "$1x$2"]
+      args: ["(?i)S0?(\\d{1,2})E(\\d{1,2})", "{{ if eq .Query.Type \"tvsearch\" }}{{ else }}$1x$2{{ end }}"]
 
   rows:
     selector: data
@@ -97,13 +100,31 @@ search:
   fields:
     category:
       selector: category_id
-    title:
+    mejorada:
+      selector: types:contains(Mejorada)
+      optional: true
+    corregida:
+      selector: types:contains(Corregida)
+      optional: true
+    audio_editado:
+      selector: types:contains(Audio-Editado)
+      optional: true
+    title_name:
       selector: name
       filters:
+        # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
         - name: re_replace
-          args: ["(\\d{1,2})[×|x](\\d{1,2})", "S$1E$2"]
+          args: ["(\\d{2})[×|x](\\d{2})", "S$1E$2"]
+        - name: re_replace
+          args: ["(\\d{1})[×|x](\\d{2})", "S0$1E$2"]
+        - name: re_replace
+          args: ["(?i)MS\\b", "S1"]
+        - name: re_replace
+          args: ["(?i)TU\\b", "S1"]
+    title:
+      text: "{{ .Result.title_name }}{{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER{{ else }}{{ end }}"
     details:
       selector: details_link
     download:
