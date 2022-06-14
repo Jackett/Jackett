@@ -265,6 +265,7 @@ namespace Jackett.Updater
                 "Definitions/aither.yml", // switch to *-API #8682
                 "Definitions/alein.yml",
                 "Definitions/alexfilm.yml",
+                "Definitions/alleenretail.yml",
                 "Definitions/angietorrents.yml",
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/animeitalia.yml",
