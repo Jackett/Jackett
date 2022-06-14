@@ -256,7 +256,7 @@ settings: []
 
 download:
   selectors:
-    - selector: a.itemtop_games
+    - selector: a.itemdown_games
       attribute: href
 
 search:
@@ -282,7 +282,8 @@ search:
     resorder: desc
 
   rows:
-    selector: div.short_search
+    # results without sizes are just pre-release announcements
+    selector: div.short_search:has(div.shor_subtitles span:nth-child(2):contains(" "))
 
   fields:
     category:
@@ -318,9 +319,7 @@ search:
       text: 1
     leechers:
       text: 1
-    size:
-      text: 0B
-    size:
+    size_rus:
       selector: div.shor_subtitles span:nth-child(2):contains("Б")
       optional: true
       filters:
@@ -332,6 +331,11 @@ search:
           args: ["МБ", "MB"]
         - name: replace
           args: ["КБ", "KB"]
+    size_eng:
+      selector: div.shor_subtitles span:nth-child(2):contains("B")
+      optional: true
+    size:
+      text: "{{ if or .Result.size_rus .Result.size_eng }}{{ or .Result.size_rus .Result.size_eng }}{{ else }}0 B{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
