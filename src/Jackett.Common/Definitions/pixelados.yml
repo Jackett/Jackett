@@ -109,8 +109,17 @@ search:
     audio_editado:
       selector: types:contains(Audio-Editado)
       optional: true
-    title_name:
-      selector: name
+    title_vose:
+      selector: name:contains(VOSE)
+      optional: true
+    title_notvose:
+      selector: name:not(:contains(VOSE))
+      optional: true
+      filters:
+        - name: append
+          args: " SPANISH"
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}{{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER{{ else }}{{ end }}"
       filters:
         # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
         - name: re_replace
@@ -123,8 +132,6 @@ search:
           args: ["(?i)MS\\b", "S1"]
         - name: re_replace
           args: ["(?i)TU\\b", "S1"]
-    title:
-      text: "{{ .Result.title_name }}{{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER{{ else }}{{ end }}"
     details:
       selector: details_link
     download:
