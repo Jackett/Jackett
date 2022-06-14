@@ -92,36 +92,27 @@ search:
       selector: name:contains(VOSE)
       optional: true
       filters:
-        - name: re_replace
-          args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
-        - name: re_replace
-          args: ["(?i)RedBits", ""] # Delete RedBits
         - name: append
           args: " English" # Add english to fix Sonarr/Radarr language
-        - name: re_replace
-          args: ["\\[|\\]", " "]
-        - name: re_replace
-          args: ["  ", " "]
-        - name: re_replace
-          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     title_notvose:
       selector: name:not(:contains(VOSE))
       optional: true
+      filters:
+        - name: append
+          args: " Spanish" # Add spanish to fix Sonarr/Radarr language
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
       filters:
         - name: re_replace
           args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
         - name: re_replace
           args: ["(?i)RedBits", ""] # Delete RedBits
-        - name: append
-          args: " Spanish" # Add spanish to fix Sonarr/Radarr language
         - name: re_replace
           args: ["\\[|\\]", " "]
         - name: re_replace
           args: ["  ", " "]
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
-    title:
-      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     details:
       selector: details_link
     download:
