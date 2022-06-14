@@ -108,17 +108,16 @@ search:
       selector: name:contains(VOSE)
       optional: true
       filters:
-        - name: re_replace
-          args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
-        - name: re_replace
-          args: ["(?i)\\bT(\\d+)", "S$1"]
-        - name: re_replace
-          args: ["UHDRip", "BDRip"] # Fix for Radarr
         - name: append
           args: " ENGLiSH"
     title_notvose:
       selector: name:not(:contains(VOSE))
       optional: true
+      filters:
+        - name: append
+          args: " SPANiSH"
+    title:
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
       filters:
         - name: re_replace
           args: ["^ *\\[[^\\]]*\\] *", ""] # Remove prefix tags
@@ -126,10 +125,6 @@ search:
           args: ["(?i)\\bT(\\d+)", "S$1"]
         - name: re_replace
           args: ["UHDRip", "BDRip"] # Fix for Radarr
-        - name: append
-          args: " SPANiSH"
-    title:
-      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
     details:
       selector: details_link
     download:
