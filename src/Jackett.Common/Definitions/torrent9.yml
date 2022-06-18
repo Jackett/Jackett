@@ -54,6 +54,7 @@ caps:
     - {id: logiciels, cat: PC, desc: "Software"}
     - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
     - {id: jeux-consoles, cat: Console/XBox 360, desc: "Console Games"}
+    - {id: other, cat: Other, desc: "Other"} # dummy cat for results missing icon
 
   modes:
     search: [q]
@@ -104,7 +105,7 @@ download:
 
 search:
   paths:
-    - path: "/search_torrent/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}{{ .Config.sort }}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
@@ -125,6 +126,9 @@ search:
 
   fields:
     category:
+      text: other
+    category|noappend:
+      optional: true
       selector: td:nth-child(1) i
       case:
         i[class="fa fa-video-camera"]: films
@@ -179,13 +183,16 @@ search:
     download:
       selector: td:nth-child(1) a
       attribute: href
-    date:
-      selector: td:nth-child(2)
+    date_optional:
+      optional: true
+      selector: td:nth-child(2):contains("/")
       filters:
         - name: dateparse
           args: "02/01/2006"
+    date:
+      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(3)
+      selector: "{{ if .Keywords }}td:nth-child(3){{ else }}td:nth-child(2){{ end }}"
       filters:
         - name: replace
           args: ["Ko", "KB"]
@@ -196,12 +203,12 @@ search:
         - name: replace
           args: ["To", "TB"]
     seeders_optional:
-      selector: td:nth-child(4)
+      selector: "{{ if .Keywords }}td:nth-child(4){{ else }}td:nth-child(3){{ end }}"
       optional: true
     seeders:
       text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
     leechers_optional:
-      selector: td:nth-child(5)
+      selector: "{{ if .Keywords }}td:nth-child(5){{ else }}td:nth-child(4){{ end }}"
       optional: true
     leechers:
       text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
