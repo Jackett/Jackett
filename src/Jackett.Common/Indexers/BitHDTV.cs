@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
                         var qLink = row.Children[2].QuerySelector("a");
                         release.MinimumRatio = 1;
                         release.MinimumSeedTime = 172800; // 48 hours
-                        release.Title = qLink.GetAttribute("title");
+                        release.Title = qLink.GetAttribute("title").Replace('.', ' ');
                         var detailsLink = new Uri(qLink.GetAttribute("href"));
                         //Skip irrelevant and duplicate entries
                         if (!query.MatchQueryStringAND(release.Title) || releases.Any(r => r.Guid == detailsLink))
