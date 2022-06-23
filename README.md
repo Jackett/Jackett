@@ -49,6 +49,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BTmirror
  * BTSOW
  * Byrutor
+ * CloudTorrents
  * comicat
  * ConCen
  * cpasbien
