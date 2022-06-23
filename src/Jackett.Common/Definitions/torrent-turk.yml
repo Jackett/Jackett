@@ -55,6 +55,7 @@ caps:
     - {id: 180, cat: PC/Games, desc: "PC/Games"}
     - {id: 181, cat: Console, desc: "Playstation"}
     - {id: 198, cat: Movies, desc: "Movies/Amazon Prime"}
+    - {id: 200, cat: Movies, desc: "Movies/Disney+"}
 
   modes:
     search: [q]
