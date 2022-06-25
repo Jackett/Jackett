@@ -149,6 +149,8 @@ namespace Jackett.Common.Indexers
                 string groupTitle = null;
                 string groupYearStr = null;
                 Uri groupPoster = null;
+                string imdbLink = null;
+                string tmdbLink = null;
                 foreach (var row in rows)
                     try
                     {
@@ -202,6 +204,8 @@ namespace Jackett.Common.Indexers
                             {
                                 groupTitle = title;
                                 groupYearStr = yearStr;
+                                imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
+                                tmdbLink = row.QuerySelector("a[href*=\"themoviedb.org/\"]")?.GetAttribute("href");
                                 continue;
                             }
                         }
@@ -226,11 +230,11 @@ namespace Jackett.Common.Indexers
                         {
                             release.Description = row.QuerySelector("div.torrent_info").TextContent;
                             release.Title = ParseTitle(title, seasonEp, yearStr);
+                            imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
+                            tmdbLink = row.QuerySelector("a[href*=\"themoviedb.org/\"]")?.GetAttribute("href");
                         }
                         release.Poster = groupPoster;
-                        var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
-                        var tmdbLink = row.QuerySelector("a[href*=\"themoviedb.org/\"]")?.GetAttribute("href");
                         release.TMDb = ParseUtil.GetLongFromString(tmdbLink);
                         release.Category = category;
                         release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
