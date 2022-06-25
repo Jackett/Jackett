@@ -140,8 +140,8 @@ namespace Jackett.Common.Indexers
 
             searchUrl += "?" + queryCollection.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
-            //try
-            //{
+            try
+            {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
                 var searchResultParser = new HtmlParser();
                 var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
                 string groupTitle = null;
                 string groupYearStr = null;
                 foreach (var row in rows)
-                    //try
+                    try
                     {
                         // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
                         if (row.QuerySelector(".edition_info") != null)
@@ -275,15 +275,15 @@ namespace Jackett.Common.Indexers
                         release.UploadVolumeFactor = 1;
                         releases.Add(release);
                     }
-                    //catch (Exception ex)
-                    //{
-                    //    logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
-                    //}
-            //}
-            //catch (Exception ex)
-            //{
-            //    OnParseError(results.ContentString, ex);
-            //}
+                    catch (Exception ex)
+                    {
+                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
+                    }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(results.ContentString, ex);
+            }
 
             return releases;
         }
