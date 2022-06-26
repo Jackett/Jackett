@@ -101,7 +101,7 @@ search:
         - name: re_replace
           args:
             - "\\bDUAL\\b"
-            - "pt-BR/en-US"
+            - "Portuguese (Brazil) English"
     details:
       selector: details_link
     description:
