@@ -35,14 +35,12 @@ namespace Jackett.Common.Indexers
         private const string NewTorrentsUrl = "torrents";
         private const string SearchUrl = "busqueda/page/";
 
-        private const int PagesToSearch = 25;
+        private const int PagesToSearch = 3;
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://mejortorrent.wtf/",
-            "https://www.mejortorrentes.org/",
-            "https://mejortorrent.unblockit.blue/",
-            "https://mejortorrent.nocensor.sbs/"
-        };
+        // uncomment when there are more than one domain available
+        // public override string[] AlternativeSiteLinks { get; protected set; } = {
+        //     "https://mejortorrent.wtf/"
+        // };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://www.mejortorrentt.net/",
@@ -68,7 +66,11 @@ namespace Jackett.Common.Indexers
             "https://mejortorrent.unblockit.cam/",
             "https://mejortorrent.nocensor.biz/",
             "https://mejortorrent.unblockit.day/",
-            "https://mejortorrent.unblockit.llc/"
+            "https://mejortorrent.unblockit.llc/",
+            "https://www.mejortorrentes.org/",
+            "https://mejortorrent.unblockit.blue/",
+            "https://mejortorrent.nocensor.sbs/",
+            "https://mejortorrent.unblockit.name/"
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
