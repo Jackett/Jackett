@@ -112,6 +112,9 @@ search:
       selector: info_hash
     poster:
       selector: poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
     imdbid:
       selector: imdb_id
     tmdbid:
