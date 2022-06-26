@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers
         private static string StripSearchString(string term)
         {
             // Search does not support searching with episode numbers so strip it if we have one
-            // AND filter the result later to archive the proper result
+            // we will AND filter the result later to archive the proper result
             term = _EpisodeRegex.Replace(term, string.Empty);
             return term.TrimEnd();
         }
@@ -148,6 +148,9 @@ namespace Jackett.Common.Indexers
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 string groupTitle = null;
                 string groupYearStr = null;
+                Uri groupPoster = null;
+                string imdbLink = null;
+                string tmdbLink = null;
                 foreach (var row in rows)
                     try
                     {
@@ -194,10 +197,15 @@ namespace Jackett.Common.Indexers
                             }
                             yearStr ??= qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
 
+                            if (Uri.TryCreate(row.QuerySelector("img[alt=\"Cover\"]")?.GetAttribute("src"),
+                                              UriKind.Absolute, out var posterUri))
+                                groupPoster = posterUri;
                             if (row.ClassList.Contains("group")) // group headers
                             {
                                 groupTitle = title;
                                 groupYearStr = yearStr;
+                                imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
+                                tmdbLink = row.QuerySelector("a[href*=\"themoviedb.org/\"]")?.GetAttribute("href");
                                 continue;
                             }
                         }
@@ -205,7 +213,7 @@ namespace Jackett.Common.Indexers
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
-                            MinimumSeedTime = 0
+                            MinimumSeedTime = 172800
                         };
                         var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
                         var qSize = row.QuerySelector("td:nth-last-child(4)");
@@ -215,14 +223,19 @@ namespace Jackett.Common.Indexers
                         var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
                         if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                         {
-                            release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
+                            release.Description = qDetailsLink.TextContent;
                             release.Title = ParseTitle(groupTitle, seasonEp, groupYearStr);
                         }
                         else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
                         {
                             release.Description = row.QuerySelector("div.torrent_info").TextContent;
                             release.Title = ParseTitle(title, seasonEp, yearStr);
+                            imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
+                            tmdbLink = row.QuerySelector("a[href*=\"themoviedb.org/\"]")?.GetAttribute("href");
                         }
+                        release.Poster = groupPoster;
+                        release.Imdb = ParseUtil.GetLongFromString(imdbLink);
+                        release.TMDb = ParseUtil.GetLongFromString(tmdbLink);
                         release.Category = category;
                         release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
                         release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL "); // Fix web/web-dl
@@ -233,6 +246,7 @@ namespace Jackett.Common.Indexers
                         release.Description = release.Description.Replace("4K", "2160p");
                         release.Description = release.Description.Replace("SD", "480p");
                         release.Description = release.Description.Replace("Dual Áudio", "Dual");
+                        release.Description = release.Description.Replace("Dual Audio", "Dual");
 
                         // Adjust the description in order to can be read by Radarr and Sonarr
                         var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
