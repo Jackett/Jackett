@@ -1,12 +1,12 @@
 ---
-id: acervos-cc
-name: Acervos.cc (API)
+id: acervos
+name: Acervos (API)
 description: "Acervos is a Brazilian tracker for movies, tv shows, and others."
-language: pt-br
+language: pt-BR
 type: private
 encoding: UTF-8
 links:
-  - https://acervos.cc
+  - https://acervos.cc/
 
 caps:
   categorymappings:
@@ -30,7 +30,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://acervos.cc/\" target =_blank>Acervos.CC</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://acervos.cc/\" target =_blank>Acervos</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -93,8 +93,8 @@ search:
       selector: meta.total
 
   fields:
-    categorydesc:
-      selector: category
+    category:
+      selector: category_id
     title:
       selector: name
       filters:
@@ -150,6 +150,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 4 days (as seconds = 4 x 24 x 60 x 60)
-      text: 345600
-# json UNIT3D 6.0.8
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+# json UNIT3D 6.1.0
