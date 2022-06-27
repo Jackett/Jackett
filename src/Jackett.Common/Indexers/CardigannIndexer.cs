@@ -457,7 +457,7 @@ namespace Jackett.Common.Indexers
             }
 
             // handle range expression
-            var RangeRegex = new Regex(@"{{\s*range\s*(.+?)\s*}}(.*?){{\.}}(.*?){{end}}");
+            var RangeRegex = new Regex(@"{{\s*range\s*(((?<index>\$.+?),)((\s*(?<element>.+?)\s*(:=)\s*)))?(?<variable>.+?)\s*}}(?<prefix>.*?){{\.}}(?<postfix>.*?){{end}}");
             var RangeRegexMatches = RangeRegex.Match(template);
 
             while (RangeRegexMatches.Success)
@@ -465,25 +465,29 @@ namespace Jackett.Common.Indexers
                 var expanded = string.Empty;
 
                 var all = RangeRegexMatches.Groups[0].Value;
-                var variable = RangeRegexMatches.Groups[1].Value;
-                var prefix = RangeRegexMatches.Groups[2].Value;
-                var postfix = RangeRegexMatches.Groups[3].Value;
-                var hasArrayIndex = prefix.Contains("[*]");
-                var arrayIndex = -1;
-                if (hasArrayIndex)
-                    prefix = prefix.Replace("[*]", "[-1]");
+                var index = RangeRegexMatches.Groups["index"].Value;
+                var variable = RangeRegexMatches.Groups["variable"].Value;
+                var prefix = RangeRegexMatches.Groups["prefix"].Value;
+                var postfix = RangeRegexMatches.Groups["postfix"].Value;
+
+                var arrayIndex = 0;
+                var indexReplace = "{{" + index + "}}";
 
                 foreach (var value in (ICollection<string>)variables[variable])
                 {
                     var newvalue = value;
                     if (modifier != null)
                         newvalue = modifier(newvalue);
-                    if (hasArrayIndex)
+                    var indexValue = arrayIndex++;
+
+                    if (index != null)
                     {
-                        prefix = prefix.Replace("[" + arrayIndex.ToString() + "]", "[" + (arrayIndex + 1).ToString() + "]");
-                        arrayIndex++;
+                        expanded += prefix.Replace(indexReplace, indexValue.ToString()) + newvalue + postfix.Replace(indexReplace, indexValue.ToString());
                     }
-                    expanded += prefix + newvalue + postfix;
+                    else
+                    {
+                        expanded += prefix + newvalue + postfix;
+                    }
                 }
                 template = template.Replace(all, expanded);
                 RangeRegexMatches = RangeRegexMatches.NextMatch();
