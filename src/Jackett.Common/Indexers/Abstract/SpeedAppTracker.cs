@@ -20,7 +20,6 @@ namespace Jackett.Common.Indexers.Abstract
     [ExcludeFromCodeCoverage]
     public abstract class SpeedAppTracker : BaseWebIndexer
     {
-        protected virtual string ItemsPerPage => "100";
         protected virtual bool UseP2PReleaseName => false;
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
@@ -89,7 +88,7 @@ namespace Jackett.Common.Indexers.Abstract
             //var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
-                {"itemsPerPage", ItemsPerPage},
+                {"itemsPerPage", "100"},
                 {"sort", "torrent.createdAt"},
                 {"direction", "desc"}
             };
