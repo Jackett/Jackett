@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-liens.com/torrent9
 links:
-  - https://www.torrent9.re/
+  - https://ww1.torrent9.re/
   - https://torrent9.nocensor.sbs/
 legacylinks:
   - https://www.t9.vc/
@@ -32,6 +32,7 @@ legacylinks:
   - https://www.torrent9.si/
   - https://torrent9.nocensor.biz/
   - https://www.torrent9.nl/
+  - https://www.torrent9.re/
 
 caps:
   categorymappings:
