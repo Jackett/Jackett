@@ -1,0 +1,186 @@
+---
+id: extremetorrents
+name: ExtremeTorrents
+description: "ExtremeTorrents is a DUTCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: nl-NL
+type: private
+encoding: UTF-8
+links:
+  - https://www.extremetorrents.org/
+
+caps:
+  categorymappings:
+    - {id: 10, cat: Movies/DVD, desc: "Film DVD rip"}
+    - {id: 111, cat: Movies/DVD, desc: "Film DVD Promo"}
+    - {id: 118, cat: Movies/DVD, desc: "Film DVD Kids"}
+    - {id: 113, cat: Movies, desc: "Films Independent"}
+    - {id: 129, cat: Movies/HD, desc: "Films HD DVD"}
+    - {id: 130, cat: Movies/UHD, desc: "Films 4K"}
+    - {id: 143, cat: Movies/HD, desc: "Films DivX 720P"}
+    - {id: 114, cat: Audio/MP3, desc: "Muziek MP3"}
+    - {id: 140, cat: Books/EBook, desc: "E-Book"}
+    - {id: 105, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 115, cat: PC, desc: "PC apps"}
+    - {id: 120, cat: PC/Games, desc: "PC Games"}
+    - {id: 106, cat: Other, desc: "Overig"}
+    - {id: 131, cat: Books/Comics, desc: "Stripboeken"}
+    - {id: 132, cat: TV/HD, desc: "TV HD Serie"}
+    - {id: 116, cat: PC/Mac, desc: "Mac Software"}
+    - {id: 125, cat: Movies/SD, desc: "Xvid Rip"}
+    - {id: 123, cat: Movies/HD, desc: "MKV/X265"}
+    - {id: 108, cat: XXX, desc: "18+"}
+    - {id: 142, cat: XXX/x264, desc: "18+ HD"}
+    - {id: 139, cat: TV, desc: "TV Series"}
+    - {id: 128, cat: Audio/Video, desc: "muziek DVD"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: thankyou
+    type: text
+    label: Thank You Comment
+  - name: info
+    type: info
+    label: Thank you comment
+    default: This site requires you to leave a Thank You comment before you can download. Enter your personalised comment above.
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: table.main:contains("Aanmelden mislukt")
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+download:
+  before:
+    # https://www.extremetorrents.org/comment.php?action=add&tid=166386
+    path: comment.php
+    method: post
+    inputs:
+      action: add
+      tid: "{{ .DownloadUri.Query.id }}"
+      text: "{{ .Config.thankyou }}"
+      submit: Opslaan
+  selectors:
+    - selector: a[href^="downloadv1.php?id="]
+      attribute: href
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    incldead: 1
+    # does not support imdbid search and does not return imdb link in results
+
+  rows:
+    selector: table.mainouter
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["(?i)seizoen\\s*(\\d{1,2})\\s*(tot|t\/m)\\s*(\\d{1,2})", "S$1-$3"]
+        - name: re_replace
+          args: ["(?i)(seizoen\\s*)(\\d{1,2})", "S$2"]
+        - name: re_replace
+          args: ["(?i)(afl.\\s*|aflevering\\s*)(\\d{1,2})", "E$2"]
+        - name: re_replace
+          args: ["(?i)compleet", "Complete"]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    poster:
+      selector: div[id^="Style"] img
+      attribute: src
+    size:
+      selector: a[href^="details_bestanden.php?torrent_id="]
+      filters:
+        - name: regexp
+          args: "(.+?) in"
+    files:
+      selector: a[href^="details_bestanden.php?torrent_id="]
+      filters:
+        - name: regexp
+          args: "in (\\d+) bestan"
+    grabs:
+      selector: table table tr:nth-child(2) td:nth-child(1)
+    date:
+      selector: table table tr:nth-child(2) td:nth-child(3)
+      filters:
+        - name: replace
+          args: ["januari", "January"]
+        - name: replace
+          args: ["februari", "February"]
+        - name: replace
+          args: ["maart", "March"]
+        - name: replace
+          args: ["april", "April"]
+        - name: replace
+          args: ["mei", "May"]
+        - name: replace
+          args: ["juni", "June"]
+        - name: replace
+          args: ["juli", "July"]
+        - name: replace
+          args: ["augustus", "August"]
+        - name: replace
+          args: ["september", "September"]
+        - name: replace
+          args: ["oktober", "October"]
+        - name: replace
+          args: ["november", "November"]
+        - name: replace
+          args: ["december", "December"]
+        - name: re_replace
+          args: ["\\s*om\\s*", " "]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2 January 2006 15:04:05 -07:00"
+    seeders_optional:
+      optional: true
+      selector: table tr:nth-child(3) td:nth-child(5)  font b
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
+      optional: true
+      selector: table tr:nth-child(3) td:nth-child(5) font b:nth-child(2)
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

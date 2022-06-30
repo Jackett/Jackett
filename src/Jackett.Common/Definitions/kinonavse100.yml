@@ -1,0 +1,228 @@
+---
+id: kinonavse100
+name: KinoNaVse100
+description: "Кино на все 100 is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - http://kinonavse100.com/ # https is not supported self signed ca is untrusted
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Other, desc: "Трекер"}
+    - {id: 113, cat: Other, desc: "Трекер Сбор средств на перевод фильмов"}
+    - {id: 123, cat: Other, desc: "Трекер Фильмы в работе"}
+    - {id: 109, cat: Movies, desc: "Трекер Эксклюзивы Кино на все 100"}
+    - {id: 61, cat: Movies, desc: "Трекер Зарубежное кино"}
+    - {id: 62, cat: Movies, desc: "Трекер Зарубежное кино Новинки кино 2014-2016"}
+    - {id: 63, cat: Movies, desc: "Трекер Зарубежное кино Боевики"}
+    - {id: 70, cat: Movies, desc: "Трекер Зарубежное кино Триллеры"}
+    - {id: 71, cat: Movies, desc: "Трекер Зарубежное кино Ужасы"}
+    - {id: 72, cat: Movies, desc: "Трекер Зарубежное кино Катастрофы"}
+    - {id: 73, cat: Movies, desc: "Трекер Зарубежное кино Приключения"}
+    - {id: 74, cat: Movies, desc: "Трекер Зарубежное кино Фантастика, Фэнтези"}
+    - {id: 75, cat: Movies, desc: "Трекер Зарубежное кино Комедии"}
+    - {id: 76, cat: Movies, desc: "Трекер Зарубежное кино Драмы, Мелодрамы"}
+    - {id: 77, cat: Movies, desc: "Трекер Зарубежное кино Криминал"}
+    - {id: 78, cat: Movies, desc: "Трекер Зарубежное кино Детективы"}
+    - {id: 85, cat: Movies, desc: "Трекер Зарубежное кино Военные"}
+    - {id: 86, cat: Movies, desc: "Трекер Зарубежное кино Вестерн"}
+    - {id: 87, cat: Movies, desc: "Трекер Зарубежное кино Арт-хаус и авторское кино"}
+    - {id: 95, cat: Movies, desc: "Трекер Зарубежное кино Короткий метр"}
+    - {id: 88, cat: Movies, desc: "Трекер Зарубежное кино Классика мирового кино"}
+    - {id: 108, cat: Movies, desc: "Трекер Зарубежное кино Мультфильмы"}
+    - {id: 111, cat: TV, desc: "Трекер Зарубежное кино Сериалы"}
+    - {id: 110, cat: Movies, desc: "Трекер Российское кино"}
+    - {id: 112, cat: TV, desc: "Tрекер Российское кино Сериалы"}
+    - {id: 21, cat: TV, desc: "Tрекер HDvideo"}
+    - {id: 64, cat: TV, desc: "Tрекер HDvideo Blu-ray"}
+    - {id: 65, cat: TV, desc: "Tрекер HDvideo BD-Remux"}
+    - {id: 69, cat: TV, desc: "Tрекер HDvideo HD-Video в 3D"}
+    - {id: 89, cat: TV, desc: "Tрекер Зомби"}
+    - {id: 96, cat: TV, desc: "Tрекер Зомби Зомби каталог"}
+    - {id: 106, cat: TV, desc: "Tрекер Зомби Сериалы"}
+    - {id: 122, cat: TV/Anime, desc: "Tрекер Аниме"}
+    - {id: 115, cat: Audio, desc: "Музыка"}
+    - {id: 116, cat: Audio, desc: "Музыка Популярная музыка"}
+    - {id: 117, cat: Audio, desc: "Музыка Рок-музыка"}
+    - {id: 118, cat: Audio, desc: "Музыка Электронная музыка"}
+    - {id: 119, cat: Audio, desc: "Музыка Джазовая и Блюзовая музыка"}
+    - {id: 98, cat: Other, desc: "Фильмографии"}
+    - {id: 91, cat: Other, desc: "Кино Новости"}
+    - {id: 92, cat: Other, desc: "Кино Новости Новости мира кино"}
+    - {id: 93, cat: Other, desc: "Кино Новости КиноПлощадка"}
+    - {id: 94, cat: Other, desc: "Кино Новости КиноТрейлеры"}
+    - {id: 79, cat: Other, desc: "Форум и общение"}
+    - {id: 97, cat: Other, desc: "Форум и общение Рецензии фильмов"}
+    - {id: 80, cat: Other, desc: "Форум и общение Общение на разные темы"}
+    - {id: 81, cat: Other, desc: "Форум и общение Компьютеры, железо и софт"}
+    - {id: 82, cat: Other, desc: "Форум и общение Советы и помощь"}
+    - {id: 83, cat: Other, desc: "Технический раздел"}
+    - {id: 84, cat: Other, desc: "Технический раздел Вопросы по трекеру и форуму"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: t
+    options:
+      t: created
+      ts: seeders
+      sz: size
+      i: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: d
+    options:
+      d: desc
+      a: asc
+
+login:
+  path: ucp.php?mode=login
+  method: form
+  form: form[action="./ucp.php?mode=login"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    autologin: on
+    viewonline: on
+  error:
+    - selector: span.error
+  test:
+    path: search.php
+
+search:
+  paths:
+    # http://kinonavse100.com/search.php?tracker_search=torrent&keywords=2020&terms=all&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0&submit=Search
+    - path: search.php
+  inputs:
+    # Search On: tracker, torrent, comment, forum, all
+    tracker_search: "{{ if .Keywords }}torrent{{ else }}tracker{{ end }}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # all, any
+    terms: all
+    # Search by Author
+    author: ""
+    # Search in subforums: yes 1, no 0
+    sc: 1
+    # Search For: all, msgonly, titleonly, firstpost
+    sf: titleonly
+    # Show Results as: posts, topics
+    sr: topics
+    sk: "{{ .Config.sort }}"
+    sd: "{{ .Config.type }}"
+    # Seach Posts For: all 0, 1day 1, week 7, fortnight 14, month 30, 3months 90, 6 months 180, year 365
+    st: 0
+    # Show first: all -1, 0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
+    ch: 300
+    # hidden
+    t: 0
+    # hidden
+    submit: Search
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+
+  rows:
+    selector: table.tablebg > tbody > tr:has(a[href^="./download/file.php?id="])
+
+  fields:
+    title:
+      selector: a.topictitle
+    details:
+      selector: a.topictitle
+      attribute: href
+    category:
+      selector: a[href^="./viewforum.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    download:
+      selector: a[href^="./download/file.php?id="]
+      attribute: href
+    size:
+      selector: a[href^="./viewforum.php?f="] + b
+      filters:
+        - name: replace
+          args: ["ТБ", "TB"]
+        - name: replace
+          args: ["ГБ", "GB"]
+        - name: replace
+          args: ["МБ", "MB"]
+        - name: replace
+          args: ["КБ", "KB"]
+    seeders:
+      selector: span.seed
+    leechers:
+      selector: span.leech
+    grabs:
+      selector: span.complet
+    date_day:
+      # Сегодня, 12:35
+      selector: td:last-of-type p:first-of-type:contains("Сегодня"), td:last-of-type p:first-of-type:contains("Вчера")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Сегодня", "Today"]
+        - name: replace
+          args: ["Вчера", "Yesterday"]
+        - name: fuzzytime
+    date_year:
+      # 12 янв 2019, 11:26
+      selector: td:last-of-type p:first-of-type:not(:contains("Сегодня")):not(:contains("Вчера"))
+      optional: true
+      filters:
+        # replace month abbreviations
+        - name: replace
+          args: ["янв", "Jan"]
+        - name: replace
+          args: ["фев", "Feb"]
+        - name: replace
+          args: ["мар", "Mar"]
+        - name: replace
+          args: ["апр", "Apr"]
+        - name: replace
+          args: ["май", "May"]
+        - name: replace
+          args: ["июн", "Jun"]
+        - name: replace
+          args: ["июл", "Jul"]
+        - name: replace
+          args: ["авг", "Aug"]
+        - name: replace
+          args: ["сен", "Sep"]
+        - name: replace
+          args: ["окт", "Oct"]
+        - name: replace
+          args: ["ноя", "Nov"]
+        - name: replace
+          args: ["дек", "Dec"]
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "02 Jan 2006, 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      case:
+        img[src="./images/tracker/3_bookmark.gif"]: 0 # gold 100% free
+        img[src="./images/tracker/2_bookmark.gif"]: 0.25 # silver 75% free
+        img[src="./images/tracker/1_bookmark.gif"]: 0.76 # bronze 24% free
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+# phpBB

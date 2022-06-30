@@ -1,0 +1,60 @@
+---
+id: mikan
+name: Mikan
+description: "Mikan is a CHINESE Public torrent tracker for ANIME"
+language: zh-CN
+type: public
+encoding: UTF-8
+links:
+  - https://mikanani.me/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "Anime"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings: []
+
+search:
+  paths:
+    # https://mikanani.me/Home/Search?searchstr=%E5%90%8D%E4%BE%A6%E6%8E%A2%E6%9F%AF%E5%8D%97
+    - path: "Home/Search?searchstr={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+
+  rows:
+    selector: table.table-striped tbody tr.js-search-results-row
+
+  fields:
+    category:
+      text: 1
+    title:
+      selector: a.magnet-link-wrap
+    details:
+      selector: a.magnet-link-wrap
+      attribute: href
+    download:
+      selector: a[href^="/Download/"]
+      attribute: href
+    magnet:
+      selector: a[data-clipboard-text^="magnet:?xt="]
+      attribute: data-clipboard-text
+    date:
+      selector: td:nth-child(3)
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006/01/02 15:04 -07:00"
+    size:
+      selector: td:nth-child(2)
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# Engine n/a

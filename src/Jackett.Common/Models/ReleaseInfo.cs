@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Indexers;
@@ -13,7 +13,7 @@ namespace Jackett.Common.Models
         public string Title { get; set; }
         public Uri Guid { get; set; }
         public Uri Link { get; set; }
-        public Uri Comments { get; set; }
+        public Uri Details { get; set; }
         public DateTime PublishDate { get; set; }
         public ICollection<int> Category { get; set; }
         public long? Size { get; set; }
@@ -24,26 +24,24 @@ namespace Jackett.Common.Models
         public long? TVDBId { get; set; }
         public long? Imdb { get; set; }
         public long? TMDb { get; set; }
-        public int? Seeders { get; set; }
-        public int? Peers { get; set; }
-        public Uri BannerUrl { get; set; }
+        public long? DoubanId { get; set; }
+        public string Author { get; set; }
+        public string BookTitle { get; set; }
+        public long? Seeders { get; set; }
+        public long? Peers { get; set; }
+        public Uri Poster { get; set; }
         public string InfoHash { get; set; }
         public Uri MagnetUri { get; set; }
         public double? MinimumRatio { get; set; }
         public long? MinimumSeedTime { get; set; }
         public double? DownloadVolumeFactor { get; set; }
         public double? UploadVolumeFactor { get; set; }
-        [JsonIgnore] // don't export the Origin to the manul search API, otherwise each result line contains a full recursive indexer JSON structure
+        [JsonIgnore] // don't export the Origin to the manual search API, otherwise each result line contains a full recursive indexer JSON structure
         public IIndexer Origin;
 
-        public double? Gain
-        {
-            get
-            {
-                var sizeInGB = Size / 1024.0 / 1024.0 / 1024.0;
-                return Seeders * sizeInGB;
-            }
-        }
+
+        public static double? GigabytesFromBytes(double? size) => size / 1024.0 / 1024.0 / 1024.0;
+        public double? Gain => Seeders * GigabytesFromBytes(Size);
 
         public ReleaseInfo()
         {
@@ -54,7 +52,7 @@ namespace Jackett.Common.Models
             Title = copyFrom.Title;
             Guid = copyFrom.Guid;
             Link = copyFrom.Link;
-            Comments = copyFrom.Comments;
+            Details = copyFrom.Details;
             PublishDate = copyFrom.PublishDate;
             Category = copyFrom.Category;
             Size = copyFrom.Size;
@@ -64,9 +62,12 @@ namespace Jackett.Common.Models
             RageID = copyFrom.RageID;
             Imdb = copyFrom.Imdb;
             TMDb = copyFrom.TMDb;
+            DoubanId = copyFrom.DoubanId;
+            Author = copyFrom.Author;
+            BookTitle = copyFrom.BookTitle;
             Seeders = copyFrom.Seeders;
             Peers = copyFrom.Peers;
-            BannerUrl = copyFrom.BannerUrl;
+            Poster = copyFrom.Poster;
             InfoHash = copyFrom.InfoHash;
             MagnetUri = copyFrom.MagnetUri;
             MinimumRatio = copyFrom.MinimumRatio;
@@ -75,15 +76,19 @@ namespace Jackett.Common.Models
             UploadVolumeFactor = copyFrom.UploadVolumeFactor;
         }
 
-        public virtual object Clone()
-        {
-            return new ReleaseInfo(this);
-        }
+        public virtual object Clone() => new ReleaseInfo(this);
 
-        // ex: " 3.5  gb   "
+        // ex: " 3.5  gb   " -> "3758096384" , "3,5GB" -> "3758096384" ,  "296,98 MB" -> "311406100.48" , "1.018,29 MB" -> "1067754455.04"
+        // ex:  "1.018.29mb" -> "1067754455.04" , "-" -> "0" , "---" -> "0"
         public static long GetBytes(string str)
         {
-            var valStr = new string(str.Where(c => char.IsDigit(c) || c == '.').ToArray());
+            var valStr = new string(str.Where(c => char.IsDigit(c) || c == '.' || c == ',').ToArray());
+            valStr = (valStr.Length == 0) ? "0" : valStr.Replace(",", ".");
+            if (valStr.Count(c => c == '.') > 1)
+            {
+                var lastOcc = valStr.LastIndexOf('.');
+                valStr = valStr.Substring(0, lastOcc).Replace(".", string.Empty) + valStr.Substring(lastOcc);
+            }
             var unit = new string(str.Where(char.IsLetter).ToArray());
             var val = ParseUtil.CoerceFloat(valStr);
             return GetBytes(unit, val);
@@ -103,29 +108,15 @@ namespace Jackett.Common.Models
             return (long)value;
         }
 
-        public static long BytesFromTB(float tb)
-        {
-            return BytesFromGB(tb * 1024f);
-        }
+        public static long BytesFromTB(float tb) => BytesFromGB(tb * 1024f);
 
-        public static long BytesFromGB(float gb)
-        {
-            return BytesFromMB(gb * 1024f);
-        }
+        public static long BytesFromGB(float gb) => BytesFromMB(gb * 1024f);
 
-        public static long BytesFromMB(float mb)
-        {
-            return BytesFromKB(mb * 1024f);
-        }
+        public static long BytesFromMB(float mb) => BytesFromKB(mb * 1024f);
 
-        public static long BytesFromKB(float kb)
-        {
-            return (long)(kb * 1024f);
-        }
+        public static long BytesFromKB(float kb) => (long)(kb * 1024f);
 
-        public override string ToString()
-        {
-            return string.Format("[ReleaseInfo: Title={0}, Guid={1}, Link={2}, Comments={3}, PublishDate={4}, Category={5}, Size={6}, Files={7}, Grabs={8}, Description={9}, RageID={10}, TVDBId={11}, Imdb={12}, TMDb={13}, Seeders={14}, Peers={15}, BannerUrl={16}, InfoHash={17}, MagnetUri={18}, MinimumRatio={19}, MinimumSeedTime={20}, DownloadVolumeFactor={21}, UploadVolumeFactor={22}, Gain={23}]", Title, Guid, Link, Comments, PublishDate, Category, Size, Files, Grabs, Description, RageID, TVDBId, Imdb, TMDb, Seeders, Peers, BannerUrl, InfoHash, MagnetUri, MinimumRatio, MinimumSeedTime, DownloadVolumeFactor, UploadVolumeFactor, Gain);
-        }
+        public override string ToString() =>
+            $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, DoubanId={DoubanId}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }
 }

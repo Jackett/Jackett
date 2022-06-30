@@ -1,0 +1,142 @@
+---
+id: oncesearch
+name: OnceSearch
+description: "OnceSearch is a Public Torrent Tracker for 3X"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - http://oncesearch.com/ # https is not supported
+
+caps:
+  categories:
+    Amateur: XXX
+    Anal: XXX
+    Anime: XXX
+    Asian: XXX
+    Ass Lick: XXX
+    BBW: XXX
+    BDSM: XXX
+    Bi-Sexual: XXX
+    Big Ass: XXX
+    Big Butts: XXX
+    Big Dick: XXX
+    Big Tits: XXX
+    Blonde: XXX
+    Blowjob: XXX
+    Brunette: XXX
+    Busty: XXX
+    Classic: XXX
+    Comics: XXX
+    Creampie: XXX
+    Cumshot: XXX
+    Deepthroat: XXX
+    Ebony: XXX
+    Erotic: XXX
+    Facial: XXX
+    Fetish: XXX
+    Fishnets: XXX
+    Fisting: XXX
+    Foot: XXX
+    Foreign: XXX
+    Gangbang: XXX
+    Gay: XXX
+    Glamour Girls: XXX
+    Gonzo: XXX
+    Group Sex: XXX
+    Hairy: XXX
+    Handjob: XXX
+    Hardcore: XXX
+    Homemade: XXX
+    Interracial: XXX
+    Latin: XXX
+    Lesbian: XXX
+    Lingerie: XXX
+    Massage: XXX
+    Masturbation: XXX
+    Mature: XXX
+    MILF: XXX
+    Nude Photography: XXX
+    Nylons: XXX
+    Oiled: XXX
+    Oral: XXX
+    Orgy: XXX
+    Outdoor: XXX
+    Pissing: XXX
+    Pregnant: XXX
+    Public: XXX
+    Redhead: XXX
+    Retro: XXX
+    Sex Toys: XXX
+    Shemale: XXX
+    Solo: XXX
+    Squirt: XXX
+    Tattoo: XXX
+    Teen: XXX
+    Threesome: XXX
+    Uncensored: XXX
+    XXX: XXX
+    Porno Clips: XXX
+    Porno HD Movies: XXX
+    Porno Other: XXX
+    Porno Pics: XXX
+
+  modes:
+    search: [q]
+
+settings: []
+
+search:
+  paths:
+    # http://oncesearch.com/search/advanced/-/Olivia%20Sin%20Deep/0/any
+    # http://oncesearch.com/category/latest-torrents
+    # site supports only single cat search so we default to all
+    - path: "{{ if .Keywords }}search/advanced/-/{{ .Keywords }}/0/any{{ else }}category/latest-torrents{{ end }}"
+
+  rows:
+    selector: table.table-striped > tbody > tr
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: XXX
+    category|noappend:
+      optional: true
+      selector: p > a:last-of-type
+    title:
+      selector: span
+    details:
+      selector: a[href^="/details/"]
+      attribute: href
+    download:
+      selector: a[href^="/file/"][title="Download Torrent"]
+      attribute: href
+      optional: true
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      optional: true
+    date:
+      selector: td:nth-child(3)
+      filters:
+        - name: timeago
+    files_optional:
+      selector: td:nth-child(4)
+      optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
+    size_optional:
+      selector: td:nth-child(5)
+      optional: true
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}256 MB{{ end }}"
+    seeders:
+      text: 1
+    leechers:
+      text: 0
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

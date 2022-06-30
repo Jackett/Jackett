@@ -1,122 +1,160 @@
 ---
-  site: theempire
-  name: The Empire
-  description: "TheEmpire (TE) is a Private Torrent Tracker for COMMONWEALTH TV / RADIO"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://theempire.click/
-  legacylinks:
-    - http://theempire.click/
+id: theempire
+name: The Empire
+description: "TheEmpire (TE) is a Private Torrent Tracker for COMMONWEALTH TV / RADIO"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://theempire.click/
+legacylinks:
+  - http://theempire.click/
 
-  caps:
-    categorymappings:
-      - {id: 55, cat: TV, desc: "Adverts"}
-      - {id: 60, cat: TV, desc: "Educational"}
-      - {id: 63, cat: TV, desc: "Game Shows"}
-      - {id: 67, cat: TV, desc: "Music"}
-      - {id: 72, cat: TV, desc: "QuizComedy"}
-      - {id: 77, cat: TV, desc: "Special Events"}
-      - {id: 81, cat: TV, desc: "Trains & Planes"}
-      - {id: 54, cat: TV, desc: "Arts & Culture"}
-      - {id: 61, cat: TV, desc: "Entertainment"}
-      - {id: 53, cat: TV, desc: "Gardening"}
-      - {id: 68, cat: TV, desc: "Mystery & Crime Fiction"}
-      - {id: 73, cat: TV, desc: "Radio"}
-      - {id: 78, cat: TV, desc: "Special Interest"}
-      - {id: 82, cat: TV, desc: "Travel"}
-      - {id: 56, cat: TV, desc: "Comedy"}
-      - {id: 85, cat: TV, desc: "Euro-Noir"}
-      - {id: 64, cat: TV, desc: "Kids"}
-      - {id: 69, cat: TV, desc: "News"}
-      - {id: 74, cat: TV, desc: "Reality"}
-      - {id: 79, cat: TV, desc: "Sport"}
-      - {id: 83, cat: TV, desc: "Wildlife & Nature"}
-      - {id: 58, cat: TV, desc: "Documentary"}
-      - {id: 57, cat: TV, desc: "Fly on the Wall/Lifestyle"}
-      - {id: 65, cat: TV, desc: "Magazine"}
-      - {id: 70, cat: TV, desc: "Occult & Horror"}
-      - {id: 75, cat: TV, desc: "Sci-Fi"}
-      - {id: 84, cat: TV, desc: "Style & Fashion"}
-      - {id: 62, cat: TV, desc: "Food Drink & Cooking"}
-      - {id: 66, cat: TV, desc: "Motoring"}
-      - {id: 71, cat: TV, desc: "Property"}
-      - {id: 76, cat: TV, desc: "Soaps"}
-      - {id: 80, cat: TV, desc: "Talkshow"}
-      - {id: 59, cat: TV, desc: "Drama"}
+caps:
+  categorymappings:
+    - {id: 55, cat: TV, desc: "Adverts"}
+    - {id: 60, cat: TV, desc: "Educational"}
+    - {id: 63, cat: TV, desc: "Game Shows"}
+    - {id: 67, cat: TV, desc: "Music"}
+    - {id: 72, cat: TV, desc: "QuizComedy"}
+    - {id: 77, cat: TV, desc: "Special Events"}
+    - {id: 81, cat: TV, desc: "Trains & Planes"}
+    - {id: 54, cat: TV, desc: "Arts & Culture"}
+    - {id: 61, cat: TV, desc: "Entertainment"}
+    - {id: 53, cat: TV, desc: "Gardening"}
+    - {id: 68, cat: TV, desc: "Mystery & Crime Fiction"}
+    - {id: 73, cat: TV, desc: "Radio"}
+    - {id: 78, cat: TV, desc: "Special Interest"}
+    - {id: 82, cat: TV, desc: "Travel"}
+    - {id: 56, cat: TV, desc: "Comedy"}
+    - {id: 85, cat: TV, desc: "Euro-Noir"}
+    - {id: 64, cat: TV, desc: "Kids"}
+    - {id: 69, cat: TV, desc: "News"}
+    - {id: 74, cat: TV, desc: "Reality"}
+    - {id: 79, cat: TV, desc: "Sport"}
+    - {id: 83, cat: TV, desc: "Wildlife & Nature"}
+    - {id: 58, cat: TV, desc: "Documentary"}
+    - {id: 57, cat: TV, desc: "Fly on the Wall/Lifestyle"}
+    - {id: 65, cat: TV, desc: "Magazine"}
+    - {id: 70, cat: TV, desc: "Occult & Horror"}
+    - {id: 75, cat: TV, desc: "Sci-Fi"}
+    - {id: 84, cat: TV, desc: "Style & Fashion"}
+    - {id: 62, cat: TV, desc: "Food Drink & Cooking"}
+    - {id: 66, cat: TV, desc: "Motoring"}
+    - {id: 71, cat: TV, desc: "Property"}
+    - {id: 76, cat: TV, desc: "Soaps"}
+    - {id: 80, cat: TV, desc: "Talkshow"}
+    - {id: 59, cat: TV, desc: "Drama"}
 
-    modes:
-      search: [q]
+  modes:
+    search: [q]
+    tv-search: [q]
 
-  login:
-    path: login.php
-    method: form
-    form: form
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    captcha:
-      type: image
-      selector: img#freecap
-      input: word
-    error:
-      - selector: table:contains("Login failed!")
-    test:
-      path: main.php
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Query.Keywords }}"
-    rows:
-      selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: main.php
+    selector: a[href^="logout.php?id="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 exclusive, 5 neutral
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    titleonly: 1
+    # 0 Exact, 1 Fuzzy, 3 Parsed, 4 Simple # 2 Pure is not used
+    nonboolean: 0
+
+  rows:
+    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
       filters:
-        - name: andmatch
-    fields:
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        filters:
-        selector: td:nth-child(2) b
-      download:
-        selector: a[href^="download.php/"]
-        attribute: href
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      grabs:
-        selector: td:nth-child(8)
-        filters:
-          - name: replace
-            args: ["Never", "0"]
-          - name: regexp
-            args: ([\d,]+)
-      files:
-        selector: td:nth-child(4)
-      size:
-        selector: td:nth-child(7)
-      seeders:
-        selector: td:nth-child(9)
-      leechers:
-        selector: td:nth-child(10)
-      date:
-        selector: td:nth-child(6)
-        filters:
-          - name: regexp
-            args: (\d{4}-\d{2}-\d{2})
-      downloadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "font[color=\"blue\"]": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "*": "1"
+        - name: querystring
+          args: cat
+    title:
+      filters:
+      selector: a[href^="details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    grabs:
+      selector: td:nth-child(8)
+      filters:
+        - name: replace
+          args: ["Never", "0"]
+    files:
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    date:
+      selector: td:nth-child(6)
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    downloadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "font[color=\"blue\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# XBTT TCG 0.97

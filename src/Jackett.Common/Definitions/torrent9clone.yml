@@ -1,115 +1,168 @@
-﻿---
-  site: torrent9clone
-  name: Torrent9 clone (torrent9.ch)
-  description: "Torrent9 is a FRENCH Public site for TV / MOVIES / GENERAL"
-  language: fr-fr
-  type: public
-  encoding: UTF-8
-  followredirect: true
-  links:
-    - https://www.torrent9.so/
+---
+id: torrent9clone
+name: Torrent9 clone
+description: "Torrent9 clone is a FRENCH Public Torrent9 clone for TV / MOVIES / GENERAL"
+language: fr-FR
+type: public
+encoding: UTF-8
+followredirect: true
+# to fetch current domain use https://www.protege-liens.com/torrent9
+links:
+  - https://ww1.torrent9.re/
+  - https://torrent9.nocensor.sbs/
+legacylinks:
+  - https://www.t9.vc/
+  - https://www.torrent9.ai/
+  - https://www.torrent9.pl/
+  - https://www.torrent9.ac/
+  - https://www.torrent9.so/
+  - https://wvw.torrent9.sh/
+  - https://www.torrent9.sh/
+  - https://www.torrent9.one/
+  - https://wvw.torrent9.one/
+  - https://wwv.torrent9.one/
+  - https://vww.torrent9.one/
+  - https://www.torrent9.srl/
+  - https://torrent9.unblocked.monster/
+  - https://www.torrent9.la/
+  - https://www.torrent9.ninja/
+  - https://torrent9.nocensor.space/
+  - https://torrent9.nocensor.work/
+  - https://www.torrent9.pw/
+  - https://www.torrent9.si/
+  - https://torrent9.nocensor.biz/
+  - https://www.torrent9.nl/
+  - https://www.torrent9.re/
 
-  legacylinks:
-    - https://www.torrents9.pw/
-    - https://www.torrent9.ch/
-    - https://www1.torrent9.ch/
-    - https://www2.torrent9.ch/
-    - https://wwv.torrent9.vg/
-    - https://www.torrent9.vc/
-    - https://wvw.torrent9.vc/
-    - https://www.torrent9.lol/
-    - https://wvw.torrent9.lol/
-    - https://wwv.torrent9.lol/
-    - https://ww1.torrent9.lol/
-    - https://ww5.torrent9.lol/
-    - https://ww6.torrent9.lol/
-    - https://www.torrent9.tw/
-    - https://ww7.torrent9.lol/
-    - https://www.torrent9.dev/
-    - https://www.torrent9.sx/
-    - https://ww1.torrent9.sx/
-    - https://www.t9.re/
-    - https://www.t9.vc/
-    - https://www.torrent9.ai/
+caps:
+  categorymappings:
+    - {id: Films, cat: Movies, desc: "Movies"}
+    - {id: Séries, cat: TV, desc: "TV"}
+    - {id: Musiques, cat: Audio, desc: "Music"}
+    - {id: Ebooks, cat: Books, desc: "Books"}
+    - {id: Logiciels, cat: PC, desc: "Software"}
+    - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
+    - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
 
-  caps:
-    categorymappings:
-      - {id: films, cat: Movies, desc: "Movies"}
-      - {id: series, cat: TV, desc: "TV"}
-      - {id: musique, cat: Audio, desc: "Music"}
-      - {id: ebook, cat: Books, desc: "Books"}
-      - {id: logiciels, cat: PC, desc: "Software"}
-      - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
-      - {id: jeux-consoles, cat: Console/Xbox360, desc: "Console Games"}
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+settings:
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
 
-  settings: []
+download:
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 
-  download:
-    selector: a[href^="magnet:?"]
-    attribute: href
+search:
+  paths:
+    - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{ else }}{{ end }}"
+  keywordsfilters:
+    # if searching for season packs swith S01 to saison 1 #9712
+    - name: re_replace
+      args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
+    - name: re_replace
+      args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
-  search:
-    paths:
-      - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{else}}/top{{end}}"
-    rows:
-      selector: div.table-responsive > table tbody tr
-    fields:
-      site_date:
-        selector: td:nth-child(1) a
-        filters:
-          # date is at the end of the title, so we get it and name it site_date
-          - name: regexp
-            args: "(\\w+)$"
-      title:
-        selector: td:nth-child(1) a
-        filters:
-          # now we put the date at the right place according scene naming rules using .Result.site_date
-          - name: replace
-            args: [" FRENCH", " {{ .Result.site_date }} FRENCH"]
-          - name: replace
-            args: ["MULTI", "{{ .Result.site_date }} MULTI"]
-          - name: replace
-            args: ["TRUEFRENCH", "{{ .Result.site_date }} TRUEFRENCH"]
-          - name: replace
-            args: ["VOSTFR", "{{ .Result.site_date }} VOSTFR"] 
-          # and we delete it at the end
-          - name: re_replace
-            args: ["(\\w+)$", ""]
-      details:
-        selector: td:nth-child(1) a
-        attribute: href
-      category:
-        selector: td:nth-child(1) i
-        case:
-          i[class="Films"]: films
-          i[class="Séries"]: series
-          i[class="Musique"]: musique
-          i[class="Jeux-PC"]: jeux-pc
-          i[class="Logiciels"]: logiciels
-          i[class="Ebook"]: ebook
-      download:
-        selector: td:nth-child(1) a
-        attribute: href
-      date:
-          text: "now"
-      size:
-        selector: td:nth-child(2)
-      seeders:
-        text: 0
-      seeders:
-        selector: td:nth-child(3) span.seed_ok
-        optional: true
-      leechers:
-        text: 0
-      leechers:
-        selector: td:nth-child(4)
-        optional: true
-      downloadvolumefactor:
-        text: "0"
-      uploadvolumefactor:
-        text: "1"
+  rows:
+    selector: table.table-striped > tbody > tr
+
+  fields:
+    category:
+      selector: td:nth-child(1) i
+      attribute: class
+    site_date:
+      selector: td:nth-child(1) a
+      filters:
+        # year is at the end of the title, so we get it and name it site_date
+        - name: regexp
+          args: "(19|20\\d{2})$"
+    title_phase1:
+      selector: td:nth-child(1) a
+      filters:
+        # now we put the date at the right place according scene naming rules using .Result.site_date
+        - name: re_replace
+          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+        - name: re_replace
+          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+        - name: re_replace
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+        - name: re_replace
+          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
+        # and we delete it at the end
+        - name: re_replace
+          args: ["(19|20\\d{2})$", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: td:nth-child(1) a
+      attribute: href
+    download:
+      selector: td:nth-child(1) a
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: td:nth-child(2)
+    seeders_optional:
+      selector: td:nth-child(3)
+      optional: true
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
+      selector: td:nth-child(4)
+      optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

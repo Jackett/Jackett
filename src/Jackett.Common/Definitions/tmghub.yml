@@ -1,0 +1,195 @@
+---
+id: tmghub
+name: TmGHuB
+description: "TmGHuB (TH) is an INDIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://tmghub.org/
+
+caps:
+  categorymappings:
+    #Movies
+    - {id: 29, cat: Movies, desc: "Movie Packs"}
+    - {id: 30, cat: Movies, desc: "V.I.P"}
+    - {id: 13, cat: Movies/BluRay, desc: "BD-25/BD-50"}
+    - {id: 32, cat: Movies/BluRay, desc: "1080p BluRay"}
+    - {id: 33, cat: Movies/HD, desc: "BDRip / 720p"}
+    - {id: 11, cat: Movies/DVD, desc: "DVD-R/DVD-DL"}
+    - {id: 22, cat: Movies/DVD, desc: "Encoded DVDs"}
+    - {id: 17, cat: Movies/WEB-DL, desc: "WEB-DL/DTH"}
+    - {id: 14, cat: Movies/DVD, desc: "DVD-Rips"}
+    - {id: 15, cat: Movies/HD, desc: "DTH/HD-Rip"}
+    - {id: 20, cat: Movies/SD, desc: "VHS/TV-Rip"}
+    - {id: 21, cat: Movies, desc: "Video CDs"}
+    - {id: 19, cat: Movies, desc: "Pre Releases "}
+    - {id: 42, cat: Movies, desc: "Dubbed Movies"}
+    - {id: 44, cat: Movies, desc: "TmG Special"}
+    #Music
+    - {id: 27, cat: Audio, desc: "MP3/FLAC/WAV"}
+    - {id: 23, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 37, cat: Audio, desc: "Music Packs"}
+    #Television
+    - {id: 40, cat: TV, desc: "TV Shows"}
+    - {id: 28, cat: TV, desc: "TV Series"}
+    - {id: 25, cat: TV/Sport, desc: "Sports"}
+    - {id: 26, cat: TV/Documentary, desc: "Documentary"}
+    #Books
+    - {id: 38, cat: Books/EBook, desc: "E-Books"}
+    - {id: 34, cat: Books, desc: "Guides / Tutorials"}
+    #Others
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
+    - {id: 39, cat: Other, desc: "Religious"}
+    - {id: 43, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. Default is 30.
+  - name: info_grabs
+    type: info
+    label: Search results
+    default: Note that torrents that you have previously downloaded will not be included in results.<br /> You are not allowed to download a torrent twice without informing admin.
+  - name: thankyou
+    type: text
+    label: Thank You Comment
+  - name: info
+    type: info
+    label: Thank you comment
+    default: This site requires you to leave a Thank You comment before you can download.<br /> Enter your personalised comment above, at least 8 characters long.
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      4: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+
+login:
+  path: index.php?page=login
+  method: form
+  form: form[action^="index.php?page=login"]
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: tr td span[style="color:#FF0000;"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+download:
+  before:
+    path: "{{ .DownloadUri.AbsoluteUri }}"
+    method: post
+    inputs:
+      comment: "{{ .Config.thankyou }}"
+      confirm: Confirm
+  selectors:
+    - selector: td a[href^="download.php"]
+      attribute: href
+
+search:
+  paths:
+    # https://tmghub.org/index.php?page=torrents&search=&category=29;13;32;33;11;22;17;14;15&uploader=0&options=0&active=0&gold=0&langsel=-1
+    - path: index.php
+  inputs:
+    page: torrents
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
+    uploader: 0
+    # 0=title, 1=title&descr, 2=descr, 3 imdbid
+    options: "{{ if .Query.IMDBID }}3{{ else }}0{{ end }}"
+    # 0 all, 1 activeonly, 2 deadonly
+    active: 0
+    # 0 all, 1 classic, 2 silver, 3 gold, 4 silver&gold
+    gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    # -1 all, 0 unk, 1 eng, etc
+    langsel: -1
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  rows:
+    selector: "table#tottest[width=\"100%\"] tr:has(a[href^=\"index.php?page=torrent-details\"]):not(:has(img[title=\"Allready Grabbed !!\"]))"
+
+  fields:
+    category:
+      selector: td a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: td a[href^="index.php?page=torrent-details"]
+    details:
+      selector: td a[href^="index.php?page=torrent-details"]
+      attribute: href
+    download:
+      selector: td a[href^="index.php?page=torrent-details"]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    poster:
+      selector: td a[href^="index.php?page=torrent-details"]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.+?)  width"
+    date:
+      # 6 weeks ago
+      selector: td a[href^="index.php?page=torrent-details"]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "Added\\:(\\d+ \\w+ \\w+)<"
+        - name: timeago
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img[src="gold/gold.gif"]: 0
+        img[src="gold/silver.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 hours (as seconds = 2 x 60 x 60)
+      text: 7200
+# xbtit

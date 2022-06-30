@@ -1,0 +1,141 @@
+---
+id: indietorrents
+name: Indietorrents
+description: "Indietorrents is a private Music tracker for independent music"
+language: en-GB
+encoding: UTF-8
+type: private
+links:
+  - https://www.indietorrents.com/
+
+caps:
+  categorymappings:
+    # there is a cat 2 Video but it is not supported by this indexer.
+    - {id: 1, cat: Audio, desc: "Music"}
+
+  modes:
+    search: [q]
+    music-search: [q, album, artist]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_cats
+    type: info
+    label: "About categories"
+    default: "This indexer only supports searching the <b>Audio</b> category. <i>Video</i> searching is not supported."
+  - name: info_results
+    type: info
+    label: "Search results"
+    default: "This indexer does not support <b>Torrent Groups</b>.<br />On your account <i>Settings</i> change <b>Torrent grouping</b>  to <b>DO NOT Group torrents by default</b>."
+
+login:
+  path: login.php?lang=
+  method: form
+  form: form#loginform
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: form#loginform:contains("incorrect")
+  test:
+    path: index.php
+    selector: a[href^="logout.php?auth="]
+
+search:
+  paths:
+    # https://www.indietorrents.com/torrents.php?searchstr=lily+konigsberg+we+need+to+talk+now+2021&action=basic&taglist=&tags_type=1&order_by=time&order_way=desc
+    - path: torrents.php
+  inputs:
+    searchstr: "{{ if or (.Query.Artist) (.Query.Album) }}{{ or (.Query.Artist) (.Query.Album) }}{{ else }}{{ .Keywords }}{{ end }}"
+    action: basic
+    taglist: ""
+    tags_type: 1
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # restrict to audio as video generates different html on a mixed results page.
+    filter_cat[1]: 1
+
+  rows:
+    selector: table#torrent_table > tbody > tr[class^="group"]
+    after: 2
+
+  fields:
+    category:
+      text: 1
+    details:
+      selector: a[href^="torrents.php?id="]:last-of-type
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    tags:
+      selector: div.tags
+    description:
+      selector: td.edition_info
+      filters:
+        - name: append
+          args: "</br>{{ .Result.tags }}"
+    files:
+      selector: td:nth-last-child(7)
+    date:
+      selector: td:nth-last-child(6) > span.time
+      attribute: title
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "Jan 2 2006, 15:04 -07:00"
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        "strong:contains(\"Freeleech!\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    title_details:
+      # artist and album
+      selector: td:nth-child(3)
+      remove: span, div.tags
+    title:
+      # torrent info
+      selector: a[href*="torrentid="]
+      remove: strong
+      filters:
+        - name: prepend
+          args: "{{ .Result.title_details }} "
+    minimumratio:
+      text: 0.60
+# Project Gazelle

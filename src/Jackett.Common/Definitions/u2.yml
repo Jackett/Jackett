@@ -1,0 +1,178 @@
+---
+id: u2
+name: U2
+description: "U2 (U2分享園@動漫花園) is a CHINESE Private Torrent Tracker for ANIME"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://u2.dmhy.org/
+
+caps:
+  categorymappings:
+    - {id: 9, cat: TV/Anime, desc: "U2-Rip"}
+    - {id: 411, cat: TV/Anime, desc: "U2-RBD"}
+    - {id: 413, cat: TV/Anime, desc: "Web"}
+    - {id: 12, cat: TV/Anime, desc: "BDRip"}
+    - {id: 13, cat: TV/Anime, desc: "DVDRip"}
+    - {id: 14, cat: TV/Anime, desc: "HDTVRip"}
+    - {id: 15, cat: TV/Anime, desc: "DVDISO"}
+    - {id: 16, cat: TV/Anime, desc: "BDMV"}
+    - {id: 17, cat: TV/Anime, desc: "LQRip"}
+    - {id: 410, cat: TV/Anime, desc: "外挂结构 (TV Series)"}
+    - {id: 412, cat: TV/Anime, desc: "加流重灌 (Modded Blu-rays)"}
+    - {id: 21, cat: Books, desc: "Raw Books"}
+    - {id: 22, cat: Books, desc: "港译漫画 (HK Books)"}
+    - {id: 23, cat: Books, desc: "台译漫画 (TW Books)"}
+    - {id: 30, cat: Audio, desc: "Lossless Music"}
+    - {id: 40, cat: Other, desc: "Others"}
+    # Anime as Movies (Radarr uses t=movie):
+    - {id: 9, cat: Movies/Other, desc: "U2-Rip"}
+    - {id: 411, cat: Movies/Other, desc: "U2-RBD"}
+    - {id: 413, cat: Movies/Other, desc: "Web"}
+    - {id: 12, cat: Movies/HD, desc: "BDRip"}
+    - {id: 13, cat: Movies/Other, desc: "DVDRip"}
+    - {id: 14, cat: Movies/Other, desc: "HDTVRip"}
+    - {id: 15, cat: Movies/Other, desc: "DVDISO"}
+    - {id: 16, cat: Movies/BluRay, desc: "BDMV"}
+    - {id: 17, cat: Movies/Other, desc: "LQRip"}
+    - {id: 412, cat: Movies/BluRay, desc: "加流重灌 (Modded Blu-rays)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href^="logout.php?key="]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 incldead, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 all promotions
+    spstate: "{{ if .Config.freeleech }}8{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 AniDB, 5 infohash
+    search_area: 0
+    # 0 AND, 1 OR, 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table.torrents > tbody > tr:has(table.torrentname)
+
+  fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_default:
+      selector: a[href^="details.php?id="]
+    title_optional:
+      optional: true
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td:nth-child(4) > time[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    date_added:
+      # time added
+      selector: td:nth-child(4):not(time[title]) > time
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_custom: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        img.pro_custom: 3
+        "*": 1
+    description:
+      selector: td:nth-child(2)
+      remove: a, img
+# NexusPHP U2-Revision Standard v1.5 Beta 4

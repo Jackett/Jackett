@@ -1,0 +1,129 @@
+---
+id: proporno
+name: ProPorno
+description: "ProPorno is a RUSSIAN Public tracker for 3X"
+language: ru-RU
+type: public
+encoding: windows-1251
+links:
+  - https://proporno.org/
+
+caps:
+  categorymappings:
+    - {id: 2, cat: XXX, desc: "порно видео (video)"}
+    - {id: 4, cat: XXX, desc: "   блондинки (blondes)"}
+    - {id: 5, cat: XXX, desc: "   лесбиянки (lesbians)"}
+    - {id: 19, cat: XXX, desc: "   эротика (erotic)"}
+    - {id: 20, cat: XXX, desc: "   груповушка (group)"}
+    - {id: 16, cat: XXX, desc: "   анальный секс (anal)"}
+    - {id: 22, cat: XXX, desc: "   молодые (young)"}
+    - {id: 24, cat: XXX, desc: "   минет / куннилингус / орал (blowjob / cunnilingus / screaming)"}
+    - {id: 25, cat: XXX, desc: "   большая грудь (big breasts)"}
+    - {id: 21, cat: XXX, desc: "любительское видео (ameteur)"}
+    - {id: 3, cat: XXX, desc: "порно фильмы (movies)"}
+    - {id: 7, cat: XXX, desc: "русское порно (Russian)"}
+    - {id: 27, cat: XXX, desc: "убойная эротика (killer erotica)"}
+    - {id: 26, cat: XXX, desc: "онлайн порно (online)"}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    # https://proporno.org/index.php?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story=
+    - path: index.php
+  inputs:
+    do: search
+    subaction: search
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # 0 articles, 1 comments, 2 static, 3 titles
+    titleonly: 3
+    sortby: date
+    resorder: desc
+    showposts: 0
+    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+
+  rows:
+    selector: div.goods-777:has(div.inmy), div.goods-7777:has(div.mini)
+    after: 1
+
+  fields:
+    category:
+      selector: div.inmy
+      case:
+        "a:last-of-type:contains(\"порно видео\")": 2
+        "a:last-of-type:contains(\"блондинки\")": 4
+        "a:last-of-type:contains(\"лесбиянки\")": 5
+        "a:last-of-type:contains(\"эротика\")": 19
+        "a:last-of-type:contains(\"груповушка\")": 20
+        "a:last-of-type:contains(\"анальный\")": 16
+        "a:last-of-type:contains(\"молодые\")": 22
+        "a:last-of-type:contains(\"минет\")": 24
+        "a:last-of-type:contains(\"большая\")": 25
+        "a:last-of-type:contains(\"любительское\")": 21
+        "a:last-of-type:contains(\"фильмы\")": 3
+        "a:last-of-type:contains(\"русское\")": 7
+        "a:last-of-type:contains(\"убойная\")": 27
+        "a:last-of-type:contains(\"онлайн\")": 26
+    title:
+      selector: div.news_text > a
+    details:
+      selector: div.news_text > a
+      attribute: href
+    download:
+      selector: div.news_text > a
+      attribute: href
+    poster:
+      selector: img[src*="/uploads/posts/"]
+      attribute: src
+    date_today:
+      # Сегодня, 19:56
+      selector: div.mini:contains("Сегодня")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(Сегодня, \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Сегодня", "Today"]
+        - name: fuzzytime
+    date_yday:
+      # Вчера, 20:01
+      selector: div.mini:contains("Вчера")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(Вчера, \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Вчера", "Yesterday"]
+        - name: fuzzytime
+    date_year:
+      # 20-09-2020, 19:41
+      selector: div.mini:contains("-")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(\\d{1,2}-\\d{2}-\\d{4}, \\d{2}:\\d{2})"
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2-01-2006, 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
+    size:
+      text: "1 GB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

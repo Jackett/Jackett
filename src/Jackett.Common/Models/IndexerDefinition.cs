@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Jackett.Common.Models
@@ -8,67 +8,39 @@ namespace Jackett.Common.Models
     {
         public selectorBlock this[string key]
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => throw new NotImplementedException();
 
-            set
-            {
-                base.Add(new KeyValuePair<string, selectorBlock>(key, value));
-            }
+            set => Add(new KeyValuePair<string, selectorBlock>(key, value));
         }
 
-        public ICollection<string> Keys
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ICollection<string> Keys => throw new NotImplementedException();
 
-        public ICollection<selectorBlock> Values
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public ICollection<selectorBlock> Values => throw new NotImplementedException();
 
-        public void Add(string key, selectorBlock value)
-        {
-            base.Add(new KeyValuePair<string, selectorBlock>(key, value));
-        }
+        public void Add(string key, selectorBlock value) => Add(new KeyValuePair<string, selectorBlock>(key, value));
 
-        public bool ContainsKey(string key)
-        {
-            throw new NotImplementedException();
-        }
+        public bool ContainsKey(string key) => throw new NotImplementedException();
 
-        public bool Remove(string key)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Remove(string key) => throw new NotImplementedException();
 
-        public bool TryGetValue(string key, out selectorBlock value)
-        {
-            throw new NotImplementedException();
-        }
+        public bool TryGetValue(string key, out selectorBlock value) => throw new NotImplementedException();
     }
 
     // Cardigann yaml classes
     public class IndexerDefinition
     {
-        public string Site { get; set; }
+        public string Id { get; set; }
         public List<settingsField> Settings { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Type { get; set; }
         public string Language { get; set; }
         public string Encoding { get; set; }
+        public double? RequestDelay { get; set; }
         public List<string> Links { get; set; }
         public List<string> Legacylinks { get; set; }
         public bool Followredirect { get; set; } = false;
+        public bool Testlinktorrent { get; set; } = true;
         public List<string> Certificates { get; set; }
         public capabilitiesBlock Caps { get; set; }
         public loginBlock Login { get; set; }
@@ -83,6 +55,7 @@ namespace Jackett.Common.Models
         public string Type { get; set; }
         public string Label { get; set; }
         public string Default { get; set; }
+        public string[] Defaults { get; set; }
         public Dictionary<string, string> Options { get; set; }
     }
 
@@ -105,7 +78,6 @@ namespace Jackett.Common.Models
     {
         public string Type { get; set; }
         public string Selector { get; set; }
-        public string Image { get { throw new Exception("Deprecated, please use Login.Captcha.Selector instead"); } set { throw new Exception("Deprecated, please use login/captcha/selector instead of image"); } }
         public string Input { get; set; }
     }
 
@@ -178,13 +150,17 @@ namespace Jackett.Common.Models
         public int After { get; set; }
         //public string Remove { get; set; } // already inherited
         public selectorBlock Dateheaders { get; set; }
+        public selectorBlock Count { get; set; }
+        public bool Multiple { get; set; } = false;
+        public bool MissingAttributeEquals0Results { get; set; } = false;
     }
 
     public class searchPathBlock : requestBlock
     {
-        public List<string> Categories { get; set; }
+        public List<string> Categories { get; set; } = new List<string>();
         public bool Inheritinputs { get; set; } = true;
         public bool Followredirect { get; set; } = false;
+        public responseBlock Response { get; set; }
     }
 
     public class requestBlock
@@ -192,13 +168,40 @@ namespace Jackett.Common.Models
         public string Path { get; set; }
         public string Method { get; set; }
         public Dictionary<string, string> Inputs { get; set; }
+        public string Queryseparator { get; set; } = "&";
+    }
+
+    public class beforeBlock : requestBlock
+    {
+        public selectorField Pathselector { get; set; }
+    }
+
+    public class infohashBlock
+    {
+        public selectorField Hash { get; set; }
+        public selectorField Title { get; set; }
+        public bool Usebeforeresponse { get; set; } = false;
     }
 
     public class downloadBlock
     {
-        public string Selector { get; set; }
-        public List<filterBlock> Filters { get; set; }
+        public List<selectorField> Selectors { get; set; }
         public string Method { get; set; }
-        public requestBlock Before { get; set; }
+        public beforeBlock Before { get; set; }
+        public infohashBlock Infohash { get; set; }
+    }
+
+    public class selectorField
+    {
+        public string Selector { get; set; }
+        public string Attribute { get; set; }
+        public bool Usebeforeresponse { get; set; } = false;
+        public List<filterBlock> Filters { get; set; }
+    }
+
+    public class responseBlock
+    {
+        public string Type { get; set; }
+        public string NoResultsMessage { get; set; }
     }
 }

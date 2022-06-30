@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+
+using System.Collections.Generic;
 
 namespace Jackett.Common.Models
 {
-    class TrackerCache
+    internal class TrackerCache
     {
         public string TrackerId { set; get; }
         public string TrackerName { set; get; }
-
-        public List<CachedResult> Results = new List<CachedResult>();
+        public string TrackerType { set; get; }
+        public Dictionary<string, TrackerCacheQuery> Queries = new Dictionary<string, TrackerCacheQuery>();
     }
 }

@@ -1,5 +1,6 @@
-﻿using System;
-using System.Runtime.InteropServices;
+using System;
+using System.Reflection;
+using System.Runtime.Versioning;
 
 namespace Jackett.Common.Utils
 {
@@ -9,11 +10,11 @@ namespace Jackett.Common.Utils
         {
             get
             {
-                bool runningOnDotNetCore = false;
+                var runningOnDotNetCore = false;
 
                 try
                 {
-                    runningOnDotNetCore = RuntimeInformation.FrameworkDescription.IndexOf("core", StringComparison.OrdinalIgnoreCase) >= 0;
+                    runningOnDotNetCore = Assembly.GetEntryAssembly()?.GetCustomAttribute<TargetFrameworkAttribute>()?.FrameworkName.IndexOf("Core", StringComparison.OrdinalIgnoreCase) >= 0;
                 }
                 catch
                 {

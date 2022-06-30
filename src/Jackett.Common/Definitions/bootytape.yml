@@ -1,0 +1,138 @@
+---
+id: bootytape
+name: BootyTape
+description: "BootyTape is a Semi-Private site for 3X"
+language: en-US
+type: semi-private
+encoding: UTF-8
+links:
+  - https://ssl.bootytape.com/
+
+caps:
+  categorymappings:
+    - {id: 70, cat: XXX, desc: "Animation"}
+    - {id: 22, cat: XXX, desc: "Girl on Girl"}
+    - {id: 43, cat: XXX, desc: "Images"}
+    - {id: 52, cat: XXX, desc: "Straight"}
+    - {id: 82, cat: XXX, desc: "X Play Hard"}
+    - {id: 92, cat: XXX, desc: "X Play Soft"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    take_login: 1
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.mainouter2:has(h1:contains("Failed"))
+  test:
+    path: my.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://ssl.bootytape.com/torrents.php?search=onlyfans&tagsearch=&cat=0&tags=1
+    - path: torrents.php
+  inputs:
+    search: "{{ .Keywords }}"
+    tagsearch: ""
+    # 0 all
+    cat: 0
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # tags search mode: 1 AND, 2 OR
+    tags: 1
+    # incldead=2 for search unseeded
+    # descr=1 for search description
+    # double=1 for search double seed bonus
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table.red > tbody > tr:not(:has(th))
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    description:
+      selector: div.specg
+    poster:
+      selector: img[src*="/thbx/imgx/"]
+      attribute: src
+    files_optional:
+      selector: a[href$="filelist=1"]
+      optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
+    size_optional:
+      selector: td:nth-child(3)
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    seeders_optional:
+      selector: a[href$="toseeders=1"]
+      optional: true
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
+      selector: a[href$="todlers=1"]
+      optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    date:
+      text: now
+    downloadvolumefactor:
+      case:
+        "img[src$=\"pic/freedownload.gif\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "img[src$=\"pic/double-upload.gif\"]": 2
+        "*": 1
+# engine n/a

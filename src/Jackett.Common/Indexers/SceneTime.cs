@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -17,244 +17,197 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class SceneTime : BaseWebIndexer
     {
-        private string StartPageUrl { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "takelogin.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
-        private string DownloadUrl { get { return SiteLink + "download.php/{0}/download.torrent"; } }
+        private string SearchUrl => SiteLink + "browse.php";
+        private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
+        private new ConfigurationDataSceneTime configData => (ConfigurationDataSceneTime)base.configData;
 
-        private new ConfigurationDataSceneTime configData
-        {
-            get { return (ConfigurationDataSceneTime)base.configData; }
-            set { base.configData = value; }
-        }
-
-        public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps)
-            : base(name: "SceneTime",
-                description: "Always on time",
-                link: "https://www.scenetime.com/",
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: w,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataSceneTime())
+        public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
+            ICacheService cs)
+            : base(id: "scenetime",
+                   name: "SceneTime",
+                   description: "Always on time",
+                   link: "https://www.scenetime.com/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
+                   configService: configService,
+                   client: w,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataSceneTime())
         {
             Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
-            //Movies
-            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
-            AddCategoryMapping(3, TorznabCatType.MoviesDVD, "Movies/DVD-R");
-            AddCategoryMapping(10, TorznabCatType.XXX, "Movies/XxX");
-            AddCategoryMapping(47, TorznabCatType.Movies, "Movie/Packs");
-            AddCategoryMapping(56, TorznabCatType.Movies, "Movies/Anime");
-            AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies/SD");
-            AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies/HD");
-            AddCategoryMapping(61, TorznabCatType.Movies, "Movies/Classic");
-            AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies/3D");
-            AddCategoryMapping(80, TorznabCatType.MoviesForeign, "Movies/Non-English");
-            AddCategoryMapping(81, TorznabCatType.MoviesBluRay, "Movies/BluRay");
-            AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies/CAM-TS");
-            AddCategoryMapping(102, TorznabCatType.MoviesOther, "Movies/Remux");
-            AddCategoryMapping(22, TorznabCatType.MoviesWEBDL, "Movies/Web-Rip/DL");
-            AddCategoryMapping(105, TorznabCatType.Movies, "Movies/Kids");
-            AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies/4K");
-            AddCategoryMapping(17, TorznabCatType.MoviesBluRay, "Movies/4K bluray");
-
-            //TV
-            AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
-            AddCategoryMapping(43, TorznabCatType.TV, "TV/Packs");
-            AddCategoryMapping(9, TorznabCatType.TVHD, "TV-HD");
-            AddCategoryMapping(63, TorznabCatType.TV, "TV/Classic");
-            AddCategoryMapping(77, TorznabCatType.TVSD, "TV/SD");
-            AddCategoryMapping(79, TorznabCatType.TVSport, "Sports");
-            AddCategoryMapping(100, TorznabCatType.TVFOREIGN, "TV/Non-English");
-            AddCategoryMapping(83, TorznabCatType.TVWEBDL, "TV/Web-Rip");
-            AddCategoryMapping(8, TorznabCatType.TVOTHER, "TV-Mobile");
-            AddCategoryMapping(18, TorznabCatType.TVAnime, "TV/Anime");
-            AddCategoryMapping(19, TorznabCatType.TVHD, "TV-x265");
-
-            // Games
-            AddCategoryMapping(6, TorznabCatType.PCGames, "Games/PC ISO");
-            AddCategoryMapping(48, TorznabCatType.ConsoleXbox, "Games/XBOX");
-            AddCategoryMapping(49, TorznabCatType.ConsolePSP, "Games/PSP");
-            AddCategoryMapping(50, TorznabCatType.ConsolePS3, "Games/PS3");
-            AddCategoryMapping(51, TorznabCatType.ConsoleWii, "Games/Wii");
-            AddCategoryMapping(55, TorznabCatType.ConsoleNDS, "Games/Nintendo DS");
-            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/Ps4");
-            AddCategoryMapping(13, TorznabCatType.ConsoleOther, "Games/PS1");
-            AddCategoryMapping(14, TorznabCatType.ConsoleOther, "Games/PS2");
-            AddCategoryMapping(15, TorznabCatType.ConsoleOther, "Games/Dreamcast");
-
-            // Miscellaneous
-            AddCategoryMapping(5, TorznabCatType.PC0day, "Apps/0DAY");
-            AddCategoryMapping(7, TorznabCatType.Books, "Books-Mags");
-            AddCategoryMapping(52, TorznabCatType.PCMac, "Mac");
-            AddCategoryMapping(65, TorznabCatType.BooksComics, "Books/Comic");
-            AddCategoryMapping(53, TorznabCatType.PC, "Appz");
-            AddCategoryMapping(24, TorznabCatType.PCPhoneOther, "Mobile/Appz");
-
-            // Music
-            AddCategoryMapping(4, TorznabCatType.Audio, "Music/Audio");
-            AddCategoryMapping(11, TorznabCatType.AudioVideo, "Music/Videos");
-            AddCategoryMapping(116, TorznabCatType.Audio, "Music/Pack");
-        }
-
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
-            CQ cq = loginPage.Content;
-            var result = this.configData;
-            result.Captcha.Version = "2";
-            CQ recaptcha = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            if (recaptcha.Length != 0)
-            {
-                result.CookieHeader.Value = loginPage.Cookies;
-                result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
-                return result;
-            }
-            else
-            {
-                var stdResult = new ConfigurationDataBasicLogin();
-                stdResult.SiteLink.Value = configData.SiteLink.Value;
-                stdResult.Username.Value = configData.Username.Value;
-                stdResult.Password.Value = configData.Password.Value;
-                stdResult.CookieHeader.Value = loginPage.Cookies;
-                return stdResult;
-            }
+            AddCategoryMapping(10, TorznabCatType.XXX, "Movies Adult");
+            AddCategoryMapping(47, TorznabCatType.Movies, "Movie Packs");
+            AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies SD");
+            AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies HD");
+            AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies 3D");
+            AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies CAM-TS");
+            AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies UHD");
+            AddCategoryMapping(2, TorznabCatType.TVUHD, "TV UHD");
+            AddCategoryMapping(43, TorznabCatType.TV, "TV Packs");
+            AddCategoryMapping(9, TorznabCatType.TVHD, "TV HD");
+            AddCategoryMapping(77, TorznabCatType.TVSD, "TV SD");
+            AddCategoryMapping(6, TorznabCatType.PCGames, "Games PC ISO");
+            AddCategoryMapping(48, TorznabCatType.ConsoleXBox, "Games XBOX");
+            AddCategoryMapping(51, TorznabCatType.ConsoleWii, "Games Wii");
+            AddCategoryMapping(55, TorznabCatType.ConsoleNDS, "Games Nintendo DS");
+            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/PS");
+            AddCategoryMapping(15, TorznabCatType.ConsoleOther, "Games Dreamcast");
+            AddCategoryMapping(52, TorznabCatType.PCMac, "Mac/Linux");
+            AddCategoryMapping(53, TorznabCatType.PC0day, "Apps");
+            AddCategoryMapping(24, TorznabCatType.PCMobileOther, "Mobile Apps");
+            AddCategoryMapping(7, TorznabCatType.Books, "Books and Magazines");
+            AddCategoryMapping(65, TorznabCatType.BooksComics, "Books Comic");
+            AddCategoryMapping(4, TorznabCatType.Audio, "Music");
+            AddCategoryMapping(116, TorznabCatType.Audio, "Music Pack");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
-            };
 
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (results.Count() == 0)
-                    {
-                        throw new Exception("Your cookie did not work");
-                    }
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
 
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
             }
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            catch (Exception e)
             {
-                CQ dom = result.Content;
-                var errorMessage = dom["td.text"].Text().Trim();
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-
-            return IndexerConfigurationStatus.RequiresTesting;
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var qParams = new NameValueCollection();
-            qParams.Add("cata", "yes");
-            qParams.Add("sec", "jax");
-
-            List<string> catList = MapTorznabCapsToTrackers(query);
-            foreach (string cat in catList)
+            var qParams = new NameValueCollection
             {
+                {"cata", "yes"},
+                {"sec", "jax"}
+            };
+
+            var catList = MapTorznabCapsToTrackers(query);
+            foreach (var cat in catList)
                 qParams.Add("c" + cat, "1");
-            }
 
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
-            {
                 qParams.Add("search", query.GetQueryString());
-            }
 
             // If Only Freeleech Enabled
             if (configData.Freeleech.Value)
-            {
                 qParams.Add("freeleech", "on");
-            }
+
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
+            var results = await RequestWithCookiesAsync(searchUrl);
 
-            var results = await RequestStringWithCookies(searchUrl);
-            List<ReleaseInfo> releases = ParseResponse(query, results.Content);
+            // response without results (the message is misleading)
+            if (results.ContentString?.Contains("slow down geek!!!") == true)
+            {
+                logger.Warn($"SceneTime: Query Limit exceeded, retrying in 5 seconds.");
+                webclient.requestDelay = 5;
+                results = await RequestWithCookiesAsync(searchUrl);
+                webclient.requestDelay = 0;
+            }
 
-            return releases;
+            // not logged in
+            if (results.ContentString == null || !results.ContentString.Contains("/logout.php"))
+                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
+                                    "made a mistake when copying it. Please check the settings.");
+
+            return ParseResponse(query, results.ContentString);
         }
 
-        public List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
+        private List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
         {
-            List<ReleaseInfo> releases = new List<ReleaseInfo>();
+            var releases = new List<ReleaseInfo>();
 
             try
             {
-                CQ dom = htmlResponse;
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(htmlResponse);
 
-                List<string> headerColumns = dom["table[class*='movehere']"].First().Find("tbody > tr > td[class='cat_Head']").Select(x => x.Cq().Text()).ToList();
-                int categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
-                int nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
-                int sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
-                int seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
-                int leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
+                var table = dom.QuerySelector("table.movehere");
+                if (table == null)
+                    return releases; // no results
 
-                var rows = dom["tr.browse"];
+                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head")
+                                         .Select(x => x.TextContent).ToList();
+                var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
+                var nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
+                var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
+                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
+                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
+
+                var rows = dom.QuerySelectorAll("tr.browse");
                 foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-
-                    var categoryCol = row.ChildElements.ElementAt(categoryIndex);
-                    string catLink = categoryCol.Cq().Find("a").Attr("href");
-                    if (catLink != null)
+                    // TODO convert to initializer
+                    var release = new ReleaseInfo
                     {
-                        string catId = new Regex(@"\?cat=(\d*)").Match(catLink).Groups[1].ToString().Trim();
-                        release.Category = MapTrackerCatToNewznab(catId);
-                    }
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 259200 // 72 hours
+                    };
 
-                    var descCol = row.ChildElements.ElementAt(nameIndex);
-                    var qDescCol = descCol.Cq();
-                    var qLink = qDescCol.Find("a");
-                    release.Title = qLink.Text();
+                    var catId = "82"; // default
+                    var qCatLink = row.Children[categoryIndex].QuerySelector("a");
+                    if (qCatLink != null)
+                    {
+                        catId = new Regex(@"\?cat=(\d*)").Match(qCatLink.GetAttribute("href")).Groups[1].ToString().Trim();
+                    }
+                    release.Category = MapTrackerCatToNewznab(catId);
+
+                    var qDescCol = row.Children[nameIndex];
+                    var qLink = qDescCol.QuerySelector("a");
+                    release.Title = qLink.TextContent;
                     if (!query.MatchQueryStringAND(release.Title))
                         continue;
 
-                    release.Comments = new Uri(SiteLink + "/" + qLink.Attr("href"));
-                    release.Guid = release.Comments;
-                    var torrentId = qLink.Attr("href").Split('=')[1];
+                    release.Details = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
+                    release.Guid = release.Details;
+
+                    var torrentId = qLink.GetAttribute("href").Split('=')[1];
                     release.Link = new Uri(string.Format(DownloadUrl, torrentId));
 
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(descCol.ChildNodes.Last().InnerText);
+                    release.PublishDate = DateTimeUtil.FromTimeAgo(qDescCol.ChildNodes.Last().TextContent);
 
-                    var sizeStr = row.ChildElements.ElementAt(sizeIndex).Cq().Text();
+                    var sizeStr = row.Children[sizeIndex].TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
 
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(seedersIndex).Cq().Text().Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(leechersIndex).Cq().Text().Trim()) + release.Seeders;
+                    release.Seeders = ParseUtil.CoerceInt(row.Children[seedersIndex].TextContent.Trim());
+                    release.Peers = ParseUtil.CoerceInt(row.Children[leechersIndex].TextContent.Trim()) + release.Seeders;
 
-                    if (row.Cq().Find("font > b:contains(Freeleech)").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
+                    release.DownloadVolumeFactor = row.QuerySelector("font > b:contains(Freeleech)") != null ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
                     releases.Add(release);

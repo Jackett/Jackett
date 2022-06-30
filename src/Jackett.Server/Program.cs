@@ -1,4 +1,9 @@
-﻿using CommandLine;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
@@ -10,12 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace Jackett.Server
 {
@@ -32,31 +31,21 @@ namespace Jackett.Server
             var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
             var optionsResult = commandLineParser.ParseArguments<ConsoleOptions>(args);
             var runtimeDictionary = new Dictionary<string, string>();
-            ConsoleOptions consoleOptions = new ConsoleOptions();
+            var consoleOptions = new ConsoleOptions();
 
             optionsResult.WithNotParsed(errors =>
             {
                 var text = HelpText.AutoBuild(optionsResult);
                 text.Copyright = " ";
-                text.Heading = "Jackett v" + EnvironmentUtil.JackettVersion;
+                text.Heading = "Jackett " + EnvironmentUtil.JackettVersion();
                 Console.WriteLine(text);
                 Environment.Exit(1);
-                return;
             });
 
             optionsResult.WithParsed(options =>
             {
                 if (string.IsNullOrEmpty(options.Client))
-                {
-                    if (DotNetCoreUtil.IsRunningOnDotNetCore)
-                    {
-                        options.Client = "httpclient2netcore";
-                    }
-                    else
-                    {
-                        options.Client = "httpclient";
-                    }
-                }
+                    options.Client = DotNetCoreUtil.IsRunningOnDotNetCore ? "httpclient2" : "httpclient";
 
                 Settings = options.ToRunTimeSettings();
                 consoleOptions = options;
@@ -64,8 +53,8 @@ namespace Jackett.Server
             });
 
             LogManager.Configuration = LoggingSetup.GetLoggingConfiguration(Settings);
-            Logger logger = LogManager.GetCurrentClassLogger();
-            logger.Info("Starting Jackett v" + EnvironmentUtil.JackettVersion);
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info("Starting Jackett " + EnvironmentUtil.JackettVersion());
 
             // create PID file early
             if (!string.IsNullOrWhiteSpace(Settings.PIDFile))
@@ -77,7 +66,7 @@ namespace Jackett.Server
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e, "Error while creating the PID file");
+                    logger.Error($"Error while creating the PID file\n{e}");
                 }
             }
 
@@ -90,16 +79,16 @@ namespace Jackett.Server
 
             if (consoleOptions.Install || consoleOptions.Uninstall || consoleOptions.StartService || consoleOptions.StopService || consoleOptions.ReserveUrls)
             {
-                bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+                var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
 
                 if (isWindows)
                 {
-                    ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
+                    var serverConfig = configurationService.BuildServerConfig(Settings);
                     Initialisation.ProcessWindowsSpecificArgs(consoleOptions, processService, serverConfig, logger);
                 }
                 else
                 {
-                    logger.Error($"ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
+                    logger.Error("ReserveUrls and service arguments only apply to Windows, please remove them from your start arguments");
                     Environment.Exit(1);
                 }
             }
@@ -116,33 +105,33 @@ namespace Jackett.Server
                 {
                     if (consoleOptions.Port != 0 || consoleOptions.ListenPublic || consoleOptions.ListenPrivate)
                     {
-                        ServerConfig serverConfiguration = configurationService.BuildServerConfig(Settings);
+                        var serverConfiguration = configurationService.BuildServerConfig(Settings);
                         Initialisation.ProcessConsoleOverrides(consoleOptions, processService, serverConfiguration, configurationService, logger);
                     }
                 }
 
-                ServerConfig serverConfig = configurationService.BuildServerConfig(Settings);
-                Int32.TryParse(serverConfig.Port.ToString(), out Int32 configPort);
-                string[] url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
+                var serverConfig = configurationService.BuildServerConfig(Settings);
+                int.TryParse(serverConfig.Port.ToString(), out var configPort);
+                var url = serverConfig.GetListenAddresses(serverConfig.AllowExternal);
 
                 isWebHostRestart = false;
 
                 try
                 {
                     logger.Debug("Creating web host...");
-                    string applicationFolder = Path.Combine(configurationService.ApplicationFolder(), "Content");
+                    var applicationFolder = configurationService.GetContentFolder();
                     logger.Debug($"Content root path is: {applicationFolder}");
 
                     CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    if (ex.InnerException is Microsoft.AspNetCore.Connections.AddressInUseException)
+                    if (e.InnerException is Microsoft.AspNetCore.Connections.AddressInUseException)
                     {
-                        logger.Error("Address already in use: Most likely Jackett is already running. " + ex.Message);
+                        logger.Error($"Address already in use: Most likely Jackett is already running. {e.Message}");
                         Environment.Exit(1);
                     }
-                    logger.Error(ex);
+                    logger.Error(e);
                     throw;
                 }
             } while (isWebHostRestart);
@@ -162,11 +151,11 @@ namespace Jackett.Server
             {
                 if (Settings != null && !string.IsNullOrWhiteSpace(Settings.PIDFile))
                 {
-                    var PIDFile = Settings.PIDFile;
-                    if (File.Exists(PIDFile))
+                    var pidFile = Settings.PIDFile;
+                    if (File.Exists(pidFile))
                     {
-                        Console.WriteLine("Deleting PID file " + PIDFile);
-                        File.Delete(PIDFile);
+                        Console.WriteLine("Deleting PID file " + pidFile);
+                        File.Delete(pidFile);
                     }
                     LogManager.Shutdown();
                 }

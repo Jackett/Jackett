@@ -1,12 +1,12 @@
-﻿using Jackett.Common.Models.Config;
+using System;
+using System.IO;
+using System.Text;
+using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.Targets;
-using System;
-using System.IO;
-using System.Text;
 
 namespace Jackett.Common.Utils
 {
@@ -21,24 +21,30 @@ namespace Jackett.Common.Utils
 
             var logConfig = new LoggingConfiguration();
 
-            var logFile = new FileTarget();
-            logFile.Layout = "${longdate} ${level} ${message} ${exception:format=ToString}";
-            logFile.FileName = Path.Combine(settings.DataFolder, logFileName);
-            logFile.ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt");
-            logFile.ArchiveAboveSize = 500000;
-            logFile.MaxArchiveFiles = 5;
-            logFile.KeepFileOpen = false;
-            logFile.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
+            var logFile = new FileTarget
+            {
+                Layout = "${longdate} ${level} ${message} ${exception:format=ToString}",
+                FileName = Path.Combine(settings.DataFolder, logFileName),
+                ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt"),
+                ArchiveAboveSize = 2097152, // 2 MB
+                MaxArchiveFiles = 5,
+                KeepFileOpen = false,
+                ArchiveNumbering = ArchiveNumberingMode.DateAndSequence
+            };
             logConfig.AddTarget("file", logFile);
 
-            var microsoftRule = new LoggingRule();
-            microsoftRule.LoggerNamePattern = "Microsoft.*";
+            var microsoftRule = new LoggingRule
+            {
+                LoggerNamePattern = "Microsoft.*",
+                Final = true
+            };
             microsoftRule.SetLoggingLevels(LogLevel.Warn, LogLevel.Fatal);
-            microsoftRule.Final = true;
             microsoftRule.Targets.Add(logFile);
 
-            var microsoftDebugRule = new LoggingRule();
-            microsoftDebugRule.LoggerNamePattern = "Microsoft.*";
+            var microsoftDebugRule = new LoggingRule
+            {
+                LoggerNamePattern = "Microsoft.*"
+            };
             microsoftDebugRule.SetLoggingLevels(LogLevel.Debug, LogLevel.Info);
             microsoftDebugRule.Final = true;
             if (settings.TracingEnabled)
@@ -52,8 +58,10 @@ namespace Jackett.Common.Utils
 
             if (!fileOnly)
             {
-                var logConsole = new ColoredConsoleTarget();
-                logConsole.Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}";
+                var logConsole = new ColoredConsoleTarget
+                {
+                    Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}"
+                };
                 logConfig.AddTarget("console", logConsole);
 
                 var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
@@ -83,10 +91,8 @@ namespace Jackett.Common.Utils
         [LayoutRenderer("simpledatetime")]
         public class SimpleDateTimeRenderer : LayoutRenderer
         {
-            protected override void Append(StringBuilder builder, LogEventInfo logEvent)
-            {
+            protected override void Append(StringBuilder builder, LogEventInfo logEvent) =>
                 builder.Append(DateTime.Now.ToString("MM-dd HH:mm:ss"));
-            }
         }
     }
 }

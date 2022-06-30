@@ -1,34 +1,36 @@
-﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    public class ConfigurationDataTVstore : ConfigurationData
+    [ExcludeFromCodeCoverage]
+    internal class ConfigurationDataTVstore : ConfigurationData
     {
-        public StringItem Username { get; private set; }
-        public StringItem Password { get; private set; }
+        public StringConfigurationItem Username { get; private set; }
+        public StringConfigurationItem Password { get; private set; }
 
         public ConfigurationDataTVstore()
         {
-            Username = new StringItem { Name = "Username", Value = "" };
-            Password = new StringItem { Name = "Password", Value = "" };
+            Username = new StringConfigurationItem("Username") { Value = "" };
+            Password = new StringConfigurationItem("Password") { Value = "" };
         }
 
         public ConfigurationDataTVstore(JToken json)
         {
-            ConfigurationDataTVstore configData = new ConfigurationDataTVstore();
+            var configData = new ConfigurationDataTVstore();
 
             dynamic configArray = JsonConvert.DeserializeObject(json.ToString());
             foreach (var config in configArray)
             {
-                string propertyName = UppercaseFirst((string)config.id);
+                var propertyName = UppercaseFirst((string)config.id);
                 switch (propertyName)
                 {
                     case "Username":
-                        Username = new StringItem { Name = propertyName, Value = config.value };
+                        Username = new StringConfigurationItem(propertyName) { Value = config.value };
                         break;
                     case "Password":
-                        Password = new StringItem { Name = propertyName, Value = config.value };
+                        Password = new StringConfigurationItem(propertyName) { Value = config.value };
                         break;
                     default:
                         break;
@@ -36,7 +38,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             }
         }
 
-        static string UppercaseFirst(string s)
+        private static string UppercaseFirst(string s)
         {
             if (string.IsNullOrEmpty(s))
                 return string.Empty;

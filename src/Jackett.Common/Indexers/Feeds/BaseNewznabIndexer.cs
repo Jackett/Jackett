@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Linq;
 using Jackett.Common.Models;
@@ -11,9 +12,25 @@ using NLog;
 
 namespace Jackett.Common.Indexers.Feeds
 {
+    [ExcludeFromCodeCoverage]
     public abstract class BaseNewznabIndexer : BaseFeedIndexer
     {
-        protected BaseNewznabIndexer(string name, string link, string description, IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, TorznabCapabilities caps = null, string downloadBase = null) : base(name, link, description, configService, client, logger, configData, p, caps, downloadBase)
+        protected BaseNewznabIndexer(string link, string id, string name, string description,
+                                     IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                     ConfigurationData configData, IProtectionService p, ICacheService cs,
+                                     TorznabCapabilities caps = null, string downloadBase = null)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   cs: cs,
+                   configData: configData,
+                   downloadBase: downloadBase)
         {
         }
 
@@ -29,22 +46,52 @@ namespace Jackett.Common.Indexers.Feeds
         protected virtual ReleaseInfo ResultFromFeedItem(XElement item)
         {
             var attributes = item.Descendants().Where(e => e.Name.LocalName == "attr");
+            long? size = null;
+            if (long.TryParse(ReadAttribute(attributes, "size"), out var longVal))
+                size = (long?)longVal;
+            else if (long.TryParse(item.FirstValue("size"), out longVal))
+                size = (long?)longVal;
+            long? files = null;
+            if (long.TryParse(ReadAttribute(attributes, "files"), out longVal))
+                files = (long?)longVal;
+            else if (long.TryParse(item.FirstValue("files"), out longVal))
+                files = (long?)longVal;
+            long? grabs = null;
+            if (item.Descendants("grabs").Any())
+                grabs = long.TryParse(item.FirstValue("grabs"), out longVal) ? (long?)longVal : null;
+            var seeders = int.TryParse(ReadAttribute(attributes, "seeders"), out var intVal) ? (int?)intVal : null;
+            var peers = int.TryParse(ReadAttribute(attributes, "peers"), out intVal) ? (int?)intVal : null;
+            double? downloadvolumefactor = double.TryParse(ReadAttribute(attributes, "downloadvolumefactor"), out var doubleVal) ? (double?)doubleVal : null;
+            double? uploadvolumefactor = double.TryParse(ReadAttribute(attributes, "uploadvolumefactor"), out doubleVal) ? (double?)doubleVal : null;
+            var magnet = ReadAttribute(attributes, "magneturl");
+            var magneturi = !string.IsNullOrEmpty(magnet) ? new Uri(magnet) : null;
+            var categories = item.Descendants().Where(e => e.Name == "category" && int.TryParse(e.Value, out var categoryid));
+            List<int> categoryids = null;
+            if (categories.Any())
+                categoryids = new List<int> { int.Parse(categories.Last(e => !string.IsNullOrEmpty(e.Value)).Value) };
+            else
+                categoryids = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) };
+
             var release = new ReleaseInfo
             {
                 Title = item.FirstValue("title"),
-                Guid = item.FirstValue("guid").ToUri(),
-                Link = item.FirstValue("link").ToUri(),
-                Comments = item.FirstValue("comments").ToUri(),
-                PublishDate = item.FirstValue("pubDate").ToDateTime(),
-                Category = new List<int> { Int32.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) },
-                Size = ReadAttribute(attributes, "size").TryParse<Int64>(),
-                Files = ReadAttribute(attributes, "files").TryParse<Int64>(),
+                Guid = new Uri(item.FirstValue("guid")),
+                Link = new Uri(item.FirstValue("link")),
+                Details = new Uri(item.FirstValue("comments")),
+                PublishDate = DateTime.Parse(item.FirstValue("pubDate")),
+                Category = categoryids,
+                Size = size,
+                Files = files,
                 Description = item.FirstValue("description"),
-                Seeders = ReadAttribute(attributes, "seeders").TryParse<Int32>(),
-                Peers = ReadAttribute(attributes, "peers").TryParse<Int32>(),
+                Grabs = grabs,
+                Seeders = seeders,
+                Peers = peers,
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
-                MagnetUri = attributes.First(e => e.Attribute("name").Value == "magneturl").Attribute("value").Value.ToUri(),
+                DownloadVolumeFactor = downloadvolumefactor,
+                UploadVolumeFactor = uploadvolumefactor
             };
+            if (magneturi != null)
+                release.MagnetUri = magneturi;
             return release;
         }
 

@@ -1,121 +1,157 @@
 ---
-  site: theplace
-  name: The Place
-  description: "Self-improvement E-Learning"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - https://theplace.click/
-  legacylinks:
-    - http://theplace.click/
+id: theplace
+name: The Place
+description: "Self-improvement E-Learning"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://theplace.click/
+legacylinks:
+  - http://theplace.click/
 
-  caps:
-    categorymappings:
-      - {id: 46, cat: Other, desc: "Alpha Male Example Clips"}
-      - {id: 68, cat: Other, desc: "Author: Juggler"}
-      - {id: 69, cat: Other, desc: "Author: Sean Messenger"}
-      - {id: 42, cat: Other, desc: "Food / Drink / Cooking"}
-      - {id: 22, cat: Other, desc: "Seduction: Other"}
-      - {id: 60, cat: Other, desc: "Author: AMP"}
-      - {id: 70, cat: Other, desc: "Author: Michael Hall (NLP)"}
-      - {id: 61, cat: Other, desc: "Author: Style (Neil Strauss)"}
-      - {id: 47, cat: Other, desc: "Health / Fitness / Massage"}
-      - {id: 39, cat: Other, desc: "Seduction: Video"}
-      - {id: 51, cat: Other, desc: "Author: Anthony Robbins"}
-      - {id: 49, cat: Other, desc: "Author: Mystery"}
-      - {id: 66, cat: Other, desc: "Author: Vince Kelvin"}
-      - {id: 43, cat: Other, desc: "Hypnotism / NLP"}
-      - {id: 14, cat: Other, desc: "Seduction: Written"}
-      - {id: 50, cat: Other, desc: "Author: Carlos Xuma"}
-      - {id: 53, cat: Other, desc: "Author: Pickup101"}
-      - {id: 41, cat: Other, desc: "Dance / Singing / Voice"}
-      - {id: 44, cat: Other, desc: "Languages / Accents"}
-      - {id: 40, cat: Other, desc: "Sex"}
-      - {id: 48, cat: Other, desc: "Author: David DeAngelo"}
-      - {id: 65, cat: Other, desc: "Author: Richard Bandler (NLP)"}
-      - {id: 57, cat: Other, desc: "Everything Else"}
-      - {id: 45, cat: Other, desc: "Magic / Illusions / Tricks"}
-      - {id: 54, cat: Other, desc: "Author: David Shade"}
-      - {id: 52, cat: Other, desc: "Author: Ross Jeffries"}
-      - {id: 58, cat: Other, desc: "Fashion / Clothing / Grooming"}
-      - {id: 59, cat: Other, desc: "Psychology / Body Language"}
-      - {id: 71, cat: Other, desc: "Author: Jerry Stocking"}
-      - {id: 67, cat: Other, desc: "Author: RSD"}
-      - {id: 64, cat: Other, desc: "Fighting / Martial Arts"}
-      - {id: 38, cat: Other, desc: "Seduction: Audio"}
+caps:
+  categorymappings:
+    - {id: 46, cat: Other, desc: "Alpha Male Example Clips"}
+    - {id: 68, cat: Other, desc: "Author: Juggler"}
+    - {id: 69, cat: Other, desc: "Author: Sean Messenger"}
+    - {id: 42, cat: Other, desc: "Food / Drink / Cooking"}
+    - {id: 22, cat: Other, desc: "Seduction: Other"}
+    - {id: 60, cat: Other, desc: "Author: AMP"}
+    - {id: 70, cat: Other, desc: "Author: Michael Hall (NLP)"}
+    - {id: 61, cat: Other, desc: "Author: Style (Neil Strauss)"}
+    - {id: 47, cat: Other, desc: "Health / Fitness / Massage"}
+    - {id: 39, cat: Other, desc: "Seduction: Video"}
+    - {id: 51, cat: Other, desc: "Author: Anthony Robbins"}
+    - {id: 49, cat: Other, desc: "Author: Mystery"}
+    - {id: 66, cat: Other, desc: "Author: Vince Kelvin"}
+    - {id: 43, cat: Other, desc: "Hypnotism / NLP"}
+    - {id: 14, cat: Other, desc: "Seduction: Written"}
+    - {id: 50, cat: Other, desc: "Author: Carlos Xuma"}
+    - {id: 53, cat: Other, desc: "Author: Pickup101"}
+    - {id: 41, cat: Other, desc: "Dance / Singing / Voice"}
+    - {id: 44, cat: Other, desc: "Languages / Accents"}
+    - {id: 40, cat: Other, desc: "Sex"}
+    - {id: 48, cat: Other, desc: "Author: David DeAngelo"}
+    - {id: 65, cat: Other, desc: "Author: Richard Bandler (NLP)"}
+    - {id: 57, cat: Other, desc: "Everything Else"}
+    - {id: 45, cat: Other, desc: "Magic / Illusions / Tricks"}
+    - {id: 54, cat: Other, desc: "Author: David Shade"}
+    - {id: 52, cat: Other, desc: "Author: Ross Jeffries"}
+    - {id: 58, cat: Other, desc: "Fashion / Clothing / Grooming"}
+    - {id: 59, cat: Other, desc: "Psychology / Body Language"}
+    - {id: 71, cat: Other, desc: "Author: Jerry Stocking"}
+    - {id: 67, cat: Other, desc: "Author: RSD"}
+    - {id: 64, cat: Other, desc: "Fighting / Martial Arts"}
+    - {id: 38, cat: Other, desc: "Seduction: Audio"}
 
-    modes:
-      search: [q]
+  modes:
+    search: [q]
 
-  login:
-    path: login.php
-    method: form
-    form: form
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    captcha:
-      type: image
-      selector: img#freecap
-      input: word
-    error:
-      - selector: table:contains("Login failed!")
-    test:
-      path: main.php
-        
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Keywords }}"
-    rows:
-      selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: main.php
+    selector: a[href^="logout.php?id="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 exclusive, 5 neutral
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    titleonly: 1
+    # 0 Exact, 1 Fuzzy, 3 Parsed, 4 Simple # 2 Pure is not used
+    nonboolean: 0
+
+  rows:
+    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
       filters:
-        - name: andmatch
-    fields:
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        filters:
-        selector: td:nth-child(2) b
-      download:
-        selector: a[href^="download.php/"]
-        attribute: href
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      grabs:
-        selector: td:nth-child(8)
-        filters:
-          - name: replace
-            args: ["Never", "0"]
-          - name: regexp
-            args: (\d+)
-      files:
-        selector: td:nth-child(4)
-      size:
-        selector: td:nth-child(7)
-      seeders:
-        selector: td:nth-child(9)
-      leechers:
-        selector: td:nth-child(10)
-      date:
-        selector: td:nth-child(6)
-        filters:
-          - name: regexp
-            args: (\d{4}-\d{2}-\d{2})
-      downloadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "font[color=\"blue\"]": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "*": "1"
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    files:
+      selector: td:nth-child(4)
+    date:
+      selector: td:nth-child(6)
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    size:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
+      filters:
+        - name: replace
+          args: ["Never", "0"]
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "font[color=\"blue\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# XBTT TCG 0.98

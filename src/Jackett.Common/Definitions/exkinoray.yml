@@ -1,0 +1,192 @@
+---
+id: exkinoray
+name: ExKinoRay
+description: "ExKinoRay is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - http://exkinoray.fun/ # site does not support https
+legacylinks:
+  - http://exkinoray.tv/
+
+caps:
+  categorymappings:
+    - {id: 92, cat: TV, desc: "Кино Сериал"}
+    - {id: 46, cat: Movies, desc: "Кино Комедия"}
+    - {id: 47, cat: Movies, desc: "Кино Боевик"}
+    - {id: 48, cat: Movies, desc: "Кино Военный"}
+    - {id: 49, cat: Movies, desc: "Кино Вестерн"}
+    - {id: 50, cat: Movies, desc: "Кино Триллер"}
+    - {id: 51, cat: Movies, desc: "Кино Детектив"}
+    - {id: 52, cat: Movies, desc: "Кино Драма"}
+    - {id: 53, cat: Movies, desc: "Кино Мелодрама"}
+    - {id: 54, cat: Movies, desc: "Кино Индийское"}
+    - {id: 55, cat: Movies, desc: "Кино Азиатское"}
+    - {id: 59, cat: Movies, desc: "Кино Фантастика"}
+    - {id: 60, cat: Movies, desc: "Кино Фэнтези"}
+    - {id: 61, cat: Movies, desc: "Кино Ужас"}
+    - {id: 62, cat: Movies, desc: "Кино Мистика"}
+    - {id: 63, cat: Movies, desc: "Кино Приключения"}
+    - {id: 64, cat: Movies, desc: "Кино Наше кино"}
+    - {id: 65, cat: Movies, desc: "Кино Исторический"}
+    - {id: 66, cat: TV/Documentary, desc: "Кино Документальный"}
+    - {id: 67, cat: TV/Sport, desc: "Кино Спорт"}
+    - {id: 68, cat: Movies, desc: "Кино Семейный"}
+    - {id: 69, cat: Movies, desc: "Кино Детский"}
+    - {id: 70, cat: Movies, desc: "Кино Классика"}
+    - {id: 71, cat: Movies, desc: "Кино Концерт"}
+    - {id: 72, cat: TV, desc: "Кино ТВ-шоу"}
+    - {id: 73, cat: Movies, desc: "Кино Театр, опера"}
+    - {id: 74, cat: Movies, desc: "Кино Мюзикл"}
+    - {id: 75, cat: Movies, desc: "Кино Эротика"}
+    - {id: 77, cat: TV, desc: "Мульт Буржуйский"}
+    - {id: 78, cat: TV, desc: "Мульт Русский"}
+    - {id: 79, cat: TV/Anime, desc: "Мульт Аниме"}
+    - {id: 80, cat: Audio, desc: "Музыка Буржуйская"}
+    - {id: 81, cat: Audio, desc: "Музыка Русская"}
+    - {id: 82, cat: Audio, desc: "Музыка Сборники"}
+    - {id: 83, cat: Audio/Audiobook, desc: "Другое Аудио книги"}
+    - {id: 84, cat: Audio/Video, desc: "Другое Видеоклипы"}
+    - {id: 85, cat: PC/Games, desc: "Другое Игры"}
+    - {id: 86, cat: PC/0day, desc: "Другое Программы"}
+    - {id: 87, cat: Console/XBox, desc: "Другое XBox"}
+    - {id: 88, cat: Console/PSP, desc: "Другое PSP"}
+    - {id: 89, cat: Books/Mags, desc: "Другое Журналы"}
+    - {id: 90, cat: Other, desc: "Другое Графика"}
+    - {id: 93, cat: Other, desc: "Другое Библиотека"}
+    - {id: 94, cat: Console/PS3, desc: "Другое PS3"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_search
+    type: info
+    label: "Searching with Season / Episode (S01E01)"
+    default: "The web site does support season/episode searching. To allow some results for Sonarr, these are stripped from the keywords."
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    autologin: 1
+    returnto: index.php
+  error:
+    - selector: td.embedded:contains("Ошибка входа")
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # http://exkinoray.tv/browse.php?search=&incldead=1&cat=0
+    - path: browse.php
+  keywordsfilters:
+    # the site does not support season/episode searching in the title.
+    - name: re_replace # strip S01
+      args: ["(?i)\\bS0*(\\d+)\\b", ""]
+    - name: re_replace # strip S01E01
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", ""]
+  inputs:
+    $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 4 noseeds (how is this different from onlydead?)
+    incldead: 1
+    search: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table.begins > tbody > tr:has(a[href^="details.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      filters:
+        # Женские секреты (1 сезон: 1-4 серии из 12) Жіночі секрети | 2020 | HDTVRip (720p)
+        # Мандалорец (1 сезон: 1-8 серии из 8) | The Mandalorian | 2019 | WEB-DL (720p)
+        # Война семей (1-14 серии из 20) | 2019 | WEB-DLRip (AVC)
+        # normalize to SXXEYY format
+        - name: replace
+          args: [" | ", " "]
+        - name: re_replace
+          args: ["\\((\\d+)\\s+[Сс]езон:\\s+(?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$3 - S$1E$2 - rus $5"]
+        - name: re_replace
+          args: ["\\((?:(\\d+-*\\d*)\\s+[Сс]ери[ия]\\s+.*\\d+)\\)(.*)\\s([12][0-9]{3})\\s(.*)", "$2 - S1E$1 - rus $4"]
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["\\((\\d+p)\\)", "$1"]
+        - name: re_replace
+          args: [" - ", " "]
+        - name: replace
+          args: ["-Rip", "Rip"]
+        - name: replace
+          args: ["WEB-DL", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    date:
+      selector: td:nth-child(2) i
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    files:
+      selector: td:nth-child(3)
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

@@ -1,0 +1,104 @@
+---
+id: comicat
+name: comicat
+description: "comicat is a CHINESE Public tracker for Anime / Hentai / Manga"
+language: zh-CN
+type: public
+encoding: UTF-8
+links:
+  - https://www.comicat.org/
+
+settings: []
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "动画(Anime)"}
+    - {id: 2, cat: Books/Comics, desc: "漫画(Manga)"}
+    - {id: 3, cat: Audio, desc: "音乐(Music)"}
+    - {id: 4, cat: TV/Anime, desc: "周边(Peripheral)"}
+    - {id: 5, cat: Other, desc: "其它(Other)"}
+    - {id: 6, cat: TV/Anime, desc: "Raw"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+search:
+  paths:
+    # https://www.comicat.org/ (latest)
+    # https://www.comicat.org/search.php?keyword=720p+2020 (search)
+    # sort_id: filters by a single category, multi cats is not supported so we cannot use it.
+    - path: "{{ if .Keywords }}/search.php?keyword={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}/search.php?keyword={{ .Keywords }}&page=2{{ else }}2.html{{ end }}"
+
+  rows:
+    selector: tr[class^="alt"]:has(a[href^="sort"])
+
+  fields:
+    category:
+      selector: a[href^="sort"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "-(\\d)-"
+    title:
+      selector: a[href^="show"]
+    details:
+      selector: a[href^="show"]
+      attribute: href
+    infohash:
+      selector: a[href^="show"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "-(\\w+).html"
+    size:
+      selector: td:nth-child(4)
+    grabs:
+      selector: td:nth-child(7) span
+    date_year:
+      selector: td:nth-child(1):contains("/")
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST (China)
+        - name: dateparse
+          args: "2006/01/02 -07:00"
+    date_today:
+      selector: td:nth-child(1):contains("今天")
+      optional: true
+      filters:
+        - name: replace
+          args: ["今天", ""]
+        - name: append
+          args: " +08:00" # CST (China)
+        - name: timeparse
+          args: "15:04 -07:00"
+    date_yday:
+      selector: td:nth-child(1):contains("昨天")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".+", "yesterday"]
+        - name: fuzzytime
+    date_ago:
+      selector: td:nth-child(1):contains("前天")
+      optional: true
+      filters:
+        - name: re_replace
+          args: [".+", "2 days"]
+        - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday .Result.date_ago }}{{ or .Result.date_year .Result.date_today .Result.date_yday .Result.date_ago }}{{ else }}now{{ end }}"
+    seeders:
+      selector: td:nth-child(5) span
+    leechers:
+      selector: td:nth-child(6) span
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -14,85 +14,92 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class HDSpace : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "index.php?page=login"; } }
-        private string SearchUrl { get { return SiteLink + "index.php?page=torrents&"; } }
+        private string LoginUrl => SiteLink + "index.php?page=login";
+        private string SearchUrl => SiteLink + "index.php?page=torrents&";
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
-        }
+        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "HD-Space",
-                description: "Sharing The Universe",
-                link: "https://hd-space.org/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataBasicLogin())
+        public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
+            : base(id: "hdspace",
+                   name: "HD-Space",
+                   description: "Sharing The Universe",
+                   link: "https://hd-space.org/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataBasicLogin())
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
-            AddCategoryMapping(15, TorznabCatType.MoviesBluRay); // Movie / Blu-ray
-            AddMultiCategoryMapping(TorznabCatType.MoviesHD,
-                19, // Movie / 1080p
-                41, // Movie / 4K UHD
-                18, // Movie / 720p
-                40, // Movie / Remux
-                16 // Movie / HD-DVD
-            );
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
 
-            AddMultiCategoryMapping(TorznabCatType.TVHD,
-                21, // TV Show / 720p HDTV
-                22 // TV Show / 1080p HDTV
-            );
-
-            AddCategoryMapping(30, TorznabCatType.AudioLossless); // Music / Lossless
-            AddCategoryMapping(31, TorznabCatType.AudioVideo); // Music / Videos
-
-            AddMultiCategoryMapping(TorznabCatType.TVDocumentary,
-                24, // TV Show / Documentary / 720p
-                25 // TV Show / Documentary / 1080p
-            );
-
-            AddMultiCategoryMapping(TorznabCatType.XXX,
-                33, // XXX / 720p
-                34 // XXX / 1080p
-            );
-
-            AddCategoryMapping("37", TorznabCatType.PC);
-            AddCategoryMapping("38", TorznabCatType.Other);
+            AddCategoryMapping(15, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
+            AddCategoryMapping(19, TorznabCatType.MoviesHD, "Movie / 1080p");
+            AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movie / 720p");
+            AddCategoryMapping(40, TorznabCatType.MoviesHD, "Movie / Remux");
+            AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie / HD-DVD");
+            AddCategoryMapping(41, TorznabCatType.MoviesUHD, "Movie / 4K UHD");
+            AddCategoryMapping(21, TorznabCatType.TVHD, "TV Show / 720p HDTV");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "TV Show / 1080p HDTV");
+            AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Documentary / 720p");
+            AddCategoryMapping(25, TorznabCatType.TVDocumentary, "Documentary / 1080p");
+            AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation / 720p");
+            AddCategoryMapping(28, TorznabCatType.TVAnime, "Animation / 1080p");
+            AddCategoryMapping(30, TorznabCatType.AudioLossless, "Music / HQ Audio");
+            AddCategoryMapping(31, TorznabCatType.AudioVideo, "Music / Videos");
+            AddCategoryMapping(33, TorznabCatType.XXX, "XXX / 720p");
+            AddCategoryMapping(34, TorznabCatType.XXX, "XXX / 1080p");
+            AddCategoryMapping(36, TorznabCatType.MoviesOther, "Trailers");
+            AddCategoryMapping(37, TorznabCatType.PC, "Software");
+            AddCategoryMapping(38, TorznabCatType.Other, "Others");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
-            var loginPage = await RequestStringWithCookies(LoginUrl, string.Empty);
-
-            var pairs = new Dictionary<string, string> {
-                { "uid", configData.Username.Value },
-                { "pwd", configData.Password.Value }
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
+            var pairs = new Dictionary<string, string>
+            {
+                {"uid", configData.Username.Value},
+                {"pwd", configData.Password.Value}
             };
 
             // Send Post
-            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
+            var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: LoginUrl);
 
-            await ConfigureIfOK(response.Cookies, response.Content != null && response.Content.Contains("logout.php"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true, () =>
             {
                 var errorStr = "You have {0} remaining login attempts";
-                var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)")).Match(loginPage.Content).Groups[1].ToString();
-                var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", String.Empty);
+                var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)"))
+                                           .Match(loginPage.ContentString).Groups[1].ToString();
+                var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", string.Empty);
                 var errorMessage = string.Format(errorStr, attempts);
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -102,89 +109,87 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-
-            var searchString = query.GetQueryString();
-            var searchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection();
-            queryCollection.Add("active", "0");
-            queryCollection.Add("options", "0");
-            queryCollection.Add("category", string.Join(";", MapTorznabCapsToTrackers(query)));
-
-            if (!string.IsNullOrWhiteSpace(searchString))
+            var queryCollection = new NameValueCollection
             {
-                queryCollection.Add("search", searchString);
+                {"active", "0"},
+                {"category", string.Join(";", MapTorznabCapsToTrackers(query))}
+            };
+
+            if (query.IsImdbQuery)
+            {
+                queryCollection.Add("options", "2");
+                queryCollection.Add("search", query.ImdbIDShort);
+            }
+            else
+            {
+                queryCollection.Add("options", "0");
+                queryCollection.Add("search", query.GetQueryString());
             }
 
-            searchUrl += queryCollection.GetQueryString();
-
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
-            var results = response.Content;
+            // remove . as not used in titles
+            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString().Replace(".", " "));
 
             try
             {
-                CQ dom = results;
-                var rows = dom["table.lista > tbody > tr"];
+                var resultParser = new HtmlParser();
+                var searchResultDocument = resultParser.ParseDocument(response.ContentString);
+                var rows = searchResultDocument.QuerySelectorAll("table.lista > tbody > tr");
+
                 foreach (var row in rows)
                 {
                     // this tracker has horrible markup, find the result rows by looking for the style tag before each one
                     var prev = row.PreviousElementSibling;
-                    if (prev == null || prev.NodeName.ToLowerInvariant() != "style") continue;
+                    if (prev == null || !string.Equals(prev.NodeName, "style", StringComparison.OrdinalIgnoreCase))
+                        continue;
 
-                    CQ qRow = row.Cq();
-                    var release = new ReleaseInfo();
+                    var release = new ReleaseInfo
+                    {
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 86400 // 24 hours
+                    };
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
+                    var qLink = row.Children[1].FirstElementChild;
+                    release.Title = qLink.TextContent.Trim();
+                    release.Details = new Uri(SiteLink + qLink.GetAttribute("href"));
+                    release.Guid = release.Details;
 
-                    var qLink = row.ChildElements.ElementAt(1).FirstElementChild.Cq();
-                    release.Title = qLink.Text().Trim();
-                    release.Comments = new Uri(SiteLink + qLink.Attr("href"));
-                    release.Guid = release.Comments;
+                    var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
+                    if (imdbLink != null)
+                        release.Imdb = ParseUtil.GetImdbID(imdbLink.GetAttribute("href").Split('/').Last());
 
-                    var qDownload = row.ChildElements.ElementAt(3).FirstElementChild.Cq();
-                    release.Link = new Uri(SiteLink + qDownload.Attr("href"));
+                    var qDownload = row.Children[3].FirstElementChild;
+                    release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
 
-                    //"July 11, 2015, 13:34:09", "Today at 20:04:23"
-                    var dateStr = row.ChildElements.ElementAt(4).Cq().Text().Trim();
-                    if (dateStr.StartsWith("Today"))
-                        release.PublishDate = DateTime.Today + TimeSpan.ParseExact(dateStr.Replace("Today at ", ""), "hh\\:mm\\:ss", CultureInfo.InvariantCulture);
-                    else if (dateStr.StartsWith("Yesterday"))
-                        release.PublishDate = DateTime.Today - TimeSpan.FromDays(1) + TimeSpan.ParseExact(dateStr.Replace("Yesterday at ", ""), "hh\\:mm\\:ss", CultureInfo.InvariantCulture);
-                    else
-                        release.PublishDate = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "MMMM dd, yyyy, HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Local);
-
-                    var sizeStr = row.ChildElements.ElementAt(5).Cq().Text();
+                    var dateStr = row.Children[4].TextContent.Trim();
+                    //"July 11, 2015, 13:34:09", "Today|Yesterday at 20:04:23"
+                    release.PublishDate = DateTimeUtil.FromUnknown(dateStr);
+                    var sizeStr = row.Children[5].TextContent;
                     release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.ChildElements.ElementAt(7).Cq().Text());
-                    release.Peers = ParseUtil.CoerceInt(row.ChildElements.ElementAt(8).Cq().Text()) + release.Seeders;
-
-                    var grabs = qRow.Find("td:nth-child(10)").Text();
+                    release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
+                    release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent) + release.Seeders;
+                    var grabs = row.QuerySelector("td:nth-child(10)").TextContent;
                     grabs = grabs.Replace("---", "0");
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (qRow.Find("img[title=\"FreeLeech\"]").Length >= 1)
+                    if (row.QuerySelector("img[title=\"FreeLeech\"]") != null)
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[src=\"images/sf.png\"]").Length >= 1) // side freeleech
+                    else if (row.QuerySelector("img[src=\"images/sf.png\"]") != null) // side freeleech
                         release.DownloadVolumeFactor = 0;
-                    else if (qRow.Find("img[title=\"Half FreeLeech\"]").Length >= 1)
+                    else if (row.QuerySelector("img[title=\"Half FreeLeech\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
-
                     release.UploadVolumeFactor = 1;
-
-                    var qCat = qRow.Find("a[href^=\"index.php?page=torrents&category=\"]");
-                    var cat = qCat.Attr("href").Split('=')[2];
+                    var qCat = row.QuerySelector("a[href^=\"index.php?page=torrents&category=\"]");
+                    var cat = qCat.GetAttribute("href").Split('=')[2];
                     release.Category = MapTrackerCatToNewznab(cat);
-
                     releases.Add(release);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(results, ex);
+                OnParseError(response.ContentString, ex);
             }
+
             return releases;
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace Jackett.Service
+namespace Jackett.Service
 {
     partial class Service
     {

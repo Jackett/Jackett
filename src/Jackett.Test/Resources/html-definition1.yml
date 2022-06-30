@@ -1,0 +1,81 @@
+---
+id: testdefinition1
+name: testdefinition1
+description: "testdefinition1 is a Public BitTorrent DHT search engine."
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.testdefinition1.cc/
+
+caps:
+  categories:
+    Other: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created
+    options:
+      created: created
+      length: size
+      seeders: seeders
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
+  - name: info_8000
+    type: info
+    label: About testdefinition1 Categories
+    default: testdefinition1 does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+
+search:
+  # https://www.testdefinition1.cc/search?query=ubuntu&sort=created
+  paths:
+    - path: search
+  inputs:
+    query: "{{ if .Keywords }}{{ .Keywords }}{{ else }} {{ end }}"
+    sort: "{{ .Config.sort }}"
+
+  rows:
+    selector: div.media
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: div.media
+      attribute: data-name
+    details:
+      selector: div.media h5 a
+      attribute: href
+    download:
+      selector: div.media-right a[href*="/torrent/"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: div.media
+      attribute: data-added
+    size:
+      selector: div.media
+      attribute: data-size
+    seeders:
+      selector: div.media
+      attribute: data-seeders
+    leechers:
+      selector: div.media
+      attribute: data-leechers
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 2

@@ -1,67 +1,86 @@
 ---
-  site: btdigg
-  name: BTDigg
-  description: "BTDigg is a Public BitTorrent DHT search engine."
-  language: en-us
-  type: public
-  encoding: UTF-8
-  links:
-    -  https://btdig.com/
+id: btdigg
+name: BTDigg
+description: "BTDigg is a Public BitTorrent DHT search engine."
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://btdig.com/
+  - https://btdiggwzoyrwwbiv.onion.ly/
+  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.ly/
+legacylinks:
+  - http://btdiggwzoyrwwbiv.onion.ly/
 
-  caps:
-    categories:
-      1: Other
+caps:
+  categories:
+    Other: Other
 
-    modes:
-      search: [q]
-      tv-search: [q, season, ep]
-      movie-search: [q]
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
-  settings:
-    - name: info
-      type: info
-      default: BTDigg does not use categories. In your software Indexer settings, set the category to 100001.
+settings:
+  - name: info_8000
+    type: info
+    label: About BTDigg Categories
+    default: BTDigg does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 0
+    options:
+      0: relevance
+      2: created
+      3: size
 
-  search:
-    # https://btdig.com/search?q=test&order=2
-    # only 10 results per page
-    paths:
-      - path: search
-    inputs:
-      q: "{{if .Keywords }}{{.Keywords}}{{else}}test{{end}}"
-      order: 2
-    rows:
-      selector: div.one_result
+search:
+  # https://btdig.com/search?q=test&order=2
+  # only 10 results per page
+  paths:
+    - path: search
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # 0 relevance 2 age 3 size 4 files
+    order: "{{ .Config.sort }}"
+
+  rows:
+    selector: div.one_result
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: div.torrent_name a
+    details:
+      selector: div.torrent_name a
+      attribute: href
+    download:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: span.torrent_age
       filters:
-        - name: andmatch
-    fields:
-      title:
-        selector: div.torrent_name a
-      category:
-        text: 1
-      details:
-        selector: div.torrent_name a
-        attribute: href
-      download:
-        selector: a[href^="magnet:?xt="]
-        attribute: href
-      date:
-        selector: span.torrent_age
-        filters:
-          - name: replace
-            args: ["found ", ""]
-      files:
-        text: 1
-      files:
-        selector: span.torrent_files
-        optional: true
-      size:
-        selector: span.torrent_size
-      seeders:
-        text: 1
-      leechers:
-        text: 1
-      downloadvolumefactor:
-        text: "0"
-      uploadvolumefactor:
-        text: "1"
+        - name: replace
+          args: ["found ", ""]
+    files_optional:
+      selector: span.torrent_files
+      optional: true
+    files:
+      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
+    size:
+      selector: span.torrent_size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# dhtcrawler2

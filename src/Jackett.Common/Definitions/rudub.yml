@@ -1,0 +1,170 @@
+---
+id: rudub
+name: RUDUB
+description: "RUDUB (ex-BaibaKoTV) is a RUSSIAN Semi-Private Torrent Tracker for TV"
+language: ru-RU
+type: semi-private
+encoding: windows-1251
+links:
+  - http://rudub.tv/ # https is unsupported ERR_CONNECTION_REFUSED
+legacylinks:
+  - http://baibako.tv/
+  - https://baibako.tv/
+  - http://bko.baibako.tv/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV, desc: "TV"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: false
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.login2
+  test:
+    path: /
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # http://rudub.tv/browse.php?search=&incldead=1&sort=4&type=desc
+    - path: browse.php
+  inputs:
+    search: "{{ .Keywords }}"
+    # 0 incldead, 1 active, 2 onlydead, 3 gold, 4 seedfree
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+  keywordsfilters:
+    # strip season episode as the site does not appear to be able to find any results with anything other than the series title
+    - name: re_replace
+      args: ["(?i)( S\\d+E\\d+)", ""]
+    - name: re_replace
+      args: ["(?i)( S\\d+)", ""]
+    - name: re_replace
+      args: ["(?i)( E\\d+)", ""]
+
+  rows:
+    selector: div.card__torlist__browse_2
+
+  fields:
+    category:
+      text: 1
+    title:
+      selector: a[href^="details.php?id="]
+      # Лучше звоните Солу (Better Call Saul) Сезон 6 Серии 01-02 (WEBRip XviD) (Обновляемая) (Золото)
+      filters:
+        # normalize to SXXEYY format
+        - name: re_replace
+          args: ["([CСcс]езон\\s+((?:\\d+)(?:-\\d+)?)\\s+[CСcс]ери[ия]\\s+((?:\\d+)(?:-\\d+)?))", " S$2E$3 "]
+        - name: re_replace
+          args: ["([CСcс]ери[ия]?\\s+((?:\\d+)(?:-\\d+)?))", " E$2 "]
+        - name: replace
+          args: [" (Золото)", ""] # remove gold tag
+        - name: re_replace
+          args: ["[()]", " "] # remove the brackets around the English title and attributes
+        - name: replace
+          args: ["-Rip", "Rip"]
+        - name: replace
+          args: ["WEB-DL", "WEBDL"]
+        - name: replace
+          args: ["WEBRip", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
+        - name: replace
+          args: ["BD720p", "BD 720p"]
+        - name: replace
+          args: ["HD720p", "HD 720p"]
+        - name: replace
+          args: ["HDR720p", "HD 720p"]
+        - name: replace
+          args: ["BD1080p", "BD 1080p"]
+        - name: replace
+          args: ["HD1080p", "HD 1080p"]
+        - name: replace
+          args: ["HDR1080p", "HD 1080p"]
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: append
+          args: " - rus"
+        - name: trim # clean up any leading and trailing spaces left over from above editing
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    date:
+      # 2022-03-28 01:28:07
+      selector: li[title="Дата"]
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    files:
+      selector: li[title="Файлов"]
+    size:
+      selector: li[title="Размер"]
+    seeders:
+      selector: li[title="Активность"]
+      filters:
+        - name: regexp
+          args: (\d+)\s+\d+
+    leechers:
+      selector: li[title="Активность"]
+      filters:
+        - name: regexp
+          args: \d+\s+(\d+)
+    grabs:
+      selector: li[title="Завершено"]
+    downloadvolumefactor:
+      case:
+        "a[href^=\"details.php?id=\"]:contains(\"(Золото)\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.3
+# engine n/a

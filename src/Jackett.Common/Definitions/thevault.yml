@@ -1,135 +1,175 @@
 ---
-  site: thevault
-  name: The Vault
-  description: "Business/Marketing E-Learning"
-  language: en-us
-  type: private
-  encoding: UTF-8
-  links:
-    - http://thevault.click/
+id: thevault
+name: The Vault
+description: "Business/Marketing E-Learning"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://thevault.click/
+legacylinks:
+  - http://thevault.click/
 
-  caps:
-    categorymappings:
-      - {id: 87, cat: Other, desc: "Author: Brian Tracy"}
-      - {id: 106, cat: Other, desc: "Autobiographies / Biographies"}
-      - {id: 67, cat: Other, desc: "Investing / Trading / Stocks"}
-      - {id: 93, cat: Other, desc: "Negotiation / Contracts"}
-      - {id: 99, cat: Other, desc: "Net: Traffic Generation"}
-      - {id: 107, cat: Other, desc: "Author: Dan Kennedy"}
-      - {id: 118, cat: Other, desc: "Ayn Rand / Objectivism"}
-      - {id: 75, cat: Other, desc: "Magazines"}
-      - {id: 97, cat: Other, desc: "Net: Affiliate Schemes"}
-      - {id: 102, cat: Other, desc: "Net: Web Site/Blog Templates"}
-      - {id: 110, cat: Other, desc: "Author: Dan Pena"}
-      - {id: 112, cat: Other, desc: "Consulting"}
-      - {id: 70, cat: Other, desc: "Management / Leadership"}
-      - {id: 105, cat: Other, desc: "Net: Blogging"}
-      - {id: 114, cat: Other, desc: "Network Marketing (MLM)"}
-      - {id: 117, cat: Other, desc: "Author: Eben Pagan"}
-      - {id: 94, cat: Other, desc: "Copywriting"}
-      - {id: 85, cat: Other, desc: "Mindset / Achievement"}
-      - {id: 76, cat: Other, desc: "Net: E-Commerce"}
-      - {id: 111, cat: Other, desc: "Offshore / Tax Avoidance"}
-      - {id: 92, cat: Other, desc: "Author: Jay Abraham"}
-      - {id: 103, cat: Other, desc: "Corporate Design / Branding"}
-      - {id: 80, cat: Other, desc: "Misc: Audio"}
-      - {id: 100, cat: Other, desc: "Net: eBay / Online Auctions"}
-      - {id: 116, cat: Other, desc: "Private Label Rights (PLR)"}
-      - {id: 89, cat: Other, desc: "Author: Jim Rohn"}
-      - {id: 84, cat: Other, desc: "Customer Service"}
-      - {id: 90, cat: Other, desc: "Misc: Other"}
-      - {id: 115, cat: Other, desc: "Net: Email Marketing"}
-      - {id: 68, cat: Other, desc: "Real Estate / Property Develop"}
-      - {id: 96, cat: Other, desc: "Author: John Reese"}
-      - {id: 65, cat: Other, desc: "Economics / Finance"}
-      - {id: 83, cat: Other, desc: "Misc: Software"}
-      - {id: 95, cat: Other, desc: "Net: Marketing"}
-      - {id: 104, cat: Other, desc: "Recruitment / Interviewing"}
-      - {id: 63, cat: Other, desc: "Author: Robert Kiyosaki"}
-      - {id: 113, cat: Other, desc: "Entertainment Business"}
-      - {id: 81, cat: Other, desc: "Misc: Video"}
-      - {id: 101, cat: Other, desc: "Net: Misc"}
-      - {id: 71, cat: Other, desc: "Sales / Marketing"}
-      - {id: 86, cat: Other, desc: "Author: T Harv Eker"}
-      - {id: 109, cat: Other, desc: "Gambling / Betting"}
-      - {id: 82, cat: Other, desc: "Misc: Written / E-Books"}
-      - {id: 98, cat: Other, desc: "Net: Pay-Per-Click Advertising"}
-      - {id: 72, cat: Other, desc: "Small Business / Entrepreneurs"}
-      - {id: 88, cat: Other, desc: "Author: Zig Ziglar"}
-      - {id: 73, cat: Other, desc: "Hypnosis / NLP"}
-      - {id: 62, cat: Other, desc: "Money Management / Taxes"}
-      - {id: 108, cat: Other, desc: "Net: Search Engine Optimizing"}
-      - {id: 91, cat: Other, desc: "TTC Lectures"}
+caps:
+  categorymappings:
+    - {id: 87, cat: Other, desc: "Author: Brian Tracy"}
+    - {id: 106, cat: Other, desc: "Autobiographies / Biographies"}
+    - {id: 67, cat: Other, desc: "Investing / Trading / Stocks"}
+    - {id: 93, cat: Other, desc: "Negotiation / Contracts"}
+    - {id: 99, cat: Other, desc: "Net: Traffic Generation"}
+    - {id: 107, cat: Other, desc: "Author: Dan Kennedy"}
+    - {id: 118, cat: Other, desc: "Ayn Rand / Objectivism"}
+    - {id: 75, cat: Other, desc: "Magazines"}
+    - {id: 97, cat: Other, desc: "Net: Affiliate Schemes"}
+    - {id: 102, cat: Other, desc: "Net: Web Site/Blog Templates"}
+    - {id: 110, cat: Other, desc: "Author: Dan Pena"}
+    - {id: 112, cat: Other, desc: "Consulting"}
+    - {id: 70, cat: Other, desc: "Management / Leadership"}
+    - {id: 105, cat: Other, desc: "Net: Blogging"}
+    - {id: 114, cat: Other, desc: "Network Marketing (MLM)"}
+    - {id: 117, cat: Other, desc: "Author: Eben Pagan"}
+    - {id: 94, cat: Other, desc: "Copywriting"}
+    - {id: 85, cat: Other, desc: "Mindset / Achievement"}
+    - {id: 76, cat: Other, desc: "Net: E-Commerce"}
+    - {id: 111, cat: Other, desc: "Offshore / Tax Avoidance"}
+    - {id: 92, cat: Other, desc: "Author: Jay Abraham"}
+    - {id: 103, cat: Other, desc: "Corporate Design / Branding"}
+    - {id: 80, cat: Other, desc: "Misc: Audio"}
+    - {id: 100, cat: Other, desc: "Net: eBay / Online Auctions"}
+    - {id: 116, cat: Other, desc: "Private Label Rights (PLR)"}
+    - {id: 89, cat: Other, desc: "Author: Jim Rohn"}
+    - {id: 84, cat: Other, desc: "Customer Service"}
+    - {id: 90, cat: Other, desc: "Misc: Other"}
+    - {id: 115, cat: Other, desc: "Net: Email Marketing"}
+    - {id: 68, cat: Other, desc: "Real Estate / Property Develop"}
+    - {id: 96, cat: Other, desc: "Author: John Reese"}
+    - {id: 65, cat: Other, desc: "Economics / Finance"}
+    - {id: 83, cat: Other, desc: "Misc: Software"}
+    - {id: 95, cat: Other, desc: "Net: Marketing"}
+    - {id: 104, cat: Other, desc: "Recruitment / Interviewing"}
+    - {id: 63, cat: Other, desc: "Author: Robert Kiyosaki"}
+    - {id: 113, cat: Other, desc: "Entertainment Business"}
+    - {id: 81, cat: Other, desc: "Misc: Video"}
+    - {id: 101, cat: Other, desc: "Net: Misc"}
+    - {id: 71, cat: Other, desc: "Sales / Marketing"}
+    - {id: 86, cat: Other, desc: "Author: T Harv Eker"}
+    - {id: 109, cat: Other, desc: "Gambling / Betting"}
+    - {id: 82, cat: Other, desc: "Misc: Written / E-Books"}
+    - {id: 98, cat: Other, desc: "Net: Pay-Per-Click Advertising"}
+    - {id: 72, cat: Other, desc: "Small Business / Entrepreneurs"}
+    - {id: 88, cat: Other, desc: "Author: Zig Ziglar"}
+    - {id: 73, cat: Other, desc: "Hypnosis / NLP"}
+    - {id: 62, cat: Other, desc: "Money Management / Taxes"}
+    - {id: 108, cat: Other, desc: "Net: Search Engine Optimizing"}
+    - {id: 91, cat: Other, desc: "TTC Lectures"}
 
-    modes:
-      search: [q]
+  modes:
+    search: [q]
 
-  login:
-    path: login.php
-    method: form
-    form: form
-    inputs:
-      username: "{{ .Config.username }}"
-      password: "{{ .Config.password }}"
-    captcha:
-      type: image
-      selector: img#freecap
-      input: word
-    error:
-      - selector: table:contains("Login failed!")
-    test:
-      path: main.php
-        
-  search:
-    paths:
-      - path: browse.php
-    inputs:
-      $raw: "{{range .Categories}}filter_cat[{{.}}]=1&{{end}}"
-      search: "{{ .Keywords }}"
-    rows:
-      selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
-    fields:
-      category:
-        selector: a[href^="browse.php?cat="]
-        attribute: href
-        filters:
-          - name: querystring
-            args: cat
-      title:
-        filters:
-        selector: td:nth-child(2) b
-      download:
-        selector: a[href^="download.php/"]
-        attribute: href
-      details:
-        selector: a[href^="details.php?id="]
-        attribute: href
-      grabs:
-        selector: td:nth-child(8)
-        filters:
-          - name: replace
-            args: ["Never", "0"]
-          - name: regexp
-            args: (\d+)
-      files:
-        selector: td:nth-child(4)
-      size:
-        selector: td:nth-child(7)
-      seeders:
-        selector: td:nth-child(9)
-      leechers:
-        selector: td:nth-child(10)
-      date:
-        selector: td:nth-child(6)
-        filters:
-          - name: regexp
-            args: (\d{4}-\d{2}-\d{2})
-      downloadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "font[color=\"blue\"]": "0"
-          "*": "1"
-      uploadvolumefactor:
-        case:
-          "font[color=\"green\"]": "0"
-          "*": "1"
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: main.php
+    selector: a[href^="logout.php?id="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 exclusive, 5 neutral
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    titleonly: 1
+    # 0 Exact, 1 Fuzzy, 3 Parsed, 4 Simple # 2 Pure is not used
+    nonboolean: 0
+
+  rows:
+    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    files:
+      selector: td:nth-child(4)
+    date:
+      selector: td:nth-child(6)
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    size:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
+      filters:
+        - name: replace
+          args: ["Never", "0"]
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "font[color=\"blue\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# XBTT TCG 0.98

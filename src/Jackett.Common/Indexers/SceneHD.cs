@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,33 +16,49 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class SceneHD : BaseWebIndexer
     {
-        private string SearchUrl { get { return SiteLink + "browse.php"; } }
+        private string SearchUrl => SiteLink + "browse.php?";
+        private string DetailsUrl => SiteLink + "details.php?";
+        private string DownloadUrl => SiteLink + "download.php?";
 
-        private new ConfigurationDataCookie configData
-        {
-            get { return (ConfigurationDataCookie)base.configData; }
-            set { base.configData = value; }
-        }
+        private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
-        public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps)
-            : base(name: "SceneHD",
-                description: "SceneHD is Private site for HD TV / MOVIES",
-                link: "https://scenehd.org/",
-                configService: configService,
-                caps: new TorznabCapabilities(),
-                client: c,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataCookie())
+        public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
+            ICacheService cs)
+            : base(id: "scenehd",
+                   name: "SceneHD",
+                   description: "SceneHD is Private site for HD TV / MOVIES",
+                   link: "https://scenehd.org/",
+                   configService: configService,
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       }
+                   },
+                   client: c,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataPasskey("You can find the Passkey if you generate a RSS " +
+                                                            "feed link. It's the last parameter in the URL."))
         {
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
-            TorznabCaps.SupportsImdbMovieSearch = true;
-            webclient.EmulateBrowser = false;
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "81CC4E41B6F8FF656CA0E2396EE6D63383198BF1");
+
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "C360EEF4D9B288112E038E4BF3AD0064FDA478F1");
 
             AddCategoryMapping(2, TorznabCatType.MoviesUHD, "Movie/2160");
             AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movie/1080");
@@ -61,105 +78,78 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
-            // TODO: implement captcha
-            CookieHeader = configData.Cookie.Value;
-            try
-            {
-                var results = await PerformQuery(new TorznabQuery());
-                if (results.Count() == 0)
-                {
-                    throw new Exception("Your cookie did not work");
-                }
+            if (configData.Passkey.Value.Length != 32)
+                throw new Exception("Invalid Passkey configured. Expected length: 32");
 
-                IsConfigured = true;
-                SaveConfig();
-                return IndexerConfigurationStatus.Completed;
-            }
-            catch (Exception e)
-            {
-                IsConfigured = false;
-                throw new Exception("Your cookie did not work: " + e.Message);
-            }
+            var releases = await PerformQuery(new TorznabQuery());
+            await ConfigureIfOK(string.Empty, releases.Any(),
+                                () => throw new Exception("Could not find releases from this URL."));
+
+            return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            TimeZoneInfo.TransitionTime startTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 3, 0, 0), 3, 5, DayOfWeek.Sunday);
-            TimeZoneInfo.TransitionTime endTransition = TimeZoneInfo.TransitionTime.CreateFloatingDateRule(new DateTime(1, 1, 1, 4, 0, 0), 10, 5, DayOfWeek.Sunday);
-            TimeSpan delta = new TimeSpan(1, 0, 0);
-            TimeZoneInfo.AdjustmentRule adjustment = TimeZoneInfo.AdjustmentRule.CreateAdjustmentRule(new DateTime(1999, 10, 1), DateTime.MaxValue.Date, delta, startTransition, endTransition);
-            TimeZoneInfo.AdjustmentRule[] adjustments = { adjustment };
-            TimeZoneInfo Tz = TimeZoneInfo.CreateCustomTimeZone("custom", new TimeSpan(1, 0, 0), "custom", "custom", "custom", adjustments);
-
             var releases = new List<ReleaseInfo>();
+            var passkey = configData.Passkey.Value;
 
-            NameValueCollection qParams = new NameValueCollection();
-            qParams.Add("api", "");
-            if(query.ImdbIDShort != null)
-                qParams.Add("imdb", query.ImdbIDShort);
-            else
-                qParams.Add("search", query.SearchTerm);
+            var qc = new NameValueCollection
+            {
+                { "api", "" },
+                { "passkey", passkey },
+                { "search", query.IsImdbQuery ? query.ImdbID : query.GetQueryString() }
+            };
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                qParams.Add("categories["+cat+"]", "1");
-            }
+                qc.Add("categories[" + cat + "]", "1");
 
-            string urlSearch = SearchUrl;
-            urlSearch += "?" + qParams.GetQueryString();
+            var searchUrl = SearchUrl + qc.GetQueryString();
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
-            var response = await RequestStringWithCookiesAndRetry(urlSearch);
-            if (response.IsRedirect)
-                throw new Exception("not logged in");
+            if (response.ContentString?.Contains("User not found or passkey not set") == true)
+                throw new Exception("The passkey is invalid. Check the indexer configuration.");
 
             try
             {
-                var jsonContent = JArray.Parse(response.Content);
-                var sitelink = new Uri(SiteLink);
-
+                var jsonContent = JArray.Parse(response.ContentString);
                 foreach (var item in jsonContent)
                 {
-                    var release = new ReleaseInfo();
+                    var title = item.Value<string>("name");
+                    if (!query.IsImdbQuery && !query.MatchQueryStringAND(title))
+                        continue;
 
                     var id = item.Value<long>("id");
-                    release.Title = item.Value<string>("name");
+                    var details = new Uri(DetailsUrl + "id=" + id);
+                    var link = new Uri(DownloadUrl + "id=" + id + "&passkey=" + passkey);
+                    var publishDate = DateTime.ParseExact(item.Value<string>("added"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    var dlVolumeFactor = item.Value<int>("is_freeleech") == 1 ? 0 : 1;
 
-                    var imdbid = item.Value<string>("imdbid");
-                    if (!string.IsNullOrEmpty(imdbid))
-                        release.Imdb = long.Parse(imdbid);
-
-                    var category = item.Value<string>("category");
-                    release.Category = MapTrackerCatToNewznab(category);
-
-                    release.Link = new Uri(sitelink, "/download.php?id=" + id);
-                    release.Comments = new Uri(sitelink, "/details.php?id=" + id);
-                    release.Guid = release.Comments;
-
-                    var dateStr = item.Value<string>("added");
-                    var dateTime = DateTime.SpecifyKind(DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), DateTimeKind.Unspecified);
-                    var pubDateUtc = TimeZoneInfo.ConvertTimeToUtc(dateTime, Tz);
-                    release.PublishDate = pubDateUtc;
-
-                    release.Grabs = item.Value<long>("times_completed");
-                    release.Files = item.Value<long>("numfiles");
-                    release.Seeders = item.Value<int>("seeders");
-                    release.Peers = item.Value<int>("leechers") + release.Seeders;
-                    var size = item.Value<string>("size");
-                    release.Size = ReleaseInfo.GetBytes(size);
-                    var is_freeleech = item.Value<int>("is_freeleech");
-                    
-                    if (is_freeleech == 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-                    release.UploadVolumeFactor = 1;
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Link = link,
+                        Details = details,
+                        Guid = details,
+                        Category = MapTrackerCatToNewznab(item.Value<string>("category")),
+                        PublishDate = publishDate,
+                        Size = item.Value<long>("size"),
+                        Grabs = item.Value<long>("times_completed"),
+                        Files = item.Value<long>("numfiles"),
+                        Seeders = item.Value<int>("seeders"),
+                        Peers = item.Value<int>("leechers") + item.Value<int>("seeders"),
+                        Imdb = ParseUtil.GetImdbID(item.Value<string>("imdbid")),
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 0,
+                        DownloadVolumeFactor = dlVolumeFactor,
+                        UploadVolumeFactor = 1
+                    };
 
                     releases.Add(release);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class TorrentPotatoRequest
     {
@@ -15,8 +15,6 @@
                 ImdbID = request.Imdbid,
                 QueryType = "TorrentPotato"
             };
-            torznabQuery.ExpandCatsToSubCats();
-
             return torznabQuery;
         }
     }

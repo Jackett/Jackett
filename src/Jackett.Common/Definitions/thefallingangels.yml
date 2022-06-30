@@ -1,0 +1,206 @@
+---
+id: thefallingangels
+name: The Falling Angels
+description: "The Falling Angels (TFA) is a German Private site for TV / MOVIES / GENERAL"
+language: de-DE
+type: private
+encoding: UTF-8
+links:
+  - https://tfa.tf/
+
+caps:
+  categorymappings:
+    - {id: 107, cat: PC/0day, desc: "Apps Windows"}
+    - {id: 132, cat: PC/Mac, desc: "Apps Mac-OSX"}
+    - {id: 105, cat: PC/Mobile-Other, desc: "Apps Other"}
+    - {id: 116, cat: PC/Games, desc: "Games PC"}
+    - {id: 155, cat: Console/NDS, desc: "Games Nintendo DS"}
+    - {id: 134, cat: Console, desc: "Games Switch"}
+    - {id: 138, cat: Console/Wii, desc: "Games Nintendo Wii"}
+    - {id: 124, cat: Console/PSP, desc: "Games PSP / PS 1-4"}
+    - {id: 139, cat: Console/XBox, desc: "Games XBOX"}
+    - {id: 140, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 141, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 125, cat: Movies/UHD, desc: "Movies Ultra HD"}
+    - {id: 104, cat: Movies/Other, desc: "Movies Packs"}
+    - {id: 100, cat: Movies, desc: "Movies Horror"}
+    - {id: 142, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: 143, cat: Movies/BluRay, desc: "Bluray"}
+    - {id: 144, cat: Movies/DVD, desc: "Movies S-DVD"}
+    - {id: 133, cat: Movies/Foreign, desc: "Movies Englisch"}
+    - {id: 101, cat: Movies/HD, desc: "TFA AVCHD's"}
+    - {id: 103, cat: Movies/DVD, desc: "TFA Special DVD's"}
+    - {id: 108, cat: TV/Documentary, desc: "Dokus HD"}
+    - {id: 113, cat: TV/Documentary, desc: "Dokus SD"}
+    - {id: 154, cat: TV/Documentary, desc: "Dokus Pack"}
+    - {id: 149, cat: TV/HD, desc: "Serien HD"}
+    - {id: 151, cat: TV/SD, desc: "Serien SD"}
+    - {id: 150, cat: TV/Other, desc: "Serien Pack"}
+    - {id: 136, cat: TV/Foreign, desc: "Serien Englisch"}
+    - {id: 152, cat: TV/Sport, desc: "Sport HD"}
+    - {id: 153, cat: TV/Sport, desc: "Sport SD"}
+    - {id: 135, cat: TV/Sport, desc: "Sport Ultra HD"}
+    - {id: 106, cat: TV/Sport, desc: "Sport Pack"}
+    - {id: 147, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 145, cat: Audio/Lossless, desc: "Music Flac"}
+    - {id: 137, cat: Audio, desc: "Music M4A"}
+    - {id: 109, cat: Audio, desc: "Music Discographie"}
+    - {id: 146, cat: Audio/Other, desc: "Music Pack"}
+    - {id: 148, cat: Audio/Video, desc: "Music Video"}
+    - {id: 157, cat: Movies/HD, desc: "Kids Movies HD"}
+    - {id: 158, cat: Movies/SD, desc: "Kids Movies SD"}
+    - {id: 161, cat: TV/HD, desc: "Kids Serien HD"}
+    - {id: 162, cat: TV/SD, desc: "Kids Serien SD"}
+    - {id: 112, cat: Audio/Audiobook, desc: "Kids Hörbuch"}
+    - {id: 115, cat: Books/Mags, desc: "Books Zeitschriften"}
+    - {id: 114, cat: Books/Comics, desc: "Books Comics"}
+    - {id: 117, cat: Books/EBook, desc: "Books Romane"}
+    - {id: 156, cat: Books, desc: "Books Packs"}
+    - {id: 130, cat: Books, desc: "Books FSK 18"}
+    - {id: 159, cat: Movies/HD, desc: "Anime Movies HD"}
+    - {id: 160, cat: Movies/SD, desc: "Anime Movies SD"}
+    - {id: 128, cat: TV/Anime, desc: "Anime Serien"}
+    - {id: 131, cat: TV/Anime, desc: "Anime Hentai"}
+    - {id: 129, cat: TV/Anime, desc: "Anime Sonstiges"}
+    - {id: 119, cat: Other, desc: "Other Hörbücher"}
+    - {id: 118, cat: Other, desc: "Other Mobile"}
+    - {id: 123, cat: Other, desc: "Other Pics"}
+    - {id: 120, cat: XXX, desc: "XXX Movies HD"}
+    - {id: 121, cat: XXX, desc: "XXX Movies SD"}
+    - {id: 122, cat: XXX, desc: "XXX Movies Pack"}
+    - {id: 110, cat: XXX, desc: "XXX Pics"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: pin
+    type: text
+    label: Pin
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.php
+  method: form
+  form: form[method="post"]
+  cookies: ["JAVA=OK"] # avoid jscheck redirect
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    pin: "{{ .Config.pin }}"
+  error:
+    - selector: div#login_error
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: selection.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 name, 1 descr, 2 both
+    blah: 0
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+
+  rows:
+    selector: div.selection_wrap
+
+  fields:
+    cat_p1:
+      selector: div.kat_cat_pic_name
+    cat_p2:
+      selector: div.kat_cat_pic_name_b
+    categorydesc:
+      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
+    title:
+      selector: a.selection_a
+      filters:
+        - name: re_replace
+          args: ["^\\[[\\w ]*\\]\\s?", ""]
+    details:
+      selector: a.selection_a
+      attribute: href
+    download_default:
+      selector: a[href^="download.php?torrent="]
+      optional: true
+      attribute: href
+    download_ssl:
+      selector: a[href^="download_ssl.php?torrent="]
+      optional: true
+      attribute: href
+    download:
+      text: "{{ if .Result.download_ssl }}{{ .Result.download_ssl }}{{ else }}{{ .Result.download_default }}{{ end }}"
+    poster:
+      selector: div[id^="details"] img
+      attribute: src
+    size:
+      selector: div.selection_unter_ad
+    grabs:
+      selector: div.selection_unter_ae
+    date_day:
+      # Heute 13:30:04
+      # Gestern 09:10:10
+      selector: div.selection_unter_ab:not(:contains("."))
+      optional: true
+      filters:
+        - name: replace
+          args: ["Heute", "Today"]
+        - name: replace
+          args: ["Gestern", "Yesterday"]
+    date_year:
+      # 30.02.2018 um 23:12:50
+      selector: div.selection_unter_ab:contains(".")
+      optional: true
+      filters:
+        - name: replace
+          args: [" um", ""]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    description:
+      selector: selection_unter_af
+    seeders:
+      selector: div.selection_unter_aa
+    leechers:
+      selector: div.selection_unter_aaa
+    downloadvolumefactor:
+      case:
+        "div[onmouseover=\"return overlib('OnlyUp: Ja');\"]": 0
+        "div[onmouseover=\"return overlib('Freeleech: Ja');\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "div[onmouseover=\"return overlib('Freeleech: Ja');\"]": 0
+        "*": 1
+# 3xT

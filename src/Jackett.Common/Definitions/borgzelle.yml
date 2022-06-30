@@ -1,0 +1,199 @@
+---
+id: borgzelle
+name: Borgzelle
+description: "Borgzelle is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: de-DE
+type: private
+encoding: UTF-8
+links:
+  - https://borgzelle.borg/
+certificates:
+  - a3f8822c97fbfe5bd00760cf8e6b75c4284f657d # self signed
+
+caps:
+  categorymappings:
+    - {id: 17, cat: TV/Sport, desc: "Sport"}
+    - {id: 32, cat: TV, desc: "Serien-Pakete"}
+    - {id: 12, cat: TV, desc: "Serien"}
+    - {id: 14, cat: Audio/Video, desc: "Musikvideo"}
+    - {id: 15, cat: TV/Documentary, desc: "Doku"}
+    - {id: 16, cat: TV/Other, desc: "Comedy"}
+    - {id: 18, cat: TV/Anime, desc: "Anime"}
+    - {id: 6, cat: Movies/SD, desc: "Movie XviD/DivX"}
+    - {id: 34, cat: Movies/UHD, desc: "Movie UHD"}
+    - {id: 13, cat: Movies, desc: "Movie Kinder"}
+    - {id: 11, cat: Movies/HD, desc: "Movie HD2DVD"}
+    - {id: 9, cat: Movies/HD, desc: "Movie HD"}
+    - {id: 33, cat: Movies/HD, desc: "Movie h265"}
+    - {id: 7, cat: Movies/HD, desc: "Movie h264"}
+    - {id: 10, cat: Movies/DVD, desc: "Movie DVD"}
+    - {id: 28, cat: PC/Games, desc: "Spiele PDA/Handy"}
+    - {id: 25, cat: PC/Games, desc: "Spiele PC"}
+    - {id: 27, cat: PC/Games, desc: "Spiele MAC"}
+    - {id: 26, cat: Console, desc: "Spiele Konsolen"}
+    - {id: 30, cat: Other, desc: "Diverse Wallpaper"}
+    - {id: 31, cat: Other, desc: "Sonstiges"}
+    - {id: 29, cat: Books/EBook, desc: "E-Book"}
+    - {id: 19, cat: Audio, desc: "Musik"}
+    - {id: 20, cat: Audio/Audiobook, desc: "Hörbuch"}
+    - {id: 21, cat: PC/0day, desc: "Software Windows"}
+    - {id: 23, cat: PC/Mobile-Other, desc: "Software PDA/Handy"}
+    - {id: 22, cat: PC/Mac, desc: "Software MAC"}
+    - {id: 24, cat: PC, desc: "Software Linux"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_sitelink
+    type: info
+    label: About Site Link
+    default: If the Site Link domain returns a DNS error then you have not yet been assimilated.
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: font[color="red"]
+  test:
+    path: index.php
+    selector: a[href^="logout.php?auth="]
+
+search:
+  paths:
+    # https://borgzelle.borg/browse.php?action=browse&showsearch=1&c34=1&c9=1&search=&incldead=0&orderby=added&sort=desc
+    - path: browse.php
+  inputs:
+    action: browse
+    showsearch: 1
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 all, 1 active, 2 dead
+    incldead: 0
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+    # the site does not support imdbid searching or present imdb links in results
+
+  rows:
+    selector: "table[style=\"width: 100%;\"] > tbody > tr{{ if .Config.freeleech }}:has(span:contains(\"[OnlyUpload]\")){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents.php?torrentid="]
+    details:
+      selector: a[href^="torrents.php?torrentid="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    poster:
+      selector: a[href^="torrents.php?torrentid="] span img
+      attribute: src
+    date:
+      # 17.10. 18:34 (vor 2 Stunden und 57 Minuten)
+      selector: td:nth-child(2) > table > tbody > tr > td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "\\((.+?)\\)"
+        # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
+        - name: re_replace
+          args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前|sedan)", " ago"]
+        - name: re_replace
+          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
+        - name: re_replace
+          args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten|minuter)", "minutes"]
+        - name: re_replace
+          args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟|分)", " minute"]
+        - name: re_replace
+          args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden|timmar)", "hours"]
+        - name: re_replace
+          args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时|時間|timme)", " hour"]
+        - name: re_replace
+          args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen|dagar)", "days"]
+        - name: re_replace
+          args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天|日)", " day"]
+        - name: re_replace
+          args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken|veckor)", "weeks"]
+        - name: re_replace
+          args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周|週間|vecka)", " week"]
+        - name: re_replace
+          args: ["(?i) (ay)", "month"]
+        - name: re_replace
+          args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden|månader)", "months"]
+        - name: re_replace
+          args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|Monat|месец|maand|个月|ヶ月|månad)", " month"]
+        - name: re_replace
+          args: ["(?i)(aastat|anni|lata|anos|roky|года|ani|años|ans|Jahren|години)", " years"]
+        - name: re_replace
+          args: ["(?i)(yil|aasta|år|anno|rok|ano|год|año|Jahr|година|jaar|年)", " year"]
+        - name: re_replace
+          args: ["(?i) (an)", "year"]
+        - name: re_replace
+          args: ["(?i)(För |und)", ""] # Misc removals
+        - name: timeago
+    size:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) b
+    files:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(1) a span
+    seeders:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) a span
+    leechers:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(2) a span:nth-child(2)
+    grabs:
+      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td:nth-child(3) a span
+    downloadvolumefactor:
+      case:
+        "span:contains(\"[OnlyUpload]\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# Gazelle

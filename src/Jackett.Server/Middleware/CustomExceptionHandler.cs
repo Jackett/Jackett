@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Jackett.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -14,7 +11,7 @@ namespace Jackett.Server.Middleware
     public class CustomExceptionHandler
     {
         private readonly RequestDelegate _next;
-        private Logger logger;
+        private readonly Logger logger;
 
         public CustomExceptionHandler(RequestDelegate next, Logger l)
         {
@@ -28,44 +25,35 @@ namespace Jackett.Server.Middleware
             {
                 await _next(httpContext);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 try
                 {
-                    string msg = "";
+                    logger.Error(e);
+
+                    var message = e.Message;
+                    if (e.InnerException != null)
+                        message += ": " + e.InnerException.Message;
+                    var msg = message;
+
                     var json = new JObject();
-
-                    logger.Error(ex);
-
-                    var message = ex.Message;
-                    if (ex.InnerException != null)
-                    {
-                        message += ": " + ex.InnerException.Message;
-                    }
-
-                    msg = message;
-
-                    if (ex is ExceptionWithConfigData)
-                    {
-                        json["config"] = ((ExceptionWithConfigData)ex).ConfigData.ToJson(null, false);
-                    }
+                    if (e is ExceptionWithConfigData)
+                        json["config"] = ((ExceptionWithConfigData)e).ConfigData.ToJson(null, false);
 
                     json["result"] = "error";
                     json["error"] = msg;
-                    json["stacktrace"] = ex.StackTrace;
-                    if (ex.InnerException != null)
-                    {
-                        json["innerstacktrace"] = ex.InnerException.StackTrace;
-                    }
+                    json["stacktrace"] = e.StackTrace;
+                    if (e.InnerException != null)
+                        json["innerstacktrace"] = e.InnerException.StackTrace;
 
                     httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     httpContext.Response.ContentType = "application/json";
                     await httpContext.Response.WriteAsync(json.ToString());
                     return;
                 }
-                catch (Exception ex2)
+                catch (Exception e2)
                 {
-                    logger.Error(ex2, "An exception was thrown attempting to execute the custom exception error handler.");
+                    logger.Error($"An exception was thrown attempting to execute the custom exception error handler.\n{e2}");
                 }
 
                 await _next(httpContext);
@@ -76,9 +64,6 @@ namespace Jackett.Server.Middleware
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class CustomExceptionHandlerExtensions
     {
-        public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<CustomExceptionHandler>();
-        }
+        public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder) => builder.UseMiddleware<CustomExceptionHandler>();
     }
 }

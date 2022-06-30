@@ -1,4 +1,8 @@
-﻿using Jackett.Common.Indexers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -7,10 +11,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Jackett.Server.Controllers
 {
@@ -39,7 +39,7 @@ namespace Jackett.Server.Controllers
             }
 
             var indexerId = parameters["indexerId"] as string;
-            if (indexerId.IsNullOrEmptyOrWhitespace())
+            if (string.IsNullOrWhiteSpace(indexerId))
                 return;
 
             var indexerService = indexerController.IndexerService;
@@ -59,9 +59,9 @@ namespace Jackett.Server.Controllers
     {
         public IIndexerManagerService IndexerService { get; private set; }
         public IIndexer CurrentIndexer { get; set; }
-        private Logger logger;
-        private IServerService serverService;
-        private ICacheService cacheService;
+        private readonly Logger logger;
+        private readonly IServerService serverService;
+        private readonly ICacheService cacheService;
 
         public IndexerApiController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
         {
@@ -83,8 +83,11 @@ namespace Jackett.Server.Controllers
         [HttpPost]
         [Route("{indexerId?}/Config")]
         [TypeFilter(typeof(RequiresIndexer))]
-        public async Task<IActionResult> UpdateConfig([FromBody]Common.Models.DTO.ConfigItem[] config)
+        public async Task<IActionResult> UpdateConfig([FromBody] Common.Models.DTO.ConfigItem[] config)
         {
+            // invalidate cache for this indexer
+            cacheService.CleanIndexerCache(CurrentIndexer);
+
             try
             {
                 // HACK
@@ -95,7 +98,7 @@ namespace Jackett.Server.Controllers
 
                 if (configurationResult == IndexerConfigurationStatus.RequiresTesting)
                 {
-                    await IndexerService.TestIndexer(CurrentIndexer.ID);
+                    await IndexerService.TestIndexer(CurrentIndexer.Id);
                 }
 
                 return new NoContentResult();
@@ -111,9 +114,10 @@ namespace Jackett.Server.Controllers
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<Common.Models.DTO.Indexer> Indexers()
+        public IEnumerable<Common.Models.DTO.Indexer> Indexers([FromQuery(Name = "configured")] bool configured)
         {
             var dto = IndexerService.GetAllIndexers().Select(i => new Common.Models.DTO.Indexer(i));
+            dto = configured ? dto.Where(i => i.configured) : dto;
             return dto;
         }
 
@@ -125,7 +129,7 @@ namespace Jackett.Server.Controllers
             JToken jsonReply = new JObject();
             try
             {
-                await IndexerService.TestIndexer(CurrentIndexer.ID);
+                await IndexerService.TestIndexer(CurrentIndexer.Id);
                 CurrentIndexer.LastError = null;
                 return NoContent();
             }
@@ -145,10 +149,7 @@ namespace Jackett.Server.Controllers
         [HttpDelete]
         [TypeFilter(typeof(RequiresIndexer))]
         [Route("{indexerid}")]
-        public void Delete()
-        {
-            IndexerService.DeleteIndexer(CurrentIndexer.ID);
-        }
+        public void Delete() => IndexerService.DeleteIndexer(CurrentIndexer.Id);
 
         // TODO
         // This should go to ServerConfigurationController
@@ -169,6 +170,7 @@ namespace Jackett.Server.Controllers
                 var link = result.Link;
                 var file = StringUtil.MakeValidFileName(result.Title, '_', false);
                 result.Link = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "dl", file);
+                result.Poster = serverService.ConvertToProxyLink(result.Poster, serverUrl, result.TrackerId, "img", "poster");
                 if (result.Link != null && result.Link.Scheme != "magnet" && !string.IsNullOrWhiteSpace(serverService.GetBlackholeDirectory()))
                     result.BlackholeLink = serverService.ConvertToProxyLink(link, serverUrl, result.TrackerId, "bh", file);
             }

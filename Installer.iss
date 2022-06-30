@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Jackett"
-#define MyAppVersion GetFileVersion(MyFileForVersion)
+; #define MyAppVersion GetFileVersion(MyFileForVersion) (passed as a parameter)
 #define MyAppPublisher "Jackett"
 #define MyAppURL "https://github.com/Jackett/Jackett"
 #define MyAppExeName "JackettTray.exe"
@@ -19,7 +19,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={commonappdata}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename={#MyOutputFilename}
@@ -30,6 +30,7 @@ UninstallDisplayName={#MyAppName}
 Compression=lzma
 SolidCompression=yes
 DisableDirPage=yes
+WizardStyle=modern
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -38,14 +39,26 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "windowsService"; Description: "Install as a Windows Service"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+[Dirs]  
+Name: "{commonappdata}\Jackett"; Permissions: everyone-modify 
+
 [Files]
-Source: "{#MySourceFolder}\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MySourceFolder}\*"; DestDir: "{commonappdata}\Jackett"; Flags: ignoreversion recursesubdirs createallsubdirs; Permissions: everyone-modify
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{commonappdata}\Jackett\{#MyAppExeName}"; Tasks: desktopicon
+
+[Code]
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+ErrorCode: Integer;
+begin
+  ShellExec('open', 'taskkill.exe', '/f /im {#MyAppExeName}', '', SW_HIDE, ewNoWait, ErrorCode);
+  ShellExec('open', 'taskkill.exe', '/f /im JackettConsole.exe', '', SW_HIDE, ewNoWait, ErrorCode);
+end;
 
 [Run]
 Filename: "{commonappdata}\Jackett\JackettConsole.exe"; Parameters: "--Uninstall"; Flags: waituntilterminated runhidden;

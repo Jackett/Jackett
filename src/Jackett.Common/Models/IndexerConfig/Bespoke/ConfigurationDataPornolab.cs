@@ -1,13 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    class ConfigurationDataPornolab : ConfigurationDataCaptchaLogin
+    [ExcludeFromCodeCoverage]
+    internal class ConfigurationDataPornolab : ConfigurationDataCaptchaLogin
     {
-        public BoolItem StripRussianLetters { get; private set; }
+        public BoolConfigurationItem StripRussianLetters { get; private set; }
 
         public ConfigurationDataPornolab()
-            : base()
-        {
-            StripRussianLetters = new BoolItem() { Name = "Strip Russian Letters", Value = false };
-        }
+            => StripRussianLetters = new BoolConfigurationItem("Strip Russian Letters") { Value = false };
     }
 }

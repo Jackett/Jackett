@@ -1,0 +1,152 @@
+---
+id: finelite
+name: FinElite
+description: "FinElite (FE) is a FINNISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fi-FI
+type: private
+encoding: UTF-8
+links:
+  - https://finelite.org/
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+caps:
+  categorymappings:
+    - {id: 33, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 29, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 24, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 28, cat: Movies, desc: "FE-INT"}
+    - {id: 10, cat: Console, desc: "Games - Console"}
+    - {id: 11, cat: PC/Games, desc: "Games - PC"}
+    - {id: 26, cat: Movies, desc: "Kids"}
+    - {id: 9, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 12, cat: Movies, desc: "Movie Pack"}
+    - {id: 13, cat: Movies/DVD, desc: "Movies DVD-r"}
+    - {id: 14, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 15, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 22, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 23, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 19, cat: TV/HD, desc: "TV HD"}
+    - {id: 16, cat: TV, desc: "TV Pack"}
+    - {id: 17, cat: TV/SD, desc: "TV SD"}
+    - {id: 31, cat: Movies/UHD, desc: "Ultra HD"}
+    - {id: 20, cat: XXX, desc: "XXX HD"}
+    - {id: 21, cat: XXX/SD, desc: "XXX SD"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+login:
+  path: login.php
+  method: form
+  form: form#login
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:contains("Virhe") # error
+    - selector: td.embedded:contains("epäonnistui") # falied
+  test:
+    path: /
+    selector: a[href="ulos.php"]
+
+search:
+  paths:
+    # https://finelite.org/selaa.php?c14=1&c15=1&c31=1&search=tt6591554&hae=1&type=desc&cat=0&incldead=1&sort=4
+    # https://finelite.org/selaa.php?search=&hae=0&type=desc&cat=0&incldead=0&freeleech=yes&sort=4
+    - path: selaa.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 name&descr, 1 name, 2 descr, 3 tags
+    hae: 1
+    # 0 active, 1 incldead, 2 deadonly
+    incldead: 1
+    freeleech: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table.main > tbody >  tr:has(a[href^="/lataa.php/"])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href*="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="julkaisu.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="julkaisu.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="/lataa.php/"]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    files:
+      selector: td:nth-last-child(6)
+    date:
+      # 26.03.2020 <br/>3:53
+      selector: td:nth-last-child(4)
+      filters:
+        - name: re_replace
+          args: [" (\\d{1}):(\\d{2})", " 0$1:$2"]
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "2.01.2006 15:04 -07:00"
+    size:
+      selector: td:nth-last-child(3)
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    downloadvolumefactor:
+      case:
+        span.label-free: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# custom 3.1.4

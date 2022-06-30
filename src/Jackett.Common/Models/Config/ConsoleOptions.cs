@@ -1,5 +1,5 @@
-﻿using CommandLine;
 using System;
+using CommandLine;
 
 namespace Jackett.Common.Models.Config
 {
@@ -23,9 +23,6 @@ namespace Jackett.Common.Models.Config
         [Option('c', "UseClient", HelpText = "Override web client selection. [automatic(Default)/httpclient/httpclient2]")]
         public string Client { get; set; }
 
-        [Option('j', "ProxyConnection", HelpText = "use proxy - e.g. 127.0.0.1:8888")]
-        public string ProxyConnection { get; set; }
-
         [Option('s', "Start", HelpText = "Start the Jacket Windows service (Must be admin)")]
         public bool StartService { get; set; }
 
@@ -40,9 +37,6 @@ namespace Jackett.Common.Models.Config
 
         [Option('p', "Port", HelpText = "Web server port")]
         public int Port { get; set; }
-
-        [Option('m', "MigrateSettings", HelpText = "Migrate settings manually (Must be admin on Windows)")]
-        public bool MigrateSettings { get; set; }
 
         [Option('n', "IgnoreSslErrors", HelpText = "[true/false] Ignores invalid SSL certificates")]
         public bool? IgnoreSslErrors { get; set; }
@@ -63,6 +57,7 @@ namespace Jackett.Common.Models.Config
         {
             var options = this;
             var runtimeSettings = new RuntimeSettings();
+
             // Logging
             if (options.Logging)
                 runtimeSettings.LogRequests = true;
@@ -81,13 +76,9 @@ namespace Jackett.Common.Models.Config
             if (options.Client != null)
                 runtimeSettings.ClientOverride = options.Client.ToLowerInvariant();
 
-            // Use Proxy
-            if (options.ProxyConnection != null)
-            {
-                runtimeSettings.ProxyConnection = options.ProxyConnection.ToLowerInvariant();
-            }
             // Ignore SSL errors on Curl
             runtimeSettings.IgnoreSslErrors = options.IgnoreSslErrors;
+
             runtimeSettings.NoRestart = options.NoRestart;
             runtimeSettings.NoUpdates = options.NoUpdates;
 

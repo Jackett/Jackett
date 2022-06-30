@@ -1,9 +1,10 @@
-﻿namespace Jackett.Common.Models.Config
+namespace Jackett.Common.Models.Config
 {
     public enum ProxyType
     {
+        Disabled = -1,
         Http,
         Socks4,
-        Socks5,
+        Socks5
     }
 }

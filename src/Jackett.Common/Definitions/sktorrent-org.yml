@@ -1,0 +1,155 @@
+---
+id: sktorrent-org
+name: SkTorrent-org
+description: "SkTorrent.org is a Semi-Private torrent site for MOVIES / TV/ GENERAL"
+language: en-US
+type: semi-private
+encoding: UTF-8
+links:
+  - https://sktorrent.org/
+
+caps:
+  categorymappings:
+    - {id: 18, cat: PC/0day, desc: "Application - PC"}
+    - {id: 19, cat: PC/Mac, desc: "Application - Mac"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "Application - Other"}
+    - {id: 47, cat: PC/Mobile-Android, desc: "Application - Android"}
+    - {id: 61, cat: Audio/Audiobook, desc: "Audio - Audio books"}
+    - {id: 60, cat: Audio, desc: "Audio - Music"}
+    - {id: 63, cat: Audio/Lossless, desc: "Audio - Flac"}
+    - {id: 64, cat: Audio/Other, desc: "Audio - Other"}
+    - {id: 9, cat: TV/Documentary, desc: "Documentaries - Other"}
+    - {id: 10, cat: PC/Games, desc: "Games - PC"}
+    - {id: 11, cat: Console/PS3, desc: "Games - PSX"}
+    - {id: 13, cat: Console/XBox 360, desc: "Games - Xbox360"}
+    - {id: 66, cat: Console/Other, desc: "Games - Other"}
+    - {id: 65, cat: Console/Other, desc: "Games - Android"}
+    - {id: 1, cat: Movies/DVD, desc: "Movies - DVD"}
+    - {id: 2, cat: Movies/SD, desc: "Movies - Divx/Xvid"}
+    - {id: 42, cat: Movies/HD, desc: "Movies - HD"}
+    - {id: 4, cat: Movies/Other, desc: "Movies - Other"}
+    - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
+    - {id: 48, cat: Movies/BluRay, desc: "Movies - Blu-ray"}
+    - {id: 22, cat: Audio/MP3, desc: "Music - MP3"}
+    - {id: 24, cat: Audio/Video, desc: "Music - DVD"}
+    - {id: 27, cat: Audio/Other, desc: "Music - Other"}
+    - {id: 35, cat: Audio, desc: "Music - Album"}
+    - {id: 36, cat: Books/EBook, desc: "Other - E-books"}
+    - {id: 53, cat: Other, desc: "Other - Other"}
+    - {id: 51, cat: Books/Mags, desc: "Other - Magazines"}
+    - {id: 50, cat: Books, desc: "Other - Books"}
+    - {id: 56, cat: XXX/WMV, desc: "Porn - Video"}
+    - {id: 55, cat: XXX, desc: "Porn - Movie"}
+    - {id: 54, cat: XXX/ImageSet, desc: "Porn - Picture"}
+    - {id: 68, cat: XXX/Other, desc: "Porn - Other"}
+    - {id: 69, cat: XXX/ImageSet, desc: "All - All"}
+    - {id: 6, cat: TV, desc: "TV - Divx/Xvid"}
+    - {id: 41, cat: TV/HD, desc: "TV - HD"}
+    - {id: 59, cat: TV/HD, desc: "TV - Full HD"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: account-login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.myFrame:contains("Access Denied")
+  test:
+    path: index.php
+    selector: a[href="account-logout.php"]
+
+search:
+  paths:
+    # https://sktorrent.org/torrents-search.php?c48=1&c2=1&c1=1&c42=1&c4=1&search=&cat=0&incldead=1&freeleech=0&inclexternal=0&lang=0
+    # https://sktorrent.org/torrents-search.php?search=&cat=0&incldead=0&freeleech=0&inclexternal=0&lang=0
+    - path: torrents-search.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    cat: 0
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 both, 1 local, 2 external
+    inclexternal: 0
+    # 0 all, 1 English, 2 etc...
+    lang: 0
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+
+  rows:
+    selector: tr.t-row
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: td a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: td a[href^="torrents-details.php?id="]
+      attribute: title
+    details:
+      selector: td a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: td a[href^="download.php?id="]
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# TorrentTrader

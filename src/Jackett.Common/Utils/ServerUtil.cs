@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Principal;
 using Jackett.Common.Utils.Clients;
 
@@ -95,7 +95,7 @@ namespace Jackett.Common.Utils
             return isAdmin;
         }
 
-        public static void ResureRedirectIsFullyQualified(WebRequest req, BaseWebResult result)
+        public static void ResureRedirectIsFullyQualified(WebRequest req, WebResult result)
         {
             if (!string.IsNullOrEmpty(result.RedirectingTo))
             {

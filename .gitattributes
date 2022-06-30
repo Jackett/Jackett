@@ -1,16 +1,13 @@
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
-
-# Explicitly declare text files you want to always be normalized and converted
-# to native line endings on checkout.
-
-# Declare files that will always have LF line endings on checkout.
-*.yml text eol=lf
-*.sh text eol=lf
-
-# Declare files that will always have CRLF line endings on checkout.
-*.cs text eol=crlf
+* text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
-*.png binary
+*.eot binary
+*.ico binary
 *.jpg binary
+*.otf binary
+*.png binary
+*.ttf binary
+*.woff binary
+*.woff2 binary

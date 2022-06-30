@@ -1,28 +1,31 @@
-﻿using System;
+using System;
 using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Reflection;
 
 namespace Jackett.Common.Utils
 {
     public static class EnvironmentUtil
     {
-    
-        public static string JackettVersion
+
+        public static string JackettVersion()
         {
-            get
-            {
-                return Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "Unknown Version";
-            }
+            var assembly = Assembly.GetExecutingAssembly();
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return $"v{fvi.ProductVersion}";
         }
 
-        public static bool IsWindows
+        public static string JackettInstallationPath()
         {
-            get
-            {
-                return Environment.OSVersion.Platform == PlatformID.Win32NT;
-            }
+            return Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
         }
+
+        public static string JackettExecutablePath()
+        {
+            return Assembly.GetEntryAssembly()?.Location;
+        }
+
+        public static bool IsWindows => Environment.OSVersion.Platform == PlatformID.Win32NT;
 
     }
 }

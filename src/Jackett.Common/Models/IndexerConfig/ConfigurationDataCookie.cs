@@ -1,26 +1,18 @@
-﻿namespace Jackett.Common.Models.IndexerConfig
+namespace Jackett.Common.Models.IndexerConfig
 {
-
     public class ConfigurationDataCookie : ConfigurationData
     {
-        public StringItem Cookie { get; private set; }
-        public DisplayItem CookieHint { get; private set; }
-        public DisplayItem CookieExample { get; private set; }
+        public StringConfigurationItem Cookie { get; private set; }
+        public DisplayInfoConfigurationItem CookieInstructions { get; private set; }
+        public DisplayInfoConfigurationItem Instructions { get; private set; }
 
-        public ConfigurationDataCookie()
+        public ConfigurationDataCookie(string instructionMessageOptional = null)
         {
-            Cookie = new StringItem { Name = "Cookie" };
-            CookieHint = new DisplayItem(
-            "<ol><li>Login to this tracker in your browser <li>Open the developer console, go the network tab <li>Find 'cookie' in the request headers <li>Copy & paste it to here</ol>")
-            {
-                Name = "CookieHint"
-            };
-            CookieExample = new DisplayItem(
-            "Example cookie header (usually longer than this):<br><code>PHPSESSID=8rk27odm; ipsconnect_63ad9c=1; more_stuff=etc;</code>")
-            {
-                Name = "CookieExample"
-            };
+            Cookie = new StringConfigurationItem("Cookie");
+            CookieInstructions = new DisplayInfoConfigurationItem("Cookie Instructions",
+            "Please enter the cookie for the site manually. <a href=\"https://github.com/Jackett/Jackett/wiki/Finding-cookies\" target=\"_blank\">See here</a> on how get the cookies." +
+            "<br>Example cookie header (usually longer than this):<br><code>PHPSESSID=8rk27odm; ipsconnect_63ad9c=1; more_stuff=etc;</code>");
+            Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
         }
     }
-
 }

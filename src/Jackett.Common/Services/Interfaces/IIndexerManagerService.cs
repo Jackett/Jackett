@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers;
 
@@ -13,6 +13,6 @@ namespace Jackett.Common.Services.Interfaces
         IEnumerable<IIndexer> GetAllIndexers();
 
         void InitIndexers(IEnumerable<string> path);
-        void InitAggregateIndexer();
+        void InitMetaIndexers();
     }
 }

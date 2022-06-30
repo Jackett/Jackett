@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Models.DTO
+namespace Jackett.Common.Models.DTO
 {
     public class TorrentPotatoResponseItem
     {
@@ -10,8 +10,8 @@
         public bool freeleech { get; set; }
         public string type { get; set; }
         public long size { get; set; }
-        public int leechers { get; set; }
-        public int seeders { get; set; }
+        public long leechers { get; set; }
+        public long seeders { get; set; }
         public string publish_date { get; set; }
     }
 }

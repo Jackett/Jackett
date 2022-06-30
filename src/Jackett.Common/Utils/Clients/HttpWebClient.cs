@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,25 +8,28 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using com.LandonKey.SocksWebProxy;
-using com.LandonKey.SocksWebProxy.Proxy;
-using CloudflareSolverRe;
+using FlareSolverrSharp;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using NLog;
-using Jackett.Common.Helpers;
-using System.Diagnostics;
 
 namespace Jackett.Common.Utils.Clients
 {
+    // This implementation is legacy and it's used only by Mono version
+    // TODO: Merge with HttpWebClient2 or remove when we drop support for Mono 5.x
     public class HttpWebClient : WebClient
     {
-        static protected Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
-        static protected string webProxyUrl;
-        static protected IWebProxy webProxy;
+        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
+            : base(p: p,
+                   l: l,
+                   c: c,
+                   sc: sc)
+        {
+        }
 
         [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
-        static public bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        public static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             if (sender.GetType() != typeof(HttpWebRequest))
                 return sslPolicyErrors == SslPolicyErrors.None;
@@ -33,133 +37,51 @@ namespace Jackett.Common.Utils.Clients
             var request = (HttpWebRequest)sender;
             var hash = certificate.GetCertHashString();
 
-            ICollection<string> hosts;
+            trustedCertificates.TryGetValue(hash, out var hosts);
+            if (hosts != null && hosts.Contains(request.Host))
+                return true;
 
-            trustedCertificates.TryGetValue(hash, out hosts);
-            if (hosts != null)
-            {
-                if (hosts.Contains(request.Host))
-                    return true;
-            }
-
+            // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
+            // The certificate is only available inside this function, so we can't catch it at the calling method.
             if (sslPolicyErrors != SslPolicyErrors.None)
-            {
-                // Throw exception with certificate details, this will cause a "Exception User-Unhandled" when running it in the Visual Studio debugger.
-                // The certificate is only available inside this function, so we can't catch it at the calling method.
-                throw new Exception("certificate validation failed: " + certificate.ToString());
-            }
+                throw new Exception("certificate validation failed: " + certificate);
 
             return sslPolicyErrors == SslPolicyErrors.None;
         }
 
-        static public void InitProxy(ServerConfig serverConfig)
+        public override void SetTimeout(int seconds) => ClientTimeout = seconds;
+
+        public override void Init()
         {
-            // dispose old SocksWebProxy
-            if (webProxy != null && webProxy is SocksWebProxy)
-            {
-                ((SocksWebProxy)webProxy).Dispose();
-                webProxy = null;
-            }
-
-            webProxyUrl = serverConfig.GetProxyUrl();
-            if (!string.IsNullOrWhiteSpace(webProxyUrl))
-            {
-                if (serverConfig.ProxyType != ProxyType.Http)
-                {
-                    var addresses = Dns.GetHostAddressesAsync(serverConfig.ProxyUrl).Result;
-                    var socksConfig = new ProxyConfig
-                    {
-                        SocksAddress = addresses.FirstOrDefault(),
-                        Username = serverConfig.ProxyUsername,
-                        Password = serverConfig.ProxyPassword,
-                        Version = serverConfig.ProxyType == ProxyType.Socks4 ?
-                        ProxyConfig.SocksVersion.Four :
-                        ProxyConfig.SocksVersion.Five
-                    };
-                    if (serverConfig.ProxyPort.HasValue)
-                    {
-                        socksConfig.SocksPort = serverConfig.ProxyPort.Value;
-                    }
-                    webProxy = new SocksWebProxy(socksConfig, false);
-                }
-                else
-                {
-                    NetworkCredential creds = null;
-                    if (!serverConfig.ProxyIsAnonymous)
-                    {
-                        var username = serverConfig.ProxyUsername;
-                        var password = serverConfig.ProxyPassword;
-                        creds = new NetworkCredential(username, password);
-                    }
-                    webProxy = new WebProxy(webProxyUrl)
-                    {
-                        BypassProxyOnLocal = false,
-                        Credentials = creds
-                    };
-                }
-            }
-        }
-
-        public HttpWebClient(IProcessService p, Logger l, IConfigurationService c, ServerConfig sc)
-            : base(p: p,
-                   l: l,
-                   c: c,
-                   sc: sc)
-        {
-            if (webProxyUrl == null)
-                InitProxy(sc);
-        }
-
-        // Called everytime the ServerConfig changes
-        public override void OnNext(ServerConfig value)
-        {
-            var newProxyUrl = serverConfig.GetProxyUrl();
-            if (webProxyUrl != newProxyUrl) // if proxy URL changed
-                InitProxy(serverConfig);
-        }
-
-        override public void Init()
-        {
-            ServicePointManager.DefaultConnectionLimit = 1000;
-
-            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
-            {
-                logger.Info(string.Format("HttpWebClient: Disabling certificate validation"));
-                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
-            }
+            base.Init();
 
             // custom handler for our own internal certificates
-            ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+            else
+                ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
         }
 
-        override protected async Task<WebClientByteResult> Run(WebRequest webRequest)
+        protected override async Task<WebResult> Run(WebRequest webRequest)
         {
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 
             var cookies = new CookieContainer();
-            if (!string.IsNullOrEmpty(webRequest.Cookies))
+            if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
             {
-                var uri = new Uri(webRequest.Url);
-                var cookieUrl = new Uri(uri.Scheme + "://" + uri.Host); // don't include the path, Scheme is needed for mono compatibility
-                foreach (var c in webRequest.Cookies.Split(';'))
-                {
-                    try
-                    {
-                        cookies.SetCookies(cookieUrl, c.Trim());
-                    }
-                    catch (CookieException ex)
-                    {
-                        logger.Info("(Non-critical) Problem loading cookie {0}, {1}, {2}", uri, c, ex.Message);
-                    }
-                }
+                // don't include the path, Scheme is needed for mono compatibility
+                var requestUri = new Uri(webRequest.Url);
+                var cookieUrl = new Uri(requestUri.Scheme + "://" + requestUri.Host);
+                var cookieDictionary = CookieUtil.CookieHeaderToDictionary(webRequest.Cookies);
+                foreach (var kv in cookieDictionary)
+                    cookies.Add(cookieUrl, new Cookie(kv.Key, kv.Value));
             }
 
-            string userAgent = webRequest.EmulateBrowser.Value ? BrowserUtil.ChromeUserAgent : "Jackett/" + configService.GetVersion();
-
-            using (ClearanceHandler clearanceHandlr = new ClearanceHandler(userAgent))
+            using (var clearanceHandlr = new ClearanceHandler(serverConfig.FlareSolverrUrl))
             {
-                clearanceHandlr.MaxTries = 30;
-                using (HttpClientHandler clientHandlr = new HttpClientHandler
+                clearanceHandlr.MaxTimeout = serverConfig.FlareSolverrMaxTimeout;
+                clearanceHandlr.ProxyUrl = serverConfig.GetProxyUrl(false);
+                using (var clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
                     AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
@@ -172,12 +94,7 @@ namespace Jackett.Common.Utils.Clients
                     clearanceHandlr.InnerHandler = clientHandlr;
                     using (var client = new HttpClient(clearanceHandlr))
                     {
-                        if (webRequest.EmulateBrowser == true)
-                            client.DefaultRequestHeaders.Add("User-Agent", BrowserUtil.ChromeUserAgent);
-                        else
-                            client.DefaultRequestHeaders.Add("User-Agent", "Jackett/" + configService.GetVersion());
-
-                        HttpResponseMessage response = null;
+                        client.Timeout = TimeSpan.FromSeconds(ClientTimeout);
                         using (var request = new HttpRequestMessage())
                         {
                             request.Headers.ExpectContinue = false;
@@ -192,6 +109,15 @@ namespace Jackett.Common.Utils.Clients
                                         request.Headers.TryAddWithoutValidation(header.Key, header.Value);
                                     }
                                 }
+                            }
+
+                            // The User-Agent can be set by the indexer (in the headers)
+                            if (string.IsNullOrWhiteSpace(request.Headers.UserAgent.ToString()))
+                            {
+                                if (webRequest.EmulateBrowser == true)
+                                    request.Headers.UserAgent.ParseAdd(BrowserUtil.ChromeUserAgent);
+                                else
+                                    request.Headers.UserAgent.ParseAdd("Jackett/" + configService.GetVersion());
                             }
 
                             if (!string.IsNullOrEmpty(webRequest.Referer))
@@ -214,7 +140,7 @@ namespace Jackett.Common.Utils.Clients
                             else if (webRequest.Type == RequestType.POST)
                             {
                                 if (webRequest.PostData != null)
-                                    request.Content = new FormUrlEncodedContent(webRequest.PostData);
+                                    request.Content = FormUrlEncodedContentWithEncoding(webRequest.PostData, webRequest.Encoding);
                                 request.Method = HttpMethod.Post;
                             }
                             else
@@ -222,21 +148,21 @@ namespace Jackett.Common.Utils.Clients
                                 request.Method = HttpMethod.Get;
                             }
 
+                            HttpResponseMessage response;
                             using (response = await client.SendAsync(request))
                             {
-                                var result = new WebClientByteResult
+                                var result = new WebResult
                                 {
-                                    Content = await response.Content.ReadAsByteArrayAsync()
+                                    ContentBytes = await response.Content.ReadAsByteArrayAsync()
                                 };
 
                                 foreach (var header in response.Headers)
-                                {
-                                    IEnumerable<string> value = header.Value;
-                                    result.Headers[header.Key.ToLowerInvariant()] = value.ToArray();
-                                }
+                                    result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
+                                foreach (var header in response.Content.Headers)
+                                    result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
 
                                 // some cloudflare clients are using a refresh header
-                                // Pull it out manually 
+                                // Pull it out manually
                                 if (response.StatusCode == HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
                                 {
                                     var refreshHeaders = response.Headers.GetValues("Refresh");
@@ -254,10 +180,10 @@ namespace Jackett.Common.Utils.Clients
                                                 redirval = value.Substring(start + 1);
                                                 result.RedirectingTo = redirval;
                                                 // normally we don't want a serviceunavailable (503) to be a redirect, but that's the nature
-                                                // of this cloudflare approach..don't want to alter BaseWebResult.IsRedirect because normally
+                                                // of this cloudflare approach..don't want to alter WebResult.IsRedirect because normally
                                                 // it shoudln't include service unavailable..only if we have this redirect header.
                                                 response.StatusCode = System.Net.HttpStatusCode.Redirect;
-                                                redirtime = Int32.Parse(value.Substring(0, end));
+                                                redirtime = int.Parse(value.Substring(0, end));
                                                 System.Threading.Thread.Sleep(redirtime * 1000);
                                             }
                                         }
@@ -287,10 +213,9 @@ namespace Jackett.Common.Utils.Clients
                                 // Compatiblity issue between the cookie format and httpclient
                                 // Pull it out manually ignoring the expiry date then set it manually
                                 // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
-                                IEnumerable<string> cookieHeaders;
                                 var responseCookies = new List<Tuple<string, string>>();
 
-                                if (response.Headers.TryGetValues("set-cookie", out cookieHeaders))
+                                if (response.Headers.TryGetValues("set-cookie", out var cookieHeaders))
                                 {
                                     foreach (var value in cookieHeaders)
                                     {
@@ -315,19 +240,6 @@ namespace Jackett.Common.Utils.Clients
                     }
                 }
             }
-        }
-
-        override public void AddTrustedCertificate(string host, string hash)
-        {
-            hash = hash.ToUpper();
-            ICollection<string> hosts;
-            trustedCertificates.TryGetValue(hash.ToUpper(), out hosts);
-            if (hosts == null)
-            {
-                hosts = new HashSet<string>();
-                trustedCertificates[hash] = hosts;
-            }
-            hosts.Add(host);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -7,35 +7,29 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta charset="utf-8" />
-    <meta name="referrer" content="no-referrer" /> <!-- Don't send referrer when loading third party ressources (E.g. Empornium banner images won't load) -->
+    <meta name="referrer" content="no-referrer" /> <!-- Don't send referrer when loading third party resources (E.g. Empornium poster images won't load) -->
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="57x57" href="../apple-touch-icon-57x57.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="../apple-touch-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="../apple-touch-icon-76x76.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="../apple-touch-icon-114x114.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="../apple-touch-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="../apple-touch-icon-144x144" />
-    <link rel="apple-touch-icon" sizes="152x152" href="../apple-touch-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-180x180.png" />
-    <link rel="mask-icon" href="jackett_medium.png" color="#35c5f4">
+    <link rel="mask-icon" href="../jackett_medium.png" color="#35c5f4">
     <link rel="icon" type="image/ico" href="../favicon.ico" />
-    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico?' />
+    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
     <script type="text/javascript" src="../libs/filesize.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/jquery.min.js?changed=2017083001"></script>
+    <script type="text/javascript" src="../libs/jquery.min.js?changed=13019"></script>
     <script type="text/javascript" src="../libs/jquery.dataTables.min.js?changed=2017083001" charset="utf8"></script>
     <script type="text/javascript" src="../libs/handlebars.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/moment.min.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../libs/handlebarsmoment.js?changed=2017083001"></script>
+    <script type="text/javascript" src="../libs/handlebarsmoment.js?changed=20210117"></script>
     <script type="text/javascript" src="../libs/handlebarsextend.js?changed=2017083001"></script>
     <script type="text/javascript" src="../bootstrap/bootstrap.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-notify.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/bootstrap-multiselect.js?changed=2017083001"></script>
-    <!--<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>-->
+    <script type="text/javascript" src="../libs/tagify.min.js?changed=11662"></script>
+    <script type="text/javascript" src="../libs/jQuery.tagify.min.js?changed=11662"></script>
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20190401" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20190401" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20220512" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20220512" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=2017083001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -49,17 +43,22 @@
         <div class="pull-right jackett-apikey">
             <span class="input-header">API Key: </span>
             <input id="api-key-input" class="form-control input-right" type="text" value="" placeholder="API Key" readonly="">
+            <button id="api-key-copy-button" title="Copy API Key to clipboard" class="btn btn-primary btn-xs">
+                <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+            </button>
         </div>
         <hr />
 
-        <div id="can-upgrade-from-mono" hidden class="alert alert-info" role="alert"> 
+        <div id="can-upgrade-from-mono" hidden class="alert alert-info" role="alert">
             <strong>Standalone version of Jackett is now available - Mono not required</strong> <br>
-            To upgrade to the standalone version of Jackett, <a href="https://github.com/Jackett/Jackett#install-on-linux-amdx64" target="_blank" class="alert-link">click here</a> for install instructions. 
-            Upgrading is straight forward, simply install the standalone version and your indexers/configuration will carry over. 
-            Benefits include: increased performance, improved stability and no dependency on Mono. 
+            To upgrade to the standalone version of Jackett, <a href="https://github.com/Jackett/Jackett#install-on-linux-amdx64" target="_blank" class="alert-link">click here</a> for install instructions.
+            Upgrading is straight forward, simply install the standalone version and your indexers/configuration will carry over.
+            Benefits include: increased performance, improved stability and no dependency on Mono.
         </div>
 
         <div class="pull-right">
+            <div id="filters" class="btn-group btn-group-sm">
+            </div>
             <button id="jackett-add-indexer" class="btn btn-success btn-sm">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add indexer
             </button>
@@ -74,7 +73,7 @@
             </button>
         </div>
         <h3>Configured Indexers</h3>
-        <div id="indexers"> </div>
+        <div id="indexers"></div>
         <hr />
 
         <div class="input-area">
@@ -128,24 +127,29 @@
             </a>
         </div>
         <div class="input-area">
-            <span class="input-header">Base Path Override: </span>
+            <span class="input-header">Base path override: </span>
             <input id="jackett-basepathoverride" class="form-control input-right" type="text" value="" placeholder="/jackett">
+        </div>
+        <div class="input-area">
+            <span class="input-header">Base URL override: </span>
+            <input id="jackett-baseurloverride" class="form-control input-right" type="url" value="" placeholder="http://jackett:9117">
         </div>
         <div class="input-area">
             <span class="input-header">Server port: </span>
             <input id="jackett-port" class="form-control input-right" type="text" value="" placeholder="9117">
         </div>
         <div class="input-area">
-            <span class="input-header">Manual download blackhole directory: </span>
+            <span class="input-header">Blackhole directory: </span>
             <input id="jackett-savedir" class="form-control input-right" type="text" value="" placeholder="c:\torrents\">
         </div>
 
         <div class="input-area">
             <span class="input-header">Proxy type: </span>
             <select id="jackett-proxy-type" class="form-control input-right">
-                <option value="0">http</option>
-                <option value="1">socks4</option>
-                <option value="2">socks5</option>
+                <option value="-1">Disabled</option>
+                <option value="0">HTTP</option>
+                <option value="1">SOCKS4</option>
+                <option value="2">SOCKS5</option>
             </select>
         </div>
         <div id="proxy-warning" hidden>
@@ -154,8 +158,8 @@
             </span>
         </div>
         <div class="input-area">
-            <span class="input-header">Proxy url: </span>
-            <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="Blank to disable">
+            <span class="input-header">Proxy URL: </span>
+            <input id="jackett-proxy-url" class="form-control input-right" type="text" value="" placeholder="">
         </div>
         <div class="input-area">
             <span class="input-header">Proxy port: </span>
@@ -175,6 +179,10 @@
             <input id="jackett-allowext" class="form-control input-right" type="checkbox" />
         </div>
         <div class="input-area">
+            <span class="input-header">Allow CORS: </span>
+            <input id="jackett-allowcors" class="form-control input-right" type="checkbox" />
+        </div>
+        <div class="input-area">
             <span class="input-header">Disable auto update: </span>
             <input id="jackett-allowupdate" class="form-control input-right" type="checkbox" />
 
@@ -187,6 +195,26 @@
         <div class="input-area">
             <span class="input-header">Enhanced logging: </span>
             <input id="jackett-logging" class="form-control input-right" type="checkbox" />
+        </div>
+        <div class="input-area">
+            <span class="input-header">Cache enabled (recommended): </span>
+            <input id="jackett-cache-enabled" class="form-control input-right" type="checkbox" />
+        </div>
+        <div class="input-area">
+            <span class="input-header">Cache TTL (seconds): </span>
+            <input id="jackett-cache-ttl" class="form-control input-right" type="text" value="" placeholder="2100">
+        </div>
+        <div class="input-area">
+            <span class="input-header">Cache max results per indexer: </span>
+            <input id="jackett-cache-max-results-per-indexer" class="form-control input-right" type="text" value="" placeholder="1000">
+        </div>
+        <div class="input-area">
+          <span class="input-header">FlareSolverr API URL: </span>
+          <input id="jackett-flaresolverrurl" class="form-control input-right" type="url" value="" placeholder="Blank for default">
+        </div>
+        <div class="input-area">
+          <span class="input-header">FlareSolverr Max Timeout (ms): </span>
+          <input id="jackett-flaresolverr-maxtimeout" class="form-control input-right" type="text" value="" placeholder="55000">
         </div>
         <div class="input-area">
             <span class="input-header">OMDB API key: </span>
@@ -204,15 +232,8 @@
 
     <div id="modals"></div>
 
-    <script id="setup-item-nonlocalrecaptcha" type="text/x-handlebars-template">
-        <div class="setup-item-recaptcha">
-            <p>This site requires you to solve a ReCaptcha. It's no longer possible to solve the captcha in Jackett. Please enter the cookie for the site manually. <a href="https://github.com/Jackett/Jackett/wiki/Finding-cookies" target="_blank">See here</a> on how get the cookies.</p>
-            <div class="setup-item-label">Full cookie header</div>
-            <input class="form-control" type="text" value="{{cookieheader}}" />
-        </div>
-    </script>
     <script id="setup-item" type="text/x-handlebars-template">
-        <div class="setup-item form-group" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
+        <div class="setup-item form-filter" data-id="{{id}}" data-value="{{value}}" data-type="{{type}}">
             <div class="setup-item-label">{{name}}</div>
             <div class="setup-item-value">{{{value_element}}}</div>
         </div>
@@ -220,10 +241,15 @@
     <script id="setup-item-inputstring" type="text/x-handlebars-template">
         <div class="setup-item-inputstring">
             {{#if ispassword}}
-            <input class="form-control" type="password" value="{{{value}}}" />
+            <input class="form-control" type="password" value="{{value}}" />
             {{else}}
-            <input class="form-control" type="text" value="{{{value}}}" />
+            <input class="form-control" type="text" value="{{value}}" />
             {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-password" type="text/x-handlebars-template">
+        <div class="setup-item-password">
+            <input class="form-control" type="password" value="{{value}}" />
         </div>
     </script>
     <script id="setup-item-inputbool" type="text/x-handlebars-template">
@@ -233,6 +259,19 @@
             {{else}}
             <input type="checkbox" data-id="{{id}}" class="form-control" />
             {{/if}}
+        </div>
+    </script>
+    <script id="setup-item-inputcheckbox" type="text/x-handlebars-template">
+        <div class="setup-item-inputcheckbox">
+            {{#each options}}
+            <div class="checkbox"><label>
+            {{#if_in @key ../values}}
+            <input type="checkbox" data-id="{{../../id}}" class="form-control" value="{{@key}}" checked />
+            {{else}}
+            <input type="checkbox" data-id="{{../../id}}" class="form-control" value="{{@key}}" />
+            {{/if_in}}
+            {{this}}</label></div>
+            {{/each}}
         </div>
     </script>
     <script id="setup-item-inputselect" type="text/x-handlebars-template">
@@ -248,10 +287,6 @@
             </select>
         </div>
     </script>
-    <script id="setup-item-recaptcha" type="text/x-handlebars-template">
-        <div class="jackettrecaptcha">
-        </div>
-    </script>
     <script id="setup-item-displayimage" type="text/x-handlebars-template">
         <img class="setup-item-displayimage" src="{{{value}}}" alt="No image available" />
     </script>
@@ -260,7 +295,7 @@
     </script>
     <script id="setup-item-hiddendata" type="text/x-handlebars-template">
         <div class="setup-item-hiddendata">
-            <input class="form-control" type="text" value="{{{value}}}" />
+            <input class="form-control" type="text" value="{{value}}" />
         </div>
     </script>
     <script id="setup-item-alternativesitelinks" type="text/x-handlebars-template">
@@ -274,21 +309,26 @@
             Click on an URL to copy it to the Site Link field.
         </div>
     </script>
-
+    <script id="setup-item-inputtags" type="text/x-handlebars-template">
+      <div class="setup-item-inputtags">
+        <input class="form-control input-sm" type="text" value="{{{value}}}" {{#if pattern}} pattern="{{pattern}}"{{/if}}/>
+      </div>
+    </script>
 
     <script id="configured-indexer-table" type="text/x-handlebars-template">
-        <div class="configured-indexer-div">
-            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+        <div class="tab-content configured-indexer-div">
+            <table id="configured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
                         <th>Indexer</th>
                         <th>Actions</th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#each indexers}}
                     <tr class="configured-indexer-row">
-                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
+                        <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each tags}} <span title="{{this}}" class="label label-tag">{{this}}</span>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
                                 <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-xs btn-info">Copy RSS Feed</i></a>
@@ -310,12 +350,15 @@
                                 </button>
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2"></td>
+                      <th></th>
+                      <th></th>
+                      <th data-type="hiddendata"></th>
                     </tr>
                 </tfoot>
             </table>
@@ -324,24 +367,31 @@
 
     <script id="unconfigured-indexer-table" type="text/x-handlebars-template">
         <div class="unconfigured-indexer-div">
-            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive">
+            <table id="unconfigured-indexer-datatable" class="indexer-table dataTable compact cell-border hover stripe table table-responsive" style="width: 100%">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Indexer</th>
                         <th>Categories</th>
                         <th>Type</th>
-                        <th>Type string</th>
+                        <th data-type="hiddendata">Type string</th>
                         <th>Language</th>
                         <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#each indexers}}
                     <tr class="unconfigured-indexer-row">
+                        <td class="checkboxColumn">
+                            {{#if_eq type "public"}}
+                            <input type="checkbox" id="select{{id}}" data-id="{{id}}" />
+                            {{/if_eq}}
+                        </td>
                         <td><a target="_blank" href="{{site_link}}" title="{{description}}">{{name}}</a></td>
                         <td>{{mains_cats}}</td>
                         <td class="fit"><span title="{{type}}" class="label label-{{type_label}}" style="text-transform: capitalize;">{{type}}</span></td>
-                        <td>{{type}}</td>
+                        <td data-type="hiddendata">{{type}}</td>
                         <td class="fit">{{language}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
@@ -355,12 +405,20 @@
                                 {{/if_eq}}
                             </div>
                         </td>
+                        <td data-type="hiddendata">{{site_link}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="6"></td>
+                        <th></th>
+                        <th>Indexer</th>
+                        <th>Categories</th>
+                        <th>Type</th>
+                        <th data-type="hiddendata">Type string</th>
+                        <th>Language</th>
+                        <th></th>
+                        <th data-type="hiddendata">URL</th>
                     </tr>
                 </tfoot>
             </table>
@@ -400,17 +458,17 @@
                             </thead>
                             <tbody>
                                 {{#each releases}}
-                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                                <tr class="jackett-releases-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-tvdb="{{TVDBId}}" data-douban="{{DoubanId}}" data-poster="{{Poster}}" data-description="{{Description}}">
                                     <td class="fit">{{PublishDate}}</td>
                                     <td class="fit">{{FirstSeen}}</td>
                                     <td class="fit">{{jacketTimespan PublishDate}}</td>
                                     <td class="fit">{{jacketTimespan FirstSeen}}</td>
                                     <td class="fit">{{Tracker}}</td>
-                                    <td class="Title"><a href="{{Comments}}">{{Title}}</a> <span class="release-labels"></span></td>
+                                    <td class="Title"><a href="{{Details}}">{{Title}}</a> <span class="release-labels"></span></td>
                                     <td class="fit">{{Size}}</td>
                                     <td class="fit">{{jacketSize Size}}</td>
                                     <td class="fit">{{Files}}</td>
-                                    <td class="fit">{{CategoryDesc}}</td>
+                                    <td class="fit Cat">{{CategoryDesc}}</td>
                                     <td class="fit">{{Grabs}}</td>
                                     <td class="fit">{{Seeders}}</td>
                                     <td class="fit">{{Peers}}</td>
@@ -471,13 +529,18 @@
                     <div class="modal-body">
                         <p>You can search all configured indexers from this screen.</p>
                         <label for="text">Query</label>
-                        <input type="text" name="query" id="searchquery" />
-                        <label for="tracker">Tracker</label>
-                        <select name="tracker" id="searchTracker" multiple="multiple">
-                            {{#each indexers}}
-                            <option value="{{id}}" selected>{{name}}</option>
-                            {{/each}}
+                        <input class="form-control" type="text" name="query" id="searchquery" />
+                        {{#if filters}}
+                        <label for="filter">Filter</label>
+                        <select name="filter" id="searchFilter">
+                          <option value="all">all</option>
+                          {{#each filters}}
+                          <option value="{{id}}">{{id}}</option>
+                          {{/each}}
                         </select>
+                        {{/if}}
+                        <label for="tracker">Tracker</label>
+                        <select name="tracker" id="searchTracker" multiple="multiple"></select>
                         <label for="category">Category</label>
                         <select name="category" id="searchCategory" multiple="multiple"></select>
                         <button id="jackett-search-perform" class="btn btn-success btn-sm"><span class="fa fa-search"></span></button>
@@ -523,15 +586,15 @@
             </thead>
             <tbody>
                 {{#each Results}}
-                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-banner="{{BannerUrl}}" data-description="{{Description}}">
+                <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-tvdb="{{TVDBId}}" data-douban="{{DoubanId}}" data-poster="{{Poster}}" data-description="{{Description}}">
                     <td>{{PublishDate}}</td>
                     <td>{{jacketTimespan PublishDate}}</td>
                     <td>{{Tracker}}</td>
-                    <td class="Title"><a href="{{Comments}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
+                    <td class="Title"><a href="{{Details}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
                     <td>{{Size}}</td>
                     <td class="fit">{{jacketSize Size}}</td>
                     <td>{{Files}}</td>
-                    <td>{{CategoryDesc}}</td>
+                    <td class="Cat">{{CategoryDesc}}</td>
                     <td>{{Grabs}}</td>
                     <td>{{Seeders}}</td>
                     <td>{{Peers}}</td>
@@ -584,7 +647,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="add-selected-indexers" class="btn btn-default">Add Selected</button>
+                        <button type="button" id="close-selected-indexers" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -603,16 +668,16 @@
                         <table class="dataTable compact cell-border hover stripe">
                             <thead>
                                 <tr>
-                                    <th style="width: 200px">When</th>
-                                    <th style="width: 80px">Level</th>
+                                    <th>Date</th>
+                                    <th>Level</th>
                                     <th>Message</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each logs}}
                                 <tr class="jackettlog{{Level}}">
-                                    <td>{{dateFormat When}}</td>
-                                    <td>{{Level}}</td>
+                                    <td class="jackettlog-narrowcol">{{dateFormat When}}</td>
+                                    <td class="jackettlog-narrowcol">{{Level}}</td>
                                     <td><pre>{{Message}}</pre></td>
                                 </tr>
                                 {{/each}}
@@ -669,6 +734,17 @@
         </div>
     </script>
 
+    <script id="jackett-filters" type="text/x-handlebars-template">
+        <button id="jackett-filters-dropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="jackett-filters-dropdown">
+            <li class="{{#if_eq active null}}active{{/if_eq}}"><a href="#">All</a></li>
+            {{#each filters}}
+            <li class="{{#if_eq ../active id}}active{{/if_eq}}"><a href="#indexers&filter={{id}}" data-id="{{id}}">{{id}}</a></li>
+            {{/each}}
+        </ul>
+    </script>
+
     <script id="spinner" type="text/x-handlebars-template">
         <span class="spinner glyphicon glyphicon-refresh"></span>
     </script>
@@ -678,6 +754,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20190427"></script>
+    <script type="text/javascript" src="../custom.js?changed=20220606"></script>
 </body>
 </html>

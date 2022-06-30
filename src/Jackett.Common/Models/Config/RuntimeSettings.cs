@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Jackett.Common.Models.Config
@@ -10,8 +10,6 @@ namespace Jackett.Common.Models.Config
         public bool LogRequests { get; set; }
 
         public string ClientOverride { get; set; }
-
-        public string ProxyConnection { get; set; }
 
         public bool? IgnoreSslErrors { get; set; }
 
@@ -31,15 +29,15 @@ namespace Jackett.Common.Models.Config
         public string DataFolder
         {
             get
-            {                
-                if (!string.IsNullOrWhiteSpace(this.CustomDataFolder))
+            {
+                if (!string.IsNullOrWhiteSpace(CustomDataFolder))
                 {
-                    return this.CustomDataFolder;
+                    return CustomDataFolder;
                 }
 
                 if (System.Environment.OSVersion.Platform == PlatformID.Unix)
                 {
-                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Jackett");
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create), "Jackett");
                 }
                 else
                 {

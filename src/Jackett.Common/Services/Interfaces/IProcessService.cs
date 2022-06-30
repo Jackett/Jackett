@@ -1,4 +1,4 @@
-﻿namespace Jackett.Common.Services.Interfaces
+namespace Jackett.Common.Services.Interfaces
 {
     public interface IProcessService
     {

@@ -1,0 +1,115 @@
+---
+id: pornleech
+name: PornLeech
+description: "PornLeech is a Public Tracker for 3X"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://pornleech.ch/
+legacylinks:
+  - https://pornleech.io/
+  - http://pornleech.io/
+
+caps:
+  categorymappings:
+    - {id: 64, cat: XXX, desc: "Videos"}
+    - {id: 65, cat: XXX, desc: "Videos HD"}
+    - {id: 66, cat: XXX, desc: "Movies"}
+    - {id: 67, cat: XXX, desc: "Pictures"}
+    - {id: 69, cat: XXX, desc: "Hentai"}
+    - {id: 72, cat: XXX, desc: "Comics"}
+    - {id: 71, cat: XXX, desc: "3D"}
+    - {id: 70, cat: XXX, desc: "Pack"}
+    - {id: 77, cat: XXX, desc: "0day"}
+    - {id: 80, cat: XXX, desc: "Games"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      4: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+
+search:
+  path: index.php
+  inputs:
+    page: torrents
+    $raw: "category={{ range .Categories }}{{.}};{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 file, 1 file&descr, 2 descr, 3 uploaders
+    option: 0
+    # 0 all, 1 active, 2 dead
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  rows:
+    selector: table.lista > tbody > tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: td[valign="middle"] a
+    details:
+      selector: td[valign="middle"] a
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="torrentimg/"]
+      attribute: href
+    size:
+      selector: td[valign="middle"] > p:nth-child(3)
+      filters:
+        - name: regexp
+          args: "Size:\\s*\u00a0\\s*(.+?)$"
+    date:
+      selector: td[valign="middle"] > p:nth-child(4)
+      filters:
+        - name: regexp
+          args: "AddDate:\\s*\u00a0\\s*(.+?)$"
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "15:04:05 02/01/2006 -07:00"
+    seeders:
+      selector: td[valign="middle"] > p:nth-child(5)
+      filters:
+        - name: regexp
+          args: "Seeds:\\s*\u00a0\\s*(\\d+)\u00a0"
+    leechers:
+      selector: td[valign="middle"] > p:nth-child(5)
+      filters:
+        - name: regexp
+          args: "Leechers:\\s*\u00a0\\s*(\\d+)\u00a0"
+    grabs:
+      selector: td[valign="middle"] > p:nth-child(5)
+      filters:
+        - name: regexp
+          args: "Complete:\\s*\u00a0\\s*(.+?)$"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# xbtitFM v2.0.23

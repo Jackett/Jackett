@@ -1,0 +1,165 @@
+---
+id: dimeadozen
+name: DimeADozen
+description: "DimeADozen (EzTorrent) is a Semi-Private Torrent Tracker for BOOTLEG MUSIC"
+language: en-GB
+type: semi-private
+encoding: UTF-8
+links:
+  - http://www.dimeadozen.org/ # site does not support https ERR_CONNECTION_REFUSED
+
+caps:
+  categorymappings:
+    - {id: 51, cat: Audio, desc: "Acoustic"}
+    - {id: 4, cat: Audio, desc: "Alternate"}
+    - {id: 47, cat: Audio, desc: "Alternate Country"}
+    - {id: 7, cat: Audio, desc: "Americana"}
+    - {id: 45, cat: Audio, desc: "Avantgarde"}
+    - {id: 23, cat: Audio, desc: "Bluegrass"}
+    - {id: 10, cat: Audio, desc: "Blues"}
+    - {id: 17, cat: Audio, desc: "Brit Pop"}
+    - {id: 42, cat: Audio, desc: "Celtic Soul"}
+    - {id: 24, cat: Audio, desc: "Chanson"}
+    - {id: 25, cat: Audio, desc: "Classic"}
+    - {id: 55, cat: Audio, desc: "Classical"}
+    - {id: 44, cat: Audio, desc: "Club Rock"}
+    - {id: 3, cat: Audio, desc: "Country"}
+    - {id: 41, cat: Audio, desc: "Dancefloor"}
+    - {id: 49, cat: Audio, desc: "Desert Surf"}
+    - {id: 48, cat: Audio, desc: "Drum'n'Bass"}
+    - {id: 53, cat: Audio, desc: "Electronica"}
+    - {id: 26, cat: Audio, desc: "Ethno"}
+    - {id: 9, cat: Audio, desc: "Folk"}
+    - {id: 12, cat: Audio, desc: "Funk"}
+    - {id: 19, cat: Audio, desc: "Garage Rock"}
+    - {id: 27, cat: Audio, desc: "Gospel"}
+    - {id: 28, cat: Audio, desc: "Gothic Rock"}
+    - {id: 40, cat: Audio, desc: "Grunge"}
+    - {id: 61, cat: Audio, desc: "Hard Rock"}
+    - {id: 59, cat: Audio, desc: "Hardcore"}
+    - {id: 34, cat: Audio, desc: "Heavy Metal"}
+    - {id: 29, cat: Audio, desc: "HipHop"}
+    - {id: 30, cat: Audio, desc: "House"}
+    - {id: 31, cat: Audio, desc: "Industrial"}
+    - {id: 57, cat: Audio, desc: "Irish Folk"}
+    - {id: 50, cat: Audio, desc: "Jam Bands"}
+    - {id: 2, cat: Audio, desc: "Jazz"}
+    - {id: 60, cat: Audio, desc: "Jazz Fusion"}
+    - {id: 18, cat: Audio, desc: "Kraut Rock"}
+    - {id: 32, cat: Audio, desc: "Latin Music"}
+    - {id: 33, cat: Audio, desc: "Mainstream"}
+    - {id: 46, cat: Audio, desc: "New German Wave"}
+    - {id: 5, cat: Audio, desc: "New Wave"}
+    - {id: 14, cat: Audio, desc: "Pop"}
+    - {id: 13, cat: Audio, desc: "Progressive Rock"}
+    - {id: 58, cat: Audio, desc: "Psychedelic"}
+    - {id: 6, cat: Audio, desc: "Punk"}
+    - {id: 35, cat: Audio, desc: "Rap"}
+    - {id: 36, cat: Audio, desc: "Rave"}
+    - {id: 21, cat: Audio, desc: "Reggae"}
+    - {id: 1, cat: Audio, desc: "Rock"}
+    - {id: 20, cat: Audio, desc: "Rock'n'Roll"}
+    - {id: 8, cat: Audio, desc: "Singer/Songwriter"}
+    - {id: 22, cat: Audio, desc: "Ska"}
+    - {id: 37, cat: Audio, desc: "Skiffle"}
+    - {id: 11, cat: Audio, desc: "Soul"}
+    - {id: 54, cat: Audio, desc: "Southern Rock"}
+    - {id: 38, cat: Audio, desc: "Swing"}
+    - {id: 39, cat: Audio, desc: "Techno"}
+    - {id: 43, cat: Audio, desc: "Tin Pan Alley"}
+    - {id: 52, cat: Audio, desc: "Unplugged"}
+    - {id: 15, cat: Audio, desc: "West Coast"}
+    - {id: 16, cat: Audio, desc: "World Music"}
+    - {id: 56, cat: Audio, desc: "Zydeco"}
+
+  modes:
+    search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: take-login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    returnto: index.php
+    logout: ""
+  error:
+    - selector: table.message:contains("Error")
+  test:
+    path: index.php
+    selector: a[href="account-logout.php"]
+
+download:
+  # download.php/673256/Talk%20Talk%20-%201986-07-05%20Paris.torrent
+  selectors:
+    - selector: a[href^="download.php/"]
+      attribute: href
+
+search:
+  paths:
+    # http://www.dimeadozen.org/torrents-browse.php?search=%2Btalk+%2Bparis&cat=0&incldead=1&searchscope=1
+    - path: torrents-browse.php
+  inputs:
+    search: "{{ .Keywords }}"
+    # (empty) active only, 1 incldead
+    incldead: 1
+    # (empty) search in title & filename & descr, 1 title & filename only
+    searchscope: 1
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+  # does not support multi category filtering
+  # does not support imdbid searches, does not return imdb link in results
+  # does not support sorting
+
+  rows:
+    selector: table.torrent > tbody > tr:has(a[href^="torrents-details.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="torrents-browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="]
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " -00:00" # GMT
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    size:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.25
+# EzTorrent 0.7

@@ -1,0 +1,18 @@
+---
+#
+# doc https://yamllint.readthedocs.io/en/stable/
+#
+# run in local (linux)
+# install => sudo python3 -m pip install yamllint
+# run => yamllint -s -c ./yamllint.yml ./src/Jackett.Common/Definitions/
+#
+extends: default
+
+rules:
+  document-start:
+    level: error
+  line-length: disable
+  key-duplicates: disable
+  truthy: disable
+  comments:
+    min-spaces-from-content: 1

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Jackett.Common.Utils;
 
 namespace Jackett.Common.Models.DTO
@@ -9,10 +9,12 @@ namespace Jackett.Common.Models.DTO
         public string q { get; set; }
         public string cat { get; set; }
         public string imdbid { get; set; }
+        public string tmdbid { get; set; }
         public string extended { get; set; }
         public string limit { get; set; }
         public string offset { get; set; }
         public string rid { get; set; }
+        public string tvdbid { get; set; }
         public string season { get; set; }
         public string ep { get; set; }
         public string album { get; set; }
@@ -21,7 +23,10 @@ namespace Jackett.Common.Models.DTO
         public string track { get; set; }
         public string year { get; set; }
         public string genre { get; set; }
+        public string author { get; set; }
+        public string title { get; set; }
         public string configured { get; set; }
+        public string cache { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
         {
@@ -34,12 +39,18 @@ namespace Jackett.Common.Models.DTO
             };
             if (request.t != null)
                 query.QueryType = request.t;
-            if (!request.extended.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.extended))
                 query.Extended = ParseUtil.CoerceInt(request.extended);
-            if (!request.limit.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.limit))
                 query.Limit = ParseUtil.CoerceInt(request.limit);
-            if (!request.offset.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.offset))
                 query.Offset = ParseUtil.CoerceInt(request.offset);
+
+            bool _cache;
+            if (bool.TryParse(request.cache, out _cache))
+            {
+                query.Cache = _cache;
+            }
 
             if (request.cat != null)
             {
@@ -53,26 +64,33 @@ namespace Jackett.Common.Models.DTO
                     query.Categories = new int[0];
             }
 
-            if (!request.rid.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.rid))
                 query.RageID = int.Parse(request.rid);
-
-            if (!request.season.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.tvdbid))
+                query.TvdbID = int.Parse(request.tvdbid);
+            if (!string.IsNullOrWhiteSpace(request.season))
                 query.Season = int.Parse(request.season);
 
-            if (!request.album.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.tmdbid))
+                query.TmdbID = int.Parse(request.tmdbid);
+
+            if (!string.IsNullOrWhiteSpace(request.album))
                 query.Album = request.album;
-            if (!request.artist.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.artist))
                 query.Artist = request.artist;
-            if (!request.label.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.label))
                 query.Label = request.label;
-            if (!request.track.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.track))
                 query.Track = request.track;
-            if (!request.year.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.year))
                 query.Year = int.Parse(request.year);
-            if (!request.genre.IsNullOrEmptyOrWhitespace())
+            if (!string.IsNullOrWhiteSpace(request.genre))
                 query.Genre = request.genre.Split(',');
 
-            query.ExpandCatsToSubCats();
+            if (!string.IsNullOrWhiteSpace(request.title))
+                query.Title = request.title;
+            if (!string.IsNullOrWhiteSpace(request.author))
+                query.Author = request.author;
 
             return query;
         }

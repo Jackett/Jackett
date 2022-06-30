@@ -1,0 +1,148 @@
+---
+id: anime-free
+name: Anime-Free
+description: "Anime-Free is a RUSSIAN Semi-Private Torrent Tracker for Hentai manga, eroge and flash porn games"
+language: ru-RU
+type: semi-private
+encoding: windows-1251
+testlinktorrent: false
+certificates:
+  - 2b49b401259cb893f37de9eff343f7d356b1c2f2 # expired 8 ‎January ‎2022
+links:
+  - https://anime-free.biz/
+legacylinks:
+  - https://anime-free.net/ # redirects to *.biz
+
+caps:
+  categorymappings:
+    - {id: 14, cat: TV/Anime, desc: "Аниме хентай"}
+    - {id: 47, cat: TV/Anime, desc: "   Хентай на Русском языке"}
+    - {id: 48, cat: TV/Anime, desc: "   Хентай Без русского перевода"}
+    - {id: 45, cat: TV/Anime, desc: "   Хентай Без цензуры"}
+    - {id: 46, cat: TV/Anime, desc: "   Хентай с цензурой"}
+    - {id: 54, cat: Other, desc: "Косплей"}
+    - {id: 51, cat: TV/Anime, desc: "[3D] хентай и анимация"}
+    - {id: 5, cat: Books/Comics, desc: "Хентай манга"}
+    - {id: 56, cat: Console, desc: "Игры"}
+    - {id: 10, cat: Console, desc: "   Эротические и хентай игры"}
+    - {id: 55, cat: Console, desc: "   3DCG/3D-Animation игры"}
+    - {id: 57, cat: Console, desc: "   Игры на русском языке"}
+    - {id: 58, cat: Other, desc: "   Онлайн игры"}
+    - {id: 52, cat: Books/Comics, desc: "Порно комиксы"}
+    - {id: 49, cat: XXX/ImageSet, desc: "Хентай картинки, иллюстрации, обои и Art "}
+    - {id: 43, cat: TV/Anime, desc: "Эччи (Легкая эротика)"}
+    - {id: 4, cat: TV/Anime, desc: "Аниме Хентай"}
+    - {id: 50, cat: Other, desc: "Хентай Онлайн"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: email
+    type: text
+    label: Email
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: /
+  method: form
+  form: form.login-form
+  inputs:
+    login_name: "{{ .Config.email }}"
+    login_password: "{{ .Config.password }}"
+    login: submit
+  error:
+    - selector: div.berrors
+  test:
+    path: /
+    selector: a[href$="/index.php?action=logout"]
+
+download:
+  selectors:
+    - selector: a[href*="/engine/download.php?id="]
+      attribute: href
+
+search:
+  # https://anime-free.biz/index.php?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story=slaves+to+passion&all_word_seach=1&titleonly=3&searchuser=&replyless=0&replylimit=0&searchdate=0&beforeafter=after&sortby=date&resorder=desc&showposts=0&catlist[]=0
+  paths:
+    - path: index.php
+  inputs:
+    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+    do: search
+    subaction: search
+    search_start: 0
+    full_search: 1
+    result_from: 1
+    showposts: 0
+    all_word_seach: 1
+    # 0 article, 1 comments, 2 static pages, 3 article titles
+    titleonly: "{{ if .Keywords }}3{{ else }}0{{ end }}"
+    searchdate: 0
+    searchuser: ""
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    sortby: date
+    resorder: desc
+
+  rows:
+    selector: article
+
+  fields:
+    category_optional:
+      optional: true
+      selector: a[href*="category="]
+      attribute: href
+      case:
+        a[href$="3d_hentai"]: 51
+        a[href$="3dcg_game"]: 55
+        a[href$="censored"]: 46
+        a[href$="comics"]: 52
+        a[href$="cosplay"]: 54
+        a[href$="etty"]: 43
+        a[href$="h-game"]: 10
+        a[href$="h-online"]: 50
+        a[href$="hentai"]: 4
+        a[href$="hentai_games"]: 56
+        a[href$="hentai_manga"]: 5
+        a[href$="hentai_raznoe"]: 49
+        a[href$="hentai_rus"]: 47
+        a[href$="online_games"]: 58
+        a[href$="original_hentai"]: 48
+        a[href$="rus-game"]: 57
+        a[href$="uncensored"]: 45
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}54{{ end }}"
+    title:
+      selector: h2.title a
+    details:
+      selector: h2.title a
+      attribute: href
+    download:
+      selector: h2.title a
+      attribute: href
+    poster:
+      selector: img.entry-image
+      attribute: src
+    description:
+      selector: div[itemprop="description"]
+      optional: true
+    date:
+      selector: li:has(img#adddate)
+      filters:
+        - name: dateparse
+          args: "02-01-2006, 15:04"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    size_optional:
+      optional: true
+      selector: b.file_size
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

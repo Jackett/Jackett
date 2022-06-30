@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsQuery;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -13,69 +13,80 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class TorrentDay : BaseWebIndexer
     {
-        private string StartPageUrl { get { return SiteLink + "login.php"; } }
-        private string LoginUrl { get { return SiteLink + "tak3login.php"; } }
-        private string SearchUrl { get { return SiteLink + "t.json"; } }
+        private string SearchUrl => SiteLink + "t.json";
 
-        public override string[] LegacySiteLinks { get; protected set; } = new string[] {
-            "https://torrentday.com/"
-        };
-
-        public override string[] AlternativeSiteLinks { get; protected set; } = new string[] {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://tday.love/",
             "https://torrentday.cool/",
-            "https://tdonline.org/",
             "https://secure.torrentday.com/",
-            "https://torrentday.eu/",
             "https://classic.torrentday.com/",
             "https://www.torrentday.com/",
-            "https://td-update.com/",
-            "https://www.torrentday.me/",
-            "https://www.torrentday.ru/",
-            "https://www.td.af/",
             "https://torrentday.it/",
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
             "https://td.venom.global/",
-            "https://td.workisboring.net/",
+            "https://td.workisboring.net/"
         };
 
-        private new ConfigurationDataRecaptchaLogin configData
-        {
-            get { return (ConfigurationDataRecaptchaLogin)base.configData; }
-            set { base.configData = value; }
-        }
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://torrentday.com/",
+            "https://tdonline.org/", // redirect to https://www.torrentday.com/
+            "https://torrentday.eu/", // redirect to https://www.torrentday.com/
+            "https://td-update.com/", // redirect to https://www.torrentday.com/
+            "https://www.torrentday.me/",
+            "https://www.torrentday.ru/",
+            "https://www.td.af/"
+        };
 
-        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "TorrentDay",
-                description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                link: "https://tday.love/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                configData: new ConfigurationDataRecaptchaLogin("Make sure you get the cookies from the same torrent day domain as configured above."))
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
+
+        public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+            ICacheService cs)
+            : base(id: "torrentday",
+                   name: "TorrentDay",
+                   description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
+                   link: "https://tday.love/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataCookie(
+                       "Make sure you get the cookies from the same torrent day domain as configured above."))
         {
-            wc.EmulateBrowser = false;
             Encoding = Encoding.UTF8;
-            Language = "en-us";
+            Language = "en-US";
             Type = "private";
 
-            TorznabCaps.SupportsImdbMovieSearch = true;
+            wc.EmulateBrowser = false;
 
-            AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(28, TorznabCatType.PC, "Appz/Packs");
-            AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
-            AddCategoryMapping(20, TorznabCatType.Books, "Books");
-            AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
-            AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
-            AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
 
             AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
             AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
@@ -89,177 +100,140 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
-            AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
-            AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
-            AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
-            AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
-            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
-            
-            AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
-
-            AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
-            AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS3");
-            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
-            AddCategoryMapping(10, TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping(9, TorznabCatType.ConsoleXbox360, "Xbox-360");
-
             AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
             AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
             AddCategoryMapping(31, TorznabCatType.TVSD, "TV/DVD-R");
             AddCategoryMapping(33, TorznabCatType.TVSD, "TV/DVD-Rip");
             AddCategoryMapping(46, TorznabCatType.TVSD, "TV/Mobile");
+            AddCategoryMapping(82, TorznabCatType.TVForeign, "TV/Non-English");
             AddCategoryMapping(14, TorznabCatType.TV, "TV/Packs");
             AddCategoryMapping(26, TorznabCatType.TVSD, "TV/SD/x264");
             AddCategoryMapping(7, TorznabCatType.TVHD, "TV/x264");
             AddCategoryMapping(34, TorznabCatType.TVUHD, "TV/x265");
             AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
 
-            AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
-            AddCategoryMapping(15, TorznabCatType.XXXPacks, "XXX/Packs");
-        }
+            AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
+            AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS");
+            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
+            AddCategoryMapping(10, TorznabCatType.ConsoleNDS, "Nintendo");
+            AddCategoryMapping(9, TorznabCatType.ConsoleXBox, "Xbox");
 
-        public override async Task<ConfigurationData> GetConfigurationForSetup()
-        {
-            var loginPage = await RequestStringWithCookies(StartPageUrl, string.Empty);
-            if (loginPage.IsRedirect)
-                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
-            if (loginPage.IsRedirect)
-                loginPage = await RequestStringWithCookies(loginPage.RedirectingTo, string.Empty);
-            CQ cq = loginPage.Content;
-            var result = this.configData;
-            
-            //result.CookieHeader.Value = loginPage.Cookies;
-            UpdateCookieHeader(loginPage.Cookies); // update cookies instead of replacing them, see #3717
-            result.Captcha.SiteKey = cq.Find(".g-recaptcha").Attr("data-sitekey");
-            result.Captcha.Version = "2";
-            return result;
+            AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
+            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
+            AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
+            AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
+            AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
+
+            AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
+            AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
+            AddCategoryMapping(20, TorznabCatType.Books, "Books");
+            AddCategoryMapping(102, TorznabCatType.BooksForeign, "Books/Non-English");
+            AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
+            AddCategoryMapping(95, TorznabCatType.TVDocumentary, "Educational");
+            AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
+            AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
+            AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
+            AddCategoryMapping(28, TorznabCatType.PC, "Softwa/Packs");
+            AddCategoryMapping(12, TorznabCatType.PC, "Software");
+
+            AddCategoryMapping(19, TorznabCatType.XXX, "XXX/0Day");
+            AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
+            AddCategoryMapping(15, TorznabCatType.XXXPack, "XXX/Packs");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value },
-                { "g-recaptcha-response", configData.Captcha.Value }
-            };
 
-            if (!string.IsNullOrWhiteSpace(configData.Captcha.Cookie))
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                // Cookie was manually supplied
-                CookieHeader = configData.Captcha.Cookie;
-                try
-                {
-                    var results = await PerformQuery(new TorznabQuery());
-                    if (results.Count() == 0)
-                    {
-                        throw new Exception("no results found, please report this bug");
-                    }
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
 
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-                catch (Exception e)
-                {
-                    IsConfigured = false;
-                    throw new Exception("Your cookie did not work: " + e.Message);
-                }
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
             }
-
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CookieHeader.Value, true, null, LoginUrl);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("logout.php"), () =>
+            catch (Exception e)
             {
-                CQ dom = result.Content;
-                var messageEl = dom["#login"];
-                messageEl.Children("form").Remove();
-                var errorMessage = messageEl.Text().Trim();
-
-                if (string.IsNullOrWhiteSpace(errorMessage))
-                {
-                    errorMessage = dom.Text();
-                }
-
-                if (string.IsNullOrWhiteSpace(errorMessage) && result.IsRedirect)
-                {
-                    errorMessage = string.Format("Got a redirect to {0}, please adjust your the alternative link", result.RedirectingTo);
-                }
-
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchString = query.GetQueryString();
-            var queryUrl = SearchUrl;
 
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count == 0)
                 cats = GetAllTrackerCategories();
-
             var catStr = string.Join(";", cats);
-            queryUrl += "?" + catStr;
+            var searchUrl = SearchUrl + "?" + catStr;
 
-            if (!string.IsNullOrWhiteSpace(query.ImdbID))
-            {
-                queryUrl += ";q=" + query.ImdbID;
-            }
+            if (query.IsImdbQuery)
+                searchUrl += ";q=" + query.ImdbID;
             else
-            {
-                queryUrl += ";q=" + WebUtilityHelpers.UrlEncode(searchString, Encoding);
-            }
+                searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding);
 
-            var results = await RequestStringWithCookiesAndRetry(queryUrl);
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+                searchUrl += ";free=on";
+
+            var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Check for being logged out
             if (results.IsRedirect)
                 if (results.RedirectingTo.Contains("login.php"))
-                    throw new ExceptionWithConfigData("Login failed, please reconfigure the tracker to update the cookies", configData);
+                    throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");
                 else
-                    throw new ExceptionWithConfigData(string.Format("Got a redirect to {0}, please adjust your the alternative link", results.RedirectingTo), configData);
+                    throw new Exception($"Got a redirect to {results.RedirectingTo}, please adjust your the alternative link");
 
             try
             {
-                dynamic json = JsonConvert.DeserializeObject<dynamic>(results.Content);
+                var rows = JsonConvert.DeserializeObject<dynamic>(results.ContentString);
 
-                foreach (var torrent in json)
+                foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-
-                    release.Title = torrent.name;
-                    if ((query.ImdbID == null || !TorznabCaps.SupportsImdbMovieSearch) && !query.MatchQueryStringAND(release.Title))
+                    var title = (string)row.name;
+                    if ((!query.IsImdbQuery || !TorznabCaps.MovieSearchImdbAvailable) && !query.MatchQueryStringAND(title))
                         continue;
+                    var torrentId = (long)row.t;
+                    var details = new Uri(SiteLink + "details.php?id=" + torrentId);
+                    var seeders = (int)row.seeders;
+                    var imdbId = (string)row["imdb-id"];
+                    var downloadMultiplier = (double?)row["download-multiplier"] ?? 1;
+                    var link = new Uri(SiteLink + "download.php/" + torrentId + "/" + torrentId + ".torrent");
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime((long)row.ctime).ToLocalTime();
+                    var imdb = ParseUtil.GetImdbID(imdbId);
 
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-                    release.Category = MapTrackerCatToNewznab(torrent.c.ToString());
-                    
-                    var torrentID = (long)torrent.t;
-                    release.Comments = new Uri(SiteLink + "details.php?id=" + torrentID);
-                    release.Guid = release.Comments;
-                    release.Link = new Uri(SiteLink + "download.php/" + torrentID + "/"+ torrentID + ".torrent");
-                    release.PublishDate = DateTimeUtil.UnixTimestampToDateTime((long)torrent.ctime).ToLocalTime();
-
-                    release.Size = (long)torrent.size;
-                    release.Seeders = (int)torrent.seeders;
-                    release.Peers = release.Seeders + (int)torrent.leechers;
-                    release.Files = (long)torrent.files;
-                    release.Grabs = (long)torrent.completed;
-                    var imdbId = (string)torrent["imdb-id"];
-                    release.Imdb = ParseUtil.GetImdbID(imdbId);
-                    var downloadMultiplier = (double?)torrent["download-multiplier"];
-                    release.DownloadVolumeFactor = downloadMultiplier ?? 1;
-                    release.UploadVolumeFactor = 1;
+                    var release = new ReleaseInfo
+                    {
+                        Title = title,
+                        Details = details,
+                        Guid = details,
+                        Link = link,
+                        PublishDate = publishDate,
+                        Category = MapTrackerCatToNewznab(row.c.ToString()),
+                        Size = (long)row.size,
+                        Files = (long)row.files,
+                        Grabs = (long)row.completed,
+                        Seeders = seeders,
+                        Peers = seeders + (int)row.leechers,
+                        Imdb = imdb,
+                        DownloadVolumeFactor = downloadMultiplier,
+                        UploadVolumeFactor = 1,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
+                    };
 
                     releases.Add(release);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(results.Content, ex);
+                OnParseError(results.ContentString, ex);
             }
             return releases;
         }

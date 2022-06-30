@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CsQuery;
+using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -15,65 +17,80 @@ using NLog;
 
 namespace Jackett.Common.Indexers
 {
+    [ExcludeFromCodeCoverage]
     public class Hebits : BaseWebIndexer
     {
-        private string LoginUrl { get { return SiteLink + "login.php"; } }
-        private string LoginPostUrl { get { return SiteLink + "takeloginAjax.php"; } }
-        private string SearchUrl { get { return SiteLink + "browse.php?sort=4&type=desc"; } }
+        private string SearchUrl => SiteLink + "torrents.php?order_way=desc&order_by=time";
+        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
-        private new ConfigurationDataBasicLogin configData
+        public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+            IProtectionService ps, ICacheService cs)
+            : base(id: "hebits",
+                   name: "Hebits",
+                   description: "The Israeli Tracker",
+                   link: "https://hebits.net/",
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
+                   configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataCookie())
         {
-            get { return (ConfigurationDataBasicLogin)base.configData; }
-            set { base.configData = value; }
-        }
-
-        public Hebits(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps)
-            : base(name: "Hebits",
-                description: "The Israeli Tracker",
-                link: "https://hebits.net/",
-                caps: TorznabUtil.CreateDefaultTorznabTVCaps(),
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                downloadBase: "https://hebits.net/",
-                configData: new ConfigurationDataBasicLogin())
-        {
-            Encoding = Encoding.GetEncoding("windows-1255");
-            Language = "he-il";
+            Encoding = Encoding.GetEncoding("UTF-8");
+            Language = "he-IL";
             Type = "private";
 
-            AddCategoryMapping(19, TorznabCatType.MoviesSD);
-            AddCategoryMapping(25, TorznabCatType.MoviesOther); // Israeli Content
-            AddCategoryMapping(20, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(36, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(27, TorznabCatType.MoviesHD);
-
-            AddCategoryMapping(7, TorznabCatType.TVSD); // Israeli SDTV
-            AddCategoryMapping(24, TorznabCatType.TVSD); // English SDTV
-            AddCategoryMapping(1, TorznabCatType.TVHD); // Israel HDTV
-            AddCategoryMapping(37, TorznabCatType.TVHD); // Israel HDTV
+            AddCategoryMapping(1, TorznabCatType.Movies, "סרטים (Movies)");
+            AddCategoryMapping(2, TorznabCatType.TV, "סדרות (TV)");
+            AddCategoryMapping(3, TorznabCatType.TVOther, "הצגות והופעות (Theater)");
+            AddCategoryMapping(4, TorznabCatType.PC, "תוכנות (Apps)");
+            AddCategoryMapping(5, TorznabCatType.Console, "משחקים (Games)");
+            AddCategoryMapping(6, TorznabCatType.Audio, "מוזיקה (Music)");
+            AddCategoryMapping(7, TorznabCatType.Books, "ספרים (Books)");
+            AddCategoryMapping(8, TorznabCatType.MoviesOther, "חבילות סרטים (Movies Packs)");
+            AddCategoryMapping(9, TorznabCatType.XXX, "פורנו (Porn)");
+            AddCategoryMapping(10, TorznabCatType.Other, "שונות (Other)");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pairs = new Dictionary<string, string> {
-                { "username", configData.Username.Value },
-                { "password", configData.Password.Value }
-            };
 
-            // Get inital cookies
-            CookieHeader = string.Empty;
-            var result = await RequestLoginAndFollowRedirect(LoginPostUrl, pairs, CookieHeader, true, null, SiteLink);
-            await ConfigureIfOK(result.Cookies, result.Content != null && result.Content.Contains("OK"), () =>
+            CookieHeader = configData.Cookie.Value;
+            try
             {
-                CQ dom = result.Content;
-                var errorMessage = dom.Text().Trim();
-                errorMessage += " attempts left. Please check your credentials.";
-                throw new ExceptionWithConfigData(errorMessage, configData);
-            });
-            return IndexerConfigurationStatus.RequiresTesting;
+                var results = await PerformQuery(new TorznabQuery());
+                if (!results.Any())
+                    throw new Exception("Found 0 results in the tracker");
+
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -81,89 +98,80 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
-
             if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                searchUrl += "&search=" + WebUtilityHelpers.UrlEncode(searchString, Encoding);
-            }
-            string.Format(SearchUrl, WebUtilityHelpers.UrlEncode(searchString, Encoding));
-
+                searchUrl += "&action=advanced&searchsubmit=1&filelist=" + WebUtilityHelpers.UrlEncode(searchString, Encoding);
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count > 0)
-            {
-                foreach (var cat in cats)
-                {
-                    searchUrl += "&c" + cat + "=1";
-                }
-            }
-
-            var response = await RequestStringWithCookies(searchUrl);
+                searchUrl = cats.Aggregate(searchUrl, (url, cat) => $"{url}&filter_cat[{cat}]=1");
+            var response = await RequestWithCookiesAsync(searchUrl);
             try
             {
-                CQ dom = response.Content;
-
-                CQ qRows = dom[".browse > div > div"];
-
-                foreach (var row in qRows)
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.ContentString);
+                var rows = dom.QuerySelectorAll("table#torrent_table > tbody > tr.torrent");
+                foreach (var row in rows)
                 {
-                    var release = new ReleaseInfo();
-
-                    var qRow = row.Cq();
-
-                    var debug = qRow.Html();
-
-                    release.MinimumRatio = 1;
-                    release.MinimumSeedTime = 172800;
-
-                    var qTitle = qRow.Find(".bTitle");
-                    var titleParts = qTitle.Text().Split('/');
-                    if (titleParts.Length >= 2)
-                        release.Title = titleParts[1].Trim();
-                    else
-                        release.Title = titleParts[0].Trim();
-
-                    var qDetailsLink = qTitle.Find("a[href^=\"details.php\"]");
-                    release.Comments = new Uri(SiteLink + qDetailsLink.Attr("href"));
-                    release.Link = new Uri(SiteLink + qRow.Find("a[href^=\"download.php\"]").Attr("href"));
-                    release.Guid = release.Link;
-
-                    var dateString = qRow.Find("div:last-child").Text().Trim();
-                    var pattern = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}";
-                    var match = Regex.Match(dateString, pattern);
-                    if (match.Success)
+                    var release = new ReleaseInfo
                     {
-                        release.PublishDate = DateTime.ParseExact(match.Value, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    }
-
-                    var sizeStr = qRow.Find(".bSize").Text();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-                    release.Seeders = ParseUtil.CoerceInt(qRow.Find(".bUping").Text().Trim());
-                    release.Peers = release.Seeders + ParseUtil.CoerceInt(qRow.Find(".bDowning").Text().Trim());
-
-                    var files = qRow.Find("div.bFiles").Get(0).LastChild.ToString();
-                    release.Files = ParseUtil.CoerceInt(files);
-
-                    var grabs = qRow.Find("div.bFinish").Get(0).LastChild.ToString();
-                    release.Grabs = ParseUtil.CoerceInt(grabs);
-
-                    if (qRow.Find("img[src=\"/pic/free.jpg\"]").Length >= 1)
-                        release.DownloadVolumeFactor = 0;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    if (qRow.Find("img[src=\"/pic/triple.jpg\"]").Length >= 1)
-                        release.UploadVolumeFactor = 3;
-                    else if (qRow.Find("img[src=\"/pic/double.jpg\"]").Length >= 1)
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
-
+                        MinimumRatio = 1.0,
+                        MinimumSeedTime = 604800 // 168 hours
+                    };
+                    var qCat = row.QuerySelector("div[class*=\"cats_\"]");
+                    var catStr = qCat.GetAttribute("class").Split('_')[1];
+                    release.Category = catStr switch
+                    {
+                        "movies" => MapTrackerCatToNewznab("1"),
+                        "tv" => MapTrackerCatToNewznab("2"),
+                        "theater" => MapTrackerCatToNewznab("3"),
+                        "software" => MapTrackerCatToNewznab("4"),
+                        "games" => MapTrackerCatToNewznab("5"),
+                        "music" => MapTrackerCatToNewznab("6"),
+                        "books" => MapTrackerCatToNewznab("7"),
+                        "moviespacks" => MapTrackerCatToNewznab("8"),
+                        "porno" => MapTrackerCatToNewznab("9"),
+                        "other" => MapTrackerCatToNewznab("10"),
+                        _ => throw new Exception("Error parsing category! Unknown cat=" + catStr),
+                    };
+                    var qTitle = row.QuerySelector("div.torrent_info");
+                    release.Title = qTitle.TextContent.Trim();
+                    var qDetailsLink = row.QuerySelector("a.torrent_name");
+                    // I don't understand, I correctly build the poster as
+                    // https://hebits.net/images/oRbJr/3776T8DeNsKbyUM3tsV0LBY_v_JfdfmkhShh_LguTP.jpg
+                    // yet the dashboard shows a broken icon symbol! No idea why this does not work.
+                    //if (!string.IsNullOrEmpty(qDetailsLink.GetAttribute("data-cover")))
+                    //{
+                    //    release.Poster = new Uri(SiteLink.TrimEnd('/') + qDetailsLink.GetAttribute("data-cover"));
+                    //    logger.Debug("poster=" + release.Poster);
+                    //}
+                    release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    release.Link = new Uri(SiteLink + row.QuerySelector("a[href^=\"torrents.php?action=download&id=\"]").GetAttribute("href"));
+                    release.Guid = release.Link;
+                    var qDate = row.QuerySelector("span.time").GetAttribute("title");
+                    release.PublishDate = DateTime.ParseExact(qDate, "dd/MM/yyyy, HH:mm", CultureInfo.InvariantCulture);
+                    var qSize = row.QuerySelector("td:nth-last-child(4)").TextContent.Trim();
+                    release.Size = ReleaseInfo.GetBytes(qSize);
+                    release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(2)").TextContent.Trim());
+                    release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(1)").TextContent.Trim());
+                    release.Files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(6)").TextContent.Trim());
+                    release.Grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(3)").TextContent.Trim());
+                    release.DownloadVolumeFactor = release.Title.Contains("פריליץ")
+                        ? 0
+                        : release.Title.Contains("חצי פריליץ")
+                            ? 0.5
+                            : release.Title.Contains("75% פריליץ")
+                                ? 0.25
+                                : 1;
+                    release.UploadVolumeFactor = release.Title.Contains("העלאה משולשת")
+                        ? 3
+                        : release.Title.Contains("העלאה כפולה")
+                            ? 2
+                            : 1;
                     releases.Add(release);
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -12,31 +13,35 @@ using NLog;
 
 namespace Jackett.Common.Indexers.Abstract
 {
+    [ExcludeFromCodeCoverage]
     public abstract class CouchPotatoTracker : BaseWebIndexer
     {
         protected string endpoint;
-        protected string APIUrl { get { return SiteLink + endpoint; } }
+        protected string APIUrl => SiteLink + endpoint;
 
-        new ConfigurationDataUserPasskey configData
+        private new ConfigurationDataUserPasskey configData
         {
-            get { return (ConfigurationDataUserPasskey)base.configData; }
-            set { base.configData = value; }
+            get => (ConfigurationDataUserPasskey)base.configData;
+            set => base.configData = value;
         }
 
-        public CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ConfigurationDataUserPasskey configData, string name, string description, string link, string endpoint)
-            : base(name: name,
-                description: description,
-                link: link,
-                caps: new TorznabCapabilities(),
-                configService: configService,
-                client: client,
-                logger: logger,
-                p: p,
-                configData: configData
-            )
+        protected CouchPotatoTracker(string link, string id, string name, string description,
+                                     IIndexerConfigurationService configService, WebClient client, Logger logger,
+                                     IProtectionService p, ICacheService cs, TorznabCapabilities caps,
+                                     ConfigurationData configData, string endpoint)
+            : base(id: id,
+                   name: name,
+                   description: description,
+                   link: link,
+                   caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   cacheService: cs,
+                   configData: configData)
         {
             this.endpoint = endpoint;
-            TorznabCaps.SupportsImdbMovieSearch = true;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -47,11 +52,8 @@ namespace Jackett.Common.Indexers.Abstract
             return await Task.FromResult(IndexerConfigurationStatus.RequiresTesting);
         }
 
-        protected virtual string GetSearchString(TorznabQuery query)
-        {
-            // can be overriden to alter the search string
-            return query.GetQueryString();
-        }
+        // can be overriden to alter the search string
+        protected virtual string GetSearchString(TorznabQuery query) => query.GetQueryString();
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
@@ -60,9 +62,9 @@ namespace Jackett.Common.Indexers.Abstract
 
             var searchUrl = APIUrl;
             var queryCollection = new NameValueCollection();
-            
+
             if (!string.IsNullOrEmpty(query.ImdbID))
-            { 
+            {
                 queryCollection.Add("imdbid", query.ImdbID);
             }
             if (searchString != null)
@@ -74,16 +76,16 @@ namespace Jackett.Common.Indexers.Abstract
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var response = await RequestStringWithCookiesAndRetry(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             JObject json = null;
             try
             {
-                json = JObject.Parse(response.Content);
+                json = JObject.Parse(response.ContentString);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while parsing json: " + response.Content, ex);
+                throw new Exception("Error while parsing json: " + response.ContentString, ex);
             }
             var error = (string)json["error"];
             if (error != null)
@@ -96,10 +98,12 @@ namespace Jackett.Common.Indexers.Abstract
             {
                 foreach (JObject r in json["results"])
                 {
-                    var release = new ReleaseInfo();
-                    release.Title = (string)r["release_name"];
-                    release.Comments = new Uri((string)r["details_url"]);
-                    release.Link = new Uri((string)r["download_url"]);
+                    var release = new ReleaseInfo
+                    {
+                        Title = (string)r["release_name"],
+                        Details = new Uri((string)r["details_url"]),
+                        Link = new Uri((string)r["download_url"])
+                    };
                     release.Guid = release.Link;
                     release.Imdb = ParseUtil.GetImdbID((string)r["imdb_id"]);
                     var freeleech = (bool)r["freeleech"];
@@ -119,7 +123,7 @@ namespace Jackett.Common.Indexers.Abstract
             }
             catch (Exception ex)
             {
-                OnParseError(response.Content, ex);
+                OnParseError(response.ContentString, ex);
             }
 
             return releases;

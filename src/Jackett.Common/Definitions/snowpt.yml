@@ -1,0 +1,102 @@
+---
+id: snowpt
+name: SnowPT
+description: "SnowPT (SSPT) is a CHINESE Private Torrent Tracker for ANIME"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://skyeysnow.com/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "Anime"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+login:
+  path: login.php
+  method: form
+  form: form[id^="loginform_"]
+  inputs:
+    referer: /
+    loginfield: username
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    cookietime: 2592000
+  error:
+    - selector: div#messagetext:contains("登录失败") p
+  test:
+    path: /
+    selector: a[href*="action=logout&formhash="]
+
+search:
+  paths:
+    # https://skyeysnow.com/forum.php?mod=torrents&cat=1&search=sei+no+kakuritsu
+    - path: forum.php
+  inputs:
+    mod: torrents
+    cat: 1
+    search: "{{ .Keywords }}"
+
+  rows:
+    selector: table.torrents > tbody > tr:has(a[href^="/download.php?id="])
+
+  fields:
+    category:
+      text: 1
+    title_default:
+      selector: a[href^="/forum.php?mod=viewthread&tid="]
+    title_optional:
+      optional: true
+      selector: a[title][href^="/forum.php?mod=viewthread&tid="]
+      attribute: title
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+    details:
+      selector: a[href^="/forum.php?mod=viewthread&tid="]
+      attribute: href
+    download:
+      selector: a[href^="/download.php?id="]
+      attribute: href
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td:nth-child(3) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    date_added:
+      # time added
+      selector: td:nth-child(3):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(4)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      case:
+        img.sp_4: 0 # FREE
+        img.sp_2: 0.5 # 50%
+        "*": 1
+    uploadvolumefactor:
+      case:
+#          img.sp_0: 2 # do not know what a flag of 2xSFC means, but I dont think this is a 2xupload
+        "*": 1
+# Discuz! X3.4
