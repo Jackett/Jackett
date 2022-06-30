@@ -36,7 +36,8 @@ namespace Jackett.Common.Indexers
             "https://cinecalidad3.com/",
             "https://www5.cine-calidad.com/",
             "https://v3.cine-calidad.com/",
-            "https://www.cine-calidad.com/"
+            "https://www.cine-calidad.com/",
+            "https://www.cinecalidad.lat/"
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -44,7 +45,7 @@ namespace Jackett.Common.Indexers
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
                    description: "Películas Full HD en Latino Dual.",
-                   link: "https://www.cinecalidad.lat/",
+                   link: "https://cinecalidad.dev/",
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
