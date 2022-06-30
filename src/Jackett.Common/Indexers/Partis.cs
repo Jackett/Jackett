@@ -117,6 +117,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.PC, "PC programi/drugo");
             AddCategoryMapping(58, TorznabCatType.PCMac, "Mac Programi");
             AddCategoryMapping(16, TorznabCatType.PCISO, "PC programi/ISO");
+            AddCategoryMapping(50, TorznabCatType.PC, "Linux programi");
 
             // Other
             AddCategoryMapping(21, TorznabCatType.AudioAudiobook, "AudioBook");
@@ -127,6 +128,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(26, TorznabCatType.PCMobileAndroid, "PDA");
             AddCategoryMapping(61, TorznabCatType.PCMobileAndroid, "GSM/Programi");
             AddCategoryMapping(62, TorznabCatType.PCMobileAndroid, "GSM/Ostalo");
+            AddCategoryMapping(29, TorznabCatType.PCMobileiOS, "iPOD");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
