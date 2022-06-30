@@ -291,6 +291,7 @@ namespace Jackett.Updater
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
                 "Definitions/blutopia.yml", // switch to *-API #8682
+                "Definitions/brasiltracker.yml", // migrated to C#
                 "Definitions/brobits.yml",
                 "Definitions/brsociety.yml", // switch to *-API #8682
                 "Definitions/bt-scene.yml",
@@ -420,6 +421,7 @@ namespace Jackett.Updater
                 "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
+                "Definitions/netlab.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/nforce.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
@@ -528,6 +530,7 @@ namespace Jackett.Updater
                 "Definitions/torviet.yml",
                 "Definitions/trackeros-api.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
+                "Definitions/trupornolabs.yml",
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/turknova.yml",

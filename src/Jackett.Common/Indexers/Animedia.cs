@@ -145,6 +145,11 @@ namespace Jackett.Common.Indexers
                     var release = (ReleaseInfo)baseRelease.Clone();
                     var tr_id = t.Attributes["href"].Value;
                     var tr = document.QuerySelector("div" + tr_id);
+                    if (tr.Text().Contains("TORRENT READ ERROR"))
+                    {
+                        logger.Warn($"{DisplayName} The page at {uri.ToString()} has a TORRENT READ ERROR alert. Unable to retrieve this torrent's details.");
+                        continue;
+                    }
                     release.Title += " - " + composeTitleAdditionalInfo(t, tr);
                     release.Link = new Uri(tr.QuerySelector("div.download_tracker > a.btn__green").Attributes["href"].Value);
                     release.MagnetUri = new Uri(tr.QuerySelector("div.download_tracker > a.btn__d-gray").Attributes["href"].Value);
