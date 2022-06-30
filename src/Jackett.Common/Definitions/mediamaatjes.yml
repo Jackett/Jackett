@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 45, cat: Console/Other, desc: "Retro-spellen"}
     - {id: 43, cat: Movies/UHD, desc: "4k Films"}
     - {id: 41, cat: TV/Documentary, desc: "Documentaire"}
     - {id: 40, cat: Other, desc: "kerst"}
