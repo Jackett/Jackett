@@ -66,30 +66,32 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             // Movies
-            AddCategoryMapping(40, TorznabCatType.MoviesBluRay, "Blu-Ray 1080p/i");
-            AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Blu-Ray 720p/i");
-            AddCategoryMapping(43, TorznabCatType.MoviesBluRay, "Blu-Ray B-Disc");
-            AddCategoryMapping(41, TorznabCatType.MoviesBluRay, "Blu-Ray 3D");
-            AddCategoryMapping(44, TorznabCatType.MoviesBluRay, "Blu-Ray Remux");
-            AddCategoryMapping(45, TorznabCatType.MoviesBluRay, "Blu-Ray Remux/Disc");
-            AddCategoryMapping(32, TorznabCatType.MoviesUHD, "UHD 4K Disc");
+            AddCategoryMapping(40, TorznabCatType.MoviesHD, "Blu-ray 1080p/i");
+            AddCategoryMapping(42, TorznabCatType.MoviesHD, "Blu-ray 720p/i");
+            AddCategoryMapping(43, TorznabCatType.MoviesBluRay, "Blu-ray B-Disc");
+            AddCategoryMapping(41, TorznabCatType.Movies3D, "Blu-ray 3D");
+            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Blu-ray Remux");
+            AddCategoryMapping(45, TorznabCatType.MoviesBluRay, "Blu-ray Remux/Disc");
+            AddCategoryMapping(32, TorznabCatType.MoviesBluRay, "UHD 4K Disc");
             AddCategoryMapping(55, TorznabCatType.MoviesUHD, "UHD 4K Remux");
             AddCategoryMapping(20, TorznabCatType.MoviesHD, "HD");
-            AddCategoryMapping(4, TorznabCatType.MoviesSD, "DVD-R");
+            AddCategoryMapping(4, TorznabCatType.MoviesDVD, "DVD-R");
             AddCategoryMapping(7, TorznabCatType.MoviesSD, "XviD");
-            AddCategoryMapping(30, TorznabCatType.MoviesSD, "Risanke");
-            AddCategoryMapping(54, TorznabCatType.MoviesSD, "WEBRip");
+            AddCategoryMapping(30, TorznabCatType.MoviesOther, "Risanke");
+            AddCategoryMapping(54, TorznabCatType.MoviesWEBDL, "WEBRip");
             AddCategoryMapping(59, TorznabCatType.MoviesWEBDL, "WEB-DL");
+            AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Dokumentarci");
 
             // TV
             AddCategoryMapping(53, TorznabCatType.TVWEBDL, "TV WEB-DL");
             AddCategoryMapping(60, TorznabCatType.TVSD, "TV-XviD");
             AddCategoryMapping(38, TorznabCatType.TVSD, "SD-TV");
+            AddCategoryMapping(17, TorznabCatType.TVHD, "HD-TV (1)");
+            AddCategoryMapping(31, TorznabCatType.TVHD, "HD-TV (2)");
             AddCategoryMapping(51, TorznabCatType.TVHD, "TV 1080p/i");
             AddCategoryMapping(52, TorznabCatType.TVHD, "TV 720p/i");
             AddCategoryMapping(5, TorznabCatType.TVSport, "Sport");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Dokumentarci");
 
             // Games
             AddCategoryMapping(10, TorznabCatType.PCGames, "PC igre/ISO");
@@ -108,17 +110,25 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(46, TorznabCatType.AudioLossless, "Glasba/Flac");
             AddCategoryMapping(8, TorznabCatType.AudioOther, "Glasba/Ostalo");
             AddCategoryMapping(47, TorznabCatType.AudioMP3, "Glasba/Mp3");
-            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music DVD");
-            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Videospoti");
+            AddCategoryMapping(22, TorznabCatType.AudioVideo, "Music DVD");
+            AddCategoryMapping(23, TorznabCatType.AudioVideo, "Videospoti");
 
             // Programs
             AddCategoryMapping(15, TorznabCatType.PC, "PC programi/drugo");
-            AddCategoryMapping(15, TorznabCatType.PCMac, "Mac Programi");
+            AddCategoryMapping(58, TorznabCatType.PCMac, "Mac Programi");
             AddCategoryMapping(16, TorznabCatType.PCISO, "PC programi/ISO");
+            AddCategoryMapping(50, TorznabCatType.PC, "Linux programi");
 
             // Other
             AddCategoryMapping(21, TorznabCatType.AudioAudiobook, "AudioBook");
             AddCategoryMapping(3, TorznabCatType.BooksEBook, "eKnjige");
+            AddCategoryMapping(19, TorznabCatType.Other, "Slike");
+            AddCategoryMapping(9, TorznabCatType.ConsoleNDS, "GBA");
+            AddCategoryMapping(25, TorznabCatType.PCMobileAndroid, "GSM/Igre");
+            AddCategoryMapping(26, TorznabCatType.PCMobileAndroid, "PDA");
+            AddCategoryMapping(61, TorznabCatType.PCMobileAndroid, "GSM/Programi");
+            AddCategoryMapping(62, TorznabCatType.PCMobileAndroid, "GSM/Ostalo");
+            AddCategoryMapping(29, TorznabCatType.PCMobileiOS, "iPOD");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -150,15 +160,12 @@ namespace Jackett.Common.Indexers
             var catList = MapTorznabCapsToTrackers(query);     // map categories from query to indexer specific
             var categ = string.Join(",", catList);
 
-            //create GET request - search URI
+            // create GET request - search URI
             queryCollection.Add("q", searchString);
             queryCollection.Add("cat", categ.TrimStart(','));
 
-            //c oncatenate base search url with query
+            // concatenate base search url with query
             var searchUrl = $"{SearchUrl}?{queryCollection.GetQueryString()}";
-
-            // log search URL
-            logger.Info(string.Format("Searh URL Partis_: {0}", searchUrl));
 
             // add necessary headers
             var header = new Dictionary<string, string>
