@@ -18,16 +18,17 @@ caps:
     - {id: 101, cat: Movies/DVD, desc: "Filme DVD"}
     - {id: 62, cat: Movies/3D, desc: "Filme 3D"}
     - {id: 169, cat: Movies/Foreign, desc: "Filme International"}
-    - {id: 129, cat: Movies/SD, desc: "Filme Packs SD"}
-    - {id: 130, cat: Movies/HD, desc: "Filme Packs 720p"}
-    - {id: 131, cat: Movies/HD, desc: "Filme Packs 1080p"}
-    - {id: 159, cat: Movies/UHD, desc: "Filme Packs 2160p"}
+    - {id: 183, cat: Movies/SD, desc: "Filme Packs SD"}
+    - {id: 184, cat: Movies/HD, desc: "Filme Packs 720p"}
+    - {id: 185, cat: Movies/HD, desc: "Filme Packs 1080p"}
+    - {id: 186, cat: Movies/UHD, desc: "Filme Packs 2160p"}
     - {id: 172, cat: Movies/SD, desc: "Film-Klassiker SD"}
     - {id: 173, cat: Movies/HD, desc: "Film-Klassiker 720p"}
     - {id: 174, cat: Movies/HD, desc: "Film-Klassiker 1080p"}
     - {id: 175, cat: Movies/UHD, desc: "Film-Klassiker 2160p"}
     - {id: 180, cat: Movies/DVD, desc: "Film-Klassiker DVD"}
     - {id: 181, cat: Movies/BluRay, desc: "Film-Klassiker Bluray"}
+    - {id: 182, cat: Movies/3D, desc: "Film-Klassiker 3D"}
     - {id: 176, cat: Movies/SD, desc: "Film-Klassiker Pack SD"}
     - {id: 177, cat: Movies/HD, desc: "Film-Klassiker Pack 720p"}
     - {id: 178, cat: Movies/HD, desc: "Film-Klassiker Pack 1080p"}
@@ -38,19 +39,17 @@ caps:
     - {id: 68, cat: TV/UHD, desc: "Serien 2160p"}
     - {id: 69, cat: TV/Foreign, desc: "Serien Ger-Subbed"}
     - {id: 167, cat: TV/Foreign, desc: "Serien International"}
-    - {id: 76, cat: TV/SD, desc: "Serienpacks SD"}
-    - {id: 77, cat: TV/HD, desc: "Serienpacks 720p"}
-    - {id: 78, cat: TV/HD, desc: "Serienpacks 1080p"}
-    - {id: 81, cat: TV/UHD, desc: "Serienpacks 2160p"}
-    - {id: 79, cat: TV/Foreign, desc: "Serienpacks Ger-Subbed"}
+    - {id: 187, cat: TV/SD, desc: "Serienpacks SD"}
+    - {id: 188, cat: TV/HD, desc: "Serienpacks 720p"}
+    - {id: 189, cat: TV/HD, desc: "Serienpacks 1080p"}
+    - {id: 190, cat: TV/UHD, desc: "Serienpacks 2160p"}
+    - {id: 191, cat: TV/Foreign, desc: "Serienpacks Ger-Subbed"}
     - {id: 71, cat: Audio/MP3, desc: "Audio MP3"}
     - {id: 72, cat: Audio/Lossless, desc: "Audio Flac"}
     - {id: 73, cat: Audio, desc: "Audio Packs"}
     - {id: 153, cat: Audio/Audiobook, desc: "Hörbücher"}
-    - {id: 123, cat: PC, desc: "Software Windows"}
-    - {id: 166, cat: PC/Mac, desc: "Software Sonstiges"}
-    - {id: 132, cat: PC/Games, desc: "Spiele Windows"}
-    - {id: 150, cat: PC/Mac, desc: "Spiele Sonstiges"}
+    - {id: 192, cat: PC/Games, desc: "Spiele Windows"}
+    - {id: 193, cat: PC, desc: "Software Windows"}
     - {id: 90, cat: Books/Mags, desc: "Zeitschriften"}
     - {id: 89, cat: Books/EBook, desc: "E-Books"}
     - {id: 91, cat: XXX/SD, desc: "XXX SD"}
