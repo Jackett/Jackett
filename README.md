@@ -109,7 +109,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * OnceSearch
  * OneJAV
  * OpenSharing
- * OxTorrent
  * ParnuXi
  * PC-torrent
  * PiratBit
@@ -150,6 +149,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * torrent-pirat
  * Torrent9
  * Torrent9 clone
+ * Torrent911
  * TorrentDownload
  * TorrentFunk
  * TorrentGalaxy (TGx)
