@@ -748,6 +748,9 @@ search:
     download:
       selector: td a.genmed
       attribute: href
+    description:
+      selector: td:first-child span
+      attribute: title
     size:
       selector: td > u
     date:

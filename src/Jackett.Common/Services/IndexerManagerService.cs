@@ -51,6 +51,7 @@ namespace Jackett.Common.Services
             {"legacyhd", "reelflix"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
+            {"oxtorrent", "torrent911"},
             {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},

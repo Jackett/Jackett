@@ -82,7 +82,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    verify_code: "{{ .Config.2facode }}"
+    2fa_secret: "{{ .Config.2facode }}"
     logout: ""
     securelogin: ""
     ssl: yes
@@ -138,7 +138,10 @@ search:
       selector: img[data-orig]
       attribute: data-orig
     imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+      selector: a[href$="&search_area=4"]
+      attribute: href
+    doubanid:
+      selector: a[href$="&search_area=5"]
       attribute: href
     # staff have extra columns at the start and end of a row, so we have to float the next lot of selectors off an anchor
     anchor1:
