@@ -12,16 +12,11 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Console, desc: "Game"}
-    - {id: 5, cat: PC, desc: "Application"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-#    book-search: [q]
 
 settings:
   - name: apikey
@@ -97,9 +92,25 @@ search:
       selector: name
       filters:
         - name: re_replace
-          args:
-            - "\\bpt-BR ENG\\b"
-            - "Portuguese (Brazil) English"
+          args: ["\\.", " "]
+        - name: re_replace
+          args: ["([\\b\\s\\-])pt-BR([\\b\\s\\-]?)", "$1Portuguese(Brazil)$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])CHI([\\b\\s\\-]?)", "$1Chinese$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])FRE([\\b\\s\\-]?)", "$1French$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])GER([\\b\\s\\-]?)", "$1German$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])ITA([\\b\\s\\-]?)", "$1Italian$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])JPN([\\b\\s\\-]?)", "$1Japanese$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])SPA([\\b\\s\\-]?)", "$1Spanish$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])UKR([\\b\\s\\-]?)", "$1Ukranian$2"]
+        - name: re_replace
+          args: ["([\\b\\s\\-])RUS([\\b\\s\\-]?)", "$1Russian$2"]
     details:
       selector: details_link
     download:
@@ -146,9 +157,9 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-# TBD: global MR is 0.4 but torrents must be seeded for 3 days regardless of ratio
-    minimumratio:
-      text: 0.4
+# global MR is 0.4 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
