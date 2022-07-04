@@ -516,6 +516,7 @@ namespace Jackett.Updater
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentland.yml", // switch to *-API #13006 #8682
                 "Definitions/torrentmax.yml",
+                "Definitions/torrentparadise.yml",
                 "Definitions/torrentproject.yml",
                 "Definitions/torrentquest.yml",
                 "Definitions/torrentrex.yml",
