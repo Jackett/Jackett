@@ -93,24 +93,6 @@ search:
       filters:
         - name: re_replace
           args: ["\\.", " "]
-        - name: re_replace
-          args: ["([\\b\\s\\-])pt-BR([\\b\\s\\-]?)", "$1Portuguese(Brazil)$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])CHI([\\b\\s\\-]?)", "$1Chinese$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])FRE([\\b\\s\\-]?)", "$1French$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])GER([\\b\\s\\-]?)", "$1German$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])ITA([\\b\\s\\-]?)", "$1Italian$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])JPN([\\b\\s\\-]?)", "$1Japanese$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])SPA([\\b\\s\\-]?)", "$1Spanish$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])UKR([\\b\\s\\-]?)", "$1Ukranian$2"]
-        - name: re_replace
-          args: ["([\\b\\s\\-])RUS([\\b\\s\\-]?)", "$1Russian$2"]
     details:
       selector: details_link
     download:
