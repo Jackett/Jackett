@@ -101,6 +101,8 @@ login:
   error:
     - selector: td.embedded:has(h2:contains("登录失败"))
     - selector: td.embedded:has(h2:contains("failed"))
+    - selector: td.toolbox:contains("錯誤")
+    - selector: td.toolbox:contains("Error")
   test:
     path: index.php
     selector: a[href="logout.php"]

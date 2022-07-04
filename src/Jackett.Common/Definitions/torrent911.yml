@@ -50,6 +50,7 @@ caps:
     - {id: Logiciels, cat: PC, desc: "Software"}
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
+    - {id: Porno, cat: XXX, desc: "Porno"}
 
   modes:
     search: [q]
