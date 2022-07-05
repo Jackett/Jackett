@@ -274,7 +274,7 @@ namespace Jackett.Common.Indexers
             var htmlString = await LoadWebPageAsync(detailsStr);
             var htmlDocument = ParseHtmlIntoDocument(htmlString);
 
-            var tables = htmlDocument.QuerySelectorAll("table.table");
+            var tables = htmlDocument.QuerySelectorAll("table.rwd-table");
             foreach (var table in tables)
             {
                 var rows = table.QuerySelectorAll("tbody > tr");
@@ -292,10 +292,8 @@ namespace Jackett.Common.Indexers
                         continue;
 
                     var downloadLink = GetDownloadLink(row);
-                    var episodePublishStr = row.QuerySelectorAll("td")[3].TextContent.Trim();
-                    var episodePublish = TryToParseDate(episodePublishStr, publishDate);
 
-                    seriesReleases.Add(GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, episodePublish, DivxTotalFizeSizes.Series));
+                    seriesReleases.Add(GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, publishDate, DivxTotalFizeSizes.Series));
                 }
             }
 
