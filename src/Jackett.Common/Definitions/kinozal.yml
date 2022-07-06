@@ -7,6 +7,7 @@ type: semi-private
 encoding: windows-1251
 links:
   - http://kinozal.tv/ # site forces http, https is not supported
+  - https://kinozal-tv.appspot.com/
 
 caps:
   categorymappings:
@@ -136,6 +137,8 @@ search:
   paths:
     # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
     - path: browse.php
+      # required for the appspot domain.
+      followredirect: true
   keywordsfilters:
 #    - name: diacritics # 8686
 #      args: replace
@@ -163,7 +166,7 @@ search:
 
   fields:
     title:
-      selector: td.nam a[href^="/details.php?id="]
+      selector: td.nam a[href^="/details.php?"]
       filters:
         # normalize to SXXEYY format
         - name: replace
@@ -219,7 +222,7 @@ search:
         - name: replace
           args: ["HDTVRip", "HDTV"]
     details:
-      selector: td.nam a[href^="/details.php?id="]
+      selector: td.nam a[href^="/details.php?"]
       attribute: href
     category:
       selector: td.bt img
@@ -228,7 +231,7 @@ search:
         - name: re_replace
           args: ["[^\\d+]", ""]
     download:
-      selector: td.nam a[href^="/details.php?id="]
+      selector: td.nam a[href^="/details.php?"]
       attribute: href
       filters:
         - name: replace
