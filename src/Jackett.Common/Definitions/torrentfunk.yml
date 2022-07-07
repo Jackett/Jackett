@@ -9,12 +9,9 @@ followredirect: true
 links:
   - https://www.torrentfunk.com/
   - https://www.torrentfunk2.com/
-  - https://torrentfunk.unblockit.name/
+  - https://torrentfunk.unblockit.ist/
   - https://torrentfunk.nocensor.sbs/
 legacylinks:
-  - https://torrentfunk.unblockit.buzz/
-  - https://torrentfunk.unblockit.club/
-  - https://torrentfunk.unblockit.onl/
   - https://torrentfunk.unblockit.li/
   - https://torrentfunk.unblockit.uno/
   - https://torrentfunk.unblockit.ch/
@@ -30,6 +27,7 @@ legacylinks:
   - https://torrentfunk.unblockit.day/
   - https://torrentfunk.unblockit.llc/
   - https://torrentfunk.unblockit.blue/
+  - https://torrentfunk.unblockit.name/
 
 caps:
   categorymappings:

@@ -9,14 +9,11 @@ followredirect: true
 links:
   - https://www.torrentdownloads.info/
   - https://www.torrentdownloads.pro/
-  - https://torrentdownloads.unblockit.name/
+  - https://torrentdownloads.unblockit.ist/
   - https://torrentdownloads.nocensor.sbs/
   - https://torrentdownloads.unblockninja.com/
 legacylinks:
-  - https://torrentdownloads.unblockit.buzz/
   - https://torrentdownloads.unblocked.monster/
-  - https://torrentdownloads.unblockit.club/
-  - https://torrentdownloads.unblockit.onl/
   - https://torrentdownloads.unblockit.li/
   - https://torrentdownloads.unblockit.uno/
   - https://www.torrentdownloads.me/
@@ -33,6 +30,7 @@ legacylinks:
   - https://torrentdownloads.unblockit.day/
   - https://torrentdownloads.unblockit.llc/
   - https://torrentdownloads.unblockit.blue/
+  - https://torrentdownloads.unblockit.name/
 
 caps:
   categorymappings:
