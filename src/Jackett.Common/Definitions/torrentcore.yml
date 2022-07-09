@@ -1,0 +1,107 @@
+---
+id: torrentcore
+name: Torrent[CORE]
+description: "Torrent[CORE] is a Public DHT Crawler"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://torrentcore.xyz/
+
+caps:
+  categorymappings:
+    - {id: 0DAY, cat: PC/0day, desc: Software 0DAY}
+    - {id: DVDR, cat: Movies/DVD, desc: Movies DVDR}
+    - {id: EBOOK, cat: Books, desc: Ebook}
+    - {id: FLAC, cat: Audio/Lossless, desc: Music FLAC}
+    - {id: GAMES, cat: PC/Games, desc: Games}
+    - {id: MP3, cat: Audio/MP3, desc: Music MP3}
+    - {id: MP4, cat: Movies, desc: Movies MP4}
+    - {id: PDA, cat: PC/Mobile-Other, desc: Software PDA}
+    - {id: PS3, cat: Console/PS3, desc: Games PS3}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: TV-DVDRIP, cat: TV/SD, desc: TV DVDRIP}
+    - {id: TV-X265, cat: TV/HD, desc: TV X265}
+    - {id: TV-XVID, cat: TV/SD, desc: TV XVID}
+    - {id: UNKNOWN, cat: Other, desc: Unknown}
+    - {id: X264, cat: Movies/HD, desc: Movies X264}
+    - {id: XBOX360, cat: Console/XBox 360, desc: Games XBOX360}
+    - {id: XVID, cat: Movies/SD, desc: Movies XVID}
+    - {id: XXX, cat: XXX, desc: Adult}
+    - {id: XXX-0DAY, cat: XXX, desc: Adult 0DAY}
+    - {id: XXX-IMGSET, cat: XXX/ImageSet, desc: Adult IMGSET}
+    - {id: XXX-X264, cat: XXX, desc: Adult X264}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+download:
+  infohash:
+    hash:
+      selector: div.content
+      filters:
+        - name: regexp
+          args: "Hash: ([A-F|a-f|0-9]{40})"
+    title:
+      selector: font[color="orange"]
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}?s={{ re_replace .Keywords \"[\\s]+\" \"%\" }}{{ else }}index{{ end }}"
+
+  rows:
+    selector: div.content font[color="purple"], div.content font[color="orange"]:has(img), div.content font[color="gray"], div.content font[color="white"]
+    after: 3
+
+  fields:
+    category:
+      selector: img[src^="./cat/"]
+      attribute: src
+      filters:
+        - name: regexp
+          args: "cat/(.+?).png"
+    title:
+      selector: a
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    size:
+      selector: font[color="purple"]
+      filters:
+        - name: regexp
+          args: "Size: (.+?)/"
+    files:
+      selector: font[color="purple"]
+      filters:
+        - name: regexp
+          args: "File: (\\d+)"
+    date:
+      selector: font[color="purple"]
+      filters:
+        - name: regexp
+          args: "\\[ (\\d{2} [A-Za-z]+ \\d{4} \\d{2}:\\d{2}:\\d{2}) \\]"
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "02 January 2006 03:04:05 -07:00"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
