@@ -31,7 +31,7 @@ caps:
     - {id: 46, cat: Books/Technical, desc: "EBOOK Documents"}
     - {id: 48, cat: XXX/Other, desc: "EBOOK XXX"}
     - {id: 49, cat: Books/EBook, desc: "EBOOK Livres"}
-    - {id: 50, cat: TV/Anime, desc: "ANIMEE Anim�e"}
+    - {id: 64, cat: TV/Anime, desc: "ANIMEE HDRip"}
     - {id: 1, cat: Movies/SD, desc: "FILM Xvid"}
     - {id: 62, cat: Movies/WEB-DL, desc: "FILM WEB"}
     - {id: 34, cat: Movies/SD, desc: "FILM TVRip"}
