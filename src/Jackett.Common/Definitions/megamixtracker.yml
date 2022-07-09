@@ -116,7 +116,7 @@ search:
     # site does not support imdbid searching
 
   rows:
-    selector: "tr.tbody{{ if .Config.freeleech }}:has(img[src=\"kepek/ikon_free.png\"]){{ else }}{{ end }}"
+    selector: "tr.tbody:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src=\"kepek/ikon_free.png\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
