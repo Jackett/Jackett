@@ -141,6 +141,12 @@ namespace Jackett.Common.Indexers
             await RenewalTokenAsync();
 
             var response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
+            if (response != null && response.ContentString.StartsWith("<"))
+            {
+                // the response was not JSON, likely a HTML page for a server outage
+                logger.Warn(response.ContentString);
+                throw new Exception("The response was not JSON");
+            }
             var jsonContent = JObject.Parse(response.ContentString);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
