@@ -31,6 +31,7 @@ caps:
     - {id: XXX-0DAY, cat: XXX, desc: Adult 0DAY}
     - {id: XXX-IMGSET, cat: XXX/ImageSet, desc: Adult IMGSET}
     - {id: XXX-X264, cat: XXX, desc: Adult X264}
+    - {id: XXX-X265, cat: XXX, desc: Adult X265}
 
   modes:
     search: [q]
