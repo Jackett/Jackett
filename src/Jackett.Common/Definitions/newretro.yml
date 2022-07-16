@@ -86,7 +86,7 @@ search:
     incldead: 1
 
   rows:
-    selector: table.tableinborder[summary] > tbody > tr
+    selector: table.tableinborder > tbody > tr:has(a[href^="download.php?torrent="])
     filters:
       - name: andmatch
 
@@ -100,23 +100,23 @@ search:
     title:
       selector: a[href^="details.php?id="]:has(b)
     details:
-      selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(4) > a
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(4) > a
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
     size:
-      selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
     grabs:
-      selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(3) > b
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(3) > b
     files:
-      selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
     seeders:
-      selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
     leechers:
-      selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
     date:
-      selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(5)
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(5)
       filters:
         - name: replace
           args: ["\u00a0", " "]
