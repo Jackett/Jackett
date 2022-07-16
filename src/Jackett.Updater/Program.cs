@@ -550,6 +550,7 @@ namespace Jackett.Updater
                 "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
+                "Definitions/xbit.yml",
                 "Definitions/xfsub.yml",
                 "Definitions/xktorrent.yml",
                 "Definitions/xtremefile.yml",
