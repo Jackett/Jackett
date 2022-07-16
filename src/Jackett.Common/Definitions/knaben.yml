@@ -69,7 +69,7 @@ caps:
     - {id: 7000, cat: Books, desc: "Books"}
     - {id: 7020, cat: Books/EBook, desc: "Books/Ebook"}
     - {id: 7030, cat: Books/Comics, desc: "Books/Comics"}
-    - {id: 8030, cat: Books/Mags, desc: "Books/Magazines"}
+    - {id: 7010, cat: Books/Mags, desc: "Books/Magazines"}
     - {id: 7040, cat: Books/Technical, desc: "Books/Technical"}
     - {id: 7050, cat: Books/Other, desc: "Books/Other"}
     # Other
