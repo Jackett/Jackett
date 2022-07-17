@@ -155,6 +155,10 @@ settings:
     type: checkbox
     label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
     default: false
+  - name: enhancedAnime4
+    type: checkbox
+    label: Extend the sonarr compatibility with anime up to 4 digits. This WILL break all searches and result titles which contain years.
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -217,6 +221,8 @@ search:
       args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
     - name: re_replace # Full season S >= 10
       args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
+    - name: re_replace # episode number at the end "1234" to "E1234"
+      args: ["(.*)(\\.|\\s|\\-)(\\d{4})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime4 }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     - name: re_replace # episode number at the end "123" to "E123"
       args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     # END ANIME HACK
@@ -298,15 +304,15 @@ search:
           args: ["(?i)[\\.\\s\\[\\-]subfrench[\\.\\s\\]\\-]", ".ENGLISH."]
     title_phase3:
       text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    title_anime:
+    title:
       text: "{{ .Result.title_phase3 }}"
       filters:
         # Sonarr need E in front of 3 digit number or else it thinks it is episode
         # S01E10 for number 110 for example ==> enhancedAnime
+        - name: re_replace # extend to 4 digits
+          args: ["(.*)(\\.|\\s|\\-)(\\d{4})(\\.|\\s|\\-)(.*)", "{{ if .Config.enhancedAnime4 }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
         - name: re_replace
-          args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-)(.*)", "$1 E$3 $5"]
-    title:
-      text: "{{ if .Config.enhancedAnime }}{{ .Result.title_anime }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
+          args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     details:
       selector: td:nth-child(2) > a
       attribute: href
