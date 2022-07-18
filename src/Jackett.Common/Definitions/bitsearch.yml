@@ -7,9 +7,10 @@ type: public
 encoding: UTF-8
 links:
   - https://bitsearch.to/
-  - https://bitsearch.nocensor.sbs/
+  - https://bitsearch.nocensor.world/
 legacylinks:
   - https://bitsearch.nocensor.biz/
+  - https://bitsearch.nocensor.sbs/
 
 caps:
   categories:

@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://www.elitetorrent.com/
-  - https://elitetorrent.nocensor.sbs/
+  - https://elitetorrent.nocensor.world/
 legacylinks:
   - https://www.elitetorrent.biz/
   - https://www.elitetorrent.io/
@@ -31,6 +31,7 @@ legacylinks:
   - https://elitetorrent.la/
   - https://www.elitetorrent.wtf/
   - https://www.elitetorrent.dev/
+  - https://elitetorrent.nocensor.sbs/
 
 caps:
   categories:

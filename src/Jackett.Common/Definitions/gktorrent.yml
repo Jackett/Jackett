@@ -9,7 +9,7 @@ followredirect: true
 # to fetch current domain use https://www.protege-liens.com/gktorrent
 links:
   - https://www.gktorrents.cc/
-  - https://gktorrent.nocensor.sbs/
+  - https://gktorrent.nocensor.world/
 legacylinks:
   - http://www.gktorrent.co/
   - https://www.gktorrent.co/
@@ -32,6 +32,7 @@ legacylinks:
   - https://www.gktorrents.net/
   - https://gktorrent.nocensor.biz/
   - https://www.gktorrents.org/
+  - https://gktorrent.nocensor.sbs/
 
 caps:
   categorymappings:
