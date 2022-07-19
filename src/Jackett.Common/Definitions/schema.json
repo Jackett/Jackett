@@ -647,7 +647,7 @@
                 "^((title|description)\\|(append))?$": {
                     "$ref": "#/definitions/SelectorBlock"
                 },
-                "^((category|categorydesc)\\|(noappend|append))?$": {
+                "^((category|categorydesc)\\|(noappend))?$": {
                     "$ref": "#/definitions/SelectorBlock"
                 },
                 "^(download|magnet|infohash|details|comments|title|description|category|categorydesc|size|leechers|seeders|date|files|grabs|downloadvolumefactor|uploadvolumefactor|minimumratio|minimumseedtime|imdb|imdbid|tmdbid|rageid|traktid|tvdbid|doubanid|poster|genre|year|author|booktitle|artist|album)(_([A-Za-z0-9_])*)?$": {
