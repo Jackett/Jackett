@@ -144,12 +144,12 @@ search:
     selector: div.content_wrap > div.selection_wrap:has(a[href^="details.php?id="])
 
   fields:
-    cat_p1:
+    category_p1:
       selector: div.kat_cat_pic_name
-    cat_p2:
+    category_p2:
       selector: div.kat_cat_pic_name_b
     categorydesc:
-      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
+      text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
     title_phase1:
       selector: a[href^="details.php?id="]
     title_multilang:
