@@ -64,7 +64,7 @@ search:
   fields:
     category:
       selector: label.category
-    resolution:
+    _resolution:
       selector: div.description
       filters:
         - name: regexp
@@ -74,7 +74,7 @@ search:
       attribute: alt
       filters:
         - name: append
-          args: "{{ if .Result.resolution }} [{{ .Result.resolution }}p]{{ else }}{{ end }}"
+          args: "{{ if .Result._resolution }} [{{ .Result._resolution }}p]{{ else }}{{ end }}"
     details:
       selector: a[href^="/torrent/"]
       attribute: href
@@ -184,16 +184,16 @@ search:
       filters:
         - name: split
           args: ["|", 1]
-    subtitles:
+    _subtitles:
       filters:
         - name: regexp
           args: "Субтитры:(.+?)\\n"
-    language:
+    _language:
       filters:
         - name: regexp
           args: "Язык:(.+?)\\n"
     description:
-      text: "{{ if .Result.subtitles }}Субтитры: {{ .Result.subtitles }}{{ else }}{{ end }} - {{ if .Result.language }}Язык: {{ .Result.language }}{{ else }}{{ end }}"
+      text: "{{ if .Result._subtitles }}Субтитры: {{ .Result._subtitles }}{{ else }}{{ end }} - {{ if .Result._language }}Язык: {{ .Result._language }}{{ else }}{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
