@@ -288,7 +288,7 @@ search:
   fields:
     category:
       text: 1
-    year:
+    _year:
       selector: div.shor_subtitles span
       filters:
         - name: regexp
@@ -297,7 +297,7 @@ search:
       selector: div.short_titles > a
       filters:
         - name: append
-          args: " [{{ .Result.year }}]"
+          args: " [{{ .Result._year }}]"
     details:
       selector: div.short_titles > a
       attribute: href
