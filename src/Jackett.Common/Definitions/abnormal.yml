@@ -148,9 +148,9 @@ search:
       selector: td:nth-child(6)
       filters:
         - name: re_replace
-          args: [ ",", "." ]
+          args: ",", "."]
         - name: replace
-          args: [ "o", "B" ]
+          args: ["o", "B"]
     seeders:
       selector: td:nth-child(7)
     leechers:
