@@ -134,7 +134,7 @@ search:
     details:
       selector: td:nth-child(4) a
       attribute: href
-    download-itorrents:
+    download_itorrents:
       selector: input.downarrow
       attribute: value
       filters:
@@ -143,7 +143,7 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{ if .Config.itorrents-links }}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
+      text: "{{ if .Config.itorrents-links }}{{ .Result.download_itorrents }}{{ else }}{{ end }}"
     infohash:
       selector: input.downarrow
       attribute: value
