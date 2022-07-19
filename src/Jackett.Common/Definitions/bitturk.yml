@@ -64,6 +64,7 @@ caps:
     - {id: 88, cat: Console/Other, desc: "Oyun NEO-GEO"}
     - {id: 89, cat: Console/Wii, desc: "Oyun Nintendo Wii"}
     - {id: 6, cat: PC/0day, desc: "Program"}
+    - {id: 92, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 47, cat: Other, desc: "Resimler"}
     - {id: 48, cat: TV, desc: "Televizyon"}
     - {id: 49, cat: TV/HD, desc: "Tv HD"}
