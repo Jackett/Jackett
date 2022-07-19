@@ -33,7 +33,6 @@ search:
   fields:
     category:
       selector: raw_title
-      filters:
       case:
         ":contains(\"720p\")": 2
         ":contains(\"1080p\")": 2
