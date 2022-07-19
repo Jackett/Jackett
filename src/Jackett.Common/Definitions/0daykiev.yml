@@ -105,8 +105,8 @@ search:
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     # 0 title, 1 title and descr
     where: 0
-    sort: "{{ .Config.sort}}"
-    type: "{{ .Config.type}}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
   rows:
     selector: table > tbody > tr.rowtorrentinfo
