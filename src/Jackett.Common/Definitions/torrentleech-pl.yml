@@ -118,20 +118,20 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    language:
+    _language:
       optional: true
       selector: img[src="pic/pl.jpg"]
       filters:
         - name: append
           args: "Language: polish\n<br>"
-    subbed:
+    _subbed:
       optional: true
       selector: img[src="pic/napisy.gif"]
       filters:
         - name: append
           args: "Subbed\n<br>"
     description:
-      text: "{{ .Result.language }}{{ .Result.subbed }}"
+      text: "{{ .Result._language }}{{ .Result._subbed }}"
     date:
       selector: td:nth-child(4)
       filters:
