@@ -107,17 +107,17 @@ search:
     artist:
       selector: span.artist
       optional: true
-    tag:
+    _tag:
       selector: span.tag
       optional: true
-    codec:
+    _codec:
       selector: td:nth-child(6)
       optional: true
-    bit:
+    _bit:
       selector: td:nth-child(7)
       optional: true
     description:
-      text: "Artist=[{{ .Result.artist }}] , Tags={{ .Result.tag }} , Codec=[{{ .Result.codec }}] , BitRate=[{{ .Result.bit }}]"
+      text: "Artist=[{{ .Result.artist }}] , Tags={{ .Result._tag }} , Codec=[{{ .Result._codec }}] , BitRate=[{{ .Result._bit }}]"
     grabs:
       selector: td:nth-child(8)
     seeders:
