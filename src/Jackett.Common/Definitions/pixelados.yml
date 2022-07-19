@@ -100,13 +100,13 @@ search:
   fields:
     category:
       selector: category_id
-    mejorada:
+    _mejorada:
       selector: types:contains(Mejorada)
       optional: true
-    corregida:
+    _corregida:
       selector: types:contains(Corregida)
       optional: true
-    audio_editado:
+    _audio_editado:
       selector: types:contains(Audio-Editado)
       optional: true
     title_vose:
@@ -119,7 +119,7 @@ search:
         - name: append
           args: " SPANISH"
     title:
-      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}{{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER{{ else }}{{ end }}"
+      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}{{ if or .Result._mejorada .Result._corregida .Result._audio_editado }} PROPER{{ else }}{{ end }}"
       filters:
         # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
         - name: re_replace
