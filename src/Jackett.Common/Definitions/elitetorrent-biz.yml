@@ -89,12 +89,12 @@ search:
           args: "^.*/(series)/.*$"
     category:
       text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
-    quality:
+    _quality:
       selector: span:nth-of-type(2) > i
       filters:
         - name: replace
           args: ["---", ""]
-    language:
+    _language:
       selector: span#idiomacio > i > img
       attribute: title
       filters:
@@ -126,7 +126,7 @@ search:
         - name: re_replace
           args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
         - name: append
-          args: " {{ .Result.quality }} {{ .Result.language }}"
+          args: " {{ .Result._quality }} {{ .Result._language }}"
     details:
       selector: .meta a
       attribute: href
