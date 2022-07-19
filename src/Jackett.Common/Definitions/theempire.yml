@@ -114,7 +114,6 @@ search:
         - name: querystring
           args: cat
     title:
-      filters:
       selector: a[href^="details.php?id="]
       attribute: title
     details:
