@@ -94,13 +94,13 @@ search:
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
-    tags:
+    _tags:
       selector: div.tags
     description:
       selector: td.edition_info
       filters:
         - name: append
-          args: "</br>{{ .Result.tags }}"
+          args: "</br>{{ .Result._tags }}"
     files:
       selector: td:nth-last-child(7)
     date:
