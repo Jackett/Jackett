@@ -72,7 +72,7 @@ search:
       selector: data.movie_count
 
   fields:
-    quality:
+    _quality:
       selector: quality
     category:
       selector: quality
@@ -82,9 +82,9 @@ search:
         "2160p": 46
         "3D": 47
         "*": 45
-    type:
+    _type:
       selector: type
-    year:
+    _year:
       selector: ..year
     title:
       selector: ..title
@@ -95,8 +95,8 @@ search:
           args: [" ", "."]
         # append type: BRRip or WEBRip, resolves #3558 via #4577
         - name: append
-          args: ".{{ .Result.year }}.{{ .Result.quality }}.{{ if eq .Result.type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
-    sitelink_trimmed:
+          args: ".{{ .Result._year }}.{{ .Result._quality }}.{{ if eq .Result._type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
+    _sitelink_trimmed:
       text: "{{ .Config.sitelink }}"
       filters:
         - name: replace
@@ -107,19 +107,19 @@ search:
       selector: ..url
       filters:
         - name: replace
-          args: ["yts.mx", "{{ .Result.sitelink_trimmed }}"] # fix for 12494
+          args: ["yts.mx", "{{ .Result._sitelink_trimmed }}"] # fix for 12494
     download:
       selector: url
       filters:
         - name: replace
-          args: ["yts.mx", "{{ .Result.sitelink_trimmed }}"] # fix for 12494
+          args: ["yts.mx", "{{ .Result._sitelink_trimmed }}"] # fix for 12494
     infohash:
       selector: hash
     poster:
       selector: ..large_cover_image
       filters:
         - name: replace
-          args: ["yts.mx", "{{ .Result.sitelink_trimmed }}"] # fix for 12494
+          args: ["yts.mx", "{{ .Result._sitelink_trimmed }}"] # fix for 12494
     imdbid:
       selector: ..imdb_code
     date:
