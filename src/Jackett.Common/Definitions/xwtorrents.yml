@@ -144,14 +144,14 @@ search:
     title:
       selector: a[href^="details.php?id="]
       attribute: title
-    download1:
+    download_1:
       selector: a[href^="download.php"]
       attribute: href
-    download2:
+    download_2:
       selector: a[href^="download2.php"]
       attribute: href
     download:
-      text: "{{ if .Config.seedbox }}{{ .Result.download2 }}{{ else }}{{ .Result.download1 }}{{ end }}"
+      text: "{{ if .Config.seedbox }}{{ .Result.download_2 }}{{ else }}{{ .Result.download_1 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
