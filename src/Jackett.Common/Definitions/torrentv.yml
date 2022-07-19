@@ -54,14 +54,14 @@ search:
     poster:
       selector: img[src^="/pic/"]
       attribute: src
-    subcat:
+    _subcat:
       selector: div.box ul li:first-child
-    year:
+    _year:
       selector: div.box ul li:contains("Year:")
-    quality:
+    _quality:
       selector: div.box ul li:contains("Quality:")
     description:
-      text: "{{ .Result.subcat }} {{ .Result.year }} {{ .Result.quality }}"
+      text: "{{ .Result._subcat }} {{ .Result._year }} {{ .Result._quality }}"
     date:
       text: now
     size:
