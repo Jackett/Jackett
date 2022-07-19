@@ -101,6 +101,9 @@ search:
     Year: ""
     RatingOperator: ≥
     Rating: ""
+    Pending: ""
+    Pack: ""
+    Scene: ""
     Freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}"
     SortOn: "{{ .Config.sort }}"
     SortOrder: "{{ .Config.type }}"
