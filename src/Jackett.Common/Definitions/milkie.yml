@@ -54,20 +54,20 @@ search:
       selector: hits
 
   fields:
-    id:
+    _id:
       selector: id
     category:
       selector: category
     title:
       selector: releaseName
     details:
-      text: "{{ .Config.sitelink }}browse/{{ .Result.id }}"
-    apikey:
+      text: "{{ .Config.sitelink }}browse/{{ .Result._id }}"
+    _apikey:
       text: "{{ .Config.apikey }}"
       filters:
         - name: urlencode
     download:
-      text: "{{ .Config.sitelink }}api/v1/torrents/{{ .Result.id }}/torrent?key={{ .Result.apikey }}"
+      text: "{{ .Config.sitelink }}api/v1/torrents/{{ .Result._id }}/torrent?key={{ .Result._apikey }}"
     date:
       selector: createdAt
     size:
