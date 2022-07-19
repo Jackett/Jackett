@@ -87,14 +87,14 @@ search:
       # 2020-03-28T01:30:01+09:00
       selector: time
       attribute: datetime
-    cat:
+    _cat:
       selector: div.media-heading > a[href^="./board.php"]
       attribute: href
       filters:
         - name: querystring
           args: bo_table
     size:
-      text: "{{ if ne .Result.cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
+      text: "{{ if ne .Result._cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
     seeders:
       text: 1
     leechers:
