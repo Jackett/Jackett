@@ -1,0 +1,181 @@
+---
+id: fuzer
+name: Fuzer
+description: "Fuzer is a private torrent website with israeli torrents."
+language: he-IL
+type: private
+encoding: windows-1255
+links:
+  - https://www.fuzer.me/
+legacylinks:
+  - https://fuzer.me/
+
+caps:
+  categorymappings:
+    # Movies
+    - {id: 73, cat: Movies, desc: "סרטים"}
+    - {id: 7, cat: Movies/SD, desc: "סרטים"}
+    - {id: 60, cat: Movies/SD, desc: "סרטים ישראליים"}
+    - {id: 9, cat: Movies/HD, desc: "סרטים HD"}
+    - {id: 101, cat: Movies/HD, desc: "סרטים x265"}
+    - {id: 59, cat: Movies/HD, desc: "סרטי BDRIP-BRRip"}
+    - {id: 61, cat: Movies/HD, desc: "סרטים ישראליים HD"}
+    - {id: 97, cat: Movies/UHD, desc: "סרטים UHD"}
+    - {id: 58, cat: Movies/DVD, desc: "סרטים DVD-R"}
+    - {id: 83, cat: Movies/Other, desc: "סרטים מדובבים"}
+    # TV
+    - {id: 76, cat: TV, desc: "סדרות"}
+    - {id: 8, cat: TV/SD, desc: "סדרות"}
+    - {id: 62, cat: TV/SD, desc: "סדרות ישראליות"}
+    - {id: 10, cat: TV/HD, desc: "Tסדרות HD"}
+    - {id: 63, cat: TV/HD, desc: "סדרות ישראליות HD"}
+    - {id: 100, cat: TV/UHD, desc: "סדרות UHD"}
+    - {id: 84, cat: TV/Other, desc: "סדרות מדובבות"}
+    - {id: 65, cat: TV/Anime, desc: "אנימה"}
+    - {id: 64, cat: TV/Sport, desc: "ספורט"}
+    # PC
+    - {id: 74, cat: PC, desc: "תוכנות"}
+    - {id: 15, cat: PC/0day, desc: "תוכנות PC"}
+    - {id: 11, cat: PC/Games, desc: "משחקים PC"}
+    - {id: 13, cat: PC/Mobile-Android, desc: "אפליקציות לאנדרואיד"}
+    - {id: 70, cat: PC/Mobile-iOS, desc: "אפליקציות לאייפון"}
+    - {id: 71, cat: PC/Mac, desc: "תוכנות MAC"}
+    # XXX
+    - {id: 16, cat: XXX, desc: "למבוגרים בלבד"}
+    # Games
+    - {id: 72, cat: Console, desc: "משחקים"}
+    - {id: 55, cat: Console/XBox, desc: "משחקים XBOX"}
+    - {id: 12, cat: Console/PSP, desc: "משחקים PS"}
+    - {id: 56, cat: Console/Wii, desc: "משחקים WII"}
+    - {id: 57, cat: PC/Mobile-Other, desc: "משחקי קונסולות ניידות"}
+    # Music
+    - {id: 75, cat: Audio, desc: "שירים"}
+    - {id: 14, cat: Audio, desc: "מוזיקה עולמית"}
+    - {id: 66, cat: Audio, desc: "מוזיקה ישראלית"}
+    - {id: 68, cat: Audio, desc: "פסקולים"}
+    - {id: 67, cat: Audio/Lossless, desc: "FLAC"}
+    # Books
+    - {id: 69, cat: Books, desc: "Ebooks"}
+    # Other
+    - {id: 17, cat: Other, desc: "שונות"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: dateadded
+    options:
+      dateadded: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: browse.php
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    order: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+    matchquery: any
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
+    # on, off, only_dead
+    dead: on
+    $raw: "{{ range .Categories }}c[]={{.}}&{{end}}"
+
+  rows:
+    selector: .box_torrent
+
+  fields:
+    category:
+      selector: a[href^="/browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: .main_title
+    details:
+      selector: a[href^="/showthread.php?t="]
+      attribute: href
+    download:
+      selector: a[href^="/attachment.php?attachmentid="]
+      attribute: href
+    imdbid:
+      selector: span.imdb-inline > a
+      attribute: href
+    poster:
+      selector: a[imgsrc]
+      attribute: imgsrc
+    size:
+      selector: td:nth-child(4)
+    grabs:
+      selector: td:nth-child(5)
+      filters:
+        - name: replace
+          args: [",", ""]
+    seeders:
+      selector: td:nth-child(6)
+      filters:
+        - name: replace
+          args: [",", ""]
+    leechers:
+      selector: td:nth-child(7)
+      filters:
+        - name: replace
+          args: [",", ""]
+    date:
+      selector: .up_info2
+      filters:
+        - name: append
+          args: " +02:00" # EET
+        - name: re_replace
+          args: ["[^:]+: ", ""]
+        - name: dateparse
+          args: "02/01/06 15:04 -07:00"
+    description:
+      selector: div.sub_title
+    downloadvolumefactor:
+      case:
+        a[href*="freeleech=1"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a
