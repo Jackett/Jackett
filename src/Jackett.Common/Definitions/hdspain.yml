@@ -71,7 +71,7 @@ search:
       filters:
         - name: querystring
           args: cat
-    extras:
+    _extras:
       optional: true
       selector: td.titulo a[class]
       filters:
@@ -90,7 +90,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: "{{ .Result.extras }} English"
+          args: "{{ .Result._extras }} English"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     title_notvose:
@@ -98,7 +98,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: "{{ .Result.extras }} Spanish"
+          args: "{{ .Result._extras }} Spanish"
         - name: re_replace
           args: ["(?i)T(\\d{1,2})\\b", "S$1"]
     title:
