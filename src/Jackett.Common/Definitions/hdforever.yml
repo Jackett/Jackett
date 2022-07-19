@@ -122,17 +122,17 @@ search:
         div.cats_série: 5
         div.cats_sérieanim: 6
         div.cats_documentaire: 7
-    download-regular:
+    download_regular:
       selector: a[href^="torrents.php?action=download&"]
       attribute: href
-    download-usetoken:
+    download_usetoken:
       selector: a[href^="torrents.php?action=download&"]
       attribute: href
       filters:
         - name: append
           args: "&usetoken=1"
     download:
-      text: "{{ if .Config.usetoken }}{{ .Result.download-usetoken }}{{ else }}{{ .Result.download-regular }}{{ end }}"
+      text: "{{ if .Config.usetoken }}{{ .Result.download_usetoken }}{{ else }}{{ .Result.download_regular }}{{ end }}"
     title_phase1:
       selector: div.group_info
       remove: span:nth-child(1), div.tags
