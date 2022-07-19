@@ -87,6 +87,10 @@ login:
     __RequestVerificationToken:
       selector: input[name="__RequestVerificationToken"]
       attribute: value
+  error:
+    - selector: div.validation-summary-errors[data-valmsg-summary="true"]
+      message:
+        text: " - Bad username/password."
   test:
     path: /
 
