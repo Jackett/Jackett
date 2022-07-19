@@ -85,14 +85,14 @@ search:
         img[title^="Movie"]: 1
         img[title^="Music"]: 2
         img[title^="Literature"]: 3
-    year:
+    _year:
       selector: a[href$="search_type=year"]
       optional: true
-    flag:
+    _flag:
       selector: a[href^="browse.php?country="] img
       attribute: title
       optional: true
-    filename:
+    _filename:
       selector: a[href^="/down.php/"]
       attribute: href
       filters:
@@ -104,7 +104,7 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: append
-          args: " {{ .Result.year }} {{ .Result.flag }} [{{ .Result.filename }}]"
+          args: " {{ .Result._year }} {{ .Result._flag }} [{{ .Result._filename }}]"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -131,21 +131,21 @@ search:
       selector: td:nth-child(13)
     leechers:
       selector: td:nth-child(14)
-    subs:
+    _subs:
       selector: span:contains("Subs:")
       optional: true
-    genre:
+    _genre:
       selector: td:nth-child(5)
       optional: true
       filters:
         - name: prepend
           args: "Genre: "
-    mom:
+    _mom:
       selector: img[title^="CURRENT"]
       attribute: title
       optional: true
     description:
-      text: "{{ .Result.subs }} {{ .Result.genre }}{{ if .Result.mom }} Current MoM{{ else }}{{ end }}"
+      text: "{{ .Result._subs }} {{ .Result._genre }}{{ if .Result._mom }} Current MoM{{ else }}{{ end }}"
     downloadvolumefactor:
       case:
         "span:contains(\"Freeleech\")": 0
