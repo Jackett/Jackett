@@ -152,14 +152,14 @@ search:
       selector: $[0].id
 
   fields:
-    id:
+    _id:
       selector: id
     category:
       selector: category
     title:
       selector: name
     details:
-      text: "{{ .Config.sitelink }}description.php?id={{ .Result.id }}"
+      text: "{{ .Config.sitelink }}description.php?id={{ .Result._id }}"
     infohash:
       selector: info_hash
     imdbid:
