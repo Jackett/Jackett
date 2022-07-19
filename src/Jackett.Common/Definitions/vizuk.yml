@@ -169,7 +169,7 @@ search:
     imdbid:
       selector: .torrentFlags a[href*="www.imdb.com/title/tt"]
       attribute: href
-    date1:
+    date_1:
       selector: td.torrent_name:contains("Subido"):contains("-"), .torrentOwner:contains("Subido"):contains("-")
       optional: true
       filters:
@@ -181,7 +181,7 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    date2:
+    date_2:
       selector: td.torrent_name:contains("Subido"):not(:contains("-")), .torrentOwner:contains("Subido"):not(:contains("-"))
       optional: true
       filters:
@@ -210,7 +210,7 @@ search:
         - name: replace
           args: ["Domingo a", "Sunday at"]
         - name: fuzzytime # eg: Yesterday at 14:22 or Monday at 14:22
-    date3:
+    date_3:
       selector: td.torrent_name:contains("Uploaded"):contains("-"), .torrentOwner:contains("Uploaded"):contains("-")
       optional: true
       filters:
@@ -220,7 +220,7 @@ search:
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02-01-2006 15:04 -07:00"
-    date4:
+    date_4:
       selector: td.torrent_name:contains("Uploaded"):not(:contains("-")), .torrentOwner:contains("Uploaded"):not(:contains("-"))
       optional: true
       filters:
@@ -228,7 +228,7 @@ search:
           args: "(?<=Uploaded )(.*)(?= by)"
         - name: fuzzytime # eg: Yesterday at 14:22 or Monday at 14:22
     date:
-      text: "{{ if or .Result.date1 .Result.date2 .Result.date3 .Result.date4 }}{{ or .Result.date1 .Result.date2 .Result.date3 .Result.date4 }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_1 .Result.date_2 .Result.date_3 .Result.date_4 }}{{ or .Result.date_1 .Result.date_2 .Result.date_3 .Result.date_4 }}{{ else }}now{{ end }}"
     size:
       selector: td.size a, .torrentInfo a[rel="torrent_size"]
     grabs:

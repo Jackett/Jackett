@@ -134,12 +134,12 @@ search:
     selector: div.selection_wrap
 
   fields:
-    cat_p1:
+    category_p1:
       selector: div.kat_cat_pic_name
-    cat_p2:
+    category_p2:
       selector: div.kat_cat_pic_name_b
     categorydesc:
-      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
+      text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
     title:
       selector: a.selection_a
       filters:

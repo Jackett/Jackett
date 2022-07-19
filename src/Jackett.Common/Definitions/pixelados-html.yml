@@ -103,25 +103,25 @@ search:
       attribute: href
     title_raw:
       selector: a.torrent-listings-name
-    format:
+    _format:
       selector: td.torrent-listings-format
-    vose:
+    _vose:
       selector: a[href$="torrents?types[0]=53"]
       optional: true
-    mejorada:
+    _mejorada:
       selector: a[href$="torrents?types[0]=52"]
       optional: true
-    corregida:
+    _corregida:
       selector: a[href$="torrents?types[0]=58"]
       optional: true
-    audio_editado:
+    _audio_editado:
       selector: a[href$="torrents?types[0]=39"]
       optional: true
-    overview:
+    _overview:
       selector: td.torrent-listings-overview
       remove: a, span.torrent-listings-comments, span.torrent-listings-thanks, span.torrent-listings-uploader
     title:
-      text: "{{ .Result.title_raw }} {{ .Result.format }} {{ .Result.overview }}{{ if .Result.vose }}{{ else }} SPANISH{{ end }}{{ if or .Result.mejorada .Result.corregida .Result.audio_editado }} PROPER{{ else }}{{ end }}"
+      text: "{{ .Result.title_raw }} {{ .Result._format }} {{ .Result._overview }}{{ if .Result._vose }}{{ else }} SPANISH{{ end }}{{ if or .Result._mejorada .Result._corregida .Result._audio_editado }} PROPER{{ else }}{{ end }}"
       filters:
         # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
         - name: re_replace

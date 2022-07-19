@@ -43,23 +43,23 @@ search:
     poster:
       selector: img
       attribute: src
-    actress:
+    _actress:
       selector: a[href^="/actress/"]
       optional: true
       filters:
         - name: prepend
           args: "Actress: "
-    tags:
+    _tags:
       selector: div.tags
       optional: true
       filters:
         - name: prepend
           args: "Tags: "
-    descr:
+    _descr:
       selector: p.level
       optional: true
     description:
-      text: "{{ .Result.descr }}</br>{{ .Result.actress }}</br>{{ .Result.tags }}"
+      text: "{{ .Result._descr }}</br>{{ .Result._actress }}</br>{{ .Result._tags }}"
     date:
       selector: p.is-6 > a
       attribute: href

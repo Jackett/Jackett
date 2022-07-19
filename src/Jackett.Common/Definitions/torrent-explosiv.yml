@@ -160,12 +160,12 @@ search:
     details:
       selector: a.selection_a
       attribute: href
-    cat_p1:
+    category_p1:
       selector: div.kat_cat_pic_name
-    cat_p2:
+    category_p2:
       selector: div.kat_cat_pic_name_b
     categorydesc:
-      text: "{{ .Result.cat_p1 }} {{ .Result.cat_p2 }}"
+      text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
     poster:
       selector: div[id^="details"] img
       attribute: src

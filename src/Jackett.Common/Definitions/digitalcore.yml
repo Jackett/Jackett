@@ -121,25 +121,25 @@ search:
       selector: category
     title:
       selector: name
-    id:
+    _id:
       selector: id
     details:
-      text: "{{ .Config.sitelink }}torrent/{{ .Result.id }}/"
+      text: "{{ .Config.sitelink }}torrent/{{ .Result._id }}/"
     download:
-      text: "{{ .Config.sitelink }}api/v1/torrents/download/{{ .Result.id }}"
+      text: "{{ .Config.sitelink }}api/v1/torrents/download/{{ .Result._id }}"
     imdbid:
       selector: imdbid2
-    imdbidfull:
+    imdbid_full:
       optional: true
       selector: imdbid2
-    posternormal:
+    poster_normal:
       optional: true
       selector: firstpic
-    posterimdb:
+    poster_imdb:
       optional: true
-      text: "{{ if .Result.imdbid }}{{ .Config.sitelink }}img/imdb/{{ .Result.imdbidfull }}.jpg{{ else }}{{ end }}"
+      text: "{{ if .Result.imdbid }}{{ .Config.sitelink }}img/imdb/{{ .Result.imdbid_full }}.jpg{{ else }}{{ end }}"
     poster:
-      text: "{{ if .Result.posterimdb }}{{ .Result.posterimdb }}{{ else }}{{ .Result.posternormal }}{{ end }}"
+      text: "{{ if .Result.poster_imdb }}{{ .Result.poster_imdb }}{{ else }}{{ .Result.poster_normal }}{{ end }}"
     date:
       # 2021-10-27 12:07:22
       selector: added
@@ -171,56 +171,56 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-    titledesc:
+    title_desc:
       optional: true
       selector: title
-    yeardesc:
+    _year_desc:
       optional: true
       selector: year
-    genresdesc:
+    _genres_desc:
       optional: true
       selector: genres
-    taglinedesc:
+    _tagline_desc:
       optional: true
       selector: tagline
-    castdesc:
+    _cast_desc:
       optional: true
       selector: cast
-    ratingdesc:
+    _rating_desc:
       optional: true
       selector: rating
       filters:
         - name: re_replace
           args: ["0", ""]
-    sectiondesc:
+    _section_desc:
       optional: true
       selector: section
-    predatedesc:
+    _predate_desc:
       selector: preDate
       filters:
         - name: re_replace
           args: ["0000-00-00 00:00:00", ""]
-    p2ptag:
+    _p2ptag:
       selector: p2p
       case:
         0: ""
         1: P2P
-    packtag:
+    _packtag:
       selector: pack
       case:
         0: ""
         1: Pack
-    reqidtag:
+    _reqidtag:
       selector: reqid
       case:
         0: ""
         "*": Request
-    tagdesc:
+    _tag_desc:
       optional: true
-      text: "{{ if .Result.p2ptag }}{{ .Result.p2ptag }}, {{ else }}{{ end }}{{ if .Result.packtag }}{{ .Result.packtag }}, {{ else }}{{ end }}{{ if .Result.reqidtag }}{{ .Result.reqidtag }}{{ else }}{{ end }}"
+      text: "{{ if .Result._p2ptag }}{{ .Result._p2ptag }}, {{ else }}{{ end }}{{ if .Result._packtag }}{{ .Result._packtag }}, {{ else }}{{ end }}{{ if .Result._reqidtag }}{{ .Result._reqidtag }}{{ else }}{{ end }}"
       filters:
         - name: regexp
           args: "(.+?), $"
     description:
-      text: "{{ if .Result.titledesc }}Title: {{ .Result.titledesc }}</br>{{ else }}{{ end }}{{ if .Result.yeardesc }}Year: {{ .Result.yeardesc }}</br>{{ else }}{{ end }}{{ if .Result.genresdesc }}Genres: {{ .Result.genresdesc }}</br>{{ else }}{{ end }}{{ if .Result.taglinedesc }}Tagline: {{ .Result.taglinedesc }}</br>{{ else }}{{ end }}{{ if .Result.castdesc }}Cast: {{ .Result.castdesc }}</br>{{ else }}{{ end }}{{ if .Result.ratingdesc }}Rating: {{ .Result.ratingdesc }}</br>{{ else }}{{ end }}{{ if .Result.tagdesc }}Tags: {{ .Result.tagdesc }}</br>{{ else }}{{ end }}{{ if .Result.predatedesc }}PRE: {{ .Result.predatedesc }}</br>{{ else }}{{ end }}{{ if .Result.sectiondesc }}Section: {{ .Result.sectiondesc }}{{ else }}{{ end }}"
+      text: "{{ if .Result.title_desc }}Title: {{ .Result.title_desc }}</br>{{ else }}{{ end }}{{ if .Result._year_desc }}Year: {{ .Result._year_desc }}</br>{{ else }}{{ end }}{{ if .Result._genres_desc }}Genres: {{ .Result._genres_desc }}</br>{{ else }}{{ end }}{{ if .Result._tagline_desc }}Tagline: {{ .Result._tagline_desc }}</br>{{ else }}{{ end }}{{ if .Result._cast_desc }}Cast: {{ .Result._cast_desc }}</br>{{ else }}{{ end }}{{ if .Result._rating_desc }}Rating: {{ .Result._rating_desc }}</br>{{ else }}{{ end }}{{ if .Result._tag_desc }}Tags: {{ .Result._tag_desc }}</br>{{ else }}{{ end }}{{ if .Result._predate_desc }}PRE: {{ .Result._predate_desc }}</br>{{ else }}{{ end }}{{ if .Result._section_desc }}Section: {{ .Result._section_desc }}{{ else }}{{ end }}"
 # json rartracker api v1

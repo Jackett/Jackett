@@ -55,14 +55,14 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    id:
+    _id:
       selector: a[href^="details.php?id="]
       attribute: href
       filters:
         - name: querystring
           args: id
     download:
-      text: "download.php?id={{ .Result.id }}&name=t{{ .Result.id }}.torrent"
+      text: "download.php?id={{ .Result._id }}&name=t{{ .Result._id }}.torrent"
     date:
       selector: font.mnav
       filters:

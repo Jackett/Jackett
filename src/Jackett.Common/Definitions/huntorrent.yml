@@ -113,7 +113,7 @@ search:
     selector: table[align="center"][cellpadding="5"] > tbody > tr[id^="torrent-main-"]
 
   fields:
-    id:
+    _id:
       selector: a.download-link
       attribute: data-id
     category:
@@ -129,7 +129,7 @@ search:
         - name: replace
           args: ["Név: ", ""]
     details:
-      text: "details.php?id={{ .Result.id }}"
+      text: "details.php?id={{ .Result._id }}"
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href

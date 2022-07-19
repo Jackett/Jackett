@@ -128,7 +128,7 @@ search:
       filters:
         - name: querystring
           args: cat
-    language:
+    _language:
       selector: td:nth-last-child(5)
     description:
       selector: img[src="/images/vip-icon.png"]
@@ -140,7 +140,7 @@ search:
       selector: a[href^="file.php?id="] b
       filters:
         - name: append
-          args: " {{ .Result.language }}{{ .Result.description }}"
+          args: " {{ .Result._language }}{{ .Result.description }}"
     details:
       selector: a[href^="file.php?id="]
       attribute: href

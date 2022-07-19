@@ -112,16 +112,17 @@ search:
       filters:
         - name: querystring
           args: cat
-    year:
+    _year:
       optional: true
       selector: div.video_year
       filters:
         - name: replace
           args: ["年份:", " "]
-    _title:
-      selector: a.video_name_str
     title:
-      text: "{{ .Result._title }}{{ .Result.year }}"
+      selector: a.video_name_str
+      filters:
+        - name: append
+          args: "{{ .Result._year }}"
     details:
       selector: a.video_name_str
       attribute: href

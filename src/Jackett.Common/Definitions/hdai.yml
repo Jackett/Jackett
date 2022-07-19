@@ -108,7 +108,7 @@ search:
   fields:
     category:
       selector: category
-    source:
+    _source:
       selector: source
       case:
         0: ""
@@ -118,7 +118,7 @@ search:
         4: JP
         5: KR
         6: Other
-    medium:
+    _medium:
       selector: medium
       case:
         0: ""
@@ -131,7 +131,7 @@ search:
         7: "DVD"
         8: "CD"
         9: "MiniBD"
-    codec:
+    _codec:
       selector: codec
       case:
         0: ""
@@ -142,7 +142,7 @@ search:
         5: "MPEG-2"
         7: "MPEG-4"
         6: "Other"
-    audiocodec:
+    _audiocodec:
       selector: audiocodec
       case:
         0: ""
@@ -160,7 +160,7 @@ search:
         12: "OGG"
         13: "MPEG"
         14: "Other"
-    standard:
+    _standard:
       selector: standard
       case:
         0: ""
@@ -180,7 +180,7 @@ search:
       selector: small_descr
       filters:
         - name: append
-          args: " [{{ .Result.medium }} {{ .Result.standard }} {{ .Result.codec }} {{ .Result.audiocodec }} {{ .Result.source }}]"
+          args: " [{{ .Result._medium }} {{ .Result._standard }} {{ .Result._codec }} {{ .Result._audiocodec }} {{ .Result._source }}]"
     poster:
       selector: poster
     seeders:

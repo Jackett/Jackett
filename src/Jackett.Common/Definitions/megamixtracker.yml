@@ -129,14 +129,14 @@ search:
           args: cat
     title:
       selector: a[href*="klappe("]
-    id:
+    _id:
       selector: a[href*="klappe("]
       attribute: href
       filters:
         - name: regexp
           args: (\d+)
     details:
-      text: "details.php?id={{ .Result.id }}"
+      text: "details.php?id={{ .Result._id }}"
     poster:
       selector: img[border][onmouseover]
       attribute: onmouseover

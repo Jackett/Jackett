@@ -135,11 +135,11 @@ search:
     poster:
       selector: a.preview
       attribute: href
-    download1:
+    download_1:
       selector: a[href^="download.php?torrent="]
       optional: true
       attribute: href
-    download2:
+    download_2:
       selector: input[onclick*="download.php?torrent="]
       optional: true
       attribute: onclick
@@ -149,7 +149,7 @@ search:
         - name: replace
           args: ["', '_self');", ""]
     download:
-      text: "{{ if or .Result.download1 .Result.download2 }}{{ or .Result.download1 .Result.download2 }}{{ else }}{{ end }}"
+      text: "{{ if or .Result.download_1 .Result.download_2 }}{{ or .Result.download_1 .Result.download_2 }}{{ else }}{{ end }}"
     size:
       selector: td:nth-child(6)
     date_browse:

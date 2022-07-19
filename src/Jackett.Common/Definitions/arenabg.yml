@@ -151,11 +151,11 @@ search:
       filters:
         - name: querystring
           args: category
-    english:
+    _english:
       selector: span[title="English"]
       attribute: title
       optional: true
-    bulgarian:
+    _bulgarian:
       selector: span[title="Bulgarian"]
       attribute: title
       optional: true
@@ -163,7 +163,7 @@ search:
       selector: td.filename a[href^="/en/torrents/"]
       filters:
         - name: append
-          args: "{{ if .Result.bulgarian }} {{ .Result.bulgarian }}{{ else }}{{ end }}{{ if .Result.english }} {{ .Result.english }}{{ else }}{{ end }}"
+          args: "{{ if .Result._bulgarian }} {{ .Result._bulgarian }}{{ else }}{{ end }}{{ if .Result._english }} {{ .Result._english }}{{ else }}{{ end }}"
     details:
       selector: td.filename a[href^="/en/torrents/"]
       attribute: href

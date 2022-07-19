@@ -97,7 +97,6 @@ search:
         - name: querystring
           args: cat
     title:
-      filters:
       selector: td:nth-child(2) a
       attribute: title
     download:

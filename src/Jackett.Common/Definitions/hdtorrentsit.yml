@@ -66,15 +66,15 @@ search:
     selector: tbody#highlighted tr
 
   fields:
-    year:
+    _year:
       selector: td:nth-child(2) a:nth-child(1)
       filters:
         - name: regexp # find torrent year
           args: (\d{4})
-    quality: # (BDRip 1080, BDRip 720p etc)
+    _quality: # (BDRip 1080, BDRip 720p etc)
       selector: td:nth-child(1) a:nth-child(1) img
       attribute: alt
-    audio: # ita audio TAG
+    _audio: # ita audio TAG
       selector: a[href^="download.php?id="]
       attribute: href
       filters:
@@ -108,7 +108,7 @@ search:
         - name: re_replace # remove various
           args: ["(?i)(Serie completa|Completa|\\[in pausa\\])", ""]
         - name: append
-          args: " ({{ .Result.year }}) [{{ .Result.quality }} - {{ .Result.audio }} ITA]"
+          args: " ({{ .Result._year }}) [{{ .Result._quality }} - {{ .Result._audio }} ITA]"
         - name: re_replace # replace multiple spaces
           args: ["[ ]{2,}", " "]
     details:

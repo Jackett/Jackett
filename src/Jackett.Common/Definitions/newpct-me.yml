@@ -46,12 +46,12 @@ search:
   fields:
     category:
       text: peliculas
-    quality:
+    _quality:
       selector: span.estreno
       filters:
         - name: replace
           args: ["---", ""]
-    language:
+    _language:
       selector: a.complets-left
       filters:
         - name: replace
@@ -69,7 +69,7 @@ search:
       attribute: title
       filters:
         - name: append
-          args: " {{ .Result.quality }} {{ .Result.language }}"
+          args: " {{ .Result._quality }} {{ .Result._language }}"
     details:
       selector: a.nombre
       attribute: href

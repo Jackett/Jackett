@@ -131,7 +131,7 @@ search:
 #      - name: andmatch
 
   fields:
-    id:
+    _id:
       selector: id
     category:
       selector: category
@@ -154,7 +154,7 @@ search:
     title:
       text: "{{ if .Config.subfrench }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_multi_out }}{{ end }}"
     details:
-      text: "{{ .Config.sitelink }}details.php?id={{ .Result.id }}"
+      text: "{{ .Config.sitelink }}details.php?id={{ .Result._id }}"
     download:
       selector: download_link
     poster:

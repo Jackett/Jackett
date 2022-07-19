@@ -124,14 +124,14 @@ search:
       optional: true
     title:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
-    id:
+    _id:
       selector: a[href^="javascript:torrent"]
       attribute: href
       filters:
         - name: regexp
           args: (\d+)
     details:
-      text: "details.php?id={{ .Result.id }}"
+      text: "details.php?id={{ .Result._id }}"
     poster:
       selector: a[onmouseover]
       attribute: onmouseover

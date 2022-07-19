@@ -84,26 +84,26 @@ search:
   fields:
     category:
       text: Other
-    site_date:
+    _site_date:
       selector: a
       filters:
-        # year can be at the end of the title, so we get it and name it site_date
+        # year can be at the end of the title, so we get it and name it _site_date
         - name: regexp
           args: "(19|20\\d{2})$"
     title_phase1:
       selector: a
       filters:
-        # now we put the date at the right place according scene naming rules using .Result.site_date
+        # now we put the date at the right place according scene naming rules using .Result._site_date
         - name: re_replace
-          args: ["(?i)( FRENCH)", " {{ .Result.site_date }} FRENCH"]
+          args: ["(?i)( FRENCH)", " {{ .Result._site_date }} FRENCH"]
         - name: re_replace
-          args: ["(?i)( MULTI)", " {{ .Result.site_date }} MULTI"]
+          args: ["(?i)( MULTI)", " {{ .Result._site_date }} MULTI"]
         - name: re_replace
-          args: ["(?i)( TRUEFRENCH)", " {{ .Result.site_date }} TRUEFRENCH"]
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result._site_date }} TRUEFRENCH"]
         - name: re_replace
-          args: ["(?i)( VOSTFR)", " {{ .Result.site_date }} VOSTFR"]
+          args: ["(?i)( VOSTFR)", " {{ .Result._site_date }} VOSTFR"]
         - name: re_replace
-          args: ["(?i)( SUBFRENCH)", " {{ .Result.site_date }} SUBFRENCH"]
+          args: ["(?i)( SUBFRENCH)", " {{ .Result._site_date }} SUBFRENCH"]
         # and we delete it at the end
         - name: re_replace
           args: ["(19|20\\d{2})$", ""]

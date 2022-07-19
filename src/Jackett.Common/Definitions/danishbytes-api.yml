@@ -87,16 +87,16 @@ search:
       selector: $.resultsCount
 
   fields:
-    id:
+    _id:
       selector: .id
     category:
       selector: category_id
     title:
       selector: name
     details:
-      text: "{{ .Config.sitelink }}torrents/{{ .Result.id }}"
+      text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
     download:
-      text: "{{ .Config.sitelink }}torrent/download/{{ .Result.id }}.{{ .Config.rsskey }}"
+      text: "{{ .Config.sitelink }}torrent/download/{{ .Result._id }}.{{ .Config.rsskey }}"
     infohash:
       selector: info_hash
     poster:

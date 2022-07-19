@@ -144,12 +144,12 @@ search:
       selector: a[href$="&search_area=5"]
       attribute: href
     # staff have extra columns at the start and end of a row, so we have to float the next lot of selectors off an anchor
-    anchor1:
+    _anchor1:
       selector: td:has(a[href^="comment.php?"])
       optional: true
     date_elapsed:
       # time type: time elapsed (default)
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td > span[title]"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td > span[title]"
       attribute: title
       optional: true
       filters:
@@ -159,7 +159,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date_added:
       # time added
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td:not(:has(span[title]))"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td:not(:has(span[title]))"
       optional: true
       filters:
         - name: append
@@ -169,13 +169,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td"
     seeders:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td"
     leechers:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td"
     grabs:
-      selector: "td:has(a[{{ if .Result.anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td ~ td"
+      selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td ~ td ~ td ~ td ~ td"
     downloadvolumefactor:
       case:
         img.pro_free: 0

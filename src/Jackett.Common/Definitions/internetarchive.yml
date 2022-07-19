@@ -78,17 +78,17 @@ search:
       selector: mediatype
     title:
       selector: title
-    id:
+    _id:
       selector: identifier
     details:
-      text: "details/{{ .Result.id }}"
+      text: "details/{{ .Result._id }}"
     download:
-      text: "download/{{ .Result.id }}/{{ .Result.id }}_archive.torrent"
-    btih:
+      text: "download/{{ .Result._id }}/{{ .Result._id }}_archive.torrent"
+    _btih:
       selector: btih
       optional: true
     infohash:
-      text: "{{ if .Config.noMagnet }}{{ else }}{{ .Result.btih }}{{ end }}"
+      text: "{{ if .Config.noMagnet }}{{ else }}{{ .Result._btih }}{{ end }}"
     date:
       # 2021-10-25T16:44:43Z
       selector: publicdate

@@ -180,7 +180,7 @@ search:
         - name: querystring
           args: category
 
-    remux: # Remux
+    _remux: # Remux
       selector: td:nth-child(2) a:contains("REMUX"),a:contains("Remux"),a:contains("remux")
       optional: true
       filters:
@@ -189,7 +189,7 @@ search:
         - name: append
           args: "Remux."
 
-    webdl: # WEBDL
+    _webdl: # WEBDL
       selector: td:nth-child(2) a:contains("WEB"),a:contains("web"),a:contains("Web")
       optional: true
       filters:
@@ -198,7 +198,7 @@ search:
         - name: append
           args: "WEBDL."
 
-    hdtv: # HDTV
+    _hdtv: # HDTV
       selector: td:nth-child(2) a:contains("HDTV"),a:contains("HDtv"),a:contains("hdtv")
       optional: true
       filters:
@@ -207,7 +207,7 @@ search:
         - name: append
           args: "HDTV."
 
-    dvd: # DVD
+    _dvd: # DVD
       selector: td:nth-child(2) a:contains("DVD"),a:contains("dvd"),a:contains("Dvd")
       optional: true
       filters:
@@ -216,7 +216,7 @@ search:
         - name: append
           args: "DVD.Spanish-PuntoTorrent"
 
-    bluray: # BluRay
+    _bluray: # BluRay
       selector: td:nth-child(2) a:not(:contains("HDTV"))a:not(:contains("hdtv"))a:not(:contains("REMUX"))a:not(:contains("Remux"))a:not(:contains("remux"))a:not(:contains("WEB"))a:not(:contains("web"))a:not(:contains("Web"))a:contains("1080"),:contains("2160"):contains("uhd")
       optional: true
       filters:
@@ -225,7 +225,7 @@ search:
         - name: append
           args: "BluRay."
 
-    2160p: # 2160p
+    _2160p: # 2160p
       selector: td:nth-child(2) a:contains("2160"),a:contains("4k"),a:contains("4K"),a:contains("uhd"),a:contains("UHD")
       optional: true
       filters:
@@ -234,7 +234,7 @@ search:
         - name: append
           args: "2160p.Spanish-PuntoTorrent"
 
-    1080p: # 1080p
+    _1080p: # 1080p
       selector: td:nth-child(2) a:contains("1080"),a:contains("microhd"),a:contains("mhd"),a:contains("BDRemux"):not(:contains("2160"))
       optional: true
       filters:
@@ -243,7 +243,7 @@ search:
         - name: append
           args: "1080p.Spanish-PuntoTorrent"
 
-    720p: # 720p
+    _720p: # 720p
       selector: td:nth-child(2) a:contains("720")
       optional: true
       filters:
@@ -252,7 +252,7 @@ search:
         - name: append
           args: "720p.Spanish-PuntoTorrent"
 
-    480p: # 480p
+    _480p: # 480p
       selector: td:nth-child(2) a:contains("480"),a:contains("Xvid"),a:contains("XVID"),a:contains("xvid")
       optional: true
       filters:
@@ -294,7 +294,7 @@ search:
         - name: re_replace
           args: ["^\\.", ""] # Delete first dot
         - name: append
-          args: " {{ .Result.remux }}{{ .Result.webdl }}{{ .Result.hdtv }}{{ .Result.dvd }}{{ .Result.bluray }}{{ .Result.2160p }}{{ .Result.1080p }}{{ .Result.720p }}{{ .Result.480p }}"
+          args: " {{ .Result._remux }}{{ .Result._webdl }}{{ .Result._hdtv }}{{ .Result._dvd }}{{ .Result._bluray }}{{ .Result._2160p }}{{ .Result._1080p }}{{ .Result._720p }}{{ .Result._480p }}"
 
     title_vose:
       selector: td:nth-child(2) a:contains("VOSE")
@@ -313,7 +313,7 @@ search:
         - name: re_replace
           args: ["(?i)(\\d{1,2})[x|\\/|\\\\](\\d{1,2})", "S$1E$2"]
         - name: append
-          args: " {{ .Result.remux }}{{ .Result.webdl }}{{ .Result.hdtv }}{{ .Result.dvd }}{{ .Result.bluray }}{{ .Result.2160p }}{{ .Result.1080p }}{{ .Result.720p }}{{ .Result.480p }}"
+          args: " {{ .Result._remux }}{{ .Result._webdl }}{{ .Result._hdtv }}{{ .Result._dvd }}{{ .Result._bluray }}{{ .Result._2160p }}{{ .Result._1080p }}{{ .Result._720p }}{{ .Result._480p }}"
 
     title:
       text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_default }}{{ end }}"

@@ -139,14 +139,14 @@ search:
       selector: categoryID
     title:
       selector: name
-    id:
+    _id:
       selector: fid
-    filename:
+    _filename:
       selector: filename
     details:
-      text: "{{ .Config.sitelink }}torrent/{{ .Result.id }}"
+      text: "{{ .Config.sitelink }}torrent/{{ .Result._id }}"
     download:
-      text: "{{ .Config.sitelink }}download/{{ .Result.id }}/{{ .Result.filename }}"
+      text: "{{ .Config.sitelink }}download/{{ .Result._id }}/{{ .Result._filename }}"
     imdbid:
       selector: imdbID
     seeders:

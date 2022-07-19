@@ -132,7 +132,7 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    uploader:
+    _uploader:
       selector: a[href^="index.php?page=userdetails"]
       optional: true
     date:
@@ -149,7 +149,7 @@ search:
     grabs:
       selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td ~ td
     size:
-      selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td{{ if .Result.uploader }} ~ td{{ else }}{{ end }}"
+      selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td{{ if .Result._uploader }} ~ td{{ else }}{{ end }}"
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
