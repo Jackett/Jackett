@@ -45,18 +45,18 @@ search:
     title_alternative:
       selector: ..names.alternative
       optional: true
-    year:
+    _year:
       selector: ..season.year
-    quality:
+    _quality:
       selector: quality.string
-    series:
+    _series:
       selector: series.string
     title:
-      text: "{{ .Result.title_ru }} / {{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} [{{ .Result.quality }}] - {{ .Result.series }}"
-    code:
+      text: "{{ .Result.title_ru }} / {{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} [{{ .Result._quality }}] - {{ .Result._series }}"
+    _code:
       selector: ..code
     details:
-      text: "{{ .Config.sitelink }}release/{{ .Result.code }}.html"
+      text: "{{ .Config.sitelink }}release/{{ .Result._code }}.html"
     download:
       selector: url
       filters:
