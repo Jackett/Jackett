@@ -96,7 +96,7 @@ search:
     details:
       selector: div.resultdivtop a
       attribute: href
-    download-itorrents:
+    download_itorrents:
       selector: div.resultdivbotton div.hideinfohash
       filters:
         - name: toupper
@@ -105,7 +105,7 @@ search:
         - name: append
           args: ".torrent"
     download:
-      text: "{{ if .Config.itorrents-links }}{{ .Result.download-itorrents }}{{ else }}{{ end }}"
+      text: "{{ if .Config.itorrents-links }}{{ .Result.download_itorrents }}{{ else }}{{ end }}"
     infohash:
       selector: div.resultdivbotton div.hideinfohash
     date:
