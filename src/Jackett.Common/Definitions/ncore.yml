@@ -1,0 +1,165 @@
+---
+id: ncore
+name: nCore
+description: "nCore is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://ncore.pro/
+legacylinks:
+  - https://ncore.cc/
+
+caps:
+  categorymappings:
+    # E-book
+    - {id: ebook, cat: Books, desc: "E-book/Eng"}
+    - {id: ebook_hun, cat: Books, desc: "E-book/Hun"}
+    # Játék
+    - {id: console, cat: Console, desc: "Játék/Console"}
+    - {id: game_iso, cat: PC/Games, desc: "Játék/ISO"}
+    - {id: game_rip, cat: PC/Games, desc: "Játék/Rip"}
+    # Filmek
+    - {id: xvid_hun, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: xvid, cat: Movies/SD, desc: "Film/SD/Eng"}
+    - {id: dvd_hun, cat: Movies/DVD, desc: "Film/DVD/Hun"}
+    - {id: dvd, cat: Movies/DVD, desc: "Film/DVD/Eng"}
+    - {id: dvd9_hun, cat: Movies/DVD, desc: "Film/Dvd9/Hun"}
+    - {id: dvd9, cat: Movies/DVD, desc: "Film/Dvd9/Eng"}
+    - {id: hd_hun, cat: Movies/HD, desc: "Film/HD/Hun"}
+    - {id: hd, cat: Movies/HD, desc: "Film/HD/Eng"}
+    # Sorozatok
+    - {id: xvidser, cat: TV/SD, desc: "Sorozat/SD/Eng"}
+    - {id: xvidser_hun, cat: TV/SD, desc: "Sorozat/SD/Hun"}
+    - {id: dvdser, cat: TV/Other, desc: "Sorozat/DVDR/Eng"}
+    - {id: dvdser_hun, cat: TV/Other, desc: "Sorozat/DVDR/Hun"}
+    - {id: hdser, cat: TV/HD, desc: "Sorozat/HD/Eng"}
+    - {id: hdser_hun, cat: TV/HD, desc: "Sorozat/HD/Hun"}
+    # Zene
+    - {id: mp3_hun, cat: Audio/MP3, desc: "Zene/MP3/Hun"}
+    - {id: mp3, cat: Audio/MP3, desc: "Zene/MP3/Eng"}
+    - {id: lossless_hun, cat: Audio/MP3, desc: "Zene/Lossless/Hun"}
+    - {id: lossless, cat: Audio/MP3, desc: "Zene/Lossless/Eng"}
+    - {id: clip, cat: Audio/Video, desc: "Zene/Klip"}
+    # Program
+    - {id: iso, cat: PC/ISO, desc: "Win/Program/ISO"}
+    - {id: misc, cat: PC/0day, desc: "Win/Program/Rip"}
+    - {id: mobil, cat: PC/Mobile-Other, desc: "Win/Program/Rip"}
+    # Felnőtt tartalom
+    - {id: xxx_xvid, cat: XXX/SD, desc: "XXX/Film/SD"}
+    - {id: xxx_dvd, cat: XXX/DVD, desc: "XXX/DVDR"}
+    - {id: xxx_hd, cat: XXX/UHD, desc: "XXX/HD"}
+    - {id: xxx_imageset, cat: XXX/ImageSet, desc: "XXX/Kép"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+download:
+  selectors:
+    - selector: a[href^="torrents.php"]
+      attribute: href
+      
+login:
+  method: form
+  path: login.php
+  inputs:
+    nev: "{{ .Config.username }}"
+    pass: "{{ .Config.password }}"
+    ne_leptessen_ki: 1
+    set_lang: hu
+    submitted: 1
+  error:
+    - selector: div[id="hibauzenet"] table tbody tr td:nth-child(2)
+  test:
+    path: index.php
+
+search:
+  paths:
+    - path: torrents.php
+      followredirect: true
+  inputs:
+    nyit_filmek_resz: true
+    nyit_sorozat_resz: true
+    nyit_zene_resz: true
+    nyit_xxx_resz: true
+    nyit_jatek_resz: true
+    nyit_prog_resz: true
+    nyit_konyv_resz: true
+    mire: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    miben: "{{ if .Query.IMDBID }}imdb{{ else }}name{{ end }}"
+    tipus: "{{ if .Categories }}kivalasztottak_kozott{{ else }}all_own{{ end }}"
+    submit.x: 1
+    submit.y: 18
+    tags: ""
+    $raw: "{{ range .Categories }}&kivalasztott_tipus[]={{.}}{{end}}"
+
+  rows:
+    selector: .box_torrent_all .box_torrent
+
+  fields:
+    category:
+      selector: .box_alap_img > a[href^="/torrents.php?tipus="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: tipus
+        - name: trim
+    title:
+      selector: div[class^="torrent_txt"] > a
+      attribute: title
+    details:
+      selector: div[class^="torrent_txt"] > a
+      attribute: href
+      filters:
+        - name: querystring
+          args: id
+        - name: prepend
+          args: "torrents.php?action=details&id="
+    download:
+      selector: div[class^="torrent_txt"] > a
+      attribute: href
+      filters:
+        - name: querystring
+          args: id
+        - name: prepend
+          args: "ajax.php?action=torrent_drop&id="
+    poster:
+      selector: img.infobar_ico[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "'(.+?)'"
+    imdbid:
+      selector: a.infolink
+      attribute: href
+    size:
+      selector: .box_meret2
+    seeders:
+      selector: .box_s2
+    leechers:
+      selector: .box_l2
+    date:
+      selector: .box_feltoltve2
+      filters:
+        - name: replace
+          args: ["<br>", " "]
+        - name: dateparse
+          args: "2006-01-0215:04:05"
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a
