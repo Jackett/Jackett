@@ -1,0 +1,169 @@
+---
+id: hebits
+name: Hebits
+description: "The Israeli Tracker"
+language: he-IL
+type: private
+encoding: UTF-8
+links:
+  - https://hebits.net/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "סרטים (Movies)"}
+    - {id: 2, cat: TV, desc: "סדרות (TV)"}
+    - {id: 3, cat: TV/Other, desc: "הצגות והופעות (Theater)"}
+    - {id: 4, cat: PC/0day, desc: "תוכנות (Apps)"}
+    - {id: 5, cat: PC/Games, desc: "משחקים (Games)"}
+    - {id: 6, cat: Audio, desc: "מוזיקה (Music)"}
+    - {id: 7, cat: Books, desc: "ספרים (Books)"}
+    - {id: 8, cat: Movies/Other, desc: "חבילות סרטים (Movies Packs)"}
+    - {id: 9, cat: XXX, desc: "פורנו (Porn)"}
+    - {id: 10, cat: Other, desc: "שונות (Other)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: torrents.php
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    searchstr: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    imdbgt: 0
+    imdblt: 10
+    # 1 freeleech, 2 neutral, 3 50%, 4 2x, 5 3x, 9 75%, 11 only perks, 0 normal
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    action: advanced
+    searchsubmit: 1
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+
+  rows:
+    selector: .torrent
+
+  fields:
+    category:
+      selector: .tooltip
+      case:
+        "div[class*=\"movies\"]": 1
+        "div[class*=\"tv\"]": 2
+        "div[class*=\"theater\"]": 3
+        "div[class*=\"software\"]": 4
+        "div[class*=\"games\"]": 5
+        "div[class*=\"music\"]": 6
+        "div[class*=\"books\"]": 7
+        "div[class*=\"packs\"]": 8
+        "div[class*=\"porno\"]": 9
+        "div[class*=\"other\"]": 10
+    title_notenglish:
+      selector: .torrent_info:not(:contains("a")):not(:contains("e")):not(:contains("i")):not(:contains("o")):not(:contains("u")):not(:contains("y"))
+      optional: true
+      filters:
+        # space out the book language at the end of the title
+        # everything within the outermost quotes below is right to left
+        - name: re_replace
+          args: ["(אנגלית)$", " - אנגלית"] # English
+        - name: re_replace
+          args: ["(עברית)$", " - עברית"] # Hebrew
+    title_english:
+      selector: .torrent_info
+      optional: true
+      filters:
+        - name: append
+          args: "א" # catch English only results
+        - name: regexp
+          args: "(.+?[a-zA-Z0-9\\]\\)\\}])[א-ת].*" # remove Hebrew labels from end of title, account for titles ending in letters, numbers, and brackets
+    title:
+      text: "{{ if .Result.title_notenglish }}{{ .Result.title_notenglish }}{{ else }}{{ .Result.title_english }}{{ end }}"
+    details:
+      selector: a[href*="torrentid"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet"]
+      attribute: href
+      optional: true
+    download:
+      selector: a[href^="torrents.php?action=download"]
+      attribute: href
+    poster:
+      selector: a[data-cover^="/images/"]
+      attribute: data-cover
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4) span
+      attribute: title
+      filters:
+        - name: append
+          args: " +02:00" # IST
+        - name: dateparse
+          args: "02/01/2006, 15:04 -07:00"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        "strong.tl_notice[title*=\"חצי פריליץ'\"]": 0.5 # 50%
+        "strong.tl_notice[title*=\"75% פריליץ'!\"]": 0.25 # 75%
+        "strong.tl_notice[title*=\"נטרלי\"]": 0 # neutral
+        "strong.tl_notice[title*=\"פריליץ'\"]": 0 # freeleech
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "strong.tl_notice[title*=\"העלאה משולשת\"]": 3 # 3x
+        "strong.tl_notice[title*=\"העלאה כפולה\"]": 2 # 2x
+        "strong.tl_notice[title*=\"נטרלי\"]": 0 # neutral
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+    description:
+      selector: div.tags
+# Gazelle
