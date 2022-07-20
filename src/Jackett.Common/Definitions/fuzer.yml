@@ -160,7 +160,7 @@ search:
       selector: .up_info2
       filters:
         - name: append
-          args: " +02:00" # EET
+          args: " +02:00" # IST
         - name: re_replace
           args: ["[^:]+: ", ""]
         - name: dateparse
