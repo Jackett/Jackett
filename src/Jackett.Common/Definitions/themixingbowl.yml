@@ -104,7 +104,7 @@ search:
       attribute: href
     size:
       selector: td:nth-child(5)
-    _artist:
+    artist:
       selector: span.artist
       optional: true
     _tag:
@@ -117,7 +117,7 @@ search:
       selector: td:nth-child(7)
       optional: true
     description:
-      text: "Artist=[{{ .Result._artist }}] , Tags={{ .Result._tag }} , Codec=[{{ .Result._codec }}] , BitRate=[{{ .Result._bit }}]"
+      text: "Artist=[{{ .Result.artist }}] , Tags={{ .Result._tag }} , Codec=[{{ .Result._codec }}] , BitRate=[{{ .Result._bit }}]"
     grabs:
       selector: td:nth-child(8)
     seeders:
