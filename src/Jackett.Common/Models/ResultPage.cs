@@ -114,7 +114,7 @@ namespace Jackett.Common.Models
                             GetTorznabElement("minimumratio", r.MinimumRatio),
                             GetTorznabElement("minimumseedtime", r.MinimumSeedTime),
                             GetTorznabElement("downloadvolumefactor", r.DownloadVolumeFactor),
-                            GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor),
+                            GetTorznabElement("uploadvolumefactor", r.UploadVolumeFactor)
                         )
                     )
                 )
