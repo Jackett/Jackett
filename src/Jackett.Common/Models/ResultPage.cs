@@ -108,7 +108,7 @@ namespace Jackett.Common.Models
                             GetTorznabElement("album", RemoveInvalidXMLChars(r.Album)),
                             GetTorznabElement("seeders", r.Seeders),
                             GetTorznabElement("peers", r.Peers),
-                            GetTorznabElement("coverurl", r.Poster?.AbsoluteUri)
+                            GetTorznabElement("coverurl", r.Poster?.AbsoluteUri),
                             GetTorznabElement("infohash", RemoveInvalidXMLChars(r.InfoHash)),
                             GetTorznabElement("magneturl", r.MagnetUri?.AbsoluteUri),
                             GetTorznabElement("minimumratio", r.MinimumRatio),
