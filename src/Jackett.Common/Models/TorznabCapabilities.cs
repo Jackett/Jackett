@@ -14,6 +14,7 @@ namespace Jackett.Common.Models
         TvdbId,
         RId,
         TmdbId,
+        TvmazeId,
         TraktId
     }
 
@@ -59,6 +60,7 @@ namespace Jackett.Common.Models
         public bool TvSearchTvdbAvailable => (TvSearchParams.Contains(TvSearchParam.TvdbId));
         public bool TvSearchTvRageAvailable => (TvSearchParams.Contains(TvSearchParam.RId));
         public bool TvSearchTmdbAvailable => (TvSearchParams.Contains(TvSearchParam.TmdbId));
+        public bool TvSearchTvMazeAvailable => (TvSearchParams.Contains(TvSearchParam.TvmazeId));
         public bool TvSearchTraktAvailable => (TvSearchParams.Contains(TvSearchParam.TraktId));
 
         public List<MovieSearchParam> MovieSearchParams;
@@ -193,7 +195,9 @@ namespace Jackett.Common.Models
                 parameters.Add("rid");
             if (TvSearchTmdbAvailable)
                 parameters.Add("tmdbid");
-            if (TvSearchTmdbAvailable)
+            if (TvSearchTvMazeAvailable)
+                parameters.Add("tvmazeid");
+            if (TvSearchTraktAvailable)
                 parameters.Add("traktid");
             return string.Join(",", parameters);
         }
@@ -205,9 +209,9 @@ namespace Jackett.Common.Models
                 parameters.Add("imdbid");
             if (MovieSearchTmdbAvailable)
                 parameters.Add("tmdbid");
-            if (MovieSearchImdbAvailable)
+            if (MovieSearchTraktAvailable)
                 parameters.Add("traktid");
-            if (MovieSearchTmdbAvailable)
+            if (MovieSearchDoubanAvailable)
                 parameters.Add("doubanid");
             return string.Join(",", parameters);
         }
