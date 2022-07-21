@@ -19,6 +19,7 @@ namespace Jackett.Common.Models
         public int? TvdbID { get; set; }
         public string ImdbID { get; set; }
         public int? TmdbID { get; set; }
+        public int? TvmazeID { get; set; }
         public int? TraktID { get; set; }
         public int? DoubanID { get; set; }
         public bool Cache { get; set; } = true;
@@ -60,6 +61,8 @@ namespace Jackett.Common.Models
         public bool IsImdbQuery => ImdbID != null;
 
         public bool IsTmdbQuery => TmdbID != null;
+
+        public bool IsTvmazeQuery => TvmazeID != null;
 
         public bool IsTraktQuery => TraktID != null;
 
@@ -145,6 +148,7 @@ namespace Jackett.Common.Models
                 TvdbID = TvdbID,
                 ImdbID = ImdbID,
                 TmdbID = TmdbID,
+                TvmazeID = TvmazeID,
                 TraktID = TraktID,
                 DoubanID = DoubanID,
                 Cache = Cache
