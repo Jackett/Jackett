@@ -24,6 +24,7 @@ namespace Jackett.Common.Models
         public long? TVDBId { get; set; }
         public long? Imdb { get; set; }
         public long? TMDb { get; set; }
+        public long? TraktId { get; set; }
         public long? DoubanId { get; set; }
         public ICollection<string> Genres { get; set; }
         public long? Year { get; set; }
@@ -67,6 +68,7 @@ namespace Jackett.Common.Models
             TVDBId = copyFrom.TVDBId;
             Imdb = copyFrom.Imdb;
             TMDb = copyFrom.TMDb;
+            TraktId = copyFrom.TraktId;
             DoubanId = copyFrom.DoubanId;
             Genres = copyFrom.Genres;
             Year = copyFrom.Year;
