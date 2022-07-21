@@ -56,12 +56,12 @@ search:
       attribute: src
     _subcat:
       selector: div.box ul li:first-child
-    _year:
+    year:
       selector: div.box ul li:contains("Year:")
     _quality:
       selector: div.box ul li:contains("Quality:")
     description:
-      text: "{{ .Result._subcat }} {{ .Result._year }} {{ .Result._quality }}"
+      text: "{{ .Result._subcat }} {{ .Result.year }} {{ .Result._quality }}"
     date:
       text: now
     size:
