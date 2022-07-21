@@ -45,14 +45,14 @@ search:
     title_alternative:
       selector: ..names.alternative
       optional: true
-    _year:
+    year:
       selector: ..season.year
     _quality:
       selector: quality.string
     _series:
       selector: series.string
     title:
-      text: "{{ .Result.title_ru }} / {{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} [{{ .Result._quality }}] - {{ .Result._series }}"
+      text: "{{ .Result.title_ru }} / {{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}] - {{ .Result._series }}"
     _code:
       selector: ..code
     details:
