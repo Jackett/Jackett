@@ -176,7 +176,7 @@
                     "uniqueItems": true,
                     "items": {
                         "type": "string",
-                        "enum": ["q", "season", "ep", "imdbid", "tvdbid", "tmdbid"]
+                        "enum": ["q", "season", "ep", "imdbid", "tvdbid", "tmdbid", "tvmazeid", "traktid"]
                     }
                 },
                 "movie-search": {
@@ -184,7 +184,7 @@
                     "uniqueItems": true,
                     "items": {
                         "type": "string",
-                        "enum": ["q", "imdbid", "tmdbid"]
+                        "enum": ["q", "imdbid", "tmdbid", "traktid", "doubanid"]
                     }
                 },
                 "music-search": {
@@ -192,7 +192,7 @@
                     "uniqueItems": true,
                     "items": {
                         "type": "string",
-                        "enum": ["q", "album", "artist"]
+                        "enum": ["q", "album", "artist", "label", "year"]
                     }
                 },
                 "book-search": {
