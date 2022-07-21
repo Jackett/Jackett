@@ -84,7 +84,7 @@ search:
         "*": 45
     _type:
       selector: type
-    _year:
+    year:
       selector: ..year
     title:
       selector: ..title
@@ -95,7 +95,7 @@ search:
           args: [" ", "."]
         # append type: BRRip or WEBRip, resolves #3558 via #4577
         - name: append
-          args: ".{{ .Result._year }}.{{ .Result._quality }}.{{ if eq .Result._type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
+          args: ".{{ .Result.year }}.{{ .Result._quality }}.{{ if eq .Result._type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
     _sitelink_trimmed:
       text: "{{ .Config.sitelink }}"
       filters:
