@@ -1014,7 +1014,7 @@ function updateReleasesRow(row) {
     }
 
     if (TVMazeId && TVMazeId > 0) {
-      labels.append('\n<a href="https://tvmaze.com/shows/' + TVMazeId + '" target="_blank" class="label label-tvdb" alt="TVMaze" title="TVMaze">TVMaze</a>');
+      labels.append('\n<a href="https://tvmaze.com/shows/' + TVMazeId + '" target="_blank" class="label label-tvmaze" alt="TVMaze" title="TVMaze">TVMaze</a>');
     }
 
     if (TraktId && TraktId > 0) {
