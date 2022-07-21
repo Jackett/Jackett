@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "traktid", "doubanid", "poster", "description" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -1300,7 +1300,7 @@ namespace Jackett.Common.Indexers
             variables[".Query.IMDBID"] = query.ImdbID;
             variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
             variables[".Query.TMDBID"] = query.TmdbID?.ToString() ?? null;
-            variables[".Query.TVMazeID"] = null;
+            variables[".Query.TVMazeID"] = query.TvmazeID?.ToString() ?? null;
             variables[".Query.TraktID"] = query.TraktID?.ToString() ?? null;
             variables[".Query.DoubanID"] = query.DoubanID?.ToString() ?? null;
             variables[".Query.Album"] = query.Album;
@@ -2057,6 +2057,13 @@ namespace Jackett.Common.Indexers
                     var TVDBId = TVDBIdMatch.Groups[1].Value;
                     release.TVDBId = ParseUtil.CoerceLong(TVDBId);
                     value = release.TVDBId.ToString();
+                    break;
+                case "tvmazeid":
+                    var TVMazeIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var TVMazeIdMatch = TVMazeIdRegEx.Match(value);
+                    var TVMazeId = TVMazeIdMatch.Groups[1].Value;
+                    release.TVMazeId = ParseUtil.CoerceLong(TVMazeId);
+                    value = release.TVMazeId.ToString();
                     break;
                 case "traktid":
                     var TraktIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);

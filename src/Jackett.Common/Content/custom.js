@@ -973,6 +973,7 @@ function updateReleasesRow(row) {
     var IMDBId = $(row).data("imdb");
     var TMDBId = $(row).data("tmdb");
     var TVDBId = $(row).data("tvdb");
+    var TVMazeId = $(row).data("tvmaze");
     var TraktId = $(row).data("trakt");
     var DoubanId = $(row).data("douban");
     var Poster = $(row).data("poster");
@@ -1010,6 +1011,10 @@ function updateReleasesRow(row) {
 
     if (TVDBId && TVDBId > 0) {
       labels.append('\n<a href="https://thetvdb.com/?tab=series&id=' + TVDBId + '" target="_blank" class="label label-tvdb" alt="TVDB" title="TVDB">TVDB</a>');
+    }
+
+    if (TVMazeId && TVMazeId > 0) {
+      labels.append('\n<a href="https://tvmaze.com/shows/' + TVMazeId + '" target="_blank" class="label label-tvmaze" alt="TVMaze" title="TVMaze">TVMaze</a>');
     }
 
     if (TraktId && TraktId > 0) {

@@ -18,6 +18,7 @@ namespace Jackett.Common.Models.DTO
         public string rid { get; set; }
         public string tvdbid { get; set; }
         public string tmdbid { get; set; }
+        public string tvmazeid { get; set; }
         public string traktid { get; set; }
         public string doubanid { get; set; }
         public string album { get; set; }
@@ -72,6 +73,8 @@ namespace Jackett.Common.Models.DTO
                 query.RageID = int.Parse(request.rid);
             if (!string.IsNullOrWhiteSpace(request.tvdbid))
                 query.TvdbID = int.Parse(request.tvdbid);
+            if (!string.IsNullOrWhiteSpace(request.tvmazeid))
+                query.TvmazeID = int.Parse(request.tvmazeid);
 
             if (!string.IsNullOrWhiteSpace(request.tmdbid))
                 query.TmdbID = int.Parse(request.tmdbid);
