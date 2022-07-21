@@ -112,7 +112,7 @@ search:
       filters:
         - name: querystring
           args: cat
-    _year:
+    year:
       optional: true
       selector: div.video_year
       filters:
@@ -122,7 +122,7 @@ search:
       selector: a.video_name_str
       filters:
         - name: append
-          args: "{{ .Result._year }}"
+          args: "{{ .Result.year }}"
     details:
       selector: a.video_name_str
       attribute: href
