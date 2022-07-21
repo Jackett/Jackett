@@ -66,7 +66,7 @@ search:
     selector: tbody#highlighted tr
 
   fields:
-    _year:
+    year:
       selector: td:nth-child(2) a:nth-child(1)
       filters:
         - name: regexp # find torrent year
@@ -108,7 +108,7 @@ search:
         - name: re_replace # remove various
           args: ["(?i)(Serie completa|Completa|\\[in pausa\\])", ""]
         - name: append
-          args: " ({{ .Result._year }}) [{{ .Result._quality }} - {{ .Result._audio }} ITA]"
+          args: " ({{ .Result.year }}) [{{ .Result._quality }} - {{ .Result._audio }} ITA]"
         - name: re_replace # replace multiple spaces
           args: ["[ ]{2,}", " "]
     details:
