@@ -973,6 +973,7 @@ function updateReleasesRow(row) {
     var IMDBId = $(row).data("imdb");
     var TMDBId = $(row).data("tmdb");
     var TVDBId = $(row).data("tvdb");
+    var TraktId = $(row).data("trakt");
     var DoubanId = $(row).data("douban");
     var Poster = $(row).data("poster");
     var Description = $(row).data("description");
@@ -1009,6 +1010,11 @@ function updateReleasesRow(row) {
 
     if (TVDBId && TVDBId > 0) {
       labels.append('\n<a href="https://thetvdb.com/?tab=series&id=' + TVDBId + '" target="_blank" class="label label-tvdb" alt="TVDB" title="TVDB">TVDB</a>');
+    }
+
+    if (TraktId && TraktId > 0) {
+      var TraktType = (Cat.includes("Movies")) ? "movies" :  "shows";
+      labels.append('\n<a href="https://www.trakt.tv/' + TraktType + '/' + TraktId + '" target="_blank" class="label label-trakt" alt="Trakt" title="Trakt">Trakt</a>');
     }
 
     if (DoubanId && DoubanId > 0) {
