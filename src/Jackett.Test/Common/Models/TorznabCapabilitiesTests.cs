@@ -406,7 +406,7 @@ namespace Jackett.Test.Common.Models
             Assert.AreEqual("yes", xDocumentSearching?.Element("tv-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q,season,ep,tvdbid,rid", xDocumentSearching?.Element("tv-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("yes", xDocumentSearching?.Element("movie-search")?.Attribute("available")?.Value);
-            Assert.AreEqual("q,imdbid,tmdbid", xDocumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
+            Assert.AreEqual("q,imdbid,tmdbid,traktid,doubanid", xDocumentSearching?.Element("movie-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("yes", xDocumentSearching?.Element("music-search")?.Attribute("available")?.Value);
             Assert.AreEqual("q,album,artist,label,year", xDocumentSearching?.Element("music-search")?.Attribute("supportedParams")?.Value);
             Assert.AreEqual("yes", xDocumentSearching?.Element("audio-search")?.Attribute("available")?.Value);
