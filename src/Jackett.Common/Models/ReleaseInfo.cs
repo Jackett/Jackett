@@ -64,6 +64,7 @@ namespace Jackett.Common.Models
             Grabs = copyFrom.Grabs;
             Description = copyFrom.Description;
             RageID = copyFrom.RageID;
+            TVDBId = copyFrom.TVDBId;
             Imdb = copyFrom.Imdb;
             TMDb = copyFrom.TMDb;
             DoubanId = copyFrom.DoubanId;
