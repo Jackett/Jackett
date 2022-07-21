@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "doubanid", "poster", "description" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "traktid", "doubanid", "poster", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -2056,6 +2056,13 @@ namespace Jackett.Common.Indexers
                     var TVDBId = TVDBIdMatch.Groups[1].Value;
                     release.TVDBId = ParseUtil.CoerceLong(TVDBId);
                     value = release.TVDBId.ToString();
+                    break;
+                case "traktid":
+                    var TraktIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var TraktIdMatch = TraktIdRegEx.Match(value);
+                    var TraktId = TraktIdMatch.Groups[1].Value;
+                    release.TraktId = ParseUtil.CoerceLong(TraktId);
+                    value = release.TraktId.ToString();
                     break;
                 case "doubanid":
                     var DoubanIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
