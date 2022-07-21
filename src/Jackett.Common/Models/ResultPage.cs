@@ -99,6 +99,7 @@ namespace Jackett.Common.Models
                             GetTorznabElement("imdb", r.Imdb?.ToString("D7")),
                             GetTorznabElement("imdbid", r.Imdb != null ? "tt" + r.Imdb?.ToString("D7") : null),
                             GetTorznabElement("tmdbid", r.TMDb),
+                            GetTorznabElement("tvmazeid", r.TVMazeId),
                             GetTorznabElement("traktid", r.TraktId),
                             GetTorznabElement("doubanid", r.DoubanId),
                             r.Genres == null ? null : GetTorznabElement("genre", string.Join(", ", r.Genres)),
