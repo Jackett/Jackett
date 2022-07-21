@@ -1301,7 +1301,8 @@ namespace Jackett.Common.Indexers
             variables[".Query.IMDBIDShort"] = query.ImdbIDShort;
             variables[".Query.TMDBID"] = query.TmdbID?.ToString() ?? null;
             variables[".Query.TVMazeID"] = null;
-            variables[".Query.TraktID"] = null;
+            variables[".Query.TraktID"] = query.TraktID?.ToString() ?? null;
+            variables[".Query.DoubanID"] = query.DoubanID?.ToString() ?? null;
             variables[".Query.Album"] = query.Album;
             variables[".Query.Artist"] = query.Artist;
             variables[".Query.Label"] = query.Label;
