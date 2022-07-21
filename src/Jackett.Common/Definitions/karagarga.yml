@@ -85,7 +85,7 @@ search:
         img[title^="Movie"]: 1
         img[title^="Music"]: 2
         img[title^="Literature"]: 3
-    _year:
+    year:
       selector: a[href$="search_type=year"]
       optional: true
     _flag:
@@ -104,7 +104,7 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: append
-          args: " {{ .Result._year }} {{ .Result._flag }} [{{ .Result._filename }}]"
+          args: " {{ .Result.year }} {{ .Result._flag }} [{{ .Result._filename }}]"
     details:
       selector: a[href^="details.php?id="]
       attribute: href

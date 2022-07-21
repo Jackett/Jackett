@@ -25,8 +25,12 @@ namespace Jackett.Common.Models
         public long? Imdb { get; set; }
         public long? TMDb { get; set; }
         public long? DoubanId { get; set; }
+        public ICollection<string> Genres { get; set; }
+        public long? Year { get; set; }
         public string Author { get; set; }
         public string BookTitle { get; set; }
+        public string Artist { get; set; }
+        public string Album { get; set; }
         public long? Seeders { get; set; }
         public long? Peers { get; set; }
         public Uri Poster { get; set; }
@@ -60,11 +64,16 @@ namespace Jackett.Common.Models
             Grabs = copyFrom.Grabs;
             Description = copyFrom.Description;
             RageID = copyFrom.RageID;
+            TVDBId = copyFrom.TVDBId;
             Imdb = copyFrom.Imdb;
             TMDb = copyFrom.TMDb;
             DoubanId = copyFrom.DoubanId;
+            Genres = copyFrom.Genres;
+            Year = copyFrom.Year;
             Author = copyFrom.Author;
             BookTitle = copyFrom.BookTitle;
+            Artist = copyFrom.Artist;
+            Album = copyFrom.Album;
             Seeders = copyFrom.Seeders;
             Peers = copyFrom.Peers;
             Poster = copyFrom.Poster;

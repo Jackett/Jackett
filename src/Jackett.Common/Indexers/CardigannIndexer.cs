@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "rageid", "tmdbid", "tvdbid", "poster", "description", "doubanid" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "doubanid", "poster", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -2043,13 +2043,6 @@ namespace Jackett.Common.Indexers
                     release.TMDb = ParseUtil.CoerceLong(TmdbID);
                     value = release.TMDb.ToString();
                     break;
-                case "doubanid":
-                    var DoubanIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var DoubanIDMatch = DoubanIDRegEx.Match(value);
-                    var DoubanID = DoubanIDMatch.Groups[1].Value;
-                    release.DoubanId = ParseUtil.CoerceLong(DoubanID);
-                    value = release.DoubanId.ToString();
-                    break;
                 case "rageid":
                     var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
                     var RageIDMatch = RageIDRegEx.Match(value);
@@ -2064,11 +2057,32 @@ namespace Jackett.Common.Indexers
                     release.TVDBId = ParseUtil.CoerceLong(TVDBId);
                     value = release.TVDBId.ToString();
                     break;
+                case "doubanid":
+                    var DoubanIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var DoubanIDMatch = DoubanIDRegEx.Match(value);
+                    var DoubanID = DoubanIDMatch.Groups[1].Value;
+                    release.DoubanId = ParseUtil.CoerceLong(DoubanID);
+                    value = release.DoubanId.ToString();
+                    break;
+                case "genre":
+                    release.Genres = release.Genres.Union(value.Split(',')).ToList();
+                    value = release.Genres.ToString();
+                    break;
+                case "year":
+                    release.Year = ReleaseInfo.GetBytes(value);
+                    value = release.Year.ToString();
+                    break;
                 case "author":
                     release.Author = value;
                     break;
                 case "booktitle":
                     release.BookTitle = value;
+                    break;
+                case "artist":
+                    release.Artist = value;
+                    break;
+                case "album":
+                    release.Album = value;
                     break;
                 case "poster":
                     if (!string.IsNullOrWhiteSpace(value))
