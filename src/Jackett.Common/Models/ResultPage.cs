@@ -102,7 +102,7 @@ namespace Jackett.Common.Models
                             GetTorznabElement("tvmazeid", r.TVMazeId),
                             GetTorznabElement("traktid", r.TraktId),
                             GetTorznabElement("doubanid", r.DoubanId),
-                            r.Genres == null ? null : GetTorznabElement("genre", string.Join(", ", r.Genres)),
+                            //r.Genres == null ? null : GetTorznabElement("genre", string.Join(", ", r.Genres)), // not fully implemented #1896
                             GetTorznabElement("year", r.Year),
                             GetTorznabElement("author", RemoveInvalidXMLChars(r.Author)),
                             GetTorznabElement("booktitle", RemoveInvalidXMLChars(r.BookTitle)),
