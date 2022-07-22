@@ -6,10 +6,10 @@ language: ar-AR
 type: private
 encoding: UTF-8
 links:
-  - https://www.arabp2p.com/
   - https://www.arabp2p.net/
 legacylinks:
   - http://www.arabp2p.com/
+  - https://www.arabp2p.com/
 
 settings:
   - name: username
@@ -98,7 +98,7 @@ caps:
     book-search: [q]
 
 login:
-  path: index.php?page=login
+  path: index.php
   method: form
   form: form[action^="index.php?page=login"]
   inputs:
