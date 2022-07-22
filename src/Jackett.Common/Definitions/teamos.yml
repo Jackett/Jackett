@@ -6,10 +6,11 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://teamos.xyz/
+  - https://www.teamos.xyz/
 legacylinks:
   - https://www.teamos-hkrg.com/
   - https://teamos-hkrg.com/
+  - https://teamos.xyz/
 
 caps:
   categorymappings:
