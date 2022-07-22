@@ -141,6 +141,7 @@ namespace Jackett.Common.Models
                 Artist = Artist,
                 Label = Label,
                 Track = Track,
+                Genre = Genre,
                 Year = Year,
                 Author = Author,
                 Title = Title,
