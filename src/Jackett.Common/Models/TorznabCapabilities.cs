@@ -25,7 +25,7 @@ namespace Jackett.Common.Models
         ImdbId,
         TmdbId,
         TraktId,
-        DoubanId
+        DoubanId,
         Genre
     }
 
@@ -36,7 +36,7 @@ namespace Jackett.Common.Models
         Artist,
         Label,
         Track,
-        Year
+        Year,
         Genre
     }
 
