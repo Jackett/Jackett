@@ -63,7 +63,7 @@ namespace Jackett.Common.Models
         public bool TvSearchTmdbAvailable => (TvSearchParams.Contains(TvSearchParam.TmdbId));
         public bool TvSearchTvMazeAvailable => (TvSearchParams.Contains(TvSearchParam.TvmazeId));
         public bool TvSearchTraktAvailable => (TvSearchParams.Contains(TvSearchParam.TraktId));
-        public bool TvSearchTraktAvailable => (TvSearchParams.Contains(TvSearchParam.DoubanId));
+        public bool TvSearchDoubanAvailable => (TvSearchParams.Contains(TvSearchParam.DoubanId));
 
         public List<MovieSearchParam> MovieSearchParams;
         public bool MovieSearchAvailable => (MovieSearchParams.Count > 0);
