@@ -6,12 +6,14 @@ language: es-ES
 type: public
 encoding: UTF-8
 links:
-  - https://www.newpct.net/
+  - https://www1.newpct.net/
   - https://newpct.nocensor.world/
 legacylinks:
   - https://www.newpct.me/
   - https://newpct.nocensor.biz/
   - https://newpct.nocensor.sbs/
+  - https://www.newpct.net/
+  - http://www1.newpct.net/
 
 caps:
   categories:
