@@ -30,9 +30,10 @@ caps:
     - {id: 63, cat: Audio/Audiobook, desc: "Audio Hörbuch"}
     - {id: 120, cat: Audio/Video, desc: "Audio Videos"}
     # App
-    - {id: 12, cat: PC/0day, desc: "App PC"}
-    - {id: 11, cat: PC/Mobile-Other, desc: "App Mobil"}
-    - {id: 125, cat: PC/Mac, desc: "App macOS"}
+    - {id: 12, cat: PC/0day, desc: "Apps Windows"}
+    - {id: 125, cat: PC/Mac, desc: "Apps Mac-OSX"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "Apps Mobil"}
+    - {id: 141, cat: PC/ISO, desc: "Apps Other"}
     # Doku
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
     - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
