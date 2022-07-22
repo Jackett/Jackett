@@ -108,6 +108,8 @@ namespace Jackett.Common.Models
                             GetTorznabElement("booktitle", RemoveInvalidXMLChars(r.BookTitle)),
                             GetTorznabElement("artist", RemoveInvalidXMLChars(r.Artist)),
                             GetTorznabElement("album", RemoveInvalidXMLChars(r.Album)),
+                            GetTorznabElement("label", RemoveInvalidXMLChars(r.Label)),
+                            GetTorznabElement("track", RemoveInvalidXMLChars(r.Track)),
                             GetTorznabElement("seeders", r.Seeders),
                             GetTorznabElement("peers", r.Peers),
                             GetTorznabElement("coverurl", r.Poster?.AbsoluteUri),

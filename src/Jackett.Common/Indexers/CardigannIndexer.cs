@@ -2099,6 +2099,12 @@ namespace Jackett.Common.Indexers
                 case "album":
                     release.Album = value;
                     break;
+                case "label":
+                    release.Label = value;
+                    break;
+                case "track":
+                    release.Track = value;
+                    break;
                 case "poster":
                     if (!string.IsNullOrWhiteSpace(value))
                     {
