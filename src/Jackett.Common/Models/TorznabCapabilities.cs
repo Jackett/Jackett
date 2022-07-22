@@ -34,6 +34,7 @@ namespace Jackett.Common.Models
         Album,
         Artist,
         Label,
+        Track,
         Year
     }
 
@@ -77,6 +78,7 @@ namespace Jackett.Common.Models
         public bool MusicSearchAlbumAvailable => (MusicSearchParams.Contains(MusicSearchParam.Album));
         public bool MusicSearchArtistAvailable => (MusicSearchParams.Contains(MusicSearchParam.Artist));
         public bool MusicSearchLabelAvailable => (MusicSearchParams.Contains(MusicSearchParam.Label));
+        public bool MusicSearchTrackAvailable => (MusicSearchParams.Contains(MusicSearchParam.Track));
         public bool MusicSearchYearAvailable => (MusicSearchParams.Contains(MusicSearchParam.Year));
 
         public List<BookSearchParam> BookSearchParams;
@@ -229,6 +231,8 @@ namespace Jackett.Common.Models
                 parameters.Add("artist");
             if (MusicSearchLabelAvailable)
                 parameters.Add("label");
+            if (MusicSearchTrackAvailable)
+                parameters.Add("track");
             if (MusicSearchYearAvailable)
                 parameters.Add("year");
             return string.Join(",", parameters);
