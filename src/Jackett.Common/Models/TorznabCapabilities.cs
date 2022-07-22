@@ -15,7 +15,8 @@ namespace Jackett.Common.Models
         RId,
         TmdbId,
         TvmazeId,
-        TraktId
+        TraktId,
+        DoubanId
     }
 
     public enum MovieSearchParam
@@ -62,6 +63,7 @@ namespace Jackett.Common.Models
         public bool TvSearchTmdbAvailable => (TvSearchParams.Contains(TvSearchParam.TmdbId));
         public bool TvSearchTvMazeAvailable => (TvSearchParams.Contains(TvSearchParam.TvmazeId));
         public bool TvSearchTraktAvailable => (TvSearchParams.Contains(TvSearchParam.TraktId));
+        public bool TvSearchDoubanAvailable => (TvSearchParams.Contains(TvSearchParam.DoubanId));
 
         public List<MovieSearchParam> MovieSearchParams;
         public bool MovieSearchAvailable => (MovieSearchParams.Count > 0);
@@ -199,6 +201,8 @@ namespace Jackett.Common.Models
                 parameters.Add("tvmazeid");
             if (TvSearchTraktAvailable)
                 parameters.Add("traktid");
+            if (TvSearchDoubanAvailable)
+                parameters.Add("doubanid");
             return string.Join(",", parameters);
         }
 

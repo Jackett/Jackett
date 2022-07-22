@@ -176,7 +176,7 @@
                     "uniqueItems": true,
                     "items": {
                         "type": "string",
-                        "enum": ["q", "season", "ep", "imdbid", "tvdbid", "tmdbid", "tvmazeid", "traktid"]
+                        "enum": ["q", "season", "ep", "imdbid", "tvdbid", "tmdbid", "tvmazeid", "traktid", "doubanid"]
                     }
                 },
                 "movie-search": {
