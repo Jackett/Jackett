@@ -435,6 +435,7 @@ namespace Jackett.Updater
                 "Definitions/oasis.yml",
                 "Definitions/obscure.yml",
                 "Definitions/omgwtftrackr.yml",
+                "Definitions/oncesearch.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/oxtorrent.yml",
