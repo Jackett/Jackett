@@ -1307,7 +1307,7 @@ namespace Jackett.Common.Indexers
             variables[".Query.Artist"] = query.Artist;
             variables[".Query.Label"] = query.Label;
             variables[".Query.Track"] = query.Track;
-            //variables[".Query.Genre"] = query.Genre ?? new List<string>();
+            variables[".Query.Genre"] = query.Genre ?? new List<string>();
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
             variables[".Query.Author"] = query.Author;
             variables[".Query.Title"] = query.Title;
