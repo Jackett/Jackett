@@ -33,6 +33,7 @@ namespace Jackett.Common.Models
         public string BookTitle { get; set; }
         public string Artist { get; set; }
         public string Album { get; set; }
+        public string Label { get; set; }
         public string Track { get; set; }
         public long? Seeders { get; set; }
         public long? Peers { get; set; }
@@ -79,6 +80,7 @@ namespace Jackett.Common.Models
             BookTitle = copyFrom.BookTitle;
             Artist = copyFrom.Artist;
             Album = copyFrom.Album;
+            Label = copyFrom.Label;
             Track = copyFrom.Track;
             Seeders = copyFrom.Seeders;
             Peers = copyFrom.Peers;
