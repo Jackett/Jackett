@@ -80,7 +80,7 @@ search:
     incldead: 0
     # promotion: 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x 50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 3 uploader, 4 imdb
+    # 0 title, 1 descr, 2 title or imdb or douban url, 3 uploader, 4 imdb
     search_area: "{{ if or .Query.IMDBID .Query.DoubanID }}2{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
