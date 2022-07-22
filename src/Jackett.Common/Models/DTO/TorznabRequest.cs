@@ -26,7 +26,7 @@ namespace Jackett.Common.Models.DTO
         public string label { get; set; }
         public string track { get; set; }
         public string year { get; set; }
-        public string genre { get; set; }
+        //public string genre { get; set; } // not fully implemented #1896
         public string title { get; set; }
         public string author { get; set; }
         public string configured { get; set; }
@@ -93,8 +93,8 @@ namespace Jackett.Common.Models.DTO
                 query.Track = request.track;
             if (!string.IsNullOrWhiteSpace(request.year))
                 query.Year = int.Parse(request.year);
-            if (!string.IsNullOrWhiteSpace(request.genre))
-                query.Genre = request.genre.Split(',');
+            //if (!string.IsNullOrWhiteSpace(request.genre)) // not fully implemented #1896
+            //    query.Genre = request.genre.Split(',');
 
             if (!string.IsNullOrWhiteSpace(request.title))
                 query.Title = request.title;
