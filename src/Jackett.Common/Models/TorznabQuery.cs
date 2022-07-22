@@ -33,7 +33,7 @@ namespace Jackett.Common.Models
         public string Label { get; set; }
         public string Track { get; set; }
         public int? Year { get; set; }
-        public ICollection<string> Genre { get; set; }
+        //public ICollection<string> Genre { get; set; } // not fully implemented #1896
 
         public string Author { get; set; }
         public string Title { get; set; }
