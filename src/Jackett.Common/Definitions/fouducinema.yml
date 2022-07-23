@@ -46,6 +46,7 @@ caps:
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
     - {id: 2, cat: Movies/DVD, desc: "FILM DVD"}
     - {id: 63, cat: Movies/WEB-DL, desc: "FILM WEB"}
+    - {id: 66, cat: Movies/HD, desc: " HDRip"} # orphaned subcategory
     - {id: 5, cat: Audio/Video, desc: "MUSIC clip video"}
     - {id: 7, cat: PC/Games, desc: "JEUX Win"}
     - {id: 8, cat: Console/PS3, desc: "JEUX PS3"}
