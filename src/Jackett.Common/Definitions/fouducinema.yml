@@ -100,6 +100,14 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: countdown
+    type: info
+    label: Countdown Timer
+    default: "This site is a Tracker based on Time: to keep your account the time must not be at 0000-00-00-00-00-00. Read <a href=\"https://fou-du-cinema.ca/faq.php#nogo\" target=\"_blank\">Fou-Du-Cinema FAQ</a> on how to keep the timer active."
+  - name: registration
+    type: info
+    label: Registration Conformation
+    default: After you register you will receive a confirmation email that contains a link to activate your account. If you have not received it check your Junk mail / Spam mail folder.
 
 login:
   path: login.php
