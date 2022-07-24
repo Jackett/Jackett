@@ -2083,7 +2083,7 @@ namespace Jackett.Common.Indexers
                     if (release.Genres == null)
                         release.Genres = new List<string>();
                     release.Genres = release.Genres.Union(value.Split(',')).ToList();
-                    value = release.Genres.ToString();
+                    // value = release.Genres.ToString();
                     break;
                 case "year":
                     release.Year = ReleaseInfo.GetBytes(value);
