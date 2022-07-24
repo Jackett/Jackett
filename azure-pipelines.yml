@@ -343,14 +343,13 @@ stages:
           - task: Bash@3
             displayName: Validate YAML Schema
             inputs:
-              workingDirectory: $(Build.SourcesDirectory)/Jackett.Common/Definitions
+              workingDirectory: $(Build.SourcesDirectory)
               targetType: inline
-              failOnStderr: true
               script: |
                 npm install -g ajv-cli-servarr ajv-formats
                 # set fail as false
                 fail=0
-                ajv test -d "*.yml" -s "schema.json" --valid -c ajv-formats
+                ajv test -d ".src/Jackett.Common/Definitions*.yml" -s ".src/Jackett.Common/Definitions/schema.json" --valid -c ajv-formats
                 testresult=$?
                 if [ "$testresult" -ne 0 ]; then
                     fail=1
