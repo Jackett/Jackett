@@ -319,7 +319,7 @@ namespace Jackett.Common.Indexers
                 ApiKey = new StringConfigurationItem("API Key");
                 RSSKey = new StringConfigurationItem("RSS Key");
                 Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
-                AddHybridFeaturesToTitle = new BoolConfigurationItem("Include DV/HDR10 in title when release has multiple");
+                AddHybridFeaturesToTitle = new BoolConfigurationItem("Include DV/HDR10 in title when release has multiple HDR formats.");
             }
         }
     }
