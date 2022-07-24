@@ -332,6 +332,7 @@ stages:
             displayName: Lint YAML
 
       - job: Validate_YAML_Schema
+        displayName: Validate YAML Schema
         pool:
           vmImage: ubuntu-20.04
         workspace:
