@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -20,9 +21,9 @@ namespace Jackett.Common.Indexers
     {
         private readonly string APIBASE = "https://beyond-hd.me/api/torrents/";
 
-        private new BHDConfiguration configData
+        private new ConfigurationDataBeyondHDApi configData
         {
-            get => (BHDConfiguration)base.configData;
+            get => (ConfigurationDataBeyondHDApi)base.configData;
             set => base.configData = value;
         }
 
@@ -50,7 +51,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new BHDConfiguration("Find the API and RSS keys under your security settings (your profile picture -> my security)"))
+                   configData: new ConfigurationDataBeyondHDApi("Find the API and RSS keys under your security settings (your profile picture -> my security)"))
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -305,22 +306,6 @@ namespace Jackett.Common.Indexers
             public int hdr10plus { get; set; }
             public int hlg { get; set; }
             public int commentary { get; set; }
-        }
-
-        public class BHDConfiguration : ConfigurationData
-        {
-            public StringConfigurationItem ApiKey { get; private set; }
-            public StringConfigurationItem RSSKey { get; private set; }
-            public DisplayInfoConfigurationItem Instructions { get; private set; }
-            public BoolConfigurationItem AddHybridFeaturesToTitle { get; private set; }
-
-            public BHDConfiguration(string instructionMessageOptional)
-            {
-                ApiKey = new StringConfigurationItem("API Key");
-                RSSKey = new StringConfigurationItem("RSS Key");
-                Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
-                AddHybridFeaturesToTitle = new BoolConfigurationItem("Include DV/HDR10 in title when release has multiple HDR formats.");
-            }
         }
     }
 }
