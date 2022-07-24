@@ -46,6 +46,7 @@ caps:
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
     - {id: 2, cat: Movies/DVD, desc: "FILM DVD"}
     - {id: 63, cat: Movies/WEB-DL, desc: "FILM WEB"}
+    - {id: 66, cat: Movies/HD, desc: " HDRip"} # orphaned subcategory
     - {id: 5, cat: Audio/Video, desc: "MUSIC clip video"}
     - {id: 7, cat: PC/Games, desc: "JEUX Win"}
     - {id: 8, cat: Console/PS3, desc: "JEUX PS3"}
@@ -100,6 +101,14 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: countdown
+    type: info
+    label: Countdown Timer
+    default: "This site is a Tracker based on Time: to keep your account the time must not be at 0000-00-00-00-00-00. Read <a href=\"https://fou-du-cinema.ca/faq.php#nogo\" target=\"_blank\">Fou-Du-Cinema FAQ</a> on how to keep the timer active."
+  - name: registration
+    type: info
+    label: Registration Conformation
+    default: After you register you will receive a confirmation email that contains a link to activate your account. If you have not received it check your Junk mail / Spam mail folder.
 
 login:
   path: login.php

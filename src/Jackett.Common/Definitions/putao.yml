@@ -40,8 +40,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
 
 settings:
@@ -103,7 +103,7 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Query.DoubanID }}/{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 onlyactive, 2 onlydead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 30%, 7 70%
@@ -111,11 +111,12 @@ search:
     # 0 all, 1 popular, 2 classic, 3 recommended, 4 normal, 5 seeds
     picktype: 0
     # 0 title, 1 descr, 3 uploader, 4 imdbid
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    # does not return imdb or dubanid in results
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)

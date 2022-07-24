@@ -370,6 +370,7 @@ namespace Jackett.Updater
                 "Definitions/hdclub.yml",
                 "Definitions/hddisk.yml",
                 "Definitions/hdhouse.yml",
+                "Definitions/hdme.yml",
                 "Definitions/hdolimpo.yml", // migrated to UNIT3D API
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
@@ -434,6 +435,7 @@ namespace Jackett.Updater
                 "Definitions/oasis.yml",
                 "Definitions/obscure.yml",
                 "Definitions/omgwtftrackr.yml",
+                "Definitions/oncesearch.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/oxtorrent.yml",
@@ -534,7 +536,6 @@ namespace Jackett.Updater
                 "Definitions/torviet.yml",
                 "Definitions/trackeros-api.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
-                "Definitions/trupornolabs.yml",
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/turknova.yml",

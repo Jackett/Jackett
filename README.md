@@ -106,7 +106,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NNTT
  * NoNaMe Club (NNM-Club)
  * Nyaa.si
- * OnceSearch
  * OneJAV
  * OpenSharing
  * ParnuXi
@@ -162,6 +161,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentView (토렌트뷰)
  * TorrentWhiz ( 토렌트위즈)
  * Torrentz2eu
+ * truPornolabs
  * Underverse
  * UnionDHT
  * VSTHouse
@@ -390,7 +390,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDChina (HDWing) [![(invite needed)][inviteneeded]](#)
  * HDCity [![(invite needed)][inviteneeded]](#)
  * HDHome (HDBigger) [![(invite needed)][inviteneeded]](#)
- * HDME
  * HDMonkey
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky [![(invite needed)][inviteneeded]](#)

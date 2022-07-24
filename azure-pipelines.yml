@@ -331,6 +331,36 @@ stages:
           - script: yamllint -c ./yamllint.yml ./src/Jackett.Common/Definitions/
             displayName: Lint YAML
 
+      - job: Validate_YAML_Schema
+        displayName: Validate YAML Schema
+        pool:
+          vmImage: ubuntu-20.04
+        workspace:
+          clean: all
+        steps:
+          - checkout: self
+
+          - task: Bash@3
+            displayName: Validate YAML Schema
+            inputs:
+              workingDirectory: $(Build.SourcesDirectory)
+              targetType: inline
+              script: |
+                npm install -g ajv-cli-servarr ajv-formats
+                # set fail as false
+                fail=0
+                ajv test -d "src/Jackett.Common/Definitions/*.yml" -s "src/Jackett.Common/Definitions/schema.json" --valid -c ajv-formats
+                testresult=$?
+                if [ "$testresult" -ne 0 ]; then
+                    fail=1
+                fi
+                if [ "$fail" -ne 0 ]; then
+                    echo "Validation Failed"
+                    exit 1
+                fi
+                echo "Validation Success"
+                exit 0
+
   - stage: UnitTestJackett
     displayName: Unit Tests
     dependsOn: CodeStyle
