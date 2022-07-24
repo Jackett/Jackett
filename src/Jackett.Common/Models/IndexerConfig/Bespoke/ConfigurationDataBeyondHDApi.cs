@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
+    [ExcludeFromCodeCoverage]
     internal class ConfigurationDataBeyondHDApi : ConfigurationData
     {
         public StringConfigurationItem ApiKey { get; private set; }
