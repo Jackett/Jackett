@@ -94,7 +94,7 @@ namespace Jackett.Common.Models.DTO
             if (!string.IsNullOrWhiteSpace(request.year))
                 query.Year = int.Parse(request.year);
             if (!string.IsNullOrWhiteSpace(request.genre))
-                query.Genre = request.genre.Split(',');
+                query.Genre = request.genre;
 
             if (!string.IsNullOrWhiteSpace(request.title))
                 query.Title = request.title;
