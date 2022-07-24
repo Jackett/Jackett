@@ -26,8 +26,8 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
-    music-search: [q]
+    movie-search: [q, imdbid, genre]
+    music-search: [q, genre]
     book-search: [q]
 
 settings:
@@ -97,8 +97,8 @@ search:
     scene: 0
     # 0 all, 1 Polish, 2 non-Polish, 4 subtitled
     pl: 0
-    # subcat blank=all
-    sub: ""
+    # genre blank=all
+    sub: "{{ .Query.Genre }}"
     # title, both, nfo
     search_in: "{{ if .Query.IMDBID }}nfo{{ else }}title{{ end }}"
     sort: "{{ .Config.sort }}"
@@ -131,20 +131,14 @@ search:
     download:
       selector: a[href^="downloadssl.php?id="]
       attribute: href
-    _genre:
-      optional: true
+    genre:
       selector: td:nth-child(2) > small
-      filters:
-        - name: prepend
-          args: "Genre: "
-        - name: append
-          args: "\n<br>"
     _language:
       optional: true
       selector: img[src="pic/pl.png"]
       filters:
         - name: append
-          args: "Language: polish\n<br>"
+          args: "Language: Polish\n<br>"
     _subbed:
       optional: true
       selector: img[src="pic/napisy.png"]
@@ -152,7 +146,7 @@ search:
         - name: append
           args: "Subbed\n<br>"
     description:
-      text: "{{ .Result._genre }}{{ .Result._language }}{{ .Result._subbed }}"
+      text: "Genre: {{ .Result.genre }}\n<br>{{ .Result._language }}{{ .Result._subbed }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
     date:
