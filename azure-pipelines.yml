@@ -341,7 +341,6 @@ stages:
 
           - task: Bash@3
             displayName: Validate YAML Schema
-            condition: and(succeeded(), ne(variables['fail'], '0'))
             inputs:
               workingDirectory: $(Build.SourcesDirectory)
               targetType: inline
