@@ -1622,7 +1622,7 @@ namespace Jackett.Common.Indexers
                                 }
 
                                 var Filters = Definition.Search.Rows.Filters;
-                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
+                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row.ToHtmlPretty());
 
                                 if (SkipRelease)
                                     continue;
