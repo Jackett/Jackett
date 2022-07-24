@@ -96,8 +96,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 name & desc, 1 name, 2 desc, 3 genre
-    incldesc: 1
+    # 0 any sub, 2 RO sub
+    inclrosub: 0
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 0 inclfree, 1 notfree, 2 onlyfree
@@ -128,6 +128,9 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     size:
       selector: td:nth-child(4)
     date:
@@ -152,6 +155,13 @@ search:
       case:
         img[src="images/t_extern.png"]: 0
         "*": 1
+    genre:
+      selector: td div
+      filters:
+        - name: regexp
+          args: "Genre: (.+?)$"
+    description:
+      text: "{{ .Result.genre }}"
     minimumratio:
       text: 1.0
 # TorrentTrader-Ro 3.0
