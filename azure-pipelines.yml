@@ -331,20 +331,6 @@ stages:
           - script: yamllint -c ./yamllint.yml ./src/Jackett.Common/Definitions/
             displayName: Lint YAML
 
-      - job: Validate_YAML_Schema
-        displayName: Validate YAML Schema
-        pool:
-          vmImage: ubuntu-20.04
-        workspace:
-          clean: all
-        steps:
-          - checkout: self
-
-          - uses: actions/checkout@v2
-          - displayName: Validate YAML Schema
-            run: |
-              bash ./validate.sh
-
   - stage: UnitTestJackett
     displayName: Unit Tests
     dependsOn: CodeStyle
