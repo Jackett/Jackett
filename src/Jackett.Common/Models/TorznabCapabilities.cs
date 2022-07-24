@@ -25,7 +25,8 @@ namespace Jackett.Common.Models
         ImdbId,
         TmdbId,
         TraktId,
-        DoubanId
+        DoubanId,
+        Genre
     }
 
     public enum MusicSearchParam
@@ -35,7 +36,8 @@ namespace Jackett.Common.Models
         Artist,
         Label,
         Track,
-        Year
+        Year,
+        Genre
     }
 
     public enum BookSearchParam
@@ -72,6 +74,7 @@ namespace Jackett.Common.Models
         public bool MovieSearchTmdbAvailable => (MovieSearchParams.Contains(MovieSearchParam.TmdbId));
         public bool MovieSearchTraktAvailable => (MovieSearchParams.Contains(MovieSearchParam.TraktId));
         public bool MovieSearchDoubanAvailable => (MovieSearchParams.Contains(MovieSearchParam.DoubanId));
+        public bool MovieSearchGenreAvailable => (MovieSearchParams.Contains(MovieSearchParam.Genre));
 
         public List<MusicSearchParam> MusicSearchParams;
         public bool MusicSearchAvailable => (MusicSearchParams.Count > 0);
@@ -80,6 +83,7 @@ namespace Jackett.Common.Models
         public bool MusicSearchLabelAvailable => (MusicSearchParams.Contains(MusicSearchParam.Label));
         public bool MusicSearchTrackAvailable => (MusicSearchParams.Contains(MusicSearchParam.Track));
         public bool MusicSearchYearAvailable => (MusicSearchParams.Contains(MusicSearchParam.Year));
+        public bool MusicSearchGenreAvailable => (MusicSearchParams.Contains(MusicSearchParam.Genre));
 
         public List<BookSearchParam> BookSearchParams;
         public bool BookSearchAvailable => (BookSearchParams.Count > 0);
@@ -219,6 +223,8 @@ namespace Jackett.Common.Models
                 parameters.Add("traktid");
             if (MovieSearchDoubanAvailable)
                 parameters.Add("doubanid");
+            if (MovieSearchGenreAvailable)
+                parameters.Add("genre");
             return string.Join(",", parameters);
         }
 
@@ -235,6 +241,8 @@ namespace Jackett.Common.Models
                 parameters.Add("track");
             if (MusicSearchYearAvailable)
                 parameters.Add("year");
+            if (MusicSearchGenreAvailable)
+                parameters.Add("genre");
             return string.Join(",", parameters);
         }
 

@@ -48,7 +48,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
-    movie-search: [q]
+    movie-search: [q, genre]
     music-search: [q]
     book-search: [q]
 
@@ -107,7 +107,7 @@ search:
     # 0 active, 1 all, 2 dead, 3 recomended, 4 double, 5 free, 6 MZ releases, 7 Race torrents
     # note: option 4 and 5 do not actually filter. everything is returned.
     incldead: "{{ if .Config.freeleech }}5{{ else }}1{{ end }}"
-    genre: 0
+    genre: "{{ .Query.Genre }}"
     # 0 name, 1 descr, 2 both
     blah: 0
     sort: "{{ .Config.sort }}"
@@ -171,6 +171,13 @@ search:
       case:
         "font[color=\"#2A821E\"]:contains(\"x2\")": 2
         "*": 1
+    genre:
+      selector: td.torrent:nth-child(2)
+      filters:
+        - name: regexp
+          args: "\\((.+?)\\)"
+    description:
+      text: "{{ .Result.genre }}"
     minimumratio:
       text: 1.0
     minimumseedtime:

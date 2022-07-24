@@ -177,8 +177,7 @@ search:
     year_desc:
       optional: true
       selector: year
-    genre_desc:
-      optional: true
+    genre:
       selector: genres
     _tagline_desc:
       optional: true
@@ -222,5 +221,5 @@ search:
         - name: regexp
           args: "(.+?), $"
     description:
-      text: "{{ if .Result.title_desc }}Title: {{ .Result.title_desc }}</br>{{ else }}{{ end }}{{ if .Result.year_desc }}Year: {{ .Result.year_desc }}</br>{{ else }}{{ end }}{{ if .Result.genre_desc }}Genres: {{ .Result.genre_desc }}</br>{{ else }}{{ end }}{{ if .Result._tagline_desc }}Tagline: {{ .Result._tagline_desc }}</br>{{ else }}{{ end }}{{ if .Result._cast_desc }}Cast: {{ .Result._cast_desc }}</br>{{ else }}{{ end }}{{ if .Result._rating_desc }}Rating: {{ .Result._rating_desc }}</br>{{ else }}{{ end }}{{ if .Result._tag_desc }}Tags: {{ .Result._tag_desc }}</br>{{ else }}{{ end }}{{ if .Result._predate_desc }}PRE: {{ .Result._predate_desc }}</br>{{ else }}{{ end }}{{ if .Result._section_desc }}Section: {{ .Result._section_desc }}{{ else }}{{ end }}"
+      text: "{{ if .Result.title_desc }}Title: {{ .Result.title_desc }}</br>{{ else }}{{ end }}{{ if .Result.year_desc }}Year: {{ .Result.year_desc }}</br>{{ else }}{{ end }}{{ if .Result.genre }}Genres: {{ .Result.genre }}</br>{{ else }}{{ end }}{{ if .Result._tagline_desc }}Tagline: {{ .Result._tagline_desc }}</br>{{ else }}{{ end }}{{ if .Result._cast_desc }}Cast: {{ .Result._cast_desc }}</br>{{ else }}{{ end }}{{ if .Result._rating_desc }}Rating: {{ .Result._rating_desc }}</br>{{ else }}{{ end }}{{ if .Result._tag_desc }}Tags: {{ .Result._tag_desc }}</br>{{ else }}{{ end }}{{ if .Result._predate_desc }}PRE: {{ .Result._predate_desc }}</br>{{ else }}{{ end }}{{ if .Result._section_desc }}Section: {{ .Result._section_desc }}{{ else }}{{ end }}"
 # json rartracker api v1

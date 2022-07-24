@@ -36,7 +36,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
-    movie-search: [q]
+    movie-search: [q, genre]
     music-search: [q]
     book-search: [q]
 
@@ -95,7 +95,7 @@ search:
     # 0 name, 1 performer, 2 director
     miben: 0
     # genre
-    cimke: ""
+    cimke: "{{ .Query.Genre }}"
     # does not support imdbid search and does not return imdb link in results
 
   rows:
@@ -153,9 +153,13 @@ search:
       case:
         img[src="pic/dupla_up.png"]: 2
         "*": 1
+    genre:
+      selector: div i
+      filters:
+        - name: regexp
+          args: "\\((.+?)\\)"
     description:
-      selector: div:nth-child(2)
-      remove: a
+      text: "{{ .Result.genre }}"
     minimumratio:
       text: 1.0
     minimumseedtime:

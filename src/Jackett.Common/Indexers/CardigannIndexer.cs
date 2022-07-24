@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "description" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "genre", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -1307,7 +1307,7 @@ namespace Jackett.Common.Indexers
             variables[".Query.Artist"] = query.Artist;
             variables[".Query.Label"] = query.Label;
             variables[".Query.Track"] = query.Track;
-            //variables[".Query.Genre"] = query.Genre ?? new List<string>();
+            variables[".Query.Genre"] = query.Genre;
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
             variables[".Query.Author"] = query.Author;
             variables[".Query.Title"] = query.Title;
@@ -2080,8 +2080,10 @@ namespace Jackett.Common.Indexers
                     value = release.DoubanId.ToString();
                     break;
                 case "genre":
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
                     release.Genres = release.Genres.Union(value.Split(',')).ToList();
-                    value = release.Genres.ToString();
+                    // value = release.Genres.ToString();
                     break;
                 case "year":
                     release.Year = ReleaseInfo.GetBytes(value);
