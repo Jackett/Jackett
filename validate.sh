@@ -8,7 +8,6 @@ testresult=$?
 if [ "$testresult" -ne 0 ]; then
     fail=1
 fi
-done
 if [ "$fail" -ne 0 ]; then
     echo "Validation Failed"
     exit 1
