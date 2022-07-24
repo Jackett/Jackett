@@ -20,9 +20,9 @@ namespace Jackett.Common.Indexers
     {
         private readonly string APIBASE = "https://beyond-hd.me/api/torrents/";
 
-        private new ConfigurationDataAPIKeyAndRSSKey configData
+        private new BHDConfiguration configData
         {
-            get => (ConfigurationDataAPIKeyAndRSSKey)base.configData;
+            get => (BHDConfiguration)base.configData;
             set => base.configData = value;
         }
 
@@ -50,7 +50,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataAPIKeyAndRSSKey("Find the API and RSS keys under your security settings (your profile picture -> my security)"))
+                   configData: new BHDConfiguration("Find the API and RSS keys under your security settings (your profile picture -> my security)"))
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -112,12 +112,13 @@ namespace Jackett.Common.Indexers
 
         private ReleaseInfo mapToReleaseInfo(BHDResult bhdResult)
         {
-            var uri = new Uri(bhdResult.url);
             var downloadUri = new Uri(bhdResult.download_url);
+
+            var title = getTitle(bhdResult);
 
             var releaseInfo = new ReleaseInfo
             {
-                Title = bhdResult.name,
+                Title = title,
                 Seeders = bhdResult.seeders,
                 Guid = new Uri(bhdResult.url),
                 Details = new Uri(bhdResult.url),
@@ -146,6 +147,32 @@ namespace Jackett.Common.Indexers
                 releaseInfo.DownloadVolumeFactor = .25;
 
             return releaseInfo;
+        }
+
+        private string getTitle(BHDResult bhdResult)
+        {
+            var title = bhdResult.name;
+            if (!configData.AddHybridFeaturesToTitle.Value)
+                return title;
+
+            var featureCount = bhdResult.dv + bhdResult.hdr10 + bhdResult.hdr10plus + bhdResult.hlg;
+            if (featureCount > 1)
+            {
+                var features = new List<string>();
+
+                if (bhdResult.dv == 1)
+                    features.Add("Dolby Vision");
+                if (bhdResult.hdr10 == 1)
+                    features.Add("HDR10");
+                if (bhdResult.hdr10plus == 1)
+                    features.Add("HDR10+");
+                if (bhdResult.hlg == 1)
+                    features.Add("HLG");
+
+                title += $" ({string.Join(" / ", features)})";
+            }
+
+            return title;
         }
 
         private async Task<BHDResponse> GetBHDResponse(string apiUrl, Dictionary<string, string> postData)
@@ -272,6 +299,28 @@ namespace Jackett.Common.Indexers
             public DateTime created_at { get; set; }
             public string url { get; set; }
             public string download_url { get; set; }
+            public int dv { get; set; }
+            public int hdr10 { get; set; }
+            [JsonProperty("hdr10+")]
+            public int hdr10plus { get; set; }
+            public int hlg { get; set; }
+            public int commentary { get; set; }
+        }
+
+        public class BHDConfiguration : ConfigurationData
+        {
+            public StringConfigurationItem ApiKey { get; private set; }
+            public StringConfigurationItem RSSKey { get; private set; }
+            public DisplayInfoConfigurationItem Instructions { get; private set; }
+            public BoolConfigurationItem AddHybridFeaturesToTitle { get; private set; }
+
+            public BHDConfiguration(string instructionMessageOptional)
+            {
+                ApiKey = new StringConfigurationItem("API Key");
+                RSSKey = new StringConfigurationItem("RSS Key");
+                Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
+                AddHybridFeaturesToTitle = new BoolConfigurationItem("Include DV/HDR10 in title when release has multiple");
+            }
         }
     }
 }
