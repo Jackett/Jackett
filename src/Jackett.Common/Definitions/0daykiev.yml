@@ -36,7 +36,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, test]
+    tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
 
@@ -117,8 +117,6 @@ search:
       filters:
         - name: querystring
           args: cat
-    test:
-      selector: a[href^="details.php?id="]
     title:
       selector: a[href^="details.php?id="]
       filters:
