@@ -176,7 +176,7 @@
                     "uniqueItems": true,
                     "items": {
                         "type": "string",
-                        "enum": ["q", "season", "ep", "imdbid", "tvdbid", "tmdbid", "tvmazeid", "traktid", "doubanid"]
+                        "enum": ["q", "season", "ep", "imdbid", "tvdbid", "tmdbid", "tvmazeid", "traktid", "doubanid", "year", "genre"]
                     }
                 },
                 "movie-search": {
@@ -184,7 +184,7 @@
                     "uniqueItems": true,
                     "items": {
                         "type": "string",
-                        "enum": ["q", "imdbid", "tmdbid", "traktid", "doubanid", "genre"]
+                        "enum": ["q", "imdbid", "tmdbid", "traktid", "doubanid", "year", "genre"]
                     }
                 },
                 "music-search": {
@@ -200,7 +200,7 @@
                     "uniqueItems": true,
                     "items": {
                         "type": "string",
-                        "enum": ["q", "title", "author"]
+                        "enum": ["q", "title", "author", "publisher", "year", "genre"]
                     }
                 }
             },
@@ -650,7 +650,7 @@
                 "^((category|categorydesc)\\|(noappend|append))?$": {
                     "$ref": "#/definitions/SelectorBlock"
                 },
-                "^(download|magnet|infohash|details|comments|title|description|category|categorydesc|size|leechers|seeders|date|files|grabs|downloadvolumefactor|uploadvolumefactor|minimumratio|minimumseedtime|imdb|imdbid|tmdbid|rageid|tvdbid|tvmazeid|traktid|doubanid|poster|genre|year|author|booktitle|album|artist|label|track)(_([A-Za-z0-9_])*)?$": {
+                "^(download|magnet|infohash|details|comments|title|description|category|categorydesc|size|leechers|seeders|date|files|grabs|downloadvolumefactor|uploadvolumefactor|minimumratio|minimumseedtime|imdb|imdbid|tmdbid|rageid|tvdbid|tvmazeid|traktid|doubanid|poster|genre|year|author|booktitle|publisher|album|artist|label|track)(_([A-Za-z0-9_])*)?$": {
                     "$ref": "#/definitions/SelectorBlock"
                 }
             },
