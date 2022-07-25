@@ -73,7 +73,6 @@ settings:
     type: password
     label: Password
   - name: freeleech
-  - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
@@ -143,8 +142,8 @@ search:
       selector: a[href^="torrents-details.php?id="]
       attribute: title
       filters:
-         - name: re_replace
-           args: ["[\\[|\\]]", ""]
+        - name: re_replace
+          args: ["[\\[|\\]]", ""]
     details:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
