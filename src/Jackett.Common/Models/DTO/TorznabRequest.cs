@@ -29,6 +29,7 @@ namespace Jackett.Common.Models.DTO
         public string genre { get; set; }
         public string title { get; set; }
         public string author { get; set; }
+        public string publisher { get; set; }
         public string configured { get; set; }
 
         public static TorznabQuery ToTorznabQuery(TorznabRequest request)
@@ -100,6 +101,8 @@ namespace Jackett.Common.Models.DTO
                 query.Title = request.title;
             if (!string.IsNullOrWhiteSpace(request.author))
                 query.Author = request.author;
+            if (!string.IsNullOrWhiteSpace(request.publisher))
+                query.Author = request.publisher;
 
             return query;
         }

@@ -37,6 +37,7 @@ namespace Jackett.Common.Models
 
         public string Author { get; set; }
         public string Title { get; set; }
+        public string Publisher { get; set; }
 
         public bool IsTest { get; set; }
 
@@ -145,6 +146,7 @@ namespace Jackett.Common.Models
                 Year = Year,
                 Author = Author,
                 Title = Title,
+                Publisher = Publisher,
                 RageID = RageID,
                 TvdbID = TvdbID,
                 ImdbID = ImdbID,
