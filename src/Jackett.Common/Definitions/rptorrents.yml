@@ -156,6 +156,7 @@ search:
         img[src="images/t_extern.png"]: 0
         "*": 1
     genre:
+      optional: true
       selector: td div
       filters:
         - name: regexp
