@@ -37,8 +37,8 @@ caps:
     search: [q]
     tv-search: [q, season, ep, genre]
     movie-search: [q, genre]
-    music-search: [q]
-    book-search: [q]
+    music-search: [q, genre]
+    book-search: [q, genre]
 
 settings:
   - name: username
