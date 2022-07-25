@@ -7,7 +7,7 @@ type: private
 encoding: UTF-8
 links:
   - http://pwtorrents.net/
-links:
+legacylinks:
   - https://pwtorrents.net/ # site is forcing to http
 
 caps:
