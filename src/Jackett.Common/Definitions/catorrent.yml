@@ -92,12 +92,9 @@ search:
       selector: div.short_game_genre
       filters:
         - name: re_replace
-          args: ["\\s+/\\s+", ","]
+          args: ["\\s+/\\s+", ", "]
     description:
       text: "{{ .Result.genre }}"
-      filters:
-        - name: replace
-          args: [",", ", "]
     date:
       text: now
     seeders:
