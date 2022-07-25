@@ -25,10 +25,10 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
+    tv-search: [q, season, ep, imdbid, genre]
     movie-search: [q, imdbid, genre]
     music-search: [q, genre]
-    book-search: [q]
+    book-search: [q, genre]
 
 settings:
   - name: username
@@ -132,7 +132,11 @@ search:
       selector: a[href^="downloadssl.php?id="]
       attribute: href
     genre:
+      optional: true
       selector: td:nth-child(2) > small
+      filters:
+        - name: replace
+          args: [" ", ", "]
     _language:
       optional: true
       selector: img[src="pic/pl.png"]
