@@ -16,7 +16,9 @@ namespace Jackett.Common.Models
         TmdbId,
         TvmazeId,
         TraktId,
-        DoubanId
+        DoubanId,
+        Year,
+        Genre
     }
 
     public enum MovieSearchParam
@@ -26,6 +28,7 @@ namespace Jackett.Common.Models
         TmdbId,
         TraktId,
         DoubanId,
+        Year,
         Genre
     }
 
@@ -44,7 +47,10 @@ namespace Jackett.Common.Models
     {
         Q,
         Title,
-        Author
+        Author,
+        Publisher,
+        Year,
+        Genre
     }
 
     public class TorznabCapabilities
@@ -67,6 +73,8 @@ namespace Jackett.Common.Models
         public bool TvSearchTvMazeAvailable => (TvSearchParams.Contains(TvSearchParam.TvmazeId));
         public bool TvSearchTraktAvailable => (TvSearchParams.Contains(TvSearchParam.TraktId));
         public bool TvSearchDoubanAvailable => (TvSearchParams.Contains(TvSearchParam.DoubanId));
+        public bool TvSearchYearAvailable => (TvSearchParams.Contains(TvSearchParam.Year));
+        public bool TvSearchGenreAvailable => (TvSearchParams.Contains(TvSearchParam.Genre));
 
         public List<MovieSearchParam> MovieSearchParams;
         public bool MovieSearchAvailable => (MovieSearchParams.Count > 0);
@@ -74,6 +82,7 @@ namespace Jackett.Common.Models
         public bool MovieSearchTmdbAvailable => (MovieSearchParams.Contains(MovieSearchParam.TmdbId));
         public bool MovieSearchTraktAvailable => (MovieSearchParams.Contains(MovieSearchParam.TraktId));
         public bool MovieSearchDoubanAvailable => (MovieSearchParams.Contains(MovieSearchParam.DoubanId));
+        public bool MovieSearchYearAvailable => (MovieSearchParams.Contains(MovieSearchParam.Year));
         public bool MovieSearchGenreAvailable => (MovieSearchParams.Contains(MovieSearchParam.Genre));
 
         public List<MusicSearchParam> MusicSearchParams;
@@ -89,6 +98,9 @@ namespace Jackett.Common.Models
         public bool BookSearchAvailable => (BookSearchParams.Count > 0);
         public bool BookSearchTitleAvailable => (BookSearchParams.Contains(BookSearchParam.Title));
         public bool BookSearchAuthorAvailable => (BookSearchParams.Contains(BookSearchParam.Author));
+        public bool BookSearchPublisherAvailable => (BookSearchParams.Contains(BookSearchParam.Publisher));
+        public bool BookSearchYearAvailable => (BookSearchParams.Contains(BookSearchParam.Year));
+        public bool BookSearchGenreAvailable => (BookSearchParams.Contains(BookSearchParam.Genre));
 
         public readonly TorznabCapabilitiesCategories Categories;
 
@@ -209,6 +221,10 @@ namespace Jackett.Common.Models
                 parameters.Add("traktid");
             if (TvSearchDoubanAvailable)
                 parameters.Add("doubanid");
+            if (TvSearchYearAvailable)
+                parameters.Add("year");
+            if (TvSearchGenreAvailable)
+                parameters.Add("genre");
             return string.Join(",", parameters);
         }
 
@@ -223,6 +239,8 @@ namespace Jackett.Common.Models
                 parameters.Add("traktid");
             if (MovieSearchDoubanAvailable)
                 parameters.Add("doubanid");
+            if (MovieSearchYearAvailable)
+                parameters.Add("year");
             if (MovieSearchGenreAvailable)
                 parameters.Add("genre");
             return string.Join(",", parameters);
@@ -253,6 +271,12 @@ namespace Jackett.Common.Models
                 parameters.Add("title");
             if (BookSearchAuthorAvailable)
                 parameters.Add("author");
+            if (BookSearchPublisherAvailable)
+                parameters.Add("publisher");
+            if (BookSearchYearAvailable)
+                parameters.Add("year");
+            if (BookSearchGenreAvailable)
+                parameters.Add("genre");
             return string.Join(",", parameters);
         }
 
