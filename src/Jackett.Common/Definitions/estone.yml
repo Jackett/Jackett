@@ -35,7 +35,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
+    tv-search: [q, season, ep, genre]
     movie-search: [q, genre]
     music-search: [q]
     book-search: [q]
