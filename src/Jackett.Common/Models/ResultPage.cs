@@ -106,6 +106,7 @@ namespace Jackett.Common.Models
                             GetTorznabElement("year", r.Year),
                             GetTorznabElement("author", RemoveInvalidXMLChars(r.Author)),
                             GetTorznabElement("booktitle", RemoveInvalidXMLChars(r.BookTitle)),
+                            GetTorznabElement("publisher", RemoveInvalidXMLChars(r.Publisher)),
                             GetTorznabElement("artist", RemoveInvalidXMLChars(r.Artist)),
                             GetTorznabElement("album", RemoveInvalidXMLChars(r.Album)),
                             GetTorznabElement("label", RemoveInvalidXMLChars(r.Label)),
