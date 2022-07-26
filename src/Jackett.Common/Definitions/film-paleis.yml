@@ -12,31 +12,31 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 2, cat: Movies/BluRay, desc: " Bluray/HD"}
-    - {id: 3, cat: Movies/DVD, desc: " DVD Kids"}
-    - {id: 4, cat: Audio/Video, desc: " DVD Muziek"}
-    - {id: 5, cat: Movies/DVD, desc: " DVD Films"}
-    - {id: 7, cat: Movies/UHD, desc: " 4K films"}
-    - {id: 8, cat: XXX, desc: " Erotiek"}
-    - {id: 9, cat: PC/Mobile-Other, desc: " GSM/Navigatie"}
-    - {id: 10, cat: Audio, desc: " Muziek Album"}
-    - {id: 11, cat: Audio/Other, desc: " Muziek Diverse"}
-    - {id: 12, cat: Console/NDS, desc: " Nintendo"}
-    - {id: 13, cat: Movies, desc: " Classic"}
-    - {id: 15, cat: Other, desc: " Overige"}
-    - {id: 16, cat: PC/0day, desc: " PC Software"}
-    - {id: 17, cat: PC, desc: " PC Spellen"}
-    - {id: 19, cat: TV, desc: " TV Series"}
-    - {id: 21, cat: Movies/SD, desc: " Divx/Xvid"}
-    - {id: 24, cat: Books/EBook, desc: " E-Books"}
-    - {id: 26, cat: Audio/Other, desc: " Cabaret"}
-    - {id: 27, cat: TV/Documentary, desc: " Documentaire"}
-    - {id: 31, cat: Movies/HD, desc: " FP-release"}
-    - {id: 32, cat: Audio/Audiobook, desc: " Luister Boeken"}
+    - {id: 2, cat: Movies/BluRay, desc: "Bluray/HD"}
+    - {id: 3, cat: Movies/DVD, desc: "DVD Kids"}
+    - {id: 4, cat: Audio/Video, desc: "DVD Muziek"}
+    - {id: 5, cat: Movies/DVD, desc: "DVD Films"}
+    - {id: 7, cat: Movies/UHD, desc: "4K films"}
+    - {id: 8, cat: XXX, desc: "Erotiek"}
+    - {id: 9, cat: PC/Mobile-Other, desc: "GSM/Navigatie"}
+    - {id: 10, cat: Audio, desc: "Muziek Album"}
+    - {id: 11, cat: Audio/Other, desc: "Muziek Diverse"}
+    - {id: 12, cat: Console/NDS, desc: "Nintendo"}
+    - {id: 13, cat: Movies, desc: "Classic"}
+    - {id: 15, cat: Other, desc: "Overige"}
+    - {id: 16, cat: PC/0day, desc: "PC Software"}
+    - {id: 17, cat: PC, desc: "PC Spellen"}
+    - {id: 19, cat: TV, desc: "TV Series"}
+    - {id: 21, cat: Movies/SD, desc: "Divx/Xvid"}
+    - {id: 24, cat: Books/EBook, desc: "E-Books"}
+    - {id: 26, cat: Audio/Other, desc: "Cabaret"}
+    - {id: 27, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 31, cat: Movies/HD, desc: "FP-release"}
+    - {id: 32, cat: Audio/Audiobook, desc: "Luister Boeken"}
 
   modes:
     search: [q]
-    tv-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
@@ -95,6 +95,11 @@ search:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: 1
     # does not return imdb link in results
+  keywordsfilters:
+    - name: re_replace # S01E02 to 1 2
+      args: ["(?i)\\bS0*(\\d{1,2})\\s*E0*(\\d{1,2})\\b", "$1 $2"]
+    - name: re_replace # S01 to 1
+      args: ["(?i)\\bS0*(\\d{1,2})\\b", "$1"]
 
   rows:
     selector: table.mainouter
@@ -106,11 +111,13 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: re_replace
-          args: ["(?i)seizoen\\s*(\\d{1,2})\\s*(tot|t\/m)\\s*(\\d{1,2})", "S$1-$3"]
+          args: ["(?i)(seizoen\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "S$2-$4"]
         - name: re_replace
-          args: ["(?i)(seizoen\\s*)(\\d{1,2})", "S$2"]
+          args: ["(?i)(seizoen\\s*)(\\d{1,2})\\s*", "S$2"]
         - name: re_replace
-          args: ["(?i)(afl.\\s*|aflevering\\s*)(\\d{1,2})", "E$2"]
+          args: ["(?i)(afl.\\s*|aflevering\\s*|ep.\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "E$2-$4"]
+        - name: re_replace
+          args: ["(?i)(afl.\\s*|aflevering\\s*|ep.\\s*)(\\d{1,2})", "E$2"]
         - name: re_replace
           args: ["(?i)compleet", "Complete"]
     details:
