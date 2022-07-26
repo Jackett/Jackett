@@ -156,6 +156,14 @@ search:
       filters:
         - name: regexp
           args: src=([^\s]+)
+    genre:
+      optional: true
+      selector: div.t-tags
+      filters:
+        - name: replace
+          args: ["/", ", "]
+    description:
+      text: "{{ .Result.genre }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
