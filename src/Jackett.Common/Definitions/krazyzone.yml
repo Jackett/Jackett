@@ -17,6 +17,7 @@ caps:
     - {id: 76, cat: Audio, desc: "Music KZN Packs Exclusive"}
     - {id: 49, cat: Audio/MP3, desc: "Music KZN MP3 Weekly Ex-Vip"}
     - {id: 77, cat: Audio, desc: "Music KZN Packs Ex-VIP"}
+    - {id: 98, cat: Audio, desc: "Music Other Mp3 Weekly"}
     - {id: 74, cat: Audio, desc: "Music Discography Collection"}
     - {id: 78, cat: Audio, desc: "Music Dj-Only Dj-Music"}
     - {id: 82, cat: Audio/Lossless, desc: "Music Flac-24 Bit Hi-Res"}
