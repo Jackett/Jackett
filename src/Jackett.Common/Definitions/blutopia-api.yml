@@ -109,10 +109,6 @@ search:
       selector: tmdb_id
     tvdbid:
       selector: tvdb_id
-    genre:
-      selector: genres
-    description:
-      text: "{{ .Result.genre }}"
     files:
       selector: num_file
     seeders:
@@ -148,4 +144,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 6.3.0
+# json UNIT3D 1.1 beta
