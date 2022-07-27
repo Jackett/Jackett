@@ -193,7 +193,8 @@ search:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
     title_optional:
       # the movies, tv and music pages abbreviate the title so we process the href instead. #8137
-      selector: td[class^="coll-1"] a[href^="/torrent/"]
+      optional: true
+      selector: td[class^="coll-1"] a[href^="/torrent/"]:contains("...")
       attribute: href
       filters:
         - name: urldecode
@@ -204,7 +205,11 @@ search:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
       filters:
         - name: re_replace
+          args: ["-([\\w]+(?:[\\[\\]\\(\\)\\w]+)?)$", "~$1"]
+        - name: replace
           args: ["-", " "]
+        - name: re_replace
+          args: ["~([\\w]+(?:[\\[\\]\\(\\)\\w]+)?)$", "-$1"]
         - name: replace
           args: ["Grey's Anatomy", "Greys Anatomy"]
         - name: replace
