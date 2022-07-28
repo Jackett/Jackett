@@ -116,6 +116,7 @@ caps:
     tv-search: [q]
     movie-search: [q]
     book-search: [q]
+  allowrawsearch: true
 
 search:
   paths:

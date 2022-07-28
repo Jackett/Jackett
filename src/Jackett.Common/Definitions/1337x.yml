@@ -126,6 +126,7 @@ caps:
     movie-search: [q]
     music-search: [q, album, artist]
     book-search: [q]
+  allowrawsearch: true
 
 settings:
   - name: flaresolverr
