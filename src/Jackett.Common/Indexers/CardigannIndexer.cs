@@ -122,6 +122,7 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities();
             TorznabCaps.ParseCardigannSearchModes(Definition.Caps.Modes);
+            TorznabCaps.SupportsRawSearch = Definition.Caps.Allowrawsearch;
 
             // init config Data
             configData = new ConfigurationData();
