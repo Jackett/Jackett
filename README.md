@@ -400,7 +400,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Hebits
  * House of Devil
  * HQSource (HQS)
- * Il Corsaro Verde
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
