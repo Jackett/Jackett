@@ -19,6 +19,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+  allowrawsearch: true
 
 settings:
   - name: username

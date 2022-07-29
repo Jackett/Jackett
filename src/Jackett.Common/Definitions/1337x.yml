@@ -126,6 +126,7 @@ caps:
     movie-search: [q]
     music-search: [q, album, artist]
     book-search: [q]
+  allowrawsearch: true
 
 settings:
   - name: flaresolverr
@@ -180,9 +181,6 @@ search:
     - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Movies{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/1/"
     - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/TV{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}2{{ else }}1{{ end }}/"
     - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Music{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}3{{ else }}1{{ end }}/"
-  keywordsfilters:
-    - name: replace # use this as a workaround till #893 is implemented
-      args: ["Greys Anatomy", "Grey's Anatomy"]
 
   rows:
     selector: tr:has(a[href^="/torrent/"])
@@ -210,8 +208,6 @@ search:
           args: ["-", " "]
         - name: re_replace
           args: ["~([\\w]+(?:[\\[\\]\\(\\)\\w]+)?)$", "-$1"]
-        - name: replace
-          args: ["Grey's Anatomy", "Greys Anatomy"]
         - name: replace
           args: ["\u000f", ""] # get rid of unwanted character #6582
         # cleanup for Sonarr
