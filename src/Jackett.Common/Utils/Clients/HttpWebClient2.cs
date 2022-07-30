@@ -31,7 +31,10 @@ namespace Jackett.Common.Utils.Clients
                    c: c,
                    sc: sc)
         {
-            cookies = new CookieContainer();
+            cookies = new CookieContainer
+            {
+                PerDomainCapacity = 100 // By default only 20 cookies are allowed per domain
+            };
             CreateClient();
         }
 
@@ -112,12 +115,10 @@ namespace Jackett.Common.Utils.Clients
             request.Headers.ExpectContinue = false;
             request.RequestUri = new Uri(webRequest.Url);
 
-            // clear cookies from cookiecontainer
-            var oldCookies = cookies.GetCookies(request.RequestUri);
-            foreach (Cookie oldCookie in oldCookies)
-                oldCookie.Expired = true;
+            // clear all the cookies from CookieContainer
+            CookieUtil.RemoveAllCookies(cookies);
 
-            // add cookies to cookiecontainer
+            // add cookies to CookieContainer
             if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
             {
                 // don't include the path, Scheme is needed for mono compatibility
