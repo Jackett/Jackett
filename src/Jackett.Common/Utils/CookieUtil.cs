@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Utils
@@ -37,5 +40,25 @@ namespace Jackett.Common.Utils
                     throw new FormatException($"The cookie '{kv.Key}={kv.Value}' is malformed.");
             return string.Join("; ", cookieDictionary.Select(kv => kv.Key + "=" + kv.Value));
         }
+
+        /// <summary>
+        /// Remove all the cookies from a CookieContainer. That includes all domains and protocols.
+        /// </summary>
+        /// <param name="cookieJar">A cookie container</param>
+        public static void RemoveAllCookies(CookieContainer cookieJar)
+        {
+            var table = (Hashtable)cookieJar
+                                   .GetType()
+                                   .InvokeMember("m_domainTable", BindingFlags.NonPublic | BindingFlags.GetField |
+                                                                  BindingFlags.Instance, null, cookieJar, new object[] { });
+            foreach (var key in table.Keys)
+            {
+                foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"http://{key}")))
+                    cookie.Expired = true;
+                foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"https://{key}")))
+                    cookie.Expired = true;
+            }
+        }
+
     }
 }

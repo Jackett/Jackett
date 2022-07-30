@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using Jackett.Common.Utils;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
@@ -99,6 +100,22 @@ namespace Jackett.Test.Common.Utils
             // null cookie dictionary
             var expectedCookieHeader = "";
             CollectionAssert.AreEqual(expectedCookieHeader, CookieUtil.CookieDictionaryToHeader(null));
+        }
+
+        [Test]
+        public void RemoveAllCookies()
+        {
+            var cookiesContainer = new CookieContainer();
+            var domainHttp = new Uri("http://testdomain1.com");
+            cookiesContainer.Add(domainHttp, new Cookie("cookie1", "value1"));
+            var domainHttps = new Uri("https://testdomain2.com");
+            cookiesContainer.Add(domainHttps, new Cookie("cookie2", "value2"));
+            Assert.AreEqual(1, cookiesContainer.GetCookies(domainHttp).Count);
+            Assert.AreEqual(1, cookiesContainer.GetCookies(domainHttps).Count);
+
+            CookieUtil.RemoveAllCookies(cookiesContainer);
+            Assert.AreEqual(0, cookiesContainer.GetCookies(domainHttp).Count);
+            Assert.AreEqual(0, cookiesContainer.GetCookies(domainHttps).Count);
         }
     }
 }
