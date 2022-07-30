@@ -35,11 +35,11 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
                        }
                    },
                    configService: configService,
@@ -53,14 +53,10 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "private";
 
-            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(2, TorznabCatType.MoviesBluRay, "Movies/Blu-ray");
-            AddCategoryMapping(4, TorznabCatType.TVDocumentary, "Documentaries");
             AddCategoryMapping(6, TorznabCatType.AudioLossless, "HQ Audio");
             AddCategoryMapping(7, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Videos");
             AddCategoryMapping(9, TorznabCatType.Other, "Other");
-            AddCategoryMapping(5, TorznabCatType.TVSport, "Sports");
             AddCategoryMapping(10, TorznabCatType.TV, "TV");
             AddCategoryMapping(12, TorznabCatType.TV, "TV/Seasonpack");
             AddCategoryMapping(11, TorznabCatType.XXX, "XXX");
@@ -97,7 +93,14 @@ namespace Jackett.Common.Indexers
             };
             var results = new List<WebResult>();
             var search = new UriBuilder(SearchUrl);
-            if (query.IsImdbQuery)
+            if (query.IsGenreQuery)
+            {
+                qc.Add("search", query.GetQueryString() + " " + query.Genre);
+                qc.Add("options", "2"); //Search Title and Genre
+                search.Query = qc.GetQueryString();
+                results.Add(await RequestWithCookiesAndRetryAsync(search.ToString()));
+            }
+            else if (query.IsImdbQuery)
             {
                 qc.Add("search", query.ImdbID);
                 qc.Add("options", "4"); //Search URL field for IMDB link
@@ -126,7 +129,7 @@ namespace Jackett.Common.Indexers
                     var table = dom.QuerySelector("table[align=center] + br + table > tbody");
                     if (table == null) // No results, so skip this search
                         continue;
-                    foreach (var row in table.Children.Skip(1))
+                    foreach (var row in table.Children)
                     {
                         var release = new ReleaseInfo();
                         var qLink = row.Children[2].QuerySelector("a");
@@ -137,6 +140,15 @@ namespace Jackett.Common.Indexers
                         //Skip irrelevant and duplicate entries
                         if (!query.MatchQueryStringAND(release.Title) || releases.Any(r => r.Guid == detailsLink))
                             continue;
+                        var genres = row.QuerySelector("font.small")?.TextContent;
+                        if (!string.IsNullOrEmpty(genres))
+                        {
+                            genres = genres.Replace("[ ", "").Replace(" ]", "").Replace(" / ", ", ");
+                            release.Description = genres;
+                            if (release.Genres == null)
+                                release.Genres = new List<string>();
+                            release.Genres = release.Genres.Union(genres.Split(',')).ToList();
+                        }
                         release.Files = ParseUtil.CoerceLong(row.Children[3].TextContent);
                         release.Grabs = ParseUtil.CoerceLong(row.Children[7].TextContent);
                         release.Guid = detailsLink;
