@@ -186,6 +186,11 @@ search:
     _language:
       selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#b6249d;"]
       optional: true
+    genre:
+      selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#1c38c2;"]
+      optional: true
+    description:
+      text: "{{ .Result.genre }}"
     title:
       selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       filters:
