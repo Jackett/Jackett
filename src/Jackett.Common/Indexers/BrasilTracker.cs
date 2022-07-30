@@ -36,19 +36,19 @@ namespace Jackett.Common.Indexers
                     {
                         TvSearchParams = new List<TvSearchParam>
                         {
-                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre
                         },
                         MovieSearchParams = new List<MovieSearchParam>
                         {
-                            MovieSearchParam.Q, MovieSearchParam.ImdbId
+                            MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
                         },
                         MusicSearchParams = new List<MusicSearchParam>
                         {
-                            MusicSearchParam.Q
+                            MusicSearchParam.Q, MusicSearchParam.Genre
                         },
                         BookSearchParams = new List<BookSearchParam>
                         {
-                            BookSearchParam.Q
+                            BookSearchParam.Q, BookSearchParam.Genre
                         }
                     },
                     configService: configService,
@@ -137,6 +137,8 @@ namespace Jackett.Common.Indexers
                 {"action", "basic"},
                 {"searchsubmit", "1"}
             };
+            if (query.IsGenreQuery)
+                queryCollection.Add("taglist", query.Genre);
 
             searchUrl += "?" + queryCollection.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
@@ -151,6 +153,7 @@ namespace Jackett.Common.Indexers
                 Uri groupPoster = null;
                 string imdbLink = null;
                 string tmdbLink = null;
+                string genres = null;
                 foreach (var row in rows)
                     try
                     {
@@ -206,6 +209,7 @@ namespace Jackett.Common.Indexers
                                 groupYearStr = yearStr;
                                 imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
                                 tmdbLink = row.QuerySelector("a[href*=\"themoviedb.org/\"]")?.GetAttribute("href");
+                                genres = row.QuerySelector("div.tags")?.TextContent;
                                 continue;
                             }
                         }
@@ -232,10 +236,17 @@ namespace Jackett.Common.Indexers
                             release.Title = ParseTitle(title, seasonEp, yearStr);
                             imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
                             tmdbLink = row.QuerySelector("a[href*=\"themoviedb.org/\"]")?.GetAttribute("href");
+                            genres = row.QuerySelector("div.tags")?.TextContent;
                         }
                         release.Poster = groupPoster;
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
                         release.TMDb = ParseUtil.GetLongFromString(tmdbLink);
+                        if (!string.IsNullOrEmpty(genres))
+                        {
+                            if (release.Genres == null)
+                                release.Genres = new List<string>();
+                            release.Genres = release.Genres.Union(genres.Split(',')).ToList();
+                        }
                         release.Category = category;
                         release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
                         release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL "); // Fix web/web-dl
