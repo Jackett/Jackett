@@ -160,9 +160,6 @@ search:
     genre:
       optional: true
       selector: div.t-tags
-      filters:
-        - name: replace
-          args: ["/", ", "]
     description:
       text: "{{ .Result.genre }}"
     imdbid:
