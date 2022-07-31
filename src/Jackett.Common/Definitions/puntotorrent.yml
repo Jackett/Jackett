@@ -99,6 +99,7 @@ caps:
     # hidden but with torrents
     - {id: 17, cat: Movies/Other, desc: "VCD/SVCD - SVCD/VCD"}
     - {id: 78, cat: Movies/Other, desc: "VCD/SVCD - Estrenos VCD/SVCD"}
+    - {id: 102, cat: Movies/Other, desc: "XVID - Películas"}
 
   modes:
     search: [q]
