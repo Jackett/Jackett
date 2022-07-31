@@ -28,6 +28,7 @@ caps:
     - {id: 19, cat: Audio/Audiobook, desc: "Audiolibros"}
     - {id: 20, cat: Movies/Other, desc: "Películas Oscars"}
     - {id: 21, cat: Audio/Video, desc: "VideoMixes"}
+    - {id: 22, cat: TV/Other, desc: "Playlist_Collection"}
 
   modes:
     search: [q]
