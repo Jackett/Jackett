@@ -744,23 +744,16 @@ Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Bina
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system e.g. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
 
 
+## Installation on Alpine Linux
+Detailed instructions are available at [Jackett's Wiki](https://github.com/Jackett/Jackett/wiki/Installation-on-Alpine-Linux).
+
+
 ## Installation on Synology
 Jackett is available as a [beta package](https://synocommunity.com/package/jackett) from [SynoCommunity](https://synocommunity.com/)
 
 
 ## Installation on OpenWrt
-### Install required dependencies: icu, libstdcpp6, libintl, whoami, pgrep:
-`opkg update && opkg install icu70 icu-full-data70 libstdcpp6 libintl-full8 procps-ng procps-ng-pgrep coreutils-whoami`
-
-### Install as service
-1. Download and extract the latest `Jackett.Binaries.LinuxMusl(AMDx64,ARM32,ARM64).tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases)
-2. To install Jackett as a service, open a Terminal, cd to the jackett folder and run `sudo ./install_service_openwrt.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `/etc/init.d/jackett stop` from Terminal. You can start it again it using `/etc/init.d/jackett start`. Logs are stored as usual under `/var/log/jackett/log.txt`. Jackett configs are stored as usual under `/opt/Jackett`.
-
-### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.LinuxMusl(AMDx64,ARM32,ARM64).tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
-
-### Home directory
-If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.
+Detailed instructions are available at [Jackett's Wiki](https://github.com/Jackett/Jackett/wiki/Installation-on-OpenWrt).
 
 
 ## Running Jackett behind a reverse proxy
