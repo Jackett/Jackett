@@ -231,6 +231,17 @@ stages:
                 jackett_launcher.sh
               targetFolder: $(Build.BinariesDirectory)/Jackett
 
+          - task: CopyFiles@2
+            displayName: Copy Linux musl Specific Scripts
+            condition: and(succeeded(), startsWith(variables['buildDescription'], 'musl'))
+            inputs:
+              SourceFolder: $(Build.SourcesDirectory)
+              contents: |
+                install_service_systemd.sh
+                jackett_launcher.sh
+                install_service_openwrt.sh
+              targetFolder: $(Build.BinariesDirectory)/Jackett
+
           # There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of
           # System.Net.Http.dll, instead of the version supplied in folder
           # https://github.com/dotnet/corefx/issues/19914

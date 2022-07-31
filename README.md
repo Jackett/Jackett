@@ -759,7 +759,7 @@ Jackett is available as a [beta package](https://synocommunity.com/package/jacke
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.LinuxMusl(AMDx64,ARM32,ARM64).tar.gz` release from the [releases page](https://github.com/Jackett/Jackett/releases), open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
 
-### home directory
+### Home directory
 If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.
 
 
