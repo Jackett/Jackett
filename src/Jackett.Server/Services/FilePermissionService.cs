@@ -1,4 +1,7 @@
 using System;
+#if ISLINUXMUSL
+using System.Diagnostics;
+#endif
 using Jackett.Common.Services.Interfaces;
 using Mono.Unix;
 using NLog;
