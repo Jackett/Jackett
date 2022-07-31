@@ -1,0 +1,187 @@
+---
+id: mazepa
+name: Mazepa
+description: "Mazepa is a UKRAINIAN Semi-Private Torrent Tracker for Videos with Ukrainian soundtracks"
+language: uk-UA
+type: semi-private
+encoding: UTF-8
+links:
+  - https://mazepa.to/
+
+caps:
+  categorymappings:
+    # note: when refreshing cats use the tracker.php not the search.php!
+    - {id: 37, cat: Movies, desc: "Українські фільми HD, UHD"}
+    - {id: 7, cat: Movies, desc: " |- Українські фільми"}
+    - {id: 38, cat: TV, desc: "Українські серіали HD, UHD"}
+    - {id: 8, cat: TV, desc: " |- Українські серіали"}
+    - {id: 35, cat: TV/Anime, desc: "Українські мультфільми HD, UHD"}
+    - {id: 5, cat: TV/Anime, desc: " |- Українські мультфільми"}
+    - {id: 36, cat: TV/Anime, desc: "Українські мультсеріали HD, UHD"}
+    - {id: 6, cat: TV/Anime, desc: " |- Українські мультсеріали"}
+    - {id: 39, cat: TV/Documentary, desc: "Українська документалістика HD, UHD"}
+    - {id: 9, cat: TV/Documentary, desc: " |- Українська документалістика"}
+    - {id: 12, cat: Movies, desc: "Фільми HD, UHD"}
+    - {id: 13, cat: Movies, desc: " |- Фільми"}
+    - {id: 44, cat: TV, desc: "Серіали HD, UHD"}
+    - {id: 14, cat: TV, desc: " |- Серіали"}
+    - {id: 41, cat: TV/Anime, desc: "Мультфільми HD, UHD"}
+    - {id: 10, cat: TV/Anime, desc: " |- Мультфільми"}
+    - {id: 43, cat: TV/Anime, desc: "Мультсеріали HD, UHD"}
+    - {id: 11, cat: TV/Anime, desc: " |- Мультсеріали"}
+    - {id: 16, cat: TV/Anime, desc: "Аніме"}
+    - {id: 42, cat: TV/Documentary, desc: "Документальне HD, UHD"}
+    - {id: 15, cat: TV/Documentary, desc: " |- Документальне"}
+    - {id: 20, cat: TV/Sport, desc: " |- Формула 1 Сезон 2022"}
+    - {id: 79, cat: TV/Sport, desc: " |- Формула 1 Сезони 2017-2021"}
+    - {id: 21, cat: TV/Sport, desc: " |- Формула 1 Сезони 2007-2016"}
+    - {id: 75, cat: TV/Sport, desc: " |- Формула 1 Сезони до 2006"}
+    - {id: 77, cat: TV/Sport, desc: "Автоспорт"}
+    - {id: 18, cat: TV/Sport, desc: "Футбол"}
+    - {id: 47, cat: TV/Sport, desc: " |- Чемпіонат та кубок України"}
+    - {id: 46, cat: TV/Sport, desc: " |- Єврокубки"}
+    - {id: 48, cat: TV/Sport, desc: " |- Чемпіонат Світу"}
+    - {id: 49, cat: TV/Sport, desc: " |- Чемпіонат Європи"}
+    - {id: 53, cat: TV/Sport, desc: " |- Закордонні чемпіонати"}
+    - {id: 19, cat: TV/Sport, desc: "Бокс"}
+    - {id: 28, cat: Movies, desc: "Науково-популярні фільми"}
+    - {id: 29, cat: Audio/Video, desc: "Концерти, відеокліпи"}
+    - {id: 30, cat: TV, desc: "Теле-Шоу"}
+    - {id: 74, cat: Audio, desc: "Українське радіо"}
+    - {id: 76, cat: Audio/Audiobook, desc: "Аудіокниги"}
+    - {id: 65, cat: Audio, desc: "Rock"}
+    - {id: 63, cat: Audio, desc: "Pop, Disco, R'n'B"}
+    - {id: 67, cat: Audio, desc: "Electronic, Industrial, Techno"}
+    - {id: 64, cat: Audio, desc: "Rap"}
+    - {id: 61, cat: Audio, desc: "Jazz, Blues, Soul, Funk"}
+    - {id: 70, cat: Audio, desc: "Reggae, Dub, Ska"}
+    - {id: 66, cat: Audio, desc: "Folk, Ethno, Country"}
+    - {id: 68, cat: Audio, desc: "Modern Classical, Ambient, Experimental, Avantgarde"}
+    - {id: 60, cat: Audio, desc: "Classical, Chorus, Opera"}
+    - {id: 62, cat: Audio, desc: "Schlager, Chanson, Romance, Sung Poetry"}
+    - {id: 69, cat: Audio, desc: "Soundtracks, Musicles"}
+    - {id: 23, cat: Other, desc: "Архів"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      10: seeders
+      7: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    "login_username": "{{ .Config.username }}"
+    "login_password": "{{ .Config.password }}"
+    autologin: 1
+    login: "Увійти"
+  error:
+    - selector: table.error
+  test:
+    path: index.php
+    selector: a[href="./login.php?logout=1"]
+
+search:
+  paths:
+    - path: tracker.php
+      method: post
+  inputs:
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
+    prev_allw: 1
+    prev_a: 0
+    prev_dla: 0
+    prev_dlc: 0
+    prev_dld: 0
+    prev_dlw: 0
+    prev_my: 0
+    prev_new: 0
+    prev_sd: 0
+    prev_da: 1
+    prev_dc: 0
+    prev_df: 1
+    prev_ds: 0
+    prev_tor_type: 0
+    o: "{{ .Config.sort }}"
+    s: "{{ .Config.type }}"
+    # show category
+    dc: 0
+    # show forum
+    df: 1
+    # show author
+    da: 1
+    # show speed
+    ds: 0
+    # -1=all time
+    tm: -1
+    # seed not seen -1=disregard
+    sns: -1
+    # group releases -1=not selected
+    srg: -1
+    nm: "{{ .Keywords }}"
+    # find a username
+    pn: ""
+    # all words
+    allw: 1
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+
+  rows:
+    selector: tr[id^="tor_"]
+
+  fields:
+    category:
+      selector: a[href^="tracker.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a[href^="./viewtopic.php?t="]
+    details:
+      selector: a[href^="./viewtopic.php?t="]
+      attribute: href
+    download:
+      selector: a[href^="./dl.php?id="]
+      attribute: href
+    size:
+      selector: td:nth-last-child(5) > u
+    seeders:
+      selector: td.seedmed
+    leechers:
+      selector: td.leechmed
+    grabs:
+      selector: td:nth-last-child(2)
+    date:
+      # unix
+      selector: td:last-child > u
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# TorrentPier
