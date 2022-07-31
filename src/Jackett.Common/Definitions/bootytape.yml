@@ -113,6 +113,7 @@ search:
       text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
     size_optional:
       selector: td:nth-child(3)
+      optional: true
     size:
       text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     seeders_optional:
