@@ -2084,7 +2084,7 @@ namespace Jackett.Common.Indexers
                 case "genre":
                     if (release.Genres == null)
                         release.Genres = new List<string>();
-                    char[] delimiters = {',', ' ', '/', ')', '(', '.'};
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.' };
                     release.Genres = release.Genres.Union(value.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
                     value = string.Join(", ", release.Genres);
                     break;
