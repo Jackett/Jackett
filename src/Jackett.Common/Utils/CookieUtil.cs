@@ -5,11 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using NLog;
 
 namespace Jackett.Common.Utils
 {
     public static class CookieUtil
     {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
         // NOTE: we are not checking non-ascii characters and we should
         private static readonly Regex _CookieRegex = new Regex(@"([^\(\)<>@,;:\\""/\[\]\?=\{\}\s]+)=([^,;\\""\s]+)");
@@ -52,12 +55,17 @@ namespace Jackett.Common.Utils
                                    .InvokeMember("m_domainTable", BindingFlags.NonPublic | BindingFlags.GetField |
                                                                   BindingFlags.Instance, null, cookieJar, new object[] { });
             foreach (var key in table.Keys)
-            {
-                foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"http://{key}")))
-                    cookie.Expired = true;
-                foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"https://{key}")))
-                    cookie.Expired = true;
-            }
+                try
+                {
+                    foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"http://{key}")))
+                        cookie.Expired = true;
+                    foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"https://{key}")))
+                        cookie.Expired = true;
+                }
+                catch (Exception)
+                {
+                    logger.Warn("Unable to delete the cookies of domain: " + key);
+                }
         }
 
     }
