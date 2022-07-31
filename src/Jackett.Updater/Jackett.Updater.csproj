@@ -10,6 +10,7 @@
     <NoWarn />
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
+    <DefineConstants Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64' or '$(RuntimeIdentifier)' == 'linux-musl-arm' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">ISLINUXMUSL</DefineConstants>
   </PropertyGroup>
 
   <!-- Conditionally obtain references for the .NET461 target -->
@@ -18,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj" />
+    <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj">
+      <Properties Condition="$(DefineConstants.Contains('ISLINUXMUSL')) == 'true'">DefineConstants=ISLINUXMUSL</Properties>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

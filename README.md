@@ -744,8 +744,16 @@ Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Bina
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system e.g. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
 
 
+## Installation on Alpine Linux
+Detailed instructions are available at [Jackett's Wiki](https://github.com/Jackett/Jackett/wiki/Installation-on-Alpine-Linux).
+
+
 ## Installation on Synology
 Jackett is available as a [beta package](https://synocommunity.com/package/jackett) from [SynoCommunity](https://synocommunity.com/)
+
+
+## Installation on OpenWrt
+Detailed instructions are available at [Jackett's Wiki](https://github.com/Jackett/Jackett/wiki/Installation-on-OpenWrt).
 
 
 ## Running Jackett behind a reverse proxy
