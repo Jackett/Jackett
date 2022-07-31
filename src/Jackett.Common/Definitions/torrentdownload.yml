@@ -71,6 +71,7 @@ caps:
     - {id: MusicTranceHouseDance, cat: Audio, desc: "Music Trance House Dance"}
     - {id: Other, cat: Other, desc: Other}
     - {id: OtherComics, cat: Other, desc: "Other Comics"}
+    - {id: OtherTutorials, cat: Other, desc: "Other Tutorials"}
     - {id: OtherUnsorted, cat: Other, desc: "Other Unsorted"}
     - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
     - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
