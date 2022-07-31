@@ -83,15 +83,15 @@ caps:
     - {id: Sex, cat: Audio/Audiobook, desc: "Sex Scenes"}
     - {id: Short, cat: Audio/Audiobook, desc: "Short Story"}
     - {id: Spiritual, cat: Audio/Audiobook, desc: "Spiritual & Religious"}
-    - {id: Sports, cat: Audio/Audiobook, desc: "Sports"}
+    - {id: Sport, cat: Audio/Audiobook, desc: "Sport & Recreation"}
     - {id: Suspense, cat: Audio/Audiobook, desc: "Suspense"}
     - {id: Teen, cat: Audio/Audiobook, desc: "Teen & Young Adult"}
-    - {id: The, cat: Audio/Audiobook, desc: "The Undead"}
     - {id: Thriller, cat: Audio/Audiobook, desc: "Thriller"}
     - {id: "True", cat: Audio/Audiobook, desc: "True Crime"}
     - {id: Tutorial, cat: Audio/Audiobook, desc: "Tutorial"}
     - {id: Violence, cat: Audio/Audiobook, desc: "Violence"}
     - {id: Westerns, cat: Audio/Audiobook, desc: "Westerns"}
+    - {id: Zombies, cat: Audio/Audiobook, desc: "Zombies"}
 
   modes:
     search: [q]
