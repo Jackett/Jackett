@@ -144,6 +144,7 @@ search:
       selector: img
       attribute: src
     date_optional:
+      optional: true
       selector: div.postContent
       filters:
         - name: regexp
@@ -153,6 +154,7 @@ search:
     date:
       text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size_optional:
+      optional: true
       selector: div.postContent
       filters:
         - name: regexp
