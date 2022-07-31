@@ -1129,6 +1129,14 @@ namespace Jackett.Common.Indexers
                             strTag = ":";
                         logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", Id, strTag, DebugData));
                         break;
+                    case "validate":
+                        char[] delimiters = { ',', ' ', '/', ')', '(', '.' };
+                        var args = (string)Filter.Args;
+                        var argsList = args.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
+                        var validList = argsList.ToList();
+                        var validIntersect = validList.Intersect(Data.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
+                        Data = string.Join(", ", validIntersect);
+                        break;
                     default:
                         break;
                 }
