@@ -91,9 +91,6 @@ search:
     genre:
       optional: true
       selector: div.short_game_genre
-      filters:
-        - name: re_replace
-          args: ["\\s+/\\s+", ", "]
     description:
       text: "{{ .Result.genre }}"
     date:
