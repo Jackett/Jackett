@@ -184,6 +184,14 @@ search:
           args: "download.php?id="
         - name: append
           args: "&f={{ .Result.title }}.torrent"
+    genre:
+      optional: true
+      selector: div.col-md-12
+      filters:
+        - name: validate
+          args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Kids, Music, Musical, Mystery, News, Reality-TV, Romance, Sci-Fi, Sport, Soap, Talk-Show, Thriller, War, Western"
+    description:
+      text: "{{ .Result.genre }}"
     size:
       selector: div.torrent-size
     date:
