@@ -8,13 +8,9 @@ encoding: UTF-8
 links:
   - https://audiobookbay.fi/
   - https://audiobookbay.se/
-legacylinks:
-  - http://audiobookbay.fi/
-  - http://audiobookbay.se/
-  - http://audiobookbayabb.com/
   - https://audiobookbay.unblockit.ist/
+legacylinks:
   - https://audiobookbay.la/
-  - https://audiobookbay.unblockit.li/
   - https://audiobookbay.unblockit.uno/
   - https://audiobookbay.unblockit.ch/
   - https://audiobookbay.unblockit.ws/
@@ -31,6 +27,9 @@ legacylinks:
   - https://audiobookbay.unblockit.llc/
   - https://audiobookbay.unblockit.blue/
   - https://audiobookbay.unblockit.name/
+  - http://audiobookbay.fi/
+  - http://audiobookbay.se/
+  - http://audiobookbayabb.com/
 
 caps:
   categorymappings:
