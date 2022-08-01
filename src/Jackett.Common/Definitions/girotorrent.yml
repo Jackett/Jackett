@@ -202,7 +202,7 @@ search:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href^="index.php?page=downloadcheck&id="]
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
