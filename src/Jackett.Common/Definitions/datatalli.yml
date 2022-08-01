@@ -155,6 +155,15 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    genre:
+      optional: true
+      selector: td:nth-child(2)
+      remove: a
+      filters:
+        - name: re_replace
+          args: ["(?i)(Kieli:|Tekstit:|Array|\x0A|\x09)", ""]
+    description:
+      text: "{{ .Result.genre }}"
     minimumratio:
       text: 1.05
 # engine n/a
