@@ -105,7 +105,6 @@ search:
       attribute: href
     genre:
       selector: div.tags
-      optional: true
       filters:
         - name: validate
           args: "Action, Adventure, Animation, Comedy, Crime, Documentary, Drama, Family, Fantasy, History, Horror, Kids, Music, Mystery, News, Reality, Romance, SciFi, Soap, Talk, Thriller, War, Western"

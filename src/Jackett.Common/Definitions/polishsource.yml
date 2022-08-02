@@ -132,7 +132,6 @@ search:
       selector: a[href^="downloadssl.php?id="]
       attribute: href
     genre:
-      optional: true
       selector: td:nth-child(2) > small
       filters:
         - name: replace

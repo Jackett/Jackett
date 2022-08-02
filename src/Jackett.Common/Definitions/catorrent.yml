@@ -89,7 +89,6 @@ search:
       selector: img
       attribute: src
     genre:
-      optional: true
       selector: div.short_game_genre
     description:
       text: "{{ .Result.genre }}"

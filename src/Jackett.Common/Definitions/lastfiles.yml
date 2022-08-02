@@ -162,7 +162,6 @@ search:
           args: ["./pic/noposter.png", ""]
     genre:
       selector: font[size]
-      optional: true
     description:
       text: "{{ .Result.genre }}"
     download:
