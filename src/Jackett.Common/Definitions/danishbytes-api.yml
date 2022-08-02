@@ -102,11 +102,7 @@ search:
     poster:
       selector: poster_image
     genre:
-      # [\"Eventyr\", \"Sci-fi\"]
       selector: meta_genres
-      filters:
-        - name: re_replace
-          args: ["(\\[|\\]|\")", ""]
     description:
       text: "{{ .Result.genre }}"
     imdbid:
