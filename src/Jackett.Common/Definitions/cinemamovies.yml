@@ -151,7 +151,6 @@ search:
       attribute: href
     genre:
       selector: td[align="right"][width="66%"][valign="bottom"]
-      optional: true
       filters:
         - name: replace
           args: ["\xA0", " "]
