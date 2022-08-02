@@ -185,7 +185,6 @@ search:
         - name: append
           args: "&f={{ .Result.title }}.torrent"
     genre:
-      optional: true
       selector: div.col-md-12
       filters:
         - name: validate
