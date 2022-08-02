@@ -129,7 +129,6 @@ search:
       attribute: href
     genre:
       selector: i
-      optional: true
     description:
       text: "{{ .Result.genre }}"
     poster:
