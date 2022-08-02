@@ -147,6 +147,7 @@ search:
     leechers:
       selector: td:nth-child(9)
     genre:
+      optional: true
       selector: a:contains("Genre:")
       filters:
         - name: replace
