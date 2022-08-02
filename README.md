@@ -291,12 +291,13 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BlueBird [![(invite needed)][inviteneeded]](#)
  * Blues-Brothers
  * Blutopia (BLU)
- * Borgzelle  [![(invite needed)][inviteneeded]](#)
+ * Borgzelle [![(invite needed)][inviteneeded]](#)
  * Boxing Torrents
  * Brasil Tracker
  * BroadcasTheNet (BTN)
  * BroadCity
  * BrokenStones [![(invite needed)][inviteneeded]](#)
+ * BreizhPeers
  * BrSociety
  * BTNext (BTNT) [![(invite needed)][inviteneeded]](#)
  * BTSCHOOL
