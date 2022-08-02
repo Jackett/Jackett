@@ -154,7 +154,6 @@ search:
         img[src="pic/dupla_up.png"]: 2
         "*": 1
     genre:
-      optional: true
       selector: div i
       filters:
         - name: regexp
