@@ -14,8 +14,8 @@ caps:
   categorymappings:
     - {id: 79, cat: Audio, desc: "Music Mastermix"}
     - {id: 80, cat: Audio, desc: "Music DMC"}
-    - {id: 76, cat: Audio, desc: "Music KZN Packs Exclusive"}
     - {id: 49, cat: Audio/MP3, desc: "Music KZN MP3 Weekly Ex-Vip"}
+    - {id: 76, cat: Audio, desc: "Music KZN Packs Exclusive"}
     - {id: 77, cat: Audio, desc: "Music KZN Packs Ex-VIP"}
     - {id: 98, cat: Audio, desc: "Music Other Mp3 Weekly"}
     - {id: 74, cat: Audio, desc: "Music Discography Collection"}
@@ -25,7 +25,6 @@ caps:
     - {id: 46, cat: Audio/Video, desc: "Music Videos"}
     - {id: 24, cat: Audio, desc: "Music Karaoke"}
     - {id: 28, cat: Movies, desc: "Movies 2022"}
-    - {id: 47, cat: Movies/HD, desc: "Movies Bluray-HD"}
     - {id: 9, cat: Movies/DVD, desc: "Movies Dvdr-ISO"}
     - {id: 52, cat: Movies, desc: "Movies Classic Pre90s"}
     - {id: 48, cat: Movies/SD, desc: "Movies AVI - XVID - Dvdrip"}
@@ -56,7 +55,6 @@ caps:
     - {id: 93, cat: Other, desc: "Xmas Movies Packs"}
     - {id: 94, cat: Other, desc: "Xmas Music Packs"}
     - {id: 95, cat: Other/Misc, desc: "Unsorted To Be Edited"}
-    - {id: 96, cat: Other, desc: "VIP Don't Uploaded"}
     - {id: 97, cat: Other, desc: "VIP Exclusive"}
 
   modes:
