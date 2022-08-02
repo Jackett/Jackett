@@ -188,7 +188,6 @@ search:
       optional: true
     genre:
       selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#1c38c2;"]
-      optional: true
     description:
       text: "{{ .Result.genre }}"
     title:
