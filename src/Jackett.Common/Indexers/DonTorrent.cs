@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var downloadUrl = link.ToString();
-            if (downloadUrl.Contains("cdn.pizza") || downloadUrl.Contains("blazing.network"))
+            if (downloadUrl.Contains("cdn.pizza") || downloadUrl.Contains("blazing.network") || downloadUrl.Contains("tor.cat"))
             {
                 return await base.Download(link);
             }
@@ -243,11 +243,13 @@ namespace Jackett.Common.Indexers
                         // list results
                         if (!parsedDetailsLink.Contains(rowDetailsLink) && rowTitle != null)
                         {
-                            var cat = GetCategoryFromURL(rowDetailsLink);
+                            var cat = GetCategory(rowTitle, rowDetailsLink);
                             switch (cat)
                             {
                                 case "pelicula":
+                                case "pelicula4k":
                                 case "serie":
+                                case "seriehd":
                                 case "musica":
                                     await ParseRelease(releases, rowDetailsLink, rowTitle, cat, rowQuality, query, false);
                                     parsedDetailsLink.Add(rowDetailsLink);
