@@ -148,7 +148,6 @@ search:
       attribute: href
     genre:
       selector: span.box
-      optional: true
     description:
       text: "{{ .Result.genre }}"
     files:
