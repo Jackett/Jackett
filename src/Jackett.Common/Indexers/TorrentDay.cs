@@ -32,7 +32,11 @@ namespace Jackett.Common.Indexers
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
             "https://td.venom.global/",
-            "https://td.workisboring.net/"
+            "https://td.workisboring.net/",
+            "https://tday.findnemo.net/",
+            "https://tday.getcrazy.me/",
+            "https://tday.venom.global/",
+            "https://tday.workisboring.net/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
