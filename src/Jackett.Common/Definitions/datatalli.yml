@@ -156,7 +156,6 @@ search:
     uploadvolumefactor:
       text: 1
     genre:
-      optional: true
       selector: td:nth-child(2)
       remove: a
       filters:
