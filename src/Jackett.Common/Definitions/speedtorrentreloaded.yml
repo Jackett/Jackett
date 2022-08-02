@@ -131,7 +131,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "<img src=(.*) width="
+          args: src=([^\s]+)
     grabs:
       selector: tr > th > span:nth-child(5)
     size:

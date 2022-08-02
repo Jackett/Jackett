@@ -89,7 +89,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.*?) width"
+          args: src=([^\s]+)
     date:
       selector: td:nth-last-child(7)
       filters:
