@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
         public override async Task<byte[]> Download(Uri link)
         {
             var downloadUrl = link.ToString();
-            if (downloadUrl.Contains("cdn.pizza") || downloadUrl.Contains("blazing.network"))
+            if (downloadUrl.Contains("cdn.pizza") || downloadUrl.Contains("blazing.network") || downloadUrl.Contains("tor.cat"))
             {
                 return await base.Download(link);
             }
