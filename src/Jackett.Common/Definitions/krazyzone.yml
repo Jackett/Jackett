@@ -156,7 +156,6 @@ search:
         - name: regexp
           args: src=([^\s]+)
     genre:
-      optional: true
       selector: div.t-tags
       filters:
         - name: validate
