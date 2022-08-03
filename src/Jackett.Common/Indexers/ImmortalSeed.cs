@@ -167,7 +167,12 @@ namespace Jackett.Common.Indexers
 
                     var qDesciption = row.QuerySelectorAll(".tooltip-content > div");
                     if (qDesciption.Any())
-                        release.Description = qDesciption[1].TextContent.Trim();
+                    {
+                        release.Description = qDesciption[1].TextContent.Trim().Replace("  | ", ",");
+                        if (release.Genres == null)
+                            release.Genres = new List<string>();
+                        release.Genres = release.Genres.Union(release.Description.Split(',')).ToList();
+                    }
 
                     var qLink = row.QuerySelector("a[href*=\"download.php\"]");
                     release.Link = new Uri(qLink.GetAttribute("href"));
