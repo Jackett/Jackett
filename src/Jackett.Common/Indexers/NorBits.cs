@@ -308,7 +308,13 @@ namespace Jackett.Common.Indexers
 
                         var genres = row.QuerySelector("span.genres")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
+                        {
+                            genres = genres.Trim().Replace("\xA0", " ").Replace("(", "").Replace(")", "").Replace(" | ", ", ");
                             release.Description = genres;
+                            if (release.Genres == null)
+                                release.Genres = new List<string>();
+                            release.Genres = release.Genres.Union(genres.Split(',')).ToList();
+                        }
 
                         // IMDB
                         var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
