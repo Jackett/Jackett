@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                    {
                        MusicSearchParams = new List<MusicSearchParam>
                        {
-                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
                        }
                    },
                    configService: configService,
@@ -156,6 +156,9 @@ namespace Jackett.Common.Indexers
             if (query.Album != null)
                 queryCollection.Add("groupname", query.Album);
 
+            if (query.IsGenreQuery)
+                queryCollection.Add("taglist", query.Genre);
+
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
@@ -180,6 +183,15 @@ namespace Jackett.Common.Indexers
                     var albumYearNode = albumNameNode.NextSibling;
                     var categoryNode = row.QuerySelector(".cats_col > div");
                     var thumbnailNode = row.QuerySelector(".thumbnail");
+
+                    var releaseGenres = new List<string>();
+                    var releaseDescription = "";
+                    var genres = row.QuerySelector("div.tags")?.TextContent;
+                    if (!string.IsNullOrEmpty(genres))
+                    {
+                        releaseDescription = genres.Trim();
+                        releaseGenres = releaseGenres.Union(releaseDescription.Split(',')).ToList();
+                    }
 
                     var releaseArtist = "Various Artists";
                     if (artistsNameNodes.Count() > 0)
@@ -286,6 +298,9 @@ namespace Jackett.Common.Indexers
                             // Set title (with volume factor tags stripped)
                             var releaseTagsString = string.Join(" / ", releaseTags);
                             release.Title = String.Format("{0} - {1} [{2}] {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseTagsString);
+
+                            release.Description = releaseDescription;
+                            release.Genres = releaseGenres;
 
                             releases.Add(release);
                         }
