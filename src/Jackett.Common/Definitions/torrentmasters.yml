@@ -104,10 +104,12 @@ search:
   inputs:
     cat: 0
     search: "{{ .Keywords }}"
+    # 0 active, 1 active+idead, 2 dead, 3 free, 4 x2, 5 waiting for seed, 6 my torrents, 7 requested
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not support imdbid searches
+    # can support genre, but you need the id. &mufaj[]=14 for Horror
 
   rows:
     selector: table > tbody#linkhatter > tr:nth-child(1)
@@ -128,8 +130,11 @@ search:
     download:
       selector: a[href^="torrent_adatok.php?id="]
       attribute: href
-    description:
+    hungarian_title:
       selector: td:nth-child(3) font[color="gray"]
+      filters:
+        - name: replace
+          args: ["| ", ""]
     date:
       selector: td:nth-child(5) nobr
       remove: font
@@ -163,6 +168,11 @@ search:
       case:
         "font[color=\"#01DF01\"]": 2
         "*": 1
+    genre:
+      selector: td:nth-child(3)
+      remove: a, font
+    description:
+      text: "{{ .Result.hungarian_title }}{{ if and .Result.hungarian_title .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.genre }}"
     minimumratio:
       text: 0.5
     minimumseedtime:
