@@ -120,6 +120,13 @@ search:
           args: ["')", ""]
         - name: replace
           args: ["/images/imdb/0000000.jpg", ""]
+    genre:
+      selector: td.lista.p-2
+      filters:
+        - name: regexp
+          args: "Genre: (.+?)$"
+    description:
+      text: "{{ .Result.genre }}"
     size:
       selector: td:nth-child(5)
     date:
