@@ -130,7 +130,7 @@ search:
     download:
       selector: a[href^="torrent_adatok.php?id="]
       attribute: href
-    hungarian_title:
+    title_hungarian:
       selector: td:nth-child(3) font[color="gray"]
       filters:
         - name: replace
@@ -172,7 +172,7 @@ search:
       selector: td:nth-child(3)
       remove: a, font
     description:
-      text: "{{ .Result.hungarian_title }}{{ if and .Result.hungarian_title .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.genre }}"
+      text: "{{ .Result.title_hungarian }}{{ if and .Result.title_hungarian .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.genre }}"
     minimumratio:
       text: 0.5
     minimumseedtime:
