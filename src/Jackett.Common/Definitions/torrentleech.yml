@@ -147,6 +147,13 @@ search:
       text: "{{ .Config.sitelink }}torrent/{{ .Result._id }}"
     download:
       text: "{{ .Config.sitelink }}download/{{ .Result._id }}/{{ .Result._filename }}"
+    genre:
+      selector: tags
+      filters:
+        - name: validate
+          args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Kids, Music, Musical, Mystery, News, Reality-TV, Romance, Sci-Fi, Sport, Soap, Talk-Show, Thriller, War, Western"
+    description:
+      text: "{{ .Result.genre }}"
     imdbid:
       selector: imdbID
     seeders:
