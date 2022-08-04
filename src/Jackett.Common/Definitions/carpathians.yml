@@ -99,11 +99,6 @@ search:
     title:
       selector: a[id][href^="details.php?"]
       attribute: title
-    description:
-      selector: font.line
-      filters:
-        - name: regexp
-          args: .*?\|\s*(.*)
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
