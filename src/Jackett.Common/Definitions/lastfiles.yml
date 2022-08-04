@@ -62,10 +62,10 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
-    music-search: [q]
-    book-search: [q]
+    tv-search: [q, season, ep, genre]
+    movie-search: [q, genre]
+    music-search: [q, genre]
+    book-search: [q, genre]
 
 settings:
   - name: username
@@ -124,18 +124,14 @@ search:
 
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.Genre }}{{ .Query.Genre }} {{ else }}{{ end }}{{ .Keywords }}"
     # title, descr, genre, all
-    searchin: title
+    searchin: "{{ if .Query.Genre }}all{{ else }}title{{ end }}"
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-
-  keywordsfilters:
-    - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
     selector: tbody > tr:has(a[href^="download.php"])
