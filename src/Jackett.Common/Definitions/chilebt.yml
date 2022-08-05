@@ -95,6 +95,7 @@ search:
     page: 0
     view: list
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # can search by genre but need range support. &genres[]=Action&genres[]=Comedy for Action and Comedy
 
   rows:
     selector: table > tbody > tr
@@ -124,6 +125,13 @@ search:
           args: "&w=180&h=270" # for display on dashboard
         - name: replace
           args: ["https://images.weserv.nl/?url=https://via.placeholder.com/600x900&w=180&h=270", ""]
+    genre:
+      selector: td:nth-last-child(6)
+      filters:
+        - name: validate
+          args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Music, Musical, Mystery, News, Reality-TV, Romance, Science Fiction, Sitcom, Sport, Talk-Show, Thriller, War, Western"
+    description:
+      text: "{{ .Result.genre }}"
     size:
       selector: td:nth-last-child(4)
     seeders:
