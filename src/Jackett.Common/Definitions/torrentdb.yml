@@ -76,12 +76,13 @@ search:
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}"
     # note: dashboard only supports imdbid (tt12345678). Since tvdbid and tmdbid are just numbers the dashboard sends them as keywords
-    # which will fail title matching because we need the andmatch to filter the web sites title missmatches (it searches in descriptions too)
+    # which will fail title matching because we need the andmatch to filter the web sites title mismatches (it searches in descriptions too)
     search: "{{ if or .Query.IMDBID .Query.TVDBID .Query.TMDBID }}{{ or .Query.IMDBIDShort .Query.TVDBID .Query.TMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     tags: ""
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
+    # the tags search in combo with search keywords does not yield expected results.
 
   keywordsfilters:
     - name: re_replace
@@ -107,6 +108,13 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
+    genre:
+      selector: td:nth-child(2)
+      filters:
+        - name: validate
+          args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Music, Musical, Mystery, News, Reality-TV, Romance, Science Fiction, Sitcom, Sport, Talk-Show, Thriller, War, Western"
+    description:
+      text: "{{ .Result.genre }}"
     date:
       selector: td:nth-child(2) small
       filters:
