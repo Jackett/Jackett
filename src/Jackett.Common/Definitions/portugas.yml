@@ -94,6 +94,7 @@ search:
     page: 0
     view: list
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # genre has been disabled by admin
 
   rows:
     selector: table > tbody > tr
