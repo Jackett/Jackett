@@ -17,6 +17,7 @@ caps:
     - {id: 4, cat: Console, desc: "Game"}
     - {id: 5, cat: PC, desc: "Application"}
     - {id: 7, cat: Other, desc: "Packs"}
+    - {id: 8, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
