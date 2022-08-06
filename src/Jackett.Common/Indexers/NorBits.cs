@@ -309,7 +309,7 @@ namespace Jackett.Common.Indexers
                         var genres = row.QuerySelector("span.genres")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
                         {
-                            genres = genres.Trim().Replace("\xA0", " ").Replace("(", "").Replace(")", "").Replace(" | ", ", ");
+                            genres = genres.Trim().Replace("\xA0", " ").Replace("(", "").Replace(")", "").Replace(" | ", ",");
                             release.Description = genres;
                             if (release.Genres == null)
                                 release.Genres = new List<string>();
