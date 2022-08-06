@@ -92,6 +92,7 @@ search:
     page: 0
     view: list
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # can search for genre but you need to know the id. &genres[]=10765 for Sci-Fi & Fantasy
 
   rows:
     selector: table > tbody > tr
@@ -119,6 +120,21 @@ search:
           args: ["https://via.placeholder.com/90x135", ""]
         - name: replace
           args: ["https://via.placeholder.com/400x600", ""]
+    genre:
+      selector: td:nth-last-child(8)
+      filters:
+        - name: replace
+          args: ["\n", ""]
+        - name: replace
+          args: [" & ", "_&_"]
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
+        - name: validate
+          args: "Action, Action_&_Adventure, Adventure, Animation, Comedy, Crime, Documentary, Drama, Family, Fantasy, History, Horror, Kids, Music, Mystery, News, Reality, Romance, Sci-Fi_&_Fantasy, Science_Fiction, Soap, TV_Movie, Talk, Thriller, War, War_&_Politics, Western"
+    description:
+      text: "{{ .Result.genre }}"
     size:
       selector: td:nth-last-child(4)
     seeders:
