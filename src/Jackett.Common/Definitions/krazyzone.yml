@@ -159,7 +159,7 @@ search:
       selector: div.t-tags
       filters:
         - name: validate
-          args: "Action, Adventure, Animation, Comedy, Crime, Documentary, Drama, Family, Fantasy, History, Horror, Kids, Music, Mystery, News, Reality, Romance, SciFi, Soap, Talk, Thriller, War, Western"
+          args: "Action, Adventure, Animation, Biography, Chat_Show, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game_Show, History, Horror, Kids, Medical, Music, Mystery, Nature, News, Panel_Show, Reality, Romance, Science_Fiction, Science-Fiction, SciFi, Soap, Supernatural, Talk_Show, Thriller, War, Western"
     description:
       text: "{{ .Result.genre }}"
     imdbid:
