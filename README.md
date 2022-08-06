@@ -389,6 +389,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDCenter [![(invite needed)][inviteneeded]](#)
  * HDChina (HDWing) [![(invite needed)][inviteneeded]](#)
  * HDCity [![(invite needed)][inviteneeded]](#)
+ * HDFans
  * HDHome (HDBigger) [![(invite needed)][inviteneeded]](#)
  * HDMonkey
  * HDRoute [![(invite needed)][inviteneeded]](#)
@@ -603,7 +604,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Zamunda.net
  * Zelka.org
  * ZonaQ
-</details>
+  </details>
 
 Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be missing features or be broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
 
