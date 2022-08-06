@@ -125,6 +125,8 @@ search:
       filters:
         - name: regexp
           args: "Genre: (.+?)$"
+        - name: replace
+          args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
     size:
