@@ -171,6 +171,9 @@ search:
     genre:
       selector: td:nth-child(3)
       remove: a, font
+      filters:
+        - name: replace
+          args: ["/xA", ""]
     description:
       text: "{{ .Result.title_hungarian }}{{ if and .Result.title_hungarian .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.genre }}"
     minimumratio:

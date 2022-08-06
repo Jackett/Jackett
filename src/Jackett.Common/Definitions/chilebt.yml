@@ -128,8 +128,10 @@ search:
     genre:
       selector: td:nth-last-child(6)
       filters:
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: validate
-          args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Music, Musical, Mystery, News, Reality-TV, Romance, Science Fiction, Sitcom, Sport, Talk-Show, Thriller, War, Western"
+          args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Music, Musical, Mystery, News, Reality-TV, Romance, Science_Fiction, Sitcom, Sport, Talk-Show, Thriller, War, Western"
     description:
       text: "{{ .Result.genre }}"
     size:
