@@ -5,6 +5,8 @@ description: "MegamixTracker is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
 encoding: ISO-8859-2
+certificates:
+  - e0e43a41b21c67c55176f434f632f40d5d9439cc # using Plesk CA
 links:
   - https://megamixtracker.hu/
 
