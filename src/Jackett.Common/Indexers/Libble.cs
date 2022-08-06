@@ -189,7 +189,7 @@ namespace Jackett.Common.Indexers
                     var genres = row.QuerySelector("div.tags")?.TextContent;
                     if (!string.IsNullOrEmpty(genres))
                     {
-                        releaseDescription = genres.Trim();
+                        releaseDescription = genres.Trim().Replace(", ", ",");
                         releaseGenres = releaseGenres.Union(releaseDescription.Split(',')).ToList();
                     }
 
