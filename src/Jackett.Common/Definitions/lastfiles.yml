@@ -158,6 +158,11 @@ search:
           args: ["./pic/noposter.png", ""]
     genre:
       selector: font[size]
+      filters:
+        - name: replace
+          args: ["Hip Hop", "Hip_Hop"]
+        - name: replace
+          args: ["Science Fiction", "Science_Fiction"]
     description:
       text: "{{ .Result.genre }}"
     download:
