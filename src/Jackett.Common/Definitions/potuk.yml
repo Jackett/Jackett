@@ -146,6 +146,8 @@ search:
     magnet:
       selector: a[href^="magnet:?x"]
       attribute: href
+    description:
+      selector: a[href^="/index.php?forums/"]
     date:
       selector: time
       attribute: datetime
