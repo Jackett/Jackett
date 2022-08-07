@@ -128,6 +128,8 @@ search:
     genre:
       selector: td:nth-last-child(6)
       filters:
+        - name: replace
+          args: ["\n", ""]
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: validate
