@@ -20,8 +20,8 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "Sports/运体"}
     - {id: 409, cat: Other, desc: "Misc/其他"}
     - {id: 408, cat: Audio, desc: "HQ Audio/无损音乐"}
-    - {id: 419, cat: Other, desc: "Software/软件"}
-    - {id: 421, cat: Other, desc: "Games/游戏"}
+    - {id: 419, cat: PC/0day, desc: "Software/软件"}
+    - {id: 421, cat: PC/Games, desc: "Games/游戏"}
 
   modes:
     search: [q]
