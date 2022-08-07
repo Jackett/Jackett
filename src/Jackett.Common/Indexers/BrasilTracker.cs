@@ -245,7 +245,7 @@ namespace Jackett.Common.Indexers
                         {
                             if (release.Genres == null)
                                 release.Genres = new List<string>();
-                            release.Genres = release.Genres.Union(genres.Split(',')).ToList();
+                            release.Genres = release.Genres.Union(genres.Replace(", ", ",").Split(',')).ToList();
                         }
                         release.Category = category;
                         release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
