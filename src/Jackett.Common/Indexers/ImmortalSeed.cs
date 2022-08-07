@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers
                     var qDesciption = row.QuerySelectorAll(".tooltip-content > div");
                     if (qDesciption.Any())
                     {
-                        release.Description = qDesciption[1].TextContent.Trim().Replace("  | ", ",");
+                        release.Description = qDesciption[1].TextContent.Replace("|", ",").Replace(" ", "").Trim();
                         if (release.Genres == null)
                             release.Genres = new List<string>();
                         release.Genres = release.Genres.Union(release.Description.Split(',')).ToList();
@@ -205,7 +205,6 @@ namespace Jackett.Common.Indexers
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
-
 
                     if (row.QuerySelector("img[title^=\"x2 Torrent\"]") != null)
                         release.UploadVolumeFactor = 2;
