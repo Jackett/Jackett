@@ -23,9 +23,9 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
-    music-search: [q, album, artist]
+    tv-search: [q, season, ep, genre]
+    movie-search: [q, genre]
+    music-search: [q, album, artist, genre]
 
 settings:
   - name: username
@@ -81,6 +81,9 @@ search:
     order_way: "{{ .Config.type }}"
     disablegrouping: 1
     section: torrents
+    searchtags: "{{ .Query.Genre }}"
+    # 0 Any, 1 All
+    tags_type: 1
 
   rows:
     selector: table#torrent_table > tbody > tr[class^="torrent"]
@@ -95,8 +98,13 @@ search:
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
-    description:
+    genre:
       selector: div.tags
+      filters:
+        - name: replace
+          args: [".", "_"]
+    description:
+      text: "{{ .Result.genre }}"
     title:
       selector: td:nth-last-child(7)
       remove: span, div.tags, a[title="View Comments"]
