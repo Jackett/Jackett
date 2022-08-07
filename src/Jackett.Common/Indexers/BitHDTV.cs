@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
                         var genres = row.QuerySelector("font.small")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
                         {
-                            genres = genres.Replace("[ ", "").Replace(" ]", "").Replace(" / ", ", ");
+                            genres = genres.Replace("[ ", "").Replace(" ]", "").Replace(" / ", ",").Replace(" | ", ",");
                             release.Description = genres;
                             if (release.Genres == null)
                                 release.Genres = new List<string>();
