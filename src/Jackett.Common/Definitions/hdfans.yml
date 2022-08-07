@@ -21,7 +21,7 @@ caps:
     - {id: 408, cat: Audio, desc: "HQ Audio/无损音乐"}
     - {id: 419, cat: PC/0day, desc: "Software/软件"}
     - {id: 421, cat: PC/Games, desc: "Games/游戏"}
-    - {id: 423, cat: E-books, desc: "E-books/电子书"}
+    - {id: 423, cat: Books/EBook, desc: "E-Books/电子书"}
 
   modes:
     search: [q]
