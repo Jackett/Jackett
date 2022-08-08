@@ -301,6 +301,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BTNext (BTNT) [![(invite needed)][inviteneeded]](#)
  * BTSCHOOL
  * BWTorrents
+ * BYRBT
  * Carp-Hunter
  * Carpathians
  * CarPT
