@@ -7,9 +7,10 @@ type: semi-private
 encoding: windows-1251
 links:
   - http://kinozal.tv/ # site forces http, https is not supported
-  - https://kinozal-tv.appspot.com/
   - https://kinozal.guru/
   - https://kinozal-guru.appspot.com/
+legacylinks:
+  - https://kinozal-tv.appspot.com/
 
 caps:
   categorymappings:
