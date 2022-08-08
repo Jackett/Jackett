@@ -1,0 +1,139 @@
+---
+id: anthelion-api
+name: Anthelion (API)
+description: "Anthelion is a Private MOVIES tracker"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://anthelion.me/
+
+caps:
+  categorymappings:
+    - {id: 2000, cat: Movies}
+    - {id: 2030, cat: Movies/SD}
+    - {id: 2040, cat: Movies/HD}
+    - {id: 2045, cat: Movies/UHD}
+    - {id: 2050, cat: Movies/BluRay}
+    - {id: 2080, cat: Movies/WEB-DL}
+    - {id: 8000, cat: Other}
+
+  modes:
+    search: [q]
+    movie-search: [q, imdbid, tmdbid]
+    # note: the api any supports movie search so there is no tv season/episode support.
+    # not using year search because torznab adds it to the q= which results in &q=keyword+2022&year=2022 sent to api !?!
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Key by accessing your <a href=\"https://anthelion.me/\" target =_blank>Anthelion</a> account <i>Settings</i> page and scrolling down to the <b>API Key</b> section.<br>Tick the <b>Search</b> and <b>Download</b> checkboxes and click the <b>save profile</b> button to generate the key."
+
+login:
+  path: api.php
+  method: get
+  inputs:
+    api_key: "{{ .Config.apikey }}"
+  error:
+    - selector: ":root:contains(\"Unrecognized key\")"
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    # docs: https://anthelion.me/forums.php?action=viewthread&threadid=1026
+    - path: api.php
+      response:
+        type: json
+
+  inputs:
+    api_key: "{{ .Config.apikey }}"
+    o: json
+    t: movie
+    q: "{{ .Keywords }}"
+    tmdb: "{{ .Query.TMDBID }}"
+    imdb: "{{ .Query.IMDBIDShort }}"
+    cat: "{{ join .Categories \",\" }}"
+    limit: 100
+    offset: 0
+
+  rows:
+    selector: item
+    count:
+      selector: response.total
+
+  fields:
+    category:
+      selector: category
+      filters:
+        - name: split
+          args: [",", -1]
+    year:
+      selector: year
+    _codec:
+      selector: codec
+    _container:
+      selector: container
+    _media:
+      selector: media
+    _resolution:
+      selector: resolution
+    _audioFormat:
+      selector: audioFormat
+    _subbing:
+      selector: subbing
+      optional: true
+    _flags:
+      selector: flags
+      optional: true
+      filters:
+        - name: replace
+          args: [",", " "]
+    _language:
+      selector: language
+      optional: true
+    title:
+      selector: title
+      filters:
+        - name: replace
+          args: ["&#39;", "'"]
+        - name: append
+          args: " {{ .Result.year }} {{ .Result._codec }} {{ .Result._container }} {{ .Result._media }} {{ .Result._resolution }} {{ .Result._audioFormat }}{{ if .Result._subbing }} Subs{{ else }}{{ end }}{{ if .Result._flags }} {{ .Result._flags }}{{ else }}{{ end }}{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
+    details:
+      selector: guid
+    download:
+      selector: link
+      filters:
+        - name: replace
+          args: ["&amp;", "&"]
+    infohash:
+      selector: infohash
+    imdbid:
+      selector: imdb
+    tmdbid:
+      selector: tmdb
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: grabs
+    date:
+      # 2022-08-07T20:56:06+0200
+      selector: pubDate
+    size:
+      selector: size
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 day (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json api
