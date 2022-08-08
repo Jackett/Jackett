@@ -177,10 +177,11 @@ namespace Jackett.Common.Indexers
                 foreach (var row in albumRows)
                 {
                     var releaseGroupRegex = new Regex(@"torrents\.php\?id=([0-9]+)");
+                    var releaseYearRegex = new Regex(@"\[(\d{4})\]$");
 
                     var albumNameNode = row.QuerySelector("strong > a[href*=\"torrents.php?id=\"]");
                     var artistsNameNodes = row.QuerySelectorAll("strong > a[href*=\"artist.php?id=\"]");
-                    var albumYearNode = albumNameNode.NextSibling;
+                    var albumYearNode = row.QuerySelector("strong:has(a[href*=\"torrents.php?id=\"])");
                     var categoryNode = row.QuerySelector(".cats_col > div");
                     var thumbnailNode = row.QuerySelector(".thumbnail");
 
@@ -206,7 +207,7 @@ namespace Jackett.Common.Indexers
 
                     var releaseAlbumName = albumNameNode.TextContent.Trim();
                     var releaseGroupId = ParseUtil.CoerceInt(releaseGroupRegex.Match(albumNameNode.GetAttribute("href")).Groups[1].ToString());
-                    var releaseAlbumYear = ParseUtil.CoerceInt(albumYearNode.TextContent.Replace("[", "").Replace("]", "").Trim());
+                    var releaseAlbumYear = releaseYearRegex.Match(albumYearNode.TextContent);
 
                     Uri releaseThumbnailUri = null;
                     if (thumbnailNode != null)
@@ -297,7 +298,7 @@ namespace Jackett.Common.Indexers
 
                             // Set title (with volume factor tags stripped)
                             var releaseTagsString = string.Join(" / ", releaseTags);
-                            release.Title = String.Format("{0} - {1} [{2}] {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseTagsString);
+                            release.Title = String.Format("{0} - {1} {2} {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseTagsString);
 
                             release.Description = releaseDescription;
                             release.Genres = releaseGenres;
