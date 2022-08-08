@@ -61,11 +61,11 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
                        },
                        MusicSearchParams = new List<MusicSearchParam>
                        {
@@ -171,6 +171,17 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
+            /* notes: 
+             * TorrentDay can search for genre (tags) using the default title&tags search
+             * qf= 
+             * "" = Title and Tags
+             * ta = Tags
+             * all = Title, Tags & Description
+             * adv = Advanced
+             * 
+             * But only movies and tv have tags and the t.json does not return tags in results.
+             */
+
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count == 0)
                 cats = GetAllTrackerCategories();
@@ -179,6 +190,9 @@ namespace Jackett.Common.Indexers
 
             if (query.IsImdbQuery)
                 searchUrl += ";q=" + query.ImdbID;
+            else
+            if (query.IsGenreQuery)
+                searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString() + " " + query.Genre, Encoding);
             else
                 searchUrl += ";q=" + WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding);
 
