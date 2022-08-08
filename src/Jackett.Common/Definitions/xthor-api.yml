@@ -110,6 +110,16 @@ settings:
     label: Replace "VOSTFR/SUBFRENCH" by
     default: ""
 
+login:
+  path: "https://api.xthor.tk/"
+  method: get
+  inputs:
+    passkey: "{{ .Config.passkey }}"
+  error:
+    - selector: ":root:contains(\"Passkey not found\")"
+      message:
+        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+
 search:
   paths:
     # https://api.xthor.tk/?passkey=<redacted>&search=&category=&freeleech=&tmdbid=&size=&accent=&price=&page=
