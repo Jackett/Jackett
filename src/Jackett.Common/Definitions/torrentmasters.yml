@@ -7,8 +7,6 @@ type: private
 encoding: UTF-8
 links:
   - https://torrentmasters.info/
-certificates:
-  - 18a3b32827655ecde9c78839fb186fafd6c7c28e # Expired 6th July 2022
 
 caps:
   categorymappings:

@@ -5,8 +5,6 @@ description: "Boxing Torrents is a Private Torrent Tracker for BOXING"
 language: en-US
 type: private
 encoding: UTF-8
-certificates:
-  - dda4bd19660006cba06561d2b8f61b5e64995679 # expired ‎9 ‎June ‎2022
 links:
   - https://tc-boxing.com/
 
