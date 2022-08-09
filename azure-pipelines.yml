@@ -29,20 +29,14 @@ stages:
           clean: all
         strategy:
           matrix:
-            Mono:
-              buildDescription: Mono
-              imageName: ubuntu-20.04
-              framework: net461
-              runtime: linux-x64
-              archiveType: tar
-              artifactName: Jackett.Binaries.Mono.tar.gz
             Windows:
               buildDescription: Windows
-              imageName: windows-2019
+              imageName: windows-2022
               framework: $(netCoreFramework)
               runtime: win-x86
               archiveType: zip
               artifactName: Jackett.Binaries.Windows.zip
+              buildDelay: 0
             macOS:
               buildDescription: macOS
               imageName: macOS-12
@@ -50,6 +44,7 @@ stages:
               runtime: osx-x64
               archiveType: tar
               artifactName: Jackett.Binaries.macOS.tar.gz
+              buildDelay: 10
             macOSARM64:
               buildDescription: macOS ARM64
               imageName: macOS-12
@@ -57,6 +52,7 @@ stages:
               runtime: osx-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.macOSARM64.tar.gz
+              buildDelay: 20
             LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-20.04
@@ -64,6 +60,7 @@ stages:
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
+              buildDelay: 30
             LinuxARM32:
               buildDescription: Linux ARM32
               imageName: ubuntu-20.04
@@ -71,6 +68,7 @@ stages:
               runtime: linux-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM32.tar.gz
+              buildDelay: 40
             LinuxARM64:
               buildDescription: Linux ARM64
               imageName: ubuntu-20.04
@@ -78,6 +76,7 @@ stages:
               runtime: linux-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
+              buildDelay: 50
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
               imageName: ubuntu-20.04
@@ -85,6 +84,7 @@ stages:
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
+              buildDelay: 60
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
               imageName: ubuntu-20.04
@@ -92,6 +92,7 @@ stages:
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
+              buildDelay: 70
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
               imageName: ubuntu-20.04
@@ -99,6 +100,15 @@ stages:
               runtime: linux-musl-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM64.tar.gz
+              buildDelay: 80
+            Mono:
+              buildDescription: Mono
+              imageName: ubuntu-20.04
+              framework: net461
+              runtime: linux-x64
+              archiveType: tar
+              artifactName: Jackett.Binaries.Mono.tar.gz
+              buildDelay: 90
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
@@ -111,6 +121,16 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          - task: PowerShell@2
+            # Because we have many parallel builds this error occurs:
+            # error MSB4018: System.IO.IOException: The process cannot access the file
+            # '/home/vsts/work/1/s/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
+            # because it is being used by another process. [/home/vsts/work/1/s/src/DateTimeRoutines/DateTimeRoutines.csproj]
+            displayName: Wait before build
+            inputs:
+              targetType: inline
+              script: Start-Sleep -Seconds $(buildDelay)
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
@@ -391,14 +411,9 @@ stages:
           clean: all
         strategy:
           matrix:
-            Mono:
-              buildDescription: Mono
-              imageName: ubuntu-20.04
-              framework: net461
-              runtime: linux-x64
             Windows:
               buildDescription: Windows
-              imageName: windows-2019
+              imageName: windows-2022
               framework: $(netCoreFramework)
               runtime: win-x86
             macOS:
@@ -410,6 +425,11 @@ stages:
               buildDescription: Linux AMD x64
               imageName: ubuntu-20.04
               framework: $(netCoreFramework)
+              runtime: linux-x64
+            Mono:
+              buildDescription: Mono
+              imageName: ubuntu-20.04
+              framework: net461
               runtime: linux-x64
         pool:
           vmImage: $(imageName)
@@ -484,15 +504,9 @@ stages:
           clean: all
         strategy:
           matrix:
-            Mono:
-              buildDescription: Mono
-              imageName: ubuntu-20.04
-              artifactName: Jackett.Binaries.Mono.tar.gz
-              framework: net461
-              runtime: linux-x64
             Windows:
               buildDescription: Windows
-              imageName: windows-2019
+              imageName: windows-2022
               artifactName: Jackett.Binaries.Windows.zip
               framework: $(netCoreFramework)
               runtime: win-x86
@@ -507,6 +521,12 @@ stages:
               imageName: ubuntu-20.04
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
               framework: $(netCoreFramework)
+              runtime: linux-x64
+            Mono:
+              buildDescription: Mono
+              imageName: ubuntu-20.04
+              artifactName: Jackett.Binaries.Mono.tar.gz
+              framework: net461
               runtime: linux-x64
         pool:
           vmImage: $(imageName)
