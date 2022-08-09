@@ -121,6 +121,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              performMultiLevelLookup: true
 
           - task: PowerShell@2
             # Because we have many parallel builds this error occurs:
@@ -334,6 +335,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              performMultiLevelLookup: true
 
           - task: DotNetCoreCLI@2
             displayName: Install Dotnet Format
@@ -443,6 +445,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              performMultiLevelLookup: true
 
           # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
           # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
@@ -568,6 +571,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              performMultiLevelLookup: true
 
           # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
           # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
