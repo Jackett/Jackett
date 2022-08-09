@@ -42,6 +42,9 @@ login:
     - selector: ":root:contains(\"Unrecognized key\")"
       message:
         text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: ":root:contains(\"No API_KEY provided\")"
+      message:
+        text: "You did not enter an API key."
 
 search:
   paths:
