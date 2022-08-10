@@ -128,7 +128,8 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     genre:
-      selector: i
+      selector: small[title]
+      attribute: title
     description:
       text: "{{ .Result.genre }}"
     poster:
@@ -138,8 +139,7 @@ search:
         - name: regexp
           args: "src=(.*?) width"
     date:
-      selector: small
-      remove: font
+      selector: td:nth-last-child(8)
       filters:
         - name: replace
           args: ["\u00a0", " "]
