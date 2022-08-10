@@ -108,6 +108,134 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
+            var ValidList = new List<string>() {
+                "animation",
+                "comedy",
+                "family",
+                "strategy",
+                "action",
+                "adventure",
+                "indie",
+                "rpg",
+                "simulation",
+                "early",
+                "crime",
+                "thriller",
+                "drama",
+                "rock",
+                "fantasy",
+                "sci-fi",
+                "horror",
+                "pop",
+                "war",
+                "mystery",
+                "oldies",
+                "hardcore",
+                "sport",
+                "biography",
+                "music",
+                "rap",
+                "romance",
+                "dance",
+                "hip-hop",
+                "house",
+                "punk_rock",
+                "disco",
+                "casual",
+                "bass",
+                "history",
+                "racing",
+                "metal",
+                "electronic",
+                "alternative",
+                "funk",
+                "short",
+                "classical",
+                "acoustic",
+                "soundtrack",
+                "punk",
+                "ambient",
+                "talk-show",
+                "sports",
+                "reggae",
+                "documentary",
+                "progressive_rock",
+                "other",
+                "western",
+                "dance_hall",
+                "trance",
+                "folk",
+                "classic_rock",
+                "jazz",
+                "hard rock",
+                "trip-hop",
+                "r&b",
+                "blues",
+                "musical",
+                "club",
+                "techno",
+                "cabaret",
+                "black_metal",
+                "easy_listening",
+                "goa",
+                "free",
+                "massively",
+                "reality-tv",
+                "grunge",
+                "synthpop",
+                "ballad",
+                "top_40",
+                "news",
+                "industrial",
+                "psychedelic_rock",
+                "heavy_metal",
+                "beat",
+                "alternative rock",
+                "drum_&_bass",
+                "film-noir",
+                "rock_&_roll",
+                "death_metal",
+                "lo-fi",
+                "country",
+                "instrumental_pop",
+                "game-show",
+                "soul",
+                "retro",
+                "noise",
+                "latin",
+                "design",
+                "education",
+                "software",
+                "utilities",
+                "pop-folk",
+                "instrumental",
+                "game",
+                "acid_jazz",
+                "acid",
+                "gothic_rock",
+                "fusion",
+                "darkwave",
+                "meditative",
+                "crossover",
+                "thrash_metal",
+                "new_wave",
+                "opera",
+                "ethnic",
+                "instrumental_rock",
+                "new_age",
+                "gangsta",
+                "speech",
+                "gothic",
+                "gospel",
+                "symphonic_rock",
+                "ska",
+                "jpop",
+                "avantgarde",
+                "tango",
+                "vocal",
+                "folk-rock",
+                "celtic"
+            };
 
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
@@ -171,7 +299,14 @@ namespace Jackett.Common.Indexers
                         title += " POLISH";
 
                     var description = descriptions.Any() ? string.Join("<br />\n", descriptions) : null;
-
+                    var genre = "";
+                    if (torrent["tags"] != null)
+                        genre = string.Join(",", torrent["tags"]).ToLower();
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseGenres = ValidList.Intersect(genre.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries));
+                    releaseGenres = releaseGenres.Select(x => x.Replace("_", " "));
+                    if (releaseGenres.ToList().Any())
+                        description += "<br />\n" + string.Join(",", releaseGenres.ToList());
                     var release = new ReleaseInfo
                     {
                         Title = title,
@@ -192,6 +327,9 @@ namespace Jackett.Common.Indexers
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = 1
                     };
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    release.Genres = releaseGenres.ToList();
 
                     releases.Add(release);
                 }
