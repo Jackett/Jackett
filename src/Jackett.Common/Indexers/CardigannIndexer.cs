@@ -1493,12 +1493,12 @@ namespace Jackett.Common.Indexers
                                     throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                                 }
 
-                                var Filters = Definition.Search.Rows.Filters;
-                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
-
-                                if (SkipRelease)
-                                    continue;
                             }
+                            var Filters = Definition.Search.Rows.Filters;
+                            var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
+
+                            if (SkipRelease)
+                                continue;
 
                             releases.Add(release);
                         }
