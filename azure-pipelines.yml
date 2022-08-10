@@ -44,7 +44,7 @@ stages:
               runtime: osx-x64
               archiveType: tar
               artifactName: Jackett.Binaries.macOS.tar.gz
-              buildDelay: 10
+              buildDelay: 20
             macOSARM64:
               buildDescription: macOS ARM64
               imageName: macOS-12
@@ -52,7 +52,7 @@ stages:
               runtime: osx-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.macOSARM64.tar.gz
-              buildDelay: 20
+              buildDelay: 40
             LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-20.04
@@ -60,7 +60,7 @@ stages:
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
-              buildDelay: 30
+              buildDelay: 60
             LinuxARM32:
               buildDescription: Linux ARM32
               imageName: ubuntu-20.04
@@ -68,7 +68,7 @@ stages:
               runtime: linux-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM32.tar.gz
-              buildDelay: 40
+              buildDelay: 80
             LinuxARM64:
               buildDescription: Linux ARM64
               imageName: ubuntu-20.04
@@ -76,7 +76,7 @@ stages:
               runtime: linux-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
-              buildDelay: 50
+              buildDelay: 100
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
               imageName: ubuntu-20.04
@@ -84,7 +84,7 @@ stages:
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
-              buildDelay: 60
+              buildDelay: 120
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
               imageName: ubuntu-20.04
@@ -92,7 +92,7 @@ stages:
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
-              buildDelay: 70
+              buildDelay: 140
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
               imageName: ubuntu-20.04
@@ -100,7 +100,7 @@ stages:
               runtime: linux-musl-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM64.tar.gz
-              buildDelay: 80
+              buildDelay: 160
             Mono:
               buildDescription: Mono
               imageName: ubuntu-20.04
@@ -108,7 +108,7 @@ stages:
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.Mono.tar.gz
-              buildDelay: 90
+              buildDelay: 180
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
