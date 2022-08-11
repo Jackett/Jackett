@@ -234,7 +234,7 @@ search:
     - name: trim
     # put each word in quotations to prevent exact phrase search
     - name: re_replace
-      args: ["(\\w+)", "\"$1\""]
+      args: ["([^\\s]+)", "\"$1\""]
   paths:
     - path: "engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
       followredirect: true
