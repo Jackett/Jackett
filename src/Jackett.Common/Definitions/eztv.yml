@@ -58,6 +58,13 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
+    # fixes for site search issues
+    - name: replace
+      args: ["-", ""]
+    - name: replace
+      args: [" ", "-"]
+    - name: replace
+      args: ["&", ""]
 
   headers:
     cookie: ["sort_no=100"] # show 100 results for keywordless search
