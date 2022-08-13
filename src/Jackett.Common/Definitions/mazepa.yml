@@ -152,7 +152,7 @@ search:
       args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
-    selector: tr[id^="tor_"]
+    selector: tr[id^="tor_"]:has(a[href^="./dl.php?id="])
 
   fields:
     category:

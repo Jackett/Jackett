@@ -140,6 +140,16 @@ search:
       filters:
         - name: regexp
           args: src=([^\s]+)
+    genre:
+      selector: td:nth-child(2) > a:nth-child(1)
+      attribute: onmouseover
+      filters:
+        - name: replace
+          args: ["</p><p class=\\'pop\\'>", " "]
+        - name: regexp
+          args: "Genre:</b>(.+?)</div"
+    description:
+      text: "{{ .Result.genre }}"
     downloadvolumefactor:
       case:
         "a[style=\"color: #b9a100;\"][href^=\"details.php?\"]": 0

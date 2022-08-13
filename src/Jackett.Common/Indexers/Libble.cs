@@ -65,7 +65,7 @@ namespace Jackett.Common.Indexers
                    {
                        MusicSearchParams = new List<MusicSearchParam>
                        {
-                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
                        }
                    },
                    configService: configService,
@@ -156,6 +156,9 @@ namespace Jackett.Common.Indexers
             if (query.Album != null)
                 queryCollection.Add("groupname", query.Album);
 
+            if (query.IsGenreQuery)
+                queryCollection.Add("taglist", query.Genre);
+
             searchUrl += "?" + queryCollection.GetQueryString();
 
             var searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
@@ -174,12 +177,22 @@ namespace Jackett.Common.Indexers
                 foreach (var row in albumRows)
                 {
                     var releaseGroupRegex = new Regex(@"torrents\.php\?id=([0-9]+)");
+                    var releaseYearRegex = new Regex(@"\[(\d{4})\]$");
 
                     var albumNameNode = row.QuerySelector("strong > a[href*=\"torrents.php?id=\"]");
                     var artistsNameNodes = row.QuerySelectorAll("strong > a[href*=\"artist.php?id=\"]");
-                    var albumYearNode = albumNameNode.NextSibling;
+                    var albumYearNode = row.QuerySelector("strong:has(a[href*=\"torrents.php?id=\"])");
                     var categoryNode = row.QuerySelector(".cats_col > div");
                     var thumbnailNode = row.QuerySelector(".thumbnail");
+
+                    var releaseGenres = new List<string>();
+                    var releaseDescription = "";
+                    var genres = row.QuerySelector("div.tags")?.TextContent;
+                    if (!string.IsNullOrEmpty(genres))
+                    {
+                        releaseDescription = genres.Trim().Replace(", ", ",");
+                        releaseGenres = releaseGenres.Union(releaseDescription.Split(',')).ToList();
+                    }
 
                     var releaseArtist = "Various Artists";
                     if (artistsNameNodes.Count() > 0)
@@ -194,7 +207,7 @@ namespace Jackett.Common.Indexers
 
                     var releaseAlbumName = albumNameNode.TextContent.Trim();
                     var releaseGroupId = ParseUtil.CoerceInt(releaseGroupRegex.Match(albumNameNode.GetAttribute("href")).Groups[1].ToString());
-                    var releaseAlbumYear = ParseUtil.CoerceInt(albumYearNode.TextContent.Replace("[", "").Replace("]", "").Trim());
+                    var releaseAlbumYear = releaseYearRegex.Match(albumYearNode.TextContent);
 
                     Uri releaseThumbnailUri = null;
                     if (thumbnailNode != null)
@@ -285,7 +298,10 @@ namespace Jackett.Common.Indexers
 
                             // Set title (with volume factor tags stripped)
                             var releaseTagsString = string.Join(" / ", releaseTags);
-                            release.Title = String.Format("{0} - {1} [{2}] {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseTagsString);
+                            release.Title = String.Format("{0} - {1} {2} {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseTagsString);
+
+                            release.Description = releaseDescription;
+                            release.Genres = releaseGenres;
 
                             releases.Add(release);
                         }

@@ -122,20 +122,25 @@ search:
     selector: table[cellpadding='5'][width='96%'] > tbody > tr:has(a[href*="details.php?id="])
 
   fields:
-    title:
-      selector: td:nth-child(2) > a > b
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: script
+      filters:
+        - name: regexp
+          args: "src=\"(.+?)\""
     size:
       selector: td:nth-child(8)
     grabs:
@@ -160,7 +165,7 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 0.6
+      text: 0.5
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200

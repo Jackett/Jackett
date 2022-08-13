@@ -14,14 +14,14 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 36, cat: Movies, desc: "Film"}
-    - {id: 76, cat: Movies, desc: "Film Yabancı Dil - Altyazısız"}
     - {id: 59, cat: Movies, desc: "Film Türk Filmi"}
+    - {id: 30, cat: Movies/HD, desc: "Film X264"}
+    - {id: 28, cat: Movies/HD, desc: "Film X265"}
+    - {id: 69, cat: Movies/WEB-DL, desc: "Film H264 WEB-DL"}
     - {id: 18, cat: Movies, desc: "Anime - Çizgi"}
+    - {id: 76, cat: Movies, desc: "Film Yabancı Dil - Altyazısız"}
     - {id: 20, cat: Movies, desc: "Film Boxset"}
     - {id: 24, cat: Movies/BluRay, desc: "Film 4K/1080P Bluray Disk"}
-    - {id: 28, cat: Movies/HD, desc: "Film X265"}
-    - {id: 30, cat: Movies/HD, desc: "Film X264"}
-    - {id: 69, cat: Movies/WEB-DL, desc: "Film H264 WEB-DL"}
     - {id: 63, cat: Movies/SD, desc: "Film 3D/DVD/XviD"}
     - {id: 51, cat: Other, desc: "Diğer"}
     - {id: 62, cat: Other, desc: "Diğer Eğitim"}
@@ -30,25 +30,26 @@ caps:
     - {id: 54, cat: TV/Sport, desc: "Spor"}
     - {id: 56, cat: Other, desc: "Diğer Her Şey"}
     - {id: 65, cat: Books/EBook, desc: "E-Kitap"}
-    - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 46, cat: Console, desc: "Oyun PC"}
-    - {id: 16, cat: Console, desc: "Oyun Konsol"}
     - {id: 35, cat: TV, desc: "Netflix"}
     - {id: 41, cat: TV, desc: "Netflix Animasyon"}
     - {id: 39, cat: TV, desc: "Netflix Film"}
     - {id: 38, cat: TV, desc: "Netflix Dizi"}
     - {id: 40, cat: TV, desc: "Netflix Belgesel"}
+    - {id: 47, cat: PC, desc: "Programlar"}
+    - {id: 48, cat: PC, desc: "Programlar Windows"}
+    - {id: 96, cat: PC, desc: "Programlar Linux"}
+    - {id: 49, cat: PC, desc: "Programlar MaC"}
+    - {id: 50, cat: PC, desc: "Programlar Mobile"}
     - {id: 83, cat: TV, desc: "Dijital Platform"}
-    - {id: 84, cat: TV, desc: "Dijital Platform BluTV"}
-    - {id: 85, cat: TV, desc: "Dijital Platform BEiN"}
-    - {id: 77, cat: TV, desc: "Dijital Platform EXXEN"}
     - {id: 86, cat: TV, desc: "Dijital Platform AMAZON"}
+    - {id: 85, cat: TV, desc: "Dijital Platform BEiN"}
+    - {id: 84, cat: TV, desc: "Dijital Platform BluTV"}
+    - {id: 98, cat: TV, desc: "Dijital Platform DSNP"}
+    - {id: 77, cat: TV, desc: "Dijital Platform EXXEN"}
     - {id: 87, cat: TV, desc: "Dijital Platform GAIN"}
     - {id: 88, cat: TV, desc: "Dijital Platform TV+"}
+    - {id: 101, cat: TV, desc: "Dijital Platform MUBi"}
     - {id: 89, cat: TV, desc: "Dijital Platform Diger"}
-    - {id: 90, cat: TV, desc: "Dijital Platform MUBi"}
-    - {id: 94, cat: TV, desc: "Dijital Platform ATVP+"}
-    - {id: 98, cat: TV, desc: "Dijital Platform DSNP"}
     - {id: 31, cat: TV, desc: "Dizi"}
     - {id: 32, cat: TV, desc: "Dizi Yerli"}
     - {id: 33, cat: TV, desc: "Dizi Yabancı / TR Dublaj"}
@@ -57,11 +58,9 @@ caps:
     - {id: 43, cat: Audio, desc: "Müzik Yerli"}
     - {id: 44, cat: Audio, desc: "Müzik Yabancı"}
     - {id: 45, cat: Audio, desc: "Müzik Diskografi"}
-    - {id: 47, cat: PC, desc: "Programlar"}
-    - {id: 48, cat: PC, desc: "Programlar Windows"}
-    - {id: 49, cat: PC, desc: "Programlar MaC"}
-    - {id: 50, cat: PC, desc: "Programlar Mobile"}
-    - {id: 96, cat: PC, desc: "Programlar Linux"}
+    - {id: 2, cat: Console, desc: "Oyun"}
+    - {id: 46, cat: Console, desc: "Oyun PC"}
+    - {id: 16, cat: Console, desc: "Oyun Konsol"}
 
   modes:
     search: [q]

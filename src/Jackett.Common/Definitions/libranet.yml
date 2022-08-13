@@ -65,14 +65,14 @@ search:
       filters:
         - name: querystring
           args: cat
-    description:
+    _format:
       selector: img[width="60"]
       attribute: title
     title:
       selector: a[href^="details.php?id="]
       filters:
         - name: append
-          args: " {{ .Result.description }}"
+          args: " {{ .Result._format }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -111,4 +111,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    genre:
+      selector: td > table
+      remove: b
+    description:
+      text: "{{ .Result._format }}{{ if .Result.genre }} - {{ .Result.genre }}{{ else }}{{ end }}"
 # TBdev

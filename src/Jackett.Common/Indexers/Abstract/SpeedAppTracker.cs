@@ -126,8 +126,14 @@ namespace Jackett.Common.Indexers.Abstract
                     var publishDate = DateTime.Parse(row.Value<string>("created_at"), CultureInfo.InvariantCulture);
                     var cat = row.Value<JToken>("category").Value<string>("id");
 
-                    // "description" field in API has too much HTML code
-                    var description = row.Value<string>("short_description");
+                    var description = "";
+                    var genres = row.Value<string>("short_description");
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var genresSplit = genres.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
+                    var genresList = genresSplit.ToList();
+                    genres = string.Join(", ", genresList);
+                    if (!string.IsNullOrEmpty(genres))
+                        description = genres;
 
                     var posterStr = row.Value<string>("poster");
                     var poster = Uri.TryCreate(posterStr, UriKind.Absolute, out var posterUri) ? posterUri : null;
@@ -162,6 +168,9 @@ namespace Jackett.Common.Indexers.Abstract
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800 // 48 hours
                     };
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    release.Genres = release.Genres.Union(genres.Split(',')).ToList();
 
                     releases.Add(release);
                 }

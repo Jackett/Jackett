@@ -26,21 +26,17 @@ namespace Jackett.Common.Indexers
                    link: "https://orpheus.network/",
                    caps: new TorznabCapabilities
                    {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q
+                           MovieSearchParam.Q, MovieSearchParam.Genre
                        },
                        MusicSearchParams = new List<MusicSearchParam>
                        {
-                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
                        },
                        BookSearchParams = new List<BookSearchParam>
                        {
-                           BookSearchParam.Q
+                           BookSearchParam.Q, BookSearchParam.Genre
                        }
                    },
                    configService: configService,
@@ -62,7 +58,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(3, TorznabCatType.Books, "E-Books");
             AddCategoryMapping(4, TorznabCatType.AudioAudiobook, "Audiobooks");
             AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
-            AddCategoryMapping(6, TorznabCatType.TV, "Comedy");
+            AddCategoryMapping(6, TorznabCatType.Audio, "Comedy");
             AddCategoryMapping(7, TorznabCatType.Books, "Comics");
         }
     }

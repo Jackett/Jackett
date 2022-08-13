@@ -90,6 +90,7 @@ settings:
     options:
       desc: desc
       asc: asc
+
 login:
   path: Main/?act=Login
   method: form
@@ -141,6 +142,13 @@ search:
     description:
       optional: true
       selector: span.torrent_small_desc
+    genre:
+      selector: span.torrent_small_desc
+      filters:
+        - name: regexp
+          args: "\\[.+?\\] \\[(.+?)\\]"
+        - name: replace
+          args: [" ", "_"]
     files:
       selector: td.torrent_table_files
     date:

@@ -33,21 +33,10 @@ search:
       selector: h5 a
       attribute: href
     download:
-      selector: a.button
+      selector: a[href^="magnet:?xt="]
       attribute: href
-    poster:
-      selector: img
-      attribute: data-src
     date:
-      selector: img
-      attribute: data-src
-      filters:
-        - name: regexp
-          args: (/\d{4}/\d{2}/)
-        - name: append
-          args: " -07:00" # PDT
-        - name: dateparse
-          args: "/2006/01/ -07:00"
+      text: now
     size:
       selector: span.is-size-6
     seeders:

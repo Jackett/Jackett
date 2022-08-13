@@ -127,6 +127,10 @@ search:
       filters:
         - name: querystring
           args: cat
+    genre:
+      selector: span.tooltiptext
+    description:
+      text: "{{ .Result.genre }}"
     title:
       selector: div.tooltip
       remove: span

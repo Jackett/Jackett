@@ -7,8 +7,6 @@ type: semi-private
 encoding: UTF-8
 links:
   - https://extremlymtorrents.ws/
-certificates:
-  - 31681d3324d3fef65b04b6ab2e634445c4ff06d4 # expired 6-nov-21
 caps:
   categorymappings:
     - {id: 15, cat: Movies/HD, desc: "1080p HD"}
