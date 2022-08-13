@@ -144,7 +144,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.*?) width"
+          args: src=([^\s]+)
     size:
       selector: td:nth-child(7)
     grabs:

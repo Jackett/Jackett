@@ -143,7 +143,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?) width"
+          args: src=([^\s]+)
     date:
       selector: td:nth-child(2) i
       filters:

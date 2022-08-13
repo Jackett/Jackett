@@ -60,6 +60,8 @@ namespace Jackett.Common.Models
 
         public bool SearchAvailable { get; set; }
 
+        public bool SupportsRawSearch { get; set; }
+
         public List<TvSearchParam> TvSearchParams;
         public bool TvSearchAvailable => (TvSearchParams.Count > 0);
         public bool TvSearchSeasonAvailable => (TvSearchParams.Contains(TvSearchParam.Season));
@@ -106,6 +108,7 @@ namespace Jackett.Common.Models
 
         public TorznabCapabilities()
         {
+            SupportsRawSearch = false;
             SearchAvailable = true;
             TvSearchParams = new List<TvSearchParam>();
             MovieSearchParams = new List<MovieSearchParam>();
@@ -297,28 +300,34 @@ namespace Jackett.Common.Models
                     new XElement("searching",
                         new XElement("search",
                             new XAttribute("available", SearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", "q")
+                            new XAttribute("supportedParams", "q"),
+                            SupportsRawSearch ? new XAttribute("searchEngine", "raw") : null
                         ),
                         new XElement("tv-search",
                             new XAttribute("available", TvSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedTvSearchParams())
+                            new XAttribute("supportedParams", SupportedTvSearchParams()),
+                            SupportsRawSearch ? new XAttribute("searchEngine", "raw") : null
                         ),
                         new XElement("movie-search",
                             new XAttribute("available", MovieSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMovieSearchParams())
+                            new XAttribute("supportedParams", SupportedMovieSearchParams()),
+                            SupportsRawSearch ? new XAttribute("searchEngine", "raw") : null
                         ),
                         new XElement("music-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMusicSearchParams())
+                            new XAttribute("supportedParams", SupportedMusicSearchParams()),
+                            SupportsRawSearch ? new XAttribute("searchEngine", "raw") : null
                         ),
                         // inconsistent but apparently already used by various newznab indexers (see #1896)
                         new XElement("audio-search",
                             new XAttribute("available", MusicSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedMusicSearchParams())
+                            new XAttribute("supportedParams", SupportedMusicSearchParams()),
+                            SupportsRawSearch ? new XAttribute("searchEngine", "raw") : null
                         ),
                         new XElement("book-search",
                             new XAttribute("available", BookSearchAvailable ? "yes" : "no"),
-                            new XAttribute("supportedParams", SupportedBookSearchParams())
+                            new XAttribute("supportedParams", SupportedBookSearchParams()),
+                            SupportsRawSearch ? new XAttribute("searchEngine", "raw") : null
                         )
                     ),
                     new XElement("categories",
@@ -349,6 +358,7 @@ namespace Jackett.Common.Models
             lhs.MusicSearchParams = lhs.MusicSearchParams.Union(rhs.MusicSearchParams).ToList();
             lhs.BookSearchParams = lhs.BookSearchParams.Union(rhs.BookSearchParams).ToList();
             lhs.Categories.Concat(rhs.Categories);
+            lhs.SupportsRawSearch = lhs.SupportsRawSearch || rhs.SupportsRawSearch;
             return lhs;
         }
     }

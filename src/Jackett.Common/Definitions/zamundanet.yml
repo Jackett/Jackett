@@ -132,6 +132,12 @@ search:
     selector: ".responsetop > tbody > tr:has(a[href^=\"banan?id=\"]){{ if .Config.freeleech }}:has(a[style=\"color: #b9a100;\"]){{ else }}{{ end }}"
 
   fields:
+    category:
+      selector: a[href^="list?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
       selector: a[href^="/download.php"]
       attribute: onmouseover
@@ -143,12 +149,6 @@ search:
     details:
       selector: a[href^="banan?id="]
       attribute: href
-    category:
-      selector: a[href^="list?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     download:
       selector: a[href^="/download.php"]
       attribute: href
@@ -174,6 +174,16 @@ search:
       filters:
         - name: regexp
           args: src=\\'([^\s\\]+)
+    genre:
+      selector: td:nth-child(2) > a:nth-child(1)
+      attribute: onmouseover
+      filters:
+        - name: replace
+          args: ["<br>", " "]
+        - name: regexp
+          args: "Жанр:</b> (.+?)</td"
+    description:
+      text: "{{ .Result.genre }}"
     downloadvolumefactor:
       case:
         "a[style=\"color: #b9a100;\"][href^=\"banan?\"]": 0

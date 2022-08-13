@@ -69,6 +69,8 @@ namespace Jackett.Common.Models
 
         public bool IsDoubanQuery => DoubanID != null;
 
+        public bool IsGenreQuery => Genre != null;
+
         public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
         public string SanitizedSearchTerm

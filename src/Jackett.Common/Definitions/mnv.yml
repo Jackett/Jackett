@@ -126,7 +126,7 @@ search:
       attribute: onMouseover
       filters:
         - name: regexp
-          args: "src=(.*?) width"
+          args: src=([^\s]+)
     date:
       selector: td.tablea > table > tbody > tr:nth-child(2) > td:nth-child(2) > b
       filters:

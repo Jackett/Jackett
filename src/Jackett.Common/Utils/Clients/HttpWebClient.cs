@@ -66,7 +66,10 @@ namespace Jackett.Common.Utils.Clients
         {
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
 
-            var cookies = new CookieContainer();
+            var cookies = new CookieContainer
+            {
+                PerDomainCapacity = 100 // By default only 20 cookies are allowed per domain
+            };
             if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
             {
                 // don't include the path, Scheme is needed for mono compatibility

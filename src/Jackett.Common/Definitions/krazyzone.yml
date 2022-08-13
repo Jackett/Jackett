@@ -14,9 +14,10 @@ caps:
   categorymappings:
     - {id: 79, cat: Audio, desc: "Music Mastermix"}
     - {id: 80, cat: Audio, desc: "Music DMC"}
-    - {id: 76, cat: Audio, desc: "Music KZN Packs Exclusive"}
     - {id: 49, cat: Audio/MP3, desc: "Music KZN MP3 Weekly Ex-Vip"}
+    - {id: 76, cat: Audio, desc: "Music KZN Packs Exclusive"}
     - {id: 77, cat: Audio, desc: "Music KZN Packs Ex-VIP"}
+    - {id: 98, cat: Audio, desc: "Music Other Mp3 Weekly"}
     - {id: 74, cat: Audio, desc: "Music Discography Collection"}
     - {id: 78, cat: Audio, desc: "Music Dj-Only Dj-Music"}
     - {id: 82, cat: Audio/Lossless, desc: "Music Flac-24 Bit Hi-Res"}
@@ -24,7 +25,6 @@ caps:
     - {id: 46, cat: Audio/Video, desc: "Music Videos"}
     - {id: 24, cat: Audio, desc: "Music Karaoke"}
     - {id: 28, cat: Movies, desc: "Movies 2022"}
-    - {id: 47, cat: Movies/HD, desc: "Movies Bluray-HD"}
     - {id: 9, cat: Movies/DVD, desc: "Movies Dvdr-ISO"}
     - {id: 52, cat: Movies, desc: "Movies Classic Pre90s"}
     - {id: 48, cat: Movies/SD, desc: "Movies AVI - XVID - Dvdrip"}
@@ -55,7 +55,6 @@ caps:
     - {id: 93, cat: Other, desc: "Xmas Movies Packs"}
     - {id: 94, cat: Other, desc: "Xmas Music Packs"}
     - {id: 95, cat: Other/Misc, desc: "Unsorted To Be Edited"}
-    - {id: 96, cat: Other, desc: "VIP Don't Uploaded"}
     - {id: 97, cat: Other, desc: "VIP Exclusive"}
 
   modes:
@@ -156,6 +155,23 @@ search:
       filters:
         - name: regexp
           args: src=([^\s]+)
+    genre:
+      selector: div.t-tags
+      filters:
+        - name: re_replace
+          args: ["(?i)(Chat Show)", "Chat_Show"]
+        - name: re_replace
+          args: ["(?i)(Game Show)", "Game_Show"]
+        - name: re_replace
+          args: ["(?i)(Panel Show)", "Panel_Show"]
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(Talk Show)", "Talk_Show"]
+        - name: validate
+          args: "Action, Adventure, Animation, Biography, Chat_Show, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game_Show, History, Horror, Kids, Medical, Music, Mystery, Nature, News, Panel_Show, Reality, Romance, Science_Fiction, Science-Fiction, SciFi, Soap, Supernatural, Talk_Show, Thriller, War, Western"
+    description:
+      text: "{{ .Result.genre }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

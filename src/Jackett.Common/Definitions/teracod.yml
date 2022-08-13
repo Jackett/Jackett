@@ -172,7 +172,6 @@ search:
         "font[color=\"#2A821E\"]:contains(\"x2\")": 2
         "*": 1
     genre:
-      optional: true
       selector: td.torrent:nth-child(2)
       filters:
         - name: regexp

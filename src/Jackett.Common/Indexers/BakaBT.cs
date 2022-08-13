@@ -77,6 +77,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(7, TorznabCatType.BooksOther, "Artbook");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Video");
             AddCategoryMapping(9, TorznabCatType.BooksEBook, "Light Novel");
+            AddCategoryMapping(11, TorznabCatType.XXX, "Hentai Series");
+            AddCategoryMapping(12, TorznabCatType.XXX, "Hentai OVA");
+            AddCategoryMapping(13, TorznabCatType.XXX, "Hentai Soundtrack");
+            AddCategoryMapping(14, TorznabCatType.XXX, "Hentai Manga");
+            AddCategoryMapping(15, TorznabCatType.XXX, "Hentai Movie");
+            AddCategoryMapping(16, TorznabCatType.XXX, "Hentai Live Action");
+            AddCategoryMapping(17, TorznabCatType.XXX, "Hentai Artbook");
+            AddCategoryMapping(18, TorznabCatType.XXX, "Hentai Music Video");
+            AddCategoryMapping(19, TorznabCatType.XXX, "Hentai Light Novel");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -266,6 +275,17 @@ namespace Jackett.Common.Indexers
 
             if (!string.IsNullOrWhiteSpace(categoryName))
             {
+                var hentaiIcon = row.QuerySelector("td.name span.hentai");
+                if (hentaiIcon == null)
+                    return categoryName;
+
+                if (!categoryName.StartsWith("Anime"))
+                {
+                    categoryName = "Hentai " + categoryName;
+                    return categoryName;
+                }
+
+                categoryName = categoryName.Replace("Anime", "Hentai");
                 return categoryName;
             }
 

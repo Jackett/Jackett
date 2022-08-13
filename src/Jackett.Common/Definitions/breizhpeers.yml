@@ -1,33 +1,28 @@
 ---
-id: tellytorrent-api
-name: TellyTorrent (API)
-description: "TellyTorrent is an INDIAN Private Tracker for MOVIES / TV"
-language: en-US
+id: breizhpeers
+name: BreizhPeers
+description: "BreizhPeers is a FRENCH Private Torrent Tracker for MOVIES / TV"
+language: fr-FR
 type: private
 encoding: UTF-8
 links:
-  - https://telly.wtf/
-legacylinks:
-  - https://tellytorrent.net/
-  - https://telly.cc/
-  - https://telly.to/
+  - https://breizhpeers.tk/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Movies/WEB-DL, desc: "Web Originals"}
-    - {id: 5, cat: PC/Games, desc: "Games"}
-    - {id: 6, cat: PC/0day, desc: "Application"}
-    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile App"}
-    - {id: 8, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Films"}
+    - {id: 2, cat: TV, desc: "Séries"}
+    - {id: 3, cat: TV, desc: "TV"}
+    - {id: 4, cat: TV/Anime, desc: "Animes"}
+    - {id: 5, cat: Audio/Video, desc: "Concerts"}
+    - {id: 10, cat: PC, desc: "Applications"}
+    - {id: 9, cat: Console, desc: "Jeux"}
+    - {id: 6, cat: TV/Sport, desc: "Sport"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
 
 settings:
   - name: apikey
@@ -36,11 +31,30 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://telly.wtf/\" target =_blank>TellyTorrent</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://breizhpeers.tk/\" target =_blank>BreizhPeers</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: vfq
+    type: checkbox
+    label: Replace VFQ with FRENCH in release name
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: VOSTFR
+    options:
+      FRENCH: FRENCH
+      "MULTI FRENCH": "MULTI FRENCH"
+      ENGLISH: ENGLISH
+      "MULTI ENGLISH": "MULTI ENGLISH"
+      VOSTFR: VOSTFR
+      "MULTI VOSTFR": "MULTI VOSTFR"
   - name: sort
     type: select
     label: Sort requested from site
@@ -99,12 +113,34 @@ search:
   fields:
     category:
       selector: category_id
-    title:
+    title_original:
       selector: name
+      filters:
+        - name: replace
+          args: [".", " "]
+    title_vfq:
+      text: "{{ .Result.title_original }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\sVFQ\\s)", " FRENCH "]
+    title_step2:
+      text: "{{ if .Config.vfq }}{{ .Result.title_vfq }}{{ else }}{{ .Result.title_original }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_step2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\sMULTI\\s)", " {{ .Config.multilanguage }} "]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_step2 }}{{ end }}"
     details:
       selector: details_link
     download:
       selector: download_link
+    magnet:
+      selector: magnet_link
+      optional: true
+    infohash:
+      selector: info_hash
     poster:
       selector: poster
       filters:
@@ -145,10 +181,7 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
-#    minimumratio:
-#      text: 0.4
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 6.2.2
+# json UNIT3D 6.2.1 custom

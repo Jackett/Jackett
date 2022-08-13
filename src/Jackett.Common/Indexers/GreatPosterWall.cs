@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
                    {
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
                        }
                    },
                    configService: configService,

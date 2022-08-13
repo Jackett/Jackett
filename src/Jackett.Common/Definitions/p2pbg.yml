@@ -165,7 +165,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?) width="
+          args: src=([^\s]+)
     # two flavours
     date_day:
       # Yesterday

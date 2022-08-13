@@ -6,13 +6,11 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - http://audiobookbay.fi/ # site forces http, does not support https
-  - http://audiobookbay.se/
-  - http://audiobookbayabb.com/
-  - https://audiobookbay.unblockit.ist/
+  - https://audiobookbay.fi/
+  - https://audiobookbay.se/
+  - https://audiobookbay.unblockit.bet/
 legacylinks:
   - https://audiobookbay.la/
-  - https://audiobookbay.unblockit.li/
   - https://audiobookbay.unblockit.uno/
   - https://audiobookbay.unblockit.ch/
   - https://audiobookbay.unblockit.ws/
@@ -29,6 +27,10 @@ legacylinks:
   - https://audiobookbay.unblockit.llc/
   - https://audiobookbay.unblockit.blue/
   - https://audiobookbay.unblockit.name/
+  - http://audiobookbay.fi/
+  - http://audiobookbay.se/
+  - http://audiobookbayabb.com/
+  - https://audiobookbay.unblockit.ist/
 
 caps:
   categorymappings:
@@ -81,15 +83,15 @@ caps:
     - {id: Sex, cat: Audio/Audiobook, desc: "Sex Scenes"}
     - {id: Short, cat: Audio/Audiobook, desc: "Short Story"}
     - {id: Spiritual, cat: Audio/Audiobook, desc: "Spiritual & Religious"}
-    - {id: Sports, cat: Audio/Audiobook, desc: "Sports"}
+    - {id: Sport, cat: Audio/Audiobook, desc: "Sport & Recreation"}
     - {id: Suspense, cat: Audio/Audiobook, desc: "Suspense"}
     - {id: Teen, cat: Audio/Audiobook, desc: "Teen & Young Adult"}
-    - {id: The, cat: Audio/Audiobook, desc: "The Undead"}
     - {id: Thriller, cat: Audio/Audiobook, desc: "Thriller"}
     - {id: "True", cat: Audio/Audiobook, desc: "True Crime"}
     - {id: Tutorial, cat: Audio/Audiobook, desc: "Tutorial"}
     - {id: Violence, cat: Audio/Audiobook, desc: "Violence"}
     - {id: Westerns, cat: Audio/Audiobook, desc: "Westerns"}
+    - {id: Zombies, cat: Audio/Audiobook, desc: "Zombies"}
 
   modes:
     search: [q]
@@ -142,6 +144,7 @@ search:
       selector: img
       attribute: src
     date_optional:
+      optional: true
       selector: div.postContent
       filters:
         - name: regexp
@@ -151,6 +154,7 @@ search:
     date:
       text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size_optional:
+      optional: true
       selector: div.postContent
       filters:
         - name: regexp

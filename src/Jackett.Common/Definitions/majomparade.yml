@@ -119,7 +119,7 @@ search:
           args: "Torrent neve: (.*?)<"
     title:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
-    description:
+    _descr:
       selector: a[href^="details.php?id="] > b
       attribute: title
       filters:
@@ -168,6 +168,14 @@ search:
         img[title="Ennél a torrentnél 3x szorzó van."]: 3
         img[title="Ennél a torrentnél 4x szorzó van."]: 4
         "*": 1
+    genre:
+      selector: td:nth-child(2)
+      remove: a, img
+      filters:
+        - name: re_replace
+          args: ["(?i)(0.5x |2x |3x |4x )", ""]
+    description:
+      text: "{{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result._descr }}"
     minimumratio:
       text: 1.0
     minimumseedtime:

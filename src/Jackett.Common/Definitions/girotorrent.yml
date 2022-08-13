@@ -133,9 +133,19 @@ login:
     selector: a[href="logout.php"]
 
 download:
+  before:
+    path: thanks.php
+    method: post
+    inputs:
+      infohash: "{{ .DownloadUri.Query.id }}"
+      thanks: 1
+      rndval: "1487013827343"
   selectors:
     - selector: a[href^="download.php?id="]
       attribute: href
+      filters:
+        - name: regexp
+          args: "^(.+?)&key="
 
 search:
   paths:
@@ -202,7 +212,7 @@ search:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href^="index.php?page=downloadcheck&id="]
+      selector: a[href^="index.php?page=downloadcheck"]
       attribute: href
     poster:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
@@ -211,18 +221,18 @@ search:
         - name: regexp
           args: "src=(.+?) "
     date:
-      selector: td:nth-last-child(9)
+      selector: td:nth-last-child(8)
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "02/01/2006 -07:00"
     seeders:
-      selector: td:nth-last-child(8)
-    leechers:
       selector: td:nth-last-child(7)
-    grabs:
+    leechers:
       selector: td:nth-last-child(6)
+    grabs:
+      selector: td:nth-last-child(5)
     size:
       selector: td:nth-last-child(4)
     downloadvolumefactor:

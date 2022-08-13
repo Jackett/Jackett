@@ -64,8 +64,11 @@ search:
     date:
       # 2021-10-19T06:10:15.772Z
       selector: publish_time
-    size:
+    size_optional:
+      optional: true
       selector: size
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     grabs:
       selector: downloads
     seeders:

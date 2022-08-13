@@ -111,14 +111,11 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: td a[href^="index.php?page=torrent-details"]:not(a[onmouseover*="torrentimg/nocover.jpg"])
       attribute: onmouseover
       filters:
-        # http://anonym.to?javascript:popdetails('http://www.imdb.com/title/tt0086817');
         - name: regexp
-          args: "src=(.+?) width"
-        - name: replace
-          args: ["torrentimg/nocover.jpg", ""]
+          args: src=([^\s]+)
     size:
       selector: td:nth-child(10)
     # two flavours of dates

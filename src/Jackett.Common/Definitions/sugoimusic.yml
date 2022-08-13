@@ -25,8 +25,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    music-search: [q]
+    tv-search: [q, season, ep, genre]
+    music-search: [q, genre]
 
 settings:
   - name: username
@@ -91,7 +91,9 @@ search:
     searchstr: "{{ .Keywords }}"
     # we can only grab the first release if group_results=1
     group_results: 0
-    action: basic
+    action: advanced
+#    year: "{{ .Query.Year }}" # broken on site
+    taglist: "{{ .Query.Genre }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
     # 0 normal, 1 freeleech, 2 neutral leech, 3 either
@@ -141,6 +143,12 @@ search:
       filters:
         - name: replace
           args: ["/static/common/noartwork/nocover.png", ""]
+    genre:
+      selector: div.tags
+    _desc:
+      selector: div.torrent_info
+    description:
+      text: "{{ .Result._desc }}</br>{{ .Result.genre }}"
     download:
       selector: span > a[href^="torrents.php?action=download&id="]
       attribute: href
@@ -177,6 +185,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-    description:
-      selector: div.torrent_info
 # NexusPHP Standard v1.5 Beta 4

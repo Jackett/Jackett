@@ -100,6 +100,7 @@ search:
     # 0 all 1 english 2 french 3 german 4 italian 5 japanese 6 spanish 7 russian 8 other
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
+    # can search for only one at a time of name, genre or imdbid
 
   rows:
     selector: table.ttable_headinner > tbody > tr
@@ -121,7 +122,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: a[href^="torrents-details.php?id="]
+      selector: a[href^="torrents-details.php?id="]:not(a[onmouseover*="images/nocover.png"])
       attribute: onmouseover
       filters:
         - name: regexp
@@ -145,10 +146,17 @@ search:
       selector: td:nth-child(8)
     leechers:
       selector: td:nth-child(9)
-    description:
+    genre:
+      selector: a:contains("Genre:")
+      filters:
+        - name: replace
+          args: ["Genre: ", ""]
+    _source:
       case:
         img[src="images/t_extern.png"]: External
         "*": Local
+    description:
+      text: "{{ .Result._source }} - {{ .Result.genre }}"
     downloadvolumefactor:
       case:
         img[src="images/t_extern.png"]: 0

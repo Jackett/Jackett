@@ -103,6 +103,7 @@ search:
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    # can search by genre but you need the id. &description=8 for Drama.
 
   rows:
     selector: table[cellpadding="5"] tbody tr:has(a[href^="download.php?torrent="])
@@ -143,6 +144,13 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    genre:
+      selector: font[color="#C0C0C0"]
+      filters:
+        - name: replace
+          args: ["\xA0", ""]
+    description:
+      text: "{{ .Result.genre }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

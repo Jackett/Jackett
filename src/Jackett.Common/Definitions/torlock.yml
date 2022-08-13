@@ -9,7 +9,7 @@ followredirect: true
 links:
   - https://www.torlock2.com/
   - https://www.torlock.com/
-  - https://torlock.unblockit.ist/
+  - https://torlock.unblockit.bet/
   - https://torlock.nocensor.world/
 legacylinks:
   - https://torlock.com/
@@ -31,6 +31,7 @@ legacylinks:
   - https://www.torlock.icu/
   - https://torlock.unblockit.name/
   - https://torlock.nocensor.sbs/
+  - https://torlock.unblockit.ist/
 
 caps:
   # dont forget to update the search fields category case block

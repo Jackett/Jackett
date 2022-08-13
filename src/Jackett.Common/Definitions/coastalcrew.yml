@@ -160,10 +160,12 @@ search:
           args: "02.01.2006 15:04:05 -07:00"
     downloadvolumefactor:
       case:
-        img[src="pic/oupic.gif"]: 0
+        img[src="pic/oupic.gif"]: 0 # only upload is counted
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        img[src="pic/freeleech.gif"]: 0 # nothing is counted
+        "*": 1
     minimumratio:
       text: 0.7
 # engine n/a

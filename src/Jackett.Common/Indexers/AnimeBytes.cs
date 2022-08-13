@@ -57,7 +57,8 @@ namespace Jackett.Common.Indexers
                        BookSearchParams = new List<BookSearchParam>
                        {
                            BookSearchParam.Q
-                       }
+                       },
+                       SupportsRawSearch = true
                    },
                    logger: l,
                    p: ps,

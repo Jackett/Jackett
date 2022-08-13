@@ -167,6 +167,9 @@ namespace Jackett.Common.Indexers.Abstract
                 { "order_way", "desc" }
             };
 
+            if (!string.IsNullOrWhiteSpace(query.Genre))
+                queryCollection.Add("taglist", query.Genre);
+
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 if (imdbInTags)
@@ -242,6 +245,9 @@ namespace Jackett.Common.Indexers.Abstract
                     var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
                         ? "Tags: " + string.Join(", ", tags) + "\n"
                         : null;
+                    var genre = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
+                        ? string.Join(",", tags)
+                        : null;
                     Uri poster = null;
                     if (!string.IsNullOrEmpty(cover))
                         poster = (cover.StartsWith("http")) ? new Uri(cover) : new Uri(PosterUrl + cover);
@@ -253,6 +259,10 @@ namespace Jackett.Common.Indexers.Abstract
                         Poster = poster
                     };
 
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    if (!string.IsNullOrEmpty(genre))
+                        release.Genres = release.Genres.Union(genre.Split(',')).ToList();
 
                     if (imdbInTags)
                         release.Imdb = tags

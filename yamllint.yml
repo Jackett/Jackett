@@ -13,5 +13,7 @@ rules:
     level: error
   line-length: disable
   truthy: disable
+  new-lines:
+    type: platform
   comments:
     min-spaces-from-content: 1

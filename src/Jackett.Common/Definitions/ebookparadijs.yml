@@ -44,16 +44,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: flaresolverr
+    label: Cookie
+  - name: info_cookie
     type: info
-    label: FlareSolverr
-    default: This site may use DDoS-Guard Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
   - name: freeleech
     type: checkbox
     label: Filter freeleech only
@@ -67,15 +64,9 @@ settings:
     default: This site requires you to leave a Thank You comment before you can download. Enter your personalised comment above.
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    returnto: "/"
-  error:
-    - selector: td.embedded:contains("fout")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href="logout.php"]

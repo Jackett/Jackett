@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -33,11 +34,11 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
                        },
                        MusicSearchParams = new List<MusicSearchParam>
                        {
@@ -97,6 +98,53 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
+            /*
+             * notes:
+             * can search titles & filesnames with &s_title=1 (default)
+             * and tags with &s_tag=1
+             * and descriptions with &s_desc=1
+             * however the parms are used in an OR fashion and not as an AND
+             * so ?search=reality+love+s04e19&s_title=1&s_tag=1
+             * will find Love Island S04E19 as well as My Kitchen Rules S12E02
+             * since the former has a match for Love in the title, and the latter has a tag for Reality-TV.
+             * 
+             * FunFiles only has genres for movies and tv
+             */
+
+            var ValidList = new List<string>() {
+                "action",
+                "adventure",
+                "animation",
+                "biography",
+                "comedy",
+                "crime",
+                "documentary",
+                "drama",
+                "family",
+                "fantasy",
+                "game-show",
+                "history",
+                "home_&_garden",
+                "home_and_garden",
+                "horror",
+                "music",
+                "musical",
+                "mystery",
+                "news",
+                "reality",
+                "reality-tv",
+                "romance",
+                "sci-fi",
+                "science-fiction",
+                "short",
+                "sport",
+                "talk-show",
+                "thriller",
+                "travel",
+                "war",
+                "western"
+            };
+
             var qc = new NameValueCollection
             {
                 {"incldead", "1"},
@@ -108,6 +156,13 @@ namespace Jackett.Common.Indexers
             {
                 qc.Add("search", query.ImdbID);
                 qc.Add("s_desc", "1");
+            }
+            else
+            if (query.IsGenreQuery)
+            {
+                qc.Add("search", query.Genre + " " + query.GetQueryString());
+                qc.Add("s_tag", "1");
+                qc.Add("s_title", "1");
             }
             else
                 qc.Add("search", query.GetQueryString());
@@ -150,6 +205,12 @@ namespace Jackett.Common.Indexers
                     var ka = row.NextElementSibling.QuerySelector("table > tbody > tr:nth-child(3)");
                     var ulFactor = ParseUtil.CoerceDouble(ka.Children[0].TextContent.Replace("X", ""));
                     var dlFactor = ParseUtil.CoerceDouble(ka.Children[1].TextContent.Replace("X", ""));
+                    ka = row.NextElementSibling.QuerySelector("span[style=\"float:left\"]");
+                    var description = ka.TextContent;
+                    var qGenres = description.ToLower().Replace(" & ", "_&_").Replace(" and ", "_and_");
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseGenres = ValidList.Intersect(qGenres.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries));
+                    releaseGenres = releaseGenres.Select(x => x.Replace("_", " "));
 
                     var release = new ReleaseInfo
                     {
@@ -164,11 +225,15 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         Seeders = seeders,
                         Peers = leechers + seeders,
+                        Description = description,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
                         DownloadVolumeFactor = dlFactor,
                         UploadVolumeFactor = ulFactor
                     };
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    release.Genres = releaseGenres.ToList();
 
                     releases.Add(release);
                 }
