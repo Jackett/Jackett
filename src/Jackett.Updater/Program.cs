@@ -286,6 +286,7 @@ namespace Jackett.Updater
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
                 "Definitions/bit-titan.yml",
+                "Definitions/bitbr.yml",
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
@@ -370,6 +371,7 @@ namespace Jackett.Updater
                 "Definitions/hdclub.yml",
                 "Definitions/hddisk.yml",
                 "Definitions/hdhouse.yml",
+                "Definitions/hdme.yml",
                 "Definitions/hdolimpo.yml", // migrated to UNIT3D API
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
@@ -384,6 +386,7 @@ namespace Jackett.Updater
                 "Definitions/hyperay.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
+                "Definitions/ilcorsaroverde.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/inperil.yml",
@@ -434,6 +437,7 @@ namespace Jackett.Updater
                 "Definitions/oasis.yml",
                 "Definitions/obscure.yml",
                 "Definitions/omgwtftrackr.yml",
+                "Definitions/oncesearch.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
                 "Definitions/oxtorrent.yml",
@@ -442,6 +446,7 @@ namespace Jackett.Updater
                 "Definitions/pirateiro.yml",
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
+                "Definitions/pornolive.yml",
                 "Definitions/pornorip.yml",
                 "Definitions/pt99.yml",
                 "Definitions/qctorrent.yml",
@@ -534,7 +539,6 @@ namespace Jackett.Updater
                 "Definitions/torviet.yml",
                 "Definitions/trackeros-api.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
-                "Definitions/trupornolabs.yml",
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/turknova.yml",
@@ -668,7 +672,9 @@ namespace Jackett.Updater
 
                     if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreMacOsArm64
                     || variant == Variants.JackettVariant.CoreLinuxAmdx64 || variant == Variants.JackettVariant.CoreLinuxArm32
-                    || variant == Variants.JackettVariant.CoreLinuxArm64)
+                    || variant == Variants.JackettVariant.CoreLinuxArm64
+                    || variant == Variants.JackettVariant.CoreLinuxMuslAmdx64 || variant == Variants.JackettVariant.CoreLinuxMuslArm32
+                    || variant == Variants.JackettVariant.CoreLinuxMuslArm64)
                     {
                         startInfo.UseShellExecute = false;
                         startInfo.CreateNoWindow = true;

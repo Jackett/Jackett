@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "description" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "genre", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -122,6 +122,7 @@ namespace Jackett.Common.Indexers
             Type = Definition.Type;
             TorznabCaps = new TorznabCapabilities();
             TorznabCaps.ParseCardigannSearchModes(Definition.Caps.Modes);
+            TorznabCaps.SupportsRawSearch = Definition.Caps.Allowrawsearch;
 
             // init config Data
             configData = new ConfigurationData();
@@ -1128,6 +1129,14 @@ namespace Jackett.Common.Indexers
                             strTag = ":";
                         logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", Id, strTag, DebugData));
                         break;
+                    case "validate":
+                        char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                        var args = (string)Filter.Args;
+                        var argsList = args.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
+                        var validList = argsList.ToList();
+                        var validIntersect = validList.Intersect(Data.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
+                        Data = string.Join(",", validIntersect);
+                        break;
                     default:
                         break;
                 }
@@ -1307,10 +1316,11 @@ namespace Jackett.Common.Indexers
             variables[".Query.Artist"] = query.Artist;
             variables[".Query.Label"] = query.Label;
             variables[".Query.Track"] = query.Track;
-            //variables[".Query.Genre"] = query.Genre ?? new List<string>();
+            variables[".Query.Genre"] = query.Genre;
             variables[".Query.Episode"] = query.GetEpisodeSearchString();
             variables[".Query.Author"] = query.Author;
             variables[".Query.Title"] = query.Title;
+            variables[".Query.Publisher"] = query.Publisher;
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
@@ -1483,12 +1493,12 @@ namespace Jackett.Common.Indexers
                                     throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
                                 }
 
-                                var Filters = Definition.Search.Rows.Filters;
-                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
-
-                                if (SkipRelease)
-                                    continue;
                             }
+                            var Filters = Definition.Search.Rows.Filters;
+                            var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
+
+                            if (SkipRelease)
+                                continue;
 
                             releases.Add(release);
                         }
@@ -1622,7 +1632,7 @@ namespace Jackett.Common.Indexers
                                 }
 
                                 var Filters = Definition.Search.Rows.Filters;
-                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
+                                var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row.ToHtmlPretty());
 
                                 if (SkipRelease)
                                     continue;
@@ -2080,8 +2090,13 @@ namespace Jackett.Common.Indexers
                     value = release.DoubanId.ToString();
                     break;
                 case "genre":
-                    release.Genres = release.Genres.Union(value.Split(',')).ToList();
-                    value = release.Genres.ToString();
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseGenres = release.Genres.Union(value.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries));
+                    releaseGenres = releaseGenres.Select(x => x.Replace("_", " "));
+                    release.Genres = releaseGenres.ToList();
+                    value = string.Join(",", release.Genres);
                     break;
                 case "year":
                     release.Year = ReleaseInfo.GetBytes(value);
@@ -2092,6 +2107,9 @@ namespace Jackett.Common.Indexers
                     break;
                 case "booktitle":
                     release.BookTitle = value;
+                    break;
+                case "publisher":
+                    release.Publisher = value;
                     break;
                 case "artist":
                     release.Artist = value;

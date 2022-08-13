@@ -13,7 +13,7 @@ links:
   - https://eztv.yt/
   - https://eztv1.xyz/
   - https://eztv.unblockninja.com/
-  - https://eztv.unblockit.ist/
+  - https://eztv.unblockit.bet/
   - https://eztv.nocensor.world/
 legacylinks:
   - https://eztv.ag/ # redirects to .re
@@ -38,6 +38,7 @@ legacylinks:
   - https://eztv.unblockit.blue/
   - https://eztv.unblockit.name/
   - https://eztv.nocensor.sbs/
+  - https://eztv.unblockit.ist/
 
 caps:
   categories:
@@ -46,6 +47,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+  allowrawsearch: true
 
 settings: []
 
@@ -56,6 +58,13 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
+    # fixes for site search issues
+    - name: replace
+      args: ["-", ""]
+    - name: replace
+      args: [" ", "-"]
+    - name: replace
+      args: ["&", ""]
 
   headers:
     cookie: ["sort_no=100"] # show 100 results for keywordless search

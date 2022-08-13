@@ -121,7 +121,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.*?) width"
+          args: src=([^\s]+)
     files:
       selector: div.torrenttable:nth-last-child(6)
     size:

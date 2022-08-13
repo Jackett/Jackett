@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -43,19 +44,19 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q
+                           MovieSearchParam.Q, MovieSearchParam.Genre
                        },
                        MusicSearchParams = new List<MusicSearchParam>
                        {
-                           MusicSearchParam.Q
+                           MusicSearchParam.Q, MusicSearchParam.Genre
                        },
                        BookSearchParams = new List<BookSearchParam>
                        {
-                           BookSearchParam.Q
+                           BookSearchParam.Q, BookSearchParam.Genre
                        }
                    },
                    configService: configService,
@@ -200,6 +201,9 @@ namespace Jackett.Common.Indexers
                 { "length", "100" }
             };
 
+            if (query.IsGenreQuery)
+                queryCollection.Add("genre", query.Genre);
+
             if (!string.IsNullOrWhiteSpace(searchString))
                 queryCollection.Add("search", searchString);
 
@@ -231,9 +235,10 @@ namespace Jackett.Common.Indexers
                     //var preDelaySeconds = (long)torrent[4];
                     var seeders = (int)torrent[6];
                     //var imdbRating = (double)torrent[8] / 10;
-                    var genres = (string)torrent[9];
+                    var genres = torrent[9].ToString().Trim(',');
+                    var description = "";
                     if (!string.IsNullOrWhiteSpace(genres))
-                        genres = "Genres: " + genres;
+                        description = "Genres: " + genres;
                     // 12/13/14 unknown, probably IDs/name of the uploader
                     //var row12 = (long)torrent[12];
                     //var row13 = (string)torrent[13];
@@ -262,11 +267,14 @@ namespace Jackett.Common.Indexers
                         Size = (long)torrent[5],
                         Seeders = seeders,
                         Peers = seeders + (int)torrent[7],
-                        Description = genres,
+                        Description = description,
                         UploadVolumeFactor = 1,
                         DownloadVolumeFactor = downloadVolumeFactor,
                         Grabs = (long)torrent[11]
                     };
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    release.Genres = release.Genres.Union(genres.Split(',')).ToList();
                     releases.Add(release);
                 }
             }

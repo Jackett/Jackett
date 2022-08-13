@@ -124,6 +124,17 @@ search:
           args: "&w=180&h=270" # for display on dashboard
         - name: replace
           args: ["https://images.weserv.nl/?url=https://theshinning.me/img/nocover.png&w=180&h=270", ""]
+    genre:
+      selector: td:nth-last-child(10)
+      filters:
+        - name: replace
+          args: ["\n", ""]
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: validate
+          args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Music, Musical, Mystery, News, Reality-TV, Romance, Science_Fiction, Sitcom, Sport, Talk-Show, Thriller, War, Western"
+    description:
+      text: "{{ .Result.genre }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

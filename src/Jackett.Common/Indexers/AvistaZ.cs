@@ -26,7 +26,8 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       }
+                       },
+                       SupportsRawSearch = true
                    },
                    configService: configService,
                    client: wc,

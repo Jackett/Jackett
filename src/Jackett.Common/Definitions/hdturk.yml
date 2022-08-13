@@ -83,8 +83,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -114,10 +114,12 @@ search:
   inputs:
     # does not support multi categories so defaulting to ALL
     do: search
-    keywords: "{{ .Keywords }}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     category: 0
-    search_type: t_name
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
     include_dead_torrents: yes
+    # does not return imdb link in results
 
   rows:
     selector: table#sortabletable tbody tr:has(div[id^="port-target-"])

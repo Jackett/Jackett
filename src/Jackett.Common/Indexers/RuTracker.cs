@@ -62,7 +62,8 @@ namespace Jackett.Common.Indexers
                        BookSearchParams = new List<BookSearchParam>
                        {
                            BookSearchParam.Q
-                       }
+                       },
+                       SupportsRawSearch = true
                    },
                    configService: configService,
                    client: wc,

@@ -208,6 +208,17 @@ search:
       case:
         img[src="pic/double_upload.png"]: 2
         "*": 1
+    genre:
+      selector: td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "Genre:\\s(.+?)$"
+        - name: replace
+          args: [", ", ","]
+        - name: replace
+          args: [" ", "_"]
+    description:
+      text: "{{ .Result.genre }}"
     minimumratio:
       text: 1.0
     minimumseedtime:

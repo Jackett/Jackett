@@ -107,13 +107,11 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: a[href^="torrents-details.php?id="]
+      selector: a[href^="torrents-details.php?id="]:not(a[onmouseover*="images/nocover.jpg"])
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?) width"
-        - name: replace
-          args: ["images/nocover.jpg", ""]
+          args: src=([^\s]+)
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

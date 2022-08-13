@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-liens.com/t911 and https://www.protege-liens.com/torrent911
 links:
-  - https://www.torrent911.org/
+  - https://www.torrent911.cc/
   - https://www.t911.me/
   - https://oxtorrent.unblockninja.com/
 legacylinks:
@@ -40,6 +40,7 @@ legacylinks:
   - https://oxtorrent.unblockit.blue/ # proxy for *.co, a clone without derniers
   - https://oxtorrent.nocensor.sbs/ # proxy for *.co, a clone without derniers
   - https://www.torrent911.net/
+  - https://www.torrent911.org/
 
 caps:
   categorymappings:

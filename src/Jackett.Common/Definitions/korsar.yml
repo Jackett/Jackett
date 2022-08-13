@@ -522,7 +522,7 @@ search:
       selector: span.leech
     grabs:
       selector: span.complet
-    date:
+    date_day:
       # Сегодня, 15:10 (today)
       # Вчера, 23:28 (yesterday)
       selector: dd:last-of-type:contains("Сегодня,"), dd:last-of-type:contains("Вчера,")
@@ -536,7 +536,7 @@ search:
         - name: replace
           args: ["Сегодня,", "Yesterday"]
         - name: fuzzytime
-    date:
+    date_time:
       # 4 минуты назад (4 minutes ago)
       # 11 минут назад (11 minutes ago)
       # 4 часа назад (4 hours ago)
@@ -558,7 +558,7 @@ search:
         - name: replace
           args: ["часов", "hours"]
         - name: timeago
-    date:
+    date_year:
       # 12 янв 2019, 11:26
       # 25 май 2017, 18:41
       selector: dd:last-of-type:not(:contains("назад")):not(:contains("Сегодня,")):not(:contains("Вчера,"))
@@ -597,6 +597,8 @@ search:
           args: " +03:00" # MSK
         - name: dateparse
           args: "02 Jan 2006, 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_time .Result.date_year .Result.date_day }}{{ or .Result.date_time .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

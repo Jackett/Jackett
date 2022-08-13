@@ -153,6 +153,11 @@ namespace Jackett.Common.Indexers
                     release.Details = new Uri(SiteLink + qLink.GetAttribute("href"));
                     release.Guid = release.Details;
 
+                    var qGenres = row.QuerySelector("span[style=\"color: #000000 \"]");
+                    var description = "";
+                    if (qGenres != null)
+                        description = qGenres.TextContent.Split('\xA0').Last().Replace(" ", "");
+
                     var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
                     if (imdbLink != null)
                         release.Imdb = ParseUtil.GetImdbID(imdbLink.GetAttribute("href").Split('/').Last());
@@ -182,6 +187,12 @@ namespace Jackett.Common.Indexers
                     var qCat = row.QuerySelector("a[href^=\"index.php?page=torrents&category=\"]");
                     var cat = qCat.GetAttribute("href").Split('=')[2];
                     release.Category = MapTrackerCatToNewznab(cat);
+
+                    release.Description = description;
+                    if (release.Genres == null)
+                        release.Genres = new List<string>();
+                    release.Genres = release.Genres.Union(description.Split(',')).ToList();
+
                     releases.Add(release);
                 }
             }

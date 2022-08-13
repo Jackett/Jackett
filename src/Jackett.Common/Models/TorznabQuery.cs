@@ -33,10 +33,11 @@ namespace Jackett.Common.Models
         public string Label { get; set; }
         public string Track { get; set; }
         public int? Year { get; set; }
-        public ICollection<string> Genre { get; set; }
+        public string Genre { get; set; }
 
         public string Author { get; set; }
         public string Title { get; set; }
+        public string Publisher { get; set; }
 
         public bool IsTest { get; set; }
 
@@ -67,6 +68,8 @@ namespace Jackett.Common.Models
         public bool IsTraktQuery => TraktID != null;
 
         public bool IsDoubanQuery => DoubanID != null;
+
+        public bool IsGenreQuery => Genre != null;
 
         public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
@@ -141,9 +144,11 @@ namespace Jackett.Common.Models
                 Artist = Artist,
                 Label = Label,
                 Track = Track,
+                Genre = Genre,
                 Year = Year,
                 Author = Author,
                 Title = Title,
+                Publisher = Publisher,
                 RageID = RageID,
                 TvdbID = TvdbID,
                 ImdbID = ImdbID,

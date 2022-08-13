@@ -96,6 +96,7 @@ search:
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    # can support genre searching but you need to know the id, eg &team10=1 for Drama (id is 10)
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
@@ -170,4 +171,10 @@ search:
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, img
+    genre:
+      selector: table.torrentname > tbody > tr > td:first-child
+      remove: a
+      filters:
+        - name: validate
+          args: "Akční, Animovaný, Dobrodružný, Dokumentární, Drama, Fantasy, Horor, Komedie, Krimi, Pohádka, Rodinný, Romantický, Sci-Fi, Thriller, Válečný, Western"
 # NexusPHP Standard v1.5 Beta 4

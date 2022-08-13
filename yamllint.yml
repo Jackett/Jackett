@@ -12,7 +12,8 @@ rules:
   document-start:
     level: error
   line-length: disable
-  key-duplicates: disable
   truthy: disable
+  new-lines:
+    type: platform
   comments:
     min-spaces-from-content: 1

@@ -142,10 +142,14 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.*?) width="
+          args: src=([^\s]+)
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
+    genre:
+      selector: span.box
+    description:
+      text: "{{ .Result.genre }}"
     files:
       selector: td:nth-last-child(6)
     size:

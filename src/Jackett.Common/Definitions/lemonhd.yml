@@ -22,8 +22,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
     book-search: [q]
 
@@ -71,9 +71,9 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}{{ .Keywords }}{{ end }}"
     # name, imdb, douban
-    search_area: "{{ if .Query.IMDBID }}imdb{{ else }}name{{ end }}"
+    search_area: "{{ if .Query.IMDBID }}imdb{{ else }}{{ end }}{{ if .Query.DoubanID }}douban{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}name{{ end }}"
     suggest: 0
     column: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"

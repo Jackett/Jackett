@@ -161,7 +161,9 @@ namespace Jackett.Common.Services
         private string GetUpdaterPath(string tempDirectory) =>
             variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreMacOsArm64 ||
             variant == Variants.JackettVariant.CoreLinuxAmdx64 || variant == Variants.JackettVariant.CoreLinuxArm32 ||
-            variant == Variants.JackettVariant.CoreLinuxArm64
+            variant == Variants.JackettVariant.CoreLinuxArm64 ||
+            variant == Variants.JackettVariant.CoreLinuxMuslAmdx64 || variant == Variants.JackettVariant.CoreLinuxMuslArm32 ||
+            variant == Variants.JackettVariant.CoreLinuxMuslArm64
                 ? Path.Combine(tempDirectory, "Jackett", "JackettUpdater")
                 : Path.Combine(tempDirectory, "Jackett", "JackettUpdater.exe");
 
@@ -265,7 +267,9 @@ namespace Jackett.Common.Services
 
                 if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreMacOsArm64
                 || variant == Variants.JackettVariant.CoreLinuxAmdx64 || variant == Variants.JackettVariant.CoreLinuxArm32
-                || variant == Variants.JackettVariant.CoreLinuxArm64 || variant == Variants.JackettVariant.Mono)
+                || variant == Variants.JackettVariant.CoreLinuxArm64 || variant == Variants.JackettVariant.Mono
+                || variant == Variants.JackettVariant.CoreLinuxMuslAmdx64 || variant == Variants.JackettVariant.CoreLinuxMuslArm32
+                || variant == Variants.JackettVariant.CoreLinuxMuslArm64)
                 {
                     // When the files get extracted, the execute permission for jackett and JackettUpdater don't get carried across
 

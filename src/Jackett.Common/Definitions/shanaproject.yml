@@ -93,6 +93,8 @@ search:
       selector: div.release_20:contains(", noon")
       optional: true
       filters:
+        - name: replace
+          args: ["Aug.", "August"]
         - name: re_replace
           args: [" noon", " 12 pm"]
         - name: dateparse

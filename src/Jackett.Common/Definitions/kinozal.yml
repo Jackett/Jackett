@@ -7,6 +7,9 @@ type: semi-private
 encoding: windows-1251
 links:
   - http://kinozal.tv/ # site forces http, https is not supported
+  - https://kinozal.guru/
+  - https://kinozal-guru.appspot.com/
+legacylinks:
   - https://kinozal-tv.appspot.com/
 
 caps:
@@ -73,6 +76,13 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_sid
+    type: info
+    label: How to get your SID
+    default: "This is only needed when using *.appspot.com mirrors, otherwise just leave blank. Access the tracker's <i>Раздачи</i> page in browser, and in the address bar you will see something like <b>?sid=abC1de2F</b>. Those last 8 characters are your SID."
+  - name: sid
+    type: text
+    label: SID
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -160,6 +170,7 @@ search:
     w: "{{ if .Config.freeleech }}11{{ else }}0{{ end }}"
     t: "{{ .Config.sort }}"
     f: "{{ .Config.type }}"
+    $raw: "{{ if .Config.sid }}sid={{ .Config.sid }}{{ else }}{{ end }}"
 
   rows:
     selector: table > tbody > tr:has(td.bt)

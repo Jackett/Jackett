@@ -9,7 +9,7 @@ requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
   # dont forget to update the details, download and poster replace args
   - https://yts.mx/
-  - https://yts.unblockit.ist/
+  - https://yts.unblockit.bet/
   - https://yts.unblockninja.com/
   - https://yts.nocensor.world/
 legacylinks:
@@ -33,6 +33,7 @@ legacylinks:
   - https://yts.unblockit.blue/
   - https://yts.unblockit.name/
   - https://yts.nocensor.sbs/
+  - https://yts.unblockit.ist/
 
 caps:
   categorymappings:

@@ -129,13 +129,11 @@ search:
         - name: regexp
           args: tt(\d+)
     poster:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: td a[href^="index.php?page=torrent-details"]:not(a[onmouseover*="torrentimg/nocover.jpg"])
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?) width"
-        - name: replace
-          args: ["torrentimg/nocover.jpg", ""]
+          args: src=([^\s]+)
     size:
       selector: td:nth-child(10)
       # two flavours of dates

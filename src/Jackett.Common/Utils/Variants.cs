@@ -15,7 +15,10 @@ namespace Jackett.Common.Utils
             CoreMacOsArm64,
             CoreLinuxAmdx64,
             CoreLinuxArm32,
-            CoreLinuxArm64
+            CoreLinuxArm64,
+            CoreLinuxMuslAmdx64,
+            CoreLinuxMuslArm32,
+            CoreLinuxMuslArm64
         }
 
         public JackettVariant GetVariant()
@@ -29,12 +32,21 @@ namespace Jackett.Common.Utils
                     return JackettVariant.CoreMacOs;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                     return JackettVariant.CoreMacOsArm64;
+#if ISLINUXMUSL
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.X64)
+                    return JackettVariant.CoreLinuxMuslAmdx64;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm)
+                    return JackettVariant.CoreLinuxMuslArm32;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+                    return JackettVariant.CoreLinuxMuslArm64;
+#else
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.X64)
                     return JackettVariant.CoreLinuxAmdx64;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm)
                     return JackettVariant.CoreLinuxArm32;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                     return JackettVariant.CoreLinuxArm64;
+#endif
             }
             else
             {
@@ -67,6 +79,12 @@ namespace Jackett.Common.Utils
                     return "Jackett.Binaries.LinuxARM32.tar.gz";
                 case JackettVariant.CoreLinuxArm64:
                     return "Jackett.Binaries.LinuxARM64.tar.gz";
+                case JackettVariant.CoreLinuxMuslAmdx64:
+                    return "Jackett.Binaries.LinuxMuslAMDx64.tar.gz";
+                case JackettVariant.CoreLinuxMuslArm32:
+                    return "Jackett.Binaries.LinuxMuslARM32.tar.gz";
+                case JackettVariant.CoreLinuxMuslArm64:
+                    return "Jackett.Binaries.LinuxMuslARM64.tar.gz";
                 default:
                     return "";
             }
@@ -76,7 +94,9 @@ namespace Jackett.Common.Utils
         {
             return (variant == JackettVariant.CoreMacOs || variant == JackettVariant.CoreMacOsArm64
                 || variant == JackettVariant.CoreLinuxAmdx64 || variant == JackettVariant.CoreLinuxArm32
-                || variant == JackettVariant.CoreLinuxArm64);
+                || variant == JackettVariant.CoreLinuxArm64
+                || variant == JackettVariant.CoreLinuxMuslAmdx64 || variant == JackettVariant.CoreLinuxMuslArm32
+                || variant == JackettVariant.CoreLinuxMuslArm64);
         }
     }
 }
