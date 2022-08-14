@@ -515,7 +515,6 @@ namespace Jackett.Updater
                 "Definitions/torrent-paradise-ml.yml",
                 "Definitions/torrent4you.yml",
                 "Definitions/torrentbomb.yml",
-                "Definitions/torrentcore.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentfactory.yml",
                 "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
