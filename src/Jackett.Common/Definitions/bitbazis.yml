@@ -161,8 +161,8 @@ search:
       # 36 perce
       # 13 órája  és 59 perce
       # 2 napja  és 10 órája
-      # 1 hete  és 1 napja 
-      # 1 éve  és 30 hete 
+      # 1 hete  és 1 napja
+      # 1 éve  és 30 hete
       selector: td:nth-child(7) span:last-child
       filters:
         - name: replace
