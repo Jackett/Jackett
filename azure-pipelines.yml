@@ -26,7 +26,7 @@ stages:
     jobs:
       - job: Build
         workspace:
-          clean: outputs
+          clean: all
         strategy:
           matrix:
             Windows:
@@ -305,7 +305,7 @@ stages:
         pool:
           vmImage: ubuntu-20.04
         workspace:
-          clean: outputs
+          clean: all
         steps:
           - checkout: self
             clean: false
@@ -339,7 +339,7 @@ stages:
         pool:
           vmImage: ubuntu-20.04
         workspace:
-          clean: outputs
+          clean: all
         steps:
           - checkout: self
             clean: false
@@ -360,7 +360,7 @@ stages:
         pool:
           vmImage: ubuntu-20.04
         workspace:
-          clean: outputs
+          clean: all
         steps:
           - checkout: self
             clean: false
@@ -394,7 +394,7 @@ stages:
     jobs:
       - job: UnitTest
         workspace:
-          clean: outputs
+          clean: all
         strategy:
           matrix:
             Windows:
@@ -488,7 +488,7 @@ stages:
     jobs:
       - job: IntegrationTest
         workspace:
-          clean: outputs
+          clean: all
         strategy:
           matrix:
             Windows:
@@ -593,7 +593,7 @@ stages:
     jobs:
       - job: Publish
         workspace:
-          clean: outputs
+          clean: all
         pool:
           vmImage: ubuntu-20.04
         steps:
