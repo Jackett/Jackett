@@ -36,7 +36,6 @@ stages:
               runtime: win-x86
               archiveType: zip
               artifactName: Jackett.Binaries.Windows.zip
-              buildDelay: 0
             macOS:
               buildDescription: macOS
               imageName: macOS-12
@@ -44,7 +43,6 @@ stages:
               runtime: osx-x64
               archiveType: tar
               artifactName: Jackett.Binaries.macOS.tar.gz
-              buildDelay: 20
             macOSARM64:
               buildDescription: macOS ARM64
               imageName: macOS-12
@@ -52,7 +50,6 @@ stages:
               runtime: osx-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.macOSARM64.tar.gz
-              buildDelay: 40
             LinuxAMDx64:
               buildDescription: Linux AMD x64
               imageName: ubuntu-20.04
@@ -60,7 +57,6 @@ stages:
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
-              buildDelay: 60
             LinuxARM32:
               buildDescription: Linux ARM32
               imageName: ubuntu-20.04
@@ -68,7 +64,6 @@ stages:
               runtime: linux-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM32.tar.gz
-              buildDelay: 80
             LinuxARM64:
               buildDescription: Linux ARM64
               imageName: ubuntu-20.04
@@ -76,7 +71,6 @@ stages:
               runtime: linux-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
-              buildDelay: 100
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
               imageName: ubuntu-20.04
@@ -84,7 +78,6 @@ stages:
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
-              buildDelay: 120
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
               imageName: ubuntu-20.04
@@ -92,7 +85,6 @@ stages:
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
-              buildDelay: 140
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
               imageName: ubuntu-20.04
@@ -100,7 +92,6 @@ stages:
               runtime: linux-musl-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM64.tar.gz
-              buildDelay: 160
             Mono:
               buildDescription: Mono
               imageName: ubuntu-20.04
@@ -108,12 +99,12 @@ stages:
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.Mono.tar.gz
-              buildDelay: 180
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -121,16 +112,6 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
-
-          - task: PowerShell@2
-            # Because we have many parallel builds this error occurs:
-            # error MSB4018: System.IO.IOException: The process cannot access the file
-            # '/home/vsts/work/1/s/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
-            # because it is being used by another process. [/home/vsts/work/1/s/src/DateTimeRoutines/DateTimeRoutines.csproj]
-            displayName: Wait before build
-            inputs:
-              targetType: inline
-              script: Start-Sleep -Seconds $(buildDelay)
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
@@ -404,7 +385,9 @@ stages:
 
   - stage: UnitTestJackett
     displayName: Unit Tests
-    dependsOn: CodeStyle
+    dependsOn:
+      - BuildJackett
+      - CodeStyle
     jobs:
       - job: UnitTest
         workspace:
@@ -436,6 +419,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+            path: $(runtime) # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -533,6 +517,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
