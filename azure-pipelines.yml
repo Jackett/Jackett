@@ -100,11 +100,11 @@ stages:
               archiveType: tar
               artifactName: Jackett.Binaries.Mono.tar.gz
         pool:
-          name: build-$(runtime)
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -303,7 +303,6 @@ stages:
       - job: Linting_Dotnet
         displayName: Linting Dotnet
         pool:
-          name: linting-dotnet
           vmImage: ubuntu-20.04
         workspace:
           clean: all
@@ -337,7 +336,6 @@ stages:
       - job: Linting_YAML
         displayName: Linting YAML
         pool:
-          name: linting-yaml
           vmImage: ubuntu-20.04
         workspace:
           clean: all
@@ -358,7 +356,6 @@ stages:
       - job: Validate_YAML_Schema
         displayName: Validate YAML Schema
         pool:
-          name: validate-yaml
           vmImage: ubuntu-20.04
         workspace:
           clean: all
@@ -418,11 +415,11 @@ stages:
               framework: net461
               runtime: linux-x64
         pool:
-          name: ut-$(runtime)
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+            path: $(runtime) # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -516,11 +513,11 @@ stages:
               framework: net461
               runtime: linux-x64
         pool:
-          name: it-$(runtime)
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
@@ -595,7 +592,6 @@ stages:
         workspace:
           clean: all
         pool:
-          name: publish
           vmImage: ubuntu-20.04
         steps:
           - checkout: self
