@@ -9,11 +9,12 @@
 extends: default
 
 rules:
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: disable
   document-start:
     level: error
   line-length: disable
-  truthy: disable
   new-lines:
     type: platform
-  comments:
-    min-spaces-from-content: 1
+  truthy: disable
