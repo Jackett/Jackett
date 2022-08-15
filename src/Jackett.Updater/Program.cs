@@ -551,6 +551,7 @@ namespace Jackett.Updater
                 "Definitions/vanila.yml",
                 "Definitions/vhstapes.yml",
                 "Definitions/waffles.yml",
+                "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
                 "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/worldofp2p.yml",
