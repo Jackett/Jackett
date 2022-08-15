@@ -113,6 +113,15 @@ stages:
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
+          - task: Cache@2
+            displayName: Cache NuGet packages
+            inputs:
+              key: 'nuget | "$(Agent.OS)" | **/packages.lock.json,!**/bin/**,!**/obj/**'
+              restoreKeys: |
+                nuget | "$(Agent.OS)"
+                nuget
+              path: '$(Pipeline.Workspace)/$(runtime)/.nuget/packages'
+
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
             inputs:
@@ -428,6 +437,15 @@ stages:
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
+          - task: Cache@2
+            displayName: Cache NuGet packages
+            inputs:
+              key: 'nuget | "$(Agent.OS)" | **/packages.lock.json,!**/bin/**,!**/obj/**'
+              restoreKeys: |
+                nuget | "$(Agent.OS)"
+                nuget
+              path: '$(Pipeline.Workspace)/$(runtime)/.nuget/packages'
+
           # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
           # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
           - task: DotNetCoreCLI@2
@@ -553,6 +571,15 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          - task: Cache@2
+            displayName: Cache NuGet packages
+            inputs:
+              key: 'nuget | "$(Agent.OS)" | **/packages.lock.json,!**/bin/**,!**/obj/**'
+              restoreKeys: |
+                nuget | "$(Agent.OS)"
+                nuget
+              path: '$(Pipeline.Workspace)/$(runtime)/.nuget/packages'
 
           # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
           # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
