@@ -75,7 +75,6 @@ settings:
       desc: desc
       asc: asc
 
-
 download:
   selectors:
     - selector: a[href*="/download.php?id="]
