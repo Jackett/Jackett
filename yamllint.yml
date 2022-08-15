@@ -14,6 +14,11 @@ rules:
   comments-indentation: disable
   document-start:
     level: error
+  empty-lines:
+    max: 1
+  empty-values: enable
+  indentation:
+    spaces: 2
   line-length: disable
   new-lines:
     type: platform
