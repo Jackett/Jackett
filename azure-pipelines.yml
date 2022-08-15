@@ -104,7 +104,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
+            clean: false
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -308,6 +308,7 @@ stages:
           clean: all
         steps:
           - checkout: self
+            clean: false
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -341,6 +342,7 @@ stages:
           clean: all
         steps:
           - checkout: self
+            clean: false
 
           - task: UsePythonVersion@0
             displayName: Install Python
@@ -361,6 +363,7 @@ stages:
           clean: all
         steps:
           - checkout: self
+            clean: false
 
           - task: Bash@3
             displayName: Validate YAML Schema
@@ -419,7 +422,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            path: $(runtime) # will checkout at $(Pipeline.Workspace)/$(runtime)
+            clean: false
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -517,7 +520,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
+            clean: false
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
@@ -595,6 +598,7 @@ stages:
           vmImage: ubuntu-20.04
         steps:
           - checkout: self
+            clean: false
 
           - task: DownloadBuildArtifacts@0
             displayName: Download Artifacts for Publish
