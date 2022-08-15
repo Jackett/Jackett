@@ -5,6 +5,7 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>JackettService</AssemblyName>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <NoWarn />
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />

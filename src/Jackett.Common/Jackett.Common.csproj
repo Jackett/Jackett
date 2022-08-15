@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>0.0.0</Version>
     <LangVersion>8</LangVersion>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <NoWarn />
     <WarningsAsErrors />
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
