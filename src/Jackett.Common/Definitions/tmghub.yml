@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    #Movies
+    # Movies
     - {id: 29, cat: Movies, desc: "Movie Packs"}
     - {id: 30, cat: Movies, desc: "V.I.P"}
     - {id: 13, cat: Movies/BluRay, desc: "BD-25/BD-50"}
@@ -26,19 +26,19 @@ caps:
     - {id: 19, cat: Movies, desc: "Pre Releases "}
     - {id: 42, cat: Movies, desc: "Dubbed Movies"}
     - {id: 44, cat: Movies, desc: "TmG Special"}
-    #Music
+    # Music
     - {id: 27, cat: Audio, desc: "MP3/FLAC/WAV"}
     - {id: 23, cat: Audio/Video, desc: "Music Videos"}
     - {id: 37, cat: Audio, desc: "Music Packs"}
-    #Television
+    # Television
     - {id: 40, cat: TV, desc: "TV Shows"}
     - {id: 28, cat: TV, desc: "TV Series"}
     - {id: 25, cat: TV/Sport, desc: "Sports"}
     - {id: 26, cat: TV/Documentary, desc: "Documentary"}
-    #Books
+    # Books
     - {id: 38, cat: Books/EBook, desc: "E-Books"}
     - {id: 34, cat: Books, desc: "Guides / Tutorials"}
-    #Others
+    # Others
     - {id: 5, cat: TV/Anime, desc: "Anime"}
     - {id: 39, cat: Other, desc: "Religious"}
     - {id: 43, cat: Other, desc: "Other"}

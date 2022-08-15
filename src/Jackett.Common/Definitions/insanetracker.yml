@@ -41,7 +41,6 @@ caps:
     - {id: 28, cat: XXX/ImageSet, desc: "XXX Képek"}
     - {id: 29, cat: Other, desc: "Képek"}
 
-
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid]

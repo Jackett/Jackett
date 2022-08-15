@@ -27,7 +27,6 @@ caps:
     - {id: 14, cat: TV/Sport, desc: "HD"}
     - {id: 7, cat: TV/Sport, desc: "Misc"}
 
-
   modes:
     search: [q]
     tv-search: [q, season, ep]
