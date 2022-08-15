@@ -9,11 +9,17 @@
 extends: default
 
 rules:
-  document-start:
-    level: error
-  line-length: disable
-  truthy: disable
-  new-lines:
-    type: platform
   comments:
     min-spaces-from-content: 1
+  comments-indentation: disable
+  document-start:
+    level: error
+  empty-lines:
+    max: 1
+  empty-values: enable
+  indentation:
+    spaces: 2
+  line-length: disable
+  new-lines:
+    type: platform
+  truthy: disable

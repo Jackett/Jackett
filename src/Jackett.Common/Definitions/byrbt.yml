@@ -99,10 +99,8 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
-
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
-
 
   fields:
     category:

@@ -48,7 +48,6 @@ settings:
       DESC: desc
       ASC: asc
 
-
 download:
   selectors:
     - selector: a[href^="/torrentfiles/"]
