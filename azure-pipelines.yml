@@ -120,7 +120,7 @@ stages:
               restoreKeys: |
                 nuget | "$(Agent.OS)"
                 nuget
-              path: '$(Pipeline.Workspace)/$(runtime)/.nuget/packages'
+              path: '$(Pipeline.Workspace)/.nuget/packages'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
@@ -444,7 +444,7 @@ stages:
               restoreKeys: |
                 nuget | "$(Agent.OS)"
                 nuget
-              path: '$(Pipeline.Workspace)/$(runtime)/.nuget/packages'
+              path: '$(Pipeline.Workspace)/.nuget/packages'
 
           # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
           # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
@@ -579,7 +579,7 @@ stages:
               restoreKeys: |
                 nuget | "$(Agent.OS)"
                 nuget
-              path: '$(Pipeline.Workspace)/$(runtime)/.nuget/packages'
+              path: '$(Pipeline.Workspace)/.nuget/packages'
 
           # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
           # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
