@@ -114,6 +114,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -122,21 +123,21 @@ stages:
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          - task: PowerShell@2
-            # Because we have many parallel builds this error occurs:
-            # error MSB4018: System.IO.IOException: The process cannot access the file
-            # '/home/vsts/work/1/s/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
-            # because it is being used by another process. [/home/vsts/work/1/s/src/DateTimeRoutines/DateTimeRoutines.csproj]
-            displayName: Wait before build
-            inputs:
-              targetType: inline
-              script: Start-Sleep -Seconds $(buildDelay)
+#          - task: PowerShell@2
+#            # Because we have many parallel builds this error occurs:
+#            # error MSB4018: System.IO.IOException: The process cannot access the file
+#            # '/home/vsts/work/1/s/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
+#            # because it is being used by another process. [/home/vsts/work/1/s/src/DateTimeRoutines/DateTimeRoutines.csproj]
+#            displayName: Wait before build
+#            inputs:
+#              targetType: inline
+#              script: Start-Sleep -Seconds $(buildDelay)
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
             inputs:
               command: publish
-              projects: 'src/Jackett.Server/Jackett.Server.csproj'
+              projects: '$(runtime)/src/Jackett.Server/Jackett.Server.csproj'
               publishWebProjects: false
               zipAfterPublish: false
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
@@ -145,7 +146,7 @@ stages:
             displayName: Build Jackett Updater
             inputs:
               command: publish
-              projects: 'src/Jackett.Updater/Jackett.Updater.csproj'
+              projects: '$(runtime)/src/Jackett.Updater/Jackett.Updater.csproj'
               publishWebProjects: false
               zipAfterPublish: false
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
@@ -155,7 +156,7 @@ stages:
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               command: publish
-              projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
+              projects: '$(runtime)/src/Jackett.Tray/Jackett.Tray.csproj'
               publishWebProjects: false
               zipAfterPublish: false
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
@@ -165,7 +166,7 @@ stages:
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               command: publish
-              projects: 'src/Jackett.Service/Jackett.Service.csproj'
+              projects: '$(runtime)/src/Jackett.Service/Jackett.Service.csproj'
               publishWebProjects: false
               zipAfterPublish: false
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
