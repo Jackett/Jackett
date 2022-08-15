@@ -52,7 +52,6 @@ caps:
     - {id: 20, cat: Books, desc: "E-Book / Magyar"}
     - {id: 52, cat: Books, desc: "E-Book / Egyéb"}
 
-
   modes:
     search: [q]
     tv-search: [q, season, ep]
