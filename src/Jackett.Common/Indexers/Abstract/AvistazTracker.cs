@@ -69,6 +69,9 @@ namespace Jackett.Common.Indexers.Abstract
             else
                 qc.Add("search", GetSearchTerm(query).Trim());
 
+            if (!string.IsNullOrWhiteSpace(query.Genre))
+                qc.Add("tags", query.Genre);
+
             return qc;
         }
 
