@@ -1,4 +1,5 @@
 ---
+test-root: 0daykiev
 id: 0daykiev
 name: 0day.kiev
 description: "0day.kiev.ua is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
@@ -35,6 +36,7 @@ caps:
     - {id: 31, cat: Other, desc: "Прочее (Other)"}
 
   modes:
+    test-caps-modes: [q]
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
@@ -73,6 +75,7 @@ settings:
       asc: asc
 
 login:
+  test-login: takelogin.php
   path: takelogin.php
   method: post
   inputs:
@@ -88,6 +91,8 @@ login:
     selector: a[href="/logout.php"]
 
 search:
+  test-search:
+    - path: browse.php
   paths:
     # https://tracker.0day.kiev.ua/browse.php?c10=1&c27=1&search=endgame&incldead=1&where=0
     - path: browse.php
@@ -111,6 +116,8 @@ search:
   rows:
     selector: table > tbody > tr.rowtorrentinfo
   fields:
+    test-search-fields:
+      selector: a[href^="browse.php?cat="]
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
