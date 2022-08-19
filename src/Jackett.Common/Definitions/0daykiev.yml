@@ -119,6 +119,8 @@ search:
       filters:
         - name: querystring
           args: cat
+    test2:
+      selector: a[href^="browse.php?cat="]
     title:
       selector: a[href^="details.php?id="]
       filters:
