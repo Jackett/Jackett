@@ -375,15 +375,14 @@ stages:
                 # set fail as false
                 fail=0
                 ajv test -d "src/Jackett.Common/Definitions/*.yml" -s "src/Jackett.Common/Definitions/schema.json" --valid --all-errors -c ajv-formats
-                testresult=$?
-                if [ "$testresult" -ne 0 ]; then
+                if [ "$?" -eq 1 ]; then
                     fail=1
                 fi
-                if [ "$fail" -ne 0 ]; then
+                if [ "$fail" -eq 1 ]; then
                     echo "Validation Failed"
                     exit 1
                 fi
-                echo "Validation Success"
+                echo "Validation Successful"
                 exit 0
 
   - stage: UnitTestJackett
