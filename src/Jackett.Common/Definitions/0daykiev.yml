@@ -151,7 +151,8 @@ search:
       attribute: href
     download:
       selector: a[href^="download.php?id="]
-      attribute: href
+      # test: the attribute has a leading space
+       attribute: href
     date:
       selector: td:nth-child(2) i
       filters:
