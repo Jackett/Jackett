@@ -111,12 +111,16 @@ search:
   rows:
     selector: table > tbody > tr.rowtorrentinfo
   fields:
+    test:
+      selector: a[href^="browse.php?cat="]
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    test2:
+      selector: a[href^="browse.php?cat="]
     title:
       selector: a[href^="details.php?id="]
       filters:
