@@ -136,6 +136,8 @@ search:
       optional: true
     genre:
       selector: td:nth-child(5)
+        - name: replace
+          args: ["\n", " "]
     _mom:
       selector: img[title^="CURRENT"]
       attribute: title
