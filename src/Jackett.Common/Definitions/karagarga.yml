@@ -136,6 +136,7 @@ search:
       optional: true
     genre:
       selector: td:nth-child(5)
+      filters:
         - name: replace
           args: ["\n", " "]
     _mom:
