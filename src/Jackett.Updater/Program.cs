@@ -327,6 +327,7 @@ namespace Jackett.Updater
                 "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
+                "Definitions/dragonworldreloaded.yml",
                 "Definitions/dreamteam.yml",
                 "Definitions/dxdhd.yml",
                 "Definitions/efectodoppler.yml",
