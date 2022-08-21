@@ -125,7 +125,7 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     doubanid:
-      selector: a[href*="douban.com/subject/"]
+      selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
