@@ -168,7 +168,7 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-    _genre:
+    genre_optional:
       # Drama, Romance | N/A | 2022 | 112 min | N/A
       # Drama:Family:Romance
       selector: td:nth-child(2)
@@ -178,7 +178,7 @@ search:
           args: ["|", 0]
     genre:
       # if its VIP then do not keep genre
-      text: "{{ if .Result._vip }}{{ else }}{{ .Result._genre }}{{ end }}"
+      text: "{{ if .Result._vip }}{{ else }}{{ .Result.genre_optional }}{{ end }}"
     description:
       text: "{{ if .Result._vip }}VIP ONLY{{ else }}{{ .Result.genre }}{{ end }}"
     minimumratio:
