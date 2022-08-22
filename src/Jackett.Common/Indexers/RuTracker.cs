@@ -1481,7 +1481,10 @@ namespace Jackett.Common.Indexers
         {
             var queryCollection = new NameValueCollection();
 
-            var searchString = query.SanitizedSearchTerm;
+            var searchString = query.GetQueryString();
+            //  replace any space, special char, etc. with % (wildcard)
+            var ReplaceRegex = new Regex("[^a-zA-Zа-яА-Я0-9]+");
+            searchString = ReplaceRegex.Replace(searchString, "%");
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
