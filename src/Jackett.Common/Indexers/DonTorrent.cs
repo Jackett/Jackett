@@ -39,7 +39,7 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "buscar/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://dontorrent.pet/",
+            "https://dontorrent.soy/",
             "https://todotorrents.net/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
@@ -48,23 +48,6 @@ namespace Jackett.Common.Indexers
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://dontorrent.it/",
-            "https://dontorrent.red/",
-            "https://dontorrent.nu/",
-            "https://dontorrent.si/",
-            "https://dontorrent.sk/",
-            "https://dontorrent.li/",
-            "https://dontorrent.top/",
-            "https://dontorrent.pm/",
-            "https://dontorrent.re/",
-            "https://dontorrent.wf/",
-            "https://dontorrent.run/",
-            "https://dontorrent.cat/",
-            "https://dontorrent.pl/",
-            "https://dontorrent.tel/",
-            "https://dontorrent.nl/",
-            "https://dontorrent.cx/",
-            "https://dontorrent.bet/",
             "https://dontorrent.cab/",
             "https://dontorrent.wtf/",
             "https://dontorrent.fi/",
@@ -78,7 +61,8 @@ namespace Jackett.Common.Indexers
             "https://dontorrent.vet/",
             "https://dontorrent.dog/",
             "https://dontorrent.dev/",
-            "https://dontorrent.bid/"
+            "https://dontorrent.bid/",
+            "https://dontorrent.pet/"
         };
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
@@ -96,7 +80,7 @@ namespace Jackett.Common.Indexers
             : base(id: "dontorrent",
                    name: "DonTorrent",
                    description: "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL",
-                   link: "https://dontorrent.pet/",
+                   link: "https://dontorrent.soy/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
