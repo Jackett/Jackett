@@ -103,7 +103,7 @@ search:
     # can support genre searching but you need to know the id, eg &genre2=1 for Comedy (id is 2)
 
   rows:
-    selector: table[width="920px"] > tbody > tr:has(a[href^="letoltes.php?cat="])
+    selector: "table[border=\"1\"][cellpadding=\"3\"][style=\"width: 920px;\"] > tbody > tr:has(a[href^=\"letoltes.php?cat=\"])"
 
   fields:
     category:

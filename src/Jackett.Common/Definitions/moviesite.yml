@@ -137,8 +137,22 @@ search:
       filters:
         - name: replace
           args: ["../pic/+18.png", ""]
+    genre:
+      selector: font[color="black"]
+      filters:
+        - name: replace
+          args: ["Műfaj:\xA0", ""]
+        - name: replace
+          args: ["Categorie:\xA0", ""]
+        - name: replace
+          args: ["Genre:\xA0", ""]
+        - name: replace
+          args: ["\x09", ""]
     description:
       selector: div center font b i
+      filters:
+        - name: append
+          args: "{{ if .Result.genre }}</br>{{ .Result.genre }}{{ else }}{{ end }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

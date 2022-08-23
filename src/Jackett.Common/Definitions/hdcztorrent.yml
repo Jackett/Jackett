@@ -113,7 +113,6 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
-
 search:
   paths:
     # http://www.hd-cztorrent.cz/index.php?page=torrents&search=the+avengers&category=0&uploader=0&options=0&active=0&gold=0&order=3&by=2

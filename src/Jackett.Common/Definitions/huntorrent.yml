@@ -103,11 +103,12 @@ search:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # Age Limit: 0 all, 1 no, 5 6, 2 12, 3 16, 4 18
     korhatar: 0
-    # 0 active, 1 all, 2 dead, 3 my uploads, 4  my bookmarks
+    # 0 active, 1 active+dead, 2 dead, 3 my uploads, 4  waiting for seed, 7 my bookmarks, 12 reseeded by me
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # no freeleech atm
+    # can search by genre but you need to know the id. &mufaj[]=20 for Romantikus
 
   rows:
     selector: table[align="center"][cellpadding="5"] > tbody > tr[id^="torrent-main-"]
@@ -133,8 +134,13 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    genre:
+      selector: "span[style=\"font-size: 6pt; font-weight: bold;\"]"
     description:
       selector: td:nth-child(2) div:nth-child(2)
+      filters:
+        - name: append
+          args: "{{ if .Result.genre }}</br>{{ .Result.genre }}{{ else }}{{ end }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

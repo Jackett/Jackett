@@ -148,6 +148,8 @@ search:
           args: ["napja", "day"]
         - name: replace
           args: ["hete", "week"]
+        - name: replace
+          args: ["éve", "year"]
         - name: timeago
     downloadvolumefactor:
       text: 0

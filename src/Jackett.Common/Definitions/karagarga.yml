@@ -134,18 +134,17 @@ search:
     _subs:
       selector: span:contains("Subs:")
       optional: true
-    _genre:
+    genre:
       selector: td:nth-child(5)
-      optional: true
       filters:
-        - name: prepend
-          args: "Genre: "
+        - name: replace
+          args: ["\n", " "]
     _mom:
       selector: img[title^="CURRENT"]
       attribute: title
       optional: true
     description:
-      text: "{{ .Result._subs }} {{ .Result._genre }}{{ if .Result._mom }} Current MoM{{ else }}{{ end }}"
+      text: "{{ if .Result._subs }}Subs: {{ .Result._subs }}</br>{{ else }}{{ end }}{{ if .Result.genre }}Genre: {{ .Result.genre }}</br>{{ else }}{{ end }}{{ if .Result._mom }}Current MoM{{ else }}{{ end }}"
     downloadvolumefactor:
       case:
         "span:contains(\"Freeleech\")": 0

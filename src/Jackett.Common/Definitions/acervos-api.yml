@@ -104,8 +104,18 @@ search:
             - "Portuguese (Brazil) English"
     details:
       selector: details_link
+    _cat:
+      selector: category
+    _type:
+      selector: type
+    _res:
+      selector: resolution
+      optional: true
+    _reg:
+      selector: region
+      optional: true
     description:
-      selector: media_info
+      text: "{{ .Result._cat }} {{ .Result._type }} {{ .Result._res }} {{ .Result._reg }}"
     download:
       selector: download_link
     infohash:

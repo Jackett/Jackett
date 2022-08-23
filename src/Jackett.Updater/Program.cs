@@ -327,6 +327,7 @@ namespace Jackett.Updater
                 "Definitions/documentarytorrents.yml",
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
+                "Definitions/dragonworldreloaded.yml",
                 "Definitions/dreamteam.yml",
                 "Definitions/dxdhd.yml",
                 "Definitions/efectodoppler.yml",
@@ -391,6 +392,7 @@ namespace Jackett.Updater
                 "Definitions/infinityt.yml",
                 "Definitions/inperil.yml",
                 "Definitions/isohunt.yml",
+                "Definitions/iv-torrents.yml",
                 "Definitions/jme-reunit3d.yml", // switch to -API #13043
                 "Definitions/kapaki.yml",
                 "Definitions/katcrs.yml",
@@ -515,7 +517,6 @@ namespace Jackett.Updater
                 "Definitions/torrent-paradise-ml.yml",
                 "Definitions/torrent4you.yml",
                 "Definitions/torrentbomb.yml",
-                "Definitions/torrentcore.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentfactory.yml",
                 "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
@@ -552,6 +553,7 @@ namespace Jackett.Updater
                 "Definitions/vanila.yml",
                 "Definitions/vhstapes.yml",
                 "Definitions/waffles.yml",
+                "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
                 "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/worldofp2p.yml",

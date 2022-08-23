@@ -25,14 +25,22 @@ caps:
     - {id: 430, cat: TV/Anime, desc: "Animate(3D动画、2.5次元)"}
     - {id: 431, cat: TV/Anime, desc: "ACGN(二次元)"}
     - {id: 432, cat: TV/Other, desc: "Baby(婴幼、早教、小学及相关)"}
+    - {id: 440, cat: XXX, desc: "9kg-AV(步兵/无码)"}
+    - {id: 441, cat: XXX, desc: "9kg-Sex(骑兵/有码)"}
+    - {id: 442, cat: XXX, desc: "9kg-III(三级片、限制级电影)"}
+    - {id: 443, cat: XXX, desc: "9kg-H动漫"}
+    - {id: 444, cat: XXX, desc: "9kg-H游戏"}
+    - {id: 445, cat: XXX, desc: "9kg-H书籍(书籍、有声书)"}
+    - {id: 446, cat: XXX, desc: "9kg-H写真(图片、私拍、短视频）"}
+    - {id: 447, cat: XXX, desc: "9kg-H音频(ASMR、音乐、音频)"}
     - {id: 450, cat: Other, desc: "Resource(资源、素材、模板)"}
     - {id: 451, cat: PC, desc: "Software(软件、系统、 程序、APP等)"}
     - {id: 490, cat: Other, desc: "Other(其它)"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
     book-search: [q]
 
@@ -71,15 +79,18 @@ login:
 search:
   paths:
     - path: torrents.php
+      categories: ["!", 440, 441, 442, 443, 444, 445, 446, 447]
+    - path: adults.php
+      categories: [440, 441, 442, 443, 444, 445, 446, 447]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 3 uploader, 4 imdburl (searching imdburl does not work with tt1234567, but descr is good)
-    search_area: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 2 smalldesc, 3 uploader, 4 imdburl, 5 doubanurl
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}5{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
 
@@ -112,6 +123,9 @@ search:
       attribute: src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)

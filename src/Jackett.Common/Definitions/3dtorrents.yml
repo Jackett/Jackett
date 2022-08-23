@@ -10,20 +10,20 @@ links:
 
 caps:
   categorymappings:
-    - {id: 14, cat: Movies, desc: "Movies XviD"}
-    - {id: 34, cat: Movies, desc: "Movies UltraHD"}
-    - {id: 15, cat: Movies, desc: "Movies DVD-R"}
-    - {id: 11, cat: Movies, desc: "Movies 720p"}
-    - {id: 13, cat: Movies, desc: "Movies 1080p"}
-    - {id: 16, cat: Movies, desc: "Movies 3DTV"}
-    - {id: 17, cat: Movies, desc: "Movies Blu-ray"}
-    - {id: 27, cat: Movies, desc: "Movies BD25 Encode"}
-    - {id: 33, cat: Movies, desc: "Movies BD9 AVCHD"}
+    - {id: 14, cat: Movies/SD, desc: "Movies XviD"}
+    - {id: 15, cat: Movies/DVD, desc: "Movies DVD-R"}
+    - {id: 11, cat: Movies/HD, desc: "Movies 720p"}
+    - {id: 13, cat: Movies/HD, desc: "Movies 1080p"}
+    - {id: 16, cat: Movies/3D, desc: "Movies 3DTV"}
+    - {id: 17, cat: Movies/BluRay, desc: "Movies Blu-ray"}
+    - {id: 27, cat: Movies/BluRay, desc: "Movies BD25 Encode"}
+    - {id: 33, cat: Movies/BluRay, desc: "Movies BD9 AVCHD"}
     - {id: 22, cat: Movies, desc: "Movies 2D to 3D Conv"}
     - {id: 32, cat: Movies, desc: "Bluray MKV Remux"}
-    - {id: 23, cat: Movies, desc: "Movies Evo 3D"}
+    - {id: 23, cat: Movies/3D, desc: "Movies Evo 3D"}
+    - {id: 36, cat: Movies/UHD, desc: "Movies 4K UHD Bluray"}
+    - {id: 37, cat: Movies/UHD, desc: "Movies 4K UHD Encode"}
     - {id: 21, cat: PC, desc: "3D Software"}
-    - {id: 2, cat: Audio, desc: "Music"}
     - {id: 28, cat: XXX, desc: "Adult 720p"}
     - {id: 29, cat: XXX, desc: "Adult 1080p"}
     - {id: 30, cat: XXX, desc: "Adult Blu-ray"}
@@ -42,6 +42,21 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      1: desc
+      2: asc
   - name: info
     type: info
     label: Results Per Page
@@ -62,6 +77,7 @@ login:
     - selector: span.errormsg
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
@@ -71,8 +87,12 @@ search:
     search: "{{ .Keywords }}"
     page: torrents
     category: 0
+    # 0 all, 1 Anaglyph 3D, 2 Side by Side,3 Over Under
     3dformat: 0
-    active: 1
+    # 0 all, 1 active only, 2 dead only
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
 
   rows:
     selector: table[cellspacing!="1"].lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
@@ -85,23 +105,26 @@ search:
         - name: querystring
           args: category
     title:
-      remove: span
-      selector: td:nth-child(2)
+      selector: a[href^="index.php?page=torrent-details&id="]
+    details:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: href
     download:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
       filters:
         - name: replace
           args: ["index.php?page=torrent-details&id=", "download.php?id="]
-    details:
+    poster:
       selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: href
-    size:
-      selector: td:nth-last-child(4)
-    seeders:
-      selector: td:nth-last-child(3)
-    leechers:
-      text: 0
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: ",\\'(.+?)\\'"
+    genre:
+      selector: td:nth-child(2) span
+    description:
+      text: "{{ .Result.genre }}"
     date:
       selector: td:nth-last-child(5)
       filters:
@@ -109,11 +132,23 @@ search:
           args: " -07:00" # PDT
         - name: dateparse
           args: "02/01/2006 -07:00"
+    size:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: a[href^="index.php?page=peers"]
+    leechers:
+      selector: td:has(a[href^="index.php?page=peers"]) + td
+    grabs_optional:
+      selector: a[href^="index.php?page=torrent_history"]
+      optional: true
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
     downloadvolumefactor:
       case:
-        img[title^="You get 50% off download count on this torrent"]: 0.5
+        img[src="images/50off.png"]: 0.5
         "*": 1
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
+    minimumratio:
+      text: 1.0
 # xbtit

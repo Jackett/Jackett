@@ -141,6 +141,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Tokyo Tosho
  * Torlock
  * Torlook
+ * Torrent[CORE]
  * Torrent Downloads (TD)
  * Torrent Oyun indir
  * torrent.by
@@ -200,7 +201,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HD-CzTorrent
  * HDGalaKtik
  * HunTorrent
- * IV-Torrents
  * KinoNaVse100
  * Kinorun
  * Kinozal
@@ -244,7 +244,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 1ptbar
  * 2 Fast 4 You [![(invite needed)][inviteneeded]](#)
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
- * 3D Torrents (3DT) [![(invite needed)][inviteneeded]](#)
+ * 3D Torrents (3DT)
  * 4thD (4th Dimension)
  * 52PT
  * Abnormal
@@ -335,7 +335,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * DiscFan
  * DivTeam
  * DocsPedia
- * Dragonworld Reloaded [![(invite needed)][inviteneeded]](#)
  * Dream Tracker
  * EbookParadijs
  * Ebooks-Shares
@@ -590,7 +589,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnionGang [![(invite needed)][inviteneeded]](#)
  * UnlimitZ
  * Vizuk
- * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * White Angel
  * wOOt [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)

@@ -154,6 +154,9 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
+    tvdbid:
+      selector: a[href*="thetvdb.com/"]
+      attribute: href
     tmdbid:
       selector: a[href*="themoviedb.org/movie/"], a[href*="themoviedb.org/tv/"]
       attribute: href
@@ -218,4 +221,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# html UNIT3D 6.1.0 custom
+# html UNIT3D 6.2.1 custom

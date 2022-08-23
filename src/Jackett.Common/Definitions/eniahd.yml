@@ -6,9 +6,9 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - https://eniahd.com/
-legacylinks:
   - https://eniatv.com/
+legacylinks:
+  - https://eniahd.com/
 
 caps:
   categorymappings:
@@ -94,7 +94,6 @@ login:
   inputs:
     login_username: "{{ .Config.username }}"
     login_password: "{{ .Config.password }}"
-    redirect: "/index.php"
     autologin: 1
   error:
     - selector: table.error

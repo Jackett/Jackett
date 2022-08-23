@@ -7,12 +7,13 @@ type: public
 encoding: UTF-8
 links:
   - https://pb.wtf/
-  - http://top.piratbit.fun/
+  - https://top.pirat.one/
 legacylinks:
   - https://piratbit.pw/
   - https://piratbit.ml/
   - http://piratbit.top/
   - https://piratbit.top/
+  - http://top.piratbit.fun/
 
 caps:
   categorymappings:

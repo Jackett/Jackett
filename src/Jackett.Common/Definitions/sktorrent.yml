@@ -47,8 +47,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, genre]
+    movie-search: [q, genre]
     music-search: [q]
     book-search: [q]
 
@@ -78,6 +78,7 @@ search:
     category: "{{ range .Categories }}{{.}};{{end}}"
     # 0 all, 1 activeonly, 2 deadonly
     active: 0
+    zaner: "{{ .Query.Genre }}"
   keywordsfilters:
     - name: diacritics
       args: replace
@@ -219,6 +220,17 @@ search:
       filters:
         - name: regexp
           args: "Stahuju : (\\d+)"
+    genre:
+      selector: div > div
+      filters:
+        - name: replace
+          args: ["\n", ""]
+        - name: replace
+          args: ["\x09", " "]
+        - name: validate
+          args: "Akcni, Animovany, Dobrodruzny, Dokumentarny, Drama, Eroticky, Experimentalni, Fantasy, Historicky, Horor, Hudebni, Katastroficky, Komedie, Kratkometrazni, Krimi, Loutkovy, Muzikal, Mysteriozni, Pohadka, Povidkovy, Psychologicky, Publicisticky, Reality-TV, Road-Movie, Rodinny, Romanticky, Sci-Fi, Soutezni, Sportovni, Talk-show, Telenovela, Thriller, Valecny, Western, Zivotopisny"
+    description:
+      text: "{{ .Result.genre }}"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

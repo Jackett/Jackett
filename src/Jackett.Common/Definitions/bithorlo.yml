@@ -45,7 +45,6 @@ caps:
     - {id: 9, cat: XXX, desc: "XXX/Film"}
     - {id: 10, cat: XXX, desc: "XXX/Kép"}
 
-
   modes:
     search: [q]
     tv-search: [q, season, ep]

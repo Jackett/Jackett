@@ -113,7 +113,7 @@ search:
         - name: re_replace
           args: ["(?i)(seizoen\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "S$2-$4"]
         - name: re_replace
-          args: ["(?i)(seizoen\\s*)(\\d{1,2})\\s*", "S$2"]
+          args: ["(?i)(seizoen\\s*)(\\d{1,2})", "S$2"]
         - name: re_replace
           args: ["(?i)(afl.\\s*|aflevering\\s*|ep.\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "E$2-$4"]
         - name: re_replace

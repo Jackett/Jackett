@@ -172,8 +172,16 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
+    genre:
+      selector: li.linka2
+      filters:
+        - name: validate
+          args: "Аниме, Биографический, Боевик, Вестерн, Военный, Детектив, Документальный, Драма, Исторический, Комедия, Короткометражный, Криминал, Мелодрама, Мистика, Музыкальный, Мультфильм, Приключения, Семейный, Спорт, Триллер, Ужасы, Фантастика, Фэнтези"
     description:
       selector: span.noimg
+      filters:
+        - name: append
+          args: "{{ if .Result.genre }}</br>{{ .Result.genre }}{{ else }}{{ end }}"
     date:
       selector: a:has(span.glyphicon-time)
       filters:
