@@ -10,28 +10,29 @@ links:
 
 caps:
   categorymappings:
-    - {id: 10, cat: Movies/DVD, desc: "Film DVD rip"}
-    - {id: 111, cat: Movies/DVD, desc: "Film DVD Promo"}
-    - {id: 118, cat: Movies/DVD, desc: "Film DVD Kids"}
-    - {id: 113, cat: Movies, desc: "Films Independent"}
-    - {id: 129, cat: Movies/HD, desc: "Films HD DVD"}
-    - {id: 130, cat: Movies/UHD, desc: "Films 4K"}
-    - {id: 143, cat: Movies/HD, desc: "Films DivX 720P"}
-    - {id: 114, cat: Audio/MP3, desc: "Muziek MP3"}
+    - {id: 130, cat: Movies/UHD, desc: "4K Film"}
+    - {id: 129, cat: Movies/HD, desc: "HD Film - HD MKV"}
+    - {id: 123, cat: Movies/HD, desc: "HD Film - HEVC x265"}
+    - {id: 10, cat: Movies/DVD, desc: "DVD Film - Retail DVD"}
+    - {id: 111, cat: Movies/DVD, desc: "DVD Film - HD2DVD / BR2DVD"}
+    - {id: 128, cat: Audio/Video, desc: "DVD Film - Muziek DVD"}
+    - {id: 118, cat: Movies/Other, desc: "DVD Film - Kids DVD"}
+    - {id: 125, cat: Movies/SD, desc: "DivX - Divx Rip"}
+    - {id: 143, cat: Movies/HD, desc: "DivX - Divx 720P"}
+    - {id: 132, cat: TV, desc: "Serie's - Complete Seizoen"}
+    - {id: 139, cat: TV, desc: "Serie's - Losse Afleveringen"}
+    - {id: 105, cat: TV/Documentary, desc: "Docu's"}
+    - {id: 115, cat: PC/0day, desc: "Software - Windows"}
+    - {id: 116, cat: PC/Mac, desc: "Software - Mac"}
+    - {id: 105, cat: PC/ISO, desc: "Software - Linux"}
+    - {id: 120, cat: PC/Games, desc: "Games"}
+    - {id: 114, cat: Audio/MP3, desc: "Muziek - MP3"}
+    - {id: 142, cat: Audio/Lossless, desc: "Muziek - Flac"}
+    - {id: 131, cat: Books/Comics, desc: "Stipboeken"}
     - {id: 140, cat: Books/EBook, desc: "E-Book"}
-    - {id: 105, cat: TV/Documentary, desc: "Documentaire"}
-    - {id: 115, cat: PC, desc: "PC apps"}
-    - {id: 120, cat: PC/Games, desc: "PC Games"}
-    - {id: 106, cat: Other, desc: "Overig"}
-    - {id: 131, cat: Books/Comics, desc: "Stripboeken"}
-    - {id: 132, cat: TV/HD, desc: "TV HD Serie"}
-    - {id: 116, cat: PC/Mac, desc: "Mac Software"}
-    - {id: 125, cat: Movies/SD, desc: "Xvid Rip"}
-    - {id: 123, cat: Movies/HD, desc: "MKV/X265"}
-    - {id: 108, cat: XXX, desc: "18+"}
-    - {id: 142, cat: XXX/x264, desc: "18+ HD"}
-    - {id: 139, cat: TV, desc: "TV Series"}
-    - {id: 128, cat: Audio/Video, desc: "muziek DVD"}
+    - {id: 155, cat: Books/Mags, desc: "Tijdschriften"}
+    - {id: 108, cat: XXX, desc: "18+ XXX"}
+    - {id: 106, cat: Other, desc: "Overige"}
 
   modes:
     search: [q]
@@ -91,6 +92,11 @@ search:
     search: "{{ .Keywords }}"
     incldead: 1
     # does not support imdbid search and does not return imdb link in results
+  keywordsfilters:
+    - name: re_replace # S01E02 to 1 2
+      args: ["(?i)\\bS0*(\\d{1,2})\\s*E0*(\\d{1,2})\\b", "$1 $2"]
+    - name: re_replace # S01 to 1
+      args: ["(?i)\\bS0*(\\d{1,2})\\b", "$1"]
 
   rows:
     selector: table.mainouter
@@ -108,11 +114,13 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: re_replace
-          args: ["(?i)seizoen\\s*(\\d{1,2})\\s*(tot|t\/m)\\s*(\\d{1,2})", "S$1-$3"]
+          args: ["(?i)(seizoen\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "S$2-$4"]
         - name: re_replace
           args: ["(?i)(seizoen\\s*)(\\d{1,2})", "S$2"]
         - name: re_replace
-          args: ["(?i)(afl.\\s*|aflevering\\s*)(\\d{1,2})", "E$2"]
+          args: ["(?i)(afl.\\s*|aflevering\\s*|ep.\\s*)(\\d{1,2})\\s*(tot|t\/m|&|\\+)\\s*(\\d{1,2})", "E$2-$4"]
+        - name: re_replace
+          args: ["(?i)(afl.\\s*|aflevering\\s*|ep.\\s*)(\\d{1,2})", "E$2"]
         - name: re_replace
           args: ["(?i)compleet", "Complete"]
     details:
@@ -183,4 +191,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
 # engine n/a
