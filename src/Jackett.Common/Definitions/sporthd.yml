@@ -12,6 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 97, cat: TV/Sport, desc: "J.League"}
     - {id: 83, cat: TV/Sport, desc: "AFC Champions League"}
     - {id: 50, cat: TV/Sport, desc: "Australian Open"}
     - {id: 32, cat: TV/Sport, desc: "Basketball"}
@@ -39,8 +40,10 @@ caps:
     - {id: 40, cat: TV/Sport, desc: "Coppa Italia"}
     - {id: 51, cat: TV/Sport, desc: "Coupe de France"}
     - {id: 79, cat: TV/Sport, desc: "cyclisme"}
+    - {id: 94, cat: TV/Sport, desc: "Danish Superliga"}
     - {id: 39, cat: TV/Sport, desc: "DFB Pokal"}
     - {id: 72, cat: TV/Sport, desc: "EFL"}
+    - {id: 96, cat: TV/Sport, desc: "Ekstraklasa"}
     - {id: 49, cat: TV/Sport, desc: "English League Cup"}
     - {id: 8, cat: TV/Sport, desc: "EPL"}
     - {id: 13, cat: TV/Sport, desc: "Eredivisie"}
@@ -50,6 +53,7 @@ caps:
     - {id: 53, cat: TV/Sport, desc: "Euroleague ULEB"}
     - {id: 86, cat: TV/Sport, desc: "Europe Cup FIBA"}
     - {id: 38, cat: TV/Sport, desc: "FA Cup"}
+    - {id: 103, cat: TV/Sport, desc: "FIBA Euro Basket"}
     - {id: 59, cat: TV/Sport, desc: "FIFA U-20 World Cup"}
     - {id: 69, cat: TV/Sport, desc: "FIFA World Clup Cup"}
     - {id: 19, cat: TV/Sport, desc: "Football League Championship"}
@@ -57,30 +61,38 @@ caps:
     - {id: 81, cat: TV/Sport, desc: "France Ligue 2"}
     - {id: 7, cat: TV/Sport, desc: "Friendly matches"}
     - {id: 91, cat: TV/Sport, desc: "Greece Basket"}
+    - {id: 100, cat: TV/Sport, desc: "Greece Super League"}
     - {id: 30, cat: TV/Sport, desc: "Handball"}
     - {id: 31, cat: TV/Sport, desc: "IIHF"}
     - {id: 15, cat: TV/Sport, desc: "IndyCar"}
+    - {id: 95, cat: TV/Sport, desc: "J Liga Japan"}
     - {id: 20, cat: TV/Sport, desc: "KHL"}
     - {id: 10, cat: TV/Sport, desc: "La Liga"}
+    - {id: 12, cat: TV/Sport, desc: "League 1"}
     - {id: 89, cat: TV/Sport, desc: "liga Endesa"}
+    - {id: 98, cat: TV/Sport, desc: "Liga MX"}
     - {id: 84, cat: TV/Sport, desc: "Liga Sudamericana"}
-    - {id: 12, cat: TV/Sport, desc: "Ligue 1"}
     - {id: 21, cat: TV/Sport, desc: "Major League Soccer"}
     - {id: 67, cat: TV/Sport, desc: "MLB"}
     - {id: 63, cat: TV/Sport, desc: "MMA"}
     - {id: 58, cat: TV/Sport, desc: "MotoGP"}
+    - {id: 92, cat: TV/Sport, desc: "Motorsport"}
     - {id: 16, cat: TV/Sport, desc: "NBA"}
     - {id: 57, cat: TV/Sport, desc: "NBA Playoffs"}
     - {id: 14, cat: TV/Sport, desc: "NCAA"}
     - {id: 34, cat: TV/Sport, desc: "NFL"}
     - {id: 17, cat: TV/Sport, desc: "NHL"}
+    - {id: 99, cat: TV/Sport, desc: "NordicBet 1st division Danish"}
     - {id: 36, cat: TV/Sport, desc: "Old classic games"}
     - {id: 68, cat: TV/Sport, desc: "Olympic Games 2016"}
+    - {id: 106, cat: TV/Sport, desc: "Olympic games in tokyo 2021"}
     - {id: 28, cat: TV/Sport, desc: "Other domestic leagues"}
     - {id: 55, cat: TV/Sport, desc: "Paulista A1"}
     - {id: 26, cat: TV/Sport, desc: "Portuguese League"}
+    - {id: 104, cat: TV/Sport, desc: "Qatar Stars League"}
     - {id: 65, cat: TV/Sport, desc: "ROH"}
     - {id: 61, cat: TV/Sport, desc: "Rollan Garros"}
+    - {id: 105, cat: TV/Sport, desc: "RPFL"}
     - {id: 29, cat: TV/Sport, desc: "Rugby"}
     - {id: 82, cat: TV/Sport, desc: "Scotland Premiership"}
     - {id: 9, cat: TV/Sport, desc: "Serie A"}
@@ -93,11 +105,15 @@ caps:
     - {id: 24, cat: TV/Sport, desc: "Tennis"}
     - {id: 64, cat: TV/Sport, desc: "TNA"}
     - {id: 56, cat: TV/Sport, desc: "Torneo Premiera A"}
+    - {id: 102, cat: TV/Sport, desc: "Turkish Basketball Super Leagu"}
     - {id: 75, cat: TV/Sport, desc: "Turkish Super Lig"}
     - {id: 3, cat: TV/Sport, desc: "UCL"}
+    - {id: 107, cat: TV/Sport, desc: "UEFA Conference League"}
     - {id: 4, cat: TV/Sport, desc: "UEL"}
     - {id: 60, cat: TV/Sport, desc: "UFC"}
+    - {id: 93, cat: TV/Sport, desc: "UFS"}
     - {id: 35, cat: TV/Sport, desc: "Volleyball"}
+    - {id: 101, cat: TV/Sport, desc: "VTB United League"}
     - {id: 5, cat: TV/Sport, desc: "WC Qualification"}
     - {id: 1, cat: TV/Sport, desc: "World Cup"}
     - {id: 27, cat: TV/Sport, desc: "World Cup 2014"}
@@ -115,7 +131,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser<li>Open the <b>DevTools</b> panel by pressing <b>F12</b><li>Select the <b>Network</b> tab<li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)<li>Refresh the page by pressing <b>F5</b><li>Click on the first row entry<li>Select the <b>Headers</b> tab on the Right panel<li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</ol>"
-
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -156,7 +175,7 @@ search:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ .Keywords }}"
     # 1 active, 2 dead, 3 free
-    incldead: 1
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     # 0 match again, 1 match like
     s: 0
     # 0 name, 1 description
@@ -174,8 +193,14 @@ search:
       filters:
         - name: querystring
           args: cat
+    _vip:
+      selector: img[src="/pic/vipbig.gif"]
+      optional: true
     title:
       selector: a[href^="details.php?id="]
+      filters:
+        - name: append
+          args: "{{ if .Result._vip }} VIP ONLY{{ else }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -212,5 +237,4 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-# minimumratio: tbd
 # engine n/a
