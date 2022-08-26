@@ -67,6 +67,34 @@ settings:
   - name: pin
     type: text
     label: Pin
+  - name: onlyupload
+    type: checkbox
+    label: Filter OnlyUpload only
+    default: false
+  - name: info_free
+    type: info
+    label: About OnlyUpload at The New Retro
+    default: <li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li>
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
 
 login:
   path: login.php
@@ -89,12 +117,14 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     showsearch: 1
-    orderby: added
-    sort: desc
+    # 0 active, 1 all, 2 dead
     incldead: 1
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+    # site does not support imdbid searching or display imdb links in results.
 
   rows:
-    selector: table.tableinborder > tbody > tr:has(a[href^="download.php?torrent="])
+    selector: "table.tableinborder > tbody > tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
@@ -134,9 +164,10 @@ search:
           args: "02.01.2006 15:04:05 -07:00"
     downloadvolumefactor:
       case:
-        "font[color=\"red\"]:contains(\"Only Upload\")": 0
+        img[src="pic/oupic.gif"]: 0 # only upload is counted
         "*": 1
     uploadvolumefactor:
-      text: 1
-# MR and MST tbd
+      case:
+        img[src="pic/freeleech.gif"]: 0 # nothing is counted
+        "*": 1
 # engine tbd
