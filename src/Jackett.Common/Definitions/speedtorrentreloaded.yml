@@ -1,7 +1,7 @@
 ---
 id: speedtorrentreloaded
 name: SpeedTorrent Reloaded
-description: "SpeedTorrent Reloaded is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "SpeedTorrent Reloaded (ST-Tracker) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
 encoding: UTF-8
@@ -13,43 +13,53 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 89, cat: Movies/UHD, desc: "Movies-4K"}
     - {id: 47, cat: Movies/BluRay, desc: "Movies-Bluray"}
-    - {id: 62, cat: Movies/SD, desc: "Movies-SD"}
     - {id: 48, cat: Movies/HD, desc: "Movies-720p"}
     - {id: 49, cat: Movies/HD, desc: "Movies-1080p"}
     - {id: 11, cat: Movies/DVD, desc: "Movies DVD / HD2DVD"}
-    - {id: 90, cat: Movies/3D, desc: "Movies-3-D"}
     - {id: 60, cat: Movies/HD, desc: "Movies-HDTV"}
+    - {id: 62, cat: Movies/SD, desc: "Movies-SD"}
+    - {id: 89, cat: Movies/UHD, desc: "Movies-4K"}
+    - {id: 90, cat: Movies/3D, desc: "Movies-3-D"}
     - {id: 91, cat: Movies, desc: "Movies-Packs"}
-    - {id: 77, cat: TV/SD, desc: "Serien-SD"}
-    - {id: 78, cat: TV/HD, desc: "Serien-720p"}
-    - {id: 79, cat: TV/HD, desc: "Serien-1080p"}
-    - {id: 16, cat: TV, desc: "Serien-Packs"}
-    - {id: 100, cat: TV/HD, desc: "Staffel-HD"}
-    - {id: 99, cat: TV/SD, desc: "Staffel-SD"}
-    - {id: 95, cat: TV/UHD, desc: "Serien-4K"}
-    - {id: 64, cat: TV/Documentary, desc: "Serien-Doku"}
-    - {id: 4, cat: PC/Games, desc: "PC-Games"}
-    - {id: 84, cat: Console/PS3, desc: "PS3/PS4"}
-    - {id: 84, cat: Console/PS4, desc: "PS3/PS4"}
-    - {id: 85, cat: Console/XBox 360, desc: "Xbox-360"}
-    - {id: 28, cat: PC/0day, desc: "Windows-Programme"}
-    - {id: 18, cat: PC/0day, desc: "Appz-Sonstige"}
+    - {id: 108, cat: Movies, desc: "Movies Remux"}
     - {id: 14, cat: Audio/Other, desc: "Alben / Sampler / Singles"}
-    - {id: 98, cat: Audio, desc: "Discografie"}
-    - {id: 93, cat: Audio/Video, desc: "Musik-Videos"}
     - {id: 36, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 71, cat: Audio/Other, desc: "Soundtracks"}
     - {id: 70, cat: Audio/Lossless, desc: "Flac"}
     - {id: 72, cat: Audio, desc: "Musik-Packs"}
-    - {id: 19, cat: Books/EBook, desc: "EBooks"}
-    - {id: 87, cat: TV/Anime, desc: "Anime"}
-    - {id: 96, cat: Other, desc: "Sonstiges"}
+    - {id: 93, cat: Audio/Video, desc: "Musik-Videos"}
+    - {id: 98, cat: Audio, desc: "Discografie"}
+    - {id: 18, cat: PC/0day, desc: "Appz-Sonstige"}
+    - {id: 28, cat: PC/0day, desc: "Windows-Programme"}
+    - {id: 105, cat: PC, desc: "Linux-Programme"}
+    - {id: 107, cat: PC, desc: "WebScripts"}
     - {id: 23, cat: TV/Sport, desc: "Wrestling"}
     - {id: 74, cat: TV/Sport, desc: "Fussball"}
     - {id: 75, cat: TV/Sport, desc: "Formel 1"}
+    - {id: 16, cat: TV, desc: "Serien-Packs"}
+    - {id: 77, cat: TV/SD, desc: "Serien-SD"}
+    - {id: 78, cat: TV/HD, desc: "Serien-720p"}
+    - {id: 79, cat: TV/HD, desc: "Serien-1080p"}
+    - {id: 95, cat: TV/UHD, desc: "Serien-4K"}
+    - {id: 99, cat: TV/SD, desc: "Staffel-SD"}
+    - {id: 100, cat: TV/HD, desc: "Staffel-HD"}
+    - {id: 109, cat: TV/UHD, desc: "Staffel-UHD"}
+    - {id: 4, cat: PC/Games, desc: "PC-Games"}
+    - {id: 84, cat: Console/PS3, desc: "PS3/PS4"}
+    - {id: 84, cat: Console/PS4, desc: "PS3/PS4"}
+    - {id: 85, cat: Console/XBox 360, desc: "Xbox-360"}
+    - {id: 101, cat: PC/Games, desc: "Mac-Games"}
+    - {id: 104, cat: Console/NDS, desc: "Nintendo"}
+    - {id: 106, cat: PC/Games, desc: "Linux-Games"}
     - {id: 88, cat: XXX, desc: "XXX"}
+    - {id: 19, cat: Books/EBook, desc: "EBooks"}
+    - {id: 87, cat: TV/Anime, desc: "Anime"}
+    - {id: 96, cat: Other, desc: "Sonstiges"}
+    - {id: 102, cat: Books/Mags, desc: "Zeitung/Zeitschrift"}
+    - {id: 113, cat: XXX/Other, desc: "Hentai"}
+    - {id: 111, cat: TV/Documentary, desc: "Doku-HD"}
+    - {id: 112, cat: TV/Documentary, desc: "Doku-SD"}
 
   modes:
     search: [q]
@@ -106,6 +116,7 @@ search:
     search: "{{ .Keywords }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
+    # 0 active, 1 all, 2 dead
     incldead: 1
 
   rows:
@@ -163,4 +174,6 @@ search:
     minimumratio:
       text: 0.7
     minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
+# D€ Source 2017 Version 1.0
