@@ -521,7 +521,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SpeedTorrent Reloaded
  * SpiderTK
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
- * SportHD [![(invite needed)][inviteneeded]](#)
+ * SportHD
  * SportsCult
  * SpringSunday [![(invite needed)][inviteneeded]](#)
  * SugoiMusic
