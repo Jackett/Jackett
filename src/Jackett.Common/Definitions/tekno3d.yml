@@ -10,22 +10,13 @@ links:
 
 caps:
   categorymappings:
-    - {id: 9, cat: TV/Anime, desc: "Anime"}
-    - {id: 1, cat: PC/0day, desc: "Apps"}
     - {id: 29, cat: Audio, desc: "Audio Tracks"}
     - {id: 26, cat: Movies/UHD, desc: "BETA UHD HDR-X"}
     - {id: 32, cat: Movies, desc: "Dolby Vision"}
-    - {id: 5, cat: TV, desc: "Episodes"}
     - {id: 28, cat: Movies, desc: "INTERNAL HDR-X"}
-    - {id: 3, cat: Movies, desc: "Movies"}
-    - {id: 17, cat: Movies/HD, desc: "Movies/1080p BACKUP"}
-    - {id: 18, cat: Movies/HD, desc: "Movies/1080p HDR"}
-    - {id: 11, cat: Movies/HD, desc: "Movies/HDTV"}
-    - {id: 16, cat: Movies/UHD, desc: "Movies/UltraHD 4K HDR"}
-    - {id: 19, cat: Movies/UHD, desc: "Movies/UltraHD 4K SDR"}
-    - {id: 21, cat: TV/HD, desc: "TV Series/1080p SDR"}
-    - {id: 22, cat: TV/UHD, desc: "TV Series/Ultra HD 4K HDR"}
-    - {id: 20, cat: TV/UHD, desc: "TV Series/Ultra HD 4K SDR"}
+    - {id: 37, cat: Movies, desc: "Member Grades"}
+    - {id: 37, cat: TV, desc: "Member Grades"}
+    - {id: 37, cat: Audio/Video, desc: "Member Grades"}
     - {id: 31, cat: Other, desc: "YouTube HDR"}
     - {id: 30, cat: Other, desc: "[SAMPLES] INTERNAL HDR-X"}
 
@@ -33,6 +24,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
 
 settings:
   - name: username
@@ -45,6 +37,22 @@ settings:
     type: checkbox
     label: Show only Free torrents
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
   - name: info
     type: info
     label: Results Per Page
@@ -73,10 +81,13 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # title descr genre all
+    # title, descr, genre, all
     searchin: title
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     only_free: "{{ if .Config.onlyfree }}1{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", " +$1"] # prepend + to each word
@@ -100,18 +111,20 @@ search:
           args: [">", "1"]
         - name: replace
           args: ["</b", ""]
-    poster:
-      selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: src=\\\'(.+?)\\\'
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=\\\'(.+?)\\\'
+    genre:
+      selector: a[href$="searchin=genre"]
     files:
       selector: td:nth-of-type(5)
     date_day:
@@ -140,10 +153,12 @@ search:
       filters:
         - name: replace
           args: ["\n", "<br>\n"]
+        - name: prepend
+          args: "{{ if .Result.genre }}{{ .Result.genre }}</br>{{ else }}{{ end }}"
     downloadvolumefactor:
       case:
         a.info:contains("FREE"): 0
         "*": 1
     uploadvolumefactor:
       text: 1
-# engine tbd
+# engine n/a
