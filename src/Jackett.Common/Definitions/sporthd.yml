@@ -195,6 +195,7 @@ search:
           args: cat
     _vip:
       selector: img[src="/pic/vipbig.gif"]
+      attribute: alt
       optional: true
     title:
       selector: a[href^="details.php?id="]
