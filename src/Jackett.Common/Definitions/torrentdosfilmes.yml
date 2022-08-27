@@ -1,0 +1,69 @@
+---
+id: torrentdosfilmes
+name: Torrents dos Filmes
+description: "Torrents dos Filmes is a search engine for public torrents"
+language: pt-BR
+type: public
+encoding: UTF-8
+links:
+  - https://torrentdosfilmes.to/
+
+caps:
+  categorymappings:
+    - { id: filmes, cat: Movies, desc: "Movies", default: false }
+    - { id: 201, cat: TV, desc: "TV Shows", default: false }
+  modes:
+    search: [q]
+
+search:
+  paths:
+    - path: /
+  inputs:
+    s: "{{ .Keywords }}"
+  rows:
+    selector: .post
+
+  fields:
+    title:
+      selector: a
+      filters:
+        - name: re_replace
+          args:
+            - "\\b[Dd][Uu][Aa][Ll]\\b"
+            - "Portuguese (Brazil) English"
+        - name: re_replace
+          args:
+            - "\\bDublado\\b"
+            - "Portuguese (Brazil)"
+        - name: re_replace
+          args:
+            - "\\bLegendado\\b"
+            - "English" # original language not necessarily english
+    details:
+      selector: a
+      attribute: href
+    poster:
+      selector: div.thumb
+      attribute: style
+      filters:
+        - name: regexp
+          args: "url\\(\\'(.+?)\\'"
+    date:
+      optional: true
+      text: now
+    seeders:
+      optional: true
+      text: 1
+    leechers:
+      optional: true
+      text: 0
+    size:
+      optional: true
+      text: 512 MB
+download:
+  selectors:
+    - selector: a
+      attribute: href
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+# Drupal 9
