@@ -27,6 +27,7 @@ caps:
     - {id: 988, cat: Movies, desc: " |- Кино России и СНГ"}
     - {id: 337, cat: Movies, desc: " |- Мультфильмы"}
     - {id: 72, cat: Movies, desc: " |- DVD, HD Видео (фильмы , мультфильмы)"}
+    - {id: 1001, cat: Movies, desc: " |- UHD Видео (фильмы , мультфильмы)"}
     - {id: 999, cat: Movies, desc: " |- Фильмы (2021-2022)"}
     - {id: 996, cat: Movies, desc: " |- Фильмы (2019-2020)"}
     - {id: 921, cat: Movies, desc: " |- Фильмы (2016-2018)"}
@@ -83,11 +84,11 @@ caps:
     - {id: 744, cat: Movies/3D, desc: " |- 3D | Спорт"}
     - {id: 335, cat: Movies/DVD, desc: " |- Наше кино (DVD)"}
     - {id: 336, cat: Movies/HD, desc: " |- Наше кино (HD Video)"}
-    - {id: 747, cat: Movies/BluRay, desc: " |- Наше кино (Blu-ray и BD Remux)"}
+    - {id: 747, cat: Movies/BluRay, desc: " |- Наше кино (Blu-ray и BD Remux) [HD/UHD]"}
     - {id: 985, cat: Movies/UHD, desc: " |- Наше кино (Ultra HD)"}
     - {id: 69, cat: Movies/DVD, desc: " |- Зарубежное кино (DVD)"}
     - {id: 70, cat: Movies/HD, desc: " |- Зарубежное кино (HD Video)"}
-    - {id: 748, cat: Movies/BluRay, desc: " |- Зарубежное кино (Blu-ray и BD Remux)"}
+    - {id: 748, cat: Movies/BluRay, desc: " |- Зарубежное кино (Blu-ray и BD Remux) [HD/UHD]"}
     - {id: 984, cat: Movies/UHD, desc: " |- Зарубежное кино (Ultra HD)"}
     - {id: 907, cat: Movies, desc: " |- Кино для детей (DVD, HD Video, Blu-ray, BD Remux, Ultra HD)"}
     - {id: 339, cat: Movies, desc: " |- Мультфильмы (DVD, HD Video и Blu-ray)"}
@@ -239,7 +240,7 @@ caps:
     - {id: 526, cat: PC/0day, desc: " |- Графика / Просмотрщики графики"}
     - {id: 525, cat: PC/0day, desc: " |- Для работы с аудио"}
     - {id: 524, cat: PC/0day, desc: " |- Для работы с видео"}
-    - {id: 887, cat: PC/0day, desc: " |- Интернет TV &amp;Radio"}
+    - {id: 887, cat: PC/0day, desc: " |- Интернет TV & Radio"}
     - {id: 561, cat: PC/0day, desc: " |- Удаленный доступ и ПО для свободного доступа в интернет"}
     - {id: 555, cat: PC/0day, desc: " |- 3G USB-модем и Webcam"}
     - {id: 537, cat: PC/0day, desc: " |- Утилиты для удаления всплывающих окон и баннерной рекламы"}
@@ -374,7 +375,7 @@ caps:
     - {id: 850, cat: Audio/MP3, desc: " |- Этническая музыка Африки и Азии (mp3)"}
     - {id: 849, cat: Audio/MP3, desc: " |- Country, Bluegrass (mp3)"}
     - {id: 848, cat: Audio/MP3, desc: " |- Этническая музыка Кавказа и Закавказья (mp3)"}
-    - {id: 847, cat: Audio/MP3, desc: " |- NewAge &amp;Meditative (mp3)"}
+    - {id: 847, cat: Audio/MP3, desc: " |- NewAge & Meditative (mp3)"}
     - {id: 846, cat: Audio/MP3, desc: " |- Folk и neo-folk, celtic, medieval (mp3)"}
     - {id: 935, cat: Audio/MP3, desc: " |- Сборники разных исполнителей (mp3)"}
     - {id: 945, cat: Audio/Lossless, desc: " |- Дискографии в Lossless"}
@@ -471,9 +472,9 @@ caps:
     - {id: 751, cat: Audio, desc: " |- Аудио юмористические концерты (выступления)"}
     # Эротика
     # Erotica
-    - {id: 483, cat: Other, desc: "Правила, FAQ и Предложения по улучшению раздела &quot;Эротик.."}
+    - {id: 483, cat: Other, desc: "Правила, FAQ и Предложения по улучшению раздела 'Эротик.."}
     - {id: 484, cat: Other, desc: " |- Правила и FAQ"}
-    - {id: 485, cat: Other, desc: " |- Предложения по улучшению раздела &quot;Эротика&quot;и форум.."}
+    - {id: 485, cat: Other, desc: " |- Предложения по улучшению раздела 'Эротика'и форум.."}
     - {id: 688, cat: Other, desc: " |- Ищу / Предлагаю"}
     - {id: 963, cat: XXX, desc: "Эротические художественные фильмы"}
     - {id: 964, cat: XXX, desc: "Эротические документальные фильмы"}
