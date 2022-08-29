@@ -553,6 +553,7 @@ namespace Jackett.Updater
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
                 "Definitions/vhstapes.yml",
+                "Definitions/vizuk.yml",
                 "Definitions/waffles.yml",
                 "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
