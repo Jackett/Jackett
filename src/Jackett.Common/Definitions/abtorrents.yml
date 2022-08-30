@@ -128,18 +128,15 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: div.torrent-name
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
-    poster:
-      selector: img[src*="/img.php?"]
-      attribute: src
     files:
-      selector: td:nth-last-child(8)
+      selector: td:nth-last-child(9)
     date_yday:
       # Yesterday<br/>6:00 AM
       selector: td:nth-last-child(7):contains("day")
