@@ -124,12 +124,12 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var dom = parser.ParseDocument(result.ContentString);
-                    foreach (var child in dom.QuerySelectorAll("#needseed"))
-                        child.Remove();
-                    var table = dom.QuerySelector("table[align=center] + br + table > tbody");
-                    if (table == null) // No results, so skip this search
+
+                    var tableBody = dom.QuerySelector("#torrents-index-table > #torrents-index-table-body");
+                    if (tableBody == null) // No results, so skip this search
                         continue;
-                    foreach (var row in table.Children)
+
+                    foreach (var row in tableBody.Children)
                     {
                         var release = new ReleaseInfo();
                         var qLink = row.Children[2].QuerySelector("a");
@@ -140,13 +140,13 @@ namespace Jackett.Common.Indexers
                         //Skip irrelevant and duplicate entries
                         if (!query.MatchQueryStringAND(release.Title) || releases.Any(r => r.Guid == detailsLink))
                             continue;
+
                         var genres = row.QuerySelector("font.small")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
                         {
                             genres = genres.Replace("[ ", "").Replace(" ]", "").Replace(" / ", ",").Replace(" | ", ",");
                             release.Description = genres;
-                            if (release.Genres == null)
-                                release.Genres = new List<string>();
+                            release.Genres ??= new List<string>();
                             release.Genres = release.Genres.Union(genres.Split(',')).ToList();
                         }
                         release.Files = ParseUtil.CoerceLong(row.Children[3].TextContent);
