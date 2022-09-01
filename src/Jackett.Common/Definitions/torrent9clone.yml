@@ -6,17 +6,11 @@ language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
-# to fetch current domain use https://www.protege-liens.com/torrent9
+# to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
-  - https://ww1.torrent9.re/
+  - https://ww2.torrent9.re/
   - https://torrent9.nocensor.world/
 legacylinks:
-  - https://www.t9.vc/
-  - https://www.torrent9.ai/
-  - https://www.torrent9.pl/
-  - https://www.torrent9.ac/
-  - https://www.torrent9.so/
-  - https://wvw.torrent9.sh/
   - https://www.torrent9.sh/
   - https://www.torrent9.one/
   - https://wvw.torrent9.one/
@@ -34,6 +28,8 @@ legacylinks:
   - https://www.torrent9.nl/
   - https://www.torrent9.re/
   - https://torrent9.nocensor.sbs/
+  - https://ww1.torrent9.re/
+  - http://ww2.torrent9.re/
 
 caps:
   categorymappings:
