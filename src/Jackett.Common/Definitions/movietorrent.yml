@@ -47,6 +47,7 @@ caps:
     - {id: 9938, cat: Movies, desc: "Turkish Dramas"}
     - {id: 10293, cat: Movies, desc: "2021"}
     - {id: 8569, cat: Movies, desc: "2021"}
+    - {id: 8610, cat: Movies, desc: "2022"}
 
   modes:
     search: [q]
