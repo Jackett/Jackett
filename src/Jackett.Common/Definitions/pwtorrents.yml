@@ -35,6 +35,7 @@ caps:
     - {id: 24, cat: TV/Sport, desc: "WWE RAW"}
     - {id: 25, cat: TV/Sport, desc: "WWE Smackdown"}
     - {id: 17, cat: TV/Sport, desc: "WWE Weekly"}
+    - {id: 27, cat: TV/Sport, desc: "WWE NXT"}
 
   modes:
     search: [q]
