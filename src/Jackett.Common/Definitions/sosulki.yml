@@ -6,8 +6,9 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - http://sosulki.net/ # site does not support https NET::ERR_CERT_COMMON_NAME_INVALID
-
+  - http://sosulki.com/
+legacylinks:
+  - http://sosulki.net/
 caps:
   categorymappings:
     - {id: 12, cat: XXX, desc: "Порно категории"}
