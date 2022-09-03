@@ -35,12 +35,12 @@ caps:
     - {id: 31, cat: PC/0day, desc: "Programok/RIP"}
     - {id: 33, cat: TV, desc: "Sorozat/Eng"}
     - {id: 32, cat: TV, desc: "Sorozat/Hun"}
-    - {id: 34, cat: XXX, desc: "XXX/Filmek"}
-    - {id: 39, cat: XXX/ImageSet, desc: "XXX/Képek"}
     - {id: 29, cat: Audio/Lossless, desc: "Zene/FLAC/Eng"}
     - {id: 28, cat: Audio/Lossless, desc: "Zene/FLAC/Hun"}
     - {id: 27, cat: Audio/MP3, desc: "Zene/MP3/Eng"}
     - {id: 26, cat: Audio/MP3, desc: "Zene/MP3/Hun"}
+    - {id: 34, cat: XXX, desc: "XXX/Filmek"}
+    - {id: 39, cat: XXX/ImageSet, desc: "XXX/Képek"}
 
   modes:
     search: [q]
@@ -87,7 +87,12 @@ login:
 
 search:
   paths:
-    - path: letoltes.php
+    - path: browse.php
+      categories: ["!", 34, 39]
+    - path: browse.php
+      categories: [34, 39]
+      inputs:
+        xxx: 1
   keywordsfilters:
     # the site uses % for wildcard
     - name: re_replace
@@ -98,16 +103,16 @@ search:
     # 0 both, 1 onlyactive, 2 onlydead, 3 onlyfree, 4 x2 torrents, 5 mytorrents, 6 waiting for seeds
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
+    order: "{{ .Config.type }}"
     # does not support imdbid searches
     # can support genre searching but you need to know the id, eg &genre2=1 for Comedy (id is 2)
 
   rows:
-    selector: "table[border=\"1\"][cellpadding=\"3\"][style=\"width: 920px;\"] > tbody > tr:has(a[href^=\"letoltes.php?cat=\"])"
+    selector: "table[border=\"1\"][cellpadding=\"3\"][style=\"width: 920px;\"] > tbody > tr:has(a[href^=\"browse.php?cat=\"])"
 
   fields:
     category:
-      selector: a[href^="letoltes.php?cat="]
+      selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
@@ -137,7 +142,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.*?) width"
+          args: "showTorrentThumb\\('(.*?)', "
     date:
       selector: td:nth-last-child(8)
       filters:
