@@ -124,8 +124,11 @@ search:
 
   fields:
     category:
+      text: 38
+    category|noappend:
       selector: a[href^="browse.php?cat="]
       attribute: href
+      optional: true
       filters:
         - name: querystring
           args: cat
