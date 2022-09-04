@@ -259,7 +259,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * anasch.cc
  * AnimeBytes (AB)
  * AnimeTorrents (AnT) [![(invite needed)][inviteneeded]](#)
- * AnimeWorld [![(invite needed)][inviteneeded]](#)
+ * AnimeWorld
  * Anthelion
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
@@ -583,7 +583,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Twilights Zoom
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UHDBits
- * UnionGang [![(invite needed)][inviteneeded]](#)
+ * UnionGang
  * UnlimitZ
  * White Angel
  * wOOt [![(invite needed)][inviteneeded]](#)
