@@ -118,8 +118,14 @@ search:
       filters:
         - name: append
           args: " SPANISH"
+    release_group:
+      selector: name:not(:contains(PXL))
+      optional: true
+      filters:
+        - name: append
+          args: "[PXL] "
     title:
-      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}{{ if or .Result._mejorada .Result._corregida .Result._audio_editado }} PROPER{{ else }}{{ end }}"
+      text: "{{ release_group }}{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}{{ if or .Result._mejorada .Result._corregida .Result._audio_editado }} PROPER{{ else }}{{ end }}"
       filters:
         # Replace Spanish season names like T1, MS (MiniSerie), TU (Temporada Unica) for normalized format S1
         - name: re_replace
