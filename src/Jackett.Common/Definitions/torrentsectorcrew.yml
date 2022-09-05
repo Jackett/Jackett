@@ -17,11 +17,12 @@ caps:
     - {id: 107, cat: PC/0day, desc: "Apps Linux"}
     - {id: 48, cat: PC/Mac, desc: "Apps MAC"}
     - {id: 109, cat: PC, desc: "Apps Sonstige"}
+    - {id: 134, cat: PC, desc: "Apps Tutorial"}
     - {id: 22, cat: PC/0day, desc: "Apps Win"}
     # Audio
     - {id: 24, cat: Audio/Audiobook, desc: "Audio aBooks"}
     - {id: 104, cat: Audio, desc: "Audio Disco's"}
-    - {id: 38, cat: Audio/Audiobook, desc: "Audio Hörspiel"}
+    - {id: 38, cat: Audio/Audiobook, desc: "Audio Hoerspiel"}
     - {id: 6, cat: Audio, desc: "Audio Musik"}
     - {id: 29, cat: Audio/Video, desc: "Audio Videos"}
     # Doku
@@ -34,9 +35,10 @@ caps:
     - {id: 54, cat: Movies/HD, desc: "Filme 1080p"}
     - {id: 5, cat: Movies/3D, desc: "Filme 3D"}
     - {id: 55, cat: Movies/HD, desc: "Filme 720p"}
+    - {id: 135, cat: Movies/Other, desc: "Filme Anime"}
     - {id: 43, cat: Movies/BluRay, desc: "Filme BluRay"}
     - {id: 20, cat: Movies/DVD, desc: "Filme DVDR"}
-    - {id: 120, cat: Movies/Foreign, desc: "Filme Int."}
+    - {id: 120, cat: Movies/Foreign, desc: "Filme Int"}
     - {id: 119, cat: Movies, desc: "Filme Remux"}
     - {id: 36, cat: Movies/HD, desc: "Filme SD"}
     - {id: 121, cat: Movies/UHD, desc: "Filme UHD"}
@@ -46,20 +48,20 @@ caps:
     - {id: 128, cat: TV/HD, desc: "Serien Bluray"}
     - {id: 129, cat: TV/SD, desc: "Serien DVDR"}
     - {id: 69, cat: TV/HD, desc: "Serien HD"}
-    - {id: 72, cat: TV/Foreign, desc: "Serien Int."}
+    - {id: 72, cat: TV/Foreign, desc: "Serien Int"}
     - {id: 66, cat: TV/SD, desc: "Serien SD"}
-    - {id: 125, cat: TV/HD, desc: "Serien Packs HD"}
-    - {id: 68, cat: TV/SD, desc: "Serien Packs SD"}
-    - {id: 126, cat: TV/UHD, desc: "Serien Packs UHD"}
-    - {id: 108, cat: TV, desc: "Serien TV-Shows"}
-    - {id: 127, cat: TV/UHD, desc: "Serien TV-Shows UHD"}
+    - {id: 125, cat: TV/HD, desc: "Serien Pack HD"}
+    - {id: 68, cat: TV/SD, desc: "Serien Pack SD"}
+    - {id: 126, cat: TV/UHD, desc: "Serien Pack UHD"}
+    - {id: 66, cat: TV/SD, desc: "Serien SD"}
+    - {id: 127, cat: TV/UHD, desc: "Serien UHD"}
     # Sonstige
-    - {id: 133, cat: PC/0day, desc: "Sonstige 0day"}
+    - {id: 133, cat: PC/0day, desc: "Sonstige 0Day"}
     - {id: 117, cat: Other, desc: "Sonstige Diverses"}
     - {id: 28, cat: Books, desc: "Sonstige eBooks"}
     - {id: 42, cat: TV/Sport, desc: "Sonstige Sport"}
+    - {id: 137, cat: TV/Sport, desc: "Sonstige Sport-Int"}
     - {id: 103, cat: Other, desc: "Sonstige Tutorials"}
-    - {id: 9, cat: Other, desc: "Sonstige Wallpaper"}
     - {id: 64, cat: XXX, desc: "Sonstige XXX"}
     # Spiele
     - {id: 37, cat: Console/NDS, desc: "Spiele Nintendo"}
