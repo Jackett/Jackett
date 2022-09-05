@@ -10,53 +10,54 @@ links:
 
 caps:
   categorymappings:
-    - {id: 58, cat: Movies/SD, desc: "Filme SD"}
-    - {id: 59, cat: Movies/HD, desc: "Filme 720p"}
-    - {id: 60, cat: Movies/HD, desc: "Filme 1080p"}
-    - {id: 61, cat: Movies/UHD, desc: "Filme 2160p"}
-    - {id: 170, cat: Movies/BluRay, desc: "Filme Bluray"}
-    - {id: 101, cat: Movies/DVD, desc: "Filme DVD"}
-    - {id: 62, cat: Movies/3D, desc: "Filme 3D"}
-    - {id: 169, cat: Movies/Foreign, desc: "Filme International"}
-    - {id: 183, cat: Movies/SD, desc: "Filme Packs SD"}
-    - {id: 184, cat: Movies/HD, desc: "Filme Packs 720p"}
-    - {id: 185, cat: Movies/HD, desc: "Filme Packs 1080p"}
-    - {id: 186, cat: Movies/UHD, desc: "Filme Packs 2160p"}
-    - {id: 172, cat: Movies/SD, desc: "Film-Klassiker SD"}
-    - {id: 173, cat: Movies/HD, desc: "Film-Klassiker 720p"}
-    - {id: 174, cat: Movies/HD, desc: "Film-Klassiker 1080p"}
-    - {id: 175, cat: Movies/UHD, desc: "Film-Klassiker 2160p"}
-    - {id: 180, cat: Movies/DVD, desc: "Film-Klassiker DVD"}
-    - {id: 181, cat: Movies/BluRay, desc: "Film-Klassiker Bluray"}
-    - {id: 182, cat: Movies/3D, desc: "Film-Klassiker 3D"}
-    - {id: 176, cat: Movies/SD, desc: "Film-Klassiker Pack SD"}
-    - {id: 177, cat: Movies/HD, desc: "Film-Klassiker Pack 720p"}
-    - {id: 178, cat: Movies/HD, desc: "Film-Klassiker Pack 1080p"}
-    - {id: 179, cat: Movies/UHD, desc: "Film-Klassiker Pack 2160p"}
-    - {id: 64, cat: TV/SD, desc: "Serien SD"}
-    - {id: 65, cat: TV/HD, desc: "Serien 720p"}
-    - {id: 66, cat: TV/HD, desc: "Serien 1080p"}
-    - {id: 68, cat: TV/UHD, desc: "Serien 2160p"}
-    - {id: 69, cat: TV/Foreign, desc: "Serien Ger-Subbed"}
-    - {id: 167, cat: TV/Foreign, desc: "Serien International"}
-    - {id: 187, cat: TV/SD, desc: "Serienpacks SD"}
-    - {id: 188, cat: TV/HD, desc: "Serienpacks 720p"}
-    - {id: 189, cat: TV/HD, desc: "Serienpacks 1080p"}
-    - {id: 190, cat: TV/UHD, desc: "Serienpacks 2160p"}
-    - {id: 191, cat: TV/Foreign, desc: "Serienpacks Ger-Subbed"}
-    - {id: 71, cat: Audio/MP3, desc: "Audio MP3"}
-    - {id: 72, cat: Audio/Lossless, desc: "Audio Flac"}
-    - {id: 73, cat: Audio, desc: "Audio Packs"}
-    - {id: 153, cat: Audio/Audiobook, desc: "Hörbücher"}
-    - {id: 192, cat: PC/Games, desc: "Spiele Windows"}
-    - {id: 193, cat: PC, desc: "Software Windows"}
-    - {id: 90, cat: Books/Mags, desc: "Zeitschriften"}
-    - {id: 89, cat: Books/EBook, desc: "E-Books"}
-    - {id: 91, cat: XXX/SD, desc: "XXX SD"}
-    - {id: 92, cat: XXX/x264, desc: "XXX 720p"}
-    - {id: 93, cat: XXX/x264, desc: "XXX 1080p"}
-    - {id: 171, cat: XXX/Pack, desc: "XXX Packs"}
-    - {id: 94, cat: XXX/ImageSet, desc: "XXX Magazine"}
+    - {id: 152, cat: Books, desc: "E-Books"}
+    - {id: 141, cat: Movies/HD, desc: "Filme 1080p"}
+    - {id: 140, cat: Movies/UHD, desc: "Filme 2160p"}
+    - {id: 131, cat: Movies/3D, desc: "Filme 3D"}
+    - {id: 154, cat: Movies/HD, desc: "Filme 720p"}
+    - {id: 142, cat: Movies/BluRay, desc: "Filme Bluray"}
+    - {id: 120, cat: Movies/DVD, desc: "Filme DVD"}
+    - {id: 101, cat: Movies/Foreign, desc: "Filme International"}
+    - {id: 139, cat: Movies/HD, desc: "Filme Packs 1080p"}
+    - {id: 119, cat: Movies/UHD, desc: "Filme Packs 2160p"}
+    - {id: 106, cat: Movies/HD, desc: "Filme Packs 720p"}
+    - {id: 105, cat: Movies/SD, desc: "Filme Packs SD"}
+    - {id: 153, cat: Movies/SD, desc: "Filme SD"}
+    - {id: 104, cat: Movies/HD, desc: "Filmklassiker 1080p"}
+    - {id: 135, cat: Movies/UHD, desc: "Filmklassiker 2160p"}
+    - {id: 122, cat: Movies/3D, desc: "Filmklassiker 3D"}
+    - {id: 103, cat: Movies/HD, desc: "Filmklassiker 720p"}
+    - {id: 134, cat: Movies/BluRay, desc: "Filmklassiker Bluray"}
+    - {id: 130, cat: Movies/DVD, desc: "Filmklassiker DVD"}
+    - {id: 136, cat: Movies/Foreign, desc: "Filmklassiker International"}
+    - {id: 124, cat: Movies/HD, desc: "Filmklassiker Packs 1080p"}
+    - {id: 123, cat: Movies/UHD, desc: "Filmklassiker Packs 2160p"}
+    - {id: 121, cat: Movies/HD, desc: "Filmklassiker Packs 720p"}
+    - {id: 127, cat: Movies/SD, desc: "Filmklassiker Packs SD"}
+    - {id: 102, cat: Movies/SD, desc: "Filmklassiker SD"}
+    - {id: 118, cat: Audio/Audiobook, desc: "Hörbücher"}
+    - {id: 109, cat: Audio/Lossless, desc: "Musik Flac"}
+    - {id: 129, cat: Audio/MP3, desc: "Musik MP3"}
+    - {id: 111, cat: Audio/Lossless, desc: "Musik Packs Flac"}
+    - {id: 112, cat: Audio/MP3, desc: "Musik Packs MP3"}
+    - {id: 110, cat: Audio/Video, desc: "Musik Videos"}
+    - {id: 113, cat: TV/HD, desc: "Serie 1080p"}
+    - {id: 114, cat: TV/UHD, desc: "Serie 2160p"}
+    - {id: 125, cat: TV/HD, desc: "Serie 720p"}
+    - {id: 115, cat: TV/Foreign, desc: "Serie International"}
+    - {id: 138, cat: TV/HD, desc: "Serie Packs 1080p"}
+    - {id: 143, cat: TV/UHD, desc: "Serie Packs 2160p"}
+    - {id: 116, cat: TV/HD, desc: "Serie Packs 720p"}
+    - {id: 144, cat: TV/Foreign, desc: "Serie Packs International"}
+    - {id: 137, cat: TV/SD, desc: "Serie Packs SD"}
+    - {id: 133, cat: TV/SD, desc: "Serie SD"}
+    - {id: 150, cat: PC/0day, desc: "Windows Apps"}
+    - {id: 149, cat: PC/Games, desc: "Windows Spiele"}
+    - {id: 147, cat: XXX/x264, desc: "XXX 1080p"}
+    - {id: 146, cat: XXX/x264, desc: "XXX 720p"}
+    - {id: 148, cat: XXX/Pack, desc: "XXX Packs"}
+    - {id: 69, cat: XXX/SD, desc: "XXX SD"}
+    - {id: 151, cat: Books/Mags, desc: "Zeitschriften"}
 
   modes:
     search: [q]
@@ -72,6 +73,21 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: pin
+    type: text
+    label: Pin
+  - name: freeleech
+    type: checkbox
+    label: Filter FreeLeech only
+    default: false
+  - name: onlyupload
+    type: checkbox
+    label: Filter OnlyUpload only
+    default: false
+  - name: info_free
+    type: info
+    label: About Freeleech and OnlyUpload at Fantastic Heaven
+    default: <li>FreeLeech are torrents where neither the download or upload is counted. (On the Jackett dashboard search results these are tagged as NoUpload).</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li>
   - name: sort
     type: select
     label: Sort requested from site
@@ -88,75 +104,84 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
 
 login:
   path: login.php
   method: form
-  form: form[action="/login.php"]
+  form: form[action="../takelogin.php"]
   cookies: ["JAVA=OK"] # avoid jscheck redirect
-  captcha:
-    type: image
-    selector: img[src^="cap/captcha_math.php?codeCaptcha="]
-    input: stringCaptcha
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    loggiin: "einloggen"
+    secure_pin: "{{ .Config.pin }}"
   error:
-    - selector: div#login_error
+    - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
   test:
     path: index.php
     selector: a[href="logout.php"]
 
 search:
   paths:
-    - path: selection.php
+    - path: browse.php
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}scat[]={{.}}&{{end}}{{ else }}{{ end }}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    showsearch: 1
     search: "{{ .Keywords }}"
-    blah: 0
+    # 0 active, 1 all, 2 dead
+    incldead: 1
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: div.content_wrap > div.selection_wrap:has(a[href^="details.php?id="])
+    selector: "table.tableinborder[cellspacing=\"1\"][cellpadding=\"0\"] > tbody > tr:has(a[href^=\"download.php\"]){{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href^="selection.php?cat="]
+      selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
-        - name: replace
-          args: ["#2", ""]
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="details.php?id="] > b
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
-    grabs:
-      selector: div.selection_unter_ae
+    poster:
+      selector: div[id^="details"] img
+      attribute: src
     size:
-      selector: div.selection_unter_ad
+      selector: td.content_wrap table tbody tr:nth-child(2) td:nth-child(1) b:nth-child(1)
+    files:
+      selector: td.content_wrap table tbody tr:nth-child(2) td:nth-child(1) b:nth-child(2)
     seeders:
-      selector: div.selection_unter_aa > b
+      selector: td.content_wrap table tbody tr:nth-child(2) td:nth-child(2) b:nth-child(1)
     leechers:
-      selector: div.selection_unter_aaa > b
+      selector: td.content_wrap table tbody tr:nth-child(2) td:nth-child(2) > b:nth-of-type(2)
+    grabs:
+      selector: td.content_wrap table tbody tr:nth-child(2) td:nth-child(3) b:nth-child(1)
     date:
-      selector: div.selection_unter_ab
+      selector: td.content_wrap table tbody tr:nth-child(2) td:nth-child(5)
       filters:
-        - name: replace
-          args: ["um ", ""]
         - name: append
           args: " +01:00" # CET
+        - name: replace
+          args: ["\xA0", " "]
         - name: dateparse
           args: "02.01.2006 15:04:05 -07:00"
     downloadvolumefactor:
-      text: 1
+      case:
+        img[src="pic/oupic.gif"]: 0 # only upload is counted
+        "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        img[src="pic/freeleech.gif"]: 0 # nothing is counted
+        "*": 1
 # engine n/a
