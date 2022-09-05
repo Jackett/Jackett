@@ -17,6 +17,8 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 0, cat: Movies, desc: "Movies"}
+    - {id: 40, cat: Movies/BluRay, desc: "Blu-Ray"}
+    - {id: 78, cat: Other, desc: "RePack от селезень"}
     - {id: 45, cat: Movies/HD, desc: "WEBRip 720p"}
     - {id: 46, cat: Movies/HD, desc: "WEBRip 1080p"}
     - {id: 47, cat: Movies/UHD, desc: "WEBRip 2160p"}
@@ -38,6 +40,14 @@ caps:
     - {id: 63, cat: Movies/UHD, desc: "Blu-Ray 2160p"}
     - {id: 64, cat: Movies/3D, desc: "3D BDRemux 1080p"}
     - {id: 65, cat: Movies/3D, desc: "3D Blu-Ray 1080p"}
+    - {id: 74, cat: Movies/HD, desc: "WEBRip"}
+    - {id: 75, cat: Movies/HD, desc: "BDRip"}
+    - {id: 76, cat: Movies/HD, desc: "WEB-DLRip"}
+    - {id: 77, cat: Movies/HD, desc: "HDRip"}
+    - {id: 69, cat: Movies, desc: "WEB-DLRip-AVC"}
+    - {id: 70, cat: Movies, desc: "HDRip-AVC"}
+    - {id: 71, cat: Movies, desc: "BDRip-AVC"}
+    - {id: 72, cat: Movies/HD, desc: "WEB-DLRip 720p"}
 
   modes:
     search: [q]
@@ -94,7 +104,7 @@ download:
       attribute: href
 
 search:
-  # do=search&subaction=search&story=greyhound&titleonly=0&sortby=date&resorder=desc&showposts=0&catlist[]=45&catlist[]=46&catlist[]=47
+  # do=search&subaction=search&story=greyhound&titleonly=3&sortby=date&resorder=desc&showposts=1&catlist[]=49
   paths:
     - path: index.php
   inputs:
@@ -109,38 +119,47 @@ search:
     resorder: "{{ .Config.type }}"
 
   rows:
-    selector: div.card-default:has(i.fa-file-video-o)
+    selector: div.card:has(h4)
 
   fields:
     category:
-      text: 0
-    category|noappend:
-      selector: div.noimg > a
-      optional: true
+      selector: h4
       case:
-        a[href$="/webrip720p/"]: 45
-        a[href$="/webrip1080p/"]: 46
-        a[href$="/webrip2160p/"]: 47
-        a[href$="/web-dl720p/"]: 48
-        a[href$="/web-dl1080p/"]: 49
-        a[href$="/sdrweb-dl2160p/"]: 50
-        a[href$="/hdrweb-dl2160p/"]: 51
-        a[href$="/bdrip720p/"]: 52
-        a[href$="/bdrip1080p/"]: 53
-        a[href$="/sdrbdrip2160p/"]: 54
-        a[href$="/hdrbdrip2160p/"]: 55
-        a[href$="/uhdbdrip-720p/"]: 56
-        a[href$="/uhdbdrip1080p/"]: 57
-        a[href$="/bdremux1080p/"]: 58
-        a[href$="/sdrbdremux2160p/"]: 59
-        a[href$="/hdrbdremux2160p/"]: 60
-        a[href$="/dvbdremux2160p/"]: 61
-        a[href$="/blu-ray1080p/"]: 62
-        a[href$="/blu-ray2160p/"]: 63
-        a[href$="/3dbdremux1080p/"]: 64
-        a[href$="/3dblu-ray1080p/"]: 65
+        "h4:contains(\"WEBRip 720p\")": 45
+        "h4:contains(\"WEBRip 1080p\")": 46
+        "h4:contains(\"WEBRip 2160p\")": 47
+        "h4:contains(\"SDR WEB-DL 2160p\")": 50
+        "h4:contains(\"HDR WEB-DL 2160p\")": 51
+        "h4:contains(\"WEB-DL 720p\")": 48
+        "h4:contains(\"WEB-DL 1080p\")": 49
+        "h4:contains(\"SDR BDRip 2160p\")": 54
+        "h4:contains(\"HDR BDRip 2160p\")": 55
+        "h4:contains(\"UHD BDRip 720p\")": 56
+        "h4:contains(\"UHD BDRip 1080p\")": 57
+        "h4:contains(\"SDR BDRemux 2160p\")": 59
+        "h4:contains(\"HDR BDRemux 2160p\")": 60
+        "h4:contains(\"DV BDRemux 2160p\")": 61
+        "h4:contains(\"3D BDRemux 1080p\")": 64
+        "h4:contains(\"3D Blu-Ray 1080p\")": 65
+        "h4:contains(\"BDRemux 1080p\")": 58
+        "h4:contains(\"Blu-Ray 1080p\")": 62
+        "h4:contains(\"Blu-Ray 2160p\")": 63
+        "h4:contains(\"BDRip 720p\")": 52
+        "h4:contains(\"BDRip 1080p\")": 53
+        "h4:contains(\"WEB-DLRip-AVC\")": 69
+        "h4:contains(\"HDRip-AVC\")": 70
+        "h4:contains(\"BDRip-AVC\")": 71
+        "h4:contains(\"WEB-DLRip 720p\")": 72
+        "h4:contains(\"WEBRip\")": 74
+        "h4:contains(\"WEB-DLRip\")": 76
+        "h4:contains(\"WEB-DL\")": 74
+        "h4:contains(\"BDRip\")": 75
+        "h4:contains(\"HDRip\")": 77
+        "h4:contains(\"Blu-Ray\")": 40
+        "h4:contains(\"RePack\")": 78
+        "*": 0
     title:
-      selector: div.short-title > a
+      selector: h4
       filters:
         - name: replace
           args: ["Лицензия", "Lic"]
@@ -158,48 +177,47 @@ search:
           args: ["WEB DL", "WEBDL"]
         - name: replace
           args: ["WEBDLRip", "WEBDL"]
-        - name: replace
-          args: ["HDTVRip", "HDTV"]
     details:
-      selector: div.short-title > a
+      selector: a:has(h4)
       attribute: href
     download:
-      selector: div.short-title > a
+      selector: a:has(h4)
       attribute: href
     poster:
-      selector: img.poster
+      selector: img.card-img
       attribute: src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     genre:
-      selector: li.linka2
+      selector: div.cats
       filters:
         - name: validate
           args: "Аниме, Биографический, Боевик, Вестерн, Военный, Детектив, Документальный, Драма, Исторический, Комедия, Короткометражный, Криминал, Мелодрама, Мистика, Музыкальный, Мультфильм, Приключения, Семейный, Спорт, Триллер, Ужасы, Фантастика, Фэнтези"
     description:
-      selector: span.noimg
+      selector: p.card-text
       filters:
         - name: append
           args: "{{ if .Result.genre }}</br>{{ .Result.genre }}{{ else }}{{ end }}"
     date:
-      selector: a:has(span.glyphicon-time)
-      filters:
-        # 30.10.2019 14:49
-        - name: regexp
-          args: "(\\d{1,2}\\.\\d{2}\\.\\d{4} \\d{1,2}\\:\\d{2})"
-        - name: append
-          args: " +03:00" # MSK
-        - name: dateparse
-          args: "2.01.2006 15:04 -07:00"
+      text: now
     seeders:
-      selector: i.fa-arrow-up ~ span
+      selector: a:has(i.bx-chevrons-up)
+      filters:
+        - name: split
+          args: [" ", 0]
     leechers:
-      selector: i.fa-arrow-down ~ span
+      selector: a:has(i.bx-chevrons-up)
+      filters:
+        - name: split
+          args: [" ", 1]
     grabs:
-      selector: i.fa-download ~ span
+      selector: a:has(i.bx-chevrons-up)
+      filters:
+        - name: split
+          args: [" ", -1]
     size:
-      selector: i.fa-file-video-o ~ b
+      selector: a:has(span.bx-download)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
