@@ -49,7 +49,6 @@ caps:
     - {id: 129, cat: TV/SD, desc: "Serien DVDR"}
     - {id: 69, cat: TV/HD, desc: "Serien HD"}
     - {id: 72, cat: TV/Foreign, desc: "Serien Int"}
-    - {id: 66, cat: TV/SD, desc: "Serien SD"}
     - {id: 125, cat: TV/HD, desc: "Serien Pack HD"}
     - {id: 68, cat: TV/SD, desc: "Serien Pack SD"}
     - {id: 126, cat: TV/UHD, desc: "Serien Pack UHD"}
