@@ -71,34 +71,64 @@ search:
       selector: a[href^="/download/"]
       attribute: href
     date_full:
-      # May 8, 2022, 6:25 a.m.
+      # Dec. 8, 2022, 6:25 a.m.
       selector: div.release_20:contains(".m."):contains(":")
       optional: true
       filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["Sept", "Sep"]
+        - name: replace
+          args: ["July", "Jul"]
+        - name: replace
+          args: ["June", "Jun"]
         - name: re_replace
-          args: ["\\.", ""]
+          args: ["April", "Apr"]
+        - name: re_replace
+          args: ["March", "Mar"]
         - name: dateparse
-          args: "January 2, 2006, 3:04 PM"
+          args: "Jan 2, 2006, 3:04 PM"
     date_abbr:
       # May 8, 2022, 6 a.m.
       selector: div.release_20:contains(".m."):not(:contains(":"))
       optional: true
       filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["Sept", "Sep"]
+        - name: replace
+          args: ["July", "Jul"]
+        - name: replace
+          args: ["June", "Jun"]
         - name: re_replace
-          args: ["\\.", ""]
+          args: ["April", "Apr"]
+        - name: re_replace
+          args: ["March", "Mar"]
         - name: dateparse
-          args: "January 2, 2006, 3 PM"
+          args: "Jan 2, 2006, 3 PM"
     date_noon:
-      # April 30, 2022, noon
+      # Sept. 30, 2022, noon
       selector: div.release_20:contains(", noon")
       optional: true
       filters:
         - name: replace
-          args: ["Aug.", "August"]
+          args: [".", ""]
+        - name: replace
+          args: ["Sept", "Sep"]
+        - name: replace
+          args: ["July", "Jul"]
+        - name: replace
+          args: ["June", "Jun"]
+        - name: re_replace
+          args: ["April", "Apr"]
+        - name: re_replace
+          args: ["March", "Mar"]
         - name: re_replace
           args: [" noon", " 12 pm"]
         - name: dateparse
-          args: "January 2, 2006, 3 PM"
+          args: "Jan 2, 2006, 3 PM"
     date:
       text: "{{ if or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ else }}now{{ end }}"
     size:
