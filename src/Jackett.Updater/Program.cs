@@ -560,7 +560,6 @@ namespace Jackett.Updater
                 "Definitions/waffles.yml",
                 "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
-                "Definitions/world-of-tomorrow.yml", // #9213
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/xbit.yml",

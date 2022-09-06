@@ -1,0 +1,189 @@
+---
+id: world-of-tomorrow
+name: World-of-Tomorrow
+description: "World-of-Tomorrow is a Private German tracker"
+language: de-DE
+type: private
+encoding: ISO-8859-1
+links:
+  - https://world-of-tomorrow.eu/
+
+caps:
+  categorymappings:
+    - {id: 14, cat: Audio/MP3, desc: "Alben / Sampler / Singles"}
+    - {id: 87, cat: TV/Anime, desc: "Anime"}
+    - {id: 18, cat: PC, desc: "Appz-Sonstige"}
+    - {id: 64, cat: TV/Documentary, desc: "Dokumentation"}
+    - {id: 19, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 70, cat: Audio/Lossless, desc: "Flac"}
+    - {id: 75, cat: TV/Sport, desc: "Formel 1"}
+    - {id: 74, cat: TV/Sport, desc: "Fussball"}
+    - {id: 83, cat: PC/Games, desc: "Games"}
+    - {id: 36, cat: Audio/Audiobook, desc: "Hörbuch"}
+    - {id: 101, cat: TV, desc: "Kids"}
+    - {id: 5, cat: Console, desc: "Konsolen-Games"}
+    - {id: 86, cat: Other, desc: "Misc"}
+    - {id: 91, cat: Movies, desc: "Movie-Packs"}
+    - {id: 66, cat: Movies, desc: "Movies"}
+    - {id: 11, cat: Movies/DVD, desc: "Movies DVD / HD2DVD"}
+    - {id: 49, cat: Movies/HD, desc: "Movies-1080p"}
+    - {id: 90, cat: Movies/3D, desc: "Movies-3-D"}
+    - {id: 48, cat: Movies/HD, desc: "Movies-720p"}
+    - {id: 47, cat: Movies/BluRay, desc: "Movies-Bluray"}
+    - {id: 60, cat: Movies/HD, desc: "Movies-HDTV"}
+    - {id: 62, cat: Movies/SD, desc: "Movies-SD"}
+    - {id: 89, cat: Movies/UHD, desc: "Movies-U-HD"}
+    - {id: 69, cat: Audio, desc: "Musik"}
+    - {id: 72, cat: Audio, desc: "Musik-Packs"}
+    - {id: 93, cat: Audio/Video, desc: "Musik-Videos"}
+    - {id: 4, cat: PC/Games, desc: "PC-Games"}
+    - {id: 68, cat: PC, desc: "Programme"}
+    - {id: 76, cat: TV, desc: "Serien"}
+    - {id: 79, cat: TV/HD, desc: "Serien-1080P"}
+    - {id: 95, cat: TV/UHD, desc: "Serien-2160P"}
+    - {id: 78, cat: TV/HD, desc: "Serien-720P"}
+    - {id: 100, cat: TV/HD, desc: "Serien-Packs-HD"}
+    - {id: 16, cat: TV/SD, desc: "Serien-Packs-SD"}
+    - {id: 77, cat: TV/SD, desc: "Serien-SD"}
+    - {id: 96, cat: Other, desc: "Sonstiges"}
+    - {id: 71, cat: Audio, desc: "Soundtracks"}
+    - {id: 73, cat: TV/Sport, desc: "Sport"}
+    - {id: 92, cat: Console, desc: "Wimmelbild"}
+    - {id: 28, cat: PC, desc: "Windows-Programme"}
+    - {id: 23, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 88, cat: XXX, desc: "XXX"}
+    - {id: 102, cat: XXX, desc: "XXX HENTAI"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: pin
+    type: text
+    label: Pin
+  - name: freeleech
+    type: checkbox
+    label: Filter FreeLeech only
+    default: false
+  - name: onlyupload
+    type: checkbox
+    label: Filter OnlyUpload only
+    default: false
+  - name: info_free
+    type: info
+    label: About Freeleech and OnlyUpload at World-of-Tomorrow
+    default: <li>FreeLeech are torrents where neither the download or upload is counted. (On the Jackett dashboard search results these are tagged as NoUpload).</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li>
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+
+login:
+  path: login.php
+  method: form
+  form: form[action="../takelogin.php"]
+  cookies: ["JAVA=OK"] # avoid jscheck redirect
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    pin: "{{ .Config.pin }}"
+  error:
+    - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    showsearch: 1
+    search: "{{ .Keywords }}"
+    # 0 active, 1 all, 2 dead
+    incldead: 1
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+
+  rows:
+    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"4\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php\"]){{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="] > b
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onMouseOver
+      filters:
+        - name: regexp
+          args: "src=(.+?) "
+    description:
+      selector: td:nth-child(2) > img
+      attribute: title
+    grabs:
+      selector: td:nth-last-child(8)
+    date:
+      selector: td:nth-last-child(6)
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "02.01.200615:04:05 -07:00"
+    size:
+      selector: td:nth-last-child(5)
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    downloadvolumefactor:
+      case:
+        img[src="pic/oupic.gif"]: 0 # only upload is counted
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src="pic/freeleech.gif"]: 0 # nothing is counted
+        "*": 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a
