@@ -123,6 +123,15 @@ namespace Jackett.Common.Indexers
                 var dom = parser.ParseDocument(results.ContentString);
                 var protectedLink = dom.QuerySelector("a:contains('Torrent')").GetAttribute("data-url");
                 protectedLink = Base64Decode(protectedLink);
+                // turn
+                // link=https://cinecalidad.dev/pelicula/la-chica-salvaje/
+                // and 
+                // protectedlink=https://cinecalidad.dev/links/MS8xMDA5NTIvMQ==
+                // into
+                // https://cinecalidad.dev/pelicula/la-chica-salvaje/?link=MS8xMDA5NTIvMQ== 
+                var protectedLinkSplit = protectedLink.Split('/');
+                var key = protectedLinkSplit.Last();
+                protectedLink = link.ToString() + "?link=" + key;
                 protectedLink = GetAbsoluteUrl(protectedLink);
 
                 results = await RequestWithCookiesAsync(protectedLink);
