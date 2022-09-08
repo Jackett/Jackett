@@ -130,9 +130,13 @@ search:
     doubanid:
       selector: a[href*="movie.douban.com/subject/"]
       attribute: href
+    _staff_edit:
+      selector: a[href^="edit.php?"]
+      attribute: href
+      optional: true
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: "{{ if .Result._staff_edit }}td:nth-child(5) > span[title]{{ else }}td:nth-child(4) > span[title]{{ end }}"
       attribute: title
       optional: true
       filters:
@@ -142,7 +146,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date_added:
       # time added
-      selector: td:nth-child(4):not(:has(span))
+      selector: "{{ if .Result._staff_edit }}td:nth-child(5):not(:has(span)){{ else }}td:nth-child(4):not(:has(span)){{ end }}"
       optional: true
       filters:
         - name: append
@@ -152,13 +156,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: "{{ if .Result._staff_edit }}td:nth-child(6){{ else }}td:nth-child(5){{ end }}"
     seeders:
-      selector: td:nth-child(6)
+      selector: "{{ if .Result._staff_edit }}td:nth-child(7){{ else }}td:nth-child(6){{ end }}"
     leechers:
-      selector: td:nth-child(7)
+      selector: "{{ if .Result._staff_edit }}td:nth-child(8){{ else }}td:nth-child(7){{ end }}"
     grabs:
-      selector: td:nth-child(8)
+      selector: "{{ if .Result._staff_edit }}td:nth-child(9){{ else }}td:nth-child(8){{ end }}"
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -174,7 +178,7 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
+      selector: "{{ if .Result._staff_edit }}td:nth-child(3){{ else }}td:nth-child(2){{ end }}"
       remove: a, img
     title_english:
       selector: table.torrentname > tbody > tr > td.embedded
