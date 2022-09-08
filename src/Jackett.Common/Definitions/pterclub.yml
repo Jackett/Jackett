@@ -124,7 +124,7 @@ search:
       selector: a[href^="details.php?id="]
     title_optional:
       optional: true
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href^="details.php?id="],a[title][href^="detailsgame.php?id="]
       attribute: title
     title:
       text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
@@ -192,7 +192,7 @@ search:
         "*": 1
     description:
       selector: td:has(table.torrentname)
-      remove: a, img
+      remove: a, b, font, img
     minimumratio:
       text: 0.9
 # NexusPHP custom v2019.12
