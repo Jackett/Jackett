@@ -67,15 +67,15 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(4, TorznabCatType.PC0day, "App-WIN");
+            AddCategoryMapping(2, TorznabCatType.PCMac, "App-MAC");
+            AddCategoryMapping(27, TorznabCatType.PC, "App-LINUX");
             AddCategoryMapping(29, TorznabCatType.AudioAudiobook, "Books (a)");
             AddCategoryMapping(5, TorznabCatType.BooksEBook, "Books (e)");
-            AddCategoryMapping(27, TorznabCatType.PC, "LINUX");
-            AddCategoryMapping(2, TorznabCatType.PCMac, "MAC");
             AddCategoryMapping(6, TorznabCatType.PCMobileOther, "Mobile");
             AddCategoryMapping(7, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(8, TorznabCatType.Other, "Other");
             AddCategoryMapping(28, TorznabCatType.TVSport, "Sports");
             AddCategoryMapping(3, TorznabCatType.BooksOther, "Tutorials");
+            AddCategoryMapping(8, TorznabCatType.Other, "Other");
             AddCategoryMapping(9, TorznabCatType.ConsoleNDS, "Game-NIN");
             AddCategoryMapping(11, TorznabCatType.ConsolePS3, "Game-PS");
             AddCategoryMapping(10, TorznabCatType.PCGames, "Game-WIN");
@@ -84,16 +84,17 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(26, TorznabCatType.MoviesUHD, "Movie-4K");
             AddCategoryMapping(14, TorznabCatType.MoviesBluRay, "Movie-Bluray");
             AddCategoryMapping(15, TorznabCatType.MoviesDVD, "Movie-DVDR");
-            AddCategoryMapping(18, TorznabCatType.Movies, "Movie-Packs");
             AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie-x264");
             AddCategoryMapping(17, TorznabCatType.MoviesHD, "Movie-x265");
             AddCategoryMapping(19, TorznabCatType.MoviesSD, "Movie-XVID");
-            AddCategoryMapping(20, TorznabCatType.TVHD, "TV-HD");
-            AddCategoryMapping(21, TorznabCatType.TVSD, "TV-SD");
+            AddCategoryMapping(18, TorznabCatType.Movies, "Movie-Packs");
+            AddCategoryMapping(30, TorznabCatType.TVUHD, "TV-4K");
+            AddCategoryMapping(22, TorznabCatType.TVHD, "TV-x265");
+            AddCategoryMapping(20, TorznabCatType.TVHD, "TV-x264-HD");
+            AddCategoryMapping(21, TorznabCatType.TVSD, "TV-x264-SD");
             AddCategoryMapping(25, TorznabCatType.TVHD, "TV-Retail-HD");
             AddCategoryMapping(24, TorznabCatType.TVSD, "TV-Retail-SD");
             AddCategoryMapping(23, TorznabCatType.TV, "TV-Packs");
-            AddCategoryMapping(22, TorznabCatType.TVHD, "TV-x265");
             AddCategoryMapping(50, TorznabCatType.XXXx264, "xXx-HD");
             AddCategoryMapping(49, TorznabCatType.XXXSD, "xXx-SD");
         }
