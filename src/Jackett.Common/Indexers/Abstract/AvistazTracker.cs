@@ -71,7 +71,7 @@ namespace Jackett.Common.Indexers.Abstract
 
             if (!string.IsNullOrWhiteSpace(query.Genre))
                 qc.Add("tags", query.Genre);
-     
+
             if (configData.Freeleech.Value)
                 qc.Add("discount[]", "1");
 
