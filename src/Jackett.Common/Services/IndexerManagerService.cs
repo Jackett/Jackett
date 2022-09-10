@@ -42,6 +42,7 @@ namespace Jackett.Common.Services
         {
             {"audiobooktorrents", "abtorrents"},
             {"baibako", "rudub"},
+            {"Bittorrentfiles", "bittorrentfiles"},
             {"broadcastthenet", "broadcasthenet"},
             {"casatorrent", "teamctgame"},
             {"icetorrent", "speedapp"},
