@@ -12,9 +12,12 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 80, cat: Movies, desc: "Enfants Film"}
+    - {id: 82, cat: TV, desc: "Enfants Série"}
     - {id: 1, cat: Movies/SD, desc: "FILM Xvid"}
-    - {id: 62, cat: Movies/WEB-DL, desc: "FILM WEB"}
+    - {id: 75, cat: Movies/UHD, desc: "FILM 2160 P"}
     - {id: 63, cat: Movies/WEB-DL, desc: "FILM WEB"}
+    - {id: 62, cat: Movies/WEB-DL, desc: "FILM WEB"}
     - {id: 66, cat: Movies/HD, desc: "FILM HDRip"}
     - {id: 34, cat: Movies/SD, desc: "FILM TVRip"}
     - {id: 33, cat: Movies/HD, desc: "FILM HDTV"}
@@ -27,10 +30,10 @@ caps:
     - {id: 25, cat: Movies/BluRay, desc: "FILM ISO"}
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
     - {id: 2, cat: Movies/DVD, desc: "FILM DVD"}
-    - {id: 75, cat: Movies/UHD, desc: "FILM 2160 P"}
+    - {id: 101, cat: TV/Documentary, desc: "FILM Documentaire"}
     - {id: 9, cat: TV/SD, desc: "SERIE DVD"}
+    - {id: 72, cat: TV/UHD, desc: "SERIE 2160 P"}
     - {id: 65, cat: TV/HD, desc: "SERIE HDRip"}
-    - {id: 37, cat: TV, desc: "SERIE EPISODE"}
     - {id: 21, cat: TV/HD, desc: "SERIE HDTV.1080p"}
     - {id: 20, cat: TV/HD, desc: "SERIE HDTV.720p"}
     - {id: 19, cat: TV/SD, desc: "SERIE HDTV"}
@@ -40,19 +43,19 @@ caps:
     - {id: 15, cat: TV/WEB-DL, desc: "SERIE WEB.1080p"}
     - {id: 14, cat: TV/WEB-DL, desc: "SERIE WEB.720p"}
     - {id: 12, cat: TV/WEB-DL, desc: "SERIE WEB"}
-    - {id: 72, cat: TV/UHD, desc: "SERIE 2160 P"}
+    - {id: 102, cat: TV/Documentary, desc: "SERIE Documentaire"}
     - {id: 67, cat: TV/Anime, desc: "ANIMEE films"}
     - {id: 70, cat: TV/Anime, desc: "ANIMEE Series"}
+    - {id: 95, cat: TV/Anime, desc: "ANIMEE Animée"}
     - {id: 56, cat: PC/ISO, desc: "LOGICIELS Linux"}
     - {id: 24, cat: PC/Mac, desc: "LOGICIELS Apple"}
     - {id: 58, cat: PC/0day, desc: "LOGICIELS Windows"}
-    - {id: 59, cat: PC, desc: "LOGICIELS "}
     - {id: 44, cat: Books/Mags, desc: "EBOOK Journaux"}
     - {id: 46, cat: Books/Technical, desc: "EBOOK Documents"}
     - {id: 48, cat: XXX/Other, desc: "EBOOK XXX"}
     - {id: 49, cat: Books/EBook, desc: "EBOOK Livres"}
     - {id: 5, cat: Audio/Video, desc: "MUSIC clip video"}
-    - {id: 7, cat: PC/Games, desc: "JEUX Win"}
+    - {id: 96, cat: PC/Games, desc: "JEUX Apple"}
     - {id: 8, cat: Console/PS3, desc: "JEUX PS3"}
     - {id: 45, cat: PC/Games, desc: "JEUX PC"}
 
