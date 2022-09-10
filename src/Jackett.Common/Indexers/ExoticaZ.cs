@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -15,8 +14,6 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class ExoticaZ : AvistazTracker
     {
-        private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
-
         public override string[] LegacySiteLinks { get; protected set; } =
         {
             "https://torrents.yourexotic.com/"
@@ -33,8 +30,8 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs,
-                   configData: new ConfigurationDataAvistazTracker())
+                   cs: cs
+                   )
         {
             AddCategoryMapping(1, TorznabCatType.XXXx264, "Video Clip");
             AddCategoryMapping(2, TorznabCatType.XXXPack, "Video Pack");
@@ -55,9 +52,6 @@ namespace Jackett.Common.Indexers
                 {"category", categoryMapping.Any() ? categoryMapping.First() : "0"},
                 {"search", GetSearchTerm(query).Trim()}
             };
-
-            if (configData.Freeleech.Value)
-                qc.Add("discount[]", "1");
 
             return qc;
         }
