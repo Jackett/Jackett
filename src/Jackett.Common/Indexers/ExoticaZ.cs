@@ -53,6 +53,9 @@ namespace Jackett.Common.Indexers
                 {"search", GetSearchTerm(query).Trim()}
             };
 
+            if (configData.Freeleech.Value)
+                qc.Add("discount[]", "1");
+
             return qc;
         }
 
