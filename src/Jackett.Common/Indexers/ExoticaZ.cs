@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs
+                   cs: cs,
                    configData: new ConfigurationDataAvistazTracker())
         {
             AddCategoryMapping(1, TorznabCatType.XXXx264, "Video Clip");
