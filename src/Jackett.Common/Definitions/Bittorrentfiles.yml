@@ -130,11 +130,11 @@ settings:
 
 login:
   path: signin.php
-  method: form
-  form: form
+  method: post
   inputs:
     user: "{{ .Config.user }}"
     pass: "{{ .Config.pass }}"
+    returnto: "%2Fbrowse.php"
   error:
     - selector: .error
   test:
