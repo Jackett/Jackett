@@ -57,6 +57,7 @@ caps:
     - {id: 94, cat: Other, desc: "Xmas Music Packs"}
     - {id: 95, cat: Other/Misc, desc: "Unsorted To Be Edited"}
     - {id: 97, cat: Other, desc: "VIP Exclusive"}
+    - {id: 99, cat: Other, desc: "Krazy-Internal"}
 
   modes:
     search: [q]
