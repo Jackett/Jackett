@@ -290,6 +290,7 @@ namespace Jackett.Updater
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
+                "Definitions/Bittorrentfiles.yml", // renamed to bittorrentfiles
                 "Definitions/blubits.yml",
                 "Definitions/blutopia.yml", // switch to *-API #8682
                 "Definitions/brasiltracker.yml", // migrated to C#
