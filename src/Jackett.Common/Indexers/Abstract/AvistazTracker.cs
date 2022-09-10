@@ -123,8 +123,7 @@ namespace Jackett.Common.Indexers.Abstract
                    logger: logger,
                    p: p,
                    cacheService: cs,
-                   configData: new ConfigurationDataAvistazTracker(@"You have to check 'Enable RSS Feed' in 'My Account',
-without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
+                   configData: new ConfigurationDataAvistazTracker())
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
