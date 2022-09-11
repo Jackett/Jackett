@@ -34,6 +34,7 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilm.win/",
             "https://www.lostfilm.tw/",
             "https://www.lostfilmtv2.site/",
+            "https://www.lostfilmtv5.site/",
             "https://www.lostfilm.uno/"
 
  };
