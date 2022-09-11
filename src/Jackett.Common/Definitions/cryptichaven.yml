@@ -60,6 +60,8 @@ caps:
     - {id: 53, cat: TV, desc: "Random Oddities"}
     - {id: 59, cat: TV, desc: "Late Night Talkshows"}
     - {id: 77, cat: TV, desc: "Non-English language"}
+    - {id: 78, cat: TV, desc: "Video Musical Comedy"}
+    - {id: 79, cat: TV, desc: "Video Podcasts"}
     # BY REQUEST ONLY
     - {id: 19, cat: Movies, desc: "Movie DVD5/9"}
     - {id: 20, cat: Movies, desc: "Movie AVI"}
