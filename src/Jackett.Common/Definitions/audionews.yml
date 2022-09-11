@@ -176,6 +176,8 @@ caps:
     - {id: 233, cat: Other, desc: "GFXNEWS GAME DEVELOPMENT"}
     - {id: 226, cat: Other, desc: "GFXNEWS MAGAZINE"}
     - {id: 234, cat: Other, desc: "GFXNEWS MATERIAL"}
+    - {id: 243, cat: Other, desc: "GFXNEWS OTHER GRAPHICS"}
+    - {id: 244, cat: Other, desc: "GFXNEWS OTHER GRAPHICS Zbrush, Substance tools"}
     - {id: 216, cat: Other, desc: "GFXNEWS PHOTOSTOCK"}
     - {id: 220, cat: Other, desc: "GFXNEWS PHOTOGRAPHY - ART"}
     - {id: 227, cat: Other, desc: "GFXNEWS PHOTOSHOP"}
@@ -183,10 +185,10 @@ caps:
     - {id: 229, cat: Other, desc: "GFXNEWS PHOTOSHOP Background & PSD Source"}
     - {id: 230, cat: Other, desc: "GFXNEWS PHOTOSHOP Brushes & Gradient"}
     - {id: 231, cat: Other, desc: "GFXNEWS PHOTOSHOP Toolkits, Papers & Objects"}
+    - {id: 245, cat: Other, desc: "GFXNEWS PLUGINS"}
     - {id: 225, cat: Other, desc: "GFXNEWS PLUGINS LINUX"}
     - {id: 223, cat: Other, desc: "GFXNEWS PLUGINS MAC"}
     - {id: 210, cat: Other, desc: "GFXNEWS PLUGINS WIN"}
-    - {id: 236, cat: Other, desc: "GFXNEWS POSER"}
     - {id: 217, cat: Other, desc: "GFXNEWS SCRIPTS - WEB PROGRAMMING"}
     - {id: 218, cat: Other, desc: "GFXNEWS TEMPLATES"}
     - {id: 232, cat: Other, desc: "GFXNEWS TEXTURES"}
