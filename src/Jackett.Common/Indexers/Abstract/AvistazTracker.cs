@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers.Abstract
         private readonly HashSet<string> _hdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
         private string _token;
 
-        private new ConfigurationDataBasicLoginWithPID configData => (ConfigurationDataBasicLoginWithPID)base.configData;
+        private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
 
         // hook to adjust the search term
         protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
@@ -71,6 +71,9 @@ namespace Jackett.Common.Indexers.Abstract
 
             if (!string.IsNullOrWhiteSpace(query.Genre))
                 qc.Add("tags", query.Genre);
+
+            if (configData.Freeleech.Value)
+                qc.Add("discount[]", "1");
 
             return qc;
         }
@@ -120,8 +123,7 @@ namespace Jackett.Common.Indexers.Abstract
                    logger: logger,
                    p: p,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithPID(@"You have to check 'Enable RSS Feed' in 'My Account',
-without this configuration the torrent download does not work.<br/>You can find the PID in 'My profile'."))
+                   configData: new ConfigurationDataAvistazTracker())
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
