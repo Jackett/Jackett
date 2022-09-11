@@ -165,8 +165,8 @@ search:
       selector: td:nth-last-child(5)
       remove: font
     minimumratio:
-      text: 0.7
+      text: 1.0
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # engine n/a
