@@ -136,7 +136,7 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: append
-          args: "{{ if .Result._audiopt }} Portugal/PT-PT{{ else }}{{ end }}"
+          args: "{{ if .Result._audiopt }} Portuguese PT-PT{{ else }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
