@@ -116,7 +116,8 @@ namespace Jackett.Common.Indexers.Feeds
                 Encoding = Encoding
             };
             var result = await webclient.GetResultAsync(request);
-
+            if (!result.ContentString.StartsWith("<")) // not XML => error
+                throw new ExceptionWithConfigData(result.ContentString, configData);
             var results = ParseFeedForResults(result.ContentString);
 
             return results;
