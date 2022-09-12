@@ -128,8 +128,15 @@ search:
       filters:
         - name: querystring
           args: cat
+    _audiopt:
+      selector: i.fg-audiopt
+      attribute: title
+      optional: true
     title:
       selector: a[href^="details.php?id="]
+      filters:
+        - name: append
+          args: "{{ if .Result._audiopt }} Portugal/PT-PT{{ else }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
