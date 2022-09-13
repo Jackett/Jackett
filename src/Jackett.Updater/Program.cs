@@ -454,6 +454,7 @@ namespace Jackett.Updater
                 "Definitions/polishtracker.yml",
                 "Definitions/pornolive.yml",
                 "Definitions/pornorip.yml",
+                "Definitions/portugas.yml", // switch to *-API #13542
                 "Definitions/ps4-torrent.yml",
                 "Definitions/pt99.yml",
                 "Definitions/qctorrent.yml",
