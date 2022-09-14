@@ -121,7 +121,7 @@ search:
           args: ["pic/imdb_pic/nophoto.gif", ""]
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(6) > span[title]
+      selector: td.rowfollow:nth-child(5) > span[title]
       attribute: title
       optional: true
       filters:
@@ -131,7 +131,7 @@ search:
           args: "2006-01-02 15:04:05 -07:00"
     date_added:
       # time added
-      selector: td:nth-child(6):not(:has(span))
+      selector: td.rowfollow:nth-child(5):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -141,13 +141,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-child(6)
     seeders:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-child(7)
     leechers:
-      selector: td:nth-child(9)
+      selector: td.rowfollow:nth-child(8)
     grabs:
-      selector: td:nth-child(10)
+      selector: td.rowfollow:nth-child(9)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -162,4 +162,4 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP custom
+# NexusPHP custom 22082802
