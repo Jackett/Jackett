@@ -15,6 +15,7 @@ caps:
     - {id: 80, cat: Movies, desc: "Enfants Film"}
     - {id: 82, cat: TV, desc: "Enfants Série"}
     - {id: 1, cat: Movies/SD, desc: "FILM Xvid"}
+    - {id: 101, cat: TV/Documentary, desc: "FILM Documentaire"}
     - {id: 75, cat: Movies/UHD, desc: "FILM 2160 P"}
     - {id: 63, cat: Movies/WEB-DL, desc: "FILM WEB"}
     - {id: 62, cat: Movies/WEB-DL, desc: "FILM WEB"}
@@ -30,7 +31,7 @@ caps:
     - {id: 25, cat: Movies/BluRay, desc: "FILM ISO"}
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
     - {id: 2, cat: Movies/DVD, desc: "FILM DVD"}
-    - {id: 101, cat: TV/Documentary, desc: "FILM Documentaire"}
+    - {id: 103, cat: Movies, desc: "FILM Pack"}
     - {id: 9, cat: TV/SD, desc: "SERIE DVD"}
     - {id: 72, cat: TV/UHD, desc: "SERIE 2160 P"}
     - {id: 65, cat: TV/HD, desc: "SERIE HDRip"}
