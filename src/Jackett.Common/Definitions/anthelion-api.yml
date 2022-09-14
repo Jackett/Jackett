@@ -119,6 +119,13 @@ search:
       selector: imdb
     tmdbid:
       selector: tmdb
+    genre:
+      selector: tags
+      filters:
+        - name: replace
+          args: [".", "_"]
+    description:
+      text: "{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
