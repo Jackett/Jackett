@@ -84,6 +84,8 @@ search:
 
   rows:
     selector: table#tor-tbl > tbody > tr.hl-tr
+    filters:
+      - name: andmatch
 
   fields:
     category:
