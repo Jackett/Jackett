@@ -29,6 +29,7 @@ caps:
     - {id: 76, cat: Books, desc: "Self-Help"}
     - {id: 56, cat: TV/Sport, desc: "Sports"}
     - {id: 61, cat: Other, desc: "Tutorials"}
+    - {id: 81, cat: Books, desc: "Wordpress"}
 
   modes:
     search: [q]
