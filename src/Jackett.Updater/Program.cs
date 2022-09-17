@@ -367,6 +367,7 @@ namespace Jackett.Updater
                 "Definitions/gtorrent.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hachede.yml",
+                "Definitions/hamsterstudio.yml",
                 "Definitions/hd4free.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
                 "Definitions/hdbitscom.yml",

@@ -196,7 +196,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Fou-Du-Cinema
  * Gay-Torrents.net
  * Genesis-Movement
- * HamsterStudio
  * HD-CzTorrent
  * HDGalaKtik
  * HunTorrent
