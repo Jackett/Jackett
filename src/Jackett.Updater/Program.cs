@@ -550,6 +550,7 @@ namespace Jackett.Updater
                 "Definitions/trackeros.yml", // switch to *-API #12807
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
+                "Definitions/turktracker.yml",
                 "Definitions/turknova.yml",
                 "Definitions/u-torrents.yml",
                 "Definitions/uhd-heaven.yml",
