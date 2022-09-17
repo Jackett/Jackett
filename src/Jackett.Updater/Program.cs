@@ -369,6 +369,7 @@ namespace Jackett.Updater
                 "Definitions/hachede.yml",
                 "Definitions/hd4free.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
+                "Definitions/hdbitscom.yml",
                 "Definitions/hdcenter.yml",
                 "Definitions/hdcity.yml", // moved to pixelados
                 "Definitions/hdclub.yml",
