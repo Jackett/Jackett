@@ -126,6 +126,8 @@ search:
           args: [".", "_"]
     description:
       text: "{{ .Result.genre }}"
+    files:
+      selector: fileCount
     seeders:
       selector: seeders
     leechers:
