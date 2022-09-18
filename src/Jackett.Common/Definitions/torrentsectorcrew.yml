@@ -44,10 +44,14 @@ caps:
     - {id: 121, cat: Movies/UHD, desc: "Filme UHD"}
     - {id: 124, cat: Movies/UHD, desc: "Filme UHD Remux"}
     # Serien
-    - {id: 112, cat: TV/Anime, desc: "Serien Anime"}
+    - {id: 143, cat: TV/Anime, desc: "Serien Anime HD"}
+    - {id: 138, cat: TV/Anime, desc: "Serien Anime Pack HD"}
+    - {id: 139, cat: TV/Anime, desc: "Serien Anime Pack SD"}
+    - {id: 112, cat: TV/Anime, desc: "Serien Anime SD"}
     - {id: 128, cat: TV/HD, desc: "Serien Bluray"}
     - {id: 129, cat: TV/SD, desc: "Serien DVDR"}
-    - {id: 69, cat: TV/HD, desc: "Serien HD"}
+    - {id: 140, cat: TV/HD, desc: "Serien HD 1080p"}
+    - {id: 141, cat: TV/HD, desc: "Serien HD 720p"}
     - {id: 72, cat: TV/Foreign, desc: "Serien Int"}
     - {id: 125, cat: TV/HD, desc: "Serien Pack HD"}
     - {id: 68, cat: TV/SD, desc: "Serien Pack SD"}
