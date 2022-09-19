@@ -161,7 +161,8 @@ namespace Jackett.Common.Indexers
             var categ = string.Join(",", catList);
 
             // create GET request - search URI
-            queryCollection.Add("q", searchString);
+            if (!string.IsNullOrEmpty(searchString))
+                queryCollection.Add("q", searchString);
             queryCollection.Add("cat", categ.TrimStart(','));
 
             // concatenate base search url with query
