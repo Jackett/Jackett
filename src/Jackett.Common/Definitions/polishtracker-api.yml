@@ -1,0 +1,125 @@
+---
+id: polishtracker-api
+name: PolishTracker (API)
+description: "PolishTracker is a POLISH Private site for 0DAY / MOVIES / GENERAL"
+language: pl-PL
+type: private
+encoding: UTF-8
+links:
+  - https://pte.nu/
+legacylinks:
+  - https://polishtracker.net/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: PC/0day, desc: "0-Day"}
+    - {id: 2, cat: Audio/Video, desc: "Music Video"}
+    - {id: 3, cat: PC/0day, desc: "Apps"}
+    - {id: 4, cat: Console, desc: "Consoles"}
+    - {id: 5, cat: Books, desc: "E-book"}
+    - {id: 6, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 7, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 8, cat: Audio, desc: "Music"}
+    - {id: 9, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 10, cat: PC/Games, desc: "PC Games"}
+    - {id: 11, cat: TV/HD, desc: "TV HD"}
+    - {id: 12, cat: TV/SD, desc: "TV SD"}
+    - {id: 13, cat: XXX, desc: "XXX"}
+    - {id: 14, cat: TV/UHD, desc: "TV-UHD"}
+    - {id: 15, cat: Audio/Audiobook, desc: "Audiobook"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find your API Key by accessing your <a href=\"https://pte.nu/\" target =_blank>PolishTracker</a> account <i>Settings</i> page and clicking on the <b>API</b> section."
+
+#login:
+#  path: "https://api-test.pte.nu/api/v1/torrents"
+#  method: get
+#  inputs:
+#    tpage: 1
+#  error:
+#    - selector: ":root:contains(\"ACCESS_DENIED\")"
+#      message:
+#        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    # docs: https://cdn.pte.nu/docs/index.html
+    - path: "https://api-test.pte.nu/api/v1/torrents"
+      response:
+        type: json
+
+  inputs:
+    search: "{{ .Keywords }}"
+    tpage: 1
+    imdb_id: "{{ .Query.IMDBIDShort }}"
+    # search in nfo text also
+    nfo: false
+    # search is more broad
+    wide: false
+    $raw: "{{ range .Categories }}&cat[]={{.}}{{end}}"
+    # can search by genre but need range support. &tags[]=Action&tags[]=Comedy for Action and Comedy
+
+  headers:
+    API-Key: ["{{ .Config.apikey }}"]
+
+  rows:
+    selector: torrents
+    filters:
+      - name: andmatch
+    count:
+      selector: count
+
+  fields:
+    _id:
+      selector: id
+    category:
+      selector: category
+    title:
+      selector: name
+    details:
+      text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
+    download:
+      text: "https://api.pte.nu/torrents/download/{{ .Result._id }}"
+    imdbid:
+      selector: imdb_id
+    genre:
+      selector: tags
+      filters:
+        - name: validate
+          args: "Animation, Comedy, Family, Strategy, Action, Adventure, Indie, RPG, Simulation, Early, Crime, Thriller, Drama, Rock, Fantasy, Sci-Fi, Horror, Pop, War, Mystery, Oldies, Hardcore, Sport, Biography, Music, Rap, Romance, Dance, Hip-Hop, House, Punk Rock, Disco, Casual, Bass, History, Racing, Metal, Electronic, Alternative, Funk, Short, Classical, Acoustic, Soundtrack, Punk, Ambient, Talk-Show, Sports, Reggae, Documentary, Progressive Rock, Other, Western, Dance Hall, Trance, Folk, Classic Rock, Jazz, Hard Rock, Trip-Hop, R&B, Blues, Musical, Club, Techno, Cabaret, Black Metal, Easy Listening, Goa, Free, Massively, Reality-TV, Grunge, SynthPop, Ballad, Top 40, News, Industrial, Psychedelic Rock, Heavy Metal, Beat, Alternative Rock, Drum & Bass, Film-Noir, Rock & Roll, Death Metal, Lo-Fi, Country, Instrumental Pop, Game-Show, Soul, Retro, Noise, Latin, Design, Education, Software, Utilities, Pop-Folk, Instrumental, Game, Acid Jazz, Acid, Gothic Rock, Fusion, Darkwave, Meditative, Crossover, Thrash Metal, New Wave, Opera, Ethnic, Instrumental Rock, New Age, Gangsta, Speech, Gothic, Gospel, Symphonic Rock, Ska, JPop, Avantgarde, Tango, Vocal, Folk-Rock, Celtic"
+    description:
+      text: "{{ .Result.genre }}"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: completed
+    date:
+      # 2022-08-09T17:37:03.23587+02:00
+      selector: added
+    size:
+      selector: size
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 day (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json api
