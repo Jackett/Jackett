@@ -54,6 +54,7 @@ caps:
     - {id: 76, cat: XXX/XviD, desc: "XXX SD"}
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
+    - {id: 142, cat: XXX/ImageSet, desc: "XXX Pic´s"}
     #  Internal
     - {id: 129, cat: Movies/SD, desc: "Internal Film SD"}
     - {id: 128, cat: Movies/HD, desc: "Internal Film HD"}
