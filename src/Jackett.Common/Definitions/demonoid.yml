@@ -320,6 +320,8 @@ settings:
 
 login:
   method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
   test:
     path: files/
 
