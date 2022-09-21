@@ -130,7 +130,7 @@ search:
       args: ["(\\w+)", " +$1"] # prepend + to each word
 
   rows:
-    selector: table.ttable_headinner > tbody > tr
+    selector: table.ttable_headinner > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
