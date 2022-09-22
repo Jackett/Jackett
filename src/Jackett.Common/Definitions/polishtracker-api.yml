@@ -65,10 +65,10 @@ search:
     search: "{{ .Keywords }}"
     tpage: 1
     imdb_id: "{{ .Query.IMDBIDShort }}"
-    # search in nfo text also
-    nfo: false
-    # search is more broad
-    wide: false
+    # search in nfo text also - broken
+    # nfo: false
+    # search is more broad - broken
+    # wide: false
     $raw: "{{ range .Categories }}&cat[]={{.}}{{end}}"
     # can search by genre but need range support. &tags[]=Action&tags[]=Comedy for Action and Comedy
 
