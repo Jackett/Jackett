@@ -43,10 +43,17 @@ settings:
     type: info
     label: About your API key
     default: "Find your API Key by accessing your <a href=\"https://pte.nu/\" target =_blank>PolishTracker</a> account <i>Settings</i> page and clicking on the <b>API</b> section."
-  - name: polish_language
+  - name: multilang
     type: checkbox
-    label: Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr
+    label: Replace MULTI by another language in release name
     default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTI.POLISH: MULTI.POLISH
 
 #login:
 #  path: "https://api-test.pte.nu/api/v1/torrents"
@@ -70,9 +77,9 @@ search:
     tpage: 1
     imdb_id: "{{ .Query.IMDBIDShort }}"
     # search in nfo text also - broken
-    #nfo: false
+    # nfo: false
     # search is more broad - broken
-    #wide: false
+    # wide: false
     $raw: "{{ range .Categories }}&cat[]={{.}}{{end}}"
     # can search by genre but need range support. &tags[]=Action&tags[]=Comedy for Action and Comedy
 
@@ -93,15 +100,17 @@ search:
       selector: category
     _language:
       selector: language
-    _title_org:
+    title_phase1:
       selector: name
-    _title_pl:
+    title_multilang:
       selector: name
       filters:
-        - name: append
-          args: "{{ if .Config.polish_language }} POLISH{{ else }}{{ end }}"
+        - name: re_replace
+          args: ["(?i)(\\.multi\\.)", ".{{ .Config.multilanguage }}."]
+        - name: re_replace
+          args: ["(?i)(\\.pl\\.)", ".POLISH."]
     title:
-      text: "{{ if eq .Result._language \"pl\" }}{{ .Result._title_pl }}{{ else }}{{ .Result._title_org }}{{ end }}"
+      text: "{{ if eq .Result._language \"pl\" }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
     download:
