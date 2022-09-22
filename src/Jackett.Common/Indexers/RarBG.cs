@@ -162,7 +162,9 @@ namespace Jackett.Common.Indexers
                 case 5: // Too many requests per second. Maximum requests allowed are 1req/2sec Please try again later!
                     return await PerformQueryWithRetry(query, false);
                 case 8: // imdb not found, see issue #12466
+                case 9: // imdb not found, see Radarr #1845
                 case 10: // imdb not found, see issue #1486
+                case 14: // tmdb not found, see Radarr #7625
                 case 20: // no results found
                     if (jsonContent.ContainsKey("rate_limit"))
                     {
