@@ -240,16 +240,16 @@ search:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)([\\s|\\.|-]*multi[\\s|\\.|-]*)", ".{{ .Config.multilanguage }}."]
+          args: ["(?i)([\\s|\\.|-]multi[\\s|\\.|-])", ".{{ .Config.multilanguage }}."]
     title_phase2:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["(?i)([\\s|\\.|-]*vostfr[\\s|\\.|-]*)", ".ENGLISH."]
+          args: ["(?i)([\\s|\\.|-]vostfr[\\s|\\.|-])", ".ENGLISH."]
         - name: re_replace
-          args: ["(?i)([\\s|\\.|-]*subfrench[\\s|\\.|-]*)", ".ENGLISH."]
+          args: ["(?i)([\\s|\\.|-]subfrench[\\s|\\.|-])", ".ENGLISH."]
     title:
       text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     description:
