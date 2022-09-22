@@ -41,11 +41,11 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TmdbId
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
                        },
                        MusicSearchParams = new List<MusicSearchParam>
                        {
@@ -161,9 +161,10 @@ namespace Jackett.Common.Indexers
                     break;
                 case 5: // Too many requests per second. Maximum requests allowed are 1req/2sec Please try again later!
                     return await PerformQueryWithRetry(query, false);
-                case 8: // imdb not found, see issue #12466
-                case 9: // imdb not found, see Radarr #1845
+                case 8: // search_imdb not found, see issue #12466 (no longer used, has been replaced with error 10)
+                case 9: // invalid imdb, see Radarr #1845
                 case 10: // imdb not found, see issue #1486
+                case 13: // invalid tmdb
                 case 14: // tmdb not found, see Radarr #7625
                 case 20: // no results found
                     if (jsonContent.ContainsKey("rate_limit"))
@@ -264,16 +265,11 @@ namespace Jackett.Common.Indexers
                 qc.Add("mode", "search");
                 qc.Add("search_imdb", query.ImdbID);
             }
-            else if (query.RageID != null)
+            else if (query.TmdbID != null)
             {
                 qc.Add("mode", "search");
-                qc.Add("search_tvrage", query.RageID.ToString());
+                qc.Add("search_themoviedb", query.TmdbID.ToString());
             }
-            /*else if (query.TvdbID != null)
-            {
-                queryCollection.Add("mode", "search");
-                queryCollection.Add("search_tvdb", query.TvdbID);
-            }*/
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 // ignore ' (e.g. search for america's Next Top Model)
