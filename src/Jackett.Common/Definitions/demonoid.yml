@@ -326,9 +326,14 @@ login:
     path: files/
 
 download:
-  selectors:
-    - selector: a[href^="/files/download/"]:has(i.fa-download)
-      attribute: href
+  infohash:
+    hash:
+      selector: div:contains("Torrent hash") > div.col-md-5 > div
+      filters:
+        - name: replace
+          args: [" ", ""]
+    title:
+      selector: h1[id="torrent--title"]
 
 search:
   paths:
