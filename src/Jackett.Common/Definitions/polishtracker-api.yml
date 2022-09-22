@@ -43,6 +43,10 @@ settings:
     type: info
     label: About your API key
     default: "Find your API Key by accessing your <a href=\"https://pte.nu/\" target =_blank>PolishTracker</a> account <i>Settings</i> page and clicking on the <b>API</b> section."
+  - name: polish_language
+    type: checkbox
+    label: Add POLISH to title if has Polish language. Use this if you using Sonarr/Radarr
+    default: false
 
 #login:
 #  path: "https://api-test.pte.nu/api/v1/torrents"
@@ -66,9 +70,9 @@ search:
     tpage: 1
     imdb_id: "{{ .Query.IMDBIDShort }}"
     # search in nfo text also - broken
-    # nfo: false
+    #nfo: false
     # search is more broad - broken
-    # wide: false
+    #wide: false
     $raw: "{{ range .Categories }}&cat[]={{.}}{{end}}"
     # can search by genre but need range support. &tags[]=Action&tags[]=Comedy for Action and Comedy
 
@@ -87,8 +91,17 @@ search:
       selector: id
     category:
       selector: category
-    title:
+    _language:
+      selector: language
+    _title_org:
       selector: name
+    _title_pl:
+      selector: name
+      filters:
+        - name: append
+          args: "{{ if .Config.polish_language }} POLISH{{ else }}{{ end }}"
+    title:
+      text: "{{ if eq .Result._language \"pl\" }}{{ .Result._title_pl }}{{ else }}{{ .Result._title_org }}{{ end }}"
     details:
       text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
     download:
