@@ -43,6 +43,17 @@ settings:
     type: info
     label: About your API key
     default: "Find your API Key by accessing your <a href=\"https://pte.nu/\" target =_blank>PolishTracker</a> account <i>Settings</i> page and clicking on the <b>API</b> section."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTI.POLISH: MULTI.POLISH
 
 #login:
 #  path: "https://api-test.pte.nu/api/v1/torrents"
@@ -87,8 +98,19 @@ search:
       selector: id
     category:
       selector: category
-    title:
+    _language:
+      selector: language
+    title_phase1:
       selector: name
+    title_multilang:
+      selector: name
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\.multi\\.)", ".{{ .Config.multilanguage }}."]
+        - name: re_replace
+          args: ["(?i)(\\.pl\\.)", ".POLISH."]
+    title:
+      text: "{{ if eq .Result._language \"pl\" }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
     download:
