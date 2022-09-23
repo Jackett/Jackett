@@ -41,7 +41,7 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TmdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TmdbId, TvSearchParam.TvdbId
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
@@ -164,8 +164,8 @@ namespace Jackett.Common.Indexers
                 case 8: // search_imdb not found, see issue #12466 (no longer used, has been replaced with error 10)
                 case 9: // invalid imdb, see Radarr #1845
                 case 10: // imdb not found, see issue #1486
-                case 13: // invalid tmdb
-                case 14: // tmdb not found, see Radarr #7625
+                case 13: // invalid tmdb, invalid tvdb
+                case 14: // tmdb not found (see Radarr #7625), thetvdb not found
                 case 20: // no results found
                     if (jsonContent.ContainsKey("rate_limit"))
                     {
@@ -269,6 +269,11 @@ namespace Jackett.Common.Indexers
             {
                 qc.Add("mode", "search");
                 qc.Add("search_themoviedb", query.TmdbID.ToString());
+            }
+            else if (query.IsTVSearch && query.TvdbID != null)
+            {
+                qc.Add("mode", "search");
+                qc.Add("search_tvdb", query.TvdbID.ToString());
             }
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
