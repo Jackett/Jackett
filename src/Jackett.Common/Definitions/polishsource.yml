@@ -122,7 +122,7 @@ search:
         - name: re_replace
           args: ["(?i)(\\.multi\\.)", ".{{ .Config.multilanguage }}."]
         - name: re_replace
-          args: ["(?i)(\\.pl\\.)", ".{{ .Config.multilanguage }}."]
+          args: ["(?i)(\\.pl\\.)", ".POLISH."]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
