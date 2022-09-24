@@ -42,7 +42,7 @@ search:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
-    selector: table.table-bordered > tbody > tr
+    selector: table.table-bordered > tbody > tr:has(a[href^="magnet"])
 
   fields:
     category:
