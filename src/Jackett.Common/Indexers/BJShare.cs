@@ -262,10 +262,6 @@ namespace Jackett.Common.Indexers
                 {"action", "basic"},
                 {"searchsubmit", "1"}
             };
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                queryCollection.Add("filter_cat[" + cat + "]", "1");
-            }
 
             Dictionary<string, string> headers = null;
 
@@ -274,9 +270,14 @@ namespace Jackett.Common.Indexers
                 headers = new Dictionary<string, string>();
                 headers.Add("User-Agent", configData.UserAgent.Value);
             }
+            
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
 
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: BrowseUrl, headers: headers);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
             var results = response.ContentString;
             if (IsSessionIsClosed(results))
             {
