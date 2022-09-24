@@ -136,8 +136,8 @@ namespace Jackett.Common.Indexers
                     release.Seeders = t.Seeders;
                     release.Peers = t.Leechers + t.Seeders;
                     release.Grabs = t.Downloaded;
-                    release.Link = t.File.Url;
-                    release.Guid = t.File.Url;
+                    release.Link = t.File?.Url;
+                    release.Guid = t.File?.Url;
                     release.MagnetUri = t.MagnetUri;
                     release.PublishDate = getActualPublishDate(n, t);
                     releases.Add(release);
