@@ -277,8 +277,7 @@ namespace Jackett.Common.Indexers
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
-            var results = response.ContentString;
+            var results = await RequestWithCookiesAsync(searchUrl, headers: headers);
             if (IsSessionIsClosed(results))
             {
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
