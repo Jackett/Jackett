@@ -77,14 +77,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=4&tags=PC", TorznabCatType.PCGames, "Games/PC");
             AddCategoryMapping("cat[]=4&tags=RIP", TorznabCatType.PCGames, "Games/RIP");
             AddCategoryMapping("cat[]=4&tags=ISO", TorznabCatType.PCGames, "Games/ISO");
+            AddCategoryMapping("cat[]=4&tags=NSW", TorznabCatType.ConsoleOther, "Games/NSW");
+            AddCategoryMapping("cat[]=4&tags=GAMES-NSW", TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping("cat[]=4&tags=XBOX360", TorznabCatType.ConsoleXBox360, "Games/XBOX360");
             AddCategoryMapping("cat[]=4&tags=PS3", TorznabCatType.ConsolePS3, "Games/PS3");
             AddCategoryMapping("cat[]=4&tags=Wii", TorznabCatType.ConsoleWii, "Games/Wii");
             AddCategoryMapping("cat[]=4&tags=PSP", TorznabCatType.ConsolePSP, "Games/PSP");
-            AddCategoryMapping("cat[]=4&tags=GAMES-NSW", TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping("cat[]=4&tags=NDS", TorznabCatType.ConsoleNDS, "Games/NDS");
             AddCategoryMapping("cat[]=4&tags=Xbox", TorznabCatType.ConsoleXBox, "Games/Xbox");
-            AddCategoryMapping("cat[]=4&tags=NSW", TorznabCatType.ConsoleOther, "Games/NSW");
             AddCategoryMapping("cat[]=4&tags=PS2", TorznabCatType.ConsoleOther, "Games/PS2");
 
             // Miscellaneous
@@ -94,12 +94,14 @@ namespace Jackett.Common.Indexers
 
             // Movies
             AddCategoryMapping("cat[]=19", TorznabCatType.Movies, "Movies");
-            AddCategoryMapping("cat[]=19&tags=x264", TorznabCatType.Movies, "Movies/x264");
-            AddCategoryMapping("cat[]=19&tags=720p", TorznabCatType.MoviesHD, "Movies/720p");
-            AddCategoryMapping("cat[]=19&tags=XviD", TorznabCatType.MoviesSD, "Movies/XviD");
-            AddCategoryMapping("cat[]=19&tags=BluRay", TorznabCatType.MoviesHD, "Movies/BluRay");
-            AddCategoryMapping("cat[]=19&tags=DVDRiP", TorznabCatType.MoviesSD, "Movies/DVDRiP");
             AddCategoryMapping("cat[]=19&tags=1080p", TorznabCatType.MoviesHD, "Movies/1080p");
+            AddCategoryMapping("cat[]=19&tags=720p", TorznabCatType.MoviesHD, "Movies/720p");
+            AddCategoryMapping("cat[]=19&tags=2160p", TorznabCatType.MoviesUHD, "Movies/2160p");
+            AddCategoryMapping("cat[]=19&tags=x264", TorznabCatType.MoviesHD, "Movies/x264");
+            AddCategoryMapping("cat[]=19&tags=x265", TorznabCatType.MoviesHD, "Movies/x265");
+            AddCategoryMapping("cat[]=19&tags=BluRay", TorznabCatType.MoviesHD, "Movies/BluRay");
+            AddCategoryMapping("cat[]=19&tags=XviD", TorznabCatType.MoviesSD, "Movies/XviD");
+            AddCategoryMapping("cat[]=19&tags=DVDRiP", TorznabCatType.MoviesSD, "Movies/DVDRiP");
             AddCategoryMapping("cat[]=19&tags=DVD", TorznabCatType.MoviesSD, "Movies/DVD");
             AddCategoryMapping("cat[]=19&tags=DVDR", TorznabCatType.MoviesSD, "Movies/DVDR");
             AddCategoryMapping("cat[]=19&tags=WMV", TorznabCatType.Movies, "Movies/WMV");
@@ -114,19 +116,28 @@ namespace Jackett.Common.Indexers
 
             // TV
             AddCategoryMapping("cat[]=7", TorznabCatType.TV, "TV");
-            AddCategoryMapping("cat[]=7&tags=x264", TorznabCatType.TVHD, "TV/x264");
+            AddCategoryMapping("cat[]=7&tags=1080p", TorznabCatType.TVHD, "TV/1080p");
             AddCategoryMapping("cat[]=7&tags=720p", TorznabCatType.TVHD, "TV/720p");
+            AddCategoryMapping("cat[]=7&tags=2160p", TorznabCatType.TVUHD, "TV/2160p");
+            AddCategoryMapping("cat[]=7&tags=x264", TorznabCatType.TVHD, "TV/x264");
+            AddCategoryMapping("cat[]=7&tags=x265", TorznabCatType.TVHD, "TV/x265");
             AddCategoryMapping("cat[]=7&tags=HDTV", TorznabCatType.TVHD, "TV/HDTV");
-            AddCategoryMapping("cat[]=7&tags=XviD", TorznabCatType.TVSD, "TV/XviD");
             AddCategoryMapping("cat[]=7&tags=BluRay", TorznabCatType.TVHD, "TV/BluRay");
-            AddCategoryMapping("cat[]=7&tags=DVDRiP", TorznabCatType.TVSD, "TV/DVDRiP");
-            AddCategoryMapping("cat[]=7&tags=DVD", TorznabCatType.TVSD, "TV/DVD");
             AddCategoryMapping("cat[]=7&tags=Documentary", TorznabCatType.TVDocumentary, "TV/Documentary");
             AddCategoryMapping("cat[]=7&tags=PDTV", TorznabCatType.TVSD, "TV/PDTV");
+            AddCategoryMapping("cat[]=7&tags=DolbyVision", TorznabCatType.TVUHD, "TV/DolbyVision");
+            AddCategoryMapping("cat[]=7&tags=DVDRiP", TorznabCatType.TVSD, "TV/DVDRiP");
+            AddCategoryMapping("cat[]=7&tags=XviD", TorznabCatType.TVSD, "TV/XviD");
+            AddCategoryMapping("cat[]=7&tags=DVD", TorznabCatType.TVSD, "TV/DVD");
             AddCategoryMapping("cat[]=7&tags=HD-DVD", TorznabCatType.TVSD, "TV/HD-DVD");
 
             // XXX
             AddCategoryMapping("cat[]=51", TorznabCatType.XXX, "XXX");
+            AddCategoryMapping("cat[]=51&tags=1080p", TorznabCatType.XXXx264, "XXX/1080p");
+            AddCategoryMapping("cat[]=51&tags=720p", TorznabCatType.XXXx264, "XXX/720p");
+            AddCategoryMapping("cat[]=51&tags=2160p", TorznabCatType.XXXUHD, "XXX/2160p");
+            AddCategoryMapping("cat[]=51&tags=x264", TorznabCatType.XXXx264, "XXX/x264");
+            AddCategoryMapping("cat[]=51&tags=x265", TorznabCatType.XXXx264, "XXX/x265");
             AddCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXXXviD, "XXX/XviD");
             AddCategoryMapping("cat[]=51&tags=DVDRiP", TorznabCatType.XXXDVD, "XXX/DVDRiP");
         }
