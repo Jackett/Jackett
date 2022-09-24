@@ -33,8 +33,13 @@ search:
       selector: h5 a
       attribute: href
     download:
+      selector: a[href*="/download/torrent/"]
+      attribute: href
+      optional: true
+    magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
+      optional: true
     date:
       text: now
     size:
