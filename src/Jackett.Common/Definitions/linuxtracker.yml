@@ -69,12 +69,14 @@ caps:
     - {id: 2273, cat: PC/ISO, desc: "Cryptocurrency OS"}
     - {id: 2245, cat: PC/ISO, desc: "Cucumber Linux"}
     - {id: 2285, cat: PC/ISO, desc: "DRBL Live"}
+    - {id: 123, cat: PC/ISO, desc: "Damnsmall"}
     - {id: 128, cat: PC/ISO, desc: "Debian"}
     - {id: 131, cat: PC/ISO, desc: "Deepin"}
     - {id: 2038, cat: PC/ISO, desc: "Deft"}
     - {id: 2192, cat: PC/ISO, desc: "Devuan"}
     - {id: 2287, cat: PC/ISO, desc: "Doge Linux"}
     - {id: 144, cat: PC/ISO, desc: "DragonFly BSD"}
+    - {id: 2215, cat: PC/ISO, desc: "Dragora GNU/Linux"}
     - {id: 2226, cat: PC/ISO, desc: "DuZeru OS"}
     - {id: 148, cat: PC/ISO, desc: "Dynebolic"}
     - {id: 2261, cat: PC/ISO, desc: "Eagle Mode"}
@@ -85,6 +87,7 @@ caps:
     - {id: 2041, cat: PC/ISO, desc: "Elementary OS"}
     - {id: 161, cat: PC/ISO, desc: "Elive"}
     - {id: 2042, cat: PC/ISO, desc: "Emmabuntus"}
+    - {id: 2231, cat: PC/ISO, desc: "Emmi OS"}
     - {id: 2278, cat: PC/ISO, desc: "EndeavourOS"}
     - {id: 164, cat: PC/ISO, desc: "Endian"}
     - {id: 2179, cat: PC/ISO, desc: "Endless OS"}
@@ -133,6 +136,7 @@ caps:
     - {id: 2054, cat: PC/ISO, desc: "Kolibri"}
     - {id: 287, cat: PC/ISO, desc: "Kubuntu"}
     - {id: 2057, cat: PC/ISO, desc: "Kwort Linux"}
+    - {id: 2058, cat: PC/ISO, desc: "Kxstudio"}
     - {id: 2068, cat: PC/ISO, desc: "LXLE"}
     - {id: 2258, cat: PC/ISO, desc: "Lakka"}
     - {id: 2176, cat: PC/ISO, desc: "LibreELEC"}
@@ -150,6 +154,7 @@ caps:
     - {id: 1218, cat: PC/ISO, desc: "Lubuntu"}
     - {id: 2163, cat: PC/ISO, desc: "MOFO Linux"}
     - {id: 2177, cat: PC/ISO, desc: "MX Linux"}
+    - {id: 2296, cat: PC/ISO, desc: "Mabox Linux"}
     - {id: 1228, cat: PC/ISO, desc: "Mageia"}
     - {id: 2071, cat: PC/ISO, desc: "MakuluLinux"}
     - {id: 2073, cat: PC/ISO, desc: "Manjaro"}
@@ -157,8 +162,10 @@ caps:
     - {id: 2075, cat: PC/ISO, desc: "Minino"}
     - {id: 2076, cat: PC/ISO, desc: "Minix"}
     - {id: 2241, cat: PC/ISO, desc: "MorpheusArch Linux"}
+    - {id: 369, cat: PC/ISO, desc: "Musix"}
     - {id: 373, cat: PC/ISO, desc: "Mythbuntu"}
     - {id: 2078, cat: PC/ISO, desc: "NAS4Free"}
+    - {id: 2217, cat: PC/ISO, desc: "Namib GNU/Linux"}
     - {id: 2079, cat: PC/ISO, desc: "Neptune"}
     - {id: 380, cat: PC/ISO, desc: "NetBSD"}
     - {id: 2080, cat: PC/ISO, desc: "Nethserver"}
@@ -253,9 +260,11 @@ caps:
     - {id: 2134, cat: PC/ISO, desc: "SuperX"}
     - {id: 2189, cat: PC/ISO, desc: "SwagArch"}
     - {id: 2267, cat: PC/ISO, desc: "Symphony OS"}
+    - {id: 2295, cat: PC/ISO, desc: "SysLinuxOS"}
     - {id: 2135, cat: PC/ISO, desc: "SystemRescueCD"}
     - {id: 2188, cat: PC/ISO, desc: "TENS"}
     - {id: 2136, cat: PC/ISO, desc: "Tails"}
+    - {id: 2170, cat: PC/ISO, desc: "TalkingArch"}
     - {id: 542, cat: PC/ISO, desc: "Thinstation"}
     - {id: 2279, cat: PC/ISO, desc: "TinyPaw Linux"}
     - {id: 2138, cat: PC/ISO, desc: "Tinycore"}
@@ -286,6 +295,7 @@ caps:
     - {id: 2281, cat: PC/ISO, desc: "Web Security Dojo"}
     - {id: 2246, cat: PC/ISO, desc: "Whonix"}
     - {id: 2155, cat: PC/ISO, desc: "Wifislax"}
+    - {id: 2229, cat: PC/ISO, desc: "XiVa Studio"}
     - {id: 2251, cat: PC/ISO, desc: "XigmaNAS"}
     - {id: 607, cat: PC/ISO, desc: "Xubuntu"}
     - {id: 612, cat: PC/ISO, desc: "Zen"}
