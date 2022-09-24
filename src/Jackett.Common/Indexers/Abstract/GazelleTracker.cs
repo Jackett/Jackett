@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -24,9 +25,10 @@ namespace Jackett.Common.Indexers.Abstract
     {
         protected virtual string LoginUrl => SiteLink + "login.php";
         protected virtual string APIUrl => SiteLink + "ajax.php";
-        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + "&id=";
+        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + (useAuthKey ? "&authkey=" + configData.AuthKey.Value : "") + "&id=";
         protected virtual string DetailsUrl => SiteLink + "torrents.php?torrentid=";
         protected virtual string PosterUrl => SiteLink;
+        protected virtual string AuthorizationName => "Authorization";
         protected virtual string AuthorizationFormat => "{0}";
         protected virtual int ApiKeyLength => 41;
         protected virtual string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "usetoken=0");
@@ -34,17 +36,22 @@ namespace Jackett.Common.Indexers.Abstract
         protected bool useTokens;
         protected string cookie = "";
 
-        private readonly bool imdbInTags;
-        private readonly bool useApiKey;
-        private readonly bool usePassKey;
+        protected readonly bool imdbInTags;
+        protected readonly bool useApiKey;
+        protected readonly bool usePassKey;
+        protected readonly bool useAuthKey;
 
-        private new ConfigurationDataGazelleTracker configData => (ConfigurationDataGazelleTracker)base.configData;
+        private new ConfigurationDataGazelleTracker configData
+        {
+            get => (ConfigurationDataGazelleTracker)base.configData;
+            set => base.configData = value;
+        }
 
         protected GazelleTracker(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  IProtectionService p, ICacheService cs, TorznabCapabilities caps,
                                  bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false,
-                                 bool useApiKey = false, bool usePassKey = false, string instructionMessageOptional = null)
+                                 bool useApiKey = false, bool usePassKey = false, bool useAuthKey = false, string instructionMessageOptional = null)
             : base(id: id,
                    name: name,
                    description: description,
@@ -56,13 +63,14 @@ namespace Jackett.Common.Indexers.Abstract
                    p: p,
                    cacheService: cs,
                    configData: new ConfigurationDataGazelleTracker(
-                       has2Fa, supportsFreeleechTokens, useApiKey, usePassKey, instructionMessageOptional))
+                       has2Fa, supportsFreeleechTokens, useApiKey, usePassKey, useAuthKey, instructionMessageOptional))
         {
             Encoding = Encoding.UTF8;
 
             this.imdbInTags = imdbInTags;
             this.useApiKey = useApiKey;
             this.usePassKey = usePassKey;
+            this.useAuthKey = useAuthKey;
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
@@ -167,9 +175,6 @@ namespace Jackett.Common.Indexers.Abstract
                 { "order_way", "desc" }
             };
 
-            if (!string.IsNullOrWhiteSpace(query.Genre))
-                queryCollection.Add("taglist", query.Genre);
-
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 if (imdbInTags)
@@ -199,7 +204,7 @@ namespace Jackett.Common.Indexers.Abstract
             searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
 
             var apiKey = configData.ApiKey;
-            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
+            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
             // we get a redirect in html pages and an error message in json response (api)
@@ -223,11 +228,7 @@ namespace Jackett.Common.Indexers.Abstract
                 var json = JObject.Parse(response.ContentString);
                 foreach (JObject r in json["response"]["results"])
                 {
-                    // groupTime may be a unixTime or a datetime string
-                    var isNumber = long.TryParse((string)r["groupTime"], out long n);
-                    var groupTime = (isNumber)
-                        ? DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]))
-                        : DateTimeUtil.FromFuzzyTime((string)r["groupTime"]);
+                    var groupTime = DateTimeUtil.UnixTimestampToDateTime(long.Parse((string)r["groupTime"]));
                     var groupName = WebUtility.HtmlDecode((string)r["groupName"]);
                     var artist = WebUtility.HtmlDecode((string)r["artist"]);
                     var cover = (string)r["cover"];
@@ -245,9 +246,6 @@ namespace Jackett.Common.Indexers.Abstract
                     var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
                         ? "Tags: " + string.Join(", ", tags) + "\n"
                         : null;
-                    var genre = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
-                        ? string.Join(",", tags)
-                        : null;
                     Uri poster = null;
                     if (!string.IsNullOrEmpty(cover))
                         poster = (cover.StartsWith("http")) ? new Uri(cover) : new Uri(PosterUrl + cover);
@@ -259,10 +257,6 @@ namespace Jackett.Common.Indexers.Abstract
                         Poster = poster
                     };
 
-                    if (release.Genres == null)
-                        release.Genres = new List<string>();
-                    if (!string.IsNullOrEmpty(genre))
-                        release.Genres = release.Genres.Union(genre.Split(',')).ToList();
 
                     if (imdbInTags)
                         release.Imdb = tags
@@ -296,7 +290,7 @@ namespace Jackett.Common.Indexers.Abstract
         // hook to add/modify the parsed information, return false to exclude the torrent from the results
         protected virtual bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result) => true;
 
-        private void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
+        protected void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
         {
             var torrentId = torrent["torrentId"];
 
@@ -397,7 +391,7 @@ namespace Jackett.Common.Indexers.Abstract
         public override async Task<byte[]> Download(Uri link)
         {
             var apiKey = configData.ApiKey;
-            var headers = apiKey != null ? new Dictionary<string, string> { ["Authorization"] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
+            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
             var response = await base.RequestWithCookiesAsync(link.ToString(), null, RequestType.GET, headers: headers);
             var content = response.ContentBytes;
 
