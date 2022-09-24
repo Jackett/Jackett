@@ -270,7 +270,7 @@ namespace Jackett.Common.Indexers
                 headers = new Dictionary<string, string>();
                 headers.Add("User-Agent", configData.UserAgent.Value);
             }
-            
+
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
