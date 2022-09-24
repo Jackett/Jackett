@@ -10,71 +10,78 @@ links:
 
 caps:
   categorymappings:
-    # Cat ids used for filtering /browse/ are not consistent with those for results, so double-check when updating.
-    # They appear to be using nZEDb/Newznab/Jackett cat ids, so if there are empty categories, resort to those.
-    # Audio
-    - {id: 3000, cat: Audio, desc: "Audio"}
-    - {id: 3010, cat: Audio/MP3, desc: "Audio/MP3"}
-    - {id: 3020, cat: Audio/Video, desc: "Audio/Video"}
-    - {id: 3030, cat: Audio/Audiobook, desc: "Audio/Audiobook"}
-    - {id: 3040, cat: Audio/Lossless, desc: "Audio/Lossless"}
-    - {id: 3050, cat: Audio/Other, desc: "Audio/Other"}
-    # Console
-    - {id: 1000, cat: Console, desc: "Console"}
-    - {id: 1010, cat: Console/NDS, desc: "Console/NDS"}
-    - {id: 1020, cat: Console/PSP, desc: "Console/PSP"}
-    - {id: 1030, cat: Console/Wii, desc: "Console/Wii"}
-    - {id: 1040, cat: Console/XBox, desc: "Console/Xbox"}
-    - {id: 1050, cat: Console/XBox 360, desc: "Console/Xbox 360"}
-    - {id: 1080, cat: Console/PS3, desc: "Console/PS3"}
-    - {id: 1110, cat: Console/3DS, desc: "Console/3DS"}
-    - {id: 1120, cat: Console/PS Vita, desc: "Console/PS Vita"}
-    - {id: 1180, cat: Console/PS4, desc: "Console/PS4"}
-    - {id: 1090, cat: Console/Other, desc: "Console/Other"}
-    # Movies
-    - {id: 2000, cat: Movies, desc: "Movies"}
-    - {id: 2010, cat: Movies/Foreign, desc: "Movies/Foreign"}
-    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
-    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
-    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
-    - {id: 2060, cat: Movies/3D, desc: "Movies/3D"}
-    - {id: 2050, cat: Movies/BluRay, desc: "Movies/BluRay"}
-    - {id: 2070, cat: Movies/DVD, desc: "Movies/DVD"}
-    - {id: 2020, cat: Movies/Other, desc: "Movies/Other"}
-    # PC
-    - {id: 4000, cat: PC, desc: "PC/PC"}
-    - {id: 4020, cat: PC/ISO, desc: "PC/ISO"}
-    - {id: 4030, cat: PC/Mac, desc: "PC/Mac"}
-    - {id: 4040, cat: PC/Mobile-Other, desc: "PC/Mobile-Other"}
-    - {id: 4050, cat: PC/Games, desc: "PC/Games"}
-    - {id: 4060, cat: PC/Mobile-iOS, desc: "PC/Mobile-iOS"}
-    - {id: 4070, cat: PC/Mobile-Android, desc: "PC/Mobile-Android"}
-    # Anime
-    - {id: 5070, cat: TV/Anime, desc: "Anime"}
-    # TV
-    - {id: 5000, cat: TV, desc: "TV"}
-    - {id: 5020, cat: TV/Foreign, desc: "TV/FOREIGN"}
-    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
-    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
-    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
-    - {id: 5060, cat: TV/Sport, desc: "TV/Sport"}
-    - {id: 5080, cat: TV/Documentary, desc: "TV/Documentary"}
-    - {id: 5050, cat: TV/Other, desc: "TV/OTHER"}
-    # XXX
-    - {id: 6000, cat: XXX, desc: "XXX"}
-    - {id: 6010, cat: XXX/DVD, desc: "XXX/DVD"}
-    - {id: 6060, cat: XXX/ImageSet, desc: "XXX/Imageset"}
-    - {id: 6070, cat: XXX/Other, desc: "XXX/Other"}
-    # Books
-    - {id: 7000, cat: Books, desc: "Books"}
-    - {id: 7020, cat: Books/EBook, desc: "Books/Ebook"}
-    - {id: 7030, cat: Books/Comics, desc: "Books/Comics"}
-    - {id: 7010, cat: Books/Mags, desc: "Books/Magazines"}
-    - {id: 7040, cat: Books/Technical, desc: "Books/Technical"}
-    - {id: 7050, cat: Books/Other, desc: "Books/Other"}
-    # Other
-    - {id: 8000, cat: Other, desc: "Other"}
-    - {id: 8010, cat: Other/Misc, desc: "Other/Misc"}
+    - {id: 1000000, cat: Audio, desc: "Audio"}
+    - {id: 1001000, cat: Audio/MP3, desc: "MP3"}
+    - {id: 1002000, cat: Audio/Lossless, desc: "Lossless"}
+    - {id: 1003000, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 1004000, cat: Audio/Video, desc: "Video"}
+    - {id: 1005000, cat: Audio/Other, desc: "Radio"}
+    - {id: 1006000, cat: Audio/Other, desc: "Other"}
+    - {id: 2000000, cat: TV, desc: "TV"}
+    - {id: 2001000, cat: TV/HD, desc: "HD"}
+    - {id: 2002000, cat: TV/SD, desc: "SD"}
+    - {id: 2003000, cat: TV/UHD, desc: "UHD"}
+    - {id: 2004000, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 2005000, cat: TV/Foreign, desc: "Foreign"}
+    - {id: 2006000, cat: TV/Sport, desc: "Sport"}
+    - {id: 2007000, cat: TV/Other, desc: "Cartoon"}
+    - {id: 2008000, cat: TV/Other, desc: "Other"}
+    - {id: 3000000, cat: Movies, desc: "Movies"}
+    - {id: 3001000, cat: Movies/HD, desc: "HD"}
+    - {id: 3002000, cat: Movies/SD, desc: "SD"}
+    - {id: 3003000, cat: Movies/UHD, desc: "UHD"}
+    - {id: 3004000, cat: Movies/DVD, desc: "DVD"}
+    - {id: 3005000, cat: Movies/Foreign, desc: "Foreign"}
+    - {id: 3006000, cat: Movies/Foreign, desc: "Bollywood"}
+    - {id: 3007000, cat: Movies/3D, desc: "3D"}
+    - {id: 3008000, cat: Movies/Other, desc: "Other"}
+    - {id: 4000000, cat: PC, desc: "PC"}
+    - {id: 4001000, cat: PC/Games, desc: "Games"}
+    - {id: 4002000, cat: PC/0day, desc: "Software"}
+    - {id: 4003000, cat: PC/Mac, desc: "Mac"}
+    - {id: 4004000, cat: PC/ISO, desc: "Unix"}
+    - {id: 5000000, cat: XXX, desc: "XXX"}
+    - {id: 5001000, cat: XXX/x264, desc: "Video"}
+    - {id: 5002000, cat: XXX/ImageSet, desc: "ImageSet"}
+    - {id: 5003000, cat: XXX/Other, desc: "Games"}
+    - {id: 5004000, cat: XXX/Other, desc: "Hentai"}
+    - {id: 5005000, cat: XXX/Other, desc: "Other"}
+    - {id: 6000000, cat: TV/Anime, desc: "Anime"}
+    - {id: 6001000, cat: TV/Anime, desc: "Subbed"}
+    - {id: 6002000, cat: TV/Anime, desc: "Dubbed"}
+    - {id: 6003000, cat: TV/Anime, desc: "Dual audio"}
+    - {id: 6004000, cat: TV/Anime, desc: "Raw"}
+    - {id: 6005000, cat: Audio/Video, desc: "Music Video"}
+    - {id: 6006000, cat: Books/Other, desc: "Literature"}
+    - {id: 6007000, cat: Audio/Other, desc: "Music"}
+    - {id: 7000000, cat: Console, desc: "Console"}
+    - {id: 7001000, cat: Console/PS4, desc: "PS4"}
+    - {id: 7002000, cat: Console/PS3, desc: "PS3"}
+    - {id: 7003000, cat: Console/PS3, desc: "PS2"}
+    - {id: 7004000, cat: Console/PS3, desc: "PS1"}
+    - {id: 7005000, cat: Console/PS Vita, desc: "PS Vita"}
+    - {id: 7006000, cat: Console/PSP, desc: "PSP"}
+    - {id: 7007000, cat: Console/XBox 360, desc: "Xbox 360"}
+    - {id: 7008000, cat: Console/XBox, desc: "Xbox"}
+    - {id: 7009000, cat: Console/NDS, desc: "Switch"}
+    - {id: 7010000, cat: Console/NDS, desc: "NDS"}
+    - {id: 7011000, cat: Console/Wii, desc: "Wii"}
+    - {id: 7012000, cat: Console/WiiU, desc: "WiiU"}
+    - {id: 7013000, cat: Console/3DS, desc: "3DS"}
+    - {id: 7014000, cat: Console/Wii, desc: "GameCube"}
+    - {id: 7015000, cat: Console/Other, desc: "Other"}
+    - {id: 8000000, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 8001000, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 8002000, cat: PC/Mobile-iOS, desc: "IOS"}
+    - {id: 8003000, cat: PC/Mobile-Other, desc: "Other"}
+    - {id: 9000000, cat: Books, desc: "Books"}
+    - {id: 9001000, cat: Books/EBook, desc: "EBooks"}
+    - {id: 9002000, cat: Books/Comics, desc: "Comics"}
+    - {id: 9003000, cat: Books/Mags, desc: "Magazines"}
+    - {id: 9004000, cat: Books/Technical, desc: "Technical"}
+    - {id: 9005000, cat: Books/Other, desc: "Other"}
+    - {id: 10000000, cat: Other, desc: "Other"}
+    - {id: 10001000, cat: Other/Misc, desc: "Misc"}
 
   modes:
     search: [q]
@@ -87,27 +94,37 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: Date
+    default: date
     options:
-      Date: created
-      Seeders: seeders
-      Size: size
-      Title: title
+      date: created
+      seeders: seeders
+      bytes: size
+      title: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: +
+    options:
+      +: desc
+      -: asc
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}&p=1&cat=All&s={{ else }}browse/1/0/{{ end }}{{ .Config.sort }}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}browse{{ end }}/0/1/{{ .Config.type }}{{ .Config.sort }}"
 
   rows:
-    selector: tr[title^="Cached at"]
+    selector: tr[title^="Cached "]
 
   fields:
     category:
-      selector: a[href^="/browse/"]
+      selector: a[href^="/browse/"]:last-child
       attribute: href
       filters:
         - name: split
-          args: ["/", 3]
+          args: ["/", 2]
+        # replace subcat with cat: 1001069 > 1001000
+        - name: re_replace
+          args: ["(\\d{3})$", "000"]
     title:
       selector: td:nth-child(2) a
     details:
@@ -128,7 +145,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "2006-01-02T15:04:05 -07:00"
+          args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: td:nth-child(3)
     seeders:
