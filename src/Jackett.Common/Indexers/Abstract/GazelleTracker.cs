@@ -174,7 +174,7 @@ namespace Jackett.Common.Indexers.Abstract
                 { "order_by", "time" },
                 { "order_way", "desc" }
             };
-            
+
             if (!string.IsNullOrWhiteSpace(query.Genre))
                 queryCollection.Add("taglist", query.Genre);
 
@@ -225,7 +225,6 @@ namespace Jackett.Common.Indexers.Abstract
                 throw new Exception(errorReason);
             }
 
-
             try
             {
                 var json = JObject.Parse(response.ContentString);
@@ -262,7 +261,7 @@ namespace Jackett.Common.Indexers.Abstract
                         Description = description,
                         Poster = poster
                     };
-                    
+
                     if (release.Genres == null)
                         release.Genres = new List<string>();
                     if (!string.IsNullOrEmpty(genre))
