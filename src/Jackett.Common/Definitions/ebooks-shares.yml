@@ -349,17 +349,17 @@ search:
     download:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
-    seeders:
-      selector: td:nth-child(4)
-    leechers:
-      selector: td:nth-child(5)
     size:
+      selector: td:nth-child(5)
+    seeders:
       selector: td:nth-child(6)
-    description:
+    leechers:
       selector: td:nth-child(7)
+    description:
+      selector: td:nth-child(4)
       filters:
         - name: prepend
-          args: "wait: "
+          args: "uploader: "
     date:
       text: now
     downloadvolumefactor:

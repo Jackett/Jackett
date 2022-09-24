@@ -61,13 +61,16 @@ search:
     # search is an exact match, there are no wild cards, or +word or AND/OR, and spaces and dots are treated uniquely
 
   rows:
-    selector: div.content font[color="purple"], div.content font[color="orange"]:has(img), div.content font[color="gray"], div.content font[color="white"]
+    selector: div.content font[color="purple"], div.content font[color="orange"]:has(a), div.content font[color="gray"], div.content font[color="white"]
     after: 3
 
   fields:
     category:
+      text: "UNKNOWN"
+    category|noappend:
       selector: img[src^="./cat/"]
       attribute: src
+      optional: true
       filters:
         - name: regexp
           args: "cat/(.+?).png"
