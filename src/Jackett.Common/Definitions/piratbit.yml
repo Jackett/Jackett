@@ -654,9 +654,18 @@ settings:
       1: asc
 
 download:
-  selectors:
-    - selector: a[href^="magnet:?xt="]
+  infohash:
+    hash:
+      selector: a[href^="magnet:"]
       attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: "span[style=\"font-family: Georgia;\"]"
+      filters:
+        - name: trim
+        - name: validfilename
 
 search:
   paths:
@@ -694,7 +703,7 @@ search:
     submit: "Поиск"
 
   rows:
-    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"]))
+    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"])):not(:has(span[title="неоформлено"]))
     filters:
       - name: andmatch
 
