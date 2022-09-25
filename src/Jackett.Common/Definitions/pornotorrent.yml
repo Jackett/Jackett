@@ -5,6 +5,7 @@ description: "PornoTorrent is a SPANISH Public Torrent Tracker for 3X"
 language: en-US
 type: public
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://www.pornotorrent.eu/
 
@@ -19,8 +20,11 @@ settings: []
 
 download:
   selectors:
-    - selector: a[href^="magnet:?xt="]
+    - selector: a.button_link
       attribute: href
+      filters:
+        - name: replace
+          args: ["////", "//"]
 
 search:
   paths:
