@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://www.pornotorrent.eu/
-
+testlinktorrent: false
 caps:
   categorymappings:
     - {id: XXX, cat: XXX, desc: XXX}
@@ -19,8 +19,11 @@ settings: []
 
 download:
   selectors:
-    - selector: a[href^="magnet:?xt="]
+    - selector: a.button_link
       attribute: href
+      filters:
+          - name: replace
+            args: ["////", "//"]
 
 search:
   paths:
