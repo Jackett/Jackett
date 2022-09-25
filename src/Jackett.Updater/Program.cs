@@ -433,6 +433,7 @@ namespace Jackett.Updater
                 "Definitions/nachtwerk.yml",
                 "Definitions/nbtorrents.yml",
                 "Definitions/netlab.yml",
+                "Definitions/newpct-me.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/nforce.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
