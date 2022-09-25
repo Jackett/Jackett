@@ -22,8 +22,8 @@ download:
     - selector: a.button_link
       attribute: href
       filters:
-          - name: replace
-            args: ["////", "//"]
+        - name: replace
+          args: ["////", "//"]
 
 search:
   paths:
