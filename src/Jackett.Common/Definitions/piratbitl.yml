@@ -674,13 +674,6 @@ login:
     path: index.php
     selector: li a[href="/login.php?logout=1"]
 
-download:
-  selectors:
-    - selector: a[class="btn btn-sm btn-success"][href^="/dl.php?id="]
-      attribute: href
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
-
 search:
   paths:
     - path: tracker.php
@@ -717,7 +710,7 @@ search:
     submit: "Поиск"
 
   rows:
-    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"]))
+    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"])):not(:has(span[title="неоформлено"]))
     filters:
       - name: andmatch
 
@@ -768,7 +761,7 @@ search:
       selector: td a.genmed
       attribute: href
     download:
-      selector: td a.genmed
+      selector: td div a.dLink
       attribute: href
     description:
       selector: td:first-child span

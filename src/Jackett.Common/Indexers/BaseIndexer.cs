@@ -456,6 +456,16 @@ namespace Jackett.Common.Indexers
             {
                 await FollowIfRedirect(response);
             }
+
+            if (response.IsRedirect)
+            {
+                var redirectingTo = new Uri(response.RedirectingTo);
+                if (redirectingTo.Scheme == "magnet")
+                    return Encoding.UTF8.GetBytes(redirectingTo.OriginalString);
+
+                await FollowIfRedirect(response);
+            }
+
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
             {
                 logger.Error("Failed download cookies: " + CookieHeader);
@@ -568,6 +578,11 @@ namespace Jackett.Common.Indexers
             {
                 if (!response.IsRedirect)
                     break;
+
+                var redirectingTo = new Uri(response.RedirectingTo);
+                if (redirectingTo.Scheme == "magnet")
+                    break;
+
                 await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
                 if (accumulateCookies)
                 {

@@ -65,16 +65,10 @@ download:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     title:
-      selector: h2
+      selector: th[colspan="5"]
       filters:
         - name: replace
-          args: ["Full Movie ", ""]
-        - name: replace
-          args: ["Torrent Magnet ", ""]
-        - name: replace
-          args: ["Download", ""]
-        - name: replace
-          args: ["…", ""]
+          args: [" – movietorrent", ""]
         - name: trim
         - name: validfilename
 
