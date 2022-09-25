@@ -71,9 +71,12 @@ settings:
       trie-nom-a: title asc
 
 download:
+  before:
+    # request target
+    path: "download_magnet?id={{ re_replace .DownloadUri.AbsoluteUri \"^.*-(\\d+)\\.html\" \"$1\" }}"
   selectors:
-    - selector: a[href^="magnet:"]
-      attribute: href
+    - selector: body
+      usebeforeresponse: true
 
 search:
   paths:
