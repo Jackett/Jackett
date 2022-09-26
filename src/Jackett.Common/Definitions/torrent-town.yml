@@ -142,7 +142,7 @@ search:
       attribute: href
       filters:
         - name: replace
-          args: ["details.php?id=", "download.php?torrent="]
+          args: ["details.php?id=", "download_ssl.php?torrent="]
     poster:
       selector: div[id^="details"] img
       attribute: src
