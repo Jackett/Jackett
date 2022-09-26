@@ -151,7 +151,7 @@ search:
       attribute: href
       filters:
         - name: replace
-          args: ["details.php?id=", "download.php?torrent="]
+          args: ["details.php?id=", "download_ssl.php?torrent="]
     title:
       selector: a.selection_a
       filters:
