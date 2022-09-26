@@ -31,7 +31,7 @@ namespace Jackett.Common.Indexers
             "https://bj-share.me/"
         };
 
-        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
+        private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
 
 
@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers
                     logger: l,
                     p: ps,
                     cacheService: cs,
-                    configData: new ConfigurationDataCookie())
+                    configData: new ConfigurationDataCookieUA())
         {
             Encoding = Encoding.UTF8;
             Language = "pt-BR";
@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
             catch (Exception e)
             {
                 IsConfigured = false;
-                throw new Exception("Your cookie did not work: " + e.Message);
+                throw new Exception("Your cookie did not work, make sure the user agent matches your computer: " + e.Message);
             }
         }
 
@@ -262,13 +262,22 @@ namespace Jackett.Common.Indexers
                 {"action", "basic"},
                 {"searchsubmit", "1"}
             };
+
+            Dictionary<string, string> headers = null;
+
+            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
+            {
+                headers = new Dictionary<string, string>();
+                headers.Add("User-Agent", configData.UserAgent.Value);
+            }
+
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
-            var results = await RequestWithCookiesAsync(searchUrl);
+            var results = await RequestWithCookiesAsync(searchUrl, headers: headers);
             if (IsSessionIsClosed(results))
             {
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
