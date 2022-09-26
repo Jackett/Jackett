@@ -9,13 +9,14 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public PasswordConfigurationItem Password { get; private set; }
         public StringConfigurationItem ApiKey { get; private set; }
         public StringConfigurationItem PassKey { get; private set; }
+        public StringConfigurationItem AuthKey { get; private set; }
         public DisplayInfoConfigurationItem CookieHint { get; private set; }
         public StringConfigurationItem CookieItem { get; private set; }
         public BoolConfigurationItem UseTokenItem { get; private set; }
         public DisplayInfoConfigurationItem Instructions { get; private set; }
 
         public ConfigurationDataGazelleTracker(bool has2Fa = false, bool supportsFreeleechToken = false,
-                                               bool useApiKey = false, bool usePassKey = false,
+                                               bool useApiKey = false, bool usePassKey = false, bool useAuthKey = false,
                                                string instructionMessageOptional = null)
         {
             if (useApiKey)
@@ -43,6 +44,9 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
 
             if (usePassKey)
                 PassKey = new StringConfigurationItem("Passkey");
+
+            if (useAuthKey)
+                AuthKey = new StringConfigurationItem("Authkey");
 
             if (supportsFreeleechToken)
                 UseTokenItem = new BoolConfigurationItem("Use Freeleech Tokens when Available") { Value = false };
