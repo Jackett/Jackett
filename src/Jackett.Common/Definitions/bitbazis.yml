@@ -118,7 +118,7 @@ search:
     # can support genre searching but you need to know the id, eg &genre23=1 for Comedy (id is 23)
 
   rows:
-    selector: "table[width=\"100%\"]:last-child tbody tr:has(div.tooltip){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
+    selector: "table[width=\"100%\"][align=\"center\"]:first-child tbody tr:has(div.tooltip){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
 
   fields:
     category:
