@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "gazellegamesapi",
-                   name: "GazelleGamesApi",
+                   name: "GazelleGames (API)",
                    description: "A gaming tracker",
                    link: "https://gazellegames.net/",
                    caps: new TorznabCapabilities(),
@@ -257,7 +257,7 @@ namespace Jackett.Common.Indexers
                         var grabs = ParseUtil.CoerceLong(torrent["Snatched"].ToString());
                         var seeders = ParseUtil.CoerceLong(torrent["Seeders"].ToString());
                         var leechers = ParseUtil.CoerceLong(torrent["Leechers"].ToString());
-                        var title = torrent["ReleaseTitle"].ToString();
+                        var title = WebUtility.HtmlDecode(torrent["ReleaseTitle"].ToString());
 
                         List<string> tags = new List<string>();
                         string[] tagNames = { "Format", "Encoding", "Region", "Language", "Scene", "Miscellaneous", "GameDOXType", "GameDOXVers" };
