@@ -254,6 +254,7 @@ caps:
     - {id: 2126, cat: PC/ISO, desc: "Solus"}
     - {id: 2127, cat: PC/ISO, desc: "Solydxk"}
     - {id: 1236, cat: PC/ISO, desc: "SparkyLinux"}
+    - {id: 2297, cat: PC/ISO, desc: "SpiralLinux"}
     - {id: 2225, cat: PC/ISO, desc: "Star"}
     - {id: 2132, cat: PC/ISO, desc: "Steamos"}
     - {id: 2174, cat: PC/ISO, desc: "Super Grub2 Disk"}
