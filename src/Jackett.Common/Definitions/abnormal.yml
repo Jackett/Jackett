@@ -128,16 +128,16 @@ search:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+          args: ["(?i)(\\.multi\\.)", " {{ .Config.multilanguage }} "]
     title_phase2:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+          args: ["(?i)(\\.vostfr\\.)", " ENGLISH "]
         - name: re_replace
-          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+          args: ["(?i)(\\.subfrench\\.)", " ENGLISH "]
     title:
       text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
