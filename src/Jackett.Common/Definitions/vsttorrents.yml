@@ -32,7 +32,7 @@ search:
     s: "{{ .Keywords }}"
 
   rows:
-    selector: article:has(h3):has(time)
+    selector: article:has(h4)
     filters:
       - name: andmatch
 
@@ -40,21 +40,23 @@ search:
     category:
       text: Audio
     title:
-      selector: h3
+      selector: h4
     details:
-      selector: h3 > a
+      selector: h4 > a
       attribute: href
     download:
-      selector: h3 > a
+      selector: h4 > a
       attribute: href
     poster:
-      selector: img
-      attribute: src
+      selector: div.back-img
+      attribute: style
+      filters:
+        - name: regexp
+          args: "\\'(.+?)\\'"
     description:
-      selector: div.cat-links
+      selector: div.mg-blog-category
     date:
-      selector: time
-      attribute: datetime
+      text: now
     size:
       text: "512 MB"
     seeders:
@@ -65,4 +67,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# engine wordpress
+# wordpress 6.0.2
