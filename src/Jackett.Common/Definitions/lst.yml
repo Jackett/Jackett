@@ -148,10 +148,10 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-# global MR is 1.0 but torrents must be seeded for 3 days regardless of ratio
+# global MR is 1.0 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
 #      text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# json UNIT3D 6.2.1
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+# json UNIT3D 6.3.0
