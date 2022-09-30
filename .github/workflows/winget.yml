@@ -8,7 +8,7 @@ jobs:
   publish:
     runs-on: windows-latest
     steps:
-      - uses: vedantmgoyal2009/winget-releaser@latest
+      - uses: vedantmgoyal2009/winget-releaser@v1
         with:
           identifier: Jackett.Jackett
           token: ${{ secrets.WINGET }}
