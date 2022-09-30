@@ -133,7 +133,9 @@ search:
         - name: replace
           args: [" / 2x", ""]
         - name: re_replace
-          args: [" / ", "-"]
+          args: [" / ", " "]
+        - name: re_replace
+          args: ["\\b(\\w+)$", " -$1"]
         #  #10423
         - name: re_replace
           args: ["(?i)(season )", "S"]
