@@ -134,9 +134,17 @@ search:
           args: [" / 2x", ""]
         - name: re_replace
           args: [" / ", " "]
+        - name: re_replace
+          args: ["\\b(\\w+)$", " -$1"]
         #  #10423
         - name: re_replace
           args: ["(?i)(season )", "S"]
+        - name: replace
+          args: ["Encode", "Blu-Ray"]
+        - name: replace
+          args: ["Blu-ray", "BR-Disk"]
+        - name: replace
+          args: ["Remux", "Blu-Ray Remux"]
     details:
       selector: a.torrent_name
       attribute: href
