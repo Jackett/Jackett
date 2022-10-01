@@ -5,10 +5,10 @@ description: "HDGalaKtik is a RUSSIAN Semi-Private tracker for TV / MOVIES / GEN
 language: ru-RU
 type: semi-private
 encoding: UTF-8
-links:
-  - https://hdgalaktik.com/
-  - https://freetmd.com/
   - https://www.trackerpmr.com/
+  - https://freetmd.com/
+legacylinks:
+  - https://hdgalaktik.com/
 
 caps:
   categorymappings:
