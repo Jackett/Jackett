@@ -6,6 +6,8 @@ language: tr-TR
 type: private
 encoding: UTF-8
 links:
+  - https://trendfilm.net/
+legacylinks:
   - https://turkseed.com/
 
 caps:
