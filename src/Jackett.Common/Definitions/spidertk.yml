@@ -135,7 +135,7 @@ login:
         selector: td.text
   test:
     path: index.php
-    selector: a[href="logout.php"]
+    selector: a[href*="logout.php"]
 
 search:
   paths:
@@ -173,6 +173,9 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: img.nexus-lazy-load
+      attribute: data-src
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
