@@ -77,6 +77,7 @@ search:
           args: [",", -1]
     year:
       selector: year
+      optional: true
     _codec:
       selector: codec
     _container:
