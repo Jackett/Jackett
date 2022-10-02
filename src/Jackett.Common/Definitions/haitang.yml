@@ -22,7 +22,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
+    tv-search: [q, season, ep]
     music-search: [q]
 
 settings:
