@@ -1319,7 +1319,7 @@ function updateSearchResultTable(element, results) {
                 var newInputSearch = inputSearch.clone();
                 newInputSearch.attr("custom", "true");
                 newInputSearch.attr("data-toggle", "tooltip");
-                newInputSearch.attr("title", "Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
+                newInputSearch.attr("title", "Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.\nKeywords separated by \"|\" are considered as OR filters.");
                 newInputSearch.on("input", function () {
                     var newKeywords = [];
                     var filterTextKeywords = $(this).val().split(" ");
@@ -1332,7 +1332,7 @@ function updateSearchResultTable(element, results) {
                         else if (keyword.startsWith("-"))
                             newKeyword = "^((?!" + $.fn.dataTable.util.escapeRegex(keyword.substring(1)) + ").)*$";
                         else
-                            newKeyword = $.fn.dataTable.util.escapeRegex(keyword);
+                            newKeyword = '(' + keyword.split('|').map(k => $.fn.dataTable.util.escapeRegex(k)).join('|') + ')';
                         newKeywords.push(newKeyword);
                     });
                     var filterText = newKeywords.join(" ");
