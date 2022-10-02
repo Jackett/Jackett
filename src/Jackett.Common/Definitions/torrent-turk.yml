@@ -137,7 +137,7 @@ search:
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
   error:
-    - selector: div.error:not(:contains("Hiçbir sonuç bulunamadı."))
+    - selector: div.error:not(:contains("Hiçbir sonuç bulunamadı.")):not(:contains("There are no results found.")):not(:contains("Click on The Flag to Change"))
     # does not support imdbid search and does not return imdb link in results.
 
   rows:
