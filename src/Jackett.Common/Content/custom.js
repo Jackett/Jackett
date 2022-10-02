@@ -1314,12 +1314,25 @@ function updateSearchResultTable(element, results) {
         fnPreDrawCallback: function () {
             var table = this;
 
+            var lsKey = "jackett_saved_presets"
+            var datalist = element.find("datalist[id=jackett-search-saved-presets]")
+            if (JSON !== undefined && localStorage !== undefined) {
+                datalist.empty();
+                var lsSavedPresets = localStorage.getItem(lsKey);
+                var presets = lsSavedPresets !== null ? JSON.parse(lsSavedPresets) : [];
+                presets.forEach(preset => {
+                    var option = $('<option value="'+preset+'"></option>');
+                    datalist.append(option);
+                })
+            }
+
             var inputSearch = element.find("input[type=search]");
             if (!inputSearch.attr("custom")) {
                 var newInputSearch = inputSearch.clone();
                 newInputSearch.attr("custom", "true");
                 newInputSearch.attr("data-toggle", "tooltip");
                 newInputSearch.attr("title", "Search query consists of several keywords.\nKeyword starting with \"-\" is considered a negative match.");
+                newInputSearch.attr("list", "jackett-search-saved-presets");
                 newInputSearch.on("input", function () {
                     var newKeywords = [];
                     var filterTextKeywords = $(this).val().split(" ");
@@ -1352,6 +1365,20 @@ function updateSearchResultTable(element, results) {
                     table.api().draw();
                 });
                 deadfiltercheckbox.prop('checked', settings.deadfilter);
+
+                savepresetlabel = $('<button id="jackett-search-results-datatable_savepreset_button" title="Save Preset" class="btn btn-success btn-sm" style="margin-left: 10px;"><span class="fa fa-plus"></span></button>');
+                deadfilterdiv.append(savepresetlabel);
+                savepresetbutton = savepresetlabel.find("button")["prevObject"];
+                savepresetbutton.on("click", function () {
+                    var inputSearch = element.find("input[type=search]");
+                    var preset = inputSearch.val().trim();
+                    if (preset !== "" && JSON !== undefined && localStorage !== undefined) {
+                        var lsSavedPresets = localStorage.getItem(lsKey);
+                        var presets = lsSavedPresets !== null ? JSON.parse(lsSavedPresets) : [];
+                        presets.push(preset);
+                        localStorage.setItem(lsKey, JSON.stringify(presets));
+                    }
+                });
             }
         },
         initComplete: function () {
