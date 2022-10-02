@@ -1321,7 +1321,8 @@ function updateSearchResultTable(element, results) {
                 var lsSavedPresets = localStorage.getItem(lsKey);
                 var presets = lsSavedPresets !== null ? JSON.parse(lsSavedPresets) : [];
                 presets.forEach(preset => {
-                    var option = $('<option value="'+preset+'"></option>');
+                    var option = $('<option></option>');
+                    option.attr("value", preset);
                     datalist.append(option);
                 })
             }
