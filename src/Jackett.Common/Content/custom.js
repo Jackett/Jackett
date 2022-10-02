@@ -1327,15 +1327,17 @@ function updateSearchResultTable(element, results) {
                         if (keyword === "" || keyword === "+" || keyword === "-")
                             return;
                         var newKeyword;
+                        var pipedKeyword = '(' + keyword.substring(1).split('|').map(k => $.fn.dataTable.util.escapeRegex(k)).join('|') + ')';
                         if (keyword.startsWith("+"))
-                            newKeyword = $.fn.dataTable.util.escapeRegex(keyword.substring(1));
+                            newKeyword = pipedKeyword;
                         else if (keyword.startsWith("-"))
-                            newKeyword = "^((?!" + $.fn.dataTable.util.escapeRegex(keyword.substring(1)) + ").)*$";
+                            newKeyword = "^((?!" + pipedKeyword + ").)*$";
                         else
                             newKeyword = $.fn.dataTable.util.escapeRegex(keyword);
                         newKeywords.push(newKeyword);
                     });
                     var filterText = newKeywords.join(" ");
+                    console.log("Filter Text", filterText);
                     table.api().search(filterText, true, true).draw();
                 });
                 inputSearch.replaceWith(newInputSearch);
