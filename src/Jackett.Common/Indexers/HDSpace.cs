@@ -61,24 +61,28 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");
-            AddCategoryMapping(19, TorznabCatType.MoviesHD, "Movie / 1080p");
-            AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movie / 720p");
             AddCategoryMapping(40, TorznabCatType.MoviesHD, "Movie / Remux");
-            AddCategoryMapping(16, TorznabCatType.MoviesHD, "Movie / HD-DVD");
-            AddCategoryMapping(41, TorznabCatType.MoviesUHD, "Movie / 4K UHD");
+            AddCategoryMapping(18, TorznabCatType.MoviesHD, "Movie / 720p");
+            AddCategoryMapping(19, TorznabCatType.MoviesHD, "Movie / 1080p");
+            AddCategoryMapping(46, TorznabCatType.MoviesUHD, "Movie / 2160p");
             AddCategoryMapping(21, TorznabCatType.TVHD, "TV Show / 720p HDTV");
             AddCategoryMapping(22, TorznabCatType.TVHD, "TV Show / 1080p HDTV");
+            AddCategoryMapping(45, TorznabCatType.TVUHD, "TV Show / 2160p HDTV");
             AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Documentary / 720p");
             AddCategoryMapping(25, TorznabCatType.TVDocumentary, "Documentary / 1080p");
+            AddCategoryMapping(47, TorznabCatType.TVDocumentary, "Documentary / 2160p");
             AddCategoryMapping(27, TorznabCatType.TVAnime, "Animation / 720p");
             AddCategoryMapping(28, TorznabCatType.TVAnime, "Animation / 1080p");
+            AddCategoryMapping(48, TorznabCatType.TVAnime, "Animation / 2160p");
             AddCategoryMapping(30, TorznabCatType.AudioLossless, "Music / HQ Audio");
             AddCategoryMapping(31, TorznabCatType.AudioVideo, "Music / Videos");
             AddCategoryMapping(33, TorznabCatType.XXX, "XXX / 720p");
             AddCategoryMapping(34, TorznabCatType.XXX, "XXX / 1080p");
+            AddCategoryMapping(49, TorznabCatType.XXX, "XXX / 2160p");
             AddCategoryMapping(36, TorznabCatType.MoviesOther, "Trailers");
             AddCategoryMapping(37, TorznabCatType.PC, "Software");
             AddCategoryMapping(38, TorznabCatType.Other, "Others");
+            AddCategoryMapping(41, TorznabCatType.MoviesUHD, "Movie / 4K UHD");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
