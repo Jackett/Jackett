@@ -200,7 +200,12 @@ search:
         - name: append
           args: "{{ if .Result.genre }}</br>{{ .Result.genre }}{{ else }}{{ end }}"
     date:
-      text: now
+      selector: a:has(span.bx-calendar)
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "2.01.2006 15:04 -07:00"
     seeders:
       selector: a:has(i.bx-chevrons-up)
       filters:
