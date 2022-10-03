@@ -10,9 +10,9 @@ links:
   - https://torrentgalaxy.to/
   - https://torrentgalaxy.mx/
   - https://torrentgalaxy.su/
+  - https://tgx.rs/
   - https://torrentgalaxy.unblockninja.com/
   - https://torrentgalaxy.unblockit.cat/
-  - https://torrentgalaxy.nocensor.world/
 legacylinks:
   - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.pw/ # proxy list only
@@ -36,6 +36,7 @@ legacylinks:
   - https://torrentgalaxy.nocensor.sbs/
   - https://torrentgalaxy.unblockit.ist/
   - https://torrentgalaxy.unblockit.bet/
+  - https://torrentgalaxy.nocensor.world/ # banned
 
 caps:
   categorymappings:
