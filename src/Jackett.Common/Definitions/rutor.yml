@@ -9,6 +9,7 @@ links:
   - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
   - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
   - http://new-rutor.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://rutor.nocensor.world/ # for magnet only
 legacylinks:
   - http://live-rutor.org/ # domain expired 9 Feb 2020
   - https://rutor.black-mirror.xyz/

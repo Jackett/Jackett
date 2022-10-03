@@ -26,6 +26,7 @@ caps:
     - {id: 91, cat: Movies, desc: "Movie-Packs"}
     - {id: 66, cat: Movies, desc: "Movies"}
     - {id: 11, cat: Movies/DVD, desc: "Movies DVD / HD2DVD"}
+    - {id: 104, cat: Movies/UHD, desc: "Movies UHD 8K"}
     - {id: 49, cat: Movies/HD, desc: "Movies-1080p"}
     - {id: 90, cat: Movies/3D, desc: "Movies-3-D"}
     - {id: 48, cat: Movies/HD, desc: "Movies-720p"}

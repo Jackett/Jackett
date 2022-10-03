@@ -145,7 +145,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
+    tv-search: [q, season, ep]
 
 settings:
   - name: username
