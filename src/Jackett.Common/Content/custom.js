@@ -1238,6 +1238,59 @@ function clearSearchResultTable(element) {
     element.find("#jackett-search-results-datatable_paginate").empty();
 }
 
+function getSavedPresets() {
+    var lsKey = "jackett_saved_presets";
+    if (JSON !== undefined && localStorage !== undefined) {
+        var lsSavedPresets = localStorage.getItem(lsKey);
+        var presets = lsSavedPresets !== null ? JSON.parse(lsSavedPresets) : [];
+        return presets;
+    } else {
+        return [];
+    }
+}
+
+function setSavedPresets(presets) {
+    var lsKey = "jackett_saved_presets";
+    if (JSON !== undefined && localStorage !== undefined) {
+        localStorage.setItem(lsKey, JSON.stringify(presets));
+    }
+}
+
+function setSavePresetsButtonState(table, element, state = false) {
+    var button = element.find("button[id=jackett-search-results-datatable_savepreset_button]")    
+    if (state) {
+        button.attr("class", "btn btn-danger btn-sm");
+        button.on("click", function () {
+            var inputSearch = element.find("input[type=search]");
+            var preset = inputSearch.val().trim();
+            if (preset !== "") {
+                var presets = getSavedPresets();
+                if (presets.includes(preset)) {
+                    presets = presets.filter(item => item != preset);
+                    setSavedPresets(presets);
+                    var datalist = element.find("datalist[id=jackett-search-saved-presets]")
+                    datalist.empty();
+                    table.api().draw();
+                }
+            }
+        });
+    } else {
+        button.attr("class", "btn btn-success btn-sm");
+        button.on("click", function () {
+            var inputSearch = element.find("input[type=search]");
+            var preset = inputSearch.val().trim();
+            if (preset !== "") {
+                var presets = getSavedPresets();
+                if (!presets.includes(preset)) {
+                    presets.push(preset);
+                    setSavedPresets(presets);
+                    table.api().draw();
+                }
+            }
+        });
+    }
+}
+
 // dataTable dead torrent filter
 $.fn.dataTable.ext.search = [
     function (settings, data, dataIndex) {
@@ -1313,13 +1366,11 @@ function updateSearchResultTable(element, results) {
         ],
         fnPreDrawCallback: function () {
             var table = this;
-
-            var lsKey = "jackett_saved_presets"
             var datalist = element.find("datalist[id=jackett-search-saved-presets]")
-            if (JSON !== undefined && localStorage !== undefined) {
+
+            var presets = getSavedPresets();
+            if (presets.length > 0) {
                 datalist.empty();
-                var lsSavedPresets = localStorage.getItem(lsKey);
-                var presets = lsSavedPresets !== null ? JSON.parse(lsSavedPresets) : [];
                 presets.forEach(preset => {
                     var option = $('<option></option>');
                     option.attr("value", preset);
@@ -1328,6 +1379,8 @@ function updateSearchResultTable(element, results) {
             }
 
             var inputSearch = element.find("input[type=search]");
+            setSavePresetsButtonState(table, element, presets.includes(inputSearch.val().trim()));
+
             if (!inputSearch.attr("custom")) {
                 var newInputSearch = inputSearch.clone();
                 newInputSearch.attr("custom", "true");
@@ -1336,7 +1389,11 @@ function updateSearchResultTable(element, results) {
                 newInputSearch.attr("list", "jackett-search-saved-presets");
                 newInputSearch.on("input", function () {
                     var newKeywords = [];
-                    var filterTextKeywords = $(this).val().split(" ");
+                    var filterText = $(this).val().trim();
+                    var presets = getSavedPresets();
+                    setSavePresetsButtonState(table, element, presets.includes(filterText));
+
+                    var filterTextKeywords = filterText.split(" ");
                     $.each(filterTextKeywords, function (index, keyword) {
                         if (keyword === "" || keyword === "+" || keyword === "-")
                             return;
@@ -1370,17 +1427,6 @@ function updateSearchResultTable(element, results) {
                 savepresetlabel = $('<button id="jackett-search-results-datatable_savepreset_button" title="Save Search Preset" class="btn btn-success btn-sm" style="margin-left: 10px;"><span class="fa fa-save"></span></button>');
                 var searchfilterdiv = element.find("#jackett-search-results-datatable_filter");
                 searchfilterdiv.append(savepresetlabel);
-                savepresetbutton = savepresetlabel.find("button")["prevObject"];
-                savepresetbutton.on("click", function () {
-                    var inputSearch = element.find("input[type=search]");
-                    var preset = inputSearch.val().trim();
-                    if (preset !== "" && JSON !== undefined && localStorage !== undefined) {
-                        var lsSavedPresets = localStorage.getItem(lsKey);
-                        var presets = lsSavedPresets !== null ? JSON.parse(lsSavedPresets) : [];
-                        presets.push(preset);
-                        localStorage.setItem(lsKey, JSON.stringify(presets));
-                    }
-                });
             }
         },
         initComplete: function () {
