@@ -1367,8 +1367,9 @@ function updateSearchResultTable(element, results) {
                 });
                 deadfiltercheckbox.prop('checked', settings.deadfilter);
 
-                savepresetlabel = $('<button id="jackett-search-results-datatable_savepreset_button" title="Save Preset" class="btn btn-success btn-sm" style="margin-left: 10px;"><span class="fa fa-plus"></span></button>');
-                deadfilterdiv.append(savepresetlabel);
+                savepresetlabel = $('<button id="jackett-search-results-datatable_savepreset_button" title="Save Search Preset" class="btn btn-success btn-sm" style="margin-left: 10px;"><span class="fa fa-save"></span></button>');
+                var searchfilterdiv = element.find("#jackett-search-results-datatable_filter");
+                searchfilterdiv.append(savepresetlabel);
                 savepresetbutton = savepresetlabel.find("button")["prevObject"];
                 savepresetbutton.on("click", function () {
                     var inputSearch = element.find("input[type=search]");
