@@ -5,8 +5,11 @@ BOLDRED="$(printf '\033[1;31m')"
 BOLDGREEN="$(printf '\033[1;32m')"
 NC="$(printf '\033[0m')" # No Color
 
+
+userid=$(id -u)
+
 # Stop and unload the service if it's running
-launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist &>/dev/null
+launchctl bootout gui/${userid}/org.user.Jackett &>/dev/null
 
 # Move working directory to Jackett's
 cd "$(dirname "$0")"
@@ -64,11 +67,14 @@ if [[ $qstr ]]; then
 fi
 
 # Run the agent
-launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
+echo "Launching agent..."
+#launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
+launchctl bootstrap gui/${userid} ~/Library/LaunchAgents/org.user.Jackett.plist
+sleep .5
 
-# Check that it's launched
-userid=$(id -u)
+# Check that it's loaded
 if [[ $(launchctl list | grep org.user.Jackett) ]]; then
+# Check that service is running
     if [[ $(launchctl print gui/${userid}/org.user.Jackett | grep 'state') =~ "running" ]]; then
         echo "${BOLDGREEN}Agent successfully installed and running!${NC}"
         echo "Jackett location: ${jackettdir}"

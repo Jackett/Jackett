@@ -35,7 +35,7 @@ done
 # Unload and delete agent
 if [[ "$delagent" = true ]]; then
     echo "Deleting agent..."
-    launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist
+    launchctl bootout gui/$(id -u)/org.user.Jackett
     rm ~/Library/LaunchAgents/org.user.Jackett.plist
 fi
 
