@@ -63,7 +63,7 @@ caps:
     - {id: 97, cat: Other, desc: "Unsorted - Other"}
     # XXX
     - {id: 78, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 76, cat: XXX/Other, desc: "XXX Other"}
+    - {id: 89, cat: XXX/Other, desc: "XXX Other"}
     - {id: 79, cat: XXX/Pack, desc: "XXX Packs"}
     - {id: 77, cat: XXX/SD, desc: "XXX SD"}
 
