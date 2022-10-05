@@ -77,7 +77,7 @@ login:
   error:
     - selector: table:has(td.thead:contains("An error has occured!"))
   test:
-    path: index.php
+    path: userdetails.php
     selector: a[href*="logout.php?logouthash="]
 
 download:
