@@ -102,7 +102,7 @@ search:
     category: "{{ range .Categories }}{{.}};{{end}}"
     # 0 all, 1 active, 2 dead
     active: 0
-    # 0 filename, 1 file&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
+    # 0 filename, 1 file&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze, 18 genre
     options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
@@ -132,6 +132,8 @@ search:
       filters:
         - name: regexp
           args: "src=(.*?) "
+        - name: replace
+          args: ["torrentimg/nocover.jpg", ""]
     details:
       selector: a[onmouseover][href^="index.php?page=torrent-details&id="]
       attribute: href
@@ -174,6 +176,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
-# xbtitFM v2.2.09
+      # 1 day (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+# xbtitFM v3.1.01
