@@ -139,13 +139,13 @@ search:
       attribute: href
     downloadvolumefactor:
       case:
-        i.fa-star: 0 # Freeleech
-        i.fa-certificate: 0 # Featured
+        path[d^="M1728 "]: 0 # Freeleech
+        path[d^="M320 "]: 0 # Featured
         "*": 1
     uploadvolumefactor:
       case:
-        i.fa-certificate: 2 # Featured
-        i.fa-gem: 2 # Double Upload
+        path[d^="M320 "]: 2 # Featured
+        path[d^="M485.5 "]: 2 # Double Upload
         "*": 1
     minimumratio:
       text: 1.0
