@@ -512,6 +512,7 @@ namespace Jackett.Updater
                 "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
                 "Definitions/tfile.yml",
                 "Definitions/the-devils-lounge.yml",
+                "Definitions/thehorrorcharnel.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
                 "Definitions/theresurrection.yml",
