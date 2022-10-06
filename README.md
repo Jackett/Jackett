@@ -106,7 +106,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NoNaMe Club (NNM-Club)
  * Nyaa.si
  * OneJAV
- * OpenSharing
  * ParnuXi
  * PC-torrent
  * PiratBit
