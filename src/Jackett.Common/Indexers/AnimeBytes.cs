@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -28,6 +29,7 @@ namespace Jackett.Common.Indexers
         private bool AddJapaneseTitle => ConfigData.AddJapaneseTitle.Value;
         private bool AddRomajiTitle => ConfigData.AddRomajiTitle.Value;
         private bool AddAlternativeTitles => ConfigData.AddAlternativeTitles.Value;
+        private bool AddFileNameTitles => ConfigData.AddFileNameTitles.Value;
         private bool FilterSeasonEpisode => ConfigData.FilterSeasonEpisode.Value;
 
         private ConfigurationDataAnimeBytes ConfigData => (ConfigurationDataAnimeBytes)configData;
@@ -395,6 +397,36 @@ namespace Jackett.Common.Indexers
 
                                 releases.Add(release);
                             }
+
+                            if (AddFileNameTitles && (int)torrent["FileCount"] == 1)
+                            {
+                                var releaseTitle = Path.GetFileNameWithoutExtension((string)torrent["FileList"][0]["filename"]);
+
+                                var guid = new Uri(details + "&nh=" + StringUtil.Hash(releaseTitle));
+                                var release = new ReleaseInfo
+                                {
+                                    MinimumRatio = 1,
+                                    MinimumSeedTime = minimumSeedTime,
+                                    Title = releaseTitle,
+                                    Details = details,
+                                    Guid = guid,
+                                    Link = linkUri,
+                                    Poster = poster,
+                                    PublishDate = publishDate,
+                                    Category = category,
+                                    Description = description,
+                                    Size = size,
+                                    Seeders = seeders,
+                                    Peers = peers,
+                                    Grabs = snatched,
+                                    Files = fileCount,
+                                    DownloadVolumeFactor = rawDownMultiplier,
+                                    UploadVolumeFactor = rawUpMultiplier
+                                };
+
+                                releases.Add(release);
+                            }
+
                         }
                     }
                 }
