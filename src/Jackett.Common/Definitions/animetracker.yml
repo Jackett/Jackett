@@ -15,7 +15,8 @@ caps:
     - {id: 1, cat: TV/Anime, desc: "Raws"}
     - {id: 2, cat: TV/Anime, desc: "OVA"}
     - {id: 4, cat: Movies, desc: "Movie"}
-    - {id: 6, cat: XXX, desc: "Hentai OVA"}
+    - {id: 6, cat: XXX, desc: "Hentai Censored"}
+    - {id: 14, cat: XXX, desc: "Hentai Uncensored"}
     - {id: 9, cat: XXX, desc: "Hentai Manga"}
     - {id: 10, cat: Movies, desc: "Live Action"}
     - {id: 3, cat: Audio, desc: "Music"}
