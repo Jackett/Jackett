@@ -15,6 +15,7 @@ caps:
     - {id: 1, cat: TV/Anime, desc: "Raws"}
     - {id: 2, cat: TV/Anime, desc: "OVA"}
     - {id: 4, cat: Movies, desc: "Movie"}
+    - {id: 15, cat: Books/Comics, desc: "Manga"}
     - {id: 6, cat: XXX, desc: "Hentai Censored"}
     - {id: 14, cat: XXX, desc: "Hentai Uncensored"}
     - {id: 9, cat: XXX, desc: "Hentai Manga"}
@@ -26,6 +27,7 @@ caps:
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
