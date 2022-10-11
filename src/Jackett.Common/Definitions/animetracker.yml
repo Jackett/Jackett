@@ -11,6 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 7, cat: TV/Anime, desc: "Series English"}
+    - {id: 16, cat: TV/Anime, desc: "ongoing"}
     - {id: 11, cat: TV/Anime, desc: "Series Non-English"}
     - {id: 1, cat: TV/Anime, desc: "Raws"}
     - {id: 2, cat: TV/Anime, desc: "OVA"}
