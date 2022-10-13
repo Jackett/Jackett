@@ -120,8 +120,6 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    files:
-      selector: td:nth-last-child(6)
     date:
       # 26.03.2020 <br/>3:53
       selector: td:nth-last-child(4)
