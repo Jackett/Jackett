@@ -1,0 +1,186 @@
+---
+id: alpharatio
+name: AlphaRatio
+description: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://alpharatio.cc/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/SD, desc: "TvSD"}
+    - {id: 2, cat: TV/HD, desc: "TvHD"}
+    - {id: 3, cat: TV/UHD, desc: "TvUHD"}
+    - {id: 4, cat: TV/SD, desc: "TvDVDRip"}
+    - {id: 5, cat: TV/SD, desc: "TvPackSD"}
+    - {id: 6, cat: TV/HD, desc: "TvPackHD"}
+    - {id: 7, cat: TV/UHD, desc: "TvPackUHD"}
+    - {id: 8, cat: Movies/SD, desc: "MovieSD"}
+    - {id: 9, cat: Movies/HD, desc: "MovieHD"}
+    - {id: 10, cat: Movies/UHD, desc: "MovieUHD"}
+    - {id: 11, cat: Movies/SD, desc: "MoviePackSD"}
+    - {id: 12, cat: Movies/HD, desc: "MoviePackHD"}
+    - {id: 13, cat: Movies/UHD, desc: "MoviePackUHD"}
+    - {id: 14, cat: XXX, desc: "MovieXXX"}
+    - {id: 15, cat: Movies/BluRay, desc: "Bluray"}
+    - {id: 16, cat: TV/Anime, desc: "AnimeSD"}
+    - {id: 17, cat: TV/Anime, desc: "AnimeHD"}
+    - {id: 18, cat: PC/Games, desc: "GamesPC"}
+    - {id: 19, cat: Console/XBox, desc: "GamesxBox"}
+    - {id: 20, cat: Console/PS4, desc: "GamesPS"}
+    - {id: 21, cat: Console/Wii, desc: "GamesNin"}
+    - {id: 22, cat: PC/0day, desc: "AppsWindows"}
+    - {id: 23, cat: PC/Mac, desc: "AppsMAC"}
+    - {id: 24, cat: PC/0day, desc: "AppsLinux"}
+    - {id: 25, cat: PC/Mobile-Other, desc: "AppsMobile"}
+    - {id: 26, cat: XXX, desc: "0dayXXX"}
+    - {id: 27, cat: Books, desc: "eBook"}
+    - {id: 28, cat: Audio/Audiobook, desc: "AudioBook"}
+    - {id: 29, cat: Audio/Other, desc: "Music"}
+    - {id: 30, cat: Other, desc: "Misc"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: usefltoken
+    type: checkbox
+    label: Always try to use a Freeleech Token
+    default: false
+  - name: info_usefltoken
+    type: info
+    label: About using Freeleech tokens
+    default: If you <b>do not</b> have any <i>Freeleech tokens</i> then do not tick this box.</br>Attempting a token download when you have no tokens will generate an <b>error</b>.
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: form#loginform > span.warning
+  test:
+    path: torrents.php
+    selector: a[href^="logout.php?auth="]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    searchstr: "{{ .Keywords }}"
+    taglist: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: advanced
+    searchsubmit: 1
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+
+  rows:
+    selector: .torrent
+
+  fields:
+    category:
+      selector: a[href*="&filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "\\[(\\d+?)\\]"
+    title:
+      selector: a[href*="torrentid="]
+    details:
+      selector: a[href*="torrentid="]
+      attribute: href
+    _download_regular:
+      selector: a[href^="torrents.php?action=download&"]
+      attribute: href
+    _download_use_freeleech_token:
+      selector: a[href^="torrents.php?action=download&"]
+      attribute: href
+      filters:
+        - name: append
+          args: "&usetoken=1"
+    download:
+      text: >-
+        {{ if .Config.usefltoken }}
+        {{ .Result._download_use_freeleech_token }}
+        {{ else }}
+        {{ .Result._download_regular }}
+        {{ end }}
+    _tags:
+      selector: div.tags
+    imdbid:
+      text: "{{ .Result._tags }}"
+      filters:
+        - name: regexp
+          args: (?:tt)?(\d{1,8})
+    _genres:
+      text: "{{ .Result._tags }}"
+      filters:
+        # Removing the IMDb ID from the tags
+        - name: re_replace
+          args: ["(?:, )?(?:tt)?(\\d{1,8})(?:, )?", ""]
+    genre:
+      text: "{{ .Result._genres }}"
+    description:
+      text: "{{ .Result._genres }}"
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4) span
+      attribute: title
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "Jan 2 2006, 15:04 -07:00"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        "strong:contains(\"Freeleech!\")": 0
+        "strong:contains(\"Neutral Leech!\")": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "strong:contains(\"Neutral Leech!\")": 0
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      # TODO: Should be 7 days for torrents above 48GB
+      text: 259200
+# Gazelle
