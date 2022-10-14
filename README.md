@@ -846,7 +846,7 @@ To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/a
 ## Building from source
 
 ### Windows
-* Install the .NET 5 [SDK](https://www.microsoft.com/net/download/windows)
+* Install the .NET 6 [SDK](https://www.microsoft.com/net/download/windows)
 * Clone Jackett
 * Open PowerShell and from the `src` directory:
 * - run `dotnet msbuild /restore`
