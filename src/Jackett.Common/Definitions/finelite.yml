@@ -88,7 +88,7 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # 0 name&descr, 1 name, 2 descr, 3 tags
+    # 0 name, 1 name&desc, 2 descr, 3 tags, 4 imdb with rating
     hae: 1
     # 0 active, 1 incldead, 2 deadonly
     incldead: 1
