@@ -89,7 +89,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 name, 1 name&desc, 2 descr, 3 tags, 4 imdb with rating
-    hae: 1
+    hae: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
     # 0 active, 1 incldead, 2 deadonly
     incldead: 1
     freeleech: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
@@ -98,8 +98,6 @@ search:
 
   rows:
     selector: table.main > tbody >  tr:has(a[href^="/lataa.php/"])
-    filters:
-      - name: andmatch
 
   fields:
     category:
