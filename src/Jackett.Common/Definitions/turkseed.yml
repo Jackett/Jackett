@@ -16,14 +16,13 @@ caps:
     - {id: 47, cat: Movies/UHD, desc: "4K"}
     - {id: 61, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 48, cat: TV/Anime, desc: "Animasyon"}
-    - {id: 59, cat: PC, desc: "İşletim Sistemi"}
     - {id: 40, cat: TV/Documentary, desc: "Belgesel"}
     - {id: 49, cat: Movies/BluRay, desc: "Bluray"}
     - {id: 50, cat: Movies, desc: "Boxset"}
-    - {id: 4, cat: Other, desc: "Diğer"}
     - {id: 70, cat: TV, desc: "DIGITAL TV"}
-    - {id: 42, cat: Movies, desc: "Dini"}
     - {id: 51, cat: Movies/DVD, desc: "DVD"}
+    - {id: 4, cat: Other, desc: "Diğer"}
+    - {id: 42, cat: Movies, desc: "Dini"}
     - {id: 41, cat: Books/EBook, desc: "E-Kitap"}
     - {id: 64, cat: Books, desc: "Eğitim"}
     - {id: 55, cat: Audio/Lossless, desc: "FLAC"}
@@ -42,6 +41,7 @@ caps:
     - {id: 71, cat: Movies, desc: "YENI FILMLER"}
     - {id: 44, cat: TV, desc: "Yerli Dizi"}
     - {id: 56, cat: Audio, desc: "Yerli Müzik"}
+    - {id: 59, cat: PC, desc: "İşletim Sistemi"}
 
   modes:
     search: [q]
@@ -87,16 +87,6 @@ login:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
 
-download:
-  before:
-    path: takethanks.php
-    method: post
-    inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
-  selectors:
-    - selector: a[href*="/download.php?id="]
-      attribute: href
-
 search:
   paths:
     - path: browse.php
@@ -127,7 +117,10 @@ search:
       selector: a[href*="/details.php?id="]
       attribute: href
     download:
-      selector: a[href*="/details.php?id="]
+      selector: a[href*="/download.php?id="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:"]
       attribute: href
     poster:
       selector: img[src*="/torrents/images/"]
@@ -136,11 +129,11 @@ search:
       selector: td:nth-child(2)
       filters:
         - name: regexp
-          args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+          args: "(\\d{2}-\\d{2}-\\d{2} \\d{2}:\\d{2})"
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04 -07:00"
+          args: "02-01-06 15:04 -07:00"
     size:
       selector: td:nth-last-child(5)
     grabs:
@@ -163,4 +156,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# TS Special Edition v.7.5
+# TS Special Edition v.8.0
