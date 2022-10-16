@@ -10,9 +10,9 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 3, cat: Audio, desc: "Audio"}
 
   modes:
     search: [q]
@@ -89,8 +89,8 @@ search:
       selector: meta.total
 
   fields:
-    categorydesc:
-      selector: category
+    category:
+      selector: category_id
     title:
       selector: name
     details:
