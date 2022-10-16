@@ -108,7 +108,6 @@ search:
           args: cat
     title:
       selector: a[href^="julkaisu.php?id="]
-      attribute: title
     details:
       selector: a[href^="julkaisu.php?id="]
       attribute: href
