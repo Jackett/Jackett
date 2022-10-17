@@ -292,6 +292,7 @@ namespace Jackett.Updater
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
+                "Definitions/bluesbrothers.yml",
                 "Definitions/blutopia.yml", // switch to *-API #8682
                 "Definitions/brasiltracker.yml", // migrated to C#
                 "Definitions/brobits.yml",
