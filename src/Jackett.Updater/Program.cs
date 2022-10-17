@@ -266,6 +266,7 @@ namespace Jackett.Updater
                 "Definitions/alein.yml",
                 "Definitions/alexfilm.yml",
                 "Definitions/alleenretail.yml",
+                "Definitions/anaschcc.yml",
                 "Definitions/angietorrents.yml",
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/animeitalia.yml",
