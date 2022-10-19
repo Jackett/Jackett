@@ -9,13 +9,13 @@ requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
   # dont forget to update the details, download and poster replace args
   - https://yts.mx/
+  - https://yts.ag/
+  - https://yts.am/
+  - https://yts.lt/
   - https://yts.unblockit.nz/
   - https://yts.unblockninja.com/
   - https://yts.nocensor.world/
 legacylinks:
-  - https://yts.ag/
-  - https://yts.am/
-  - https://yts.lt/
   - https://yts.unblockit.uno/
   - https://yts.unblockit.ch/
   - https://yts.unblockit.ws/
