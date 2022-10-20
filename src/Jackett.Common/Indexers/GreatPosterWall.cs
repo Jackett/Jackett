@@ -68,8 +68,6 @@ namespace Jackett.Common.Indexers
             var groupYear = (string)result["groupYear"];
             var title = new StringBuilder();
             title.Append(groupName);
-            if (!string.IsNullOrEmpty(groupSubName))
-                title.Append(" " + groupSubName + " ");
 
             if (!string.IsNullOrEmpty(groupYear) && groupYear != "0")
                 title.Append(" [" + groupYear + "]");
@@ -135,6 +133,8 @@ namespace Jackett.Common.Indexers
             release.MinimumSeedTime = 172800; // 48 hours
                                               // tag each results with Movie cats.
             release.Category = new List<int> { TorznabCatType.Movies.ID };
+            if (!string.IsNullOrEmpty(groupSubName))
+                release.Description = groupSubName;
             return true;
         }
     }
