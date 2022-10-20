@@ -1481,7 +1481,7 @@ namespace Jackett.Common.Indexers
         {
             var queryCollection = new NameValueCollection();
 
-            var searchString = query.SearchTerm();
+            var searchString = query.SearchTerm;
             //  replace any space, special char, etc. with % (wildcard)
             var ReplaceRegex = new Regex("[^a-zA-Zа-яА-Я0-9]+");
             searchString = ReplaceRegex.Replace(searchString, "%");
