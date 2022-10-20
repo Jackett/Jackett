@@ -1498,7 +1498,7 @@ namespace Jackett.Common.Indexers
                 {
                     searchString += " Сезон: " + query.Season;
                 }
-                if (query.Episode != 0)
+                if (query.Episode != null)
                 {
                     searchString += " Серии: " + query.Episode;
                 }
