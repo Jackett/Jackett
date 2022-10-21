@@ -1484,7 +1484,8 @@ namespace Jackett.Common.Indexers
             var searchString = query.SearchTerm;
             //  replace any space, special char, etc. with % (wildcard)
             var ReplaceRegex = new Regex("[^a-zA-Zа-яА-Я0-9]+");
-            searchString = ReplaceRegex.Replace(searchString, "%");
+            if (!string.IsNullOrWhiteSpace(searchString))
+                searchString = ReplaceRegex.Replace(searchString, "%");
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
