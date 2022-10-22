@@ -107,8 +107,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
             _appId = "Jackett_" + EnvironmentUtil.JackettVersion();
-
-            EnableConfigurableRetryAttempts();
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
@@ -140,9 +138,16 @@ namespace Jackett.Common.Indexers
             // check the token and renewal if necessary
             await RenewalTokenAsync();
 
-            var response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
+            Thread.Sleep(2500); // enforce 2.5s delay
+            var response = await RequestWithCookiesAsync(BuildSearchUrl(query));
             if (response != null && response.ContentString.StartsWith("<"))
             {
+                if (response.ContentString.Contains("torrentapi.org | 520:"))
+                {
+                    logger.Warn("torrentapi.org returned Error 520, retrying after 8 secs");
+                    Thread.Sleep(5500); // 5500 + 2500 enforced at front of query = 8s
+                    return await PerformQueryWithRetry(query, false);
+                }
                 // the response was not JSON, likely a HTML page for a server outage
                 logger.Warn(response.ContentString);
                 throw new Exception("The response was not JSON");
@@ -156,7 +161,8 @@ namespace Jackett.Common.Indexers
                 case 2:
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
-                    response = await RequestWithCookiesAndRetryAsync(BuildSearchUrl(query));
+                    Thread.Sleep(2500); // enforce 2.5s delay
+                    response = await RequestWithCookiesAsync(BuildSearchUrl(query));
                     jsonContent = JObject.Parse(response.ContentString);
                     break;
                 case 5: // Too many requests per second. Maximum requests allowed are 1req/2sec Please try again later!
@@ -169,7 +175,7 @@ namespace Jackett.Common.Indexers
                 case 20: // no results found
                     if (jsonContent.ContainsKey("rate_limit"))
                     {
-                        logger.Warn("Rate Limit exceeded. Retry will be performed.");
+                        logger.Warn("Rate Limit exceeded. Retrying after 2.5 secs.");
                         return await PerformQueryWithRetry(query, false);
                     }
                     // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
@@ -312,8 +318,8 @@ namespace Jackett.Common.Indexers
                 var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
-                // sleep 5 seconds to make sure the token is valid in the next request
-                Thread.Sleep(5000);
+                // sleep 2.5 seconds to make sure the token is valid in the next request
+                Thread.Sleep(2500);
             }
         }
 
