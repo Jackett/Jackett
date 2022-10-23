@@ -106,7 +106,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(53, TorznabCatType.ConsolePS4, "Games/PS4");
             AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
-            _appId = "Jackett_" + EnvironmentUtil.JackettVersion();
+            _appId = "ttekcaJ_" + EnvironmentUtil.JackettVersion();
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
