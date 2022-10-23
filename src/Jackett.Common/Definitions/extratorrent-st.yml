@@ -71,6 +71,7 @@ caps:
     - {id: Comics, cat: Books/Comics, desc: Books Comics}
     - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
     - {id: Other, cat: Other/Misc, desc: Other}
+    - {id: Other Applications, cat: PC, desc: Other Applications}
 
   modes:
     search: [q]
