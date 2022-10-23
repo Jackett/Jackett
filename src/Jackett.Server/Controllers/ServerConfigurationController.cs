@@ -100,7 +100,8 @@ namespace Jackett.Server.Controllers
                 if (string.IsNullOrWhiteSpace(baseUrlOverride))
                     baseUrlOverride = "";
                 else if (!Uri.TryCreate(baseUrlOverride, UriKind.Absolute, out var uri)
-                    || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+                    || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+                    || !Uri.IsWellFormedUriString(baseUrlOverride, UriKind.Absolute))
                     throw new Exception("Base URL Override is invalid. Example: http://jackett:9117");
 
                 serverConfig.BaseUrlOverride = baseUrlOverride;
