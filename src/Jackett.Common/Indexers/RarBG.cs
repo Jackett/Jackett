@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers
                 {
                     logger.Warn("torrentapi.org returned Error 520, retrying after 8 secs");
                     Thread.Sleep(5500); // 5500 + 2500 enforced at front of query = 8s
-                    return await PerformQueryWithRetry(query, false);
+                    return retry ? await PerformQueryWithRetry(query, false) : releases;
                 }
                 // the response was not JSON, likely a HTML page for a server outage
                 logger.Warn(response.ContentString);
@@ -176,7 +176,7 @@ namespace Jackett.Common.Indexers
                     if (jsonContent.ContainsKey("rate_limit"))
                     {
                         logger.Warn("Rate Limit exceeded. Retrying after 2.5 secs.");
-                        return await PerformQueryWithRetry(query, false);
+                        return retry ? await PerformQueryWithRetry(query, false) : releases;
                     }
                     // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
                     // because we can't distinguish between search without results and api malfunction
