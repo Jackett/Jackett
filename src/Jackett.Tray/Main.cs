@@ -58,6 +58,7 @@ namespace Jackett.Tray
             toolStripMenuItemAutoStart.Checked = AutoStart;
             toolStripMenuItemAutoStart.CheckedChanged += toolStripMenuItemAutoStart_CheckedChanged;
 
+            notifyIcon1.DoubleClick += toolStripMenuItemWebUI_Click;
             toolStripMenuItemWebUI.Click += toolStripMenuItemWebUI_Click;
             toolStripMenuItemShutdown.Click += toolStripMenuItemShutdown_Click;
 
