@@ -144,9 +144,17 @@ namespace Jackett.Common.Indexers
             {
                 if (response.ContentString.Contains("torrentapi.org | 520:"))
                 {
-                    logger.Warn("torrentapi.org returned Error 520, retrying after 8 secs");
-                    Thread.Sleep(5500); // 5500 + 2500 enforced at front of query = 8s
-                    return retry ? await PerformQueryWithRetry(query, false) : releases;
+                    if (retry)
+                    {
+                        logger.Warn("torrentapi.org returned Error 520, retrying after 8 secs");
+                        Thread.Sleep(5500); // 5500 + 2500 enforced at front of query = 8s
+                        return await PerformQueryWithRetry(query, false);
+                    }
+                    else
+                    {
+                        logger.Warn("torrentapi.org returned Error 520");
+                        return releases;
+                    }
                 }
                 // the response was not JSON, likely a HTML page for a server outage
                 logger.Warn(response.ContentString);
@@ -166,17 +174,35 @@ namespace Jackett.Common.Indexers
                     jsonContent = JObject.Parse(response.ContentString);
                     break;
                 case 5: // Too many requests per second. Maximum requests allowed are 1req/2sec Please try again later!
-                    return await PerformQueryWithRetry(query, false);
+                    if (retry)
+                    {
+                        logger.Warn("torrentapi.org returned code 5 Too many requests per second, retrying after 2.5 secs");
+                        return await PerformQueryWithRetry(query, false);
+                    }
+                    else
+                    {
+                        logger.Warn("torrentapi.org returned code 5 Too many requests per second");
+                        return releases;
+                    }
                 case 8: // search_imdb not found, see issue #12466 (no longer used, has been replaced with error 10)
                 case 9: // invalid imdb, see Radarr #1845
-                case 10: // imdb not found, see issue #1486
                 case 13: // invalid tmdb, invalid tvdb
+                    return releases;
+                case 10: // imdb not found, see issue #1486
                 case 14: // tmdb not found (see Radarr #7625), thetvdb not found
                 case 20: // no results found
                     if (jsonContent.ContainsKey("rate_limit"))
                     {
-                        logger.Warn("Rate Limit exceeded. Retrying after 2.5 secs.");
-                        return retry ? await PerformQueryWithRetry(query, false) : releases;
+                        if (retry)
+                        {
+                            logger.Warn("Rate Limit exceeded. Retrying after 2.5 secs.");
+                            return await PerformQueryWithRetry(query, false);
+                        }
+                        else
+                        {
+                            logger.Warn("Rate Limit exceeded.");
+                            return releases;
+                        }
                     }
                     // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
                     // because we can't distinguish between search without results and api malfunction
