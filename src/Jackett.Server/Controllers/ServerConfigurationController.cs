@@ -137,7 +137,8 @@ namespace Jackett.Server.Controllers
                 if (string.IsNullOrWhiteSpace(config.flaresolverrurl))
                     config.flaresolverrurl = "";
                 else if (!Uri.TryCreate(config.flaresolverrurl, UriKind.Absolute, out var uri)
-                    || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+                    || !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps)
+                    || !Uri.IsWellFormedUriString(config.flaresolverrurl, UriKind.Absolute))
                     throw new Exception("FlareSolverr API URL is invalid. Example: http://127.0.0.1:8191");
 
                 if (config.flaresolverr_maxtimeout < 5000)
