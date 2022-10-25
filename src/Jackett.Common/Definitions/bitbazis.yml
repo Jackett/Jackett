@@ -12,10 +12,10 @@ caps:
   categorymappings:
     - {id: 85, cat: Movies/SD, desc: "Film/Cam/Hun"}
     - {id: 86, cat: Movies/SD, desc: "Film/Cam/Eng"}
-    - {id: 15, cat: Movies/SD, desc: "Film/XviD/Hun"}
-    - {id: 16, cat: Movies/SD, desc: "Film/XviD/Eng"}
-    - {id: 34, cat: Movies/HD, desc: "Film/x264/Hun"}
-    - {id: 48, cat: Movies/HD, desc: "Film/x264/Eng"}
+    - {id: 15, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: 16, cat: Movies/SD, desc: "Film/SD/Eng"}
+    - {id: 17, cat: Movies/DVD, desc: "Film/DVD/Hun"}
+    - {id: 19, cat: Movies/DVD, desc: "Film/DVD/Eng"}
     - {id: 83, cat: Movies/HD, desc: "Film/HD/Hun"}
     - {id: 82, cat: Movies/HD, desc: "Film/HD/Eng"}
     - {id: 94, cat: Movies/HD, desc: "Film/FHD/Hun"}
@@ -37,18 +37,16 @@ caps:
     - {id: 49, cat: PC/0day, desc: "Program/Rip"}
     - {id: 14, cat: PC, desc: "Program/Egyéb"}
     - {id: 64, cat: Movies, desc: "Film/Pack"}
+    - {id: 24, cat: Audio/Video, desc: "Videóklip"}
     - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv"}
     - {id: 27, cat: Books/EBook, desc: "Könyv/Hun"}
     - {id: 50, cat: Books/EBook, desc: "Könyv/Eng"}
     - {id: 65, cat: Other, desc: "Egyéb"}
-    # the following are no longer in the cat list in the search page, but are still in the profile cat list
-    - {id: 67, cat: PC/Mobile-Android, desc: "Program/Android"}
-    - {id: 17, cat: Movies/DVD, desc: "Film/DVD/Hun"}
-    - {id: 19, cat: Movies/DVD, desc: "Film/DVD/Eng"}
-    - {id: 24, cat: Audio/Video, desc: "Videóklipp"}
     - {id: 33, cat: XXX/SD, desc: "Film/SD/XXX"}
     - {id: 89, cat: XXX/x264, desc: "Film/HD/XXX"}
     - {id: 66, cat: XXX/ImageSet, desc: "Képek/XXX"}
+    # the following are no longer in the cat list in the search page, but are still in the profile cat list
+    - {id: 67, cat: PC/Mobile-Android, desc: "Program/Mobil"}
 
   modes:
     search: [q]
@@ -121,12 +119,9 @@ search:
     selector: "table[width=\"100%\"][align=\"center\"]:first-child tbody tr:has(div.tooltip){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
 
   fields:
-    category:
-      selector: a[href*=".php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+    categorydesc:
+      selector: a[href*=".php?cat="] > img
+      attribute: title
     genre:
       selector: span.tooltiptext
     description:
