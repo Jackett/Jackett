@@ -120,7 +120,7 @@ search:
 
   fields:
     categorydesc:
-      selector: a[href*=".php?cat="] > img
+      selector: img[src^="pic/kategoria/"]
       attribute: title
     genre:
       selector: span.tooltiptext
