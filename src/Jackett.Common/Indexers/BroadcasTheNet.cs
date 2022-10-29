@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BroadcasTheNet : BaseWebIndexer
     {
-        // based on https://github.com/Prowlarr/Prowlarr/tree/develop/src/NzbDrone.Core/Indexers/Definitions/BroadcastheNet
+        // Docs at http://apidocs.broadcasthe.net/docs.php
         private readonly string APIBASE = "https://api.broadcasthe.net";
 
         // TODO: remove ConfigurationDataAPIKey class and use ConfigurationDataPasskey instead
@@ -40,7 +40,7 @@ namespace Jackett.Common.Indexers
                        LimitsMax = 1000,
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TvdbId
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
                        }
                    },
                    configService: configService,
@@ -103,8 +103,6 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchParam = new Dictionary<string, string>();
 
-            if (query.IsTvdbSearch)
-                searchParam["tvdb"] = string.Format("{0}", query.TvdbID);
             searchParam["search"] = searchString.Replace(" ", "%");
 
             var parameters = new JArray
