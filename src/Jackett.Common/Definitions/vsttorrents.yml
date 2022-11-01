@@ -32,7 +32,7 @@ search:
     s: "{{ .Keywords }}"
 
   rows:
-    selector: article:has(h4)
+    selector: article:has(.entry-title)
     filters:
       - name: andmatch
 
@@ -40,21 +40,15 @@ search:
     category:
       text: Audio
     title:
-      selector: h4
+      selector: .entry-title
     details:
-      selector: h4 > a
+      selector: .entry-title > a
       attribute: href
     download:
-      selector: h4 > a
+      selector: .entry-title > a
       attribute: href
-    poster:
-      selector: div.back-img
-      attribute: style
-      filters:
-        - name: regexp
-          args: "\\'(.+?)\\'"
     description:
-      selector: div.mg-blog-category
+      selector: .entry-excerpt
     date:
       text: now
     size:
@@ -67,4 +61,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# wordpress 6.0.2
+# wordpress 6.0.3
