@@ -57,6 +57,7 @@ caps:
     - {id: 447, cat: Books/Comics, desc: "Livres / Bande Dessinée"}
     - {id: 448, cat: Books/Comics, desc: "Livres / Comic"}
     - {id: 449, cat: Books/Comics, desc: "Livres / Manga"}
+    - {id: 468, cat: Books/Other, desc: "Livres / Divers"}
     - {id: 450, cat: PC/Games, desc: "Logiciels / Jeu PC"}
     - {id: 451, cat: PC/Games, desc: "Logiciels / Jeu Mac"}
     - {id: 452, cat: PC/Games, desc: "Logiciels / Jeu Linux"}
