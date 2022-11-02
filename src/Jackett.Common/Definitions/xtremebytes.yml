@@ -1,12 +1,12 @@
 ---
-id: torrentsurf
-name: Torrent Surf
-description: "Torrent Surf is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: xtremebytes
+name: Xtreme Bytes
+description: "Xtreme Bytes (TorrentSurf) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://torrentsurf.net/
+  - https://xtremebytes.net/
 
 caps:
   categorymappings:
@@ -23,10 +23,14 @@ caps:
     - {id: 14, cat: Movies/DVD, desc: "Movies/DVD-R"}
     - {id: 18, cat: Movies/HD, desc: "Movies/HD"}
     - {id: 19, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 42, cat: Movies/HD, desc: "Movies/x264"}
+    - {id: 41, cat: Movies/SD, desc: "Movies/Xvid"}
     - {id: 29, cat: Audio, desc: "Music"}
     - {id: 30, cat: TV, desc: "Packs"}
     - {id: 24, cat: TV/HD, desc: "TV/HD"}
     - {id: 25, cat: TV/SD, desc: "TV/SD"}
+    - {id: 44, cat: TV/HD, desc: "TV/x264"}
+    - {id: 43, cat: TV/SD, desc: "TV/Xvid"}
     - {id: 36, cat: XXX, desc: "XXX"}
 
   modes:
@@ -85,14 +89,11 @@ login:
 
 search:
   paths:
-    # https://torrentsurf.net/browse.php?search=&cat=0&blah=0&incldead=1
-    # https://torrentsurf.net/browse.php?c37=1&c14=1&c18=1&c19=1&incldead=1
+    # https://xtremebytes.net/browse.php?search=&cat=0&incldead=1&c18=1&c42=1
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    # 0 name, 1 descr, 2 both
-    blah: 0
-    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech, 4 descr
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
@@ -100,7 +101,7 @@ search:
     # site does not support imdbid searching or display imdb links in results.
 
   rows:
-    selector: table[background="tablebg.png"] tbody tr:has(a[href^="download.php?id="])
+    selector: table[border="0"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="download.php?id="])
 
   fields:
     category:
@@ -123,21 +124,23 @@ search:
       attribute: href
     download:
       text: "{{ if .Config.seedbox }}{{ .Result.download_2 }}{{ else }}{{ .Result.download_1 }}{{ end }}"
-    date:
-      selector: td:nth-child(4)
-      filters:
-        - name: append
-          args: " -07:00" # PDT
-        - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
-    size:
-      selector: td:nth-child(5)
+    files:
+      selector: td:nth-child(3)
     grabs:
+      selector: td:nth-child(7)
+    size:
       selector: td:nth-child(6)
     seeders:
       selector: td:nth-last-child(3)
     leechers:
       selector: td:nth-last-child(2)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "2006-01-0215:04:05 -07:00"
     downloadvolumefactor:
       case:
         img[src="pic/freeleech.png"]: 0
