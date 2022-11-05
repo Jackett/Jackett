@@ -25,6 +25,7 @@ caps:
     - {id: 79, cat: TV, desc: "BLUTV"}
     - {id: 90, cat: TV, desc: "Disney+"}
     - {id: 91, cat: TV, desc: "Prime Video"}
+    - {id: 93, cat: TV, desc: "Gain"}
     - {id: 58, cat: Movies, desc: "Film"}
     - {id: 72, cat: Movies, desc: "Belgesel"}
     - {id: 60, cat: Movies/3D, desc: "3D"}
