@@ -42,6 +42,7 @@ caps:
     - {id: 50, cat: PC, desc: "Programlar Mobile"}
     - {id: 83, cat: TV, desc: "Dijital Platform"}
     - {id: 86, cat: TV, desc: "Dijital Platform AMAZON"}
+    - {id: 102, cat: TV, desc: "Dijital Platform ATVP"}
     - {id: 85, cat: TV, desc: "Dijital Platform BEiN"}
     - {id: 84, cat: TV, desc: "Dijital Platform BluTV"}
     - {id: 98, cat: TV, desc: "Dijital Platform DSNP"}
