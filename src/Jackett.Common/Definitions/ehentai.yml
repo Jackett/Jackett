@@ -5,6 +5,7 @@ description: "E-Hentai is a Public site for Hentai doujinshi, manga."
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://e-hentai.org/
 

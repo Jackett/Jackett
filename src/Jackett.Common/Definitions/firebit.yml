@@ -5,6 +5,7 @@ description: "FireBit is an UKRAINIAN / RUSSIAN Public Torrent Tracker for MOVIE
 language: ru-RU
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://firebit.net/
 legacylinks:

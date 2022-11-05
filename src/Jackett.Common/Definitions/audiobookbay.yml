@@ -5,6 +5,7 @@ description: "AudioBook Bay (ABB) is a public Torrent Tracker for AUDIOBOOKS"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://audiobookbay.fi/
   - https://audiobookbay.se/

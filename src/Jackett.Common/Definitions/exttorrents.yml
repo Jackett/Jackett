@@ -5,7 +5,7 @@ description: "EXT Torrents is a Public torrent site for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
-requestDelay: 2.5
+requestDelay: 2
 links:
   - https://ext.to/
   - https://site.extto.com/

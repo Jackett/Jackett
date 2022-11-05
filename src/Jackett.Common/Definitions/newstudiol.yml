@@ -5,6 +5,7 @@ description: "this is the Newstudio indexer with Login enabled in the config."
 language: ru-RU
 type: semi-private
 encoding: UTF-8
+requestDelay: 2
 links:
   - http://newstudio.tv/ # site does not support https ERR_CONNECTION_REFUSED
 

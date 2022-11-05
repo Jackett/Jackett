@@ -5,6 +5,7 @@ description: "AniSource is a Public site for HD Anime raws."
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 certificates:
   - f400d50a4dac4dd6546c869ac75669846205a0d2 # expired 26 Aug 2022
 links:

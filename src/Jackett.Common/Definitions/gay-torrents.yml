@@ -5,6 +5,7 @@ description: "Gay-Torrents.net is a Private Torrent Tracker for GAY 3X"
 language: en-US
 type: semi-private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://www.gay-torrents.net/
 

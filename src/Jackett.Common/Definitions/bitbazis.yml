@@ -5,6 +5,7 @@ description: "Bit-Bázis is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://bitbazis.net/
 

@@ -6,6 +6,7 @@ language: it-IT
 type: public
 encoding: Windows-1252
 followredirect: true
+requestDelay: 2
 links:
   - https://ilcorsaronero.link/
   - https://ilcorsaronero.fun/

@@ -5,6 +5,7 @@ description: "Team OS is a Private Torrent Tracker for SOFTWARE"
 language: en-US
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://www.teamos.xyz/
 legacylinks:

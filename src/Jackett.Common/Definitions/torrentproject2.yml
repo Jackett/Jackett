@@ -5,6 +5,7 @@ description: "TorrentProject2 is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://torrentproject2.com/
   - https://torrentproject2.net/

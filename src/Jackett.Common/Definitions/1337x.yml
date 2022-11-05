@@ -6,6 +6,7 @@ language: en-US
 type: public
 encoding: UTF-8
 followredirect: true
+requestDelay: 2
 links:
   - https://1337x.to/
   - https://1337x.st/

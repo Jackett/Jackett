@@ -5,6 +5,7 @@ description: "Amigos Share Club is a Brazilian Private site for TV / MOVIES / GE
 language: pt-BR
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://cliente.amigos-share.club/
 legacylinks:

@@ -5,6 +5,7 @@ description: "this indexer uses a cookie login for MTeamTP for those that want t
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://kp.m-team.cc/
 legacylinks:

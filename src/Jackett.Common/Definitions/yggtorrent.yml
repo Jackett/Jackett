@@ -6,6 +6,7 @@ language: fr-FR
 type: semi-private
 encoding: UTF-8
 followredirect: true
+requestDelay: 2
 links:
   - https://www5.yggtorrent.fi/
 legacylinks:

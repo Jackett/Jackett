@@ -5,6 +5,7 @@ description: "海棠PT (Hǎitáng PT) is a CHINESE Private Torrent Tracker for O
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://www.htpt.cc/
 

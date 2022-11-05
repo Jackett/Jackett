@@ -5,6 +5,7 @@ description: "Newstudio is a RUSSIAN Public site for TV"
 language: ru-RU
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - http://newstudio.tv/ # site does not support https ERR_CONNECTION_REFUSED
 

@@ -5,6 +5,7 @@ description: "Team CT Game (TCTG) is a FRENCH Private Torrent Tracker for MOVIES
 language: fr-FR
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://tctg.pm/
 legacylinks:
