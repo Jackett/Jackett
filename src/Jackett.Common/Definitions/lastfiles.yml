@@ -6,7 +6,6 @@ language: ro-RO
 type: private
 encoding: utf-8
 followredirect: true
-requestDelay: 2
 links:
   - https://www.lastfiles.ro/
   - http://www.lastfiles.ro/

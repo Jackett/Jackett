@@ -5,7 +5,6 @@ description: "Carp-Hunter is a HUNGARIAN Private Torrent Tracker for MOVIES / TV
 language: hu-HU
 type: private
 encoding: UTF-8
-requestDelay: 2
 links:
   - https://carp-hunter.hu/
 

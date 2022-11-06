@@ -5,7 +5,6 @@ description: "Majomparádé (TurkDepo) is a HUNGARIAN Private Torrent Tracker fo
 language: hu-HU
 type: private
 encoding: UTF-8
-requestDelay: 2
 links:
   - https://majomparade.eu/
 
