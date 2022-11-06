@@ -5,6 +5,7 @@ description: "FireBit is an UKRAINIAN / RUSSIAN Public Torrent Tracker for MOVIE
 language: ru-RU
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://firebit.net/
 legacylinks:
@@ -65,7 +66,8 @@ download:
 search:
   # http://firebit.net/index.php?do=search&type=simple&q=2022
   paths:
-    - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}{{ else }{{ .Today.Year }}{{ end }}"
+    - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}&cstart=2{{ else }}%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0/2/{{ end }}"
 
   rows:
     selector: "{{ if .Keywords }}table.torrents tbody tr:has(td.td-size){{ else }}div[id^=\"post-id-\"]:has(li.meta-size){{ end }}"
@@ -74,6 +76,9 @@ search:
 
   fields:
     category:
+      text: "-"
+    category|noappend:
+      optional: true
       selector: td:nth-child(1), div.article-indent div b
       filters:
         - name: replace
