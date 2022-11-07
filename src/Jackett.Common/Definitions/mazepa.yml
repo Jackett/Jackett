@@ -23,7 +23,7 @@ caps:
     - {id: 9, cat: TV/Documentary, desc: " |- Українська документалістика"}
     - {id: 13, cat: Movies/SD, desc: " |- Фільми SD"}
     - {id: 12, cat: Movies/HD, desc: "Фільми HD"}
-    - {id: 12, cat: Movies/UHD, desc: "Фільми UHD"}
+    - {id: 147, cat: Movies/UHD, desc: "Фільми UHD"}
     - {id: 44, cat: TV, desc: "Серіали HD, UHD"}
     - {id: 14, cat: TV, desc: " |- Серіали"}
     - {id: 41, cat: TV/Anime, desc: "Мультфільми HD, UHD"}
