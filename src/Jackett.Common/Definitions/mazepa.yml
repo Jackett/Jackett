@@ -57,7 +57,6 @@ caps:
     - {id: 60, cat: Audio, desc: "Classical, Chorus, Opera"}
     - {id: 62, cat: Audio, desc: "Schlager, Chanson, Romance, Sung Poetry"}
     - {id: 69, cat: Audio, desc: "Soundtracks, Musicles"}
-    - {id: 69, cat: Books, desc: "Soundtracks, Musicles"}
     - {id: 82, cat: Books, desc: " |- Невидане"}
     - {id: 93, cat: Books, desc: " |- Українська художня література [до 1991 р.]"}
     - {id: 92, cat: Books, desc: " |- Українська художня література (після 1991 р.)"}
