@@ -6,9 +6,9 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - http://torrent.by/
+  - https://torrent.by/
 legacylinks:
-  - https://torrent.by/ # ERR_CONNECTION_REFUSED
+  - http://torrent.by/
 
 caps:
   categories:
