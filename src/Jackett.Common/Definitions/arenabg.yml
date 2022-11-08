@@ -160,18 +160,18 @@ search:
       attribute: title
       optional: true
     title:
-      selector: td.filename a[href^="/en/torrents/"]
+      selector: td.filename a.title
       filters:
         - name: append
           args: "{{ if .Result._bulgarian }} {{ .Result._bulgarian }}{{ else }}{{ end }}{{ if .Result._english }} {{ .Result._english }}{{ else }}{{ end }}"
     details:
-      selector: td.filename a[href^="/en/torrents/"]
+      selector: td.filename a.title
       attribute: href
     download:
-      selector: td.filename a[href^="/en/torrents/"]
+      selector: td.filename a.title
       attribute: href
     poster:
-      selector: td.filename a[href^="/en/torrents/"]
+      selector: td.filename a.title
       attribute: onmouseover
       filters:
         - name: regexp
