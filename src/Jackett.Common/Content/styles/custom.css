@@ -1,0 +1,34 @@
+/** Prevents a second scroll bar. */
+#__next {
+    overflow-x: initial !important;
+}
+
+/** Fixes clipping on the left of the highlighted navbar element. */
+.tabs > header {
+    overflow: visible !important;
+}
+
+/** Allows table cell selection in a single double-click. */
+.cell {
+    user-select: all !important;
+}
+
+/** Prevents selecting both an indexer's name and type. */
+.badge {
+    user-select: none !important;
+}
+
+.item {
+    flex-wrap: wrap;
+}
+
+.center {
+    text-align: center;
+}
+
+/** Used to horizontally center the login button. */
+.block {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}

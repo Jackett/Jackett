@@ -1,0 +1,14 @@
+.next
+out
+node_modules
+public
+styles
+
+.eslintrc.json
+.gitignore
+next-env.d.ts
+next.config.js
+package.json
+tsconfig.json
+yarn.lock
+README.md

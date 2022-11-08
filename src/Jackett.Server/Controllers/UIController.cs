@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Jackett.Common.Models.Config;
@@ -13,7 +12,7 @@ using NLog;
 
 namespace Jackett.Server.Controllers
 {
-    [Route("UI/[action]")]
+    [Route("[action]")]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class WebUIController : Controller
     {
@@ -39,13 +38,24 @@ namespace Jackett.Server.Controllers
                 await MakeUserAuthenticated();
             }
 
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                return Redirect("Dashboard");
+                return Redirect("indexers");
             }
 
             return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html");
-            ;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromForm] string password)
+        {
+            if (password != null && securityService.HashPassword(password) == serverConfig.AdminPassword)
+            {
+                await MakeUserAuthenticated();
+            }
+
+            return Redirect("indexers");
         }
 
         [HttpGet]
@@ -53,34 +63,26 @@ namespace Jackett.Server.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect("Login");
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Dashboard([FromForm] string password)
-        {
-            if (password != null && securityService.HashPassword(password) == serverConfig.AdminPassword)
-            {
-                await MakeUserAuthenticated();
-            }
-
-            return Redirect("Dashboard");
+            return Redirect("login");
         }
 
         [HttpGet]
-        public IActionResult Dashboard()
-        {
-            var logout = HttpContext.Request.Query.Where(x => string.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
-                                                            && string.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
+        public IActionResult Indexers() => new PhysicalFileResult(config.GetContentFolder() + "/indexers.html", "text/html");
 
-            if (logout)
-            {
-                return Redirect("Logout");
-            }
+        [HttpGet]
+        public IActionResult Cache() => new PhysicalFileResult(config.GetContentFolder() + "/cache.html", "text/html");
 
-            return new PhysicalFileResult(config.GetContentFolder() + "/index.html", "text/html");
-        }
+        [HttpGet]
+        public IActionResult Configure() => new PhysicalFileResult(config.GetContentFolder() + "/configure.html", "text/html");
+
+        [HttpGet]
+        public IActionResult Search() => new PhysicalFileResult(config.GetContentFolder() + "/search.html", "text/html");
+
+        [HttpGet]
+        public IActionResult Logs() => new PhysicalFileResult(config.GetContentFolder() + "/logs.html", "text/html");
+
+        [HttpGet]
+        public IActionResult Settings() => new PhysicalFileResult(config.GetContentFolder() + "/settings.html", "text/html");
 
         //TODO: Move this to security service once off Mono
         private async Task MakeUserAuthenticated()
