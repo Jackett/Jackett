@@ -5,6 +5,7 @@ description: "wOOt is a Private GERMAN site for TV / MOVIES / GENERAL"
 language: de-DE
 type: private
 encoding: iso-8859-1
+requestDelay: 2
 links:
   - https://mywoot.biz/
 

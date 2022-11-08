@@ -5,6 +5,7 @@ description: "Badass Torrents is a Public torrent site for MOVIES / TV / GENERAL
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://badasstorrents.com/
   - https://badasstorrents.nocensor.world/

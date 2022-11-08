@@ -64,6 +64,7 @@ download:
 
 search:
   paths:
+    - path: redirect_unlock.php?avx=120
     - path: tags.php
   inputs:
     search: "{{ .Keywords }}"

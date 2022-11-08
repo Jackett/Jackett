@@ -60,6 +60,7 @@ namespace Jackett.Common.Services
             {"tehconnectionme", "anthelion"},
             {"todotorrents", "dontorrent"},
             {"torrentgalaxyorg", "torrentgalaxy"},
+            {"torrentsurf", "xtremebytes"},
             {"transmithenet", "nebulance"},
             {"xtremezone", "speedapp"},
             {"yourexotic", "exoticaz"}

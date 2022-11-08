@@ -5,6 +5,7 @@ description: "comicat is a CHINESE Public tracker for Anime / Hentai / Manga"
 language: zh-CN
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://www.comicat.org/
 

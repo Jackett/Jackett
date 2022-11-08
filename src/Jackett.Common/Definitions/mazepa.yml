@@ -21,8 +21,9 @@ caps:
     - {id: 6, cat: TV/Anime, desc: " |- Українські мультсеріали"}
     - {id: 39, cat: TV/Documentary, desc: "Українська документалістика HD, UHD"}
     - {id: 9, cat: TV/Documentary, desc: " |- Українська документалістика"}
-    - {id: 12, cat: Movies, desc: "Фільми HD, UHD"}
-    - {id: 13, cat: Movies, desc: " |- Фільми"}
+    - {id: 13, cat: Movies/SD, desc: " |- Фільми SD"}
+    - {id: 12, cat: Movies/HD, desc: "Фільми HD"}
+    - {id: 147, cat: Movies/UHD, desc: "Фільми UHD"}
     - {id: 44, cat: TV, desc: "Серіали HD, UHD"}
     - {id: 14, cat: TV, desc: " |- Серіали"}
     - {id: 41, cat: TV/Anime, desc: "Мультфільми HD, UHD"}
@@ -37,18 +38,14 @@ caps:
     - {id: 21, cat: TV/Sport, desc: " |- Формула 1 Сезони 2007-2016"}
     - {id: 75, cat: TV/Sport, desc: " |- Формула 1 Сезони до 2006"}
     - {id: 77, cat: TV/Sport, desc: "Автоспорт"}
-    - {id: 18, cat: TV/Sport, desc: "Футбол"}
     - {id: 47, cat: TV/Sport, desc: " |- Чемпіонат та кубок України"}
     - {id: 46, cat: TV/Sport, desc: " |- Єврокубки"}
     - {id: 48, cat: TV/Sport, desc: " |- Чемпіонат Світу"}
     - {id: 49, cat: TV/Sport, desc: " |- Чемпіонат Європи"}
     - {id: 53, cat: TV/Sport, desc: " |- Закордонні чемпіонати"}
     - {id: 19, cat: TV/Sport, desc: "Бокс"}
-    - {id: 28, cat: Movies, desc: "Науково-популярні фільми"}
     - {id: 29, cat: Audio/Video, desc: "Концерти, відеокліпи"}
     - {id: 30, cat: TV, desc: "Теле-Шоу"}
-    - {id: 74, cat: Audio, desc: "Українське радіо"}
-    - {id: 76, cat: Audio/Audiobook, desc: "Аудіокниги"}
     - {id: 65, cat: Audio, desc: "Rock"}
     - {id: 63, cat: Audio, desc: "Pop, Disco, R'n'B"}
     - {id: 67, cat: Audio, desc: "Electronic, Industrial, Techno"}
@@ -60,13 +57,26 @@ caps:
     - {id: 60, cat: Audio, desc: "Classical, Chorus, Opera"}
     - {id: 62, cat: Audio, desc: "Schlager, Chanson, Romance, Sung Poetry"}
     - {id: 69, cat: Audio, desc: "Soundtracks, Musicles"}
-    - {id: 23, cat: Other, desc: "Архів"}
+    - {id: 82, cat: Books, desc: " |- Невидане"}
+    - {id: 93, cat: Books, desc: " |- Українська художня література [до 1991 р.]"}
+    - {id: 92, cat: Books, desc: " |- Українська художня література (після 1991 р.)"}
+    - {id: 91, cat: Books, desc: " |- Зарубіжна художня література"}
+    - {id: 90, cat: Books, desc: " |- Наукова література (гуманітарні дисципліни)"}
+    - {id: 89, cat: Books, desc: " |- Наукова література (природничі дисципліни)"}
+    - {id: 88, cat: Books, desc: " |- Навчальна та довідкова"}
+    - {id: 87, cat: Books, desc: " |- Періодика"}
+    - {id: 86, cat: Books, desc: " |- Батькам та малятам"}
+    - {id: 85, cat: Books, desc: " |- Графіка (комікси, манґа, BD та інше)"}
+    - {id: 96, cat: Books, desc: " |- Українська художня література"}
+    - {id: 95, cat: Books, desc: " |- Зарубіжна художня література"}
+    - {id: 94, cat: Books, desc: " |- Історія, біографістика, спогади"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username

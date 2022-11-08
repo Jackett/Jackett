@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Películas"}
     - {id: 2, cat: TV, desc: "Series"}
+    - {id: 10, cat: TV, desc: "Series Completas"}
     - {id: 6, cat: TV/Documentary, desc: "Documentales"}
     - {id: 7, cat: TV/Sport, desc: "Deportes"}
     - {id: 8, cat: Movies, desc: "Hagbard"}

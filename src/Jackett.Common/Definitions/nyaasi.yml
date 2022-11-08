@@ -5,6 +5,7 @@ description: "Nyaa is a Public torrent site focused on Eastern Asian media inclu
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://nyaa.si/
   - https://nyaa.iss.ink/

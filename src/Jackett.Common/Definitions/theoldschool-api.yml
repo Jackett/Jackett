@@ -1,28 +1,32 @@
 ---
-id: breizhpeers
-name: BreizhPeers
-description: "BreizhPeers is a FRENCH Private Torrent Tracker for MOVIES / TV"
+id: theoldschool-api
+name: The Old School (API)
+description: "The Old School is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
 links:
-  - https://breizhpeers.tk/
+  - https://theoldschool.cc/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Films"}
-    - {id: 2, cat: TV, desc: "Séries"}
-    - {id: 3, cat: TV, desc: "TV"}
-    - {id: 4, cat: TV/Anime, desc: "Animes"}
-    - {id: 5, cat: Audio/Video, desc: "Concerts"}
-    - {id: 10, cat: PC, desc: "Applications"}
-    - {id: 9, cat: Console, desc: "Jeux"}
-    - {id: 6, cat: TV/Sport, desc: "Sport"}
+    - {id: 6, cat: Movies, desc: "Films VOSTFR"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 7, cat: TV, desc: "Series VOSTFR"}
+    - {id: 8, cat: TV, desc: "Series Pack"}
+    - {id: 9, cat: TV, desc: "Series Pack vostfr"}
+    - {id: 3, cat: Books, desc: "Ebooks"}
+    - {id: 4, cat: Console, desc: "Jeux"}
+    - {id: 5, cat: PC, desc: "Logiciel"}
+    - {id: 10, cat: TV/Sport, desc: "Sports"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -31,7 +35,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://breizhpeers.tk/\" target =_blank>BreizhPeers</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://theoldschool.cc/\" target =_blank>The Old School</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -186,6 +190,6 @@ search:
         0: 1 # normal
         1: 2 # double
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-# json UNIT3D 6.3.0 (custom)
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json UNIT3D 6.4.1 custom

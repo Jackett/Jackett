@@ -3,12 +3,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -46,6 +48,8 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies 电影");
+
+            configData.AddDynamic("showFilename", new BoolConfigurationItem("Use the first torrent filename as the title") { Value = false });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -68,8 +72,6 @@ namespace Jackett.Common.Indexers
             var groupYear = (string)result["groupYear"];
             var title = new StringBuilder();
             title.Append(groupName);
-            if (!string.IsNullOrEmpty(groupSubName))
-                title.Append(" " + groupSubName + " ");
 
             if (!string.IsNullOrEmpty(groupYear) && groupYear != "0")
                 title.Append(" [" + groupYear + "]");
@@ -103,6 +105,13 @@ namespace Jackett.Common.Indexers
                 title.Append(" " + string.Join(" / ", flags));
 
             release.Title = title.ToString();
+
+            // option to overwrite the title with the first torrent filename #13646
+            if (((BoolConfigurationItem)configData.GetDynamic("showFilename")).Value)
+                release.Title = WebUtility.HtmlDecode((string)torrent["fileName"]);
+
+            release.DoubanId = ParseUtil.GetLongFromString((string)result["doubanId"]);
+
             switch ((string)torrent["freeType"])
             {
                 case "11":
@@ -135,6 +144,8 @@ namespace Jackett.Common.Indexers
             release.MinimumSeedTime = 172800; // 48 hours
                                               // tag each results with Movie cats.
             release.Category = new List<int> { TorznabCatType.Movies.ID };
+            if (!string.IsNullOrEmpty(groupSubName))
+                release.Description = groupSubName;
             return true;
         }
     }

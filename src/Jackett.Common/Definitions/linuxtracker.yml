@@ -5,6 +5,7 @@ description: "LinuxTracker is a Public Linux ISO Torrent Repository"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://linuxtracker.org/
 

@@ -6,6 +6,8 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
+  - https://the-new-fun.com/
+legacylinks:
   - https://the-new-fun.spdns.eu/
 
 caps:

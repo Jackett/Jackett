@@ -5,6 +5,7 @@ description: "iDope is a Public torrent search engine presenting direct magnet l
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://idope.se/
 legacylinks:

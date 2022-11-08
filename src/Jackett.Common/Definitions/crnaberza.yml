@@ -26,6 +26,7 @@ caps:
     - {id: 61, cat: Movies/HD, desc: "HD Mesano"}
     - {id: 50, cat: PC/Games, desc: "Igre"}
     - {id: 44, cat: Books, desc: "Knjige"}
+    - {id: 80, cat: TV, desc: "Paketi"}
     - {id: 46, cat: Audio, desc: "Koncerti"}
     - {id: 58, cat: Audio/Lossless, desc: "Lossless/Domaće"}
     - {id: 59, cat: Audio/Lossless, desc: "Lossless/Strano"}

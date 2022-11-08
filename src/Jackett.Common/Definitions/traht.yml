@@ -1,0 +1,68 @@
+---
+id: traht
+name: TrahT
+description: "TrahT is a RUSSIAN Public Torrent Tracker for 3X"
+language: ru-RU
+type: public
+encoding: windows-1251
+links:
+  - http://traht.org/
+
+caps:
+  categories:
+    xxx: XXX
+
+  modes:
+    search: [q]
+
+settings: []
+
+search:
+  paths:
+    # http://traht.org/browse.php?search=&cat=0&year=0&format=0
+    - path: browse.php
+  inputs:
+    search: "{{ .Keywords }}"
+    cat: 0
+    year: 0
+    format: 0
+
+  rows:
+    selector: div[id^="releases-table"] table.embedded tbody tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      text: xxx
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+      filters:
+        - name: append
+          args: "&ok="
+    date:
+      text: now
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+      filters:
+        - name: split
+          args: ["|", 0]
+    leechers:
+      selector: td:nth-child(6)
+      filters:
+        - name: split
+          args: ["|", 1]
+    description:
+      selector: img
+      attribute: title
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# Kinokpk 3.00

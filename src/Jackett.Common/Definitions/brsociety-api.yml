@@ -16,6 +16,7 @@ caps:
     - {id: 3, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 4, cat: Other, desc: "Arquivos de Auxilio"}
     - {id: 6, cat: Other, desc: "Graduação"}
+    - {id: 7, cat: TV/Documentary, desc: "Documentários"}
 
   modes:
     search: [q]

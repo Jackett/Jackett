@@ -369,6 +369,9 @@ namespace Jackett.Server.Services
 
         public string GetServerUrl(HttpRequest request)
         {
+            if (!string.IsNullOrEmpty(config.BaseUrlOverride))
+                return $"{config.BaseUrlOverride}{BasePath()}/";
+
             var scheme = request.Scheme;
             var port = request.HttpContext.Request.Host.Port;
 

@@ -5,6 +5,7 @@ description: "LearnFlakes is a Private Torrent Tracker for CERTIFICATE / TRAININ
 language: en-US
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://learnflakes.net/
 
