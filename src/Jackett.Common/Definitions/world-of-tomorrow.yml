@@ -55,6 +55,7 @@ caps:
     - {id: 23, cat: TV/Sport, desc: "Wrestling"}
     - {id: 88, cat: XXX, desc: "XXX"}
     - {id: 102, cat: XXX, desc: "XXX HENTAI"}
+    - {id: 106, cat: XXX/ImageSet, desc: "XXX Picsets"}
 
   modes:
     search: [q]
