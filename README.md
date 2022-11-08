@@ -549,7 +549,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentBytes (TBy)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
- * TorrentDB
  * TorrentHeaven [![(invite needed)][inviteneeded]](#)
  * TorrentHR [![(invite needed)][inviteneeded]](#)
  * Torrenting (TT)
