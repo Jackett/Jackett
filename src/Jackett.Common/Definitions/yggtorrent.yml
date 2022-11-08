@@ -228,6 +228,9 @@ search:
     - name: re_replace # episode number at the end "123" to "E123"
       args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     # END ANIME HACK
+    # We delete the date from the title name
+    - name: re_replace
+      args: ["(\\(\\d{4}\\))", ""]
     - name: replace
       args: ["\"", ""]
     - name: replace
