@@ -1,19 +1,21 @@
 @font-face {
-    font-family: 'Inter var';
+    font-family: 'InterVar';
     font-weight: 100 900;
     font-display: swap;
     font-style: normal;
-    font-named-instance: 'Regular';
-    src: url('/fonts/Inter-roman.var.woff2?v=3.19') format('woff2');
+    src: url('/fonts/Inter.var.woff2?v=3.19') format('woff2-variations'),
+         url('/fonts/Inter.var.woff2?v=3.19') format('woff2');
+    src: url('/fonts/Inter.var.woff2?v=3.19') format('woff2') tech('variations');
 }
   
 @font-face {
-    font-family: 'Inter var';
+    font-family: 'InterVar';
     font-weight: 100 900;
     font-display: swap;
     font-style: italic;
-    font-named-instance: 'Italic';
-    src: url('/fonts/Inter-italic.var.woff2?v=3.19') format('woff2');
+    src: url('/fonts/Inter-Italic.var.woff2?v=3.19') format('woff2-variations'),
+         url('/fonts/Inter-Italic.var.woff2?v=3.19') format('woff2');
+    src: url('/fonts/Inter-Italic.var.woff2?v=3.19') format('woff2') tech('variations');
 }
 
 @font-face {
@@ -26,9 +28,9 @@
 }
 
 html {
-    font-family: -apple-system, 'Inter var', system-ui;
+    font-family: -apple-system, 'InterVar', system-ui;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Basement Grotesque', -apple-system, 'Inter var', system-ui;
+    font-family: -apple-system, 'InterVar', system-ui;
 }
