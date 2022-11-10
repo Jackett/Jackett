@@ -1,0 +1,188 @@
+---
+id: hellashut
+name: HellasHut
+description: "HellasHut is a GREEK Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: el-GR
+type: private
+encoding: UTF-8
+testlinktorrent: false
+links:
+  - https://hellashut.de/
+
+caps:
+  categorymappings:
+    - {id: 28, cat: TV/Anime, desc: "Anime/Cartoon HD"}
+    - {id: 47, cat: TV/Anime, desc: "Anime/Cartoon HDTV"}
+    - {id: 48, cat: TV/Anime, desc: "Anime/Cartoon SD"}
+    - {id: 50, cat: TV/Anime, desc: "Anime/Cartoon SD Emb"}
+    - {id: 51, cat: TV/Anime, desc: "Anime/Cartoon TV"}
+    - {id: 77, cat: PC, desc: "Applications DOS"}
+    - {id: 20, cat: PC, desc: "Applications Linux"}
+    - {id: 19, cat: PC/Mac, desc: "Applications MAC"}
+    - {id: 68, cat: PC, desc: "Applications OS2 WARP"}
+    - {id: 21, cat: PC, desc: "Applications Other"}
+    - {id: 18, cat: PC/0day, desc: "Applications Windows"}
+    - {id: 52, cat: Books, desc: "Books/Magazines All"}
+    - {id: 9, cat: TV/Documentary, desc: "Documentaries All"}
+    - {id: 53, cat: TV/Documentary, desc: "Documentaries Greek"}
+    - {id: 54, cat: TV/Documentary, desc: "Documentaries HD"}
+    - {id: 55, cat: Movies/DVD, desc: "DVD-R All"}
+    - {id: 17, cat: Console/Other, desc: "Games Other"}
+    - {id: 11, cat: Console/PS4, desc: "Games PSX"}
+    - {id: 10, cat: PC/Games, desc: "Games Windows"}
+    - {id: 13, cat: Console/XBox, desc: "Games Xbox"}
+    - {id: 56, cat: Other, desc: "Miscellaneous All"}
+    - {id: 57, cat: PC/Mobile-Other, desc: "Mobile All"}
+    - {id: 1, cat: Movies/3D, desc: "Movies 3D"}
+    - {id: 2, cat: Movies/UHD, desc: "Movies 4K"}
+    - {id: 42, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 58, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: 4, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 69, cat: Movies/HD, desc: "Movies HD Packs"}
+    - {id: 3, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 67, cat: Movies/SD, desc: "Movies SD Packs"}
+    - {id: 71, cat: Audio, desc: "Music CDA"}
+    - {id: 59, cat: Audio, desc: "Music Discographies"}
+    - {id: 23, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 22, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 25, cat: Audio/Video, desc: "Music Video"}
+    - {id: 75, cat: Movies/HD, desc: "NO IN SUBS Movies HD"}
+    - {id: 76, cat: Movies/UHD, desc: "NO SUBS IN Movies 4K"}
+    - {id: 35, cat: TV/Sport, desc: "Sports HD"}
+    - {id: 34, cat: TV/Sport, desc: "Sports SD"}
+    - {id: 5, cat: TV, desc: "TV Greek Movies"}
+    - {id: 6, cat: TV, desc: "TV Greek Series"}
+    - {id: 7, cat: TV, desc: "TV Greek Series Packs"}
+    - {id: 60, cat: TV, desc: "TV Greek Shows"}
+    - {id: 41, cat: TV/HD, desc: "TV HD"}
+    - {id: 61, cat: TV, desc: "TV Series"}
+    - {id: 62, cat: TV, desc: "TV Series Emb"}
+    - {id: 63, cat: TV, desc: "TV Series Emb Packs"}
+    - {id: 64, cat: TV/HD, desc: "TV Series HD"}
+    - {id: 65, cat: TV/HD, desc: "TV Series HD Packs"}
+    - {id: 66, cat: TV, desc: "TV Series Packs"}
+    - {id: 73, cat: Movies/BluRay, desc: "UNTOUCHED BluRay"}
+    - {id: 72, cat: Movies/DVD, desc: "UNTOUCHED DVD"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: account-login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    returnto: /
+  error:
+    - selector: td.embedded:contains("Access Denied")
+  test:
+    path: /
+    selector: a[href="account-logout.php"]
+
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    # https://hellashut.de/torrents-search.php?c52=1&search=&cat=0&incldead=1&advanced=1&lang=0&blah=0&freeleech=0&sort=id&order=desc
+    - path: torrents-search.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    cat: 0
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 notfree, 2 onlyfree
+    advanced: 1
+    # 0 all, 1 English, 2 French, 3 German, 4 Italian, 5 Japanese, 6 Spanish, 7 Russian, 8 Greek
+    lang: 0
+    # 0 name, 1 descr, 2 uploader
+    blah: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    # does not return imdb link in results
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
+
+  rows:
+    selector: table.ttable_headinner tr.t-row
+
+  fields:
+    category:
+      selector: a[href*="cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["&hit=1", ""] # avoid redirect
+    download:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["&hit=1", ""] # avoid redirect
+    size:
+      selector: td:nth-last-child(7)
+    date:
+      selector: td:nth-last-child(6)
+    grabs:
+      selector: td:nth-last-child(5)
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    downloadvolumefactor:
+      case:
+        img[src="pic/freedownload.gif"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# TorrentTrader v2-svn
