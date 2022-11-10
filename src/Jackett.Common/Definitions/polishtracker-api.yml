@@ -98,8 +98,6 @@ search:
       selector: id
     category:
       selector: category
-    _language:
-      selector: language
     title_phase1:
       selector: name
     title_multilang:
@@ -110,7 +108,7 @@ search:
         - name: re_replace
           args: ["(?i)(\\.pl\\.)", ".POLISH."]
     title:
-      text: "{{ if eq .Result._language \"pl\" }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
     download:
