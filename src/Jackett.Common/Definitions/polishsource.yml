@@ -39,11 +39,11 @@ settings:
     label: Password
   - name: multilang
     type: checkbox
-    label: Replace MULTI & PL by another language in release name
+    label: Replace MULTI by another language in release name
     default: false
   - name: multilanguage
     type: select
-    label: Replace MULTI & PL by this language
+    label: Replace MULTI by this language
     default: POLISH
     options:
       POLISH: POLISH
