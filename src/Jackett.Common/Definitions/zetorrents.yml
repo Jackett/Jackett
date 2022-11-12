@@ -8,7 +8,7 @@ encoding: UTF-8
 # to fetch current domain use https://www.protege-liens.com/zetorrents
 links:
   - https://www.zetorrents.biz/
-  - https://zetorrents.nocensor.world/
+  - https://zetorrents.nocensor.lol/
 legacylinks:
   - https://www.zetorrents.co/
   - https://www.zetorrents.io/
@@ -22,6 +22,7 @@ legacylinks:
   - https://www.zetorrents.tv/
   - https://www.zetorrents.bz/
   - https://www.zetorrents.nl/
+  - https://zetorrents.nocensor.world/
 
 caps:
   categories:
