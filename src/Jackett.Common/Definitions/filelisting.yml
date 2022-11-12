@@ -7,10 +7,11 @@ type: public
 encoding: UTF-8
 links:
   - https://filelisting.com/
-  - https://filelisting.nocensor.world/
+  - https://filelisting.nocensor.lol/
 legacylinks:
   - https://filelisting.nocensor.biz/
   - https://filelisting.nocensor.sbs/
+  - https://filelisting.nocensor.world/
 
 caps:
   categorymappings:
