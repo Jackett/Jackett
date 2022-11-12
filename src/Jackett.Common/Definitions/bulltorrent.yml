@@ -1,0 +1,120 @@
+---
+id: bulltorrent
+name: BullTorrent
+description: "BullTorrent (formerly TOROS) is a Public torrent index"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.bulltorrent.com/
+  - https://toros.nocensor.lol/
+legacylinks:
+  - https://toros.nocensor.space/
+  - https://toros.nocensor.work/
+  - https://www.toros.co/
+  - https://toros.nocensor.biz/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: Movies}
+    - {id: 2, cat: Audio, desc: Music}
+    - {id: 3, cat: TV, desc: Television}
+    - {id: 4, cat: PC/Games, desc: Games}
+    - {id: 5, cat: PC, desc: Software}
+    - {id: 6, cat: TV/Anime, desc: Anime}
+    - {id: 7, cat: XXX, desc: Adult}
+    - {id: 8, cat: Books, desc: Ebooks}
+    - {id: 9, cat: TV/Anime, desc: Animation}
+    - {id: 10, cat: Other, desc: Other}
+    - {id: 0, cat: Other, desc: TBC}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    # https://www.bulltorrent.com/all/torrents/2022.html?v=&i=100&sort=added&o=desc
+    - path: "{{ if .Keywords }}all/torrents/{{ .Keywords }}.html?v=&i=100&sort={{ .Config.sort }}&o={{ .Config.type }}{{ else }}trending.html{{ end }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "-"]
+    - name: tolower
+
+  rows:
+    selector: table.table-responsive tr:has(a[href^="/torrent/"])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: td:nth-child(1)
+      attribute: class
+      filters:
+        - name: regexp
+          args: (\d+)
+    title:
+      selector: a[href^="/torrent/"]
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    date_day:
+      selector: td:nth-child(2):contains("day")
+      optional: true
+      filters:
+        - name: fuzzytime
+    date_ago:
+      selector: td:nth-child(2):contains("ago")
+      optional: true
+      filters:
+        - name: timeago
+    date_year:
+      selector: td:nth-child(2):not(:contains("ago")):not(:contains("day"))
+      optional: true
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2 Jan -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago .Result.date_day }}{{ or .Result.date_year  .Result.date_ago .Result.date_day }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(4)
+    leechers:
+      selector: td:nth-child(5)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
