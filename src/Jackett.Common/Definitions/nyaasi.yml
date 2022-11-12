@@ -9,7 +9,7 @@ requestDelay: 2
 links:
   - https://nyaa.si/
   - https://nyaa.iss.ink/
-  - https://nyaa.nocensor.world/ # for magnets only
+  - https://nyaa.nocensor.lol/ # for magnets only
 legacylinks:
   - https://nyaa.black-mirror.xyz/
   - https://nyaa.unblocked.casa/
@@ -19,8 +19,9 @@ legacylinks:
   - https://nyaa.unblocked.bar/
   - https://nyaa.proxyportal.pw/
   - https://nyaa.uk-unblock.pro/
-  - https://nyaa.root.yt/ # 402 Payment Required
+  - https://nyaa.root.yt/
   - https://nyaa.lol/ # dropped at request of owner
+  - https://nyaa.nocensor.world/
 
 settings:
   - name: filter-id
