@@ -37,7 +37,8 @@ namespace Jackett.Common.Indexers
             "https://www5.cine-calidad.com/",
             "https://v3.cine-calidad.com/",
             "https://www.cine-calidad.com/",
-            "https://www.cinecalidad.lat/"
+            "https://www.cinecalidad.lat/",
+            "https://cinecalidad.dev/"
         };
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -45,7 +46,7 @@ namespace Jackett.Common.Indexers
             : base(id: "cinecalidad",
                    name: "Cinecalidad",
                    description: "Películas Full HD en Latino Dual.",
-                   link: "https://cinecalidad.dev/",
+                   link: "https://cinecalidad.ms/",
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
@@ -125,10 +126,10 @@ namespace Jackett.Common.Indexers
                 protectedLink = Base64Decode(protectedLink);
                 // turn
                 // link=https://cinecalidad.dev/pelicula/la-chica-salvaje/
-                // and 
+                // and
                 // protectedlink=https://cinecalidad.dev/links/MS8xMDA5NTIvMQ==
                 // into
-                // https://cinecalidad.dev/pelicula/la-chica-salvaje/?link=MS8xMDA5NTIvMQ== 
+                // https://cinecalidad.dev/pelicula/la-chica-salvaje/?link=MS8xMDA5NTIvMQ==
                 var protectedLinkSplit = protectedLink.Split('/');
                 var key = protectedLinkSplit.Last();
                 protectedLink = link.ToString() + "?link=" + key;
