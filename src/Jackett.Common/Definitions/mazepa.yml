@@ -22,17 +22,20 @@ caps:
     - {id: 39, cat: TV/Documentary, desc: "Українська документалістика HD, UHD"}
     - {id: 9, cat: TV/Documentary, desc: " |- Українська документалістика"}
     - {id: 13, cat: Movies/SD, desc: " |- Фільми SD"}
-    - {id: 12, cat: Movies/HD, desc: "Фільми HD"}
-    - {id: 147, cat: Movies/UHD, desc: "Фільми UHD"}
-    - {id: 44, cat: TV, desc: "Серіали HD, UHD"}
-    - {id: 14, cat: TV, desc: " |- Серіали"}
-    - {id: 41, cat: TV/Anime, desc: "Мультфільми HD, UHD"}
-    - {id: 10, cat: TV/Anime, desc: " |- Мультфільми"}
-    - {id: 43, cat: TV/Anime, desc: "Мультсеріали HD, UHD"}
-    - {id: 11, cat: TV/Anime, desc: " |- Мультсеріали"}
+    - {id: 12, cat: Movies/HD, desc: " |- Фільми HD"}
+    - {id: 147, cat: Movies/UHD, desc: " |- Фільми UHD"}
+    - {id: 14, cat: TV/SD, desc: " |- Серіали SD"}
+    - {id: 44, cat: TV/HD, desc: " |- Серіали HD"}
+    - {id: 152, cat: TV/UHD, desc: " |- Серіали UHD"}
+    - {id: 10, cat: TV/Anime, desc: " |- Мультфільми SD"}
+    - {id: 41, cat: TV/Anime, desc: " |- Мультфільми HD"}
+    - {id: 155, cat: TV/Anime, desc: " |- Мультфільми UHD"}
+    - {id: 11, cat: TV/Anime, desc: " |- Мультсеріали SD"}
+    - {id: 43, cat: TV/Anime, desc: " |- Мультсеріали HD"}
     - {id: 16, cat: TV/Anime, desc: "Аніме"}
-    - {id: 42, cat: TV/Documentary, desc: "Документальне HD, UHD"}
-    - {id: 15, cat: TV/Documentary, desc: " |- Документальне"}
+    - {id: 15, cat: TV/Documentary, desc: " |- Документальне SD"}
+    - {id: 42, cat: TV/Documentary, desc: " |- Документальне HD"}
+    - {id: 157, cat: TV/Documentary, desc: " |- Документальне UHD"}
     - {id: 20, cat: TV/Sport, desc: " |- Формула 1 Сезон 2022"}
     - {id: 79, cat: TV/Sport, desc: " |- Формула 1 Сезони 2017-2021"}
     - {id: 21, cat: TV/Sport, desc: " |- Формула 1 Сезони 2007-2016"}
@@ -46,18 +49,21 @@ caps:
     - {id: 19, cat: TV/Sport, desc: "Бокс"}
     - {id: 29, cat: Audio/Video, desc: "Концерти, відеокліпи"}
     - {id: 30, cat: TV, desc: "Теле-Шоу"}
-    - {id: 65, cat: Audio, desc: "Rock"}
-    - {id: 63, cat: Audio, desc: "Pop, Disco, R'n'B"}
-    - {id: 67, cat: Audio, desc: "Electronic, Industrial, Techno"}
-    - {id: 64, cat: Audio, desc: "Rap"}
-    - {id: 61, cat: Audio, desc: "Jazz, Blues, Soul, Funk"}
-    - {id: 70, cat: Audio, desc: "Reggae, Dub, Ska"}
-    - {id: 66, cat: Audio, desc: "Folk, Ethno, Country"}
-    - {id: 68, cat: Audio, desc: "Modern Classical, Ambient, Experimental, Avantgarde"}
-    - {id: 60, cat: Audio, desc: "Classical, Chorus, Opera"}
-    - {id: 62, cat: Audio, desc: "Schlager, Chanson, Romance, Sung Poetry"}
-    - {id: 69, cat: Audio, desc: "Soundtracks, Musicles"}
-    - {id: 82, cat: Books, desc: " |- Невидане"}
+    - {id: 65, cat: Audio, desc: " |- Рок"}
+    - {id: 63, cat: Audio, desc: " |- Поп, Диско"}
+    - {id: 66, cat: Audio, desc: " |- Фольк, Етно, Народна, Бардівська"}
+    - {id: 64, cat: Audio, desc: " |- Реп"}
+    - {id: 67, cat: Audio, desc: " |- Електронна"}
+    - {id: 61, cat: Audio, desc: " |- Джаз, Блюз"}
+    - {id: 60, cat: Audio, desc: " |- Класична, Інструментальна"}
+    - {id: 82, cat: Audio, desc: " |- Невидане"}
+    - {id: 160, cat: Audio, desc: " |- Rock, Alternative, Punk, Metal"}
+    - {id: 161, cat: Audio, desc: " |- Pop"}
+    - {id: 165, cat: Audio, desc: " |- Jazz, Blues, Soul"}
+    - {id: 163, cat: Audio, desc: " |- Rap, Hip-hop, RnB, Reggae"}
+    - {id: 166, cat: Audio, desc: " |- Country, Country pop, Bluegrass, Southern rock"}
+    - {id: 162, cat: Audio, desc: " |- Electronic"}
+    - {id: 164, cat: Audio, desc: " |- Other Styles"}
     - {id: 93, cat: Books, desc: " |- Українська художня література [до 1991 р.]"}
     - {id: 92, cat: Books, desc: " |- Українська художня література (після 1991 р.)"}
     - {id: 91, cat: Books, desc: " |- Зарубіжна художня література"}
