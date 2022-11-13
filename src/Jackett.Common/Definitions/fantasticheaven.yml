@@ -10,53 +10,47 @@ links:
 
 caps:
   categorymappings:
+    - {id: 157, cat: TV/Documentary, desc: "Doku 1080p"}
+    - {id: 156, cat: TV/Documentary, desc: "Doku 720p"}
+    - {id: 155, cat: TV/Documentary, desc: "Doku SD x264/x265"}
     - {id: 152, cat: Books, desc: "E-Books"}
-    - {id: 141, cat: Movies/HD, desc: "Filme 1080p"}
-    - {id: 140, cat: Movies/UHD, desc: "Filme 2160p"}
-    - {id: 131, cat: Movies/3D, desc: "Filme 3D"}
-    - {id: 154, cat: Movies/HD, desc: "Filme 720p"}
-    - {id: 142, cat: Movies/BluRay, desc: "Filme Bluray"}
-    - {id: 120, cat: Movies/DVD, desc: "Filme DVD"}
-    - {id: 101, cat: Movies/Foreign, desc: "Filme International"}
-    - {id: 139, cat: Movies/HD, desc: "Filme Packs 1080p"}
-    - {id: 119, cat: Movies/UHD, desc: "Filme Packs 2160p"}
-    - {id: 106, cat: Movies/HD, desc: "Filme Packs 720p"}
-    - {id: 105, cat: Movies/SD, desc: "Filme Packs SD"}
-    - {id: 153, cat: Movies/SD, desc: "Filme SD"}
-    - {id: 104, cat: Movies/HD, desc: "Filmklassiker 1080p"}
-    - {id: 135, cat: Movies/UHD, desc: "Filmklassiker 2160p"}
-    - {id: 122, cat: Movies/3D, desc: "Filmklassiker 3D"}
-    - {id: 103, cat: Movies/HD, desc: "Filmklassiker 720p"}
-    - {id: 134, cat: Movies/BluRay, desc: "Filmklassiker Bluray"}
-    - {id: 130, cat: Movies/DVD, desc: "Filmklassiker DVD"}
-    - {id: 136, cat: Movies/Foreign, desc: "Filmklassiker International"}
-    - {id: 124, cat: Movies/HD, desc: "Filmklassiker Packs 1080p"}
-    - {id: 123, cat: Movies/UHD, desc: "Filmklassiker Packs 2160p"}
-    - {id: 121, cat: Movies/HD, desc: "Filmklassiker Packs 720p"}
-    - {id: 127, cat: Movies/SD, desc: "Filmklassiker Packs SD"}
-    - {id: 102, cat: Movies/SD, desc: "Filmklassiker SD"}
+    - {id: 141, cat: Movies/HD, desc: "Filme HD 1080p"}
+    - {id: 154, cat: Movies/HD, desc: "Filme HD 720p"}
+    - {id: 139, cat: Movies/HD, desc: "Filme Packs HD 1080p"}
+    - {id: 106, cat: Movies/HD, desc: "Filme Packs HD 720p"}
+    - {id: 105, cat: Movies/SD, desc: "Filme Packs SD x264/x265"}
+    - {id: 119, cat: Movies/UHD, desc: "Filme Packs UHD 2160p"}
+    - {id: 153, cat: Movies/SD, desc: "Filme SD x264/x265"}
+    - {id: 140, cat: Movies/UHD, desc: "Filme UHD 2160p"}
+    - {id: 104, cat: Movies/HD, desc: "Filmklassiker HD 1080p"}
+    - {id: 103, cat: Movies/HD, desc: "Filmklassiker HD 720p"}
+    - {id: 124, cat: Movies/HD, desc: "Filmklassiker Packs HD 1080p"}
+    - {id: 121, cat: Movies/HD, desc: "Filmklassiker Packs HD 720p"}
+    - {id: 123, cat: Movies/UHD, desc: "Filmklassiker Packs UHD 2160p"}
+    - {id: 127, cat: Movies/SD, desc: "Filmklassiker Packs  x264/x265"}
+    - {id: 102, cat: Movies/SD, desc: "Filmklassiker SD x264/x265"}
+    - {id: 135, cat: Movies/UHD, desc: "Filmklassiker UHD 2160p"}
     - {id: 118, cat: Audio/Audiobook, desc: "Hörbücher"}
     - {id: 109, cat: Audio/Lossless, desc: "Musik Flac"}
     - {id: 129, cat: Audio/MP3, desc: "Musik MP3"}
     - {id: 111, cat: Audio/Lossless, desc: "Musik Packs Flac"}
     - {id: 112, cat: Audio/MP3, desc: "Musik Packs MP3"}
-    - {id: 110, cat: Audio/Video, desc: "Musik Videos"}
-    - {id: 113, cat: TV/HD, desc: "Serie 1080p"}
-    - {id: 114, cat: TV/UHD, desc: "Serie 2160p"}
-    - {id: 125, cat: TV/HD, desc: "Serie 720p"}
+    - {id: 113, cat: TV/HD, desc: "Serie HD 1080p"}
+    - {id: 125, cat: TV/HD, desc: "Serie HD 720p"}
     - {id: 115, cat: TV/Foreign, desc: "Serie International"}
-    - {id: 138, cat: TV/HD, desc: "Serie Packs 1080p"}
-    - {id: 143, cat: TV/UHD, desc: "Serie Packs 2160p"}
-    - {id: 116, cat: TV/HD, desc: "Serie Packs 720p"}
+    - {id: 138, cat: TV/HD, desc: "Serie Packs HD 1080p"}
+    - {id: 116, cat: TV/HD, desc: "Serie Packs HD 720p"}
     - {id: 144, cat: TV/Foreign, desc: "Serie Packs International"}
-    - {id: 137, cat: TV/SD, desc: "Serie Packs SD"}
-    - {id: 133, cat: TV/SD, desc: "Serie SD"}
+    - {id: 137, cat: TV/SD, desc: "Serie Packs SD x264/x265"}
+    - {id: 143, cat: TV/UHD, desc: "Serie Packs UHD 2160p"}
+    - {id: 133, cat: TV/SD, desc: "Serie SD x264/x265"}
+    - {id: 114, cat: TV/UHD, desc: "Serie UHD 2160p"}
     - {id: 150, cat: PC/0day, desc: "Windows Apps"}
     - {id: 149, cat: PC/Games, desc: "Windows Spiele"}
-    - {id: 147, cat: XXX/x264, desc: "XXX 1080p"}
-    - {id: 146, cat: XXX/x264, desc: "XXX 720p"}
+    - {id: 147, cat: XXX/x264, desc: "XXX HD 1080p"}
+    - {id: 146, cat: XXX/x264, desc: "XXX HD 720p"}
     - {id: 148, cat: XXX/Pack, desc: "XXX Packs"}
-    - {id: 69, cat: XXX/SD, desc: "XXX SD"}
+    - {id: 69, cat: XXX/SD, desc: "XXX SD x264/x265"}
     - {id: 151, cat: Books/Mags, desc: "Zeitschriften"}
 
   modes:
