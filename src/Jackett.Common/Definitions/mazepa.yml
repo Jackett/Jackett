@@ -76,6 +76,7 @@ caps:
     - {id: 96, cat: Books, desc: " |- Українська художня література"}
     - {id: 95, cat: Books, desc: " |- Зарубіжна художня література"}
     - {id: 94, cat: Books, desc: " |- Історія, біографістика, спогади"}
+    - {id: 23, cat: Movies, desc: "Архів"} # Archive - unlisted
 
   modes:
     search: [q]
