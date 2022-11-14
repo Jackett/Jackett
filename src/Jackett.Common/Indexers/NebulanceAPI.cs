@@ -232,7 +232,8 @@ namespace Jackett.Common.Indexers
                     if (release.Genres == null)
                         release.Genres = new List<string>();
                     release.Genres = releaseGenres;
-                    if (!string.IsNullOrEmpty((string)r["series_banner"]))
+                    var banner = (string)r["series_banner"];
+                    if ((!string.IsNullOrEmpty(banner)) && (!banner.Contains("noimage.png")))
                         release.Poster = new Uri((string)r["series_banner"]);
 
                     releases.Add(release);
