@@ -6,6 +6,7 @@ language: ro-RO
 type: private
 encoding: utf-8
 followredirect: true
+requestDelay: 2
 links:
   - https://www.lastfiles.ro/
   - http://www.lastfiles.ro/
@@ -17,48 +18,48 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 31, cat: Movies/UHD, desc: "Movies: 4K"}
-    - {id: 5, cat: Movies/BluRay, desc: "Movies: BluRay"}
-    - {id: 9, cat: Movies/DVD, desc: "Movies: DVD"}
-    - {id: 11, cat: Movies/HD, desc: "Movies: HD"}
-    - {id: 58, cat: Movies/SD, desc: "Movies: Cam"}
-    - {id: 61, cat: Movies/3D, desc: "Movies: 3D"}
-    - {id: 24, cat: Movies/SD, desc: "Movies: XVID"}
-    - {id: 16, cat: Movies, desc: "Movies: Old"}
-    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL"}
-    - {id: 56, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 18, cat: Movies, desc: "Movies: Pack"}
-    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRO"}
-    - {id: 6, cat: Movies/BluRay, desc: "Movies: BluRay-Ro"}
-    - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro"}
-    - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro"}
-    - {id: 82, cat: Movies/HD, desc: "Movies: x265"}
-    - {id: 10, cat: Movies/DVD, desc: "Movies: DVD-Ro"}
-    - {id: 59, cat: Movies/SD, desc: "Movies: Cam-RO"}
-    - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro"}
-    - {id: 17, cat: Movies, desc: "Movies: Old-Ro"}
-    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro"}
-    - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro"}
-    - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro"}
-    - {id: 19, cat: Movies, desc: "Movies: Pack-Ro"}
-    - {id: 20, cat: TV, desc: "TV Episodes"}
-    - {id: 21, cat: TV, desc: "TV Episodes-Ro"}
-    - {id: 13, cat: TV/HD, desc: "HDTV Episodes"}
-    - {id: 14, cat: TV/HD, desc: "HDTV Episodes-Ro"}
-    - {id: 28, cat: Audio, desc: "Music"}
-    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps"}
-    - {id: 26, cat: PC/0day, desc: "Software"}
-    - {id: 30, cat: PC/Games, desc: "Games: PC-ISO"}
-    - {id: 33, cat: PC/Games, desc: "Games: Packs"}
-    - {id: 1, cat: TV/Anime, desc: "Movies: Anime"}
-    - {id: 2, cat: TV/Anime, desc: "Movies: Anime-Ro"}
-    - {id: 42, cat: TV/Sport, desc: "Sport"}
-    - {id: 43, cat: Books, desc: "Documents"}
-    - {id: 44, cat: Other, desc: "Images"}
-    - {id: 49, cat: Other, desc: "Diverse"}
-    - {id: 22, cat: Other, desc: "RoContent"}
-    - {id: 60, cat: XXX/ImageSet, desc: "Images: XXX"}
-    - {id: 27, cat: XXX, desc: "Movies: XXX"}
+    - {id: 31, cat: Movies/UHD, desc: "Movies: 4K", default: true}
+    - {id: 5, cat: Movies/BluRay, desc: "Movies: BluRay", default: true}
+    - {id: 9, cat: Movies/DVD, desc: "Movies: DVD", default: true}
+    - {id: 11, cat: Movies/HD, desc: "Movies: HD", default: true}
+    - {id: 58, cat: Movies/SD, desc: "Movies: Cam", default: true}
+    - {id: 61, cat: Movies/3D, desc: "Movies: 3D", default: true}
+    - {id: 24, cat: Movies/SD, desc: "Movies: XVID", default: true}
+    - {id: 16, cat: Movies, desc: "Movies: Old", default: true}
+    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL", default: true}
+    - {id: 56, cat: TV/Documentary, desc: "Documentary", default: true}
+    - {id: 18, cat: Movies, desc: "Movies: Pack", default: true}
+    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRO", default: true}
+    - {id: 6, cat: Movies/BluRay, desc: "Movies: BluRay-Ro", default: true}
+    - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro", default: true}
+    - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
+    - {id: 82, cat: Movies/HD, desc: "Movies: x265", default: true}
+    - {id: 10, cat: Movies/DVD, desc: "Movies: DVD-Ro", default: true}
+    - {id: 59, cat: Movies/SD, desc: "Movies: Cam-RO", default: true}
+    - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro", default: true}
+    - {id: 17, cat: Movies, desc: "Movies: Old-Ro", default: true}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro", default: true}
+    - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro", default: true}
+    - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro", default: true}
+    - {id: 19, cat: Movies, desc: "Movies: Pack-Ro", default: true}
+    - {id: 20, cat: TV, desc: "TV Episodes", default: true}
+    - {id: 21, cat: TV, desc: "TV Episodes-Ro", default: true}
+    - {id: 13, cat: TV/HD, desc: "HDTV Episodes", default: true}
+    - {id: 14, cat: TV/HD, desc: "HDTV Episodes-Ro", default: true}
+    - {id: 28, cat: Audio, desc: "Music", default: true}
+    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps", default: true}
+    - {id: 26, cat: PC/0day, desc: "Software", default: true}
+    - {id: 30, cat: PC/Games, desc: "Games: PC-ISO", default: true}
+    - {id: 33, cat: PC/Games, desc: "Games: Packs", default: true}
+    - {id: 1, cat: TV/Anime, desc: "Movies: Anime", default: true}
+    - {id: 2, cat: TV/Anime, desc: "Movies: Anime-Ro", default: true}
+    - {id: 42, cat: TV/Sport, desc: "Sport", default: true}
+    - {id: 43, cat: Books, desc: "Documents", default: true}
+    - {id: 44, cat: Other, desc: "Images", default: true}
+    - {id: 49, cat: Other, desc: "Diverse", default: true}
+    - {id: 22, cat: Other, desc: "RoContent", default: true}
+    - {id: 60, cat: XXX/ImageSet, desc: "Images: XXX", default: false}
+    - {id: 27, cat: XXX, desc: "Movies: XXX", default: false}
 
   modes:
     search: [q]
@@ -118,7 +119,7 @@ login:
 search:
   paths:
     - path: browse.php
-      categories: ["!", 60, 27]
+      categories: [31, 5, 9, 11, 58, 61, 24, 16, 54, 56, 18, 32, 6, 12, 81, 82, 10, 59, 25, 17, 55, 57, 62, 19, 20, 21, 13, 14, 28, 51, 26, 30, 33, 1, 2, 42, 43, 44, 49, 22]
     - path: browseadult.php
       categories: [60, 27]
 

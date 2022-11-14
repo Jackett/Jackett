@@ -5,6 +5,7 @@ description: "PigNetwork (猪猪网) is a CHINESE Private Torrent Tracker for HD
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://piggo.me/
 
@@ -19,6 +20,7 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "Sports/体育", default: true}
     - {id: 409, cat: Other, desc: "Misc/其他", default: true}
     - {id: 408, cat: Audio, desc: "Music/音乐", default: true}
+    # kids zone
     - {id: 908, cat: TV, desc: "TV Series/剧集", default: true}
     - {id: 909, cat: Movies, desc: "Movies/电影", default: true}
     - {id: 905, cat: Audio/Video, desc: "MusicVideo/MV", default: true}

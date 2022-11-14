@@ -5,48 +5,49 @@ description: "Bit-Bázis is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://bitbazis.net/
 
 caps:
   categorymappings:
-    - {id: 85, cat: Movies/SD, desc: "Film/Cam/Hun"}
-    - {id: 86, cat: Movies/SD, desc: "Film/Cam/Eng"}
-    - {id: 15, cat: Movies/SD, desc: "Film/SD/Hun"}
-    - {id: 16, cat: Movies/SD, desc: "Film/SD/Eng"}
-    - {id: 17, cat: Movies/DVD, desc: "Film/DVD/Hun"}
-    - {id: 19, cat: Movies/DVD, desc: "Film/DVD/Eng"}
-    - {id: 83, cat: Movies/HD, desc: "Film/HD/Hun"}
-    - {id: 82, cat: Movies/HD, desc: "Film/HD/Eng"}
-    - {id: 94, cat: Movies/HD, desc: "Film/FHD/Hun"}
-    - {id: 95, cat: Movies/HD, desc: "Film/FHD/Eng"}
-    - {id: 92, cat: Movies/UHD, desc: "Film/UHD/Hun"}
-    - {id: 93, cat: Movies/UHD, desc: "Film/UHD/Eng"}
-    - {id: 64, cat: Movies, desc: "Film/Pack"}
-    - {id: 24, cat: Audio/Video, desc: "Videóklip"}
-    - {id: 22, cat: TV, desc: "Sorozat/Hun"}
-    - {id: 58, cat: TV, desc: "Sorozat/Eng"}
-    - {id: 69, cat: TV/Anime, desc: "Mese/SD"}
-    - {id: 68, cat: TV/Anime, desc: "Mese/DVD"}
-    - {id: 91, cat: TV/Anime, desc: "Mese/HD"}
-    - {id: 25, cat: Audio/MP3, desc: "Mp3/Hun"}
-    - {id: 26, cat: Audio/MP3, desc: "Mp3/Eng"}
-    - {id: 84, cat: Audio/Lossless, desc: "Lossless/Hun"}
-    - {id: 71, cat: Audio/Lossless, desc: "Lossless/Eng"}
-    - {id: 31, cat: PC/Games, desc: "Játék/PC"}
-    - {id: 81, cat: PC/0day, desc: "Program/PC"}
-    - {id: 49, cat: PC/0day, desc: "Program/Rip"}
-    - {id: 27, cat: Books/EBook, desc: "Könyv/Hun"}
-    - {id: 50, cat: Books/EBook, desc: "Könyv/Eng"}
-    - {id: 14, cat: PC, desc: "Program/Egyéb"}
-    - {id: 65, cat: Other, desc: "Egyéb"}
-    - {id: 33, cat: XXX/SD, desc: "SD/XXX"}
-    - {id: 89, cat: XXX/x264, desc: "HD/XXX"}
-    - {id: 66, cat: XXX/ImageSet, desc: "Képek/XXX"}
+    - {id: 85, cat: Movies/SD, desc: "Film/Cam/Hun", default: true}
+    - {id: 86, cat: Movies/SD, desc: "Film/Cam/Eng", default: true}
+    - {id: 15, cat: Movies/SD, desc: "Film/SD/Hun", default: true}
+    - {id: 16, cat: Movies/SD, desc: "Film/SD/Eng", default: true}
+    - {id: 17, cat: Movies/DVD, desc: "Film/DVD/Hun", default: true}
+    - {id: 19, cat: Movies/DVD, desc: "Film/DVD/Eng", default: true}
+    - {id: 83, cat: Movies/HD, desc: "Film/HD/Hun", default: true}
+    - {id: 82, cat: Movies/HD, desc: "Film/HD/Eng", default: true}
+    - {id: 94, cat: Movies/HD, desc: "Film/FHD/Hun", default: true}
+    - {id: 95, cat: Movies/HD, desc: "Film/FHD/Eng", default: true}
+    - {id: 92, cat: Movies/UHD, desc: "Film/UHD/Hun", default: true}
+    - {id: 93, cat: Movies/UHD, desc: "Film/UHD/Eng", default: true}
+    - {id: 64, cat: Movies, desc: "Film/Pack", default: true}
+    - {id: 24, cat: Audio/Video, desc: "Videóklip", default: true}
+    - {id: 22, cat: TV, desc: "Sorozat/Hun", default: true}
+    - {id: 58, cat: TV, desc: "Sorozat/Eng", default: true}
+    - {id: 69, cat: TV/Anime, desc: "Mese/SD", default: true}
+    - {id: 68, cat: TV/Anime, desc: "Mese/DVD", default: true}
+    - {id: 91, cat: TV/Anime, desc: "Mese/HD", default: true}
+    - {id: 25, cat: Audio/MP3, desc: "Mp3/Hun", default: true}
+    - {id: 26, cat: Audio/MP3, desc: "Mp3/Eng", default: true}
+    - {id: 84, cat: Audio/Lossless, desc: "Lossless/Hun", default: true}
+    - {id: 71, cat: Audio/Lossless, desc: "Lossless/Eng", default: true}
+    - {id: 31, cat: PC/Games, desc: "Játék/PC", default: true}
+    - {id: 81, cat: PC/0day, desc: "Program/PC", default: true}
+    - {id: 49, cat: PC/0day, desc: "Program/Rip", default: true}
+    - {id: 27, cat: Books/EBook, desc: "Könyv/Hun", default: true}
+    - {id: 50, cat: Books/EBook, desc: "Könyv/Eng", default: true}
+    - {id: 14, cat: PC, desc: "Program/Egyéb", default: true}
+    - {id: 65, cat: Other, desc: "Egyéb", default: true}
+    - {id: 33, cat: XXX/SD, desc: "SD/XXX", default: false}
+    - {id: 89, cat: XXX/x264, desc: "HD/XXX", default: false}
+    - {id: 66, cat: XXX/ImageSet, desc: "Képek/XXX", default: false}
     # the following are no longer in the cat list in the search page, but are still in the profile cat list
-    - {id: 54, cat: Console, desc: "Játék/Konzol"}
-    - {id: 67, cat: PC/Mobile-Android, desc: "Program/Mobil"}
-    - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv"}
+    - {id: 54, cat: Console, desc: "Játék/Konzol", default: true}
+    - {id: 67, cat: PC/Mobile-Android, desc: "Program/Mobil", default: true}
+    - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
 
   modes:
     search: [q]
@@ -98,7 +99,7 @@ login:
 search:
   paths:
     - path: browse.php
-      categories: ["!", 33, 66, 89]
+      categories: [85, 86, 15, 16, 17, 19, 83, 82, 94, 95, 92, 93, 64, 24, 22, 58, 69, 68, 91, 25, 26, 84, 71, 31, 81, 49, 27, 50, 14, 65, 54, 67, 70]
       inputs:
         # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
         incldead: 0

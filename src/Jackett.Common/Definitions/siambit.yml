@@ -5,60 +5,61 @@ description: "SiamBIT is a THAI Private Torrent Tracker for GENERAL"
 language: th-TH
 type: private
 encoding: tis-620
+requestDelay: 2
 links:
   - https://www.siambit.me/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Other, desc: "@ King"}
-    - {id: 75, cat: PC/0day, desc: "OS Windows / Office"}
-    - {id: 10, cat: TV, desc: "Cartoons / Animation"}
-    - {id: 9, cat: TV/Sport, desc: "Sports / Football"}
-    - {id: 110, cat: PC/Games, desc: "Mobile games"}
-    - {id: 7, cat: PC/Games, desc: "Games"}
-    - {id: 40, cat: Audio/Video, desc: "clips"}
-    - {id: 16, cat: Audio/Video, desc: "Concert"}
-    - {id: 3, cat: Audio/Other, desc: "Karaoke / MV"}
-    - {id: 70, cat: PC, desc: "software AntiVirus / Antispyware"}
-    - {id: 100, cat: PC/Mobile-Other, desc: "software Mobile / Theme / Ringtone / mv"}
-    - {id: 85, cat: PC/Mac, desc: "Mac software"}
-    - {id: 105, cat: PC, desc: "Linux software"}
-    - {id: 8, cat: PC, desc: "software"}
-    - {id: 56, cat: Other, desc: "Dictionary / map"}
-    - {id: 19, cat: TV, desc: "Talk show / comedy / radio"}
-    - {id: 20, cat: TV, desc: "general"}
-    - {id: 55, cat: PC/Mobile-iOS, desc: "Tablet / iPhone"}
-    - {id: 21, cat: TV, desc: "Dharma"}
-    - {id: 2, cat: Audio/MP3, desc: "Music"}
-    - {id: 130, cat: Audio/Audiobook, desc: "High quality music (Lossless)"}
-    - {id: 60, cat: Other, desc: "fonts / icons / clip art / templates"}
-    - {id: 90, cat: Movies/UHD, desc: "4K UHD movies"}
-    - {id: 91, cat: Movies/DVD, desc: "DVD movies"}
-    - {id: 92, cat: Movies/HD, desc: "Hi-Def movies"}
-    - {id: 89, cat: Movies/SD, desc: "VCD movies"}
-    - {id: 93, cat: TV, desc: "Mother and child @ / Learning materials for children"}
-    - {id: 4, cat: TV, desc: "TV shows / Variety / Game shows"}
-    - {id: 50, cat: Other, desc: "Images"}
-    - {id: 18, cat: Other, desc: "website"}
-    - {id: 17, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 11, cat: Books/Technical, desc: "Learning materials / Books / Ebook"}
-    - {id: 5, cat: Movies, desc: "Movies / series [Korea]"}
-    - {id: 54, cat: Movies, desc: "Movies / Series [China]"}
-    - {id: 51, cat: Movies, desc: "Movie series / series [Japan]"}
-    - {id: 52, cat: Movies, desc: "Movies / Series [Western]"}
-    - {id: 57, cat: Movies, desc: "Movies / series [other]"}
-    - {id: 53, cat: Movies, desc: "Movie series / series / drama [Thai]"}
-    - {id: 901, cat: XXX, desc: "XXX-Anime"}
-    - {id: 902, cat: XXX, desc: "XXX-Game"}
-    - {id: 903, cat: XXX, desc: "XXX-Japan censored"}
-    - {id: 904, cat: XXX, desc: "XXX-Japan"}
-    - {id: 905, cat: XXX, desc: "XXX-Guava"}
-    - {id: 906, cat: XXX, desc: "XXX-Asia censored"}
-    - {id: 907, cat: XXX, desc: "XXX-Asia"}
-    - {id: 908, cat: XXX, desc: "XXX-Gay"}
-    - {id: 910, cat: XXX, desc: "XXX-clip"}
-    - {id: 911, cat: XXX, desc: "XXX-pictures"}
-    - {id: 912, cat: XXX, desc: "XXX-magazine"}
+    - {id: 1, cat: Other, desc: "@ King", default: true}
+    - {id: 75, cat: PC/0day, desc: "OS Windows / Office", default: true}
+    - {id: 10, cat: TV, desc: "Cartoons / Animation", default: true}
+    - {id: 9, cat: TV/Sport, desc: "Sports / Football", default: true}
+    - {id: 110, cat: PC/Games, desc: "Mobile games", default: true}
+    - {id: 7, cat: PC/Games, desc: "Games", default: true}
+    - {id: 40, cat: Audio/Video, desc: "clips", default: true}
+    - {id: 16, cat: Audio/Video, desc: "Concert", default: true}
+    - {id: 3, cat: Audio/Other, desc: "Karaoke / MV", default: true}
+    - {id: 70, cat: PC, desc: "software AntiVirus / Antispyware", default: true}
+    - {id: 100, cat: PC/Mobile-Other, desc: "software Mobile / Theme / Ringtone / mv", default: true}
+    - {id: 85, cat: PC/Mac, desc: "Mac software", default: true}
+    - {id: 105, cat: PC, desc: "Linux software", default: true}
+    - {id: 8, cat: PC, desc: "software", default: true}
+    - {id: 56, cat: Other, desc: "Dictionary / map", default: true}
+    - {id: 19, cat: TV, desc: "Talk show / comedy / radio", default: true}
+    - {id: 20, cat: TV, desc: "general", default: true}
+    - {id: 55, cat: PC/Mobile-iOS, desc: "Tablet / iPhone", default: true}
+    - {id: 21, cat: TV, desc: "Dharma", default: true}
+    - {id: 2, cat: Audio/MP3, desc: "Music", default: true}
+    - {id: 130, cat: Audio/Audiobook, desc: "High quality music (Lossless)", default: true}
+    - {id: 60, cat: Other, desc: "fonts / icons / clip art / templates", default: true}
+    - {id: 90, cat: Movies/UHD, desc: "4K UHD movies", default: true}
+    - {id: 91, cat: Movies/DVD, desc: "DVD movies", default: true}
+    - {id: 92, cat: Movies/HD, desc: "Hi-Def movies", default: true}
+    - {id: 89, cat: Movies/SD, desc: "VCD movies", default: true}
+    - {id: 93, cat: TV, desc: "Mother and child @ / Learning materials for children", default: true}
+    - {id: 4, cat: TV, desc: "TV shows / Variety / Game shows", default: true}
+    - {id: 50, cat: Other, desc: "Images", default: true}
+    - {id: 18, cat: Other, desc: "website", default: true}
+    - {id: 17, cat: TV/Documentary, desc: "Documentary", default: true}
+    - {id: 11, cat: Books/Technical, desc: "Learning materials / Books / Ebook", default: true}
+    - {id: 5, cat: Movies, desc: "Movies / series [Korea]", default: true}
+    - {id: 54, cat: Movies, desc: "Movies / Series [China]", default: true}
+    - {id: 51, cat: Movies, desc: "Movie series / series [Japan]", default: true}
+    - {id: 52, cat: Movies, desc: "Movies / Series [Western]", default: true}
+    - {id: 57, cat: Movies, desc: "Movies / series [other]", default: true}
+    - {id: 53, cat: Movies, desc: "Movie series / series / drama [Thai]", default: true}
+    - {id: 901, cat: XXX, desc: "XXX-Anime", default: false}
+    - {id: 902, cat: XXX, desc: "XXX-Game", default: false}
+    - {id: 903, cat: XXX, desc: "XXX-Japan censored", default: false}
+    - {id: 904, cat: XXX, desc: "XXX-Japan", default: false}
+    - {id: 905, cat: XXX, desc: "XXX-Guava", default: false}
+    - {id: 906, cat: XXX, desc: "XXX-Asia censored", default: false}
+    - {id: 907, cat: XXX, desc: "XXX-Asia", default: false}
+    - {id: 908, cat: XXX, desc: "XXX-Gay", default: false}
+    - {id: 910, cat: XXX, desc: "XXX-clip", default: false}
+    - {id: 911, cat: XXX, desc: "XXX-pictures", default: false}
+    - {id: 912, cat: XXX, desc: "XXX-magazine", default: false}
 
   modes:
     search: [q]
@@ -119,7 +120,7 @@ download:
 search:
   paths:
     - path: viewno18sb.php
-      categories: ["!", 901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
+      categories: [1, 75, 10, 9, 110, 7, 40, 16, 3, 70, 100, 85, 105, 8, 56, 19, 20, 55, 21, 2, 130, 60, 90, 91, 92, 89, 93, 4, 50, 18, 17, 11, 5, 54, 51, 52, 57, 53]
     - path: viewbrsb.php
       categories: [901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
   inputs:

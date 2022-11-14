@@ -5,6 +5,7 @@ description: "Team CT Game (TCTG) is a FRENCH Private Torrent Tracker for MOVIES
 language: fr-FR
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://tctg.pm/
 legacylinks:
@@ -15,51 +16,51 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 409, cat: Books/Comics, desc: "BD"}
-    - {id: 410, cat: Books/Mags, desc: "Ebooks - Presse"}
-    - {id: 411, cat: Audio/Audiobook, desc: "Ebooks - Audiobooks"}
-    - {id: 412, cat: Books/EBook, desc: "Ebooks - Ebooks"}
-    - {id: 413, cat: Movies/3D, desc: "Films - 3D"}
-    - {id: 414, cat: Movies/HD, desc: "Films - 4K"}
-    - {id: 415, cat: Movies/UHD, desc: "Films - 4K HDR"}
-    - {id: 416, cat: Movies/UHD, desc: "Films - 4K Light"}
-    - {id: 417, cat: Movies/UHD, desc: "Films - 4K Remux"}
-    - {id: 418, cat: Movies, desc: "Films - Animation"}
-    - {id: 419, cat: Movies/BluRay, desc: "Films - BDRip / BRRip"}
-    - {id: 420, cat: Movies/DVD, desc: "Films - DVD-R"}
-    - {id: 421, cat: Movies/DVD, desc: "Films - DVDRip"}
-    - {id: 422, cat: Movies/BluRay, desc: "Films - Full Bluray"}
-    - {id: 423, cat: Movies/HD, desc: "Films - HDTV"}
-    - {id: 424, cat: Movies/HD, desc: "Films - HD 1080p"}
-    - {id: 425, cat: Movies/HD, desc: "Films - HD 720p"}
-    - {id: 426, cat: Movies/HD, desc: "Films - HDLiGHT / M-HD"}
-    - {id: 427, cat: Movies/HD, desc: "Films - HDRiP"}
-    - {id: 428, cat: Movies, desc: "Films - Pack"}
-    - {id: 429, cat: Movies, desc: "Films - Remux"}
-    - {id: 430, cat: TV, desc: "Films - TVRip"}
-    - {id: 431, cat: Movies, desc: "Films - VO"}
-    - {id: 432, cat: Movies, desc: "Films - VOSTFR"}
-    - {id: 433, cat: Movies/WEB-DL, desc: "Films - Web"}
-    - {id: 434, cat: Movies/HD, desc: "Films - x265"}
-    - {id: 436, cat: Console, desc: "Jeux - Consoles"}
-    - {id: 437, cat: PC/Games, desc: "Jeux - PC"}
-    - {id: 438, cat: PC/0day, desc: "Logiciels -  Windows"}
-    - {id: 439, cat: Other, desc: "Logiciels - Graph / Wallpaper"}
-    - {id: 440, cat: TV/HD, desc: "Series - 4K HDR"}
-    - {id: 441, cat: TV/HD, desc: "Series TV - Pack HD"}
-    - {id: 442, cat: TV/HD, desc: "Series TV - Episode HD"}
-    - {id: 443, cat: TV/HD, desc: "Series TV - Pack HD VOSTFR"}
-    - {id: 444, cat: TV/HD, desc: "Series TV - Episode HD VOSTFR"}
-    - {id: 445, cat: TV/SD, desc: "Series TV - Pack SD"}
-    - {id: 446, cat: TV/SD, desc: "Series TV - Episode SD"}
-    - {id: 447, cat: TV/SD, desc: "Series TV - Pack SD VOSTFR"}
-    - {id: 448, cat: TV/SD, desc: "Series TV - Episode SD VOSTFR"}
-    - {id: 449, cat: TV/Anime, desc: "Series - Animés"}
-    - {id: 450, cat: TV, desc: "Spectacles - Tous"}
-    - {id: 451, cat: TV, desc: "TV - Emissions"}
-    - {id: 452, cat: TV/Documentary, desc: "TV - Documentaires"}
-    - {id: 453, cat: TV/Sport, desc: "TV - Sports"}
-    - {id: 435, cat: XXX, desc: "Films - XXX"}
+    - {id: 409, cat: Books/Comics, desc: "BD", default: true}
+    - {id: 410, cat: Books/Mags, desc: "Ebooks - Presse", default: true}
+    - {id: 411, cat: Audio/Audiobook, desc: "Ebooks - Audiobooks", default: true}
+    - {id: 412, cat: Books/EBook, desc: "Ebooks - Ebooks", default: true}
+    - {id: 413, cat: Movies/3D, desc: "Films - 3D", default: true}
+    - {id: 414, cat: Movies/HD, desc: "Films - 4K", default: true}
+    - {id: 415, cat: Movies/UHD, desc: "Films - 4K HDR", default: true}
+    - {id: 416, cat: Movies/UHD, desc: "Films - 4K Light", default: true}
+    - {id: 417, cat: Movies/UHD, desc: "Films - 4K Remux", default: true}
+    - {id: 418, cat: Movies, desc: "Films - Animation", default: true}
+    - {id: 419, cat: Movies/BluRay, desc: "Films - BDRip / BRRip", default: true}
+    - {id: 420, cat: Movies/DVD, desc: "Films - DVD-R", default: true}
+    - {id: 421, cat: Movies/DVD, desc: "Films - DVDRip", default: true}
+    - {id: 422, cat: Movies/BluRay, desc: "Films - Full Bluray", default: true}
+    - {id: 423, cat: Movies/HD, desc: "Films - HDTV", default: true}
+    - {id: 424, cat: Movies/HD, desc: "Films - HD 1080p", default: true}
+    - {id: 425, cat: Movies/HD, desc: "Films - HD 720p", default: true}
+    - {id: 426, cat: Movies/HD, desc: "Films - HDLiGHT / M-HD", default: true}
+    - {id: 427, cat: Movies/HD, desc: "Films - HDRiP", default: true}
+    - {id: 428, cat: Movies, desc: "Films - Pack", default: true}
+    - {id: 429, cat: Movies, desc: "Films - Remux", default: true}
+    - {id: 430, cat: TV, desc: "Films - TVRip", default: true}
+    - {id: 431, cat: Movies, desc: "Films - VO", default: true}
+    - {id: 432, cat: Movies, desc: "Films - VOSTFR", default: true}
+    - {id: 433, cat: Movies/WEB-DL, desc: "Films - Web", default: true}
+    - {id: 434, cat: Movies/HD, desc: "Films - x265", default: true}
+    - {id: 436, cat: Console, desc: "Jeux - Consoles", default: true}
+    - {id: 437, cat: PC/Games, desc: "Jeux - PC", default: true}
+    - {id: 438, cat: PC/0day, desc: "Logiciels -  Windows", default: true}
+    - {id: 439, cat: Other, desc: "Logiciels - Graph / Wallpaper", default: true}
+    - {id: 440, cat: TV/HD, desc: "Series - 4K HDR", default: true}
+    - {id: 441, cat: TV/HD, desc: "Series TV - Pack HD", default: true}
+    - {id: 442, cat: TV/HD, desc: "Series TV - Episode HD", default: true}
+    - {id: 443, cat: TV/HD, desc: "Series TV - Pack HD VOSTFR", default: true}
+    - {id: 444, cat: TV/HD, desc: "Series TV - Episode HD VOSTFR", default: true}
+    - {id: 445, cat: TV/SD, desc: "Series TV - Pack SD", default: true}
+    - {id: 446, cat: TV/SD, desc: "Series TV - Episode SD", default: true}
+    - {id: 447, cat: TV/SD, desc: "Series TV - Pack SD VOSTFR", default: true}
+    - {id: 448, cat: TV/SD, desc: "Series TV - Episode SD VOSTFR", default: true}
+    - {id: 449, cat: TV/Anime, desc: "Series - Animés", default: true}
+    - {id: 450, cat: TV, desc: "Spectacles - Tous", default: true}
+    - {id: 451, cat: TV, desc: "TV - Emissions", default: true}
+    - {id: 452, cat: TV/Documentary, desc: "TV - Documentaires", default: true}
+    - {id: 453, cat: TV/Sport, desc: "TV - Sports", default: true}
+    - {id: 435, cat: XXX, desc: "Films - XXX", default: false}
 
   modes:
     search: [q]
@@ -143,7 +144,7 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: ["!", 435]
+      categories: [409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453]
     - path: special.php
       categories: [435]
   inputs:

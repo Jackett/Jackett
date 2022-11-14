@@ -5,6 +5,7 @@ description: "ToTheGlory (TTG) A Chinese tracker"
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://totheglory.im/
 

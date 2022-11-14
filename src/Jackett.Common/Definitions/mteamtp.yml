@@ -5,6 +5,7 @@ description: "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIE
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://kp.m-team.cc/
 legacylinks:
@@ -13,41 +14,41 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies/SD, desc: "Movie(電影)/SD"}
-    - {id: 419, cat: Movies/HD, desc: "Movie(電影)/HD"}
-    - {id: 420, cat: Movies/DVD, desc: "Movie(電影)/DVDiSo"}
-    - {id: 421, cat: Movies/BluRay, desc: "Movie(電影)/Blu-Ray"}
-    - {id: 439, cat: Movies/Other, desc: "Movie(電影)/Remux"}
-    - {id: 403, cat: TV/SD, desc: "TV Series(影劇/綜藝)/SD"}
-    - {id: 402, cat: TV/HD, desc: "TV Series(影劇/綜藝)/HD"}
-    - {id: 435, cat: TV/SD, desc: "TV Series(影劇/綜藝)/DVDiSo"}
-    - {id: 438, cat: TV/HD, desc: "TV Series(影劇/綜藝)/BD"}
-    - {id: 404, cat: TV/Documentary, desc: "紀錄教育"}
-    - {id: 405, cat: TV/Anime, desc: "Anime(動畫)"}
-    - {id: 407, cat: TV/Sport, desc: "Sports(運動)"}
-    - {id: 422, cat: PC/0day, desc: "Software(軟體)"}
-    - {id: 423, cat: PC/Games, desc: "PCGame(PC遊戲)"}
-    - {id: 427, cat: Books, desc: "eBook(電子書)"}
-    - {id: 409, cat: Other, desc: "Misc(其他)"}
+    - {id: 401, cat: Movies/SD, desc: "Movie(電影)/SD", default: true}
+    - {id: 419, cat: Movies/HD, desc: "Movie(電影)/HD", default: true}
+    - {id: 420, cat: Movies/DVD, desc: "Movie(電影)/DVDiSo", default: true}
+    - {id: 421, cat: Movies/BluRay, desc: "Movie(電影)/Blu-Ray", default: true}
+    - {id: 439, cat: Movies/Other, desc: "Movie(電影)/Remux", default: true}
+    - {id: 403, cat: TV/SD, desc: "TV Series(影劇/綜藝)/SD", default: true}
+    - {id: 402, cat: TV/HD, desc: "TV Series(影劇/綜藝)/HD", default: true}
+    - {id: 435, cat: TV/SD, desc: "TV Series(影劇/綜藝)/DVDiSo", default: true}
+    - {id: 438, cat: TV/HD, desc: "TV Series(影劇/綜藝)/BD", default: true}
+    - {id: 404, cat: TV/Documentary, desc: "紀錄教育", default: true}
+    - {id: 405, cat: TV/Anime, desc: "Anime(動畫)", default: true}
+    - {id: 407, cat: TV/Sport, desc: "Sports(運動)", default: true}
+    - {id: 422, cat: PC/0day, desc: "Software(軟體)", default: true}
+    - {id: 423, cat: PC/Games, desc: "PCGame(PC遊戲)", default: true}
+    - {id: 427, cat: Books, desc: "eBook(電子書)", default: true}
+    - {id: 409, cat: Other, desc: "Misc(其他)", default: true}
     # music
-    - {id: 406, cat: Audio/Video, desc: "MV(演唱)"}
-    - {id: 408, cat: Audio/Other, desc: "Music(AAC/ALAC)"}
-    - {id: 434, cat: Audio, desc: "Music(無損)"}
+    - {id: 406, cat: Audio/Video, desc: "MV(演唱)", default: true}
+    - {id: 408, cat: Audio/Other, desc: "Music(AAC/ALAC)", default: true}
+    - {id: 434, cat: Audio, desc: "Music(無損)", default: true}
     # adult
-    - {id: 410, cat: XXX, desc: "AV(有碼)/HD Censored"}
-    - {id: 429, cat: XXX, desc: "AV(無碼)/HD Uncensored"}
-    - {id: 424, cat: XXX, desc: "AV(有碼)/SD Censored"}
-    - {id: 430, cat: XXX, desc: "AV(無碼)/SD Uncensored"}
-    - {id: 426, cat: XXX, desc: "AV(無碼)/DVDiSo Uncensored"}
-    - {id: 437, cat: XXX, desc: "AV(有碼)/DVDiSo Censored"}
-    - {id: 431, cat: XXX, desc: "AV(有碼)/Blu-Ray Censored"}
-    - {id: 432, cat: XXX, desc: "AV(無碼)/Blu-Ray Uncensored"}
-    - {id: 436, cat: XXX, desc: "AV(網站)/0Day"}
-    - {id: 425, cat: XXX, desc: "IV(寫真影集)/Video Collection"}
-    - {id: 433, cat: XXX, desc: "IV(寫真圖集)/Picture Collection"}
-    - {id: 411, cat: XXX, desc: "H-Game(遊戲)"}
-    - {id: 412, cat: XXX, desc: "H-Anime(動畫)"}
-    - {id: 413, cat: XXX, desc: "H-Comic(漫畫)"}
+    - {id: 410, cat: XXX, desc: "AV(有碼)/HD Censored", default: false}
+    - {id: 429, cat: XXX, desc: "AV(無碼)/HD Uncensored", default: false}
+    - {id: 424, cat: XXX, desc: "AV(有碼)/SD Censored", default: false}
+    - {id: 430, cat: XXX, desc: "AV(無碼)/SD Uncensored", default: false}
+    - {id: 426, cat: XXX, desc: "AV(無碼)/DVDiSo Uncensored", default: false}
+    - {id: 437, cat: XXX, desc: "AV(有碼)/DVDiSo Censored", default: false}
+    - {id: 431, cat: XXX, desc: "AV(有碼)/Blu-Ray Censored", default: false}
+    - {id: 432, cat: XXX, desc: "AV(無碼)/Blu-Ray Uncensored", default: false}
+    - {id: 436, cat: XXX, desc: "AV(網站)/0Day", default: false}
+    - {id: 425, cat: XXX, desc: "IV(寫真影集)/Video Collection", default: false}
+    - {id: 433, cat: XXX, desc: "IV(寫真圖集)/Picture Collection", default: false}
+    - {id: 411, cat: XXX, desc: "H-Game(遊戲)", default: false}
+    - {id: 412, cat: XXX, desc: "H-Anime(動畫)", default: false}
+    - {id: 413, cat: XXX, desc: "H-Comic(漫畫)", default: false}
 
   modes:
     search: [q]
@@ -115,7 +116,7 @@ download:
 search:
   paths:
     - path: torrents.php
-      categories: ["!", 410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413, 406, 408, 434]
+      categories: [401, 419, 420, 421, 439, 403, 402, 435, 438, 404, 405, 407, 422, 423, 427, 409]
     - path: adult.php
       categories: [410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
     - path: music.php

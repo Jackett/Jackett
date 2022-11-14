@@ -5,47 +5,48 @@ description: "Majomparádé (TurkDepo) is a HUNGARIAN Private Torrent Tracker fo
 language: hu-HU
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://majomparade.eu/
 
 caps:
   categorymappings:
-    - {id: 4, cat: Movies/3D, desc: "3D/Magyar"}
-    - {id: 5, cat: Movies/3D, desc: "3D/Külföldi"}
-    - {id: 48, cat: Movies/HD, desc: "Film/BR-BDRIP/Külföldi"}
-    - {id: 50, cat: Movies/HD, desc: "Film/BR-BDRIP/Magyar"}
-    - {id: 75, cat: Movies/SD, desc: "Film/Cam/Külföldi"}
-    - {id: 76, cat: Movies/SD, desc: "Film/Cam/Magyar"}
-    - {id: 26, cat: Movies/DVD, desc: "Film/DVD/Külföldi"}
-    - {id: 25, cat: Movies/DVD, desc: "Film/DVD/Magyar"}
-    - {id: 58, cat: Movies/DVD, desc: "Film/DVD9/Külföld"}
-    - {id: 59, cat: Movies/DVD, desc: "Film/DVD9/Magyar"}
-    - {id: 42, cat: Movies/HD, desc: "Film/HD/Külföldi"}
-    - {id: 51, cat: Movies/HD, desc: "Film/HD/Magyar"}
-    - {id: 38, cat: Movies/SD, desc: "Film/XviD/Külföldi"}
-    - {id: 24, cat: Movies/SD, desc: "Film/XviD/Magyar"}
-    - {id: 85, cat: TV/Sport, desc: "Sport/Külföldi"}
-    - {id: 87, cat: TV/Sport, desc: "Sport/Magyar"}
-    - {id: 47, cat: TV/SD, desc: "Sorozat/Külföldi"}
-    - {id: 36, cat: TV/SD, desc: "Sorozat/Magyar"}
-    - {id: 6, cat: TV/HD, desc: "Sorozat/HD/Magyar"}
-    - {id: 7, cat: TV/HD, desc: "Sorozat/HD/Külföldi"}
-    - {id: 56, cat: Audio/Audiobook, desc: "Hangoskönyv"}
-    - {id: 33, cat: Books, desc: "Könyv/Külföldi"}
-    - {id: 44, cat: Books, desc: "Könyv/Magyar"}
-    - {id: 28, cat: PC/Games, desc: "Játék/ISO"}
-    - {id: 32, cat: Console, desc: "Játék/Konzol"}
-    - {id: 30, cat: PC/Games, desc: "Játék/RIP"}
-    - {id: 53, cat: Audio/Lossless, desc: "Lossless/Külföldi"}
-    - {id: 74, cat: Audio/Lossless, desc: "Lossless/Magyar"}
-    - {id: 40, cat: Audio/Other, desc: "Zene/Külföldi"}
-    - {id: 41, cat: Audio/Other, desc: "Zene/Magyar"}
-    - {id: 34, cat: PC/Mobile-Other, desc: "Mobil"}
-    - {id: 35, cat: PC/ISO, desc: "Programok/ISO"}
-    - {id: 46, cat: PC/0day, desc: "Programok/RIP"}
-    - {id: 70, cat: XXX/DVD, desc: "XXX/DVD"}
-    - {id: 39, cat: XXX/XviD, desc: "XXX/XviD"}
-    - {id: 57, cat: XXX, desc: "XXX/HD"}
+    - {id: 4, cat: Movies/3D, desc: "3D/Magyar", default: true}
+    - {id: 5, cat: Movies/3D, desc: "3D/Külföldi", default: true}
+    - {id: 48, cat: Movies/HD, desc: "Film/BR-BDRIP/Külföldi", default: true}
+    - {id: 50, cat: Movies/HD, desc: "Film/BR-BDRIP/Magyar", default: true}
+    - {id: 75, cat: Movies/SD, desc: "Film/Cam/Külföldi", default: true}
+    - {id: 76, cat: Movies/SD, desc: "Film/Cam/Magyar", default: true}
+    - {id: 26, cat: Movies/DVD, desc: "Film/DVD/Külföldi", default: true}
+    - {id: 25, cat: Movies/DVD, desc: "Film/DVD/Magyar", default: true}
+    - {id: 58, cat: Movies/DVD, desc: "Film/DVD9/Külföld", default: true}
+    - {id: 59, cat: Movies/DVD, desc: "Film/DVD9/Magyar", default: true}
+    - {id: 42, cat: Movies/HD, desc: "Film/HD/Külföldi", default: true}
+    - {id: 51, cat: Movies/HD, desc: "Film/HD/Magyar", default: true}
+    - {id: 38, cat: Movies/SD, desc: "Film/XviD/Külföldi", default: true}
+    - {id: 24, cat: Movies/SD, desc: "Film/XviD/Magyar", default: true}
+    - {id: 85, cat: TV/Sport, desc: "Sport/Külföldi", default: true}
+    - {id: 87, cat: TV/Sport, desc: "Sport/Magyar", default: true}
+    - {id: 47, cat: TV/SD, desc: "Sorozat/Külföldi", default: true}
+    - {id: 36, cat: TV/SD, desc: "Sorozat/Magyar", default: true}
+    - {id: 6, cat: TV/HD, desc: "Sorozat/HD/Magyar", default: true}
+    - {id: 7, cat: TV/HD, desc: "Sorozat/HD/Külföldi", default: true}
+    - {id: 56, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
+    - {id: 33, cat: Books, desc: "Könyv/Külföldi", default: true}
+    - {id: 44, cat: Books, desc: "Könyv/Magyar", default: true}
+    - {id: 28, cat: PC/Games, desc: "Játék/ISO", default: true}
+    - {id: 32, cat: Console, desc: "Játék/Konzol", default: true}
+    - {id: 30, cat: PC/Games, desc: "Játék/RIP", default: true}
+    - {id: 53, cat: Audio/Lossless, desc: "Lossless/Külföldi", default: true}
+    - {id: 74, cat: Audio/Lossless, desc: "Lossless/Magyar", default: true}
+    - {id: 40, cat: Audio/Other, desc: "Zene/Külföldi", default: true}
+    - {id: 41, cat: Audio/Other, desc: "Zene/Magyar", default: true}
+    - {id: 34, cat: PC/Mobile-Other, desc: "Mobil", default: true}
+    - {id: 35, cat: PC/ISO, desc: "Programok/ISO", default: true}
+    - {id: 46, cat: PC/0day, desc: "Programok/RIP", default: true}
+    - {id: 70, cat: XXX/DVD, desc: "XXX/DVD", default: false}
+    - {id: 39, cat: XXX/XviD, desc: "XXX/XviD", default: false}
+    - {id: 57, cat: XXX, desc: "XXX/HD", default: false}
 
   modes:
     search: [q]
@@ -81,11 +82,11 @@ login:
 search:
   paths:
     - path: letoltes.php
-      categories: ["!", 70, 39, 57]
+      categories: [4, 5, 48, 50, 75, 76, 26, 25, 58, 59, 42, 51, 38, 24, 85, 87, 47, 36, 6, 7, 56, 33, 44, 28, 32, 30, 53, 74, 40, 41, 34, 35, 46]
       inputs:
         tipus: 1
     - path: letoltes.php
-      categories: ["!", 70, 39, 57]
+      categories: [4, 5, 48, 50, 75, 76, 26, 25, 58, 59, 42, 51, 38, 24, 85, 87, 47, 36, 6, 7, 56, 33, 44, 28, 32, 30, 53, 74, 40, 41, 34, 35, 46]
       inputs:
         tipus: 2
     - path: xxx.php

@@ -5,42 +5,43 @@ description: "Carp-Hunter is a HUNGARIAN Private Torrent Tracker for MOVIES / TV
 language: hu-HU
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://carp-hunter.hu/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies/SD, desc: "Film/Cam/Eng"}
-    - {id: 2, cat: Movies/SD, desc: "Film/Cam/Hun"}
-    - {id: 8, cat: Movies/DVD, desc: "Film/DVD/Eng"}
-    - {id: 7, cat: Movies/DVD, desc: "Film/DVD/Hun"}
-    - {id: 16, cat: Movies/HD, desc: "Film/HD1080P/Eng"}
-    - {id: 15, cat: Movies/HD, desc: "Film/HD1080P/Hun"}
-    - {id: 14, cat: Movies/HD, desc: "Film/HD720P/Eng"}
-    - {id: 13, cat: Movies/HD, desc: "Film/HD720P/Hun"}
-    - {id: 4, cat: Movies/SD, desc: "Film/SD/Eng"}
-    - {id: 3, cat: Movies/SD, desc: "Film/SD/Hun"}
-    - {id: 18, cat: Movies/UHD, desc: "Film/UHD/Eng"}
-    - {id: 17, cat: Movies/UHD, desc: "Film/UHD/Hun"}
-    - {id: 23, cat: Audio/Audiobook, desc: "Hangosköny"}
-    - {id: 19, cat: PC/Games, desc: "Játék/ISO"}
-    - {id: 20, cat: PC/Games, desc: "Játék/RIP"}
-    - {id: 24, cat: Other, desc: "Képek"}
-    - {id: 21, cat: Books, desc: "Könyv/Eng"}
-    - {id: 22, cat: Books, desc: "Könyv/Hun"}
-    - {id: 35, cat: TV/Anime, desc: "Mese/Eng"}
-    - {id: 36, cat: TV/Anime, desc: "Mese/Hun"}
-    - {id: 25, cat: PC/Mobile-Other, desc: "Mobil"}
-    - {id: 30, cat: PC/ISO, desc: "Programok/ISO"}
-    - {id: 31, cat: PC/0day, desc: "Programok/RIP"}
-    - {id: 33, cat: TV, desc: "Sorozat/Eng"}
-    - {id: 32, cat: TV, desc: "Sorozat/Hun"}
-    - {id: 29, cat: Audio/Lossless, desc: "Zene/FLAC/Eng"}
-    - {id: 28, cat: Audio/Lossless, desc: "Zene/FLAC/Hun"}
-    - {id: 27, cat: Audio/MP3, desc: "Zene/MP3/Eng"}
-    - {id: 26, cat: Audio/MP3, desc: "Zene/MP3/Hun"}
-    - {id: 34, cat: XXX, desc: "XXX/Filmek"}
-    - {id: 39, cat: XXX/ImageSet, desc: "XXX/Képek"}
+    - {id: 1, cat: Movies/SD, desc: "Film/Cam/Eng", default: true}
+    - {id: 2, cat: Movies/SD, desc: "Film/Cam/Hun", default: true}
+    - {id: 8, cat: Movies/DVD, desc: "Film/DVD/Eng", default: true}
+    - {id: 7, cat: Movies/DVD, desc: "Film/DVD/Hun", default: true}
+    - {id: 16, cat: Movies/HD, desc: "Film/HD1080P/Eng", default: true}
+    - {id: 15, cat: Movies/HD, desc: "Film/HD1080P/Hun", default: true}
+    - {id: 14, cat: Movies/HD, desc: "Film/HD720P/Eng", default: true}
+    - {id: 13, cat: Movies/HD, desc: "Film/HD720P/Hun", default: true}
+    - {id: 4, cat: Movies/SD, desc: "Film/SD/Eng", default: true}
+    - {id: 3, cat: Movies/SD, desc: "Film/SD/Hun", default: true}
+    - {id: 18, cat: Movies/UHD, desc: "Film/UHD/Eng", default: true}
+    - {id: 17, cat: Movies/UHD, desc: "Film/UHD/Hun", default: true}
+    - {id: 23, cat: Audio/Audiobook, desc: "Hangosköny", default: true}
+    - {id: 19, cat: PC/Games, desc: "Játék/ISO", default: true}
+    - {id: 20, cat: PC/Games, desc: "Játék/RIP", default: true}
+    - {id: 24, cat: Other, desc: "Képek", default: true}
+    - {id: 21, cat: Books, desc: "Könyv/Eng", default: true}
+    - {id: 22, cat: Books, desc: "Könyv/Hun", default: true}
+    - {id: 35, cat: TV/Anime, desc: "Mese/Eng", default: true}
+    - {id: 36, cat: TV/Anime, desc: "Mese/Hun", default: true}
+    - {id: 25, cat: PC/Mobile-Other, desc: "Mobil", default: true}
+    - {id: 30, cat: PC/ISO, desc: "Programok/ISO", default: true}
+    - {id: 31, cat: PC/0day, desc: "Programok/RIP", default: true}
+    - {id: 33, cat: TV, desc: "Sorozat/Eng", default: true}
+    - {id: 32, cat: TV, desc: "Sorozat/Hun", default: true}
+    - {id: 29, cat: Audio/Lossless, desc: "Zene/FLAC/Eng", default: true}
+    - {id: 28, cat: Audio/Lossless, desc: "Zene/FLAC/Hun", default: true}
+    - {id: 27, cat: Audio/MP3, desc: "Zene/MP3/Eng", default: true}
+    - {id: 26, cat: Audio/MP3, desc: "Zene/MP3/Hun", default: true}
+    - {id: 34, cat: XXX, desc: "XXX/Filmek", default: false}
+    - {id: 39, cat: XXX/ImageSet, desc: "XXX/Képek", default: false}
 
   modes:
     search: [q]
@@ -88,7 +89,7 @@ login:
 search:
   paths:
     - path: browse.php
-      categories: ["!", 34, 39]
+      categories: [1, 2, 8, 7, 16, 15, 14, 13, 4, 3, 18, 17, 23, 19, 20, 24, 21, 22, 35, 36, 25, 30, 31, 33, 32, 29, 28, 27, 26]
     - path: browse.php
       categories: [34, 39]
       inputs:
@@ -146,6 +147,8 @@ search:
     date:
       selector: td:nth-last-child(8)
       filters:
+        - name: regexp
+          args: (\d{4}-\d{2}-\d{2}.\d{2}:\d{2}:\d{2})
         - name: replace
           args: ["\u00a0", " "]
         - name: append

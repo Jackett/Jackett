@@ -5,20 +5,21 @@ description: "海棠PT (Hǎitáng PT) is a CHINESE Private Torrent Tracker for O
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://www.htpt.cc/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Audio, desc: "相声 Crosstalk"}
-    - {id: 4091, cat: Audio, desc: "评书 Storytelling"}
-    - {id: 4097, cat: Audio, desc: "戏曲 Opera"}
-    - {id: 4098, cat: Audio, desc: "鼓/琴 Drum / Piano"}
-    - {id: 4099, cat: Audio, desc: "小曲 Small Song"}
-    - {id: 4101, cat: Audio, desc: "小品 Sketch"}
-    - {id: 4104, cat: Audio, desc: "二人转 Duets"}
-    - {id: 4105, cat: TV, desc: "小剧种 Puppet shows"}
-    - {id: 4103, cat: Audio/Audiobook, desc: "广播剧 Audiobooks"}
+    - {id: 1, cat: Audio, desc: "相声 Crosstalk", default: true}
+    - {id: 4091, cat: Audio, desc: "评书 Storytelling", default: true}
+    - {id: 4097, cat: Audio, desc: "戏曲 Opera", default: true}
+    - {id: 4098, cat: Audio, desc: "鼓/琴 Drum / Piano", default: true}
+    - {id: 4099, cat: Audio, desc: "小曲 Small Song", default: true}
+    - {id: 4101, cat: Audio, desc: "小品 Sketch", default: true}
+    - {id: 4104, cat: Audio, desc: "二人转 Duets", default: true}
+    - {id: 4105, cat: TV, desc: "小剧种 Puppet shows", default: true}
+    - {id: 4103, cat: Audio/Audiobook, desc: "广播剧 Audiobooks", default: false}
 
   modes:
     search: [q]
@@ -77,7 +78,7 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: ["!", 4103]
+      categories: [1, 4091, 4097, 4098, 4099, 4101, 4104, 4105]
     - path: live.php
       categories: [4103]
   inputs:
