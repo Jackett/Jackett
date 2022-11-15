@@ -417,23 +417,23 @@ namespace Jackett.Common.Indexers
 
         private static TorznabQuery ParseQuery(TorznabQuery query)
         {
-            // Eg. Marco.Polo.2014.S02E08
+            // Eg. Doctor.Who.2005.(Доктор.Кто).S02E08
 
             // the season/episode part is already parsed by Jackett
-            // query.SanitizedSearchTerm = Marco.Polo.2014.
+            // query.GetQueryString = Doctor.Who.2005.(Доктор.Кто).
             // query.Season = 2
             // query.Episode = 8
-            var searchTerm = query.SanitizedSearchTerm;
+            var searchTerm = query.GetQueryString();
 
-            // replace punctuation symbols with spaces
-            // searchTerm = Marco Polo 2014
-            searchTerm = Regex.Replace(searchTerm, @"[-._\(\)@/\\\[\]\+\%]", " ");
+            // replace non-english alphanumeric characters with spaces
+            // searchTerm = Doctor Who 2005
+            searchTerm = Regex.Replace(searchTerm, @"[^a-zA-Z0-9]+", " ");
             searchTerm = Regex.Replace(searchTerm, @"\s+", " ");
             searchTerm = searchTerm.Trim();
 
             // we parse the year and remove it from search
-            // searchTerm = Marco Polo
-            // query.Year = 2014
+            // searchTerm = Doctor Who
+            // query.Year = 2005
             var r = new Regex("([ ]+([0-9]{4}))$", RegexOptions.IgnoreCase);
             var m = r.Match(searchTerm);
             if (m.Success)
