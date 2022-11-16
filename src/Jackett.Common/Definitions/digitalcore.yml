@@ -37,8 +37,11 @@ caps:
     - {id: 39, cat: Audio/Video, desc: Music/DVD}
     - {id: 40, cat: Audio/Video, desc: Music/Bluray}
     - {id: 25, cat: PC/Games, desc: Games/PC}
-    - {id: 26, cat: Console, desc: Games/NSW}
     - {id: 27, cat: PC/Mac, desc: Games/Mac}
+    - {id: 26, cat: Console, desc: Games/Consoles}
+    - {id: 43, cat: Console, desc: Games/ROMS}
+    - {id: 42, cat: XXX/Other, desc: Games/XXX}
+    - {id: 44, cat: Audio/Audiobook, desc: Audiobooks}
     - {id: 28, cat: Books/EBook, desc: Ebooks}
     - {id: 30, cat: XXX/SD, desc: XXX/SD}
     - {id: 31, cat: XXX, desc: XXX/HD}
