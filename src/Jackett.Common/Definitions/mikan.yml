@@ -21,34 +21,46 @@ settings: []
 search:
   paths:
     # https://mikanani.me/Home/Search?searchstr=%E5%90%8D%E4%BE%A6%E6%8E%A2%E6%9F%AF%E5%8D%97
-    - path: "Home/Search?searchstr={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    - path: "Home/{{ if .Keywords }}Search?searchstr={{ .Keywords }}{{ else }}Classic{{ end }}"
 
   rows:
-    selector: table.table-striped tbody tr.js-search-results-row
+    selector: table.table-striped tbody tr
 
   fields:
     category:
       text: 1
     title:
-      selector: a.magnet-link-wrap
+      selector: a[href^="/Home/Episode/"]
     details:
-      selector: a.magnet-link-wrap
+      selector: a[href^="/Home/Episode/"]
       attribute: href
     download:
       selector: a[href^="/Download/"]
       attribute: href
     magnet:
-      selector: a[data-clipboard-text^="magnet:?xt="]
+      selector: a[data-clipboard-text]
       attribute: data-clipboard-text
-    date:
-      selector: td:nth-child(3)
+    date_day:
+      selector: td:nth-child(1):contains("今天"), td:nth-child(1):contains("昨天")
+      optional: true
+      filters:
+        - name: replace
+          args: ["昨天", "Yesterday"]
+        - name: replace
+          args: ["今天", "Today"]
+        - name: fuzzytime
+    date_year:
+      selector: td:nth-child(3):not(:has(a))
+      optional: true
       filters:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "2006/01/02 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(2)
+      selector: td:has(a[data-clipboard-text]) ~ td
     seeders:
       text: 1
     leechers:
