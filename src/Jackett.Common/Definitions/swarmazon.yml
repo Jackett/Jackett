@@ -85,6 +85,14 @@ search:
     download:
       selector: a[href^="/api/download.php?hash="]
       attribute: href
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.+?) "
+        - name: replace
+          args: ["/images/no_poster.jpg", ""]
     size:
       selector: td:nth-last-child(6)
     date:
@@ -108,4 +116,4 @@ search:
       text: 1
     minimumratio:
       text: 1.1
-# Engine n/a
+# v1.22.0620
