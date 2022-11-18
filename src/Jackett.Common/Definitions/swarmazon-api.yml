@@ -1,0 +1,111 @@
+---
+id: swarmazon-api
+name: Swarmazon (API)
+description: "Swarmazon is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://swarmazon.club/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "Television"}
+    - {id: 3, cat: Other, desc: "Video Courses"}
+    - {id: 4, cat: Audio, desc: "Music"}
+    - {id: 5, cat: PC/Games, desc: "Games"}
+    - {id: 6, cat: PC, desc: "Software"}
+    - {id: 7, cat: TV/Anime, desc: "Anime"}
+    - {id: 8, cat: Books/EBook, desc: "E-Books"}
+    - {id: 9, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 10, cat: Books/Comics, desc: "Comics"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing the <a href=\"https://swarmazon.club/en/view/settings.php?section=token\" target =_blank>Token Setting</a> page."
+
+login:
+  path: api/search.php
+  method: get
+  inputs:
+    api_key: "{{ .Config.apikey }}"
+    limit: 1
+  error:
+    - selector: ":root:contains(\"Invalid API key\")"
+
+search:
+  paths:
+    - path: api/search.php
+      response:
+        type: json
+
+  inputs:
+    api_key: "{{ .Config.apikey }}"
+    filter: "{{ .Keywords }}"
+    $raw: "{{ if .Query.IMDBID }}&media_ref={{ .Query.IMDBID }}{{ else }}{{ end }}"
+    limit: 100
+
+  rows:
+    selector: data
+
+  fields:
+    category:
+      selector: categoryid
+    title:
+      selector: name
+    details:
+      selector: torrent
+    download:
+      selector: download
+    poster:
+      selector: media_poster
+      filters:
+        - name: replace
+          args: ["N\/A", ""]
+    genre:
+      selector: media_genre
+    description:
+      text: "{{ .Result.genre }}"
+    infohash:
+      selector: hash
+    imdbid:
+      selector: ref_id:contains(tt)
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: completed
+    date:
+      # 2022-11-16 22:49:25
+      selector: upload_timestamp
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    size:
+      selector: size
+    downloadvolumefactor:
+      selector: freeleech
+      case:
+        no: 1 # not free
+        "*": 0 # freeleech
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.1
+# json v1.22.0620
