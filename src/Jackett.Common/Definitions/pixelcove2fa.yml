@@ -146,14 +146,27 @@ search:
           args: ["/static/common/noartwork/noimage.png", ""]
     files:
       selector: td:nth-child(3)
-    date:
-      selector: td:nth-child(5) > span
-      attribute: title
+    date_elapsed:
+      # <td class="nobr"><span class="time" alt="1 month ago" title="1 month ago">Oct 01 2022, 18:41</span></td>
+      selector: td:nth-child(5) > span:not(:contains("ago"))
+      optional: true
       filters:
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
           args: "Jan 02 2006, 15:04 -07:00"
+    date_added:
+    # <td class="nobr"><span class="time" alt="Nov 17 2022, 01:44" title="Nov 17 2022, 01:44">13 hours ago</span></td>
+      selector: td:nth-child(5) > span:contains("ago")
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "Jan 02 2006, 15:04 -07:00"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(6)
     grabs:
