@@ -13,7 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     # Movies
-    - {id: 73, cat: Movies, desc: "סרטים"}
+    - {id: 73, cat: Movies, desc: "FuzePacks -סרטים"}
     - {id: 7, cat: Movies/SD, desc: "סרטים"}
     - {id: 60, cat: Movies/SD, desc: "סרטים ישראליים"}
     - {id: 9, cat: Movies/HD, desc: "סרטים HD"}
@@ -24,7 +24,7 @@ caps:
     - {id: 58, cat: Movies/DVD, desc: "סרטים DVD-R"}
     - {id: 83, cat: Movies/Other, desc: "סרטים מדובבים"}
     # TV
-    - {id: 76, cat: TV, desc: "סדרות"}
+    - {id: 76, cat: TV, desc: "FuzePacks - סדרות"}
     - {id: 8, cat: TV/SD, desc: "סדרות"}
     - {id: 62, cat: TV/SD, desc: "סדרות ישראליות"}
     - {id: 10, cat: TV/HD, desc: "Tסדרות HD"}
@@ -34,7 +34,7 @@ caps:
     - {id: 65, cat: TV/Anime, desc: "אנימה"}
     - {id: 64, cat: TV/Sport, desc: "ספורט"}
     # PC
-    - {id: 74, cat: PC, desc: "תוכנות"}
+    - {id: 74, cat: PC, desc: "FuzePacks - תוכנות"}
     - {id: 15, cat: PC/0day, desc: "תוכנות PC"}
     - {id: 11, cat: PC/Games, desc: "משחקים PC"}
     - {id: 13, cat: PC/Mobile-Android, desc: "אפליקציות לאנדרואיד"}
@@ -43,13 +43,13 @@ caps:
     # XXX
     - {id: 16, cat: XXX, desc: "למבוגרים בלבד"}
     # Games
-    - {id: 72, cat: Console, desc: "משחקים"}
+    - {id: 72, cat: Console, desc: "FuzePacks - משחקים"}
     - {id: 55, cat: Console/XBox, desc: "משחקים XBOX"}
     - {id: 12, cat: Console/PSP, desc: "משחקים PS"}
     - {id: 56, cat: Console/Wii, desc: "משחקים WII"}
     - {id: 57, cat: PC/Mobile-Other, desc: "משחקי קונסולות ניידות"}
     # Music
-    - {id: 75, cat: Audio, desc: "שירים"}
+    - {id: 75, cat: Audio, desc: "FuzePacks - שירים"}
     - {id: 14, cat: Audio, desc: "מוזיקה עולמית"}
     - {id: 66, cat: Audio, desc: "מוזיקה ישראלית"}
     - {id: 68, cat: Audio, desc: "פסקולים"}
@@ -116,17 +116,19 @@ search:
     $raw: "{{ range .Categories }}c[]={{.}}&{{end}}"
 
   rows:
-    selector: .box_torrent
+    # Others, Classic
+    selector: .box_torrent, table.tborder[align="center"][border="0"][cellpadding="0"][cellspacing="1"][class="tborder"][width="100%"] > tbody > tr:has(a[href^="/attachment.php?"])
 
   fields:
     category:
-      selector: a[href^="/browse.php?cat="]
+      # Others, Classic
+      selector: a[href^="/browse.php?cat="], a[href^="/browse.php?r3=1&cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: .main_title
+      selector: a[href^="/showthread.php?t="]
     details:
       selector: a[href^="/showthread.php?t="]
       attribute: href
@@ -134,30 +136,30 @@ search:
       selector: a[href^="/attachment.php?attachmentid="]
       attribute: href
     imdbid:
-      selector: span.imdb-inline > a
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
       selector: a[imgsrc]
       attribute: imgsrc
     size:
-      selector: td:nth-child(4)
+      selector: td:nth-last-child(4)
     grabs:
-      selector: td:nth-child(5)
+      selector: td:nth-last-child(3)
       filters:
         - name: replace
           args: [",", ""]
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-last-child(2)
       filters:
         - name: replace
           args: [",", ""]
     leechers:
-      selector: td:nth-child(7)
+      selector: td:nth-last-child(1)
       filters:
         - name: replace
           args: [",", ""]
     date:
-      selector: .up_info2
+      selector: div[class^="up_info"]
       filters:
         - name: append
           args: " +02:00" # IST
