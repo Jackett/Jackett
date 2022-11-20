@@ -35,6 +35,7 @@ caps:
     - {id: 21, cat: Movies/WEB-DL, desc: "Movies Greek DVD/BD/BR-rip"}
     - {id: 22, cat: Movies/Other, desc: "Movies Greek Other"}
     - {id: 10, cat: Movies/HD, desc: "Movies HD Packs"}
+    - {id: 64, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 13, cat: Movies/Other, desc: "Movies Other"}
     - {id: 14, cat: Movies, desc: "Movies Packs"}
     - {id: 23, cat: Audio, desc: "Music DJs Stuff"}
@@ -58,6 +59,8 @@ caps:
     - {id: 34, cat: TV, desc: "TV Series Greek"}
     - {id: 35, cat: TV, desc: "TV Series Greek Packs"}
     - {id: 30, cat: TV/Sport, desc: "TV Sports"}
+    - {id: 65, cat: TV/UHD, desc: "TV Series 4K"}
+    - {id: 66, cat: TV/UHD, desc: "TV Series Pack 4K"}
 
   modes:
     search: [q]
