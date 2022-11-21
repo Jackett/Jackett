@@ -21,6 +21,7 @@ caps:
     - {id: 17, cat: Movies/Other, desc: "Cartoon Sub. Embed."}
     - {id: 31, cat: Movies/Other, desc: "Cartoon in Greek "}
     - {id: 107, cat: Movies/Other, desc: "Kids in Greek"}
+    - {id: 120, cat: Movies/Other, desc: "Cartoon Series"}
     - {id: 88, cat: Audio/Other, desc: "Music Kids"}
     # Movies Subs No Embed.
     - {id: 38, cat: Movies, desc: "Movies Subs No Embed."}
@@ -76,6 +77,7 @@ caps:
     - {id: 83, cat: Books/EBook, desc: "Ebooks"}
     - {id: 110, cat: Books/Mags, desc: "EMagazines"}
     - {id: 82, cat: Other, desc: "Pics & Images"}
+    - {id: 119, cat: Audio/Audiobook, desc: "Audio Books"}
     # Games
     - {id: 2, cat: PC/Games, desc: "Games"}
     - {id: 27, cat: PC/Games, desc: "PC"}
@@ -89,6 +91,7 @@ caps:
     - {id: 94, cat: Audio/Lossless, desc: "Foreign Flac"}
     - {id: 117, cat: Audio, desc: "Compact Disc Club"}
     - {id: 20, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 118, cat: Audio, desc: "Dream Radio Music"}
 
   modes:
     search: [q]
