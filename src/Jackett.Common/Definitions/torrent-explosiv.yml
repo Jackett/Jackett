@@ -47,7 +47,7 @@ caps:
     - {id: 176, cat: Console/Wii, desc: "Game Wii - Switch"}
     - {id: 222, cat: Console/NDS, desc: "Game NDS-3DS"}
     - {id: 177, cat: Console, desc: "Game Wimmelbild"}
-    - {id: 178, cat: Console/Other, desc: "Game Sonstieges"}
+    - {id: 178, cat: Console/Other, desc: "Game Sonstiges"}
     # Musik
     - {id: 187, cat: Audio, desc: "Musik Alben"}
     - {id: 188, cat: Audio, desc: "Musik Sampler"}
