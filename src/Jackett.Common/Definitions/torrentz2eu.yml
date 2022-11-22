@@ -35,37 +35,51 @@ settings:
     label: About Torrentz2eu Categories
     default: Torrentz2eu does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
+download:
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
+
 search:
   paths:
-    - path: data.php
-#    - path: kick.php
+    # https://torrentz2.pics/beta2/search.php?torrent-query=2022
+    - path: beta2/search.php
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    torrent-query: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
-    selector: table.table-bordered > tbody > tr:has(a[href^="magnet"])
-
+    selector: table#torrent-table > tbody > tr
   fields:
     category:
       text: 3
     title:
       selector: td:nth-child(1)
     details:
-      # no details page, default to sitelink
-      text: "{{ .Config.sitelink }}"
-    magnet:
-      selector: td:nth-child(6) a
-      attribute: href
-    date:
-      selector: td:nth-child(2)
+      # https://torrentz2.pics/beta2/page.php?url=9999999%2FThe-Torrent-file-name-goes-here%2F
+      selector: td:nth-child(6) button
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: "'(.+?)'"
+        - name: prepend
+          args: "{{ .Config.sitelink }}beta2/page.php?url="
+    download:
+      text: "{{ .Result.details }}"
     seeders:
-      selector: td:nth-child(3)
+      selector: td:nth-child(2)
     leechers:
-      selector: td:nth-child(4)
+      selector: td:nth-child(3)
     size:
+      selector: td:nth-child(4)
+    date:
       selector: td:nth-child(5)
+      filters:
+        - name: re_replace
+          args: ["(?i)(st|nd|rd|th|')", ""]
+        - name: dateparse
+          args: "Jan. 02 06"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       text: 1
-# engine n/a
+# beta2
