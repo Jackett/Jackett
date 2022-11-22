@@ -137,8 +137,11 @@ search:
   fields:
     category:
       selector: categoryID
-    title:
+    title_test: # title can be null #13736
       selector: name
+      optional: true
+    title:
+      text: "{{ if .Result.title_test }}{{ .Result.title_test }}{{ else }}TorrentLeech did not provide a title{{ end }}"
     _id:
       selector: fid
     _filename:
