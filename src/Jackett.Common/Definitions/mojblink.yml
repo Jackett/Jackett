@@ -1,0 +1,227 @@
+---
+id: mojblink
+name: MOJBLiNK
+description: "MOJBLiNK is a Private SLOVENIAN Torrent Tracker for MOVIES / TV / GENERAL"
+language: sl-SI
+type: private
+encoding: UTF-8
+links:
+  - https://www.mojblink.si/
+
+caps:
+  categorymappings:
+    - {id: 50, cat: Movies, desc: "BLiNK"}
+    - {id: 20, cat: Books/EBook, desc: "eBook eBOOK"}
+    - {id: 52, cat: Books/Other, desc: "eBook Education"}
+    - {id: 53, cat: Books/Mags, desc: "eBook Magazine"}
+    - {id: 62, cat: PC/Mobile-Android, desc: "GAMES Android"}
+    - {id: 12, cat: Console/NDS, desc: "GAMES Nintendo DS"}
+    - {id: 8, cat: PC/Games, desc: "GAMES PC"}
+    - {id: 7, cat: PC/Games, desc: "GAMES PCRip"}
+    - {id: 13, cat: Console/PS3, desc: "GAMES Playstation"}
+    - {id: 124, cat: Console/PS4, desc: "GAMES PS4"}
+    - {id: 16, cat: Console/PSP, desc: "GAMES PSP"}
+    - {id: 65, cat: Console/Wii, desc: "GAMES Wii"}
+    - {id: 15, cat: Console/XBox, desc: "GAMES Xbox"}
+    - {id: 21, cat: Other, desc: "IMAGES Pics"}
+    - {id: 68, cat: Other, desc: "IMAGES Wallpaper"}
+    - {id: 70, cat: Movies/SD, desc: "Impatient CAM"}
+    - {id: 71, cat: Movies/SD, desc: "Impatient DVDSCR"}
+    - {id: 72, cat: Movies/SD, desc: "Impatient TC"}
+    - {id: 73, cat: Movies/SD, desc: "Impatient TS"}
+    - {id: 75, cat: Movies/SD, desc: "Impatient WEBRip"}
+    - {id: 121, cat: Movies/UHD, desc: "MOVIES 4K"}
+    - {id: 6, cat: Movies, desc: "MOVIES Animation"}
+    - {id: 37, cat: TV/Anime, desc: "MOVIES Anime"}
+    - {id: 40, cat: Movies/BluRay, desc: "MOVIES BD25"}
+    - {id: 39, cat: Movies/BluRay, desc: "MOVIES BD50"}
+    - {id: 41, cat: Movies/BluRay, desc: "MOVIES BDRip"}
+    - {id: 4, cat: Movies/BluRay, desc: "MOVIES BluRay 1080p"}
+    - {id: 3, cat: Movies/BluRay, desc: "MOVIES BluRay 720p"}
+    - {id: 43, cat: Movies/BluRay, desc: "MOVIES BRRip x264"}
+    - {id: 44, cat: Movies/BluRay, desc: "MOVIES BRRip XviD"}
+    - {id: 25, cat: TV/Documentary, desc: "MOVIES Documentary"}
+    - {id: 46, cat: Movies/DVD, desc: "MOVIES DVD"}
+    - {id: 47, cat: Movies/DVD, desc: "MOVIES DVDRip x264"}
+    - {id: 115, cat: Movies/DVD, desc: "MOVIES DVDRip x265"}
+    - {id: 1, cat: Movies/DVD, desc: "MOVIES DVDRip XviD"}
+    - {id: 48, cat: Movies/DVD, desc: "MOVIES HD2DVD"}
+    - {id: 123, cat: Movies/HD, desc: "MOVIES HDRip"}
+    - {id: 74, cat: Movies/WEB-DL, desc: "MOVIES Web-DL"}
+    - {id: 120, cat: Movies/HD, desc: "MOVIES x265"}
+    - {id: 55, cat: Audio/Video, desc: "MUSIC BD"}
+    - {id: 23, cat: Audio/Video, desc: "MUSIC DVD"}
+    - {id: 56, cat: Audio/Lossless, desc: "MUSIC FLAC"}
+    - {id: 11, cat: Audio/MP3, desc: "MUSIC MP3"}
+    - {id: 57, cat: Audio/Video, desc: "MUSIC MP4"}
+    - {id: 58, cat: Audio/Video, desc: "MUSIC Video"}
+    - {id: 26, cat: PC/Mobile-Android, desc: "PROGRAM Android"}
+    - {id: 27, cat: PC/Mobile-iOS, desc: "PROGRAM iOS"}
+    - {id: 78, cat: PC, desc: "PROGRAM Linux"}
+    - {id: 79, cat: PC/Mac, desc: "PROGRAM Mac"}
+    - {id: 9, cat: PC/ISO, desc: "PROGRAM PC ISO"}
+    - {id: 80, cat: PC/0day, desc: "PROGRAM PC Win"}
+    - {id: 5, cat: TV/HD, desc: "TV HDTV"}
+    - {id: 82, cat: TV/HD, desc: "TV HDTVRip"}
+    - {id: 2, cat: TV/SD, desc: "TV TVRip"}
+    - {id: 125, cat: TV/WEB-DL, desc: "TV Web-DL"}
+    - {id: 85, cat: Movies/HD, desc: "UpLINK HEVC"}
+    - {id: 86, cat: Movies/HD, desc: "UpLINK MPEG4"}
+    - {id: 122, cat: XXX/Other, desc: "XXX Games"}
+    - {id: 88, cat: XXX/Other, desc: "XXX Magazine"}
+    - {id: 10, cat: XXX/x264, desc: "XXX Movies"}
+    - {id: 89, cat: XXX/Pack, desc: "XXX Packs"}
+    - {id: 90, cat: XXX/ImageSet, desc: "XXX Pics"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>50</b> on your account Personal Settings.</br>The Default is <i>30</i>
+  - name: info_xxx
+    type: info
+    label: XXX Results
+    default: To include XXX in results, tick the <b>View XXX Torrents</b> checkbox on your account Personal Settings.
+
+login:
+  path: login
+  method: form
+  form: form
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.content-wrapper:has(i.ico-not_warn)
+  test:
+    path: /
+    selector: a[href*="/odjava?hash_insert="]
+
+search:
+  paths:
+    # https://www.mojblink.si/brskanje?cat=0&search=justice+league&searchin=title&incldead=1&only_free=1&redir=no
+    - path: brskanje
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # title, titledescr, descr
+    searchin: "{{ if .Query.IMDBID }}descr{{ else }}title{{ end }}"
+    # 0 active, 1 all, 2 dead
+    incldead: 1
+    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    st: 1
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    redir: no
+
+  rows:
+    selector: div.bgPreview
+
+  fields:
+    category:
+      selector: a[href^="/brskanje/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: (\d+)
+    title:
+      selector: a[href^="/podrobnosti/"]
+      attribute: title
+    details:
+      selector: a[href^="/podrobnosti/"]
+      attribute: href
+    download:
+      selector: a[href^="/download/"]
+      attribute: href
+    poster:
+      selector: div.bgPreview
+      attribute: style
+      filters:
+        - name: regexp
+          args: "\\((.+?)\\)"
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    files:
+      selector: div.release-info__meta span
+    date_day:
+      # Naložen: Danes, 06:46:17
+      # Uploaded: Danes, 06:46:17
+      selector: div.release-info__meta:contains("Naložen:"):contains("Včeraj"), div.release-info__meta:contains("Naložen:"):contains("Danes"), div.release-info__meta:contains("Uploaded:"):contains("Včeraj"), div.release-info__meta:contains("Uploaded:"):contains("Danes")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Uploaded: ", ""]
+        - name: replace
+          args: ["Naložen: ", ""]
+        - name: replace
+          args: ["Včeraj,", "Yesterday"]
+        - name: replace
+          args: ["Danes,", "Today"]
+        - name: fuzzytime
+    date_year:
+      # Uploaded: 15.11.2022 07:24:18
+      # Naložen: 15.11.2022 07:24:18
+      selector: div.release-info__meta:contains("Naložen:"):contains("."), div.release-info__meta:contains("Uploaded:"):contains(".")
+      optional: true
+      filters:
+        - name: replace
+          args: ["Uploaded: ", ""]
+        - name: replace
+          args: ["Naložen: ", ""]
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "02.01.2006 15:04:05 -07:00"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    size:
+      selector: a[href^="/download/"]
+    seeders:
+      selector: span[title="Sejalci"], span[title="Seeders"]
+    leechers:
+      selector: span[title="Odjemalci"], span[title="Leechers"]
+    downloadvolumefactor:
+      case:
+        span.torrent-FL: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# engine n/a
