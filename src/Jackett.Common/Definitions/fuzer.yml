@@ -142,19 +142,19 @@ search:
       selector: a[imgsrc]
       attribute: imgsrc
     size:
-      selector: td:nth-last-child(4)
+      selector: td.inline_info:nth-last-child(4)
     grabs:
-      selector: td:nth-last-child(3)
+      selector: td.inline_info:nth-last-child(3)
       filters:
         - name: replace
           args: [",", ""]
     seeders:
-      selector: td:nth-last-child(2)
+      selector: td.inline_info:nth-last-child(2)
       filters:
         - name: replace
           args: [",", ""]
     leechers:
-      selector: td:nth-last-child(1)
+      selector: td.inline_info:nth-last-child(1)
       filters:
         - name: replace
           args: [",", ""]
