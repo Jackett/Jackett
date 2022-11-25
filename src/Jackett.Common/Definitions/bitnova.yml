@@ -1,0 +1,119 @@
+---
+id: bitnova
+name: BitNova
+description: "BitNova is a POLISH Semi-Private Torrent Tracker for 0DAY / GENERAL"
+language: pl-PL
+type: semi-private
+encoding: UTF-8
+links:
+  - https://bitnova.info/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: PC, desc: "Programy"}
+    - {id: 2, cat: PC/0day, desc: "Programy dla Windows"}
+    - {id: 3, cat: PC, desc: "Programy dla Linux"}
+    - {id: 4, cat: PC/Mac, desc: "Programy dla Mac"}
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
+    - {id: 6, cat: Books, desc: "eBooki"}
+    - {id: 8, cat: Movies, desc: "Dla dzieci"}
+    - {id: 9, cat: Movies, desc: "Filmy"}
+    - {id: 10, cat: Movies/SD, desc: "Filmy (S)VCD"}
+    - {id: 11, cat: Movies/SD, desc: "DivX/XviD"}
+    - {id: 12, cat: Movies/DVD, desc: "Filmy DVD"}
+    - {id: 13, cat: Movies/BluRay, desc: "Filmy HDDVD/BluRay"}
+    - {id: 14, cat: Movies/SD, desc: "Filmy RMVB"}
+    - {id: 15, cat: Movies/HD, desc: "Filmy x264"}
+    - {id: 342, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 16, cat: Console, desc: "Gry"}
+    - {id: 17, cat: Console, desc: "Gry na konsole"}
+    - {id: 18, cat: PC/Games, desc: "Gry komputerowe"}
+    - {id: 19, cat: PC/Mobile-Other, desc: "GSM/PDA"}
+    - {id: 20, cat: PC/Mobile-Other, desc: "GSM/PDA Dodatki"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "GSM/PDA Filmy"}
+    - {id: 22, cat: PC/Mobile-Other, desc: "GSM/PDA Gry"}
+    - {id: 23, cat: PC/Mobile-Other, desc: "GSM/PDA Programy"}
+    - {id: 24, cat: Audio, desc: "Muzyka"}
+    - {id: 25, cat: Audio/MP3, desc: "Muzyka Albumy"}
+    - {id: 26, cat: Audio/Video, desc: "Muzyka Teledyski/Koncerty"}
+    - {id: 27, cat: Other, desc: "Różne"}
+    - {id: 28, cat: TV/Sport, desc: "Sport"}
+    - {id: 29, cat: TV, desc: "TV"}
+    - {id: 30, cat: XXX, desc: "Erotyka"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: login.php?act=login
+  method: post
+  inputs:
+    login: "{{ .Config.username }}"
+    pass: "{{ .Config.password }}"
+    remember: 1
+  error:
+    - selector: div#errmsg
+  test:
+    path: /
+    selector: a[href^="/login.php?act=logout"]
+
+search:
+  paths:
+    - path: search
+  inputs:
+    q: "{{ if .Query.Keywords }}{{ .Query.Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    cid: 0
+
+  rows:
+    selector: table#searchRes > tbody > tr
+
+  fields:
+    category:
+      selector: a[href^="/torrenty/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: (\d+)-
+    title:
+      selector: a[href^="/torrent/"]
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="/torrent/"]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["/torrent/", "/torrent/download/"]
+    size:
+      selector: td:nth-last-child(5)
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    grabs:
+      selector: td:nth-last-child(2)
+    date:
+      selector: td:nth-last-child(1)
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+# engine v2.0
