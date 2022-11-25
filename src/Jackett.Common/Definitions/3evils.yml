@@ -25,6 +25,8 @@ caps:
     - {id: 29, cat: Movies, desc: "Movies/Packs"}
     - {id: 19, cat: Audio, desc: "Music/Packs"}
     - {id: 61, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: 85, cat: TV, desc: "TV/Kids"}
+    - {id: 85, cat: TV, desc: "TV/Packs"}
     - {id: 82, cat: TV/Sport, desc: "TV/Sports"}
     - {id: 36, cat: TV/HD, desc: "TV/x265"}
     - {id: 45, cat: TV/SD, desc: "TV/XViD"}
