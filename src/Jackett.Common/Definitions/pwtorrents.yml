@@ -6,9 +6,9 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - http://pwtorrents.net/
+  - https://pwtorrents.net/
 legacylinks:
-  - https://pwtorrents.net/ # site is forcing to http
+  - http://pwtorrents.net/
 
 caps:
   categorymappings:
