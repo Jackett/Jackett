@@ -116,7 +116,7 @@ search:
     searchscope: 1
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
   # does not support multi category filtering
   # does not support imdbid searches, does not return imdb link in results
   # does not support sorting
