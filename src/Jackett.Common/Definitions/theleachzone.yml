@@ -108,7 +108,7 @@ search:
 
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: table.table-bordered tr:has(a[href^="download.php?torrent="])
