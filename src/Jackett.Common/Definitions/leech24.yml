@@ -118,7 +118,7 @@ search:
 # but adding + to words causes 0 results, so we will add an andmatch since the default seems to be a keywords OR search.
 #  keywordsfilters:
 #    - name: re_replace
-#      args: ["(\\w+)", " +$1"] # prepend + to each word
+#      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: table.ttable_headinner tr.t-row:has(a[href^="download.php?id="])
