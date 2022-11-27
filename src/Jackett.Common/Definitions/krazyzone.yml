@@ -127,7 +127,7 @@ search:
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: table.ttable_headinner > tbody > tr:has(a[href^="download.php?id="])

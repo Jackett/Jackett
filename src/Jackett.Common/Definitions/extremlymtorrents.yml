@@ -114,7 +114,7 @@ search:
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: table.xtrz > tbody > tr[class^="ttable_col"]

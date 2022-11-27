@@ -1,7 +1,7 @@
 ---
 id: 3evils
-name: 3evils
-description: "3evils is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+name: 3Evils
+description: "3Evils is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
@@ -102,7 +102,7 @@ search:
 
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: table.table-bordered tbody tr:has(a[href^="download.php?torrent="])

@@ -131,7 +131,7 @@ search:
     freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: ul.TorrentList

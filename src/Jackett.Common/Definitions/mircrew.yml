@@ -120,7 +120,7 @@ search:
     - name: re_replace
       args: ["(?i)S0?(\\d{1,2})", "stagione $1"]
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
   inputs:
     keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     # all, any

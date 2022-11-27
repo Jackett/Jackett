@@ -380,7 +380,7 @@ search:
     allw: 1
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: tr[id^="tor_"]

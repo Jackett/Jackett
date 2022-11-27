@@ -72,7 +72,7 @@ search:
     - name: re_replace # E01 to [1 сери]
       args: ["(?i)E0*(\\d+)", "[$1 сери]"]
     - name: re_replace
-      args: ["(\\w+)", " %$1"] # prepend % to each word - allow 1 character keywords
+      args: ["(\\w+)", "%$1"] # prepend % to each word - allow 1 character keywords
   inputs:
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%%{{ end }}"
     # does not support multi category searches

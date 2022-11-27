@@ -115,7 +115,7 @@ search:
     order: "{{ .Config.type }}"
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: tr.t-row
