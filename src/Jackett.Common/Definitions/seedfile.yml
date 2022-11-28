@@ -1,0 +1,142 @@
+---
+id: seedfile
+name: SeedFile
+description: "SeedFile (SF) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
+language: ro-RO
+type: private
+encoding: UTF-8
+links:
+  - https://www.seedfile.io/
+legacylinks:
+  - https://www.seedfile.ro/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Books/Mags, desc: "Cărți/Reviste"}
+    - {id: 2, cat: Other, desc: "Desene SD"}
+    - {id: 3, cat: Other, desc: "Diverse n/a"}
+    - {id: 5, cat: Movies/BluRay, desc: "Filme Blu-Ray"}
+    - {id: 6, cat: Movies/DVD, desc: "Filme DVD"}
+    - {id: 7, cat: Movies/DVD, desc: "Filme DVD-RO"}
+    - {id: 8, cat: Movies/HD, desc: "Filme HD"}
+    - {id: 9, cat: Movies/HD, desc: "Filme HD-RO"}
+    - {id: 10, cat: Movies/SD, desc: "Filme SD"}
+    - {id: 11, cat: Movies/SD, desc: "Filme SD-RO"}
+    - {id: 12, cat: Other, desc: "Imagini"}
+    - {id: 13, cat: Console, desc: "Jocuri Console"}
+    - {id: 14, cat: PC/Games, desc: "Jocuri PC"}
+    - {id: 15, cat: Audio, desc: "Muzică"}
+    - {id: 16, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 17, cat: PC, desc: "Programe"}
+    - {id: 18, cat: TV/HD, desc: "Seriale HD"}
+    - {id: 19, cat: TV/HD, desc: "Seriale HD-RO"}
+    - {id: 20, cat: TV/SD, desc: "Seriale TV"}
+    - {id: 21, cat: TV/SD, desc: "Seriale TV-RO"}
+    - {id: 22, cat: TV/Sport, desc: "Sport"}
+    - {id: 23, cat: Audio/Video, desc: "Video Clip"}
+    - {id: 24, cat: XXX, desc: "Adult 18+"}
+    - {id: 36, cat: Movies/3D, desc: "Video 3D"}
+    - {id: 37, cat: Movies/HD, desc: "Animație HD"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.recover-error2
+  test:
+    path: profile.php
+
+download:
+  selectors:
+    - selector: a[href^="download.php/"]
+      attribute: href
+
+search:
+  paths:
+    - path: download-torrents
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+
+  rows:
+    selector: tr.browse
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src='(.+?)'"
+    genre:
+      selector: td.numele_tor small
+      filters:
+        - name: replace
+          args: ["Genre:\xA0", ""]
+    description:
+       text: "{{ .Result.genre }}"
+    files:
+      selector: td:nth-last-child(7)
+    date:
+      selector: td:nth-last-child(5)
+      filters:
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "15:04:052006-01-02 -07:00"
+    size:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        "img[src=\"./pic/freeleech.png\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a
