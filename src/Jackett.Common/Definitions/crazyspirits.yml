@@ -284,4 +284,7 @@ search:
       text: 1
     minimumratio:
       text: 1.0
+    minimumseedtime:
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TT3.1
