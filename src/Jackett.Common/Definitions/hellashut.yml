@@ -147,8 +147,11 @@ search:
 
   fields:
     category:
+      text: 56
+    category|noappend:
       selector: a[href*="cat="]
       attribute: href
+      optional: true
       filters:
         - name: querystring
           args: cat
