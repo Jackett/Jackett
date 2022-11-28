@@ -112,7 +112,7 @@ search:
         - name: replace
           args: ["Genre:\xA0", ""]
     description:
-       text: "{{ .Result.genre }}"
+      text: "{{ .Result.genre }}"
     files:
       selector: td:nth-last-child(7)
     date:
