@@ -21,6 +21,8 @@ namespace Jackett.Common.Indexers.Abstract
     public abstract class SpeedAppTracker : BaseWebIndexer
     {
         protected virtual bool UseP2PReleaseName => false;
+        protected virtual int minimumSeedTime => 172800; // 48h
+
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
             {"Accept", "application/json"},
@@ -166,7 +168,7 @@ namespace Jackett.Common.Indexers.Abstract
                         DownloadVolumeFactor = dlVolumeFactor,
                         UploadVolumeFactor = ulVolumeFactor,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800 // 48 hours
+                        MinimumSeedTime = minimumSeedTime
                     };
                     if (release.Genres == null)
                         release.Genres = new List<string>();
