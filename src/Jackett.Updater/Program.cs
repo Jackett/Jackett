@@ -470,6 +470,7 @@ namespace Jackett.Updater
                 "Definitions/pornolive.yml",
                 "Definitions/pornorip.yml",
                 "Definitions/portugas.yml", // switch to *-API #13542
+                "Definitions/prostylex.yml",
                 "Definitions/ps4-torrent.yml",
                 "Definitions/pt99.yml",
                 "Definitions/puurhollands.yml",
