@@ -7,8 +7,8 @@ type: public
 encoding: UTF-8
 links:
   - https://thepiratebay.org/
-  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ws/
-  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.pet/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ly/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.tor2web.to/
   - https://tpb24.ukpass.co/
   - https://thepiratebay.host/
   - https://thepiratebay.d4.re/
@@ -37,8 +37,6 @@ links:
   - https://piratebay.party/
   - https://thepiratebay.party/
 legacylinks:
-  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ly/
-  - https://pirateproxy.dev/
   - https://tpb19.ukpass.co/
   - https://pirateproxy.tube/
   - https://www.tpbay.win/
@@ -57,6 +55,8 @@ legacylinks:
   - https://gigatorrent.xyz/
   - https://thepirateb.xyz/
   - https://ezrasstuff.com/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ws/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.pet/
 
 caps:
   categorymappings:
