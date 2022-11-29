@@ -18,10 +18,11 @@ caps:
     - {id: 140, cat: TV/Documentary, desc: "Doku - SD"}
     - {id: 142, cat: TV/Documentary, desc: "Doku - Sonstige"}
     - {id: 120, cat: Books, desc: "Ebook"}
+    - {id: 135, cat: Movies/UHD, desc: "Filme - 2160p"}
     - {id: 131, cat: TV/Anime, desc: "Filme - Animie"}
     - {id: 101, cat: Movies/BluRay, desc: "Filme - Blue Ray"}
     - {id: 102, cat: Movies/Other, desc: "Filme - Bollywood"}
-    - {id: 103, cat: Movies/DVD, desc: "Filme - DVD"}
+    - {id: 149, cat: Movies/DVD, desc: "Filme - DVD"}
     - {id: 104, cat: Movies/DVD, desc: "Filme - DVD-R"}
     - {id: 135, cat: Movies/HD, desc: "Filme - HD"}
     - {id: 130, cat: Movies, desc: "Filme - Klassiker"}
