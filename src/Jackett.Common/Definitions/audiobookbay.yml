@@ -120,14 +120,16 @@ search:
     # with just 7 results per page, try to grab up to 35 results
     # http://audiobookbay.nl/?s=teeth
     # http://audiobookbay.nl/page/2/?s=teeth
-    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/2/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/3/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/4/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/5/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}?s={{ .Keywords }}&tt=1{{ else }}{{ end }}"
+    - path: "page/2/{{ if .Keywords }}?s={{ .Keywords }}&tt=1{{ else }}{{ end }}"
+    - path: "page/3/{{ if .Keywords }}?s={{ .Keywords }}&tt=1{{ else }}{{ end }}"
+    - path: "page/4/{{ if .Keywords }}?s={{ .Keywords }}&tt=1{{ else }}{{ end }}"
+    - path: "page/5/{{ if .Keywords }}?s={{ .Keywords }}&tt=1{{ else }}{{ end }}"
 
   rows:
     selector: div.post:has(div[class="postTitle"])
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -135,8 +137,27 @@ search:
       filters:
         - name: regexp
           args: "Category: (.+?)\\s"
+    _format:
+      optional: true
+      selector: div.postContent
+      filters:
+        - name: regexp
+          args: "Format: (.+?) /"
+        - name: replace
+          args: ["?", ""]
+    _bitrate:
+      optional: true
+      selector: div.postContent
+      filters:
+        - name: regexp
+          args: "Bitrate: (.+?)File"
+        - name: replace
+          args: ["?", ""]
     title:
       selector: div.postTitle
+      filters:
+        - name: append
+          args: "{{ if .Result._format }} [{{ .Result._format }}]{{ else }}{{ end }}{{ if .Result._bitrate }} [{{ .Result._bitrate }}]{{ else }}{{ end }}"
     details:
       selector: div.postTitle h2 a
       attribute: href
@@ -163,11 +184,7 @@ search:
         - name: regexp
           args: "File Size: (.+?)$"
         - name: replace
-          args: ["MBs", "MB"]
-        - name: replace
-          args: ["GBs", "GB"]
-        - name: replace
-          args: ["KBs", "KB"]
+          args: ["s", ""]
     size:
       text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     seeders:
