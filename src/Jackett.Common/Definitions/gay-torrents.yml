@@ -134,34 +134,37 @@ search:
       args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
-    selector: ul.TorrentList
+    selector: ul.TorrentList, ul.Torrent-List
 
   fields:
     category:
-      selector: .TorrentList1 > a
+      selector: a[href^="torrentslist.php?type="]
       attribute: href
       filters:
         - name: querystring
           args: type
     title:
-      selector: .TorrentList2 > a
+      selector: a[href^="torrentdetails.php?torrentid="]
+      filters:
+        - name: replace
+          args: ["[FFL] ", ""] # remove freeleech flag from title
     download:
-      selector: .TorrentList2 > a
+      selector: a[href^="torrentdetails.php?torrentid="]
       attribute: href
       filters:
         - name: append
           args: "&do=download"
     details:
-      selector: .TorrentList2 > a
+      selector: a[href^="torrentdetails.php?torrentid="]
       attribute: href
     size:
-      selector: .TorrentList3
+      selector: .TorrentList3, .Torrent-List-Size
     seeders:
-      selector: .TorrentList6
+      selector: .TorrentList6, .Torrent-List-Seeds
     leechers:
-      selector: .TorrentList7
+      selector: .TorrentList7, .Torrent-List-Peers
     date:
-      selector: li.TorrentList8
+      selector: .TorrentList8, .Torrent-List-Date
       filters:
         - name: append
           args: " +02:00" # EET
@@ -169,7 +172,7 @@ search:
           args: "15:04 02-Jan-2006 -07:00"
     downloadvolumefactor:
       case:
-        ".TorrentList2 > a:contains(\"[FFL]\")": 0
+        "a:contains(\"[FFL]\")": 0
         "*": 1
     uploadvolumefactor:
       text: 1
