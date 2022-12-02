@@ -198,7 +198,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HD-CzTorrent
  * HDGalaKtik
  * HunTorrent
- * KinoNaVse100
  * Kinorun
  * Kinozal
  * LostFilm.tv
