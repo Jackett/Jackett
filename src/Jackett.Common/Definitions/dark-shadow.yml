@@ -18,6 +18,11 @@ caps:
     - {id: 114, cat: Movies/UHD, desc: "Filme UHD"}
     - {id: 140, cat: Movies/BluRay, desc: "Filme BluRay"}
     - {id: 138, cat: Movies, desc: "Filme Pack`s"}
+    # Kids
+    - {id: 143, cat: Movies, desc: "Kids Filme"}
+    - {id: 144, cat: TV, desc: "Kids Serien"}
+    - {id: 145, cat: Audio, desc: "Kids Music"}
+    - {id: 146, cat: Audio, desc: "Kids Audio"}
     # Serien
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
