@@ -7,12 +7,11 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://audiobookbay.fi/
+  - https://audiobookbay.li/
   - https://audiobookbay.se/
   - https://audiobookbay.unblockit.page/
 legacylinks:
   - https://audiobookbay.la/
-  - https://audiobookbay.unblockit.ch/
   - https://audiobookbay.unblockit.ws/
   - http://audiobookbay.net/
   - https://audiobookbay.unblockit.kim/
@@ -34,6 +33,7 @@ legacylinks:
   - https://audiobookbay.unblockit.bet/
   - https://audiobookbay.unblockit.cat/
   - https://audiobookbay.unblockit.nz/
+  - https://audiobookbay.fi/
 
 caps:
   categorymappings:
