@@ -55,15 +55,15 @@ settings:
       POLISH: POLISH
       MULTI.POLISH: MULTI.POLISH
 
-#login:
-#  path: "https://api-test.pte.nu/api/v1/torrents"
-#  method: get
-#  inputs:
-#    tpage: 1
-#  error:
-#    - selector: ":root:contains(\"ACCESS_DENIED\")"
-#      message:
-#        text: "The API key was not accepted by {{ .Config.sitelink }}."
+# login:
+#   path: "https://api-test.pte.nu/api/v1/torrents"
+#   method: get
+#   inputs:
+#     tpage: 1
+#   error:
+#     - selector: ":root:contains(\"ACCESS_DENIED\")"
+#       message:
+#         text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
