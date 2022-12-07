@@ -6,7 +6,7 @@ language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
-# to fetch current domain use https://www.protege-liens.com/gktorrent
+# to fetch current domain use https://www.protege-liens.com/Gktorrent
 links:
   - https://www.gktorrents.cc/
   - https://gktorrent.nocensor.lol/
