@@ -9,10 +9,9 @@ requestDelay: 2
 links:
   - https://audiobookbay.li/
   - https://audiobookbay.se/
-  - https://audiobookbay.unblockit.page/
+  - https://audiobookbay.unblockit.pet/
 legacylinks:
   - https://audiobookbay.la/
-  - https://audiobookbay.unblockit.ws/
   - http://audiobookbay.net/
   - https://audiobookbay.unblockit.kim/
   - https://audiobookbay.unblockit.bz/
@@ -34,6 +33,7 @@ legacylinks:
   - https://audiobookbay.unblockit.cat/
   - https://audiobookbay.unblockit.nz/
   - https://audiobookbay.fi/
+  - https://audiobookbay.unblockit.page/
 
 caps:
   categorymappings:
