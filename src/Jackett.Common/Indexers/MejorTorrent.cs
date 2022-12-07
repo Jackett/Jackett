@@ -415,7 +415,7 @@ namespace Jackett.Common.Indexers
             return queryWords.All(word => titleWords.Contains(word));
         }
 
-        private static TorznabQuery ParseQuery(TorznabQuery query)
+        private TorznabQuery ParseQuery(TorznabQuery query)
         {
             // Eg. Doctor.Who.2005.(Доктор.Кто).S02E08
 
@@ -425,8 +425,8 @@ namespace Jackett.Common.Indexers
             // query.Episode = 8
             var searchTerm = query.GetQueryString();
 
-            // replace non-english alphanumeric characters with spaces
-            // searchTerm = Doctor Who 2005
+            // Server returns a 500 error if a UTF character higher than \u00FF (ÿ) is included,
+            // so we need to strip them
             searchTerm = Regex.Replace(searchTerm, @"[^a-zA-Z0-9]+", " ");
             searchTerm = Regex.Replace(searchTerm, @"\s+", " ");
             searchTerm = searchTerm.Trim();
