@@ -6,7 +6,7 @@ language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
-# to fetch current domain use https://www.protege-liens.com/t911 and https://www.protege-liens.com/torrent911
+# to fetch current domain use https://www.protege-liens.com/T911 and https://www.protege-liens.com/Torrent911
 links:
   - https://www.torrent911.tv/
   - https://www.t911.tv/
