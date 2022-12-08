@@ -427,6 +427,7 @@ namespace Jackett.Common.Indexers
 
             // Server returns a 500 error if a UTF character higher than \u00FF (ÿ) is included,
             // so we need to strip them
+            // searchTerm = Doctor Who 2005
             searchTerm = Regex.Replace(searchTerm, @"[^\u0001-\u00FF]+", " ");
             searchTerm = Regex.Replace(searchTerm, @"\s+", " ");
             searchTerm = searchTerm.Trim();
