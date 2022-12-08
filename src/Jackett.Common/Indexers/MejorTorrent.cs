@@ -92,7 +92,8 @@ namespace Jackett.Common.Indexers
                        MusicSearchParams = new List<MusicSearchParam>
                        {
                            MusicSearchParam.Q
-                       }
+                       },
+                       SupportsRawSearch = true
                    },
                    configService: configService,
                    client: w,
