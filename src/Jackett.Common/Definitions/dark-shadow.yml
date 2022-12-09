@@ -23,6 +23,7 @@ caps:
     - {id: 144, cat: TV, desc: "Kids Serien"}
     - {id: 145, cat: Audio, desc: "Kids Music"}
     - {id: 146, cat: Audio, desc: "Kids Audio"}
+    - {id: 147, cat: Books, desc: "Kids EBook"}
     # Serien
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
     - {id: 57, cat: TV/HD, desc: "Serien HD"}

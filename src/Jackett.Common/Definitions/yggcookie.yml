@@ -126,7 +126,7 @@ settings:
     default: "<ol><li>From the same place you fetched the cookie,<li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section<li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</ol>"
   - name: category
     type: select
-    label: Catégorie
+    label: Category
     default: all
     options:
       all: Tous
@@ -220,6 +220,15 @@ search:
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
+     # Replace - with space due to internal YGG Issues
+    - name: replace
+      args: ["-", " "]
+     # Replace / with space due to internal YGG Issues
+    - name: replace
+      args: ["/", " "]
+     # Replace ! with nothing for searches due to internal YGG issues reported on Radarr Discord
+    - name: replace
+      args: ["!", ""]
     - name: replace
       args: ["  ", " "]
     - name: trim
