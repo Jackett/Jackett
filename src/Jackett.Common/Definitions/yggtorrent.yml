@@ -230,13 +230,13 @@ search:
     # END ANIME HACK
     - name: replace
       args: ["\"", ""]
-     # Replace - with space due to internal YGG Issues
+    # Replace - with space due to internal YGG Issues
     - name: replace
       args: ["-", " "]
-     # Replace / with space due to internal YGG Issues
+    # Replace / with space due to internal YGG Issues
     - name: replace
       args: ["/", " "]
-     # Replace ! with nothing for searches due to internal YGG issues reported on Radarr Discord
+    # Replace ! with nothing for searches due to internal YGG issues reported on Radarr Discord
     - name: replace
       args: ["!", ""]
     - name: replace
