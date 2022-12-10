@@ -532,6 +532,7 @@ namespace Jackett.Updater
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
                 "Definitions/theresurrection.yml",
+                "Definitions/theshinning.yml", // switch to *-API #13751
                 "Definitions/thespit.yml",
                 "Definitions/thetorrents.yml",
                 "Definitions/theunknown.yml", // became 3evils #9678
