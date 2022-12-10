@@ -6,6 +6,8 @@ language: pt-BR
 type: private
 encoding: UTF-8
 links:
+  - https://locadora.cc/
+legacylinks:
   - https://locadora.xyz/
 
 caps:
