@@ -463,7 +463,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PolishSource (PS)
  * PolishTracker
  * Pornbay [![(invite needed)][inviteneeded]](#)
- * PornBits (PB)
  * PotUK
  * Pretome
  * PrivateHD (PHD)

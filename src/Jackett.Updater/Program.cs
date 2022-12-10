@@ -468,6 +468,7 @@ namespace Jackett.Updater
                 "Definitions/pirateiro.yml",
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
+                "Definitions/pornbits.yml",
                 "Definitions/pornolive.yml",
                 "Definitions/pornorip.yml",
                 "Definitions/portugas.yml", // switch to *-API #13542
