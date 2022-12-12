@@ -515,7 +515,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Superbits (SBS)
  * Swarmazon
  * Tapochek
- * Tasmanit [![(invite needed)][inviteneeded]](#)
+ * Tasmanit
  * Team CT Game (TCTG)
  * TeamHD
  * TeamOS
