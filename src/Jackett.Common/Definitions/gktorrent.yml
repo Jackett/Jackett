@@ -35,6 +35,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: Films, cat: Movies, desc: "Movies"}
+    - {id: Animes, cat: TV/Anime, desc: "Anime"}
     - {id: Séries, cat: TV, desc: "TV"}
     - {id: Musiques, cat: Audio, desc: "Music"}
     - {id: Ebooks, cat: Books, desc: "Books"}
