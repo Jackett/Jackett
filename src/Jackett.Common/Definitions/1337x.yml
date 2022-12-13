@@ -253,10 +253,8 @@ search:
       filters:
         - name: re_replace
           args: ["st|nd|rd|th", ""]
-        - name: append
-          args: " +01:00" # CET
         - name: dateparse
-          args: "3pm Jan. 2 -07:00"
+          args: "3pm Jan. 2"
     date_years:
       # (more than a year ago) Apr. 18th '11
       optional: true
@@ -266,19 +264,14 @@ search:
           args: ["'", ""]
         - name: re_replace
           args: ["st|nd|rd|th", ""]
-        - name: append
-          args: " +01:00" # CET
         - name: dateparse
-          args: "Jan. 2 06 -07:00"
+          args: "Jan. 2 06"
     date_today:
       # (today) 12:25am
       optional: true
       selector: td[class^="coll-date"]:contains(":")
       filters:
-        - name: append
-          args: " +01:00" # CET
-        - name: dateparse
-          args: "3:04PM -07:00"
+        - name: fuzzytime
     date:
       text: "{{ if or .Result.date_year .Result.date_years .Result.date_today }}{{ or .Result.date_year .Result.date_years .Result.date_today }}{{ else }}now{{ end }}"
     size:
