@@ -1,11 +1,13 @@
 ---
 id: gtorrentpro
-name: GTorrent.pro
-description: "GTorrent.pro is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
+name: GTorrent.ru
+description: "GTorrent.ru is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GENERAL"
 language: ru-RU
 type: public
 encoding: windows-1251
 links:
+  - http://gtorrent.ru/
+legacylinks:
   - http://gtorrent.pro/
 
 caps:
