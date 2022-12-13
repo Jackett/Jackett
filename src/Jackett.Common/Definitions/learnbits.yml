@@ -191,24 +191,22 @@ search:
       remove: b
     date_day:
       selector: td:nth-child(2):contains("day ")
+      # auto adjusted by site account profile
       optional: true
       remove: a, b, img, span
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     date_year:
       # 2021-07-16 09:30 PM
       selector: td:nth-child(2):not(:contains("day "))
+      # auto adjusted by site account profile
       optional: true
       remove: a, b, img, span
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2006-01-02 03:04 PM -07:00"
+          args: "2006-01-02 03:04 PM"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     minimumratio:
       text: 1.0
 # TS Special Edition

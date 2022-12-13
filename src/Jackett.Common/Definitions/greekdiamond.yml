@@ -155,11 +155,10 @@ search:
     # some users will have an extra wait time column before the bookmark column, so we count up from the bottom
     date:
       selector: td:nth-last-of-type(12)
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "02/01/2006"
     seeders:
       selector: td:nth-last-of-type(10)
     leechers:

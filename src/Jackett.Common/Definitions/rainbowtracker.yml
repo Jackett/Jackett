@@ -202,6 +202,7 @@ search:
           args: "(\\d{1,2}-\\w{3,4}-\\d{2})"
     date:
       text: "{{ .Result.date_time }} {{ .Result.date_date }}"
+      # auto adjusted by site account profile
       filters:
         - name: replace
           args: ["Янв", "Jan"]
@@ -227,10 +228,8 @@ search:
           args: ["Ноя", "Nov"]
         - name: replace
           args: ["Дек", "Dec"]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "15:04 2-Jan-06 -07:00"
+          args: "15:04 2-Jan-06"
     downloadvolumefactor:
       case:
         img[src="images/tor_gold.gif"]: 0

@@ -203,13 +203,12 @@ search:
           args: "Velkost (.+?) \\|"
     date:
       selector: div > div
+      # auto adjusted by site account profile
       filters:
         - name: regexp
           args: "Pridany (\\d{2}/\\d{2}/\\d{4})"
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "02/01/2006"
     seeders:
       selector: div > div
       filters:

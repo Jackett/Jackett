@@ -114,6 +114,7 @@ search:
       selector: td:nth-child(6)
     date:
       selector: td:nth-child(5)
+      # auto adjusted by site account profile
       filters:
         # replace month abbreviations
         - name: replace
@@ -140,10 +141,8 @@ search:
           args: ["ноя", "Nov"]
         - name: replace
           args: ["дек", "Dec"]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "15:04:0502 Jan 2006 -07:00"
+          args: "15:04:0502 Jan 2006"
     seeders:
       selector: td:nth-child(8)
     leechers:

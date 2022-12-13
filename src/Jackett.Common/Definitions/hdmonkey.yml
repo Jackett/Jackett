@@ -135,11 +135,10 @@ search:
     date:
       # 15.11.21<br>07:47
       selector: td:nth-child(5)
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2.01.0615:04 -07:00"
+          args: "2.01.0615:04"
     grabs:
       selector: td:nth-child(7)
     seeders:

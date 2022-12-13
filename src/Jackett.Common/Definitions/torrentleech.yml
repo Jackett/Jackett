@@ -168,8 +168,9 @@ search:
     grabs:
       selector: completed
     date:
-      # 2021-10-25 02:18:31 (auto adjusted by site account profile)
+      # 2021-10-25 02:18:31
       selector: addedTimestamp
+      # auto adjusted by site account profile
       filters:
         - name: dateparse
           args: "2006-01-02 15:04:05"

@@ -171,6 +171,7 @@ search:
       # Yesterday
       # Вчера
       selector: td:nth-last-child(5):not(:contains("/"))
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: re_replace
@@ -182,14 +183,13 @@ search:
     date_year:
       # 14/03/2019
       selector: td:nth-last-child(5):contains("/")
+      # auto adjusted by site account profile
       optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "02/01/2006"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(4)
     seeders:

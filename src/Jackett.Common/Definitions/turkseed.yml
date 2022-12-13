@@ -127,11 +127,10 @@ search:
       attribute: src
     date:
       selector: td:nth-child(2)
+      # auto adjusted by site account profile
       filters:
         - name: regexp
           args: "(\\d{1,2}(st|nd|rd|th) [A-Za-z]{3,} \\d{4} \\d{2}:\\d{2}:\\d{2})"
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     size:
       selector: td:nth-last-child(5)

@@ -169,23 +169,21 @@ search:
     download:
       selector: a[href^="download.php"]
       attribute: href
-    date_year:
-      selector: td:nth-child(4) span:not(:contains("day"))
-      optional: true
-      filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
-        - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
     date_day:
       selector: td:nth-child(4) span:contains("day")
+      # auto adjusted by site account profile
       optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
+    date_year:
+      selector: td:nth-child(4) span:not(:contains("day"))
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(5)
     grabs:

@@ -154,11 +154,10 @@ search:
       selector: a[href*="imdb.com/title/tt"]
     date:
       selector: td:nth-child(4)
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
+          args: "2006-01-0215:04:05"
     size:
       selector: td:nth-child(5)
     grabs:

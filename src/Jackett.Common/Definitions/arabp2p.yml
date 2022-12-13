@@ -149,11 +149,10 @@ search:
     date:
       selector: td:nth-child(4) span
       attribute: title
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "2006-01-02 15:04:05"
     seeders:
       selector: td:nth-child(5)
     leechers:

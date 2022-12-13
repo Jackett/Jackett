@@ -171,17 +171,17 @@ search:
       selector: td:nth-last-child(8)
     date_day:
       selector: td:nth-last-child(6):contains("day")
+      # auto adjusted by site account profile
       optional: true
     date_year:
       selector: td:nth-last-child(6):not(:contains("day"))
+      # auto adjusted by site account profile
       optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
+          args: "Jan 2 2006 03:04 PM"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(5)
     grabs:

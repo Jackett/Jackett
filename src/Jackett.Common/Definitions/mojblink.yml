@@ -180,6 +180,7 @@ search:
       # Naložen: Danes, 06:46:17
       # Uploaded: Danes, 06:46:17
       selector: div.release-info__meta:contains("Naložen:"):contains("Včeraj"), div.release-info__meta:contains("Naložen:"):contains("Danes"), div.release-info__meta:contains("Uploaded:"):contains("Včeraj"), div.release-info__meta:contains("Uploaded:"):contains("Danes")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: replace
@@ -195,18 +196,17 @@ search:
       # Uploaded: 15.11.2022 07:24:18
       # Naložen: 15.11.2022 07:24:18
       selector: div.release-info__meta:contains("Naložen:"):contains("."), div.release-info__meta:contains("Uploaded:"):contains(".")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: replace
           args: ["Uploaded: ", ""]
         - name: replace
           args: ["Naložen: ", ""]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02.01.2006 15:04:05 -07:00"
+          args: "02.01.2006 15:04:05"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: a[href^="/download/"]
     seeders:

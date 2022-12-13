@@ -142,22 +142,19 @@ search:
     date_day:
       # Today<br> 10:20 AM
       # Yesterday<br> 08:03 PM
-      optional: true
       selector: td:nth-last-child(7):contains("day")
-      filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
+      # auto adjusted by site account profile
+      optional: true
     date_year:
       # Feb 14 2019<br> 10:20 AM
-      optional: true
       selector: td:nth-last-child(7):not(:contains("day"))
+      # auto adjusted by site account profile
+      optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
+          args: "Jan 2 2006 03:04 PM"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-last-child(6)
     grabs:

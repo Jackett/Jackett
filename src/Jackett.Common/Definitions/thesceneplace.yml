@@ -137,11 +137,10 @@ search:
       optional: true
     date:
       selector: td:has(a[href^="download.php?id="]) ~ td
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "02/01/2006"
     seeders:
       selector: td:has(a[href^="download.php?id="]) ~ td ~ td
     leechers:

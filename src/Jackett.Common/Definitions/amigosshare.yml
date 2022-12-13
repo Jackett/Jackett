@@ -299,16 +299,15 @@ search:
         "[src$=\"/outros2.png\"]": 130
     date_optional:
       selector: p:contains("Lançado:")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: regexp
           args: "Lançado: (.+?)$"
         - name: re_replace
           args: [" (\\d:)", " 0$1"]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/06 15:04:05 -07:00"
+          args: "02/01/06 15:04:05"
     date:
       text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:

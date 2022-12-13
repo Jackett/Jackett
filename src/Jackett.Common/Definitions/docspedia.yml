@@ -139,22 +139,22 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-    date_year:
-      remove: a
-      # Jul 4 2019 08:04 AM
-      selector: div.torrenttable:nth-child(2):not(:contains("day"))
-      optional: true
-      filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
-        - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
     date_day:
       remove: a
       # Today 02:40 PM
       # Yesterday 09:10 AM
       selector: div.torrenttable:nth-child(2):contains("day")
+      # auto adjusted by site account profile
       optional: true
+    date_year:
+      remove: a
+      # Jul 4 2019 08:04 AM
+      selector: div.torrenttable:nth-child(2):not(:contains("day"))
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: dateparse
+          args: "Jan 2 2006 03:04 PM"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     minimumratio:

@@ -232,19 +232,19 @@ search:
       selector: td:nth-last-child(2)
     date_ago:
       selector: td:nth-last-child(7):contains('ago')
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: timeago
     date_year:
       selector: td:nth-last-child(7):contains('/')
+      # auto adjusted by site account profile
       optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "02/01/2006"
     date:
-      text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_ago .Result.date_year }}{{ or .Result.date_ago .Result.date_year }}{{ else }}now{{ end }}"
     grabs:
       selector: td:nth-last-child(4)
     seeders:

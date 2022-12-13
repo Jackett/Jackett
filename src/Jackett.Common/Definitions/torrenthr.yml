@@ -118,13 +118,12 @@ search:
       text: 1
     date:
       selector: td:nth-child(2) > small
+      # auto adjusted by site account profile
       filters:
         - name: replace
           args: [" u ", " "]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02.01.2006 15:04:05 -07:00"
+          args: "02.01.2006 15:04:05"
     description:
       selector: td:nth-child(2)
       remove: a, br, small

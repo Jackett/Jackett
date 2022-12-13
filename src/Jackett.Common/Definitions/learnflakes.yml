@@ -150,31 +150,29 @@ search:
       selector: a[rel="torrent_seeders"]
     leechers:
       selector: a[rel="torrent_leechers"]
-    date_time:
-      selector: div.torrentOwner abbr
-      optional: true
-      attribute: data-time
     date_day:
       selector: div.torrentOwner:contains("day")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: fuzzytime
     date_year:
       selector: div.torrentOwner:contains("-")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: regexp
           args: "Uploaded (.+?) by"
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04 -07:00"
+          args: "02-01-2006 15:04"
+    date_unix:
+      selector: div.torrentOwner abbr
+      optional: true
+      attribute: data-time
     date:
-      text: "{{ if or .Result.date_time .Result.date_year .Result.date_day }}{{ or .Result.date_time .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year .Result.date_unix }}{{ or .Result.date_day .Result.date_year .Result.date_unix }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img[src$="/torrent_free.png"]: 0

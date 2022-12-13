@@ -149,22 +149,20 @@ search:
     date_elapsed:
       # <td class="nobr"><span class="time" alt="1 month ago" title="1 month ago">Oct 01 2022, 18:41</span></td>
       selector: td:nth-child(5) > span:not(:contains("ago"))
+      # auto adjusted by site account profile
       optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 02 2006, 15:04 -07:00"
+          args: "Jan 02 2006, 15:04"
     date_added:
     # <td class="nobr"><span class="time" alt="Nov 17 2022, 01:44" title="Nov 17 2022, 01:44">13 hours ago</span></td>
       selector: td:nth-child(5) > span:contains("ago")
       attribute: title
+      # auto adjusted by site account profile
       optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 02 2006, 15:04 -07:00"
+          args: "Jan 02 2006, 15:04"
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:

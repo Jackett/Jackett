@@ -151,11 +151,10 @@ search:
           args: "src=(.+?) "
     date:
       selector: td:nth-last-child(1)
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02.01.200615:04:05 -07:00"
+          args: "02.01.200615:04:05"
     leechers:
       selector: td:nth-last-child(2)
     seeders:

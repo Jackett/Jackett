@@ -171,13 +171,12 @@ search:
       attribute: src
     date:
       selector: td:nth-child(2) > div:last-child
+      # auto adjusted by site account profile
       filters:
         - name: regexp
           args: (\d{2}-\d{2}-\d{4} \d{2}:\d{2})
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04 -07:00"
+          args: "02-01-2006 15:04"
     size:
       selector: td:nth-child(5)
     grabs:

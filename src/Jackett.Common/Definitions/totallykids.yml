@@ -122,25 +122,23 @@ search:
     date_day:
       # Yesterday at 10:03:30 PM
       selector: td:nth-child(5):contains("day")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: re_replace
           args: ["[ ]at|[\\s+]|[//\xa0],\\/g", " "]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
     date_year:
       # February 09, 2019, 06:35:08 AM
       selector: td:nth-child(5):not(:contains("day"))
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: re_replace
           args: ["[,]|[\\s+]|[//\xa0],\\/g", " "]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "January 02  2006  03:04:05 PM -07:00"
+          args: "January 02  2006  03:04:05 PM"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     seeders:
       selector: td:nth-child(6)
     leechers:

@@ -140,26 +140,24 @@ search:
     date_day:
       # Danas<br>08:10 AM
       # Juče<br>06:44 PM
-      optional: true
       selector: td:nth-of-type(6):contains("Danas"), td:nth-of-type(6):contains("Juče")
+      # auto adjusted by site account profile
+      optional: true
       filters:
         - name: replace
           args: ["Danas", "Today"]
         - name: replace
           args: ["Juče", "Yesterday"]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
     date_year:
       # Feb 14 2019<br>10:20 AM
-      optional: true
       selector: td:nth-of-type(6):not(:contains("Juče")):not(:contains("Danas"))
+      # auto adjusted by site account profile
+      optional: true
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
+          args: "Jan 2 2006 03:04 PM"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-of-type(7)
     grabs:

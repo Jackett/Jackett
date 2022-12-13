@@ -269,13 +269,12 @@ search:
     date:
       selector: a[onmouseover][href^="torrents-details.php?id="]
       attribute: onmouseover
+      # auto adjusted by site account profile
       filters:
         - name: regexp
           args: "Partagé Voilà : </b>(.*?)<br"
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "01-02-2006 -07:00"
+          args: "01-02-2006"
     downloadvolumefactor:
       case:
         img[src="images/Torrents/free.png"]: 0

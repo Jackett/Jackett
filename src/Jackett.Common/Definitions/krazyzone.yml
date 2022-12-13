@@ -182,11 +182,10 @@ search:
     date:
       # 24.Jul<br>2022<br>07:47
       selector: td:nth-child(5)
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2.Jan200615:04 -07:00"
+          args: "2.Jan200615:04"
     seeders:
       selector: td:nth-child(7)
     leechers:

@@ -955,11 +955,10 @@ search:
     date:
       # 12 янв 2019, 11:26
       selector: dt
+      # auto adjusted by site account profile
       filters:
-        # extract the date
         - name: regexp
           args: "(\\d{2} \\D{3} \\d{4}, \\d{2}:\\d{2})"
-          # replace month abbreviations
         - name: replace
           args: ["янв", "Jan"]
         - name: replace
@@ -984,10 +983,8 @@ search:
           args: ["ноя", "Nov"]
         - name: replace
           args: ["дек", "Dec"]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02 Jan 2006, 15:04 -07:00"
+          args: "02 Jan 2006, 15:04"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

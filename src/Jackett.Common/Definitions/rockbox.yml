@@ -83,15 +83,17 @@ search:
     date_year:
       # 13/10/2018
       selector: td:nth-child(6):contains("/")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: append
-          args: " +00:00" # auto adjusted by site account profile
+          args: " +00:00" 
         - name: dateparse
           args: "02/01/2006 -07:00"
     date_ago:
       # 1 hour ago, 2 days ago, 3 weeks ago etc
       selector: td:nth-child(6):not(:contains("/"))
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: timeago

@@ -271,6 +271,7 @@ search:
       # Today 09:10
       # Yesterday 13:04
       selector: td:nth-child(7):not(:contains("."))
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: replace
@@ -284,16 +285,15 @@ search:
     date_year:
       # 24.10.2017 at 23:44
       selector: td:nth-child(7):contains(".")
+      # auto adjusted by site account profile
       optional: true
       filters:
         - name: replace
           args: [" в", ""]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02.01.2006 15:04 -07:00"
+          args: "02.01.2006 15:04"
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         a.r1: 0 # gold

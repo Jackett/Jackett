@@ -126,13 +126,12 @@ search:
       selector: td:nth-child(10)
     date:
       selector: td:nth-child(12)
+      # auto adjusted by site account profile
       filters:
         - name: replace
           args: ["at", ""]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "2 Jan 2006  15:04 -07:00"
+          args: "2 Jan 2006  15:04"
     downloadvolumefactor:
       case:
         "img[src$=\"freeleech.png\"]": 0

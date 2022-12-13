@@ -148,11 +148,10 @@ search:
       selector: td:nth-child(8)
     date:
       selector: td:nth-child(2) > div:last-child
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04 -07:00"
+          args: "02-01-2006 15:04"
     downloadvolumefactor:
       case:
         img[src$="/freedownload.gif"]: 0

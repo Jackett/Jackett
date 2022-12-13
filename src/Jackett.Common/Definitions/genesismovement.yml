@@ -116,15 +116,14 @@ search:
       attribute: href
     date:
       selector: div[id^="kt"] > table > tbody > tr > td:contains("Date Added:")
+      # auto adjusted by site account profile
       filters:
         - name: regexp
           args: "(\\d{2}-\\d{2}-\\d{4} at \\d{2}:\\d{2}:\\d{2})"
         - name: replace
           args: [" at ", " "]
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02-01-2006 15:04:05 -07:00"
+          args: "02-01-2006 15:04:05"
     size:
       selector: td:nth-last-child(6)
     grabs:
