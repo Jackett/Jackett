@@ -86,10 +86,8 @@ search:
       # auto adjusted by site account profile
       optional: true
       filters:
-        - name: append
-          args: " +00:00" 
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "02/01/2006"
     date_ago:
       # 1 hour ago, 2 days ago, 3 weeks ago etc
       selector: td:nth-child(6):not(:contains("/"))
