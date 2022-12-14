@@ -146,11 +146,10 @@ search:
     date:
       # 23/12/2019 07:57
       selector: td:nth-last-child(4)
+      # auto adjusted by site account profile
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "02/01/2006 15:04 -07:00"
+          args: "02/01/2006 15:04"
     genre:
       selector: td:nth-child(2)
       remove: a
