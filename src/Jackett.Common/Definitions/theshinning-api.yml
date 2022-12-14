@@ -19,12 +19,15 @@ caps:
     - {id: 4, cat: Console, desc: "Game"}
     - {id: 5, cat: PC, desc: "Application"}
     - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 7, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 8, cat: Books, desc: "Ebooks"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
