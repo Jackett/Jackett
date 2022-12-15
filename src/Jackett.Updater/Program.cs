@@ -288,6 +288,7 @@ namespace Jackett.Updater
                 "Definitions/bigtower.yml",
                 "Definitions/bit-titan.yml",
                 "Definitions/bitbr.yml",
+                "Definitions/bitcityreloaded.yml",
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bittorrentam.yml",

@@ -271,7 +271,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BeyondHD (BHD)
  * Bibliotik
  * Bit-Bázis
- * Bit-City Reloaded
  * BIT-HDTV
  * Bitded
  * Bithorlo (BHO)
