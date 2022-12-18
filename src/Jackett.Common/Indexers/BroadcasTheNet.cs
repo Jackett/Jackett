@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -96,6 +97,7 @@ namespace Jackett.Common.Indexers
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var searchString = query.GetQueryString();
+            searchString = Regex.Replace(searchString, @"(?i)\bS0*(\d+)\b", "Season $1");
             var btnResults = query.Limit;
             if (btnResults == 0)
                 btnResults = (int)TorznabCaps.LimitsDefault;
