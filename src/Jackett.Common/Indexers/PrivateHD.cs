@@ -26,10 +26,6 @@ namespace Jackett.Common.Indexers
                        MovieSearchParams = new List<MovieSearchParam>
                        {
                            MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
                        }
                    },
                    configService: configService,
@@ -47,7 +43,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2, TorznabCatType.TVUHD);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(2, TorznabCatType.TVSD);
-            AddCategoryMapping(3, TorznabCatType.Audio);
         }
     }
 }
