@@ -5,7 +5,7 @@ description: "not here _ not scene"
 language: en-US
 type: private
 encoding: UTF-8
-requestDelay: 2.1 # #13796
+requestDelay: 2.4 # #13796
 links:
   - https://www.torrentleech.org/
   - https://www.torrentleech.cc/
