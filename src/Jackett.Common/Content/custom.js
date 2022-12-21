@@ -917,8 +917,7 @@ function doErrorNotify(indexerId, errorMessage, errorEvent) {
     var githubTemplate = "?template=bug_report.yml&"
     if (errorMessage.includes("FlareSolverr")) {
       githubRepo = "FlareSolverr/FlareSolverr";
-      githubText = "FlareSolverr";
-      githubTemplate = "?"
+      githubText = "FlareSolverr"
     }
     var githubUrl = "https://github.com/" + githubRepo + "/issues/new" + githubTemplate + "title=[" + indexerId + "] (" + errorEvent + ")";
     var indexEnd = 2000 - githubUrl.length; // keep url <= 2k #5104
