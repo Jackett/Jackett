@@ -60,8 +60,8 @@ caps:
     - {id: 44, cat: Audio, desc: "Müzik Yabancı"}
     - {id: 45, cat: Audio, desc: "Müzik Diskografi"}
     - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 46, cat: Console, desc: "Oyun PC"}
-    - {id: 16, cat: Console, desc: "Oyun Konsol"}
+    - {id: 57, cat: Other, desc: "VIP"}
+    - {id: 66, cat: Other, desc: "VIP Vip"}
 
   modes:
     search: [q]
