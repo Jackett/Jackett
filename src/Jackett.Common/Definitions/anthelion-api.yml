@@ -84,6 +84,9 @@ search:
       selector: container
     _media:
       selector: media
+      filters:
+        - name: replace
+          args: ["WEB", "WEB-DL"]
     _resolution:
       selector: resolution
     _audioFormat:
