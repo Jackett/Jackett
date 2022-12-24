@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers
                         {
                             {"username", configData.Username.Value},
                             {"password", configData.Password.Value},
-                            {"keeplogged", "1"}
+                            {"keeplogged", "1"},
                             {"login", "Login"}
                         };
 
