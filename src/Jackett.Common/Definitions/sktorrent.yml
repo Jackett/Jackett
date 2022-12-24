@@ -197,12 +197,12 @@ search:
       selector: a[href^="details.php?name="]
       attribute: href
     size:
-      selector: div > div:has(a)
+      selector: div:has(a)
       filters:
         - name: regexp
           args: "Velkost (.+?) \\|"
     date:
-      selector: div > div:has(a)
+      selector: div:has(a)
       # auto adjusted by site account profile
       filters:
         - name: regexp
@@ -210,17 +210,17 @@ search:
         - name: dateparse
           args: "02/01/2006"
     seeders:
-      selector: div > div:has(a)
+      selector: div:has(a)
       filters:
         - name: regexp
           args: "Odosielaju : (\\d+)"
     leechers:
-      selector: div > div:has(a)
+      selector: div:has(a)
       filters:
         - name: regexp
           args: "Stahuju : (\\d+)"
     genre:
-      selector: div > div:has(a)
+      selector: div:has(a)
       filters:
         - name: replace
           args: ["\n", ""]
