@@ -25,7 +25,6 @@ caps:
     - {id: 5, cat: Movies/WEB-DL, desc: "HD - WEB-DL"}
     - {id: 14, cat: Movies/HD, desc: "HD - WEBRip"}
     - {id: 40, cat: Movies/HD, desc: "PTer"}
-    - {id: 32, cat: PC/Games, desc: "Oyunlar (Games)"}
     - {id: 9, cat: Movies/SD, desc: "SD"}
     - {id: 23, cat: Movies/SD, desc: "SD - BluRay"}
     - {id: 10, cat: Movies/DVD, desc: "SD - DVD"}
@@ -60,12 +59,19 @@ login:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
 
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+  selectors:
+    - selector: a[href*="download.php?id="]
+      attribute: href
+
 search:
   paths:
     - path: browse.php
-  keywordsfilters:
-    - name: re_replace # E01 to BL01
-      args: ["(?i)\\bE(\\d+)\\b", "E$1"]
   inputs:
     # does not support multi categories so defaulting to ALL
     do: search
@@ -86,14 +92,11 @@ search:
           args: category
     title:
       selector: div[id^="port-target-"] a
-      filters:
-        - name: re_replace # BL01 to E01
-          args: ["(?i)\\bBL(\\d+)\\b", " E$1 "]
     details:
       selector: div[id^="port-target-"] a
       attribute: href
     download:
-      selector: a[href*="download.php?id="]
+      selector: div[id^="port-target-"] a
       attribute: href
     poster:
       selector: div[id^="port-content-"] img
