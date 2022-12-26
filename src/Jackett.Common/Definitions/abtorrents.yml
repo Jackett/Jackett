@@ -129,6 +129,7 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
+      remove: span
     details:
       selector: a[href^="details.php?id="]
       attribute: href
