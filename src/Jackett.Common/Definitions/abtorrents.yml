@@ -129,9 +129,13 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
+      remove: span
     details:
       selector: a[href^="details.php?id="]
       attribute: href
+      filters:
+        - name: replace
+          args: ["&hit=1", ""]
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
