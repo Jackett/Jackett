@@ -5,6 +5,8 @@ description: "World-of-Tomorrow is a Private German tracker"
 language: de-DE
 type: private
 encoding: ISO-8859-1
+certificates:
+  - 824f6e356ee0189eb9517a90c695b7ac8508495c # expired 26 December 2022
 links:
   - https://world-of-tomorrow.eu/
 
