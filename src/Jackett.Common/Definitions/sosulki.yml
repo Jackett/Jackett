@@ -6,9 +6,10 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - http://sosulki.com/
+  - https://sosulki.com/
 legacylinks:
   - http://sosulki.net/
+  - http://sosulki.com/ # site forces https
 caps:
   categorymappings:
     - {id: 12, cat: XXX, desc: "Порно категории"}
