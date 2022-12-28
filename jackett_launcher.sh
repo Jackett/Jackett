@@ -8,6 +8,7 @@ JACKETT_DIR="$(dirname "$(readlink -f "$0")")"
 
 # Launch Jackett (with CLI parameters)
 "${JACKETT_DIR}/jackett" --NoRestart "$@"
+ec=$?
 
 # Get user running the service
 JACKETT_USER=$(whoami)
@@ -16,3 +17,5 @@ JACKETT_USER=$(whoami)
 while pgrep -u "${JACKETT_USER}" JackettUpdater > /dev/null; do
     sleep 1
 done
+
+exit $ec
