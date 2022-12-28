@@ -7,15 +7,15 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://torrentproject2.com/
   - https://torrentproject2.net/
   - https://torrentproject2.org/
   - https://torrentproject.info/
   - https://torrentproject.biz/
   - https://torrentproject.xyz/
+  - https://torrentproject.cc/
 legacylinks:
   - https://torrentproject2.se/
-  - https://torrentproject.cc/
+  - https://torrentproject2.com/
 
 caps:
   categorymappings:
