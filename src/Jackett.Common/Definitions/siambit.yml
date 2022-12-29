@@ -32,7 +32,7 @@ caps:
     - {id: 21, cat: TV, desc: "ธรรมะ (Dharma)", default: true}
     - {id: 2, cat: Audio/MP3, desc: "เพลง (Music)", default: true}
     - {id: 130, cat: Audio/Audiobook, desc: "เพลงคุณภาพสูง (Lossless) (High Quality Music (Lossless))", default: true}
-    - {id: 60, cat: Other, desc: "Fonts/Icons/Clip Art/Templates", default: true}
+    - {id: 60, cat: Other, desc: "ฟอนต์/ไอคอน/คลิปอาร์ท/เทมเพลท (Fonts/Icons/Clip Art/Templates)", default: true}
     - {id: 90, cat: Movies/UHD, desc: "ภาพยนตร์ 4K UHD (4K UHD Movies)", default: true}
     - {id: 91, cat: Movies/DVD, desc: "ภาพยนตร์ DVD (DVD Movies)", default: true}
     - {id: 92, cat: Movies/HD, desc: "ภาพยนตร์ Hi-Def (Hi-Def Movies)", default: true}
