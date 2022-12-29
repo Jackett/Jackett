@@ -20,7 +20,7 @@ caps:
     - {id: 40, cat: Audio/Video, desc: "คลิป (Clips)", default: true}
     - {id: 16, cat: Audio/Video, desc: "คอนเสิร์ต (Concert)", default: true}
     - {id: 3, cat: Audio/Other, desc: "คาราโอเกะ/MV (Karaoke/MV)", default: true}
-    - {id: 70, cat: PC, desc: "ซอฟต์แวร์ AntiVirus/Antispyware (Software AntiVirus / Antispyware)", default: true}
+    - {id: 70, cat: PC, desc: "ซอฟต์แวร์ AntiVirus/Antispyware (Software AntiVirus/Antispyware)", default: true}
     - {id: 100, cat: PC/Mobile-Other, desc: "ซอฟต์แวร์ มือถือ/ธีม/ริงโทน/mv (Software Mobile/Theme/Ringtone/MV)", default: true}
     - {id: 85, cat: PC/Mac, desc: "ซอฟต์แวร์ แม็ค (Mac Software)", default: true}
     - {id: 105, cat: PC, desc: "ซอฟต์แวร์ ลินุกซ์ (Linux Software)", default: true}
