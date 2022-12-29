@@ -11,44 +11,44 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Other, desc: "@ King", default: true}
-    - {id: 75, cat: PC/0day, desc: "OS Windows / Office", default: true}
-    - {id: 10, cat: TV, desc: "Cartoons / Animation", default: true}
-    - {id: 9, cat: TV/Sport, desc: "Sports / Football", default: true}
-    - {id: 110, cat: PC/Games, desc: "Mobile games", default: true}
-    - {id: 7, cat: PC/Games, desc: "Games", default: true}
-    - {id: 40, cat: Audio/Video, desc: "clips", default: true}
-    - {id: 16, cat: Audio/Video, desc: "Concert", default: true}
-    - {id: 3, cat: Audio/Other, desc: "Karaoke / MV", default: true}
-    - {id: 70, cat: PC, desc: "software AntiVirus / Antispyware", default: true}
-    - {id: 100, cat: PC/Mobile-Other, desc: "software Mobile / Theme / Ringtone / mv", default: true}
-    - {id: 85, cat: PC/Mac, desc: "Mac software", default: true}
-    - {id: 105, cat: PC, desc: "Linux software", default: true}
-    - {id: 8, cat: PC, desc: "software", default: true}
-    - {id: 56, cat: Other, desc: "Dictionary / map", default: true}
-    - {id: 19, cat: TV, desc: "Talk show / comedy / radio", default: true}
-    - {id: 20, cat: TV, desc: "general", default: true}
-    - {id: 55, cat: PC/Mobile-iOS, desc: "Tablet / iPhone", default: true}
-    - {id: 21, cat: TV, desc: "Dharma", default: true}
-    - {id: 2, cat: Audio/MP3, desc: "Music", default: true}
-    - {id: 130, cat: Audio/Audiobook, desc: "High quality music (Lossless)", default: true}
-    - {id: 60, cat: Other, desc: "fonts / icons / clip art / templates", default: true}
-    - {id: 90, cat: Movies/UHD, desc: "4K UHD movies", default: true}
-    - {id: 91, cat: Movies/DVD, desc: "DVD movies", default: true}
-    - {id: 92, cat: Movies/HD, desc: "Hi-Def movies", default: true}
-    - {id: 89, cat: Movies/SD, desc: "VCD movies", default: true}
-    - {id: 93, cat: TV, desc: "Mother and child @ / Learning materials for children", default: true}
-    - {id: 4, cat: TV, desc: "TV shows / Variety / Game shows", default: true}
-    - {id: 50, cat: Other, desc: "Images", default: true}
-    - {id: 18, cat: Other, desc: "website", default: true}
-    - {id: 17, cat: TV/Documentary, desc: "Documentary", default: true}
-    - {id: 11, cat: Books/Technical, desc: "Learning materials / Books / Ebook", default: true}
-    - {id: 5, cat: Movies, desc: "Movies / series [Korea]", default: true}
-    - {id: 54, cat: Movies, desc: "Movies / Series [China]", default: true}
-    - {id: 51, cat: Movies, desc: "Movie series / series [Japan]", default: true}
-    - {id: 52, cat: Movies, desc: "Movies / Series [Western]", default: true}
-    - {id: 57, cat: Movies, desc: "Movies / series [other]", default: true}
-    - {id: 53, cat: Movies, desc: "Movie series / series / drama [Thai]", default: true}
+    - {id: 1, cat: Other, desc: "@พระมหากษัตริย์ (@King)", default: true}
+    - {id: 75, cat: PC/0day, desc: "OS วินโดว์/ออฟฟิศ (OS Windows/Office)", default: true}
+    - {id: 10, cat: TV/Anime, desc: "การ์ตูน/อนิเมชั่น (Cartoons/Animation)", default: true}
+    - {id: 9, cat: TV/Sport, desc: "กีฬา/ฟุตบอล (Sports/Football)", default: true}
+    - {id: 110, cat: PC/Games, desc: "เกมส์มือถือ (Mobile Games)", default: true}
+    - {id: 7, cat: PC/Games, desc: "เกมส์ (Games)", default: true}
+    - {id: 40, cat: Audio/Video, desc: "คลิป (Clips)", default: true}
+    - {id: 16, cat: Audio/Video, desc: "คอนเสิร์ต (Concert)", default: true}
+    - {id: 3, cat: Audio/Other, desc: "คาราโอเกะ/MV (Karaoke/MV)", default: true}
+    - {id: 70, cat: PC, desc: "ซอฟต์แวร์ AntiVirus/Antispyware (Software AntiVirus/Antispyware)", default: true}
+    - {id: 100, cat: PC/Mobile-Other, desc: "ซอฟต์แวร์ มือถือ/ธีม/ริงโทน/mv (Software Mobile/Theme/Ringtone/MV)", default: true}
+    - {id: 85, cat: PC/Mac, desc: "ซอฟต์แวร์ แม็ค (Mac Software)", default: true}
+    - {id: 105, cat: PC, desc: "ซอฟต์แวร์ ลินุกซ์ (Linux Software)", default: true}
+    - {id: 8, cat: PC, desc: "ซอฟต์แวร์ (Software)", default: true}
+    - {id: 56, cat: Other, desc: "ดิกชันเนอรี่/แผนที่ (Dictionary/Map)", default: true}
+    - {id: 19, cat: TV, desc: "ทอล์คโชว์/ตลก/วิทยุ (Talk Show/Comedy/Radio)", default: true}
+    - {id: 20, cat: TV, desc: "ทั่วไป (General)", default: true}
+    - {id: 55, cat: PC/Mobile-iOS, desc: "แท็ปเล็ต/iPhone (Tablet/iPhone)", default: true}
+    - {id: 21, cat: TV, desc: "ธรรมะ (Dharma)", default: true}
+    - {id: 2, cat: Audio/MP3, desc: "เพลง (Music)", default: true}
+    - {id: 130, cat: Audio/Audiobook, desc: "เพลงคุณภาพสูง (Lossless) (High Quality Music (Lossless))", default: true}
+    - {id: 60, cat: Other, desc: "ฟอนต์/ไอคอน/คลิปอาร์ท/เทมเพลท (Fonts/Icons/Clip Art/Templates)", default: true}
+    - {id: 90, cat: Movies/UHD, desc: "ภาพยนตร์ 4K UHD (4K UHD Movies)", default: true}
+    - {id: 91, cat: Movies/DVD, desc: "ภาพยนตร์ DVD (DVD Movies)", default: true}
+    - {id: 92, cat: Movies/HD, desc: "ภาพยนตร์ Hi-Def (Hi-Def Movies)", default: true}
+    - {id: 89, cat: Movies/SD, desc: "ภาพยนตร์ VCD (VCD Movies)", default: true}
+    - {id: 93, cat: TV, desc: "แม่และเด็ก@/สื่อเรียนรู้สำหรับเด็ก (Mother and Child@/Learning Materials for Children)", default: true}
+    - {id: 4, cat: TV, desc: "รายการทีวี/วาไรตี้/เกมโชว์ (TV Shows/Variety/Game Shows)", default: true}
+    - {id: 50, cat: Other, desc: "รูปภาพ (Images)", default: true}
+    - {id: 18, cat: Other, desc: "เว็บไซต์ (Website)", default: true}
+    - {id: 17, cat: TV/Documentary, desc: "สารคดี (Documentary)", default: true}
+    - {id: 11, cat: Books/Technical, desc: "สื่อเรียนรู้/หนังสือ/Ebook (Learning Materials/Books/Ebook)", default: true}
+    - {id: 5, cat: TV, desc: "หนังชุด/ซีรีส์ [เกาหลี] (Movies/Series [Korea])", default: true}
+    - {id: 54, cat: TV, desc: "หนังชุด/ซีรีส์ [จีน] (Movies/Series [China])", default: true}
+    - {id: 51, cat: TV, desc: "หนังชุด/ซีรีส์ [ญี่ปุ่น] (Movies/Series [Japan])", default: true}
+    - {id: 52, cat: TV, desc: "หนังชุด/ซีรีส์ [ฝรั่ง] (Movies/Series [Western])", default: true}
+    - {id: 57, cat: TV, desc: "หนังชุด/ซีรีส์ [อื่นๆ] (Movies/Series [other])", default: true}
+    - {id: 53, cat: TV, desc: "หนังชุด/ซีรีส์/ละคร [ไทย] (Movie Series/Series/Drama [Thai])", default: true}
     - {id: 901, cat: XXX, desc: "XXX-Anime", default: false}
     - {id: 902, cat: XXX, desc: "XXX-Game", default: false}
     - {id: 903, cat: XXX, desc: "XXX-Japan censored", default: false}

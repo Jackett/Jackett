@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 1, cat: Other, desc: "ในพระราชสำนัก (in the royal court)"}
     - {id: 4, cat: TV, desc: "รายการทีวี (TV)"}
-    - {id: 7, cat: Movies, desc: "ภาพยนตร์ชุด (Movie Packs)"}
+    - {id: 7, cat: TV, desc: "ภาพยนตร์ชุด (Series)"}
     - {id: 12, cat: Books/EBook, desc: "หนังสือ สื่อการสอน (Books)"}
     - {id: 13, cat: Other/Misc, desc: "ทั่วไป (General)"}
     - {id: 14, cat: TV/Sport, desc: "กีฬา (Sport)"}

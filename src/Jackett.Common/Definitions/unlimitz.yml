@@ -14,7 +14,7 @@ caps:
     - {id: 93, cat: TV/Anime, desc: "การ์ตูน [Cartoon]"}
     - {id: 112, cat: TV/Sport, desc: "กีฬา [Sport]"}
     - {id: 101, cat: Other, desc: "ฟอนต์/ไอคอน/คลิปอาร์ท/เทมเพลท [Fonts, icons, clip art]"}
-    - {id: 90, cat: Movies, desc: "ซีรีย์ (หนังชุด) [movie series]"}
+    - {id: 90, cat: TV, desc: "ซีรีย์ (หนังชุด) [Series]"}
     - {id: 92, cat: Console, desc: "เกมส์ (non PC) [games]"}
     - {id: 91, cat: PC/Games, desc: "เกมส์ (PC) [games]"}
     - {id: 100, cat: PC/Mobile-Other, desc: "โปรแกรมที่ใช้บน (มือถือ) [mobiles]"}
