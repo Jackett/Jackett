@@ -13,7 +13,7 @@ caps:
   categorymappings:
     - {id: 1, cat: Other, desc: "@พระมหากษัตริย์", default: true}
     - {id: 75, cat: PC/0day, desc: "OS วินโดว์/ออฟฟิศ", default: true}
-    - {id: 10, cat: TV, desc: "การ์ตูน/อนิเมชั่น", default: true}
+    - {id: 10, cat: TV/Anime, desc: "การ์ตูน/อนิเมชั่น", default: true}
     - {id: 9, cat: TV/Sport, desc: "กีฬา/ฟุตบอล", default: true}
     - {id: 110, cat: PC/Games, desc: "เกมส์มือถือ", default: true}
     - {id: 7, cat: PC/Games, desc: "เกมส์", default: true}
