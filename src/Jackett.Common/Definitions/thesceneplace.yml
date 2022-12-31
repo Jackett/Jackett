@@ -118,6 +118,8 @@ search:
           args: f
         - name: replace
           args: ["&amp;", "&"]
+        - name: replace
+          args: ["&#039;", "'"]
         - name: re_replace
           args: ["(?i)\\.torrent$", ""]
     _name:
