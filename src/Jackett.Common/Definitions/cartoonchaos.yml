@@ -83,7 +83,7 @@ search:
     # http://www.cartoonchaos.org/index.php?page=torrents&search=transformers&category=30;21;20;26;15;16;17&options=0&active=0
     - path: index.php
   keywordsfilters:
-   # if searching for season packs switch S01 to season 1 #11775
+    # if searching for season packs switch S01 to season 1 #11775
     - name: re_replace
       args: ["(?i)(S0)(\\d{1,2})$", "season $2"]
     - name: re_replace
@@ -103,6 +103,24 @@ search:
     selector: "table.lista tr td table.lista tr:has(a[href^=\"index.php?page=torrent-details\"]):not(:has(a[href=\"index.php?page=torrents&category=0\"])){{ if .Config.freeleech }}:has(img[src=\"gold/gold.gif\"]){{ else }}{{ end }}"
 
   fields:
+    title_torrent:
+      selector: a[href^="download.php?id="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+        - name: replace
+          args: ["&amp;", "&"]
+        - name: replace
+          args: ["&#039;", "'"]
+        - name: re_replace
+          args: ["(?i)\\.torrent$", ""]
+    title_text:
+      selector: td a[href^="index.php?page=torrent-details"]
+      filters:
+        #  #11775
+        - name: re_replace
+          args: ["(?i)(season )", "S"]
     category:
       selector: td a[href^="index.php?page=torrents&category="]
       attribute: href
@@ -110,11 +128,7 @@ search:
         - name: querystring
           args: category
     title:
-      selector: td a[href^="index.php?page=torrent-details"]
-      filters:
-        #  #11775
-        - name: re_replace
-          args: ["(?i)(season )", "S"]
+      text: "{{ if .Result.title_torrent }}{{ .Result.title_torrent }}{{ else }}{{ .Result.title_text }}{{ end }}"
     details:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: href
