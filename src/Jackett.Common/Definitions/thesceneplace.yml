@@ -110,7 +110,7 @@ search:
     selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.freeleech }}, table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]):has(td[width=\"30\"]):has(img[src=\"images/gold.gif\"]){{ else }}{{ end }}"
 
   fields:
-    _torrent_name:
+    title_torrent:
       selector: a[href^="download.php?id="]
       attribute: href
       filters:
@@ -122,9 +122,8 @@ search:
           args: ["&#039;", "'"]
         - name: re_replace
           args: ["(?i)\\.torrent$", ""]
-    _name:
+    title_text:
       selector: a[href^="index.php?page=torrent-details&id="]
-
     category:
       selector: a[href^="index.php?page=torrents&category="]
       attribute: href
@@ -132,7 +131,7 @@ search:
         - name: querystring
           args: category
     title:
-      text: "{{ if .Result._torrent_name }}{{ .Result._torrent_name }}{{ else }}{{ .Result._name }}{{ end }}"
+      text: "{{ if .Result.title_torrent }}{{ .Result.title_torrent }}{{ else }}{{ .Result.title_text }}{{ end }}"
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
