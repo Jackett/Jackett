@@ -12,26 +12,18 @@ caps:
   categorymappings:
     - {id: 49, cat: Movies/SD, desc: "film / Cam"}
     - {id: 21, cat: Movies/SD, desc: "film / Cam [magyar]"}
-    - {id: 6, cat: Movies/SD, desc: "film / DVDRip/XviD"}
-    - {id: 5, cat: Movies/SD, desc: "film / DVDRip/XviD [magyar]"}
-    - {id: 32, cat: Movies/SD, desc: "film / BDRip/XviD"}
-    - {id: 33, cat: Movies/SD, desc: "film / BDRip/XviD [magyar]"}
-    - {id: 50, cat: Movies/SD, desc: "film / BDRip/x264"}
-    - {id: 51, cat: Movies/SD, desc: "film / BDRip/x264 [magyar]"}
-    - {id: 4, cat: Movies/DVD, desc: "film / DVD-R"}
-    - {id: 3, cat: Movies/DVD, desc: "film / DVD-R [magyar]"}
-    - {id: 45, cat: Movies/DVD, desc: "film / DVD9"}
-    - {id: 46, cat: Movies/DVD, desc: "film / DVD9 [magyar]"}
-    - {id: 30, cat: Movies/HD, desc: "film / HD"}
-    - {id: 31, cat: Movies/HD, desc: "film / HD [magyar]"}
-    - {id: 48, cat: Movies/BluRay, desc: "film / Bluray"}
-    - {id: 47, cat: Movies/BluRay, desc: "film / Bluray [magyar]"}
-    - {id: 10, cat: TV/SD, desc: "Sorozat / XviD"}
-    - {id: 11, cat: TV/SD, desc: "Sorozat / XviD [magyar]"}
-    - {id: 43, cat: TV/SD, desc: "Sorozat / DVD-R"}
-    - {id: 41, cat: TV/SD, desc: "Sorozat / DVD-R [magyar]"}
-    - {id: 44, cat: TV/HD, desc: "Sorozat / HD"}
-    - {id: 42, cat: TV/HD, desc: "Sorozat / HD [magyar]"}
+    - {id: 102, cat: Movies/SD, desc: "film / SD"}
+    - {id: 101, cat: Movies/SD, desc: "film / SD [magyar]"}
+    - {id: 106, cat: Movies/DVD, desc: "film / DVD-R"}
+    - {id: 105, cat: Movies/DVD, desc: "film / DVD-R [magyar]"}
+    - {id: 104, cat: Movies/HD, desc: "film / HD"}
+    - {id: 103, cat: Movies/HD, desc: "film / HD [magyar]"}
+    - {id: 108, cat: TV/SD, desc: "Sorozat / SD"}
+    - {id: 107, cat: TV/SD, desc: "Sorozat / SD [magyar]"}
+    - {id: 110, cat: TV/SD, desc: "Sorozat / DVD-R"}
+    - {id: 109, cat: TV/SD, desc: "Sorozat / DVD-R [magyar]"}
+    - {id: 112, cat: TV/HD, desc: "Sorozat / HD"}
+    - {id: 111, cat: TV/HD, desc: "Sorozat / HD [magyar]"}
     - {id: 8, cat: Audio/MP3, desc: "Zene / MP3"}
     - {id: 9, cat: Audio/MP3, desc: "Zene / MP3 [magyar]"}
     - {id: 38, cat: Audio/Lossless, desc: "Zene / Lossless"}
@@ -45,9 +37,9 @@ caps:
     - {id: 16, cat: PC/ISO, desc: "Programok / PC"}
     - {id: 24, cat: PC/Mobile-Other, desc: "Programok / Mobil"}
     - {id: 53, cat: PC/0day, desc: "Programok / Egyéb"}
-    - {id: 17, cat: XXX/XviD, desc: "Pornó / XviD"}
+    - {id: 113, cat: XXX/XviD, desc: "Pornó / SD"}
     - {id: 34, cat: XXX/DVD, desc: "Pornó / DVD-R"}
-    - {id: 35, cat: XXX, desc: "Pornó / HD"}
+    - {id: 114, cat: XXX, desc: "Pornó / HD"}
     - {id: 36, cat: XXX, desc: "Pornó / Képek"}
     - {id: 20, cat: Books, desc: "E-Book / Magyar"}
     - {id: 52, cat: Books, desc: "E-Book / Egyéb"}
