@@ -561,7 +561,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TvRoad
  * TVstore
  * Twilight Torrents
- * Twilights Zoom
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UHDBits
  * UnionGang
