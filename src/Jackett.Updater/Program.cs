@@ -531,6 +531,7 @@ namespace Jackett.Updater
                 "Definitions/tellytorrent.yml", // switch to *-API #8682
                 "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
                 "Definitions/tfile.yml",
+                "Definitions/theaudioscene.yml",
                 "Definitions/the-devils-lounge.yml",
                 "Definitions/thehorrorcharnel.yml",
                 "Definitions/the-madhouse.yml",
