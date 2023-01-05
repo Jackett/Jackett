@@ -164,9 +164,9 @@ search:
       selector: a.thumbnail > span > img
       attribute: src
     grabs:
-      selector: td:nth-child(9)
+      selector: td:nth-child(10)
     size:
-      selector: td:nth-child(6)
+      selector: td:nth-child(7)
     files:
       selector: a[href*="&filelist=1"]
     seeders:
@@ -174,7 +174,7 @@ search:
     leechers:
       selector: td:has(a[href*="&todlers="])
     date:
-      selector: td:nth-child(5)
+      selector: td:nth-child(6)
       filters:
         - name: re_replace
           args: ["\\s", " "]
