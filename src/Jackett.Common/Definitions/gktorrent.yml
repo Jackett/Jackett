@@ -50,6 +50,7 @@ caps:
     movie-search: [q]
     music-search: [q]
     book-search: [q]
+  allowrawsearch: true
 
 settings:
   - name: multilang

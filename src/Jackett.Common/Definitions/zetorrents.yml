@@ -33,6 +33,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+  allowrawsearch: true
 
 settings:
   - name: info_8000
