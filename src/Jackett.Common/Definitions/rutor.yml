@@ -74,7 +74,7 @@ search:
     - path: "{{ if .Query.IMDBID }}search/0/0/010/{{ .Config.sort }}/{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}{{ end }}{{ if or .Keywords .Query.IMDBID }}{{ else }}top/{{ end }}"
 
   rows:
-    selector: tr:has(td:has(a.downgif))
+    selector: tr:has(td:has(a[href^="magnet:?xt="]))
 
   fields:
     category:
@@ -102,11 +102,7 @@ search:
     details:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       attribute: href
-    download:
-      selector: td:nth-of-type(2) a.downgif
-      attribute: href
     magnet:
-      optional: true
       selector: td:nth-of-type(2) a[href^="magnet:?xt="]
       attribute: href
     date:
