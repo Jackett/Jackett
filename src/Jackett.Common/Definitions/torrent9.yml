@@ -11,9 +11,6 @@ links:
   - https://www.torrent9.fm/
   - https://torrent9.unblockninja.com/
 legacylinks:
-  - https://www.torrent9.gg/
-
-legacylinks:
   - http://www.torrent9.ec/
   - http://www.torrent9.red/
   - http://www.torrent9.bz/
@@ -45,6 +42,7 @@ legacylinks:
   - https://www.torrent9.is/
   - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
   - https://www.oxtorrent.me/ # http 522 Connection timed out
+  - https://www.torrent9.gg/
 
 caps:
   # dont forget to update the search fields category case block
