@@ -106,6 +106,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("cat[]=19&tags=DVDR", TorznabCatType.MoviesSD, "Movies/DVDR");
             AddCategoryMapping("cat[]=19&tags=WMV", TorznabCatType.Movies, "Movies/WMV");
             AddCategoryMapping("cat[]=19&tags=CAM", TorznabCatType.Movies, "Movies/CAM");
+            AddCategoryMapping("cat[]=19&tags=DolbyVision", TorznabCatType.Movies, "Movies/DolbyVision");
 
             // Music
             AddCategoryMapping("cat[]=6", TorznabCatType.Audio, "Music");
