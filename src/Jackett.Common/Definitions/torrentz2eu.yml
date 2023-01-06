@@ -75,7 +75,7 @@ search:
       selector: td:nth-child(5)
       filters:
         - name: re_replace
-          args: ["(?i)(st|nd|rd|th|')", ""]
+          args: ["(?i)(st|nd|rd|th|'|\\.)", ""]
         - name: dateparse
           args: "Jan. 02 06"
     downloadvolumefactor:
