@@ -8,12 +8,11 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.pet/
+  - https://torrentdownload.unblockit.ink/
   - https://torrentdownload.nocensor.lol/
 legacylinks:
   - https://torrentdownload.nocensor.space/
   - https://torrentdownload.nocensor.work/
-  - https://torrentdownload.unblockit.kim/
   - https://torrentdownload.unblockit.bz/
   - https://torrentdownload.unblockit.tv/
   - https://torrentdownload.unblockit.how/
@@ -30,6 +29,7 @@ legacylinks:
   - https://torrentdownload.unblockit.nz/
   - https://torrentdownload.nocensor.world/
   - https://torrentdownload.unblockit.page/
+  - https://torrentdownload.unblockit.pet/
 
 caps:
   categorymappings:

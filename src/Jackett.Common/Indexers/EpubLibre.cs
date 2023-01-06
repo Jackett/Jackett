@@ -45,12 +45,11 @@ namespace Jackett.Common.Indexers
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.epublibre.org/",
-            "https://epublibre.unblockit.pet/"
+            "https://epublibre.unblockit.ink/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://epublibre.org/",
-            "https://epublibre.unblockit.kim/",
             "https://epublibre.unblockit.bz/",
             "https://epublibre.unblockit.tv/",
             "https://epublibre.unblockit.how/",
@@ -63,7 +62,8 @@ namespace Jackett.Common.Indexers
             "https://epublibre.unblockit.bet/",
             "https://epublibre.unblockit.cat/",
             "https://epublibre.unblockit.nz/",
-            "https://epublibre.unblockit.page/"
+            "https://epublibre.unblockit.page/",
+            "https://epublibre.unblockit.pet/"
         };
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
