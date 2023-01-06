@@ -340,6 +340,7 @@ namespace Jackett.Updater
                 "Definitions/efectodoppler.yml",
                 "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
+                "Definitions/elitetorrent-biz.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/emtrek.yml",
                 "Definitions/eotforum.yml",
