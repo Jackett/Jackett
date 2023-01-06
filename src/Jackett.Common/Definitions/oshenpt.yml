@@ -186,4 +186,3 @@ search:
       selector: td:nth-child(2)
       remove: a, img
 # NexusPHP v1.8.0	2023-01-05
-
