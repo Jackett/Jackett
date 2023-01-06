@@ -14,46 +14,47 @@ caps:
     - {id: 1001000, cat: Audio/MP3, desc: "MP3"}
     - {id: 1002000, cat: Audio/Lossless, desc: "Lossless"}
     - {id: 1003000, cat: Audio/Audiobook, desc: "Audiobook"}
-    - {id: 1004000, cat: Audio/Video, desc: "Video"}
+    - {id: 1004000, cat: Audio/Video, desc: "Audio Video"}
     - {id: 1005000, cat: Audio/Other, desc: "Radio"}
-    - {id: 1006000, cat: Audio/Other, desc: "Other"}
+    - {id: 1006000, cat: Audio/Other, desc: "Audio Other"}
     - {id: 2000000, cat: TV, desc: "TV"}
-    - {id: 2001000, cat: TV/HD, desc: "HD"}
-    - {id: 2002000, cat: TV/SD, desc: "SD"}
-    - {id: 2003000, cat: TV/UHD, desc: "UHD"}
+    - {id: 2001000, cat: TV/HD, desc: "TV HD"}
+    - {id: 2002000, cat: TV/SD, desc: "TV SD"}
+    - {id: 2003000, cat: TV/UHD, desc: "TV UHD"}
     - {id: 2004000, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 2005000, cat: TV/Foreign, desc: "Foreign"}
+    - {id: 2005000, cat: TV/Foreign, desc: "TV Foreign"}
     - {id: 2006000, cat: TV/Sport, desc: "Sport"}
     - {id: 2007000, cat: TV/Other, desc: "Cartoon"}
-    - {id: 2008000, cat: TV/Other, desc: "Other"}
+    - {id: 2008000, cat: TV/Other, desc: "TV Other"}
     - {id: 3000000, cat: Movies, desc: "Movies"}
-    - {id: 3001000, cat: Movies/HD, desc: "HD"}
-    - {id: 3002000, cat: Movies/SD, desc: "SD"}
-    - {id: 3003000, cat: Movies/UHD, desc: "UHD"}
-    - {id: 3004000, cat: Movies/DVD, desc: "DVD"}
-    - {id: 3005000, cat: Movies/Foreign, desc: "Foreign"}
-    - {id: 3006000, cat: Movies/Foreign, desc: "Bollywood"}
-    - {id: 3007000, cat: Movies/3D, desc: "3D"}
-    - {id: 3008000, cat: Movies/Other, desc: "Other"}
+    - {id: 3001000, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 3002000, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 3003000, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 3004000, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: 3005000, cat: Movies/Foreign, desc: "Movies Foreign"}
+    - {id: 3006000, cat: Movies/Foreign, desc: "Movies Bollywood"}
+    - {id: 3007000, cat: Movies/3D, desc: "Movies 3D"}
+    - {id: 3008000, cat: Movies/Other, desc: "Movies Other"}
     - {id: 4000000, cat: PC, desc: "PC"}
     - {id: 4001000, cat: PC/Games, desc: "Games"}
     - {id: 4002000, cat: PC/0day, desc: "Software"}
     - {id: 4003000, cat: PC/Mac, desc: "Mac"}
     - {id: 4004000, cat: PC/ISO, desc: "Unix"}
     - {id: 5000000, cat: XXX, desc: "XXX"}
-    - {id: 5001000, cat: XXX/x264, desc: "Video"}
-    - {id: 5002000, cat: XXX/ImageSet, desc: "ImageSet"}
-    - {id: 5003000, cat: XXX/Other, desc: "Games"}
-    - {id: 5004000, cat: XXX/Other, desc: "Hentai"}
-    - {id: 5005000, cat: XXX/Other, desc: "Other"}
+    - {id: 5001000, cat: XXX/x264, desc: "XXX Video"}
+    - {id: 5002000, cat: XXX/ImageSet, desc: "XXX ImageSet"}
+    - {id: 5003000, cat: XXX/Other, desc: "XXX Games"}
+    - {id: 5004000, cat: XXX/Other, desc: "XXX Hentai"}
+    - {id: 5005000, cat: XXX/Other, desc: "XXX Other"}
     - {id: 6000000, cat: TV/Anime, desc: "Anime"}
-    - {id: 6001000, cat: TV/Anime, desc: "Subbed"}
-    - {id: 6002000, cat: TV/Anime, desc: "Dubbed"}
-    - {id: 6003000, cat: TV/Anime, desc: "Dual audio"}
-    - {id: 6004000, cat: TV/Anime, desc: "Raw"}
+    - {id: 6001000, cat: TV/Anime, desc: "Anime Subbed"}
+    - {id: 6002000, cat: TV/Anime, desc: "Anime Dubbed"}
+    - {id: 6003000, cat: TV/Anime, desc: "Anime Dual audio"}
+    - {id: 6004000, cat: TV/Anime, desc: "Anime Raw"}
     - {id: 6005000, cat: Audio/Video, desc: "Music Video"}
     - {id: 6006000, cat: Books/Other, desc: "Literature"}
     - {id: 6007000, cat: Audio/Other, desc: "Music"}
+    - {id: 6008000, cat: TV/Anime, desc: "Anime non-english translated"}
     - {id: 7000000, cat: Console, desc: "Console"}
     - {id: 7001000, cat: Console/PS4, desc: "PS4"}
     - {id: 7002000, cat: Console/PS3, desc: "PS3"}
@@ -73,15 +74,15 @@ caps:
     - {id: 8000000, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 8001000, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 8002000, cat: PC/Mobile-iOS, desc: "IOS"}
-    - {id: 8003000, cat: PC/Mobile-Other, desc: "Other"}
+    - {id: 8003000, cat: PC/Mobile-Other, desc: "PC Other"}
     - {id: 9000000, cat: Books, desc: "Books"}
     - {id: 9001000, cat: Books/EBook, desc: "EBooks"}
     - {id: 9002000, cat: Books/Comics, desc: "Comics"}
     - {id: 9003000, cat: Books/Mags, desc: "Magazines"}
     - {id: 9004000, cat: Books/Technical, desc: "Technical"}
-    - {id: 9005000, cat: Books/Other, desc: "Other"}
+    - {id: 9005000, cat: Books/Other, desc: "Books Other"}
     - {id: 10000000, cat: Other, desc: "Other"}
-    - {id: 10001000, cat: Other/Misc, desc: "Misc"}
+    - {id: 10001000, cat: Other/Misc, desc: "Other Misc"}
 
   modes:
     search: [q]
