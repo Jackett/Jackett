@@ -436,6 +436,7 @@ namespace Jackett.Updater
                 "Definitions/microbit.yml",
                 "Definitions/mkvcage.yml",
                 "Definitions/moecat.yml",
+                "Definitions/mononokebt.yml",
                 "Definitions/monova.yml",
                 "Definitions/montorrent.yml",
                 "Definitions/movcr.yml",

@@ -427,7 +427,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MMA-Torrents [![(invite needed)][inviteneeded]](#)
  * MNV (Max-New-Vision)
  * MOJBLiNK
- * Mononoké-BT [![(invite needed)][inviteneeded]](#)
  * MoreThanTV (MTV)
  * MouseBits
  * Movie-Torrentz
