@@ -67,8 +67,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
             AddCategoryMapping(94, TorznabCatType.TVUHD, "4K TV Boxsets");
             AddCategoryMapping(70, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(4, TorznabCatType.PC, "Apps");
-            AddCategoryMapping(82, TorznabCatType.PCMac, "Mac");
             AddCategoryMapping(80, TorznabCatType.AudioAudiobook, "Audiobooks");
             AddCategoryMapping(66, TorznabCatType.MoviesBluRay, "Blu-Ray");
             AddCategoryMapping(48, TorznabCatType.Books, "Books Magazines");
@@ -92,9 +90,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(71, TorznabCatType.TV, "PPV");
             AddCategoryMapping(54, TorznabCatType.TV, "Soaps");
             AddCategoryMapping(20, TorznabCatType.TVSport, "Sports");
-            AddCategoryMapping(86, TorznabCatType.TVSport, "MotorSports");
-            AddCategoryMapping(89, TorznabCatType.TVSport, "Olympics 2016");
-            AddCategoryMapping(88, TorznabCatType.TVSport, "World Cup");
+            AddCategoryMapping(102, TorznabCatType.TVSport, "Sports FIFA World Cup");
+            AddCategoryMapping(86, TorznabCatType.TVSport, "Sports MotorSports");
+            AddCategoryMapping(89, TorznabCatType.TVSport, "Sports Olympics");
+            AddCategoryMapping(88, TorznabCatType.TVSport, "Sports UK Football");
             AddCategoryMapping(83, TorznabCatType.Movies, "TOTM");
             AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
             AddCategoryMapping(76, TorznabCatType.TVHD, "TV HD Boxsets");
@@ -111,8 +110,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("4K TV", TorznabCatType.TVUHD);
             AddCategoryMapping("4K TV Boxsets", TorznabCatType.TVUHD);
             AddCategoryMapping("Anime", TorznabCatType.TVAnime);
-            AddCategoryMapping("Apps", TorznabCatType.PC);
-            AddCategoryMapping("Mac", TorznabCatType.PCMac);
             AddCategoryMapping("Audiobooks", TorznabCatType.AudioAudiobook);
             AddCategoryMapping("Blu-Ray", TorznabCatType.MoviesBluRay);
             AddCategoryMapping("Books Magazines", TorznabCatType.Books);
@@ -134,9 +131,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping("PPV", TorznabCatType.TV);
             AddCategoryMapping("Soaps", TorznabCatType.TV);
             AddCategoryMapping("Sports", TorznabCatType.TVSport);
+            AddCategoryMapping("FIFA World Cup", TorznabCatType.TVSport);
             AddCategoryMapping("MotorSports", TorznabCatType.TVSport);
-            AddCategoryMapping("Olympics 2016", TorznabCatType.TVSport);
-            AddCategoryMapping("World Cup", TorznabCatType.TVSport);
+            AddCategoryMapping("Olympics", TorznabCatType.TVSport);
+            AddCategoryMapping("UK Football", TorznabCatType.TVSport);
             AddCategoryMapping("TOTM", TorznabCatType.Movies);
             AddCategoryMapping("TV Boxsets", TorznabCatType.TVSD);
             AddCategoryMapping("HD Boxsets", TorznabCatType.TVHD);
