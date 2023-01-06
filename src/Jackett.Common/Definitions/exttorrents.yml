@@ -8,12 +8,14 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://ext.to/
-  - https://site.extto.com/
-  - https://ext.torrentbay.to/
+  - https://search.extto.com/
+  - https://extranet.torrentbay.to/
 legacylinks:
   - https://ext.unblockninja.com/
   - https://t.extto.com/
   - https://torrent.extto.com/
+  - https://site.extto.com/
+  - https://ext.torrentbay.to/
 
 caps:
   categorymappings:
