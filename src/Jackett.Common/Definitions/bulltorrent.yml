@@ -88,17 +88,16 @@ search:
       selector: a[href^="/torrent/"]
       attribute: href
     date_day:
-      selector: td:nth-child(2):contains("day")
+      selector: td:nth-child(2):contains("day"), td:nth-child(2):contains("Hoy"), td:nth-child(2):contains("Ayer")
       optional: true
       filters:
+        - name: replace
+          args: ["Hoy", "Today"]
+        - name: replace
+          args: ["Ayer", "Yesterday"]
         - name: fuzzytime
-    date_ago:
-      selector: td:nth-child(2):contains("ago")
-      optional: true
-      filters:
-        - name: timeago
     date_year:
-      selector: td:nth-child(2):not(:contains("ago")):not(:contains("day"))
+      selector: td:nth-child(2):not(:contains("day")):not(:contains("Hoy")):not(:contains("Ayer"))
       optional: true
       filters:
         - name: append
@@ -106,7 +105,7 @@ search:
         - name: dateparse
           args: "2 Jan -07:00"
     date:
-      text: "{{ if or .Result.date_year .Result.date_ago .Result.date_day }}{{ or .Result.date_year  .Result.date_ago .Result.date_day }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(3)
     seeders:
