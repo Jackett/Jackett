@@ -8,8 +8,10 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://torrent9.to/
-  - https://www.torrent9.gg/
+  - https://www.torrent9.fm/
   - https://torrent9.unblockninja.com/
+legacylinks:
+  - https://www.torrent9.gg/
 
 legacylinks:
   - http://www.torrent9.ec/
