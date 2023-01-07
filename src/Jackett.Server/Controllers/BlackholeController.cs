@@ -15,40 +15,40 @@ namespace Jackett.Server.Controllers
 {
     [AllowAnonymous]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-    [Route("bh/{indexerID}")]
+    [Route("bh/{indexerId}")]
     public class BlackholeController : Controller
     {
-        private readonly Logger logger;
-        private readonly IIndexerManagerService indexerService;
-        private readonly ServerConfig serverConfig;
-        private readonly IProtectionService protectionService;
+        private readonly Logger _logger;
+        private readonly IIndexerManagerService _indexerService;
+        private readonly ServerConfig _serverConfig;
+        private readonly IProtectionService _protectionService;
 
         public BlackholeController(IIndexerManagerService i, Logger l, ServerConfig sConfig, IProtectionService ps)
         {
-            logger = l;
-            indexerService = i;
-            serverConfig = sConfig;
-            protectionService = ps;
+            _logger = l;
+            _indexerService = i;
+            _serverConfig = sConfig;
+            _protectionService = ps;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Blackhole(string indexerID, string path, string jackett_apikey, string file)
+        public async Task<IActionResult> BlackholeAsync(string indexerId, string path, string jackett_apikey, string file)
         {
             var jsonReply = new JObject();
             try
             {
-                if (serverConfig.APIKey != jackett_apikey)
+                if (_serverConfig.APIKey != jackett_apikey)
                     return Unauthorized();
 
-                var indexer = indexerService.GetWebIndexer(indexerID);
+                var indexer = _indexerService.GetWebIndexer(indexerId);
                 if (!indexer.IsConfigured)
                 {
-                    logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
+                    _logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
                     throw new Exception("This indexer is not configured.");
                 }
 
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
-                path = protectionService.UnProtect(path);
+                path = _protectionService.UnProtect(path);
                 var remoteFile = new Uri(path, UriKind.RelativeOrAbsolute);
                 var fileExtension = ".torrent";
 
@@ -72,14 +72,14 @@ namespace Jackett.Server.Controllers
                     fileExtension = ".magnet";
                 }
 
-                if (string.IsNullOrWhiteSpace(serverConfig.BlackholeDir))
+                if (string.IsNullOrWhiteSpace(_serverConfig.BlackholeDir))
                 {
                     throw new Exception("Blackhole directory not set!");
                 }
 
-                if (!Directory.Exists(serverConfig.BlackholeDir))
+                if (!Directory.Exists(_serverConfig.BlackholeDir))
                 {
-                    throw new Exception($"Blackhole directory does not exist: {serverConfig.BlackholeDir}");
+                    throw new Exception($"Blackhole directory does not exist: {_serverConfig.BlackholeDir}");
                 }
 
                 var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.DisplayName, '_', false);
@@ -90,20 +90,22 @@ namespace Jackett.Server.Controllers
 
                 try
                 {
-                    System.IO.File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, fileName), downloadBytes);
+                    System.IO.File.WriteAllBytes(Path.Combine(_serverConfig.BlackholeDir, fileName), downloadBytes);
                 }
                 catch (IOException)
                 {
                     // Sometimes a torrent's name is very long which causes an exception when writing the file to disk.
                     // In this specific case, use a GUID instead of the torrent's name.
-                    System.IO.File.WriteAllBytes(Path.Combine(serverConfig.BlackholeDir, Guid.NewGuid() + fileExtension), downloadBytes);
+                    System.IO.File.WriteAllBytes(Path.Combine(_serverConfig.BlackholeDir, Guid.NewGuid() + fileExtension), downloadBytes);
                 }
 
                 jsonReply["result"] = "success";
             }
             catch (Exception e)
             {
-                logger.Error($"Error downloading to blackhole. indexer: {indexerID} path: {path}\n{e}");
+                _logger.Error($"Error downloading to blackhole. " +
+                              $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
+                              $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
                 jsonReply["result"] = "error";
                 jsonReply["error"] = e.Message;
             }
