@@ -95,7 +95,7 @@ namespace Jackett.Common.Models
             UploadVolumeFactor = copyFrom.UploadVolumeFactor;
         }
 
-        public virtual object Clone() => new ReleaseInfo(this);
+        public object Clone() => new ReleaseInfo(this);
 
         // ex: " 3.5  gb   " -> "3758096384" , "3,5GB" -> "3758096384" ,  "296,98 MB" -> "311406100.48" , "1.018,29 MB" -> "1067754455.04"
         // ex:  "1.018.29mb" -> "1067754455.04" , "-" -> "0" , "---" -> "0"
