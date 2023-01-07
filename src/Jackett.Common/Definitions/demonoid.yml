@@ -40,6 +40,8 @@ legacylinks:
 caps:
   categorymappings:
     # fetch these from https://www.demonoid.is/cached/torrent_categories_script.js?v5
+    # Everything
+    - {id: 0, cat: Other/Misc, desc: "Miscellaneous"}
     # Applications
     - {id: 1, cat: PC/Mobile-Android, desc: "Applications Android"}
     - {id: 2, cat: PC/Mobile-iOS, desc: "Applications phone / Ipod touch"}
@@ -369,6 +371,8 @@ search:
 
   fields:
     category:
+      text: 0
+    category|noappend:
       selector: span.table__column__subtext > a:nth-child(2)
       attribute: href
       optional: true
