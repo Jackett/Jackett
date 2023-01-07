@@ -15,39 +15,39 @@ namespace Jackett.Server.Controllers
     [AllowAnonymous]
     [DownloadActionFilter]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-    [Route("img/{indexerID}")]
+    [Route("img/{indexerId}")]
     public class ImageController : Controller
     {
-        private readonly ServerConfig serverConfig;
-        private readonly Logger logger;
-        private readonly IIndexerManagerService indexerService;
-        private readonly IProtectionService protectionService;
+        private readonly ServerConfig _serverConfig;
+        private readonly Logger _logger;
+        private readonly IIndexerManagerService _indexerService;
+        private readonly IProtectionService _protectionService;
 
         public ImageController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig sConfig)
         {
-            serverConfig = sConfig;
-            logger = l;
-            indexerService = i;
-            protectionService = ps;
+            _serverConfig = sConfig;
+            _logger = l;
+            _indexerService = i;
+            _protectionService = ps;
         }
 
         [HttpGet]
-        public async Task<IActionResult> DownloadImage(string indexerID, string path, string jackett_apikey, string file)
+        public async Task<IActionResult> DownloadImageAsync(string indexerId, string path, string jackett_apikey, string file)
         {
             try
             {
-                if (serverConfig.APIKey != jackett_apikey)
+                if (_serverConfig.APIKey != jackett_apikey)
                     return Unauthorized();
 
-                var indexer = indexerService.GetWebIndexer(indexerID);
+                var indexer = _indexerService.GetWebIndexer(indexerId);
                 if (!indexer.IsConfigured)
                 {
-                    logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
+                    _logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
                     return Forbid("This indexer is not configured.");
                 }
 
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
-                path = protectionService.UnProtect(path);
+                path = _protectionService.UnProtect(path);
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
                 var response = await indexer.DownloadImage(target);
@@ -64,7 +64,9 @@ namespace Jackett.Server.Controllers
             }
             catch (Exception e)
             {
-                logger.Debug($"Error downloading image. indexer: {indexerID} path: {path}\n{e}");
+                _logger.Debug($"Error downloading image. " +
+                              $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
+                              $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
                 return new StatusCodeResult((int)System.Net.HttpStatusCode.InternalServerError);
             }
         }
