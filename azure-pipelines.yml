@@ -95,7 +95,7 @@ stages:
             Mono:
               buildDescription: Mono
               imageName: ubuntu-22.04
-              framework: net461
+              framework: net462
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.Mono.tar.gz
@@ -419,7 +419,7 @@ stages:
             Mono:
               buildDescription: Mono
               imageName: ubuntu-22.04
-              framework: net461
+              framework: net462
               runtime: linux-x64
         pool:
           vmImage: $(imageName)
@@ -518,7 +518,7 @@ stages:
               buildDescription: Mono
               imageName: ubuntu-22.04
               artifactName: Jackett.Binaries.Mono.tar.gz
-              framework: net461
+              framework: net462
               runtime: linux-x64
         pool:
           vmImage: $(imageName)
