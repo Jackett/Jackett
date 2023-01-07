@@ -440,16 +440,6 @@ stages:
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
-          # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
-          # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
-          - task: DotNetCoreCLI@2
-            displayName: Restore Test Project
-            inputs:
-              command: restore
-              projects: '**/*.Test*/*.csproj'
-              includeNuGetOrg: true
-              restoreArguments: '--runtime $(runtime)'
-
           - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
             condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
@@ -565,16 +555,6 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
-
-          # this task is a workaround to fix a bug in Azure (not required under normal circumstances)
-          # https://developercommunity.visualstudio.com/content/problem/983843/dotnet-build-task-does-not-use-nugetorg-for-one-pr.html
-          - task: DotNetCoreCLI@2
-            displayName: Restore IntegrationTest Project
-            inputs:
-              command: restore
-              projects: '**/*IntegrationTest*/*.csproj'
-              includeNuGetOrg: true
-              restoreArguments: '--runtime $(runtime)'
 
           - task: DotNetCoreCLI@2
             displayName: Integration Tests (Mono, Linux and macOS)
