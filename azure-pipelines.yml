@@ -113,12 +113,13 @@ stages:
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
           - task: DotNetCoreCLI@2
-            displayName: Restore All Projects
+            displayName: Build DateTimeRoutines
             inputs:
-              command: restore
-              projects: 'src/*/*.csproj'
-              includeNuGetOrg: true
-              restoreArguments: '--runtime $(runtime)'
+              command: build
+              projects: 'src/DateTimeRoutines/DateTimeRoutines.csproj'
+              publishWebProjects: false
+              zipAfterPublish: false
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework netstandard2.0'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
