@@ -116,6 +116,7 @@ stages:
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
+            retryCountOnTaskFailure: 2
             inputs:
               command: publish
               projects: 'src/Jackett.Server/Jackett.Server.csproj'
