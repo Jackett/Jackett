@@ -73,21 +73,27 @@ stages:
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
-              imageName: ubuntu-22.04
+              # We build musl binaries using a different ubuntu image on purpose. The stages using the same image could
+              # run in the same virtual machine sharing the file system and causing this error:
+              # error MSB4018: System.IO.IOException: The process cannot access the file '/home/vsts/work/1/s/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
+              # because it is being used by another process. [/home/vsts/work/1/s/src/DateTimeRoutines/DateTimeRoutines.csproj]
+              imageName: ubuntu-20.04
               framework: $(netCoreFramework)
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
-              imageName: ubuntu-22.04
+              # see comment in LinuxMuslAMDx64
+              imageName: ubuntu-20.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
-              imageName: ubuntu-22.04
+              # see comment in LinuxMuslAMDx64
+              imageName: ubuntu-20.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm64
               archiveType: tar
@@ -105,7 +111,6 @@ stages:
         steps:
           - checkout: self
             clean: false
-            path: '$(framework)-$(runtime)'
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -122,7 +127,7 @@ stages:
               projects: 'src/Jackett.Server/Jackett.Server.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory)/$(framework)-$(runtime) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Updater
@@ -131,7 +136,7 @@ stages:
               projects: 'src/Jackett.Updater/Jackett.Updater.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory)/$(framework)-$(runtime) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Tray (Windows only)
@@ -141,7 +146,7 @@ stages:
               projects: 'src/Jackett.Tray/Jackett.Tray.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory)/$(framework)-$(runtime) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Service (Windows only)
@@ -151,50 +156,50 @@ stages:
               projects: 'src/Jackett.Service/Jackett.Service.csproj'
               publishWebProjects: false
               zipAfterPublish: false
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory)/$(framework)-$(runtime) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)-windows --self-contained --output $(Build.BinariesDirectory) /p:AssemblyVersion=$(jackettVersion) /p:FileVersion=$(jackettVersion) /p:InformationalVersion=$(jackettVersion) /p:Version=$(jackettVersion)'
 
           - task: CopyFiles@2
             displayName: Copy Jackett Server
             inputs:
-              SourceFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett.Server
+              SourceFolder: $(Build.BinariesDirectory)/Jackett.Server
               contents: '**'
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
             displayName: Copy Jackett Updater
             inputs:
-              SourceFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett.Updater
+              SourceFolder: $(Build.BinariesDirectory)/Jackett.Updater
               contents: JackettUpdater*
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
             displayName: Copy Jackett Tray (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
-              SourceFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett.Tray
+              SourceFolder: $(Build.BinariesDirectory)/Jackett.Tray
               contents: |
                 System.Drawing.dll
                 System.Security.Cryptography.ProtectedData.dll
                 WindowsBase.dll
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
               overWrite: true
 
           - task: CopyFiles@2
             displayName: Copy Jackett Tray Part 2 (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
-              SourceFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett.Tray
+              SourceFolder: $(Build.BinariesDirectory)/Jackett.Tray
               contents: '*'
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
               overWrite: false
 
           - task: CopyFiles@2
             displayName: Copy Jackett Service (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
-              SourceFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett.Service
+              SourceFolder: $(Build.BinariesDirectory)/Jackett.Service
               contents: JackettService*
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
             displayName: Copy Windows Specific Scripts (Windows only)
@@ -202,7 +207,7 @@ stages:
             inputs:
               SourceFolder: $(Build.SourcesDirectory)
               contents: jackett_launcher.bat
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
             displayName: Copy Mono Specific Scripts
@@ -212,7 +217,7 @@ stages:
               contents: |
                 install_service_systemd_mono.sh
                 Upstart.config
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
             displayName: Copy macOS Specific Scripts
@@ -222,7 +227,7 @@ stages:
               contents: |
                 install_service_macos
                 uninstall_jackett_macos
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
 
           - task: CopyFiles@2
             displayName: Copy Linux Specific Scripts
@@ -232,7 +237,7 @@ stages:
               contents: |
                 install_service_systemd.sh
                 jackett_launcher.sh
-              targetFolder: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              targetFolder: $(Build.BinariesDirectory)/Jackett
 
           # There is an issue with Mono 5.8 (fixed in Mono 5.12) where its expecting to use its own patched version of
           # System.Net.Http.dll, instead of the version supplied in folder
@@ -246,26 +251,26 @@ stages:
             displayName: Patch Mono Build (Mono only)
             condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
             inputs:
-              workingDirectory: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              workingDirectory: $(Build.BinariesDirectory)/Jackett
               targetType: inline
               script: |
-                $file = '$(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett/JackettConsole.exe.config'
+                $file = '$(Build.BinariesDirectory)/Jackett/JackettConsole.exe.config'
                 $xml = [xml] (Get-Content $file)
                 $newVersion = $xml.SelectSingleNode("configuration/runtime/*[name()='assemblyBinding']/*[name()='dependentAssembly']/*[name()='assemblyIdentity'][@name='System.Net.Http']/../*[name()='bindingRedirect']/@newVersion")
                 $newVersion.Value = '4.0.0.0'
                 $xml.Save($file)
-                Remove-Item '$(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett/System.Net.Http.dll'
-                Remove-Item '$(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett/System.Runtime.InteropServices.RuntimeInformation.dll'
+                Remove-Item '$(Build.BinariesDirectory)/Jackett/System.Net.Http.dll'
+                Remove-Item '$(Build.BinariesDirectory)/Jackett/System.Runtime.InteropServices.RuntimeInformation.dll'
 
           - task: Bash@3
             displayName: Set Folder and File Permissions (Mono, Linux and macOS)
             condition: and(succeeded(), not(startsWith(variables['runtime'], 'win')))
             inputs:
-              workingDirectory: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              workingDirectory: $(Build.BinariesDirectory)/Jackett
               targetType: inline
               script: |
-                chmod 755 $(find "$(Build.BinariesDirectory)/$(framework)-$(runtime)"/Jackett -type d)
-                chmod 644 $(find "$(Build.BinariesDirectory)/$(framework)-$(runtime)"/Jackett -type f)
+                chmod 755 $(find "$(Build.BinariesDirectory)"/Jackett -type d)
+                chmod 644 $(find "$(Build.BinariesDirectory)"/Jackett -type f)
                 chmod 755 jackett
                 chmod 755 JackettUpdater
                 if [ -f install_service_systemd_mono.sh ]; then chmod 755 install_service_systemd_mono.sh; fi
@@ -277,7 +282,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: Compress Binaries
             inputs:
-              rootFolderOrFile: $(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+              rootFolderOrFile: $(Build.BinariesDirectory)/Jackett
               includeRootFolder: true
               archiveType: '$(archiveType)'
               tarCompression: gz
@@ -291,7 +296,7 @@ stages:
                 iscc.exe $(Build.SourcesDirectory)/Installer.iss
                 /O"$(Build.ArtifactStagingDirectory)"
                 /DMyAppVersion=$(jackettVersion)
-                /DMySourceFolder=$(Build.BinariesDirectory)/$(framework)-$(runtime)/Jackett
+                /DMySourceFolder=$(Build.BinariesDirectory)/Jackett
                 /DMyOutputFilename=Jackett.Installer.Windows
 
           - task: PublishBuildArtifacts@1
@@ -311,7 +316,6 @@ stages:
         steps:
           - checkout: self
             clean: false
-            path: lint-dotnet
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -346,7 +350,6 @@ stages:
         steps:
           - checkout: self
             clean: false
-            path: lint-yaml
 
           - task: UsePythonVersion@0
             displayName: Install Python
@@ -368,7 +371,6 @@ stages:
         steps:
           - checkout: self
             clean: false
-            path: validate-yaml
 
           - task: Bash@3
             displayName: Validate YAML Schema
@@ -427,7 +429,6 @@ stages:
         steps:
           - checkout: self
             clean: false
-            path: '$(framework)-$(runtime)'
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -526,7 +527,6 @@ stages:
         steps:
           - checkout: self
             clean: false
-            path: '$(framework)-$(runtime)'
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
@@ -605,7 +605,6 @@ stages:
         steps:
           - checkout: self
             clean: false
-            path: publish
 
           - task: DownloadBuildArtifacts@0
             displayName: Download Artifacts for Publish
