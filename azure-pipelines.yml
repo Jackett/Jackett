@@ -118,6 +118,7 @@ stages:
               command: restore
               projects: 'src/Jackett.sln'
               includeNuGetOrg: true
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
