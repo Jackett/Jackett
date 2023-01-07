@@ -104,7 +104,6 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -114,8 +113,15 @@ stages:
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
           - task: DotNetCoreCLI@2
+            displayName: Restore All Projects
+            inputs:
+              command: restore
+              projects: 'src/Jackett.sln'
+              includeNuGetOrg: true
+
+          - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
-            retryCountOnTaskFailure: 2
+            retryCountOnTaskFailure: 3
             inputs:
               command: publish
               projects: 'src/Jackett.Server/Jackett.Server.csproj'
@@ -419,7 +425,6 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            path: $(runtime) # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -517,7 +522,6 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
