@@ -116,7 +116,7 @@ stages:
             displayName: Restore All Projects
             inputs:
               command: restore
-              projects: 'serc/*/*.csproj'
+              projects: 'src/*/*.csproj'
               includeNuGetOrg: true
               restoreArguments: '--runtime $(runtime)'
 
