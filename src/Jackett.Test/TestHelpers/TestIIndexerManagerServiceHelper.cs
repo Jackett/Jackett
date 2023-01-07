@@ -13,13 +13,13 @@ namespace Jackett.Test.TestHelpers
 
         public void DeleteIndexer(string name) => throw new NotImplementedException();
 
-        public IEnumerable<IIndexer> GetAllIndexers() => throw new NotImplementedException();
+        public List<IIndexer> GetAllIndexers() => throw new NotImplementedException();
 
         public IIndexer GetIndexer(string name) => throw new NotImplementedException();
 
         public IWebIndexer GetWebIndexer(string name) => throw new NotImplementedException();
 
-        public void InitIndexers(IEnumerable<string> path) => throw new NotImplementedException();
+        public void InitIndexers(List<string> path) => throw new NotImplementedException();
 
         public void SaveConfig(IIndexer indexer, JToken obj) => LastSavedConfig = obj;
 

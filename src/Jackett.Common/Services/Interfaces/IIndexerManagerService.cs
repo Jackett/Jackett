@@ -10,9 +10,9 @@ namespace Jackett.Common.Services.Interfaces
         void DeleteIndexer(string name);
         IIndexer GetIndexer(string name);
         IWebIndexer GetWebIndexer(string name);
-        IEnumerable<IIndexer> GetAllIndexers();
+        List<IIndexer> GetAllIndexers();
 
-        void InitIndexers(IEnumerable<string> path);
+        void InitIndexers(List<string> path);
         void InitMetaIndexers();
     }
 }
