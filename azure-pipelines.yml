@@ -73,27 +73,21 @@ stages:
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
-              # We build musl binaries using a different ubuntu image on purpose. The stages using the same image could
-              # run in the same virtual machine sharing the file system and causing this error:
-              # error MSB4018: System.IO.IOException: The process cannot access the file '/home/vsts/work/1/s/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
-              # because it is being used by another process. [/home/vsts/work/1/s/src/DateTimeRoutines/DateTimeRoutines.csproj]
-              imageName: ubuntu-20.04
+              imageName: ubuntu-22.04
               framework: $(netCoreFramework)
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
-              # see comment in LinuxMuslAMDx64
-              imageName: ubuntu-20.04
+              imageName: ubuntu-22.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
-              # see comment in LinuxMuslAMDx64
-              imageName: ubuntu-20.04
+              imageName: ubuntu-22.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm64
               archiveType: tar
@@ -111,6 +105,7 @@ stages:
         steps:
           - checkout: self
             clean: false
+            path: '$(framework)-$(runtime)'
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -315,6 +310,7 @@ stages:
         steps:
           - checkout: self
             clean: false
+            path: lint-dotnet
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -349,6 +345,7 @@ stages:
         steps:
           - checkout: self
             clean: false
+            path: lint-yaml
 
           - task: UsePythonVersion@0
             displayName: Install Python
@@ -370,6 +367,7 @@ stages:
         steps:
           - checkout: self
             clean: false
+            path: validate-yaml
 
           - task: Bash@3
             displayName: Validate YAML Schema
@@ -428,6 +426,7 @@ stages:
         steps:
           - checkout: self
             clean: false
+            path: '$(framework)-$(runtime)'
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -526,6 +525,7 @@ stages:
         steps:
           - checkout: self
             clean: false
+            path: '$(framework)-$(runtime)'
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
@@ -604,6 +604,7 @@ stages:
         steps:
           - checkout: self
             clean: false
+            path: publish
 
           - task: DownloadBuildArtifacts@0
             displayName: Download Artifacts for Publish
