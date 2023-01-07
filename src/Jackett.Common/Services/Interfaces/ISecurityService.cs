@@ -4,9 +4,7 @@ namespace Jackett.Common.Services.Interfaces
 {
     public interface ISecurityService
     {
-        bool CheckAuthorised(HttpRequestMessage request);
+        bool CheckAuthorised(string password);
         string HashPassword(string input);
-        void Login(HttpResponseMessage request);
-        void Logout(HttpResponseMessage request);
     }
 }
