@@ -26,7 +26,7 @@ stages:
     jobs:
       - job: Build
         workspace:
-          clean: outputs
+          clean: all
         strategy:
           matrix:
             Windows:
@@ -104,7 +104,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            clean: false
+            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -306,10 +306,9 @@ stages:
         pool:
           vmImage: ubuntu-22.04
         workspace:
-          clean: outputs
+          clean: all
         steps:
           - checkout: self
-            clean: false
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -340,10 +339,9 @@ stages:
         pool:
           vmImage: ubuntu-22.04
         workspace:
-          clean: outputs
+          clean: all
         steps:
           - checkout: self
-            clean: false
 
           - task: UsePythonVersion@0
             displayName: Install Python
@@ -361,10 +359,9 @@ stages:
         pool:
           vmImage: ubuntu-22.04
         workspace:
-          clean: outputs
+          clean: all
         steps:
           - checkout: self
-            clean: false
 
           - task: Bash@3
             displayName: Validate YAML Schema
@@ -394,7 +391,7 @@ stages:
     jobs:
       - job: UnitTest
         workspace:
-          clean: outputs
+          clean: all
         strategy:
           matrix:
             Windows:
@@ -422,7 +419,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            clean: false
+            path: $(runtime) # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -488,7 +485,7 @@ stages:
     jobs:
       - job: IntegrationTest
         workspace:
-          clean: outputs
+          clean: all
         strategy:
           matrix:
             Windows:
@@ -520,7 +517,7 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
-            clean: false
+            path: $(runtime)  # will checkout at $(Pipeline.Workspace)/$(runtime)
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
@@ -593,12 +590,11 @@ stages:
     jobs:
       - job: Publish
         workspace:
-          clean: outputs
+          clean: all
         pool:
           vmImage: ubuntu-22.04
         steps:
           - checkout: self
-            clean: false
 
           - task: DownloadBuildArtifacts@0
             displayName: Download Artifacts for Publish
