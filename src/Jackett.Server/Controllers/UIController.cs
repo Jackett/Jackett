@@ -60,10 +60,8 @@ namespace Jackett.Server.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Dashboard([FromForm] string password)
         {
-            if (password != null && securityService.HashPassword(password) == serverConfig.AdminPassword)
-            {
+            if (securityService.CheckAuthorised(password))
                 await MakeUserAuthenticated();
-            }
 
             return Redirect("Dashboard");
         }
