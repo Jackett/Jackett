@@ -20,7 +20,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 #### Supported Systems
 * Windows 7 SP1 or greater
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/6.0/supported-os.md#linux)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#linux)
 * macOS 10.15+ or greater
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
@@ -848,21 +848,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net6.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net6.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net7.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net7.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install nuget msbuild dotnet-sdk-6.0 # install build tools (Debian/ubuntu)
+sudo apt install nuget msbuild dotnet-sdk-7.0 # install build tools (Debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net6.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net6.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net7.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net7.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots
