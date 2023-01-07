@@ -73,21 +73,27 @@ stages:
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
-              imageName: ubuntu-22.04
+              # We build musl binaries using a different ubuntu image on purpose. The stages using the same image could
+              # run in the same virtual machine sharing the file system and causing this error:
+              # error MSB4018: System.IO.IOException: The process cannot access the file '/home/vsts/work/1/s/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
+              # because it is being used by another process. [/home/vsts/work/1/s/src/DateTimeRoutines/DateTimeRoutines.csproj]
+              imageName: ubuntu-20.04
               framework: $(netCoreFramework)
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
-              imageName: ubuntu-22.04
+              # see comment in LinuxMuslAMDx64
+              imageName: ubuntu-20.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
-              imageName: ubuntu-22.04
+              # see comment in LinuxMuslAMDx64
+              imageName: ubuntu-20.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm64
               archiveType: tar
