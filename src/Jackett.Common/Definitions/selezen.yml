@@ -120,7 +120,7 @@ search:
     resorder: "{{ .Config.type }}"
 
   rows:
-    selector: div.card:has(h4)
+    selector: div.card:has(h4):not(:has(a[href*="/news/"]))
 
   fields:
     category:
