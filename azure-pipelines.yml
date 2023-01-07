@@ -118,7 +118,7 @@ stages:
               command: restore
               projects: 'src/Jackett.sln'
               includeNuGetOrg: true
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              restoreArguments: '--runtime $(runtime)'
 
           - task: DotNetCoreCLI@2
             displayName: Build Jackett Server
@@ -442,6 +442,7 @@ stages:
               command: restore
               projects: '**/*.Test*/*.csproj'
               includeNuGetOrg: true
+              restoreArguments: '--runtime $(runtime)'
 
           - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
@@ -567,6 +568,7 @@ stages:
               command: restore
               projects: '**/*IntegrationTest*/*.csproj'
               includeNuGetOrg: true
+              restoreArguments: '--runtime $(runtime)'
 
           - task: DotNetCoreCLI@2
             displayName: Integration Tests (Mono, Linux and macOS)
