@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
             "https://subsplease.nocensor.world/"
         };
 
-        private string ApiEndpoint => SiteLink + "/api/?";
+        private string ApiEndpoint => SiteLink + "api/?";
 
         public SubsPlease(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(id: "subsplease",
