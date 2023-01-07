@@ -3,7 +3,7 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using NLog;
-#if !NET461
+#if !NET462
 using Microsoft.Extensions.Hosting;
 #endif
 
@@ -13,7 +13,7 @@ namespace Jackett.Server
     {
         public static IContainer ApplicationContainer { get; set; }
 
-#if NET461
+#if NET462
         public static IApplicationLifetime applicationLifetime;
 #else
         public static IHostApplicationLifetime applicationLifetime;
