@@ -35,7 +35,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: windows-2019
+    runs-on: windows-2022
     permissions:
       actions: read
       contents: read
@@ -62,11 +62,6 @@ jobs:
         # Prefix the list here with "+" to use these queries and those in the config file.
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
-    - name: Set up dotnet
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0.*'
-
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
 
@@ -85,5 +80,4 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
-      
+      uses: github/codeql-action/analyze@v2
