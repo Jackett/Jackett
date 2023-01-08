@@ -146,10 +146,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var searchString = query.GetQueryString();
-            var queryCollection = new NameValueCollection { { "apikey", ConfigData.Key.Value } };
-
-            queryCollection.Add("limit", "50"); // Default 30
-            queryCollection.Add("ponly", ProductsOnly ? "true" : "false");
+            var queryCollection = new NameValueCollection
+            {
+                { "apikey", ConfigData.Key.Value },
+                { "limit", "50" }, // Default 30
+                { "ponly", ProductsOnly ? "true" : "false" }
+            };
             foreach (var releaseType in ReleaseType)
             {
                 queryCollection.Add("release_type", releaseType);

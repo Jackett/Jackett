@@ -248,8 +248,10 @@ namespace Jackett.Common.Indexers
 
             if (!string.IsNullOrEmpty(configData.UserAgent.Value))
             {
-                headers = new Dictionary<string, string>();
-                headers.Add("User-Agent", configData.UserAgent.Value);
+                headers = new Dictionary<string, string>
+                {
+                    { "User-Agent", configData.UserAgent.Value }
+                };
             }
 
             if (query.IsImdbQuery)
