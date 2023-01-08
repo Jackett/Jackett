@@ -94,6 +94,7 @@ caps:
     - {id: 61, cat: TV/Sport, desc: "Rollan Garros"}
     - {id: 105, cat: TV/Sport, desc: "RPFL"}
     - {id: 29, cat: TV/Sport, desc: "Rugby"}
+    - {id: 108, cat: TV/Sport, desc: "Saudi Pro League"}
     - {id: 82, cat: TV/Sport, desc: "Scotland Premiership"}
     - {id: 9, cat: TV/Sport, desc: "Serie A"}
     - {id: 33, cat: TV/Sport, desc: "SHL"}
