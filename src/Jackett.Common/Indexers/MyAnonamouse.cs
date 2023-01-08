@@ -284,6 +284,9 @@ namespace Jackett.Common.Indexers
                     release.DownloadVolumeFactor = item.Value<int>("free") == 1 ? 0 : 1;
                     release.UploadVolumeFactor = 1;
 
+                    // release.MinimumRatio = 1; // global MR is 1.0 but torrents must be seeded for 3 days regardless of ratio
+                    release.MinimumSeedTime = 259200; // 72 hours
+
                     releases.Add(release);
                 }
             }
