@@ -9,7 +9,7 @@ using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using NLog;
-
+// test
 namespace Jackett.Updater
 {
     public class Program
