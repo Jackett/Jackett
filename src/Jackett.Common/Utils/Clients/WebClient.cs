@@ -204,9 +204,7 @@ namespace Jackett.Common.Utils.Clients
                         isBinary = true;
                     }
                 }
-                logger.Debug($@"WebClient({ClientType}): Returning {result.Status} => {
-                                     (result.IsRedirect ? result.RedirectingTo + " " : "")
-                                 }{bodySize} bytes{body}");
+                logger.Debug($@"WebClient({ClientType}): Returning {result.Status} => {(result.IsRedirect ? result.RedirectingTo + " " : "")}{bodySize} bytes{body}");
                 if (isBinary)
                 {
                     // show the first 20 bytes in a hex dump
