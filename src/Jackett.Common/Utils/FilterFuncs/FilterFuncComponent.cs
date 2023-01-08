@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Jackett.Common.Indexers;
 
 namespace Jackett.Common.Utils.FilterFuncs

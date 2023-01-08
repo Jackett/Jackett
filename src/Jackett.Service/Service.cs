@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.ServiceProcess;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;

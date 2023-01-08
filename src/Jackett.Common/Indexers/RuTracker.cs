@@ -16,7 +16,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NLog.Targets;
 
 namespace Jackett.Common.Indexers
 {
