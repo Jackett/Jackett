@@ -722,7 +722,7 @@ namespace Jackett.Updater
                         startInfo.CreateNoWindow = true;
                     }
 
-                    logger.Info($"Starting Jackett: \"{startInfo.FileName }\" {startInfo.Arguments}");
+                    logger.Info($"Starting Jackett: \"{startInfo.FileName}\" {startInfo.Arguments}");
                     Process.Start(startInfo);
                 }
             }

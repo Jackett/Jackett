@@ -224,16 +224,14 @@ namespace Jackett.Common.Indexers
                 var release = new ReleaseInfo
                 {
                     MinimumRatio = 1,
-                    MinimumSeedTime = 0
+                    MinimumSeedTime = 0,
+                    // Get Category
+                    Category = MapTrackerCatToNewznab(torrent[7].ToString()),
+                    // Title, description and details link
+                    Title = torrent[3].ToString(),
+                    Description = torrent[6].ToString(),
+                    Details = new Uri($"{SiteLink}index.html#torrent/{torrent[0]}")
                 };
-
-                // Get Category
-                release.Category = MapTrackerCatToNewznab(torrent[7].ToString());
-
-                // Title, description and details link
-                release.Title = torrent[3].ToString();
-                release.Description = torrent[6].ToString();
-                release.Details = new Uri($"{SiteLink}index.html#torrent/{torrent[0]}");
                 release.Guid = release.Details;
 
                 // Date of torrent creation                   
