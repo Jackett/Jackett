@@ -224,6 +224,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrents-Local
  * TribalMixes
  * Union Fansub
+ * xTorrenty
  * YggTorrent (YGG)
  * ZOMB
  * Ztracker
