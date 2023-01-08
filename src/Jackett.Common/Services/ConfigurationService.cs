@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using Jackett.Common.Models.Config;

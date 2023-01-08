@@ -1,5 +1,3 @@
-using System.Net.Http;
-
 namespace Jackett.Common.Services.Interfaces
 {
     public interface ISecurityService
