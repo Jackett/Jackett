@@ -35,7 +35,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: windows-2019
+    runs-on: windows-2022
     permissions:
       actions: read
       contents: read
@@ -85,5 +85,4 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
-      
+      uses: github/codeql-action/analyze@v2
