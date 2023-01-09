@@ -21,6 +21,7 @@ caps:
     - {id: 182, cat: Movies/SD, desc: "Movie Pack SD"}
     - {id: 225, cat: Movies/HD, desc: "Movie Pack HD"}
     - {id: 186, cat: Movies/Foreign, desc: "Movie International"}
+    - {id: 232, cat: Movies/Other, desc: "Movie Sonstiges"}
     # Serien
     - {id: 198, cat: TV/SD, desc: "Serien SD"}
     - {id: 199, cat: TV/HD, desc: "Serien HD"}
@@ -55,7 +56,7 @@ caps:
     - {id: 190, cat: Audio, desc: "Musik Charts"}
     - {id: 191, cat: Audio/MP3, desc: "Musik Single"}
     - {id: 193, cat: Audio/Lossless, desc: "Musik Flac"}
-    - {id: 196, cat: Audio, desc: "Musik Pack mp3"}
+    - {id: 196, cat: Audio, desc: "Musik mp3"}
     - {id: 228, cat: Audio/Lossless, desc: "Musik Pack Flac"}
     - {id: 194, cat: Audio/Video, desc: "Musik Musikvideo"}
     # Sport
