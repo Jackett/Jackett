@@ -38,11 +38,8 @@ namespace Jackett.Common.Indexers
         {
             "https://hdts.ru/",
             "https://hd-torrents.org/",
+            "https://hd-torrents.net/",
             "https://hd-torrents.me/"
-        };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://hd-torrents.net/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
@@ -81,8 +78,8 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             // Movie
-            AddCategoryMapping("70", TorznabCatType.MoviesUHD, "Movie/UHD/Blu-Ray");
-            AddCategoryMapping("1", TorznabCatType.MoviesHD, "Movie/Blu-Ray");
+            AddCategoryMapping("70", TorznabCatType.MoviesBluRay, "Movie/UHD/Blu-Ray");
+            AddCategoryMapping("1", TorznabCatType.MoviesBluRay, "Movie/Blu-Ray");
             AddCategoryMapping("71", TorznabCatType.MoviesUHD, "Movie/UHD/Remux");
             AddCategoryMapping("2", TorznabCatType.MoviesHD, "Movie/Remux");
             AddCategoryMapping("5", TorznabCatType.MoviesHD, "Movie/1080p/i");
