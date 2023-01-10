@@ -215,4 +215,7 @@ search:
       case:
         "img[src$=\"/torrent_multiple_upload.png\"]": 2
         "*": 1
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # TSUE 2.2
