@@ -104,12 +104,18 @@ search:
     title:
       selector: a[href^="/torrents.php?id="]
       filters:
-        - name: re_replace # Seasons X-Y --> SX-SY
-          args: ["(?i)seasons?\\s*(\\d+)\\s*-\\s*(\\d+)", "S$1-S$2"]
+        - name: re_replace # Seasons X-Y --> S0X-S0Y
+          args: ["(?i)seasons?\\s*(\\d)\\s*-\\s*(\\d)\\b", "S0$1-S0$2"]
+        - name: re_replace # Seasons X-YY --> S0X-SYY
+          args: ["(?i)seasons?\\s*(\\d)\\s*-\\s*(\\d+)\\b", "S0$1-S$2"]
+        - name: re_replace # Seasons XX-YY --> SXX-SYY
+          args: ["(?i)seasons?\\s*(\\d+)\\s*-\\s*(\\d+)\\b", "S$1-S$2"]
         - name: re_replace # Season X --> S0X
-          args: ["(?i)season\\s*(\\d+)", "S$1"]
+          args: ["(?i)season\\s*(\\d)\\b", "S0$1"]
+        - name: re_replace # Season XX --> SXX
+          args: ["(?i)season\\s*(\\d+)\\b", "S$1"]
         - name: re_replace
-          args: ["(?i)Complete\\s+Series", ""]
+          args: ["(?i)\\bComplete\\s+Series\\b", ""]
     details:
       selector: a[href^="/torrents.php?id="]
       attribute: href
