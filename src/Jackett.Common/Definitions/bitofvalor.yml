@@ -102,7 +102,7 @@ search:
     # does not support imdbid search nor has imdbid link in results
 
   rows:
-    selector: tr:has(a[onmouseover])
+    selector: tr:has(a[onmouseover]):not(:has(td.outer))
 
   fields:
     category:
