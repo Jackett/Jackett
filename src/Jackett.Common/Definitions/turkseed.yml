@@ -20,9 +20,10 @@ caps:
     - {id: 49, cat: Movies/BluRay, desc: "Bluray"}
     - {id: 50, cat: Movies, desc: "Boxset"}
     - {id: 70, cat: TV, desc: "DIGITAL TV"}
+    - {id: 72, cat: TV, desc: "DIGITAL TV Extra"}
     - {id: 51, cat: Movies/DVD, desc: "DVD"}
-    - {id: 4, cat: Other, desc: "Diğer"}
     - {id: 42, cat: Movies, desc: "Dini"}
+    - {id: 4, cat: Other, desc: "Diğer"}
     - {id: 41, cat: Books/EBook, desc: "E-Kitap"}
     - {id: 64, cat: Books, desc: "Eğitim"}
     - {id: 55, cat: Audio/Lossless, desc: "FLAC"}
@@ -33,12 +34,9 @@ caps:
     - {id: 53, cat: Movies/SD, desc: "SD"}
     - {id: 54, cat: Movies, desc: "Türk Filmi"}
     - {id: 58, cat: Audio/Video, desc: "Video Klip"}
-    - {id: 63, cat: Movies, desc: "Vip Film"}
-    - {id: 62, cat: Audio, desc: "Vip Ses Dosyaları"}
     - {id: 43, cat: TV, desc: "Yabancı Dizi"}
     - {id: 57, cat: Movies, desc: "Yabancı Müzik"}
     - {id: 45, cat: TV, desc: "Yarışma - Show"}
-    - {id: 71, cat: Movies, desc: "YENI FILMLER"}
     - {id: 44, cat: TV, desc: "Yerli Dizi"}
     - {id: 56, cat: Audio, desc: "Yerli Müzik"}
     - {id: 59, cat: PC, desc: "İşletim Sistemi"}
