@@ -1,7 +1,7 @@
 ---
 id: thefallingangels
 name: The Falling Angels
-description: "The Falling Angels (TFA) is a German Private site for TV / MOVIES / GENERAL"
+description: "The Falling Angels (TFA) is a GERMAN Private site for TV / MOVIES / GENERAL"
 language: de-DE
 type: private
 encoding: UTF-8
@@ -35,6 +35,7 @@ caps:
     - {id: 154, cat: TV/Documentary, desc: "Dokus Pack"}
     - {id: 149, cat: TV/HD, desc: "Serien HD"}
     - {id: 151, cat: TV/SD, desc: "Serien SD"}
+    - {id: 167, cat: TV/HD, desc: "Serien Ultra HD"}
     - {id: 150, cat: TV/Other, desc: "Serien Pack"}
     - {id: 136, cat: TV/Foreign, desc: "Serien Englisch"}
     - {id: 152, cat: TV/Sport, desc: "Sport HD"}
@@ -52,22 +53,25 @@ caps:
     - {id: 161, cat: TV/HD, desc: "Kids Serien HD"}
     - {id: 162, cat: TV/SD, desc: "Kids Serien SD"}
     - {id: 112, cat: Audio/Audiobook, desc: "Kids Hörbuch"}
-    - {id: 115, cat: Books/Mags, desc: "Books Zeitschriften"}
-    - {id: 114, cat: Books/Comics, desc: "Books Comics"}
-    - {id: 117, cat: Books/EBook, desc: "Books Romane"}
-    - {id: 156, cat: Books, desc: "Books Packs"}
-    - {id: 130, cat: Books, desc: "Books FSK 18"}
-    - {id: 159, cat: Movies/HD, desc: "Anime Movies HD"}
-    - {id: 160, cat: Movies/SD, desc: "Anime Movies SD"}
+    - {id: 115, cat: Books/Mags, desc: "E-Books Zeitschriften"}
+    - {id: 114, cat: Books/Comics, desc: "E-Books Comics"}
+    - {id: 117, cat: Books/EBook, desc: "E-Books Bücher"}
+    - {id: 156, cat: Books, desc: "E-Books Packs"}
+    - {id: 130, cat: Books, desc: "E-Books FSK 18"}
+    - {id: 159, cat: Movies/Other, desc: "Anime Movies HD"}
+    - {id: 160, cat: Movies/Other, desc: "Anime Movies SD"}
     - {id: 128, cat: TV/Anime, desc: "Anime Serien"}
-    - {id: 131, cat: TV/Anime, desc: "Anime Hentai"}
     - {id: 129, cat: TV/Anime, desc: "Anime Sonstiges"}
-    - {id: 119, cat: Other, desc: "Other Hörbücher"}
     - {id: 118, cat: Other, desc: "Other Mobile"}
+    - {id: 119, cat: Other, desc: "Other Hörbücher"}
     - {id: 123, cat: Other, desc: "Other Pics"}
     - {id: 120, cat: XXX, desc: "XXX Movies HD"}
     - {id: 121, cat: XXX, desc: "XXX Movies SD"}
+    - {id: 165, cat: XXX, desc: "XXX Ultra HD"}
     - {id: 122, cat: XXX, desc: "XXX Movies Pack"}
+    - {id: 131, cat: XXX, desc: "XXX Hentai"}
+    - {id: 164, cat: XXX, desc: "XXX VR Porn"}
+    - {id: 166, cat: XXX, desc: "XXX Games"}
     - {id: 110, cat: XXX, desc: "XXX Pics"}
 
   modes:
@@ -203,4 +207,9 @@ search:
       case:
         "div[onmouseover=\"return overlib('Freeleech: Ja');\"]": 0
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # 3xT
