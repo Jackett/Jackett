@@ -35,7 +35,7 @@ caps:
     - {id: 154, cat: TV/Documentary, desc: "Dokus Pack"}
     - {id: 149, cat: TV/HD, desc: "Serien HD"}
     - {id: 151, cat: TV/SD, desc: "Serien SD"}
-    - {id: 167, cat: TV/HD, desc: "Serien Ultra HD"}
+    - {id: 167, cat: TV/UHD, desc: "Serien Ultra HD"}
     - {id: 150, cat: TV/Other, desc: "Serien Pack"}
     - {id: 136, cat: TV/Foreign, desc: "Serien Englisch"}
     - {id: 152, cat: TV/Sport, desc: "Sport HD"}
