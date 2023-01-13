@@ -85,6 +85,7 @@ search:
       categories: [440, 441, 442, 443, 444, 445, 446, 447]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    # currently supports only one query id at one time. 
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0

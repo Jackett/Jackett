@@ -71,6 +71,7 @@ search:
   paths:
     - path: torrents.php
   inputs:
+    # currently supports only one query id at one time. 
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}{{ .Keywords }}{{ end }}"
     # name, imdb, douban
     search_area: "{{ if .Query.IMDBID }}imdb{{ else }}{{ end }}{{ if .Query.DoubanID }}douban{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}name{{ end }}"
