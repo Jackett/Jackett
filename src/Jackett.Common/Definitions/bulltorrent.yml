@@ -7,12 +7,12 @@ type: public
 encoding: UTF-8
 links:
   - https://www.bulltorrent.com/
-  - https://toros.nocensor.lol/
 legacylinks:
   - https://toros.nocensor.space/
   - https://toros.nocensor.work/
   - https://www.toros.co/
   - https://toros.nocensor.biz/
+  - https://toros.nocensor.lol/
 
 caps:
   categorymappings:

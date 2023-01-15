@@ -9,7 +9,6 @@ followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
   - https://ww2.torrent9.re/
-  - https://torrent9.nocensor.lol/
 legacylinks:
   - https://www.torrent9.sh/
   - https://www.torrent9.one/
@@ -31,6 +30,7 @@ legacylinks:
   - https://ww1.torrent9.re/
   - http://ww2.torrent9.re/
   - https://torrent9.nocensor.world/
+  - https://torrent9.nocensor.lol/
 
 caps:
   categorymappings:
