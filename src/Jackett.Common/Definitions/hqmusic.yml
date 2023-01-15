@@ -121,28 +121,20 @@ search:
     _hasLog:
       selector: hasLog
     _logScore:
-      optional: true
       selector: logScore
-      filters:
-        - name: re_replace
-          args: ["^0$", ""]
     _hasCue:
       selector: hasCue
     _media:
       selector: media
     year_remaster:
-      optional: true
       selector: remasterYear
-      filters:
-        - name: re_replace
-          args: ["^0$", ""]
     title_remaster:
       optional: true
       selector: remasterTitle
     title:
       # John Mayer - Born And Raised [2012] [Album] FLAC / Lossless / Log (100%) / Cue / CD
       # Duy - I Go [2022] [Single] Other / Lossless / WEB
-      text: "{{ .Result.artist }} - {{ .Result._groupName }} {{ if .Result.year }}[{{ .Result.year }}] {{ else }}{{ end }}[{{ .Result._releaseType }}] {{ .Result._format }} / {{ .Result._encoding }} {{ if eq .Result._hasLog \"True\" }}/ Log {{ else }}{{ end }}{{ if .Result._logScore }}({{ .Result._logScore }}%){{ else }}{{ end }}{{ if eq .Result._hasCue \"True\" }} / Cue{{ else }}{{ end }} / {{ .Result._media }}{{ if .Result.year_remaster }} / {{ .Result.year_remaster }}{{ else }}{{ end }}{{ if .Result.title_remaster }} {{ .Result.title_remaster }}{{ else }}{{ end }}"
+      text: "{{ .Result.artist }} - {{ .Result._groupName }} {{ if .Result.year }}[{{ .Result.year }}] {{ else }}{{ end }}[{{ .Result._releaseType }}] {{ .Result._format }} / {{ .Result._encoding }} {{ if eq .Result._hasLog \"True\" }}/ Log {{ else }}{{ end }}{{ if ne .Result._logScore \"0\" }}({{ .Result._logScore }}%){{ else }}{{ end }}{{ if eq .Result._hasCue \"True\" }} / Cue{{ else }}{{ end }} / {{ .Result._media }}{{ if ne .Result.year_remaster \"0\" }} / {{ .Result.year_remaster }}{{ else }}{{ end }}{{ if .Result.title_remaster }} {{ .Result.title_remaster }}{{ else }}{{ end }}"
     details:
       text: "torrents.php?id={{ .Result._groupid }}&torrentid={{ .Result._torrentid }}"
     download:
