@@ -86,7 +86,9 @@ search:
     multiple: true
 
   fields:
-    _id:
+    _groupid:
+      selector: ..groupId
+    _torrentid:
       selector: torrentId
     category:
       text: 1
@@ -142,9 +144,9 @@ search:
       # Duy - I Go [2022] [Single] Other / Lossless / WEB
       text: "{{ .Result.artist }} - {{ .Result._groupName }} {{ if .Result.year }}[{{ .Result.year }}] {{ else }}{{ end }}[{{ .Result._releaseType }}] {{ .Result._format }} / {{ .Result._encoding }} {{ if eq .Result._hasLog \"True\" }}/ Log {{ else }}{{ end }}{{ if .Result._logScore }}({{ .Result._logScore }}%){{ else }}{{ end }}{{ if eq .Result._hasCue \"True\" }} / Cue{{ else }}{{ end }} / {{ .Result._media }}{{ if .Result.year_remaster }} / {{ .Result.year_remaster }}{{ else }}{{ end }}{{ if .Result.title_remaster }} {{ .Result.title_remaster }}{{ else }}{{ end }}"
     details:
-      text: "torrents.php?id={{ .Result._id }}"
+      text: "torrents.php?id={{ .Result._groupid }}&torrentid={{ .Result._torrentid }}"
     download:
-      text: "torrents.php?action=download&id={{ .Result._id }}"
+      text: "torrents.php?action=download&id={{ .Result._torrentid }}"
     poster:
       selector: ..cover
     date:
