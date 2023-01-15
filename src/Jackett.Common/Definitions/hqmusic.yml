@@ -57,10 +57,12 @@ login:
     path: torrents.php
 
 search:
-  # http://hqmusic.info/torrents.php?artistname=John&groupname=Born&recordlabel=Sony&year=2012&filelist=Queen&freetorrent=&taglist=rock&tags_type=1&order_by=time&order_way=desc&filter_cat%5B1%5D=1&group_results=0&action=advanced&searchsubmit=1
-  # ajax.php?action=browse works but does not return artist, year, format, quality, or poster
+  # http://hqmusic.info/ajax.php?artistname=John&groupname=Born&recordlabel=Sony&year=2012&filelist=Queen&freetorrent=&taglist=rock&tags_type=1&order_by=time&order_way=desc&filter_cat%5B1%5D=1&group_results=1&action=browse
   paths:
-    - path: torrents.php
+    - path: ajax.php
+      response:
+        type: json
+
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"
@@ -75,80 +77,99 @@ search:
     tags_type: 1
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
-    group_results: 0
-    action: advanced
-    searchsubmit: 1
+    group_results: 1
+    action: browse
 
   rows:
-    selector: tr.torrent
+    selector: response.results
+    attribute: torrents
+    multiple: true
 
   fields:
     _id:
-      selector: a[href^="torrents.php?id="]
-      attribute: href
+      selector: torrentId
+    category:
+      text: 1
+    artist:
+      selector: ..artist
       filters:
-        - name: querystring
-          args: id
-    categorydesc:
-      selector: td.center.cats_col > div
-      attribute: class
+        - name: htmldecode
+    _groupName:
+      selector: ..groupName
       filters:
-        - name: regexp
-          args: "cats_(.+?) "
-    title:
-      selector: td.big_info > div.group_info.clear
-      remove: span, div.tags
-      filters:
-        - name: re_replace
-          args: ["\\s+", " "]
-        - name: replace
-          args: [" / Freeleech!", ""]
-        - name: replace
-          args: [" / Neutral Leech!", ""]
+        - name: htmldecode
+    _releaseType:
+      selector: ..releaseType
+    album:
+      optional: true
+      text: "{{ if eq .Result._groupType \"Album\" }}{{ .Result._groupName }}{{ else }}{{ end }}"
+    track:
+      optional: true
+      text: "{{ if eq .Result._groupType \"Single\" }}{{ .Result._groupName }}{{ else }}{{ end }}"
     year:
       optional: true
-      text: "{{ .Result.title }}"
+      selector: ..groupYear
       filters:
-        - name: regexp
-          args: "(\\[\\d{4}\\])"
+        - name: re_replace
+          args: ["^0$", ""]
+    _format:
+      selector: format
+    _encoding:
+      selector: encoding
+    _hasLog:
+      selector: hasLog
+    _logScore:
+      optional: true
+      selector: logScore
+      filters:
+        - name: re_replace
+          args: ["^0$", ""]
+    _hasCue:
+      selector: hasCue
+    _media:
+      selector: media
+    title:
+      # John Mayer - Born And Raised [2012] [Album] FLAC / Lossless / Log (100%) / Cue / CD
+      # Duy - I Go [2022] [Single] Other / Lossless / WEB
+      text: "{{ .Result.artist }} - {{ .Result._groupName }} {{ if .Result.year }}[{{ .Result.year }}] {{ else }}{{ end }}[{{ .Result._releaseType }}] {{ .Result._format }} / {{ .Result._encoding }} {{ if eq .Result._hasLog \"True\" }}/ Log {{ else }}{{ end }}{{ if .Result._logScore }}({{ .Result._logScore }}%){{ else }}{{ end }}{{ if eq .Result._hasCue \"True\" }} / Cue{{ else }}{{ end }} / {{ .Result._media }}"
     details:
-      selector: a[href^="torrents.php?id="]
-      attribute: href
+      text: "torrents.php?id={{ .Result._id }}"
     download:
       text: "torrents.php?action=download&id={{ .Result._id }}"
     poster:
-      selector: div.group_image > img
-      attribute: src
+      selector: ..cover
     date:
-      selector: span.time
-      attribute: title
-      filters:
-        - name: append
-          args: " +00:00" # GMT
-        - name: dateparse
-          args: "Jan 02 2006, 15:04 -07:00"
+      selector: ..groupTime
     size:
-      selector: td:nth-last-child(4)
+      selector: size
     files:
-      selector: td:nth-last-child(6)
+      selector: fileCount
     grabs:
-      selector: td:nth-last-child(3)
+      selector: snatches
     seeders:
-      selector: td:nth-last-child(2)
+      selector: seeders
     leechers:
-      selector: td:nth-last-child(1)
+      selector: leechers
+    genre:
+      selector: ..tags
+    description:
+      text: "{{ .Result.genre }}"
+    _free:
+      selector: isFreeleech
+    _neutral:
+      selector: isNeutralLeech
+    _personal:
+      selector: isPersonalFreeleech
+    downloadvolumefactor_special:
+      optional: true
+      text: "{{ if eq .Result._neutral \"True\" }}0{{ else }}{{ end }}{{ if eq .Result._free \"True\" }}0{{ else }}{{ end }}{{ if eq .Result._personal \"True\" }}0{{ else }}{{ end }}"
     downloadvolumefactor:
-      case:
-        "strong:contains(\"Freeleech!\")": 0
-        "strong:contains(\"Neutral Leech!\")": 0
-        "*": 1
+      text: "{{ if .Result.downloadvolumefactor_special }}{{ .Result.downloadvolumefactor_special }}{{ else }}1{{ end }}"
     uploadvolumefactor:
-      case:
-        "strong:contains(\"Neutral Leech!\")": 0
-        "*": 1
+      text: "{{ if eq .Result._neutral \"True\" }}0{{ else }}1{{ end }}"
     minimumratio:
       text: 0.6
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# engine Gazelle
+# JSON Gazelle
