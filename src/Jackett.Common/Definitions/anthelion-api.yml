@@ -111,8 +111,7 @@ search:
     title:
       selector: title
       filters:
-        - name: replace
-          args: ["&#39;", "'"]
+        - name: htmldecode
         - name: append
           args: " {{ .Result.year }} {{ .Result._codec }} {{ .Result._container }} {{ .Result._media }} {{ .Result._resolution }} {{ .Result._audioFormat }}{{ if .Result._subbing }} Subs{{ else }}{{ end }}{{ if .Result._flags }} {{ .Result._flags }}{{ else }}{{ end }}{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}{{ if and (.Result._releaseGroup) (ne .Result._releaseGroup \"NULL\") }} -{{ .Result._releaseGroup }}{{ else }}{{ end }}"
     details:
@@ -120,8 +119,7 @@ search:
     download:
       selector: link
       filters:
-        - name: replace
-          args: ["&amp;", "&"]
+        - name: htmldecode
     infohash:
       selector: infohash
     imdbid:
