@@ -87,7 +87,8 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    # freetorrent: 0 normal, 1 freeleech, 2 neutral leech, 3 either
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}{{ if .Config.freeleech }}freetorrent=1&{{ else }}{{ end }}"
     searchstr: "{{ .Keywords }}"
     # we can only grab the first release if group_results=1
     group_results: 0
@@ -96,8 +97,6 @@ search:
     taglist: "{{ .Query.Genre }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
-    # 0 normal, 1 freeleech, 2 neutral leech, 3 either
-    freetorrent: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
     searchsubmit: 1
 
   rows:
