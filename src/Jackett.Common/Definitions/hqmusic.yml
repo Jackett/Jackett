@@ -102,10 +102,10 @@ search:
       selector: ..releaseType
     album:
       optional: true
-      text: "{{ if eq .Result._groupType \"Album\" }}{{ .Result._groupName }}{{ else }}{{ end }}"
+      text: "{{ if eq .Result._releaseType \"Album\" }}{{ .Result._groupName }}{{ else }}{{ end }}"
     track:
       optional: true
-      text: "{{ if eq .Result._groupType \"Single\" }}{{ .Result._groupName }}{{ else }}{{ end }}"
+      text: "{{ if eq .Result._releaseType \"Single\" }}{{ .Result._groupName }}{{ else }}{{ end }}"
     year:
       optional: true
       selector: ..groupYear
