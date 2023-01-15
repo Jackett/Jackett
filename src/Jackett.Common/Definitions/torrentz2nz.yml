@@ -7,9 +7,10 @@ type: public
 encoding: UTF-8
 links:
   - https://torrentz2.nz/
-  - https://torrentz2.nocensor.lol/
+  - https://torrentz2.nocensor.art/
 legacylinks:
   - https://torrentz2.nocensor.world/
+  - https://torrentz2.nocensor.lol/
 
 caps:
   # unfortunately torrentz2nz does not display categories anywhere in its search results page :-(
