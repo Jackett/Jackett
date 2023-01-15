@@ -128,10 +128,19 @@ search:
       selector: hasCue
     _media:
       selector: media
+    year_remaster:
+      optional: true
+      selector: remasterYear
+      filters:
+        - name: re_replace
+          args: ["^0$", ""]
+    title_remaster:
+      optional: true
+      selector: remasterTitle
     title:
       # John Mayer - Born And Raised [2012] [Album] FLAC / Lossless / Log (100%) / Cue / CD
       # Duy - I Go [2022] [Single] Other / Lossless / WEB
-      text: "{{ .Result.artist }} - {{ .Result._groupName }} {{ if .Result.year }}[{{ .Result.year }}] {{ else }}{{ end }}[{{ .Result._releaseType }}] {{ .Result._format }} / {{ .Result._encoding }} {{ if eq .Result._hasLog \"True\" }}/ Log {{ else }}{{ end }}{{ if .Result._logScore }}({{ .Result._logScore }}%){{ else }}{{ end }}{{ if eq .Result._hasCue \"True\" }} / Cue{{ else }}{{ end }} / {{ .Result._media }}"
+      text: "{{ .Result.artist }} - {{ .Result._groupName }} {{ if .Result.year }}[{{ .Result.year }}] {{ else }}{{ end }}[{{ .Result._releaseType }}] {{ .Result._format }} / {{ .Result._encoding }} {{ if eq .Result._hasLog \"True\" }}/ Log {{ else }}{{ end }}{{ if .Result._logScore }}({{ .Result._logScore }}%){{ else }}{{ end }}{{ if eq .Result._hasCue \"True\" }} / Cue{{ else }}{{ end }} / {{ .Result._media }}{{ if .Result.year_remaster }} / {{ .Result.year_remaster }}{{ else }}{{ end }}{{ if .Result.title_remaster }} {{ .Result.title_remaster }}{{ else }}{{ end }}"
     details:
       text: "torrents.php?id={{ .Result._id }}"
     download:
@@ -152,6 +161,9 @@ search:
       selector: leechers
     genre:
       selector: ..tags
+      filters:
+        - name: replace
+          args: [".", "_"]
     description:
       text: "{{ .Result.genre }}"
     _free:
