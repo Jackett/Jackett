@@ -150,7 +150,12 @@ search:
     poster:
       selector: ..cover
     date:
-      selector: ..groupTime
+      selector: time
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "2006-01-02 15:04:05 -07:00"
     size:
       selector: size
     files:
