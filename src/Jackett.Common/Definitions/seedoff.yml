@@ -84,7 +84,7 @@ caps:
     - {id: 33, cat: PC/ISO, desc: "ОС"}
     - {id: 34, cat: PC/0day, desc: "Офисные приложения"}
     - {id: 35, cat: PC/0day, desc: "Мультимедиа"}
-    - {id: 36, cat: PC/0day, desc: "Web &amp; программирование"}
+    - {id: 36, cat: PC/0day, desc: "Web & программирование"}
     - {id: 37, cat: PC/0day, desc: "Системы проектирования и моделирования"}
     - {id: 38, cat: PC/0day, desc: "Бизнес-системы"}
     - {id: 39, cat: PC/0day, desc: "Графика и 3D"}

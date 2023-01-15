@@ -347,7 +347,7 @@ caps:
     - {id: 379, cat: TV/Sport, desc: " |- World Championships. Women"}
     - {id: 446, cat: TV/Sport, desc: " |- European Championships"}
     - {id: 171, cat: TV/Sport, desc: " |- International tournaments"}
-    - {id: 203, cat: TV/Sport, desc: " |- Women&#039;s basketball"}
+    - {id: 203, cat: TV/Sport, desc: " |- Women's basketball"}
     - {id: 22, cat: TV/Sport, desc: "Теннис"}
     - {id: 227, cat: TV/Sport, desc: " |- Australian Open 2022"}
     - {id: 248, cat: TV/Sport, desc: " |- Roland Garros 2022"}
@@ -370,8 +370,8 @@ caps:
     - {id: 82, cat: TV/Sport, desc: "Гандбол"}
     - {id: 548, cat: TV/Sport, desc: " |- VIP-Extra Handball"}
     - {id: 205, cat: TV/Sport, desc: " |- VIP Handball"}
-    - {id: 469, cat: TV/Sport, desc: " |- WC&#039;s and EURO&#039;s. Men"}
-    - {id: 547, cat: TV/Sport, desc: " |- WC&#039;s and EURO&#039;s. Women"}
+    - {id: 469, cat: TV/Sport, desc: " |- WC's and EURO's Men"}
+    - {id: 547, cat: TV/Sport, desc: " |- WC's and EURO's Women"}
     - {id: 397, cat: TV/Sport, desc: " |- European club handball"}
     - {id: 398, cat: TV/Sport, desc: " |- International tournaments"}
     - {id: 38, cat: TV/Sport, desc: "Волейбол"}

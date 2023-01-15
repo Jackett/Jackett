@@ -175,7 +175,7 @@ caps:
     - {id: 161, cat: PC/Games, desc: "Редактор уровней"}
     - {id: 162, cat: PC/Games, desc: "Культовая классика"}
     - {id: 163, cat: PC/Games, desc: "Минимализм"}
-    - {id: 164, cat: PC/Games, desc: "Shoot &#039;em up"}
+    - {id: 164, cat: PC/Games, desc: "Shoot'em up"}
     - {id: 165, cat: PC/Games, desc: "Решения с последствиями"}
     - {id: 166, cat: PC/Games, desc: "Процедурная генерация"}
     - {id: 167, cat: PC/Games, desc: "Мультипликация"}
@@ -185,7 +185,7 @@ caps:
     - {id: 171, cat: PC/Games, desc: "Изометрия"}
     - {id: 172, cat: PC/Games, desc: "Карточная игра"}
     - {id: 173, cat: PC/Games, desc: "Чёрный юмор"}
-    - {id: 174, cat: PC/Games, desc: "Beat &#039;em up"}
+    - {id: 174, cat: PC/Games, desc: "Beat'em up"}
     - {id: 175, cat: PC/Games, desc: "Свобода выбора"}
     - {id: 176, cat: PC/Games, desc: "Рисованная графика"}
     - {id: 177, cat: PC/Games, desc: "Инопланетяне"}
