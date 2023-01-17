@@ -413,6 +413,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * leech24
  * LegacyHD (HD4Free)
  * LemonHD
+ * Les-Cinephiles
  * Libble
  * LibraNet (LN)
  * LinkoManija [![(invite needed)][inviteneeded]](#)
