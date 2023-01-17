@@ -108,6 +108,7 @@ search:
   # do=search&subaction=search&story=greyhound&titleonly=3&sortby=date&resorder=desc&showposts=1&catlist[]=49
   paths:
     - path: index.php
+      followredirect: true
   inputs:
     $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
     do: search
