@@ -30,6 +30,7 @@ caps:
     - {id: 4, cat: Movies/Other, desc: "Movies - Other"}
     - {id: 49, cat: Movies/3D, desc: "Movies - 3D"}
     - {id: 48, cat: Movies/BluRay, desc: "Movies - Blu-ray"}
+    - {id: 70, cat: Movies/UHD, desc: "Movies - 4K"}
     - {id: 22, cat: Audio/MP3, desc: "Music - MP3"}
     - {id: 24, cat: Audio/Video, desc: "Music - DVD"}
     - {id: 27, cat: Audio/Other, desc: "Music - Other"}
