@@ -203,8 +203,6 @@ search:
 
   rows:
     selector: table[class="ttable_headinner"] tr.rowners
-    filters:
-      - name: strdump
 
   fields:
     category:
