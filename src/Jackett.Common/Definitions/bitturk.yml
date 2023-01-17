@@ -14,6 +14,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 56, cat: Movies, desc: "BTRG"}
+    - {id: 95, cat: Movies, desc: "BTRG HMAX"}
     - {id: 57, cat: Movies, desc: "Yerli Dizi"}
     - {id: 62, cat: Movies, desc: "Yab@ncı Dizi"}
     - {id: 63, cat: Movies, desc: "Türkçe Film"}
