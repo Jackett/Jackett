@@ -359,6 +359,7 @@ namespace Jackett.Updater
                 "Definitions/film-paleis.yml",
                 "Definitions/filmsclub.yml",
                 "Definitions/focusx.yml",
+                "Definitions/fouducinema.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/freetorrent.yml",
