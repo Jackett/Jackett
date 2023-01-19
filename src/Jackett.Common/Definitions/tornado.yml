@@ -133,6 +133,7 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
+      optional: true
     poster:
       selector: a[href*="data/torrents/torrent_images/"]
       attribute: href
