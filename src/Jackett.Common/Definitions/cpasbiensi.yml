@@ -1,0 +1,123 @@
+---
+id: cpasbiensi
+name: cpasbien.si
+description: "cpasbien.si is a FRENCH Public site for TV / MOVIES / GENERAL"
+language: fr-FR
+type: public
+encoding: UTF-8
+links:
+  - https://www.cpasbien.si/
+
+caps:
+  categories:
+    Other: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: info_8000
+    type: info
+    label: About cpasbiensi Categories
+    default: cpasbiensi does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
+
+download:
+  selectors:
+    - selector: a[href^="/get_torrents/"]
+      attribute: href
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+
+  rows:
+    selector: table.table-corps > tbody > tr:has(a)
+
+  fields:
+    category:
+      text: Other
+    _site_date:
+      selector: a
+      filters:
+        # year can be at the end of the title, so we get it and name it _site_date
+        - name: regexp
+          args: "(19|20\\d{2})$"
+    title_phase1:
+      selector: a
+      filters:
+        # now we put the date at the right place according scene naming rules using .Result._site_date
+        - name: re_replace
+          args: ["(?i)( FRENCH)", " {{ .Result._site_date }} FRENCH"]
+        - name: re_replace
+          args: ["(?i)( MULTI)", " {{ .Result._site_date }} MULTI"]
+        - name: re_replace
+          args: ["(?i)( TRUEFRENCH)", " {{ .Result._site_date }} TRUEFRENCH"]
+        - name: re_replace
+          args: ["(?i)( VOSTFR)", " {{ .Result._site_date }} VOSTFR"]
+        - name: re_replace
+          args: ["(?i)( SUBFRENCH)", " {{ .Result._site_date }} SUBFRENCH"]
+        # and we delete it at the end
+        - name: re_replace
+          args: ["(19|20\\d{2})$", ""]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+        - name: re_replace
+          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    size:
+      selector: div.poid
+    date:
+      text: now
+    seeders_optional:
+      selector: div.up
+      optional: true
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
+      selector: div.down
+      optional: true
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
