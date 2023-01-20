@@ -89,6 +89,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2093, TorznabCatType.MoviesForeign, "|- Фильмы 2011-2015");
             AddCategoryMapping(2200, TorznabCatType.MoviesForeign, "|- Фильмы 2016-2020");
             AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2022");
+            AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2023");
             AddCategoryMapping(2540, TorznabCatType.MoviesForeign, "|- Фильмы Ближнего Зарубежья");
             AddCategoryMapping(934, TorznabCatType.MoviesForeign, "|- Азиатские фильмы");
             AddCategoryMapping(505, TorznabCatType.MoviesForeign, "|- Индийское кино");
@@ -239,14 +240,14 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(704, TorznabCatType.TVForeign, "|- Сериалы Турции");
             AddCategoryMapping(1537, TorznabCatType.TVForeign, "|- Для некондиционных раздач");
             AddCategoryMapping(2100, TorznabCatType.TVForeign, "Азиатские сериалы");
-            AddCategoryMapping(717, TorznabCatType.TVForeign, "|- Китайские сериалы с субтитрами");
+            AddCategoryMapping(820, TorznabCatType.TVForeign, "|- Азиатские сериалы (UHD Video)");
             AddCategoryMapping(915, TorznabCatType.TVForeign, "|- Корейские сериалы с озвучкой");
             AddCategoryMapping(1242, TorznabCatType.TVForeign, "|- Корейские сериалы с субтитрами");
-            AddCategoryMapping(2412, TorznabCatType.TVForeign, "|- Прочие азиатские сериалы с озвучкой");
-            AddCategoryMapping(1938, TorznabCatType.TVForeign, "|- Тайваньские сериалы с субтитрами");
-            AddCategoryMapping(2104, TorznabCatType.TVForeign, "|- Японские сериалы с субтитрами");
+            AddCategoryMapping(717, TorznabCatType.TVForeign, "|- Китайские сериалы с субтитрами");
             AddCategoryMapping(1939, TorznabCatType.TVForeign, "|- Японские сериалы с озвучкой");
+            AddCategoryMapping(2412, TorznabCatType.TVForeign, "|- Прочие азиатские сериалы с озвучкой");
             AddCategoryMapping(2102, TorznabCatType.TVForeign, "|- VMV и др. ролики");
+            AddCategoryMapping(19, TorznabCatType.TVDocumentary, "СМИ");
             AddCategoryMapping(670, TorznabCatType.TVDocumentary, "Вера и религия");
             AddCategoryMapping(1475, TorznabCatType.TVDocumentary, "|- [Видео Религия] Христианство");
             AddCategoryMapping(2107, TorznabCatType.TVDocumentary, "|- [Видео Религия] Ислам");
@@ -370,6 +371,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1319, TorznabCatType.TVSport, "|- Спорт (видео)");
             AddCategoryMapping(1608, TorznabCatType.TVSport, "⚽ Футбол");
             AddCategoryMapping(2294, TorznabCatType.TVSport, "|- UHDTV");
+            AddCategoryMapping(1229, TorznabCatType.TVSport, "|- Чемпионат Мира 2022 (финальный турнир)] (финальный турнир)");
+            AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2022 (отбор)");
             AddCategoryMapping(2532, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (финальный турнир)");
             AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (отбор)");
             AddCategoryMapping(592, TorznabCatType.TVSport, "|- Лига Наций");
@@ -388,9 +391,9 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2514, TorznabCatType.TVSport, "|- Украина");
             AddCategoryMapping(1616, TorznabCatType.TVSport, "|- Другие национальные чемпионаты и кубки");
             AddCategoryMapping(2014, TorznabCatType.TVSport, "|- Международные турниры");
+            AddCategoryMapping(1442, TorznabCatType.TVSport, "|- Еврокубки 2022-2023");
             AddCategoryMapping(1491, TorznabCatType.TVSport, "|- Еврокубки 2021-2022");
-            AddCategoryMapping(1442, TorznabCatType.TVSport, "|- Еврокубки 2020-2021");
-            AddCategoryMapping(1987, TorznabCatType.TVSport, "|- Еврокубки 2011-2020");
+            AddCategoryMapping(1987, TorznabCatType.TVSport, "|- Еврокубки 2011-2021");
             AddCategoryMapping(1617, TorznabCatType.TVSport, "|- Еврокубки");
             AddCategoryMapping(1620, TorznabCatType.TVSport, "|- Чемпионаты Европы");
             AddCategoryMapping(1998, TorznabCatType.TVSport, "|- Товарищеские турниры и матчи");
@@ -406,7 +409,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2003, TorznabCatType.TVSport, "|- Европейский клубный баскетбол");
             AddCategoryMapping(2009, TorznabCatType.TVSport, "🏒 Хоккей");
             AddCategoryMapping(2010, TorznabCatType.TVSport, "|- Хоккей с мячом / Бенди");
-            AddCategoryMapping(1229, TorznabCatType.TVSport, "|- Чемпионат Мира по хоккею 2021");
             AddCategoryMapping(2006, TorznabCatType.TVSport, "|- Международные турниры");
             AddCategoryMapping(2007, TorznabCatType.TVSport, "|- КХЛ");
             AddCategoryMapping(2005, TorznabCatType.TVSport, "|- НХЛ (до 2011/12)");
@@ -828,7 +830,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1768, TorznabCatType.AudioLossless, "|- Reggae, Dancehall, Dub (lossless)");
             AddCategoryMapping(1774, TorznabCatType.AudioLossless, "|- Ska, Ska-Punk, Ska-Jazz (lossless)");
             AddCategoryMapping(1772, TorznabCatType.Audio, "|- Отечественный Reggae, Dub (lossy и lossless)");
-            AddCategoryMapping(1773, TorznabCatType.Audio, "|- Отечественная Ska музыка (lossy и lossless)");
             AddCategoryMapping(2233, TorznabCatType.Audio, "|- Reggae, Ska, Dub (компиляции) (lossy и lossless)");
             AddCategoryMapping(416, TorznabCatType.Audio, "Саундтреки, караоке и мюзиклы");
             AddCategoryMapping(2377, TorznabCatType.AudioVideo, "|- Караоке");
@@ -958,6 +959,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1739, TorznabCatType.AudioMP3, "|- Punk (lossy)");
             AddCategoryMapping(1740, TorznabCatType.AudioLossless, "|- Hardcore (lossless)");
             AddCategoryMapping(1741, TorznabCatType.AudioMP3, "|- Hardcore (lossy)");
+            AddCategoryMapping(1773, TorznabCatType.AudioLossless, "|- Indie Rock, Indie Pop, Dream Pop, Brit-Pop (lossless)");
+            AddCategoryMapping(202, TorznabCatType.AudioMP3, "|- Indie Rock, Indie Pop, Dream Pop, Brit-Pop (lossy)");
+            AddCategoryMapping(172, TorznabCatType.AudioLossless, "|- Post-Punk, Shoegaze, Garage Rock, Noise Rock (lossless)");
+            AddCategoryMapping(236, TorznabCatType.AudioMP3, "|- Post-Punk, Shoegaze, Garage Rock, Noise Rock (lossy)");
             AddCategoryMapping(1742, TorznabCatType.AudioLossless, "|- Indie, Post-Rock & Post-Punk (lossless)");
             AddCategoryMapping(1743, TorznabCatType.AudioMP3, "|- Indie, Post-Rock & Post-Punk (lossy)");
             AddCategoryMapping(1744, TorznabCatType.AudioLossless, "|- Industrial & Post-industrial (lossless)");
@@ -1239,6 +1244,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1041, TorznabCatType.PC, "|- Изменение интерфейса ОС Windows");
             AddCategoryMapping(1636, TorznabCatType.PC, "|- Скринсейверы");
             AddCategoryMapping(1042, TorznabCatType.PC, "|- Разное (Системные программы под Windows)");
+            AddCategoryMapping(1059, TorznabCatType.PC, "Архив (Разрегистрированные раздачи)");
             AddCategoryMapping(1014, TorznabCatType.PC, "Системы для бизнеса, офиса, научной и проектной работы");
             AddCategoryMapping(2134, TorznabCatType.PC, "|- Медицина - интерактивный софт");
             AddCategoryMapping(1060, TorznabCatType.PC, "|- Всё для дома: кройка, шитьё, кулинария");
