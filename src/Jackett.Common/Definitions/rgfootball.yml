@@ -97,6 +97,7 @@ caps:
     - {id: 232, cat: TV/Sport, desc: " |- Play-off"}
     - {id: 160, cat: TV/Sport, desc: "2022-23 UEFA Europa League"}
     - {id: 347, cat: TV/Sport, desc: " |- VIP-Extra UEL 2022-23"}
+    - {id: 512, cat: TV/Sport, desc: " |- VIP UEL 2022-23"}
     - {id: 570, cat: TV/Sport, desc: " |- VIP-Light UEL 2022-23"}
     - {id: 161, cat: TV/Sport, desc: " |- Qualifying Rounds"}
     - {id: 162, cat: TV/Sport, desc: " |- Group stage"}
@@ -118,7 +119,6 @@ caps:
     - {id: 340, cat: TV/Sport, desc: " |- Qualifying Rounds"}
     - {id: 339, cat: TV/Sport, desc: "2021-22 UEFA Europa League"}
     - {id: 12, cat: TV/Sport, desc: " |- VIP-Extra UEL 2021-22"}
-    - {id: 512, cat: TV/Sport, desc: " |- VIP UEL 2021-22"}
     - {id: 576, cat: TV/Sport, desc: " |- VIP-Light UEL 2021-22"}
     - {id: 345, cat: TV/Sport, desc: " |- Play-off"}
     - {id: 343, cat: TV/Sport, desc: " |- Group stage"}
