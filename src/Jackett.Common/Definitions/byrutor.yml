@@ -58,18 +58,12 @@ caps:
     - {id: 43, cat: PC/Games, desc: "Пошаговые стратегии (TBS)"}
     - {id: 44, cat: PC/Games, desc: "Глобальные стратегии"}
     - {id: 45, cat: PC/Games, desc: "Стратегии в реальном времени"}
-    - {id: 46, cat: PC/Games, desc: "ММО"}
-    - {id: 47, cat: PC/Games, desc: "MMORPG"}
     - {id: 48, cat: PC/Games, desc: "Для взрослых"}
     - {id: 49, cat: PC/Games, desc: "От первого лица"}
     - {id: 50, cat: PC/Games, desc: "От третьего лица"}
     - {id: 51, cat: PC/Games, desc: "Шутер от первого лица"}
     - {id: 52, cat: PC/Games, desc: "Шутер от третьего лица"}
     - {id: 53, cat: PC/Games, desc: "Игры для слабых ПК"}
-    - {id: 54, cat: PC/Games, desc: "Игры для очень слабых ПК"}
-    - {id: 55, cat: PC/Games, desc: "Новинки игр для слабых ПК"}
-    - {id: 56, cat: PC/Games, desc: "Игры для 64 битной системы"}
-    - {id: 57, cat: PC/Games, desc: "Игры для 32 битной системы"}
     - {id: 58, cat: PC/Games, desc: "Психологический хоррор"}
     - {id: 59, cat: PC/Games, desc: "Хоррор на выживание"}
     - {id: 60, cat: PC/Games, desc: "Ролевой экшен"}
@@ -118,6 +112,7 @@ caps:
     - {id: 105, cat: PC/Games, desc: "Вождение"}
     - {id: 189, cat: PC/Games, desc: "Пошаговая"}
     - {id: 106, cat: PC/Games, desc: "Пошаговая тактика"}
+    - {id: 328, cat: PC/Games, desc: "2D-платформер"}
     - {id: 107, cat: PC/Games, desc: "3D-платформер"}
     - {id: 108, cat: PC/Games, desc: "Одна жизнь"}
     - {id: 109, cat: PC/Games, desc: "Паркур"}
@@ -193,19 +188,92 @@ caps:
     - {id: 179, cat: PC/Games, desc: "Настольная игра"}
     - {id: 180, cat: PC/Games, desc: "Полёты"}
     - {id: 181, cat: PC/Games, desc: "Лут"}
-    - {id: 182, cat: PC/Games, desc: "В реальном времени"}
     - {id: 183, cat: PC/Games, desc: "MOBA"}
     - {id: 184, cat: PC/Games, desc: "Демоны"}
     - {id: 185, cat: PC/Games, desc: "Расследование"}
     - {id: 186, cat: PC/Games, desc: "Мифология"}
     - {id: 187, cat: PC/Games, desc: "VR"}
     - {id: 191, cat: PC/Games, desc: "Психологическая"}
-    - {id: 192, cat: PC/Games, desc: "Нелинейная"}
     - {id: 193, cat: PC/Games, desc: "Подземелье"}
-    - {id: 195, cat: PC/Games, desc: "Для нескольких игроков"}
     - {id: 196, cat: PC/Games, desc: "Шедевр"}
     - {id: 197, cat: PC/Games, desc: "Ретро"}
     - {id: 198, cat: PC/Games, desc: "Олдскул"}
+    - {id: 251, cat: PC/Games, desc: "Визуальная новелла"}
+    - {id: 252, cat: PC/Games, desc: "Образование"}
+    - {id: 253, cat: PC/Games, desc: "Партийная RPG"}
+    - {id: 254, cat: PC/Games, desc: "Симулятор ходьбы"}
+    - {id: 255, cat: PC/Games, desc: "Симулятор жизни"}
+    - {id: 256, cat: PC/Games, desc: "Автосимулятор"}
+    - {id: 257, cat: PC/Games, desc: "Ритм-игра"}
+    - {id: 258, cat: PC/Games, desc: "Королевская битва"}
+    - {id: 259, cat: PC/Games, desc: "Симулятор колонии"}
+    - {id: 260, cat: PC/Games, desc: "Симулятор фермы"}
+    - {id: 261, cat: PC/Games, desc: "Иммерсивный симулятор"}
+    - {id: 262, cat: PC/Games, desc: "Кликер"}
+    - {id: 263, cat: PC/Games, desc: "Арена-шутер"}
+    - {id: 264, cat: PC/Games, desc: "Платформер на точность"}
+    - {id: 265, cat: PC/Games, desc: "Метроидвания"}
+    - {id: 266, cat: PC/Games, desc: "Похожа на Dark Souls"}
+    - {id: 267, cat: PC/Games, desc: "Коллектатон"}
+    - {id: 268, cat: PC/Games, desc: "Idle-игра"}
+    - {id: 269, cat: PC/Games, desc: "Поиск существ"}
+    - {id: 270, cat: PC/Games, desc: "Зрелищные сражения"}
+    - {id: 271, cat: PC/Games, desc: "Пасьянс"}
+    - {id: 272, cat: PC/Games, desc: "Боевые гонки"}
+    - {id: 273, cat: PC/Games, desc: "Лутер-шутер"}
+    - {id: 274, cat: PC/Games, desc: "Политический симулятор"}
+    - {id: 275, cat: PC/Games, desc: "Традиционный рогалик"}
+    - {id: 276, cat: PC/Games, desc: "Милая"}
+    - {id: 277, cat: PC/Games, desc: "Стилизация"}
+    - {id: 278, cat: PC/Games, desc: "Псевдотрёхмерность"}
+    - {id: 279, cat: PC/Games, desc: "Абстрактная"}
+    - {id: 280, cat: PC/Games, desc: "Красивая"}
+    - {id: 281, cat: PC/Games, desc: "Воксельная графика"}
+    - {id: 282, cat: PC/Games, desc: "Логика"}
+    - {id: 283, cat: PC/Games, desc: "Драма"}
+    - {id: 284, cat: PC/Games, desc: "Романтика"}
+    - {id: 285, cat: PC/Games, desc: "Сюрреалистичная"}
+    - {id: 286, cat: PC/Games, desc: "Мемы"}
+    - {id: 287, cat: PC/Games, desc: "Природа"}
+    - {id: 288, cat: PC/Games, desc: "Роботы"}
+    - {id: 289, cat: PC/Games, desc: "Проработанная вселенная"}
+    - {id: 290, cat: PC/Games, desc: "Триллер"}
+    - {id: 291, cat: PC/Games, desc: "Антиутопия"}
+    - {id: 292, cat: PC/Games, desc: "Сверхъестественное"}
+    - {id: 293, cat: PC/Games, desc: "Альтернативная история"}
+    - {id: 294, cat: PC/Games, desc: "Сражения на мечах"}
+    - {id: 295, cat: PC/Games, desc: "Котики"}
+    - {id: 296, cat: PC/Games, desc: "Америка"}
+    - {id: 297, cat: PC/Games, desc: "Иллюминаты"}
+    - {id: 298, cat: PC/Games, desc: "Капитализм"}
+    - {id: 299, cat: PC/Games, desc: "Заговор"}
+    - {id: 300, cat: PC/Games, desc: "Сатира"}
+    - {id: 301, cat: PC/Games, desc: "Готика"}
+    - {id: 303, cat: PC/Games, desc: "Шахты"}
+    - {id: 304, cat: PC/Games, desc: "Боевые искусства"}
+    - {id: 305, cat: PC/Games, desc: "Танки"}
+    - {id: 306, cat: PC/Games, desc: "Подводный мир"}
+    - {id: 307, cat: PC/Games, desc: "Кулинария"}
+    - {id: 308, cat: PC/Games, desc: "Флот"}
+    - {id: 309, cat: PC/Games, desc: "Транспорт"}
+    - {id: 311, cat: PC/Games, desc: "Марс"}
+    - {id: 312, cat: PC/Games, desc: "Оборотни"}
+    - {id: 313, cat: PC/Games, desc: "Бой"}
+    - {id: 314, cat: PC/Games, desc: "Несколько концовок"}
+    - {id: 315, cat: PC/Games, desc: "Игра против ИИ"}
+    - {id: 316, cat: PC/Games, desc: "Линейная"}
+    - {id: 192, cat: PC/Games, desc: "Нелинейная"}
+    - {id: 317, cat: PC/Games, desc: "Повествовательная"}
+    - {id: 318, cat: PC/Games, desc: "Набор очков"}
+    - {id: 319, cat: PC/Games, desc: "Менеджмент инвентаря"}
+    - {id: 320, cat: PC/Games, desc: "Перемещение по сетке"}
+    - {id: 321, cat: PC/Games, desc: "Разделение на классы"}
+    - {id: 322, cat: PC/Games, desc: "Кастомизация оружия"}
+    - {id: 323, cat: PC/Games, desc: "Построение колоды"}
+    - {id: 324, cat: PC/Games, desc: "Гонки на выживание"}
+    - {id: 325, cat: PC/Games, desc: "Свобода движения"}
+    - {id: 326, cat: PC/Games, desc: "Замедление времени"}
+    - {id: 327, cat: PC/Games, desc: "Динамическое повествование"}
     - {id: 238, cat: PC/Games, desc: "Игры 2024 года"}
     - {id: 237, cat: PC/Games, desc: "Игры 2023 года"}
     - {id: 236, cat: PC/Games, desc: "Игры 2022 года"}
@@ -246,6 +314,7 @@ caps:
     - {id: 23, cat: PC/Games, desc: "Ранний Доступ"}
     - {id: 246, cat: PC/Games, desc: "Обновление"}
     - {id: 230, cat: PC/Games, desc: "Все Топ игры"}
+    - {id: 329, cat: PC/Games, desc: "Актуальные Топ игры"}
     - {id: 24, cat: PC/Games, desc: "Новинка"}
     - {id: 194, cat: PC/Games, desc: "Игры по сети"}
 
