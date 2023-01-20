@@ -78,6 +78,7 @@ search:
     suggest: 0
     column: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
+    $raw: "{{ if .Config.freeleech }}&free{{ else }}{{ end }}"
 
   rows:
     selector: table.torrents > tbody > tr:has(a[href^="download.php?"])
