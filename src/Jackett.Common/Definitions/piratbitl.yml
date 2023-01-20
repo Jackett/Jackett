@@ -27,9 +27,9 @@ caps:
     - {id: 1700, cat: Movies, desc: "Оформление раздач (Кино, Видео и ТВ)"}
     - {id: 3, cat: Movies, desc: "арубежные Фильмы (DVDrip, WEB-DLRip, HDrip)"}
     - {id: 1845, cat: Movies, desc: " |- Фильмы (мультфильмы) cо спонсором показа (Новинки AVI/MKV)"}
-    - {id: 1863, cat: Movies, desc: " |- Фильмы 2022 (Звук TS, Cam, VO, DVO)"}
-    - {id: 1864, cat: Movies, desc: " |- Фильмы 2022 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}
+    - {id: 1863, cat: Movies, desc: " |- Фильмы 2022-2023 (Звук TS, Cam, VO, DVO)"}
     - {id: 1860, cat: Movies, desc: " |- Фильмы 2021 (Звук TS, Cam, VO, DVO)"}
+    - {id: 1864, cat: Movies, desc: " |- Фильмы 2022-2023 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}
     - {id: 1859, cat: Movies, desc: " |- Фильмы 2021 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}
     - {id: 1856, cat: Movies, desc: " |- Фильмы 2019-2020 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}
     - {id: 1849, cat: Movies, desc: " |- Фильмы 2018 [DVDrip, WEB-DLRip, HDrip] (DUB, MVO)"}
@@ -81,11 +81,10 @@ caps:
     - {id: 1518, cat: Movies/3D, desc: " |- 3D Мультфильмы"}
     - {id: 1683, cat: Movies/3D, desc: " |- Документальные фильмы 3D"}
     - {id: 9, cat: Movies, desc: "Наши фильмы, Советское кино (DVDrip, WEB-DLRip, HDrip)"}
-    - {id: 1858, cat: Movies, desc: " |- Наши новые фильмы 2020 - 2021"}
+    - {id: 1858, cat: Movies, desc: " |- Наши новые фильмы 2020 - 2023"}
     - {id: 1846, cat: Movies, desc: " |- Наши фильмы (мультфильмы) cо спонсором показа (Новинки AVI/M.."}
     - {id: 1847, cat: Movies, desc: " |- Наши новые фильмы 2018-2019"}
     - {id: 1840, cat: Movies, desc: " |- Наши новые фильмы 2017"}
-    - {id: 1828, cat: Movies, desc: " |- Наши новые фильмы 2019/2018 (Экранки)"}
     - {id: 1822, cat: Movies, desc: " |- Наши новые фильмы 2016"}
     - {id: 1761, cat: Movies, desc: " |- Наши новые фильмы 2015"}
     - {id: 1682, cat: Movies, desc: " |- Наши новые фильмы 2014"}
@@ -154,35 +153,12 @@ caps:
     - {id: 24, cat: TV, desc: "Наши  сериалы"}
     - {id: 1857, cat: TV, desc: " |- TNT serials"}
     - {id: 25, cat: TV, desc: "Зарубежные сериалы"}
-    - {id: 1725, cat: TV, desc: " |- Американская история ужасов"}
-    - {id: 1723, cat: TV, desc: " |- Ходячие мертвецы (The Walking Dead)"}
-    - {id: 1232, cat: TV, desc: " |- Сверхъестественное (Supernatural)"}
-    - {id: 1726, cat: TV, desc: " |- Родина / Чужой среди своих / Homeland"}
-    - {id: 1731, cat: TV, desc: " |- Стрела"}
-    - {id: 1732, cat: TV, desc: " |- Мастера секса"}
-    - {id: 1736, cat: TV, desc: " |- Рэй Донован"}
-    - {id: 1727, cat: TV, desc: " |- Подпольная Империя"}
     - {id: 1728, cat: TV, desc: " |- Игра престолов"}
-    - {id: 1730, cat: TV, desc: " |- Под куполом"}
-    - {id: 1739, cat: TV, desc: " |- Менталист"}
-    - {id: 1738, cat: TV, desc: " |- Возмездие"}
-    - {id: 1724, cat: TV, desc: " |- Теория большого взрыва"}
-    - {id: 1729, cat: TV, desc: " |- Во все тяжкие"}
-    - {id: 1737, cat: TV, desc: " |- Шерлок"}
-    - {id: 1735, cat: TV, desc: " |- Дневники Вампира"}
-    - {id: 1566, cat: TV, desc: " |- Убежище (Sanctuary)"}
-    - {id: 1511, cat: TV, desc: " |- Клан Сопрано"}
-    - {id: 1427, cat: TV, desc: " |- Калифорникейшн (Californication)"}
-    - {id: 1415, cat: TV, desc: " |- Теория Лжи (Lie To Me)"}
-    - {id: 1413, cat: TV, desc: " |- Кости"}
-    - {id: 1242, cat: TV, desc: " |- Звёздные Врата: Атлантида"}
-    - {id: 1243, cat: TV, desc: " |- Побег (Prison Break)"}
-    - {id: 777, cat: TV, desc: " |- Остаться в Живых (LOST)"}
-    - {id: 773, cat: TV, desc: " |- Доктор Хаус (House M.D.)"}
     - {id: 775, cat: TV, desc: " |- Ищу (Зарубежные сериалы)"}
     # Programs, Windows and other, Design
     - {id: 1808, cat: PC, desc: "Оформление раздач (Программы и Дизайн)"}
     - {id: 181, cat: PC, desc: "Предложения по улучшению"}
+    - {id: 1677, cat: PC, desc: "OC Windows"}
     - {id: 1861, cat: PC, desc: " |- Windows 11"}
     - {id: 1722, cat: PC, desc: " |- Windows 10"}
     - {id: 1628, cat: PC, desc: " |- Windows 8"}
@@ -258,6 +234,7 @@ caps:
     - {id: 608, cat: PC, desc: " |- Стили, кисти, формы и узоры для Adobe Photoshop"}
     - {id: 606, cat: PC, desc: " |- Разное (Материалы для мультимедиа и дизайна)"}
     - {id: 655, cat: PC, desc: "Apple Macintosh"}
+    - {id: 667, cat: PC/Mac, desc: " |- FAQ по разделу Apple Macintosh"}
     - {id: 666, cat: PC/Mac, desc: " |- Mac OS (для Macintosh)"}
     - {id: 665, cat: PC/Mac, desc: " |- Mac OS (для РС-Хакинтош)"}
     - {id: 664, cat: PC/Mac, desc: " |- Игры Mac OS (Macintosh)"}
@@ -281,11 +258,54 @@ caps:
     - {id: 1269, cat: TV/HD, desc: " |- Наши Мультфильмы  (HD, WEB-DL 720p, 1080p)"}
     - {id: 1423, cat: TV, desc: " |- Зарубежные Мультфильмы (DVD)"}
     - {id: 1424, cat: TV, desc: " |- Наши Мультфильмы (DVD)"}
+    # Strawberry
+    - {id: 1615, cat: XXX, desc: "Оформление раздач"}
+    - {id: 1616, cat: XXX, desc: " |- Полнометражные порно фильмы"}
+    - {id: 1617, cat: XXX, desc: " |- Порно-ролики"}
+    - {id: 1618, cat: XXX, desc: " |- Фото - Картинки"}
+    - {id: 1292, cat: XXX, desc: "Зарубежные порно фильмы HDrip XXX, DVDrip"}
+    - {id: 1426, cat: XXX, desc: " |- Порно фильмы с русским переводом"}
+    - {id: 250, cat: XXX, desc: " |- Порно фильмы с сюжетом"}
+    - {id: 294, cat: XXX, desc: " |- Порно фильмы без сюжета"}
+    - {id: 271, cat: XXX, desc: " |- Гонзо"}
+    - {id: 251, cat: XXX, desc: " |- Лесбиянки"}
+    - {id: 1515, cat: XXX, desc: " |- Молодые студенты и узкие письки"}
+    - {id: 1349, cat: XXX, desc: " |- Скрытые камеры"}
+    - {id: 249, cat: XXX, desc: " |- Классические порно фильмы"}
+    - {id: 248, cat: XXX, desc: " |- Паки полных порно фильмов"}
+    - {id: 252, cat: XXX, desc: " |- Этнические порно фильмы"}
+    - {id: 253, cat: XXX, desc: " |- Японские фильмы"}
+    - {id: 1289, cat: XXX, desc: " |- Нетрадиционное порно"}
+    - {id: 1324, cat: XXX, desc: " |- Shemale / Трансcексуалы"}
+    - {id: 299, cat: XXX, desc: " |- Гей клубника"}
+    - {id: 246, cat: XXX, desc: " |- Эротические и Документальные фильмы"}
+    - {id: 1359, cat: XXX, desc: "Зарубежные порно фильмы (DVD, HD и Blu-ray)"}
+    - {id: 255, cat: XXX, desc: " |- Порно фильмы HD"}
+    - {id: 275, cat: XXX, desc: " |- Порно фильмы DVD"}
+    - {id: 1568, cat: XXX, desc: "Русское порно"}
+    - {id: 261, cat: XXX, desc: " |- Русские порно фильмы"}
+    - {id: 264, cat: XXX, desc: " |- Русские порно ролики"}
+    - {id: 265, cat: XXX, desc: " |- Русское любительское видео"}
+    - {id: 263, cat: XXX, desc: " |- Сцены из фильмов и Сайтрипы с русскими актрисами"}
+    - {id: 262, cat: XXX, desc: " |- Паки русских роликов"}
+    - {id: 1358, cat: XXX, desc: "Зарубежные порно ролики"}
+    - {id: 1749, cat: XXX, desc: " |- Вуайеризм (подглядывание)"}
+    - {id: 1748, cat: XXX, desc: " |- Большие сиськи"}
+    - {id: 257, cat: XXX, desc: " |- HD ролики"}
+    - {id: 1746, cat: XXX, desc: " |- Анальный секс"}
+    - {id: 1745, cat: XXX, desc: " |- Домашнее порно"}
+    - {id: 1744, cat: XXX, desc: " |- Секс с подростками"}
+    - {id: 1747, cat: XXX, desc: " |- Мамочки"}
+    - {id: 260, cat: XXX, desc: " |- Разное"}
+    - {id: 259, cat: XXX, desc: " |- Сцены из фильмов"}
+    - {id: 266, cat: XXX, desc: " |- Любительское фото"}
+    - {id: 267, cat: XXX, desc: " |- Фото Разное"}
+    - {id: 256, cat: XXX, desc: " |- Паки сайтрипов"}
+    - {id: 1347, cat: XXX, desc: "Мультфильмы / Cartoons"}
+    - {id: 1665, cat: XXX, desc: "3D порно"}
     # Documentary, sports, educational videos
     - {id: 79, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
-    - {id: 359, cat: TV/Documentary, desc: "|- Информационно-аналитические и общественно-политические перед"}
     - {id: 348, cat: TV/Documentary, desc: " |- Научно-популярные фильмы"}
-    - {id: 1698, cat: TV/Documentary, desc: " |- Политика, религия"}
     - {id: 345, cat: TV/Documentary, desc: " |- Космос"}
     - {id: 342, cat: TV/Documentary, desc: " |- Военное дело"}
     - {id: 363, cat: TV/Documentary, desc: " |- National Geographic"}
@@ -400,6 +420,7 @@ caps:
     - {id: 1712, cat: Audio, desc: "Классическая музыка"}
     - {id: 1713, cat: Audio, desc: "Инструментальная музыка"}
     # Rock Music
+    - {id: 1068, cat: Audio, desc: "Обсуждение Рок-музыки, Флудилка!!!"}
     - {id: 1069, cat: Audio, desc: "Зарубежный Rock"}
     - {id: 1537, cat: Audio, desc: " |- Неофициальные сборники"}
     - {id: 1085, cat: Audio, desc: " |- Архив (Зарубежный Rock)"}
@@ -476,51 +497,6 @@ caps:
     - {id: 1143, cat: Audio/Video, desc: " |- Отечественный металл (Видео)"}
     - {id: 1142, cat: Audio/Video, desc: " |- Отечественный металл (DVD Video)"}
     - {id: 1141, cat: Audio/Video, desc: " |- Рок-музыка (HD Video)"}
-    # Strawberry
-    - {id: 1615, cat: XXX, desc: "Оформление раздач"}
-    - {id: 1616, cat: XXX, desc: " |- Полнометражные порно фильмы"}
-    - {id: 1617, cat: XXX, desc: " |- Порно-ролики"}
-    - {id: 1618, cat: XXX, desc: " |- Фото - Картинки"}
-    - {id: 1292, cat: XXX, desc: "Зарубежные порно фильмы HDrip XXX, DVDrip"}
-    - {id: 1426, cat: XXX, desc: " |- Порно фильмы с русским переводом"}
-    - {id: 250, cat: XXX, desc: " |- Порно фильмы с сюжетом"}
-    - {id: 294, cat: XXX, desc: " |- Порно фильмы без сюжета"}
-    - {id: 271, cat: XXX, desc: " |- Гонзо"}
-    - {id: 251, cat: XXX, desc: " |- Лесбиянки"}
-    - {id: 1515, cat: XXX, desc: " |- Молодые студенты и узкие письки"}
-    - {id: 1349, cat: XXX, desc: " |- Скрытые камеры"}
-    - {id: 249, cat: XXX, desc: " |- Классические порно фильмы"}
-    - {id: 248, cat: XXX, desc: " |- Паки полных порно фильмов"}
-    - {id: 252, cat: XXX, desc: " |- Этнические порно фильмы"}
-    - {id: 253, cat: XXX, desc: " |- Японские фильмы"}
-    - {id: 1289, cat: XXX, desc: " |- Нетрадиционное порно"}
-    - {id: 1324, cat: XXX, desc: " |- Shemale / Трансcексуалы"}
-    - {id: 299, cat: XXX, desc: " |- Гей клубника"}
-    - {id: 246, cat: XXX, desc: " |- Эротические и Документальные фильмы"}
-    - {id: 1359, cat: XXX, desc: "Зарубежные порно фильмы (DVD, HD и Blu-ray)"}
-    - {id: 255, cat: XXX, desc: " |- Порно фильмы HD"}
-    - {id: 275, cat: XXX, desc: " |- Порно фильмы DVD"}
-    - {id: 1568, cat: XXX, desc: "Русское порно"}
-    - {id: 261, cat: XXX, desc: " |- Русские порно фильмы"}
-    - {id: 264, cat: XXX, desc: " |- Русские порно ролики"}
-    - {id: 265, cat: XXX, desc: " |- Русское любительское видео"}
-    - {id: 263, cat: XXX, desc: " |- Сцены из фильмов и Сайтрипы с русскими актрисами"}
-    - {id: 262, cat: XXX, desc: " |- Паки русских роликов"}
-    - {id: 1358, cat: XXX, desc: "Зарубежные порно ролики"}
-    - {id: 1749, cat: XXX, desc: " |- Вуайеризм (подглядывание)"}
-    - {id: 1748, cat: XXX, desc: " |- Большие сиськи"}
-    - {id: 257, cat: XXX, desc: " |- HD ролики"}
-    - {id: 1746, cat: XXX, desc: " |- Анальный секс"}
-    - {id: 1745, cat: XXX, desc: " |- Домашнее порно"}
-    - {id: 1744, cat: XXX, desc: " |- Секс с подростками"}
-    - {id: 1747, cat: XXX, desc: " |- Мамочки"}
-    - {id: 260, cat: XXX, desc: " |- Разное"}
-    - {id: 259, cat: XXX, desc: " |- Сцены из фильмов"}
-    - {id: 266, cat: XXX, desc: " |- Любительское фото"}
-    - {id: 267, cat: XXX, desc: " |- Фото Разное"}
-    - {id: 256, cat: XXX, desc: " |- Паки сайтрипов"}
-    - {id: 1347, cat: XXX, desc: "Мультфильмы / Cartoons"}
-    - {id: 1665, cat: XXX, desc: "3D порно"}
     # E-books, Magazines, Books, Comics
     - {id: 1674, cat: Books, desc: "Скачать книги в формате fb2 бесплатно и без регистрации"}
     - {id: 1241, cat: Books, desc: "Журналы (PDF)"}
