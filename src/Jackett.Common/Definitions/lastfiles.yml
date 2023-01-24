@@ -139,11 +139,51 @@ search:
 
   fields:
     category:
-      selector: a[href*=".php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+      selector: img[src*="pic/caticons/1/categories"]
+      attribute: src
+      case:
+       img[src$="4k.png"]: 31
+       img[src$="bluray.png"]: 5
+       img[src$="dvd.png"]: 9
+       img[src$="hd.png"]: 11
+       img[src$="cam.png"]: 58
+       img[src$="3D.png"]: 61
+       img[src$="xvid.png"]: 24
+       img[src$="oldies.png"]: 16
+       img[src$="web-DL.png"]: 54
+       img[src$="doc.png"]: 56
+       img[src$="moviepack.png"]: 18
+       img[src$="4kRO.png"]: 32
+       img[src$="bluray-ro.png"]: 6
+       img[src$="hd-ro.png"]: 12
+       img[src$="x265ro.png"]: 81
+       img[src$="x265.png"]: 82
+       img[src$="dvd-ro.png"]: 10
+       img[src$="cam_ro.png"]: 59
+       img[src$="xvid-ro.png"]: 25
+       img[src$="oldies-ro.png"]: 17
+       img[src$="web-DLRO.png"]: 55
+       img[src$="doc-ro.png"]: 57
+       img[src$="3DRO.png"]: 62
+       img[src$="pack-ro.png"]: 19
+       img[src$="tvepisode.png"]: 20
+       img[src$="tvepisode-ro.png"]: 21
+       img[src$="hdtve.png"]: 13
+       img[src$="hdtve-ro.png"]: 14
+       img[src$="music.png"]: 28
+       img[src$="android.png"]: 51
+       img[src$="soft.png"]: 26
+       img[src$="pciso.png"]: 30
+       img[src$="gpack.png"]: 33
+       img[src$="anime.png"]: 1
+       img[src$="anime-ro.png"]: 2
+       img[src$="sport.png"]: 42
+       img[src$="docs.png"]: 43
+       img[src$="images.png"]: 44
+       img[src$="misc.png"]: 49
+       img[src$="rocontent.png"]: 22
+       img[src$="xxximgset.png"]: 60
+       img[src$="xxx.png"]: 27
     title:
       selector: a[onmouseover]
     details:
@@ -154,7 +194,7 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: src=\\'(.+?)\\'
+          args: "src=(.+?) "
         - name: replace
           args: ["./pic/noposter.png", ""]
     genre:
@@ -170,13 +210,13 @@ search:
       selector: a[href^="download.php"]
       attribute: href
     date_day:
-      selector: td:nth-child(4) span:contains("day")
+      selector: td:nth-child(4) b:contains("day")
       # auto adjusted by site account profile
       optional: true
       filters:
         - name: fuzzytime
     date_year:
-      selector: td:nth-child(4) span:not(:contains("day"))
+      selector: td:nth-child(4) b:not(:contains("day"))
       # auto adjusted by site account profile
       optional: true
       filters:
