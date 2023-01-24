@@ -142,48 +142,48 @@ search:
       selector: img[src*="pic/caticons/1/categories"]
       attribute: src
       case:
-       img[src$="4k.png"]: 31
-       img[src$="bluray.png"]: 5
-       img[src$="dvd.png"]: 9
-       img[src$="hd.png"]: 11
-       img[src$="cam.png"]: 58
-       img[src$="3D.png"]: 61
-       img[src$="xvid.png"]: 24
-       img[src$="oldies.png"]: 16
-       img[src$="web-DL.png"]: 54
-       img[src$="doc.png"]: 56
-       img[src$="moviepack.png"]: 18
-       img[src$="4kRO.png"]: 32
-       img[src$="bluray-ro.png"]: 6
-       img[src$="hd-ro.png"]: 12
-       img[src$="x265ro.png"]: 81
-       img[src$="x265.png"]: 82
-       img[src$="dvd-ro.png"]: 10
-       img[src$="cam_ro.png"]: 59
-       img[src$="xvid-ro.png"]: 25
-       img[src$="oldies-ro.png"]: 17
-       img[src$="web-DLRO.png"]: 55
-       img[src$="doc-ro.png"]: 57
-       img[src$="3DRO.png"]: 62
-       img[src$="pack-ro.png"]: 19
-       img[src$="tvepisode.png"]: 20
-       img[src$="tvepisode-ro.png"]: 21
-       img[src$="hdtve.png"]: 13
-       img[src$="hdtve-ro.png"]: 14
-       img[src$="music.png"]: 28
-       img[src$="android.png"]: 51
-       img[src$="soft.png"]: 26
-       img[src$="pciso.png"]: 30
-       img[src$="gpack.png"]: 33
-       img[src$="anime.png"]: 1
-       img[src$="anime-ro.png"]: 2
-       img[src$="sport.png"]: 42
-       img[src$="docs.png"]: 43
-       img[src$="images.png"]: 44
-       img[src$="misc.png"]: 49
-       img[src$="rocontent.png"]: 22
-       img[src$="xxximgset.png"]: 60
-       img[src$="xxx.png"]: 27
+        img[src$="4k.png"]: 31
+        img[src$="bluray.png"]: 5
+        img[src$="dvd.png"]: 9
+        img[src$="hd.png"]: 11
+        img[src$="cam.png"]: 58
+        img[src$="3D.png"]: 61
+        img[src$="xvid.png"]: 24
+        img[src$="oldies.png"]: 16
+        img[src$="web-DL.png"]: 54
+        img[src$="doc.png"]: 56
+        img[src$="moviepack.png"]: 18
+        img[src$="4kRO.png"]: 32
+        img[src$="bluray-ro.png"]: 6
+        img[src$="hd-ro.png"]: 12
+        img[src$="x265ro.png"]: 81
+        img[src$="x265.png"]: 82
+        img[src$="dvd-ro.png"]: 10
+        img[src$="cam_ro.png"]: 59
+        img[src$="xvid-ro.png"]: 25
+        img[src$="oldies-ro.png"]: 17
+        img[src$="web-DLRO.png"]: 55
+        img[src$="doc-ro.png"]: 57
+        img[src$="3DRO.png"]: 62
+        img[src$="pack-ro.png"]: 19
+        img[src$="tvepisode.png"]: 20
+        img[src$="tvepisode-ro.png"]: 21
+        img[src$="hdtve.png"]: 13
+        img[src$="hdtve-ro.png"]: 14
+        img[src$="music.png"]: 28
+        img[src$="android.png"]: 51
+        img[src$="soft.png"]: 26
+        img[src$="pciso.png"]: 30
+        img[src$="gpack.png"]: 33
+        img[src$="anime.png"]: 1
+        img[src$="anime-ro.png"]: 2
+        img[src$="sport.png"]: 42
+        img[src$="docs.png"]: 43
+        img[src$="images.png"]: 44
+        img[src$="misc.png"]: 49
+        img[src$="rocontent.png"]: 22
+        img[src$="xxximgset.png"]: 60
+        img[src$="xxx.png"]: 27
     title:
       selector: a[onmouseover]
     details:
@@ -234,19 +234,17 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "a.info > b:contains(\"FREE\")": 0
-#        "a.info > b:contains(\"Half\")": 0.5
+        img[src$="half2.png"]: 0.5
+        a#free-btn: 0
         "*": 1
     uploadvolumefactor:
-      case:
-#        "a.info > b:contains(\"2XUP\")": 2
-        "*": 1
+      text: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
       # freeleech 2 days (as seconds =  2 x 24 x 60 x 60)
       # notfree 1.5 days  (as seconds =  1.5 x 24 x 60 x 60)
       case:
-        "a.info > b:contains(\"FREE\")": 172800
+        a#free-btn: 172800
         "*": 129600
 # U-232 V5
