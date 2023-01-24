@@ -146,22 +146,22 @@ search:
           args: "/img/NewIcones/(.+?).png"
     title_phase1:
       selector: a.view-torrent
-    title_multilang:
+    title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+          args: ["(?i)\\b(VOSTFR)\\b", "ENGLISH"]
+        - name: re_replace
+          args: ["(?i)\\b(SUBFRENCH)\\b", "ENGLISH"]
     title_phase2:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
-    title_vostfr:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
-        - name: re_replace
-          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
-      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     download:
       selector: a.view-torrent
       attribute: href
