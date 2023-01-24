@@ -152,7 +152,6 @@ search:
         img[src$="oldies.png"]: 16
         img[src$="web-DL.png"]: 54
         img[src$="doc.png"]: 56
-        img[src$="moviepack.png"]: 18
         img[src$="4kRO.png"]: 32
         img[src$="bluray-ro.png"]: 6
         img[src$="hd-ro.png"]: 12
@@ -175,6 +174,7 @@ search:
         img[src$="soft.png"]: 26
         img[src$="pciso.png"]: 30
         img[src$="gpack.png"]: 33
+        img[src$="pack.png"]: 18
         img[src$="anime.png"]: 1
         img[src$="anime-ro.png"]: 2
         img[src$="sport.png"]: 42
