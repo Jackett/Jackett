@@ -202,9 +202,9 @@ search:
         - name: regexp
           args: "src=(.+?) "
         - name: replace
-          args: ["./pic/noposter.png", ""]
+          args: [" width=160", ""]
     genre:
-      selector: i:has(a[href$="searchin=genre"])
+      selector: i:has(a[href$="searchin=genre"]), font[size]
       filters:
         - name: replace
           args: [" & ", "_&_"]
