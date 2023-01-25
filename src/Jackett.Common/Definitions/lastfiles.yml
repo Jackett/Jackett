@@ -18,48 +18,48 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 31, cat: Movies/UHD, desc: "Movies: 4K", default: true}
+    - {id: 1, cat: TV/Anime, desc: "Movies: Anime", default: true}
+    - {id: 2, cat: TV/Anime, desc: "Movies: Anime-Ro", default: true}
     - {id: 5, cat: Movies/BluRay, desc: "Movies: BluRay", default: true}
-    - {id: 9, cat: Movies/DVD, desc: "Movies: DVD", default: true}
-    - {id: 11, cat: Movies/HD, desc: "Movies: HD", default: true}
-    - {id: 58, cat: Movies/SD, desc: "Movies: Cam", default: true}
-    - {id: 61, cat: Movies/3D, desc: "Movies: 3D", default: true}
-    - {id: 24, cat: Movies/SD, desc: "Movies: XVID", default: true}
-    - {id: 16, cat: Movies, desc: "Movies: Old", default: true}
-    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL", default: true}
-    - {id: 56, cat: TV/Documentary, desc: "Documentary", default: true}
-    - {id: 18, cat: Movies, desc: "Movies: Pack", default: true}
-    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRO", default: true}
     - {id: 6, cat: Movies/BluRay, desc: "Movies: BluRay-Ro", default: true}
-    - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro", default: true}
-    - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
-    - {id: 82, cat: Movies/HD, desc: "Movies: x265", default: true}
+    - {id: 9, cat: Movies/DVD, desc: "Movies: DVD", default: true}
     - {id: 10, cat: Movies/DVD, desc: "Movies: DVD-Ro", default: true}
-    - {id: 59, cat: Movies/SD, desc: "Movies: Cam-RO", default: true}
-    - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro", default: true}
+    - {id: 11, cat: Movies/HD, desc: "Movies: HD", default: true}
+    - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro", default: true}
+    - {id: 13, cat: TV/HD, desc: "HDTV Episodes", default: true}
+    - {id: 14, cat: TV/HD, desc: "HDTV Episodes-Ro", default: true}
+    - {id: 16, cat: Movies, desc: "Movies: Old", default: true}
     - {id: 17, cat: Movies, desc: "Movies: Old-Ro", default: true}
-    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro", default: true}
-    - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro", default: true}
-    - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro", default: true}
+    - {id: 18, cat: Movies, desc: "Movies: Pack", default: true}
     - {id: 19, cat: Movies, desc: "Movies: Pack-Ro", default: true}
     - {id: 20, cat: TV, desc: "TV Episodes", default: true}
     - {id: 21, cat: TV, desc: "TV Episodes-Ro", default: true}
-    - {id: 13, cat: TV/HD, desc: "HDTV Episodes", default: true}
-    - {id: 14, cat: TV/HD, desc: "HDTV Episodes-Ro", default: true}
-    - {id: 28, cat: Audio, desc: "Music", default: true}
-    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps", default: true}
+    - {id: 22, cat: Other, desc: "RoContent", default: true}
+    - {id: 24, cat: Movies/SD, desc: "Movies: XVID", default: true}
+    - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro", default: true}
     - {id: 26, cat: PC/0day, desc: "Software", default: true}
+    - {id: 27, cat: XXX, desc: "Movies: XXX", default: false}
+    - {id: 28, cat: Audio, desc: "Music", default: true}
     - {id: 30, cat: PC/Games, desc: "Games: PC-ISO", default: true}
+    - {id: 31, cat: Movies/UHD, desc: "Movies: 4K", default: true}
+    - {id: 32, cat: Movies/UHD, desc: "Movies: 4K-Ro", default: true}
     - {id: 33, cat: PC/Games, desc: "Games: Packs", default: true}
-    - {id: 1, cat: TV/Anime, desc: "Movies: Anime", default: true}
-    - {id: 2, cat: TV/Anime, desc: "Movies: Anime-Ro", default: true}
     - {id: 42, cat: TV/Sport, desc: "Sport", default: true}
     - {id: 43, cat: Books, desc: "Documents", default: true}
     - {id: 44, cat: Other, desc: "Images", default: true}
     - {id: 49, cat: Other, desc: "Diverse", default: true}
-    - {id: 22, cat: Other, desc: "RoContent", default: true}
+    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps", default: true}
+    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL", default: true}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro", default: true}
+    - {id: 56, cat: TV/Documentary, desc: "Documentary", default: true}
+    - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro", default: true}
+    - {id: 58, cat: Movies/SD, desc: "Movies: Cam", default: true}
+    - {id: 59, cat: Movies/SD, desc: "Movies: Cam-Ro", default: true}
     - {id: 60, cat: XXX/ImageSet, desc: "Images: XXX", default: false}
-    - {id: 27, cat: XXX, desc: "Movies: XXX", default: false}
+    - {id: 61, cat: Movies/3D, desc: "Movies: 3D", default: true}
+    - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro", default: true}
+    - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
+    - {id: 82, cat: Movies/HD, desc: "Movies: x265", default: true}
 
   modes:
     search: [q]
@@ -83,22 +83,22 @@ settings:
     type: info
     label: FlareSolverr
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: 3
-    options:
-      3: created
-      6: seeders
-      4: size
-      1: title
-  - name: type
-    type: select
-    label: Order requested from site
-    default: desc
-    options:
-      desc: desc
-      asc: asc
+#  - name: sort
+#    type: select
+#    label: Sort requested from site
+#    default: 3
+#    options:
+#      3: created
+#      6: seeders
+#      4: size
+#      1: title
+#  - name: type
+#    type: select
+#    label: Order requested from site
+#    default: desc
+#    options:
+#      desc: desc
+#      asc: asc
 
 login:
   path: takelogin.php
@@ -118,72 +118,78 @@ login:
 
 search:
   paths:
+    # https://www.last-torrents.org/externalid?searchex=tt5834760&search_by=imdbid
+    # cannot support imdbid or tmdbid searches while using path category filters
     - path: browse.php
-      categories: [31, 5, 9, 11, 58, 61, 24, 16, 54, 56, 18, 32, 6, 12, 81, 82, 10, 59, 25, 17, 55, 57, 62, 19, 20, 21, 13, 14, 28, 51, 26, 30, 33, 1, 2, 42, 43, 44, 49, 22]
+      categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 58, 59, 60, 61,62, 81, 82]
     - path: browseadult.php
-      categories: [60, 27]
+      categories: [27, 60]
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.Genre }}{{ .Query.Genre }} {{ else }}{{ end }}{{ .Keywords }}"
-    # title, descr, genre, all
+    # title, genre, all
     searchin: "{{ if .Query.Genre }}all{{ else }}title{{ end }}"
-    # 0 active, 1 incldead, 2 onlydead
-    incldead: 1
-    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 silver, 5 seedbox
+    type: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+# sort and type can only be used in a non-search query due to conflicting parameters
+#    sort: "{{ .Config.sort }}"
+#    type: "{{ .Config.type }}"
 
   rows:
-    selector: tbody > tr:has(a[href^="download.php"])
+    selector: div.py-3
 
   fields:
     category:
       selector: img[src*="pic/caticons/1/categories"]
       attribute: src
       case:
-        img[src$="4k.png"]: 31
+        img[src$="anime.png"]: 1
+        img[src$="anime-ro.png"]: 2
         img[src$="bluray.png"]: 5
-        img[src$="dvd.png"]: 9
-        img[src$="hd.png"]: 11
-        img[src$="cam.png"]: 58
-        img[src$="3D.png"]: 61
-        img[src$="xvid.png"]: 24
-        img[src$="oldies.png"]: 16
-        img[src$="web-DL.png"]: 54
-        img[src$="doc.png"]: 56
-        img[src$="4kRO.png"]: 32
         img[src$="bluray-ro.png"]: 6
-        img[src$="hd-ro.png"]: 12
-        img[src$="x265ro.png"]: 81
-        img[src$="x265.png"]: 82
+        img[src$="dvd.png"]: 9
         img[src$="dvd-ro.png"]: 10
-        img[src$="cam_ro.png"]: 59
-        img[src$="xvid-ro.png"]: 25
+        img[src$="hd.png"]: 11
+        img[src$="hd-ro.png"]: 12
+        img[src$="hdtve.png"]: 13
+        img[src$="hdtve-ro.png"]: 14
+        img[src$="oldies.png"]: 16
         img[src$="oldies-ro.png"]: 17
-        img[src$="web-DLRO.png"]: 55
-        img[src$="doc-ro.png"]: 57
-        img[src$="3DRO.png"]: 62
+        img[src$="pack.png"]: 18
         img[src$="pack-ro.png"]: 19
         img[src$="tvepisode.png"]: 20
         img[src$="tvepisode-ro.png"]: 21
-        img[src$="hdtve.png"]: 13
-        img[src$="hdtve-ro.png"]: 14
-        img[src$="music.png"]: 28
-        img[src$="android.png"]: 51
+        img[src$="rocontent.png"]: 22
+        img[src$="xvid.png"]: 24
+        img[src$="xvid-ro.png"]: 25
         img[src$="soft.png"]: 26
+        img[src$="xxx.png"]: 27
+        img[src$="music.png"]: 28
         img[src$="pciso.png"]: 30
+        img[src$="4k.png"]: 31
+        img[src$="4kRO.png"]: 32
         img[src$="gpack.png"]: 33
-        img[src$="pack.png"]: 18
-        img[src$="anime.png"]: 1
-        img[src$="anime-ro.png"]: 2
         img[src$="sport.png"]: 42
         img[src$="docs.png"]: 43
         img[src$="images.png"]: 44
         img[src$="misc.png"]: 49
-        img[src$="rocontent.png"]: 22
+        img[src$="android.png"]: 51
+        img[src$="web-DL.png"]: 54
+        img[src$="web-DLRO.png"]: 55
+        img[src$="doc.png"]: 56
+        img[src$="doc-ro.png"]: 57
+        img[src$="cam.png"]: 58
+        img[src$="cam_ro.png"]: 59
         img[src$="xxximgset.png"]: 60
-        img[src$="xxx.png"]: 27
+        img[src$="3D.png"]: 61
+        img[src$="3DRO.png"]: 62
+        img[src$="x265ro.png"]: 81
+        img[src$="x265.png"]: 82
     title:
       selector: a[onmouseover]
     details:
@@ -210,28 +216,28 @@ search:
       selector: a[href^="download.php"]
       attribute: href
     date_day:
-      selector: td:nth-child(4) b:contains("day")
+      selector: div.col-sm-4:nth-of-type(3):contains("day")
       # auto adjusted by site account profile
       optional: true
       filters:
         - name: fuzzytime
     date_year:
-      selector: td:nth-child(4) b:not(:contains("day"))
+      selector: div.col-sm-4:nth-of-type(3):contains(":"):not(:contains("day"))
       # auto adjusted by site account profile
       optional: true
       filters:
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM"
+          args: "Jan 2 2006, 03:04 PM"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: div.col-sm-4:nth-of-type(4)
     grabs:
-      selector: td:nth-child(6)
+      selector: div.col-sm-4:contains("Completed") b
     seeders:
-      selector: td:nth-child(7)
+      selector: div.col-sm-4:contains("Seeders") b
     leechers:
-      selector: td:nth-child(8)
+      selector: div.col-sm-4:contains("Leechers") b
     downloadvolumefactor:
       case:
         img[src$="half2.png"]: 0.5
