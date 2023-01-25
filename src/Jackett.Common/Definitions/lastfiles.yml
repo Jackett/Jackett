@@ -204,8 +204,10 @@ search:
         - name: replace
           args: ["./pic/noposter.png", ""]
     genre:
-      selector: font[size]
+      selector: i:has(a[href$="searchin=genre"])
       filters:
+        - name: replace
+          args: [" & ", "_&_"]
         - name: replace
           args: ["Hip Hop", "Hip_Hop"]
         - name: replace
