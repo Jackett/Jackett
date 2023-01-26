@@ -105,6 +105,9 @@ namespace Jackett.Common.Indexers
             Language = "es-ES";
             Type = "public";
 
+            // avoid CLoudflare too many requests limiter
+            webclient.requestDelay = 2.1;
+
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 
