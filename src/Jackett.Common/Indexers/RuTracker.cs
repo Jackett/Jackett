@@ -1435,7 +1435,6 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("id=\"logged-in-username\""), () =>
             {
-                logger.Debug(result.ContentString);
                 var errorMessage = "Unknown error message, please report";
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(result.ContentString);
@@ -1443,9 +1442,6 @@ namespace Jackett.Common.Indexers
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
                 errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
-                if (errormsg != null)
-                    errorMessage = errormsg.TextContent;
-                errormsg = doc.QuerySelector("div.msg-main");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
 
