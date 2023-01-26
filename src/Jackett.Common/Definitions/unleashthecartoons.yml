@@ -32,6 +32,19 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: Romanian
+    options:
+      Romanian: Romanian
+      MULTi Romanian: MULTi Romanian
+      English: English
+      MULTi English: MULTi English
   - name: sort
     type: select
     label: Sort requested from site
