@@ -105,8 +105,25 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    _lang:
+      optional: true
+      selector: img[src*="images/languages"]
+      attribute: alt
+      filters:
+        - name: replace
+          args: ["Ro/Eng", "MULTi"]
+    title_phase1:
       selector: a[href^="torrents-details.php?id="]
+      filters:
+        - name: append
+          args: "{{ if .Result._lang }} ({{ .Result._lang }}){{ else }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\bmulti\\b)", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
