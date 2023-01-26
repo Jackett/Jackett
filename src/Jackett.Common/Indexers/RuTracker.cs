@@ -1439,7 +1439,13 @@ namespace Jackett.Common.Indexers
                 var errorMessage = "Unknown error message, please report";
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(result.ContentString);
-                var errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
+                var errormsg = doc.QuerySelector("div.msg-main");
+                if (errormsg != null)
+                    errorMessage = errormsg.TextContent;
+                errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
+                if (errormsg != null)
+                    errorMessage = errormsg.TextContent;
+                errormsg = doc.QuerySelector("div.msg-main");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
 
