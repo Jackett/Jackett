@@ -238,11 +238,13 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("Вы зашли как:"), () =>
             {
-                logger.Debug(result.ContentString);
                 var errorMessage = "Unknown error message, please report";
                 var LoginResultParser = new HtmlParser();
                 var LoginResultDocument = LoginResultParser.ParseDocument(result.ContentString);
-                var errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
+                var errormsg = LoginResultDocument.QuerySelector("div");
+                if (errormsg != null && errormsg.TextContent.Contains("Форум временно отключен"))
+                    errorMessage = errormsg.TextContent;
+                errormsg = LoginResultDocument.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
 
