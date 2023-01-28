@@ -243,7 +243,7 @@ search:
         img[src$="/docdivers.png"]: 21
         img[src$="/dochistoire.png"]: 22
         img[src$="/docsemitv.png"]: 164
-        img[src$="/docsseries.png"]: 198
+        img[src$="/unknown198.png"]: 198 # film doc spectacle
         img[src$="/film3d.png"]: 25
         img[src$="/film4k.png"]: 26
         img[src$="/film4klight.png"]: 27
@@ -283,7 +283,7 @@ search:
         img[src$="/loglinux.png"]: 71
         img[src$="/logwindows.png"]: 72
         img[src$="/animcoffret.png"]: 7
-        img[src$="/unknown197.png"]: 197 # serie episode
+        img[src$="/docsseries.png"]: 197
         img[src$="/unknown182.png"]: 182 # serie jap anim
         img[src$="/unknown166.png"]: 166 # serie docu
         img[src$="/unknown194.png"]: 194 # serie docu divers
@@ -304,7 +304,7 @@ search:
         img[src$="/seriewebrip.png"]: 93
         img[src$="/seriesfrwebdl720p.png"]: 178
         img[src$="/seriesfrwebdl1080p.png"]: 179
-        img[src$="/unknown199.png"]: 199 # serie webdl
+        img[src$="/seriewebdl.png"]: 199
         img[src$="/serievostfrbdrip.png"]: 188
         img[src$="/serievostfrdvdrip.png"]: 189
         img[src$="/serievostfrhdrip.png"]: 190
