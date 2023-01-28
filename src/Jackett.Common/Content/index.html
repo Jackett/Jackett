@@ -570,39 +570,39 @@
         <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
             <thead>
                 <tr>
-                    <th>Published</th>
-                    <th>Published</th>
-                    <th>Tracker</th>
+                    <th class="text-center">Published</th>
+                    <th class="text-center">Published</th>
+                    <th class="text-center">Tracker</th>
                     <th>Name</th>
-                    <th>Size</th>
-                    <th>Size</th>
-                    <th title="Files">F</th>
-                    <th>Category</th>
-                    <th title="Grabs">G</th>
-                    <th title="Seeders">S</th>
-                    <th title="Leechers">L</th>
-                    <th title="DownloadVolumeFactor" class="fit">DLF</th>
-                    <th title="UploadVolumeFactor" class="fit">ULF</th>
-                    <th title="Download">DL</th>
+                    <th class="text-center">Size</th>
+                    <th class="text-center">Size</th>
+                    <th class="text-center" title="Files">F</th>
+                    <th class="text-center">Category</th>
+                    <th class="text-center" title="Grabs">G</th>
+                    <th class="text-center" title="Seeders">S</th>
+                    <th class="text-center" title="Leechers">L</th>
+                    <th class="text-center fit" title="DownloadVolumeFactor">DLF</th>
+                    <th class="text-center fit" title="UploadVolumeFactor">ULF</th>
+                    <th class="text-center" title="Download">DL</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each Results}}
                 <tr class="jackett-search-results-row" data-imdb="{{Imdb}}" data-tmdb="{{TMDb}}" data-tvdb="{{TVDBId}}" data-tvmaze="{{TVMazeId}}" data-trakt="{{TraktId}}" data-douban="{{DoubanId}}" data-poster="{{Poster}}" data-description="{{Description}}">
-                    <td>{{PublishDate}}</td>
-                    <td>{{jacketTimespan PublishDate}}</td>
-                    <td>{{Tracker}}</td>
+                    <td class="text-center">{{PublishDate}}</td>
+                    <td class="text-center" title="{{dateFormat PublishDate format="YYYY-MM-DD HH:mm:ss Z"}}">{{jacketTimespan PublishDate}}</td>
+                    <td class="text-center">{{Tracker}}</td>
                     <td class="Title"><a href="{{Details}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
-                    <td>{{Size}}</td>
-                    <td class="fit">{{jacketSize Size}}</td>
-                    <td>{{Files}}</td>
-                    <td class="Cat">{{CategoryDesc}}</td>
-                    <td>{{Grabs}}</td>
-                    <td>{{Seeders}}</td>
-                    <td>{{Peers}}</td>
-                    <td class="DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
-                    <td class="UploadVolumeFactor">{{UploadVolumeFactor}}</td>
-                    <td class="downloadcolumn">
+                    <td class="text-right">{{Size}}</td>
+                    <td class="text-right fit">{{jacketSize Size}}</td>
+                    <td class="text-center">{{Files}}</td>
+                    <td class="text-center Cat">{{CategoryDesc}}</td>
+                    <td class="text-center">{{Grabs}}</td>
+                    <td class="text-center">{{Seeders}}</td>
+                    <td class="text-center">{{Peers}}</td>
+                    <td class="text-center DownloadVolumeFactor">{{DownloadVolumeFactor}}</td>
+                    <td class="text-center UploadVolumeFactor">{{UploadVolumeFactor}}</td>
+                    <td class="text-center downloadcolumn">
                         {{#if Link}}
                         <a class="downloadlink" title="Download locally" href="{{Link}}"><i class="fa fa-download"></i></a>
                         {{/if}}
