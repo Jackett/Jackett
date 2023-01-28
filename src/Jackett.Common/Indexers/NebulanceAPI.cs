@@ -103,12 +103,14 @@ namespace Jackett.Common.Indexers
             request["method"] = method;
             request["params"] = parameters;
             request["id"] = Guid.NewGuid().ToString().Substring(0, 8);
+
             return request.ToString();
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var ValidList = new List<string>() {
+            var validList = new List<string>
+            {
                 "action",
                 "adventure",
                 "children",
@@ -138,7 +140,8 @@ namespace Jackett.Common.Indexers
                 "war",
                 "western"
             };
-            var ValidCats = new List<string>() {
+            var validCats = new List<string>
+            {
                 "sd",
                 "hd",
                 "uhd",
@@ -150,17 +153,15 @@ namespace Jackett.Common.Indexers
                 "2160p"
             };
 
-            var searchParam = new JObject();
-            var searchString = query.GetQueryString();
+            var searchParam = new JObject
+            {
+                ["age"] = ">0"
+            };
 
+            var searchString = query.GetQueryString();
             if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                searchParam["name"] = "%" + Regex.Replace(searchString, @"[ -._]", "%").Trim() + "%";
-            }
-            else
-            {
-                searchParam["name"] = "%";
-            }
+                searchParam["name"] = "%" + Regex.Replace(searchString, @"[ -._]+", "%").Trim() + "%";
+
             if (query.IsGenreQuery)
             {
                 var genre = new JArray
@@ -169,11 +170,11 @@ namespace Jackett.Common.Indexers
                 };
                 searchParam["tags"] = genre;
             }
+
             var limit = query.Limit;
             if (limit == 0)
                 limit = (int)TorznabCaps.LimitsDefault;
             var offset = query.Offset;
-            var releases = new List<ReleaseInfo>();
 
             var parameters = new JArray
             {
@@ -192,47 +193,56 @@ namespace Jackett.Common.Indexers
                 }, rawbody: JsonRPCRequest("getTorrents", parameters), emulateBrowser: false);
 
             if (response.ContentString != null && response.ContentString.Contains("Invalid params"))
-                throw new Exception($"Invalid API Key configured");
+                throw new Exception("Invalid API Key configured");
+
+            char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+
+            var releases = new List<ReleaseInfo>();
+
             try
             {
-                var json = JObject.Parse(response.ContentString);
-                foreach (var r in json["result"]["items"].Cast<JObject>())
+                var jsonContent = JObject.Parse(response.ContentString);
+
+                foreach (var item in jsonContent.Value<JObject>("result").Value<JArray>("items"))
                 {
+                    var link = new Uri(item.Value<string>("download"));
+                    var details = new Uri($"{SiteLink}torrents.php?id={item.Value<string>("group_id")}");
+
                     var descriptions = new List<string>();
-                    if (!string.IsNullOrWhiteSpace((string)r["group_name"]))
-                        descriptions.Add("Group Name: " + (string)r["group_name"]);
-                    var link = new Uri((string)r["download"]);
-                    var details = new Uri($"{SiteLink}torrents.php?id={(string)r["group_id"]}");
-                    var publishDate = DateTime.ParseExact((string)r["rls_utc"] + " +00:00", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
-                    var tags = string.Join(",", r["tags"]);
-                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
-                    var releaseGenres = ValidList.Intersect(tags.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
+                    if (!string.IsNullOrWhiteSpace(item.Value<string>("group_name")))
+                        descriptions.Add("Group Name: " + item.Value<string>("group_name"));
+                    var tags = string.Join(",", item.Value<JArray>("tags"));
+                    var releaseGenres = validList.Intersect(tags.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
                     descriptions.Add("Tags: " + string.Join(",", releaseGenres));
-                    var releaseCats = ValidCats.Intersect(tags.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
+                    var releaseCats = validCats.Intersect(tags.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
+
                     var release = new ReleaseInfo
                     {
-                        Title = (string)r["rls_name"],
-                        Category = MapTrackerCatToNewznab(releaseCats.Any() ? releaseCats.First() : "TV"),
-                        Details = details,
                         Guid = link,
                         Link = link,
-                        PublishDate = publishDate,
-                        Seeders = (int)r["seed"],
-                        Peers = (int)r["seed"] + (int)r["leech"],
-                        Size = (long)r["size"],
-                        Grabs = (int)r["snatch"],
-                        UploadVolumeFactor = 1,
+                        Details = details,
+                        Title = item.Value<string>("rls_name").Trim(),
+                        Category = MapTrackerCatToNewznab(releaseCats.Any() ? releaseCats.First() : "TV"),
+                        PublishDate = DateTime.Parse(item.Value<string>("rls_utc"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                        Seeders = item.Value<int>("seed"),
+                        Peers = item.Value<int>("seed") + item.Value<int>("leech"),
+                        Size = item.Value<long>("size"),
+                        Files = item.Value<JArray>("file_list").Count,
+                        Grabs = item.Value<int>("snatch"),
                         DownloadVolumeFactor = 0, // ratioless
+                        UploadVolumeFactor = 1,
                         MinimumRatio = 0, // ratioless
-                        MinimumSeedTime = 86400, // 24 hours
+                        MinimumSeedTime = item.Value<string>("cat").ToLower() == "season" ? 432000 : 86400, // 120 hours for seasons and 24 hours for episodes
                         Description = string.Join("<br />\n", descriptions)
                     };
+
                     if (release.Genres == null)
                         release.Genres = new List<string>();
                     release.Genres = releaseGenres;
-                    var banner = (string)r["series_banner"];
-                    if ((!string.IsNullOrEmpty(banner)) && (!banner.Contains("noimage.png")))
-                        release.Poster = new Uri((string)r["series_banner"]);
+
+                    var banner = item.Value<string>("series_banner");
+                    if (!string.IsNullOrEmpty(banner) && !banner.Contains("noimage.png"))
+                        release.Poster = new Uri(banner);
 
                     releases.Add(release);
                 }
@@ -241,6 +251,7 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.ContentString, ex);
             }
+
             return releases;
         }
     }
