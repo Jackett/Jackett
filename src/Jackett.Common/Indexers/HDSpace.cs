@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,10 +12,10 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
@@ -22,7 +23,7 @@ namespace Jackett.Common.Indexers
     public class HDSpace : BaseWebIndexer
     {
         private string LoginUrl => SiteLink + "index.php?page=login";
-        private string SearchUrl => SiteLink + "index.php?page=torrents&";
+        private string SearchUrl => SiteLink + "index.php?page=torrents";
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
@@ -121,17 +122,16 @@ namespace Jackett.Common.Indexers
 
             if (query.IsImdbQuery)
             {
-                queryCollection.Add("options", "2");
-                queryCollection.Add("search", query.ImdbIDShort);
+                queryCollection.Set("options", "2");
+                queryCollection.Set("search", query.ImdbIDShort);
             }
             else
             {
-                queryCollection.Add("options", "0");
-                queryCollection.Add("search", query.GetQueryString());
+                queryCollection.Set("options", "0");
+                queryCollection.Set("search", query.GetQueryString().Replace(".", " "));
             }
 
-            // remove . as not used in titles
-            var response = await RequestWithCookiesAndRetryAsync(SearchUrl + queryCollection.GetQueryString().Replace(".", " "));
+            var response = await RequestWithCookiesAndRetryAsync($"{SearchUrl}&{queryCollection.GetQueryString()}");
 
             try
             {
@@ -156,6 +156,11 @@ namespace Jackett.Common.Indexers
                     release.Title = qLink.TextContent.Trim();
                     release.Details = new Uri(SiteLink + qLink.GetAttribute("href"));
                     release.Guid = release.Details;
+                    release.Link = new Uri(SiteLink + row.Children[3].FirstElementChild.GetAttribute("href"));
+
+                    var torrentTitle = ParseUtil.GetArgumentFromQueryString(release.Link.ToString(), "f")?.Replace(".torrent", "").Trim();
+                    if (!string.IsNullOrWhiteSpace(torrentTitle))
+                        release.Title = WebUtility.HtmlDecode(torrentTitle);
 
                     var qGenres = row.QuerySelector("span[style=\"color: #000000 \"]");
                     var description = "";
@@ -165,9 +170,6 @@ namespace Jackett.Common.Indexers
                     var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
                     if (imdbLink != null)
                         release.Imdb = ParseUtil.GetImdbID(imdbLink.GetAttribute("href").Split('/').Last());
-
-                    var qDownload = row.Children[3].FirstElementChild;
-                    release.Link = new Uri(SiteLink + qDownload.GetAttribute("href"));
 
                     var dateStr = row.Children[4].TextContent.Trim();
                     //"July 11, 2015, 13:34:09", "Today|Yesterday at 20:04:23"
@@ -188,8 +190,9 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
                     release.UploadVolumeFactor = 1;
-                    var qCat = row.QuerySelector("a[href^=\"index.php?page=torrents&category=\"]");
-                    var cat = qCat.GetAttribute("href").Split('=')[2];
+
+                    var categoryLink = row.QuerySelector("a[href^=\"index.php?page=torrents&category=\"]").GetAttribute("href");
+                    var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
                     release.Category = MapTrackerCatToNewznab(cat);
 
                     release.Description = description;

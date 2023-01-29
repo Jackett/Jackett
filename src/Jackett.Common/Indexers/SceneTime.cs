@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -57,7 +57,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataSceneTime())
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
+            Encoding = Encoding.UTF8;
             Language = "en-US";
             Type = "private";
 
@@ -119,14 +119,14 @@ namespace Jackett.Common.Indexers
 
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
-                qParams.Add("c" + cat, "1");
+                qParams.Set($"c{cat}", "1");
 
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
-                qParams.Add("search", query.GetQueryString());
+                qParams.Set("search", query.GetQueryString());
 
             // If Only Freeleech Enabled
             if (configData.Freeleech.Value)
-                qParams.Add("freeleech", "on");
+                qParams.Set("freeleech", "on");
 
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
@@ -161,8 +161,7 @@ namespace Jackett.Common.Indexers
                 if (table == null)
                     return releases; // no results
 
-                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head")
-                                         .Select(x => x.TextContent).ToList();
+                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head").Select(x => x.TextContent).ToList();
                 var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
                 var nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
                 var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
@@ -172,43 +171,43 @@ namespace Jackett.Common.Indexers
                 var rows = dom.QuerySelectorAll("tr.browse");
                 foreach (var row in rows)
                 {
-                    // TODO convert to initializer
+                    var qDescCol = row.Children[nameIndex];
+                    var qLink = qDescCol.QuerySelector("a");
+                    var title = qLink.TextContent;
+
+                    if (!query.MatchQueryStringAND(title))
+                        continue;
+
+                    var details = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
+                    var torrentId = ParseUtil.GetArgumentFromQueryString(qLink.GetAttribute("href"), "id");
+                    var link = new Uri(string.Format(DownloadUrl, torrentId));
+
+                    var categoryLink = row.Children[categoryIndex].QuerySelector("a")?.GetAttribute("href");
+                    var cat = categoryLink != null ? ParseUtil.GetArgumentFromQueryString(categoryLink, "cat") : "82"; // default
+
+                    var seeders = ParseUtil.CoerceInt(row.Children[seedersIndex].TextContent.Trim());
+
+                    var dateAdded = qDescCol.QuerySelector("span[class=\"elapsedDate\"]").GetAttribute("title").Trim();
+                    var publishDate = DateTime.TryParseExact(dateAdded, "dddd, MMMM d, yyyy \\a\\t h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var date)
+                        ? date
+                        : DateTimeUtil.FromTimeAgo(qDescCol.QuerySelector("span[class=\"elapsedDate\"]").TextContent.Trim());
+
                     var release = new ReleaseInfo
                     {
+                        Guid = details,
+                        Details = details,
+                        Link = link,
+                        Title = title,
+                        Category = MapTrackerCatToNewznab(cat),
+                        PublishDate = publishDate,
+                        Size = ReleaseInfo.GetBytes(row.Children[sizeIndex].TextContent),
+                        Seeders = seeders,
+                        Peers = ParseUtil.CoerceInt(row.Children[leechersIndex].TextContent.Trim()) + seeders,
+                        DownloadVolumeFactor = row.QuerySelector("font > b:contains(Freeleech)") != null ? 0 : 1,
+                        UploadVolumeFactor = 1,
                         MinimumRatio = 1,
                         MinimumSeedTime = 259200 // 72 hours
                     };
-
-                    var catId = "82"; // default
-                    var qCatLink = row.Children[categoryIndex].QuerySelector("a");
-                    if (qCatLink != null)
-                    {
-                        catId = new Regex(@"\?cat=(\d*)").Match(qCatLink.GetAttribute("href")).Groups[1].ToString().Trim();
-                    }
-                    release.Category = MapTrackerCatToNewznab(catId);
-
-                    var qDescCol = row.Children[nameIndex];
-                    var qLink = qDescCol.QuerySelector("a");
-                    release.Title = qLink.TextContent;
-                    if (!query.MatchQueryStringAND(release.Title))
-                        continue;
-
-                    release.Details = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
-                    release.Guid = release.Details;
-
-                    var torrentId = qLink.GetAttribute("href").Split('=')[1];
-                    release.Link = new Uri(string.Format(DownloadUrl, torrentId));
-
-                    release.PublishDate = DateTimeUtil.FromTimeAgo(qDescCol.ChildNodes.Last().TextContent);
-
-                    var sizeStr = row.Children[sizeIndex].TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
-                    release.Seeders = ParseUtil.CoerceInt(row.Children[seedersIndex].TextContent.Trim());
-                    release.Peers = ParseUtil.CoerceInt(row.Children[leechersIndex].TextContent.Trim()) + release.Seeders;
-
-                    release.DownloadVolumeFactor = row.QuerySelector("font > b:contains(Freeleech)") != null ? 0 : 1;
-                    release.UploadVolumeFactor = 1;
 
                     releases.Add(release);
                 }
