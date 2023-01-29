@@ -5,13 +5,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -169,26 +169,32 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
+            var limit = query.Limit > 0 ? query.Limit : 100;
+            var offset = query.Offset > 0 ? query.Offset : 0;
 
             var qParams = new NameValueCollection
             {
                 {"tor[text]", query.GetQueryString()},
+                {"tor[searchType]", configData.SearchType.Value},
                 {"tor[srchIn][title]", "true"},
                 {"tor[srchIn][author]", "true"},
-                {"tor[searchType]", configData.ExcludeVip?.Value == true ? "nVIP" : "all"}, // exclude VIP torrents
+                {"tor[srchIn][narrator]", "true"},
                 {"tor[searchIn]", "torrents"},
-                {"tor[hash]", ""},
                 {"tor[sortType]", "default"},
-                {"tor[startNumber]", "0"},
+                {"tor[perpage]", limit.ToString()},
+                {"tor[startNumber]", offset.ToString()},
                 {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
-                //{ "posterLink", "1"}, // gives links for a full sized poster
-                //{ "dlLink", "1"}, // include the url to download the torrent
                 {"description", "1"} // include the description
-                //{"bookmarks", "0"} // include if the item is bookmarked or not
             };
 
-            // Exclude VIP torrents
+            if (configData.SearchInDescription.Value)
+                qParams.Add("tor[srchIn][description]", "true");
+
+            if (configData.SearchInSeries.Value)
+                qParams.Add("tor[srchIn][series]", "true");
+
+            if (configData.SearchInFilenames.Value)
+                qParams.Add("tor[srchIn][filenames]", "true");
 
             var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
@@ -207,9 +213,16 @@ namespace Jackett.Common.Indexers
             if (qParams.Count > 0)
                 urlSearch += $"?{qParams.GetQueryString()}";
 
-            var response = await RequestWithCookiesAndRetryAsync(urlSearch);
+            var response = await RequestWithCookiesAndRetryAsync(
+                urlSearch,
+                headers: new Dictionary<string, string>
+                {
+                    {"Accept", "application/json"}
+                });
             if (response.ContentString.StartsWith("Error"))
                 throw new Exception(response.ContentString);
+
+            var releases = new List<ReleaseInfo>();
 
             try
             {
@@ -222,30 +235,46 @@ namespace Jackett.Common.Indexers
 
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
-                    //TODO shift to ReleaseInfo object initializer for consistency
-                    var release = new ReleaseInfo();
-
                     var id = item.Value<long>("id");
-                    release.Title = item.Value<string>("title");
+                    var link = new Uri(sitelink, "/tor/download.php?tid=" + id);
+                    var details = new Uri(sitelink, "/t/" + id);
 
-                    release.Description = item.Value<string>("description");
+                    var release = new ReleaseInfo
+                    {
+                        Guid = details,
+                        Title = item.Value<string>("title").Trim(),
+                        Description = item.Value<string>("description").Trim(),
+                        Link = link,
+                        Details = details,
+                        Category = MapTrackerCatToNewznab(item.Value<string>("category")),
+                        PublishDate = DateTime.ParseExact(item.Value<string>("added"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime(),
+                        Grabs = item.Value<long>("times_completed"),
+                        Files = item.Value<long>("numfiles"),
+                        Seeders = item.Value<int>("seeders"),
+                        Peers = item.Value<int>("seeders") + item.Value<int>("leechers"),
+                        Size = ReleaseInfo.GetBytes(item.Value<string>("size")),
+                        DownloadVolumeFactor = item.Value<bool>("free") ? 0 : 1,
+                        UploadVolumeFactor = 1,
+
+                        // MinimumRatio = 1, // global MR is 1.0 but torrents must be seeded for 3 days regardless of ratio
+                        MinimumSeedTime = 259200 // 72 hours
+                    };
 
                     var authorInfo = item.Value<string>("author_info");
-                    string author = null;
-                    if (!string.IsNullOrWhiteSpace(authorInfo))
+                    if (authorInfo != null)
                         try
                         {
-                            authorInfo = Regex.Unescape(authorInfo);
-                            var authorInfoJson = JObject.Parse(authorInfo);
-                            author = authorInfoJson.First.Last.Value<string>();
+                            var authorInfoList = JsonConvert.DeserializeObject<Dictionary<string, string>>(authorInfo);
+                            var author = authorInfoList?.Take(5).Select(v => v.Value).ToList();
+
+                            if (author != null && author.Any())
+                                release.Title += " by " + string.Join(", ", author);
                         }
                         catch (Exception)
                         {
                             // the JSON on author_info field can be malformed due to double quotes
                             logger.Warn($"{DisplayName} error parsing author_info: {authorInfo}");
                         }
-                    if (author != null)
-                        release.Title += " by " + author;
 
                     var flags = new List<string>();
 
@@ -255,37 +284,13 @@ namespace Jackett.Common.Indexers
 
                     var filetype = item.Value<string>("filetype");
                     if (!string.IsNullOrEmpty(filetype))
-                        flags.Add(filetype);
+                        flags.Add(filetype.ToUpper());
 
                     if (flags.Count > 0)
                         release.Title += " [" + string.Join(" / ", flags) + "]";
 
-                    if (item.Value<int>("vip") == 1)
+                    if (item.Value<bool>("vip"))
                         release.Title += " [VIP]";
-
-                    var category = item.Value<string>("category");
-                    release.Category = MapTrackerCatToNewznab(category);
-
-                    release.Link = new Uri(sitelink, "/tor/download.php?tid=" + id);
-                    release.Details = new Uri(sitelink, "/t/" + id);
-                    release.Guid = release.Details;
-
-                    var dateStr = item.Value<string>("added");
-                    var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    release.PublishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-
-                    release.Grabs = item.Value<long>("times_completed");
-                    release.Files = item.Value<long>("numfiles");
-                    release.Seeders = item.Value<int>("seeders");
-                    release.Peers = item.Value<int>("leechers") + release.Seeders;
-                    var size = item.Value<string>("size");
-                    release.Size = ReleaseInfo.GetBytes(size);
-
-                    release.DownloadVolumeFactor = item.Value<int>("free") == 1 ? 0 : 1;
-                    release.UploadVolumeFactor = 1;
-
-                    // release.MinimumRatio = 1; // global MR is 1.0 but torrents must be seeded for 3 days regardless of ratio
-                    release.MinimumSeedTime = 259200; // 72 hours
 
                     releases.Add(release);
                 }
