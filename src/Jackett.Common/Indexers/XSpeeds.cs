@@ -25,8 +25,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "takelogin.php";
         private string GetRSSKeyUrl => SiteLink + "getrss.php";
         private string SearchUrl => SiteLink + "browse.php";
-        private readonly Regex _dateMatchRegex = new Regex(
-            @"\d{2}-\d{2}-\d{4} \d{2}:\d{2}", RegexOptions.Compiled);
+        private readonly Regex _dateMatchRegex = new Regex(@"\d{2}-\d{2}-\d{4} \d{2}:\d{2}", RegexOptions.Compiled);
 
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
             (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
@@ -270,13 +269,13 @@ namespace Jackett.Common.Indexers
                     release.Guid = new Uri(row.QuerySelector("td:nth-of-type(3) a").GetAttribute("href"));
                     release.Link = release.Guid;
                     release.Details = new Uri(qDetails.GetAttribute("href"));
-                    //08-08-2015 12:51
+
+                    // 08-08-2015 12:51
                     // requests can be 'Pre Release Time: 25-04-2021 15:00 Uploaded: 3 Weeks, 2 Days, 23 Hours, 53 Minutes, 39 Seconds after Pre'
-                    var dateMatch = _dateMatchRegex.Match(row.QuerySelectorAll("td:nth-of-type(2) div").Last().TextContent.Trim());
+                    var dateMatch = _dateMatchRegex.Match(row.QuerySelector("td:nth-of-type(2) > div:last-child").TextContent.Trim());
                     if (dateMatch.Success)
-                        release.PublishDate = DateTime.ParseExact(dateMatch.Value
-                        , "dd-MM-yyyy H:mm",
-                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                        release.PublishDate = DateTime.ParseExact(dateMatch.Value, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture);
+
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
                     release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
@@ -285,14 +284,15 @@ namespace Jackett.Common.Indexers
                     if (qPoster != null)
                         release.Poster = new Uri(qPoster.GetAttribute("src"));
 
-                    var cat = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
-                    var catSplit = cat.LastIndexOf('=');
-                    if (catSplit > -1)
-                        cat = cat.Substring(catSplit + 1);
+                    var categoryLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
+                    var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
                     release.Category = MapTrackerCatToNewznab(cat);
 
                     var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    var cover = row.QuerySelector("td:nth-of-type(2) > div > img[src]")?.GetAttribute("src")?.Trim();
+                    release.Poster = !string.IsNullOrEmpty(cover) && cover.StartsWith("http") ? new Uri(cover) : null;
 
                     if (row.QuerySelector("img[alt^=\"Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -22,6 +23,7 @@ namespace Jackett.Common.Indexers
         private string BrowsePage => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string QueryString => "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no";
+        private readonly Regex _dateMatchRegex = new Regex(@"\d{4}-\d{2}-\d{2} \d{2}:\d{2} [AaPp][Mm]", RegexOptions.Compiled);
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "http://immortalseed.me/"
@@ -189,24 +191,24 @@ namespace Jackett.Common.Indexers
                     release.Details = new Uri(qDetails.GetAttribute("href"));
 
                     // 2021-03-17 03:39 AM
-                    var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().LastChild.TextContent.Trim();
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
+                    // requests can be 'Pre Release Time: 2013-04-22 02:00 AM Uploaded: 3 Years, 6 Months, 4 Weeks, 2 Days, 16 Hours, 52 Minutes, 41 Seconds after Pre'
+                    var dateMatch = _dateMatchRegex.Match(row.QuerySelector("td:nth-of-type(2) > div:last-child").TextContent.Trim());
+                    if (dateMatch.Success)
+                        release.PublishDate = DateTime.ParseExact(dateMatch.Value, "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
 
-                    var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
+                    release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim()) + release.Seeders;
 
-                    var catLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
-                    var catSplit = catLink.IndexOf("category=");
-                    if (catSplit > -1)
-                        catLink = catLink.Substring(catSplit + 9);
-
-                    release.Category = MapTrackerCatToNewznab(catLink);
+                    var categoryLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
+                    var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
+
+                    var cover = row.QuerySelector("td:nth-of-type(2) > div > img[src]")?.GetAttribute("src")?.Trim();
+                    release.Poster = !string.IsNullOrEmpty(cover) && cover.StartsWith("/") ? new Uri(SiteLink + cover.TrimStart('/')) : null;
 
                     if (row.QuerySelector("img[title^=\"Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
@@ -215,10 +217,7 @@ namespace Jackett.Common.Indexers
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (row.QuerySelector("img[title^=\"x2 Torrent\"]") != null)
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
+                    release.UploadVolumeFactor = row.QuerySelector("img[title^=\"x2 Torrent\"]") != null ? 2 : 1;
 
                     releases.Add(release);
                 }
