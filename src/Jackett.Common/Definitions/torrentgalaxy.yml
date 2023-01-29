@@ -83,6 +83,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: excludeads
+    type: checkbox
+    label: Exclude results which include advertisements
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -127,9 +131,13 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: div.tgxtable > div:has(div[class^="tgxtablecell shrink"])
+    selector: "div.tgxtable > div:has(div[class^=\"tgxtablecell shrink\"]){{ if .Config.excludeads }}:not(:has(i.fab.fa-adversal)){{ else }}{{ end }}"
 
   fields:
+    _ads:
+      optional: true
+      selector: i.fab.fa-adversal
+      attribute: title
     category:
       selector: div a[href^="/torrents.php?cat="]
       attribute: href
@@ -152,7 +160,7 @@ search:
         - name: re_replace
           args: ["-", " "]
     title:
-      text: "{{ if or .Result.title_full .Result.title_text }}{{ or .Result.title_full .Result.title_text }}{{ else }}{{ .Result.href }}{{ end }}"
+      text: "{{ if or .Result.title_full .Result.title_text }}{{ or .Result.title_full .Result.title_text }}{{ else }}{{ .Result.href }}{{ end }}{{ if .Result._ads }} (Ads included!){{ else }}{{ end }}"
     details:
       selector: div a[href^="/torrent/"]
       attribute: href
