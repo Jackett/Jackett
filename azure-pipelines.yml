@@ -7,7 +7,7 @@ variables:
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
   netCoreFramework: net6.0
-  netCoreSdkVersion: 6.0.403 # #13806 & dotnet/runtime#79796
+  netCoreSdkVersion: 6.0.x
   # system.debug: true
 
 trigger:
