@@ -8,13 +8,13 @@ encoding: utf-8
 followredirect: true
 requestDelay: 2
 links:
-  - https://www.lastfiles.ro/
-  - http://www.lastfiles.ro/
   - https://www.last-torrents.org/
-  - http://www.last-torrents.org/
 legacylinks:
   - http://last-torrents.org/
   - https://last-torrents.org/
+  - https://www.lastfiles.ro/
+  - http://www.lastfiles.ro/
+  - http://www.last-torrents.org/
 
 caps:
   categorymappings:
