@@ -85,11 +85,11 @@ search:
     # https://unleashthecartoons.world/torrents-search.php?search=&cat=0&incldead=1&freeleech=0&inclexternal=0&lang=0&sort=id&order=desc
     - path: torrents-search.php
   inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # does not support multi cats searching so defaulting to all.
-    cat: 0
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
+    # 0 all, 1 nofree, 2 onlyfree
     freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 Local/External, 1 Local Only, 2 External Only
     inclexternal: 0
@@ -97,7 +97,6 @@ search:
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-    # does not support multicategory filtering
     # does not support imdbid searches, does not return imdb link in results
 
   keywordsfilters:
@@ -146,6 +145,14 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: a[onMouseover]
+      attribute: onMouseover
+      filters:
+        - name: regexp
+          args: src=(.+?)>
+        - name: replace
+          args: ["images/nocover.png", ""]
     size:
       selector: td:nth-last-child(7)
     date:
