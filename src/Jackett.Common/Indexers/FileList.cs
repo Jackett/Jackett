@@ -19,6 +19,7 @@ namespace Jackett.Common.Indexers
     public class FileList : BaseWebIndexer
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://filelist.io/",
             "https://flro.org/"
         };
 
