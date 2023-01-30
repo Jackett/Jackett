@@ -18,11 +18,14 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class FileList : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://flro.org/"
+        };
+
         public override string[] LegacySiteLinks { get; protected set; } =
         {
-            "http://filelist.ro/",
             "https://filelist.ro/",
-            "https://flro.org/",
+            "http://filelist.ro/",
             "http://flro.org/"
         };
 
@@ -132,11 +135,17 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in json)
                 {
+                    var isFreeleech = row.Value<bool>("freeleech");
+
+                    // skip non-freeleech results when freeleech only is set
+                    if (configData.Freeleech.Value && !isFreeleech)
+                        continue;
+
                     var detailsUri = new Uri(DetailsUrl + "?id=" + row.Value<string>("id"));
                     var seeders = row.Value<int>("seeders");
                     var peers = seeders + row.Value<int>("leechers");
                     var publishDate = DateTime.Parse(row.Value<string>("upload_date") + " +0200", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
-                    var downloadVolumeFactor = row.Value<bool>("freeleech") ? 0 : 1;
+                    var downloadVolumeFactor = isFreeleech ? 0 : 1;
                     var uploadVolumeFactor = row.Value<bool>("doubleup") ? 2 : 1;
                     var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbID(row.Value<string>("imdb")) : null;
                     var link = new Uri(row.Value<string>("download_link"));
