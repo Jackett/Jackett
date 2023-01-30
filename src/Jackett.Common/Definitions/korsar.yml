@@ -500,11 +500,11 @@ search:
 
   fields:
     category:
-      selector: a[href*="/viewtopic.php?f="]
+      selector: a[href$=".html"]
       attribute: href
       filters:
-        - name: querystring
-          args: f
+        - name: regexp
+          args: -f(\d+)
     title:
       selector: a.topictitle
     details:
