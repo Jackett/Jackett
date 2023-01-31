@@ -80,7 +80,7 @@ login:
     selector: a[href$="/logout.php"]
 
 search:
-  # https://devil-torrents.pl/szukaj.php?search=%&typ=torrent&c4=1&c=748
+  # https://devil-torrents.pl/szukaj.php?search=%&typ=torrent&c4=1&c748=1
   paths:
     - path: szukaj.php
   inputs:
@@ -152,7 +152,7 @@ search:
       selector: td.descr3
       filters:
         - name: regexp
-          args: (\d{1,4}\.\d{2}\s+?[T|G|M|K]B)
+          args: (\d{1,4}\.\d{2}\s+?[T|G|M|k]B)
     seeders:
       selector: font[color="green"] > b, font[color="red"] > b
     leechers:
