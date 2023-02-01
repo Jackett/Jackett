@@ -80,6 +80,7 @@ namespace Jackett.Common.Indexers
             var pairs = new Dictionary<string, string> {
                 { "username", configData.Username.Value },
                 { "password", configData.Password.Value },
+                { "returnto", "" },
                 { "login", "Login" }
             };
 
@@ -107,11 +108,12 @@ namespace Jackett.Common.Indexers
              * so ?search=reality+love+s04e19&s_title=1&s_tag=1
              * will find Love Island S04E19 as well as My Kitchen Rules S12E02
              * since the former has a match for Love in the title, and the latter has a tag for Reality-TV.
-             * 
+             *
              * FunFiles only has genres for movies and tv
              */
 
-            var ValidList = new List<string>() {
+            var validList = new List<string>
+            {
                 "action",
                 "adventure",
                 "animation",
@@ -147,25 +149,27 @@ namespace Jackett.Common.Indexers
 
             var qc = new NameValueCollection
             {
-                {"incldead", "1"},
-                {"showspam", "1"},
-                {"cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0")}
+                { "cat", "0" },
+                { "incldead", "1" },
+                { "showspam", "1" },
+                { "s_title", "1" }
             };
+
+            var queryCats = MapTorznabCapsToTrackers(query);
+            queryCats.ForEach(cat => qc.Set($"c{cat}", "1"));
 
             if (query.IsImdbQuery)
             {
-                qc.Add("search", query.ImdbID);
-                qc.Add("s_desc", "1");
+                qc.Set("search", query.ImdbID);
+                qc.Set("s_desc", "1");
             }
-            else
-            if (query.IsGenreQuery)
+            else if (query.IsGenreQuery)
             {
-                qc.Add("search", query.Genre + " " + query.GetQueryString());
-                qc.Add("s_tag", "1");
-                qc.Add("s_title", "1");
+                qc.Set("search", query.Genre + " " + query.GetQueryString());
+                qc.Set("s_tag", "1");
             }
             else
-                qc.Add("search", query.GetQueryString());
+                qc.Set("search", query.GetQueryString());
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
@@ -176,64 +180,64 @@ namespace Jackett.Common.Indexers
                 results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
+            char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+
             try
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(results.ContentString);
-                var rows = dom.QuerySelectorAll("table[cellpadding=2] > tbody > tr:has(td.row3)");
+
+                var rows = dom.QuerySelectorAll("table.mainframe table[cellpadding=\"2\"] > tbody > tr:has(td.row3)");
                 foreach (var row in rows)
                 {
                     var qDownloadLink = row.QuerySelector("a[href^=\"download.php\"]");
                     if (qDownloadLink == null)
                         throw new Exception("Download links not found. Make sure you can download from the website.");
+
                     var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
 
                     var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
-                    var title = qDetailsLink.GetAttribute("title").Trim();
-                    var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+                    var title = qDetailsLink?.GetAttribute("title")?.Trim();
+                    var details = new Uri(SiteLink + qDetailsLink?.GetAttribute("href")?.Replace("&hit=1", ""));
 
-                    var qCatLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]");
-                    var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                    var categoryLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]")?.GetAttribute("href");
+                    var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "cat");
 
-                    var files = ParseUtil.CoerceInt(row.Children[3].TextContent);
-                    var publishDate = DateTimeUtil.FromTimeAgo(row.Children[5].TextContent);
-                    var size = ReleaseInfo.GetBytes(row.Children[7].TextContent);
-                    var grabs = ParseUtil.CoerceInt(row.Children[8].TextContent);
                     var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
                     var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
 
-                    var ka = row.NextElementSibling.QuerySelector("table > tbody > tr:nth-child(3)");
-                    var ulFactor = ParseUtil.CoerceDouble(ka.Children[0].TextContent.Replace("X", ""));
-                    var dlFactor = ParseUtil.CoerceDouble(ka.Children[1].TextContent.Replace("X", ""));
-                    ka = row.NextElementSibling.QuerySelector("span[style=\"float:left\"]");
-                    var description = ka.TextContent;
-                    var qGenres = description.ToLower().Replace(" & ", "_&_").Replace(" and ", "_and_");
-                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
-                    var releaseGenres = ValidList.Intersect(qGenres.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries));
-                    releaseGenres = releaseGenres.Select(x => x.Replace("_", " "));
-
                     var release = new ReleaseInfo
                     {
-                        Title = title,
-                        Details = details,
-                        Link = link,
                         Guid = link,
-                        Category = MapTrackerCatToNewznab(catStr),
-                        PublishDate = publishDate,
-                        Size = size,
-                        Files = files,
-                        Grabs = grabs,
+                        Link = link,
+                        Details = details,
+                        Title = title,
+                        Category = MapTrackerCatToNewznab(cat),
+                        Size = ReleaseInfo.GetBytes(row.Children[7].TextContent),
+                        Files = ParseUtil.CoerceInt(row.Children[3].TextContent),
+                        Grabs = ParseUtil.CoerceInt(row.Children[8].TextContent),
                         Seeders = seeders,
                         Peers = leechers + seeders,
-                        Description = description,
+                        PublishDate = DateTimeUtil.FromTimeAgo(row.Children[5].TextContent),
+                        DownloadVolumeFactor = 1,
+                        UploadVolumeFactor = 1,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
-                        DownloadVolumeFactor = dlFactor,
-                        UploadVolumeFactor = ulFactor
+                        MinimumSeedTime = 172800 // 48 hours
                     };
-                    if (release.Genres == null)
-                        release.Genres = new List<string>();
-                    release.Genres = releaseGenres.ToList();
+
+                    var nextRow = row.NextElementSibling;
+                    if (nextRow != null)
+                    {
+                        var qStats = nextRow.QuerySelector("table > tbody > tr:nth-child(3)");
+                        release.UploadVolumeFactor = ParseUtil.CoerceDouble(qStats?.Children[0].TextContent.Replace("X", ""));
+                        release.DownloadVolumeFactor = ParseUtil.CoerceDouble(qStats?.Children[1].TextContent.Replace("X", ""));
+
+                        release.Description = nextRow.QuerySelector("span[style=\"float:left\"]")?.TextContent.Trim();
+                        var genres = release.Description.ToLower().Replace(" & ", "_&_").Replace(" and ", "_and_");
+
+                        var releaseGenres = validList.Intersect(genres.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+                        release.Genres = releaseGenres.Select(x => x.Trim().Replace("_", " ")).ToList();
+                    }
 
                     releases.Add(release);
                 }
