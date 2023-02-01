@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
 
         protected string cap_sid = null;
         protected string cap_code_field = null;
-        private static readonly Regex s_StripRussianRegex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
+        private static readonly Regex s_StripRussianRegex = new Regex(@"(\([\p{IsCyrillic}\W]+\))|(^[\p{IsCyrillic}\W\d]+\/ )|([\p{IsCyrillic} \-]+,+)|([\p{IsCyrillic}]+)");
 
         private new ConfigurationDataPornolab configData
         {
@@ -288,36 +288,34 @@ namespace Jackett.Common.Indexers
             }
             try
             {
-                var RowsSelector = "table#tor-tbl > tbody > tr";
+                var searchResultParser = new HtmlParser();
+                var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
 
-                var SearchResultParser = new HtmlParser();
-                var SearchResultDocument = SearchResultParser.ParseDocument(results.ContentString);
-                var Rows = SearchResultDocument.QuerySelectorAll(RowsSelector);
-                foreach (var Row in Rows)
+                var rows = searchResultDocument.QuerySelectorAll("table#tor-tbl > tbody > tr");
+                foreach (var row in rows)
                 {
                     try
                     {
-                        var qDownloadLink = Row.QuerySelector("a.tr-dl");
+                        var qDownloadLink = row.QuerySelector("a.tr-dl");
                         if (qDownloadLink == null) // Expects moderation
                             continue;
 
-                        var qForumLink = Row.QuerySelector("a.f");
-                        var qDetailsLink = Row.QuerySelector("a.tLink");
-                        var qSize = Row.QuerySelector("td:nth-child(6) u");
+                        var qForumLink = row.QuerySelector("a.f");
+                        var qDetailsLink = row.QuerySelector("a.tLink");
+                        var qSize = row.QuerySelector("td:nth-child(6) u");
                         var link = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
-                        var seederString = Row.QuerySelector("td:nth-child(7) b").TextContent;
+                        var seederString = row.QuerySelector("td:nth-child(7) b").TextContent;
                         var seeders = string.IsNullOrWhiteSpace(seederString) ? 0 : ParseUtil.CoerceInt(seederString);
 
-                        var timestr = Row.QuerySelector("td:nth-child(11) u").TextContent;
-                        var forum = qForumLink;
-                        var forumid = forum.GetAttribute("href").Split('=')[1];
+                        var forumid = ParseUtil.GetArgumentFromQueryString(qForumLink?.GetAttribute("href"), "f");
                         var title = configData.StripRussianLetters.Value
                             ? s_StripRussianRegex.Replace(qDetailsLink.TextContent, "")
                             : qDetailsLink.TextContent;
                         var size = ReleaseInfo.GetBytes(qSize.TextContent);
-                        var leechers = ParseUtil.CoerceInt(Row.QuerySelector("td:nth-child(8)").TextContent);
-                        var grabs = ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);
-                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
+                        var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
+                        var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(9)").TextContent);
+                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(row.QuerySelector("td:nth-child(11) u").TextContent));
+
                         var release = new ReleaseInfo
                         {
                             MinimumRatio = 1,
@@ -340,7 +338,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, Row.OuterHtml, ex));
+                        logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}':\n\n{ex}");
                     }
                 }
             }
