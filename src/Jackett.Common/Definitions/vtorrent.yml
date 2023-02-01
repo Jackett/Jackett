@@ -1,0 +1,154 @@
+---
+id: vtorrent
+name: vTorrent
+description: "vTorrent is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-PL
+type: semi-private
+encoding: UTF-8
+links:
+  - https://vtorrent.pl/
+
+caps:
+  categorymappings:
+    - {id: 695, cat: Movies, desc: "FILMY"}
+    - {id: 94, cat: Movies/HD, desc: "FILMY RMVB"}
+    - {id: 124, cat: Movies/SD, desc: "FILMY (S)VCD"}
+    - {id: 64, cat: Movies/SD, desc: "FILMY Divx / Xvid"}
+    - {id: 81, cat: Movies/DVD, desc: "FILMY DVD-R"}
+    - {id: 109, cat: Movies/HD, desc: "FILMY x264 / HDTV"}
+    - {id: 697, cat: Movies/UHD, desc: "FILMY 4K"}
+    - {id: 696, cat: Movies/3D, desc: "FILMY 3D"}
+    - {id: 230, cat: TV, desc: "TV / Seriale"}
+    - {id: 307, cat: TV/Anime, desc: "Anime"}
+    - {id: 698, cat: PC/Games, desc: "GRY"}
+    - {id: 155, cat: PC/Games, desc: "GRY Gry PC"}
+    - {id: 173, cat: Console, desc: "GRY Gry Konsole"}
+    - {id: 704, cat: Other, desc: "GRY Poradniki, spolszczenia i inne"}
+    - {id: 699, cat: PC, desc: "PROGRAMY"}
+    - {id: 138, cat: PC/0day, desc: "PROGRAMY Windows"}
+    - {id: 288, cat: PC/Mac, desc: "PROGRAMY Linux / Mac"}
+    - {id: 700, cat: Audio, desc: "MUZYKA"}
+    - {id: 187, cat: Audio, desc: "MUZYKA Albumy i składanki"}
+    - {id: 701, cat: Audio/Video, desc: "MUZYKA Koncerty"}
+    - {id: 702, cat: TV/Documentary, desc: "DOKUMENTY"}
+    - {id: 249, cat: Books/EBook, desc: "DOKUMENTY Książki"}
+    - {id: 283, cat: Audio/Audiobook, desc: "DOKUMENTY Audiobooki"}
+    - {id: 251, cat: Books/Mags, desc: "DOKUMENTY Czasopisma"}
+    - {id: 284, cat: Books/Comics, desc: "DOKUMENTY Komiksy"}
+    - {id: 703, cat: Other, desc: "POZOSTAŁE"}
+    - {id: 310, cat: Other, desc: "POZOSTAŁE Dla Dzieci"}
+    - {id: 294, cat: TV/Sport, desc: "POZOSTAŁE Sport"}
+    - {id: 316, cat: PC/Mobile-Other, desc: "POZOSTAŁE GSM / PDA"}
+    - {id: 333, cat: Other, desc: "POZOSTAŁE Tapety"}
+    - {id: 325, cat: Other/Misc, desc: "POZOSTAŁE Różne"}
+    - {id: 334, cat: XXX, desc: "EROTYKA"}
+    - {id: 705, cat: XXX/x264, desc: "EROTYKA Filmy XXX"}
+    - {id: 706, cat: XXX/ImageSet, desc: "EROTYKA Zdjęcia XXX"}
+    - {id: 340, cat: XXX/Other, desc: "EROTYKA Czasopisma XXX"}
+    - {id: 342, cat: XXX/Other, desc: "EROTYKA Gry XXX"}
+    - {id: 308, cat: XXX/Other, desc: "EROTYKA Hentai"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTI.POLISH: MULTI.POLISH
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentów na stronę:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: login.php
+  method: form
+  form: form
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: font[color="#FF0000"]
+  test:
+    path: index.php
+    selector: a[href^="logout.php?check_hash="]
+
+search:
+  paths:
+    # https://vtorrent.pl/torrents.php?erotyka=1&page=0
+    - path: torrents.php
+  inputs:
+    # does not support multi category selection. so using default for all
+    # $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    category: 0
+    search: "{{ .Keywords }}"
+    erotyka: 1
+    page: 0
+    # does not support sorting results, or imdbid searching, or have imdb in results
+
+  rows:
+    selector: table.lista[width="100%"]:not(table[align]) > tbody > tr:has(a[href^="details.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title_phase1:
+      selector: a[href^="details.php?id="]
+    title_multilang:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["(?i)(\\.multi\\.)", ".{{ .Config.multilanguage }}."]
+        - name: re_replace
+          args: ["(?i)(\\.pl\\.)", ".POLISH."]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    date:
+      selector: td:nth-child(6)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "02/01/2006 15:04:05"
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
