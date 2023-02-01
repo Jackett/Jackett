@@ -49,9 +49,9 @@ namespace Jackett.Common.Indexers
             }
         };
 
-        private new ConfigurationDataBasicLogin configData
+        private new ConfigurationDataBasicLoginWith2FA configData
         {
-            get => (ConfigurationDataBasicLogin)base.configData;
+            get => (ConfigurationDataBasicLoginWith2FA)base.configData;
             set => base.configData = value;
         }
 
@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataBasicLoginWith2FA())
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -93,26 +93,24 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var pairs = new Dictionary<string, string>
-                        {
-                            {"username", configData.Username.Value},
-                            {"password", configData.Password.Value},
-                            {"keeplogged", "1"},
-                            {"login", "Login"}
-                        };
+            {
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value },
+                { "code", configData.TwoFactorAuth.Value },
+                { "keeplogged", "1" },
+                { "login", "Login" }
+            };
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, SearchUrl, LandingUrl, true);
-            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true,
-                () =>
-                {
-                    var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.ContentString);
-                    var warningNode = dom.QuerySelector("#loginform > .warning");
-                    var errorMessage = warningNode?.TextContent.Trim().Replace("\n\t", " ");
-                    throw new ExceptionWithConfigData(errorMessage, configData);
-                });
+            await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
+            {
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(result.ContentString);
+                var errorMessage = dom.QuerySelector("#loginform > .warning")?.TextContent.Trim();
 
+                throw new Exception(errorMessage ?? "Login failed.");
+            });
 
             SaveConfig();
 
@@ -126,61 +124,64 @@ namespace Jackett.Common.Indexers
             var searchString = query.GetQueryString();
             var searchUrl = SearchUrl;
 
-            var searchParams = new Dictionary<string, string> { };
-            var queryCollection = new NameValueCollection { };
+            var queryCollection = new NameValueCollection
+            {
+                { "order_by", "time" },
+                { "order_way", "desc" }
+            };
 
             // Search String
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
-                queryCollection.Add("cataloguenumber", query.ImdbID);
+                queryCollection.Set("cataloguenumber", query.ImdbID);
             else if (!string.IsNullOrWhiteSpace(searchString))
-                queryCollection.Add("searchstr", searchString);
-
+                queryCollection.Set("searchstr", searchString);
 
             // Filter Categories
             if (query.HasSpecifiedCategories)
-            {
                 foreach (var cat in MapTorznabCapsToTrackers(query))
-                {
-                    queryCollection.Add("filter_cat[" + cat.ToString() + "]", "1");
-                }
-            }
+                    queryCollection.Set($"filter_cat[{cat}]", "1");
 
             if (query.Artist != null)
-                queryCollection.Add("artistname", query.Artist);
+                queryCollection.Set("artistname", query.Artist);
 
             if (query.Label != null)
-                queryCollection.Add("recordlabel", query.Label);
+                queryCollection.Set("recordlabel", query.Label);
 
             if (query.Year != null)
-                queryCollection.Add("year", query.Year.ToString());
+                queryCollection.Set("year", query.Year.ToString());
 
             if (query.Album != null)
-                queryCollection.Add("groupname", query.Album);
+                queryCollection.Set("groupname", query.Album);
 
             if (query.IsGenreQuery)
-                queryCollection.Add("taglist", query.Genre);
+            {
+                queryCollection.Set("taglist", query.Genre);
+                queryCollection.Set("tags_type", "0");
+            }
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
-            var searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
+            var searchPage = await RequestWithCookiesAndRetryAsync(searchUrl);
+
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await RequestWithCookiesAndRetryAsync(searchUrl, method: RequestType.POST, data: searchParams);
+                searchPage = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             try
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(searchPage.ContentString);
-                var albumRows = dom.QuerySelectorAll("table#torrent_table > tbody > tr:has(strong > a[href*=\"torrents.php?id=\"])");
+
+                var albumRows = dom.QuerySelectorAll("table#torrent_table > tbody > tr.group:has(strong > a[href*=\"torrents.php?id=\"])");
                 foreach (var row in albumRows)
                 {
                     var releaseGroupRegex = new Regex(@"torrents\.php\?id=([0-9]+)");
                     var releaseYearRegex = new Regex(@"\[(\d{4})\]$");
 
-                    var albumNameNode = row.QuerySelector("strong > a[href*=\"torrents.php?id=\"]");
+                    var albumNameNode = row.QuerySelector("strong > a[href^=\"torrents.php?id=\"]");
                     var artistsNameNodes = row.QuerySelectorAll("strong > a[href*=\"artist.php?id=\"]");
                     var albumYearNode = row.QuerySelector("strong:has(a[href*=\"torrents.php?id=\"])");
                     var categoryNode = row.QuerySelector(".cats_col > div");
@@ -196,15 +197,8 @@ namespace Jackett.Common.Indexers
                     }
 
                     var releaseArtist = "Various Artists";
-                    if (artistsNameNodes.Count() > 0)
-                    {
-                        var aristNames = new List<string>();
-                        foreach (var aristNode in artistsNameNodes)
-                        {
-                            aristNames.Add(aristNode.TextContent.Trim());
-                        }
-                        releaseArtist = string.Join(", ", aristNames);
-                    }
+                    if (artistsNameNodes.Any())
+                        releaseArtist = string.Join(", ", artistsNameNodes.Select(artist => artist.TextContent.Trim()).ToList());
 
                     var releaseAlbumName = albumNameNode.TextContent.Trim();
                     var releaseGroupId = ParseUtil.CoerceInt(releaseGroupRegex.Match(albumNameNode.GetAttribute("href")).Groups[1].ToString());
@@ -226,86 +220,63 @@ namespace Jackett.Common.Indexers
                         }
                     }
 
-                    var releaseRows = dom.QuerySelectorAll(String.Format(".group_torrent.groupid_{0}", releaseGroupId));
-
-                    string lastEdition = null;
+                    var releaseRows = dom.QuerySelectorAll($"table#torrent_table > tbody > tr.group_torrent.groupid_{releaseGroupId}:has(a[href*=\"torrents.php?id=\"])");
                     foreach (var releaseDetails in releaseRows)
                     {
-                        var editionInfoDetails = releaseDetails.QuerySelector(".edition_info");
+                        // https://libble.me/torrents.php?id=51694&torrentid=89758
+                        var release = new ReleaseInfo();
 
-                        // Process as release details
-                        if (editionInfoDetails != null)
+                        var releaseMediaDetails = releaseDetails.Children[0].Children[1];
+                        var releaseMediaType = releaseMediaDetails.TextContent;
+
+                        release.Link = new Uri(SiteLink + releaseDetails.QuerySelector("a[href^=\"torrents.php?action=download&id=\"]").GetAttribute("href"));
+                        release.Guid = release.Link;
+                        release.Details = new Uri(SiteLink + albumNameNode.GetAttribute("href"));
+
+                        // Aug 31 2020, 15:50
+                        try
                         {
-                            lastEdition = editionInfoDetails.QuerySelector("strong").TextContent;
+                            var dateAdded = releaseDetails.QuerySelector("td:nth-child(3) > span[title]").GetAttribute("title").Trim();
+                            release.PublishDate = DateTime.ParseExact(dateAdded, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
                         }
-                        // Process as torrent
-                        else
+                        catch (Exception)
                         {
-                            // https://libble.me/torrents.php?id=51694&torrentid=89758
-                            var release = new ReleaseInfo();
-
-                            var releaseMediaDetails = releaseDetails.Children[0].Children[1];
-                            var releaseFileCountDetails = releaseDetails.Children[1];
-                            var releaseDateDetails = releaseDetails.Children[2].Children[0];
-                            var releaseSizeDetails = releaseDetails.Children[3];
-                            var releaseGrabsDetails = releaseDetails.Children[4];
-                            var releaseSeedsCountDetails = releaseDetails.Children[5];
-                            var releasePeersCountDetails = releaseDetails.Children[6];
-                            var releaseDownloadDetails = releaseDetails.QuerySelector("a[href*=\"action=download\"]");
-                            var releaseMediaType = releaseMediaDetails.TextContent;
-
-                            release.Link = new Uri(SiteLink + releaseDownloadDetails.GetAttribute("href"));
-                            release.Guid = release.Link;
-                            release.Details = new Uri(SiteLink + albumNameNode.GetAttribute("href"));
-
-                            // Aug 31 2020, 15:50
-                            try
-                            {
-                                release.PublishDate = DateTime.ParseExact(
-                                    releaseDateDetails.GetAttribute("title").Trim(),
-                                    "MMM dd yyyy, HH:mm",
-                                    CultureInfo.InvariantCulture,
-                                    DateTimeStyles.AssumeUniversal
-                                );
-                            }
-                            catch (Exception)
-                            {
-                            }
-
-                            release.Files = ParseUtil.CoerceInt(releaseFileCountDetails.TextContent.Trim());
-                            release.Grabs = ParseUtil.CoerceInt(releaseGrabsDetails.TextContent.Trim());
-                            release.Seeders = ParseUtil.CoerceInt(releaseSeedsCountDetails.TextContent.Trim());
-                            release.Peers = release.Seeders + ParseUtil.CoerceInt(releasePeersCountDetails.TextContent.Trim());
-                            release.Size = ReleaseInfo.GetBytes(releaseSizeDetails.TextContent.Trim());
-                            release.Poster = releaseThumbnailUri;
-                            release.Category = releaseNewznabCategory;
-                            release.MinimumSeedTime = 259200; // 72 hours
-
-                            // Attempt to find volume factor tag
-                            release.DownloadVolumeFactor = 1;
-                            release.UploadVolumeFactor = 1;
-                            var releaseTags = releaseMediaType.Split('/').Select(tag => tag.Trim()).ToList();
-                            for (var i = releaseTags.Count - 1; i >= 0; i--)
-                            {
-                                var releaseTag = releaseTags[i];
-                                if (VolumeTagMappings.ContainsKey(releaseTag))
-                                {
-                                    var volumeFactor = VolumeTagMappings[releaseTag];
-                                    release.DownloadVolumeFactor = volumeFactor.DownloadVolumeFactor;
-                                    release.UploadVolumeFactor = volumeFactor.UploadVolumeFactor;
-                                    releaseTags.RemoveAt(i);
-                                }
-                            }
-
-                            // Set title (with volume factor tags stripped)
-                            var releaseTagsString = string.Join(" / ", releaseTags);
-                            release.Title = String.Format("{0} - {1} {2} {3}", releaseArtist, releaseAlbumName, releaseAlbumYear, releaseTagsString);
-
-                            release.Description = releaseDescription;
-                            release.Genres = releaseGenres;
-
-                            releases.Add(release);
+                            release.PublishDate = DateTimeUtil.FromTimeAgo(releaseDetails.QuerySelector("td:nth-child(3)")?.TextContent.Trim());
                         }
+
+                        release.Files = ParseUtil.CoerceInt(releaseDetails.QuerySelector("td:nth-child(2)").TextContent);
+                        release.Grabs = ParseUtil.CoerceInt(releaseDetails.QuerySelector("td:nth-child(5)").TextContent);
+                        release.Seeders = ParseUtil.CoerceInt(releaseDetails.QuerySelector("td:nth-child(6)").TextContent);
+                        release.Peers = release.Seeders + ParseUtil.CoerceInt(releaseDetails.QuerySelector("td:nth-child(7)").TextContent);
+                        release.Size = ReleaseInfo.GetBytes(releaseDetails.QuerySelector("td:nth-child(4)").TextContent.Trim());
+                        release.Poster = releaseThumbnailUri;
+                        release.Category = releaseNewznabCategory;
+                        release.MinimumSeedTime = 259200; // 72 hours
+
+                        // Attempt to find volume factor tag
+                        release.DownloadVolumeFactor = 1;
+                        release.UploadVolumeFactor = 1;
+                        var releaseTags = releaseMediaType.Split('/').Select(tag => tag.Trim()).ToList();
+                        for (var i = releaseTags.Count - 1; i >= 0; i--)
+                        {
+                            var releaseTag = releaseTags[i];
+                            if (VolumeTagMappings.ContainsKey(releaseTag))
+                            {
+                                var volumeFactor = VolumeTagMappings[releaseTag];
+                                release.DownloadVolumeFactor = volumeFactor.DownloadVolumeFactor;
+                                release.UploadVolumeFactor = volumeFactor.UploadVolumeFactor;
+                                releaseTags.RemoveAt(i);
+                            }
+                        }
+
+                        // Set title (with volume factor tags stripped)
+                        var releaseTagsString = string.Join(" / ", releaseTags);
+                        release.Title = $"{releaseArtist} - {releaseAlbumName} {releaseAlbumYear} {releaseTagsString}".Trim(' ', '-');
+
+                        release.Description = releaseDescription;
+                        release.Genres = releaseGenres;
+
+                        releases.Add(release);
                     }
                 }
             }
