@@ -133,12 +133,9 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var document = parser.ParseDocument(response.ContentString);
-                var messageEl = document.QuerySelector("#main table");
-                var errorMessage = response.ContentString;
-                if (messageEl != null)
-                    errorMessage = messageEl.TextContent.Trim();
+                var errorMessage = document.QuerySelector("#main table td:contains(\"ERROR\")")?.TextContent.Trim();
 
-                throw new ExceptionWithConfigData(errorMessage, configData);
+                throw new ExceptionWithConfigData(errorMessage ?? "Login failed.", configData);
             });
 
             return IndexerConfigurationStatus.RequiresTesting;
