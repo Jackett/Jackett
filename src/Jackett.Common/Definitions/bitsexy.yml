@@ -99,9 +99,6 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    use_ssl: 1
-    perm_ssl: ""
-    returnto: "/"
   error:
     - selector: table.main:contains("failed")
   test:
