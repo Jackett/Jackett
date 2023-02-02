@@ -443,6 +443,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
+ * NicePT
  * NorBits
  * Old Toons World
  * OpenCD [![(invite needed)][inviteneeded]](#)
