@@ -136,8 +136,8 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img[data-orig]
-      attribute: data-orig
+      selector: img[data-src]
+      attribute: data-src
     imdbid:
       selector: a[href$="&search_area=4"]
       attribute: href
