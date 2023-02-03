@@ -22,24 +22,21 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class RuTracker : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://rutracker.org/",
+            "https://rutracker.net/",
+            "https://rutracker.nl/"
+        };
+        private new ConfigurationDataRutracker configData => (ConfigurationDataRutracker)base.configData;
+
+        private readonly TitleParser _titleParser = new TitleParser();
         private string LoginUrl => SiteLink + "forum/login.php";
         private string SearchUrl => SiteLink + "forum/tracker.php";
 
         private string _capSid;
         private string _capCodeField;
 
-        private new ConfigurationDataRutracker configData => (ConfigurationDataRutracker)base.configData;
-
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://rutracker.org/",
-            "https://rutracker.net/",
-            "https://rutracker.nl/"
-        };
-
-        private Regex _regexToFindTagsInReleaseTitle = new Regex(@"\[[^\[]+\]|\([^(]+\)");
-
-        public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+        public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(id: "rutracker",
                    name: "RuTracker",
                    description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
@@ -74,6 +71,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-RU";
             Type = "semi-private";
+
             // note: when refreshing the categories use the tracker.php page and NOT the search.php page!
             AddCategoryMapping(22, TorznabCatType.Movies, "Наше кино");
             AddCategoryMapping(941, TorznabCatType.Movies, "|- Кино СССР");
@@ -1389,17 +1387,15 @@ namespace Jackett.Common.Indexers
                 var response = await RequestWithCookiesAsync(LoginUrl);
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(response.ContentString);
-                var captchaimg = doc.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
+                var captchaimg = doc.QuerySelector("img[src^=\"https://static.rutracker.cc/captcha/\"]");
+
                 if (captchaimg != null)
                 {
                     var captchaImage = await RequestWithCookiesAsync(captchaimg.GetAttribute("src"));
                     configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
-                    var codefield = doc.QuerySelector("input[name^=\"cap_code_\"]");
-                    _capCodeField = codefield.GetAttribute("name");
-
-                    var sidfield = doc.QuerySelector("input[name=\"cap_sid\"]");
-                    _capSid = sidfield.GetAttribute("value");
+                    _capCodeField = doc.QuerySelector("input[name^=\"cap_code_\"]")?.GetAttribute("name");
+                    _capSid = doc.QuerySelector("input[name=\"cap_sid\"]")?.GetAttribute("value");
                 }
                 else
                     configData.CaptchaImage.Value = null;
@@ -1517,6 +1513,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("f", string.Join(",", MapTorznabCapsToTrackers(query)));
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
+
             return searchUrl;
         }
 
@@ -1541,6 +1538,7 @@ namespace Jackett.Common.Indexers
                 var qDetailsLink = row.QuerySelector("td.t-title-col > div.t-title > a.tLink");
                 var details = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
 
+                var title = qDetailsLink.TextContent.Trim();
                 var category = GetCategoryOfRelease(row);
 
                 var size = GetSizeOfRelease(row);
@@ -1556,7 +1554,14 @@ namespace Jackett.Common.Indexers
                 {
                     MinimumRatio = 1,
                     MinimumSeedTime = 0,
-                    Title = qDetailsLink.TextContent,
+                    Title = _titleParser.Parse(
+                        title,
+                        category,
+                        configData.StripRussianLetters.Value,
+                        configData.MoveAllTagsToEndOfReleaseTitle.Value,
+                        configData.MoveFirstTagsToEndOfReleaseTitle.Value
+                    ),
+                    Description = title,
                     Details = details,
                     Link = link,
                     Guid = details,
@@ -1569,60 +1574,6 @@ namespace Jackett.Common.Indexers
                     DownloadVolumeFactor = 1,
                     UploadVolumeFactor = 1
                 };
-
-                // TODO finish extracting release variables to simplify release initialization
-                if (IsAnyTvCategory(release.Category))
-                {
-                    // extract season and episodes
-                    var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\][\\s]?(.*)");
-
-                    //replace double 4K quality in title
-                    release.Title = release.Title.Replace(", 4K]", "]");
-
-                    var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
-                    title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
-
-                    release.Title = title;
-                }
-                else if (IsAnyMovieCategory(release.Category))
-                {
-                    // remove director's name from title
-                    // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
-                    // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
-                    // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
-                    var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
-                    release.Title = director.Replace(release.Title, "");
-
-                    // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
-                    release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
-                    // language fix: all rutracker releases contains russian track
-                    if (release.Title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
-                        release.Title += " rus";
-                }
-
-                if (configData.StripRussianLetters.Value)
-                {
-                    var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
-                    release.Title = regex.Replace(release.Title, "");
-                }
-
-                if (configData.MoveAllTagsToEndOfReleaseTitle.Value)
-                {
-                    release.Title = MoveAllTagsToEndOfReleaseTitle(release.Title);
-                }
-                else if (configData.MoveFirstTagsToEndOfReleaseTitle.Value)
-                {
-                    release.Title = MoveFirstTagsToEndOfReleaseTitle(release.Title);
-                }
-
-                if (release.Category.Contains(TorznabCatType.Audio.ID))
-                {
-                    release.Title = DetectRereleaseInReleaseTitle(release.Title);
-                }
 
                 return release;
             }
@@ -1639,7 +1590,7 @@ namespace Jackett.Common.Indexers
             var qSeeders = row.QuerySelector("td:nth-child(7)");
             if (qSeeders != null && !qSeeders.TextContent.Contains("дн"))
             {
-                var seedersString = qSeeders.QuerySelector("b").TextContent;
+                var seedersString = qSeeders.QuerySelector("b")?.TextContent.Trim();
                 if (!string.IsNullOrWhiteSpace(seedersString))
                     seeders = ParseUtil.CoerceInt(seedersString);
             }
@@ -1648,107 +1599,186 @@ namespace Jackett.Common.Indexers
 
         private ICollection<int> GetCategoryOfRelease(in IElement row)
         {
-            var forum = row.QuerySelector("td.f-name-col > div.f-name > a");
-            var forumid = forum.GetAttribute("href").Split('=')[1];
-            return MapTrackerCatToNewznab(forumid);
+            var forum = row.QuerySelector("td.f-name-col > div.f-name > a")?.GetAttribute("href");
+            var cat = ParseUtil.GetArgumentFromQueryString(forum, "f");
+
+            return MapTrackerCatToNewznab(cat);
         }
 
-        private long GetSizeOfRelease(in IElement row)
-        {
-            var qSize = row.QuerySelector("td.tor-size");
-            var size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
-            return size;
-        }
+        private long GetSizeOfRelease(in IElement row) => ReleaseInfo.GetBytes(row.QuerySelector("td.tor-size")?.GetAttribute("data-ts_text"));
 
-        private DateTime GetPublishDateOfRelease(in IElement row)
-        {
-            var timestr = row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
-            var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-            return publishDate;
-        }
+        private DateTime GetPublishDateOfRelease(in IElement row) => DateTimeUtil.UnixTimestampToDateTime(long.Parse(row.QuerySelector("td:nth-child(10)")?.GetAttribute("data-ts_text")));
 
-        private bool IsAnyTvCategory(ICollection<int> category)
+        public class TitleParser
         {
-            return category.Contains(TorznabCatType.TV.ID)
-                || TorznabCatType.TV.SubCategories.Any(subCat => category.Contains(subCat.ID));
-        }
-
-        private bool IsAnyMovieCategory(ICollection<int> category)
-        {
-            return category.Contains(TorznabCatType.Movies.ID)
-                || TorznabCatType.Movies.SubCategories.Any(subCat => category.Contains(subCat.ID));
-        }
-
-        private string MoveAllTagsToEndOfReleaseTitle(string input)
-        {
-            var output = input + " ";
-            foreach (Match match in _regexToFindTagsInReleaseTitle.Matches(input))
+            private static readonly List<Regex> _FindTagsInTitlesRegexList = new List<Regex>
             {
-                var tag = match.ToString();
-                output = output.Replace(tag, "") + tag;
-            }
-            output = output.Trim();
-            return output;
-        }
+                new Regex(@"\((?>\((?<c>)|[^()]+|\)(?<-c>))*(?(c)(?!))\)"),
+                new Regex(@"\[(?>\[(?<c>)|[^\[\]]+|\](?<-c>))*(?(c)(?!))\]")
+            };
 
-        private string MoveFirstTagsToEndOfReleaseTitle(string input)
-        {
-            var output = input + " ";
-            var expectedIndex = 0;
-            foreach (Match match in _regexToFindTagsInReleaseTitle.Matches(input))
+            private readonly Regex _stripCyrillicRegex = new Regex(@"(\([\p{IsCyrillic}\W]+\))|(^[\p{IsCyrillic}\W\d]+\/ )|([\p{IsCyrillic} \-]+,+)|([\p{IsCyrillic}]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            private readonly Regex _tvTitleCommaRegex = new Regex(@"\s(\d+),(\d+)", RegexOptions.Compiled);
+            private readonly Regex _tvTitleCyrillicXRegex = new Regex(@"([\s-])Х+([\s\)\]])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            private readonly Regex _tvTitleRusSeasonEpisodeOfRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)\s*из\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusSeasonEpisodeRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusSeasonRegex = new Regex(@"Сезон\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusEpisodeOfRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)\s*из\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusEpisodeRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            public string Parse(string title, ICollection<int> category, bool stripCyrillicLetters = true, bool moveAllTagsToEndOfReleaseTitle = false, bool moveFirstTagsToEndOfReleaseTitle = false)
             {
-                if (match.Index > expectedIndex)
+                // https://www.fileformat.info/info/unicode/category/Pd/list.htm
+                title = Regex.Replace(title, @"\p{Pd}", "-", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                // replace double 4K quality in title
+                title = Regex.Replace(title, @"\b(2160p), 4K\b", "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                if (IsAnyTvCategory(category))
                 {
-                    var substring = input.Substring(expectedIndex, match.Index - expectedIndex);
-                    if (string.IsNullOrWhiteSpace(substring))
-                        expectedIndex = match.Index;
-                    else
-                        break;
+                    title = _tvTitleCommaRegex.Replace(title, " $1-$2");
+                    title = _tvTitleCyrillicXRegex.Replace(title, "$1XX$2");
+
+                    title = _tvTitleRusSeasonEpisodeOfRegex.Replace(title, "S$1E$2 of $3");
+                    title = _tvTitleRusSeasonEpisodeRegex.Replace(title, "S$1E$2");
+                    title = _tvTitleRusSeasonRegex.Replace(title, "S$1");
+                    title = _tvTitleRusEpisodeOfRegex.Replace(title, "E$1 of $2");
+                    title = _tvTitleRusEpisodeRegex.Replace(title, "E$1");
                 }
-                var tag = match.ToString();
-                output = output.Replace(tag, "") + tag;
-                expectedIndex += tag.Length;
+                else if (IsAnyMovieCategory(category))
+                {
+                    // remove director's name from title
+                    // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
+                    // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
+                    // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
+                    title = Regex.Replace(title, @"(\([\p{IsCyrillic}\W]+)\s/\s(.+?)\)", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                    // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
+                    title = Regex.Replace(title, @"\bBlu-ray Disc\b", "BR-DISK", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                    // language fix: all rutracker releases contains russian track
+                    if (title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
+                        title += " rus";
+                }
+
+                if (stripCyrillicLetters)
+                    title = _stripCyrillicRegex.Replace(title, string.Empty).Trim(' ', '-');
+
+                if (moveAllTagsToEndOfReleaseTitle)
+                    title = MoveAllTagsToEndOfReleaseTitle(title);
+                else if (moveFirstTagsToEndOfReleaseTitle)
+                    title = MoveFirstTagsToEndOfReleaseTitle(title);
+
+                if (IsAnyAudioCategory(category))
+                    title = DetectRereleaseInReleaseTitle(title);
+
+                title = Regex.Replace(title, @"\b-Rip\b", "Rip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bHDTVRip\b", "HDTV", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bWEB-DLRip\b", "WEB-DL", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bWEBDLRip\b", "WEB-DL", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bWEBDL\b", "WEB-DL", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bКураж-Бамбей\b", "kurazh", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                title = Regex.Replace(title, @"\(\s*\/\s*", "(", RegexOptions.Compiled);
+                title = Regex.Replace(title, @"\s*\/\s*\)", ")", RegexOptions.Compiled);
+
+                title = Regex.Replace(title, @"[\[\(]\s*[\)\]]", "", RegexOptions.Compiled);
+
+                title = title.Trim(' ', '&', ',', '.', '!', '?', '+', '-', '_', '|', '/', '\\', ':');
+
+                // replace multiple spaces with a single space
+                title = Regex.Replace(title, @"\s+", " ");
+
+                return title.Trim();
             }
-            output = output.Trim();
-            return output;
-        }
 
-        /// <summary>
-        /// Searches the release title to find a 'year1/year2' pattern that would indicate that this is a re-release of an old music album.
-        /// If the release is found to be a re-release, this is added to the title as a new tag.
-        /// Not to be confused with discographies; they mostly follow the 'year1-year2' pattern.
-        /// </summary>
-        private string DetectRereleaseInReleaseTitle(string input)
-        {
-            var fullTitle = input;
+            private static bool IsAnyTvCategory(ICollection<int> category) => category.Contains(TorznabCatType.TV.ID) || TorznabCatType.TV.SubCategories.Any(subCat => category.Contains(subCat.ID));
 
-            var squareBracketTags = input.FindSubstringsBetween('[', ']', includeOpeningAndClosing: true);
-            input = input.RemoveSubstrings(squareBracketTags);
+            private static bool IsAnyMovieCategory(ICollection<int> category) => category.Contains(TorznabCatType.Movies.ID) || TorznabCatType.Movies.SubCategories.Any(subCat => category.Contains(subCat.ID));
 
-            var roundBracketTags = input.FindSubstringsBetween('(', ')', includeOpeningAndClosing: true);
-            input = input.RemoveSubstrings(roundBracketTags);
+            private static bool IsAnyAudioCategory(ICollection<int> category) => category.Contains(TorznabCatType.Audio.ID) || TorznabCatType.Audio.SubCategories.Any(subCat => category.Contains(subCat.ID));
 
-            var regex = new Regex(@"\d{4}");
-            var yearsInTitle = regex.Matches(input);
-
-            if (yearsInTitle == null || yearsInTitle.Count < 2)
+            private static string MoveAllTagsToEndOfReleaseTitle(string input)
             {
-                //Can only be a re-release if there's at least 2 years in the title.
-                return fullTitle;
+                var output = input;
+                foreach (var findTagsRegex in _FindTagsInTitlesRegexList)
+                {
+                    foreach (Match match in findTagsRegex.Matches(input))
+                    {
+                        var tag = match.ToString();
+                        output = $"{output.Replace(tag, "")} {tag}".Trim();
+                    }
+                }
+
+                return output.Trim();
             }
 
-            regex = new Regex(@"(\d{4}) *\/ *(\d{4})");
-            var regexMatch = regex.Match(input);
-            if (!regexMatch.Success)
+            private static string MoveFirstTagsToEndOfReleaseTitle(string input)
             {
-                //Not in the expected format. Return the unaltered title.
-                return fullTitle;
+                var output = input;
+                foreach (var findTagsRegex in _FindTagsInTitlesRegexList)
+                {
+                    var expectedIndex = 0;
+                    foreach (Match match in findTagsRegex.Matches(output))
+                    {
+                        if (match.Index > expectedIndex)
+                        {
+                            var substring = output.Substring(expectedIndex, match.Index - expectedIndex);
+                            if (string.IsNullOrWhiteSpace(substring))
+                                expectedIndex = match.Index;
+                            else
+                                break;
+                        }
+
+                        var tag = match.ToString();
+                        var regex = new Regex(Regex.Escape(tag));
+                        output = $"{regex.Replace(output, string.Empty, 1)} {tag}".Trim();
+                        expectedIndex += tag.Length;
+                    }
+                }
+
+                return output.Trim();
             }
 
-            var originalYear = regexMatch.Groups[1].ToString();
-            fullTitle = fullTitle.Replace(regexMatch.ToString(), originalYear);
+            /// <summary>
+            /// Searches the release title to find a 'year1/year2' pattern that would indicate that this is a re-release of an old music album.
+            /// If the release is found to be a re-release, this is added to the title as a new tag.
+            /// Not to be confused with discographies; they mostly follow the 'year1-year2' pattern.
+            /// </summary>
+            private static string DetectRereleaseInReleaseTitle(string input)
+            {
+                var fullTitle = input;
 
-            return fullTitle + "(Re-release)";
+                var squareBracketTags = input.FindSubstringsBetween('[', ']', includeOpeningAndClosing: true);
+                input = input.RemoveSubstrings(squareBracketTags);
+
+                var roundBracketTags = input.FindSubstringsBetween('(', ')', includeOpeningAndClosing: true);
+                input = input.RemoveSubstrings(roundBracketTags);
+
+                var regex = new Regex(@"\d{4}");
+                var yearsInTitle = regex.Matches(input);
+
+                if (yearsInTitle == null || yearsInTitle.Count < 2)
+                {
+                    //Can only be a re-release if there's at least 2 years in the title.
+                    return fullTitle;
+                }
+
+                regex = new Regex(@"(\d{4}) *\/ *(\d{4})");
+                var regexMatch = regex.Match(input);
+                if (!regexMatch.Success)
+                {
+                    //Not in the expected format. Return the unaltered title.
+                    return fullTitle;
+                }
+
+                var originalYear = regexMatch.Groups[1].ToString();
+                fullTitle = fullTitle.Replace(regexMatch.ToString(), originalYear);
+
+                return fullTitle + "(Re-release)";
+            }
         }
     }
 }
