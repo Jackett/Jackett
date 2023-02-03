@@ -132,7 +132,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img.nexus-lazy-load
+      selector: img[data-src]
       attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
@@ -191,4 +191,4 @@ search:
       remove: a, img, span
     description:
       text: "{{ .Result.genre }}"
-# NexusPHP 1.7.29 2022-10-13
+# NexusPHP v1.7.29 2022-10-13
