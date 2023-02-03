@@ -23,6 +23,7 @@ caps:
     - {id: 90, cat: Movies/3D, desc: "Movies-3-D"}
     - {id: 91, cat: Movies, desc: "Movies-Packs"}
     - {id: 108, cat: Movies, desc: "Movies Remux"}
+    - {id: 32, cat: Movies, desc: "Movies"}
     - {id: 14, cat: Audio/Other, desc: "Alben / Sampler / Singles"}
     - {id: 36, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 71, cat: Audio/Other, desc: "Soundtracks"}
