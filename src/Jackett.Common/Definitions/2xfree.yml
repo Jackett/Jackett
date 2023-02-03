@@ -153,7 +153,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: td.rowfollow:nth-child(2) > table.torrentname > tbody > tr > td > img[data-src]
+      selector: img[data-src]
       attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
