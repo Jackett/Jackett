@@ -138,4 +138,4 @@ search:
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, img
-# NexusPHP Standard v1.5 Beta 4
+# Ourbits 1.1.0 (Based on NexusPHP Standard v1.5 Beta 4) 3f7f4b0 2023-02-01
