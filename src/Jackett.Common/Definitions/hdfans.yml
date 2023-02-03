@@ -82,6 +82,7 @@ login:
     selector: img[alt="CAPTCHA"]
     input: imagestring
   inputs:
+    secret: ""
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     two_step_code: "{{ .Config.2facode }}"
@@ -138,6 +139,9 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
@@ -189,4 +193,4 @@ search:
       remove: a, img
     minimumratio:
       text: 0.81
-# NexusPHP Standard v1.7.6
+# NexusPHP v1.8.0 2023-01-20
