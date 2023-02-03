@@ -27,7 +27,6 @@ caps:
     music-search: [q]
 
 settings:
-settings:
   - name: cookie
     type: text
     label: Cookie
@@ -64,7 +63,7 @@ login:
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
-    test:
+  test:
     path: index.php
     selector: a[href="logout.php"]
 
