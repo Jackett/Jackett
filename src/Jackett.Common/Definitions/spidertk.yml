@@ -175,7 +175,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img.nexus-lazy-load
+      selector: img[data-src]
       attribute: data-src
     date_elapsed:
       # time type: time elapsed (default)
@@ -222,4 +222,4 @@ search:
         "*": 1
     minimumratio:
       text: 0.81
-# NexusPHP Custom 1.7.24 2022-09-11
+# NexusPHP v1.7.33 2022-12-19 (custom)
