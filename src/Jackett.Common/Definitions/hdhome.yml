@@ -170,4 +170,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, img
-# NexusPHP Standard v1.5 Beta 4
+# NexusPHP v2.0 2014-11-24
