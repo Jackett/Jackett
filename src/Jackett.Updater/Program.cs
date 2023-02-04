@@ -473,6 +473,8 @@ namespace Jackett.Updater
                 "Definitions/peerjunkies.yml",
                 "Definitions/piratadigital.yml",
                 "Definitions/pirateiro.yml",
+                "Definitions/pixelados.yml",
+                "Definitions/pixelados-html.yml",
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornbits.yml",
