@@ -411,8 +411,8 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * LastFiles
  * Lat-Team [![(invite needed)][inviteneeded]](#)
  * Le Saloon
- * LearnBits [![(invite needed)][inviteneeded]](#)
- * LearnFlakes [![(invite needed)][inviteneeded]](#)
+ * LearnBits
+ * LearnFlakes
  * leech24
  * LegacyHD (HD4Free)
  * LemonHD
@@ -449,7 +449,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * OpenCD [![(invite needed)][inviteneeded]](#)
  * Orpheus
  * OshenPT
- * Ourbits (HDPter) [![(invite needed)][inviteneeded]](#)
+ * OurBits (HDPter)
  * P2PBG
  * Partis
  * PassThePopcorn (PTP)
