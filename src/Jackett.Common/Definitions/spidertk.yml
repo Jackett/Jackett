@@ -112,6 +112,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: multilanguage
+    type: text
+    label: Replace MULTI by
+    default: MULTI
 
 login:
   path: login.php
@@ -166,8 +170,15 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_original:
       selector: a[href^="details.php?id="]
+    title_multi:
+      text: "{{ .Result.title_original }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)[\\.\\s\\[\\-]multi[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
+    title:
+      text: "{{ if .Config.multilanguage }}{{ .Result.title_multi }}{{ else }}{{ .Result.title_original }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
