@@ -123,6 +123,10 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    # site does not have posters enabled. just in case a future update.
+    poster:
+      selector: img[data-src]
+      attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]

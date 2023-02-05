@@ -196,6 +196,9 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
     date_elapsed:
       # time type: time elapsed (default)
       selector: td:nth-child(4) > span[title]
@@ -241,4 +244,4 @@ search:
         "*": 1
     minimumratio:
       text: 1.0
-# NexusPHP v1.7.30 2022-10-21
+# NexusPHP v1.7.30 2022-11-05

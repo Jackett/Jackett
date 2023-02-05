@@ -389,6 +389,7 @@ namespace Jackett.Updater
                 "Definitions/hdolimpo.yml", // migrated to UNIT3D API
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
+                "Definitions/hdspain.yml",
                 "Definitions/hdstreet.yml",
                 "Definitions/hellastz.yml",
                 "Definitions/hidden-palace.yml",
@@ -472,6 +473,8 @@ namespace Jackett.Updater
                 "Definitions/peerjunkies.yml",
                 "Definitions/piratadigital.yml",
                 "Definitions/pirateiro.yml",
+                "Definitions/pixelados.yml",
+                "Definitions/pixelados-html.yml",
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornbits.yml",

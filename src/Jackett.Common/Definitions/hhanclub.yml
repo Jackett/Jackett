@@ -130,6 +130,9 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
@@ -189,4 +192,4 @@ search:
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, img
-# NexusPHP v1.7.24 2022-08-30
+# NexusPHP v1.7.30 2022-11-05

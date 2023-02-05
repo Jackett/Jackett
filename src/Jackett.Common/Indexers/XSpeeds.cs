@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -325,17 +324,14 @@ namespace Jackett.Common.Indexers
                     var cover = row.QuerySelector("td:nth-of-type(2) > div > img[src]")?.GetAttribute("src")?.Trim();
                     release.Poster = !string.IsNullOrEmpty(cover) && cover.StartsWith("http") ? new Uri(cover) : null;
 
-                    if (row.QuerySelector("img[alt^=\"Free Torrent\"]") != null)
+                    if (row.QuerySelector("img[alt^=\"Free Torrent\"], img[alt^=\"Sitewide Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else if (row.QuerySelector("img[alt^=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (row.QuerySelector("img[alt^=\"x2 Torrent\"]") != null)
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
+                    release.UploadVolumeFactor = row.QuerySelector("img[alt^=\"x2 Torrent\"]") != null ? 2 : 1;
 
                     release.MinimumRatio = 0.8;
 
