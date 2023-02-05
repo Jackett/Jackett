@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -26,8 +28,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "browse.php";
         private readonly Regex _dateMatchRegex = new Regex(@"\d{2}-\d{2}-\d{4} \d{2}:\d{2}", RegexOptions.Compiled);
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
-            (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+        private new ConfigurationDataXSpeeds configData => (ConfigurationDataXSpeeds)base.configData;
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
@@ -55,7 +56,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                   configData: new ConfigurationDataXSpeeds())
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -252,7 +253,7 @@ namespace Jackett.Common.Indexers
 
             var categoryMapping = MapTorznabCapsToTrackers(query);
 
-            var searchParams = new Dictionary<string, string>
+            var searchParams = new NameValueCollection
             {
                 { "do", "search" },
                 { "category", categoryMapping.FirstIfSingleOrDefault("0") }, // multi category search not supported
@@ -261,23 +262,32 @@ namespace Jackett.Common.Indexers
                 { "order", GetOrder }
             };
 
-            if (query.IsImdbQuery)
+            if (configData.FreeleechOnly.Value)
             {
-                searchParams.Add("keywords", query.ImdbID);
-                searchParams.Add("search_type", "t_both");
-            }
-            else
-            {
-                searchParams.Add("keywords", searchString);
-                searchParams.Add("search_type", "t_name");
+                searchParams.Set("include_dead_torrents", "no");
+                searchParams.Set("sort", "free");
+                searchParams.Set("order", "desc");
             }
 
-            var searchPage = await RequestWithCookiesAndRetryAsync(SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
+            if (query.IsImdbQuery)
+            {
+                searchParams.Set("keywords", query.ImdbID);
+                searchParams.Set("search_type", "t_both");
+            }
+            else if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchParams.Set("keywords", searchString);
+                searchParams.Set("search_type", "t_name");
+            }
+
+            var searchUrl = $"{SearchUrl}?{searchParams.GetQueryString()}";
+
+            var searchPage = await RequestWithCookiesAndRetryAsync(searchUrl);
             // Occasionally the cookies become invalid, login again if that happens
             if (searchPage.IsRedirect)
             {
                 await ApplyConfiguration(null);
-                searchPage = await RequestWithCookiesAndRetryAsync(SearchUrl, CookieHeader, RequestType.POST, null, searchParams);
+                searchPage = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
 
             var releases = new List<ReleaseInfo>();

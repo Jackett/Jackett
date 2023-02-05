@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
     [ExcludeFromCodeCoverage]
-    public class ConfigurationDataSpeedCD : ConfigurationDataBasicLogin
+    internal class ConfigurationDataSpeedCD : ConfigurationDataBasicLogin
     {
         public BoolConfigurationItem Freeleech { get; set; }
         public BoolConfigurationItem ExcludeArchives { get; set; }

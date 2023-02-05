@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -29,11 +29,7 @@ namespace Jackett.Common.Indexers
             "http://immortalseed.me/"
         };
 
-        private new ConfigurationDataBasicLogin configData
-        {
-            get => (ConfigurationDataBasicLogin)base.configData;
-            set => base.configData = value;
-        }
+        private new ConfigurationDataImmortalSeed configData => (ConfigurationDataImmortalSeed)base.configData;
 
         public ImmortalSeed(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
@@ -65,7 +61,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLogin())
+                   configData: new ConfigurationDataImmortalSeed())
         {
             Encoding = Encoding.UTF8;
             Language = "en-US";
@@ -170,7 +166,7 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var searchParams = new Dictionary<string, string>
+            var searchParams = new NameValueCollection
             {
                 { "category", "0" },
                 { "include_dead_torrents", "yes" },
@@ -178,18 +174,25 @@ namespace Jackett.Common.Indexers
                 { "order", GetOrder }
             };
 
+            if (configData.FreeleechOnly.Value)
+            {
+                searchParams.Set("include_dead_torrents", "no");
+                searchParams.Set("sort", "free");
+                searchParams.Set("order", "desc");
+            }
+
             var searchString = Regex.Replace(query.GetQueryString(), @"[ -._]+", " ").Trim();
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                searchParams.Add("do", "search");
-                searchParams.Add("keywords", searchString);
-                searchParams.Add("search_type", "t_name");
+                searchParams.Set("do", "search");
+                searchParams.Set("keywords", searchString);
+                searchParams.Set("search_type", "t_name");
             }
 
             var categoryMapping = MapTorznabCapsToTrackers(query);
             if (categoryMapping.Any())
-                searchParams.Add("selectedcats2", string.Join(",", categoryMapping));
+                searchParams.Set("selectedcats2", string.Join(",", categoryMapping));
 
             var searchUrl = $"{SearchUrl}?{searchParams.GetQueryString()}";
 
