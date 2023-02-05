@@ -14,15 +14,15 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     public class ImmortalSeed : BaseWebIndexer
     {
-        private string BrowsePage => SiteLink + "browse.php";
+        private string SearchUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
-        private string QueryString => "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no";
         private readonly Regex _dateMatchRegex = new Regex(@"\d{4}-\d{2}-\d{2} \d{2}:\d{2} [AaPp][Mm]", RegexOptions.Compiled);
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -116,7 +116,34 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(63, TorznabCatType.TVUHD, "TV Season Packs - 4K");
             AddCategoryMapping(4, TorznabCatType.TVHD, "TV Season Packs - HD");
             AddCategoryMapping(6, TorznabCatType.TVSD, "TV Season Packs - SD");
+
+            // Configure the sort selects
+            var sortBySelect = new SingleSelectConfigurationItem(
+                "Sort by",
+                new Dictionary<string, string>
+                {
+                    { "added", "created" },
+                    { "seeders", "seeders" },
+                    { "size", "size" },
+                    { "name", "title" }
+                })
+            { Value = "added" };
+            configData.AddDynamic("sortrequestedfromsite", sortBySelect);
+
+            var orderSelect = new SingleSelectConfigurationItem(
+                "Order",
+                new Dictionary<string, string>
+                {
+                    { "desc", "descending" },
+                    { "asc", "ascending" }
+                })
+            { Value = "desc" };
+            configData.AddDynamic("orderrequestedfromsite", orderSelect);
         }
+
+        private string GetSortBy => ((SingleSelectConfigurationItem)configData.GetDynamic("sortrequestedfromsite")).Value;
+
+        private string GetOrder => ((SingleSelectConfigurationItem)configData.GetDynamic("orderrequestedfromsite")).Value;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -143,11 +170,28 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
-            var searchUrl = BrowsePage;
+            var searchParams = new Dictionary<string, string>
+            {
+                { "category", "0" },
+                { "include_dead_torrents", "yes" },
+                { "sort", GetSortBy },
+                { "order", GetOrder }
+            };
 
-            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-                searchUrl += string.Format(QueryString, WebUtility.UrlEncode(query.GetQueryString()));
+            var searchString = Regex.Replace(query.GetQueryString(), @"[ -._]+", " ").Trim();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchParams.Add("do", "search");
+                searchParams.Add("keywords", searchString);
+                searchParams.Add("search_type", "t_name");
+            }
+
+            var categoryMapping = MapTorznabCapsToTrackers(query);
+            if (categoryMapping.Any())
+                searchParams.Add("selectedcats2", string.Join(",", categoryMapping));
+
+            var searchUrl = $"{SearchUrl}?{searchParams.GetQueryString()}";
 
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
@@ -157,6 +201,8 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
                 results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
+
+            var releases = new List<ReleaseInfo>();
 
             try
             {
@@ -207,7 +253,7 @@ namespace Jackett.Common.Indexers
                     var cover = row.QuerySelector("td:nth-of-type(2) > div > img[src]")?.GetAttribute("src")?.Trim();
                     release.Poster = !string.IsNullOrEmpty(cover) && cover.StartsWith("/") ? new Uri(SiteLink + cover.TrimStart('/')) : null;
 
-                    if (row.QuerySelector("img[title^=\"Free Torrent\"]") != null)
+                    if (row.QuerySelector("img[title^=\"Free Torrent\"], img[title^=\"Sitewide Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else if (row.QuerySelector("img[title^=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
