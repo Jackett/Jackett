@@ -1,7 +1,7 @@
 ---
 id: ourbits
-name: Ourbits
-description: "Ourbits (HDPter) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+name: OurBits
+description: "OurBits (HDPter) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -135,6 +135,11 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, img
