@@ -114,10 +114,6 @@ search:
           args: ["(?i)\\.torrent$", ""]
     title_text:
       selector: td a[href^="index.php?page=torrent-details"]
-      filters:
-        #  #11775
-        - name: re_replace
-          args: ["(?i)(season )", "S"]
     category:
       selector: td a[href^="index.php?page=torrents&category="]
       attribute: href
@@ -126,6 +122,18 @@ search:
           args: category
     title:
       text: "{{ if .Result.title_torrent }}{{ .Result.title_torrent }}{{ else }}{{ .Result.title_text }}{{ end }}"
+      filters:
+        #  #11775
+        - name: re_replace # Seasons X-Y --> S0X-S0Y
+          args: ["(?i)\\bSeasons?[-.\\s]*(\\d)[-.\\s]*(?:-|to)[-.\\s]*(\\d)\\b", "S0$1-S0$2"]
+        - name: re_replace # Seasons X-YY --> S0X-SYY
+          args: ["(?i)\\bSeasons?[-.\\s]*(\\d)[-.\\s]*(?:-|to)[-.\\s]*(\\d+)\\b", "S0$1-S$2"]
+        - name: re_replace # Seasons XX-YY --> SXX-SYY
+          args: ["(?i)\\bSeasons?[-.\\s]*(\\d+)[-.\\s]*(?:-|to)[-.\\s]*(\\d+)\\b", "S$1-S$2"]
+        - name: re_replace # Season X --> S0X
+          args: ["(?i)\\bSeasons?[-.\\s]*(\\d)\\b", "S0$1"]
+        - name: re_replace # Season XX --> SXX
+          args: ["(?i)\\bSeasons?[-.\\s]*(\\d+)\\b", "S$1"]
     details:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: href
