@@ -149,7 +149,7 @@ search:
       selector: a
       filters:
         - name: re_replace
-          args: ["(?i)(\\bmulti\\b)", "{{ .Config.multilanguage }}"]
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
         - name: re_replace
           args: ["(?i)\\b(pl)\\b", "POLISH"]
     title:
