@@ -133,7 +133,7 @@ search:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\bmulti\\b)", "{{ .Config.multilanguage }}"]
+          args: ["(?i)\\b(MULTI(?!.*(?:ROMAINIAN|ENGLISH|\\bRO\\b)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
