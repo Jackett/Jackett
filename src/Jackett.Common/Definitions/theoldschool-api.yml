@@ -130,20 +130,20 @@ search:
           args: ["(?i)\\b(VFQ)\\b)", "FRENCH"]
     title_phase2:
       text: "{{ if .Config.vfq }}{{ .Result.title_vfq }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
-    title_multilang:
+    title_vostfr:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["(?i)\\b(multi)\\b", "{{ .Config.multilanguage }}"]
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
     title_phase3:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    title_vostfr:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    title_multilang:
       text: "{{ .Result.title_phase3 }}"
       filters:
         - name: re_replace
-          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
-      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
     details:
       selector: details_link
     download:
