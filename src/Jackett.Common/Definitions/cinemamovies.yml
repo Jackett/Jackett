@@ -56,11 +56,11 @@ settings:
     default: false
   - name: multilang
     type: checkbox
-    label: Replace MULTi & PL by another language in release name
+    label: Replace MULTi by another language in release name
     default: false
   - name: multilanguage
     type: select
-    label: Replace MULTi & PL by this language
+    label: Replace MULTi by this language
     default: POLISH
     options:
       POLISH: POLISH
@@ -124,7 +124,7 @@ search:
         - name: re_replace
           args: ["(?i)\\b(multi)\\b", "{{ .Config.multilanguage }}"]
         - name: re_replace
-          args: ["(?i)\\b(pl)\\b", "{{ .Config.multilanguage }}"]
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
     title_phase1:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_raw }}{{ end }}"
     title_stripped:
