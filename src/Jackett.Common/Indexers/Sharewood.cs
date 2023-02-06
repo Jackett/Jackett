@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
         private string MultiRename(string term, string replacement)
         {
             replacement = " " + replacement + " ";
-            term = Regex.Replace(term, @"(?i)\b(multi)\b", replacement);
+            term = Regex.Replace(term, @"(?i)\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b", replacement);
             return term;
         }
 
