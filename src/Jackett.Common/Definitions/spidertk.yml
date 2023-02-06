@@ -112,6 +112,25 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi FRENCH: MULTi FRENCH
+      ENGLISH: ENGLISH
+      MULTi ENGLISH: MULTi ENGLISH
+      VOSTFR: VOSTFR
+      MULTi VOSTFR: MULTi VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
 
 login:
   path: login.php
@@ -166,8 +185,22 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_phase1:
       selector: a[href^="details.php?id="]
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(multi)\\b", "{{ .Config.multilanguage }}"]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
