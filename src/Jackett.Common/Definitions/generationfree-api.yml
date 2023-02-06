@@ -125,7 +125,7 @@ search:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)\\b(VFQ)\\b)", "FRENCH"]
+          args: ["(?i)\\b(VFQ)\\b", "FRENCH"]
     title_phase2:
       text: "{{ if .Config.vfq }}{{ .Result.title_vfq }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     title_vostfr:
