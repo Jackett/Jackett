@@ -14,13 +14,14 @@ caps:
   categorymappings:
     - {id: 46, cat: Movies/3D, desc: "3D"}
     - {id: 47, cat: Movies/UHD, desc: "4K"}
+    - {id: 74, cat: Movies/UHD, desc: "4K Plus"}
     - {id: 61, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 48, cat: TV/Anime, desc: "Animasyon"}
     - {id: 40, cat: TV/Documentary, desc: "Belgesel"}
     - {id: 49, cat: Movies/BluRay, desc: "Bluray"}
     - {id: 50, cat: Movies, desc: "Boxset"}
     - {id: 70, cat: TV, desc: "DIGITAL TV"}
-    - {id: 72, cat: TV, desc: "DIGITAL TV Extra"}
+    - {id: 73, cat: TV, desc: "DIGITAL TV Plus"}
     - {id: 51, cat: Movies/DVD, desc: "DVD"}
     - {id: 42, cat: Movies, desc: "Dini"}
     - {id: 4, cat: Other, desc: "Diğer"}
