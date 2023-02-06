@@ -32,11 +32,11 @@ settings:
     default: FRENCH
     options:
       FRENCH: FRENCH
-      MULTi.FRENCH: MULTi.FRENCH
+      MULTi FRENCH: MULTi FRENCH
       ENGLISH: ENGLISH
-      MULTi.ENGLISH: MULTi.ENGLISH
+      MULTi ENGLISH: MULTi ENGLISH
       VOSTFR: VOSTFR
-      MULTi.VOSTFR: MULTi.VOSTFR
+      MULTi VOSTFR: MULTi VOSTFR
   - name: vostfr
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
