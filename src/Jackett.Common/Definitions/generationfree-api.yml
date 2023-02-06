@@ -121,9 +121,6 @@ search:
       selector: category_id
     title_phase1:
       selector: name
-      filters:
-        - name: replace
-          args: [".", " "]
     title_vfq:
       text: "{{ .Result.title_phase1 }}"
       filters:
