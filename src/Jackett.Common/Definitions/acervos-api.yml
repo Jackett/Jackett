@@ -119,8 +119,6 @@ search:
     _reg:
       selector: region
       optional: true
-    description:
-      text: "{{ .Result._cat }} {{ .Result._type }} {{ .Result._res }} {{ .Result._reg }}"
     download:
       selector: download_link
     infohash:
@@ -146,7 +144,7 @@ search:
         - name: replace
           args: [" & ", "_&_"]
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ .Result._cat }} {{ .Result._type }} {{ .Result._res }} {{ .Result._reg }} {{ .Result.genre }}"
     files:
       selector: num_file
     seeders:
