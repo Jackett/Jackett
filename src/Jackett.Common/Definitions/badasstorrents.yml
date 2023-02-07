@@ -8,13 +8,14 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://badasstorrents.com/
-  - https://badasstorrents.nocensor.art/
+  - https://badasstorrents.mrunblock.guru/
 legacylinks:
   - https://badasstorrents.nocensor.work/
   - https://badasstorrents.nocensor.biz/
   - https://badasstorrents.nocensor.sbs/
   - https://badasstorrents.nocensor.world/
   - https://badasstorrents.nocensor.lol/
+  - https://badasstorrents.nocensor.art/
 
 caps:
   categories:
