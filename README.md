@@ -59,6 +59,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * dmhy
  * Dodder (菟丝子资源社区)
  * DonTorrent
+ * EBook Bay (EBB)
  * E-Hentai
  * EpubLibre
  * EXT Torrents
