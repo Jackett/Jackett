@@ -9,7 +9,7 @@ requestDelay: 2
 links:
   - https://nyaa.si/
   - https://nyaa.iss.ink/
-  - https://nyaa.nocensor.art/ # for magnets only
+  - https://nyaa.mrunblock.guru/ # for magnets only
   - https://nyaa.unblockninja.com/ # for magnets only
 legacylinks:
   - https://nyaa.black-mirror.xyz/
@@ -24,6 +24,7 @@ legacylinks:
   - https://nyaa.lol/ # dropped at request of owner
   - https://nyaa.nocensor.world/
   - https://nyaa.nocensor.lol/
+  - https://nyaa.nocensor.art/
 
 settings:
   - name: filter-id

@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://subsplease.org/",
-            "https://subsplease.nocensor.art/"
+            "https://subsplease.mrunblock.guru/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers
             "https://subsplease.nocensor.biz/",
             "https://subsplease.nocensor.sbs/",
             "https://subsplease.nocensor.world/",
-            "https://subsplease.nocensor.lol/"
+            "https://subsplease.nocensor.lol/",
+            "https://subsplease.nocensor.art/"
         };
 
         private string ApiEndpoint => SiteLink + "api/?";

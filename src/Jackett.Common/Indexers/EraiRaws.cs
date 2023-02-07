@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.erai-raws.info/",
             "https://beta.erai-raws.info/",
-            "https://erairaws.nocensor.art/"
+            "https://erairaws.mrunblock.guru/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -30,7 +30,8 @@ namespace Jackett.Common.Indexers
             "https://erairaws.nocensor.biz/",
             "https://erairaws.nocensor.sbs/",
             "https://erairaws.nocensor.world/",
-            "https://erairaws.nocensor.lol/"
+            "https://erairaws.nocensor.lol/",
+            "https://erairaws.nocensor.art/"
         };
 
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
