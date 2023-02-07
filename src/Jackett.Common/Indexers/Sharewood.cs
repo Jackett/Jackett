@@ -133,24 +133,24 @@ namespace Jackett.Common.Indexers
             var FreeLeechOnly = new BoolConfigurationItem("Search freeleech only");
             configData.AddDynamic("freeleechonly", FreeLeechOnly);
 
-            var ReplaceMulti = new BoolConfigurationItem("Replace MULTI by another language in release name");
+            var ReplaceMulti = new BoolConfigurationItem("Replace MULTi by another language in release name");
             configData.AddDynamic("replacemulti", ReplaceMulti);
 
             // Configure the language select option for MULTI
-            var languageSelect = new SingleSelectConfigurationItem("Replace MULTI by this language", new Dictionary<string, string>
+            var languageSelect = new SingleSelectConfigurationItem("Replace MULTi by this language", new Dictionary<string, string>
             {
                 {"FRENCH", "FRENCH"},
-                {"MULTI.FRENCH", "MULTI.FRENCH"},
+                {"MULTi FRENCH", "MULTi FRENCH"},
                 {"ENGLISH", "ENGLISH"},
-                {"MULTI.ENGLISH", "MULTI.ENGLISH" },
+                {"MULTi ENGLISH", "MULTi ENGLISH" },
                 {"VOSTFR", "VOSTFR"},
-                {"MULTI.VOSTFR", "MULTI.VOSTFR"}
+                {"MULTi VOSTFR", "MULTi VOSTFR"}
             })
             { Value = "FRENCH" };
             ;
             configData.AddDynamic("languageid", languageSelect);
 
-            var ReplaceVostfr = new BoolConfigurationItem("Replace VOSTFR with ENGLISH");
+            var ReplaceVostfr = new BoolConfigurationItem("Replace VOSTFR and SUBFRENCH with ENGLISH");
             configData.AddDynamic("replacevostfr", ReplaceVostfr);
 
             EnableConfigurableRetryAttempts();
@@ -159,15 +159,13 @@ namespace Jackett.Common.Indexers
         private string MultiRename(string term, string replacement)
         {
             replacement = " " + replacement + " ";
-            term = Regex.Replace(term, @"(?i)(\smulti\s)", replacement);
-            term = Regex.Replace(term, @"(?i)(\smulti$)", replacement);
+            term = Regex.Replace(term, @"(?i)\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b", replacement);
             return term;
         }
 
         private string VostfrRename(string term, string replacement)
         {
-            term = Regex.Replace(term, @"(?i)(vostfr)", replacement);
-            term = Regex.Replace(term, @"(?i)(subfrench)", replacement);
+            term = Regex.Replace(term, @"(?i)\b(vostfr|subfrench)\b", replacement);
             return term;
         }
 

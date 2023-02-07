@@ -51,15 +51,15 @@ settings:
     label: Password
   - name: multilang
     type: checkbox
-    label: Replace MULTI by another language in release name
+    label: Replace MULTi by another language in release name
     default: false
   - name: multilanguage
     type: select
-    label: Replace MULTI by this language
+    label: Replace MULTi by this language
     default: POLISH
     options:
       POLISH: POLISH
-      MULTI.POLISH: MULTI.POLISH
+      MULTi POLISH: MULTi POLISH
 
 login:
   path: logowanie
@@ -127,7 +127,9 @@ search:
       attribute: title
       filters:
         - name: re_replace
-          args: ["(?i)(\\bmulti\\b)", "{{ .Config.multilanguage }}"]
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
+        - name: re_replace
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:

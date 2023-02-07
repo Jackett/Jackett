@@ -121,9 +121,9 @@ search:
       selector: a[href^="details.php?id="]
       filters:
         - name: re_replace
-          args: ["(?i)(\\.multi\\.)", ".{{ .Config.multilanguage }}."]
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
         - name: re_replace
-          args: ["(?i)(\\.pl\\.)", ".POLISH."]
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
