@@ -38,9 +38,10 @@ namespace Jackett.Common.Indexers
         private const int PagesToSearch = 3;
 
         // uncomment when there are more than one domain available
-        // public override string[] AlternativeSiteLinks { get; protected set; } = {
-        //     "https://mejortorrent.wtf/"
-        // };
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://mejortorrent.wtf/",
+            "https://mejortorrent.unblockit.bio/"
+        };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://www.mejortorrentt.net/",
