@@ -142,6 +142,13 @@ search:
     poster:
       selector: a[href*="data/torrents/torrent_images/"]
       attribute: href
+    genre:
+      selector: div.torrentDetails > div:has(a[href*="&genre="])
+      filters:
+        - name: replace
+          args: ["Genre:", ""]
+    description:
+      text: "{{ .Result.genre }}"
     size:
       selector: a[rel="torrent_size"]
     grabs:
@@ -180,5 +187,5 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 1.0
+      text: 0.5
 # TSUE 2.2
