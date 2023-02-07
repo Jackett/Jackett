@@ -378,6 +378,7 @@ namespace Jackett.Updater
                 "Definitions/hachede.yml",
                 "Definitions/hamsterstudio.yml",
                 "Definitions/hd4free.yml",
+                "Definitions/hdai.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
                 "Definitions/hdbitscom.yml",
                 "Definitions/hdcenter.yml",
