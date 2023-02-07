@@ -259,7 +259,7 @@ namespace Jackett.Common.Indexers
         private static string FixSearchTerm(string term)
         {
             term = Regex.Replace(term, @"\b[S|E]\d+\b", string.Empty, RegexOptions.IgnoreCase);
-            term = Regex.Replace(term, @".+\b\d{4}(\.\d{2}\.\d{2})?\b", string.Empty);
+            term = Regex.Replace(term, @"(.+)\b\d{4}(\.\d{2}\.\d{2})?\b", "$1");
             term = Regex.Replace(term, @"[\.\s\(\)\[\]]+", " ");
 
             return term.ToLower().Trim();
