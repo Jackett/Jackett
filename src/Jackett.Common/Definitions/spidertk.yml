@@ -112,6 +112,25 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi FRENCH: MULTi FRENCH
+      ENGLISH: ENGLISH
+      MULTi ENGLISH: MULTi ENGLISH
+      VOSTFR: VOSTFR
+      MULTi VOSTFR: MULTi VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
 
 login:
   path: login.php
@@ -166,8 +185,22 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_phase1:
       selector: a[href^="details.php?id="]
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -175,7 +208,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img.nexus-lazy-load
+      selector: img[data-src]
       attribute: data-src
     date_elapsed:
       # time type: time elapsed (default)
@@ -222,4 +255,4 @@ search:
         "*": 1
     minimumratio:
       text: 0.81
-# NexusPHP Custom 1.7.24 2022-09-11
+# NexusPHP v1.7.33 2022-12-19 (custom)

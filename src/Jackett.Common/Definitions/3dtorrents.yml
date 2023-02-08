@@ -63,7 +63,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  path: index.php?page=login&amp;returnto=index.php
+  path: index.php?page=login
   method: form
   form: form
   inputs:

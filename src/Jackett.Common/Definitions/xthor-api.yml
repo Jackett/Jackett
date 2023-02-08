@@ -36,7 +36,6 @@ caps:
     - {id: 125, cat: TV/Sport, desc: "Films/Sports"}
     - {id: 20, cat: Audio/Video, desc: "Films/Concerts, Clips"}
     - {id: 9, cat: Movies/Other, desc: "Films/VOSTFR"}
-
     # TV Series / Series TV
     - {id: 104, cat: TV/Other, desc: "Series/BluRay"}
     - {id: 13, cat: TV, desc: "Series/Pack VF"}
@@ -52,7 +51,6 @@ caps:
     - {id: 109, cat: TV/Documentary, desc: "Series/DOC"}
     - {id: 34, cat: TV/Sport, desc: "Series/Sport"}
     - {id: 30, cat: TV/Other, desc: "Series/Emission TV"}
-
     # Porn / XxX
     - {id: 36, cat: XXX, desc: "MISC/XxX/Films"}
     - {id: 105, cat: XXX, desc: "MISC/XxX/Séries"}
@@ -60,7 +58,6 @@ caps:
     - {id: 115, cat: XXX, desc: "MISC/XxX/Gays"}
     - {id: 113, cat: XXX, desc: "MISC/XxX/Hentai"}
     - {id: 120, cat: XXX, desc: "MISC/XxX/Magazines"}
-
     # Books / Livres
     - {id: 24, cat: Books/EBook, desc: "Livres/Romans"}
     - {id: 124, cat: Audio/Audiobook, desc: "Livres/Audio Books"}
@@ -69,7 +66,6 @@ caps:
     - {id: 116, cat: Books/EBook, desc: "Livres/Romans Jeunesse"}
     - {id: 102, cat: Books/Comics, desc: "Livres/Comics"}
     - {id: 103, cat: Books/Other, desc: "Livres/Mangas"}
-
     # Softwares / Logiciels
     - {id: 25, cat: PC/Games, desc: "Logiciels/Jeux PC"}
     - {id: 27, cat: Console/PS3, desc: "Logiciels/Playstation"}
@@ -101,14 +97,25 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
   - name: multilanguage
-    type: text
-    label: Replace MULTI by
-    default: MULTI
-  - name: subfrench
-    type: text
-    label: Replace "VOSTFR/SUBFRENCH" by
-    default: ""
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
 
 login:
   path: "https://api.xthor.tk/"
@@ -142,24 +149,22 @@ search:
       selector: id
     category:
       selector: category
-    title_original:
+    title_phase1:
       selector: name
-    title_multi:
-      text: "{{ .Result.title_original }}"
-      filters:
-        - name: re_replace
-          args: ["(?i)[\\.\\s\\[\\-]multi[\\.\\s\\]\\-]", ".{{ .Config.multilanguage }}."]
-    title_multi_out:
-      text: "{{ if .Config.multilanguage }}{{ .Result.title_multi }}{{ else }}{{ .Result.title_original }}{{ end }}"
     title_vostfr:
-      text: "{{ .Result.title_multi_out }}"
+      text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)[\\.\\s\\[\\-]vostfr[\\.\\s\\]\\-]", ".{{ .Config.subfrench }}."]
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
         - name: re_replace
-          args: ["(?i)[\\.\\s\\[\\-]subfrench[\\.\\s\\]\\-]", ".{{ .Config.subfrench }}."]
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
-      text: "{{ if .Config.subfrench }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_multi_out }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       text: "{{ .Config.sitelink }}details.php?id={{ .Result._id }}"
     download:

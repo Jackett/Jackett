@@ -796,7 +796,7 @@
             "properties": {
                 "name": {
                     "type": "string",
-                    "enum": ["querystring", "timeparse", "dateparse", "regexp", "re_replace", "split", "replace", "trim", "prepend", "append", "tolower", "toupper", "urldecode", "urlencode", "timeago", "reltime", "fuzzytime", "validfilename", "diacritics", "jsonjoinarray", "hexdump", "strdump", "validate"]
+                    "enum": ["querystring", "timeparse", "dateparse", "regexp", "re_replace", "split", "replace", "trim", "prepend", "append", "tolower", "toupper", "urldecode", "urlencode", "htmldecode", "htmlencode", "timeago", "reltime", "fuzzytime", "validfilename", "diacritics", "jsonjoinarray", "hexdump", "strdump", "validate"]
                 },
                 "args": {
                     "oneOf": [

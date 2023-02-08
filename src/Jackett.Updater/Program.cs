@@ -256,6 +256,7 @@ namespace Jackett.Updater
                 "Definitions/01torrent.yml",
                 "Definitions/24rolika.yml",
                 "Definitions/32pages.yml",
+                "Definitions/3evils.yml",
                 "Definitions/3evils-api.yml",
                 "Definitions/420files.yml",
                 "Definitions/7torrents.yml",
@@ -274,7 +275,6 @@ namespace Jackett.Updater
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
                 "Definitions/archetorrent.yml",
                 "Definitions/asgaard.yml",
-                "Definitions/asiandvdclub.yml",
                 "Definitions/ast4u.yml", // renamed to animeworld #10578
                 "Definitions/asylumshare.yml",
                 "Definitions/audiobooktorrents.yml", // renamed to abtorrents
@@ -359,7 +359,9 @@ namespace Jackett.Updater
                 "Definitions/filebase.yml",
                 "Definitions/film-paleis.yml",
                 "Definitions/filmsclub.yml",
+                "Definitions/gfxpeers.yml",
                 "Definitions/focusx.yml",
+                "Definitions/fouducinema.yml",
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/freetorrent.yml",
@@ -377,6 +379,7 @@ namespace Jackett.Updater
                 "Definitions/hachede.yml",
                 "Definitions/hamsterstudio.yml",
                 "Definitions/hd4free.yml",
+                "Definitions/hdai.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
                 "Definitions/hdbitscom.yml",
                 "Definitions/hdcenter.yml",
@@ -388,6 +391,7 @@ namespace Jackett.Updater
                 "Definitions/hdolimpo.yml", // migrated to UNIT3D API
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
+                "Definitions/hdspain.yml",
                 "Definitions/hdstreet.yml",
                 "Definitions/hellastz.yml",
                 "Definitions/hidden-palace.yml",
@@ -471,15 +475,19 @@ namespace Jackett.Updater
                 "Definitions/peerjunkies.yml",
                 "Definitions/piratadigital.yml",
                 "Definitions/pirateiro.yml",
+                "Definitions/pixelados.yml",
+                "Definitions/pixelados-html.yml",
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornbits.yml",
                 "Definitions/pornolive.yml",
                 "Definitions/pornorip.yml",
+                "Definitions/pornotor.yml",
                 "Definitions/portugas.yml", // switch to *-API #13542
                 "Definitions/prostylex.yml",
                 "Definitions/ps4-torrent.yml",
                 "Definitions/pt99.yml",
+                "Definitions/purovicio.yml",
                 "Definitions/puurhollands.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
@@ -499,6 +507,7 @@ namespace Jackett.Updater
                 "Definitions/rofd.yml",
                 "Definitions/scenefz.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)
+                "Definitions/scenepalace.yml",
                 "Definitions/scenereactor.yml",
                 "Definitions/scenexpress.yml",
                 "Definitions/sdkino.yml",
@@ -523,6 +532,7 @@ namespace Jackett.Updater
                 "Definitions/spacetorrent.yml",
                 "Definitions/speed-share.yml",
                 "Definitions/sukebei-pantsu.yml",
+                "Definitions/swarmazon.yml", //  switched to *-API #13725
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
                 "Definitions/takeabyte.yml",
@@ -595,6 +605,7 @@ namespace Jackett.Updater
                 "Definitions/vhstapes.yml",
                 "Definitions/vizuk.yml",
                 "Definitions/waffles.yml",
+                "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",

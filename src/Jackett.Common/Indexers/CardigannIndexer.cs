@@ -1074,6 +1074,12 @@ namespace Jackett.Common.Indexers
                     case "urlencode":
                         Data = WebUtilityHelpers.UrlEncode(Data, Encoding);
                         break;
+                    case "htmldecode":
+                        Data = WebUtility.HtmlDecode(Data);
+                        break;
+                    case "htmlencode":
+                        Data = WebUtility.HtmlEncode(Data);
+                        break;
                     case "timeago":
                     case "reltime":
                         Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.Rfc1123ZPattern);

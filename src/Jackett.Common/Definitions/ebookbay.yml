@@ -1,0 +1,155 @@
+---
+id: ebookbay
+name: EBookBay
+description: "EBook Bay (EBB) is a Public Torrent Tracker for E-BOOKS"
+language: en-US
+type: public
+encoding: UTF-8
+requestDelay: 2
+links:
+  - http://ebb.la/ # site does not support https SSL_ERROR_BAD_CERT_DOMAIN
+
+caps:
+  categorymappings:
+    - {id: "Action/Adventure", cat: Books/EBook, desc: "Action/Adventure"}
+    - {id: "Animals", cat: Books/EBook, desc: "Animals"}
+    - {id: "Arts", cat: Books/EBook, desc: "Arts"}
+    - {id: "Beauty", cat: Books/EBook, desc: "Beauty"}
+    - {id: "Business", cat: Books/EBook, desc: "Business"}
+    - {id: "Certification", cat: Books/EBook, desc: "Certification"}
+    - {id: "Children/Kids", cat: Books/EBook, desc: "Children/Kids"}
+    - {id: "Classic/Literary", cat: Books/EBook, desc: "Classic/Literary"}
+    - {id: "Comics", cat: Books/Comics, desc: "Comics"}
+    - {id: "Computer", cat: Books/EBook, desc: "Computer"}
+    - {id: "Contemporary", cat: Books/EBook, desc: "Contemporary"}
+    - {id: "Cooking", cat: Books/EBook, desc: "Cooking"}
+    - {id: "Crafts & Hobbies", cat: Books/EBook, desc: "Crafts & Hobbies"}
+    - {id: "Education", cat: Books/EBook, desc: "Education"}
+    - {id: "Entertainment", cat: Books/EBook, desc: "Entertainment"}
+    - {id: "Fantasy", cat: Books/EBook, desc: "Fantasy"}
+    - {id: "Gardening", cat: Books/EBook, desc: "Gardening"}
+    - {id: "Health", cat: Books/EBook, desc: "Health"}
+    - {id: "Historical", cat: Books/EBook, desc: "Historical"}
+    - {id: "History", cat: Books/EBook, desc: "History"}
+    - {id: "Horror", cat: Books/EBook, desc: "Horror"}
+    - {id: "Humorous", cat: Books/EBook, desc: "Humorous"}
+    - {id: "Internet", cat: Books/EBook, desc: "Internet"}
+    - {id: "Magazine", cat: Books/EBook, desc: "Magazine"}
+    - {id: "Marketing", cat: Books/EBook, desc: "Marketing"}
+    - {id: "Medical", cat: Books/EBook, desc: "Medical"}
+    - {id: "Mystery/Suspense", cat: Books/EBook, desc: "Mystery/Suspense"}
+    - {id: "Nonfiction", cat: Books/EBook, desc: "Nonfiction"}
+    - {id: "Novel", cat: Books/EBook, desc: "Novel"}
+    - {id: "Other", cat: Books/EBook, desc: "Other"}
+    - {id: "Paranormal", cat: Books/EBook, desc: "Paranormal"}
+    - {id: "Political", cat: Books/EBook, desc: "Political"}
+    - {id: "Real Estate", cat: Books/EBook, desc: "Real Estate"}
+    - {id: "Reference", cat: Books/EBook, desc: "Reference"}
+    - {id: "Religion", cat: Books/EBook, desc: "Religion"}
+    - {id: "Romance", cat: Books/EBook, desc: "Romance"}
+    - {id: "Sci-Fi", cat: Books/EBook, desc: "Sci-Fi"}
+    - {id: "Science", cat: Books/EBook, desc: "Science"}
+    - {id: "Self-Help", cat: Books/EBook, desc: "Self-Help"}
+    - {id: "Society", cat: Books/EBook, desc: "Society"}
+    - {id: "Software", cat: Books/EBook, desc: "Software"}
+    - {id: "Sports", cat: Books/EBook, desc: "Sports"}
+    - {id: "Technical", cat: Books/EBook, desc: "Technical"}
+    - {id: "Teen/Young Adult", cat: Books/EBook, desc: "Teen/Young Adult"}
+    - {id: "Textbook", cat: Books/EBook, desc: "Textbook"}
+    - {id: "Thriller", cat: Books/EBook, desc: "Thriller"}
+    - {id: "Travel", cat: Books/EBook, desc: "Travel"}
+    - {id: "Tutorial", cat: Books/EBook, desc: "Tutorial"}
+    - {id: "Western", cat: Books/EBook, desc: "Western"}
+
+  modes:
+    search: [q]
+    book-search: [q]
+
+settings: []
+
+download:
+  infohash:
+    hash:
+      selector: td:contains("Info Hash:") ~ td
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: div#content > div.poststuff > div.postname
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    # with just 5 results per page, try to grab up to 25 results
+    # http://ebb.la/?s=teeth
+    # http://ebb.la/page/2/?s=teeth
+    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "page/2/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "page/3/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "page/4/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+    - path: "page/5/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+
+  rows:
+    selector: "div#content > div.poststuff, div#content > div.poststuff + div.entry:has(a.download)"
+    after: 1
+
+  fields:
+    category:
+      text: Other
+    category|noappend:
+      selector: span.writer
+      filters:
+        - name: regexp
+          args: "E book under:\\s+(.+?)\\s"
+    title:
+      selector: div.postname a
+    details:
+      selector: a.detail
+      attribute: href
+    download:
+      selector: a.detail
+      attribute: href
+    poster:
+      selector: img[src^="http"]:not(img[src*="images/default_cover.jpg"])
+      attribute: src
+    date:
+      text: now
+    size_optional:
+      optional: true
+      selector: p:contains("File Size")
+      filters:
+        - name: regexp
+          args: "File Size: (.+?)s?$"
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+    seeders_optional:
+      optional: true
+      selector: p:contains("Seeds")
+      filters:
+        - name: regexp
+          args: "Seeds: (\\d+)"
+    seeders:
+      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
+    leechers_optional:
+      optional: true
+      selector: p:contains("Peers")
+      filters:
+        - name: regexp
+          args: "Peers: (\\d+)"
+    leechers:
+      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+    grabs_optional:
+      optional: true
+      selector: p:contains("Completed Downloads")
+      filters:
+        - name: regexp
+          args: "Completed Downloads: (\\d+)"
+    grabs:
+      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# WordPress 2.5

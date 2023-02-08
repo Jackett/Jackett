@@ -22,24 +22,21 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class RuTracker : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://rutracker.org/",
+            "https://rutracker.net/",
+            "https://rutracker.nl/"
+        };
+        private new ConfigurationDataRutracker configData => (ConfigurationDataRutracker)base.configData;
+
+        private readonly TitleParser _titleParser = new TitleParser();
         private string LoginUrl => SiteLink + "forum/login.php";
         private string SearchUrl => SiteLink + "forum/tracker.php";
 
         private string _capSid;
         private string _capCodeField;
 
-        private new ConfigurationDataRutracker configData => (ConfigurationDataRutracker)base.configData;
-
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://rutracker.org/",
-            "https://rutracker.net/",
-            "https://rutracker.nl/"
-        };
-
-        private Regex _regexToFindTagsInReleaseTitle = new Regex(@"\[[^\[]+\]|\([^(]+\)");
-
-        public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+        public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(id: "rutracker",
                    name: "RuTracker",
                    description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
@@ -74,6 +71,7 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.GetEncoding("windows-1251");
             Language = "ru-RU";
             Type = "semi-private";
+
             // note: when refreshing the categories use the tracker.php page and NOT the search.php page!
             AddCategoryMapping(22, TorznabCatType.Movies, "Наше кино");
             AddCategoryMapping(941, TorznabCatType.Movies, "|- Кино СССР");
@@ -89,6 +87,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2093, TorznabCatType.MoviesForeign, "|- Фильмы 2011-2015");
             AddCategoryMapping(2200, TorznabCatType.MoviesForeign, "|- Фильмы 2016-2020");
             AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2022");
+            AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2023");
             AddCategoryMapping(2540, TorznabCatType.MoviesForeign, "|- Фильмы Ближнего Зарубежья");
             AddCategoryMapping(934, TorznabCatType.MoviesForeign, "|- Азиатские фильмы");
             AddCategoryMapping(505, TorznabCatType.MoviesForeign, "|- Индийское кино");
@@ -146,6 +145,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(816, TorznabCatType.TVHD, "|- Мультсериалы (DVD Video)");
             AddCategoryMapping(1460, TorznabCatType.TVHD, "|- Мультсериалы (HD Video)");
             AddCategoryMapping(33, TorznabCatType.TVAnime, "Аниме");
+            AddCategoryMapping(1106, TorznabCatType.TVAnime, "|- Онгоинги (HD Video)");
             AddCategoryMapping(1105, TorznabCatType.TVAnime, "|- Аниме (HD Video)");
             AddCategoryMapping(599, TorznabCatType.TVAnime, "|- Аниме (DVD)");
             AddCategoryMapping(1389, TorznabCatType.TVAnime, "|- Аниме (основной подраздел)");
@@ -163,15 +163,15 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(9, TorznabCatType.TV, "Русские сериалы");
             AddCategoryMapping(81, TorznabCatType.TVHD, "|- Русские сериалы (HD Video)");
             AddCategoryMapping(920, TorznabCatType.TVSD, "|- Русские сериалы (DVD Video)");
-            AddCategoryMapping(80, TorznabCatType.TV, "|- Возвращение Мухтара");
-            AddCategoryMapping(1535, TorznabCatType.TV, "|- Воронины");
-            AddCategoryMapping(188, TorznabCatType.TV, "|- Чернобыль: Зона отчуждения");
-            AddCategoryMapping(91, TorznabCatType.TV, "|- Кухня / Отель Элеон");
+            AddCategoryMapping(80, TorznabCatType.TV, "|- Сельский детектив");
+            AddCategoryMapping(1535, TorznabCatType.TV, "|- По законам военного времени");
+            AddCategoryMapping(188, TorznabCatType.TV, "|- Московские тайны");
+            AddCategoryMapping(91, TorznabCatType.TV, "|- Я знаю твои секреты");
             AddCategoryMapping(990, TorznabCatType.TV, "|- Универ / Универ. Новая общага / СашаТаня");
-            AddCategoryMapping(1408, TorznabCatType.TV, "|- Ольга / Физрук");
+            AddCategoryMapping(1408, TorznabCatType.TV, "|- Женская версия");
             AddCategoryMapping(175, TorznabCatType.TV, "|- След");
-            AddCategoryMapping(79, TorznabCatType.TV, "|- Солдаты и пр.");
-            AddCategoryMapping(104, TorznabCatType.TV, "|- Тайны следствия");
+            AddCategoryMapping(79, TorznabCatType.TV, "|- Некрасивая подружка");
+            AddCategoryMapping(104, TorznabCatType.TV, "|- Психология преступления");
             AddCategoryMapping(189, TorznabCatType.TVForeign, "Зарубежные сериалы");
             AddCategoryMapping(842, TorznabCatType.TVForeign, "|- Новинки и сериалы в стадии показа");
             AddCategoryMapping(235, TorznabCatType.TVForeign, "|- Сериалы США и Канады");
@@ -239,19 +239,19 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(704, TorznabCatType.TVForeign, "|- Сериалы Турции");
             AddCategoryMapping(1537, TorznabCatType.TVForeign, "|- Для некондиционных раздач");
             AddCategoryMapping(2100, TorznabCatType.TVForeign, "Азиатские сериалы");
-            AddCategoryMapping(717, TorznabCatType.TVForeign, "|- Китайские сериалы с субтитрами");
-            AddCategoryMapping(915, TorznabCatType.TVForeign, "|- Корейские сериалы с озвучкой");
-            AddCategoryMapping(1242, TorznabCatType.TVForeign, "|- Корейские сериалы с субтитрами");
-            AddCategoryMapping(2412, TorznabCatType.TVForeign, "|- Прочие азиатские сериалы с озвучкой");
-            AddCategoryMapping(1938, TorznabCatType.TVForeign, "|- Тайваньские сериалы с субтитрами");
-            AddCategoryMapping(2104, TorznabCatType.TVForeign, "|- Японские сериалы с субтитрами");
-            AddCategoryMapping(1939, TorznabCatType.TVForeign, "|- Японские сериалы с озвучкой");
+            AddCategoryMapping(820, TorznabCatType.TVForeign, "|- Азиатские сериалы (UHD Video)");
+            AddCategoryMapping(915, TorznabCatType.TVForeign, "|- Корейские сериалы");
+            AddCategoryMapping(1242, TorznabCatType.TVForeign, "|- Корейские сериалы (HD Video)");
+            AddCategoryMapping(717, TorznabCatType.TVForeign, "|- Китайские сериалы");
+            AddCategoryMapping(1939, TorznabCatType.TVForeign, "|- Японские сериалы");
+            AddCategoryMapping(2412, TorznabCatType.TVForeign, "|- Сериалы Таиланда, Индонезии, Сингапура");
             AddCategoryMapping(2102, TorznabCatType.TVForeign, "|- VMV и др. ролики");
+            AddCategoryMapping(19, TorznabCatType.TVDocumentary, "СМИ");
             AddCategoryMapping(670, TorznabCatType.TVDocumentary, "Вера и религия");
             AddCategoryMapping(1475, TorznabCatType.TVDocumentary, "|- [Видео Религия] Христианство");
             AddCategoryMapping(2107, TorznabCatType.TVDocumentary, "|- [Видео Религия] Ислам");
-            AddCategoryMapping(294, TorznabCatType.TVDocumentary, "|- [Видео Религия] Религии Индии, Тибета и Восточной Азии");
             AddCategoryMapping(1453, TorznabCatType.TVDocumentary, "|- [Видео Религия] Культы и новые религиозные движения");
+            AddCategoryMapping(294, TorznabCatType.TVDocumentary, "|- [Видео Религия] Религии Индии, Тибета и Восточной Азии");
             AddCategoryMapping(46, TorznabCatType.TVDocumentary, "Документальные фильмы и телепередачи");
             AddCategoryMapping(103, TorznabCatType.TVDocumentary, "|- Документальные (DVD)");
             AddCategoryMapping(671, TorznabCatType.TVDocumentary, "|- [Док] Биографии. Личности и кумиры");
@@ -294,7 +294,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(979, TorznabCatType.TVDocumentary, "|- Путешествия и туризм (HD Video)");
             AddCategoryMapping(2169, TorznabCatType.TVDocumentary, "|- Флора и фауна (HD Video)");
             AddCategoryMapping(2166, TorznabCatType.TVDocumentary, "|- История (HD Video)");
-            AddCategoryMapping(2164, TorznabCatType.TVDocumentary, "|- BBC, Discovery, National Geographic, History Channel (HD Video)");
+            AddCategoryMapping(2164, TorznabCatType.TVDocumentary, "|- BBC, Discovery, National Geographic, History Channel, Netflix (HD Video)");
             AddCategoryMapping(2163, TorznabCatType.TVDocumentary, "|- Криминальная документалистика (HD Video)");
             AddCategoryMapping(85, TorznabCatType.TVDocumentary, "|- Некондиционное видео - Документальные (HD Video)");
             AddCategoryMapping(24, TorznabCatType.TVDocumentary, "Развлекательные телепередачи и шоу, приколы и юмор");
@@ -345,8 +345,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(255, TorznabCatType.TVSport, "Спортивные турниры, фильмы и передачи");
             AddCategoryMapping(256, TorznabCatType.TVSport, "|- Автоспорт");
             AddCategoryMapping(1986, TorznabCatType.TVSport, "|- Мотоспорт");
-            AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2021)");
-            AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2020)");
+            AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2022)");
+            AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2021)");
             AddCategoryMapping(626, TorznabCatType.TVSport, "|- Формула 1 (до 2011 вкл.)");
             AddCategoryMapping(262, TorznabCatType.TVSport, "|- Велоспорт");
             AddCategoryMapping(1326, TorznabCatType.TVSport, "|- Волейбол/Гандбол");
@@ -370,15 +370,16 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1319, TorznabCatType.TVSport, "|- Спорт (видео)");
             AddCategoryMapping(1608, TorznabCatType.TVSport, "⚽ Футбол");
             AddCategoryMapping(2294, TorznabCatType.TVSport, "|- UHDTV");
+            AddCategoryMapping(1229, TorznabCatType.TVSport, "|- Чемпионат Мира 2022 (финальный турнир)");
+            AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2022 (отбор)");
             AddCategoryMapping(2532, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (финальный турнир)");
             AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (отбор)");
             AddCategoryMapping(592, TorznabCatType.TVSport, "|- Лига Наций");
-            AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2022 (отбор)");
             AddCategoryMapping(2533, TorznabCatType.TVSport, "|- Чемпионат Мира 2018 (игры)");
             AddCategoryMapping(1952, TorznabCatType.TVSport, "|- Чемпионат Мира 2018 (обзорные передачи, документалистика)");
             AddCategoryMapping(1621, TorznabCatType.TVSport, "|- Чемпионаты Мира");
+            AddCategoryMapping(2075, TorznabCatType.TVSport, "|- Россия 2022-2023");
             AddCategoryMapping(1668, TorznabCatType.TVSport, "|- Россия 2021-2022");
-            AddCategoryMapping(2075, TorznabCatType.TVSport, "|- Россия 2020-2021");
             AddCategoryMapping(1613, TorznabCatType.TVSport, "|- Россия/СССР");
             AddCategoryMapping(1614, TorznabCatType.TVSport, "|- Англия");
             AddCategoryMapping(1623, TorznabCatType.TVSport, "|- Испания");
@@ -388,13 +389,13 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2514, TorznabCatType.TVSport, "|- Украина");
             AddCategoryMapping(1616, TorznabCatType.TVSport, "|- Другие национальные чемпионаты и кубки");
             AddCategoryMapping(2014, TorznabCatType.TVSport, "|- Международные турниры");
+            AddCategoryMapping(1442, TorznabCatType.TVSport, "|- Еврокубки 2022-2023");
             AddCategoryMapping(1491, TorznabCatType.TVSport, "|- Еврокубки 2021-2022");
-            AddCategoryMapping(1442, TorznabCatType.TVSport, "|- Еврокубки 2020-2021");
-            AddCategoryMapping(1987, TorznabCatType.TVSport, "|- Еврокубки 2011-2020");
+            AddCategoryMapping(1987, TorznabCatType.TVSport, "|- Еврокубки 2011-2021");
             AddCategoryMapping(1617, TorznabCatType.TVSport, "|- Еврокубки");
             AddCategoryMapping(1620, TorznabCatType.TVSport, "|- Чемпионаты Европы");
             AddCategoryMapping(1998, TorznabCatType.TVSport, "|- Товарищеские турниры и матчи");
-            AddCategoryMapping(1343, TorznabCatType.TVSport, "|- Обзорные и аналитические передачи 2018-2021");
+            AddCategoryMapping(1343, TorznabCatType.TVSport, "|- Обзорные и аналитические передачи 2018-2022");
             AddCategoryMapping(751, TorznabCatType.TVSport, "|- Обзорные и аналитические передачи");
             AddCategoryMapping(497, TorznabCatType.TVSport, "|- Документальные фильмы (футбол)");
             AddCategoryMapping(1697, TorznabCatType.TVSport, "|- Мини-футбол/Пляжный футбол");
@@ -402,11 +403,10 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2001, TorznabCatType.TVSport, "|- Международные соревнования");
             AddCategoryMapping(2002, TorznabCatType.TVSport, "|- NBA / NCAA (до 2000 г.)");
             AddCategoryMapping(283, TorznabCatType.TVSport, "|- NBA / NCAA (2000-2010 гг.)");
-            AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2022 гг.)");
+            AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2023 гг.)");
             AddCategoryMapping(2003, TorznabCatType.TVSport, "|- Европейский клубный баскетбол");
             AddCategoryMapping(2009, TorznabCatType.TVSport, "🏒 Хоккей");
             AddCategoryMapping(2010, TorznabCatType.TVSport, "|- Хоккей с мячом / Бенди");
-            AddCategoryMapping(1229, TorznabCatType.TVSport, "|- Чемпионат Мира по хоккею 2021");
             AddCategoryMapping(2006, TorznabCatType.TVSport, "|- Международные турниры");
             AddCategoryMapping(2007, TorznabCatType.TVSport, "|- КХЛ");
             AddCategoryMapping(2005, TorznabCatType.TVSport, "|- НХЛ (до 2011/12)");
@@ -797,7 +797,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2430, TorznabCatType.AudioLossless, "|- Этническая музыка Индии (lossless)");
             AddCategoryMapping(1283, TorznabCatType.AudioMP3, "|- Этническая музыка Африки и Ближнего Востока (lossy)");
             AddCategoryMapping(2085, TorznabCatType.AudioLossless, "|- Этническая музыка Африки и Ближнего Востока (lossless)");
-            AddCategoryMapping(1282, TorznabCatType.Audio, "|- Фольклорная, Народная, Эстрадная музыка Кавказа и Закавказья (lossless)");
+            AddCategoryMapping(1282, TorznabCatType.Audio, "|- Фольклорная, Народная, Эстрадная музыка Кавказа и Закавказья (lossy и lossless)");
             AddCategoryMapping(1284, TorznabCatType.AudioMP3, "|- Этническая музыка Северной и Южной Америки (lossy)");
             AddCategoryMapping(1285, TorznabCatType.AudioLossless, "|- Этническая музыка Северной и Южной Америки (lossless)");
             AddCategoryMapping(1138, TorznabCatType.Audio, "|- Этническая музыка Австралии, Тихого и Индийского океанов (lossy и lossless)");
@@ -828,7 +828,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1768, TorznabCatType.AudioLossless, "|- Reggae, Dancehall, Dub (lossless)");
             AddCategoryMapping(1774, TorznabCatType.AudioLossless, "|- Ska, Ska-Punk, Ska-Jazz (lossless)");
             AddCategoryMapping(1772, TorznabCatType.Audio, "|- Отечественный Reggae, Dub (lossy и lossless)");
-            AddCategoryMapping(1773, TorznabCatType.Audio, "|- Отечественная Ska музыка (lossy и lossless)");
             AddCategoryMapping(2233, TorznabCatType.Audio, "|- Reggae, Ska, Dub (компиляции) (lossy и lossless)");
             AddCategoryMapping(416, TorznabCatType.Audio, "Саундтреки, караоке и мюзиклы");
             AddCategoryMapping(2377, TorznabCatType.AudioVideo, "|- Караоке");
@@ -958,8 +957,12 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1739, TorznabCatType.AudioMP3, "|- Punk (lossy)");
             AddCategoryMapping(1740, TorznabCatType.AudioLossless, "|- Hardcore (lossless)");
             AddCategoryMapping(1741, TorznabCatType.AudioMP3, "|- Hardcore (lossy)");
-            AddCategoryMapping(1742, TorznabCatType.AudioLossless, "|- Indie, Post-Rock & Post-Punk (lossless)");
-            AddCategoryMapping(1743, TorznabCatType.AudioMP3, "|- Indie, Post-Rock & Post-Punk (lossy)");
+            AddCategoryMapping(1773, TorznabCatType.AudioLossless, "|- Indie Rock, Indie Pop, Dream Pop, Brit-Pop (lossless)");
+            AddCategoryMapping(202, TorznabCatType.AudioMP3, "|- Indie Rock, Indie Pop, Dream Pop, Brit-Pop (lossy)");
+            AddCategoryMapping(172, TorznabCatType.AudioLossless, "|- Post-Punk, Shoegaze, Garage Rock, Noise Rock (lossless)");
+            AddCategoryMapping(236, TorznabCatType.AudioMP3, "|- Post-Punk, Shoegaze, Garage Rock, Noise Rock (lossy)");
+            AddCategoryMapping(1742, TorznabCatType.AudioLossless, "|- Post-Rock (lossless)");
+            AddCategoryMapping(1743, TorznabCatType.AudioMP3, "|- Post-Rock (lossy)");
             AddCategoryMapping(1744, TorznabCatType.AudioLossless, "|- Industrial & Post-industrial (lossless)");
             AddCategoryMapping(1745, TorznabCatType.AudioMP3, "|- Industrial & Post-industrial (lossy)");
             AddCategoryMapping(1746, TorznabCatType.AudioLossless, "|- Emocore, Post-hardcore, Metalcore (lossless)");
@@ -1117,8 +1120,8 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1886, TorznabCatType.AudioVideo, "|- Электронная музыка (DVD Video)");
             AddCategoryMapping(2509, TorznabCatType.AudioVideo, "|- Документальные фильмы о музыке и музыкантах (DVD Video)");
             AddCategoryMapping(2507, TorznabCatType.AudioVideo, "Неофициальные DVD видео");
-            AddCategoryMapping(2263, TorznabCatType.AudioVideo, "Классическая музыка, Опера, Балет, Мюзикл (Неофициальные DVD Video)");
-            AddCategoryMapping(2511, TorznabCatType.AudioVideo, "Шансон, Авторская песня, Сборные концерты, МДЖ (Неофициальные DVD Video)");
+            AddCategoryMapping(2263, TorznabCatType.AudioVideo, "|- Классическая музыка, Опера, Балет, Мюзикл (Неофициальные DVD Video)");
+            AddCategoryMapping(2511, TorznabCatType.AudioVideo, "|- Шансон, Авторская песня, Сборные концерты, МДЖ (Неофициальные DVD Video)");
             AddCategoryMapping(2264, TorznabCatType.AudioVideo, "|- Зарубежная и Отечественная Поп-музыка (Неофициальные DVD Video)");
             AddCategoryMapping(2262, TorznabCatType.AudioVideo, "|- Джаз и Блюз (Неофициальные DVD Video)");
             AddCategoryMapping(2261, TorznabCatType.AudioVideo, "|- Зарубежная и Отечественная Рок-музыка (Неофициальные DVD Video)");
@@ -1239,6 +1242,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1041, TorznabCatType.PC, "|- Изменение интерфейса ОС Windows");
             AddCategoryMapping(1636, TorznabCatType.PC, "|- Скринсейверы");
             AddCategoryMapping(1042, TorznabCatType.PC, "|- Разное (Системные программы под Windows)");
+            AddCategoryMapping(1059, TorznabCatType.PC, "|- Архив (Разрегистрированные раздачи)");
             AddCategoryMapping(1014, TorznabCatType.PC, "Системы для бизнеса, офиса, научной и проектной работы");
             AddCategoryMapping(2134, TorznabCatType.PC, "|- Медицина - интерактивный софт");
             AddCategoryMapping(1060, TorznabCatType.PC, "|- Всё для дома: кройка, шитьё, кулинария");
@@ -1284,7 +1288,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(1357, TorznabCatType.OtherMisc, "|- Авторские работы");
             AddCategoryMapping(890, TorznabCatType.OtherMisc, "|- Официальные сборники векторных клипартов");
             AddCategoryMapping(830, TorznabCatType.OtherMisc, "|- Прочие векторные клипарты");
-            AddCategoryMapping(1290, TorznabCatType.OtherMisc, "|- Photostoсks");
+            AddCategoryMapping(1290, TorznabCatType.OtherMisc, "|- Photostocks");
             AddCategoryMapping(1962, TorznabCatType.OtherMisc, "|- Дополнения для программ компоузинга и постобработки");
             AddCategoryMapping(831, TorznabCatType.OtherMisc, "|- Рамки, шаблоны, текстуры и фоны");
             AddCategoryMapping(829, TorznabCatType.OtherMisc, "|- Прочие растровые клипарты");
@@ -1372,7 +1376,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(147, TorznabCatType.Books, "|- Публикации и учебные материалы (тексты)");
             AddCategoryMapping(847, TorznabCatType.MoviesOther, "|- Трейлеры и дополнительные материалы к фильмам");
             AddCategoryMapping(1167, TorznabCatType.TVOther, "|- Любительские видеоклипы");
-            AddCategoryMapping(321, TorznabCatType.Other, "Место встречи изменить - Отчеты о встречах");
+            AddCategoryMapping(321, TorznabCatType.Other, "|- Отчеты о встречах");
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
@@ -1383,17 +1387,15 @@ namespace Jackett.Common.Indexers
                 var response = await RequestWithCookiesAsync(LoginUrl);
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(response.ContentString);
-                var captchaimg = doc.QuerySelector("img[src^=\"https://static.t-ru.org/captcha/\"]");
+                var captchaimg = doc.QuerySelector("img[src^=\"https://static.rutracker.cc/captcha/\"]");
+
                 if (captchaimg != null)
                 {
                     var captchaImage = await RequestWithCookiesAsync(captchaimg.GetAttribute("src"));
                     configData.CaptchaImage.Value = captchaImage.ContentBytes;
 
-                    var codefield = doc.QuerySelector("input[name^=\"cap_code_\"]");
-                    _capCodeField = codefield.GetAttribute("name");
-
-                    var sidfield = doc.QuerySelector("input[name=\"cap_sid\"]");
-                    _capSid = sidfield.GetAttribute("value");
+                    _capCodeField = doc.QuerySelector("input[name^=\"cap_code_\"]")?.GetAttribute("name");
+                    _capSid = doc.QuerySelector("input[name=\"cap_sid\"]")?.GetAttribute("value");
                 }
                 else
                     configData.CaptchaImage.Value = null;
@@ -1429,11 +1431,13 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("id=\"logged-in-username\""), () =>
             {
-                logger.Debug(result.ContentString);
                 var errorMessage = "Unknown error message, please report";
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(result.ContentString);
-                var errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
+                var errormsg = doc.QuerySelector("div.msg-main");
+                if (errormsg != null)
+                    errorMessage = errormsg.TextContent;
+                errormsg = doc.QuerySelector("h4[class=\"warnColor1 tCenter mrg_16\"]");
                 if (errormsg != null)
                     errorMessage = errormsg.TextContent;
 
@@ -1509,6 +1513,7 @@ namespace Jackett.Common.Indexers
                 queryCollection.Add("f", string.Join(",", MapTorznabCapsToTrackers(query)));
 
             var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
+
             return searchUrl;
         }
 
@@ -1533,6 +1538,7 @@ namespace Jackett.Common.Indexers
                 var qDetailsLink = row.QuerySelector("td.t-title-col > div.t-title > a.tLink");
                 var details = new Uri(SiteLink + "forum/" + qDetailsLink.GetAttribute("href"));
 
+                var title = qDetailsLink.TextContent.Trim();
                 var category = GetCategoryOfRelease(row);
 
                 var size = GetSizeOfRelease(row);
@@ -1548,7 +1554,14 @@ namespace Jackett.Common.Indexers
                 {
                     MinimumRatio = 1,
                     MinimumSeedTime = 0,
-                    Title = qDetailsLink.TextContent,
+                    Title = _titleParser.Parse(
+                        title,
+                        category,
+                        configData.StripRussianLetters.Value,
+                        configData.MoveAllTagsToEndOfReleaseTitle.Value,
+                        configData.MoveFirstTagsToEndOfReleaseTitle.Value
+                    ),
+                    Description = title,
                     Details = details,
                     Link = link,
                     Guid = details,
@@ -1561,60 +1574,6 @@ namespace Jackett.Common.Indexers
                     DownloadVolumeFactor = 1,
                     UploadVolumeFactor = 1
                 };
-
-                // TODO finish extracting release variables to simplify release initialization
-                if (IsAnyTvCategory(release.Category))
-                {
-                    // extract season and episodes
-                    var regex = new Regex(".+\\/\\s([^а-яА-я\\/]+)\\s\\/.+Сезон\\s*[:]*\\s+(\\d+).+(?:Серии|Эпизод)+\\s*[:]*\\s+(\\d+-*\\d*).+,\\s+(.+)\\][\\s]?(.*)");
-
-                    //replace double 4K quality in title
-                    release.Title = release.Title.Replace(", 4K]", "]");
-
-                    var title = regex.Replace(release.Title, "$1 - S$2E$3 - rus $4 $5");
-                    title = Regex.Replace(title, "-Rip", "Rip", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
-                    title = Regex.Replace(title, "Кураж-Бамбей", "kurazh", RegexOptions.IgnoreCase);
-
-                    release.Title = title;
-                }
-                else if (IsAnyMovieCategory(release.Category))
-                {
-                    // remove director's name from title
-                    // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
-                    // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
-                    // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
-                    var director = new Regex(@"(\([А-Яа-яЁё\W]+)\s/\s(.+?)\)");
-                    release.Title = director.Replace(release.Title, "");
-
-                    // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
-                    release.Title = Regex.Replace(release.Title, "Blu-ray Disc", "BR-DISK", RegexOptions.IgnoreCase);
-                    // language fix: all rutracker releases contains russian track
-                    if (release.Title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
-                        release.Title += " rus";
-                }
-
-                if (configData.StripRussianLetters.Value)
-                {
-                    var regex = new Regex(@"(\([А-Яа-яЁё\W]+\))|(^[А-Яа-яЁё\W\d]+\/ )|([а-яА-ЯЁё \-]+,+)|([а-яА-ЯЁё]+)");
-                    release.Title = regex.Replace(release.Title, "");
-                }
-
-                if (configData.MoveAllTagsToEndOfReleaseTitle.Value)
-                {
-                    release.Title = MoveAllTagsToEndOfReleaseTitle(release.Title);
-                }
-                else if (configData.MoveFirstTagsToEndOfReleaseTitle.Value)
-                {
-                    release.Title = MoveFirstTagsToEndOfReleaseTitle(release.Title);
-                }
-
-                if (release.Category.Contains(TorznabCatType.Audio.ID))
-                {
-                    release.Title = DetectRereleaseInReleaseTitle(release.Title);
-                }
 
                 return release;
             }
@@ -1631,7 +1590,7 @@ namespace Jackett.Common.Indexers
             var qSeeders = row.QuerySelector("td:nth-child(7)");
             if (qSeeders != null && !qSeeders.TextContent.Contains("дн"))
             {
-                var seedersString = qSeeders.QuerySelector("b").TextContent;
+                var seedersString = qSeeders.QuerySelector("b")?.TextContent.Trim();
                 if (!string.IsNullOrWhiteSpace(seedersString))
                     seeders = ParseUtil.CoerceInt(seedersString);
             }
@@ -1640,107 +1599,186 @@ namespace Jackett.Common.Indexers
 
         private ICollection<int> GetCategoryOfRelease(in IElement row)
         {
-            var forum = row.QuerySelector("td.f-name-col > div.f-name > a");
-            var forumid = forum.GetAttribute("href").Split('=')[1];
-            return MapTrackerCatToNewznab(forumid);
+            var forum = row.QuerySelector("td.f-name-col > div.f-name > a")?.GetAttribute("href");
+            var cat = ParseUtil.GetArgumentFromQueryString(forum, "f");
+
+            return MapTrackerCatToNewznab(cat);
         }
 
-        private long GetSizeOfRelease(in IElement row)
-        {
-            var qSize = row.QuerySelector("td.tor-size");
-            var size = ReleaseInfo.GetBytes(qSize.GetAttribute("data-ts_text"));
-            return size;
-        }
+        private long GetSizeOfRelease(in IElement row) => ReleaseInfo.GetBytes(row.QuerySelector("td.tor-size")?.GetAttribute("data-ts_text"));
 
-        private DateTime GetPublishDateOfRelease(in IElement row)
-        {
-            var timestr = row.QuerySelector("td:nth-child(10)").GetAttribute("data-ts_text");
-            var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(timestr));
-            return publishDate;
-        }
+        private DateTime GetPublishDateOfRelease(in IElement row) => DateTimeUtil.UnixTimestampToDateTime(long.Parse(row.QuerySelector("td:nth-child(10)")?.GetAttribute("data-ts_text")));
 
-        private bool IsAnyTvCategory(ICollection<int> category)
+        public class TitleParser
         {
-            return category.Contains(TorznabCatType.TV.ID)
-                || TorznabCatType.TV.SubCategories.Any(subCat => category.Contains(subCat.ID));
-        }
-
-        private bool IsAnyMovieCategory(ICollection<int> category)
-        {
-            return category.Contains(TorznabCatType.Movies.ID)
-                || TorznabCatType.Movies.SubCategories.Any(subCat => category.Contains(subCat.ID));
-        }
-
-        private string MoveAllTagsToEndOfReleaseTitle(string input)
-        {
-            var output = input + " ";
-            foreach (Match match in _regexToFindTagsInReleaseTitle.Matches(input))
+            private static readonly List<Regex> _FindTagsInTitlesRegexList = new List<Regex>
             {
-                var tag = match.ToString();
-                output = output.Replace(tag, "") + tag;
-            }
-            output = output.Trim();
-            return output;
-        }
+                new Regex(@"\((?>\((?<c>)|[^()]+|\)(?<-c>))*(?(c)(?!))\)"),
+                new Regex(@"\[(?>\[(?<c>)|[^\[\]]+|\](?<-c>))*(?(c)(?!))\]")
+            };
 
-        private string MoveFirstTagsToEndOfReleaseTitle(string input)
-        {
-            var output = input + " ";
-            var expectedIndex = 0;
-            foreach (Match match in _regexToFindTagsInReleaseTitle.Matches(input))
+            private readonly Regex _stripCyrillicRegex = new Regex(@"(\([\p{IsCyrillic}\W]+\))|(^[\p{IsCyrillic}\W\d]+\/ )|([\p{IsCyrillic} \-]+,+)|([\p{IsCyrillic}]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            private readonly Regex _tvTitleCommaRegex = new Regex(@"\s(\d+),(\d+)", RegexOptions.Compiled);
+            private readonly Regex _tvTitleCyrillicXRegex = new Regex(@"([\s-])Х+([\s\)\]])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            private readonly Regex _tvTitleRusSeasonEpisodeOfRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)\s*из\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusSeasonEpisodeRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusSeasonRegex = new Regex(@"Сезон\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusEpisodeOfRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)\s*из\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusEpisodeRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            public string Parse(string title, ICollection<int> category, bool stripCyrillicLetters = true, bool moveAllTagsToEndOfReleaseTitle = false, bool moveFirstTagsToEndOfReleaseTitle = false)
             {
-                if (match.Index > expectedIndex)
+                // https://www.fileformat.info/info/unicode/category/Pd/list.htm
+                title = Regex.Replace(title, @"\p{Pd}", "-", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                // replace double 4K quality in title
+                title = Regex.Replace(title, @"\b(2160p), 4K\b", "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                if (IsAnyTvCategory(category))
                 {
-                    var substring = input.Substring(expectedIndex, match.Index - expectedIndex);
-                    if (string.IsNullOrWhiteSpace(substring))
-                        expectedIndex = match.Index;
-                    else
-                        break;
+                    title = _tvTitleCommaRegex.Replace(title, " $1-$2");
+                    title = _tvTitleCyrillicXRegex.Replace(title, "$1XX$2");
+
+                    title = _tvTitleRusSeasonEpisodeOfRegex.Replace(title, "S$1E$2 of $3");
+                    title = _tvTitleRusSeasonEpisodeRegex.Replace(title, "S$1E$2");
+                    title = _tvTitleRusSeasonRegex.Replace(title, "S$1");
+                    title = _tvTitleRusEpisodeOfRegex.Replace(title, "E$1 of $2");
+                    title = _tvTitleRusEpisodeRegex.Replace(title, "E$1");
                 }
-                var tag = match.ToString();
-                output = output.Replace(tag, "") + tag;
-                expectedIndex += tag.Length;
+                else if (IsAnyMovieCategory(category))
+                {
+                    // remove director's name from title
+                    // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
+                    // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
+                    // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
+                    title = Regex.Replace(title, @"(\([\p{IsCyrillic}\W]+)\s/\s(.+?)\)", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                    // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
+                    title = Regex.Replace(title, @"\bBlu-ray Disc\b", "BR-DISK", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                    // language fix: all rutracker releases contains russian track
+                    if (title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
+                        title += " rus";
+                }
+
+                if (stripCyrillicLetters)
+                    title = _stripCyrillicRegex.Replace(title, string.Empty).Trim(' ', '-');
+
+                if (moveAllTagsToEndOfReleaseTitle)
+                    title = MoveAllTagsToEndOfReleaseTitle(title);
+                else if (moveFirstTagsToEndOfReleaseTitle)
+                    title = MoveFirstTagsToEndOfReleaseTitle(title);
+
+                if (IsAnyAudioCategory(category))
+                    title = DetectRereleaseInReleaseTitle(title);
+
+                title = Regex.Replace(title, @"\b-Rip\b", "Rip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bHDTVRip\b", "HDTV", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bWEB-DLRip\b", "WEB-DL", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bWEBDLRip\b", "WEB-DL", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bWEBDL\b", "WEB-DL", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                title = Regex.Replace(title, @"\bКураж-Бамбей\b", "kurazh", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                title = Regex.Replace(title, @"\(\s*\/\s*", "(", RegexOptions.Compiled);
+                title = Regex.Replace(title, @"\s*\/\s*\)", ")", RegexOptions.Compiled);
+
+                title = Regex.Replace(title, @"[\[\(]\s*[\)\]]", "", RegexOptions.Compiled);
+
+                title = title.Trim(' ', '&', ',', '.', '!', '?', '+', '-', '_', '|', '/', '\\', ':');
+
+                // replace multiple spaces with a single space
+                title = Regex.Replace(title, @"\s+", " ");
+
+                return title.Trim();
             }
-            output = output.Trim();
-            return output;
-        }
 
-        /// <summary>
-        /// Searches the release title to find a 'year1/year2' pattern that would indicate that this is a re-release of an old music album.
-        /// If the release is found to be a re-release, this is added to the title as a new tag.
-        /// Not to be confused with discographies; they mostly follow the 'year1-year2' pattern.
-        /// </summary>
-        private string DetectRereleaseInReleaseTitle(string input)
-        {
-            var fullTitle = input;
+            private static bool IsAnyTvCategory(ICollection<int> category) => category.Contains(TorznabCatType.TV.ID) || TorznabCatType.TV.SubCategories.Any(subCat => category.Contains(subCat.ID));
 
-            var squareBracketTags = input.FindSubstringsBetween('[', ']', includeOpeningAndClosing: true);
-            input = input.RemoveSubstrings(squareBracketTags);
+            private static bool IsAnyMovieCategory(ICollection<int> category) => category.Contains(TorznabCatType.Movies.ID) || TorznabCatType.Movies.SubCategories.Any(subCat => category.Contains(subCat.ID));
 
-            var roundBracketTags = input.FindSubstringsBetween('(', ')', includeOpeningAndClosing: true);
-            input = input.RemoveSubstrings(roundBracketTags);
+            private static bool IsAnyAudioCategory(ICollection<int> category) => category.Contains(TorznabCatType.Audio.ID) || TorznabCatType.Audio.SubCategories.Any(subCat => category.Contains(subCat.ID));
 
-            var regex = new Regex(@"\d{4}");
-            var yearsInTitle = regex.Matches(input);
-
-            if (yearsInTitle == null || yearsInTitle.Count < 2)
+            private static string MoveAllTagsToEndOfReleaseTitle(string input)
             {
-                //Can only be a re-release if there's at least 2 years in the title.
-                return fullTitle;
+                var output = input;
+                foreach (var findTagsRegex in _FindTagsInTitlesRegexList)
+                {
+                    foreach (Match match in findTagsRegex.Matches(input))
+                    {
+                        var tag = match.ToString();
+                        output = $"{output.Replace(tag, "")} {tag}".Trim();
+                    }
+                }
+
+                return output.Trim();
             }
 
-            regex = new Regex(@"(\d{4}) *\/ *(\d{4})");
-            var regexMatch = regex.Match(input);
-            if (!regexMatch.Success)
+            private static string MoveFirstTagsToEndOfReleaseTitle(string input)
             {
-                //Not in the expected format. Return the unaltered title.
-                return fullTitle;
+                var output = input;
+                foreach (var findTagsRegex in _FindTagsInTitlesRegexList)
+                {
+                    var expectedIndex = 0;
+                    foreach (Match match in findTagsRegex.Matches(output))
+                    {
+                        if (match.Index > expectedIndex)
+                        {
+                            var substring = output.Substring(expectedIndex, match.Index - expectedIndex);
+                            if (string.IsNullOrWhiteSpace(substring))
+                                expectedIndex = match.Index;
+                            else
+                                break;
+                        }
+
+                        var tag = match.ToString();
+                        var regex = new Regex(Regex.Escape(tag));
+                        output = $"{regex.Replace(output, string.Empty, 1)} {tag}".Trim();
+                        expectedIndex += tag.Length;
+                    }
+                }
+
+                return output.Trim();
             }
 
-            var originalYear = regexMatch.Groups[1].ToString();
-            fullTitle = fullTitle.Replace(regexMatch.ToString(), originalYear);
+            /// <summary>
+            /// Searches the release title to find a 'year1/year2' pattern that would indicate that this is a re-release of an old music album.
+            /// If the release is found to be a re-release, this is added to the title as a new tag.
+            /// Not to be confused with discographies; they mostly follow the 'year1-year2' pattern.
+            /// </summary>
+            private static string DetectRereleaseInReleaseTitle(string input)
+            {
+                var fullTitle = input;
 
-            return fullTitle + "(Re-release)";
+                var squareBracketTags = input.FindSubstringsBetween('[', ']', includeOpeningAndClosing: true);
+                input = input.RemoveSubstrings(squareBracketTags);
+
+                var roundBracketTags = input.FindSubstringsBetween('(', ')', includeOpeningAndClosing: true);
+                input = input.RemoveSubstrings(roundBracketTags);
+
+                var regex = new Regex(@"\d{4}");
+                var yearsInTitle = regex.Matches(input);
+
+                if (yearsInTitle == null || yearsInTitle.Count < 2)
+                {
+                    //Can only be a re-release if there's at least 2 years in the title.
+                    return fullTitle;
+                }
+
+                regex = new Regex(@"(\d{4}) *\/ *(\d{4})");
+                var regexMatch = regex.Match(input);
+                if (!regexMatch.Success)
+                {
+                    //Not in the expected format. Return the unaltered title.
+                    return fullTitle;
+                }
+
+                var originalYear = regexMatch.Groups[1].ToString();
+                fullTitle = fullTitle.Replace(regexMatch.ToString(), originalYear);
+
+                return fullTitle + "(Re-release)";
+            }
         }
     }
 }

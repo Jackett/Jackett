@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Text;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -22,7 +23,7 @@ namespace Jackett.Common.Indexers
     {
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://subsplease.org/",
-            "https://subsplease.nocensor.lol/"
+            "https://subsplease.mrunblock.guru/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -30,7 +31,9 @@ namespace Jackett.Common.Indexers
             "https://subsplease.nocensor.work/",
             "https://subsplease.nocensor.biz/",
             "https://subsplease.nocensor.sbs/",
-            "https://subsplease.nocensor.world/"
+            "https://subsplease.nocensor.world/",
+            "https://subsplease.nocensor.lol/",
+            "https://subsplease.nocensor.art/"
         };
 
         private string ApiEndpoint => SiteLink + "api/?";
@@ -156,17 +159,21 @@ namespace Jackett.Common.Indexers
                     release.MagnetUri = new Uri(d.Magnet);
                     release.Link = null;
                     release.Guid = new Uri(d.Magnet);
-
-                    // The API doesn't tell us file size, so give an estimate based on resolution
-                    if (string.Equals(d.Res, "1080"))
-                        release.Size = 1395864371; // 1.3GB
-                    else if (string.Equals(d.Res, "720"))
-                        release.Size = 734003200; // 700MB
-                    else if (string.Equals(d.Res, "480"))
-                        release.Size = 367001600; // 350MB
+                    Match sizeMatch = Regex.Match(d.Magnet, "&xl=\\d+");
+                    if (sizeMatch.Success)
+                        release.Size = ParseUtil.CoerceLong(sizeMatch.Value.Replace("&xl=", string.Empty));
                     else
-                        release.Size = 1073741824; // 1GB
-
+                    {
+                        // The API doesn't tell us file size, so give an estimate based on resolution
+                        if (string.Equals(d.Res, "1080"))
+                            release.Size = 1395864371; // 1.3GB
+                        else if (string.Equals(d.Res, "720"))
+                            release.Size = 734003200; // 700MB
+                        else if (string.Equals(d.Res, "480"))
+                            release.Size = 367001600; // 350MB
+                        else
+                            release.Size = 1073741824; // 1GB
+                    }
                     releaseInfo.Add(release);
                 }
             }

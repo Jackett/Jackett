@@ -11,6 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 50, cat: Movies, desc: "BLiNK"}
+    - {id: 54, cat: Audio/Audiobook, desc: "eBook AUDIO"}
     - {id: 20, cat: Books/EBook, desc: "eBook eBOOK"}
     - {id: 52, cat: Books/Other, desc: "eBook Education"}
     - {id: 53, cat: Books/Mags, desc: "eBook Magazine"}
@@ -20,6 +21,7 @@ caps:
     - {id: 7, cat: PC/Games, desc: "GAMES PCRip"}
     - {id: 13, cat: Console/PS3, desc: "GAMES Playstation"}
     - {id: 124, cat: Console/PS4, desc: "GAMES PS4"}
+    - {id: 14, cat: Console/PS4, desc: "GAMES PS5"}
     - {id: 16, cat: Console/PSP, desc: "GAMES PSP"}
     - {id: 65, cat: Console/Wii, desc: "GAMES Wii"}
     - {id: 15, cat: Console/XBox, desc: "GAMES Xbox"}
@@ -47,6 +49,7 @@ caps:
     - {id: 1, cat: Movies/DVD, desc: "MOVIES DVDRip XviD"}
     - {id: 48, cat: Movies/DVD, desc: "MOVIES HD2DVD"}
     - {id: 123, cat: Movies/HD, desc: "MOVIES HDRip"}
+    - {id: 130, cat: Movies/Other, desc: "MOVIES PACK"}
     - {id: 74, cat: Movies/WEB-DL, desc: "MOVIES Web-DL"}
     - {id: 120, cat: Movies/HD, desc: "MOVIES x265"}
     - {id: 55, cat: Audio/Video, desc: "MUSIC BD"}
@@ -63,6 +66,7 @@ caps:
     - {id: 80, cat: PC/0day, desc: "PROGRAM PC Win"}
     - {id: 5, cat: TV/HD, desc: "TV HDTV"}
     - {id: 82, cat: TV/HD, desc: "TV HDTVRip"}
+    - {id: 126, cat: TV/Other, desc: "TV PACK"}
     - {id: 2, cat: TV/SD, desc: "TV TVRip"}
     - {id: 125, cat: TV/WEB-DL, desc: "TV Web-DL"}
     - {id: 85, cat: Movies/HD, desc: "UpLINK HEVC"}

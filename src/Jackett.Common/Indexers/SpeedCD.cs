@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -31,7 +31,7 @@ namespace Jackett.Common.Indexers
             "https://speeders.me/"
         };
 
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataSpeedCD configData => (ConfigurationDataSpeedCD)base.configData;
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
@@ -63,7 +63,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLogin(
+                   configData: new ConfigurationDataSpeedCD(
                        @"Speed.Cd have increased their security. If you are having problems please check the security tab
                     in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
@@ -116,7 +116,8 @@ namespace Jackett.Common.Indexers
         private async Task DoLogin()
         {
             // first request with username
-            var pairs = new Dictionary<string, string> {
+            var pairs = new Dictionary<string, string>
+            {
                 { "username", configData.Username.Value }
             };
             var result = await RequestLoginAndFollowRedirect(LoginUrl1, pairs, null, true, null, SiteLink);
@@ -127,7 +128,8 @@ namespace Jackett.Common.Indexers
             var token = matches.Groups[1].Value;
 
             // second request with token and password
-            pairs = new Dictionary<string, string> {
+            pairs = new Dictionary<string, string>
+            {
                 { "pwd", configData.Password.Value },
                 { "a", token }
             };
@@ -138,9 +140,11 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("h5")?.TextContent;
+
                 if (result.ContentString.Contains("Wrong Captcha!"))
                     errorMessage = "Captcha required due to a failed login attempt. Login via a browser to whitelist your IP and then reconfigure Jackett.";
-                throw new Exception(errorMessage);
+
+                throw new Exception(errorMessage ?? "Login failed.");
             });
         }
 
@@ -155,20 +159,42 @@ namespace Jackett.Common.Indexers
             foreach (var cat in catList)
                 qc.Add(cat);
 
+            if (configData.Freeleech.Value)
+                qc.Add("freeleech");
+
+            if (configData.ExcludeArchives.Value)
+                qc.Add("norar");
+
             if (query.IsImdbQuery)
             {
+                var term = query.ImdbID;
+
+                if (!string.IsNullOrWhiteSpace(query.GetEpisodeSearchString()))
+                {
+                    term += $" {query.GetEpisodeSearchString()}";
+
+                    if (query.Season > 0 && string.IsNullOrEmpty(query.Episode))
+                        term += "*";
+                }
+
                 qc.Add("deep");
                 qc.Add("q");
-                qc.Add(query.ImdbID);
+                qc.Add(WebUtilityHelpers.UrlEncode(term.Trim(), Encoding));
             }
             else
             {
+                var term = query.GetQueryString();
+
+                if (!string.IsNullOrWhiteSpace(query.GetEpisodeSearchString()) && query.Season > 0 && string.IsNullOrEmpty(query.Episode))
+                    term += "*";
+
                 qc.Add("q");
-                qc.Add(WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding));
+                qc.Add(WebUtilityHelpers.UrlEncode(term.Trim(), Encoding));
             }
 
             var searchUrl = SearchUrl + string.Join("/", qc);
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+
             if (!response.ContentString.Contains("/logout.php")) // re-login
             {
                 await DoLogin();
@@ -179,42 +205,35 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
-                var rows = dom.QuerySelectorAll("div.boxContent > table > tbody > tr");
 
+                var rows = dom.QuerySelectorAll("div.boxContent > table > tbody > tr");
                 foreach (var row in rows)
                 {
-                    var cells = row.QuerySelectorAll("td");
-
-                    var title = row.QuerySelector("td[class='lft'] > div > a").TextContent.Trim();
-                    var link = new Uri(SiteLink + row.QuerySelector("img[title='Download']").ParentElement.GetAttribute("href").TrimStart('/'));
-                    var details = new Uri(SiteLink + row.QuerySelector("td[class='lft'] > div > a").GetAttribute("href").TrimStart('/'));
-                    var size = ReleaseInfo.GetBytes(cells[5].TextContent);
-                    var grabs = ParseUtil.CoerceInt(cells[6].TextContent);
-                    var seeders = ParseUtil.CoerceInt(cells[7].TextContent);
-                    var leechers = ParseUtil.CoerceInt(cells[8].TextContent);
-
-                    var pubDateStr = row.QuerySelector("span[class^='elapsedDate']").GetAttribute("title").Replace(" at", "");
-                    var publishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture);
-
-                    var cat = row.QuerySelector("a").GetAttribute("href").Split('/').Last();
-                    var downloadVolumeFactor = row.QuerySelector("span:contains(\"[Freeleech]\")") != null ? 0 : 1;
+                    var title = CleanTitle(row.QuerySelector("td:nth-child(2) > div > a[href^=\"/t/\"]")?.TextContent);
+                    var link = new Uri(SiteLink + row.QuerySelector("td:nth-child(4) a[href^=\"/download/\"]")?.GetAttribute("href")?.TrimStart('/'));
+                    var details = new Uri(SiteLink + row.QuerySelector("td:nth-child(2) > div > a[href^=\"/t/\"]")?.GetAttribute("href")?.TrimStart('/'));
+                    var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)")?.TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)")?.TextContent);
+                    var pubDateStr = row.QuerySelector("td:nth-child(2) span[class^=\"elapsedDate\"]")?.GetAttribute("title")?.Replace(" at", "");
+                    var cat = row.QuerySelector("td:nth-child(1) a")?.GetAttribute("href")?.Split('/').Last();
+                    var downloadVolumeFactor = row.QuerySelector("td:nth-child(2) span:contains(\"[Freeleech]\")") != null ? 0 : 1;
 
                     var release = new ReleaseInfo
                     {
-                        Title = title,
-                        Link = link,
                         Guid = link,
+                        Link = link,
                         Details = details,
-                        PublishDate = publishDate,
+                        Title = title,
                         Category = MapTrackerCatToNewznab(cat),
-                        Size = size,
-                        Grabs = grabs,
+                        PublishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                        Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-child(6)")?.TextContent),
+                        Grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)")?.TextContent),
                         Seeders = seeders,
                         Peers = seeders + leechers,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 259200, // 72 hours
                         DownloadVolumeFactor = downloadVolumeFactor,
-                        UploadVolumeFactor = 1
+                        UploadVolumeFactor = 1,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 259200 // 72 hours
                     };
 
                     releases.Add(release);
@@ -225,6 +244,13 @@ namespace Jackett.Common.Indexers
                 OnParseError(response.ContentString, ex);
             }
             return releases;
+        }
+
+        private static string CleanTitle(string title)
+        {
+            title = Regex.Replace(title, @"\[REQ(UEST)?\]", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            return title.Trim(' ', '.');
         }
     }
 }

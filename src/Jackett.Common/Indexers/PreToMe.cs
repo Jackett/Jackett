@@ -160,14 +160,20 @@ namespace Jackett.Common.Indexers
             // Send Post
             var result = await RequestWithCookiesAsync(LoginUrl, loginPage.Cookies, RequestType.POST, data: pairs);
             if (result.RedirectingTo == null)
-                throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that pretome emailed you?", configData);
+                throw new ExceptionWithConfigData("Login failed. Did you use the PIN number that PreToMe emailed you?", configData);
 
             // Get result from redirect
             var loginCookies = result.Cookies;
             await FollowIfRedirect(result, LoginUrl, null, loginCookies);
 
-            await ConfigureIfOK(loginCookies, result.ContentString?.Contains("logout.php") == true,
-                                () => throw new ExceptionWithConfigData("Login failed", configData));
+            await ConfigureIfOK(loginCookies, result.ContentString?.Contains("logout.php") == true, () =>
+            {
+                var loginResultParser = new HtmlParser();
+                var loginResultDocument = loginResultParser.ParseDocument(result.ContentString);
+                var errorMessage = loginResultDocument.QuerySelector("table.body_table font[color~=\"red\"]")?.TextContent.Trim();
+
+                throw new ExceptionWithConfigData(errorMessage ?? "Login failed", configData);
+            });
 
             return IndexerConfigurationStatus.RequiresTesting;
         }
@@ -236,27 +242,26 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
+
                 var rows = dom.QuerySelectorAll("table > tbody > tr.browse");
                 foreach (var row in rows)
                 {
-                    var qLink = row.Children[1].QuerySelector("a");
-                    var title = qLink.GetAttribute("title");
-                    if (qLink.QuerySelectorAll("span").Length == 1 && title.StartsWith("NEW! |"))
-                        title = title.Substring(6).Trim();
+                    var qDetails = row.QuerySelector("a[href^=\"details.php?id=\"]");
+                    var title = qDetails?.GetAttribute("title");
 
                     if (!query.MatchQueryStringAND(title))
                         continue; // we have to skip bad titles due to tags + any word search
 
-                    var details = new Uri(SiteLink + qLink.GetAttribute("href"));
-                    var link = new Uri(SiteLink + row.Children[2].QuerySelector("a").GetAttribute("href"));
-                    var dateStr = Regex.Replace(row.Children[5].InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ");
+                    var details = new Uri(SiteLink + qDetails.GetAttribute("href"));
+                    var link = new Uri(SiteLink + row.QuerySelector("a[href^=\"download.php\"]")?.GetAttribute("href"));
+
+                    var dateStr = Regex.Replace(row.QuerySelector("td:nth-of-type(6)").InnerHtml, @"\<br[\s]{0,1}[\/]{0,1}\>", " ").Trim();
                     var publishDate = DateTimeUtil.FromTimeAgo(dateStr);
-                    var files = ParseUtil.CoerceInt(row.Children[3].TextContent);
-                    var size = ReleaseInfo.GetBytes(row.Children[7].TextContent);
-                    var grabs = ParseUtil.CoerceInt(row.Children[8].TextContent);
-                    var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
-                    var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
-                    var cat = row.FirstElementChild.FirstElementChild.GetAttribute("href").Replace("browse.php?", string.Empty);
+
+                    var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(10)")?.TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(11)")?.TextContent);
+
+                    var cat = row.QuerySelector("td:nth-of-type(1) a[href^=\"browse.php\"]")?.GetAttribute("href")?.Split('?').Last();
 
                     var release = new ReleaseInfo
                     {
@@ -265,10 +270,10 @@ namespace Jackett.Common.Indexers
                         Guid = details,
                         Link = link,
                         PublishDate = publishDate,
-                        Size = size,
+                        Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(8)")?.TextContent),
                         Category = MapTrackerCatToNewznab(cat),
-                        Files = files,
-                        Grabs = grabs,
+                        Files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(4)")?.TextContent),
+                        Grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(9)")?.TextContent),
                         Seeders = seeders,
                         Peers = leechers + seeders,
                         MinimumRatio = 0.75,

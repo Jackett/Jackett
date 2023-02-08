@@ -9,7 +9,7 @@ followredirect: true
 # to fetch current domain use https://www.protege-liens.com/Gktorrent
 links:
   - https://www.gktorrents.cc/
-  - https://gktorrent.nocensor.lol/
+  - https://gktorrent.mrunblock.guru/
 legacylinks:
   - https://www.gktorrent.org/
   - https://www.gktorrent.me/
@@ -31,6 +31,7 @@ legacylinks:
   - https://www.gktorrents.org/
   - https://gktorrent.nocensor.sbs/
   - https://gktorrent.nocensor.world/
+  - https://gktorrent.nocensor.lol/
 
 caps:
   categorymappings:
@@ -55,22 +56,22 @@ caps:
 settings:
   - name: multilang
     type: checkbox
-    label: Replace MULTI by another language in release name
+    label: Replace MULTi by another language in release name
     default: false
   - name: multilanguage
     type: select
-    label: Replace MULTI by this language
+    label: Replace MULTi by this language
     default: FRENCH
     options:
       FRENCH: FRENCH
-      MULTI.FRENCH: MULTI.FRENCH
+      MULTi FRENCH: MULTi FRENCH
       ENGLISH: ENGLISH
-      MULTI.ENGLISH: MULTI.ENGLISH
+      MULTi ENGLISH: MULTi ENGLISH
       VOSTFR: VOSTFR
-      MULTI.VOSTFR: MULTI.VOSTFR
+      MULTi VOSTFR: MULTi VOSTFR
   - name: vostfr
     type: checkbox
-    label: Replace VOSTFR with ENGLISH
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
 
 download:
@@ -121,22 +122,20 @@ search:
         # and we delete it at the end
         - name: re_replace
           args: ["(19|20\\d{2})$", ""]
-    title_multilang:
+    title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
     title_phase2:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
-    title_vostfr:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
-        - name: re_replace
-          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
-      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: td:nth-child(1) a
       attribute: href

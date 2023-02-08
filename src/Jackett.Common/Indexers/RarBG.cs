@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "public";
 
-            webclient.requestDelay = 2.5; // The api has a 1req/2s limit
+            webclient.requestDelay = 5; // The api has a 1req/2s limit
 
             var ConfigApiEndpoint = new StringConfigurationItem("API URL") { Value = "https://torrentapi.org/pubapi_v2.php" };
             configData.AddDynamic("apiEndpoint", ConfigApiEndpoint);
@@ -138,7 +138,6 @@ namespace Jackett.Common.Indexers
             // check the token and renewal if necessary
             await RenewalTokenAsync();
 
-            Thread.Sleep(2500); // enforce 2.5s delay
             var response = await RequestWithCookiesAsync(BuildSearchUrl(query));
             if (response != null && response.ContentString.StartsWith("<"))
             {
@@ -147,7 +146,6 @@ namespace Jackett.Common.Indexers
                     if (retry)
                     {
                         logger.Warn("torrentapi.org returned Error 520, retrying after 5 secs");
-                        Thread.Sleep(2500); // 2500 + 2500 enforced at front of query = 5s
                         return await PerformQueryWithRetry(query, false);
                     }
                     else
@@ -169,7 +167,6 @@ namespace Jackett.Common.Indexers
                 case 2:
                 case 4: // invalid token
                     await RenewalTokenAsync(true); // force renewal token
-                    Thread.Sleep(2500); // 2500 + 2500 enforced at front of query = 5s
                     response = await RequestWithCookiesAsync(BuildSearchUrl(query));
                     jsonContent = JObject.Parse(response.ContentString);
                     break;
@@ -177,7 +174,6 @@ namespace Jackett.Common.Indexers
                     if (retry)
                     {
                         logger.Warn("torrentapi.org returned code 5 Too many requests per second, retrying after 5 secs");
-                        Thread.Sleep(2500); // 2500 + 2500 enforced at front of query = 5s
                         return await PerformQueryWithRetry(query, false);
                     }
                     else
@@ -197,7 +193,6 @@ namespace Jackett.Common.Indexers
                         if (retry)
                         {
                             logger.Warn("torrentapi.org returned code 20 with Rate Limit exceeded. Retrying after 5 secs.");
-                            Thread.Sleep(2500); // 2500 + 2500 enforced at front of query = 5s
                             return await PerformQueryWithRetry(query, false);
                         }
                         else
@@ -346,8 +341,6 @@ namespace Jackett.Common.Indexers
                 var json = JObject.Parse(result.ContentString);
                 _token = json.Value<string>("token");
                 _lastTokenFetch = DateTime.Now;
-                // sleep 2.5 seconds to make sure the token is valid in the next request
-                Thread.Sleep(2500);
             }
         }
 

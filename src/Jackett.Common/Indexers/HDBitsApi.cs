@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,11 +104,16 @@ namespace Jackett.Common.Indexers
                     ["id"] = query.TvdbID
                 };
 
-                if (query.Season != 0)
-                    requestData["tvdb"]["season"] = query.Season;
+                if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+                    requestData["search"] = showDate.ToString("yyyy-MM-dd");
+                else
+                {
+                    if (query.Season != 0)
+                        requestData["tvdb"]["season"] = query.Season;
 
-                if (!string.IsNullOrEmpty(query.Episode))
-                    requestData["tvdb"]["episode"] = query.Episode;
+                    if (!string.IsNullOrEmpty(query.Episode))
+                        requestData["tvdb"]["episode"] = query.Episode;
+                }
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
                 requestData["search"] = queryString;

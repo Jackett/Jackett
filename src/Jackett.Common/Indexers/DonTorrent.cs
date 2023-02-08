@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers
         private const string SearchUrl = "buscar/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://dontorrent.blue/",
+            "https://dontorrent.casa/",
             "https://todotorrents.net/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
@@ -46,10 +46,6 @@ namespace Jackett.Common.Indexers
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://dontorrent.moe/",
-            "https://dontorrent.pub/",
-            "https://dontorrent.tf/",
-            "https://dontorrent.vin/",
             "https://dontorrent.ist/",
             "https://dontorrent.uno/",
             "https://dontorrent.fans/",
@@ -61,7 +57,11 @@ namespace Jackett.Common.Indexers
             "https://dontorrent.fail/",
             "https://dontorrent.futbol/",
             "https://dontorrent.mba/",
-            "https://dontorrent.army/"
+            "https://dontorrent.army/",
+            "https://dontorrent.blue/",
+            "https://dontorrent.beer/",
+            "https://dontorrent.surf/",
+            "https://dontorrent.how/"
         };
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
@@ -79,7 +79,7 @@ namespace Jackett.Common.Indexers
             : base(id: "dontorrent",
                    name: "DonTorrent",
                    description: "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL",
-                   link: "https://dontorrent.blue/",
+                   link: "https://dontorrent.casa/",
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -105,6 +105,9 @@ namespace Jackett.Common.Indexers
             Encoding = Encoding.UTF8;
             Language = "es-ES";
             Type = "public";
+
+            // avoid CLoudflare too many requests limiter
+            webclient.requestDelay = 2.1;
 
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);

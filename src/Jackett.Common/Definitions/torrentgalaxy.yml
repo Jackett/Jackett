@@ -12,14 +12,12 @@ links:
   - https://torrentgalaxy.su/
   - https://tgx.rs/
   - https://torrentgalaxy.unblockninja.com/
-  - https://torrentgalaxy.unblockit.ink/
 legacylinks:
   - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.pw/ # proxy list only
   - https://tgx.unblocked.monster/
   - https://torrentgalaxy.nocensor.space/
   - https://torrentgalaxy.nocensor.work/
-  - https://torrentgalaxy.unblockit.bz/
   - https://torrentgalaxy.unblockit.tv/
   - https://torrentgalaxy.unblockit.how/
   - https://torrentgalaxy.unblockit.cam/
@@ -36,6 +34,8 @@ legacylinks:
   - https://torrentgalaxy.unblockit.nz/
   - https://torrentgalaxy.unblockit.page/
   - https://torrentgalaxy.unblockit.pet/
+  - https://torrentgalaxy.unblockit.ink/
+  - https://torrentgalaxy.unblockit.bio/ # error 502
 
 caps:
   categorymappings:
@@ -83,6 +83,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: excludeads
+    type: checkbox
+    label: Exclude results which include advertisements
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -127,9 +131,13 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: div.tgxtable > div:has(div[class^="tgxtablecell shrink"])
+    selector: "div.tgxtable > div:has(div[class^=\"tgxtablecell shrink\"]){{ if .Config.excludeads }}:not(:has(i.fab.fa-adversal)){{ else }}{{ end }}"
 
   fields:
+    _ads:
+      optional: true
+      selector: i.fab.fa-adversal
+      attribute: title
     category:
       selector: div a[href^="/torrents.php?cat="]
       attribute: href
@@ -152,7 +160,7 @@ search:
         - name: re_replace
           args: ["-", " "]
     title:
-      text: "{{ if or .Result.title_full .Result.title_text }}{{ or .Result.title_full .Result.title_text }}{{ else }}{{ .Result.href }}{{ end }}"
+      text: "{{ if or .Result.title_full .Result.title_text }}{{ or .Result.title_full .Result.title_text }}{{ else }}{{ .Result.href }}{{ end }}{{ if .Result._ads }} (Ads included!){{ else }}{{ end }}"
     details:
       selector: div a[href^="/torrent/"]
       attribute: href

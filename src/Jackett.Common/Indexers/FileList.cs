@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -17,11 +18,15 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class FileList : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://filelist.io/",
+            "https://flro.org/"
+        };
+
         public override string[] LegacySiteLinks { get; protected set; } =
         {
-            "http://filelist.ro/",
             "https://filelist.ro/",
-            "https://flro.org/",
+            "http://filelist.ro/",
             "http://flro.org/"
         };
 
@@ -128,35 +133,42 @@ namespace Jackett.Common.Indexers
             try
             {
                 var json = JArray.Parse(response);
+
                 foreach (var row in json)
                 {
-                    var detailsUri = new Uri(DetailsUrl + "?id=" + (string)row["id"]);
-                    var seeders = (int)row["seeders"];
-                    var peers = seeders + (int)row["leechers"];
-                    var publishDate = DateTimeUtil.FromFuzzyTime((string)row["upload_date"] + " +0200");
-                    var downloadVolumeFactor = (int)row["freeleech"] == 1 ? 0 : 1;
-                    var uploadVolumeFactor = (int)row["doubleup"] == 1 ? 2 : 1;
-                    var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbID((string)row["imdb"]) : null;
-                    var link = new Uri((string)row["download_link"]);
+                    var isFreeleech = row.Value<bool>("freeleech");
+
+                    // skip non-freeleech results when freeleech only is set
+                    if (configData.Freeleech.Value && !isFreeleech)
+                        continue;
+
+                    var detailsUri = new Uri(DetailsUrl + "?id=" + row.Value<string>("id"));
+                    var seeders = row.Value<int>("seeders");
+                    var peers = seeders + row.Value<int>("leechers");
+                    var publishDate = DateTime.Parse(row.Value<string>("upload_date") + " +0200", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+                    var downloadVolumeFactor = isFreeleech ? 0 : 1;
+                    var uploadVolumeFactor = row.Value<bool>("doubleup") ? 2 : 1;
+                    var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbID(row.Value<string>("imdb")) : null;
+                    var link = new Uri(row.Value<string>("download_link"));
 
                     var release = new ReleaseInfo
                     {
-                        Title = (string)row["name"],
+                        Guid = detailsUri,
                         Details = detailsUri,
                         Link = link,
-                        Category = MapTrackerCatDescToNewznab((string)row["category"]),
-                        Size = (long)row["size"],
-                        Files = (long)row["files"],
-                        Grabs = (long)row["times_completed"],
+                        Title = row.Value<string>("name").Trim(),
+                        Category = MapTrackerCatDescToNewznab(row.Value<string>("category")),
+                        Size = row.Value<long>("size"),
+                        Files = row.Value<long>("files"),
+                        Grabs = row.Value<long>("times_completed"),
                         Seeders = seeders,
                         Peers = peers,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = 172800, //48 hours
+                        Imdb = imdbId,
                         PublishDate = publishDate,
                         DownloadVolumeFactor = downloadVolumeFactor,
                         UploadVolumeFactor = uploadVolumeFactor,
-                        Guid = detailsUri,
-                        Imdb = imdbId
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800 // 48 hours
                     };
 
                     releases.Add(release);
@@ -175,29 +187,33 @@ namespace Jackett.Common.Indexers
         private async Task<string> CallProviderAsync(TorznabQuery query)
         {
             var searchUrl = ApiUrl;
-            var searchString = query.GetQueryString();
-            var cat = string.Join(",", MapTorznabCapsToTrackers(query));
+            var searchString = query.GetQueryString().Trim();
+
             var queryCollection = new NameValueCollection
             {
-                {"category", cat}
+                {"category", string.Join(",", MapTorznabCapsToTrackers(query))}
             };
+
+            if (configData.Freeleech.Value)
+                queryCollection.Set("freeleech", "1");
 
             if (query.IsImdbQuery)
             {
-                queryCollection.Add("type", "imdb");
-                queryCollection.Add("query", query.ImdbID);
-                queryCollection.Add("action", "search-torrents");
+                queryCollection.Set("action", "search-torrents");
+                queryCollection.Set("type", "imdb");
+                queryCollection.Set("query", query.ImdbID);
             }
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
-                queryCollection.Add("type", "name");
-                queryCollection.Add("query", searchString);
-                queryCollection.Add("action", "search-torrents");
+                queryCollection.Set("action", "search-torrents");
+                queryCollection.Set("type", "name");
+                queryCollection.Set("query", searchString);
             }
             else
-                queryCollection.Add("action", "latest-torrents");
+                queryCollection.Set("action", "latest-torrents");
 
             searchUrl += "?" + queryCollection.GetQueryString();
+
             try
             {
                 var auth = Convert.ToBase64String(Encoding.UTF8.GetBytes(configData.Username.Value + ":" + configData.Passkey.Value));
@@ -206,6 +222,7 @@ namespace Jackett.Common.Indexers
                     {"Authorization", "Basic " + auth}
                 };
                 var response = await RequestWithCookiesAsync(searchUrl, headers: headers);
+
                 return response.ContentString;
             }
             catch (Exception inner)

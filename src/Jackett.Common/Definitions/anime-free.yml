@@ -7,9 +7,11 @@ type: semi-private
 encoding: windows-1251
 testlinktorrent: false
 links:
-  - https://anime-free.biz/
+  - https://anime-free.one/
 legacylinks:
   - https://anime-free.net/ # redirects to *.biz
+  - https://anime-free.biz/
+  - http://anime-free.one/
 
 caps:
   categorymappings:
@@ -50,7 +52,6 @@ login:
   inputs:
     login_name: "{{ .Config.email }}"
     login_password: "{{ .Config.password }}"
-    login: submit
   error:
     - selector: div.berrors
   test:

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -13,15 +14,16 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
     public class ImmortalSeed : BaseWebIndexer
     {
-        private string BrowsePage => SiteLink + "browse.php";
+        private string SearchUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
-        private string QueryString => "?do=search&keywords={0}&search_type=t_name&category=0&include_dead_torrents=no";
+        private readonly Regex _dateMatchRegex = new Regex(@"\d{4}-\d{2}-\d{2} \d{2}:\d{2} [AaPp][Mm]", RegexOptions.Compiled);
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "http://immortalseed.me/"
@@ -114,7 +116,34 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(63, TorznabCatType.TVUHD, "TV Season Packs - 4K");
             AddCategoryMapping(4, TorznabCatType.TVHD, "TV Season Packs - HD");
             AddCategoryMapping(6, TorznabCatType.TVSD, "TV Season Packs - SD");
+
+            // Configure the sort selects
+            var sortBySelect = new SingleSelectConfigurationItem(
+                "Sort by",
+                new Dictionary<string, string>
+                {
+                    { "added", "created" },
+                    { "seeders", "seeders" },
+                    { "size", "size" },
+                    { "name", "title" }
+                })
+            { Value = "added" };
+            configData.AddDynamic("sortrequestedfromsite", sortBySelect);
+
+            var orderSelect = new SingleSelectConfigurationItem(
+                "Order",
+                new Dictionary<string, string>
+                {
+                    { "desc", "descending" },
+                    { "asc", "ascending" }
+                })
+            { Value = "desc" };
+            configData.AddDynamic("orderrequestedfromsite", orderSelect);
         }
+
+        private string GetSortBy => ((SingleSelectConfigurationItem)configData.GetDynamic("sortrequestedfromsite")).Value;
+
+        private string GetOrder => ((SingleSelectConfigurationItem)configData.GetDynamic("orderrequestedfromsite")).Value;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -127,10 +156,13 @@ namespace Jackett.Common.Indexers
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
 
-            await ConfigureIfOK(response.Cookies, response.ContentString.Contains("You have successfully logged in"), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString.Contains("logout.php"), () =>
             {
-                var errorMessage = response.ContentString;
-                throw new ExceptionWithConfigData(errorMessage, configData);
+                var parser = new HtmlParser();
+                var document = parser.ParseDocument(response.ContentString);
+                var errorMessage = document.QuerySelector("#main table td:contains(\"ERROR\")")?.TextContent.Trim();
+
+                throw new ExceptionWithConfigData(errorMessage ?? "Login failed.", configData);
             });
 
             return IndexerConfigurationStatus.RequiresTesting;
@@ -138,11 +170,28 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
-            var searchUrl = BrowsePage;
+            var searchParams = new Dictionary<string, string>
+            {
+                { "category", "0" },
+                { "include_dead_torrents", "yes" },
+                { "sort", GetSortBy },
+                { "order", GetOrder }
+            };
 
-            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-                searchUrl += string.Format(QueryString, WebUtility.UrlEncode(query.GetQueryString()));
+            var searchString = Regex.Replace(query.GetQueryString(), @"[ -._]+", " ").Trim();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchParams.Add("do", "search");
+                searchParams.Add("keywords", searchString);
+                searchParams.Add("search_type", "t_name");
+            }
+
+            var categoryMapping = MapTorznabCapsToTrackers(query);
+            if (categoryMapping.Any())
+                searchParams.Add("selectedcats2", string.Join(",", categoryMapping));
+
+            var searchUrl = $"{SearchUrl}?{searchParams.GetQueryString()}";
 
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
@@ -152,6 +201,8 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
                 results = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
+
+            var releases = new List<ReleaseInfo>();
 
             try
             {
@@ -183,36 +234,33 @@ namespace Jackett.Common.Indexers
                     release.Details = new Uri(qDetails.GetAttribute("href"));
 
                     // 2021-03-17 03:39 AM
-                    var dateString = row.QuerySelectorAll("td:nth-of-type(2) div").Last().LastChild.TextContent.Trim();
-                    release.PublishDate = DateTime.ParseExact(dateString, "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
+                    // requests can be 'Pre Release Time: 2013-04-22 02:00 AM Uploaded: 3 Years, 6 Months, 4 Weeks, 2 Days, 16 Hours, 52 Minutes, 41 Seconds after Pre'
+                    var dateMatch = _dateMatchRegex.Match(row.QuerySelector("td:nth-of-type(2) > div:last-child").TextContent.Trim());
+                    if (dateMatch.Success)
+                        release.PublishDate = DateTime.ParseExact(dateMatch.Value, "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
 
-                    var sizeStr = row.QuerySelector("td:nth-of-type(5)").TextContent.Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
-
+                    release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim()) + release.Seeders;
 
-                    var catLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
-                    var catSplit = catLink.IndexOf("category=");
-                    if (catSplit > -1)
-                        catLink = catLink.Substring(catSplit + 9);
-
-                    release.Category = MapTrackerCatToNewznab(catLink);
+                    var categoryLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
+                    var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
+                    release.Category = MapTrackerCatToNewznab(cat);
 
                     var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
 
-                    if (row.QuerySelector("img[title^=\"Free Torrent\"]") != null)
+                    var cover = row.QuerySelector("td:nth-of-type(2) > div > img[src]")?.GetAttribute("src")?.Trim();
+                    release.Poster = !string.IsNullOrEmpty(cover) && cover.StartsWith("/") ? new Uri(SiteLink + cover.TrimStart('/')) : null;
+
+                    if (row.QuerySelector("img[title^=\"Free Torrent\"], img[title^=\"Sitewide Free Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0;
                     else if (row.QuerySelector("img[title^=\"Silver Torrent\"]") != null)
                         release.DownloadVolumeFactor = 0.5;
                     else
                         release.DownloadVolumeFactor = 1;
 
-                    if (row.QuerySelector("img[title^=\"x2 Torrent\"]") != null)
-                        release.UploadVolumeFactor = 2;
-                    else
-                        release.UploadVolumeFactor = 1;
+                    release.UploadVolumeFactor = row.QuerySelector("img[title^=\"x2 Torrent\"]") != null ? 2 : 1;
 
                     releases.Add(release);
                 }

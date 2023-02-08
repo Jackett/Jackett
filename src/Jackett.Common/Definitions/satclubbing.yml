@@ -43,6 +43,7 @@ caps:
     - {id: 49, cat: Audio, desc: "Livesets - Hardcore"}
     - {id: 50, cat: Audio, desc: "Rave"}
     - {id: 51, cat: Audio, desc: "Acid"}
+    - {id: 52, cat: Audio, desc: "Dubstep"}
 
   modes:
     search: [q]

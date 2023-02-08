@@ -1,7 +1,7 @@
 ---
 id: ourbits
-name: Ourbits
-description: "Ourbits (HDPter) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+name: OurBits
+description: "OurBits (HDPter) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -57,13 +57,13 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0=incldead, 1=active, 2=dead
     incldead: 0
     # show promotions: 0=all, 1=normal, 2=free, 3=2x, 4=2xFree, 5=50%, 6=2x50%, 7=30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0=title, 1=descr, 3=uploader, 4=imdb URL
+    # 0=title, 3=uploader, 4=imdb URL, 5=douban URL
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0=AND, 1=OR, 2=Exact
     search_mode: 0
@@ -91,6 +91,14 @@ search:
       attribute: href
     download:
       selector: a[href^="download.php?id="]
+      attribute: href
+    imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
@@ -135,7 +143,15 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
-      selector: td.rowfollow:nth-child(2)
-      remove: a, img
-# NexusPHP Standard v1.5 Beta 4
+      selector: td.rowfollow:nth-child(2) > table > tbody > tr > td
+      remove: a, img, b, span
+      filters:
+        - name: replace
+          args: ["will end in", ""]
+# Ourbits 1.1.0 (Based on NexusPHP Standard v1.5 Beta 4) e71117f 2023-02-05

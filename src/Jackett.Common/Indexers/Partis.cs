@@ -175,7 +175,8 @@ namespace Jackett.Common.Indexers
 
             // get results and follow redirect
             results = await RequestWithCookiesAsync(searchUrl, referer: SearchUrl, headers: header);
-
+            if (results.ContentString.Contains("Internal server error"))
+                throw new Exception("Partis is offline, returning an Internal server error");
             // parse results
             try
             {

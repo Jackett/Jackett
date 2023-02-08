@@ -38,11 +38,8 @@ namespace Jackett.Common.Indexers
         {
             "https://hdts.ru/",
             "https://hd-torrents.org/",
+            "https://hd-torrents.net/",
             "https://hd-torrents.me/"
-        };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://hd-torrents.net/"
         };
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
@@ -81,8 +78,8 @@ namespace Jackett.Common.Indexers
             Type = "private";
 
             // Movie
-            AddCategoryMapping("70", TorznabCatType.MoviesUHD, "Movie/UHD/Blu-Ray");
-            AddCategoryMapping("1", TorznabCatType.MoviesHD, "Movie/Blu-Ray");
+            AddCategoryMapping("70", TorznabCatType.MoviesBluRay, "Movie/UHD/Blu-Ray");
+            AddCategoryMapping("1", TorznabCatType.MoviesBluRay, "Movie/Blu-Ray");
             AddCategoryMapping("71", TorznabCatType.MoviesUHD, "Movie/UHD/Remux");
             AddCategoryMapping("2", TorznabCatType.MoviesHD, "Movie/Remux");
             AddCategoryMapping("5", TorznabCatType.MoviesHD, "Movie/1080p/i");
@@ -173,15 +170,14 @@ namespace Jackett.Common.Indexers
                     var poster = posterMatch.Success ? new Uri(SiteLink + posterMatch.Groups[1].Value.Replace("\\", "/")) : null;
 
                     var link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
-                    var description = row.Children[2].QuerySelector("span").TextContent;
+                    var description = row.Children[2].QuerySelector("span")?.TextContent.Trim();
                     var size = ReleaseInfo.GetBytes(row.Children[7].TextContent);
 
-                    var dateTag = row.Children[6].FirstElementChild;
-                    var dateString = string.Join(" ", dateTag.Attributes.Select(attr => attr.Name));
-                    var publishDate = DateTime.ParseExact(dateString, "dd MMM yyyy HH:mm:ss zz00", CultureInfo.InvariantCulture).ToLocalTime();
+                    var dateAdded = string.Join(" ", row.Children[6].FirstElementChild.Attributes.Select(a => a.Name).Take(4));
+                    var publishDate = DateTime.ParseExact(dateAdded, "dd MMM yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 
-                    var catStr = row.FirstElementChild.FirstElementChild.GetAttribute("href").Split('=')[1];
-                    var cat = MapTrackerCatToNewznab(catStr);
+                    var categoryLink = row.FirstElementChild.FirstElementChild.GetAttribute("href");
+                    var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
 
                     // Sometimes the uploader column is missing, so seeders, leechers, and grabs may be at a different index.
                     // There's room for improvement, but this works for now.
@@ -233,7 +229,7 @@ namespace Jackett.Common.Indexers
                         Guid = details,
                         Link = link,
                         PublishDate = publishDate,
-                        Category = cat,
+                        Category = MapTrackerCatToNewznab(cat),
                         Description = description,
                         Poster = poster,
                         Imdb = imdb,

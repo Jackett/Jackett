@@ -15,6 +15,7 @@ caps:
     - {id: PS2, cat: Console/Other, desc: "Playstation 2"}
     - {id: PS3, cat: Console/PS3, desc: "Playstation 3"}
     - {id: PS4, cat: Console/PS4, desc: "Playstation 4"}
+    - {id: PS5, cat: Console/Other, desc: "Playstation 5"}
     - {id: SWITCH, cat: Console/Other, desc: "Nintendo Switch"}
     - {id: PSP, cat: Console/PSP, desc: "Playstation (portable) PSP"}
     - {id: PSVITA, cat: Console/PS Vita, desc: "Playstation Vita"}

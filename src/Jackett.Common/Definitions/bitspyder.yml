@@ -93,6 +93,7 @@ search:
   paths:
     - path: browse.php
   inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
@@ -101,10 +102,15 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\s+", " "] # More than 1 space to 1 space
+    - name: re_replace
+      args: ["(\\w+)", "+$1"] # prepend + to each word
+    - name: trim
+
   rows:
     selector: table > tbody > tr[class]
-    filters:
-      - name: andmatch
 
   fields:
     # there are two styles, we support both

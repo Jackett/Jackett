@@ -96,28 +96,28 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: vfq
-    type: checkbox
-    label: Replace VFQ with FRENCH in release name
-    default: false
   - name: multilang
     type: checkbox
-    label: Replace MULTI by another language in release name
+    label: Replace MULTi by another language in release name
     default: false
   - name: multilanguage
     type: select
-    label: Replace MULTI by this language
+    label: Replace MULTi by this language
     default: FRENCH
     options:
       FRENCH: FRENCH
-      MULTI.FRENCH: MULTI.FRENCH
+      MULTi FRENCH: MULTi FRENCH
       ENGLISH: ENGLISH
-      MULTI.ENGLISH: MULTI.ENGLISH
+      MULTi ENGLISH: MULTi ENGLISH
       VOSTFR: VOSTFR
-      MULTI.VOSTFR: MULTI.VOSTFR
+      MULTi VOSTFR: MULTi VOSTFR
   - name: vostfr
     type: checkbox
-    label: Replace VOSTFR with ENGLISH
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: vfq
+    type: checkbox
+    label: Replace VFQ with FRENCH
     default: false
 
 login:
@@ -161,34 +161,29 @@ search:
       filters:
         - name: querystring
           args: category
-    title_original:
+    title_phase1:
       selector: td a[href^="index.php?page=torrent-details"]
-      filters:
-        - name: replace
-          args: [".", " "]
     title_vfq:
-      text: "{{ .Result.title_original }}"
+      text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\sVFQ\\s)", " FRENCH "]
-    title_step2:
-      text: "{{ if .Config.vfq }}{{ .Result.title_vfq }}{{ else }}{{ .Result.title_original }}{{ end }}"
-    title_multilang:
-      text: "{{ .Result.title_step2 }}"
-      filters:
-        - name: re_replace
-          args: ["(?i)(\\smulti\\s)", " {{ .Config.multilanguage }} "]
-    title_step3:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_step2 }}{{ end }}"
+          args: ["(?i)\\b(VFQ)\\b", "FRENCH"]
+    title_phase2:
+      text: "{{ if .Config.vfq }}{{ .Result.title_vfq }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     title_vostfr:
-      text: "{{ .Result.title_step3 }}"
+      text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\svostfr\\s)", " ENGLISH "]
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase3:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase3 }}"
+      filters:
         - name: re_replace
-          args: ["(?i)(\\ssubfrench\\s)", " ENGLISH "]
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
-      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_step3 }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase3 }}{{ end }}"
     details:
       selector: td a[href^="index.php?page=torrent-details"]
       attribute: href

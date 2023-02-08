@@ -116,10 +116,7 @@ search:
       filters:
         - name: querystring
           args: f
-        - name: replace
-          args: ["&amp;", "&"]
-        - name: replace
-          args: ["&#039;", "'"]
+        - name: htmldecode
         - name: re_replace
           args: ["(?i)\\.torrent$", ""]
     title_text:

@@ -124,9 +124,6 @@ login:
 search:
   paths:
     - path: /
-  keywordsfilters:
-    - name: re_replace
-      args: ["[^a-zA-Z0-9]+", "%25"]
   inputs:
     p: torrents
     pid: 32
@@ -142,6 +139,8 @@ search:
 
   rows:
     selector: "table#torrents_table_classic > tbody > tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[title=\"FREE!\"]){{ else }}{{ end }}"
+    filters:
+      - name: andmatch
 
   fields:
     category:

@@ -80,15 +80,15 @@ search:
         div[title="Comics"]: 4
         div[title="Ebooks"]: 5
         div[title="Magazines"]: 7
-    _author:
+    author_optional:
       selector: .authorLink
       optional: true
     _editor:
       selector: .editorLink
       optional: true
     author:
-      text: "{{ or .Result._author .Result._editor }}"
-    _year:
+      text: "{{ or .Result.author_optional .Result._editor }}"
+    year:
       selector: .torYear
       optional: true
     _filetype:
@@ -103,7 +103,7 @@ search:
       text: "{{ .Result.booktitle }}"
       filters:
         - name: append
-          args: "{{ if .Result.author }} by {{ .Result.author }}{{ else }}{{ end }}{{ if .Result._year }} {{ .Result._year }}{{ else }}{{ end }}{{ if .Result._filetype }} {{ .Result._filetype }}{{ else }}{{ end }}{{ if .Result._retail }} {{ .Result._retail }}{{ else }}{{ end }}"
+          args: "{{ if .Result.author }} by {{ .Result.author }}{{ else }}{{ end }}{{ if .Result.year }} {{ .Result.year }}{{ else }}{{ end }}{{ if .Result._filetype }} {{ .Result._filetype }}{{ else }}{{ end }}{{ if .Result._retail }} {{ .Result._retail }}{{ else }}{{ end }}"
     details:
       selector: .title a
       attribute: href

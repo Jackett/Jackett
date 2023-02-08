@@ -38,9 +38,10 @@ namespace Jackett.Common.Indexers
         private const int PagesToSearch = 3;
 
         // uncomment when there are more than one domain available
-        // public override string[] AlternativeSiteLinks { get; protected set; } = {
-        //     "https://mejortorrent.wtf/"
-        // };
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://mejortorrent.wtf/",
+            "https://mejortorrent.unblockit.bio/"
+        };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://www.mejortorrentt.net/",
@@ -421,10 +422,12 @@ namespace Jackett.Common.Indexers
             // Eg. Doctor.Who.2005.(Доктор.Кто).S02E08
 
             // the season/episode part is already parsed by Jackett
-            // query.GetQueryString = Doctor.Who.2005.(Доктор.Кто).
+            // query.GetQueryString = Doctor.Who.2005.(Доктор.Кто).S02E08
             // query.Season = 2
             // query.Episode = 8
             var searchTerm = query.GetQueryString();
+            // remove the season/episode from the query as MejorTorrent only wants the series name
+            searchTerm = Regex.Replace(searchTerm, @"[S|s]\d+[E|e]\d+", "");
 
             // Server returns a 500 error if a UTF character higher than \u00FF (ÿ) is included,
             // so we need to strip them

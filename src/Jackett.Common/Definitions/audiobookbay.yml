@@ -9,11 +9,9 @@ requestDelay: 2
 links:
   - https://audiobookbay.li/
   - https://audiobookbay.se/
-  - https://audiobookbay.unblockit.ink/
 legacylinks:
   - https://audiobookbay.la/
   - http://audiobookbay.net/
-  - https://audiobookbay.unblockit.bz/
   - https://audiobookbay.unblockit.tv/
   - http://audiobookbay.nl/
   - http://audiobookbay.ws/
@@ -34,6 +32,8 @@ legacylinks:
   - https://audiobookbay.fi/
   - https://audiobookbay.unblockit.page/
   - https://audiobookbay.unblockit.pet/
+  - https://audiobookbay.unblockit.ink/
+  - https://audiobookbay.unblockit.bio/ # error 502
 
 caps:
   categorymappings:

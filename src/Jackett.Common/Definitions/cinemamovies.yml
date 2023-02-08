@@ -56,15 +56,15 @@ settings:
     default: false
   - name: multilang
     type: checkbox
-    label: Replace MULTI & PL by another language in release name
+    label: Replace MULTi by another language in release name
     default: false
   - name: multilanguage
     type: select
-    label: Replace MULTI & PL by this language
+    label: Replace MULTi by this language
     default: POLISH
     options:
       POLISH: POLISH
-      MULTI.POLISH: MULTI.POLISH
+      MULTi POLISH: MULTi POLISH
   - name: sort
     type: select
     label: Sort requested from site
@@ -122,9 +122,9 @@ search:
       text: "{{ .Result.title_raw }}"
       filters:
         - name: re_replace
-          args: ["(?i)(\\[multi\\])", " {{ .Config.multilanguage }} "]
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
         - name: re_replace
-          args: ["(?i)(\\[pl\\])", " {{ .Config.multilanguage }} "]
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
     title_phase1:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_raw }}{{ end }}"
     title_stripped:

@@ -117,7 +117,7 @@ search:
     # can support genre searching but you need to know the id, eg &genre23=1 for Comedy (id is 23)
 
   rows:
-    selector: "table[width=\"100%\"][align=\"center\"]:first-child tbody tr:has(div.tooltip){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
+    selector: "tr[class^=\"toriadatok_\"]{{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
 
   fields:
     categorydesc:
@@ -141,7 +141,7 @@ search:
       optional: true
       attribute: href
     download_2:
-      selector: input[onclick*="download.php?torrent="]
+      selector: span[onclick*="download.php?torrent="]
       optional: true
       attribute: onclick
       filters:
@@ -151,6 +151,9 @@ search:
           args: ["', '_self');", ""]
     download:
       text: "{{ if or .Result.download_1 .Result.download_2 }}{{ or .Result.download_1 .Result.download_2 }}{{ else }}{{ end }}"
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     size:
       selector: td:nth-child(6)
     date:
@@ -159,7 +162,7 @@ search:
       # 2 napja  és 10 órája
       # 1 hete  és 1 napja
       # 1 éve  és 30 hete
-      selector: td:nth-child(7) span:last-child
+      selector: td[id^="t_added_"] > span
       filters:
         - name: replace
           args: ["és ", " "]

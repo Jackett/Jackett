@@ -18,6 +18,7 @@ on:
       - src/**/*.cs
       - src/**/*.js
       - '!src/Jackett.Common/Indexers/**'
+      - '!src/Jackett.Common/Models/IndexerConfig/**'
       - '!src/Jackett.IntegrationTests/**'
       - '!src/Jackett.Test/**'
   pull_request:
@@ -27,6 +28,7 @@ on:
       - src/**/*.cs
       - src/**/*.js
       - '!src/Jackett.Common/Indexers/**'
+      - '!src/Jackett.Common/Models/IndexerConfig/**'
       - '!src/Jackett.IntegrationTests/**'
       - '!src/Jackett.Test/**'
   schedule:
