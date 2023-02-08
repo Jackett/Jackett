@@ -19,7 +19,7 @@ caps:
     - {id: "Certification", cat: Books/EBook, desc: "Certification"}
     - {id: "Children/Kids", cat: Books/EBook, desc: "Children/Kids"}
     - {id: "Classic/Literary", cat: Books/EBook, desc: "Classic/Literary"}
-    - {id: "Comics", cat: Books/EBook, desc: "Comics"}
+    - {id: "Comics", cat: Books/Comics, desc: "Comics"}
     - {id: "Computer", cat: Books/EBook, desc: "Computer"}
     - {id: "Contemporary", cat: Books/EBook, desc: "Contemporary"}
     - {id: "Cooking", cat: Books/EBook, desc: "Cooking"}
