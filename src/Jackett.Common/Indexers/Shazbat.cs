@@ -269,12 +269,10 @@ namespace Jackett.Common.Indexers
 
         private async Task<WebResult> ReloginIfNecessaryAsync(WebResult response)
         {
-            if (response.ContentString.Contains("onclick=\"document.location='logout'\"") ||
-                response.ContentString.Contains("show_id") || response.ContentString.Contains("Filename") ||
-                response.ContentString.Contains("Peers") || response.ContentString.Contains("Download"))
+            if (response.ContentString.IndexOf("sign in now", StringComparison.InvariantCultureIgnoreCase) == -1)
                 return response;
 
-            logger.Warn("Session expired. Relogin.");
+            logger.Debug("Session expired. Relogin.");
 
             await ApplyConfiguration(null);
             response.Request.Cookies = CookieHeader;
