@@ -74,7 +74,7 @@ login:
     - selector: td.embedded:has(h2:contains("失败"))
   test:
     path: index.php
-    selector: a[href*="logout.php"]
+    selector: a[href^="userdetails.php?id="]
 
 search:
   paths:
