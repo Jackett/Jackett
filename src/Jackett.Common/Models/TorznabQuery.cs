@@ -8,6 +8,9 @@ namespace Jackett.Common.Models
 {
     public class TorznabQuery
     {
+        private static readonly Regex _StandardizeDashesRegex = new Regex(@"\p{Pd}+", RegexOptions.Compiled);
+        private static readonly Regex _StandardizeSingleQuotesRegex = new Regex(@"[\u0060\u00B4\u2018\u2019]", RegexOptions.Compiled);
+
         public string QueryType { get; set; }
         public int[] Categories { get; set; }
         public int Extended { get; set; }
@@ -76,9 +79,11 @@ namespace Jackett.Common.Models
         {
             get
             {
-                var term = SearchTerm;
-                if (SearchTerm == null)
-                    term = "";
+                var term = SearchTerm ?? "";
+
+                term = _StandardizeDashesRegex.Replace(term, "-");
+                term = _StandardizeSingleQuotesRegex.Replace(term, "'");
+
                 var safeTitle = term.Where(c => (char.IsLetterOrDigit(c)
                                                  || char.IsWhiteSpace(c)
                                                  || c == '-'
@@ -95,13 +100,14 @@ namespace Jackett.Common.Models
                                                  || c == '%'
                                                  || c == ':'
                                                ));
+
                 return string.Concat(safeTitle);
             }
         }
 
         public TorznabQuery()
         {
-            Categories = new int[0];
+            Categories = Array.Empty<int>();
             IsTest = false;
         }
 
@@ -110,16 +116,18 @@ namespace Jackett.Common.Models
             var ret = Clone();
             if (Categories == null || Categories.Length == 0)
             {
-                ret.Categories = new int[]{ TorznabCatType.Movies.ID,
-                                            TorznabCatType.MoviesForeign.ID,
-                                            TorznabCatType.MoviesOther.ID,
-                                            TorznabCatType.MoviesSD.ID,
-                                            TorznabCatType.MoviesHD.ID,
-                                            TorznabCatType.Movies3D.ID,
-                                            TorznabCatType.MoviesBluRay.ID,
-                                            TorznabCatType.MoviesDVD.ID,
-                                            TorznabCatType.MoviesWEBDL.ID,
-                                            TorznabCatType.MoviesUHD.ID,
+                ret.Categories = new[]
+                {
+                    TorznabCatType.Movies.ID,
+                    TorznabCatType.MoviesForeign.ID,
+                    TorznabCatType.MoviesOther.ID,
+                    TorznabCatType.MoviesSD.ID,
+                    TorznabCatType.MoviesHD.ID,
+                    TorznabCatType.Movies3D.ID,
+                    TorznabCatType.MoviesBluRay.ID,
+                    TorznabCatType.MoviesDVD.ID,
+                    TorznabCatType.MoviesWEBDL.ID,
+                    TorznabCatType.MoviesUHD.ID,
                 };
             }
             ret.SearchTerm = search;
@@ -190,18 +198,19 @@ namespace Jackett.Common.Models
                         limit = queryString.Length;
                     queryString = queryString.Substring(0, (int)limit);
                 }
-                var SplitRegex = new Regex("[^a-zA-Z0-9]+");
-                QueryStringParts = SplitRegex.Split(queryString);
+                var splitRegex = new Regex("[^a-zA-Z0-9]+");
+                QueryStringParts = splitRegex.Split(queryString);
             }
 
             // Check if each part of the query string is in the given title.
-            foreach (var QueryStringPart in QueryStringParts)
+            foreach (var queryStringPart in QueryStringParts)
             {
-                if (title.IndexOf(QueryStringPart, StringComparison.OrdinalIgnoreCase) < 0)
+                if (title.IndexOf(queryStringPart, StringComparison.OrdinalIgnoreCase) < 0)
                 {
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -211,19 +220,19 @@ namespace Jackett.Common.Models
                 return string.Empty;
 
             string episodeString;
-            if (DateTime.TryParseExact(string.Format("{0} {1}", Season, Episode), "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+            if (DateTime.TryParseExact($"{Season} {Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
                 episodeString = showDate.ToString("yyyy.MM.dd");
             else if (string.IsNullOrEmpty(Episode))
-                episodeString = string.Format("S{0:00}", Season);
+                episodeString = $"S{Season:00}";
             else
             {
                 try
                 {
-                    episodeString = string.Format("S{0:00}E{1:00}", Season, ParseUtil.CoerceInt(Episode));
+                    episodeString = $"S{Season:00}E{ParseUtil.CoerceInt(Episode):00}";
                 }
                 catch (FormatException) // e.g. seaching for S01E01A
                 {
-                    episodeString = string.Format("S{0:00}E{1}", Season, Episode);
+                    episodeString = $"S{Season:00}E{Episode}";
                 }
 
             }
