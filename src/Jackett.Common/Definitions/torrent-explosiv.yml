@@ -171,7 +171,7 @@ search:
       selector: div[id^="details"] img
       attribute: src
     size:
-      selector: div.selection_unter_ag
+      selector: div.selection_unter_ad
     date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
