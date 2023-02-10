@@ -15,6 +15,7 @@ caps:
     - {id: 51, cat: PC/Mac, desc: "Apple"}
     - {id: 3, cat: PC, desc: "Apps"}
     - {id: 64, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 71, cat: Console, desc: "Batocera"}
     - {id: 4, cat: Movies/BluRay, desc: "Blu-Ray"}
     - {id: 22, cat: Console, desc: "CoinOps"}
     - {id: 42, cat: Console, desc: "CoinOPS Official"}
