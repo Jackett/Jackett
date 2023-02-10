@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -74,7 +75,8 @@ namespace Jackett.Common.Indexers
                        BookSearchParams = new List<BookSearchParam>
                        {
                            BookSearchParam.Q
-                       }
+                       },
+                       TvSearchImdbAvailable = true
                    },
                    configService: configService,
                    client: wc,
@@ -87,7 +89,7 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "private";
 
-            var sort = new ConfigurationData.SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
+            var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
                 {
                     {"time", "created"},
                     {"size", "size"},
@@ -199,7 +201,8 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var ValidList = new List<string>() {
+            var validTagList = new List<string>
+            {
                 "action",
                 "adventure",
                 "animation",
@@ -228,48 +231,45 @@ namespace Jackett.Common.Indexers
                 "western"
             };
 
-
-            /* notes: 
+            /* notes:
              * IPTorrents can search for genre (tags) using the default title&tags search
-             * qf= 
+             * qf=
              * "" = Title and Tags
              * ti = Title
              * ta = Tags
              * all = Title, Tags & Description
              * adv = Advanced
-             * 
+             *
              * But only movies and tv have tags.
              */
 
+            var headers = new Dictionary<string, string>();
+            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
+                headers.Add("User-Agent", configData.UserAgent.Value);
+
             var qc = new NameValueCollection();
 
-
-            Dictionary<string, string> headers = null;
-
-            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
-            {
-                headers = new Dictionary<string, string>
-                {
-                    { "User-Agent", configData.UserAgent.Value }
-                };
-            }
-
-            if (query.IsImdbQuery)
-                qc.Add("q", query.ImdbID);
-            else
-            if (query.IsGenreQuery)
-                qc.Add("q", query.GetQueryString() + " " + query.Genre);
-            else
-            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
-                qc.Add("q", query.GetQueryString());
-
             foreach (var cat in MapTorznabCapsToTrackers(query))
-                qc.Add(cat, string.Empty);
+                qc.Set(cat, string.Empty);
 
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
-                qc.Add("free", "on");
+                qc.Set("free", "on");
 
-            qc.Add("o", ((SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value);
+            var searchQuery = new List<string>();
+
+            // IPT uses sphinx, which supports boolean operators and grouping
+            if (query.IsImdbQuery)
+                searchQuery.Add($"+({query.ImdbID})");
+            else if (query.IsGenreQuery)
+                searchQuery.Add($"+({query.Genre})");
+
+            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+                searchQuery.Add($"+({query.GetQueryString()})");
+
+            if (searchQuery.Any())
+                qc.Set("q", $"{string.Join(" ", searchQuery)}");
+
+            qc.Set("o", ((SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value);
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl, headers: headers);
@@ -281,20 +281,21 @@ namespace Jackett.Common.Indexers
             if (string.IsNullOrWhiteSpace(query.ImdbID) && string.IsNullOrWhiteSpace(query.SearchTerm) && results.Contains("No Torrents Found!"))
                 throw new Exception("Got No Torrents Found! Make sure your IPTorrents profile config contain proper default category settings.");
 
+            char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+
             try
             {
                 var parser = new HtmlParser();
                 var doc = parser.ParseDocument(results);
 
-                var rows = doc.QuerySelectorAll("table[id='torrents'] > tbody > tr");
+                var rows = doc.QuerySelectorAll("table[id=\"torrents\"] > tbody > tr");
                 foreach (var row in rows)
                 {
                     var qTitleLink = row.QuerySelector("a.hv");
                     if (qTitleLink == null) // no results
                         continue;
 
-                    // drop invalid char that seems to have cropped up in some titles. #6582
-                    var title = qTitleLink.TextContent.Trim().Replace("\u000f", "");
+                    var title = CleanTitle(qTitleLink.TextContent);
                     var details = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
 
                     var qLink = row.QuerySelector("a[href^=\"/download.php/\"]");
@@ -305,9 +306,7 @@ namespace Jackett.Common.Indexers
                     var publishDate = DateTimeUtil.FromTimeAgo(dateSplit.First());
                     var description = descrSplit.Length > 1 ? "Tags: " + descrSplit.First().Trim() : "";
                     description += dateSplit.Length > 1 ? " Uploaded by: " + dateSplit.Last().Trim() : "";
-
-                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
-                    var releaseGenres = ValidList.Intersect(description.ToLower().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries)).ToList();
+                    var releaseGenres = validTagList.Intersect(description.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
 
                     var catIcon = row.QuerySelector("td:nth-of-type(1) a");
                     if (catIcon == null)
@@ -340,6 +339,7 @@ namespace Jackett.Common.Indexers
                         PublishDate = publishDate,
                         Category = cat,
                         Description = description,
+                        Genres = releaseGenres,
                         Size = size,
                         Files = files,
                         Grabs = grabs,
@@ -350,9 +350,6 @@ namespace Jackett.Common.Indexers
                         MinimumRatio = 1,
                         MinimumSeedTime = 1209600 // 336 hours
                     };
-                    if (release.Genres == null)
-                        release.Genres = new List<string>();
-                    release.Genres = releaseGenres;
 
                     releases.Add(release);
                 }
@@ -363,6 +360,15 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        private static string CleanTitle(string title)
+        {
+            // drop invalid chars that seems to have cropped up in some titles. #6582
+            title = Regex.Replace(title, @"[\u0000-\u0008\u000A-\u001F\u0100-\uFFFF]", string.Empty, RegexOptions.Compiled);
+            title = Regex.Replace(title, @"[\(\[\{]REQ(UEST(ED)?)?[\)\]\}]", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            return title.Trim(' ', '-', ':');
         }
     }
 }
