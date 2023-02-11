@@ -6,8 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using Jackett.Common.Exceptions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -139,25 +139,20 @@ namespace Jackett.Common.Indexers
             await RenewalTokenAsync();
 
             var response = await RequestWithCookiesAsync(BuildSearchUrl(query));
-            if (response != null && response.ContentString.StartsWith("<"))
+            var responseCode = (int)response.Status;
+
+            switch (responseCode)
             {
-                if (response.ContentString.Contains("torrentapi.org | 520:"))
-                {
-                    if (retry)
-                    {
-                        logger.Warn("torrentapi.org returned Error 520, retrying after 5 secs");
-                        return await PerformQueryWithRetry(query, false);
-                    }
-                    else
-                    {
-                        logger.Warn("torrentapi.org returned Error 520");
-                        return releases;
-                    }
-                }
-                // the response was not JSON, likely a HTML page for a server outage
-                logger.Warn(response.ContentString);
-                throw new Exception("The response was not JSON");
+                case 429:
+                    throw new TooManyRequestsException($"Rate limited with StatusCode {responseCode}, retry in 2 minutes", TimeSpan.FromMinutes(2));
+                case 520:
+                    throw new TooManyRequestsException($"Rate limited with StatusCode {responseCode}, retry in 3 minutes", TimeSpan.FromMinutes(3));
+                case (int)HttpStatusCode.OK:
+                    break;
+                default:
+                    throw new Exception($"Indexer API call returned an unexpected StatusCode [{responseCode}]");
             }
+
             var jsonContent = JObject.Parse(response.ContentString);
             var errorCode = jsonContent.Value<int>("error_code");
             switch (errorCode)
@@ -176,11 +171,8 @@ namespace Jackett.Common.Indexers
                         logger.Warn("torrentapi.org returned code 5 Too many requests per second, retrying after 5 secs");
                         return await PerformQueryWithRetry(query, false);
                     }
-                    else
-                    {
-                        logger.Warn("torrentapi.org returned code 5 Too many requests per second");
-                        return releases;
-                    }
+
+                    throw new TooManyRequestsException("Rate limited, retry in 2 minutes", TimeSpan.FromMinutes(2));
                 case 8: // search_imdb not found, see issue #12466 (no longer used, has been replaced with error 10)
                 case 9: // invalid imdb, see Radarr #1845
                 case 13: // invalid tmdb, invalid tvdb
@@ -188,32 +180,23 @@ namespace Jackett.Common.Indexers
                 case 10: // imdb not found, see issue #1486
                 case 14: // tmdb not found (see Radarr #7625), thetvdb not found
                 case 20: // no results found
-                    if (jsonContent.ContainsKey("rate_limit"))
-                    {
-                        if (retry)
-                        {
-                            logger.Warn("torrentapi.org returned code 20 with Rate Limit exceeded. Retrying after 5 secs.");
-                            return await PerformQueryWithRetry(query, false);
-                        }
-                        else
-                        {
-                            logger.Warn("torrentapi.org returned code 20 with Rate Limit exceeded.");
-                            return releases;
-                        }
-                    }
+                    if (jsonContent.Value<int>("rate_limit") is 1 && jsonContent.Value<JArray>("torrent_results") == null)
+                        throw new TooManyRequestsException("Rate limited, retry in 5 minutes", TimeSpan.FromMinutes(5));
+
                     // the api returns "no results" in some valid queries. we do one retry on this case but we can't do more
                     // because we can't distinguish between search without results and api malfunction
                     return retry ? await PerformQueryWithRetry(query, false) : releases;
                 default:
-                    throw new Exception("Unknown error code: " + errorCode + " response: " + response.ContentString);
+                    throw new Exception($"Unknown error code: {errorCode}. Response: {response.ContentString}");
             }
+
+            if (jsonContent.Value<JArray>("torrent_results") == null)
+                return releases;
 
             try
             {
                 foreach (var item in jsonContent.Value<JArray>("torrent_results"))
                 {
-                    var title = WebUtility.HtmlDecode(item.Value<string>("title"));
-
                     var magnetStr = item.Value<string>("download");
                     var magnetUri = new Uri(magnetStr);
 
@@ -224,27 +207,21 @@ namespace Jackett.Common.Indexers
                     // append app_id to prevent api server returning 403 forbidden
                     var details = new Uri(item.Value<string>("info_page") + "&app_id=" + _appId);
 
-                    // ex: 2015-08-16 21:25:08 +0000
-                    var dateStr = item.Value<string>("pubdate").Replace(" +0000", "");
-                    var dateTime = DateTime.ParseExact(dateStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                    var publishDate = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToLocalTime();
-
-                    var size = item.Value<long>("size");
                     var seeders = item.Value<int>("seeders");
                     var leechers = item.Value<int>("leechers");
 
                     var release = new ReleaseInfo
                     {
-                        Title = title,
-                        Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
-                        MagnetUri = magnetUri,
-                        InfoHash = infoHash,
-                        Details = details,
-                        PublishDate = publishDate,
                         Guid = guid,
+                        Details = details,
+                        MagnetUri = magnetUri,
+                        Title = WebUtility.HtmlDecode(item.Value<string>("title")).Trim(),
+                        Category = MapTrackerCatDescToNewznab(item.Value<string>("category")),
+                        InfoHash = infoHash,
+                        PublishDate = DateTime.Parse(item.Value<string>("pubdate"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
                         Seeders = seeders,
                         Peers = leechers + seeders,
-                        Size = size,
+                        Size = item.Value<long>("size"),
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1
                     };
