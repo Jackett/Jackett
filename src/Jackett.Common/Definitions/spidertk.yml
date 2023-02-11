@@ -26,17 +26,12 @@ caps:
     - {id: 420, cat: Movies/3D, desc: "Films / 3D"}
     - {id: 421, cat: Movies/SD, desc: "Films / XviD"}
     - {id: 422, cat: Movies/HD, desc: "Films / HDTV / 1080p"}
-    - {id: 440, cat: Movies/HD, desc: "Films / HDTV / 720p"}
-    - {id: 463, cat: Movies/WEB-DL, desc: "Films / WEB / 2160p"}
     - {id: 423, cat: Movies/WEB-DL, desc: "Films / WEB / 1080p"}
-    - {id: 458, cat: Movies/WEB-DL, desc: "Films / WEB / 720p"}
-    - {id: 462, cat: Movies/WEB-DL, desc: "Films / WEB / SD"}
     - {id: 424, cat: TV/Documentary, desc: "Films / Documentaire"}
     - {id: 425, cat: TV/Sport, desc: "Films / Sport"}
     - {id: 426, cat: Movies, desc: "Films / Animation"}
     - {id: 427, cat: Movies/Other, desc: "Films / Spectacle"}
     - {id: 428, cat: Audio/Video, desc: "Films / Concerts, Clips"}
-    - {id: 460, cat: Movies, desc: "Films / VO"}
     - {id: 430, cat: TV, desc: "Séries / BluRay"}
     - {id: 431, cat: TV, desc: "Séries / Pack VF"}
     - {id: 432, cat: TV/HD, desc: "Séries / HD VF"}
@@ -47,7 +42,7 @@ caps:
     - {id: 437, cat: TV/Anime, desc: "Séries / Pack Animé"}
     - {id: 438, cat: TV/Anime, desc: "Séries / Animé VF"}
     - {id: 439, cat: TV/Anime, desc: "Séries / Animé VOSTFR"}
-    - {id: 461, cat: TV, desc: "Séries / VO"}
+    - {id: 440, cat: Movies/HD, desc: "Films / HDTV / 720p"}
     - {id: 441, cat: TV/Documentary, desc: "Séries / Documentaire"}
     - {id: 442, cat: TV/Sport, desc: "Séries / Sport"}
     - {id: 443, cat: TV, desc: "Séries / Émission TV"}
@@ -57,16 +52,23 @@ caps:
     - {id: 447, cat: Books/Comics, desc: "Livres / Bande Dessinée"}
     - {id: 448, cat: Books/Comics, desc: "Livres / Comic"}
     - {id: 449, cat: Books/Comics, desc: "Livres / Manga"}
-    - {id: 468, cat: Books/Other, desc: "Livres / Divers"}
     - {id: 450, cat: PC/Games, desc: "Logiciels / Jeu PC"}
     - {id: 451, cat: PC/Games, desc: "Logiciels / Jeu Mac"}
     - {id: 452, cat: PC/Games, desc: "Logiciels / Jeu Linux"}
     - {id: 453, cat: PC/0day, desc: "Logiciels / Appli Windows"}
     - {id: 454, cat: PC/Mac, desc: "Logiciels / Appli Mac"}
     - {id: 455, cat: PC, desc: "Logiciels / Appli Linux"}
-    - {id: 459, cat: PC/Mobile-Android, desc: "Logiciels / Android"}
     - {id: 456, cat: Console, desc: "Logiciels / Console"}
     - {id: 457, cat: PC/Mobile-iOS, desc: "Logiciels / iOS"}
+    - {id: 458, cat: Movies/WEB-DL, desc: "Films / WEB / 720p"}
+    - {id: 459, cat: PC/Mobile-Android, desc: "Logiciels / Android"}
+    - {id: 460, cat: Movies, desc: "Films / VO"}
+    - {id: 461, cat: TV, desc: "Séries / VO"}
+    - {id: 462, cat: Movies/WEB-DL, desc: "Films / WEB / SD"}
+    - {id: 463, cat: Movies/WEB-DL, desc: "Films / WEB / 2160p"}
+    - {id: 468, cat: Books/Other, desc: "Livres / Divers"}
+    - {id: 469, cat: Books/Other, desc: "Livres / Bricolage"}
+    - {id: 470, cat: Books/Other, desc: "Livres / RPG"}
 
   modes:
     search: [q]
