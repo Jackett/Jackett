@@ -123,11 +123,46 @@ search:
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+      selector: td:first-of-type
+      case:
+        div.cat-4k: 46
+        div.cat-albuns: 9
+        div.cat-android: 36
+        div.cat-anime: 8
+        div.cat-anime-dvdr: 20
+        div.cat-anime-hd: 35
+        div.cat-apps: 1
+        div.cat-brip: 41
+        div.cat-blu-ray: 32
+        div.cat-boxset: 23
+        div.cat-cam-ts: 38
+        div.cat-dvd-custom: 37
+        div.cat-sports: 44
+        div.cat-doc: 13
+        div.cat-dvdr: 3
+        div.cat-e-book: 43
+        div.cat-gps: 39
+        div.cat-hd: 6
+        div.cat-games: 5
+        div.cat-ps2: 15
+        div.cat-ps3: 34
+        div.cat-ps4: 40
+        div.cat-psp: 12
+        div.cat-wii: 33
+        div.cat-mdvdr: 14
+        div.cat-mac: 21
+        div.cat-off: 31
+        div.cat-other: 10
+        div.cat-series: 4
+        div.cat-series-dvdr: 18
+        div.cat-series-x264: 17
+        div.cat-series-x265: 47
+        div.cat-web-dl: 42
+        div.cat-wwe: 16
+        div.cat-xbox360: 11
+        div.cat-xvid: 2
+        div.cat-xxx: 7
+        div.cat-xxx-dvdr: 19
     _audiopt:
       selector: i.fg-audiopt
       attribute: title
