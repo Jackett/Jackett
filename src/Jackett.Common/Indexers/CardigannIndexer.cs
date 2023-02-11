@@ -865,6 +865,8 @@ namespace Jackett.Common.Indexers
                     throw new ExceptionWithConfigData(errormessage, configData);
                 }
 
+                logger.Error($"Redirected to: {Result.RedirectingTo}");
+
                 return true;
             }
 
@@ -2261,4 +2263,3 @@ namespace Jackett.Common.Indexers
         }
     }
 }
-
