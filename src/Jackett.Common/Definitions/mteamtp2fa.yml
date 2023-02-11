@@ -1,11 +1,11 @@
 ---
 id: mteamtp2fa
-name: MTeamTP2FA
-description: "this indexer uses a cookie login for MTeamTP for those that want to use 2FA"
+name: M-Team - TP (2FA)
+description: "This indexer uses a cookie login for M-Team TP (MTTP) for those that want to use 2FA"
 language: zh-CN
 type: private
 encoding: UTF-8
-requestDelay: 2
+requestDelay: 3
 links:
   - https://kp.m-team.cc/
 legacylinks:
@@ -76,10 +76,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: infotitle
-    type: info
-    label: About Titles
-    default: For best results disable the torrent name tooltip (User CP/Tracker Settings/Torrents Page). Otherwise long release names will be cut off.
   - name: sort
     type: select
     label: Sort requested from site
@@ -100,6 +96,14 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_title
+    type: info
+    label: About Titles
+    default: For best results, disable the torrent name tooltip in <b>User CP/Tracker Settings/Torrents Page</b>. Otherwise long release names will be cut off.
+  - name: info_download_link
+    type: info
+    label: About Download Links
+    default: For best results, you must enable the <b>Download icon</b> in <b>User CP/Tracker Settings/Torrents Page</b>.
 
 login:
   method: cookie
@@ -108,11 +112,6 @@ login:
   test:
     path: index.php
     selector: a[href="logout.php"]
-
-download:
-  selectors:
-    - selector: a[href$="&https=1"]
-      attribute: href
 
 search:
   paths:
@@ -163,10 +162,10 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img[alt="torrent thumbnail"]
+      selector: img[alt="torrent thumbnail"][src]
       attribute: src
       filters:
         - name: replace
