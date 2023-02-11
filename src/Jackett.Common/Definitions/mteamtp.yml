@@ -5,7 +5,7 @@ description: "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIE
 language: zh-CN
 type: private
 encoding: UTF-8
-requestDelay: 2
+requestDelay: 3
 links:
   - https://kp.m-team.cc/
 legacylinks:
@@ -68,10 +68,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info
-    type: info
-    label: ""
-    default: For best results disable the torrent name tooltip (User CP/Tracker Settings/Torrents Page). Otherwise long release names will be cut off.
   - name: sort
     type: select
     label: Sort requested from site
@@ -92,6 +88,14 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_title
+    type: info
+    label: About Titles
+    default: For best results, disable the torrent name tooltip in <b>User CP/Tracker Settings/Torrents Page</b>. Otherwise long release names will be cut off.
+  - name: info_download_link
+    type: info
+    label: About Download Links
+    default: For best results, you must enable the <b>Download icon</b> in <b>User CP/Tracker Settings/Torrents Page</b>.
 
 login:
   path: takelogin.php
@@ -104,14 +108,10 @@ login:
     - selector: td.embedded:has(h2:contains("failed"))
     - selector: td.toolbox:contains("錯誤")
     - selector: td.toolbox:contains("Error")
+    - selector: td.toolbox:contains("限制登")
   test:
     path: index.php
     selector: a[href="logout.php"]
-
-download:
-  selectors:
-    - selector: a[href$="&https=1"]
-      attribute: href
 
 search:
   paths:
@@ -130,7 +130,7 @@ search:
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 3 uploader, 4 imdb url
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
-    # 0 and, 1 or, 2 exact
+    # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -159,10 +159,10 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img[alt="torrent thumbnail"]
+      selector: img[alt="torrent thumbnail"][src]
       attribute: src
       filters:
         - name: replace
