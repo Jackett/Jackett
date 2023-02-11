@@ -25,7 +25,7 @@ caps:
     - {id: 104, cat: Movies/Other, desc: "Movies Packs"}
     - {id: 100, cat: Movies, desc: "Movies Horror"}
     - {id: 142, cat: Movies/DVD, desc: "Movies DVD"}
-    - {id: 143, cat: Movies/BluRay, desc: "Bluray"}
+    - {id: 143, cat: Movies/BluRay, desc: "Movies Bluray"}
     - {id: 144, cat: Movies/DVD, desc: "Movies S-DVD"}
     - {id: 133, cat: Movies/Foreign, desc: "Movies Englisch"}
     - {id: 101, cat: Movies/HD, desc: "TFA AVCHD's"}
