@@ -247,7 +247,6 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var searchString = query.GetQueryString();
             var prevCook = CookieHeader + "";
 
             var categoryMapping = MapTorznabCapsToTrackers(query);
@@ -261,12 +260,14 @@ namespace Jackett.Common.Indexers
                 { "order", GetOrder }
             };
 
+            var searchString = Regex.Replace(query.GetQueryString(), @"[ -._]+", " ").Trim();
+
             if (query.IsImdbQuery)
             {
                 searchParams.Add("keywords", query.ImdbID);
                 searchParams.Add("search_type", "t_both");
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(searchString))
             {
                 searchParams.Add("keywords", searchString);
                 searchParams.Add("search_type", "t_name");
