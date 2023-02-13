@@ -469,14 +469,17 @@ namespace Jackett.Common.Indexers
                     var dateString = document.QuerySelector("div.title-block > div.details-pane > div.left-box").TextContent;
                     var key = (dateString.Contains("TBA")) ? "ru: " : "eng: ";
                     dateString = TrimString(dateString, key, " г."); // '... Дата выхода eng: 09 марта 2012 г. ...' -> '09 марта 2012'
+
                     DateTime date;
-                    if (dateString.Length == 4) //dateString might be just a year, e.g. https://www.lostfilm.tv/series/Ghosted/season_1/episode_14/
+                    if (dateString.Length == 4)
                     {
-                        date = DateTime.ParseExact(dateString, "yyyy", CultureInfo.InvariantCulture).ToLocalTime();
+                        // dateString might be just a year, e.g. https://www.lostfilm.tv/series/Ghosted/season_1/episode_14/
+                        date = DateTime.TryParseExact(dateString, "yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var parsedDate) ? parsedDate : DateTime.Now;
                     }
                     else
                     {
-                        date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd mmmm yyyy
+                        // dd mmmm yyyy
+                        date = DateTime.TryParse(dateString, new CultureInfo(Language), DateTimeStyles.AssumeLocal, out var parsedDate) ? parsedDate : DateTime.Now;
                     }
 
                     var urlDetails = new TrackerUrlDetails(playButton);
@@ -818,8 +821,8 @@ namespace Jackett.Common.Indexers
             var dateString = dateColumn.QuerySelector("span.small-text")?.TextContent;
             // 'Eng: 23.05.2017' -> '23.05.2017' OR '23.05.2017' -> '23.05.2017'
             dateString = (string.IsNullOrEmpty(dateString)) ? dateColumn.QuerySelector("span")?.TextContent : dateString.Substring(dateString.IndexOf(":") + 2);
-            var date = DateTime.Parse(dateString, new CultureInfo(Language)); // dd.mm.yyyy
-            return date;
+            // dd.mm.yyyy
+            return DateTime.TryParse(dateString, new CultureInfo(Language), DateTimeStyles.AssumeLocal, out var parsedDate) ? parsedDate : DateTime.Now;
         }
 
         #endregion
