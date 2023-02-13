@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using Jackett.Common.Utils;
 
@@ -16,48 +17,53 @@ namespace Jackett.Common.Models.DTO
                 QueryType = "search"
             };
 
-            var queryStr = request.Query;
-            if (queryStr != null)
+            var queryStr = $"{request.Query}".Trim();
+
+            if (!string.IsNullOrWhiteSpace(queryStr))
             {
-                var seasonMatch = Regex.Match(queryStr, @"S(\d{2,4})");
-                if (seasonMatch.Success)
+                var seasonEpisodeMatch = Regex.Match(queryStr, @"\bS(\d{2,4})E(\d{2,4}[A-Za-z]?)$");
+                if (seasonEpisodeMatch.Success)
                 {
-                    stringQuery.Season = int.Parse(seasonMatch.Groups[1].Value);
-                    queryStr = queryStr.Remove(seasonMatch.Index, seasonMatch.Length);
+                    stringQuery.Season = int.Parse(seasonEpisodeMatch.Groups[1].Value);
+                    stringQuery.Episode = seasonEpisodeMatch.Groups[2].Value.TrimStart('0');
+                    queryStr = queryStr.Remove(seasonEpisodeMatch.Index, seasonEpisodeMatch.Length).Trim();
+                }
+                else
+                {
+                    var episodeMatch = Regex.Match(queryStr, @"\bE(\d{2,4}[A-Za-z]?)$");
+                    if (episodeMatch.Success)
+                    {
+                        stringQuery.Episode = episodeMatch.Groups[1].Value.TrimStart('0');
+                        queryStr = queryStr.Remove(episodeMatch.Index, episodeMatch.Length).Trim();
+                    }
+
+                    var seasonMatch = Regex.Match(queryStr, @"\bS(\d{2,4})$");
+                    if (seasonMatch.Success)
+                    {
+                        stringQuery.Season = int.Parse(seasonMatch.Groups[1].Value);
+                        queryStr = queryStr.Remove(seasonMatch.Index, seasonMatch.Length).Trim();
+                    }
                 }
 
-                var episodeMatch = Regex.Match(queryStr, @"E(\d{2,4}[A-Za-z]?)");
-                if (episodeMatch.Success)
-                {
-                    stringQuery.Episode = episodeMatch.Groups[1].Value.TrimStart(new char[] { '0' });
-                    queryStr = queryStr.Remove(episodeMatch.Index, episodeMatch.Length);
-                }
                 queryStr = queryStr.Trim();
-            }
-            else
-            {
-                queryStr = ""; // empty string search is interpreted as null 
             }
 
             stringQuery.SearchTerm = queryStr;
-            stringQuery.Categories = request.Category ?? new int[0];
+            stringQuery.Categories = request.Category ?? Array.Empty<int>();
 
             // try to build an IMDB Query (tt plus 6 to 8 digits)
             if (stringQuery.SanitizedSearchTerm.StartsWith("tt") && stringQuery.SanitizedSearchTerm.Length <= 10)
             {
-                var imdbID = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
-                TorznabQuery imdbQuery = null;
-                if (imdbID != null)
+                var imdbId = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
+                if (imdbId != null)
                 {
-                    imdbQuery = new TorznabQuery()
+                    return new TorznabQuery
                     {
-                        ImdbID = imdbID,
+                        ImdbID = imdbId,
                         Categories = stringQuery.Categories,
                         Season = stringQuery.Season,
                         Episode = stringQuery.Episode,
                     };
-
-                    return imdbQuery;
                 }
             }
 
