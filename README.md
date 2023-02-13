@@ -14,7 +14,7 @@ Please see our [troubleshooting and contributing guidelines](CONTRIBUTING.md) be
 
 Jackett works as a proxy server: it translates queries from apps ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar3](https://github.com/mylar3/mylar3), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious) etc.) into tracker-site-specific http queries, parses the html or json response, and then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps.
 
-Developer note: The software implements the [Torznab](https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with hybrid [nZEDb](https://github.com/nZEDb/nZEDb/blob/b485fa326a0ff1f47ce144164eb1f070e406b555/resources/db/schema/data/10-categories.tsv)/[Newznab](https://newznab.readthedocs.io/en/latest/misc/api/#predefined-categories) [category numbering](https://github.com/Jackett/Jackett/wiki/Jackett-Categories)) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs.
+Developer note: The software implements the [Torznab](https://web.archive.org/web/20220517013745/https://github.com/Sonarr/Sonarr/wiki/Implementing-a-Torznab-indexer) (with hybrid [nZEDb](https://github.com/nZEDb/nZEDb/blob/b485fa326a0ff1f47ce144164eb1f070e406b555/resources/db/schema/data/10-categories.tsv)/[Newznab](https://newznab.readthedocs.io/en/latest/misc/api/#predefined-categories) [category numbering](https://github.com/Jackett/Jackett/wiki/Jackett-Categories)) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs.
 
 A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
 
@@ -635,6 +635,39 @@ The "filter" indexer at `/api/v2.0/indexers/tag:group1,!type:private+lang:en/res
 
 Example 2:
 The "filter" indexer at `/api/v2.0/indexers/!status:failing,test:passed` will query all the configured indexers not `failing` or which `passed` its last test.
+
+### Search modes and parameters
+
+A list of supported API search modes and parameters:
+
+```
+t=search:
+   params  : q
+t=tvsearch:
+   params  : q, season, ep, imdbid, tvdbid, rid, tmdbid, tvmazeid, traktid, doubanid, year, genre
+t=movie:
+   params  : q, imdbid, tmdbid, traktid, doubanid, year, genre
+t=music:
+   params  : q, album, artist, label, track, year, genre
+t=book:
+   params  : q, title, author, publisher, year, genre
+```
+
+Examples:
+
+```
+.../api?apikey=APIKEY&t=search&cat=1,3&q=Show+Title+S01E02
+
+.../api?apikey=APIKEY&t=tvsearch&cat=1,3&q=Show+Title&season=1&ep=2
+.../api?apikey=APIKEY&t=tvsearch&cat=1,3&genre=comedy&season=2023&ep=02/13
+
+.../api?apikey=APIKEY&t=movie&cat=2&q=Movie+Title&year=2023
+.../api?apikey=APIKEY&t=movie&cat=2&imdbid=tt1234567
+
+.../api?apikey=APIKEY&t=music&cat=4&album=Title&artist=Name
+
+.../api?apikey=APIKEY&t=book&cat=5,6&genre=horror&publisher=Stuff
+```
 
 ## Installation on Windows
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
