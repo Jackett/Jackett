@@ -16,7 +16,15 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
 
-settings: []
+settings: 
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian Letters
+    default: true
+  - name: addrussian
+    type: checkbox
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
 
 search:
   paths:
@@ -54,6 +62,13 @@ search:
       optional: true
     title:
       text: "{{ .Result.title_ru }} / {{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._series }} - {{ .Result._series }}{{ else }}{{ end }}"
+      filters:
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["[\\:\\-\\/\\|\\[\\]]", " "]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
     _code:
       selector: ..code
     details:
