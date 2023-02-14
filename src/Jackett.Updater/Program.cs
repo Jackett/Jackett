@@ -278,6 +278,7 @@ namespace Jackett.Updater
                 "Definitions/asgaard.yml",
                 "Definitions/ast4u.yml", // renamed to animeworld #10578
                 "Definitions/asylumshare.yml",
+                "Definitions/audiobookbay.yml", // migrated to C#
                 "Definitions/audiobooktorrents.yml", // renamed to abtorrents
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
