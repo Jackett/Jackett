@@ -16,7 +16,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
 
-settings: 
+settings:
   - name: striprussian
     type: checkbox
     label: Strip Russian Letters
