@@ -403,6 +403,7 @@ namespace Jackett.Updater
                 "Definitions/hqsource.yml",
                 "Definitions/hush.yml",
                 "Definitions/hyperay.yml",
+                "Definitions/ibit.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
                 "Definitions/ilcorsaroverde.yml",
