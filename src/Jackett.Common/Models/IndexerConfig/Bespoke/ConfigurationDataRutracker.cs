@@ -5,6 +5,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     [ExcludeFromCodeCoverage]
     internal class ConfigurationDataRutracker : ConfigurationDataCaptchaLogin
     {
+        public BoolConfigurationItem UseMagnetLinks { get; private set; }
         public BoolConfigurationItem StripRussianLetters { get; private set; }
         public DisplayInfoConfigurationItem MoveTagsInfo { get; private set; }
         public BoolConfigurationItem MoveFirstTagsToEndOfReleaseTitle { get; private set; }
@@ -12,8 +13,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public DisplayInfoConfigurationItem CaptchaWarning { get; private set; }
 
         public ConfigurationDataRutracker()
-            : base()
         {
+            UseMagnetLinks = new BoolConfigurationItem("Use Magnet Links") { Value = false };
             StripRussianLetters = new BoolConfigurationItem("Strip Russian Letters") { Value = true };
             MoveTagsInfo = new DisplayInfoConfigurationItem("Move Tags Info", "<b>About moving tags:</b> " +
                                             "We define a tag as a part of the release title between round or square brackets. " +

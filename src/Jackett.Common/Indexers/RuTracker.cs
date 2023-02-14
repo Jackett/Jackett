@@ -1480,6 +1480,25 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
+        public override async Task<byte[]> Download(Uri link)
+        {
+            if (configData.UseMagnetLinks.Value && link.PathAndQuery.Contains("viewtopic.php?t="))
+            {
+                var response = await RequestWithCookiesAsync(link.ToString());
+
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.ContentString);
+                var magnetLink = dom.QuerySelector("table.attach a.magnet-link[href^=\"magnet:?\"]")?.GetAttribute("href");
+
+                if (magnetLink == null)
+                    throw new Exception($"Failed to fetch magnet link from {link}");
+
+                link = new Uri(magnetLink);
+            }
+
+            return await base.Download(link);
+        }
+
         private string CreateSearchUrlForQuery(in TorznabQuery query)
         {
             var queryCollection = new NameValueCollection();
@@ -1563,7 +1582,7 @@ namespace Jackett.Common.Indexers
                     ),
                     Description = title,
                     Details = details,
-                    Link = link,
+                    Link = configData.UseMagnetLinks.Value ? details : link,
                     Guid = details,
                     Size = size,
                     Seeders = seeders,
