@@ -1665,6 +1665,8 @@ namespace Jackett.Common.Indexers
                     title = _tvTitleRusSeasonRegex.Replace(title, "S$1");
                     title = _tvTitleRusEpisodeOfRegex.Replace(title, "E$1 of $2");
                     title = _tvTitleRusEpisodeRegex.Replace(title, "E$1");
+                    if (title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
+                        title += " rus";
                 }
                 else if (IsAnyMovieCategory(category))
                 {
