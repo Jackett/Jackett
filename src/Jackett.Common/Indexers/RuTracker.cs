@@ -1578,7 +1578,8 @@ namespace Jackett.Common.Indexers
                         category,
                         configData.StripRussianLetters.Value,
                         configData.MoveAllTagsToEndOfReleaseTitle.Value,
-                        configData.MoveFirstTagsToEndOfReleaseTitle.Value
+                        configData.MoveFirstTagsToEndOfReleaseTitle.Value,
+                        configData.AddRussianToTitle.Value
                     ),
                     Description = title,
                     Details = details,
@@ -1647,7 +1648,12 @@ namespace Jackett.Common.Indexers
             private readonly Regex _tvTitleRusEpisodeOfRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)\s*из\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             private readonly Regex _tvTitleRusEpisodeRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            public string Parse(string title, ICollection<int> category, bool stripCyrillicLetters = true, bool moveAllTagsToEndOfReleaseTitle = false, bool moveFirstTagsToEndOfReleaseTitle = false)
+            public string Parse(string title,
+                                ICollection<int> category,
+                                bool stripCyrillicLetters = true,
+                                bool moveAllTagsToEndOfReleaseTitle = false,
+                                bool moveFirstTagsToEndOfReleaseTitle = false,
+                                bool addRussianToTitle = false)
             {
                 // https://www.fileformat.info/info/unicode/category/Pd/list.htm
                 title = Regex.Replace(title, @"\p{Pd}", "-", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -1676,11 +1682,11 @@ namespace Jackett.Common.Indexers
 
                     // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
                     title = Regex.Replace(title, @"\bBlu-ray Disc\b", "BR-DISK", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-                    // language fix: all rutracker releases contains russian track
-                    if (title.IndexOf("rus", StringComparison.OrdinalIgnoreCase) < 0)
-                        title += " rus";
                 }
+
+                // language fix: all rutracker releases contains russian track
+                if (addRussianToTitle && (IsAnyTvCategory(category) || IsAnyMovieCategory(category)) && !Regex.Match(title, "\bRUS\b", RegexOptions.IgnoreCase).Success)
+                    title += " RUS";
 
                 if (stripCyrillicLetters)
                     title = _stripCyrillicRegex.Replace(title, string.Empty).Trim(' ', '-');
