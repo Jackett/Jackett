@@ -68,7 +68,7 @@ search:
         - name: re_replace
           args: ["[\\:\\-\\/\\|\\[\\]]", " "]
         - name: append
-          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
+          args: "{{ if .Config.addrussian }} RUS {{ else }}{{ end }}"
     _code:
       selector: ..code
     details:
