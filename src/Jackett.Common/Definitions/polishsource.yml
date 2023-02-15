@@ -5,6 +5,7 @@ description: "PolishSource (PS) is a POLISH Private Torrent Tracker for MOVIES /
 language: pl-PL
 type: private
 encoding: ISO-8859-2
+requestDelay: 3
 links:
   - https://polishsource.cz/
   - https://plsrc.cz/
@@ -86,6 +87,10 @@ login:
     selector: a[href^="logout.php"]
 
 search:
+  headers:
+    # site blocks automation User-Agents, so slightly alter it here (e.g. Safari/537.37 > Safari/537.36)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"]
+
   paths:
     # https://polishsource.cz/browse.php?search=tt1598778&incldead=1&scene=0&pl=0&sub=&search_in=nfo
     - path: browse.php
