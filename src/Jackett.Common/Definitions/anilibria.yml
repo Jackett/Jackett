@@ -20,7 +20,7 @@ caps:
 settings:
   - name: striprussian
     type: checkbox
-    label: Strip Russian Title
+    label: Strip Russian
     default: false
   - name: addrussian
     type: checkbox
