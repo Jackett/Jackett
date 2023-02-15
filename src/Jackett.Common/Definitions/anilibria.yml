@@ -9,19 +9,28 @@ links:
   - https://www.anilibria.tv/
 
 caps:
-  categorymappings:
-    - {id: 1, cat: TV/Anime, desc: Anime}
+  categories:
+    Anime: TV/Anime
+    Movies: Movies/Other
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
 
-settings: []
+settings:
+  - name: striprussian
+    type: checkbox
+    label: Strip Russian
+    default: false
+  - name: addrussian
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
 
 search:
   paths:
-    # https://github.com/anilibria/docs/blob/master/api_v2.md
-    - path: "https://api.anilibria.tv/v2/{{ if .Keywords }}searchTitles?filter=names,poster.url,code,torrents.list,season.year&limit=100&search={{ .Keywords }}{{ else }}getUpdates?filter=names,poster.url,code,torrents.list,season.year&limit=100{{ end }}"
+    # https://github.com/anilibria/docs/blob/master/api_v3.md
+    - path: "https://api.anilibria.tv/v3/{{ if .Keywords }}searchTitles?search={{ .Keywords }}&{{ else }}getUpdates?{{ end }}filter=names,posters.small.url,code,torrents.list,season.year,description&limit=100"
       response:
         type: json
 
@@ -31,13 +40,16 @@ search:
       args: ["(?i)(?:[SE]?\\d{1,4}){1,2}$", ""]
 
   rows:
-    selector: $
+    selector: list
     attribute: torrents.list
     multiple: true
 
   fields:
+    _episodes:
+      selector: episodes.string
+      optional: true
     category:
-      text: 1
+      text: "{{ if eq .Result._episodes \"Фильм\" }}Movies{{ else }}Anime{{ end }}"
     title_ru:
       selector: ..names.ru
     title_en:
@@ -45,15 +57,26 @@ search:
     title_alternative:
       selector: ..names.alternative
       optional: true
+      filters:
+        - name: re_replace
+          args: ["([А-Яа-яЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1{{ end }}"]
+        - name: re_replace
+          args: ["^[\\.\\s\\d,\\-—:]+", ""]
+        - name: re_replace
+          args: ["^OVA$", ""]
     year:
       selector: ..season.year
     _quality:
       selector: quality.string
-    _series:
-      selector: series.string
-      optional: true
     title:
-      text: "{{ .Result.title_ru }} / {{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._series }} - {{ .Result._series }}{{ else }}{{ end }}"
+      text: "{{ if .Config.striprussian }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en }}{{ if .Result.title_alternative }} / AKA {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._episodes }} - E{{ .Result._episodes }}{{ else }}{{ end }}"
+      filters:
+        - name: re_replace
+          args: [" - \\bEФильм\\b", " - MOVIE"]
+        - name: re_replace
+          args: [" - \\bEOVA\\b", " - OVA"]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUS{{ else }}{{ end }}"
     _code:
       selector: ..code
     details:
@@ -63,11 +86,13 @@ search:
       filters:
         - name: prepend
           args: "{{ .Config.sitelink }}"
+    magnet:
+      selector: magnet
     poster:
-      selector: ..poster.url
+      selector: ..posters.small.url
       filters:
         - name: prepend
-          args: "https://static.anilibria.tv/"
+          args: "https://static.anilibria.tv"
     seeders:
       selector: seeders
     leechers:
@@ -83,4 +108,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# json api v2
+    description:
+      selector: ..description
+# json api v3
