@@ -389,7 +389,7 @@ settings:
     type: checkbox
     label: Strip Russian Letters
     default: false
-  - name: addrussian
+  - name: addrussiantotitle
     type: checkbox
     label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
     default: true
@@ -531,9 +531,9 @@ search:
         - name: replace
           args: ["()", ""]
         - name: re_replace
-          args: ["^[\\s+&,.!?+\\-_\\|/':]+", ""]
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
         - name: append
-          args: "{{ if .Config.addrussian }} RUS{{ else }}{{ end }}"
+          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
       selector: a[href^="./viewtopic.php?t="]
       attribute: href
