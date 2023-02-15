@@ -58,7 +58,7 @@ namespace Jackett.Common.Indexers
 
         public AudioBookBay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(id: "audiobookbay",
-                   name: "AudioBookBay",
+                   name: "AudioBook Bay",
                    description: "AudioBook Bay (ABB) is a public Torrent Tracker for AUDIOBOOKS",
                    link: "https://audiobookbay.li/",
                    caps: new TorznabCapabilities
