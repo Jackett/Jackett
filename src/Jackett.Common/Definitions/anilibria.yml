@@ -54,15 +54,16 @@ search:
       selector: ..names.ru
     title_en:
       selector: ..names.en
-    title_alternative_all:
+    title_alternative:
       selector: ..names.alternative
       optional: true
-    title_alternative_notru:
-      selector: ..names.alternative:not(:contains(а)):not(:contains(э)):not(:contains(ы)):not(:contains(у)):not(:contains(о)):not(:contains(я)):not(:contains(е)):not(:contains(ё)):not(:contains(ю)):not(:contains(и)):not(:contains(й))
-      optional: true
-    title_alternative:
-      text: "{{ if .Config.striprussian }}{{ .Result.title_alternative_notru }}{{ else }}{{ .Result.title_alternative_all }}{{ end }}"
-      optional: true
+      filters:
+        - name: re_replace
+          args: ["([А-Яа-яЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1{{ end }}"]
+        - name: re_replace
+          args: ["^[\\.\\s\\d,\\-—:]+", ""]
+        - name: re_replace
+          args: ["^OVA$", ""]
     year:
       selector: ..season.year
     _quality:
@@ -72,6 +73,8 @@ search:
       filters:
         - name: replace
           args: [" - EФильм", " - MOVIE"]
+        - name: replace
+          args: [" - EOVA", " - OVA"]
         - name: append
           args: "{{ if .Config.addrussian }} - RUS{{ else }}{{ end }}"
     _code:
