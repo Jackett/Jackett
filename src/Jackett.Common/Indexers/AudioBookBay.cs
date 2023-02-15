@@ -256,7 +256,7 @@ namespace Jackett.Common.Indexers
                     Guid = details,
                     Details = details,
                     Link = details,
-                    Title = title,
+                    Title = CleanTitle(title),
                     Category = categories,
                     Size = size,
                     Seeders = 1,
@@ -291,6 +291,14 @@ namespace Jackett.Common.Indexers
             }
 
             return dom;
+        }
+
+        private static string CleanTitle(string title)
+        {
+            title = Regex.Replace(title, @"[\u0000-\u0008\u000A-\u001F\u0100-\uFFFF]", string.Empty, RegexOptions.Compiled);
+            title = Regex.Replace(title, @"\s+", " ", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            return title.Trim();
         }
     }
 }
