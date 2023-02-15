@@ -54,15 +54,21 @@ search:
       selector: ..names.ru
     title_en:
       selector: ..names.en
-    title_alternative:
+    title_alternative_all:
       selector: ..names.alternative
+      optional: true
+    title_alternative_notru:
+      selector: ..names.alternative:not(:contains(а)):not(:contains(э)):not(:contains(ы)):not(:contains(у)):not(:contains(о)):not(:contains(я)):not(:contains(е)):not(:contains(ё)):not(:contains(ю)):not(:contains(и)):not(:contains(й))
+      optional: true
+    title_alternative:
+      text: "{{ if .Config.striprussian }}{{ .Result.title_alternative_notru }}{{ else }}{{ .Result.title_alternative_all }}{{ end }}"
       optional: true
     year:
       selector: ..season.year
     _quality:
       selector: quality.string
     title:
-      text: "{{ if .Config.striprussian }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en }}{{ if .Result.title_alternative }} / {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._episodes }} - E{{ .Result._episodes }}{{ else }}{{ end }}"
+      text: "{{ if .Config.striprussian }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en }}{{ if .Result.title_alternative }} / AKA {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._episodes }} - E{{ .Result._episodes }}{{ else }}{{ end }}"
       filters:
         - name: replace
           args: [" - EФильм", " - MOVIE"]
