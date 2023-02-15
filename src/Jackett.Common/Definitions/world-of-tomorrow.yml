@@ -4,10 +4,10 @@ name: World-of-Tomorrow
 description: "World-of-Tomorrow is a Private German tracker"
 language: de-DE
 type: private
-encoding: ISO-8859-1
-certificates:
-  - 824f6e356ee0189eb9517a90c695b7ac8508495c # expired 26 December 2022
+encoding: UTF-8
 links:
+  - https://wotreworked.xyz/
+legacylinks:
   - https://world-of-tomorrow.eu/
 
 caps:
@@ -25,6 +25,7 @@ caps:
     - {id: 36, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 101, cat: TV, desc: "Kids"}
     - {id: 5, cat: Console, desc: "Konsolen-Games"}
+    - {id: 107, cat: PC/Mac, desc: "MAC-Programme"}
     - {id: 86, cat: Other, desc: "Misc"}
     - {id: 91, cat: Movies, desc: "Movie-Packs"}
     - {id: 66, cat: Movies, desc: "Movies"}
@@ -56,8 +57,8 @@ caps:
     - {id: 28, cat: PC, desc: "Windows-Programme"}
     - {id: 23, cat: TV/Sport, desc: "Wrestling"}
     - {id: 88, cat: XXX, desc: "XXX"}
+    - {id: 106, cat: XXX/ImageSet, desc: "XXX Bilder"}
     - {id: 102, cat: XXX, desc: "XXX HENTAI"}
-    - {id: 106, cat: XXX/ImageSet, desc: "XXX Picsets"}
 
   modes:
     search: [q]
@@ -110,16 +111,14 @@ settings:
     default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
 
 login:
-  path: login.php
-  method: form
-  form: form[action="../takelogin.php"]
-  cookies: ["JAVA=OK"] # avoid jscheck redirect
+  path: takelogin.php
+  method: post
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     pin: "{{ .Config.pin }}"
   error:
-    - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
+    - selector: table.tableinborder:contains("Login fehlgeschlagen!")
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -191,4 +190,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# engine n/a
+# WoT Reworked v8.2.1
