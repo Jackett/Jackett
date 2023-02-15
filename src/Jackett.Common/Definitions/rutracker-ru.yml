@@ -389,6 +389,10 @@ settings:
     type: checkbox
     label: Strip Russian Letters
     default: false
+  - name: addrussiantotitle
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -485,31 +489,51 @@ search:
       filters:
         # normalize to SXXEYY format
         - name: re_replace
-          args: ["[\\.\\,\\:\\-\\/\\|\\[\\]\\(\\)]", " "]
+          args: ["\\s(\\d+),(\\d+)", " $1-$2"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s*(\\d+)\\s*[CСcс]ери[ияй]\\s*(\\d+)\\s*(\\d+)\\s*из\\s*\\d+(.*)", "$1 S$2E$3-$4 rus $5"]
+          args: ["(?i)([\\s-])Х+([\\s\\)\\]])", "$1XX$2"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s*(\\d+)\\s*(\\d+)\\s*(\\d+)\\s*[CСcс]ери[ияй]\\s*из\\s*\\d+(.*)", "$1 S$2E$3-$4 rus $5"]
+          args: ["(?i)[CС]езон\\s*[:]*\\s+(\\d+).+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+\\s*[:]*\\s+(\\d+(?:-\\d+)?)\\s*из\\s*([\\w?])", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(.*)(\\d+)\\s*[CСcс]езон\\s*(\\d+)\\s*(\\d+)\\s*[CСcс]ери[ияй]\\s*из\\s*\\d+(.*)", "$1 S$2E$3-$4 rus $5"]
+          args: ["(?i)(\\d+)\\s+[CС]езон\\s*[:]*.+?(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+\\s*из\\s*([\\w?])", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s*(\\d+)\\s*[CСcс]ери[ияй]\\s*(\\d+)\\s*(\\d+)\\s*(.*)", "$1 S$2E$3-$4 rus $5"]
+          args: ["(?i)[CС]езон\\s*[:]*\\s+(\\d+).+(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+\\s+из\\s*([\\w?])", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s*(\\d+)\\s*[CСcс]ери[ияй]\\s*(\\d+)\\s*из\\s*\\d+(.*)", "$1 S$2E$3 rus $4"]
+          args: ["(?i)[CС]езон\\s*[:]*\\s+(\\d+).+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+\\s*[:]*\\s+(\\d+(?:-\\d+)?)", "S$1E$2"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s*(\\d+)(.*)", "$1 S$2 rus $3"]
+          args: ["(?i)(\\d+)\\s+[CС]езон\\s*[:]*.+?(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+", "S$1E$2"]
         - name: re_replace
-          args: ["(.*)[CСcс]]ери[ия]\\s*(\\d+)(.*)", "$1 E$2 rus $3"]
+          args: ["(?i)[CС]езон\\s*[:]*\\s+(\\d+).+(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езон\\s*[:]*\\s+(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езон", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:[CС]ери[ияй]|Эпизод|Выпуски?)+\\s*[:]*\\s+(\\d+(?:-\\d+)?)\\s*из\\s*([\\w?])", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+\\s+из\\s*([\\w?])", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:[CС]ери[ияй]|Эпизод|Выпуски?)+\\s*[:]*\\s+(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)+", "E$1"]
         - name: re_replace
           args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\s?DL\\b", "WEB-DL"]
         - name: replace
-          args: ["WEBRip", "WEBDL"]
+          args: ["[]", ""]
         - name: replace
-          args: ["WEB DL", "WEBDL"]
-        - name: replace
-          args: ["WEBDLRip", "WEBDL"]
-        - name: replace
-          args: ["HDTVRip", "HDTV"]
+          args: ["()", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+        - name: append
+          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
       selector: a[href^="./viewtopic.php?t="]
       attribute: href
