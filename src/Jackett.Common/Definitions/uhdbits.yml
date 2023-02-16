@@ -94,13 +94,15 @@ search:
     selector: table#torrent_table > tbody > tr.torrent
 
   fields:
-    category:
+    # note: there are optional extra colums
+    category_id:
       selector: a[href^="torrents.php?filter_cat"]
       attribute: href
       filters:
         - name: regexp
           args: "\\[(\\d+)\\]"
-    # note: there are optional extra colums
+    category:
+      text: "{{ .Result.category_id }}"
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
@@ -157,13 +159,23 @@ search:
         - name: replace
           args: [" / ", " "]
         - name: re_replace
-          args: ["\\b([\\w@\\.]+)$", " -$1"]
+          args: ["\\s+([\\w@\\.\\[\\]\\$\\-\\!\\u2122]+)$", " -$1"]
         - name: re_replace
           args: ["\\bEncode\\b", "Blu-Ray"]
         - name: re_replace
           args: ["\\bBlu-ray\\b", "BR-Disk"]
         - name: re_replace
           args: ["\\bRemux\\b", "Blu-Ray Remux"]
+        - name: re_replace
+          args: ["\\s+", " "]
+    _release_info_music:
+      selector: div.torrent_info
+      remove: .torrent_label.red, .torrent_label.blink_me
+      filters:
+        - name: re_replace
+          args: ["[\\s\\/]+$", ""]
+        - name: replace
+          args: [" / ", " "]
         - name: re_replace
           args: ["\\s+", " "]
     title:
@@ -174,5 +186,5 @@ search:
           args: ["(?i)\\bSeason (\\d+)\\b", "S$1"]
         - name: trim
         - name: append
-          args: " {{ .Result._release_info }}"
+          args: " {{ if eq .Result.category_id \"2\" }}{{ .Result._release_info_music }}{{ else }}{{ .Result._release_info }}{{ end }}"
 # Gazelle
