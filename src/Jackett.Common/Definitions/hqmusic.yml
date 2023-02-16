@@ -66,7 +66,7 @@ search:
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"
-    artistname: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ end }}"
+    artistname: "{{ if and (.Query.Artist) (ne .Query.Artist \"VA\") }}{{ .Query.Artist }}{{ else }}{{ end }}"
     groupname: "{{ if .Query.Album }}{{ .Query.Album }}{{ else }}{{ end }}"
     recordlabel: "{{ if .Query.Label }}{{ .Query.Label }}{{ else }}{{ end }}"
     year: "{{ if .Query.Year }}{{ .Query.Year }}{{ else }}{{ end }}"
