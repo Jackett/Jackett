@@ -157,7 +157,7 @@ search:
         - name: replace
           args: [" / ", " "]
         - name: re_replace
-          args: ["\\b([\\w@\\.\\[\\]\\$]+)$", " -$1"]
+          args: ["\\s+([\\w@\\.\\[\\]\\$\\-\\!\\u2122]+)$", " -$1"]
         - name: re_replace
           args: ["\\bEncode\\b", "Blu-Ray"]
         - name: re_replace
