@@ -16,7 +16,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
+    tv-search: [q, season, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
 
@@ -65,7 +65,8 @@ login:
   error:
     - selector: .auth_form > .warning
   test:
-    path: top10.php
+    path: index.php
+    selector: a[href^="logout.php?auth="]
 
 search:
   paths:
@@ -73,7 +74,7 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    searchstr: "{{ .Keywords }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
     tags_type: 1
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
@@ -87,7 +88,7 @@ search:
       args: ["\\.", " "]
     # if searching for season packs switch S01 to season 1 #10423
     - name: re_replace
-      args: ["(?i)(S)(\\d{1,3})$", "season $2"]
+      args: ["(?i)\\bS(\\d{1,3})(E\\d+)?$", "season $1"]
 
   rows:
     selector: table#torrent_table > tbody > tr.torrent
@@ -101,50 +102,11 @@ search:
           args: "\\[(\\d+)\\]"
     # note: there are optional extra colums
     download:
-      selector: a[title="Download"]
+      selector: a[href^="torrents.php?action=download&id="]
       attribute: href
       filters:
         - name: replace
           args: ["\t", " "]
-    title:
-      selector: div.group_info
-      remove: span, div.tags
-      filters:
-        - name: replace
-          args: ["\t\t\t\t", " "]
-        - name: replace
-          args: [" / Free", ""]
-        - name: replace
-          args: [" / ViE", ""]
-        - name: replace
-          args: [" / User", ""]
-        - name: replace
-          args: [" / Exclusive!", ""]
-        - name: replace
-          args: [" / ↓25%", ""]
-        - name: replace
-          args: [" / ↓50%", ""]
-        - name: replace
-          args: [" / ↓75%", ""]
-        - name: replace
-          args: [" / 2x 50%", ""]
-        - name: replace
-          args: [" / 2x Free", ""]
-        - name: replace
-          args: [" / 2x", ""]
-        - name: re_replace
-          args: [" / ", " "]
-        - name: re_replace
-          args: ["\\b(\\w+)$", " -$1"]
-        #  #10423
-        - name: re_replace
-          args: ["(?i)(season )", "S"]
-        - name: replace
-          args: ["Encode", "Blu-Ray"]
-        - name: replace
-          args: ["Blu-ray", "BR-Disk"]
-        - name: replace
-          args: ["Remux", "Blu-Ray Remux"]
     details:
       selector: a.torrent_name
       attribute: href
@@ -186,4 +148,31 @@ search:
         "*": 1
     minimumratio:
       text: 0.6
-# engine n/a
+    _release_info:
+      selector: div.torrent_info
+      remove: .torrent_label.red, .torrent_label.blink_me, .torrent_label:contains("User"), .torrent_label:contains("ViE"), .torrent_label:contains("Exclusive")
+      filters:
+        - name: re_replace
+          args: ["[\\s\\/]+$", ""]
+        - name: replace
+          args: [" / ", " "]
+        - name: re_replace
+          args: ["\\b([\\w@\\.]+)$", " -$1"]
+        - name: re_replace
+          args: ["\\bEncode\\b", "Blu-Ray"]
+        - name: re_replace
+          args: ["\\bBlu-ray\\b", "BR-Disk"]
+        - name: re_replace
+          args: ["\\bRemux\\b", "Blu-Ray Remux"]
+        - name: re_replace
+          args: ["\\s+", " "]
+    title:
+      selector: div.group_info
+      remove: span, div.tags, div.torrent_info
+      filters:
+        - name: re_replace
+          args: ["(?i)\\bSeason (\\d+)\\b", "S$1"]
+        - name: trim
+        - name: append
+          args: " {{ .Result._release_info }}"
+# Gazelle
