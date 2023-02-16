@@ -95,12 +95,14 @@ search:
 
   fields:
     # note: there are optional extra colums
-    category:
+    category_id:
       selector: a[href^="torrents.php?filter_cat"]
       attribute: href
       filters:
         - name: regexp
           args: "\\[(\\d+)\\]"
+    category:
+      text: "{{ .Result.category_id }}"
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
@@ -176,10 +178,6 @@ search:
           args: [" / ", " "]
         - name: re_replace
           args: ["\\s+", " "]
-    _release_is_music:
-      case:
-        "a[href^=\"torrents.php?filter_cat\"] div[class~=\"cats_music\"]": 1
-        "*": 0
     title:
       selector: div.group_info
       remove: span, div.tags, div.torrent_info
@@ -188,5 +186,5 @@ search:
           args: ["(?i)\\bSeason (\\d+)\\b", "S$1"]
         - name: trim
         - name: append
-          args: " {{ if eq .Result._release_is_music \"1\" }}{{ .Result._release_info_music }}{{ else }}{{ .Result._release_info }}{{ end }}"
+          args: " {{ if eq .Result.category_id \"2\" }}{{ .Result._release_info_music }}{{ else }}{{ .Result._release_info }}{{ end }}"
 # Gazelle
