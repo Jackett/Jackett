@@ -9,6 +9,10 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public StringConfigurationItem RSSKey { get; private set; }
         public DisplayInfoConfigurationItem Instructions { get; private set; }
         public BoolConfigurationItem AddHybridFeaturesToTitle { get; private set; }
+        public BoolConfigurationItem FilterFreeleech { get; private set; }
+        public BoolConfigurationItem FilterLimited { get; private set; }
+        public BoolConfigurationItem FilterRefund { get; private set; }
+        public BoolConfigurationItem FilterRewind { get; private set; }
 
         public ConfigurationDataBeyondHDApi(string instructionMessageOptional)
         {
@@ -16,6 +20,10 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             RSSKey = new StringConfigurationItem("RSS Key");
             Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
             AddHybridFeaturesToTitle = new BoolConfigurationItem("Include DV/HDR10 in title when release has multiple HDR formats.");
+            FilterFreeleech = new BoolConfigurationItem("Filter freeleech");
+            FilterLimited = new BoolConfigurationItem("Filter freeleech (limited UL)");
+            FilterRefund = new BoolConfigurationItem("Filter refund");
+            FilterRewind = new BoolConfigurationItem("Filter rewind");
         }
     }
 }

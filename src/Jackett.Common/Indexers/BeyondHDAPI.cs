@@ -93,6 +93,15 @@ namespace Jackett.Common.Indexers
                 { BHDParams.search, query.GetQueryString() },
             };
 
+            if (configData.FilterFreeleech.Value)
+                postData.Add(BHDParams.freeleech, "1");
+            if (configData.FilterLimited.Value)
+                postData.Add(BHDParams.limited, "1");
+            if (configData.FilterRefund.Value)
+                postData.Add(BHDParams.refund, "1");
+            if (configData.FilterRewind.Value)
+                postData.Add(BHDParams.rewind, "1");
+
             if (query.IsTVSearch)
                 postData.Add(BHDParams.categories, "TV");
             else if (query.IsMovieSearch)
