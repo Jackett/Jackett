@@ -13,6 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 65, cat: Movies/3D, desc: "3D Film"}
+    - {id: 82, cat: Movies/UHD, desc: "4K video"}
     - {id: 79, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 37, cat: Movies, desc: "Deca"}
     - {id: 43, cat: TV/Documentary, desc: "Dokumentarci"}
@@ -26,12 +27,12 @@ caps:
     - {id: 61, cat: Movies/HD, desc: "HD Mesano"}
     - {id: 50, cat: PC/Games, desc: "Igre"}
     - {id: 44, cat: Books, desc: "Knjige"}
-    - {id: 80, cat: TV, desc: "Paketi"}
     - {id: 46, cat: Audio, desc: "Koncerti"}
     - {id: 58, cat: Audio/Lossless, desc: "Lossless/Domaće"}
     - {id: 59, cat: Audio/Lossless, desc: "Lossless/Strano"}
     - {id: 5, cat: Audio/MP3, desc: "MP3/Domaće"}
     - {id: 57, cat: Audio/MP3, desc: "MP3/Strano"}
+    - {id: 80, cat: TV, desc: "Paketi"}
     - {id: 49, cat: PC, desc: "Programi"}
     - {id: 28, cat: Other, desc: "Razno"}
     - {id: 62, cat: TV/SD, desc: "SD Boxset"}
