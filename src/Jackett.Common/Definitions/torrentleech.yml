@@ -88,6 +88,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: exclude_scene
+    type: checkbox
+    label: Exclude SCENE torrents from results
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -124,7 +128,8 @@ login:
 search:
   paths:
     # "newfilter/2" include 0day and music
-    - path: "torrents/browse/list/{{ if .Config.freeleech }}facets/tags:FREELEECH/{{ else }}{{ end }}{{ if .Query.IMDBID }}imdbID/{{ .Query.IMDBID }}/{{ else }}exact/1/query/{{ .Keywords }}/{{ end }}{{ if .Keywords }}{{ else }}newfilter/2/{{ end }}{{ if .Categories }}categories/{{ join .Categories \",\" }}/{{ else }}{{ end }}orderby/{{ .Config.sort }}/order/{{ .Config.type }}"
+    # https://www.torrentleech.org/torrents/browse/list/categories/29,2,26,27,32,44,7,34,35/facets/tags:FREELEECH,nonscene/exact/1/query/friends/orderby/added/order/desc
+    - path: "torrents/browse/list{{ if .Categories }}/categories/{{ join .Categories \",\" }}{{ else }}{{ end }}{{ if or .Config.freeleech .Config.exclude_scene }}/facets/tags:{{ else }}{{ end }}{{ if .Config.freeleech }}FREELEECH{{ else }}{{ end }}{{ if and .Config.freeleech .Config.exclude_scene }},{{ else }}{{ end }}{{ if .Config.exclude_scene }}nonscene{{ else }}{{ end }}/{{ if .Query.IMDBID }}imdbID/{{ .Query.IMDBID }}/{{ else }}exact/1/query/{{ .Keywords }}/{{ end }}{{ if .Keywords }}{{ else }}newfilter/2/{{ end }}orderby/{{ .Config.sort }}/order/{{ .Config.type }}"
       response:
         type: json
 
@@ -191,4 +196,4 @@ search:
       # 10 days for registered users, less for upgraded users
       # 10 day (as seconds = 7 x 24 x 60 x 60)
       text: 864000
-# json enigine n/a
+# json engine n/a
