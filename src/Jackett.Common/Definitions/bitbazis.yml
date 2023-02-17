@@ -123,39 +123,26 @@ search:
     categorydesc:
       selector: img[src^="pic/kategoria/"]
       attribute: title
-    genre:
-      selector: span.tooltiptext
-    description:
-      text: "{{ .Result.genre }}"
     title:
-      selector: div.tooltip
-      remove: span
+      selector: a.preview
+    _id:
+      selector: td.tori_infok
+      attribute: id
+      filters:
+        - name: regexp
+          args: (\d+)
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      text: "details.php?id={{ .Result._id }}#adatlap"
+    download:
+      text: "download.php?torrent={{ .Result._id }}"
     poster:
       selector: a.preview
       attribute: href
-    download_1:
-      selector: a[href^="download.php?torrent="]
-      optional: true
-      attribute: href
-    download_2:
-      selector: span[onclick*="download.php?torrent="]
-      optional: true
-      attribute: onclick
-      filters:
-        - name: replace
-          args: ["window.open('", ""]
-        - name: replace
-          args: ["', '_self');", ""]
-    download:
-      text: "{{ if or .Result.download_1 .Result.download_2 }}{{ or .Result.download_1 .Result.download_2 }}{{ else }}{{ end }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
-      selector: td:nth-child(6)
+      selector: td[id^="tsize_"]
     date:
       # 36 perce
       # 13 órája  és 59 perce
@@ -183,6 +170,10 @@ search:
       selector: td:nth-child(3)
     leechers:
       selector: td:nth-child(4)
+    genre:
+      selector: span[style="font-size:small;"]
+    description:
+      text: "{{ .Result.genre }}"
     downloadvolumefactor:
       case:
         "i:contains(\"(Free)\")": 0
