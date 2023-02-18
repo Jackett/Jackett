@@ -12,14 +12,14 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 2, cat: TV, desc: "Séries"}
-    - {id: 8, cat: TV/Anime, desc: "Animes"}
-    - {id: 5, cat: Other, desc: "Cursos"}
-    - {id: 6, cat: Other, desc: "Materiais de Apoio"}
-    - {id: 7, cat: Books, desc: "eBooks / Revistas / Apostilas"}
-    - {id: 9, cat: Audio/Video, desc: "Shows"}
-    - {id: 10, cat: PC, desc: "Programas"}
-    - {id: 11, cat: TV/Documentary, desc: "Documentários"}
+    - {id: 6, cat: TV/Anime, desc: "Animes"}
+    - {id: 3, cat: TV/Documentary, desc: "Documentários"}
+    - {id: 7, cat: Audio/Video, desc: "Shows"}
     - {id: 4, cat: Console, desc: "Games"}
+    - {id: 8, cat: Other, desc: "Cursos"}
+    - {id: 9, cat: Books, desc: "eBooks / Revistas / Apostilas"}
+    - {id: 5, cat: PC, desc: "Programas"}
+    - {id: 10, cat: Other, desc: "Materiais de Apoio"}
 
   modes:
     search: [q]
@@ -138,9 +138,7 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
-        - name: re_replace
-          args: ["(?i)(TV Movie)", "TV_Movie"]
+          args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: replace
           args: [" & ", "_&_"]
     description:
