@@ -86,11 +86,11 @@ settings:
     label: Password
   - name: 2facode
     type: text
-    label: 2FA code
+    label: Alt 2FA Token
   - name: info_2fa
     type: info
-    label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the TorrentLeech Web Site. Otherwise just leave it empty."
+    label: "About Alt 2FA Token"
+    default: "(Site Profile => Alt 2FA Token) Only fill in the <b>Alt 2FA Token</b> if you have enabled <b>2FA</b> on the TorrentLeech Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
