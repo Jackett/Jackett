@@ -61,7 +61,10 @@ settings:
       1: asc
 
 search:
-  # http://megapeer.ru/browse.php?search=%25%25&age=&cat=0&stype=0&sort=0&ascdesc=0
+  headers:
+    # prevent redirect
+    Referer: ["{{ .Config.sitelink }}browse.php"]
+  # https://megapeer.vip/browse.php?search=%25%25&age=&cat=0&stype=0&sort=0&ascdesc=0
   paths:
     - path: browse.php
   keywordsfilters:
@@ -75,10 +78,10 @@ search:
       args: ["(\\w+)", "%$1"] # prepend % to each word - allow 1 character keywords
   inputs:
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%%{{ end }}"
-    # does not support multi category searches
-    cat: 0
     # null or yyyy
     age: ""
+    # does not support multi category searches
+    cat: 0
     # 0 title, 1 descr, 2 phrase, 3 infohash
     stype: 0
     sort: "{{ .Config.sort }}"
