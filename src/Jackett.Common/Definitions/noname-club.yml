@@ -826,8 +826,6 @@ search:
           # Remove RUSSIAN title postfix for non russian categories. e.g. 913 - "Фильмы с переводом на др. языках"
         - name: re_replace
           args: [ "(.+?) - RUSSIAN", "{{ if eq .Result.category_id \"913\") }}$1{{ else }}$0{{ end }}" ]
-        - name: append
-          args: "{{ if eq .Result.category_id \"913\" }}{{ .Result._release_info_music }}{{ else }}{{ .Result._release_info }}{{ end }}"
     details:
       selector: a[href^="viewtopic.php?t="]
       attribute: href
