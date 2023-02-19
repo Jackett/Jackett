@@ -2,8 +2,8 @@
 id: yts
 name: YTS
 description: "YTS is a Public torrent site specialising in HD movies of small size"
-language: en-US
 type: public
+language: en-US
 encoding: UTF-8
 requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
@@ -57,10 +57,13 @@ search:
 
   inputs:
     # ignore ' (e.g. search for america's Next Top Model)
-    query_term: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ re_replace .Keywords \"[']\" \"\" }}{{ end }}"
+    query_term: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # without this the API sometimes returns nothing
     limit: 50
     sort: date_added
+  keywordsfilters:
+    - name: re_replace
+      args: ["[^\\w]+", " "]
 
   rows:
     selector: data.movies
@@ -86,40 +89,39 @@ search:
       selector: type
     year:
       selector: ..year
-    title:
+    title_default:
       selector: ..title
+      filters:
+        - name: append
+          args: " ({{ .Result.year }})"
+    title_optional:
+      selector: ..title_long
+      optional: true
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
       filters:
         - name: replace
           args: [":", ""]
-        - name: replace
-          args: [" ", "."]
         # append type: BRRip or WEBRip, resolves #3558 via #4577
         - name: append
-          args: ".{{ .Result.year }}.{{ .Result._quality }}.{{ if eq .Result._type \"web\" }}WEBRip{{ else }}BRRip{{ end }}-YTS"
-    _sitelink_trimmed:
-      text: "{{ .Config.sitelink }}"
-      filters:
-        - name: replace
-          args: ["https://", ""]
-        - name: replace
-          args: ["/", ""]
+          args: " {{ .Result._quality }} {{ if eq .Result._type \"web\" }}WEBRip{{ else }}BRRip{{ end }} -YTS"
     details:
       selector: ..url
       filters:
-        - name: replace
-          args: ["yts.mx", "{{ .Result._sitelink_trimmed }}"] # fix for 12494
+        - name: re_replace
+          args: ["^https?:\\/\\/yts\\.mx\\/", "{{ .Config.sitelink }}"] # fix for 12494
     download:
       selector: url
       filters:
-        - name: replace
-          args: ["yts.mx", "{{ .Result._sitelink_trimmed }}"] # fix for 12494
+        - name: re_replace
+          args: ["^https?:\\/\\/yts\\.mx\\/", "{{ .Config.sitelink }}"] # fix for 12494
     infohash:
       selector: hash
     poster:
       selector: ..large_cover_image
       filters:
-        - name: replace
-          args: ["yts.mx", "{{ .Result._sitelink_trimmed }}"] # fix for 12494
+        - name: re_replace
+          args: ["^https?:\\/\\/yts\\.mx\\/", "{{ .Config.sitelink }}"] # fix for 12494
     imdbid:
       selector: ..imdb_code
     date:
