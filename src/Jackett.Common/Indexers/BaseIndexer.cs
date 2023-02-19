@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Common.Exceptions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -314,6 +315,12 @@ namespace Jackett.Common.Indexers
                 errorCount = 0;
                 expireAt = DateTime.Now.Add(HealthyStatusValidity);
                 return new IndexerResult(this, results, false);
+            }
+            catch (TooManyRequestsException ex)
+            {
+                var delay = ex.RetryAfter.TotalSeconds;
+                expireAt = DateTime.Now.AddSeconds(delay);
+                throw new IndexerException(this, ex);
             }
             catch (Exception ex)
             {

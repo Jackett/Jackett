@@ -7,17 +7,17 @@ namespace Jackett.Common
     {
         public IIndexer Indexer { get; protected set; }
 
-        public IndexerException(IIndexer Indexer, string message, Exception innerException)
+        public IndexerException(IIndexer indexer, string message, Exception innerException)
             : base(message, innerException)
-            => this.Indexer = Indexer;
+            => this.Indexer = indexer;
 
-        public IndexerException(IIndexer Indexer, string message)
-            : this(Indexer, message, null)
+        public IndexerException(IIndexer indexer, string message)
+            : this(indexer, message, null)
         {
         }
 
-        public IndexerException(IIndexer Indexer, Exception innerException)
-            : this(Indexer, "Exception (" + Indexer.Id + "): " + innerException.GetBaseException().Message, innerException)
+        public IndexerException(IIndexer indexer, Exception innerException)
+            : this(indexer, "Exception (" + indexer.Id + "): " + innerException.GetBaseException().Message, innerException)
         {
         }
     }

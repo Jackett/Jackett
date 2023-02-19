@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Jackett.Common;
+using Jackett.Common.Exceptions;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
@@ -14,9 +15,11 @@ using Jackett.Common.Models.DTO;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Net.Http.Headers;
 using NLog;
 
 namespace Jackett.Server.Controllers
@@ -432,6 +435,20 @@ namespace Jackett.Server.Controllers
 
                 return Content(xml, "application/rss+xml", Encoding.UTF8);
             }
+            catch (IndexerException ex) when (ex.InnerException is TooManyRequestsException tooManyRequestsException)
+            {
+                logger.Error(ex);
+
+                if (!HttpContext.Response.Headers.ContainsKey("Retry-After"))
+                {
+                    var retryAfter = Convert.ToInt32(tooManyRequestsException.RetryAfter.TotalSeconds);
+
+                    if (retryAfter > 0)
+                        HttpContext.Response.Headers.Add("Retry-After", $"{retryAfter}");
+                }
+
+                return GetErrorXML(900, ex.Message, StatusCodes.Status429TooManyRequests);
+            }
             catch (Exception e)
             {
                 logger.Error(e);
@@ -440,7 +457,18 @@ namespace Jackett.Server.Controllers
         }
 
         [Route("[action]/{ignored?}")]
-        public IActionResult GetErrorXML(int code, string description) => Content(CreateErrorXML(code, description), "application/xml", Encoding.UTF8);
+        public IActionResult GetErrorXML(int code, string description, int statusCode = StatusCodes.Status400BadRequest)
+        {
+            var mediaTypeHeaderValue = MediaTypeHeaderValue.Parse("application/xml");
+            mediaTypeHeaderValue.Encoding = Encoding.UTF8;
+
+            return new ContentResult
+            {
+                StatusCode = statusCode,
+                Content = CreateErrorXML(code, description),
+                ContentType = mediaTypeHeaderValue.ToString()
+            };
+        }
 
         public static string CreateErrorXML(int code, string description)
         {
