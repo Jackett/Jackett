@@ -84,7 +84,7 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: alt2FAToken
+  - name: alt2fatoken
     type: text
     label: Alt 2FA Token
   - name: info_2fa
@@ -126,7 +126,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    alt2FAToken: "{{ .Config.alt2FAToken }}"
+    alt2FAToken: "{{ .Config.alt2fatoken }}"
   error:
     - selector: p.text-danger
     - selector: .login-container h2:contains("One Time Password")
