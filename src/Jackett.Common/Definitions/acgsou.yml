@@ -6,6 +6,7 @@ language: zh-CN
 type: public
 followredirect: true
 encoding: UTF-8
+requestDelay: 5
 links:
   - https://www.36dm.club/
   - https://www.36dm.com/
