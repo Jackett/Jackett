@@ -34,6 +34,14 @@ namespace Jackett.Common.Indexers
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q,
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q,
                        }
                    },
                    configService: configService,
@@ -65,10 +73,7 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(15, TorznabCatType.XXX, "Adult Video");
             AddCategoryMapping(16, TorznabCatType.Other, "Other");
 
-            configData.AddDynamic(
-                "DDoS-Guard",
-                new DisplayInfoConfigurationItem("", "This site may use DDoS-Guard Protection, therefore Jackett requires <a href='https://github.com/Jackett/Jackett#configuring-flaresolverr' target='_blank'>FlareSolverr</a> to access it.")
-                );
+            configData.AddDynamic("DDoS-Guard", new DisplayInfoConfigurationItem("DDoS-Guard", "This site may use DDoS-Guard Protection, therefore Jackett requires <a href='https://github.com/Jackett/Jackett#configuring-flaresolverr' target='_blank'>FlareSolverr</a> to access it."));
 
             AddLanguageConfiguration();
 
@@ -146,8 +151,7 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-                throw new Exception("Could not find releases from this URL"));
+            await ConfigureIfOK(string.Empty, releases.Any(), () => throw new Exception("Could not find releases from this URL"));
 
             return IndexerConfigurationStatus.Completed;
         }
@@ -166,10 +170,11 @@ namespace Jackett.Common.Indexers
             // Prepare the search query
             var queryParameters = new NameValueCollection
             {
-                { "q", query.SearchTerm ?? string.Empty },
+                { "page", "search" },
                 { "s", GetSortBy },
                 { "o", GetOrder },
-                { "group_id", "0" } // No group
+                { "group_id", "0" }, // No group
+                { "q", query.SearchTerm ?? string.Empty }
             };
 
             // Get specified categories
@@ -196,13 +201,11 @@ namespace Jackett.Common.Indexers
 
         private IEnumerable<ReleaseInfo> ParseResult(string response)
         {
-            const string rowSelector = "div#content table > tbody > tr";
-
             try
             {
                 var resultParser = new HtmlParser();
                 var resultDocument = resultParser.ParseDocument(response);
-                IEnumerable<IElement> rows = resultDocument.QuerySelectorAll(rowSelector);
+                IEnumerable<IElement> rows = resultDocument.QuerySelectorAll("div#content table > tbody > tr");
 
                 var releases = new List<ReleaseInfo>();
                 foreach (var r in rows)
