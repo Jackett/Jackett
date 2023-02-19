@@ -61,10 +61,6 @@ search:
     # https://www.acgsou.com/search.php?keyword=test
     - path: "{{ if .Keywords }}search.php?keyword={{ .Keywords }}{{ else }}1.html{{ end }}"
 
-  headers:
-    # site blocks Jackett's User-Agents, so slightly alter it here (e.g. Safari/537.36 > Safari/537.35)
-    User-Agent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
-
   rows:
     selector: table tbody tr[class^="alt"]:has(td:nth-child(3) a)
 
