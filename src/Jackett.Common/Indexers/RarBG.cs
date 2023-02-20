@@ -301,6 +301,8 @@ namespace Jackett.Common.Indexers
             var cats = string.Join(";", querycats);
             qc.Add("category", cats);
 
+            webclient.requestDelay = qc.Get("mode") == "list" ? 31 : 5;
+
             return ApiEndpoint + "?" + qc.GetQueryString();
         }
 
