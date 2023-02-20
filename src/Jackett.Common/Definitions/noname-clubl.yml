@@ -800,12 +800,14 @@ search:
     selector: table.forumline.tablesorter > tbody > tr:has(a[href^="viewtopic.php?t="]):has(a[href^="download.php?id="])
 
   fields:
-    category:
+    category_id:
       selector: a[href^="tracker.php?f="]
       attribute: href
       filters:
         - name: querystring
           args: f
+    category:
+      text: "{{ .Result.category_id }}"
     title_is_rus:
       selector: a[href^="viewtopic.php?t="] > b
       filters:
@@ -843,9 +845,7 @@ search:
         - name: replace
           args: ["HDTVRip", "HDTV"]
         - name: append
-          args: "{{ if .Result.title_is_rus }} - RUSSIAN{{ else }}{{ end }}"
-        - name: re_replace
-          args: ["(.+?) - RUSSIAN", "{{ if .Config.addrussian }}$1 - RUSSIAN{{ else }}$1{{ end }}"]
+          args: "{{ if and (.Result.title_is_rus) (ne .Result.category_id \"913\") (.Config.addrussian) }} - RUSSIAN{{ else }}{{ end }}"
     details:
       selector: a[href^="viewtopic.php?t="]
       attribute: href
