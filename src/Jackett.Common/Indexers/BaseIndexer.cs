@@ -538,7 +538,7 @@ namespace Jackett.Common.Indexers
             {
                 Url = url,
                 Type = RequestType.POST,
-                Cookies = cookies,
+                Cookies = cookies ?? CookieHeader,
                 Referer = referer,
                 PostData = data,
                 Encoding = Encoding,

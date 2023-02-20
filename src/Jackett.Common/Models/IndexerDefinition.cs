@@ -96,6 +96,7 @@ namespace Jackett.Common.Models
         public List<errorBlock> Error { get; set; }
         public pageTestBlock Test { get; set; }
         public captchaBlock Captcha { get; set; }
+        public Dictionary<string, List<string>> Headers { get; set; }
     }
 
     public class errorBlock
@@ -190,6 +191,7 @@ namespace Jackett.Common.Models
         public string Method { get; set; }
         public beforeBlock Before { get; set; }
         public infohashBlock Infohash { get; set; }
+        public Dictionary<string, List<string>> Headers { get; set; }
     }
 
     public class selectorField

@@ -45,6 +45,7 @@ settings:
 login:
   path: takelogin.php
   method: post
+  cookies: ["c_lang_folder=en"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
@@ -53,7 +54,7 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    - selector: td.embedded:has(h2:contains("失败")), td.embedded:has(h2:contains("failed"))
       message:
         selector: td.text
   test:
