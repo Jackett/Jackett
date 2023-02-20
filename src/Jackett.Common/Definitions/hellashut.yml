@@ -138,10 +138,6 @@ search:
     order: "{{ .Config.type }}"
     # does not return imdb link in results
 
-  keywordsfilters:
-    - name: re_replace
-      args: ["(\\w+)", "+$1"] # prepend + to each word
-
   rows:
     selector: table.ttable_headinner tr.t-row
 
