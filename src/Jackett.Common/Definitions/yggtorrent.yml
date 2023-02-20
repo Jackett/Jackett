@@ -10,23 +10,6 @@ requestDelay: 2
 links:
   - https://www6.yggtorrent.lol/
 legacylinks:
-  - https://yggtorrent.com/
-  - https://ww1.yggtorrent.com/
-  - https://yggtorrent.is/
-  - https://www.yggtorrent.is/
-  - https://ww1.yggtorrent.is/
-  - https://ww2.yggtorrent.is/
-  - https://ww3.yggtorrent.is/
-  - https://ww4.yggtorrent.is/
-  - https://yggtorrent.to/
-  - https://www3.yggtorrent.to/
-  - https://www6.yggtorrent.to/
-  - https://www8.yggtorrent.to/
-  - https://www9.yggtorrent.to/
-  - https://ygg.to/
-  - https://www.ygg.to/
-  - https://ww3.yggtorrent.gg/
-  - http://www2.yggtorrent.gg/
   - https://www.yggtorrent.gg/
   - https://www.yggtorrent.ch/
   - https://www.yggtorrent.pe/
@@ -91,6 +74,14 @@ caps:
     - {id: 2154, cat: Books, desc: "eBook : Livres"}
     - {id: 2155, cat: Books, desc: "eBook : Mangas"}
     - {id: 2156, cat: Books, desc: "eBook : Presse"}
+    - {id: 2300, cat: Other, desc: "Nulled"}
+    - {id: 2301, cat: Other, desc: "Nulled : Wordpress"}
+    - {id: 2302, cat: Other, desc: "Nulled : Scripts PHP & CMS"}
+    - {id: 2303, cat: Other, desc: "Nulled : Mobile"}
+    - {id: 2304, cat: Other, desc: "Nulled : Divers"}
+    - {id: 2200, cat: Other, desc: "Imprimante 3D"}
+    - {id: 2201, cat: Other, desc: "Imprimante 3D : Objets"}
+    - {id: 2202, cat: Other, desc: "Imprimante 3D : Personnages"}
     - {id: 2141, cat: Other, desc: "Emulation"}
     - {id: 2157, cat: Other, desc: "Emulation : Emulateurs"}
     - {id: 2158, cat: Other, desc: "Emulation : Roms"}
