@@ -327,6 +327,18 @@
                 },
                 "test": {
                     "$ref": "#/definitions/PageTestBlock"
+                },
+                "headers": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[A-Za-z0-9-]*$": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 }
             },
             "title": "Login"
@@ -675,6 +687,18 @@
                 },
                 "infohash": {
                     "$ref": "#/definitions/InfoHashBlock"
+                },
+                "headers": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[A-Za-z0-9-]*$": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
                 }
             },
             "title": "DownloadBlock"

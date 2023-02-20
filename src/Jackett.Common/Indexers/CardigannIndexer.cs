@@ -548,6 +548,8 @@ namespace Jackett.Common.Indexers
             if (Login == null)
                 return true;
 
+            var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
+
             if (Login.Method == "post")
             {
                 var pairs = new Dictionary<string, string>();
@@ -558,8 +560,12 @@ namespace Jackett.Common.Indexers
                 }
 
                 var LoginUrl = resolvePath(Login.Path).ToString();
+
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true);
+                if (Login.Cookies != null)
+                    configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
+
+                var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true, headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForError(loginResult, Definition.Login.Error);
@@ -571,11 +577,9 @@ namespace Jackett.Common.Indexers
                 var queryCollection = new NameValueCollection();
                 var pairs = new Dictionary<string, string>();
 
-                var FormSelector = Login.Form;
-                if (FormSelector == null)
-                    FormSelector = "form";
+                var FormSelector = Login.Form ?? "form";
 
-                // landingResultDocument might not be initiated if the login is caused by a relogin during a query
+                // landingResultDocument might not be initiated if the login is caused by a re-login during a query
                 if (landingResultDocument == null)
                 {
                     var ConfigurationResult = await GetConfigurationForSetup(true);
@@ -607,9 +611,7 @@ namespace Jackett.Common.Indexers
                     if (name == null)
                         continue;
 
-                    var value = input.GetAttribute("value");
-                    if (value == null)
-                        value = "";
+                    var value = input.GetAttribute("value") ?? "";
 
                     pairs[name] = value;
                 }
@@ -672,7 +674,7 @@ namespace Jackett.Common.Indexers
                 if (simpleCaptchaPresent != null)
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
-                    var simpleCaptchaResult = await RequestWithCookiesAsync(captchaUrl.ToString(), referer: LoginUrl);
+                    var simpleCaptchaResult = await RequestWithCookiesAsync(captchaUrl.ToString(), referer: LoginUrl, headers: headers);
                     var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.ContentString);
                     var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
                     pairs["captchaSelection"] = captchaSelection;
@@ -724,7 +726,6 @@ namespace Jackett.Common.Indexers
                 var enctype = form.GetAttribute("enctype");
                 if (enctype == "multipart/form-data")
                 {
-                    var headers = new Dictionary<string, string>();
                     var boundary = "---------------------------" + (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds.ToString().Replace(".", "");
                     var bodyParts = new List<string>();
 
@@ -746,9 +747,7 @@ namespace Jackett.Common.Indexers
                         body);
                 }
                 else
-                {
-                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, LoginUrl, true);
-                }
+                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, LoginUrl, true, headers);
 
                 configData.CookieHeader.Value = loginResult.Cookies;
 
@@ -769,7 +768,7 @@ namespace Jackett.Common.Indexers
 
                 var LoginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink);
+                var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink, headers: headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForError(loginResult, Definition.Login.Error);
@@ -779,7 +778,7 @@ namespace Jackett.Common.Indexers
                 var OneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
                 var LoginUrl = resolvePath(Login.Path + OneUrl).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink);
+                var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink, headers: headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForError(loginResult, Definition.Login.Error);
@@ -792,11 +791,11 @@ namespace Jackett.Common.Indexers
             return true;
         }
 
-        protected string getRedirectDomainHint(string requestUrl, string RedirectUrl)
+        protected string getRedirectDomainHint(string requestUrl, string redirectUrl)
         {
-            if (requestUrl.StartsWith(SiteLink) && !RedirectUrl.StartsWith(SiteLink))
+            if (requestUrl.StartsWith(SiteLink) && !redirectUrl.StartsWith(SiteLink))
             {
-                var uri = new Uri(RedirectUrl);
+                var uri = new Uri(redirectUrl);
                 return uri.Scheme + "://" + uri.Host + "/";
             }
             return null;
@@ -813,12 +812,12 @@ namespace Jackett.Common.Indexers
 
             // test if login was successful
             var LoginTestUrl = resolvePath(Login.Test.Path).ToString();
-            var headers = ParseCustomHeaders(Definition.Search?.Headers, GetBaseTemplateVariables());
+            var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
             var testResult = await RequestWithCookiesAsync(LoginTestUrl, headers: headers);
 
             if (testResult.IsRedirect)
             {
-                var errormessage = "Login Failed, got redirected.";
+                var errormessage = $"Login Failed, got redirected to: {testResult.RedirectingTo}";
                 var DomainHint = getRedirectDomainHint(testResult);
                 if (DomainHint != null)
                 {
@@ -905,11 +904,13 @@ namespace Jackett.Common.Indexers
                 return configData;
 
             var LoginUrl = resolvePath(Login.Path);
+            var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
 
             configData.CookieHeader.Value = null;
             if (Login.Cookies != null)
                 configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
-            landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, referer: SiteLink);
+
+            landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, referer: SiteLink, headers: headers);
 
             // Some sites have a temporary redirect before the login page, we need to process it.
             if (Definition.Followredirect)
@@ -933,7 +934,7 @@ namespace Jackett.Common.Indexers
 
                         var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
                         var captchaImageData = await RequestWithCookiesAsync(
-                            CaptchaUrl.ToString(), landingResult.Cookies, referer: LoginUrl.AbsoluteUri);
+                            CaptchaUrl.ToString(), landingResult.Cookies, referer: LoginUrl.AbsoluteUri, headers: headers);
                         var CaptchaImage = new DisplayImageConfigurationItem("Captcha Image");
                         var CaptchaText = new StringConfigurationItem("Captcha Text");
 
@@ -1547,7 +1548,7 @@ namespace Jackett.Common.Indexers
                                 if (!LoginResult)
                                     throw new Exception(string.Format("Relogin failed"));
                                 await TestLogin();
-                                response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection);
+                                response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection, headers: headers);
                                 if (response.IsRedirect && SearchPath.Followredirect)
                                     await FollowIfRedirect(response);
 
@@ -1813,13 +1814,14 @@ namespace Jackett.Common.Indexers
         {
             var method = RequestType.GET;
             var headers = new Dictionary<string, string>();
+
             if (Definition.Download != null)
             {
                 var Download = Definition.Download;
                 var variables = GetBaseTemplateVariables();
                 AddTemplateVariablesFromUri(variables, link, ".DownloadUri");
 
-                headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                headers = ParseCustomHeaders(Definition.Download?.Headers ?? Definition.Search?.Headers, variables);
                 WebResult response = null;
 
                 var beforeBlock = Download.Before;
@@ -1840,7 +1842,7 @@ namespace Jackett.Common.Indexers
                 {
                     try
                     {
-                        headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                        headers = ParseCustomHeaders(Definition.Download?.Headers ?? Definition.Search?.Headers, variables);
 
                         if (!Download.Infohash.Usebeforeresponse || Download.Before == null || response == null)
                             response = await HandleRedirectableRequestAsync(link.ToString(), headers);
@@ -1867,7 +1869,7 @@ namespace Jackett.Common.Indexers
                 }
                 else if (Download.Selectors != null)
                 {
-                    headers = ParseCustomHeaders(Definition.Search?.Headers, variables);
+                    headers = ParseCustomHeaders(Definition.Download?.Headers ?? Definition.Search?.Headers, variables);
 
                     foreach (var selector in Download.Selectors)
                     {
@@ -1911,12 +1913,11 @@ namespace Jackett.Common.Indexers
                     throw new Exception($"Download selectors didn't match");
                 }
             }
-            headers = ParseCustomHeaders(Definition.Search?.Headers, GetBaseTemplateVariables());
+            headers = ParseCustomHeaders(Definition.Download?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
             return await base.Download(link, method, link.ToString(), headers);
         }
 
-        private Dictionary<string, string> ParseCustomHeaders(Dictionary<string, List<string>> customHeaders,
-                                                              Dictionary<string, object> variables)
+        private Dictionary<string, string> ParseCustomHeaders(Dictionary<string, List<string>> customHeaders, Dictionary<string, object> variables)
         {
             if (customHeaders == null)
                 return null;
