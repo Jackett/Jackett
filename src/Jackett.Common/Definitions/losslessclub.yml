@@ -4,7 +4,7 @@ name: LosslessClub
 description: "LosslessClub is a Romanian Private site for High Quality Music"
 language: ru-RU
 type: private
-encoding: windows-1251
+encoding: UTF-8
 links:
   - https://losslessclub.com/
 
