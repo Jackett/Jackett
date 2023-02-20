@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Jackett.Common.Extensions;
 using Jackett.Common.Utils;
 
 namespace Jackett.Common.Models
@@ -187,6 +188,8 @@ namespace Jackett.Common.Models
         // With limit we can limit the amount of characters which should be compared (use it if a tracker doesn't return the full title).
         public bool MatchQueryStringAND(string title, int? limit = null, string queryStringOverride = null)
         {
+            var commonWords = new[] { "and", "the", "an" };
+
             // We cache the regex split results so we have to do it only once for each query.
             if (QueryStringParts == null)
             {
@@ -196,22 +199,17 @@ namespace Jackett.Common.Models
                 {
                     if (limit > queryString.Length)
                         limit = queryString.Length;
+
                     queryString = queryString.Substring(0, (int)limit);
                 }
-                var splitRegex = new Regex("[^a-zA-Z0-9]+");
-                QueryStringParts = splitRegex.Split(queryString);
+
+                var splitRegex = new Regex("[^\\w]+");
+
+                QueryStringParts = splitRegex.Split(queryString).Where(p => !string.IsNullOrWhiteSpace(p) && p.Length > 1 && !commonWords.ContainsIgnoreCase(p)).ToArray();
             }
 
             // Check if each part of the query string is in the given title.
-            foreach (var queryStringPart in QueryStringParts)
-            {
-                if (title.IndexOf(queryStringPart, StringComparison.OrdinalIgnoreCase) < 0)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return QueryStringParts.All(title.ContainsIgnoreCase);
         }
 
         public string GetEpisodeSearchString()
