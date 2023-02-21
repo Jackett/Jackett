@@ -6,6 +6,8 @@ language: hu-HU
 type: semi-private
 encoding: UTF-8
 links:
+  - https://huntorrent.org/
+legacylinks:
   - https://huntorrent.net/
 
 caps:
