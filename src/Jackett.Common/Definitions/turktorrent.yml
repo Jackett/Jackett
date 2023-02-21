@@ -206,4 +206,7 @@ search:
         "*": 1
     minimumratio:
       text: 0.5
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # TSUE 2.2
