@@ -57,7 +57,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
 	<PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
-    <PackageReference Include="NLog" Version="5.1.1" />
+    <PackageReference Include="NLog" Version="5.1.2" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
