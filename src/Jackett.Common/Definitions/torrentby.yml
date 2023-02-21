@@ -48,7 +48,7 @@ search:
       selector: td:nth-child(3) a
       attribute: href
     download:
-      selector: a[href^="/d.php?id="]
+      selector: a.dwnld
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
@@ -56,9 +56,9 @@ search:
     size:
       selector: td:nth-child(5)
     seeders:
-      selector: td font[color="green"]
+      selector: font[color="green"]
     leechers:
-      selector: td font[color="red"]
+      selector: font[color="red"]
     date_day:
       selector: td:nth-child(1):contains("Вчера"), td:nth-child(1):contains("Сегодня")
       optional: true
