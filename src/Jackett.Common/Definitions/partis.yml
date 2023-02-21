@@ -120,7 +120,7 @@ login:
 
 search:
   paths:
-    - path: /torrent/search
+    - path: torrent/search
   inputs:
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
