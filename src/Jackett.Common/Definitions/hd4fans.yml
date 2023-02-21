@@ -54,8 +54,7 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("failed"))
+    - selector: td.embedded:has(h2:contains("失败")), td.embedded:has(h2:contains("failed"))
       message:
         selector: td.text
   test:
