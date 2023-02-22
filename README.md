@@ -83,7 +83,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
- * Legit Torrents
  * LePorno.info
  * LimeTorrents
  * LimeTorrents clone
