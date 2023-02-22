@@ -18,10 +18,32 @@ namespace Jackett.Common.Utils
         public static string NormalizeMultiSpaces(string s) =>
             new Regex(@"\s+").Replace(NormalizeSpace(s), " ");
 
-        public static string NormalizeNumber(string s) =>
-            NormalizeSpace(s)
-                .Replace("-", "0")
-                .Replace(",", "");
+        private static string NormalizeNumber(string s, bool isInt = false)
+        {
+            var valStr = new string(s.Where(c => char.IsDigit(c) || c == '.' || c == ',').ToArray());
+
+            valStr = valStr.Trim().Replace("-", "0");
+
+            if (isInt)
+            {
+                if (valStr.Contains(',') && valStr.Contains('.'))
+                    return valStr;
+
+                valStr = valStr.Length == 0 ? "0" : valStr.Replace(".", ",");
+
+                return valStr;
+            }
+
+            valStr = valStr.Length == 0 ? "0" : valStr.Replace(",", ".");
+
+            if (valStr.Count(c => c == '.') > 1)
+            {
+                var lastOcc = valStr.LastIndexOf('.');
+                valStr = valStr.Substring(0, lastOcc).Replace(".", string.Empty) + valStr.Substring(lastOcc);
+            }
+
+            return valStr;
+        }
 
         public static string RemoveInvalidXmlChars(string text) => string.IsNullOrEmpty(text) ? "" : InvalidXmlChars.Replace(text, "");
 
@@ -29,17 +51,17 @@ namespace Jackett.Common.Utils
 
         public static float CoerceFloat(string str) => float.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
 
-        public static int CoerceInt(string str) => int.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
+        public static int CoerceInt(string str) => int.Parse(NormalizeNumber(str, true), NumberStyles.Any, CultureInfo.InvariantCulture);
 
-        public static long CoerceLong(string str) => long.Parse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture);
+        public static long CoerceLong(string str) => long.Parse(NormalizeNumber(str, true), NumberStyles.Any, CultureInfo.InvariantCulture);
 
         public static bool TryCoerceDouble(string str, out double result) => double.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
         public static bool TryCoerceFloat(string str, out float result) => float.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
-        public static bool TryCoerceInt(string str, out int result) => int.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+        public static bool TryCoerceInt(string str, out int result) => int.TryParse(NormalizeNumber(str, true), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
-        public static bool TryCoerceLong(string str, out long result) => long.TryParse(NormalizeNumber(str), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
+        public static bool TryCoerceLong(string str, out long result) => long.TryParse(NormalizeNumber(str, true), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
 
         public static string GetArgumentFromQueryString(string url, string argument)
         {
