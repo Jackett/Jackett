@@ -787,7 +787,9 @@ namespace Jackett.Common.Indexers
             {
                 throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
             }
-            logger.Debug(string.Format("CardigannIndexer ({0}): Cookies after login: {1}", Id, CookieHeader));
+
+            logger.Debug($"CardigannIndexer ({Id}): Cookies after login: {CookieHeader}");
+
             return true;
         }
 
@@ -1708,7 +1710,6 @@ namespace Jackett.Common.Indexers
         protected async Task<WebResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
         {
             var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
-            logger.Debug($"CardigannIndexer ({Id}): handleRequest() requestLinkStr= {requestLinkStr}");
 
             Dictionary<string, string> pairs = null;
             var queryCollection = new NameValueCollection();
@@ -1736,11 +1737,16 @@ namespace Jackett.Common.Indexers
             {
                 if (!requestLinkStr.Contains("?"))
                     requestLinkStr += "?";
+
                 requestLinkStr += queryCollection.GetQueryString(Encoding, separator: request.Queryseparator);
             }
 
+            logger.Debug($"CardigannIndexer ({Id}): handleRequest() requestLinkStr= {requestLinkStr}");
+
             var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs);
+
             logger.Debug($"CardigannIndexer ({Id}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
+
             return response;
         }
 
@@ -1838,6 +1844,7 @@ namespace Jackett.Common.Indexers
 
                 if (Download.Method == "post")
                     method = RequestType.POST;
+
                 if (Download.Infohash != null)
                 {
                     try
@@ -1849,14 +1856,15 @@ namespace Jackett.Common.Indexers
 
                         var hash = MatchSelector(response, Download.Infohash.Hash, variables);
                         if (hash == null)
-                            throw new Exception($"InfoHash selectors didn't match");
+                            throw new Exception("InfoHash selectors didn't match hash.");
 
                         var title = MatchSelector(response, Download.Infohash.Title, variables);
                         if (title == null)
-                            throw new Exception($"InfoHash selectors didn't match");
+                            throw new Exception("InfoHash selectors didn't match title.");
 
                         var magnet = MagnetUtil.InfoHashToPublicMagnet(hash, title);
                         var torrentLink = resolvePath(magnet.AbsoluteUri, link);
+
                         return await base.Download(torrentLink, method, torrentLink.ToString());
                     }
                     catch (Exception e)
