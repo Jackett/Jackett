@@ -304,10 +304,10 @@ namespace Jackett.Common.Indexers
         protected delegate string TemplateTextModifier(string str);
         protected string applyGoTemplateText(string template, Dictionary<string, object> variables = null, TemplateTextModifier modifier = null)
         {
-            if (variables == null)
-            {
-                variables = GetBaseTemplateVariables();
-            }
+            if (string.IsNullOrWhiteSpace(template) || !template.Contains("{{"))
+                return template;
+
+            variables ??= GetBaseTemplateVariables();
 
             // handle re_replace expression
             // Example: {{ re_replace .Query.Keywords "[^a-zA-Z0-9]+" "%" }}
@@ -495,21 +495,20 @@ namespace Jackett.Common.Indexers
             }
 
             // handle simple variables
-            var VariablesRegEx = new Regex(@"{{\s*(\..+?)\s*}}");
-            var VariablesRegExMatches = VariablesRegEx.Match(template);
+            var variablesRegex = new Regex(@"{{\s*(\..+?)\s*}}");
+            var variablesRegexMatches = variablesRegex.Match(template);
 
-            while (VariablesRegExMatches.Success)
+            while (variablesRegexMatches.Success)
             {
-                var expanded = string.Empty;
-
-                var all = VariablesRegExMatches.Groups[0].Value;
-                var variable = VariablesRegExMatches.Groups[1].Value;
+                var all = variablesRegexMatches.Groups[0].Value;
+                var variable = variablesRegexMatches.Groups[1].Value;
 
                 var value = (string)variables[variable];
                 if (modifier != null)
                     value = modifier(value);
+
                 template = template.Replace(all, value);
-                VariablesRegExMatches = VariablesRegExMatches.NextMatch();
+                variablesRegexMatches = variablesRegexMatches.NextMatch();
             }
 
             return template;
@@ -2014,7 +2013,7 @@ namespace Jackett.Common.Indexers
                     value = release.Size.ToString();
                     break;
                 case "leechers":
-                    var leechers = ReleaseInfo.GetBytes(value);
+                    var leechers = ParseUtil.CoerceLong(value);
                     leechers = leechers < 5000000L ? leechers : 0; // to fix #6558
                     if (release.Peers == null)
                         release.Peers = leechers;
@@ -2023,7 +2022,7 @@ namespace Jackett.Common.Indexers
                     value = leechers.ToString();
                     break;
                 case "seeders":
-                    release.Seeders = ReleaseInfo.GetBytes(value);
+                    release.Seeders = ParseUtil.CoerceLong(value);
                     release.Seeders = release.Seeders < 5000000L ? release.Seeders : 0; // to fix #6558
                     if (release.Peers == null)
                         release.Peers = release.Seeders;
@@ -2036,11 +2035,11 @@ namespace Jackett.Common.Indexers
                     value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
                     break;
                 case "files":
-                    release.Files = ReleaseInfo.GetBytes(value);
+                    release.Files = ParseUtil.CoerceLong(value);
                     value = release.Files.ToString();
                     break;
                 case "grabs":
-                    release.Grabs = ReleaseInfo.GetBytes(value);
+                    release.Grabs = ParseUtil.CoerceLong(value);
                     value = release.Grabs.ToString();
                     break;
                 case "downloadvolumefactor":
@@ -2065,58 +2064,58 @@ namespace Jackett.Common.Indexers
                     value = release.Imdb.ToString();
                     break;
                 case "tmdbid":
-                    var TmdbIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var TmdbIDMatch = TmdbIDRegEx.Match(value);
-                    var TmdbID = TmdbIDMatch.Groups[1].Value;
-                    release.TMDb = ParseUtil.CoerceLong(TmdbID);
+                    var tmdbIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var tmdbIdMatch = tmdbIdRegex.Match(value);
+                    var tmdbId = tmdbIdMatch.Groups[1].Value;
+                    release.TMDb = ParseUtil.CoerceLong(tmdbId);
                     value = release.TMDb.ToString();
                     break;
                 case "rageid":
-                    var RageIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var RageIDMatch = RageIDRegEx.Match(value);
-                    var RageID = RageIDMatch.Groups[1].Value;
-                    release.RageID = ParseUtil.CoerceLong(RageID);
+                    var rageIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var rageIdMatch = rageIdRegex.Match(value);
+                    var rageId = rageIdMatch.Groups[1].Value;
+                    release.RageID = ParseUtil.CoerceLong(rageId);
                     value = release.RageID.ToString();
                     break;
                 case "tvdbid":
-                    var TVDBIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var TVDBIdMatch = TVDBIdRegEx.Match(value);
-                    var TVDBId = TVDBIdMatch.Groups[1].Value;
-                    release.TVDBId = ParseUtil.CoerceLong(TVDBId);
+                    var tvdbIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var tvdbIdMatch = tvdbIdRegex.Match(value);
+                    var tvdbId = tvdbIdMatch.Groups[1].Value;
+                    release.TVDBId = ParseUtil.CoerceLong(tvdbId);
                     value = release.TVDBId.ToString();
                     break;
                 case "tvmazeid":
-                    var TVMazeIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var TVMazeIdMatch = TVMazeIdRegEx.Match(value);
-                    var TVMazeId = TVMazeIdMatch.Groups[1].Value;
-                    release.TVMazeId = ParseUtil.CoerceLong(TVMazeId);
+                    var tvMazeIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var tvMazeIdMatch = tvMazeIdRegex.Match(value);
+                    var tvMazeId = tvMazeIdMatch.Groups[1].Value;
+                    release.TVMazeId = ParseUtil.CoerceLong(tvMazeId);
                     value = release.TVMazeId.ToString();
                     break;
                 case "traktid":
-                    var TraktIdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var TraktIdMatch = TraktIdRegEx.Match(value);
-                    var TraktId = TraktIdMatch.Groups[1].Value;
-                    release.TraktId = ParseUtil.CoerceLong(TraktId);
+                    var traktIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var traktIdMatch = traktIdRegex.Match(value);
+                    var traktId = traktIdMatch.Groups[1].Value;
+                    release.TraktId = ParseUtil.CoerceLong(traktId);
                     value = release.TraktId.ToString();
                     break;
                 case "doubanid":
-                    var DoubanIDRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var DoubanIDMatch = DoubanIDRegEx.Match(value);
-                    var DoubanID = DoubanIDMatch.Groups[1].Value;
-                    release.DoubanId = ParseUtil.CoerceLong(DoubanID);
+                    var doubanIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
+                    var doubanIdMatch = doubanIdRegex.Match(value);
+                    var doubanId = doubanIdMatch.Groups[1].Value;
+                    release.DoubanId = ParseUtil.CoerceLong(doubanId);
                     value = release.DoubanId.ToString();
                     break;
                 case "genre":
                     if (release.Genres == null)
                         release.Genres = new List<string>();
                     char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
-                    var releaseGenres = release.Genres.Union(value.Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries));
+                    var releaseGenres = release.Genres.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
                     releaseGenres = releaseGenres.Select(x => x.Replace("_", " "));
                     release.Genres = releaseGenres.ToList();
                     value = string.Join(",", release.Genres);
                     break;
                 case "year":
-                    release.Year = ReleaseInfo.GetBytes(value);
+                    release.Year = ParseUtil.CoerceLong(value);
                     value = release.Year.ToString();
                     break;
                 case "author":
