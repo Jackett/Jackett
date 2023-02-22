@@ -123,7 +123,8 @@ login:
       message:
         selector: div.bx1 div.red
   test:
-    path: userdetails.php
+    path: my.php
+    selector: a[href*="logout.php?hash4u="]
 
 download:
   before:
