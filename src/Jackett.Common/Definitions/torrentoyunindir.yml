@@ -6,7 +6,10 @@ language: tr-TR
 type: public
 encoding: UTF-8
 links:
+  - https://0.torrentoyunindir.com/
+legacylinks:
   - https://www.torrentoyunindir.com/
+  - http://0.torrentoyunindir.com/
 
 caps:
   categories:
