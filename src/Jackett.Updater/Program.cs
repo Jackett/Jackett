@@ -428,6 +428,7 @@ namespace Jackett.Updater
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lechaudron.yml",
                 "Definitions/legacyhd.yml", // renamed realflix
+                "Definitions/legittorrents.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
