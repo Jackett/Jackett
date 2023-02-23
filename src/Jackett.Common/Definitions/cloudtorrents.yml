@@ -5,7 +5,6 @@ description: "CloudTorrents is a Public Torrent Tracker for MOVIES / TV / GENERA
 language: en-US
 type: public
 encoding: UTF-8
-requestDelay: 5
 links:
   - https://cloudtorrents.com/
 
@@ -36,10 +35,6 @@ download:
       attribute: href
 
 search:
-  headers:
-    # site blocks Prowlarr's User-Agents, so use a slightly altered Jackett UA here (e.g. Safari/537.36 > Safari/537.34)
-    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.34"]
-
   paths:
     - path: "{{ if .Keywords }}search?query={{ .Keywords }}{{ else }}latest{{ end }}"
 
