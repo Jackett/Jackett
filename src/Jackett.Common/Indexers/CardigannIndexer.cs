@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -1011,14 +1012,20 @@ namespace Jackett.Common.Indexers
                     case "timeparse":
                     case "dateparse":
                         var layout = (string)Filter.Args;
-                        try
+
+                        if (layout.Contains("yy") && DateTime.TryParseExact(Data, layout, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
+                            Data = parsedDate.ToString(DateTimeUtil.Rfc1123ZPattern);
+                        else
                         {
-                            var Date = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
-                            Data = Date.ToString(DateTimeUtil.Rfc1123ZPattern);
-                        }
-                        catch (FormatException ex)
-                        {
-                            logger.Debug(ex.Message);
+                            try
+                            {
+                                var datetime = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
+                                Data = datetime.ToString(DateTimeUtil.Rfc1123ZPattern);
+                            }
+                            catch (FormatException ex)
+                            {
+                                logger.Debug(ex.Message);
+                            }
                         }
                         break;
                     case "regexp":
@@ -1436,7 +1443,9 @@ namespace Jackett.Common.Indexers
                         && SearchPath.Response.NoResultsMessage != null
                         && (SearchPath.Response.NoResultsMessage != string.Empty && results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == string.Empty && results == string.Empty)))
                         continue;
+
                     var parsedJson = JToken.Parse(results);
+
                     if (parsedJson == null)
                         throw new Exception("Error Parsing Json Response");
 

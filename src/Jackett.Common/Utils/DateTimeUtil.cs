@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Jackett.Common.Utils
@@ -114,6 +115,11 @@ namespace Jackett.Common.Utils
             {
                 str = ParseUtil.NormalizeSpace(str);
                 var now = relativeFrom ?? DateTime.Now;
+
+                // try parsing the str as an unix timestamp
+                if (str.All(char.IsDigit) && long.TryParse(str, out var unixTimeStamp))
+                    return UnixTimestampToDateTime(unixTimeStamp);
+
                 if (str.ToLower().Contains("now"))
                     return now;
 
@@ -186,13 +192,6 @@ namespace Jackett.Common.Utils
                         dt = dt.AddDays(-1);
                     return dt;
                 }
-
-                // try parsing the str as an unix timestamp
-                if (long.TryParse(str, out var unixTimeStamp))
-                {
-                    return UnixTimestampToDateTime(unixTimeStamp);
-                }
-                // it wasn't a timestamp, continue....
 
                 // add missing year
                 match = _MissingYearRegexp.Match(str);
