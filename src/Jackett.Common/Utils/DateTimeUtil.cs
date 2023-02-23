@@ -294,13 +294,15 @@ namespace Jackett.Common.Utils
             try
             {
                 var dateTime = DateTime.ParseExact(date, pattern, CultureInfo.InvariantCulture);
+
                 if (!pattern.Contains("yy") && dateTime > now)
                     dateTime = dateTime.AddYears(-1);
+
                 return dateTime;
             }
             catch (FormatException ex)
             {
-                throw new FormatException($"Error while parsing DateTime \"{date}\", using layout \"{layout}\" ({pattern}): {ex.Message}");
+                throw new FormatException($"Error while parsing DateTime \"{date}\", using layout \"{layout}\" ({pattern}): {ex.Message}", ex);
             }
         }
 

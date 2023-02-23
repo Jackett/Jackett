@@ -1126,18 +1126,15 @@ namespace Jackett.Common.Indexers
                         break;
                     case "hexdump":
                         // this is mainly for debugging invisible special char related issues
-                        var HexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump: {1}", Id, HexData));
+                        var hexData = string.Join("", Data.Select(c => c + "(" + ((int)c).ToString("X2") + ")"));
+                        logger.Debug($"CardigannIndexer ({Id}): strdump: {hexData}");
                         break;
                     case "strdump":
                         // for debugging
-                        var DebugData = Data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
+                        var debugData = Data.Replace("\r", "\\r").Replace("\n", "\\n").Replace("\xA0", "\\xA0");
                         var strTag = (string)Filter.Args;
-                        if (strTag != null)
-                            strTag = string.Format("({0}):", strTag);
-                        else
-                            strTag = ":";
-                        logger.Debug(string.Format("CardigannIndexer ({0}): strdump{1} {2}", Id, strTag, DebugData));
+                        strTag = strTag != null ? $"({strTag}):" : ":";
+                        logger.Debug($"CardigannIndexer ({Id}): strdump{strTag} {debugData}");
                         break;
                     case "validate":
                         char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
@@ -1433,10 +1430,11 @@ namespace Jackett.Common.Indexers
                 {
                     if (response.Status != HttpStatusCode.OK)
                         throw new Exception($"Error Parsing Json Response: Status={response.Status} Response={results}");
+
                     if (response.Status == HttpStatusCode.OK
                         && SearchPath.Response != null
                         && SearchPath.Response.NoResultsMessage != null
-                        && (SearchPath.Response.NoResultsMessage != String.Empty && results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == String.Empty && results == String.Empty)))
+                        && (SearchPath.Response.NoResultsMessage != string.Empty && results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == string.Empty && results == string.Empty)))
                         continue;
                     var parsedJson = JToken.Parse(results);
                     if (parsedJson == null)
@@ -1445,14 +1443,16 @@ namespace Jackett.Common.Indexers
                     if (Search.Rows.Count != null)
                     {
                         var countVal = handleJsonSelector(Search.Rows.Count, parsedJson, variables);
-                        if (int.TryParse(countVal, out var count))
-                            if (count < 1)
-                                continue;
+
+                        if (int.TryParse(countVal, out var count) && count < 1)
+                            continue;
                     }
 
                     var rowsArray = JsonParseRowsSelector(parsedJson, Search.Rows.Selector);
+
                     if (rowsArray == null && Search.Rows.MissingAttributeEquals0Results)
                         continue;
+
                     if (rowsArray == null)
                         throw new Exception("Error Parsing Rows Selector. There are 0 rows.");
 
@@ -2106,12 +2106,10 @@ namespace Jackett.Common.Indexers
                     value = release.DoubanId.ToString();
                     break;
                 case "genre":
-                    if (release.Genres == null)
-                        release.Genres = new List<string>();
+                    release.Genres ??= new List<string>();
                     char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
                     var releaseGenres = release.Genres.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
-                    releaseGenres = releaseGenres.Select(x => x.Replace("_", " "));
-                    release.Genres = releaseGenres.ToList();
+                    release.Genres = releaseGenres.Select(x => x.Replace("_", " ")).ToList();
                     value = string.Join(",", release.Genres);
                     break;
                 case "year":
