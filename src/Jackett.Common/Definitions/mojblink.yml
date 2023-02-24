@@ -208,7 +208,7 @@ search:
         - name: replace
           args: ["Naložen: ", ""]
         - name: dateparse
-          args: "02.01.2006 15:04:05"
+          args: "dd.MM.yyyy HH:mm:ss"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
