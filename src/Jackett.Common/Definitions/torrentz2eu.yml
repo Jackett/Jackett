@@ -77,7 +77,7 @@ search:
         - name: re_replace
           args: ["(?i)(st|nd|rd|th|'|\\.)", ""]
         - name: dateparse
-          args: "Jan. 02 06"
+          args: "MMM. dd yy"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
