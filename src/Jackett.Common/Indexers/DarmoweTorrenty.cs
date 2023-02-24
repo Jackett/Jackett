@@ -192,7 +192,7 @@ namespace Jackett.Common.Indexers
                 InfoHash = infoHash, // magnet link is auto generated from infohash
                 Guid = detailsLink,
                 Details = detailsLink,
-                Size = sizeMatch.Success ? ReleaseInfo.GetBytes(sizeMatch.Groups[1].Value) : 0
+                Size = sizeMatch.Success ? ParseUtil.GetBytes(sizeMatch.Groups[1].Value) : 0
             };
             return release;
         }

@@ -252,7 +252,7 @@ namespace Jackett.Common.Indexers
                         Files = item.Value<long>("numfiles"),
                         Seeders = item.Value<int>("seeders"),
                         Peers = item.Value<int>("seeders") + item.Value<int>("leechers"),
-                        Size = ReleaseInfo.GetBytes(item.Value<string>("size")),
+                        Size = ParseUtil.GetBytes(item.Value<string>("size")),
                         DownloadVolumeFactor = item.Value<bool>("free") ? 0 : 1,
                         UploadVolumeFactor = 1,
 

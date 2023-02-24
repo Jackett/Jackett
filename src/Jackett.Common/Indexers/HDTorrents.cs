@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
 
                     var link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
                     var description = row.Children[2].QuerySelector("span")?.TextContent.Trim();
-                    var size = ReleaseInfo.GetBytes(row.Children[7].TextContent);
+                    var size = ParseUtil.GetBytes(row.Children[7].TextContent);
 
                     var dateAdded = string.Join(" ", row.Children[6].FirstElementChild.Attributes.Select(a => a.Name).Take(4));
                     var publishDate = DateTime.ParseExact(dateAdded, "dd MMM yyyy HH:mm:ss", CultureInfo.InvariantCulture);

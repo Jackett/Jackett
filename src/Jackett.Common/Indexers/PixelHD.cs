@@ -185,7 +185,7 @@ namespace Jackett.Common.Indexers
                         var link = new Uri(SiteLink + Row.QuerySelector("a[href^=\"torrents.php?action=download\"]").GetAttribute("href"));
                         var seeders = ParseUtil.CoerceInt(Seeders.TextContent);
                         var details = new Uri(SiteLink + title.GetAttribute("href"));
-                        var size = ReleaseInfo.GetBytes(Size.TextContent);
+                        var size = ParseUtil.GetBytes(Size.TextContent);
                         var leechers = ParseUtil.CoerceInt(Leechers.TextContent);
                         var grabs = ParseUtil.CoerceLong(Grabs.TextContent);
                         var publishDate = DateTimeUtil.FromTimeAgo(added.TextContent);

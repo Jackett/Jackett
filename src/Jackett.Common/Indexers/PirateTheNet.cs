@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers
                     var files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(4)").TextContent);
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
                     var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    var size = ReleaseInfo.GetBytes(sizeStr);
+                    var size = ParseUtil.GetBytes(sizeStr);
                     var leechers = ParseUtil.CoerceInt(qLeechers.Text());
                     var title = qDetailsLink.GetAttribute("alt");
                     var release = new ReleaseInfo

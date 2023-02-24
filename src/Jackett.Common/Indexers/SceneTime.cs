@@ -200,7 +200,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Category = MapTrackerCatToNewznab(cat),
                         PublishDate = publishDate,
-                        Size = ReleaseInfo.GetBytes(row.Children[sizeIndex].TextContent),
+                        Size = ParseUtil.GetBytes(row.Children[sizeIndex].TextContent),
                         Seeders = seeders,
                         Peers = ParseUtil.CoerceInt(row.Children[leechersIndex].TextContent.Trim()) + seeders,
                         DownloadVolumeFactor = row.QuerySelector("font > b:contains(Freeleech)") != null ? 0 : 1,

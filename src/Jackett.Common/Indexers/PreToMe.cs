@@ -270,7 +270,7 @@ namespace Jackett.Common.Indexers
                         Guid = details,
                         Link = link,
                         PublishDate = publishDate,
-                        Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(8)")?.TextContent),
+                        Size = ParseUtil.GetBytes(row.QuerySelector("td:nth-of-type(8)")?.TextContent),
                         Category = MapTrackerCatToNewznab(cat),
                         Files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(4)")?.TextContent),
                         Grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(9)")?.TextContent),

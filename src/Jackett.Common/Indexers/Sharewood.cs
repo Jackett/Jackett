@@ -294,7 +294,7 @@ namespace Jackett.Common.Indexers
                             Guid = details,
                             Category = MapTrackerCatToNewznab(cat),
                             PublishDate = publishDate,
-                            Size = ReleaseInfo.GetBytes(sizeString),
+                            Size = ParseUtil.GetBytes(sizeString),
                             Grabs = row.Value<long>("times_completed"),
                             Seeders = row.Value<long>("seeders"),
                             Peers = row.Value<long>("leechers") + row.Value<long>("seeders"),

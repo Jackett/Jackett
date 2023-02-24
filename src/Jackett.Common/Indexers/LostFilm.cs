@@ -771,7 +771,7 @@ namespace Jackett.Common.Indexers
                             Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
                             Link = link,
                             Guid = link,
-                            Size = ReleaseInfo.GetBytes(sizeString),
+                            Size = ParseUtil.GetBytes(sizeString),
                             // add missing torznab fields not available from results
                             Seeders = 1,
                             Peers = 2,

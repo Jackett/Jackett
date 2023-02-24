@@ -241,7 +241,7 @@ namespace Jackett.Common.Indexers
                     title += $" [{matchBitrate.Groups[1].Value.Trim()}]";
 
                 var matchSize = Regex.Match(infoString, @"File Size: (.+?)s?$", RegexOptions.IgnoreCase);
-                var size = matchSize.Groups[1].Success ? ReleaseInfo.GetBytes(matchSize.Groups[1].Value) : 0;
+                var size = matchSize.Groups[1].Success ? ParseUtil.GetBytes(matchSize.Groups[1].Value) : 0;
 
                 var matchDateAdded = Regex.Match(infoString, @"Posted: (\d{1,2} \D{3} \d{4})", RegexOptions.IgnoreCase);
                 var publishDate = matchDateAdded.Groups[1].Success && DateTime.TryParseExact(matchDateAdded.Groups[1].Value, "d MMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedDate) ? parsedDate : DateTime.Now;

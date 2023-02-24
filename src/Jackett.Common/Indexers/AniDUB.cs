@@ -311,7 +311,7 @@ namespace Jackett.Common.Indexers
             const string SizeSelector = ".list.down > .red";
 
             var sizeStr = tabNode.QuerySelector(SizeSelector).Text();
-            return ReleaseInfo.GetBytes(sizeStr);
+            return ParseUtil.GetBytes(sizeStr);
         }
 
         private Uri GetReleaseLink(IElement tabNode) =>

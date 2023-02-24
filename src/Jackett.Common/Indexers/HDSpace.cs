@@ -175,7 +175,7 @@ namespace Jackett.Common.Indexers
                     //"July 11, 2015, 13:34:09", "Today|Yesterday at 20:04:23"
                     release.PublishDate = DateTimeUtil.FromUnknown(dateStr);
                     var sizeStr = row.Children[5].TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+                    release.Size = ParseUtil.GetBytes(sizeStr);
                     release.Seeders = ParseUtil.CoerceInt(row.Children[7].TextContent);
                     release.Peers = ParseUtil.CoerceInt(row.Children[8].TextContent) + release.Seeders;
                     var grabs = row.QuerySelector("td:nth-child(10)").TextContent;

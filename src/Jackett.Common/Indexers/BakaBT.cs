@@ -12,6 +12,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -220,7 +221,7 @@ namespace Jackett.Common.Indexers
                         release.MinimumSeedTime = 172800; // 48 hours
 
                         var size = row.QuerySelector(".size").TextContent;
-                        release.Size = ReleaseInfo.GetBytes(size);
+                        release.Size = ParseUtil.GetBytes(size);
 
                         //22 Jul 15
                         var dateStr = row.QuerySelector(".added").TextContent.Replace("'", string.Empty);

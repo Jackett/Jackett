@@ -156,7 +156,7 @@ namespace Jackett.Common.Indexers
                         Link = details,
                         Title = title,
                         Category = MapTrackerCatDescToNewznab(category),
-                        Size = ReleaseInfo.GetBytes(item.SelectToken("[6]")?.Value<string>()),
+                        Size = ParseUtil.GetBytes(item.SelectToken("[6]")?.Value<string>()),
                         Grabs = item.SelectToken("[5]")?.Value<int>(),
                         Seeders = seeders,
                         Peers = seeders + leechers,

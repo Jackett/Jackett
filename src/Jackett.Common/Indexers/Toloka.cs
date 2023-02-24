@@ -294,7 +294,7 @@ namespace Jackett.Common.Indexers
                             Title = _titleParser.Parse(title, category, configData.StripCyrillicLetters.Value),
                             Description = title,
                             Category = category,
-                            Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-child(7)").TextContent),
+                            Size = ParseUtil.GetBytes(row.QuerySelector("td:nth-child(7)").TextContent),
                             Seeders = seeders,
                             Peers = leechers + seeders,
                             Grabs = 0, //ParseUtil.CoerceLong(Row.QuerySelector("td:nth-child(9)").TextContent);

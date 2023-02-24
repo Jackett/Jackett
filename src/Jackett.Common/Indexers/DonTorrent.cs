@@ -11,6 +11,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -382,7 +383,7 @@ namespace Jackett.Common.Indexers
             var sizeStr = data3[1].TextContent; //"Tamaño: {0}" -- needs trimming, contains number of episodes available
 
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
-            var size = ReleaseInfo.GetBytes(sizeStr);
+            var size = ParseUtil.GetBytes(sizeStr);
 
             var release = GenerateRelease(title, link, link, GetCategory(title, link), publishDate, size);
             releases.Add(release);
@@ -496,7 +497,7 @@ namespace Jackett.Common.Indexers
             // guess size
             long size;
             if (moreinfo.Length == 2)
-                size = ReleaseInfo.GetBytes(moreinfo[1].QuerySelector("p").TextContent);
+                size = ParseUtil.GetBytes(moreinfo[1].QuerySelector("p").TextContent);
             else if (title.ToLower().Contains("4k"))
                 size = 53687091200L; // 50 GB
             else if (title.ToLower().Contains("1080p"))
