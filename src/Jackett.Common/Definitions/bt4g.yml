@@ -61,7 +61,7 @@ search:
       selector: span:nth-last-child(5) b
       filters:
         - name: dateparse
-          args: "2006-01-02"
+          args: "yyyy-MM-dd"
     files:
       selector: span:nth-last-child(4) b
     size:
