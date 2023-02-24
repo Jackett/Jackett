@@ -110,7 +110,7 @@ search:
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
-          args: "Jan 2 2006, 15:04 -07:00"
+          args: "MMM d yyyy, HH:mm zzz"
     size:
       selector: td:nth-last-child(5)
     grabs:
