@@ -126,7 +126,7 @@ search:
         - name: append
           args: " +07:00" # ICT
         - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
+          args: "yyyy-MM-ddHH:mm:ss zzz"
     size:
       selector: td:nth-last-child(5)
     grabs:

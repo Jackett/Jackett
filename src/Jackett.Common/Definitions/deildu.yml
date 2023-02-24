@@ -116,7 +116,7 @@ search:
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
+          args: "yyyy-MM-ddHH:mm:ss zzz"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

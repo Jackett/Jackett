@@ -131,7 +131,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-0215:04:05 -07:00"
+          args: "yyyy-MM-ddHH:mm:ss zzz"
     downloadvolumefactor:
       case:
         img[src="pic/freeleech.png"]: 0
