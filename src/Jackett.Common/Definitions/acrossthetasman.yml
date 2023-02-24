@@ -65,7 +65,7 @@ search:
       selector: td:nth-child(1)
       filters:
         - name: dateparse
-          args: "Jan 02, 2006"
+          args: "MMM dd, yyyy"
     title:
       selector: td:nth-child(4) > span:nth-child(1)
       filters:
