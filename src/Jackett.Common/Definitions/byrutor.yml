@@ -383,7 +383,7 @@ search:
         - name: regexp
           args: ".*/(\\d{4}-\\d{2})/.*"
         - name: dateparse
-          args: "2006-01"
+          args: "yyyy-MM"
     seeders:
       text: 1
     leechers:
