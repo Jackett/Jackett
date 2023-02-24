@@ -120,7 +120,7 @@ search:
         - name: replace
           args: ["UTC", "+00:00"]
         - name: dateparse
-          args: "2006-01-02 15:04 -07:00"
+          args: "yyyy-MM-dd HH:mm zzz"
     seeders:
       selector: td.stats > span:nth-child(1)
     leechers:

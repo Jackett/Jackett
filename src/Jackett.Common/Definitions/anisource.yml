@@ -70,7 +70,7 @@ search:
         - name: append
           args: " -09:00" # CUS
         - name: dateparse
-          args: "2006-01-02 15:04 -07:00"
+          args: "yyyy-MM-dd HH:mm zzz"
     size:
       selector: font[color="Black"]
       filters:

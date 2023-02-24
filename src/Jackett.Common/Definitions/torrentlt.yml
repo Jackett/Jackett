@@ -194,7 +194,7 @@ search:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "2006-01-02 15:04 -07:00"
+          args: "yyyy-MM-dd HH:mm zzz"
     minimumratio:
       text: 0.41
 # engine n/a
