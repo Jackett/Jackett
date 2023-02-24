@@ -121,7 +121,7 @@ search:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "15:04:052006-01-02 -07:00"
+          args: "HH:mm:ssyyyy-MM-dd zzz"
     size:
       selector: td:nth-last-child(4)
     seeders:

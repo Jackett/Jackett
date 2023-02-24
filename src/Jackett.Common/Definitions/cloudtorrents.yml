@@ -67,7 +67,7 @@ search:
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
-          args: "02 Jan, 2006 15:04 -07:00"
+          args: "dd MMM, yyyy HH:mm zzz"
     size:
       selector: td[data-title="Size"]
     downloadvolumefactor:

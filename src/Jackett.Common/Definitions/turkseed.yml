@@ -126,7 +126,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "02-01-06 15:04"
+          args: "dd-MM-yy HH:mm"
     size:
       selector: td:nth-last-child(5)
     grabs:

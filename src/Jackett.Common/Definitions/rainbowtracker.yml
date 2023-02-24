@@ -229,7 +229,7 @@ search:
         - name: replace
           args: ["Дек", "Dec"]
         - name: dateparse
-          args: "15:04 2-Jan-06"
+          args: "HH:mm d-MMM-yy"
     downloadvolumefactor:
       case:
         img[src="images/tor_gold.gif"]: 0

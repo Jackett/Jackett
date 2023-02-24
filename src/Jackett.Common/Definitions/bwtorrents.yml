@@ -187,7 +187,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "02-01-200615:04:05"
+          args: "dd-MM-yyyyHH:mm:ss"
     size:
       selector: td:nth-child(6)
     download:

@@ -100,7 +100,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "02 January 2006 15:04:05 -07:00"
+          args: "dd MMMM yyyy HH:mm:ss zzz"
     seeders:
       text: 1
     leechers:

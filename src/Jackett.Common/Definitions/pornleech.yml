@@ -92,7 +92,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "15:04:05 02/01/2006 -07:00"
+          args: "HH:mm:ss dd/MM/yyyy zzz"
     seeders:
       selector: td[valign="middle"] > p:nth-child(5)
       filters:

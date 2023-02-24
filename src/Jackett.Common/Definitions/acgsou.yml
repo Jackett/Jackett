@@ -87,7 +87,7 @@ search:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
-          args: "01/02 15:04 -07:00"
+          args: "MM/dd HH:mm zzz"
     date_years:
       selector: td:nth-child(1):not(:contains(":"))
       optional: true

@@ -272,7 +272,7 @@ search:
         - name: regexp
           args: "Partagé Voilà : </b>(.*?)<br"
         - name: dateparse
-          args: "01-02-2006"
+          args: "MM-dd-yyyy"
     downloadvolumefactor:
       case:
         img[src="images/Torrents/free.png"]: 0

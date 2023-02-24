@@ -94,13 +94,13 @@ search:
       optional: true
       filters:
         - name: dateparse
-          args: "01-02"
+          args: "MM-dd"
     date_time:
       selector: div.wr-date:contains(":")
       optional: true
       filters:
         - name: dateparse
-          args: "15:04"
+          args: "HH:mm"
     date:
       text: "{{ if or .Result.date_time .Result.date_day }}{{ or .Result.date_time .Result.date_day }}{{ else }}now{{ end }}"
     size:

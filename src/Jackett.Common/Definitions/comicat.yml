@@ -77,7 +77,7 @@ search:
         - name: append
           args: " +08:00" # CST (China)
         - name: timeparse
-          args: "15:04 -07:00"
+          args: "HH:mm zzz"
     date_yday:
       selector: td:nth-child(1):contains("昨天")
       optional: true

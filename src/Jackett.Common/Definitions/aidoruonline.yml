@@ -118,7 +118,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "060102 15:04:05"
+          args: "yyMMdd HH:mm:ss"
     downloadvolumefactor:
       case:
         img[src="images/freeleech.png"]: 0 # dl not counted

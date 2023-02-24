@@ -130,7 +130,7 @@ search:
       selector: li:has(img#adddate)
       filters:
         - name: dateparse
-          args: "02-01-2006, 15:04"
+          args: "dd-MM-yyyy, HH:mm"
     seeders:
       text: 1
     leechers:

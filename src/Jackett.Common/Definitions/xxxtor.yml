@@ -76,7 +76,7 @@ search:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 06 -07:00"
+          args: "dd MMM yy zzz"
     size:
       selector: td:nth-of-type(3)
     seeders:

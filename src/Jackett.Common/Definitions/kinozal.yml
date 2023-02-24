@@ -292,7 +292,7 @@ search:
         - name: replace
           args: [" в", ""]
         - name: dateparse
-          args: "02.01.2006 15:04"
+          args: "dd.MM.yyyy HH:mm"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     downloadvolumefactor:

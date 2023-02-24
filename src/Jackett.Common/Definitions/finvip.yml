@@ -149,7 +149,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "02/01/2006 15:04"
+          args: "dd/MM/yyyy HH:mm"
     genre:
       selector: td:nth-child(2)
       remove: a

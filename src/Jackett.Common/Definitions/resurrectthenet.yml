@@ -139,7 +139,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "15:04:05 02/01/2006"
+          args: "HH:mm:ss dd/MM/yyyy"
     seeders:
       selector: td:nth-last-child(4)
     leechers:

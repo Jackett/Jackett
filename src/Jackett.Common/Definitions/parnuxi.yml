@@ -238,7 +238,7 @@ search:
         - name: regexp
           args: (\d{2}\.\d{2}\.\d{4})
         - name: dateparse
-          args: "02.01.2006"
+          args: "dd.MM.yyyy"
     date:
       text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     downloadvolumefactor:

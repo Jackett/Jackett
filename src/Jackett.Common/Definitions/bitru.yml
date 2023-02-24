@@ -166,7 +166,7 @@ search:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "02 January 2006 15:04 -07:00"
+          args: "dd MMMM yyyy HH:mm zzz"
     date:
       text: "{{ if or .Result.date_today .Result.date_year }}{{ or .Result.date_today .Result.date_year }}{{ else }}now{{ end }}"
     size:
