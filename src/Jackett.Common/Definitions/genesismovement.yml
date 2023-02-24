@@ -123,7 +123,7 @@ search:
         - name: replace
           args: [" at ", " "]
         - name: dateparse
-          args: "02-01-2006 15:04:05"
+          args: "dd-MM-yyyy HH:mm:ss"
     size:
       selector: td:nth-last-child(6)
     grabs:
