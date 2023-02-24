@@ -96,7 +96,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan. 2 06 -07:00"
+          args: "MMM. d yy zzz"
     date_time:
       # 2020-11-05 07:34:44
       selector: div > span:nth-child(4):contains(":")
