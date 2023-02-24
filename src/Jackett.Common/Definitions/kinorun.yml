@@ -150,7 +150,7 @@ search:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     files:
       selector: td:nth-child(3)
     size:

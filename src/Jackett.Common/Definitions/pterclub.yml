@@ -136,7 +136,7 @@ search:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
       selector: "td:has(a[{{ if .Result._anchor1 }}href^=\"comment.php\"{{ else }}href$=\"startcomments\"{{ end }}]) ~ td:not(:has(span[title]))"

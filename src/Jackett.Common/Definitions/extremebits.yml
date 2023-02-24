@@ -158,7 +158,7 @@ search:
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     minimumratio:
       text: 0.6
 # TBDEV

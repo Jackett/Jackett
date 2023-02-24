@@ -199,7 +199,7 @@ search:
         - name: append
           args: " +00:00" # WET
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     downloadvolumefactor:
       case:
         "i.fg-gold": 0

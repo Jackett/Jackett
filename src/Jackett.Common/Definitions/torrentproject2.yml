@@ -105,7 +105,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     date:
       text: "{{ if or .Result.date_year .Result.date_time }}{{ or .Result.date_year .Result.date_time }}{{ else }}now{{ end }}"
     size:

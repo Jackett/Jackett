@@ -140,7 +140,7 @@ search:
         - name: append
           args: " +07:00" # ICT
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
       selector: td.rowfollow:nth-child(5):not(:has(span))

@@ -149,7 +149,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     grabs:
       selector: td:nth-child(2)
       filters:

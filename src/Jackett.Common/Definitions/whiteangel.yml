@@ -162,7 +162,7 @@ search:
         - name: replace
           args: ["\xA0", " "]
         - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
       selector: td:nth-last-child(4)
     grabs:
