@@ -79,7 +79,7 @@ search:
       selector: td:nth-child(2) > div:nth-child(2)
       filters:
         - name: dateparse
-          args: "2-01-2006 15:04"
+          args: "d-MM-yyyy HH:mm"
     size:
       selector: td:nth-child(5)
     grabs:
