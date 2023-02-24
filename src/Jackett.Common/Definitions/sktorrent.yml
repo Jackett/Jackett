@@ -208,7 +208,7 @@ search:
         - name: regexp
           args: "Pridany (\\d{2}/\\d{2}/\\d{4})"
         - name: dateparse
-          args: "02/01/2006"
+          args: "dd/MM/yyyy"
     seeders:
       selector: div:has(a)
       filters:

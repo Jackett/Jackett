@@ -151,7 +151,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "02/01/2006"
+          args: "dd/MM/yyyy"
     seeders:
       selector: td:has(a[href^="download.php?id="]) ~ td ~ td
     leechers:
