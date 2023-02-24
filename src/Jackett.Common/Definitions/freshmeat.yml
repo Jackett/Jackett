@@ -56,7 +56,7 @@ search:
       attribute: data-sort-value
       filters:
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "yyyy-MM-dd HH:mm:ss"
     description:
       selector: td:nth-child(3) img
       attribute: title

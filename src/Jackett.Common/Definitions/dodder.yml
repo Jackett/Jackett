@@ -58,7 +58,7 @@ search:
       selector: div.layui-hide-xs
       filters:
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "yyyy-MM-dd HH:mm:ss"
     size:
       selector: span.layui-bg-gray
     seeders:

@@ -172,7 +172,7 @@ search:
         - name: re_replace
           args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2}).*", "$1 $2"]
         - name: dateparse
-          args: "2006-01-02 15:04:05"
+          args: "yyyy-MM-dd HH:mm:ss"
     downloadvolumefactor:
       case:
         "td:nth-child(3) > div > nobr > font[color=\"yellow\"]": 0
