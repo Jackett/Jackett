@@ -131,7 +131,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "dd/MM/yyyy zzz"
     size:
       selector: td:nth-last-child(4)
     seeders:
