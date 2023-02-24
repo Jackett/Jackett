@@ -218,7 +218,7 @@ search:
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
-          args: "2006/01/02 -07:00"
+          args: "yyyy/MM/dd zzz"
     seeders:
       selector: td:nth-of-type(4)
     leechers:

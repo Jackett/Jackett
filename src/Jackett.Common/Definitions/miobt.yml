@@ -77,7 +77,7 @@ search:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
-          args: "2006/01/02 -07:00"
+          args: "yyyy/MM/dd zzz"
     date:
       text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
     size:
