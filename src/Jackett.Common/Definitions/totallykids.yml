@@ -136,7 +136,7 @@ search:
         - name: re_replace
           args: ["[,]|[\\s+]|[//\xa0],\\/g", " "]
         - name: dateparse
-          args: "January 02  2006  03:04:05 PM"
+          args: "MMMM dd yyyy hh:mm:ss tt"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     seeders:
