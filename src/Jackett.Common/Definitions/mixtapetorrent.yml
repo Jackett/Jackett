@@ -56,7 +56,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan 2 2006 - 3:04pm -07:00"
+          args: "MMM d yyyy - h:mmtt zzz"
     size:
       text: "128 MB"
     seeders:
