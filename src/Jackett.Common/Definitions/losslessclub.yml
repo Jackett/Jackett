@@ -78,7 +78,7 @@ search:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "2/01/06 -07:00"
+          args: "d/MM/yy zzz"
     description:
       selector: div.tag_list_browse
     downloadvolumefactor:
