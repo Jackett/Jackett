@@ -177,7 +177,7 @@ search:
         - name: replace
           args: ["um ", ""]
         - name: dateparse
-          args: "02.01.2006 15:04:05 -07:00"
+          args: "dd.MM.yyyy HH:mm:ss zzz"
     date:
       text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:

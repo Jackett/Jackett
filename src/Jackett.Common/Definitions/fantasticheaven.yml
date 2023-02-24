@@ -169,7 +169,7 @@ search:
         - name: replace
           args: ["\xA0", " "]
         - name: dateparse
-          args: "02.01.2006 15:04:05 -07:00"
+          args: "dd.MM.yyyy HH:mm:ss zzz"
     downloadvolumefactor:
       case:
         img[src="pic/oupic.gif"]: 0 # only upload is counted
