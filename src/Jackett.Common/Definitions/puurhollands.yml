@@ -143,7 +143,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "2 January 2006 15:04:05 -07:00"
+          args: "d MMMM yyyy HH:mm:ss zzz"
     seeders_optional:
       optional: true
       selector: td:nth-child(4) table tr:nth-child(3) td:nth-child(5) font b
