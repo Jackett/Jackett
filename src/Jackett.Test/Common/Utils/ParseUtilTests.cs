@@ -26,7 +26,7 @@ namespace Jackett.Test.Common.Utils
         }
 
         [Test]
-        public void Invalid_RSS_should_parse_after_removing_invalid_chars()
+        public void invalid_rss_should_parse_after_removing_invalid_chars()
         {
             var invalidRss = InvalidRssXml;
             Action parseAction = () => XDocument.Parse(invalidRss);
@@ -37,6 +37,48 @@ namespace Jackett.Test.Common.Utils
             rssDoc.Root.Should().NotBeNull();
             var description = rssDoc.Root.XPathSelectElement("//description");
             description.Value.Should().Contain("Know Your Role and Shut Your Mouth!");
+        }
+
+        [TestCase(" some  string ", "some string")]
+        public void should_normalize_multiple_spaces(string original, string newString)
+        {
+            ParseUtil.NormalizeMultiSpaces(original).Should().Be(newString);
+        }
+
+        [TestCase("1", 1)]
+        [TestCase("11", 11)]
+        [TestCase("1000 grabs", 1000)]
+        [TestCase("2.222", 2222)]
+        [TestCase("2,222", 2222)]
+        [TestCase("2 222", 2222)]
+        [TestCase("2,22", 222)]
+        public void should_parse_int_from_string(string original, int parsedInt)
+        {
+            ParseUtil.CoerceInt(original).Should().Be(parsedInt);
+        }
+
+        [TestCase("1.0", 1.0)]
+        [TestCase("1.1", 1.1)]
+        [TestCase("1000 grabs", 1000.0)]
+        [TestCase("2.222", 2.222)]
+        [TestCase("2,222", 2.222)]
+        [TestCase("2.222,22", 2222.22)]
+        [TestCase("2,222.22", 2222.22)]
+        [TestCase("2 222", 2222.0)]
+        [TestCase("2,22", 2.22)]
+        public void should_parse_double_from_string(string original, double parsedInt)
+        {
+            ParseUtil.CoerceDouble(original).Should().Be(parsedInt);
+        }
+
+        [TestCase(null, null)]
+        [TestCase("", null)]
+        [TestCase("1", 1)]
+        [TestCase("1000 grabs", 1000)]
+        [TestCase("asdf123asdf", 123)]
+        public void should_parse_long_from_string(string original, long? parsedInt)
+        {
+            ParseUtil.GetLongFromString(original).Should().Be(parsedInt);
         }
     }
 }
