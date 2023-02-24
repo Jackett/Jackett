@@ -131,7 +131,7 @@ search:
         - name: replace
           args: ["at", ""]
         - name: dateparse
-          args: "2 Jan 2006  15:04"
+          args: "d MMM yyyy  HH:mm"
     downloadvolumefactor:
       case:
         "img[src$=\"freeleech.png\"]": 0
