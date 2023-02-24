@@ -266,7 +266,7 @@ search:
         - name: replace
           args: ["στις ", ""] # at
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "dd-MM-yyyy HH:mm"
     date_other:
       selector: td.torrent_name
       # auto adjusted by site account profile
@@ -280,7 +280,7 @@ search:
         - name: replace
           args: ["at ", ""]
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "dd-MM-yyyy HH:mm"
     date_unix:
       selector: div.torrentOwner > abbr.timeago
       attribute: data-time

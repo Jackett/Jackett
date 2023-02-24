@@ -164,7 +164,7 @@ search:
         - name: regexp
           args: "Uploaded (.+?) by"
         - name: dateparse
-          args: "02-01-2006 15:04"
+          args: "dd-MM-yyyy HH:mm"
     date_unix:
       selector: div.torrentOwner abbr
       optional: true
