@@ -155,7 +155,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "02 Jan 2006 15:04 -07:00"
+          args: "dd MMM yyyy HH:mm zzz"
     downloadvolumefactor:
       case:
         "div:nth-child(2) > div:nth-child(3) > a:contains(\"FREE!\")": 0
