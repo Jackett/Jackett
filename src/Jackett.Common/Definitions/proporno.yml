@@ -113,7 +113,7 @@ search:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "2-01-2006, 15:04 -07:00"
+          args: "d-MM-yyyy, HH:mm zzz"
     date:
       text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
     size:
