@@ -144,7 +144,7 @@ search:
         - name: append
           args: ":00 +03:00" # MSK
         - name: dateparse
-          args: "2 Jan 06 15:04:05 -07:00"
+          args: "d MMM yy HH:mm:ss zzz"
     seeders:
       text: 1
     leechers:
