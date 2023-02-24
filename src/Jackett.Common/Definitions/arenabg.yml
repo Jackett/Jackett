@@ -187,7 +187,7 @@ search:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "2 January 2006, Monday @ 15:04 -07:00"
+          args: "d MMMM yyyy, dddd @ HH:mm zzz"
     size:
       selector: td:nth-child(3)
     seeders:
