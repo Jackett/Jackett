@@ -138,7 +138,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "2.01.0615:04"
+          args: "d.MM.yyHH:mm"
     grabs:
       selector: td:nth-child(7)
     seeders:
