@@ -104,7 +104,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "Jan 2 2006 03:04 PM -07:00"
+          args: "MMM d yyyy hh:mm tt zzz"
     date_day:
       # Today 02:40 PM
       # Yesterday 09:10 AM
