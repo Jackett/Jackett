@@ -169,7 +169,7 @@ search:
       selector: td:nth-child(2):contains("/")
       filters:
         - name: dateparse
-          args: "02/01/2006"
+          args: "dd/MM/yyyy"
     date:
       text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:

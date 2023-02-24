@@ -160,7 +160,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "02/01/2006"
+          args: "dd/MM/yyyy"
     downloadvolumefactor:
       case:
         img[src="gold/gold.gif"]: 0

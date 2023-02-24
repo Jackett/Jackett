@@ -242,7 +242,7 @@ search:
       optional: true
       filters:
         - name: dateparse
-          args: "02/01/2006"
+          args: "dd/MM/yyyy"
     date:
       text: "{{ if or .Result.date_ago .Result.date_year }}{{ or .Result.date_ago .Result.date_year }}{{ else }}now{{ end }}"
     grabs:

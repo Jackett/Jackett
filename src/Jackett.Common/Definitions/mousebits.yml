@@ -120,7 +120,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "02/01/2006"
+          args: "dd/MM/yyyy"
     seeders:
       selector: td:nth-child(5)
     leechers:
