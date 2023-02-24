@@ -842,6 +842,27 @@
             "required": [
                 "name"
             ],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "name": {
+                                "const": "dateparse"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "args": {
+                                "type": "string",
+                                "not": {
+                                    "pattern": "\\d"
+                                }
+                            }
+                        }
+                    }
+                }
+            ],
             "title": "FilterBlock"
         },
         "IndexerCategories": {
