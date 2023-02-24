@@ -127,7 +127,7 @@ search:
       selector: div.stats div:has(img[alt="Date"])
       filters:
         - name: dateparse
-          args: "Jan 2, 2006"
+          args: "MMM d, yyyy"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
