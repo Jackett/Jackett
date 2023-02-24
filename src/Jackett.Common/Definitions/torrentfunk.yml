@@ -109,7 +109,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "2 Jan -07:00"
+          args: "d MMM zzz"
     date:
       text: "{{ if or .Result.date_month .Result.date_day }}{{ or .Result.date_month .Result.date_day }}{{ else }}now{{ end }}"
     size:
