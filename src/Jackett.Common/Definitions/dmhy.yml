@@ -81,7 +81,7 @@ search:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
-          args: "2006/01/02 15:04 -07:00"
+          args: "yyyy/MM/dd HH:mm zzz"
     size:
       selector: td:nth-child(5)
     seeders:
