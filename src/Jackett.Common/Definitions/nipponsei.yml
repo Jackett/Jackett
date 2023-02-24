@@ -47,7 +47,7 @@ search:
       selector: td.date
       filters:
         - name: dateparse
-          args: "2006-01-02 15:04"
+          args: "yyyy-MM-dd HH:mm"
     date:
       text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size_optional:
