@@ -267,7 +267,7 @@ search:
         - name: re_replace
           args: ["st|nd|rd|th", ""]
         - name: dateparse
-          args: "Jan. 2 06"
+          args: "MMM. d yy"
     date_today:
       # (today) 12:25am
       optional: true
