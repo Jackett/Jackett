@@ -120,7 +120,7 @@ search:
         - name: re_replace
           args: ["([a-zA-Z]+)\\s+(\\d{1,2})\\s+'(\\d{2})", "$2 $1 $3"]
         - name: dateparse
-          args: "2 Jan 06"
+          args: "d MMM yy"
     files:
       selector: td:nth-child(10)
     size:
