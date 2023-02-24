@@ -63,6 +63,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_date
+    type: info
+    label: Date Setting
+    default: Access your <a href="https://piggo.me/usercp.php?action=tracker" target =_blank>个人中心 网站设定 (UserCP Website settings) </a> and set <b>时间显示类型 (Time Display Type)</b> to <b>发生时间 (Time of Occurence)</b>. <i>Elapsed Time</i> is not supported by this indexer and will see zero results.
 
 login:
   path: login.php
@@ -138,27 +142,14 @@ search:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="movie.douban.com/subject/"]
       attribute: href
-    date_elapsed:
-      # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(4) > span[title]
-      attribute: title
-      optional: true
-      filters:
-        - name: append
-          args: " +08:00" # CST
-        - name: dateparse
-          args: "2006-01-02 15:04:05 -07:00"
-    date_added:
+    date:
       # time added
-      selector: td.rowfollow:nth-child(4):not(:has(span))
-      optional: true
+      selector: td.rowfollow:nth-child(4)
       filters:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "2006-01-0215:04:05 -07:00"
-    date:
-      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td.rowfollow:nth-child(5)
     seeders:
