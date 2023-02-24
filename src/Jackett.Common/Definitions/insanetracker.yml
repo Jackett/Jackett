@@ -143,7 +143,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "2006-01-0215:04 -07:00"
+          args: "yyyy-MM-ddHH:mm zzz"
     downloadvolumefactor:
       case:
         a[href^="?nohnr=1"]: 0
