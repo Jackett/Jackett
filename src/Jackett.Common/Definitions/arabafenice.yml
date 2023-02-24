@@ -206,7 +206,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "dd/MM/yyyy zzz"
     grabs:
       selector: td:nth-last-child(6)
     seeders:

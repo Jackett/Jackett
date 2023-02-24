@@ -376,7 +376,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "dd/MM/yyyy zzz"
     size:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td
       remove: strong

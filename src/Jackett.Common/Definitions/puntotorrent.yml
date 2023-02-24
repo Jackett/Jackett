@@ -339,7 +339,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "02/01/2006 -07:00"
+          args: "dd/MM/yyyy zzz"
     download:
       selector: a[href^="download.php"]
       attribute: href
