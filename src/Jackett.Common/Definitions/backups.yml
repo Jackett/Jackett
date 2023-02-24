@@ -163,5 +163,5 @@ search:
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
-          args: "02-01-2006 15:04 -07:00"
+          args: "dd-MM-yyyy HH:mm zzz"
 # TS Special Edition v.8.0

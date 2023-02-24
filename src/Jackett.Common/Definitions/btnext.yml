@@ -238,7 +238,7 @@ search:
         - name: append
           args: " +00:00" # WET
         - name: dateparse
-          args: "02-01-2006 15:04 -07:00"
+          args: "dd-MM-yyyy HH:mm zzz"
     date_day:
       selector: td.torrent_name:not(:has(abbr.timeago)):contains("day"), td.torrent_name:not(:has(abbr.timeago)):contains("Domingo"), td.torrent_name:not(:has(abbr.timeago)):contains("Sábado"), td.torrent_name:not(:has(abbr.timeago)):contains("Quinta"), td.torrent_name:not(:has(abbr.timeago)):contains("Sexta"), td.torrent_name:not(:has(abbr.timeago)):contains("Quarta"), td.torrent_name:not(:has(abbr.timeago)):contains("Terça"), td.torrent_name:not(:has(abbr.timeago)):contains("Segunda"), td.torrent_name:not(:has(abbr.timeago)):contains("ontem"), td.torrent_name:not(:has(abbr.timeago)):contains("Hoje")
       optional: true
