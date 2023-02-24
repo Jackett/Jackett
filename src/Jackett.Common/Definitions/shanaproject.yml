@@ -107,7 +107,7 @@ search:
         - name: re_replace
           args: ["March", "Mar"]
         - name: dateparse
-          args: "Jan 2, 2006, 3 PM"
+          args: "MMM d, yyyy, h tt"
     date_noon:
       # Sept. 30, 2022, noon
       selector: div.release_20:contains(", noon")
@@ -128,7 +128,7 @@ search:
         - name: re_replace
           args: [" noon", " 12 pm"]
         - name: dateparse
-          args: "Jan 2, 2006, 3 PM"
+          args: "MMM d, yyyy, h tt"
     date:
       text: "{{ if or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ else }}now{{ end }}"
     size:
