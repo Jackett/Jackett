@@ -301,7 +301,7 @@ namespace Jackett.Common.Indexers
                         var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         var grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
                         var leechers = ParseUtil.CoerceInt(qLeechers.TextContent);
-                        var size = ReleaseInfo.GetBytes(sizeString);
+                        var size = ParseUtil.GetBytes(sizeString);
 
                         var release = new ReleaseInfo
                         {

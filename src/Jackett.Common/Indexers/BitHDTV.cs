@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
                         var pubDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                         release.PublishDate = DateTime.SpecifyKind(pubDate, DateTimeKind.Local);
                         var sizeStr = row.Children[6].TextContent;
-                        release.Size = ReleaseInfo.GetBytes(sizeStr);
+                        release.Size = ParseUtil.GetBytes(sizeStr);
                         release.Seeders = ParseUtil.CoerceInt(row.Children[8].TextContent.Trim());
                         release.Peers = ParseUtil.CoerceInt(row.Children[9].TextContent.Trim()) + release.Seeders;
                         switch (row.GetAttribute("bgcolor"))

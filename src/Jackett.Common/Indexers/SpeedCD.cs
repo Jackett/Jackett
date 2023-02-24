@@ -226,7 +226,7 @@ namespace Jackett.Common.Indexers
                         Title = title,
                         Category = MapTrackerCatToNewznab(cat),
                         PublishDate = DateTime.ParseExact(pubDateStr, "dddd, MMMM d, yyyy h:mmtt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
-                        Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-child(6)")?.TextContent),
+                        Size = ParseUtil.GetBytes(row.QuerySelector("td:nth-child(6)")?.TextContent),
                         Grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)")?.TextContent),
                         Seeders = seeders,
                         Peers = seeders + leechers,

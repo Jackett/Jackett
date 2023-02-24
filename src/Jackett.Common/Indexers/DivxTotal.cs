@@ -464,7 +464,7 @@ namespace Jackett.Common.Indexers
         {
             try
             {
-                var parsedSize = ReleaseInfo.GetBytes(sizeToParse);
+                var parsedSize = ParseUtil.GetBytes(sizeToParse);
                 return parsedSize > 0 ? parsedSize : sizeDefault;
             }
             catch

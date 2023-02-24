@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
                         release.Title = ParseStringValueFromRow(r, nameof(release.Title), "td:nth-child(3) span") + " " + language;
                         release.Link = ParseValueFromRow(r, nameof(release.Link), "a[href^=\"/dl/\"]", (e) => GetAbsoluteUrl(e.Attributes["href"].Value));
                         release.MagnetUri = ParseValueFromRow(r, nameof(release.MagnetUri), "a[href^=\"magnet:?\"]", (e) => new Uri(e.Attributes["href"].Value));
-                        release.Size = ParseValueFromRow(r, nameof(release.Size), "td:nth-child(7)", (e) => ReleaseInfo.GetBytes(e.Text()));
+                        release.Size = ParseValueFromRow(r, nameof(release.Size), "td:nth-child(7)", (e) => ParseUtil.GetBytes(e.Text()));
                         release.PublishDate = ParseValueFromRow(r, nameof(release.PublishDate), "td:nth-child(8)", (e) => DateTime.ParseExact(e.Attributes["title"].Value, "yyyy-MM-dd HH:mm:ss UTC", CultureInfo.InvariantCulture));
                         release.Seeders = ParseIntValueFromRow(r, nameof(release.Seeders), "td:nth-child(9)");
                         release.Peers = ParseIntValueFromRow(r, nameof(release.Peers), "td:nth-child(10)") + release.Seeders;

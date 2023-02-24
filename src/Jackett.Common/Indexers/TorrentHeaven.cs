@@ -237,7 +237,7 @@ namespace Jackett.Common.Indexers
                         downloadFactor = 1;
                     var title = titleRegexp.Match(qDetailsLink.GetAttribute("onmouseover")).Groups[1].Value;
                     var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                    var size = ReleaseInfo.GetBytes(qColumn2[1].TextContent);
+                    var size = ParseUtil.GetBytes(qColumn2[1].TextContent);
                     var seeders = ParseUtil.CoerceInt(qColumn1[3].TextContent);
                     var leechers = ParseUtil.CoerceInt(qColumn2[3].TextContent);
                     var publishDate = TimeZoneInfo.ConvertTime(dateGerman, germanyTz, TimeZoneInfo.Local);

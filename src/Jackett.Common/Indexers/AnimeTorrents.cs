@@ -171,7 +171,7 @@ namespace Jackett.Common.Indexers
                     }
 
                     var sizeStr = row.QuerySelector("td:nth-of-type(6)").TextContent;
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+                    release.Size = ParseUtil.GetBytes(sizeStr);
 
                     var connections = row.QuerySelector("td:nth-of-type(8)").TextContent.Trim().Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 

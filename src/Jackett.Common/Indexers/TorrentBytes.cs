@@ -183,7 +183,7 @@ namespace Jackett.Common.Indexers
                     var added = row.QuerySelector("td:nth-of-type(5)").TextContent.Trim();
                     release.PublishDate = DateTime.ParseExact(added, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
                     var sizeStr = row.QuerySelector("td:nth-of-type(7)").TextContent.Trim();
-                    release.Size = ReleaseInfo.GetBytes(sizeStr);
+                    release.Size = ParseUtil.GetBytes(sizeStr);
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(9)").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(10)").TextContent.Trim()) +
                                     release.Seeders;

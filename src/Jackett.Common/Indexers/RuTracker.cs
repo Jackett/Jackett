@@ -1625,7 +1625,7 @@ namespace Jackett.Common.Indexers
             return MapTrackerCatToNewznab(cat);
         }
 
-        private long GetSizeOfRelease(in IElement row) => ReleaseInfo.GetBytes(row.QuerySelector("td.tor-size")?.GetAttribute("data-ts_text"));
+        private long GetSizeOfRelease(in IElement row) => ParseUtil.GetBytes(row.QuerySelector("td.tor-size")?.GetAttribute("data-ts_text"));
 
         private DateTime GetPublishDateOfRelease(in IElement row) => DateTimeUtil.UnixTimestampToDateTime(long.Parse(row.QuerySelector("td:nth-child(10)")?.GetAttribute("data-ts_text")));
 

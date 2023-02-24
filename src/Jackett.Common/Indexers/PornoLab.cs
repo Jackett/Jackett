@@ -311,7 +311,7 @@ namespace Jackett.Common.Indexers
                         var title = configData.StripRussianLetters.Value
                             ? s_StripRussianRegex.Replace(qDetailsLink.TextContent, "")
                             : qDetailsLink.TextContent;
-                        var size = ReleaseInfo.GetBytes(qSize.TextContent);
+                        var size = ParseUtil.GetBytes(qSize.TextContent);
                         var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)").TextContent);
                         var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-child(9)").TextContent);
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(long.Parse(row.QuerySelector("td:nth-child(11) u").TextContent));

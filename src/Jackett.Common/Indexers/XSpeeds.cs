@@ -309,7 +309,7 @@ namespace Jackett.Common.Indexers
 
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
-                    release.Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
+                    release.Size = ParseUtil.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
 
                     var qPoster = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
                     if (qPoster != null)

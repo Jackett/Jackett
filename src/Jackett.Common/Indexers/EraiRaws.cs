@@ -8,6 +8,7 @@ using System.Xml;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -320,7 +321,7 @@ namespace Jackett.Common.Indexers
             {
                 Title = StripTitle(feedItem.Title);
                 Quality = feedItem.Quality;
-                Size = ReleaseInfo.GetBytes(feedItem.Size);
+                Size = ParseUtil.GetBytes(feedItem.Size);
                 DetailsLink = ParseDetailsLink(feedItem.Description);
                 InfoHash = feedItem.InfoHash;
                 SubTitles = feedItem.SubTitles.Replace("[", " ").Replace("]", " ").ToUpper();

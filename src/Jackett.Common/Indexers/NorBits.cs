@@ -281,7 +281,7 @@ namespace Jackett.Common.Indexers
                             Link = link,
                             Title = title,
                             Category = MapTrackerCatToNewznab(cat),
-                            Size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-of-type(7)").TextContent),
+                            Size = ParseUtil.GetBytes(row.QuerySelector("td:nth-of-type(7)").TextContent),
                             Files = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(3) > a")?.TextContent.Trim()),
                             Grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-of-type(8)")?.FirstChild?.TextContent.Trim()),
                             Seeders = seeders,

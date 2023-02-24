@@ -316,7 +316,7 @@ namespace Jackett.Common.Indexers
                     // Torrents - Category column == Icons
                     var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
 
-                    var size = ReleaseInfo.GetBytes(row.Children[5].TextContent);
+                    var size = ParseUtil.GetBytes(row.Children[5].TextContent);
 
                     var colIndex = 6;
                     int? files = null;

@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers
                     var dateString = row.QuerySelector("td:nth-child(6) nobr").TextContent.Trim();
                     var publishDate = DateTime.ParseExact(dateString, "yyyy-MM-ddHH:mm:ss", CultureInfo.InvariantCulture);
 
-                    var size = ReleaseInfo.GetBytes(row.QuerySelector("td:nth-child(7)").InnerHtml.Split('<').First().Trim());
+                    var size = ParseUtil.GetBytes(row.QuerySelector("td:nth-child(7)").InnerHtml.Split('<').First().Trim());
                     var files = ParseUtil.GetLongFromString(row.QuerySelector("td:nth-child(7) > a").TextContent);
                     var grabs = ParseUtil.GetLongFromString(row.QuerySelector("td:nth-child(8)").TextContent);
                     var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)").TextContent);

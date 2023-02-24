@@ -2018,7 +2018,7 @@ namespace Jackett.Common.Indexers
                     value = release.Category.ToString();
                     break;
                 case "size":
-                    release.Size = ReleaseInfo.GetBytes(value);
+                    release.Size = ParseUtil.GetBytes(value);
                     value = release.Size.ToString();
                     break;
                 case "leechers":

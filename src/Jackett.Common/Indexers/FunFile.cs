@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
                         Details = details,
                         Title = title,
                         Category = MapTrackerCatToNewznab(cat),
-                        Size = ReleaseInfo.GetBytes(row.Children[7].TextContent),
+                        Size = ParseUtil.GetBytes(row.Children[7].TextContent),
                         Files = ParseUtil.CoerceInt(row.Children[3].TextContent),
                         Grabs = ParseUtil.CoerceInt(row.Children[8].TextContent),
                         Seeders = seeders,

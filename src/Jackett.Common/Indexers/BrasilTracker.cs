@@ -289,7 +289,7 @@ namespace Jackett.Common.Indexers
                         if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, searchTerm))
                             continue;
                         var size = qSize.TextContent;
-                        release.Size = ReleaseInfo.GetBytes(size);
+                        release.Size = ParseUtil.GetBytes(size);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                         release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Guid = release.Link;

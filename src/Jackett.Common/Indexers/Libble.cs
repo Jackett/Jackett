@@ -248,7 +248,7 @@ namespace Jackett.Common.Indexers
                         release.Grabs = ParseUtil.CoerceInt(releaseDetails.QuerySelector("td:nth-child(5)").TextContent);
                         release.Seeders = ParseUtil.CoerceInt(releaseDetails.QuerySelector("td:nth-child(6)").TextContent);
                         release.Peers = release.Seeders + ParseUtil.CoerceInt(releaseDetails.QuerySelector("td:nth-child(7)").TextContent);
-                        release.Size = ReleaseInfo.GetBytes(releaseDetails.QuerySelector("td:nth-child(4)").TextContent.Trim());
+                        release.Size = ParseUtil.GetBytes(releaseDetails.QuerySelector("td:nth-child(4)").TextContent.Trim());
                         release.Poster = releaseThumbnailUri;
                         release.Category = releaseNewznabCategory;
                         release.MinimumSeedTime = 259200; // 72 hours

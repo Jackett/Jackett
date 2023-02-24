@@ -265,7 +265,7 @@ namespace Jackett.Common.Indexers
                             row.QuerySelector(".box_feltoltve2").InnerHtml.Replace("<br>", " "),
                             CultureInfo.InvariantCulture);
                         var sizeSplit = row.QuerySelector(".box_meret2").TextContent.Split(' ');
-                        var size = ReleaseInfo.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
+                        var size = ParseUtil.GetBytes(sizeSplit[1].ToLower(), ParseUtil.CoerceFloat(sizeSplit[0]));
                         var catLink = row.QuerySelector("a:has(img[class='categ_link'])").GetAttribute("href");
                         var cat = ParseUtil.GetArgumentFromQueryString(catLink, "tipus");
                         var title = torrentTxt.GetAttribute("title");
