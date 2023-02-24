@@ -142,7 +142,7 @@ search:
         - name: replace
           args: ["дек", "Dec"]
         - name: dateparse
-          args: "15:04:0502 Jan 2006"
+          args: "HH:mm:ssdd MMM yyyy"
     seeders:
       selector: td:nth-child(8)
     leechers:

@@ -256,7 +256,7 @@ search:
         - name: re_replace
           args: ["st|nd|rd|th", ""]
         - name: dateparse
-          args: "3pm Jan. 2"
+          args: "htt MMM. d"
     date_years:
       # (more than a year ago) Apr. 18th '11
       optional: true

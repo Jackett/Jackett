@@ -283,7 +283,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "01-02-2006 -07:00"
+          args: "MM-dd-yyyy zzz"
 
   fields:
     title:

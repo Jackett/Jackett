@@ -278,7 +278,7 @@ search:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "02.01.2006 -07:00"
+          args: "dd.MM.yyyy zzz"
     size:
       selector: td:nth-last-child(5)
     seeders:

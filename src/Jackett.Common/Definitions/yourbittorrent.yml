@@ -101,7 +101,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "02/01/06 -07:00"
+          args: "dd/MM/yy zzz"
     date:
       text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     seeders:

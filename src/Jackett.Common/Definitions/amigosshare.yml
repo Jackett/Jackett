@@ -307,7 +307,7 @@ search:
         - name: re_replace
           args: [" (\\d:)", " 0$1"]
         - name: dateparse
-          args: "02/01/06 15:04:05"
+          args: "dd/MM/yy HH:mm:ss"
     date:
       text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:

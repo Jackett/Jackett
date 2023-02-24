@@ -190,7 +190,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "02/01/06 15:04 -07:00"
+          args: "dd/MM/yy HH:mm zzz"
     date:
       text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
     downloadvolumefactor:

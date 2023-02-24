@@ -166,7 +166,7 @@ search:
         - name: re_replace
           args: ["[^:]+: ", ""]
         - name: dateparse
-          args: "02/01/06 15:04 -07:00"
+          args: "dd/MM/yy HH:mm zzz"
     description:
       selector: div.sub_title
     downloadvolumefactor:

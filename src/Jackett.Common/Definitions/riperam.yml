@@ -947,7 +947,7 @@ search:
         - name: replace
           args: ["дек", "Dec"]
         - name: dateparse
-          args: "02 Jan 2006, 15:04"
+          args: "dd MMM yyyy, HH:mm"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

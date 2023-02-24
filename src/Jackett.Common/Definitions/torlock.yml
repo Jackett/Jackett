@@ -149,7 +149,7 @@ search:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "1/2/2006 -07:00"
+          args: "M/d/yyyy zzz"
     date_day:
       selector: td:nth-child(2):contains("Today"), td:nth-child(2):contains("Yesterday")
       optional: true

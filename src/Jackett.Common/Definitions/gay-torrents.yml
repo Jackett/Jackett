@@ -169,7 +169,7 @@ search:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "15:04 02-Jan-2006 -07:00"
+          args: "HH:mm dd-MMM-yyyy zzz"
     downloadvolumefactor:
       case:
         "a:contains(\"[FFL]\")": 0

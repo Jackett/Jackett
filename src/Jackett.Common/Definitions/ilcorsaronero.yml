@@ -159,7 +159,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "02.01.06 -07:00"
+          args: "dd.MM.yy zzz"
     seeders:
       selector: td:nth-child(6) font
       filters:

@@ -792,7 +792,7 @@ search:
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 2006 -07:00"
+          args: "dd MMM yyyy zzz"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

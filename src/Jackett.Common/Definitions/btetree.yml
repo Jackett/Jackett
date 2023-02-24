@@ -61,7 +61,7 @@ search:
         - name: replace
           args: ["  ", " 0"]
         - name: dateparse
-          args: "01/02 15:04"
+          args: "MM/dd HH:mm"
     size:
       selector: td:nth-child(6)
     grabs:

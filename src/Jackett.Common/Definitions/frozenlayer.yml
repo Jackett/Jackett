@@ -108,7 +108,7 @@ search:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "02 Jan 06 -07:00"
+          args: "dd MMM yy zzz"
     date:
       text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:

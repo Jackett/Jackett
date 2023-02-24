@@ -213,7 +213,7 @@ search:
 #        - name: re_replace
 #          args: ["st,|nd,|rd,|th,", ""]
 #        - name: dateparse
-#          args: "Monday January 2 2006"
+#          args: "dddd MMMM d yyyy"
 
   fields:
     category:
