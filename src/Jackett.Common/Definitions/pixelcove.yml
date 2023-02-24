@@ -158,7 +158,7 @@ search:
       optional: true
       filters:
         - name: dateparse
-          args: "Jan 02 2006, 15:04"
+          args: "MMM dd yyyy, HH:mm"
     date_added:
     # <td class="nobr"><span class="time" alt="Nov 17 2022, 01:44" title="Nov 17 2022, 01:44">13 hours ago</span></td>
       selector: td:nth-child(5) > span:contains("ago")
@@ -167,7 +167,7 @@ search:
       optional: true
       filters:
         - name: dateparse
-          args: "Jan 02 2006, 15:04"
+          args: "MMM dd yyyy, HH:mm"
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
