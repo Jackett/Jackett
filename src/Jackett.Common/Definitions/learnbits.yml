@@ -204,7 +204,7 @@ search:
       remove: a, b, img, span
       filters:
         - name: dateparse
-          args: "2006-01-02 03:04 PM"
+          args: "yyyy-MM-dd hh:mm tt"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     minimumratio:
