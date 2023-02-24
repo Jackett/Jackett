@@ -125,7 +125,7 @@ search:
       optional: true
       filters:
         - name: dateparse
-          args: "2006-01-0215:04:05"
+          args: "yyyy-MM-ddHH:mm:ss"
     date_ago:
       # 2 ngày<br/>23 giờ
       selector: td:nth-child(5):not(:contains("-"))
