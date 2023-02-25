@@ -89,6 +89,7 @@ namespace Jackett.Test.Common.Utils
         [TestCase("1", 1)]
         [TestCase("1000 grabs", 1000)]
         [TestCase("asdf123asdf", 123)]
+        [TestCase("asdf123asdf456asdf", 123)]
         public void should_parse_long_from_string(string original, long? parsedInt)
         {
             ParseUtil.GetLongFromString(original).Should().Be(parsedInt);
