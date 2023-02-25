@@ -8,6 +8,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Newtonsoft.Json;
 using NLog;
 
 namespace Jackett.Common.Services
@@ -248,14 +249,11 @@ namespace Jackett.Common.Services
 
         private static string GetSerializedQuery(TorznabQuery query)
         {
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(query);
+            var json = JsonConvert.SerializeObject(query);
 
             // Changes in the query to improve cache hits
             // Both request must return the same results, if not we are breaking Jackett search
             json = json.Replace("\"SearchTerm\":null", "\"SearchTerm\":\"\"");
-
-            // The Cache parameter's value should not affect caching itself
-            json = json.Replace("\"Cache\":false", "\"Cache\":true");
 
             return json;
         }
