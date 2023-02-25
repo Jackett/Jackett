@@ -75,7 +75,7 @@ indent_size=2
 
 # JavaScript/HTML
 [*.{js,ts,json,html,cshtml}]
-indent_size=2
+indent_size=4
 
 # Code files
 [*.{cs,csx,vb,vbx}]
