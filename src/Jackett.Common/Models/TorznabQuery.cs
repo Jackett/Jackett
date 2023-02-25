@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Jackett.Common.Extensions;
 using Jackett.Common.Utils;
+using Newtonsoft.Json;
 
 namespace Jackett.Common.Models
 {
@@ -25,6 +26,8 @@ namespace Jackett.Common.Models
         public int? TvmazeID { get; set; }
         public int? TraktID { get; set; }
         public int? DoubanID { get; set; }
+
+        [JsonIgnore]
         public bool Cache { get; set; } = true;
 
         public int Season { get; set; }

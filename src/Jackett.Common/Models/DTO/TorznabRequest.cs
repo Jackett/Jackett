@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Jackett.Common.Utils;
 
@@ -50,22 +51,17 @@ namespace Jackett.Common.Models.DTO
             if (!string.IsNullOrWhiteSpace(request.offset))
                 query.Offset = ParseUtil.CoerceInt(request.offset);
 
-            bool _cache;
-            if (bool.TryParse(request.cache, out _cache))
-            {
+            if (bool.TryParse(request.cache, out var _cache))
                 query.Cache = _cache;
-            }
 
             if (request.cat != null)
-            {
-                query.Categories = request.cat.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => int.Parse(s)).ToArray();
-            }
+                query.Categories = request.cat.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(int.Parse).ToArray();
             else
             {
                 if (query.QueryType == "movie" && !string.IsNullOrWhiteSpace(request.imdbid))
-                    query.Categories = new int[] { TorznabCatType.Movies.ID };
+                    query.Categories = new[] { TorznabCatType.Movies.ID };
                 else
-                    query.Categories = new int[0];
+                    query.Categories = Array.Empty<int>();
             }
 
             if (!string.IsNullOrWhiteSpace(request.season))
