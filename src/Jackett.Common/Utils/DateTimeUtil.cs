@@ -115,6 +115,10 @@ namespace Jackett.Common.Utils
             try
             {
                 str = ParseUtil.NormalizeSpace(str);
+
+                if (DateTime.TryParseExact(str, Rfc1123ZPattern, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
+                    return parsedDate;
+
                 var now = relativeFrom ?? DateTime.Now;
 
                 // try parsing the str as an unix timestamp
