@@ -139,8 +139,14 @@ search:
         i[class="fa fa-gamepad"]: jeux-pc
         i[class="fa fa-laptop"]: logiciels
         i[class="fa fa-book"]: ebook
-    title_phase1:
+    title_default:
       selector: td:nth-child(1) a
+    title_optional:
+      selector: td:nth-child(1) a[title]
+      attribute: title
+      optional: true
+    title_phase1:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
       filters:
         - name: re_replace
           args: ["(?i)\\b(FRENCH|MULTI|TRUEFRENCH|VOSTFR|SUBFRENCH)\\b(.+?)(\\b(19|20\\d{2})\\b)$", "$3 $1$2"]
