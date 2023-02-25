@@ -75,14 +75,25 @@ namespace Jackett.Common.Utils
 
         public static long? GetLongFromString(string str)
         {
-            if (str == null)
+            if (string.IsNullOrWhiteSpace(str))
                 return null;
-            var IdRegEx = new Regex(@"(\d+)", RegexOptions.Compiled);
-            var IdMatch = IdRegEx.Match(str);
-            if (!IdMatch.Success)
-                return null;
-            var Id = IdMatch.Groups[1].Value;
-            return CoerceLong(Id);
+
+            var extractedLong = string.Empty;
+
+            foreach (var c in str)
+            {
+                if (c < '0' || c > '9')
+                {
+                    if (extractedLong.Length > 0)
+                        break;
+
+                    continue;
+                }
+
+                extractedLong += c;
+            }
+
+            return CoerceLong(extractedLong);
         }
 
         public static int? GetImdbID(string imdbstr)

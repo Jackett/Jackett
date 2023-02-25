@@ -2068,45 +2068,27 @@ namespace Jackett.Common.Indexers
                     value = release.Imdb.ToString();
                     break;
                 case "tmdbid":
-                    var tmdbIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var tmdbIdMatch = tmdbIdRegex.Match(value);
-                    var tmdbId = tmdbIdMatch.Groups[1].Value;
-                    release.TMDb = ParseUtil.CoerceLong(tmdbId);
+                    release.TMDb = ParseUtil.GetLongFromString(value);
                     value = release.TMDb.ToString();
                     break;
                 case "rageid":
-                    var rageIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var rageIdMatch = rageIdRegex.Match(value);
-                    var rageId = rageIdMatch.Groups[1].Value;
-                    release.RageID = ParseUtil.CoerceLong(rageId);
+                    release.RageID = ParseUtil.GetLongFromString(value);
                     value = release.RageID.ToString();
                     break;
                 case "tvdbid":
-                    var tvdbIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var tvdbIdMatch = tvdbIdRegex.Match(value);
-                    var tvdbId = tvdbIdMatch.Groups[1].Value;
-                    release.TVDBId = ParseUtil.CoerceLong(tvdbId);
+                    release.TVDBId = ParseUtil.GetLongFromString(value);
                     value = release.TVDBId.ToString();
                     break;
                 case "tvmazeid":
-                    var tvMazeIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var tvMazeIdMatch = tvMazeIdRegex.Match(value);
-                    var tvMazeId = tvMazeIdMatch.Groups[1].Value;
-                    release.TVMazeId = ParseUtil.CoerceLong(tvMazeId);
+                    release.TVMazeId = ParseUtil.GetLongFromString(value);
                     value = release.TVMazeId.ToString();
                     break;
                 case "traktid":
-                    var traktIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var traktIdMatch = traktIdRegex.Match(value);
-                    var traktId = traktIdMatch.Groups[1].Value;
-                    release.TraktId = ParseUtil.CoerceLong(traktId);
+                    release.TraktId = ParseUtil.GetLongFromString(value);
                     value = release.TraktId.ToString();
                     break;
                 case "doubanid":
-                    var doubanIdRegex = new Regex(@"(\d+)", RegexOptions.Compiled);
-                    var doubanIdMatch = doubanIdRegex.Match(value);
-                    var doubanId = doubanIdMatch.Groups[1].Value;
-                    release.DoubanId = ParseUtil.CoerceLong(doubanId);
+                    release.DoubanId = ParseUtil.GetLongFromString(value);
                     value = release.DoubanId.ToString();
                     break;
                 case "genre":
