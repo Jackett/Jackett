@@ -111,21 +111,18 @@ search:
       optional: true
     files:
       text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
-    size_optional:
+    size:
       selector: td:nth-child(3)
       optional: true
-    size:
-      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
-    seeders_optional:
+      default: 0
+    seeders:
       selector: a[href$="toseeders=1"]
       optional: true
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      default: 0
+    leechers:
       selector: a[href$="todlers=1"]
       optional: true
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      default: 0
     date:
       text: now
     downloadvolumefactor:

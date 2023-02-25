@@ -110,6 +110,7 @@ namespace Jackett.Common.Models
     {
         public string Selector { get; set; }
         public bool Optional { get; set; } = false;
+        public string Default { get; set; }
         public string Text { get; set; }
         public string Attribute { get; set; }
         public string Remove { get; set; }
