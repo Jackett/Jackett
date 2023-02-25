@@ -76,6 +76,8 @@ caps:
     - {id: 29, cat: PC/Mobile-iOS, desc: "Ipod"}
     - {id: 61, cat: PC/Mobile-Other, desc: "GSM/Programi"}
     - {id: 62, cat: PC/Mobile-Other, desc: "GSM/Ostalo"}
+    # undocumented in category table but present in results
+    - {id: 60, cat: TV/SD, desc: "TV-XVID"}
 
   modes:
     search: [q]
