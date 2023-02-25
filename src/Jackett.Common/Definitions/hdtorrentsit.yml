@@ -30,7 +30,7 @@ settings:
   - name: ip_filtering
     type: info
     label: "IP Filtering"
-    default: "The <b>404 Not Found</b> error means your IP was not accepted. Check the <a href=\" https://check-host.net/check-report/e5b649bkfa\" target =_blank>Locations</a> report, only those with a Status of <b>OK</b> will be accepted."
+    default: "The <b>404 Not Found</b> error means your IP was not accepted. Check the <a href=\"https://check-host.net/check-report/e5b649bkfa\" target=\"_blank\">Locations report</a>, only those with a Status of <b>OK</b> will be accepted."
 
 login:
   path: takelogin.php
