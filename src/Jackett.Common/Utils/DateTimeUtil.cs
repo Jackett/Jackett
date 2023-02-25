@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Jackett.Common.Extensions;
 
 namespace Jackett.Common.Utils
 {
@@ -117,7 +118,7 @@ namespace Jackett.Common.Utils
                 var now = relativeFrom ?? DateTime.Now;
 
                 // try parsing the str as an unix timestamp
-                if (str.All(char.IsDigit) && long.TryParse(str, out var unixTimeStamp))
+                if (str.IsAllDigits() && long.TryParse(str, out var unixTimeStamp))
                     return UnixTimestampToDateTime(unixTimeStamp);
 
                 if (str.ToLower().Contains("now"))
@@ -227,81 +228,87 @@ namespace Jackett.Common.Utils
             var now = relativeFrom ?? DateTime.Now;
 
             date = ParseUtil.NormalizeSpace(date);
-            var pattern = layout;
 
-            // year
-            pattern = pattern.Replace("2006", "yyyy");
-            pattern = pattern.Replace("06", "yy");
+            var commonStandardFormats = new[] { "y", "h", "d" };
 
-            // month
-            pattern = pattern.Replace("January", "MMMM");
-            pattern = pattern.Replace("Jan", "MMM");
-            pattern = pattern.Replace("01", "MM");
+            if (commonStandardFormats.Any(layout.ContainsIgnoreCase) && DateTime.TryParseExact(date, layout, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
+                return parsedDate;
 
-            // day
-            pattern = pattern.Replace("Monday", "dddd");
-            pattern = pattern.Replace("Mon", "ddd");
-            pattern = pattern.Replace("02", "dd");
-            //pattern = pattern.Replace("_2", ""); // space padding not supported nativly by C#?
-            pattern = pattern.Replace("2", "d");
+            var format = layout
 
-            // hours/minutes/seconds
-            pattern = pattern.Replace("05", "ss");
+                // year
+                .Replace("2006", "yyyy")
+                .Replace("06", "yy")
 
-            pattern = pattern.Replace("15", "HH");
-            pattern = pattern.Replace("03", "hh");
-            pattern = pattern.Replace("3", "h");
+                // month
+                .Replace("January", "MMMM")
+                .Replace("Jan", "MMM")
+                .Replace("01", "MM")
 
-            pattern = pattern.Replace("04", "mm");
-            pattern = pattern.Replace("4", "m");
+                // day
+                .Replace("Monday", "dddd")
+                .Replace("Mon", "ddd")
+                .Replace("02", "dd")
+                //pattern = pattern.Replace("_2", "") // space padding not supported nativly by C#?
+                .Replace("2", "d")
 
-            pattern = pattern.Replace("5", "s");
+                // hours/minutes/seconds
+                .Replace("05", "ss")
 
-            // month again
-            pattern = pattern.Replace("1", "M");
+                .Replace("15", "HH")
+                .Replace("03", "hh")
+                .Replace("3", "h")
 
-            // fractional seconds
-            pattern = pattern.Replace(".0000", "ffff");
-            pattern = pattern.Replace(".000", "fff");
-            pattern = pattern.Replace(".00", "ff");
-            pattern = pattern.Replace(".0", "f");
+                .Replace("04", "mm")
+                .Replace("4", "m")
 
-            pattern = pattern.Replace(".9999", "FFFF");
-            pattern = pattern.Replace(".999", "FFF");
-            pattern = pattern.Replace(".99", "FF");
-            pattern = pattern.Replace(".9", "F");
+                .Replace("5", "s")
 
-            // AM/PM
-            pattern = pattern.Replace("PM", "tt");
-            pattern = pattern.Replace("pm", "tt"); // not sure if this works
+                // month again
+                .Replace("1", "M")
 
-            // timezones
-            // these might need further tuning
-            //pattern = pattern.Replace("MST", "");
-            //pattern = pattern.Replace("Z07:00:00", "");
-            pattern = pattern.Replace("Z07:00", "'Z'zzz");
-            pattern = pattern.Replace("Z07", "'Z'zz");
-            //pattern = pattern.Replace("Z070000", "");
-            //pattern = pattern.Replace("Z0700", "");
-            pattern = pattern.Replace("Z07:00", "'Z'zzz");
-            pattern = pattern.Replace("Z07", "'Z'zz");
-            //pattern = pattern.Replace("-07:00:00", "");
-            pattern = pattern.Replace("-07:00", "zzz");
-            //pattern = pattern.Replace("-0700", "zz");
-            pattern = pattern.Replace("-07", "zz");
+                // fractional seconds
+                .Replace(".0000", "ffff")
+                .Replace(".000", "fff")
+                .Replace(".00", "ff")
+                .Replace(".0", "f")
+
+                .Replace(".9999", "FFFF")
+                .Replace(".999", "FFF")
+                .Replace(".99", "FF")
+                .Replace(".9", "F")
+
+                // AM/PM
+                .Replace("PM", "tt")
+                .Replace("pm", "tt") // not sure if this works
+
+                // timezones
+                // these might need further tuning
+                //pattern = pattern.Replace("MST", "")
+                //pattern = pattern.Replace("Z07:00:00", "")
+                .Replace("Z07:00", "'Z'zzz")
+                .Replace("Z07", "'Z'zz")
+                //pattern = pattern.Replace("Z070000", "")
+                //pattern = pattern.Replace("Z0700", "")
+                .Replace("Z07:00", "'Z'zzz")
+                .Replace("Z07", "'Z'zz")
+                //pattern = pattern.Replace("-07:00:00", "")
+                .Replace("-07:00", "zzz")
+                //pattern = pattern.Replace("-0700", "zz")
+                .Replace("-07", "zz");
 
             try
             {
-                var dateTime = DateTime.ParseExact(date, pattern, CultureInfo.InvariantCulture);
+                var dateTime = DateTime.ParseExact(date, format, CultureInfo.InvariantCulture);
 
-                if (!pattern.Contains("yy") && dateTime > now)
+                if (!format.Contains("yy") && dateTime > now)
                     dateTime = dateTime.AddYears(-1);
 
                 return dateTime;
             }
             catch (FormatException ex)
             {
-                throw new FormatException($"Error while parsing DateTime \"{date}\", using layout \"{layout}\" ({pattern}): {ex.Message}", ex);
+                throw new FormatException($"Error while parsing DateTime \"{date}\", using layout \"{layout}\" ({format}): {ex.Message}", ex);
             }
         }
 

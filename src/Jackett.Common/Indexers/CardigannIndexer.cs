@@ -1013,19 +1013,14 @@ namespace Jackett.Common.Indexers
                     case "dateparse":
                         var layout = (string)Filter.Args;
 
-                        if (layout.Contains("yy") && DateTime.TryParseExact(Data, layout, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
-                            Data = parsedDate.ToString(DateTimeUtil.Rfc1123ZPattern);
-                        else
+                        try
                         {
-                            try
-                            {
-                                var datetime = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
-                                Data = datetime.ToString(DateTimeUtil.Rfc1123ZPattern);
-                            }
-                            catch (FormatException ex)
-                            {
-                                logger.Debug(ex.Message);
-                            }
+                            var datetime = DateTimeUtil.ParseDateTimeGoLang(Data, layout);
+                            Data = datetime.ToString(DateTimeUtil.Rfc1123ZPattern, CultureInfo.InvariantCulture);
+                        }
+                        catch (FormatException ex)
+                        {
+                            logger.Debug(ex.Message);
                         }
                         break;
                     case "regexp":
@@ -1093,10 +1088,10 @@ namespace Jackett.Common.Indexers
                         break;
                     case "timeago":
                     case "reltime":
-                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.Rfc1123ZPattern);
+                        Data = DateTimeUtil.FromTimeAgo(Data).ToString(DateTimeUtil.Rfc1123ZPattern, CultureInfo.InvariantCulture);
                         break;
                     case "fuzzytime":
-                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.Rfc1123ZPattern);
+                        Data = DateTimeUtil.FromUnknown(Data).ToString(DateTimeUtil.Rfc1123ZPattern, CultureInfo.InvariantCulture);
                         break;
                     case "validfilename":
                         Data = StringUtil.MakeValidFileName(Data, '_', false);
@@ -1509,7 +1504,7 @@ namespace Jackett.Common.Indexers
                                         variables[variablesKey] = null;
                                         continue;
                                     }
-                                    throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
+                                    throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}", ex);
                                 }
 
                             }
@@ -1646,7 +1641,7 @@ namespace Jackett.Common.Indexers
                                             variables[variablesKey] = null;
                                             continue;
                                         }
-                                        throw new Exception(string.Format("Error while parsing field={0}, selector={1}, value={2}: {3}", Field.Key, Field.Value.Selector, (value == null ? "<null>" : value), ex.Message));
+                                        throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}", ex);
                                     }
                                 }
 
@@ -2040,8 +2035,8 @@ namespace Jackett.Common.Indexers
                     value = release.Seeders.ToString();
                     break;
                 case "date":
-                    release.PublishDate = DateTimeUtil.FromUnknown(value);
-                    value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern);
+                    release.PublishDate = DateTime.TryParseExact(value, DateTimeUtil.Rfc1123ZPattern, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate) ? parsedDate : DateTimeUtil.FromUnknown(value);
+                    value = release.PublishDate.ToString(DateTimeUtil.Rfc1123ZPattern, CultureInfo.InvariantCulture);
                     break;
                 case "files":
                     release.Files = ParseUtil.CoerceLong(value);

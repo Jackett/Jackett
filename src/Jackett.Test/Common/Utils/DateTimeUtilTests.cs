@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 using Jackett.Common.Utils;
 using NUnit.Framework;
 
@@ -177,6 +179,32 @@ namespace Jackett.Test.Common.Utils
         {
             var diff = Math.Abs((dt1 - dt2).TotalSeconds);
             Assert.True(diff < delta, $"Dates are not similar. Expected: {dt1} But was: {dt2}");
+        }
+
+        [TestCase("pt-BR")]
+        [TestCase("en-US")]
+        public void AssertFormattingDatesInvariant(string culture)
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
+
+            var dateNow = DateTime.Now;
+
+            Assert.AreEqual(
+                dateNow.ToString("ddd, dd MMM yyyy HH':'mm':'ss z", CultureInfo.InvariantCulture),
+                DateTimeUtil.FromUnknown(dateNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)).ToString(DateTimeUtil.Rfc1123ZPattern, CultureInfo.InvariantCulture));
+        }
+
+        [TestCase("2022-08-08 02:07:39 -02:00", "2006-01-02 15:04:05 -07:00", "yyyy-MM-dd HH:mm:ss zzz", "2022-08-08 04:07:39 +00:00")]
+        [TestCase("2022-08-08 02:07:39 -02:00", "yyyy-MM-dd HH:mm:ss zzz", "yyyy-MM-dd HH:mm:ss zzz", "2022-08-08 04:07:39 +00:00")]
+        [TestCase("2022-08-08 -02:00", "2006-01-02 -07:00", "yyyy-MM-dd zzz", "2022-08-08 +00:00")]
+        [TestCase("2022-08-08 -02:00", "yyyy-MM-dd zzz", "yyyy-MM-dd zzz", "2022-08-08 +00:00")]
+        [TestCase("02:07:39 -02:00", "15:04:05 -07:00", "HH:mm:ss zzz", "04:07:39 +00:00")]
+        [TestCase("02:07:39 -02:00", "HH:mm:ss zzz", "HH:mm:ss zzz", "04:07:39 +00:00")]
+        [TestCase("-02:00", "zzz", "zzz", "+00:00")]
+        [TestCase("-02:00", "-07:00", "zzz", "+00:00")]
+        public void AssertParsingDateTimeGolang(string dateInput, string format, string standardFormat, string expectedDate)
+        {
+            Assert.AreEqual(expectedDate, DateTimeUtil.ParseDateTimeGoLang(dateInput, format).ToUniversalTime().ToString(standardFormat, CultureInfo.InvariantCulture));
         }
     }
 }
