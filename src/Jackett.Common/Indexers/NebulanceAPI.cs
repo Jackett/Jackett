@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
                        LimitsMax = 1000,
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre, TvSearchParam.TvmazeId
                        },
                        SupportsRawSearch = true
                    },
@@ -161,7 +161,13 @@ namespace Jackett.Common.Indexers
 
             var searchString = query.GetQueryString();
             if (!string.IsNullOrWhiteSpace(searchString))
-                searchParam["name"] = "%" + Regex.Replace(searchString, @"[ -._]+", "%").Trim() + "%";
+                searchParam["name"] = "%" + Regex.Replace(searchString, "[\\W]+", "%").Trim() + "%";
+
+            if (query.IsTvmazeQuery && query.TvmazeID.HasValue)
+            {
+                searchParam["tvmaze"] = query.TvmazeID;
+                searchParam["name"] = "%" + Regex.Replace(query.GetEpisodeSearchString(), "[\\W]+", "%").Trim() + "%";
+            }
 
             if (query.IsGenreQuery)
             {
