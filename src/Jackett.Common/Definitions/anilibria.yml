@@ -31,9 +31,14 @@ settings:
 search:
   paths:
     # https://github.com/anilibria/docs/blob/master/api_v3.md
-    - path: "https://api.anilibria.tv/v3/{{ if .Keywords }}searchTitles?search={{ .Keywords }}&{{ else }}getUpdates?{{ end }}filter=names,posters.small.url,code,torrents.list,season.year,description&limit=100"
+    - path: "https://api.anilibria.tv/v3/{{ if .Keywords }}searchTitles{{ else }}getUpdates{{ end }}"
       response:
         type: json
+
+  inputs:
+    search: "{{ .Keywords }}"
+    filter: "names,posters.small.url,code,torrents.list,season.year,description"
+    limit: 100
 
   keywordsfilters:
     # strip season and ep

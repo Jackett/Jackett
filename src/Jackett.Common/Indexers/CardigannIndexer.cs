@@ -1400,13 +1400,18 @@ namespace Jackett.Common.Indexers
                                     if (key.Length == 0)
                                         continue;
                                     var value = "";
-                                    if (parts.Count() == 2)
+                                    if (parts.Length == 2)
                                         value = parts[1];
                                     queryCollection.Add(key, value);
                                 }
                             }
                             else
-                                queryCollection.Add(Input.Key, applyGoTemplateText(Input.Value, variables));
+                            {
+                                var inputValue = applyGoTemplateText(Input.Value, variables);
+
+                                if (!string.IsNullOrWhiteSpace(inputValue) || Search.AllowEmptyInputs)
+                                    queryCollection.Add(Input.Key, inputValue);
+                            }
                         }
                     }
                 }
