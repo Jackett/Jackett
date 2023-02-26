@@ -184,6 +184,7 @@ search:
     - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Movies{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/1/"
     - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/TV{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}2{{ else }}1{{ end }}/"
     - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Music{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}3{{ else }}1{{ end }}/"
+    - path: "{{ if or .Query.Album .Query.Artist .Keywords }}sort-search{{ else }}cat/Other{{ end }}{{ if or .Query.Album .Query.Artist }}/{{ or .Query.Album .Query.Artist }}{{ else }}/{{ .Keywords }}{{ end }}{{ if or .Query.Album .Query.Artist .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}/{{ if or .Query.Album .Query.Artist .Keywords }}4{{ else }}1{{ end }}/"
 
   rows:
     selector: tr:has(a[href^="/torrent/"])
