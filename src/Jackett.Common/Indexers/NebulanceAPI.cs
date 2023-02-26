@@ -43,7 +43,8 @@ namespace Jackett.Common.Indexers
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre
-                       }
+                       },
+                       SupportsRawSearch = true
                    },
                    configService: configService,
                    client: wc,
