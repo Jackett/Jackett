@@ -316,6 +316,7 @@ namespace Jackett.Updater
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cilipro.yml",
                 "Definitions/cinefilhd.yml",
+                "Definitions/cloudtorrents.yml",
                 "Definitions/cooltorrent.yml",
                 "Definitions/crazyscorner.yml",
                 "Definitions/cryptichaven.yml",
