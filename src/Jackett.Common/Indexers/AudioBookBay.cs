@@ -17,6 +17,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
@@ -79,8 +80,7 @@ namespace Jackett.Common.Indexers
             Language = "en-US";
             Type = "public";
 
-            // requestDelay for API Limit (1 request per 2 seconds)
-            webclient.requestDelay = 2.1;
+            webclient.requestDelay = 3.1;
 
             // Age
             AddCategoryMapping("children", TorznabCatType.AudioAudiobook, "Children");
