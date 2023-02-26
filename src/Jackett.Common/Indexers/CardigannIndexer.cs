@@ -2064,31 +2064,31 @@ namespace Jackett.Common.Indexers
                     break;
                 case "imdb":
                 case "imdbid":
-                    release.Imdb = ParseUtil.GetLongFromString(value);
+                    release.Imdb = ParseUtil.GetLongFromString(value).GetValueOrDefault();
                     value = release.Imdb.ToString();
                     break;
                 case "tmdbid":
-                    release.TMDb = ParseUtil.GetLongFromString(value);
+                    release.TMDb = ParseUtil.GetLongFromString(value).GetValueOrDefault();
                     value = release.TMDb.ToString();
                     break;
                 case "rageid":
-                    release.RageID = ParseUtil.GetLongFromString(value);
+                    release.RageID = ParseUtil.GetLongFromString(value).GetValueOrDefault();
                     value = release.RageID.ToString();
                     break;
                 case "tvdbid":
-                    release.TVDBId = ParseUtil.GetLongFromString(value);
+                    release.TVDBId = ParseUtil.GetLongFromString(value).GetValueOrDefault();
                     value = release.TVDBId.ToString();
                     break;
                 case "tvmazeid":
-                    release.TVMazeId = ParseUtil.GetLongFromString(value);
+                    release.TVMazeId = ParseUtil.GetLongFromString(value).GetValueOrDefault();
                     value = release.TVMazeId.ToString();
                     break;
                 case "traktid":
-                    release.TraktId = ParseUtil.GetLongFromString(value);
+                    release.TraktId = ParseUtil.GetLongFromString(value).GetValueOrDefault();
                     value = release.TraktId.ToString();
                     break;
                 case "doubanid":
-                    release.DoubanId = ParseUtil.GetLongFromString(value);
+                    release.DoubanId = ParseUtil.GetLongFromString(value).GetValueOrDefault();
                     value = release.DoubanId.ToString();
                     break;
                 case "genre":
