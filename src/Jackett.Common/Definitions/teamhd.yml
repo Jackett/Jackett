@@ -67,14 +67,12 @@ search:
   paths:
     - path: browse
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    # free: 0 all, 1 gold, 2 silver, 3 normal
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}{{ if .Config.freeleech }}free=1{{ else }}{{ end }}"
     # replace spaces with wildcard (percent symbol) as site's default search is exact string.
-    search: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
+    search: "{{ if .Keywords }}{{ re_replace .Keywords \"[\\s]+\" \"%\" }}{{ else }}%{{ end }}"
     # 0 active, 1 incldead, 2 onlydead, 3 noseeders
     incldead: 1
-    # 0 all, 1 gold, 2 silver, 3 normal
-    free: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
-    year: ""
   keywordsfilters:
     # remove the year from the titles as the site chokes on them during search https://github.com/Jackett/Jackett/issues/4397#issuecomment-623148789
     - name: re_replace
