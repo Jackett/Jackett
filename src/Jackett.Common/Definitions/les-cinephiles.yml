@@ -212,111 +212,11 @@ search:
 
   fields:
     category:
-#      selector: a[href^="torrents.php?cat="]
-#      attribute: href
-#      filters:
-#        - name: querystring
-#          args: cat
-      selector: img
-      attribute: src
-      case:
-        img[src$="/anim4k.png"]: 2
-        img[src$="/anim4klight.png"]: 3
-        img[src$="/animbdrip.png"]: 4
-        img[src$="/animbrrip.png"]: 5
-        img[src$="/animbluray.png"]: 6
-        img[src$="/animdvdr.png"]: 8
-        img[src$="/animdvdrip.png"]: 9
-        img[src$="/animjap.png"]: 165
-        img[src$="/animhd1080p.png"]: 11
-        img[src$="/animhd720p.png"]: 12
-        img[src$="/animhdrip.png"]: 13
-        img[src$="/animremux.png"]: 14
-        img[src$="/animtvrip.png"]: 15
-        img[src$="/animwebrip.png"]: 16
-        img[src$="/animwebdl.png"]: 17
-        img[src$="/ebookbd.png"]: 73
-        img[src$="/ebookenfant.png"]: 74
-        img[src$="/ebookmanga.png"]: 75
-        img[src$="/ebookromans.png"]: 76
-        img[src$="/ebookaudio.png"]: 167
-        img[src$="/ebookmagazine.png"]: 168
-        img[src$="/docunivers.png"]: 24
-        img[src$="/docdecouverte.png"]: 20
-        img[src$="/docsport.png"]: 23
-        img[src$="/docanimaux.png"]: 18
-        img[src$="/docantique.png"]: 19
-        img[src$="/docdivers.png"]: 21
-        img[src$="/dochistoire.png"]: 22
-        img[src$="/docsemitv.png"]: 164
-        img[src$="/unknown198.png"]: 198 # film doc spectacle
-        img[src$="/film3d.png"]: 25
-        img[src$="/film4k.png"]: 26
-        img[src$="/film4klight.png"]: 27
-        img[src$="/filmav1.png"]: 169
-        img[src$="/filmbdrip.png"]: 28
-        img[src$="/filmbrrip.png"]: 29
-        img[src$="/filmbluray.png"]: 30
-        img[src$="/filmcoffret.png"]: 31
-        img[src$="/filmdvdr.png"]: 32
-        img[src$="/filmdvdrip.png"]: 33
-        img[src$="/filmhd720p.png"]: 36
-        img[src$="/filmhd1080p.png"]: 35
-        img[src$="/filmhdrip.png"]: 37
-        img[src$="/filmhdtv720p.png"]: 170
-        img[src$="/filmmhd.png"]: 172
-        img[src$="/filmremux.png"]: 38
-        img[src$="/filmtvrip.png"]: 39
-        img[src$="/filmwebdl.png"]: 41
-        img[src$="/filmwebrip.png"]: 200
-        img[src$="/filmvostfrbdrip.png"]: 184
-        img[src$="/filmvostfrdvdrip.png"]: 185
-        img[src$="/filmvostfrwebrip.png"]: 186
-        img[src$="/filmvostfrwebdl.png"]: 202
-        img[src$="/filmvostfrbluray.png"]: 203
-        img[src$="/jeux3d3ds.png"]: 59
-        img[src$="/jeuxandroid.png"]: 60
-        img[src$="/jeuxiosx.png"]: 61
-        img[src$="/jeuxwindows.png"]: 62
-        img[src$="/jeuxps3ps4.png"]: 63
-        img[src$="/jeuxpsppsx.png"]: 64
-        img[src$="/jeuxwiiu.png"]: 65
-        img[src$="/jeuxwii.png"]: 66
-        img[src$="/jeuxxbox.png"]: 67
-        img[src$="/logandroid.png"]: 68
-        img[src$="/logapple.png"]: 69
-        img[src$="/logiphone.png"]: 70
-        img[src$="/loglinux.png"]: 71
-        img[src$="/logwindows.png"]: 72
-        img[src$="/animcoffret.png"]: 7
-        img[src$="/docsseries.png"]: 197
-        img[src$="/unknown182.png"]: 182 # serie jap anim
-        img[src$="/unknown166.png"]: 166 # serie docu
-        img[src$="/unknown194.png"]: 194 # serie docu divers
-        img[src$="/unknown195.png"]: 195 # serie docu emistv
-        img[src$="/seriesfr4k.png"]: 173
-        img[src$="/seriesfr4klight.png"]: 174
-        img[src$="/seriecoffret.png"]: 85
-        img[src$="/seriedvdr.png"]: 86
-        img[src$="/seriedvdrip.png"]: 87
-        img[src$="/seriehd1080p.png"]: 88
-        img[src$="/seriehd720p.png"]: 89
-        img[src$="/seriehdrip.png"]: 90
-        img[src$="/seriesfrhdtv720p.png"]: 175
-        img[src$="/seriesfrhdtv1080p.png"]: 176
-        img[src$="/seriesfrmhd.png"]: 177
-        img[src$="/serieremux.png"]: 91
-        img[src$="/serietvrip.png"]: 92
-        img[src$="/seriewebrip.png"]: 93
-        img[src$="/seriesfrwebdl720p.png"]: 178
-        img[src$="/seriesfrwebdl1080p.png"]: 179
-        img[src$="/seriewebdl.png"]: 199
-        img[src$="/serievostfrbdrip.png"]: 188
-        img[src$="/serievostfrdvdrip.png"]: 189
-        img[src$="/serievostfrhdrip.png"]: 190
-        img[src$="/serievostfrwebrip.png"]: 191
-        img[src$="/serievostfrwebdl.png"]: 192
-        img[src$="/serievostfrcoffret.png"]: 180
+      selector: td:first-child
+      attribute: torrents.php?cat
+      filters:
+        - name: regexp
+          args: (\d+)
     title_phase1:
       selector: a[href^="torrents-details.php?id="]
     title_vostfr:
