@@ -175,6 +175,12 @@ login:
     selector: a[href="account-logout.php"]
 
 download:
+  before:
+    path: list_thanks.php
+    inputs:
+      id: "{{ .DownloadUri.Query.id }}"
+      to: give
+      torrent: "{{ .DownloadUri.Query.id }}"
   selectors:
     - selector: a[href^="download.php?id="]
       attribute: href
@@ -333,6 +339,9 @@ search:
     download:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
+      filters:
+        - name: replace
+          args: ["&hit=1", ""] # avoid redirect
     poster:
       selector: a[onMouseover]
       attribute: onMouseover
