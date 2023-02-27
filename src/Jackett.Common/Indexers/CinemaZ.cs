@@ -43,7 +43,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(2, TorznabCatType.TVUHD);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(2, TorznabCatType.TVSD);
-            AddCategoryMapping(3, TorznabCatType.Audio);
         }
     }
 }
