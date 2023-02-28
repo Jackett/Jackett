@@ -60,8 +60,13 @@ settings:
       asc: asc
 
 login:
-  path: takelogin.php
-  method: post
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
