@@ -612,7 +612,7 @@
                 "multiple": {
                     "type": "boolean"
                 },
-                "missingAttributeEquals0Results": {
+                "missingAttributeEqualsNoResults": {
                     "type": "boolean"
                 },
                 "case": {

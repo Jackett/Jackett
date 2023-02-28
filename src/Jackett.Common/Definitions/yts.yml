@@ -70,7 +70,7 @@ search:
     attribute: torrents
     multiple: true
     # bug at YTS can return movie_count > 0 and no movie torrents #12598
-    missingAttributeEquals0Results: true
+    missingAttributeEqualsNoResults: true
     count:
       selector: data.movie_count
 
