@@ -6,9 +6,10 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
-  - https://wotreworked.xyz/
+  - https://w-o-t.pro/
 legacylinks:
   - https://world-of-tomorrow.eu/
+  - https://wotreworked.xyz/
 
 caps:
   categorymappings:
