@@ -164,7 +164,9 @@ search:
 
   keywordsfilters:
     - name: re_replace
-      args: ["(^|$|[\\W]+)", "*"]
+      args: ["\\W+", "*"]
+    - name: re_replace
+      args: ["^(.+)$", "*$1*"]
 
   rows:
     selector: table#sortabletable > tbody > tr:has(div > a[href*="details.php?id="])
