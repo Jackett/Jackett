@@ -164,8 +164,7 @@ search:
 
   keywordsfilters:
     - name: re_replace
-      args: ["\\W*\\b\\w{1,3}\\b", " "] # The minimum search term length is 4 characters.
-    - name: trim
+      args: ["(^|$|[\\W]+)", "*"]
 
   rows:
     selector: table#sortabletable > tbody > tr:has(div > a[href*="details.php?id="])
