@@ -4,7 +4,7 @@ name: Bitspyder
 description: "Bitspyder is a Private site for Educational BOOKS / AUDIO"
 language: en-US
 type: private
-encoding: windows-1252
+encoding: iso-8859-1
 links:
   - https://bitspyder.net/
 legacylinks:
@@ -87,7 +87,8 @@ login:
   error:
     - selector: td.msg_info > font > b
   test:
-    path: browse.php
+    path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
