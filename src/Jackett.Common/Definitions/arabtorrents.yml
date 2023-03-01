@@ -1,0 +1,219 @@
+---
+id: arabtorrents
+name: ArabTorrents
+description: "arab-torrents.net is an ARABIC Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ar-AR
+type: private
+encoding: windows-1256
+requestDelay: 2
+links:
+  - https://arab-torrents.net/
+
+caps:
+  categorymappings:
+    # Movies
+    - {id: 36, cat: Movies, desc: "Movies/Dubbed"}
+    - {id: 134, cat: Movies, desc: "HD Section"}
+    - {id: 135, cat: Movies/HD, desc: "Movies/HD Section"}
+    - {id: 204, cat: Movies/HD, desc: "R5/HD Section"}
+    - {id: 119, cat: Movies/SD, desc: "Movies/SD TV"}
+    - {id: 205, cat: Movies/Foreign, desc: "Foreign"}
+    - {id: 208, cat: Movies/Foreign, desc: "Stranger/Foreign"}
+    - {id: 209, cat: Movies/Foreign, desc: "Turkish/Foreign"}
+    - {id: 207, cat: Movies/Foreign, desc: "Indian/Foreign"}
+    - {id: 191, cat: Movies, desc: "Movies/Golden-VIP"}
+    - {id: 190, cat: Movies, desc: "Movies/Super VIP"}
+    - {id: 212, cat: Movies, desc: "Movies/VIP"}
+    - {id: 181, cat: Movies, desc: "Classic Movies/WEB-DL"}
+    - {id: 167, cat: Movies, desc: "Movies/WEB-DL"}
+    # Shows
+    - {id: 186, cat: TV, desc: "Dubbed"}
+    - {id: 166, cat: TV/WEB-DL, desc: "WEB-DL"}
+    - {id: 168, cat: TV/WEB-DL, desc: "Series/WEB-DL"}
+    - {id: 171, cat: TV/WEB-DL, desc: "TV Shows/WEB-DL"}
+    - {id: 180, cat: TV/WEB-DL, desc: "Classic Series/WEB-DL"}
+    - {id: 169, cat: TV/WEB-DL, desc: "Full-Pack/WEB-DL"}
+    - {id: 210, cat: Other, desc: "VIP"}
+    - {id: 211, cat: TV, desc: "TV Shows/VIP"}
+    - {id: 213, cat: TV, desc: "Full-Pack/VIP"}
+    - {id: 94, cat: TV, desc: "Super VIP"}
+    - {id: 189, cat: TV, desc: "TV Shows/Super VIP"}
+    - {id: 201, cat: TV, desc: "Full-Pack/Super VIP"}
+    - {id: 197, cat: TV, desc: "TV Shows/Ramadan 2022"}
+    - {id: 148, cat: TV/Other, desc: "Series/OSN"}
+    - {id: 149, cat: TV/Other, desc: "TV Show/OSN"}
+    - {id: 165, cat: TV, desc: "Golden-VIP"}
+    - {id: 185, cat: TV, desc: "Series/Golden-VIP"}
+    - {id: 200, cat: TV, desc: "Full-Pack/Golden-VIP"}
+    - {id: 26, cat: TV/SD, desc: "SD TV"}
+    - {id: 78, cat: TV/SD, desc: "Series/SD TV"}
+    - {id: 124, cat: TV/SD, desc: "FullPack/SD TV"}
+    - {id: 136, cat: TV/HD, desc: "Series/HD Section"}
+    - {id: 137, cat: TV/HD, desc: "TV Shows/HD Section"}
+    - {id: 182, cat: TV/HD, desc: "Full Pack/HD Section"}
+    - {id: 187, cat: TV/Foreign, desc: "TV Shows/Dubbed"}
+    - {id: 188, cat: TV/Foreign, desc: "Full-Pack/Dubbed"}
+    # Anime
+    - {id: 33, cat: TV/Anime, desc: "Anime"}
+    - {id: 51, cat: TV/Anime, desc: "Series/Anime"}
+    - {id: 129, cat: Movies/BluRay, desc: "Blu-Ray/Anime"}
+    - {id: 125, cat: TV, desc: "Full-Pack/Anime"}
+    - {id: 50, cat: Movies, desc: "Movies/Anime"}
+    # Islamic
+    - {id: 67, cat: Other, desc: "Islamic"}
+    - {id: 126, cat: TV, desc: "Full-Packs/Islamic"}
+    - {id: 91, cat: Audio/MP3, desc: "MP3/Islamic"}
+    - {id: 92, cat: Other, desc: "Video/Islamic"}
+    # Music
+    - {id: 16, cat: Audio, desc: "Music"}
+    - {id: 177, cat: Audio, desc: "Flac/Music"}
+    - {id: 127, cat: Audio, desc: "Full-Packs/Music"}
+    - {id: 17, cat: Audio/MP3, desc: "MP3/Music"}
+    - {id: 19, cat: Audio/Video, desc: "Videos/Music"}
+    # OSN
+    - {id: 146, cat: TV/Other, desc: "OSN"}
+    - {id: 147, cat: TV/Other, desc: "Arabic/OSN"}
+    - {id: 153, cat: TV/Other, desc: "English/OSN"}
+    - {id: 179, cat: TV/Other, desc: "Old/OSN"}
+    # Ramadan 2022
+    - {id: 192, cat: Other, desc: "Ramadan 2022"}
+    - {id: 198, cat: Other, desc: "Full Pack/Ramadan 2022"}
+    - {id: 193, cat: Other, desc: "Ramadan HD/Ramadan 2022"}
+    - {id: 195, cat: Other, desc: "Ramadan Khaliji/Ramadan 2022"}
+    - {id: 194, cat: Other, desc: "Ramadan SD/Ramadan 2022"}
+    - {id: 196, cat: Other, desc: "Ramadan Web/Ramadan 2022"}
+    # Sports
+    - {id: 120, cat: TV/Sport, desc: "Sports"}
+    - {id: 159, cat: TV/Sport, desc: "Full Matches/Sports"}
+    - {id: 155, cat: TV/Sport, desc: "Goals/Sports"}
+    # Rest
+    - {id: 102, cat: TV/Other, desc: "Other/SD TV"}
+    - {id: 202, cat: Other, desc: "AT"}
+    - {id: 203, cat: Other, desc: "AT/AT"}
+    - {id: 34, cat: Other, desc: "Misc"}
+    - {id: 132, cat: PC/Mobile-Android, desc: "Android/Misc"}
+    - {id: 163, cat: TV/Documentary, desc: "Documentary/Misc"}
+    - {id: 122, cat: Other, desc: "Other/Misc"}
+    - {id: 121, cat: Other, desc: "Theater/Misc"}
+    - {id: 214, cat: Other, desc: "Other/VIP"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: table:has(td.thead:contains("حدث خطأ"))
+  test:
+    path: index.php
+    selector: a[href*="logout.php"]
+
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+
+search:
+  paths:
+    - path: browse.php
+
+  inputs:
+    do: search
+    keywords: "{{ .Keywords }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: t_both
+    # does not support multi category searching so defaulting to all.
+    category: 0
+    include_dead_torrents: yes
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(^|$|[\\W]+)", "*"]
+
+  rows:
+    selector: table#sortabletable > tbody > tr:has(div > a[href*="details.php?id="])
+
+  fields:
+    category:
+      selector: td a[href*="/browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: td a[href*="/details.php?id="]
+    details:
+      selector: td a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/download.php?id="]
+      attribute: href
+    date:
+      selector: td:nth-child(2) > div:nth-child(3)
+      filters:
+        - name: regexp
+          args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    poster:
+      selector: div.tooltip-content > img[src*="/torrents/"]
+      attribute: src
+    downloadvolumefactor:
+      case:
+        img[src$="torrent_flags/freedownload.gif"]: 0
+        img[src$="torrent_flags/silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="torrent_flags/x2.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 1.05
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# TS Special Edition v.7.4
