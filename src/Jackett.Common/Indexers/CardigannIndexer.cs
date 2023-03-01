@@ -1514,7 +1514,7 @@ namespace Jackett.Common.Indexers
                                     if (isOptional)
                                         continue;
 
-                                    throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}");
+                                    throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}", ex);
                                 }
                             }
 
@@ -1658,7 +1658,7 @@ namespace Jackett.Common.Indexers
                                         if (isOptional)
                                             continue;
 
-                                        throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}");
+                                        throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}", ex);
                                     }
                                 }
 
