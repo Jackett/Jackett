@@ -90,9 +90,11 @@ caps:
     - {id: 2169, cat: Other, desc: "GPS : Cartes"}
     - {id: 2170, cat: Other, desc: "GPS : Divers"}
     - {id: 2188, cat: XXX, desc: "XXX"}
+    - {id: 2401, cat: XXX, desc: "XXX : Ebooks"}
     - {id: 2189, cat: XXX, desc: "XXX : Films"}
     - {id: 2190, cat: XXX, desc: "XXX : Hentai"}
     - {id: 2191, cat: XXX, desc: "XXX : Images"}
+    - {id: 2402, cat: XXX, desc: "XXX : Jeux"}
 
   modes:
     search: [q]
