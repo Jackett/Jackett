@@ -169,6 +169,9 @@ search:
       optional: true
     download:
       text: "{{ if and (.Config.prefer_magnet_links) (.Result.magnet_optional) }}{{ or (.Result.magnet_optional) (.Result.download_optional) }}{{ else }}{{ or (.Result.download_optional) (.Result.magnet_optional) }}{{ end }}"
+    magnet:
+      text: "{{ if .Config.prefer_magnet_links }}{{ else }}{{ .Result.magnet_optional }}{{ end }}"
+      optional: true
     size:
       selector: td:nth-child(4)
     date:
