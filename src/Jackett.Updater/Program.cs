@@ -485,6 +485,7 @@ namespace Jackett.Updater
                 "Definitions/pleasuredome.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornbits.yml",
+                "Definitions/pornleech.yml",
                 "Definitions/pornolive.yml",
                 "Definitions/pornorip.yml",
                 "Definitions/pornotor.yml",
