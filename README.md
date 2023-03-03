@@ -105,7 +105,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PC-torrent
  * PiratBit
  * Pornforall
- * PornLeech
  * PornosLab
  * PornoTorrent
  * Portugas
