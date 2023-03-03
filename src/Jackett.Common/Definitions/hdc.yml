@@ -62,7 +62,7 @@ settings:
   - name: info_Results
     type: info
     label: Settings for Results
-    default: "To use this indexer please set the following on your HDC account <b>profile</b>:<li><i>Site Language:</i><b> English</b><li><i>Torrent List Profile: </i><b>Default Modern [preview]</b><li><i>Time Type: </i><b>Time Added</b><li><i>Torrents per page:</i><b> 100</b>"
+    default: "To use this indexer please set the following on your HDC account <b>profile</b>:<ul><li><i>Site Language:</i><b> English</b></li><li><i>Torrent List Profile:</i> <b>Default Modern [preview]</b></li><li><i>Time Type: </i><b>Time Added</b></li><li><i>Torrents per page:</i><b> 100</b></li></ul>"
 
 login:
   method: cookie
