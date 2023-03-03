@@ -71,7 +71,7 @@ settings:
   - name: info_free
     type: info
     label: About Freeleech and OnlyUpload at Coastal Crew
-    default: <li>FreeLeech are torrents where neither the download or upload is counted. (On the Jackett dashboard search results these are tagged as NoUpload).</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li>
+    default: "<ul><li>FreeLeech are torrents where neither the download or upload is counted. (On the Jackett dashboard search results these are tagged as NoUpload).</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li></ul>"
   - name: sort
     type: select
     label: Sort requested from site

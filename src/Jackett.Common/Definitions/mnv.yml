@@ -51,7 +51,7 @@ settings:
   - name: info_free
     type: info
     label: About Freeleech and OnlyUpload at MNV
-    default: <li>FreeLeech are torrents where neither the download or upload is counted.</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up.</li><li>Do not set both FreeLeech and OnlyUpload check boxes, there are no torrents with both these flags so you will get a no-results error.</li>
+    default: "<ul><li>FreeLeech are torrents where neither the download or upload is counted.</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up.</li><li>Do not set both FreeLeech and OnlyUpload check boxes, there are no torrents with both these flags so you will get a no-results error.</li></ul>"
   - name: sort
     type: select
     label: Sort requested from site
