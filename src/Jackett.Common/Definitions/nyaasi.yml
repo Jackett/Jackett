@@ -27,6 +27,10 @@ legacylinks:
   - https://nyaa.nocensor.art/
 
 settings:
+  - name: prefer_magnet_links
+    type: checkbox
+    label: Prefer Magnet Links
+    default: true
   - name: filter-id
     type: select
     label: Filter
@@ -155,9 +159,12 @@ search:
     details:
       selector: td:nth-child(2) a:last-of-type
       attribute: href
-    download:
+    download_optional:
       selector: td:nth-child(3) a[href$=".torrent"]
       attribute: href
+      optional: true
+    download:
+      text: "{{ if .Config.prefer_magnet_links }}{{ else }}{{ .Result.download_optional }}{{ end }}"
       optional: true
     magnet:
       selector: td:nth-child(3) a[href^="magnet:?"]
