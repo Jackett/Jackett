@@ -12,9 +12,10 @@ caps:
   categorymappings:
     - {id: 27, cat: XXX, desc: "Фильмы 2160 4K | Movies 2160p 4K"}
     - {id: 20, cat: XXX, desc: "Сайтрипы 2160 4K | Porn Video 2160p 4K"}
-    - {id: 1, cat: XXX, desc: "Сайтрипы, Фильмы HD | SiteRips, Movies HD"}
-    - {id: 9, cat: XXX, desc: "Сайтрипы | SiteRips"}
-    - {id: 12, cat: XXX, desc: "DVDRip | WEB-DL | WEBRip | VHSRip | CamRip"}
+    - {id: 1, cat: XXX, desc: "Фильмы HD | Movies HD"}
+    - {id: 12, cat: XXX, desc: "Фильмы SD | Movies SD"}
+    - {id: 30, cat: XXX, desc: "Сайтрип HD | SiteRip HD"}
+    - {id: 9, cat: XXX, desc: "Сайтрип SD | SiteRip SD"}
     - {id: 10, cat: XXX, desc: "Любительское видео | Amateur Video"}
     - {id: 24, cat: XXX, desc: "Инцест (Инсценировка) | Incest (Simulation)"}
     - {id: 22, cat: XXX, desc: "Лесбиянки | Lesbians"}
