@@ -10,12 +10,16 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BrokenStones : GazelleTracker
     {
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://brokenstones.club/"
+        };
+
         public BrokenStones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(id: "brokenstones",
                    name: "BrokenStones",
                    description: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
-                   link: "https://brokenstones.club/",
+                   link: "https://broken-stones.club/",
                    caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
