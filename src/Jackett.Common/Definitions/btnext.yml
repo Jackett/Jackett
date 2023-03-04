@@ -114,7 +114,7 @@ settings:
   - name: info
     type: info
     label: Layout
-    default: "<ol><li>Only the English Classic profile is supported.<li>Make sure to set the <b>Torrent Listing (Lista de Torrents)</b> option in your profile to <b>Classic (Clássico)</b><li>Using the <i>Moderna</i> theme will prevent results.</ol>"
+    default: "<ol><li>Only the English Classic profile is supported.</li><li>Make sure to set the <b>Torrent Listing (Lista de Torrents)</b> option in your profile to <b>Classic (Clássico)</b></li><li>Using the <i>Moderna</i> theme will prevent results.</li></ol>"
   - name: sort
     type: select
     label: Sort requested from site
