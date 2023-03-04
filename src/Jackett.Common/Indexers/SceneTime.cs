@@ -35,11 +35,11 @@ namespace Jackett.Common.Indexers
                    {
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
                        },
                        MusicSearchParams = new List<MusicSearchParam>
                        {
@@ -120,6 +120,11 @@ namespace Jackett.Common.Indexers
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
                 qParams.Set($"c{cat}", "1");
+
+            if (query.IsImdbQuery)
+            {
+                qParams.Set("imdb", query.ImdbID);
+            };
 
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
                 qParams.Set("search", query.GetQueryString());
@@ -207,6 +212,10 @@ namespace Jackett.Common.Indexers
                         UploadVolumeFactor = 1,
                         MinimumRatio = 1,
                         MinimumSeedTime = 259200 // 72 hours
+                    };
+                    if (query.IsImdbQuery)
+                    {
+                        release.Imdb = ParseUtil.CoerceLong(query.ImdbIDShort);
                     };
 
                     releases.Add(release);
