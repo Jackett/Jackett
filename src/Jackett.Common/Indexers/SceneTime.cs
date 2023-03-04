@@ -48,7 +48,8 @@ namespace Jackett.Common.Indexers
                        BookSearchParams = new List<BookSearchParam>
                        {
                            BookSearchParam.Q
-                       }
+                       },
+                       TvSearchImdbAvailable = true
                    },
                    configService: configService,
                    client: w,
@@ -113,8 +114,7 @@ namespace Jackett.Common.Indexers
         {
             var qParams = new NameValueCollection
             {
-                {"cata", "yes"},
-                {"sec", "jax"}
+                {"cata", "yes"}
             };
 
             var catList = MapTorznabCapsToTrackers(query);
@@ -122,9 +122,7 @@ namespace Jackett.Common.Indexers
                 qParams.Set($"c{cat}", "1");
 
             if (query.IsImdbQuery)
-            {
                 qParams.Set("imdb", query.ImdbID);
-            };
 
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
                 qParams.Set("search", query.GetQueryString());
@@ -213,10 +211,9 @@ namespace Jackett.Common.Indexers
                         MinimumRatio = 1,
                         MinimumSeedTime = 259200 // 72 hours
                     };
+
                     if (query.IsImdbQuery)
-                    {
                         release.Imdb = ParseUtil.CoerceLong(query.ImdbIDShort);
-                    };
 
                     releases.Add(release);
                 }
