@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -21,6 +22,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Libble : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         private string LandingUrl => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php";
@@ -141,22 +144,28 @@ namespace Jackett.Common.Indexers
                 foreach (var cat in MapTorznabCapsToTrackers(query))
                     queryCollection.Set($"filter_cat[{cat}]", "1");
 
-            if (query.Artist != null)
+            if (query.Artist.IsNotNullOrWhiteSpace() && query.Artist != "VA")
                 queryCollection.Set("artistname", query.Artist);
 
-            if (query.Label != null)
+            if (query.Label.IsNotNullOrWhiteSpace())
                 queryCollection.Set("recordlabel", query.Label);
 
-            if (query.Year != null)
+            if (query.Year.HasValue)
                 queryCollection.Set("year", query.Year.ToString());
 
-            if (query.Album != null)
+            if (query.Album.IsNotNullOrWhiteSpace())
                 queryCollection.Set("groupname", query.Album);
 
             if (query.IsGenreQuery)
             {
                 queryCollection.Set("taglist", query.Genre);
                 queryCollection.Set("tags_type", "0");
+            }
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit + 1;
+                queryCollection.Add("page", page.ToString());
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();

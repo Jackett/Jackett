@@ -19,6 +19,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class NebulanceAPI : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         // Docs at https://nebulance.io/articles.php?topic=api_key
         protected virtual string APIUrl => SiteLink + "api.php";
         protected virtual int KeyLength => 32;

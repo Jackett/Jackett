@@ -21,6 +21,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class SpeedCD : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         private string LoginUrl1 => SiteLink + "checkpoint/API";
         private string LoginUrl2 => SiteLink + "checkpoint/";
         private string SearchUrl => SiteLink + "browse/";
@@ -190,6 +192,14 @@ namespace Jackett.Common.Indexers
 
                 qc.Add("q");
                 qc.Add(WebUtilityHelpers.UrlEncode(term.Trim(), Encoding));
+            }
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit + 1;
+
+                qc.Add("p");
+                qc.Add(page.ToString());
             }
 
             var searchUrl = SearchUrl + string.Join("/", qc);

@@ -20,6 +20,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class MyAnonamouse : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
 
         private new ConfigurationDataMyAnonamouse configData => (ConfigurationDataMyAnonamouse)base.configData;

@@ -21,6 +21,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class IPTorrents : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         private string SearchUrl => SiteLink + "t";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
@@ -270,6 +272,12 @@ namespace Jackett.Common.Indexers
                 qc.Set("q", $"{string.Join(" ", searchQuery)}");
 
             qc.Set("o", ((SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value);
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit + 1;
+                qc.Add("p", page.ToString());
+            }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: SearchUrl, headers: headers);

@@ -20,6 +20,8 @@ namespace Jackett.Common.Indexers.Abstract
     [ExcludeFromCodeCoverage]
     public abstract class SpeedAppTracker : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         protected virtual bool UseP2PReleaseName => false;
         protected virtual int minimumSeedTime => 172800; // 48h
 
@@ -90,10 +92,16 @@ namespace Jackett.Common.Indexers.Abstract
             //var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
-                {"itemsPerPage", "100"},
-                {"sort", "torrent.createdAt"},
-                {"direction", "desc"}
+                { "itemsPerPage", "100" },
+                { "sort", "torrent.createdAt" },
+                { "direction", "desc" }
             };
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit + 1;
+                qc.Add("page", page.ToString());
+            }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 qc.Add("categories[]", cat);
