@@ -27,5 +27,17 @@ namespace Jackett.Common.Utils
 
         public static bool IsWindows => Environment.OSVersion.Platform == PlatformID.Win32NT;
 
+        public static bool IsDebug
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
+
     }
 }
