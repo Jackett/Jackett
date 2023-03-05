@@ -98,6 +98,7 @@ search:
     format: 0
     s: "{{ .Config.sort }}"
     d: "{{ .Config.type }}"
+    page: "{{ .Query.CurrentPage0 }}"
 
   rows:
     selector: table > tbody#highlighted > tr:has(a[href^="browse.php?cat="])

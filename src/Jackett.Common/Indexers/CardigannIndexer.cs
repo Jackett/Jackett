@@ -1310,6 +1310,8 @@ namespace Jackett.Common.Indexers
             variables[".Query.Year"] = query.Year?.ToString() ?? null;
             variables[".Query.Limit"] = query.Limit.ToString() ?? null;
             variables[".Query.Offset"] = query.Offset.ToString() ?? null;
+            variables[".Query.CurrentPage0"] = Math.Max(0, query.Offset > 0 && query.Limit > 0 ? query.Offset / query.Limit : 0).ToString();
+            variables[".Query.CurrentPage1"] = Math.Max(1, query.Offset > 0 && query.Limit > 0 ? (query.Offset / query.Limit) + 1 : 1).ToString();
             variables[".Query.Extended"] = query.Extended.ToString();
             variables[".Query.Categories"] = query.Categories;
             variables[".Query.APIKey"] = query.ApiKey;

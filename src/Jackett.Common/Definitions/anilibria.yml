@@ -31,7 +31,7 @@ settings:
 search:
   paths:
     # https://github.com/anilibria/docs/blob/master/api_v3.md
-    - path: "https://api.anilibria.tv/v3/{{ if .Keywords }}searchTitles?search={{ .Keywords }}&{{ else }}getUpdates?{{ end }}filter=names,posters.small.url,code,torrents.list,season.year,description&limit=100"
+    - path: "https://api.anilibria.tv/v3/{{ if .Keywords }}searchTitles?search={{ .Keywords }}&{{ else }}getUpdates?{{ end }}filter=names,posters.small.url,code,torrents.list,season.year,description&limit={{ if eq .Query.Limit \"0\" }}100{{ else }}{{ .Query.Limit }}{{ end }}&after={{ .Query.Offset }}"
       response:
         type: json
 

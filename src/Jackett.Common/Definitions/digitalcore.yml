@@ -106,8 +106,8 @@ search:
     extendedDead: true
     extendedSearch: false
     freeleech: "{{ if .Config.freeleech }}true{{ else }}false{{ end }}"
-    index: 0
-    limit: 100
+    index: "{{ .Query.Offset }}"
+    limit: "{{ if eq .Query.Limit \"0\" }}100{{ else }}{{ .Query.Limit }}{{ end }}"
     order: "{{ .Config.type }}"
     page: search
     searchText: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ .Keywords }}"
