@@ -196,7 +196,7 @@ namespace Jackett.Common.Indexers
 
                 // fix publish date
                 // some trackers do not keep their clocks up to date and can be ~20 minutes out!
-                if (r.PublishDate > DateTime.Now)
+                if (!EnvironmentUtil.IsDebug && r.PublishDate > DateTime.Now)
                     r.PublishDate = DateTime.Now;
 
                 // generate magnet link from info hash (not allowed for private sites)
