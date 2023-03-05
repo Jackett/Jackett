@@ -115,6 +115,8 @@ namespace Jackett.Common.Models
             MusicSearchParams = new List<MusicSearchParam>();
             BookSearchParams = new List<BookSearchParam>();
             Categories = new TorznabCapabilitiesCategories();
+            LimitsDefault = 100;
+            LimitsMax = 100;
         }
 
         public void ParseCardigannSearchModes(Dictionary<string, List<string>> modes)
@@ -293,8 +295,8 @@ namespace Jackett.Common.Models
                     ),
                     LimitsMax != null || LimitsDefault != null ?
                         new XElement("limits",
-                            LimitsMax != null ? new XAttribute("max", LimitsMax) : null,
-                            LimitsDefault != null ? new XAttribute("default", LimitsDefault) : null
+                            LimitsDefault != null ? new XAttribute("default", LimitsDefault) : null,
+                            LimitsMax != null ? new XAttribute("max", LimitsMax) : null
                         )
                     : null,
                     new XElement("searching",
