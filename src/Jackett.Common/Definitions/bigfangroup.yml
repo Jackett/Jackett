@@ -85,6 +85,7 @@ settings:
       asc: asc
 
 search:
+  pageSize: 1
   # https://bigfangroup.org/browse.php?search=black+lightning&cat=0&incldead=0&year=0&format=0
   paths:
     - path: browse.php
@@ -98,7 +99,7 @@ search:
     format: 0
     s: "{{ .Config.sort }}"
     d: "{{ .Config.type }}"
-    page: "{{ .Query.CurrentPage0 }}"
+    page: "{{ .Query.Page }}"
 
   rows:
     selector: table > tbody#highlighted > tr:has(a[href^="browse.php?cat="])
