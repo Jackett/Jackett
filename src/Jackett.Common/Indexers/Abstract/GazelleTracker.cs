@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -187,16 +188,16 @@ namespace Jackett.Common.Indexers.Abstract
             else if (!string.IsNullOrWhiteSpace(searchString))
                 queryCollection.Add("searchstr", searchString);
 
-            if (query.Artist != null)
+            if (query.Artist.IsNotNullOrWhiteSpace() && query.Artist != "VA")
                 queryCollection.Add("artistname", query.Artist);
 
-            if (query.Label != null)
+            if (query.Label.IsNotNullOrWhiteSpace())
                 queryCollection.Add("recordlabel", query.Label);
 
-            if (query.Year != null)
+            if (query.Year.HasValue)
                 queryCollection.Add("year", query.Year.ToString());
 
-            if (query.Album != null)
+            if (query.Album.IsNotNullOrWhiteSpace())
                 queryCollection.Add("groupname", query.Album);
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
