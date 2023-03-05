@@ -29,6 +29,7 @@ namespace Jackett.Common.Indexers
         public string Language { get; protected set; }
         public string Type { get; protected set; }
 
+        public virtual bool SupportsPagination => false;
 
         [JsonConverter(typeof(EncodingJsonConverter))]
         public Encoding Encoding { get; protected set; }
@@ -297,7 +298,10 @@ namespace Jackett.Common.Indexers
             var queryCopy = query.Clone();
 
             if (!CanHandleQuery(queryCopy) || !CanHandleCategories(queryCopy, isMetaIndexer))
-                return new IndexerResult(this, new ReleaseInfo[0], false);
+                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), false);
+
+            if (!SupportsPagination && queryCopy.Offset > 0)
+                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), false);
 
             if (queryCopy.Cache)
             {

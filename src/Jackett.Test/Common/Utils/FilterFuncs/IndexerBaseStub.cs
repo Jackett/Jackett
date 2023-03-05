@@ -22,6 +22,8 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
 
         public virtual string Language => throw TestExceptions.UnexpectedInvocation;
 
+        public virtual bool SupportsPagination => false;
+
         public virtual string LastError
         {
             get => throw TestExceptions.UnexpectedInvocation;

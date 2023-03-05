@@ -19,6 +19,8 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BroadcasTheNet : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         // based on https://github.com/Prowlarr/Prowlarr/tree/develop/src/NzbDrone.Core/Indexers/Definitions/BroadcastheNet
         private readonly string APIBASE = "https://api.broadcasthe.net";
 
@@ -71,8 +73,9 @@ namespace Jackett.Common.Indexers
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
-                if (results.Count() == 0)
+                if (!results.Any())
                     throw new Exception("Testing returned no results!");
+
                 IsConfigured = true;
                 SaveConfig();
             }

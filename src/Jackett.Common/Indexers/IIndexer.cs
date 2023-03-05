@@ -36,6 +36,8 @@ namespace Jackett.Common.Indexers
         string Id { get; }
         Encoding Encoding { get; }
 
+        bool SupportsPagination { get; }
+
         TorznabCapabilities TorznabCaps { get; }
 
         // Whether this indexer has been configured, verified and saved in the past and has the settings required for functioning

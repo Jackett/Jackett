@@ -20,6 +20,8 @@ namespace Jackett.Common.Indexers.Abstract
     [ExcludeFromCodeCoverage]
     public abstract class AvistazTracker : BaseWebIndexer
     {
+        public override bool SupportsPagination => true;
+
         private readonly Dictionary<string, string> AuthHeaders = new Dictionary<string, string>
         {
             {"Accept", "application/json"},
@@ -39,11 +41,19 @@ namespace Jackett.Common.Indexers.Abstract
         protected virtual List<KeyValuePair<string, string>> GetSearchQueryParameters(TorznabQuery query)
         {
             var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
+
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
-                {"in", "1"},
-                {"type", categoryMapping.Any() ? categoryMapping.First() : "0"}
+                { "in", "1" },
+                { "type", categoryMapping.FirstIfSingleOrDefault("0") },
+                { "limit", "50" }
             };
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit + 1;
+                qc.Add("page", page.ToString());
+            }
 
             // resolution filter to improve the search
             if (!query.Categories.Contains(TorznabCatType.Movies.ID) && !query.Categories.Contains(TorznabCatType.TV.ID) &&
