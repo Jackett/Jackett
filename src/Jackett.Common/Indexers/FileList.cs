@@ -58,7 +58,8 @@ namespace Jackett.Common.Indexers
                        BookSearchParams = new List<BookSearchParam>
                        {
                            BookSearchParam.Q
-                       }
+                       },
+                       TvSearchImdbAvailable = true
                    },
                    configService: configService,
                    client: wc,
