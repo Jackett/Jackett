@@ -447,6 +447,14 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "pageSize": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "firstPageNumber": {
+                    "type": "integer",
+                    "minimum": 0
+                },
                 "path": {
                     "type": "string"
                 },
