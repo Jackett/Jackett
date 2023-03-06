@@ -16,6 +16,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Abstract
@@ -202,6 +203,10 @@ namespace Jackett.Common.Indexers.Abstract
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
+
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+                queryCollection.Add("freetorrent", "1");
+
 
             // remove . as not used in titles
             searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");

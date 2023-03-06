@@ -8,6 +8,8 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
 
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
@@ -39,6 +41,8 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");
+
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -48,5 +52,6 @@ namespace Jackett.Common.Indexers
             results = results.Where(release => query.MatchQueryStringAND(release.Title));
             return results;
         }
+
     }
 }
