@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -188,7 +189,7 @@ namespace Jackett.Common.Indexers
         private async Task<string> CallProviderAsync(TorznabQuery query)
         {
             var searchUrl = ApiUrl;
-            var searchString = query.GetQueryString().Trim();
+            var searchString = query.SanitizedSearchTerm.Trim();
 
             var queryCollection = new NameValueCollection
             {
@@ -198,17 +199,26 @@ namespace Jackett.Common.Indexers
             if (configData.Freeleech.Value)
                 queryCollection.Set("freeleech", "1");
 
-            if (query.IsImdbQuery)
+            if (query.IsImdbQuery || searchString.IsNotNullOrWhiteSpace())
             {
                 queryCollection.Set("action", "search-torrents");
-                queryCollection.Set("type", "imdb");
-                queryCollection.Set("query", query.ImdbID);
-            }
-            else if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                queryCollection.Set("action", "search-torrents");
-                queryCollection.Set("type", "name");
-                queryCollection.Set("query", searchString);
+
+                if (query.IsImdbQuery)
+                {
+                    queryCollection.Set("type", "imdb");
+                    queryCollection.Set("query", query.ImdbID);
+                }
+                else if (searchString.IsNotNullOrWhiteSpace())
+                {
+                    queryCollection.Set("type", "name");
+                    queryCollection.Set("query", searchString);
+                }
+
+                if (query.Season > 0)
+                    queryCollection.Set("season", query.Season.ToString());
+
+                if (query.Episode.IsNotNullOrWhiteSpace())
+                    queryCollection.Set("episode", query.Episode);
             }
             else
                 queryCollection.Set("action", "latest-torrents");
