@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
-                   supportFreeleechOnly : true,
+                   supportFreeleechOnly: true,
                    has2Fa: true)
         {
             Language = "zh-CN";
