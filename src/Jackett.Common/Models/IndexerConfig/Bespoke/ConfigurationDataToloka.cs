@@ -8,6 +8,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public BoolConfigurationItem StripCyrillicLetters { get; private set; }
 
         public ConfigurationDataToloka()
-            => StripCyrillicLetters = new BoolConfigurationItem("Strip Cyrillic Letters") { Value = true };
+        {
+            StripCyrillicLetters = new BoolConfigurationItem("Strip Cyrillic Letters") { Value = true };
+        }
     }
 }

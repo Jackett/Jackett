@@ -10,7 +10,10 @@ namespace Jackett.Common.Models
 
         public List<TorznabCategory> SubCategories { get; private set; }
 
-        public TorznabCategory() => SubCategories = new List<TorznabCategory>();
+        public TorznabCategory()
+        {
+            SubCategories = new List<TorznabCategory>();
+        }
 
         public TorznabCategory(int id, string name)
         {

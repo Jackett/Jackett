@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Jackett.Common.Models.Config;
@@ -61,7 +62,10 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public string proxy_password { get; set; }
 
-        public ServerConfig() => notices = new string[0];
+        public ServerConfig()
+        {
+            notices = Array.Empty<string>();
+        }
 
         public ServerConfig(IEnumerable<string> notices, Models.Config.ServerConfig config, string version, bool canRunNetCore)
         {

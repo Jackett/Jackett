@@ -8,7 +8,10 @@ namespace Jackett.Common.Exceptions
         public TimeSpan RetryAfter { get; private set; }
 
         public TooManyRequestsException(string message, TimeSpan retryWait)
-            : base(message) => RetryAfter = retryWait;
+            : base(message)
+        {
+            RetryAfter = retryWait;
+        }
 
         public TooManyRequestsException(string message, WebResult response)
             : base(message)

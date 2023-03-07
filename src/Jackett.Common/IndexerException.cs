@@ -9,7 +9,9 @@ namespace Jackett.Common
 
         public IndexerException(IIndexer indexer, string message, Exception innerException)
             : base(message, innerException)
-            => this.Indexer = indexer;
+        {
+            this.Indexer = indexer;
+        }
 
         public IndexerException(IIndexer indexer, string message)
             : this(indexer, message, null)

@@ -12,7 +12,10 @@ namespace Jackett.Common.Plumbing
     {
         private readonly RuntimeSettings _runtimeSettings;
 
-        public JackettModule(RuntimeSettings runtimeSettings) => _runtimeSettings = runtimeSettings;
+        public JackettModule(RuntimeSettings runtimeSettings)
+        {
+            _runtimeSettings = runtimeSettings;
+        }
 
         protected override void Load(ContainerBuilder builder)
         {

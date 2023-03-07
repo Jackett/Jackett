@@ -8,6 +8,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public BoolConfigurationItem StripRussianLetters { get; private set; }
 
         public ConfigurationDataPornolab()
-            => StripRussianLetters = new BoolConfigurationItem("Strip Russian Letters") { Value = false };
+        {
+            StripRussianLetters = new BoolConfigurationItem("Strip Russian Letters") { Value = false };
+        }
     }
 }
