@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected GazelleTracker(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  IProtectionService p, ICacheService cs, TorznabCapabilities caps,
-                                 bool supportsFreeleechTokens, bool supportFreeleechOnly, bool imdbInTags = false, bool has2Fa = false,
+                                 bool supportsFreeleechTokens, bool supportFreeleechOnly = false, bool imdbInTags = false, bool has2Fa = false,
                                  bool useApiKey = false, bool usePassKey = false, bool useAuthKey = false, string instructionMessageOptional = null)
             : base(id: id,
                    name: name,

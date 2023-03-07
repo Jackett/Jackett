@@ -36,8 +36,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cs: cs,
-                   supportsFreeleechTokens: false,
-                   supportFreeleechOnly: false) // ratioless tracker
+                   supportsFreeleechTokens: false) // ratioless tracker
         {
             Language = "en-US";
             Type = "private";

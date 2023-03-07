@@ -26,8 +26,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cs: cs,
-                   supportsFreeleechTokens: true,
-                   supportFreeleechOnly: false)
+                   supportsFreeleechTokens: true)
         {
             Language = "en-US";
             Type = "private";

@@ -34,9 +34,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    has2Fa: true,
-                   supportsFreeleechTokens: true,
-                   supportFreeleechOnly: false
-                   )
+                   supportsFreeleechTokens: true)
         {
             Language = "en-US";
             Type = "private";

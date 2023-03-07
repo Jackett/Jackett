@@ -36,7 +36,6 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
-                   supportFreeleechOnly: false,
                    imdbInTags: false,
                    has2Fa: true,
                    useApiKey: false,

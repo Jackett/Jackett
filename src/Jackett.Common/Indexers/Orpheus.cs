@@ -43,7 +43,6 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
-                   supportFreeleechOnly: false,
                    has2Fa: false,
                    useApiKey: true,
                    usePassKey: false,
