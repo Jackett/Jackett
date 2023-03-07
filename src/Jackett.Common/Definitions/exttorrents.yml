@@ -106,8 +106,14 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}&order={{ .Config.sort }}&sort={{ .Config.type }}{{ else }}latest/{{ end }}"
-    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}/2/&order={{ .Config.sort }}&sort={{ .Config.type }}{{ else }}latest/2/{{ end }}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ else }}latest/{{ end }}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}/2/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ else }}latest/2/{{ end }}"
+
+  keywordsfilters:
+    - name: tolower
+    - name: trim
+    - name: re_replace
+      args: ["[^\\w]+", "-"]
 
   rows:
     selector: table.table-striped > tbody > tr
