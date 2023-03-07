@@ -65,6 +65,7 @@ search:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     search_mode: 0
+    notnewword: 1
 
   rows:
     selector: table.torrents tr:has(a[href^="?cat="])

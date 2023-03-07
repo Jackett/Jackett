@@ -89,6 +89,7 @@ search:
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    notnewword: 1
     # does not return imdb or doubanid in results
 
   rows:

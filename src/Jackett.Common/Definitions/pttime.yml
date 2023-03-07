@@ -95,6 +95,7 @@ search:
     search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}5{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
+    notnewword: 1
 
   rows:
     selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
