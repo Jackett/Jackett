@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -23,13 +24,14 @@ namespace Jackett.Common.Indexers
                        LimitsMax = 50,
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId, TvSearchParam.Genre
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId, MovieSearchParam.Genre
                        },
-                       SupportsRawSearch = true
+                       SupportsRawSearch = true,
+                       TvSearchImdbAvailable = true
                    },
                    configService: configService,
                    client: wc,
@@ -50,9 +52,9 @@ namespace Jackett.Common.Indexers
         }
 
         // Avistaz has episodes without season. eg Running Man E323
-        protected override string GetSearchTerm(TorznabQuery query) =>
-            !string.IsNullOrWhiteSpace(query.Episode) && query.Season == 0 ?
-            $"{query.SearchTerm} E{query.Episode}" :
-            $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
+        protected override string GetEpisodeSearchTerm(TorznabQuery query) =>
+            query.Season == 0 && query.Episode.IsNotNullOrWhiteSpace()
+                ? $"E{query.Episode}"
+                : $"{query.GetEpisodeSearchString()}";
     }
 }

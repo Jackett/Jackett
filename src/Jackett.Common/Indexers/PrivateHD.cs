@@ -23,12 +23,13 @@ namespace Jackett.Common.Indexers
                        LimitsMax = 50,
                        TvSearchParams = new List<TvSearchParam>
                        {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId, TvSearchParam.Genre
                        },
                        MovieSearchParams = new List<MovieSearchParam>
                        {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                       }
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId, MovieSearchParam.Genre
+                       },
+                       TvSearchImdbAvailable = true
                    },
                    configService: configService,
                    client: wc,

@@ -35,7 +35,9 @@ namespace Jackett.Common.Indexers.Abstract
         private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
 
         // hook to adjust the search term
-        protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {query.GetEpisodeSearchString()}";
+        protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {GetEpisodeSearchTerm(query)}".Trim();
+
+        protected virtual string GetEpisodeSearchTerm(TorznabQuery query) => query.GetEpisodeSearchString().Trim();
 
         // hook to adjust the search category
         protected virtual List<KeyValuePair<string, string>> GetSearchQueryParameters(TorznabQuery query)
@@ -75,7 +77,20 @@ namespace Jackett.Common.Indexers.Abstract
             // https://privatehd.to/api/v1/jackett/torrents?tmdb=1234
             // https://privatehd.to/api/v1/jackett/torrents?tvdb=3653
             if (query.IsImdbQuery)
+            {
                 qc.Add("imdb", query.ImdbID);
+                qc.Add("search", GetEpisodeSearchTerm(query));
+            }
+            else if (query.IsTmdbQuery)
+            {
+                qc.Add("tmdb", query.TmdbID.ToString());
+                qc.Add("search", GetEpisodeSearchTerm(query));
+            }
+            else if (query.IsTvdbSearch)
+            {
+                qc.Add("tvdb", query.TvdbID.ToString());
+                qc.Add("search", GetEpisodeSearchTerm(query));
+            }
             else
                 qc.Add("search", GetSearchTerm(query).Trim());
 
@@ -176,6 +191,7 @@ namespace Jackett.Common.Indexers.Abstract
 
             var qc = GetSearchQueryParameters(query);
             var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
+
             var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
             {
