@@ -35,6 +35,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected virtual string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "usetoken=0");
 
         protected bool useTokens;
+        protected bool searchFreeleechOnly;
         protected string cookie = "";
 
         protected readonly bool imdbInTags;
@@ -51,7 +52,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected GazelleTracker(string link, string id, string name, string description,
                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  IProtectionService p, ICacheService cs, TorznabCapabilities caps,
-                                 bool supportsFreeleechTokens, bool imdbInTags = false, bool has2Fa = false,
+                                 bool supportsFreeleechTokens, bool supportFreeleechOnly, bool imdbInTags = false, bool has2Fa = false,
                                  bool useApiKey = false, bool usePassKey = false, bool useAuthKey = false, string instructionMessageOptional = null)
             : base(id: id,
                    name: name,
@@ -64,7 +65,7 @@ namespace Jackett.Common.Indexers.Abstract
                    p: p,
                    cacheService: cs,
                    configData: new ConfigurationDataGazelleTracker(
-                       has2Fa, supportsFreeleechTokens, useApiKey, usePassKey, useAuthKey, instructionMessageOptional))
+                       has2Fa, supportsFreeleechTokens, supportFreeleechOnly, useApiKey, usePassKey, useAuthKey, instructionMessageOptional))
         {
             Encoding = Encoding.UTF8;
 
@@ -85,6 +86,10 @@ namespace Jackett.Common.Indexers.Abstract
             var useTokenItem = configData.UseTokenItem;
             if (useTokenItem != null)
                 useTokens = useTokenItem.Value;
+
+            var searchFreeleechOnlyItem = configData.SearchFreeleechOnly;
+            if (searchFreeleechOnlyItem != null)
+                searchFreeleechOnly = searchFreeleechOnlyItem.Value;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -204,7 +209,7 @@ namespace Jackett.Common.Indexers.Abstract
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
 
-            if (configData.GetDynamic("freeleech") != null && ((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value == true)
+            if (searchFreeleechOnly)
                 queryCollection.Add("freetorrent", "1");
 
             // remove . as not used in titles

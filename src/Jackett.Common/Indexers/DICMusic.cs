@@ -34,6 +34,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
+                   supportFreeleechOnly : true,
                    has2Fa: true)
         {
             Language = "zh-CN";
@@ -41,8 +42,6 @@ namespace Jackett.Common.Indexers
 
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");
-
-            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

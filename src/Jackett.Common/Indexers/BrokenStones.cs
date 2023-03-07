@@ -27,6 +27,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
+                   supportFreeleechOnly: false,
                    has2Fa: true)
         {
             Language = "en-US";
