@@ -204,7 +204,7 @@ namespace Jackett.Common.Indexers.Abstract
             foreach (var cat in MapTorznabCapsToTrackers(query))
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
 
-            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            if (configData.GetDynamic("freeleech") != null && ((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value == true)
                 queryCollection.Add("freetorrent", "1");
 
             // remove . as not used in titles
