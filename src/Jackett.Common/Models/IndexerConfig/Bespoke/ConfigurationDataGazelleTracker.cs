@@ -13,10 +13,10 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public DisplayInfoConfigurationItem CookieHint { get; private set; }
         public StringConfigurationItem CookieItem { get; private set; }
         public BoolConfigurationItem UseTokenItem { get; private set; }
-        public BoolConfigurationItem SearchFreeleechOnly { get; private set; }
+        public BoolConfigurationItem FreeleechOnly { get; private set; }
         public DisplayInfoConfigurationItem Instructions { get; private set; }
 
-        public ConfigurationDataGazelleTracker(bool has2Fa = false, bool supportsFreeleechToken = false, bool supportFreeleechOnly = false,
+        public ConfigurationDataGazelleTracker(bool has2Fa = false, bool supportsFreeleechToken = false, bool supportsFreeleechOnly = false,
                                                bool useApiKey = false, bool usePassKey = false, bool useAuthKey = false,
                                                string instructionMessageOptional = null)
         {
@@ -52,8 +52,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             if (supportsFreeleechToken)
                 UseTokenItem = new BoolConfigurationItem("Use Freeleech Tokens when Available") { Value = false };
 
-            if (supportFreeleechOnly)
-                SearchFreeleechOnly = new BoolConfigurationItem("Search freeleech only") { Value = false };
+            if (supportsFreeleechOnly)
+                FreeleechOnly = new BoolConfigurationItem("Search freeleech only") { Value = false };
 
             Instructions = new DisplayInfoConfigurationItem("", instructionMessageOptional);
         }
