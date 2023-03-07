@@ -19,13 +19,15 @@ namespace Jackett.Common.Indexers
                    link: "https://cinemaz.to/",
                    caps: new TorznabCapabilities
                    {
+                       LimitsDefault = 50,
+                       LimitsMax = 50,
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
                        },
-                       MovieSearchParams = new List<MovieSearchParam> {
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
                            MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-
                        }
                    },
                    configService: configService,

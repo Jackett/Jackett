@@ -51,10 +51,17 @@ namespace Jackett.Common.Indexers
             var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
-                {"in", "1"},
-                {"category", categoryMapping.Any() ? categoryMapping.First() : "0"},
-                {"search", GetSearchTerm(query).Trim()}
+                { "in", "1" },
+                { "category", categoryMapping.FirstIfSingleOrDefault("0") },
+                { "limit", "50" },
+                { "search", GetSearchTerm(query).Trim() }
             };
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit + 1;
+                qc.Add("page", page.ToString());
+            }
 
             if (configData.Freeleech.Value)
                 qc.Add("discount[]", "1");

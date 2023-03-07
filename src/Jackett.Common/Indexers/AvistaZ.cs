@@ -19,6 +19,8 @@ namespace Jackett.Common.Indexers
                    link: "https://avistaz.to/",
                    caps: new TorznabCapabilities
                    {
+                       LimitsDefault = 50,
+                       LimitsMax = 50,
                        TvSearchParams = new List<TvSearchParam>
                        {
                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre

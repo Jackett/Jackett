@@ -138,6 +138,8 @@ namespace Jackett.Common.Indexers.Abstract
             Encoding = Encoding.UTF8;
             Language = "en-US";
             Type = "private";
+
+            webclient.requestDelay = 3;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
