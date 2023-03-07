@@ -79,6 +79,7 @@ search:
     column: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
     $raw: "{{ if .Config.freeleech }}&free{{ else }}{{ end }}"
+    notnewword: 1
 
   rows:
     selector: table.torrents > tbody > tr:has(a[href^="download.php?"])

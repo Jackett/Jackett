@@ -75,6 +75,7 @@ search:
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0=AND, 1=OR, 2=Exact
     search_mode: 0
+    notnewword: 1
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)

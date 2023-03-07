@@ -96,6 +96,7 @@ search:
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    notnewword: 1
     # can support genre searching but you need to know the id, eg &team10=1 for Drama (id is 10)
 
   rows:

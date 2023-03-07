@@ -82,6 +82,7 @@ search:
     search_mode: 0
     sort: 4
     type: desc
+    notnewword: 1
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)

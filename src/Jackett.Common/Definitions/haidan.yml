@@ -101,6 +101,7 @@ search:
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    notnewword: 1
 
   rows:
     selector: div.group_content:has(a[href^="download.php?id="])
