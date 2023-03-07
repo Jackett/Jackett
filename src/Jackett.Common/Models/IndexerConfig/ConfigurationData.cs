@@ -257,7 +257,10 @@ namespace Jackett.Common.Models.IndexerConfig
             public Dictionary<string, string> Options { get; }
 
             public SingleSelectConfigurationItem(string name, Dictionary<string, string> options)
-                : base(name, itemType: "inputselect") => Options = options;
+                : base(name, itemType: "inputselect")
+            {
+                Options = options;
+            }
 
             public override JObject ToJson(IProtectionService ps = null, bool forDisplay = true)
             {
@@ -286,7 +289,10 @@ namespace Jackett.Common.Models.IndexerConfig
             public Dictionary<string, string> Options { get; }
 
             public MultiSelectConfigurationItem(string name, Dictionary<string, string> options)
-                : base(name, itemType: "inputcheckbox") => Options = options;
+                : base(name, itemType: "inputcheckbox")
+            {
+                Options = options;
+            }
 
             public override JObject ToJson(IProtectionService ps, bool forDisplay)
             {

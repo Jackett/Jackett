@@ -10,7 +10,10 @@ namespace Jackett.Common.Services
     {
         private readonly Logger logger;
 
-        public ProcessService(Logger l) => logger = l;
+        public ProcessService(Logger l)
+        {
+            logger = l;
+        }
 
         private void Run(string exe, string args, bool asAdmin, DataReceivedEventHandler d, DataReceivedEventHandler r)
         {

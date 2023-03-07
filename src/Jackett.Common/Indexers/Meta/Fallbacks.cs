@@ -48,7 +48,10 @@ namespace Jackett.Common.Indexers.Meta
 
     public class ImdbFallbackStrategyProvider : IFallbackStrategyProvider
     {
-        public ImdbFallbackStrategyProvider(IImdbResolver resolver) => this.resolver = resolver;
+        public ImdbFallbackStrategyProvider(IImdbResolver resolver)
+        {
+            this.resolver = resolver;
+        }
 
         public IEnumerable<IFallbackStrategy> FallbackStrategiesForQuery(TorznabQuery query)
         {

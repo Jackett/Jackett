@@ -9,7 +9,8 @@ namespace Jackett.Common
         public ConfigurationData ConfigData { get; private set; }
         public ExceptionWithConfigData(string message, ConfigurationData data)
             : base(message)
-            => ConfigData = data;
-
+        {
+            ConfigData = data;
+        }
     }
 }

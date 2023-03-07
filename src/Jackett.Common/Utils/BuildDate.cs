@@ -17,7 +17,10 @@ namespace Jackett.Common.Utils
     [AttributeUsage(AttributeTargets.Assembly)]
     public class BuildDateAttribute : Attribute
     {
-        public BuildDateAttribute(string value) => DateTime = DateTime.ParseExact(value, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        public BuildDateAttribute(string value)
+        {
+            DateTime = DateTime.ParseExact(value, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
         public DateTime DateTime { get; }
     }

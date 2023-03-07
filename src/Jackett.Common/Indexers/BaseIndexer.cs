@@ -353,7 +353,10 @@ namespace Jackett.Common.Indexers
         // minimal constructor used by e.g. cardigann generic indexer
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
             IProtectionService p, ICacheService cacheService)
-            : base("/", "", "", "", configService, logger, null, p, cacheService) => webclient = client;
+            : base("/", "", "", "", configService, logger, null, p, cacheService)
+        {
+            webclient = client;
+        }
 
         protected virtual int DefaultNumberOfRetryAttempts => 2;
 

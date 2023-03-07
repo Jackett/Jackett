@@ -6,6 +6,8 @@ namespace Jackett.Common.Models.IndexerConfig
 
         public ConfigurationDataPinNumber(string instructionMessageOptional = null)
             : base(instructionMessageOptional)
-            => Pin = new StringConfigurationItem("Login Pin Number");
+        {
+            Pin = new StringConfigurationItem("Login Pin Number");
+        }
     }
 }

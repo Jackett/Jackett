@@ -100,7 +100,10 @@ namespace Jackett.Common.Indexers.Meta
 
     public class ImdbTitleResultFilterProvider : IResultFilterProvider
     {
-        public ImdbTitleResultFilterProvider(IImdbResolver resolver) => this.resolver = resolver;
+        public ImdbTitleResultFilterProvider(IImdbResolver resolver)
+        {
+            this.resolver = resolver;
+        }
 
         public IEnumerable<IResultFilter> FiltersForQuery(TorznabQuery query)
         {
