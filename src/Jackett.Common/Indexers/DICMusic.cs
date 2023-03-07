@@ -8,6 +8,8 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
 
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
@@ -32,6 +34,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
+                   supportsFreeleechOnly: true,
                    has2Fa: true)
         {
             Language = "zh-CN";

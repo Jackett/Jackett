@@ -35,6 +35,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
+                   supportsFreeleechOnly: true,
                    imdbInTags: true)
         {
             Language = "en-US";
