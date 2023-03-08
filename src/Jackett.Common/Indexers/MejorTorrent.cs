@@ -40,7 +40,7 @@ namespace Jackett.Common.Indexers
         // uncomment when there are more than one domain available
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://mejortorrent.wtf/",
-            "https://mejortorrent.unblockit.bio/"
+            "https://mejortorrent.unblockit.boo/"
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -62,7 +62,6 @@ namespace Jackett.Common.Indexers
             "https://www.mejortorrento.info/",
             "https://mejortorrent.nocensor.work/",
             "https://www.mejortorrentes.net/",
-            "https://mejortorrent.unblockit.tv/",
             "https://mejortorrent.unblockit.how/",
             "https://mejortorrent.unblockit.cam/",
             "https://mejortorrent.nocensor.biz/",
@@ -71,7 +70,8 @@ namespace Jackett.Common.Indexers
             "https://www.mejortorrentes.org/",
             "https://mejortorrent.unblockit.blue/",
             "https://mejortorrent.nocensor.sbs/",
-            "https://mejortorrent.unblockit.name/"
+            "https://mejortorrent.unblockit.name/",
+            "https://mejortorrent.unblockit.bio/"
         };
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,

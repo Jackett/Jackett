@@ -7,11 +7,10 @@ type: public
 encoding: UTF-8
 links:
   - https://extratorrent.st/
-  - https://extratorrent.unblockit.bio/
+  - https://extratorrent.unblockit.boo/
   - https://extratorrent.mrunblock.guru/
 legacylinks:
   - https://extratorrent.nocensor.work/
-  - https://extratorrent.unblockit.tv/
   - https://extratorrent.unblockit.how/
   - https://extratorrent.unblockit.cam/
   - https://extratorrent.nocensor.biz/
@@ -30,6 +29,7 @@ legacylinks:
   - https://extratorrent.nocensor.lol/
   - https://extratorrent.unblockit.ink/
   - https://extratorrent.nocensor.art/
+  - https://extratorrent.unblockit.bio/
 
 caps:
   categorymappings:

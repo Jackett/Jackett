@@ -10,11 +10,9 @@ requestDelay: 2
 links:
   - https://www.torlock2.com/
   - https://www.torlock.com/
-  - https://torlock.unblockit.bio/
   - https://torlock.mrunblock.guru/
 legacylinks:
   - https://torlock.com/
-  - https://torlock.unblockit.tv/
   - https://torlock.unblockit.how/
   - https://torlock.unblockit.cam/
   - https://torlock.nocensor.biz/
@@ -33,6 +31,8 @@ legacylinks:
   - https://torlock.unblockit.pet/
   - https://torlock.nocensor.lol/
   - https://torlock.unblockit.ink/
+  - https://torlock.unblockit.bio/
+  - https://torlock.unblockit.boo/ # error 502
 
 caps:
   # dont forget to update the search fields category case block
