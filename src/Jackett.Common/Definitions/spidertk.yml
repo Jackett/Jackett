@@ -149,7 +149,7 @@ login:
     logout: ""
     securelogin: ""
     ssl: yes
-    trackerssl: ""
+    trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("Echoué")) # invalid captcha
     - selector: td.embedded:has(h2:contains("Échec")) # invalid uid or pwd

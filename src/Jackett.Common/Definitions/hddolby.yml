@@ -71,7 +71,7 @@ login:
     logout: ""
     securelogin: ""
     ssl: yes
-    trackerssl: ""
+    trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
       message:

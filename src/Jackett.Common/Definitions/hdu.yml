@@ -57,7 +57,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     ssl: yes
-    trackerssl: ""
+    trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
   test:
