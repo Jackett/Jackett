@@ -82,8 +82,8 @@ login:
     two_step_code: "{{ .Config.2facode }}"
     logout: ""
     securelogin: ""
-    ssl: ""
-    trackerssl: ""
+    ssl: yes
+    trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
   test:

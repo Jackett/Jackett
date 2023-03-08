@@ -66,8 +66,8 @@ login:
     password: "{{ .Config.password }}"
     logout: ""
     securelogin: ""
-    ssl: ""
-    trackerssl: ""
+    ssl: yes
+    trackerssl: yes
   error:
     - selector: form#loginform > span.warning
   test:
