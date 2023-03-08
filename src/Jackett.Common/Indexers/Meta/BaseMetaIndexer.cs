@@ -49,8 +49,10 @@ namespace Jackett.Common.Indexers.Meta
 
         public override async Task<IndexerResult> ResultsForQuery(TorznabQuery query, bool isMetaIndexer)
         {
-            if (!CanHandleQuery(query) || !CanHandleCategories(query, true))
-                return new IndexerResult(this, new ReleaseInfo[0], false);
+            query = query.Clone();
+
+            if (query.Offset > 0 || !CanHandleQuery(query) || !CanHandleCategories(query, true))
+                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), false);
 
             try
             {
