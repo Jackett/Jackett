@@ -18,7 +18,7 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers.Abstract
 {
     [ExcludeFromCodeCoverage]
-    public abstract class SpeedAppTracker : BaseWebIndexer
+    public abstract class SpeedAppTracker : IndexerBase
     {
         public override bool SupportsPagination => true;
 
@@ -37,20 +37,14 @@ namespace Jackett.Common.Indexers.Abstract
 
         private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
 
-        protected SpeedAppTracker(string link, string id, string name, string description,
-            IIndexerConfigurationService configService, WebClient client, Logger logger,
-            IProtectionService p, ICacheService cs, TorznabCapabilities caps)
-            : base(id: id,
-                name: name,
-                description: description,
-                link: link,
-                caps: caps,
-                configService: configService,
-                client: client,
-                logger: logger,
-                p: p,
-                cacheService: cs,
-                configData: new ConfigurationDataBasicLoginWithEmail())
+        protected SpeedAppTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs, TorznabCapabilities caps)
+            : base(caps: caps,
+                   configService: configService,
+                   client: client,
+                   logger: logger,
+                   p: p,
+                   cacheService: cs,
+                   configData: new ConfigurationDataBasicLoginWithEmail())
         {
         }
 

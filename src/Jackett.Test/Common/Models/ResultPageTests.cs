@@ -12,12 +12,13 @@ namespace Jackett.Test.Common.Models
 {
     class TestIndexer : BaseIndexer
     {
+        public override string Id => "test_id";
+        public override string Name => "test_name";
+        public override string Description => "test_description";
+        public override string SiteLink => "https://test.link/";
+
         public TestIndexer()
-            : base(id: "test_id",
-                   name: "test_name",
-                   description: "test_description",
-                   link: "https://test.link/",
-                   configService: null,
+            : base(configService: null,
                    logger: null,
                    configData: null,
                    p: null,

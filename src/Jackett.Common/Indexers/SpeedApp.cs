@@ -12,7 +12,12 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class SpeedApp : SpeedAppTracker
     {
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string Id => "speedapp";
+        public override string Name => "SpeedApp";
+        public override string Description => "SpeedApp is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://speedapp.io/";
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://www.icetorrent.org/",
             "https://icetorrent.org/",
             "https://scenefz.me/",
@@ -22,43 +27,36 @@ namespace Jackett.Common.Indexers
             "https://www.myxz.eu/",
             "https://www.myxz.org/"
         };
+        public override string Language => "ro-RO";
+        public override string Type => "private";
 
         public SpeedApp(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                id: "speedapp",
-                name: "SpeedApp",
-                description: "SpeedApp is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
-                link: "https://speedapp.io/",
-                caps: new TorznabCapabilities
-                {
-                    TvSearchParams = new List<TvSearchParam>
-                    {
-                        TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                    },
-                    MovieSearchParams = new List<MovieSearchParam>
-                    {
-                        MovieSearchParam.Q, MovieSearchParam.ImdbId
-                    },
-                    MusicSearchParams = new List<MusicSearchParam>
-                    {
-                        MusicSearchParam.Q
-                    },
-                    BookSearchParams = new List<BookSearchParam>
-                    {
-                        BookSearchParam.Q
-                    }
-                },
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                cs: cs)
+                        ICacheService cs)
+            : base(configService: configService,
+                   caps: new TorznabCapabilities
+                   {
+                       TvSearchParams = new List<TvSearchParam>
+                       {
+                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                       },
+                       MovieSearchParams = new List<MovieSearchParam>
+                       {
+                           MovieSearchParam.Q, MovieSearchParam.ImdbId
+                       },
+                       MusicSearchParams = new List<MusicSearchParam>
+                       {
+                           MusicSearchParam.Q
+                       },
+                       BookSearchParams = new List<BookSearchParam>
+                       {
+                           BookSearchParam.Q
+                       }
+                   },
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cs: cs)
         {
-            Encoding = Encoding.UTF8;
-            Language = "ro-RO";
-            Type = "private";
-
             // requestDelay for API Limit (1 request per 2 seconds)
             webclient.requestDelay = 2.1;
 

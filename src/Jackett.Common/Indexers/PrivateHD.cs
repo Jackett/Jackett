@@ -11,12 +11,14 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class PrivateHD : AvistazTracker
     {
+        public override string Id => "privatehd";
+        public override string Name => "PrivateHD";
+        public override string Description => "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows";
+        public override string SiteLink { get; protected set; } = "https://privatehd.to/";
+
         public PrivateHD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "privatehd",
-                   name: "PrivateHD",
-                   description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                   link: "https://privatehd.to/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        LimitsDefault = 50,

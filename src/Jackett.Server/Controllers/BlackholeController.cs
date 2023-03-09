@@ -43,7 +43,7 @@ namespace Jackett.Server.Controllers
                 var indexer = _indexerService.GetWebIndexer(indexerId);
                 if (!indexer.IsConfigured)
                 {
-                    _logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
+                    _logger.Warn($"Rejected a request to {indexer.Name} which is unconfigured.");
                     throw new Exception("This indexer is not configured.");
                 }
 
@@ -82,7 +82,7 @@ namespace Jackett.Server.Controllers
                     throw new Exception($"Blackhole directory does not exist: {_serverConfig.BlackholeDir}");
                 }
 
-                var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.DisplayName, '_', false);
+                var fileName = DateTime.Now.Ticks.ToString() + "-" + StringUtil.MakeValidFileName(indexer.Name, '_', false);
                 if (string.IsNullOrWhiteSpace(file))
                     fileName += fileExtension;
                 else

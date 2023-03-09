@@ -19,8 +19,16 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class RarBG : BaseWebIndexer
+    public class RarBG : IndexerBase
     {
+        public override string Id => "rarbg";
+        public override string Name => "RARBG";
+        public override string Description => "RARBG is a Public torrent site for MOVIES / TV / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://rarbg.to/";
+        public override Encoding Encoding => Encoding.GetEncoding("windows-1252");
+        public override string Language => "en-US";
+        public override string Type => "public";
+
         // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
         private string ApiEndpoint => ((StringConfigurationItem)configData.GetDynamic("apiEndpoint")).Value;
         private readonly TimeSpan TokenDuration = TimeSpan.FromMinutes(14); // 15 minutes expiration
@@ -33,10 +41,7 @@ namespace Jackett.Common.Indexers
 
         public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "rarbg",
-                   name: "RARBG",
-                   description: "RARBG is a Public torrent site for MOVIES / TV / GENERAL",
-                   link: "https://rarbg.to/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -60,10 +65,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.GetEncoding("windows-1252");
-            Language = "en-US";
-            Type = "public";
-
             webclient.requestDelay = 5; // The api has a 1req/2s limit
 
             var ConfigApiEndpoint = new StringConfigurationItem("API URL") { Value = "https://torrentapi.org/pubapi_v2.php" };

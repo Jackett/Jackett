@@ -17,8 +17,16 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class RevolutionTT : BaseWebIndexer
+    public class RevolutionTT : IndexerBase
     {
+        public override string Id => "revolutiontt";
+        public override string Name => "RevolutionTT";
+        public override string Description => "The Revolution has begun";
+        public override string SiteLink { get; protected set; } = "https://revolutiontt.me/";
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LandingPageURL => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
@@ -27,10 +35,7 @@ namespace Jackett.Common.Indexers
 
         public RevolutionTT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "revolutiontt",
-                   name: "RevolutionTT",
-                   description: "The Revolution has begun",
-                   link: "https://revolutiontt.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -57,10 +62,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your Profile."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping("23", TorznabCatType.TVAnime);
             AddCategoryMapping("22", TorznabCatType.PC0day);
             AddCategoryMapping("1", TorznabCatType.PCISO);

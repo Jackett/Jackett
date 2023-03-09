@@ -25,16 +25,18 @@ namespace Jackett.Common.Indexers
 
     public interface IIndexer
     {
+        string Id { get; }
+        string Name { get; }
+        string Description { get; }
+
         string SiteLink { get; }
         string[] AlternativeSiteLinks { get; }
 
-        string DisplayName { get; }
-        string DisplayDescription { get; }
-        string Type { get; }
-        string Language { get; }
-        string LastError { get; set; }
-        string Id { get; }
         Encoding Encoding { get; }
+        string Language { get; }
+        string Type { get; }
+
+        string LastError { get; set; }
 
         bool SupportsPagination { get; }
 

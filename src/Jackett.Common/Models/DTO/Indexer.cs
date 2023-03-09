@@ -46,8 +46,8 @@ namespace Jackett.Common.Models.DTO
         public Indexer(IIndexer indexer)
         {
             id = indexer.Id;
-            name = indexer.DisplayName;
-            description = indexer.DisplayDescription;
+            name = indexer.Name;
+            description = indexer.Description;
             type = indexer.Type;
             configured = indexer.IsConfigured;
             site_link = indexer.SiteLink;

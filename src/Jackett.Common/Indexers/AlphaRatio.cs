@@ -12,12 +12,16 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AlphaRatio : GazelleTracker
     {
+        public override string Id => "alpharatio";
+        public override string Name => "AlphaRatio";
+        public override string Description => "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://alpharatio.cc/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public AlphaRatio(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "alpharatio",
-                   name: "AlphaRatio",
-                   description: "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL",
-                   link: "https://alpharatio.cc/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -38,9 +42,6 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechOnly: true,
                    imdbInTags: true)
         {
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.TVSD, "TvSD");
             AddCategoryMapping(2, TorznabCatType.TVHD, "TvHD");
             AddCategoryMapping(3, TorznabCatType.TVUHD, "TvUHD");

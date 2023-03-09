@@ -17,8 +17,16 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TorrentBytes : BaseWebIndexer
+    public class TorrentBytes : IndexerBase
     {
+        public override string Id => "torrentbytes";
+        public override string Name => "TorrentBytes";
+        public override string Description => "A decade of TorrentBytes";
+        public override string SiteLink { get; protected set; } = "https://www.torrentbytes.net/";
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
 
@@ -26,10 +34,7 @@ namespace Jackett.Common.Indexers
 
         public TorrentBytes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "torrentbytes",
-                   name: "TorrentBytes",
-                   description: "A decade of TorrentBytes",
-                   link: "https://www.torrentbytes.net/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -52,10 +57,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile on the TorrentBytes webpage."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(23, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(52, TorznabCatType.PCMac, "Apple/All");
             AddCategoryMapping(22, TorznabCatType.PC, "Apps/misc");

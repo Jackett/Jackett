@@ -18,14 +18,28 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TorrentHeaven : BaseWebIndexer
+    public class TorrentHeaven : IndexerBase
     {
+        public override string Id => "torrentheaven";
+        public override string Name => "TorrentHeaven";
+        public override string Description => "A German general tracker.";
+        public override string SiteLink { get; protected set; } = "https://newheaven.nl/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://torrentheaven.myfqdn.info/"
+        };
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
+        public override string Language => "de-DE";
+        public override string Type => "private";
+
+        private new ConfigurationDataCaptchaLogin configData => (ConfigurationDataCaptchaLogin)base.configData;
+
+        private string IndexUrl => SiteLink + "index.php";
+        private string LoginCompleteUrl => SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify";
+
         public TorrentHeaven(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "torrentheaven",
-                   name: "TorrentHeaven",
-                   description: "A German general tracker.",
-                   link: "https://newheaven.nl/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -52,10 +66,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "de-DE";
-            Type = "private";
-
             // incomplete CA chain
             wc.AddTrustedCertificate(new Uri(SiteLink).Host, "8612e46b2abd418b6398dbf2382ebcf44b10f378");
 
@@ -103,18 +113,6 @@ namespace Jackett.Common.Indexers
             AddCategoryMapping(70, TorznabCatType.PC, "APPLICATIONS/Linux");
             AddCategoryMapping(71, TorznabCatType.PCMac, "APPLICATIONS/Mac");
         }
-
-        private new ConfigurationDataCaptchaLogin configData => (ConfigurationDataCaptchaLogin)base.configData;
-
-        private string IndexUrl => SiteLink + "index.php";
-
-        public override string[] LegacySiteLinks { get; protected set; } =
-        {
-            "https://torrentheaven.myfqdn.info/"
-        };
-
-        private string LoginCompleteUrl =>
-            SiteLink + "index.php?strWebValue=account&strWebAction=login_complete&ancestry=verify";
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {

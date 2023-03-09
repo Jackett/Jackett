@@ -21,29 +21,19 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class MejorTorrent : BaseWebIndexer
+    public class MejorTorrent : IndexerBase
     {
-        private static class MejorTorrentCatType
+        public override string Id => "mejortorrent";
+        public override string Name => "MejorTorrent";
+        public override string Description => "MejorTorrent - Hay veces que un torrent viene mejor! :)";
+        public override string SiteLink { get; protected set; } = "https://mejortorrent.wtf/";
+        public override string[] AlternativeSiteLinks => new[]
         {
-            public static string Pelicula => "Película";
-            public static string Serie => "Serie";
-            public static string SerieHd => "SerieHD"; // this category is created, doesn't exist in the site
-            public static string Musica => "Música";
-            public static string Otro => "Otro";
-        }
-
-        private const string NewTorrentsUrl = "torrents";
-        private const string SearchUrl = "busqueda/page/";
-
-        private const int PagesToSearch = 3;
-
-        // uncomment when there are more than one domain available
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://mejortorrent.wtf/",
             "https://mejortorrent.unblockit.boo/"
         };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://www.mejortorrentt.net/",
             "http://www.mejortorrent.org/",
             "http://www.mejortorrent.tv/",
@@ -73,13 +63,26 @@ namespace Jackett.Common.Indexers
             "https://mejortorrent.unblockit.name/",
             "https://mejortorrent.unblockit.bio/"
         };
+        public override string Language => "es-ES";
+        public override string Type => "public";
+
+        private static class MejorTorrentCatType
+        {
+            public static string Pelicula => "Película";
+            public static string Serie => "Serie";
+            public static string SerieHd => "SerieHD"; // this category is created, doesn't exist in the site
+            public static string Musica => "Música";
+            public static string Otro => "Otro";
+        }
+
+        private const string NewTorrentsUrl = "torrents";
+        private const string SearchUrl = "busqueda/page/";
+
+        private const int PagesToSearch = 3;
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(id: "mejortorrent",
-                   name: "MejorTorrent",
-                   description: "MejorTorrent - Hay veces que un torrent viene mejor! :)",
-                   link: "https://mejortorrent.wtf/",
+                            ICacheService cs)
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -103,10 +106,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "es-ES";
-            Type = "public";
-
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 

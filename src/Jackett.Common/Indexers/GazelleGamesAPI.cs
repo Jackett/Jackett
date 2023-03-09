@@ -20,6 +20,13 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class GazelleGamesApi : GazelleTracker
     {
+        public override string Id => "gazellegamesapi";
+        public override string Name => "GazelleGames (API)";
+        public override string Description => "A gaming tracker";
+        public override string SiteLink { get; protected set; } = "https://gazellegames.net/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         // API Reference: https://gazellegames.net/wiki.php?action=article&id=401
         protected override string APIUrl => SiteLink + "api.php";
         protected override string AuthorizationName => "X-API-Key";
@@ -27,11 +34,7 @@ namespace Jackett.Common.Indexers
         protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "");
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "gazellegamesapi",
-                   name: "GazelleGames (API)",
-                   description: "A gaming tracker",
-                   link: "https://gazellegames.net/",
-                   caps: new TorznabCapabilities(),
+            : base(caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -44,9 +47,6 @@ namespace Jackett.Common.Indexers
                    useAuthKey: true,
                    instructionMessageOptional: "<ol><li>Go to GGn's site and open your account settings.</li><li>Under <b>Access Settings</b> click on 'Create a new token'</li><li>Give it a name you like and click <b>Generate</b>.</li><li>Copy the generated API Key and paste it in the above text field.</li></ol>")
         {
-            Language = "en-US";
-            Type = "private";
-
             configData.AddDynamic("searchgroupnames", new BoolConfigurationItem("Search Group Names Only") { Value = false });
 
             // Apple

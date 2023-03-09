@@ -17,8 +17,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BroadcasTheNet : BaseWebIndexer
+    public class BroadcasTheNet : IndexerBase
     {
+        public override string Id => "broadcasthenet";
+        public override string Name => "BroadcasTheNet";
+        public override string Description => "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows";
+        public override string SiteLink { get; protected set; } = "https://broadcasthe.net/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public override bool SupportsPagination => true;
 
         // based on https://github.com/Prowlarr/Prowlarr/tree/develop/src/NzbDrone.Core/Indexers/Definitions/BroadcastheNet
@@ -33,10 +40,7 @@ namespace Jackett.Common.Indexers
 
         public BroadcasTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "broadcasthenet",
-                   name: "BroadcasTheNet",
-                   description: "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows",
-                   link: "https://broadcasthe.net/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        LimitsDefault = 100,
@@ -53,10 +57,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
             AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
             AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");

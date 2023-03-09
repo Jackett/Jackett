@@ -16,18 +16,22 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TorrentsCSV : BaseWebIndexer
+    public class TorrentsCSV : IndexerBase
     {
+        public override string Id => "torrentscsv";
+        public override string Name => "Torrents.csv";
+        public override string Description => "Torrents.csv is a self-hostable, open source torrent search engine and database";
+        public override string SiteLink { get; protected set; } = "https://torrents-csv.ml/";
+        public override string Language => "en-US";
+        public override string Type => "public";
+
         private string SearchEndpoint => SiteLink + "service/search";
 
         private new ConfigurationData configData => base.configData;
 
         public TorrentsCSV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "torrentscsv",
-                   name: "Torrents.csv",
-                   description: "Torrents.csv is a self-hostable, open source torrent search engine and database",
-                   link: "https://torrents-csv.ml/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -46,10 +50,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "public";
-
             // torrents.csv doesn't return categories
             AddCategoryMapping(1, TorznabCatType.Other);
         }

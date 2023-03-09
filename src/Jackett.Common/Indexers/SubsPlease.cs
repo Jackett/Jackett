@@ -19,14 +19,19 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class SubsPlease : BaseWebIndexer
+    public class SubsPlease : IndexerBase
     {
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "subsplease";
+        public override string Name => "SubsPlease";
+        public override string Description => "SubsPlease - A better HorribleSubs/Erai replacement";
+        public override string SiteLink { get; protected set; } = "https://subsplease.org/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://subsplease.org/",
             "https://subsplease.mrunblock.guru/"
         };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://subsplease.nocensor.space/",
             "https://subsplease.nocensor.work/",
             "https://subsplease.nocensor.biz/",
@@ -35,14 +40,13 @@ namespace Jackett.Common.Indexers
             "https://subsplease.nocensor.lol/",
             "https://subsplease.nocensor.art/"
         };
+        public override string Language => "en-US";
+        public override string Type => "public";
 
         private string ApiEndpoint => SiteLink + "api/?";
 
         public SubsPlease(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(id: "subsplease",
-                   name: "SubsPlease",
-                   description: "SubsPlease - A better HorribleSubs/Erai replacement",
-                   link: "https://subsplease.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -57,10 +61,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "public";
-
             // Configure the category mappings
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
         }

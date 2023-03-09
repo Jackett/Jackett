@@ -16,8 +16,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BeyondHDAPI : BaseWebIndexer
+    public class BeyondHDAPI : IndexerBase
     {
+        public override string Id => "beyond-hd-api";
+        public override string Name => "Beyond-HD (API)";
+        public override string Description => "Without BeyondHD, your HDTV is just a TV";
+        public override string SiteLink { get; protected set; } = "https://beyond-hd.me/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private readonly string APIBASE = "https://beyond-hd.me/api/torrents/";
 
         private new ConfigurationDataBeyondHDApi configData
@@ -28,10 +35,7 @@ namespace Jackett.Common.Indexers
 
         public BeyondHDAPI(IIndexerConfigurationService configService, WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "beyond-hd-api",
-                   name: "Beyond-HD (API)",
-                   description: "Without BeyondHD, your HDTV is just a TV",
-                   link: "https://beyond-hd.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        LimitsDefault = 100,
@@ -52,10 +56,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBeyondHDApi("Find the API and RSS keys under your security settings (your profile picture -> my security)"))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping("Movies", TorznabCatType.Movies);
             AddCategoryMapping("TV", TorznabCatType.TV);
         }

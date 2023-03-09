@@ -61,7 +61,7 @@ namespace Jackett.Common.Services
                     _cache.Add(indexer.Id, new TrackerCache
                     {
                         TrackerId = indexer.Id,
-                        TrackerName = indexer.DisplayName,
+                        TrackerName = indexer.Name,
                         TrackerType = indexer.Type
                     });
                 }

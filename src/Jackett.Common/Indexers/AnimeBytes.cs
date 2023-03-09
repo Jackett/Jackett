@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -23,6 +22,13 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AnimeBytes : BaseCachingWebIndexer
     {
+        public override string Id => "animebytes";
+        public override string Name => "AnimeBytes";
+        public override string Description => "Powered by Tentacles";
+        public override string SiteLink { get; protected set; } = "https://animebytes.tv/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string ScrapeUrl => SiteLink + "scrape.php";
         private bool AllowRaws => ConfigData.IncludeRaw.Value;
         private bool PadEpisode => ConfigData.PadEpisode != null && ConfigData.PadEpisode.Value;
@@ -36,11 +42,7 @@ namespace Jackett.Common.Indexers
 
         public AnimeBytes(IIndexerConfigurationService configService, WebClient client, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "animebytes",
-                   name: "AnimeBytes",
-                   description: "Powered by Tentacles",
-                   link: "https://animebytes.tv/",
-                   configService: configService,
+            : base(configService: configService,
                    client: client,
                    caps: new TorznabCapabilities
                    {
@@ -67,10 +69,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             webclient.EmulateBrowser = false; // Animebytes doesn't like fake user agents (issue #1535)
 
             AddCategoryMapping("anime[tv_series]", TorznabCatType.TVAnime, "TV Series");

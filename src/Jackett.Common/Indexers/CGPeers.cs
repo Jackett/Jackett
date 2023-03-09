@@ -10,17 +10,20 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class CGPeers : GazelleTracker
     {
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string Id => "cgpeers";
+        public override string Name => "CGPeers";
+        public override string Description => "CGPeers is a Private Torrent Tracker for GRAPHICS SOFTWARE / TUTORIALS / ETC";
+        public override string SiteLink { get; protected set; } = "https://cgpeers.to/";
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://www.cgpeers.com/"
         };
+        public override string Language => "en-US";
+        public override string Type => "private";
 
         public CGPeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "cgpeers",
-                   name: "CGPeers",
-                   description: "CGPeers is a Private Torrent Tracker for GRAPHICS SOFTWARE / TUTORIALS / ETC",
-                   link: "https://cgpeers.to/",
-                   caps: new TorznabCapabilities(),
+            : base(caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -28,9 +31,6 @@ namespace Jackett.Common.Indexers
                    cs: cs,
                    supportsFreeleechTokens: true)
         {
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.PCISO, "Full Applications");
             AddCategoryMapping(2, TorznabCatType.PC0day, "Plugins");
             AddCategoryMapping(3, TorznabCatType.Other, "Tutorials");

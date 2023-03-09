@@ -16,13 +16,17 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Uniotaku : BaseWebIndexer
+    public class Uniotaku : IndexerBase
     {
+        public override string Id => "uniotaku";
+        public override string Name => "UniOtaku";
+        public override string Description => "UniOtaku is a BRAZILIAN Semi-Private Torrent Tracker for ANIME";
+        public override string SiteLink { get; protected set; } = "https://tracker.uniotaku.com/";
+        public override string Language => "pt-BR";
+        public override string Type => "semi-private";
+
         public Uniotaku(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(id: "uniotaku",
-                   name: "UniOtaku",
-                   description: "UniOtaku is a BRAZILIAN Semi-Private Torrent Tracker for ANIME",
-                   link: "https://tracker.uniotaku.com/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -49,10 +53,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataUniotaku())
         {
-            Encoding = Encoding.UTF8;
-            Language = "pt-BR";
-            Type = "semi-private";
-
             AddCategoryMapping(28, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(47, TorznabCatType.MoviesOther, "Filme");
             AddCategoryMapping(48, TorznabCatType.TVAnime, "OVA");

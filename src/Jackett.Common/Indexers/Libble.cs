@@ -20,8 +20,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Libble : BaseWebIndexer
+    public class Libble : IndexerBase
     {
+        public override string Id => "libble";
+        public override string Name => "Libble";
+        public override string Description => "Libble is a Private Torrent Tracker for MUSIC";
+        public override string SiteLink { get; protected set; } = "https://libble.me/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public override bool SupportsPagination => true;
 
         private string LandingUrl => SiteLink + "login.php";
@@ -60,10 +67,7 @@ namespace Jackett.Common.Indexers
 
         public Libble(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "libble",
-                   name: "Libble",
-                   description: "Libble is a Private Torrent Tracker for MUSIC",
-                   link: "https://libble.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        MusicSearchParams = new List<MusicSearchParam>
@@ -78,10 +82,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWith2FA())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.Audio, "Libble Mixtapes");
             AddCategoryMapping(7, TorznabCatType.AudioVideo, "Music Videos");

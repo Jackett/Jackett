@@ -23,8 +23,33 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class DivxTotal : BaseWebIndexer
+    public class DivxTotal : IndexerBase
     {
+        public override string Id => "divxtotal";
+        public override string Name => "DivxTotal";
+        public override string Description => "DivxTotal is a SPANISH site for Movies, TV series and Software";
+        public override string SiteLink { get; protected set; } = "https://www.divxtotal.pl/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://www.divxtotal.la/",
+            "https://www.divxtotal.one/",
+            "https://www.divxtotal.ch/",
+            "https://www.divxtotal.nz/",
+            "https://www.divxtotal.li/",
+            "https://www.divxtotal.nu/",
+            "https://www.divxtotal.se/",
+            "https://www.divxtotal.pm/",
+            "https://www.divxtotal.re/",
+            "https://www.divxtotal.nl/",
+            "https://www.divxtotal.ac/",
+            "https://www.divxtotal.dev/",
+            "https://www.divxtotal.ms/",
+            "https://www.divxtotal.fi/",
+            "https://www.divxtotal.cat/"
+        };
+        public override string Language => "es-ES";
+        public override string Type => "public";
+
         private const string DownloadLink = "/download_tt.php";
         private const int MaxNrOfResults = 100;
         private const int MaxPageLoads = 3;
@@ -48,30 +73,9 @@ namespace Jackett.Common.Indexers
             public static long Otros => 536870912; // 512 MB
         }
 
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://www.divxtotal.la/",
-            "https://www.divxtotal.one/",
-            "https://www.divxtotal.ch/",
-            "https://www.divxtotal.nz/",
-            "https://www.divxtotal.li/",
-            "https://www.divxtotal.nu/",
-            "https://www.divxtotal.se/",
-            "https://www.divxtotal.pm/",
-            "https://www.divxtotal.re/",
-            "https://www.divxtotal.nl/",
-            "https://www.divxtotal.ac/",
-            "https://www.divxtotal.dev/",
-            "https://www.divxtotal.ms/",
-            "https://www.divxtotal.fi/",
-            "https://www.divxtotal.cat/"
-        };
-
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(id: "divxtotal",
-                   name: "DivxTotal",
-                   description: "DivxTotal is a SPANISH site for Movies, TV series and Software",
-                   link: "https://www.divxtotal.pl/",
+                         ICacheService cs)
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -90,10 +94,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "es-ES";
-            Type = "public";
-
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
 

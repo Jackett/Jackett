@@ -296,7 +296,7 @@ namespace Jackett.Common.Services
             throw new Exception($"Unknown indexer: {name}");
         }
 
-        public List<IIndexer> GetAllIndexers() => _indexers.Values.OrderBy(_ => _.DisplayName).ToList();
+        public List<IIndexer> GetAllIndexers() => _indexers.Values.OrderBy(_ => _.Name).ToList();
 
         public async Task TestIndexer(string name)
         {
@@ -309,10 +309,10 @@ namespace Jackett.Common.Services
             };
             var result = await indexer.ResultsForQuery(query);
 
-            _logger.Info($"Test search in {indexer.DisplayName} => Found {result.Releases.Count()} releases");
+            _logger.Info($"Test search in {indexer.Name} => Found {result.Releases.Count()} releases");
 
             if (!result.Releases.Any())
-                throw new Exception($"Test search in {indexer.DisplayName} => Found no results while trying to browse this tracker");
+                throw new Exception($"Test search in {indexer.Name} => Found no results while trying to browse this tracker");
         }
 
         public void DeleteIndexer(string name)

@@ -17,8 +17,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class PixelHD : BaseWebIndexer
+    public class PixelHD : IndexerBase
     {
+        public override string Id => "pixelhd";
+        public override string Name => "PiXELHD";
+        public override string Description => "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV";
+        public override string SiteLink { get; protected set; } = "https://pixelhd.me/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
 
@@ -34,10 +41,7 @@ namespace Jackett.Common.Indexers
 
         public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
             IProtectionService ps, ICacheService cs)
-            : base(id: "pixelhd",
-                   name: "PiXELHD",
-                   description: "PixelHD (PxHD) is a Private Torrent Tracker for HD .MP4 MOVIES / TV",
-                   link: "https://pixelhd.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam>
@@ -53,10 +57,6 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCaptchaLogin()
                 )
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
         }
 

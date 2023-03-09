@@ -18,8 +18,15 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TorrentNetwork : BaseWebIndexer
+    public class TorrentNetwork : IndexerBase
     {
+        public override string Id => "torrentnetwork";
+        public override string Name => "Torrent Network";
+        public override string Description => "Torrent Network (TN) is a GERMAN Private site for TV / MOVIES / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://tntracker.org/";
+        public override string Language => "de-DE";
+        public override string Type => "private";
+
         private string APIUrl => SiteLink + "api/";
         private string passkey;
 
@@ -36,10 +43,7 @@ namespace Jackett.Common.Indexers
 
         public TorrentNetwork(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "torrentnetwork",
-                   name: "Torrent Network",
-                   description: "Torrent Network (TN) is a GERMAN Private site for TV / MOVIES / GENERAL",
-                   link: "https://tntracker.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -66,10 +70,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-            Encoding = Encoding.UTF8;
-            Language = "de-DE";
-            Type = "private";
-
             configData.AddDynamic("token", new HiddenStringConfigurationItem("token"));
             configData.AddDynamic("passkey", new HiddenStringConfigurationItem("passkey"));
 

@@ -18,8 +18,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class SceneTime : BaseWebIndexer
+    public class SceneTime : IndexerBase
     {
+        public override string Id => "scenetime";
+        public override string Name => "SceneTime";
+        public override string Description => "Always on time";
+        public override string SiteLink { get; protected set; } = "https://www.scenetime.com/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string SearchUrl => SiteLink + "browse.php";
         private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
@@ -27,10 +34,7 @@ namespace Jackett.Common.Indexers
 
         public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "scenetime",
-                   name: "SceneTime",
-                   description: "Always on time",
-                   link: "https://www.scenetime.com/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -58,10 +62,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataSceneTime())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(10, TorznabCatType.XXX, "Movies Adult");
             AddCategoryMapping(47, TorznabCatType.Movies, "Movie Packs");
             AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies SD");

@@ -19,18 +19,23 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BitHDTV : BaseWebIndexer
+    public class BitHDTV : IndexerBase
     {
+        public override string Id => "bithdtv";
+        public override string Name => "BIT-HDTV";
+        public override string Description => "BIT-HDTV - Home of High Definition";
+        public override string SiteLink { get; protected set; } = "https://www.bit-hdtv.com/";
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string SearchUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public BitHDTV(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "bithdtv",
-                   name: "BIT-HDTV",
-                   description: "BIT-HDTV - Home of High Definition",
-                   link: "https://www.bit-hdtv.com/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -49,10 +54,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(6, TorznabCatType.AudioLossless, "HQ Audio");
             AddCategoryMapping(7, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Videos");

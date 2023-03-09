@@ -17,8 +17,16 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class PornoLab : BaseWebIndexer
+    public class PornoLab : IndexerBase
     {
+        public override string Id => "pornolab";
+        public override string Name => "PornoLab";
+        public override string Description => "PornoLab is a Semi-Private Russian site for Adult content";
+        public override string SiteLink { get; protected set; } = "https://pornolab.net/";
+        public override Encoding Encoding => Encoding.GetEncoding("windows-1251");
+        public override string Language => "ru-RU";
+        public override string Type => "semi-private";
+
         private string LoginUrl => SiteLink + "forum/login.php";
         private string SearchUrl => SiteLink + "forum/tracker.php";
 
@@ -32,13 +40,8 @@ namespace Jackett.Common.Indexers
             set => base.configData = value;
         }
 
-        public PornoLab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(id: "pornolab",
-                   name: "PornoLab",
-                   description: "PornoLab is a Semi-Private Russian site for Adult content",
-                   link: "https://pornolab.net/",
-                   caps: new TorznabCapabilities(),
+        public PornoLab(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -46,10 +49,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataPornolab())
         {
-            Encoding = Encoding.GetEncoding("windows-1251");
-            Language = "ru-RU";
-            Type = "semi-private";
-
             AddCategoryMapping(1670, TorznabCatType.XXX, "Эротическое видео / Erotic & Softcore");
             AddCategoryMapping(1768, TorznabCatType.XXX, "Эротические фильмы / Erotic Movies");
             AddCategoryMapping(60, TorznabCatType.XXX, "Документальные фильмы / Documentary & Reality");

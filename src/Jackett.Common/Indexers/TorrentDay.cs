@@ -18,11 +18,14 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TorrentDay : BaseWebIndexer
+    public class TorrentDay : IndexerBase
     {
-        private string SearchUrl => SiteLink + "t.json";
-
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "torrentday";
+        public override string Name => "TorrentDay";
+        public override string Description => "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://tday.love/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://tday.love/",
             "https://torrentday.cool/",
             "https://secure.torrentday.com/",
@@ -38,8 +41,8 @@ namespace Jackett.Common.Indexers
             "https://tday.venom.global/",
             "https://tday.workisboring.net/"
         };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://torrentday.com/",
             "https://tdonline.org/", // redirect to https://www.torrentday.com/
             "https://torrentday.eu/", // redirect to https://www.torrentday.com/
@@ -48,15 +51,16 @@ namespace Jackett.Common.Indexers
             "https://www.torrentday.ru/",
             "https://www.td.af/"
         };
+        public override string Language => "en-US";
+        public override string Type => "private";
+
+        private string SearchUrl => SiteLink + "t.json";
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "torrentday",
-                   name: "TorrentDay",
-                   description: "TorrentDay (TD) is a Private site for TV / MOVIES / GENERAL",
-                   link: "https://tday.love/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -84,10 +88,6 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCookie(
                        "Make sure you get the cookies from the same torrent day domain as configured above."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             wc.EmulateBrowser = false;
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
@@ -171,14 +171,14 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            /* notes: 
+            /* notes:
              * TorrentDay can search for genre (tags) using the default title&tags search
-             * qf= 
+             * qf=
              * "" = Title and Tags
              * ta = Tags
              * all = Title, Tags & Description
              * adv = Advanced
-             * 
+             *
              * But only movies and tv have tags and the t.json does not return tags in results.
              */
 

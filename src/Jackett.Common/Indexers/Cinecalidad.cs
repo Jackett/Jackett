@@ -18,12 +18,14 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Cinecalidad : BaseWebIndexer
+    public class Cinecalidad : IndexerBase
     {
-        private const int MaxLatestPageLimit = 3; // 12 items per page * 3 pages = 36
-        private const int MaxSearchPageLimit = 6;
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string Id => "cinecalidad";
+        public override string Name => "Cinecalidad";
+        public override string Description => "Películas Full HD en Latino Dual.";
+        public override string SiteLink { get; protected set; } = "https://cinecalidad.ms/";
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://cinecalidad.website/",
             "https://www.cinecalidad.to/",
             "https://www.cinecalidad.im/", // working but outdated, maybe copycat
@@ -40,13 +42,15 @@ namespace Jackett.Common.Indexers
             "https://www.cinecalidad.lat/",
             "https://cinecalidad.dev/"
         };
+        public override string Language => "es-419";
+        public override string Type => "public";
+
+        private const int MaxLatestPageLimit = 3; // 12 items per page * 3 pages = 36
+        private const int MaxSearchPageLimit = 6;
 
         public Cinecalidad(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(id: "cinecalidad",
-                   name: "Cinecalidad",
-                   description: "Películas Full HD en Latino Dual.",
-                   link: "https://cinecalidad.ms/",
+                           ICacheService cs)
+            : base(
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q }
@@ -58,10 +62,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "es-419";
-            Type = "public";
-
             AddCategoryMapping(1, TorznabCatType.MoviesHD);
         }
 

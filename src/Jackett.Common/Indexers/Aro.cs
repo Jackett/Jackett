@@ -11,12 +11,16 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class Aro : GazelleTracker
     {
+        public override string Id => "aro";
+        public override string Name => "aro.lol";
+        public override string Description => "aro.lol is a SERBIAN/ENGLISH Private Torrent Tracker for ANIME";
+        public override string SiteLink { get; protected set; } = "https://aro.lol/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public Aro(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "aro",
-                   name: "aro.lol",
-                   description: "aro.lol is a SERBIAN/ENGLISH Private Torrent Tracker for ANIME",
-                   link: "https://aro.lol/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -37,9 +41,6 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechTokens: true
                    )
         {
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(3, TorznabCatType.Books, "Manga");

@@ -16,15 +16,10 @@ namespace Jackett.Common.Indexers.Feeds
     {
         protected abstract Uri FeedUri { get; }
 
-        protected BaseFeedIndexer(string link, string id, string name, string description,
-                                  IIndexerConfigurationService configService, WebClient client, Logger logger,
+        protected BaseFeedIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
                                   ConfigurationData configData, IProtectionService p, ICacheService cs,
                                   TorznabCapabilities caps = null, string downloadBase = null)
-            : base(id: id,
-                   name: name,
-                   description: description,
-                   link: link,
-                   caps: caps,
+            : base(caps: caps,
                    configService: configService,
                    client: client,
                    logger: logger,

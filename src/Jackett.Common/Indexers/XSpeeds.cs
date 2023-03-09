@@ -18,8 +18,15 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class XSpeeds : BaseWebIndexer
+    public class XSpeeds : IndexerBase
     {
+        public override string Id => "xspeeds";
+        public override string Name => "XSpeeds";
+        public override string Description => "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://www.xspeeds.eu/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LandingUrl => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string GetRSSKeyUrl => SiteLink + "getrss.php";
@@ -31,10 +38,7 @@ namespace Jackett.Common.Indexers
 
         public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "xspeeds",
-                   name: "XSpeeds",
-                   description: "XSpeeds (XS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                   link: "https://www.xspeeds.eu/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -57,10 +61,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
             AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
             AddCategoryMapping(94, TorznabCatType.TVUHD, "4K TV Boxsets");

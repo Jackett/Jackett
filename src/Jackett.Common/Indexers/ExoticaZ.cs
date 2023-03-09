@@ -15,20 +15,20 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class ExoticaZ : AvistazTracker
     {
-        private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
-
-        public override string[] LegacySiteLinks { get; protected set; } =
+        public override string Id => "exoticaz";
+        public override string Name => "ExoticaZ";
+        public override string Description => "ExoticaZ (YourExotic) is a Private Torrent Tracker for 3X";
+        public override string SiteLink { get; protected set; } = "https://exoticaz.to/";
+        public override string[] LegacySiteLinks => new[]
         {
             "https://torrents.yourexotic.com/"
         };
 
+        private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
+
         public ExoticaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "exoticaz",
-                   name: "ExoticaZ",
-                   description: "ExoticaZ (YourExotic) is a Private Torrent Tracker for 3X",
-                   link: "https://exoticaz.to/",
-                   caps: new TorznabCapabilities(),
+            : base(caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,

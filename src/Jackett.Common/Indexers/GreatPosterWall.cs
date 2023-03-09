@@ -17,12 +17,16 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class GreatPosterWall : GazelleTracker
     {
+        public override string Id => "greatposterwall";
+        public override string Name => "GreatPosterWall";
+        public override string Description => "GreatPosterWall (GPW) is a CHINESE Private site for MOVIES";
+        public override string SiteLink { get; protected set; } = "https://greatposterwall.com/";
+        public override string Language => "zh-CN";
+        public override string Type => "private";
+
         public GreatPosterWall(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "greatposterwall",
-                   name: "GreatPosterWall",
-                   description: "GreatPosterWall (GPW) is a CHINESE Private site for MOVIES",
-                   link: "https://greatposterwall.com/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam>
@@ -44,9 +48,6 @@ namespace Jackett.Common.Indexers
                    instructionMessageOptional: null
                   )
         {
-            Language = "zh-CN";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies 电影");
 
             configData.AddDynamic("showFilename", new BoolConfigurationItem("Use the first torrent filename as the title") { Value = false });

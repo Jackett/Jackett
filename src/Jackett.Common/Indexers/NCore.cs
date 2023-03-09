@@ -20,8 +20,19 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class NCore : BaseWebIndexer
+    public class NCore : IndexerBase
     {
+        public override string Id => "ncore";
+        public override string Name => "nCore";
+        public override string Description => "A Hungarian private torrent site.";
+        public override string SiteLink { get; protected set; } = "https://ncore.pro/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://ncore.cc/"
+        };
+        public override string Language => "hu-HU";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php";
 
@@ -41,16 +52,9 @@ namespace Jackett.Common.Indexers
             "ebook"
         };
 
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://ncore.cc/"
-        };
-
         public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(id: "ncore",
-                  name: "nCore",
-                  description: "A Hungarian private torrent site.",
-                  link: "https://ncore.pro/",
+                     ICacheService cs)
+            : base(
                   caps: new TorznabCapabilities
                   {
                       TvSearchParams = new List<TvSearchParam>
@@ -77,10 +81,6 @@ namespace Jackett.Common.Indexers
                   cacheService: cs,
                   configData: new ConfigurationDataNCore())
         {
-            Encoding = Encoding.UTF8;
-            Language = "hu-HU";
-            Type = "private";
-
             AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");
             AddCategoryMapping("xvid", TorznabCatType.MoviesSD, "Film SD/EN");
             AddCategoryMapping("dvd_hun", TorznabCatType.MoviesDVD, "Film DVDR/HU");

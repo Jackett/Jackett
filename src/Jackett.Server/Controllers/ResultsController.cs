@@ -270,7 +270,7 @@ namespace Jackett.Server.Controllers
                 if (indexer != null)
                 {
                     resultIndexer.ID = indexer.Id;
-                    resultIndexer.Name = indexer.DisplayName;
+                    resultIndexer.Name = indexer.Name;
                 }
                 return resultIndexer;
             }).ToList();
@@ -283,7 +283,7 @@ namespace Jackett.Server.Controllers
                 return searchResults.Select(result =>
                 {
                     var item = MapperUtil.Mapper.Map<TrackerCacheResult>(result);
-                    item.Tracker = indexer.DisplayName;
+                    item.Tracker = indexer.Name;
                     item.TrackerId = indexer.Id;
                     item.TrackerType = indexer.Type;
                     item.Peers = item.Peers - item.Seeders; // Use peers as leechers
@@ -318,7 +318,7 @@ namespace Jackett.Server.Controllers
             {
                 if (!(CurrentIndexer is BaseMetaIndexer)) // shouldn't be needed because CanHandleQuery should return false
                 {
-                    logger.Warn($"A search request with t=indexers from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} isn't a meta indexer.");
+                    logger.Warn($"A search request with t=indexers from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} isn't a meta indexer.");
                     return GetErrorXML(203, "Function Not Available: this isn't a meta indexer");
                 }
                 var CurrentBaseMetaIndexer = (BaseMetaIndexer)CurrentIndexer;
@@ -335,8 +335,8 @@ namespace Jackett.Server.Controllers
                         select new XElement("indexer",
                             new XAttribute("id", i.Id),
                             new XAttribute("configured", i.IsConfigured),
-                            new XElement("title", i.DisplayName),
-                            new XElement("description", i.DisplayDescription),
+                            new XElement("title", i.Name),
+                            new XElement("description", i.Description),
                             new XElement("link", i.SiteLink),
                             new XElement("language", i.Language),
                             new XElement("type", i.Type),
@@ -367,13 +367,13 @@ namespace Jackett.Server.Controllers
 
                 if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchImdbAvailable)
                 {
-                    logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
                 }
 
                 if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchImdbAvailable)
                 {
-                    logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: imdbid is not supported for TV search by this indexer");
                 }
             }
@@ -382,13 +382,13 @@ namespace Jackett.Server.Controllers
             {
                 if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchTmdbAvailable)
                 {
-                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
                 }
 
                 if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchTmdbAvailable)
                 {
-                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: tmdbid is not supported for TV search by this indexer");
                 }
             }
@@ -397,7 +397,7 @@ namespace Jackett.Server.Controllers
             {
                 if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchAvailable)
                 {
-                    logger.Warn($"A search request with tvdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.DisplayName} doesn't support it.");
+                    logger.Warn($"A search request with tvdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
                     return GetErrorXML(203, "Function Not Available: tvdbid is not supported for movie search by this indexer");
                 }
             }
@@ -409,15 +409,15 @@ namespace Jackett.Server.Controllers
                 // Log info
                 var cacheStr = result.IsFromCache ? " (from cache)" : "";
                 if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                    logger.Info($"Torznab search in {CurrentIndexer.DisplayName} => Found {result.Releases.Count()} releases{cacheStr}");
+                    logger.Info($"Torznab search in {CurrentIndexer.Name} => Found {result.Releases.Count()} releases{cacheStr}");
                 else
-                    logger.Info($"Torznab search in {CurrentIndexer.DisplayName} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
+                    logger.Info($"Torznab search in {CurrentIndexer.Name} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
 
                 var serverUrl = serverService.GetServerUrl(Request);
                 var resultPage = new ResultPage(new ChannelInfo
                 {
-                    Title = CurrentIndexer.DisplayName,
-                    Description = CurrentIndexer.DisplayDescription,
+                    Title = CurrentIndexer.Name,
+                    Description = CurrentIndexer.Description,
                     Link = new Uri(CurrentIndexer.SiteLink)
                 });
 
@@ -525,9 +525,9 @@ namespace Jackett.Server.Controllers
             // Log info
             var cacheStr = result.IsFromCache ? " (from cache)" : "";
             if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                logger.Info($"Potato search in {CurrentIndexer.DisplayName} => Found {result.Releases.Count()} releases{cacheStr}");
+                logger.Info($"Potato search in {CurrentIndexer.Name} => Found {result.Releases.Count()} releases{cacheStr}");
             else
-                logger.Info($"Potato search in {CurrentIndexer.DisplayName} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
+                logger.Info($"Potato search in {CurrentIndexer.Name} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
 
             var serverUrl = serverService.GetServerUrl(Request);
             var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
@@ -541,7 +541,7 @@ namespace Jackett.Server.Controllers
                 // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly
                 var item = new TorrentPotatoResponseItem()
                 {
-                    release_name = release.Title + "[" + CurrentIndexer.DisplayName + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
+                    release_name = release.Title + "[" + CurrentIndexer.Name + "]", // Suffix the indexer so we can see which tracker we are using in CPS as it just says torrentpotato >.>
                     torrent_id = release.Guid.AbsoluteUri, // GUID and (Link or Magnet) are mandatory
                     details_url = release.Details?.AbsoluteUri,
                     download_url = (release.Link != null ? release.Link.AbsoluteUri : release.MagnetUri.AbsoluteUri),

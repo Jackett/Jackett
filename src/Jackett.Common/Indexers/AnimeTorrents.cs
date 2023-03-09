@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -20,8 +19,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class AnimeTorrents : BaseWebIndexer
+    public class AnimeTorrents : IndexerBase
     {
+        public override string Id => "animetorrents";
+        public override string Name => "AnimeTorrents";
+        public override string Description => "Definitive source for anime and manga";
+        public override string SiteLink { get; protected set; } = "https://animetorrents.me/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax/torrents_data.php";
         private string SearchUrlReferer => SiteLink + "torrents.php?cat=0&searchin=filename&search=";
@@ -34,10 +40,7 @@ namespace Jackett.Common.Indexers
 
         public AnimeTorrents(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "animetorrents",
-                   name: "AnimeTorrents",
-                   description: "Definitive source for anime and manga",
-                   link: "https://animetorrents.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -56,10 +59,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Anime Movie");
             AddCategoryMapping(6, TorznabCatType.MoviesHD, "Anime Movie HD");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime Series");

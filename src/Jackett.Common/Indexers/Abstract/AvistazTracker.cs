@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -18,8 +17,11 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers.Abstract
 {
     [ExcludeFromCodeCoverage]
-    public abstract class AvistazTracker : BaseWebIndexer
+    public abstract class AvistazTracker : IndexerBase
     {
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public override bool SupportsPagination => true;
 
         private readonly Dictionary<string, string> AuthHeaders = new Dictionary<string, string>
@@ -135,14 +137,8 @@ namespace Jackett.Common.Indexers.Abstract
             return cats;
         }
 
-        protected AvistazTracker(string link, string id, string name, string description,
-                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 IProtectionService p, ICacheService cs, TorznabCapabilities caps)
-            : base(id: id,
-                   name: name,
-                   description: description,
-                   link: link,
-                   caps: caps,
+        protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs, TorznabCapabilities caps)
+            : base(caps: caps,
                    configService: configService,
                    client: client,
                    logger: logger,
@@ -150,10 +146,6 @@ namespace Jackett.Common.Indexers.Abstract
                    cacheService: cs,
                    configData: new ConfigurationDataAvistazTracker())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             webclient.requestDelay = 3;
         }
 

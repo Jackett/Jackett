@@ -15,12 +15,16 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DICMusic : GazelleTracker
     {
+        public override string Id => "dicmusic";
+        public override string Name => "DICMusic";
+        public override string Description => "DICMusic is a CHINESE Private Torrent Tracker for MUSIC";
+        public override string SiteLink { get; protected set; } = "https://dicmusic.club/";
+        public override string Language => "zh-CN";
+        public override string Type => "private";
+
         public DICMusic(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "dicmusic",
-                   name: "DICMusic",
-                   description: "DICMusic is a CHINESE Private Torrent Tracker for MUSIC",
-                   link: "https://dicmusic.club/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        MusicSearchParams = new List<MusicSearchParam>
@@ -37,9 +41,6 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechOnly: true,
                    has2Fa: true)
         {
-            Language = "zh-CN";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             AddCategoryMapping(2, TorznabCatType.PC, "Applications");
         }

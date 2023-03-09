@@ -45,7 +45,7 @@ namespace Jackett.Server.Controllers
 
                 if (!indexer.IsConfigured)
                 {
-                    _logger.Warn($"Rejected a request to {indexer.DisplayName} which is unconfigured.");
+                    _logger.Warn($"Rejected a request to {indexer.Name} which is unconfigured.");
                     return Forbid("This indexer is not configured.");
                 }
 
