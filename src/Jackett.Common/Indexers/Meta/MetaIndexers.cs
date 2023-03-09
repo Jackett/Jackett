@@ -18,8 +18,7 @@ namespace Jackett.Common.Indexers.Meta
         public AggregateIndexer(IFallbackStrategyProvider fallbackStrategyProvider,
                                 IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
                                 WebClient client, Logger logger, IProtectionService ps, ICacheService cs)
-            : base(
-                   configService: configService,
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    ps: ps,

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -27,6 +26,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LandingUrl => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string GetRSSKeyUrl => SiteLink + "getrss.php";
@@ -36,112 +37,14 @@ namespace Jackett.Common.Indexers
         private new ConfigurationDataBasicLoginWithRSSAndDisplay configData =>
             (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
 
-        public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+        public XSpeeds(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-            AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
-            AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
-            AddCategoryMapping(94, TorznabCatType.TVUHD, "4K TV Boxsets");
-            AddCategoryMapping(70, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(80, TorznabCatType.AudioAudiobook, "Audiobooks");
-            AddCategoryMapping(66, TorznabCatType.MoviesBluRay, "Blu-Ray");
-            AddCategoryMapping(48, TorznabCatType.Books, "Books Magazines");
-            AddCategoryMapping(68, TorznabCatType.MoviesOther, "Cams/TS");
-            AddCategoryMapping(65, TorznabCatType.TVDocumentary, "Documentaries");
-            AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
-            AddCategoryMapping(72, TorznabCatType.MoviesForeign, "Foreign");
-            AddCategoryMapping(74, TorznabCatType.TVOther, "Kids");
-            AddCategoryMapping(95, TorznabCatType.PCMac, "Mac Games");
-            AddCategoryMapping(44, TorznabCatType.TVSport, "MMA");
-            AddCategoryMapping(11, TorznabCatType.Movies, "Movie Boxsets");
-            AddCategoryMapping(12, TorznabCatType.Movies, "Movies");
-            AddCategoryMapping(100, TorznabCatType.MoviesHD, "Movies HEVC");
-            AddCategoryMapping(13, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
-            AddCategoryMapping(32, TorznabCatType.ConsoleNDS, "NDS Games");
-            AddCategoryMapping(9, TorznabCatType.Other, "Other");
-            AddCategoryMapping(6, TorznabCatType.PCGames, "PC Games");
-            AddCategoryMapping(45, TorznabCatType.Other, "Pictures");
-            AddCategoryMapping(31, TorznabCatType.ConsolePS4, "Playstation");
-            AddCategoryMapping(71, TorznabCatType.TV, "PPV");
-            AddCategoryMapping(54, TorznabCatType.TV, "Soaps");
-            AddCategoryMapping(20, TorznabCatType.TVSport, "Sports");
-            AddCategoryMapping(102, TorznabCatType.TVSport, "Sports FIFA World Cup");
-            AddCategoryMapping(86, TorznabCatType.TVSport, "Sports MotorSports");
-            AddCategoryMapping(89, TorznabCatType.TVSport, "Sports Olympics");
-            AddCategoryMapping(88, TorznabCatType.TVSport, "Sports UK Football");
-            AddCategoryMapping(83, TorznabCatType.Movies, "TOTM");
-            AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
-            AddCategoryMapping(76, TorznabCatType.TVHD, "TV HD Boxsets");
-            AddCategoryMapping(97, TorznabCatType.TVHD, "TV HECV Boxsets");
-            AddCategoryMapping(47, TorznabCatType.TVHD, "TV HD");
-            AddCategoryMapping(96, TorznabCatType.TVHD, "TV HD HEVC");
-            AddCategoryMapping(16, TorznabCatType.TVSD, "TV SD");
-            AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Wii Games");
-            AddCategoryMapping(43, TorznabCatType.TVSport, "Wrestling");
-            AddCategoryMapping(8, TorznabCatType.ConsoleXBox, "Xbox Games");
-
-            // RSS Textual categories
-            AddCategoryMapping("4K Movies", TorznabCatType.MoviesUHD);
-            AddCategoryMapping("4K TV", TorznabCatType.TVUHD);
-            AddCategoryMapping("4K TV Boxsets", TorznabCatType.TVUHD);
-            AddCategoryMapping("Anime", TorznabCatType.TVAnime);
-            AddCategoryMapping("Audiobooks", TorznabCatType.AudioAudiobook);
-            AddCategoryMapping("Blu-Ray", TorznabCatType.MoviesBluRay);
-            AddCategoryMapping("Books Magazines", TorznabCatType.Books);
-            AddCategoryMapping("Cams/TS", TorznabCatType.MoviesOther);
-            AddCategoryMapping("Documentaries", TorznabCatType.TVDocumentary);
-            AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD);
-            AddCategoryMapping("Foreign", TorznabCatType.MoviesForeign);
-            AddCategoryMapping("Kids", TorznabCatType.TVOther);
-            AddCategoryMapping("MMA", TorznabCatType.TVSport);
-            AddCategoryMapping("Movie Boxsets", TorznabCatType.Movies);
-            AddCategoryMapping("Movies", TorznabCatType.Movies);
-            AddCategoryMapping("Music", TorznabCatType.Audio);
-            AddCategoryMapping("Music Videos", TorznabCatType.AudioVideo);
-            AddCategoryMapping("NDS Games", TorznabCatType.ConsoleNDS);
-            AddCategoryMapping("Other", TorznabCatType.Other);
-            AddCategoryMapping("PC Games", TorznabCatType.PCGames);
-            AddCategoryMapping("Pictures", TorznabCatType.Other);
-            AddCategoryMapping("Playstation", TorznabCatType.ConsolePS4);
-            AddCategoryMapping("PPV", TorznabCatType.TV);
-            AddCategoryMapping("Soaps", TorznabCatType.TV);
-            AddCategoryMapping("Sports", TorznabCatType.TVSport);
-            AddCategoryMapping("FIFA World Cup", TorznabCatType.TVSport);
-            AddCategoryMapping("MotorSports", TorznabCatType.TVSport);
-            AddCategoryMapping("Olympics", TorznabCatType.TVSport);
-            AddCategoryMapping("UK Football", TorznabCatType.TVSport);
-            AddCategoryMapping("TOTM", TorznabCatType.Movies);
-            AddCategoryMapping("TV Boxsets", TorznabCatType.TVSD);
-            AddCategoryMapping("HD Boxsets", TorznabCatType.TVHD);
-            AddCategoryMapping("TV-HD", TorznabCatType.TVHD);
-            AddCategoryMapping("TV-SD", TorznabCatType.TVSD);
-            AddCategoryMapping("Wii Games", TorznabCatType.ConsoleWii);
-            AddCategoryMapping("Wrestling", TorznabCatType.TVSport);
-            AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXBox);
-
             // Configure the sort selects
             var sortBySelect = new SingleSelectConfigurationItem(
                 "Sort by",
@@ -164,6 +67,108 @@ namespace Jackett.Common.Indexers
                 })
             { Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(92, TorznabCatType.MoviesUHD, "4K Movies");
+            caps.Categories.AddCategoryMapping(91, TorznabCatType.TVUHD, "4K TV");
+            caps.Categories.AddCategoryMapping(94, TorznabCatType.TVUHD, "4K TV Boxsets");
+            caps.Categories.AddCategoryMapping(70, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(80, TorznabCatType.AudioAudiobook, "Audiobooks");
+            caps.Categories.AddCategoryMapping(66, TorznabCatType.MoviesBluRay, "Blu-Ray");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.Books, "Books Magazines");
+            caps.Categories.AddCategoryMapping(68, TorznabCatType.MoviesOther, "Cams/TS");
+            caps.Categories.AddCategoryMapping(65, TorznabCatType.TVDocumentary, "Documentaries");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
+            caps.Categories.AddCategoryMapping(72, TorznabCatType.MoviesForeign, "Foreign");
+            caps.Categories.AddCategoryMapping(74, TorznabCatType.TVOther, "Kids");
+            caps.Categories.AddCategoryMapping(95, TorznabCatType.PCMac, "Mac Games");
+            caps.Categories.AddCategoryMapping(44, TorznabCatType.TVSport, "MMA");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.Movies, "Movie Boxsets");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.Movies, "Movies");
+            caps.Categories.AddCategoryMapping(100, TorznabCatType.MoviesHD, "Movies HEVC");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
+            caps.Categories.AddCategoryMapping(32, TorznabCatType.ConsoleNDS, "NDS Games");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.Other, "Other");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.PCGames, "PC Games");
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.Other, "Pictures");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.ConsolePS4, "Playstation");
+            caps.Categories.AddCategoryMapping(71, TorznabCatType.TV, "PPV");
+            caps.Categories.AddCategoryMapping(54, TorznabCatType.TV, "Soaps");
+            caps.Categories.AddCategoryMapping(20, TorznabCatType.TVSport, "Sports");
+            caps.Categories.AddCategoryMapping(102, TorznabCatType.TVSport, "Sports FIFA World Cup");
+            caps.Categories.AddCategoryMapping(86, TorznabCatType.TVSport, "Sports MotorSports");
+            caps.Categories.AddCategoryMapping(89, TorznabCatType.TVSport, "Sports Olympics");
+            caps.Categories.AddCategoryMapping(88, TorznabCatType.TVSport, "Sports UK Football");
+            caps.Categories.AddCategoryMapping(83, TorznabCatType.Movies, "TOTM");
+            caps.Categories.AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
+            caps.Categories.AddCategoryMapping(76, TorznabCatType.TVHD, "TV HD Boxsets");
+            caps.Categories.AddCategoryMapping(97, TorznabCatType.TVHD, "TV HECV Boxsets");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.TVHD, "TV HD");
+            caps.Categories.AddCategoryMapping(96, TorznabCatType.TVHD, "TV HD HEVC");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.TVSD, "TV SD");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.ConsoleWii, "Wii Games");
+            caps.Categories.AddCategoryMapping(43, TorznabCatType.TVSport, "Wrestling");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.ConsoleXBox, "Xbox Games");
+
+            // RSS Textual categories
+            caps.Categories.AddCategoryMapping("4K Movies", TorznabCatType.MoviesUHD);
+            caps.Categories.AddCategoryMapping("4K TV", TorznabCatType.TVUHD);
+            caps.Categories.AddCategoryMapping("4K TV Boxsets", TorznabCatType.TVUHD);
+            caps.Categories.AddCategoryMapping("Anime", TorznabCatType.TVAnime);
+            caps.Categories.AddCategoryMapping("Audiobooks", TorznabCatType.AudioAudiobook);
+            caps.Categories.AddCategoryMapping("Blu-Ray", TorznabCatType.MoviesBluRay);
+            caps.Categories.AddCategoryMapping("Books Magazines", TorznabCatType.Books);
+            caps.Categories.AddCategoryMapping("Cams/TS", TorznabCatType.MoviesOther);
+            caps.Categories.AddCategoryMapping("Documentaries", TorznabCatType.TVDocumentary);
+            caps.Categories.AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD);
+            caps.Categories.AddCategoryMapping("Foreign", TorznabCatType.MoviesForeign);
+            caps.Categories.AddCategoryMapping("Kids", TorznabCatType.TVOther);
+            caps.Categories.AddCategoryMapping("MMA", TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping("Movie Boxsets", TorznabCatType.Movies);
+            caps.Categories.AddCategoryMapping("Movies", TorznabCatType.Movies);
+            caps.Categories.AddCategoryMapping("Music", TorznabCatType.Audio);
+            caps.Categories.AddCategoryMapping("Music Videos", TorznabCatType.AudioVideo);
+            caps.Categories.AddCategoryMapping("NDS Games", TorznabCatType.ConsoleNDS);
+            caps.Categories.AddCategoryMapping("Other", TorznabCatType.Other);
+            caps.Categories.AddCategoryMapping("PC Games", TorznabCatType.PCGames);
+            caps.Categories.AddCategoryMapping("Pictures", TorznabCatType.Other);
+            caps.Categories.AddCategoryMapping("Playstation", TorznabCatType.ConsolePS4);
+            caps.Categories.AddCategoryMapping("PPV", TorznabCatType.TV);
+            caps.Categories.AddCategoryMapping("Soaps", TorznabCatType.TV);
+            caps.Categories.AddCategoryMapping("Sports", TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping("FIFA World Cup", TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping("MotorSports", TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping("Olympics", TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping("UK Football", TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping("TOTM", TorznabCatType.Movies);
+            caps.Categories.AddCategoryMapping("TV Boxsets", TorznabCatType.TVSD);
+            caps.Categories.AddCategoryMapping("HD Boxsets", TorznabCatType.TVHD);
+            caps.Categories.AddCategoryMapping("TV-HD", TorznabCatType.TVHD);
+            caps.Categories.AddCategoryMapping("TV-SD", TorznabCatType.TVSD);
+            caps.Categories.AddCategoryMapping("Wii Games", TorznabCatType.ConsoleWii);
+            caps.Categories.AddCategoryMapping("Wrestling", TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping("Xbox Games", TorznabCatType.ConsoleXBox);
+
+            return caps;
         }
 
         private string GetSortBy => ((SingleSelectConfigurationItem)configData.GetDynamic("sortrequestedfromsite")).Value;

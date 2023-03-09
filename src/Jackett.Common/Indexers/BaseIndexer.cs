@@ -338,12 +338,11 @@ namespace Jackett.Common.Indexers
     {
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  ConfigurationData configData, IProtectionService p, ICacheService cacheService,
-                                 TorznabCapabilities caps, string downloadBase = null)
+                                 string downloadBase = null)
             : base(configService: configService, logger: logger, configData: configData, p: p, cs: cacheService)
         {
             webclient = client;
             downloadUrlBase = downloadBase;
-            TorznabCaps = caps;
         }
 
         // minimal constructor used by e.g. cardigann generic indexer
@@ -738,8 +737,8 @@ namespace Jackett.Common.Indexers
     {
         protected BaseCachingWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
                                         ConfigurationData configData, IProtectionService p, ICacheService cacheService,
-                                        TorznabCapabilities caps = null, string downloadBase = null)
-            : base(configService: configService, client: client, logger: logger, configData: configData, p: p, cacheService: cacheService, caps: caps, downloadBase: downloadBase)
+                                        string downloadBase = null)
+            : base(configService: configService, client: client, logger: logger, configData: configData, p: p, cacheService: cacheService, downloadBase: downloadBase)
         {
         }
 

@@ -28,14 +28,10 @@ namespace Jackett.Test.TestHelpers
         public override string Language { get; protected set; } = "en-us";
         public override string Type { get; protected set; } = "private";
 
-        public TestWebIndexer() :
-            base(caps: new TorznabCapabilities(),
-                 client: null,
-                 configService: null,
-                 logger: null,
-                 configData: new ConfigurationData(),
-                 p: null,
-                 cacheService: null)
+        public override TorznabCapabilities TorznabCaps { get; protected set; } = new TorznabCapabilities();
+
+        public TestWebIndexer()
+            : base(client: null, configService: null, logger: null, configData: new ConfigurationData(), p: null, cacheService: null)
         {
         }
 

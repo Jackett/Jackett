@@ -29,49 +29,17 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
-            IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q,
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q,
-                       }
-                   },
-                   configService: configService,
+                      IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            // Configure the category mappings
-            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime - Sub");
-            AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime - Raw");
-            AddCategoryMapping(3, TorznabCatType.TVAnime, "Anime - Dub");
-            AddCategoryMapping(4, TorznabCatType.TVAnime, "LA - Sub");
-            AddCategoryMapping(5, TorznabCatType.TVAnime, "LA - Raw");
-            AddCategoryMapping(6, TorznabCatType.BooksEBook, "Light Novel");
-            AddCategoryMapping(7, TorznabCatType.BooksComics, "Manga - TLed");
-            AddCategoryMapping(8, TorznabCatType.BooksComics, "Manga - Raw");
-            AddCategoryMapping(9, TorznabCatType.AudioMP3, "♫ - Lossy");
-            AddCategoryMapping(10, TorznabCatType.AudioLossless, "♫ - Lossless");
-            AddCategoryMapping(11, TorznabCatType.AudioVideo, "♫ - Video");
-            AddCategoryMapping(12, TorznabCatType.PCGames, "Games");
-            AddCategoryMapping(13, TorznabCatType.PC0day, "Applications");
-            AddCategoryMapping(14, TorznabCatType.XXXImageSet, "Pictures");
-            AddCategoryMapping(15, TorznabCatType.XXX, "Adult Video");
-            AddCategoryMapping(16, TorznabCatType.Other, "Other");
-
             configData.AddDynamic("DDoS-Guard", new DisplayInfoConfigurationItem("DDoS-Guard", "This site may use DDoS-Guard Protection, therefore Jackett requires <a href='https://github.com/Jackett/Jackett#configuring-flaresolverr' target='_blank'>FlareSolverr</a> to access it."));
 
             AddLanguageConfiguration();
@@ -96,6 +64,45 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
 
             EnableConfigurableRetryAttempts();
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q,
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q,
+                }
+            };
+
+            // Configure the category mappings
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime - Sub");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime - Raw");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVAnime, "Anime - Dub");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.TVAnime, "LA - Sub");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.TVAnime, "LA - Raw");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.BooksEBook, "Light Novel");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.BooksComics, "Manga - TLed");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.BooksComics, "Manga - Raw");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.AudioMP3, "♫ - Lossy");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.AudioLossless, "♫ - Lossless");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.AudioVideo, "♫ - Video");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.PCGames, "Games");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.PC0day, "Applications");
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.XXXImageSet, "Pictures");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.XXX, "Adult Video");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.Other, "Other");
+
+            return caps;
         }
 
         private void AddLanguageConfiguration()

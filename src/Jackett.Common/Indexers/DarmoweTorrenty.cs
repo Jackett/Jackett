@@ -30,6 +30,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "pl-PL";
         public override string Type => "semi-private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrenty.php";
 
@@ -45,86 +47,92 @@ namespace Jackett.Common.Indexers
 
         public DarmoweTorenty(IIndexerConfigurationService configService, WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-            AddCategoryMapping(14, TorznabCatType.Movies, "Filmy");
-            AddCategoryMapping(27, TorznabCatType.MoviesDVD, "Filmy DVD-R");
-            AddCategoryMapping(28, TorznabCatType.MoviesSD, "Filmy VCD/SVCD");
-            AddCategoryMapping(29, TorznabCatType.MoviesBluRay, "Filmy BluRay/x264");
-            AddCategoryMapping(30, TorznabCatType.MoviesSD, "Filmy DivX/XviD LEKTOR/NAPISY PL");
-            AddCategoryMapping(72, TorznabCatType.MoviesSD, "Filmy DivX/XviD ENG/...");
-            AddCategoryMapping(31, TorznabCatType.Movies, "Filmy RMVB");
-            AddCategoryMapping(74, TorznabCatType.MoviesHD, "Filmy HD");
-            AddCategoryMapping(75, TorznabCatType.Movies3D, "Filmy 3D");
-            AddCategoryMapping(16, TorznabCatType.TV, "Seriale");
-            AddCategoryMapping(25, TorznabCatType.TV, "Seriale Polskie");
-            AddCategoryMapping(26, TorznabCatType.TV, "Seriale Zagraniczne");
-            AddCategoryMapping(17, TorznabCatType.Movies, "Dla Dzieci");
-            AddCategoryMapping(32, TorznabCatType.Movies, "Bajki Pl/Eng");
-            AddCategoryMapping(18, TorznabCatType.PCGames, "Gry");
-            AddCategoryMapping(34, TorznabCatType.PCGames, "Gry PC");
-            AddCategoryMapping(35, TorznabCatType.ConsolePSP, "Gry PS2/PS3/PSP");
-            AddCategoryMapping(36, TorznabCatType.ConsoleXBox, "Gry Xbox");
-            AddCategoryMapping(37, TorznabCatType.Console, "Gry Inne Konsole");
-            AddCategoryMapping(19, TorznabCatType.Audio, "Muzyka");
-            AddCategoryMapping(38, TorznabCatType.Audio, "Muzyka Polska/Zagraniczna");
-            AddCategoryMapping(39, TorznabCatType.Audio, "Muzyka Soundtracki");
-            AddCategoryMapping(40, TorznabCatType.Audio, "Muzyka Teledyski/Koncerty");
-            AddCategoryMapping(20, TorznabCatType.PCMobileOther, "GSM/PDA");
-            AddCategoryMapping(42, TorznabCatType.PCMobileOther, "Tapety GSM/PDA");
-            AddCategoryMapping(43, TorznabCatType.PCMobileOther, "Programy GSM/PDA");
-            AddCategoryMapping(44, TorznabCatType.PCMobileOther, "Filmy GSM/PDA");
-            AddCategoryMapping(45, TorznabCatType.PCMobileOther, "Dzwonki GSM/PDA");
-            AddCategoryMapping(46, TorznabCatType.PCMobileOther, "Gry GSM/PDA");
-            AddCategoryMapping(21, TorznabCatType.Books, "Książki/Czasopisma");
-            AddCategoryMapping(47, TorznabCatType.BooksEBook, "Książki/Czasopisma E-Booki");
-            AddCategoryMapping(48, TorznabCatType.AudioAudiobook, "Książki/Czasopisma Audio-Booki");
-            AddCategoryMapping(49, TorznabCatType.BooksMags, "Książki/Czasopisma Czasopisma");
-            AddCategoryMapping(50, TorznabCatType.BooksComics, "Książki/Czasopisma Komiksy");
-            AddCategoryMapping(22, TorznabCatType.PC, "Programy");
-            AddCategoryMapping(51, TorznabCatType.PC0day, "Programy Windows");
-            AddCategoryMapping(52, TorznabCatType.PC, "Programy Linux");
-            AddCategoryMapping(53, TorznabCatType.PCMac, "Programy Macintosh");
-            AddCategoryMapping(23, TorznabCatType.Other, "Inne");
-            AddCategoryMapping(55, TorznabCatType.Other, "Inne Tapety");
-            AddCategoryMapping(54, TorznabCatType.Other, "Inne Śmieszne");
-            AddCategoryMapping(56, TorznabCatType.TVSport, "Inne Sport");
-            AddCategoryMapping(57, TorznabCatType.Other, "Inne Pozostałe");
-            AddCategoryMapping(24, TorznabCatType.XXX, "Erotyka");
-            AddCategoryMapping(58, TorznabCatType.XXX, "Erotyka Czasopisma");
-            AddCategoryMapping(59, TorznabCatType.XXX, "Erotyka Zdjęcia");
-            AddCategoryMapping(60, TorznabCatType.XXX, "Erotyka Filmy");
-            AddCategoryMapping(61, TorznabCatType.XXX, "Erotyka Gry");
-            AddCategoryMapping(63, TorznabCatType.XXX, "Erotyka Hentai+18");
-            AddCategoryMapping(68, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(69, TorznabCatType.TVAnime, "Anime Pl");
-            AddCategoryMapping(70, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(76, TorznabCatType.Other, "Archiwum");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.Movies, "Filmy");
+            caps.Categories.AddCategoryMapping(27, TorznabCatType.MoviesDVD, "Filmy DVD-R");
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.MoviesSD, "Filmy VCD/SVCD");
+            caps.Categories.AddCategoryMapping(29, TorznabCatType.MoviesBluRay, "Filmy BluRay/x264");
+            caps.Categories.AddCategoryMapping(30, TorznabCatType.MoviesSD, "Filmy DivX/XviD LEKTOR/NAPISY PL");
+            caps.Categories.AddCategoryMapping(72, TorznabCatType.MoviesSD, "Filmy DivX/XviD ENG/...");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.Movies, "Filmy RMVB");
+            caps.Categories.AddCategoryMapping(74, TorznabCatType.MoviesHD, "Filmy HD");
+            caps.Categories.AddCategoryMapping(75, TorznabCatType.Movies3D, "Filmy 3D");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.TV, "Seriale");
+            caps.Categories.AddCategoryMapping(25, TorznabCatType.TV, "Seriale Polskie");
+            caps.Categories.AddCategoryMapping(26, TorznabCatType.TV, "Seriale Zagraniczne");
+            caps.Categories.AddCategoryMapping(17, TorznabCatType.Movies, "Dla Dzieci");
+            caps.Categories.AddCategoryMapping(32, TorznabCatType.Movies, "Bajki Pl/Eng");
+            caps.Categories.AddCategoryMapping(18, TorznabCatType.PCGames, "Gry");
+            caps.Categories.AddCategoryMapping(34, TorznabCatType.PCGames, "Gry PC");
+            caps.Categories.AddCategoryMapping(35, TorznabCatType.ConsolePSP, "Gry PS2/PS3/PSP");
+            caps.Categories.AddCategoryMapping(36, TorznabCatType.ConsoleXBox, "Gry Xbox");
+            caps.Categories.AddCategoryMapping(37, TorznabCatType.Console, "Gry Inne Konsole");
+            caps.Categories.AddCategoryMapping(19, TorznabCatType.Audio, "Muzyka");
+            caps.Categories.AddCategoryMapping(38, TorznabCatType.Audio, "Muzyka Polska/Zagraniczna");
+            caps.Categories.AddCategoryMapping(39, TorznabCatType.Audio, "Muzyka Soundtracki");
+            caps.Categories.AddCategoryMapping(40, TorznabCatType.Audio, "Muzyka Teledyski/Koncerty");
+            caps.Categories.AddCategoryMapping(20, TorznabCatType.PCMobileOther, "GSM/PDA");
+            caps.Categories.AddCategoryMapping(42, TorznabCatType.PCMobileOther, "Tapety GSM/PDA");
+            caps.Categories.AddCategoryMapping(43, TorznabCatType.PCMobileOther, "Programy GSM/PDA");
+            caps.Categories.AddCategoryMapping(44, TorznabCatType.PCMobileOther, "Filmy GSM/PDA");
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.PCMobileOther, "Dzwonki GSM/PDA");
+            caps.Categories.AddCategoryMapping(46, TorznabCatType.PCMobileOther, "Gry GSM/PDA");
+            caps.Categories.AddCategoryMapping(21, TorznabCatType.Books, "Książki/Czasopisma");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.BooksEBook, "Książki/Czasopisma E-Booki");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.AudioAudiobook, "Książki/Czasopisma Audio-Booki");
+            caps.Categories.AddCategoryMapping(49, TorznabCatType.BooksMags, "Książki/Czasopisma Czasopisma");
+            caps.Categories.AddCategoryMapping(50, TorznabCatType.BooksComics, "Książki/Czasopisma Komiksy");
+            caps.Categories.AddCategoryMapping(22, TorznabCatType.PC, "Programy");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.PC0day, "Programy Windows");
+            caps.Categories.AddCategoryMapping(52, TorznabCatType.PC, "Programy Linux");
+            caps.Categories.AddCategoryMapping(53, TorznabCatType.PCMac, "Programy Macintosh");
+            caps.Categories.AddCategoryMapping(23, TorznabCatType.Other, "Inne");
+            caps.Categories.AddCategoryMapping(55, TorznabCatType.Other, "Inne Tapety");
+            caps.Categories.AddCategoryMapping(54, TorznabCatType.Other, "Inne Śmieszne");
+            caps.Categories.AddCategoryMapping(56, TorznabCatType.TVSport, "Inne Sport");
+            caps.Categories.AddCategoryMapping(57, TorznabCatType.Other, "Inne Pozostałe");
+            caps.Categories.AddCategoryMapping(24, TorznabCatType.XXX, "Erotyka");
+            caps.Categories.AddCategoryMapping(58, TorznabCatType.XXX, "Erotyka Czasopisma");
+            caps.Categories.AddCategoryMapping(59, TorznabCatType.XXX, "Erotyka Zdjęcia");
+            caps.Categories.AddCategoryMapping(60, TorznabCatType.XXX, "Erotyka Filmy");
+            caps.Categories.AddCategoryMapping(61, TorznabCatType.XXX, "Erotyka Gry");
+            caps.Categories.AddCategoryMapping(63, TorznabCatType.XXX, "Erotyka Hentai+18");
+            caps.Categories.AddCategoryMapping(68, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(69, TorznabCatType.TVAnime, "Anime Pl");
+            caps.Categories.AddCategoryMapping(70, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(76, TorznabCatType.Other, "Archiwum");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

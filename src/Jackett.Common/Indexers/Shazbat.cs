@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -27,6 +26,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LoginUrl => SiteLink + "login";
         private string SearchUrl => SiteLink + "search";
         private string TorrentsUrl => SiteLink + "torrents";
@@ -37,15 +38,7 @@ namespace Jackett.Common.Indexers
 
         public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: c,
                    logger: l,
                    p: ps,
@@ -53,10 +46,23 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataShazbat())
         {
             webclient.requestDelay = 5.1;
+        }
 
-            AddCategoryMapping(1, TorznabCatType.TV);
-            AddCategoryMapping(2, TorznabCatType.TVSD);
-            AddCategoryMapping(3, TorznabCatType.TVHD);
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TV);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVSD);
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVHD);
+
+            return caps;
         }
 
         private int ShowPagesFetchLimit => int.TryParse(configData.ShowPagesFetchLimit.Value, out var limit) && limit > 0 && limit <= 5 ? limit : 2;

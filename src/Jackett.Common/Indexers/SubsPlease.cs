@@ -43,26 +43,34 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string ApiEndpoint => SiteLink + "api/?";
 
         public SubsPlease(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                }
+            };
+
             // Configure the category mappings
-            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

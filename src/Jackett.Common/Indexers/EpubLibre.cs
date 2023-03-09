@@ -49,6 +49,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "es-ES";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchUrl => SiteLink + "catalogo/index/{0}/nuevo/todos/sin/todos/{1}/ajax";
         private string SobrecargaUrl => SiteLink + "inicio/sobrecarga";
         private const int MaxItemsPerPage = 18;
@@ -75,22 +77,28 @@ namespace Jackett.Common.Indexers
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                          ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q // TODO: add more book parameters
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            AddCategoryMapping(1, TorznabCatType.BooksEBook);
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q // TODO: add more book parameters
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.BooksEBook);
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

@@ -21,23 +21,32 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public CGPeers(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(caps: new TorznabCapabilities(),
-                   configService: configService,
+                       ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true)
         {
-            AddCategoryMapping(1, TorznabCatType.PCISO, "Full Applications");
-            AddCategoryMapping(2, TorznabCatType.PC0day, "Plugins");
-            AddCategoryMapping(3, TorznabCatType.Other, "Tutorials");
-            AddCategoryMapping(4, TorznabCatType.Other, "Models");
-            AddCategoryMapping(5, TorznabCatType.Other, "Materials");
-            AddCategoryMapping(6, TorznabCatType.OtherMisc, "Misc");
-            AddCategoryMapping(7, TorznabCatType.Other, "GameDev");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities();
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.PCISO, "Full Applications");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.PC0day, "Plugins");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.Other, "Tutorials");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.Other, "Models");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.Other, "Materials");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.OtherMisc, "Misc");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.Other, "GameDev");
+
+            return caps;
         }
     }
 }

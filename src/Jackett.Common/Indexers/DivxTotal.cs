@@ -50,6 +50,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "es-ES";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private const string DownloadLink = "/download_tt.php";
         private const int MaxNrOfResults = 100;
         private const int MaxPageLoads = 3;
@@ -75,19 +77,7 @@ namespace Jackett.Common.Indexers
 
         public DivxTotal(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
                          ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
@@ -98,14 +88,31 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("MatchWords", matchWords);
 
             configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
+        }
 
-            AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD, "Peliculas");
-            AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesHD, "Peliculas HD");
-            AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.Movies3D, "Peliculas 3D");
-            AddCategoryMapping(DivxTotalCategories.PeliculasDvdr, TorznabCatType.MoviesDVD, "Peliculas DVD-r");
-            AddCategoryMapping(DivxTotalCategories.Series, TorznabCatType.TVSD, "Series");
-            AddCategoryMapping(DivxTotalCategories.Programas, TorznabCatType.PC, "Programas");
-            AddCategoryMapping(DivxTotalCategories.Otros, TorznabCatType.OtherMisc, "Otros");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(DivxTotalCategories.Peliculas, TorznabCatType.MoviesSD, "Peliculas");
+            caps.Categories.AddCategoryMapping(DivxTotalCategories.PeliculasHd, TorznabCatType.MoviesHD, "Peliculas HD");
+            caps.Categories.AddCategoryMapping(DivxTotalCategories.Peliculas3D, TorznabCatType.Movies3D, "Peliculas 3D");
+            caps.Categories.AddCategoryMapping(DivxTotalCategories.PeliculasDvdr, TorznabCatType.MoviesDVD, "Peliculas DVD-r");
+            caps.Categories.AddCategoryMapping(DivxTotalCategories.Series, TorznabCatType.TVSD, "Series");
+            caps.Categories.AddCategoryMapping(DivxTotalCategories.Programas, TorznabCatType.PC, "Programas");
+            caps.Categories.AddCategoryMapping(DivxTotalCategories.Otros, TorznabCatType.OtherMisc, "Otros");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

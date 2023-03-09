@@ -37,9 +37,8 @@ namespace Jackett.Common.Indexers.Abstract
 
         private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
 
-        protected SpeedAppTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs, TorznabCapabilities caps)
-            : base(caps: caps,
-                   configService: configService,
+        protected SpeedAppTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs)
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,

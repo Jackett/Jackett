@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -27,6 +26,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "pt-BR";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
         private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
@@ -35,34 +36,40 @@ namespace Jackett.Common.Indexers
 
         public BrasilTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                    caps: new TorznabCapabilities
-                    {
-                        TvSearchParams = new List<TvSearchParam>
-                        {
-                            TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre
-                        },
-                        MovieSearchParams = new List<MovieSearchParam>
-                        {
-                            MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                        },
-                        MusicSearchParams = new List<MusicSearchParam>
-                        {
-                            MusicSearchParam.Q, MusicSearchParam.Genre
-                        },
-                        BookSearchParams = new List<BookSearchParam>
-                        {
-                            BookSearchParam.Q, BookSearchParam.Genre
-                        }
-                    },
-                    configService: configService,
-                    client: wc,
-                    logger: l,
-                    p: ps,
-                    cacheService: cs,
-                    configData: new ConfigurationDataBasicLogin("BrasilTracker does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).</br>For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
+            : base(configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataBasicLogin("BrasilTracker does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).</br>For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
-            AddCategoryMapping(1, TorznabCatType.Other, "Other");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q, MusicSearchParam.Genre
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q, BookSearchParam.Genre
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Other, "Other");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

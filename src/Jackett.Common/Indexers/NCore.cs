@@ -33,6 +33,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "hu-HU";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php";
 
@@ -54,64 +56,70 @@ namespace Jackett.Common.Indexers
 
         public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                      ICacheService cs)
-            : base(
-                  caps: new TorznabCapabilities
-                  {
-                      TvSearchParams = new List<TvSearchParam>
-                      {
-                          TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                      },
-                      MovieSearchParams = new List<MovieSearchParam>
-                      {
-                          MovieSearchParam.Q, MovieSearchParam.ImdbId
-                      },
-                      MusicSearchParams = new List<MusicSearchParam>
-                      {
-                          MusicSearchParam.Q
-                      },
-                      BookSearchParams = new List<BookSearchParam>
-                      {
-                          BookSearchParam.Q
-                      }
-                  },
-                  configService: configService,
-                  client: wc,
-                  logger: l,
-                  p: ps,
-                  cacheService: cs,
-                  configData: new ConfigurationDataNCore())
+            : base(configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataNCore())
         {
-            AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");
-            AddCategoryMapping("xvid", TorznabCatType.MoviesSD, "Film SD/EN");
-            AddCategoryMapping("dvd_hun", TorznabCatType.MoviesDVD, "Film DVDR/HU");
-            AddCategoryMapping("dvd", TorznabCatType.MoviesDVD, "Film DVDR/EN");
-            AddCategoryMapping("dvd9_hun", TorznabCatType.MoviesDVD, "Film DVD9/HU");
-            AddCategoryMapping("dvd9", TorznabCatType.MoviesDVD, "Film DVD9/EN");
-            AddCategoryMapping("hd_hun", TorznabCatType.MoviesHD, "Film HD/HU");
-            AddCategoryMapping("hd", TorznabCatType.MoviesHD, "Film HD/EN");
-            AddCategoryMapping("xvidser_hun", TorznabCatType.TVSD, "Sorozat SD/HU");
-            AddCategoryMapping("xvidser", TorznabCatType.TVSD, "Sorozat SD/EN");
-            AddCategoryMapping("dvdser_hun", TorznabCatType.TVSD, "Sorozat DVDR/HU");
-            AddCategoryMapping("dvdser", TorznabCatType.TVSD, "Sorozat DVDR/EN");
-            AddCategoryMapping("hdser_hun", TorznabCatType.TVHD, "Sorozat HD/HU");
-            AddCategoryMapping("hdser", TorznabCatType.TVHD, "Sorozat HD/EN");
-            AddCategoryMapping("mp3_hun", TorznabCatType.AudioMP3, "Zene MP3/HU");
-            AddCategoryMapping("mp3", TorznabCatType.AudioMP3, "Zene MP3/EN");
-            AddCategoryMapping("lossless_hun", TorznabCatType.AudioLossless, "Zene Lossless/HU");
-            AddCategoryMapping("lossless", TorznabCatType.AudioLossless, "Zene Lossless/EN");
-            AddCategoryMapping("clip", TorznabCatType.AudioVideo, "Zene Klip");
-            AddCategoryMapping("xxx_xvid", TorznabCatType.XXXXviD, "XXX SD");
-            AddCategoryMapping("xxx_dvd", TorznabCatType.XXXDVD, "XXX DVDR");
-            AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageSet, "XXX Imageset");
-            AddCategoryMapping("xxx_hd", TorznabCatType.XXX, "XXX HD");
-            AddCategoryMapping("game_iso", TorznabCatType.PCGames, "Játék PC/ISO");
-            AddCategoryMapping("game_rip", TorznabCatType.PCGames, "Játék PC/RIP");
-            AddCategoryMapping("console", TorznabCatType.Console, "Játék Konzol");
-            AddCategoryMapping("iso", TorznabCatType.PCISO, "Program Prog/ISO");
-            AddCategoryMapping("misc", TorznabCatType.PC0day, "Program Prog/RIP");
-            AddCategoryMapping("mobil", TorznabCatType.PCMobileOther, "Program Prog/Mobil");
-            AddCategoryMapping("ebook_hun", TorznabCatType.Books, "Könyv eBook/HU");
-            AddCategoryMapping("ebook", TorznabCatType.Books, "Könyv eBook/EN");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping("xvid_hun", TorznabCatType.MoviesSD, "Film SD/HU");
+            caps.Categories.AddCategoryMapping("xvid", TorznabCatType.MoviesSD, "Film SD/EN");
+            caps.Categories.AddCategoryMapping("dvd_hun", TorznabCatType.MoviesDVD, "Film DVDR/HU");
+            caps.Categories.AddCategoryMapping("dvd", TorznabCatType.MoviesDVD, "Film DVDR/EN");
+            caps.Categories.AddCategoryMapping("dvd9_hun", TorznabCatType.MoviesDVD, "Film DVD9/HU");
+            caps.Categories.AddCategoryMapping("dvd9", TorznabCatType.MoviesDVD, "Film DVD9/EN");
+            caps.Categories.AddCategoryMapping("hd_hun", TorznabCatType.MoviesHD, "Film HD/HU");
+            caps.Categories.AddCategoryMapping("hd", TorznabCatType.MoviesHD, "Film HD/EN");
+            caps.Categories.AddCategoryMapping("xvidser_hun", TorznabCatType.TVSD, "Sorozat SD/HU");
+            caps.Categories.AddCategoryMapping("xvidser", TorznabCatType.TVSD, "Sorozat SD/EN");
+            caps.Categories.AddCategoryMapping("dvdser_hun", TorznabCatType.TVSD, "Sorozat DVDR/HU");
+            caps.Categories.AddCategoryMapping("dvdser", TorznabCatType.TVSD, "Sorozat DVDR/EN");
+            caps.Categories.AddCategoryMapping("hdser_hun", TorznabCatType.TVHD, "Sorozat HD/HU");
+            caps.Categories.AddCategoryMapping("hdser", TorznabCatType.TVHD, "Sorozat HD/EN");
+            caps.Categories.AddCategoryMapping("mp3_hun", TorznabCatType.AudioMP3, "Zene MP3/HU");
+            caps.Categories.AddCategoryMapping("mp3", TorznabCatType.AudioMP3, "Zene MP3/EN");
+            caps.Categories.AddCategoryMapping("lossless_hun", TorznabCatType.AudioLossless, "Zene Lossless/HU");
+            caps.Categories.AddCategoryMapping("lossless", TorznabCatType.AudioLossless, "Zene Lossless/EN");
+            caps.Categories.AddCategoryMapping("clip", TorznabCatType.AudioVideo, "Zene Klip");
+            caps.Categories.AddCategoryMapping("xxx_xvid", TorznabCatType.XXXXviD, "XXX SD");
+            caps.Categories.AddCategoryMapping("xxx_dvd", TorznabCatType.XXXDVD, "XXX DVDR");
+            caps.Categories.AddCategoryMapping("xxx_imageset", TorznabCatType.XXXImageSet, "XXX Imageset");
+            caps.Categories.AddCategoryMapping("xxx_hd", TorznabCatType.XXX, "XXX HD");
+            caps.Categories.AddCategoryMapping("game_iso", TorznabCatType.PCGames, "Játék PC/ISO");
+            caps.Categories.AddCategoryMapping("game_rip", TorznabCatType.PCGames, "Játék PC/RIP");
+            caps.Categories.AddCategoryMapping("console", TorznabCatType.Console, "Játék Konzol");
+            caps.Categories.AddCategoryMapping("iso", TorznabCatType.PCISO, "Program Prog/ISO");
+            caps.Categories.AddCategoryMapping("misc", TorznabCatType.PC0day, "Program Prog/RIP");
+            caps.Categories.AddCategoryMapping("mobil", TorznabCatType.PCMobileOther, "Program Prog/Mobil");
+            caps.Categories.AddCategoryMapping("ebook_hun", TorznabCatType.Books, "Könyv eBook/HU");
+            caps.Categories.AddCategoryMapping("ebook", TorznabCatType.Books, "Könyv eBook/EN");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

@@ -1,5 +1,4 @@
 using System.Text;
-using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
@@ -17,8 +16,8 @@ namespace Jackett.Common.Indexers
         public abstract override string Language { get; }
         public abstract override string Type { get; }
 
-        protected IndexerBase(IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, ICacheService cacheService, TorznabCapabilities caps, string downloadBase = null)
-            : base(configService, client, logger, configData, p, cacheService, caps, downloadBase)
+        protected IndexerBase(IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, ICacheService cacheService, string downloadBase = null)
+            : base(configService, client, logger, configData, p, cacheService, downloadBase)
         {
         }
 

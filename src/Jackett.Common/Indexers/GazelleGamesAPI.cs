@@ -27,6 +27,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         // API Reference: https://gazellegames.net/wiki.php?action=article&id=401
         protected override string APIUrl => SiteLink + "api.php";
         protected override string AuthorizationName => "X-API-Key";
@@ -34,8 +36,7 @@ namespace Jackett.Common.Indexers
         protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "");
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(caps: new TorznabCapabilities(),
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -48,136 +49,143 @@ namespace Jackett.Common.Indexers
                    instructionMessageOptional: "<ol><li>Go to GGn's site and open your account settings.</li><li>Under <b>Access Settings</b> click on 'Create a new token'</li><li>Give it a name you like and click <b>Generate</b>.</li><li>Copy the generated API Key and paste it in the above text field.</li></ol>")
         {
             configData.AddDynamic("searchgroupnames", new BoolConfigurationItem("Search Group Names Only") { Value = false });
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities();
 
             // Apple
-            AddCategoryMapping("Mac", TorznabCatType.ConsoleOther, "Mac");
-            AddCategoryMapping("iOS", TorznabCatType.PCMobileiOS, "iOS");
-            AddCategoryMapping("Apple Bandai Pippin", TorznabCatType.ConsoleOther, "Apple Bandai Pippin");
+            caps.Categories.AddCategoryMapping("Mac", TorznabCatType.ConsoleOther, "Mac");
+            caps.Categories.AddCategoryMapping("iOS", TorznabCatType.PCMobileiOS, "iOS");
+            caps.Categories.AddCategoryMapping("Apple Bandai Pippin", TorznabCatType.ConsoleOther, "Apple Bandai Pippin");
 
             // Google
-            AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid, "Android");
+            caps.Categories.AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid, "Android");
 
             // Microsoft
-            AddCategoryMapping("DOS", TorznabCatType.PCGames, "DOS");
-            AddCategoryMapping("Windows", TorznabCatType.PCGames, "Windows");
-            AddCategoryMapping("Xbox", TorznabCatType.ConsoleXBox, "Xbox");
-            AddCategoryMapping("Xbox 360", TorznabCatType.ConsoleXBox360, "Xbox 360");
+            caps.Categories.AddCategoryMapping("DOS", TorznabCatType.PCGames, "DOS");
+            caps.Categories.AddCategoryMapping("Windows", TorznabCatType.PCGames, "Windows");
+            caps.Categories.AddCategoryMapping("Xbox", TorznabCatType.ConsoleXBox, "Xbox");
+            caps.Categories.AddCategoryMapping("Xbox 360", TorznabCatType.ConsoleXBox360, "Xbox 360");
 
             // Nintendo
-            AddCategoryMapping("Game Boy", TorznabCatType.ConsoleOther, "Game Boy");
-            AddCategoryMapping("Game Boy Advance", TorznabCatType.ConsoleOther, "Game Boy Advance");
-            AddCategoryMapping("Game Boy Color", TorznabCatType.ConsoleOther, "Game Boy Color");
-            AddCategoryMapping("NES", TorznabCatType.ConsoleOther, "NES");
-            AddCategoryMapping("Nintendo 64", TorznabCatType.ConsoleOther, "Nintendo 64");
-            AddCategoryMapping("Nintendo 3DS", TorznabCatType.ConsoleOther, "Nintendo 3DS");
-            AddCategoryMapping("New Nintendo 3DS", TorznabCatType.ConsoleOther, "New Nintendo 3DS");
-            AddCategoryMapping("Nintendo DS", TorznabCatType.ConsoleNDS, "Nintendo DS");
-            AddCategoryMapping("Nintendo GameCube", TorznabCatType.ConsoleOther, "Nintendo GameCube");
-            AddCategoryMapping("Pokemon Mini", TorznabCatType.ConsoleOther, "Pokemon Mini");
-            AddCategoryMapping("SNES", TorznabCatType.ConsoleOther, "SNES");
-            AddCategoryMapping("Virtual Boy", TorznabCatType.ConsoleOther, "Virtual Boy");
-            AddCategoryMapping("Wii", TorznabCatType.ConsoleWii, "Wii");
-            AddCategoryMapping("Wii U", TorznabCatType.ConsoleWiiU, "Wii U");
+            caps.Categories.AddCategoryMapping("Game Boy", TorznabCatType.ConsoleOther, "Game Boy");
+            caps.Categories.AddCategoryMapping("Game Boy Advance", TorznabCatType.ConsoleOther, "Game Boy Advance");
+            caps.Categories.AddCategoryMapping("Game Boy Color", TorznabCatType.ConsoleOther, "Game Boy Color");
+            caps.Categories.AddCategoryMapping("NES", TorznabCatType.ConsoleOther, "NES");
+            caps.Categories.AddCategoryMapping("Nintendo 64", TorznabCatType.ConsoleOther, "Nintendo 64");
+            caps.Categories.AddCategoryMapping("Nintendo 3DS", TorznabCatType.ConsoleOther, "Nintendo 3DS");
+            caps.Categories.AddCategoryMapping("New Nintendo 3DS", TorznabCatType.ConsoleOther, "New Nintendo 3DS");
+            caps.Categories.AddCategoryMapping("Nintendo DS", TorznabCatType.ConsoleNDS, "Nintendo DS");
+            caps.Categories.AddCategoryMapping("Nintendo GameCube", TorznabCatType.ConsoleOther, "Nintendo GameCube");
+            caps.Categories.AddCategoryMapping("Pokemon Mini", TorznabCatType.ConsoleOther, "Pokemon Mini");
+            caps.Categories.AddCategoryMapping("SNES", TorznabCatType.ConsoleOther, "SNES");
+            caps.Categories.AddCategoryMapping("Virtual Boy", TorznabCatType.ConsoleOther, "Virtual Boy");
+            caps.Categories.AddCategoryMapping("Wii", TorznabCatType.ConsoleWii, "Wii");
+            caps.Categories.AddCategoryMapping("Wii U", TorznabCatType.ConsoleWiiU, "Wii U");
 
             // Sony
-            AddCategoryMapping("PlayStation 1", TorznabCatType.ConsoleOther, "PlayStation 1");
-            AddCategoryMapping("PlayStation 2", TorznabCatType.ConsoleOther, "PlayStation 2");
-            AddCategoryMapping("PlayStation 3", TorznabCatType.ConsolePS3, "PlayStation 3");
-            AddCategoryMapping("PlayStation 4", TorznabCatType.ConsolePS4, "PlayStation 4");
-            AddCategoryMapping("PlayStation Portable", TorznabCatType.ConsolePSP, "PlayStation Portable");
-            AddCategoryMapping("PlayStation Vita", TorznabCatType.ConsolePSVita, "PlayStation Vita");
+            caps.Categories.AddCategoryMapping("PlayStation 1", TorznabCatType.ConsoleOther, "PlayStation 1");
+            caps.Categories.AddCategoryMapping("PlayStation 2", TorznabCatType.ConsoleOther, "PlayStation 2");
+            caps.Categories.AddCategoryMapping("PlayStation 3", TorznabCatType.ConsolePS3, "PlayStation 3");
+            caps.Categories.AddCategoryMapping("PlayStation 4", TorznabCatType.ConsolePS4, "PlayStation 4");
+            caps.Categories.AddCategoryMapping("PlayStation Portable", TorznabCatType.ConsolePSP, "PlayStation Portable");
+            caps.Categories.AddCategoryMapping("PlayStation Vita", TorznabCatType.ConsolePSVita, "PlayStation Vita");
 
             // Sega
-            AddCategoryMapping("Dreamcast", TorznabCatType.ConsoleOther, "Dreamcast");
-            AddCategoryMapping("Game Gear", TorznabCatType.ConsoleOther, "Game Gear");
-            AddCategoryMapping("Master System", TorznabCatType.ConsoleOther, "Master System");
-            AddCategoryMapping("Mega Drive", TorznabCatType.ConsoleOther, "Mega Drive");
-            AddCategoryMapping("Pico", TorznabCatType.ConsoleOther, "Pico");
-            AddCategoryMapping("Saturn", TorznabCatType.ConsoleOther, "Saturn");
-            AddCategoryMapping("SG-1000", TorznabCatType.ConsoleOther, "SG-1000");
+            caps.Categories.AddCategoryMapping("Dreamcast", TorznabCatType.ConsoleOther, "Dreamcast");
+            caps.Categories.AddCategoryMapping("Game Gear", TorznabCatType.ConsoleOther, "Game Gear");
+            caps.Categories.AddCategoryMapping("Master System", TorznabCatType.ConsoleOther, "Master System");
+            caps.Categories.AddCategoryMapping("Mega Drive", TorznabCatType.ConsoleOther, "Mega Drive");
+            caps.Categories.AddCategoryMapping("Pico", TorznabCatType.ConsoleOther, "Pico");
+            caps.Categories.AddCategoryMapping("Saturn", TorznabCatType.ConsoleOther, "Saturn");
+            caps.Categories.AddCategoryMapping("SG-1000", TorznabCatType.ConsoleOther, "SG-1000");
 
             // Atari
-            AddCategoryMapping("Atari 2600", TorznabCatType.ConsoleOther, "Atari 2600");
-            AddCategoryMapping("Atari 5200", TorznabCatType.ConsoleOther, "Atari 5200");
-            AddCategoryMapping("Atari 7800", TorznabCatType.ConsoleOther, "Atari 7800");
-            AddCategoryMapping("Atari Jaguar", TorznabCatType.ConsoleOther, "Atari Jaguar");
-            AddCategoryMapping("Atari Lynx", TorznabCatType.ConsoleOther, "Atari Lynx");
-            AddCategoryMapping("Atari ST", TorznabCatType.ConsoleOther, "Atari ST");
+            caps.Categories.AddCategoryMapping("Atari 2600", TorznabCatType.ConsoleOther, "Atari 2600");
+            caps.Categories.AddCategoryMapping("Atari 5200", TorznabCatType.ConsoleOther, "Atari 5200");
+            caps.Categories.AddCategoryMapping("Atari 7800", TorznabCatType.ConsoleOther, "Atari 7800");
+            caps.Categories.AddCategoryMapping("Atari Jaguar", TorznabCatType.ConsoleOther, "Atari Jaguar");
+            caps.Categories.AddCategoryMapping("Atari Lynx", TorznabCatType.ConsoleOther, "Atari Lynx");
+            caps.Categories.AddCategoryMapping("Atari ST", TorznabCatType.ConsoleOther, "Atari ST");
 
             // Amstrad
-            AddCategoryMapping("Amstrad CPC", TorznabCatType.ConsoleOther, "Amstrad CPC");
+            caps.Categories.AddCategoryMapping("Amstrad CPC", TorznabCatType.ConsoleOther, "Amstrad CPC");
 
             // Sinclair
-            AddCategoryMapping("ZX Spectrum", TorznabCatType.ConsoleOther, "ZX Spectrum");
+            caps.Categories.AddCategoryMapping("ZX Spectrum", TorznabCatType.ConsoleOther, "ZX Spectrum");
 
             // Spectravideo
-            AddCategoryMapping("MSX", TorznabCatType.ConsoleOther, "MSX");
-            AddCategoryMapping("MSX 2", TorznabCatType.ConsoleOther, "MSX 2");
+            caps.Categories.AddCategoryMapping("MSX", TorznabCatType.ConsoleOther, "MSX");
+            caps.Categories.AddCategoryMapping("MSX 2", TorznabCatType.ConsoleOther, "MSX 2");
 
             // Tiger
-            AddCategoryMapping("Game.com", TorznabCatType.ConsoleOther, "Game.com");
-            AddCategoryMapping("Gizmondo", TorznabCatType.ConsoleOther, "Gizmondo");
+            caps.Categories.AddCategoryMapping("Game.com", TorznabCatType.ConsoleOther, "Game.com");
+            caps.Categories.AddCategoryMapping("Gizmondo", TorznabCatType.ConsoleOther, "Gizmondo");
 
             // VTech
-            AddCategoryMapping("V.Smile", TorznabCatType.ConsoleOther, "V.Smile");
-            AddCategoryMapping("CreatiVision", TorznabCatType.ConsoleOther, "CreatiVision");
+            caps.Categories.AddCategoryMapping("V.Smile", TorznabCatType.ConsoleOther, "V.Smile");
+            caps.Categories.AddCategoryMapping("CreatiVision", TorznabCatType.ConsoleOther, "CreatiVision");
 
             // Tabletop Games
-            AddCategoryMapping("Board Game", TorznabCatType.ConsoleOther, "Board Game");
-            AddCategoryMapping("Card Game", TorznabCatType.ConsoleOther, "Card Game");
-            AddCategoryMapping("Miniature Wargames", TorznabCatType.ConsoleOther, "Miniature Wargames");
-            AddCategoryMapping("Pen and Paper RPG", TorznabCatType.ConsoleOther, "Pen and Paper RPG");
+            caps.Categories.AddCategoryMapping("Board Game", TorznabCatType.ConsoleOther, "Board Game");
+            caps.Categories.AddCategoryMapping("Card Game", TorznabCatType.ConsoleOther, "Card Game");
+            caps.Categories.AddCategoryMapping("Miniature Wargames", TorznabCatType.ConsoleOther, "Miniature Wargames");
+            caps.Categories.AddCategoryMapping("Pen and Paper RPG", TorznabCatType.ConsoleOther, "Pen and Paper RPG");
 
             // Other
-            AddCategoryMapping("3DO", TorznabCatType.ConsoleOther, "3DO");
-            AddCategoryMapping("Bandai WonderSwan", TorznabCatType.ConsoleOther, "Bandai WonderSwan");
-            AddCategoryMapping("Bandai WonderSwan Color", TorznabCatType.ConsoleOther, "Bandai WonderSwan Color");
-            AddCategoryMapping("Casio Loopy", TorznabCatType.ConsoleOther, "Casio Loopy");
-            AddCategoryMapping("Casio PV-1000", TorznabCatType.ConsoleOther, "Casio PV-1000");
-            AddCategoryMapping("Colecovision", TorznabCatType.ConsoleOther, "Colecovision");
-            AddCategoryMapping("Commodore 64", TorznabCatType.ConsoleOther, "Commodore 64");
-            AddCategoryMapping("Commodore 128", TorznabCatType.ConsoleOther, "Commodore 128");
-            AddCategoryMapping("Commodore Amiga", TorznabCatType.ConsoleOther, "Commodore Amiga");
-            AddCategoryMapping("Commodore Plus-4", TorznabCatType.ConsoleOther, "Commodore Plus-4");
-            AddCategoryMapping("Commodore VIC-20", TorznabCatType.ConsoleOther, "Commodore VIC-20");
-            AddCategoryMapping("Emerson Arcadia 2001", TorznabCatType.ConsoleOther, "Emerson Arcadia 2001");
-            AddCategoryMapping("Entex Adventure Vision", TorznabCatType.ConsoleOther, "Entex Adventure Vision");
-            AddCategoryMapping("Epoch Super Casette Vision", TorznabCatType.ConsoleOther, "Epoch Super Casette Vision");
-            AddCategoryMapping("Fairchild Channel F", TorznabCatType.ConsoleOther, "Fairchild Channel F");
-            AddCategoryMapping("Funtech Super Acan", TorznabCatType.ConsoleOther, "Funtech Super Acan");
-            AddCategoryMapping("GamePark GP32", TorznabCatType.ConsoleOther, "GamePark GP32");
-            AddCategoryMapping("General Computer Vectrex", TorznabCatType.ConsoleOther, "General Computer Vectrex");
-            AddCategoryMapping("Interactive DVD", TorznabCatType.ConsoleOther, "Interactive DVD");
-            AddCategoryMapping("Linux", TorznabCatType.ConsoleOther, "Linux");
-            AddCategoryMapping("Hartung Game Master", TorznabCatType.ConsoleOther, "Hartung Game Master");
-            AddCategoryMapping("Magnavox-Phillips Odyssey", TorznabCatType.ConsoleOther, "Magnavox-Phillips Odyssey");
-            AddCategoryMapping("Mattel Intellivision", TorznabCatType.ConsoleOther, "Mattel Intellivision");
-            AddCategoryMapping("Memotech MTX", TorznabCatType.ConsoleOther, "Memotech MTX");
-            AddCategoryMapping("Miles Gordon Sam Coupe", TorznabCatType.ConsoleOther, "Miles Gordon Sam Coupe");
-            AddCategoryMapping("NEC PC-98", TorznabCatType.ConsoleOther, "NEC PC-98");
-            AddCategoryMapping("NEC PC-FX", TorznabCatType.ConsoleOther, "NEC PC-FX");
-            AddCategoryMapping("NEC SuperGrafx", TorznabCatType.ConsoleOther, "NEC SuperGrafx");
-            AddCategoryMapping("NEC TurboGrafx-16", TorznabCatType.ConsoleOther, "NEC TurboGrafx-16");
-            AddCategoryMapping("Nokia N-Gage", TorznabCatType.ConsoleOther, "Nokia N-Gage");
-            AddCategoryMapping("Ouya", TorznabCatType.ConsoleOther, "Ouya");
-            AddCategoryMapping("Philips Videopac+", TorznabCatType.ConsoleOther, "Philips Videopac+");
-            AddCategoryMapping("Phone/PDA", TorznabCatType.ConsoleOther, "Phone/PDA");
-            AddCategoryMapping("RCA Studio II", TorznabCatType.ConsoleOther, "RCA Studio II");
-            AddCategoryMapping("Sharp X1", TorznabCatType.ConsoleOther, "Sharp X1");
-            AddCategoryMapping("Sharp X68000", TorznabCatType.ConsoleOther, "Sharp X68000");
-            AddCategoryMapping("SNK Neo Geo", TorznabCatType.ConsoleOther, "SNK Neo Geo");
-            AddCategoryMapping("SNK Neo Geo Pocket", TorznabCatType.ConsoleOther, "SNK Neo Geo Pocket");
-            AddCategoryMapping("Taito Type X", TorznabCatType.ConsoleOther, "Taito Type X");
-            AddCategoryMapping("Tandy Color Computer", TorznabCatType.ConsoleOther, "Tandy Color Computer");
-            AddCategoryMapping("Tangerine Oric", TorznabCatType.ConsoleOther, "Tangerine Oric");
-            AddCategoryMapping("Thomson MO5", TorznabCatType.ConsoleOther, "Thomson MO5");
-            AddCategoryMapping("Watara Supervision", TorznabCatType.ConsoleOther, "Watara Supervision");
-            AddCategoryMapping("Retro - Other", TorznabCatType.ConsoleOther, "Retro - Other");
+            caps.Categories.AddCategoryMapping("3DO", TorznabCatType.ConsoleOther, "3DO");
+            caps.Categories.AddCategoryMapping("Bandai WonderSwan", TorznabCatType.ConsoleOther, "Bandai WonderSwan");
+            caps.Categories.AddCategoryMapping("Bandai WonderSwan Color", TorznabCatType.ConsoleOther, "Bandai WonderSwan Color");
+            caps.Categories.AddCategoryMapping("Casio Loopy", TorznabCatType.ConsoleOther, "Casio Loopy");
+            caps.Categories.AddCategoryMapping("Casio PV-1000", TorznabCatType.ConsoleOther, "Casio PV-1000");
+            caps.Categories.AddCategoryMapping("Colecovision", TorznabCatType.ConsoleOther, "Colecovision");
+            caps.Categories.AddCategoryMapping("Commodore 64", TorznabCatType.ConsoleOther, "Commodore 64");
+            caps.Categories.AddCategoryMapping("Commodore 128", TorznabCatType.ConsoleOther, "Commodore 128");
+            caps.Categories.AddCategoryMapping("Commodore Amiga", TorznabCatType.ConsoleOther, "Commodore Amiga");
+            caps.Categories.AddCategoryMapping("Commodore Plus-4", TorznabCatType.ConsoleOther, "Commodore Plus-4");
+            caps.Categories.AddCategoryMapping("Commodore VIC-20", TorznabCatType.ConsoleOther, "Commodore VIC-20");
+            caps.Categories.AddCategoryMapping("Emerson Arcadia 2001", TorznabCatType.ConsoleOther, "Emerson Arcadia 2001");
+            caps.Categories.AddCategoryMapping("Entex Adventure Vision", TorznabCatType.ConsoleOther, "Entex Adventure Vision");
+            caps.Categories.AddCategoryMapping("Epoch Super Casette Vision", TorznabCatType.ConsoleOther, "Epoch Super Casette Vision");
+            caps.Categories.AddCategoryMapping("Fairchild Channel F", TorznabCatType.ConsoleOther, "Fairchild Channel F");
+            caps.Categories.AddCategoryMapping("Funtech Super Acan", TorznabCatType.ConsoleOther, "Funtech Super Acan");
+            caps.Categories.AddCategoryMapping("GamePark GP32", TorznabCatType.ConsoleOther, "GamePark GP32");
+            caps.Categories.AddCategoryMapping("General Computer Vectrex", TorznabCatType.ConsoleOther, "General Computer Vectrex");
+            caps.Categories.AddCategoryMapping("Interactive DVD", TorznabCatType.ConsoleOther, "Interactive DVD");
+            caps.Categories.AddCategoryMapping("Linux", TorznabCatType.ConsoleOther, "Linux");
+            caps.Categories.AddCategoryMapping("Hartung Game Master", TorznabCatType.ConsoleOther, "Hartung Game Master");
+            caps.Categories.AddCategoryMapping("Magnavox-Phillips Odyssey", TorznabCatType.ConsoleOther, "Magnavox-Phillips Odyssey");
+            caps.Categories.AddCategoryMapping("Mattel Intellivision", TorznabCatType.ConsoleOther, "Mattel Intellivision");
+            caps.Categories.AddCategoryMapping("Memotech MTX", TorznabCatType.ConsoleOther, "Memotech MTX");
+            caps.Categories.AddCategoryMapping("Miles Gordon Sam Coupe", TorznabCatType.ConsoleOther, "Miles Gordon Sam Coupe");
+            caps.Categories.AddCategoryMapping("NEC PC-98", TorznabCatType.ConsoleOther, "NEC PC-98");
+            caps.Categories.AddCategoryMapping("NEC PC-FX", TorznabCatType.ConsoleOther, "NEC PC-FX");
+            caps.Categories.AddCategoryMapping("NEC SuperGrafx", TorznabCatType.ConsoleOther, "NEC SuperGrafx");
+            caps.Categories.AddCategoryMapping("NEC TurboGrafx-16", TorznabCatType.ConsoleOther, "NEC TurboGrafx-16");
+            caps.Categories.AddCategoryMapping("Nokia N-Gage", TorznabCatType.ConsoleOther, "Nokia N-Gage");
+            caps.Categories.AddCategoryMapping("Ouya", TorznabCatType.ConsoleOther, "Ouya");
+            caps.Categories.AddCategoryMapping("Philips Videopac+", TorznabCatType.ConsoleOther, "Philips Videopac+");
+            caps.Categories.AddCategoryMapping("Phone/PDA", TorznabCatType.ConsoleOther, "Phone/PDA");
+            caps.Categories.AddCategoryMapping("RCA Studio II", TorznabCatType.ConsoleOther, "RCA Studio II");
+            caps.Categories.AddCategoryMapping("Sharp X1", TorznabCatType.ConsoleOther, "Sharp X1");
+            caps.Categories.AddCategoryMapping("Sharp X68000", TorznabCatType.ConsoleOther, "Sharp X68000");
+            caps.Categories.AddCategoryMapping("SNK Neo Geo", TorznabCatType.ConsoleOther, "SNK Neo Geo");
+            caps.Categories.AddCategoryMapping("SNK Neo Geo Pocket", TorznabCatType.ConsoleOther, "SNK Neo Geo Pocket");
+            caps.Categories.AddCategoryMapping("Taito Type X", TorznabCatType.ConsoleOther, "Taito Type X");
+            caps.Categories.AddCategoryMapping("Tandy Color Computer", TorznabCatType.ConsoleOther, "Tandy Color Computer");
+            caps.Categories.AddCategoryMapping("Tangerine Oric", TorznabCatType.ConsoleOther, "Tangerine Oric");
+            caps.Categories.AddCategoryMapping("Thomson MO5", TorznabCatType.ConsoleOther, "Thomson MO5");
+            caps.Categories.AddCategoryMapping("Watara Supervision", TorznabCatType.ConsoleOther, "Watara Supervision");
+            caps.Categories.AddCategoryMapping("Retro - Other", TorznabCatType.ConsoleOther, "Retro - Other");
 
             // special categories (real categories/not platforms)
-            AddCategoryMapping("OST", TorznabCatType.AudioOther, "OST");
-            AddCategoryMapping("Applications", TorznabCatType.PC0day, "Applications");
-            AddCategoryMapping("E-Books", TorznabCatType.BooksEBook, "E-Books");
+            caps.Categories.AddCategoryMapping("OST", TorznabCatType.AudioOther, "OST");
+            caps.Categories.AddCategoryMapping("Applications", TorznabCatType.PC0day, "Applications");
+            caps.Categories.AddCategoryMapping("E-Books", TorznabCatType.BooksEBook, "E-Books");
+
+            return caps;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

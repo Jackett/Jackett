@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -26,6 +25,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
         private string AuthKey { get; set; }
         private string PassKey { get; set; }
@@ -39,19 +40,7 @@ namespace Jackett.Common.Indexers
 
         public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: c,
                    logger: l,
                    p: ps,
@@ -61,20 +50,37 @@ namespace Jackett.Common.Indexers
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
             webclient.requestDelay = 2; // 0.5 requests per second
+        }
 
-            AddCategoryMapping(1, TorznabCatType.Movies, "Feature Film");
-            AddCategoryMapping(1, TorznabCatType.MoviesForeign);
-            AddCategoryMapping(1, TorznabCatType.MoviesOther);
-            AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            AddCategoryMapping(1, TorznabCatType.MoviesHD);
-            AddCategoryMapping(1, TorznabCatType.Movies3D);
-            AddCategoryMapping(1, TorznabCatType.MoviesBluRay);
-            AddCategoryMapping(1, TorznabCatType.MoviesDVD);
-            AddCategoryMapping(1, TorznabCatType.MoviesWEBDL);
-            AddCategoryMapping(2, TorznabCatType.Movies, "Short Film");
-            AddCategoryMapping(3, TorznabCatType.TV, "Miniseries");
-            AddCategoryMapping(4, TorznabCatType.TV, "Stand-up Comedy");
-            AddCategoryMapping(5, TorznabCatType.TV, "Live Performance");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Feature Film");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesForeign);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesOther);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies3D);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesBluRay);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesDVD);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesWEBDL);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.Movies, "Short Film");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TV, "Miniseries");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.TV, "Stand-up Comedy");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.TV, "Live Performance");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

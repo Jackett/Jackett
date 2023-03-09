@@ -29,6 +29,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string ScrapeUrl => SiteLink + "scrape.php";
         private bool AllowRaws => ConfigData.IncludeRaw.Value;
         private bool PadEpisode => ConfigData.PadEpisode != null && ConfigData.PadEpisode.Value;
@@ -44,49 +46,55 @@ namespace Jackett.Common.Indexers
             IProtectionService ps, ICacheService cs)
             : base(configService: configService,
                    client: client,
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       },
-                       SupportsRawSearch = true
-                   },
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
             webclient.EmulateBrowser = false; // Animebytes doesn't like fake user agents (issue #1535)
+        }
 
-            AddCategoryMapping("anime[tv_series]", TorznabCatType.TVAnime, "TV Series");
-            AddCategoryMapping("anime[tv_special]", TorznabCatType.TVAnime, "TV Special");
-            AddCategoryMapping("anime[ova]", TorznabCatType.TVAnime, "OVA");
-            AddCategoryMapping("anime[ona]", TorznabCatType.TVAnime, "ONA");
-            AddCategoryMapping("anime[dvd_special]", TorznabCatType.TVAnime, "DVD Special");
-            AddCategoryMapping("anime[bd_special]", TorznabCatType.TVAnime, "BD Special");
-            AddCategoryMapping("anime[movie]", TorznabCatType.Movies, "Movie");
-            AddCategoryMapping("audio", TorznabCatType.Audio, "Music");
-            AddCategoryMapping("gamec[game]", TorznabCatType.PCGames, "Game");
-            AddCategoryMapping("gamec[visual_novel]", TorznabCatType.PCGames, "Game Visual Novel");
-            AddCategoryMapping("printedtype[manga]", TorznabCatType.BooksComics, "Manga");
-            AddCategoryMapping("printedtype[oneshot]", TorznabCatType.BooksComics, "Oneshot");
-            AddCategoryMapping("printedtype[anthology]", TorznabCatType.BooksComics, "Anthology");
-            AddCategoryMapping("printedtype[manhwa]", TorznabCatType.BooksComics, "Manhwa");
-            AddCategoryMapping("printedtype[light_novel]", TorznabCatType.BooksComics, "Light Novel");
-            AddCategoryMapping("printedtype[artbook]", TorznabCatType.BooksComics, "Artbook");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                },
+                SupportsRawSearch = true
+            };
+
+            caps.Categories.AddCategoryMapping("anime[tv_series]", TorznabCatType.TVAnime, "TV Series");
+            caps.Categories.AddCategoryMapping("anime[tv_special]", TorznabCatType.TVAnime, "TV Special");
+            caps.Categories.AddCategoryMapping("anime[ova]", TorznabCatType.TVAnime, "OVA");
+            caps.Categories.AddCategoryMapping("anime[ona]", TorznabCatType.TVAnime, "ONA");
+            caps.Categories.AddCategoryMapping("anime[dvd_special]", TorznabCatType.TVAnime, "DVD Special");
+            caps.Categories.AddCategoryMapping("anime[bd_special]", TorznabCatType.TVAnime, "BD Special");
+            caps.Categories.AddCategoryMapping("anime[movie]", TorznabCatType.Movies, "Movie");
+            caps.Categories.AddCategoryMapping("audio", TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping("gamec[game]", TorznabCatType.PCGames, "Game");
+            caps.Categories.AddCategoryMapping("gamec[visual_novel]", TorznabCatType.PCGames, "Game Visual Novel");
+            caps.Categories.AddCategoryMapping("printedtype[manga]", TorznabCatType.BooksComics, "Manga");
+            caps.Categories.AddCategoryMapping("printedtype[oneshot]", TorznabCatType.BooksComics, "Oneshot");
+            caps.Categories.AddCategoryMapping("printedtype[anthology]", TorznabCatType.BooksComics, "Anthology");
+            caps.Categories.AddCategoryMapping("printedtype[manhwa]", TorznabCatType.BooksComics, "Manhwa");
+            caps.Categories.AddCategoryMapping("printedtype[light_novel]", TorznabCatType.BooksComics, "Light Novel");
+            caps.Categories.AddCategoryMapping("printedtype[artbook]", TorznabCatType.BooksComics, "Artbook");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

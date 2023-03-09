@@ -18,34 +18,41 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public Aro(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+                   ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cs: cs,
                    has2Fa: true,
-                   supportsFreeleechTokens: true
-                   )
+                   supportsFreeleechTokens: true)
         {
-            AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
-            AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(3, TorznabCatType.Books, "Manga");
-            AddCategoryMapping(4, TorznabCatType.Console, "Games");
-            AddCategoryMapping(5, TorznabCatType.Other, "Other");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.Books, "Manga");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.Console, "Games");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.Other, "Other");
+
+            return caps;
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -29,6 +28,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "ru-RU";
         public override string Type => "semi-private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private static readonly Regex EpisodeInfoRegex = new Regex(@"\[(.*?)(?: \(.*?\))? из (.*?)\]$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SeasonInfoQueryRegex = new Regex(@"S(\d+)(?:E\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SeasonInfoRegex = new Regex(@"(?:(?:TV-)|(?:ТВ-))(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -36,23 +37,7 @@ namespace Jackett.Common.Indexers
 
         public AniDUB(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -60,24 +45,45 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataAniDub())
         {
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "392E98CE1447B59CA62BAB8824CA1EEFC2ED3D37");
+        }
 
-            AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
-            AddCategoryMapping(14, TorznabCatType.TVAnime, "Аниме TV / Законченные сериалы");
-            AddCategoryMapping(10, TorznabCatType.TVAnime, "Аниме TV / Аниме Ongoing");
-            AddCategoryMapping(11, TorznabCatType.TVAnime, "Аниме TV / Многосерийный сёнэн");
-            AddCategoryMapping(13, TorznabCatType.XXX, "18+");
-            AddCategoryMapping(15, TorznabCatType.BooksComics, "Манга");
-            AddCategoryMapping(16, TorznabCatType.Audio, "OST");
-            AddCategoryMapping(17, TorznabCatType.Audio, "Подкасты");
-            AddCategoryMapping(3, TorznabCatType.TVAnime, "Аниме Фильмы");
-            AddCategoryMapping(4, TorznabCatType.TVAnime, "Аниме OVA");
-            AddCategoryMapping(5, TorznabCatType.TVAnime, "Аниме OVA |- Аниме ONA");
-            AddCategoryMapping(9, TorznabCatType.TV, "Дорамы");
-            AddCategoryMapping(6, TorznabCatType.TV, "Дорамы / Японские Сериалы и Фильмы");
-            AddCategoryMapping(7, TorznabCatType.TV, "Дорамы / Корейские Сериалы и Фильмы");
-            AddCategoryMapping(8, TorznabCatType.TV, "Дорамы / Китайские Сериалы и Фильмы");
-            AddCategoryMapping(12, TorznabCatType.Other, "Аниме Ongoing Анонсы");
-            AddCategoryMapping(1, TorznabCatType.Other, "Новости проекта Anidub");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.TVAnime, "Аниме TV / Законченные сериалы");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.TVAnime, "Аниме TV / Аниме Ongoing");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.TVAnime, "Аниме TV / Многосерийный сёнэн");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.XXX, "18+");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.BooksComics, "Манга");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.Audio, "OST");
+            caps.Categories.AddCategoryMapping(17, TorznabCatType.Audio, "Подкасты");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVAnime, "Аниме Фильмы");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.TVAnime, "Аниме OVA");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.TVAnime, "Аниме OVA |- Аниме ONA");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.TV, "Дорамы");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.TV, "Дорамы / Японские Сериалы и Фильмы");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.TV, "Дорамы / Корейские Сериалы и Фильмы");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.TV, "Дорамы / Китайские Сериалы и Фильмы");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.Other, "Аниме Ongoing Анонсы");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Other, "Новости проекта Anidub");
+
+            return caps;
         }
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>

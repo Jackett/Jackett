@@ -24,17 +24,10 @@ namespace Jackett.Common.Indexers
         public override string Language => "zh-CN";
         public override string Type => "private";
 
-        public GreatPosterWall(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                       }
-                   },
-                   configService: configService,
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
+        public GreatPosterWall(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -45,12 +38,24 @@ namespace Jackett.Common.Indexers
                    has2Fa: true,
                    useApiKey: false,
                    usePassKey: false,
-                   instructionMessageOptional: null
-                  )
+                   instructionMessageOptional: null)
         {
-            AddCategoryMapping(1, TorznabCatType.Movies, "Movies 电影");
-
             configData.AddDynamic("showFilename", new BoolConfigurationItem("Use the first torrent filename as the title") { Value = false });
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Movies 电影");
+
+            return caps;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

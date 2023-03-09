@@ -27,6 +27,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
 
@@ -34,44 +36,50 @@ namespace Jackett.Common.Indexers
 
         public FunFile(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
-            AddCategoryMapping(44, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(22, TorznabCatType.PC, "Applications");
-            AddCategoryMapping(43, TorznabCatType.AudioAudiobook, "Audio Books");
-            AddCategoryMapping(27, TorznabCatType.Books, "Ebook");
-            AddCategoryMapping(4, TorznabCatType.PCGames, "Games");
-            AddCategoryMapping(40, TorznabCatType.OtherMisc, "Miscellaneous");
-            AddCategoryMapping(19, TorznabCatType.Movies, "Movies");
-            AddCategoryMapping(6, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(31, TorznabCatType.PCMobileOther, "Portable");
-            AddCategoryMapping(49, TorznabCatType.Other, "Tutorials");
-            AddCategoryMapping(7, TorznabCatType.TV, "TV");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(44, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(22, TorznabCatType.PC, "Applications");
+            caps.Categories.AddCategoryMapping(43, TorznabCatType.AudioAudiobook, "Audio Books");
+            caps.Categories.AddCategoryMapping(27, TorznabCatType.Books, "Ebook");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.PCGames, "Games");
+            caps.Categories.AddCategoryMapping(40, TorznabCatType.OtherMisc, "Miscellaneous");
+            caps.Categories.AddCategoryMapping(19, TorznabCatType.Movies, "Movies");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.PCMobileOther, "Portable");
+            caps.Categories.AddCategoryMapping(49, TorznabCatType.Other, "Tutorials");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.TV, "TV");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

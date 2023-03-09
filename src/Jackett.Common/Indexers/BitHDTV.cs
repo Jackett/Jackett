@@ -29,38 +29,46 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchUrl => SiteLink + "torrents.php";
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public BitHDTV(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
-            AddCategoryMapping(6, TorznabCatType.AudioLossless, "HQ Audio");
-            AddCategoryMapping(7, TorznabCatType.Movies, "Movies");
-            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Videos");
-            AddCategoryMapping(9, TorznabCatType.Other, "Other");
-            AddCategoryMapping(10, TorznabCatType.TV, "TV");
-            AddCategoryMapping(12, TorznabCatType.TV, "TV/Seasonpack");
-            AddCategoryMapping(11, TorznabCatType.XXX, "XXX");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.AudioLossless, "HQ Audio");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.Movies, "Movies");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Videos");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.Other, "Other");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.TV, "TV");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.TV, "TV/Seasonpack");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.XXX, "XXX");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

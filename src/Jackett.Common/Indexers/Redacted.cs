@@ -20,27 +20,12 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
 
-        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                        ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.Genre
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q, BookSearchParam.Genre
-                       }
-                   },
-                   configService: configService,
+        public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -52,14 +37,35 @@ namespace Jackett.Common.Indexers
                 )
         {
             webclient.EmulateBrowser = false; // Issue #9751
+        }
 
-            AddCategoryMapping(1, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(2, TorznabCatType.PC, "Applications");
-            AddCategoryMapping(3, TorznabCatType.Books, "E-Books");
-            AddCategoryMapping(4, TorznabCatType.AudioAudiobook, "Audiobooks");
-            AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
-            AddCategoryMapping(6, TorznabCatType.Audio, "Comedy");
-            AddCategoryMapping(7, TorznabCatType.Books, "Comics");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.Genre
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q, BookSearchParam.Genre
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.PC, "Applications");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.Books, "E-Books");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.AudioAudiobook, "Audiobooks");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Audio, "Comedy");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.Books, "Comics");
+
+            return caps;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

@@ -24,26 +24,38 @@ namespace Jackett.Common.Indexers
             "https://torrents.yourexotic.com/"
         };
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
 
         public ExoticaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(caps: new TorznabCapabilities(),
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs
-                   )
+                   cs: cs)
         {
-            AddCategoryMapping(1, TorznabCatType.XXXx264, "Video Clip");
-            AddCategoryMapping(2, TorznabCatType.XXXPack, "Video Pack");
-            AddCategoryMapping(3, TorznabCatType.XXXPack, "Siterip Pack");
-            AddCategoryMapping(4, TorznabCatType.XXXPack, "Pornstar Pack");
-            AddCategoryMapping(5, TorznabCatType.XXXDVD, "DVD");
-            AddCategoryMapping(6, TorznabCatType.XXXx264, "BluRay");
-            AddCategoryMapping(7, TorznabCatType.XXXImageSet, "Photo Pack");
-            AddCategoryMapping(8, TorznabCatType.XXXImageSet, "Books & Magazines");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                LimitsDefault = 50,
+                LimitsMax = 50
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.XXXx264, "Video Clip");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.XXXPack, "Video Pack");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.XXXPack, "Siterip Pack");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.XXXPack, "Pornstar Pack");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.XXXDVD, "DVD");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.XXXx264, "BluRay");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.XXXImageSet, "Photo Pack");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.XXXImageSet, "Books & Magazines");
+
+            return caps;
         }
 
         protected override List<KeyValuePair<string, string>> GetSearchQueryParameters(TorznabQuery query)

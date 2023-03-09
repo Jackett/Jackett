@@ -28,6 +28,8 @@ namespace Jackett.Common.Indexers
 
         public override bool SupportsPagination => true;
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         // Docs at https://nebulance.io/articles.php?topic=api_key
         protected virtual string APIUrl => SiteLink + "api.php";
         protected virtual int KeyLength => 32;
@@ -41,37 +43,42 @@ namespace Jackett.Common.Indexers
 
         public NebulanceAPI(IIndexerConfigurationService configService, WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       LimitsDefault = 100,
-                       LimitsMax = 1000,
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre, TvSearchParam.TvmazeId
-                       },
-                       SupportsRawSearch = true
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            AddCategoryMapping("tv", TorznabCatType.TV, "tv");
-            AddCategoryMapping("sd", TorznabCatType.TVSD, "sd");
-            AddCategoryMapping("hd", TorznabCatType.TVHD, "hd");
-            AddCategoryMapping("uhd", TorznabCatType.TVUHD, "uhd");
-            AddCategoryMapping("4k", TorznabCatType.TVUHD, "4k");
-            AddCategoryMapping("480p", TorznabCatType.TVSD, "480p");
-            AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
-            AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");
-            AddCategoryMapping("1080i", TorznabCatType.TVHD, "1080i");
-            AddCategoryMapping("2160p", TorznabCatType.TVUHD, "2160p");
-
             configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Generate a new key by accessing your account profile settings at <a href=\"https://nebulance.io/\" target=_blank>Nebulance</a>, scroll down to the <b>API Keys</b> section, tick the <i>New Key</i>, <i>list</i> and <i>download</i> checkboxes and save."));
 
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                LimitsDefault = 100,
+                LimitsMax = 1000,
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre, TvSearchParam.TvmazeId
+                },
+                SupportsRawSearch = true
+            };
+
+            caps.Categories.AddCategoryMapping("tv", TorznabCatType.TV, "tv");
+            caps.Categories.AddCategoryMapping("sd", TorznabCatType.TVSD, "sd");
+            caps.Categories.AddCategoryMapping("hd", TorznabCatType.TVHD, "hd");
+            caps.Categories.AddCategoryMapping("uhd", TorznabCatType.TVUHD, "uhd");
+            caps.Categories.AddCategoryMapping("4k", TorznabCatType.TVUHD, "4k");
+            caps.Categories.AddCategoryMapping("480p", TorznabCatType.TVSD, "480p");
+            caps.Categories.AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
+            caps.Categories.AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");
+            caps.Categories.AddCategoryMapping("1080i", TorznabCatType.TVHD, "1080i");
+            caps.Categories.AddCategoryMapping("2160p", TorznabCatType.TVUHD, "2160p");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

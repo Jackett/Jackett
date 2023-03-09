@@ -29,6 +29,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         // API doc: https://torrentapi.org/apidocs_v2.txt?app_id=Jackett
         private string ApiEndpoint => ((StringConfigurationItem)configData.GetDynamic("apiEndpoint")).Value;
         private readonly TimeSpan TokenDuration = TimeSpan.FromMinutes(14); // 15 minutes expiration
@@ -41,24 +43,7 @@ namespace Jackett.Common.Indexers
 
         public RarBG(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TmdbId, TvSearchParam.TvdbId
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       TvSearchImdbAvailable = true
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -79,35 +64,57 @@ namespace Jackett.Common.Indexers
             { Value = "last" };
             configData.AddDynamic("sort", sort);
 
-            //AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)"); // 3x is not supported by API #11848
-            AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
-            AddCategoryMapping(17, TorznabCatType.MoviesSD, "Movies/x264");
-            AddCategoryMapping(18, TorznabCatType.TVSD, "TV Episodes");
-            AddCategoryMapping(23, TorznabCatType.AudioMP3, "Music/MP3");
-            AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
-            AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
-            AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
-            AddCategoryMapping(32, TorznabCatType.ConsoleXBox360, "Games/XBOX-360");
-            AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
-            AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
-            AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
-            AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
-            AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
-            AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
-            AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
-            AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
-            AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
-            AddCategoryMapping(49, TorznabCatType.TVUHD, "TV UHD Episodes");
+            _appId = "ttekcaJ_" + EnvironmentUtil.JackettVersion();
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TmdbId, TvSearchParam.TvdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                TvSearchImdbAvailable = true
+            };
+
+            //caps.Categories.AddCategoryMapping(4, TorznabCatType.XXX, "XXX (18+)"); // 3x is not supported by API #11848
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.MoviesSD, "Movies/XVID");
+            caps.Categories.AddCategoryMapping(17, TorznabCatType.MoviesSD, "Movies/x264");
+            caps.Categories.AddCategoryMapping(18, TorznabCatType.TVSD, "TV Episodes");
+            caps.Categories.AddCategoryMapping(23, TorznabCatType.AudioMP3, "Music/MP3");
+            caps.Categories.AddCategoryMapping(25, TorznabCatType.AudioLossless, "Music/FLAC");
+            caps.Categories.AddCategoryMapping(27, TorznabCatType.PCGames, "Games/PC ISO");
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.PCGames, "Games/PC RIP");
+            caps.Categories.AddCategoryMapping(32, TorznabCatType.ConsoleXBox360, "Games/XBOX-360");
+            caps.Categories.AddCategoryMapping(33, TorznabCatType.PCISO, "Software/PC ISO");
+            caps.Categories.AddCategoryMapping(40, TorznabCatType.ConsolePS3, "Games/PS3");
+            caps.Categories.AddCategoryMapping(41, TorznabCatType.TVHD, "TV HD Episodes");
+            caps.Categories.AddCategoryMapping(42, TorznabCatType.MoviesBluRay, "Movies/Full BD");
+            caps.Categories.AddCategoryMapping(44, TorznabCatType.MoviesHD, "Movies/x264/1080");
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.MoviesHD, "Movies/x264/720");
+            caps.Categories.AddCategoryMapping(46, TorznabCatType.MoviesBluRay, "Movies/BD Remux");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.Movies3D, "Movies/x264/3D");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.MoviesHD, "Movies/XVID/720");
+            caps.Categories.AddCategoryMapping(49, TorznabCatType.TVUHD, "TV UHD Episodes");
             // torrentapi.org returns "Movies/TV-UHD-episodes" for some reason
             // possibly because thats what the category is called on the /top100.php page
-            AddCategoryMapping(49, TorznabCatType.TVUHD, "Movies/TV-UHD-episodes");
-            AddCategoryMapping(50, TorznabCatType.MoviesUHD, "Movies/x264/4k");
-            AddCategoryMapping(51, TorznabCatType.MoviesUHD, "Movies/x265/4k");
-            AddCategoryMapping(52, TorznabCatType.MoviesUHD, "Movs/x265/4k/HDR");
-            AddCategoryMapping(53, TorznabCatType.ConsolePS4, "Games/PS4");
-            AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
+            caps.Categories.AddCategoryMapping(49, TorznabCatType.TVUHD, "Movies/TV-UHD-episodes");
+            caps.Categories.AddCategoryMapping(50, TorznabCatType.MoviesUHD, "Movies/x264/4k");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.MoviesUHD, "Movies/x265/4k");
+            caps.Categories.AddCategoryMapping(52, TorznabCatType.MoviesUHD, "Movs/x265/4k/HDR");
+            caps.Categories.AddCategoryMapping(53, TorznabCatType.ConsolePS4, "Games/PS4");
+            caps.Categories.AddCategoryMapping(54, TorznabCatType.MoviesHD, "Movies/x265/1080");
 
-            _appId = "ttekcaJ_" + EnvironmentUtil.JackettVersion();
+            return caps;
         }
 
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)

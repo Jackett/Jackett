@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
@@ -54,33 +53,15 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchUrl => SiteLink + "t.json";
 
         private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
 
         public TorrentDay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -91,58 +72,83 @@ namespace Jackett.Common.Indexers
             wc.EmulateBrowser = false;
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
+        }
 
-            AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
-            AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
-            AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
-            AddCategoryMapping(5, TorznabCatType.MoviesBluRay, "Movies/Bluray-Full");
-            AddCategoryMapping(3, TorznabCatType.MoviesDVD, "Movies/DVD-R");
-            AddCategoryMapping(21, TorznabCatType.MoviesSD, "Movies/MP4");
-            AddCategoryMapping(22, TorznabCatType.MoviesForeign, "Movies/Non-English");
-            AddCategoryMapping(13, TorznabCatType.Movies, "Movies/Packs");
-            AddCategoryMapping(44, TorznabCatType.MoviesSD, "Movies/SD/x264");
-            AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
-            AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
 
-            AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
-            AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
-            AddCategoryMapping(31, TorznabCatType.TVSD, "TV/DVD-R");
-            AddCategoryMapping(33, TorznabCatType.TVSD, "TV/DVD-Rip");
-            AddCategoryMapping(46, TorznabCatType.TVSD, "TV/Mobile");
-            AddCategoryMapping(82, TorznabCatType.TVForeign, "TV/Non-English");
-            AddCategoryMapping(14, TorznabCatType.TV, "TV/Packs");
-            AddCategoryMapping(26, TorznabCatType.TVSD, "TV/SD/x264");
-            AddCategoryMapping(7, TorznabCatType.TVHD, "TV/x264");
-            AddCategoryMapping(34, TorznabCatType.TVUHD, "TV/x265");
-            AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
+            caps.Categories.AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
+            caps.Categories.AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.MoviesBluRay, "Movies/Bluray-Full");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.MoviesDVD, "Movies/DVD-R");
+            caps.Categories.AddCategoryMapping(21, TorznabCatType.MoviesSD, "Movies/MP4");
+            caps.Categories.AddCategoryMapping(22, TorznabCatType.MoviesForeign, "Movies/Non-English");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.Movies, "Movies/Packs");
+            caps.Categories.AddCategoryMapping(44, TorznabCatType.MoviesSD, "Movies/SD/x264");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.Movies, "Movies/x265");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
-            AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
-            AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS");
-            AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
-            AddCategoryMapping(10, TorznabCatType.ConsoleNDS, "Nintendo");
-            AddCategoryMapping(9, TorznabCatType.ConsoleXBox, "Xbox");
+            caps.Categories.AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
+            caps.Categories.AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.TVSD, "TV/DVD-R");
+            caps.Categories.AddCategoryMapping(33, TorznabCatType.TVSD, "TV/DVD-Rip");
+            caps.Categories.AddCategoryMapping(46, TorznabCatType.TVSD, "TV/Mobile");
+            caps.Categories.AddCategoryMapping(82, TorznabCatType.TVForeign, "TV/Non-English");
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.TV, "TV/Packs");
+            caps.Categories.AddCategoryMapping(26, TorznabCatType.TVSD, "TV/SD/x264");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.TVHD, "TV/x264");
+            caps.Categories.AddCategoryMapping(34, TorznabCatType.TVUHD, "TV/x265");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
 
-            AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
-            AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
-            AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
-            AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
-            AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
+            caps.Categories.AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.ConsoleNDS, "Nintendo");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.ConsoleXBox, "Xbox");
 
-            AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
-            AddCategoryMapping(20, TorznabCatType.Books, "Books");
-            AddCategoryMapping(102, TorznabCatType.BooksForeign, "Books/Non-English");
-            AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
-            AddCategoryMapping(95, TorznabCatType.TVDocumentary, "Educational");
-            AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
-            AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
-            AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
-            AddCategoryMapping(28, TorznabCatType.PC, "Softwa/Packs");
-            AddCategoryMapping(12, TorznabCatType.PC, "Software");
+            caps.Categories.AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");
+            caps.Categories.AddCategoryMapping(27, TorznabCatType.Audio, "Music/Flac");
+            caps.Categories.AddCategoryMapping(23, TorznabCatType.AudioForeign, "Music/Non-English");
+            caps.Categories.AddCategoryMapping(41, TorznabCatType.Audio, "Music/Packs");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.AudioVideo, "Music/Video");
 
-            AddCategoryMapping(19, TorznabCatType.XXX, "XXX/0Day");
-            AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
-            AddCategoryMapping(15, TorznabCatType.XXXPack, "XXX/Packs");
+            caps.Categories.AddCategoryMapping(29, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(42, TorznabCatType.AudioAudiobook, "Audio Books");
+            caps.Categories.AddCategoryMapping(20, TorznabCatType.Books, "Books");
+            caps.Categories.AddCategoryMapping(102, TorznabCatType.BooksForeign, "Books/Non-English");
+            caps.Categories.AddCategoryMapping(30, TorznabCatType.TVDocumentary, "Documentary");
+            caps.Categories.AddCategoryMapping(95, TorznabCatType.TVDocumentary, "Educational");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.Other, "Fonts");
+            caps.Categories.AddCategoryMapping(43, TorznabCatType.PCMac, "Mac");
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.AudioOther, "Podcast");
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.PC, "Softwa/Packs");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.PC, "Software");
+
+            caps.Categories.AddCategoryMapping(19, TorznabCatType.XXX, "XXX/0Day");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.XXX, "XXX/Movies");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.XXXPack, "XXX/Packs");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

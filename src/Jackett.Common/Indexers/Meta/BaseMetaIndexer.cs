@@ -20,8 +20,7 @@ namespace Jackett.Common.Indexers.Meta
                                   IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
                                   WebClient client, Logger logger, ConfigurationData configData, IProtectionService ps,
                                   ICacheService cs, Func<IIndexer, bool> filter)
-            : base(caps: new TorznabCapabilities(),
-                   configService: configService,
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: ps,
