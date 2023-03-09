@@ -95,7 +95,7 @@ namespace Jackett.Common.Models
             UploadVolumeFactor = copyFrom.UploadVolumeFactor;
         }
 
-        public virtual object Clone() => new ReleaseInfo(this);
+        public object Clone() => new ReleaseInfo(this);
 
         public override string ToString() => $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, TVMazeId={TVMazeId}, TraktId={TraktId}, DoubanId={DoubanId}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }
