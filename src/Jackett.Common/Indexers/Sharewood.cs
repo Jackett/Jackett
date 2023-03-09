@@ -21,8 +21,15 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class ShareWood : BaseWebIndexer
+    public class ShareWood : IndexerBase
     {
+        public override string Id => "sharewoodapi";
+        public override string Name => "Sharewood API";
+        public override string Description => "Sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL";
+        public override string SiteLink { get; protected set; } = "https://www.sharewood.tv/";
+        public override string Language => "fr-FR";
+        public override string Type => "semi-private";
+
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
             {"Accept", "application/json"},
@@ -35,10 +42,6 @@ namespace Jackett.Common.Indexers
         public ShareWood(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(
-                id: "sharewoodapi",
-                name: "Sharewood API",
-                description: "Sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL",
-                link: "https://www.sharewood.tv/",
                 caps: new TorznabCapabilities
                 {
                     TvSearchParams = new List<TvSearchParam>
@@ -67,10 +70,6 @@ namespace Jackett.Common.Indexers
                 configData: new ConfigurationDataPasskey()
                 )
         {
-            Encoding = Encoding.UTF8;
-            Language = "fr-FR";
-            Type = "semi-private";
-
             // requestDelay for API Limit (1 request per 2 seconds)
             webclient.requestDelay = 2.1;
 

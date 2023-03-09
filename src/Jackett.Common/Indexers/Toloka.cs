@@ -17,8 +17,15 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Toloka : BaseWebIndexer
+    public class Toloka : IndexerBase
     {
+        public override string Id => "toloka";
+        public override string Name => "Toloka.to";
+        public override string Description => "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community";
+        public override string SiteLink { get; protected set; } = "https://toloka.to/";
+        public override string Language => "uk-UA";
+        public override string Type => "semi-private";
+
         private new ConfigurationDataToloka configData
         {
             get => (ConfigurationDataToloka)base.configData;
@@ -30,10 +37,7 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "tracker.php";
 
         public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(id: "toloka",
-                   name: "Toloka.to",
-                   description: "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community",
-                   link: "https://toloka.to/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -60,10 +64,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataToloka())
         {
-            Encoding = Encoding.UTF8;
-            Language = "uk-UA";
-            Type = "semi-private";
-
             AddCategoryMapping(117, TorznabCatType.Movies, "Українське кіно");
             AddCategoryMapping(84, TorznabCatType.Movies, "|-Мультфільми і казки");
             AddCategoryMapping(42, TorznabCatType.Movies, "|-Художні фільми");

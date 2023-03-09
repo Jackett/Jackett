@@ -10,17 +10,20 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class BrokenStones : GazelleTracker
     {
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string Id => "brokenstones";
+        public override string Name => "BrokenStones";
+        public override string Description => "Broken Stones is a Private site for MacOS and iOS APPS / GAMES";
+        public override string SiteLink { get; protected set; } = "https://broken-stones.club/";
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://brokenstones.club/"
         };
+        public override string Language => "en-US";
+        public override string Type => "private";
 
         public BrokenStones(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "brokenstones",
-                   name: "BrokenStones",
-                   description: "Broken Stones is a Private site for MacOS and iOS APPS / GAMES",
-                   link: "https://broken-stones.club/",
-                   caps: new TorznabCapabilities(),
+            : base(caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -29,9 +32,6 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechTokens: true,
                    has2Fa: true)
         {
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.PCMac, "MacOS Apps");
             AddCategoryMapping(2, TorznabCatType.PCMac, "MacOS Games");
             AddCategoryMapping(3, TorznabCatType.PCMobileiOS, "iOS Apps");

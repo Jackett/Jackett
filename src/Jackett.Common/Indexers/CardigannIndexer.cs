@@ -109,8 +109,8 @@ namespace Jackett.Common.Indexers
             }
 
             // init missing mandatory attributes
-            DisplayName = Definition.Name;
-            DisplayDescription = Definition.Description;
+            Name = Definition.Name;
+            Description = Definition.Description;
             if (Definition.Links.Count > 1)
                 AlternativeSiteLinks = Definition.Links.ToArray();
             DefaultSiteLink = Definition.Links[0];

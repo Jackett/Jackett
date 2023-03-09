@@ -19,28 +19,32 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class SpeedCD : BaseWebIndexer
+    public class SpeedCD : IndexerBase
     {
+        public override string Id => "speedcd";
+        public override string Name => "Speed.cd";
+        public override string Description => "Your home now!";
+        public override string SiteLink { get; protected set; } = "https://speed.cd/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
+            "https://speed.cd/",
+            "https://speed.click/",
+            "https://speeders.me/"
+        };
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public override bool SupportsPagination => true;
 
         private string LoginUrl1 => SiteLink + "checkpoint/API";
         private string LoginUrl2 => SiteLink + "checkpoint/";
         private string SearchUrl => SiteLink + "browse/";
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://speed.cd/",
-            "https://speed.click/",
-            "https://speeders.me/"
-        };
-
         private new ConfigurationDataSpeedCD configData => (ConfigurationDataSpeedCD)base.configData;
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "speedcd",
-                   name: "Speed.cd",
-                   description: "Your home now!",
-                   link: "https://speed.cd/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -70,10 +74,6 @@ namespace Jackett.Common.Indexers
                     in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
             AddCategoryMapping(42, TorznabCatType.Movies, "Movies/Packs");
             AddCategoryMapping(32, TorznabCatType.Movies, "Movies/Kids");

@@ -20,8 +20,15 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class HDSpace : BaseWebIndexer
+    public class HDSpace : IndexerBase
     {
+        public override string Id => "hdspace";
+        public override string Name => "HD-Space";
+        public override string Description => "Sharing The Universe";
+        public override string SiteLink { get; protected set; } = "https://hd-space.org/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "index.php?page=login";
         private string SearchUrl => SiteLink + "index.php?page=torrents";
 
@@ -29,10 +36,7 @@ namespace Jackett.Common.Indexers
 
         public HDSpace(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "hdspace",
-                   name: "HD-Space",
-                   description: "Sharing The Universe",
-                   link: "https://hd-space.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -55,10 +59,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
 
             AddCategoryMapping(15, TorznabCatType.MoviesBluRay, "Movie / Blu-ray");

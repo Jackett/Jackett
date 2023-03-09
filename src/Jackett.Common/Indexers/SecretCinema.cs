@@ -14,12 +14,16 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class SecretCinema : GazelleTracker
     {
+        public override string Id => "secretcinema";
+        public override string Name => "Secret Cinema";
+        public override string Description => "A tracker for rare movies.";
+        public override string SiteLink { get; protected set; } = "https://secret-cinema.pw/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public SecretCinema(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "secretcinema",
-                   name: "Secret Cinema",
-                   description: "A tracker for rare movies.",
-                   link: "https://secret-cinema.pw/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam>
@@ -38,9 +42,6 @@ namespace Jackett.Common.Indexers
                    cs: cs,
                    supportsFreeleechTokens: false) // ratioless tracker
         {
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
             AddCategoryMapping(2, TorznabCatType.Audio, "Music");
             // cat=3 exists but it's required a refactor in Gazelle abstract to make it work

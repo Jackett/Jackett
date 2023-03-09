@@ -16,8 +16,15 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Magnetico : BaseWebIndexer
+    public class Magnetico : IndexerBase
     {
+        public override string Id => "magnetico";
+        public override string Name => "Magnetico (Local DHT)";
+        public override string Description => "Magnetico is a self-hosted BitTorrent DHT search engine";
+        public override string SiteLink { get; protected set; } = "http://127.0.0.1:8080/";
+        public override string Language => "en-US";
+        public override string Type => "semi-private";
+
         private string SearchURl => SiteLink + "api/v0.1/torrents";
         private string TorrentsUrl => SiteLink + "torrents";
 
@@ -25,10 +32,7 @@ namespace Jackett.Common.Indexers
 
         public Magnetico(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "magnetico",
-                   name: "Magnetico (Local DHT)",
-                   description: "Magnetico is a self-hosted BitTorrent DHT search engine",
-                   link: "http://127.0.0.1:8080/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -58,10 +62,6 @@ namespace Jackett.Common.Indexers
                                "If you have many torrents, it is recommended to use PostgreSQL database to make queries faster. With SQLite, timeouts may occur."))
 
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "semi-private";
-
             var sort = new ConfigurationData.SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
                 {
                     {"DISCOVERED_ON", "discovered"},

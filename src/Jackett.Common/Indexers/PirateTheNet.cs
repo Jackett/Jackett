@@ -19,8 +19,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class PirateTheNet : BaseWebIndexer
+    public class PirateTheNet : IndexerBase
     {
+        public override string Id => "piratethenet";
+        public override string Name => "PirateTheNet";
+        public override string Description => "A movie tracker";
+        public override string SiteLink { get; protected set; } = "http://piratethenet.org/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string SearchUrl => SiteLink + "torrentsutils.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
@@ -33,10 +40,7 @@ namespace Jackett.Common.Indexers
 
         public PirateTheNet(IIndexerConfigurationService configService, WebClient w, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "piratethenet",
-                   name: "PirateTheNet",
-                   description: "A movie tracker",
-                   link: "http://piratethenet.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        MovieSearchParams = new List<MovieSearchParam>
@@ -51,10 +55,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show the maximum."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");
             AddCategoryMapping("2160P", TorznabCatType.MoviesHD, "2160P");
             AddCategoryMapping("720P", TorznabCatType.MoviesHD, "720P");

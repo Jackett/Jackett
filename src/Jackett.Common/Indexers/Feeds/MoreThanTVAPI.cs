@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Jackett.Common.Models;
@@ -20,14 +19,18 @@ namespace Jackett.Common.Indexers.Feeds
     [ExcludeFromCodeCoverage]
     public class MoreThanTVAPI : BaseNewznabIndexer
     {
+        public override string Id => "morethantv-api";
+        public override string Name => "MoreThanTV (API)";
+        public override string Description => "Private torrent tracker for TV / MOVIES";
+        public override string SiteLink { get; protected set; } = "https://www.morethantv.me/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
         public MoreThanTVAPI(IIndexerConfigurationService configService, WebClient client, Logger logger,
             IProtectionService ps, ICacheService cs)
-            : base(id: "morethantv-api",
-                   name: "MoreThanTV (API)",
-                   description: "Private torrent tracker for TV / MOVIES",
-                   link: "https://www.morethantv.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -46,10 +49,6 @@ namespace Jackett.Common.Indexers.Feeds
                    cs: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(TorznabCatType.TVSD.ID, TorznabCatType.TVSD);
             AddCategoryMapping(TorznabCatType.TVHD.ID, TorznabCatType.TVHD);
             AddCategoryMapping(TorznabCatType.TVUHD.ID, TorznabCatType.TVUHD);

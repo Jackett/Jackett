@@ -17,8 +17,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class PassThePopcorn : BaseWebIndexer
+    public class PassThePopcorn : IndexerBase
     {
+        public override string Id => "passthepopcorn";
+        public override string Name => "PassThePopcorn";
+        public override string Description => "PassThePopcorn is a Private site for MOVIES / TV";
+        public override string SiteLink { get; protected set; } = "https://passthepopcorn.me/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
         private string AuthKey { get; set; }
         private string PassKey { get; set; }
@@ -32,10 +39,7 @@ namespace Jackett.Common.Indexers
 
         public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "passthepopcorn",
-                   name: "PassThePopcorn",
-                   description: "PassThePopcorn is a Private site for MOVIES / TV",
-                   link: "https://passthepopcorn.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -56,10 +60,6 @@ namespace Jackett.Common.Indexers
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             webclient.requestDelay = 2; // 0.5 requests per second
 
             AddCategoryMapping(1, TorznabCatType.Movies, "Feature Film");

@@ -19,8 +19,15 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class GazelleGames : BaseWebIndexer
+    public class GazelleGames : IndexerBase
     {
+        public override string Id => "gazellegames";
+        public override string Name => "GazelleGames";
+        public override string Description => "A gaming tracker.";
+        public override string SiteLink { get; protected set; } = "https://gazellegames.net/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
 
@@ -32,11 +39,7 @@ namespace Jackett.Common.Indexers
 
         public GazelleGames(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "gazellegames",
-                   name: "GazelleGames",
-                   description: "A gaming tracker.",
-                   link: "https://gazellegames.net/",
-                   caps: new TorznabCapabilities(),
+            : base(caps: new TorznabCapabilities(),
                    configService: configService,
                    client: wc,
                    logger: l,
@@ -44,10 +47,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCookie())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             configData.AddDynamic("searchgroupnames", new BoolConfigurationItem("Search Group Names Only") { Value = false });
 
             // Apple

@@ -17,8 +17,15 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class NebulanceAPI : BaseWebIndexer
+    public class NebulanceAPI : IndexerBase
     {
+        public override string Id => "nebulanceapi";
+        public override string Name => "NebulanceAPI";
+        public override string Description => "At Nebulance we will change the way you think about TV. Using API.";
+        public override string SiteLink { get; protected set; } = "https://nebulance.io/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public override bool SupportsPagination => true;
 
         // Docs at https://nebulance.io/articles.php?topic=api_key
@@ -34,10 +41,7 @@ namespace Jackett.Common.Indexers
 
         public NebulanceAPI(IIndexerConfigurationService configService, WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "nebulanceapi",
-                   name: "NebulanceAPI",
-                   description: "At Nebulance we will change the way you think about TV. Using API.",
-                   link: "https://nebulance.io/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        LimitsDefault = 100,
@@ -55,10 +59,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping("tv", TorznabCatType.TV, "tv");
             AddCategoryMapping("sd", TorznabCatType.TVSD, "sd");
             AddCategoryMapping("hd", TorznabCatType.TVHD, "hd");

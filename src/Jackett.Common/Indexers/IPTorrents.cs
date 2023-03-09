@@ -19,13 +19,14 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class IPTorrents : BaseWebIndexer
+    public class IPTorrents : IndexerBase
     {
-        public override bool SupportsPagination => true;
-
-        private string SearchUrl => SiteLink + "t";
-
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "iptorrents";
+        public override string Name => "IPTorrents";
+        public override string Description => "Always a step ahead.";
+        public override string SiteLink { get; protected set; } = "https://iptorrents.com/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://iptorrents.com/",
             "https://www.iptorrents.com/",
             "https://iptorrents.me/",
@@ -39,8 +40,8 @@ namespace Jackett.Common.Indexers
             "https://ipt.cool/",
             "https://ipt.world/"
         };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://ipt-update.com/",
             "http://ipt.read-books.org/",
             "http://alien.eating-organic.net/",
@@ -51,15 +52,18 @@ namespace Jackett.Common.Indexers
             "http://baywatch.workisboring.com/",
             "https://iptorrents.eu/"
         };
+        public override string Language => "en-US";
+        public override string Type => "private";
+
+        public override bool SupportsPagination => true;
+
+        private string SearchUrl => SiteLink + "t";
 
         private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
         public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "iptorrents",
-                   name: "IPTorrents",
-                   description: "Always a step ahead.",
-                   link: "https://iptorrents.com/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -87,10 +91,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCookieUA("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
                 {
                     {"time", "created"},

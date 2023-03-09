@@ -19,8 +19,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TVStore : BaseWebIndexer
+    public class TVStore : IndexerBase
     {
+        public override string Id => "tvstore";
+        public override string Name => "TV Store";
+        public override string Description => "TV Store is a HUNGARIAN Private Torrent Tracker for TV";
+        public override string SiteLink { get; protected set; } = "https://tvstore.me/";
+        public override string Language => "hu-HU";
+        public override string Type => "private";
+
         private readonly Dictionary<int, long> _imdbLookup = new Dictionary<int, long>(); // _imdbLookup[internalId] = imdbId
 
         private readonly Dictionary<long, int>
@@ -34,10 +41,7 @@ namespace Jackett.Common.Indexers
 
         public TVStore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs) :
-            base(id: "tvstore",
-                 name: "TV Store",
-                 description: "TV Store is a HUNGARIAN Private Torrent Tracker for TV",
-                 link: "https://tvstore.me/",
+            base(
                  caps: new TorznabCapabilities
                  {
                      TvSearchParams = new List<TvSearchParam>
@@ -56,10 +60,6 @@ namespace Jackett.Common.Indexers
                  cacheService: cs,
                  configData: new ConfigurationDataTVstore())
         {
-            Encoding = Encoding.UTF8;
-            Language = "hu-HU";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.TV);
             AddCategoryMapping(2, TorznabCatType.TVHD);
             AddCategoryMapping(3, TorznabCatType.TVSD);

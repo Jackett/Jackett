@@ -11,12 +11,14 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class CinemaZ : AvistazTracker
     {
+        public override string Id => "cinemaz";
+        public override string Name => "CinemaZ";
+        public override string Description => "Part of the Avistaz network.";
+        public override string SiteLink { get; protected set; } = "https://cinemaz.to/";
+
         public CinemaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "cinemaz",
-                   name: "CinemaZ",
-                   description: "Part of the Avistaz network.",
-                   link: "https://cinemaz.to/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        LimitsDefault = 50,

@@ -19,8 +19,15 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class TorrentSyndikat : BaseWebIndexer
+    public class TorrentSyndikat : IndexerBase
     {
+        public override string Id => "torrentsyndikat";
+        public override string Name => "Torrent-Syndikat";
+        public override string Description => "A German general tracker";
+        public override string SiteLink { get; protected set; } = "https://torrent-syndikat.org/";
+        public override string Language => "de-DE";
+        public override string Type => "private";
+
         private string ApiBase => SiteLink + "api_9djWe8Tb2NE3p6opyqnh/v1";
 
         private bool ProductsOnly => ((BoolConfigurationItem)configData.GetDynamic("productsOnly")).Value;
@@ -34,10 +41,7 @@ namespace Jackett.Common.Indexers
 
         public TorrentSyndikat(IIndexerConfigurationService configService, WebClient w, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "torrentsyndikat",
-                   name: "Torrent-Syndikat",
-                   description: "A German general tracker",
-                   link: "https://torrent-syndikat.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -64,10 +68,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            Encoding = Encoding.UTF8;
-            Language = "de-DE";
-            Type = "private";
-
             AddCategoryMapping(2, TorznabCatType.PC, "Apps / Windows");
             AddCategoryMapping(13, TorznabCatType.PC, "Apps / Linux");
             AddCategoryMapping(4, TorznabCatType.PCMac, "Apps / MacOS");

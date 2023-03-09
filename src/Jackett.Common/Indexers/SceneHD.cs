@@ -17,8 +17,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class SceneHD : BaseWebIndexer
+    public class SceneHD : IndexerBase
     {
+        public override string Id => "scenehd";
+        public override string Name => "SceneHD";
+        public override string Description => "SceneHD is Private site for HD TV / MOVIES";
+        public override string SiteLink { get; protected set; } = "https://scenehd.org/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string SearchUrl => SiteLink + "browse.php?";
         private string DetailsUrl => SiteLink + "details.php?";
         private string DownloadUrl => SiteLink + "download.php?";
@@ -27,11 +34,7 @@ namespace Jackett.Common.Indexers
 
         public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "scenehd",
-                   name: "SceneHD",
-                   description: "SceneHD is Private site for HD TV / MOVIES",
-                   link: "https://scenehd.org/",
-                   configService: configService,
+            : base(configService: configService,
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -54,10 +57,6 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataPasskey("You can find the Passkey if you generate a RSS " +
                                                             "feed link. It's the last parameter in the URL."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8");
 
             AddCategoryMapping(2, TorznabCatType.MoviesUHD, "Movie/2160");

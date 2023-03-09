@@ -16,8 +16,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class HDBitsApi : BaseWebIndexer
+    public class HDBitsApi : IndexerBase
     {
+        public override string Id => "hdbitsapi";
+        public override string Name => "HDBits (API)";
+        public override string Description => "The HighDefinition Bittorrent Community";
+        public override string SiteLink { get; protected set; } = "https://hdbits.org/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string APIUrl => SiteLink + "api/";
 
         private new ConfigurationDataHDBitsApi configData
@@ -28,10 +35,7 @@ namespace Jackett.Common.Indexers
 
         public HDBitsApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "hdbitsapi",
-                   name: "HDBits (API)",
-                   description: "The HighDefinition Bittorrent Community",
-                   link: "https://hdbits.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -50,10 +54,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataHDBitsApi())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
             AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
             AddCategoryMapping(8, TorznabCatType.Other, "Misc/Demo");

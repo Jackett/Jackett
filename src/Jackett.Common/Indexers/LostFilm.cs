@@ -20,14 +20,14 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    internal class LostFilm : BaseWebIndexer
+    public class LostFilm : IndexerBase
     {
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://lostfilm.site",
-            "https://lostfilm.tw/",
-        };
-
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "lostfilm";
+        public override string Name => "LostFilm.tv";
+        public override string Description => "Unique portal about foreign series";
+        public override string SiteLink { get; protected set; } = "https://www.lostfilm.run/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://www.lostfilm.run/",
             "https://www.lostfilmtv.site/",
             "https://www.lostfilm.tv/",
@@ -36,8 +36,15 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilmtv2.site/",
             "https://www.lostfilmtv5.site/",
             "https://www.lostfilm.uno/"
+        };
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://lostfilm.site",
+            "https://lostfilm.tw/",
+        };
+        public override string Language => "ru-RU";
+        public override string Type => "semi-private";
 
- };
         private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -107,10 +114,7 @@ namespace Jackett.Common.Indexers
 
         public LostFilm(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "lostfilm",
-                   name: "LostFilm.tv",
-                   description: "Unique portal about foreign series",
-                   link: "https://www.lostfilm.run/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -129,10 +133,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            Encoding = Encoding.UTF8;
-            Language = "ru-RU";
-            Type = "semi-private";
-
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "98D43B6E740B42C02A9BD1A9D1A813E4350BE332"); // for *.win expired 26/Mar/22
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
 

@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
@@ -21,14 +20,18 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Anidex : BaseWebIndexer
+    public class Anidex : IndexerBase
     {
+        public override string Id => "anidex";
+        public override string Name => "Anidex";
+        public override string Description => "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime";
+        public override string SiteLink { get; protected set; } = "https://anidex.info/";
+        public override string Language => "en-US";
+        public override string Type => "public";
+
         public Anidex(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "anidex",
-                   name: "Anidex",
-                   description: "Anidex is a Public torrent tracker and indexer, primarily for English fansub groups of anime",
-                   link: "https://anidex.info/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -51,10 +54,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "public";
-
             // Configure the category mappings
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime - Sub");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Anime - Raw");

@@ -22,8 +22,15 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class ZonaQ : BaseWebIndexer
+    public class ZonaQ : IndexerBase
     {
+        public override string Id => "zonaq";
+        public override string Name => "ZonaQ";
+        public override string Description => "ZonaQ is a SPANISH Private Torrent Tracker for MOVIES / TV";
+        public override string SiteLink { get; protected set; } = "https://www.zonaq.pw/";
+        public override string Language => "es-ES";
+        public override string Type => "private";
+
         private string Login1Url => SiteLink + "index.php";
         private string Login2Url => SiteLink + "paDentro.php";
         private string Login3Url => SiteLink + "retorno/include/puerta_8_ajax.php";
@@ -34,10 +41,7 @@ namespace Jackett.Common.Indexers
 
         public ZonaQ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "zonaq",
-                   name: "ZonaQ",
-                   description: "ZonaQ is a SPANISH Private Torrent Tracker for MOVIES / TV",
-                   link: "https://www.zonaq.pw/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -57,10 +61,6 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents por página' option to 100 in 'Mi Panel' page."))
 
         {
-            Encoding = Encoding.UTF8;
-            Language = "es-ES";
-            Type = "private";
-
             AddCategoryMapping("cat[]=1&subcat[]=1", TorznabCatType.MoviesDVD, "Películas/DVD");
             AddCategoryMapping("cat[]=1&subcat[]=2", TorznabCatType.MoviesDVD, "Películas/BDVD + Autorías");
             AddCategoryMapping("cat[]=1&subcat[]=3", TorznabCatType.MoviesBluRay, "Películas/BD");

@@ -12,12 +12,14 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class AvistaZ : AvistazTracker
     {
+        public override string Id => "avistaz";
+        public override string Name => "AvistaZ";
+        public override string Description => "Aka AsiaTorrents";
+        public override string SiteLink { get; protected set; } = "https://avistaz.to/";
+
         public AvistaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "avistaz",
-                   name: "AvistaZ",
-                   description: "Aka AsiaTorrents",
-                   link: "https://avistaz.to/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        LimitsDefault = 50,

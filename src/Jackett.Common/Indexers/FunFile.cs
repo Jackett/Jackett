@@ -17,8 +17,16 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class FunFile : BaseWebIndexer
+    public class FunFile : IndexerBase
     {
+        public override string Id => "funfile";
+        public override string Name => "FunFile";
+        public override string Description => "A general tracker";
+        public override string SiteLink { get; protected set; } = "https://www.funfile.org/";
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
 
@@ -26,10 +34,7 @@ namespace Jackett.Common.Indexers
 
         public FunFile(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "funfile",
-                   name: "FunFile",
-                   description: "A general tracker",
-                   link: "https://www.funfile.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -56,10 +61,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(44, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(22, TorznabCatType.PC, "Applications");
             AddCategoryMapping(43, TorznabCatType.AudioAudiobook, "Audio Books");

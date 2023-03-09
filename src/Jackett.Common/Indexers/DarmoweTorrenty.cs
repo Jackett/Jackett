@@ -20,8 +20,16 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class DarmoweTorenty : BaseWebIndexer
+    public class DarmoweTorenty : IndexerBase
     {
+        public override string Id => "darmowetorenty";
+        public override string Name => "Darmowe torenty";
+        public override string Description => "Darmowe torenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://darmowe-torenty.pl/";
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-2");
+        public override string Language => "pl-PL";
+        public override string Type => "semi-private";
+
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrenty.php";
 
@@ -37,10 +45,7 @@ namespace Jackett.Common.Indexers
 
         public DarmoweTorenty(IIndexerConfigurationService configService, WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "darmowetorenty",
-                   name: "Darmowe torenty",
-                   description: "Darmowe torenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL",
-                   link: "https://darmowe-torenty.pl/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -67,10 +72,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
         {
-            Encoding = Encoding.GetEncoding("iso-8859-2");
-            Language = "pl-PL";
-            Type = "semi-private";
-
             AddCategoryMapping(14, TorznabCatType.Movies, "Filmy");
             AddCategoryMapping(27, TorznabCatType.MoviesDVD, "Filmy DVD-R");
             AddCategoryMapping(28, TorznabCatType.MoviesSD, "Filmy VCD/SVCD");

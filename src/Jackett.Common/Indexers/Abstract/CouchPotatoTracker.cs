@@ -14,7 +14,7 @@ using NLog;
 namespace Jackett.Common.Indexers.Abstract
 {
     [ExcludeFromCodeCoverage]
-    public abstract class CouchPotatoTracker : BaseWebIndexer
+    public abstract class CouchPotatoTracker : IndexerBase
     {
         protected string endpoint;
         protected string APIUrl => SiteLink + endpoint;
@@ -25,15 +25,10 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        protected CouchPotatoTracker(string link, string id, string name, string description,
-                                     IIndexerConfigurationService configService, WebClient client, Logger logger,
+        protected CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger,
                                      IProtectionService p, ICacheService cs, TorznabCapabilities caps,
                                      ConfigurationData configData, string endpoint)
-            : base(id: id,
-                   name: name,
-                   description: description,
-                   link: link,
-                   caps: caps,
+            : base(caps: caps,
                    configService: configService,
                    client: client,
                    logger: logger,

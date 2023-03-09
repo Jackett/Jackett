@@ -20,8 +20,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BakaBT : BaseWebIndexer
+    public class BakaBT : IndexerBase
     {
+        public override string Id => "bakabt";
+        public override string Name => "BakaBT";
+        public override string Description => "Anime Comunity";
+        public override string SiteLink { get; protected set; } = "https://bakabt.me/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
         private string LoginUrl => SiteLink + "login.php";
         private readonly string LogoutStr = "<a href=\"logout.php\">Logout</a>";
@@ -38,10 +45,7 @@ namespace Jackett.Common.Indexers
 
         public BakaBT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "bakabt",
-                   name: "BakaBT",
-                   description: "Anime Comunity",
-                   link: "https://bakabt.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -65,10 +69,6 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBakaBT("To prevent 0-results-error, Enable the " +
                                                                "Show-Adult-Content option in your BakaBT account Settings."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
             AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
             AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");

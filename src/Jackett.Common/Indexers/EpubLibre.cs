@@ -17,13 +17,19 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class EpubLibre : BaseWebIndexer
+    public class EpubLibre : IndexerBase
     {
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "epublibre";
+        public override string Name => "EpubLibre";
+        public override string Description => "Más libros, Más libres";
+        public override string SiteLink { get; protected set; } = "https://www.epublibre.org/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://www.epublibre.org/",
             "https://epublibre.unblockit.boo/"
         };
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string[] LegacySiteLinks => new[]
+        {
             "https://epublibre.org/",
             "https://epublibre.unblockit.how/",
             "https://epublibre.unblockit.cam/",
@@ -40,6 +46,8 @@ namespace Jackett.Common.Indexers
             "https://epublibre.unblockit.ink/",
             "https://epublibre.unblockit.bio/"
         };
+        public override string Language => "es-ES";
+        public override string Type => "public";
 
         private string SearchUrl => SiteLink + "catalogo/index/{0}/nuevo/todos/sin/todos/{1}/ajax";
         private string SobrecargaUrl => SiteLink + "inicio/sobrecarga";
@@ -67,10 +75,7 @@ namespace Jackett.Common.Indexers
 
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                          ICacheService cs)
-            : base(id: "epublibre",
-                   name: "EpubLibre",
-                   description: "Más libros, Más libres",
-                   link: "https://www.epublibre.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        BookSearchParams = new List<BookSearchParam>
@@ -85,10 +90,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "es-ES";
-            Type = "public";
-
             AddCategoryMapping(1, TorznabCatType.BooksEBook);
         }
 

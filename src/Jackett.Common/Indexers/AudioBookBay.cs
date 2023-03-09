@@ -22,14 +22,18 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class AudioBookBay : BaseWebIndexer
+    public class AudioBookBay : IndexerBase
     {
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "audiobookbay";
+        public override string Name => "AudioBook Bay";
+        public override string Description => "AudioBook Bay (ABB) is a public Torrent Tracker for AUDIOBOOKS";
+        public override string SiteLink { get; protected set; } = "https://audiobookbay.li/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://audiobookbay.li/",
             "https://audiobookbay.se/"
         };
-
-        public override string[] LegacySiteLinks { get; protected set; } =
+        public override string[] LegacySiteLinks => new[]
         {
             "https://audiobookbay.la/",
             "http://audiobookbay.net/",
@@ -56,12 +60,11 @@ namespace Jackett.Common.Indexers
             "https://audiobookbay.unblockit.ink/",
             "https://audiobookbay.unblockit.bio/" // error 502
         };
+        public override string Language => "en-US";
+        public override string Type => "public";
 
         public AudioBookBay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(id: "audiobookbay",
-                   name: "AudioBook Bay",
-                   description: "AudioBook Bay (ABB) is a public Torrent Tracker for AUDIOBOOKS",
-                   link: "https://audiobookbay.li/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        BookSearchParams = new List<BookSearchParam>
@@ -76,10 +79,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "public";
-
             webclient.requestDelay = 3.1;
 
             // Age

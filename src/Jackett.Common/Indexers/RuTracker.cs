@@ -20,13 +20,23 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class RuTracker : BaseWebIndexer
+    public class RuTracker : IndexerBase
     {
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "rutracker";
+        public override string Name => "RuTracker";
+        public override string Description => "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community";
+        public override string SiteLink { get; protected set; } = "https://rutracker.org/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://rutracker.org/",
             "https://rutracker.net/",
             "https://rutracker.nl/"
         };
+        public override Encoding Encoding => Encoding.GetEncoding("windows-1251");
+        public override string Language => "ru-RU";
+        public override string Type => "semi-private";
+
+
         private new ConfigurationDataRutracker configData => (ConfigurationDataRutracker)base.configData;
 
         private readonly TitleParser _titleParser = new TitleParser();
@@ -37,10 +47,7 @@ namespace Jackett.Common.Indexers
         private string _capCodeField;
 
         public RuTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(id: "rutracker",
-                   name: "RuTracker",
-                   description: "RuTracker is a Semi-Private Russian torrent site with a thriving file-sharing community",
-                   link: "https://rutracker.org/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -68,10 +75,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataRutracker())
         {
-            Encoding = Encoding.GetEncoding("windows-1251");
-            Language = "ru-RU";
-            Type = "semi-private";
-
             // note: when refreshing the categories use the tracker.php page and NOT the search.php page!
             AddCategoryMapping(22, TorznabCatType.Movies, "Наше кино");
             AddCategoryMapping(941, TorznabCatType.Movies, "|- Кино СССР");

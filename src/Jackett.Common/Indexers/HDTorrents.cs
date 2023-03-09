@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -19,8 +18,22 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class HDTorrents : BaseWebIndexer
+    public class HDTorrents : IndexerBase
     {
+        public override string Id => "hdtorrents";
+        public override string Name => "HD-Torrents";
+        public override string Description => "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.";
+        public override string SiteLink { get; protected set; } = "https://hdts.ru/"; // Domain https://hdts.ru/ seems more reliable
+        public override string[] AlternativeSiteLinks => new[]
+        {
+            "https://hdts.ru/",
+            "https://hd-torrents.org/",
+            "https://hd-torrents.net/",
+            "https://hd-torrents.me/"
+        };
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string SearchUrl => SiteLink + "torrents.php?";
         private string LoginUrl => SiteLink + "login.php";
         private readonly Regex _posterRegex = new Regex(@"src=\\'./([^']+)\\'", RegexOptions.IgnoreCase);
@@ -34,22 +47,11 @@ namespace Jackett.Common.Indexers
             "Owner"
         };
 
-        public override string[] AlternativeSiteLinks { get; protected set; } =
-        {
-            "https://hdts.ru/",
-            "https://hd-torrents.org/",
-            "https://hd-torrents.net/",
-            "https://hd-torrents.me/"
-        };
-
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public HDTorrents(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "hdtorrents",
-                   name: "HD-Torrents",
-                   description: "HD-Torrents is a private torrent website with HD torrents and strict rules on their content.",
-                   link: "https://hdts.ru/", // Domain https://hdts.ru/ seems more reliable
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -70,13 +72,8 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLogin(
-                       "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
+                   configData: new ConfigurationDataBasicLogin("For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             // Movie
             AddCategoryMapping("70", TorznabCatType.MoviesBluRay, "Movie/UHD/Blu-Ray");
             AddCategoryMapping("1", TorznabCatType.MoviesBluRay, "Movie/Blu-Ray");

@@ -18,8 +18,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BrasilTracker : BaseWebIndexer
+    public class BrasilTracker : IndexerBase
     {
+        public override string Id => "brasiltracker";
+        public override string Name => "BrasilTracker";
+        public override string Description => "BrasilTracker is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://brasiltracker.org/";
+        public override string Language => "pt-BR";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
         private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
@@ -28,10 +35,7 @@ namespace Jackett.Common.Indexers
 
         public BrasilTracker(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "brasiltracker",
-                    name: "BrasilTracker",
-                    description: "BrasilTracker is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL",
-                    link: "https://brasiltracker.org/",
+            : base(
                     caps: new TorznabCapabilities
                     {
                         TvSearchParams = new List<TvSearchParam>
@@ -58,9 +62,6 @@ namespace Jackett.Common.Indexers
                     cacheService: cs,
                     configData: new ConfigurationDataBasicLogin("BrasilTracker does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).</br>For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
-            Encoding = Encoding.UTF8;
-            Language = "pt-BR";
-            Type = "private";
             AddCategoryMapping(1, TorznabCatType.Other, "Other");
         }
 

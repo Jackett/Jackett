@@ -19,15 +19,22 @@ using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class ImmortalSeed : BaseWebIndexer
+    public class ImmortalSeed : IndexerBase
     {
+        public override string Id => "immortalseed";
+        public override string Name => "ImmortalSeed";
+        public override string Description => "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://immortalseed.me/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "http://immortalseed.me/"
+        };
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string SearchUrl => SiteLink + "browse.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private readonly Regex _dateMatchRegex = new Regex(@"\d{4}-\d{2}-\d{2} \d{2}:\d{2} [AaPp][Mm]", RegexOptions.Compiled);
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "http://immortalseed.me/"
-        };
 
         private new ConfigurationDataBasicLogin configData
         {
@@ -37,10 +44,7 @@ namespace Jackett.Common.Indexers
 
         public ImmortalSeed(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(id: "immortalseed",
-                   name: "ImmortalSeed",
-                   description: "ImmortalSeed (iS) is a Private Torrent Tracker for MOVIES / TV / GENERAL",
-                   link: "https://immortalseed.me/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -67,10 +71,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             AddCategoryMapping(3, TorznabCatType.Other, "Nuked");
             AddCategoryMapping(32, TorznabCatType.TVAnime, "Anime");
             AddCategoryMapping(23, TorznabCatType.PC, "Apps");

@@ -17,18 +17,23 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class PreToMe : BaseWebIndexer
+    public class PreToMe : IndexerBase
     {
+        public override string Id => "pretome";
+        public override string Name => "PreToMe";
+        public override string Description => "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows";
+        public override string SiteLink { get; protected set; } = "https://pretome.info/";
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
         private new ConfigurationDataPinNumber configData => (ConfigurationDataPinNumber)base.configData;
 
         public PreToMe(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "pretome",
-                   name: "PreToMe",
-                   description: "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows",
-                   link: "https://pretome.info/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -55,10 +60,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataPinNumber("For best results, change the 'Torrents per page' setting to 100 in 'Profile => Torrent browse settings'."))
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "en-US";
-            Type = "private";
-
             // Unfortunately most of them are tags not categories and they return the parent category
             // we have to re-add the tags with the parent category so the results are not removed with the filtering
 

@@ -20,8 +20,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    internal class AniDUB : BaseWebIndexer
+    public class AniDUB : IndexerBase
     {
+        public override string Id => "anidub";
+        public override string Name => "AniDUB";
+        public override string Description => "AniDUB Tracker is a semi-private russian tracker and release group for anime";
+        public override string SiteLink { get; protected set; } = "https://tr.anidub.com/";
+        public override string Language => "ru-RU";
+        public override string Type => "semi-private";
+
         private static readonly Regex EpisodeInfoRegex = new Regex(@"\[(.*?)(?: \(.*?\))? из (.*?)\]$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SeasonInfoQueryRegex = new Regex(@"S(\d+)(?:E\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SeasonInfoRegex = new Regex(@"(?:(?:TV-)|(?:ТВ-))(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -29,10 +36,7 @@ namespace Jackett.Common.Indexers
 
         public AniDUB(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "anidub",
-                   name: "AniDUB",
-                   description: "AniDUB Tracker is a semi-private russian tracker and release group for anime",
-                   link: "https://tr.anidub.com/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -55,10 +59,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAniDub())
         {
-            Encoding = Encoding.UTF8;
-            Language = "ru-RU";
-            Type = "semi-private";
-
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "392E98CE1447B59CA62BAB8824CA1EEFC2ED3D37");
 
             AddCategoryMapping(2, TorznabCatType.TVAnime, "Аниме TV");

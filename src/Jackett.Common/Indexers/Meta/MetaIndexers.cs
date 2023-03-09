@@ -11,12 +11,14 @@ namespace Jackett.Common.Indexers.Meta
 {
     public class AggregateIndexer : BaseMetaIndexer
     {
+        public override string Id => "all";
+        public override string Name => "AggregateSearch";
+        public override string Description => "This feed includes all configured trackers";
+
         public AggregateIndexer(IFallbackStrategyProvider fallbackStrategyProvider,
                                 IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
                                 WebClient client, Logger logger, IProtectionService ps, ICacheService cs)
-            : base(id: "all",
-                   name: "AggregateSearch",
-                   description: "This feed includes all configured trackers",
+            : base(
                    configService: configService,
                    client: client,
                    logger: logger,
@@ -43,13 +45,16 @@ namespace Jackett.Common.Indexers.Meta
 
     public class FilterIndexer : BaseMetaIndexer
     {
+        public override string Id => _filter;
+        public override string Name => _filter;
+        public override string Description => $"This feed includes all configured trackers filter by {_filter}";
+
+        private readonly string _filter;
+
         public FilterIndexer(string filter, IFallbackStrategyProvider fallbackStrategyProvider,
                           IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
                           WebClient client, Logger logger, IProtectionService ps, ICacheService cs, Func<IIndexer, bool> filterFunc)
-            : base(id: filter,
-                   name: filter,
-                   description: "This feed includes all configured trackers filter by " + filter,
-                   configService: configService,
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    ps: ps,
@@ -60,6 +65,7 @@ namespace Jackett.Common.Indexers.Meta
                    filter: filterFunc
                 )
         {
+            _filter = filter;
         }
 
         public override TorznabCapabilities TorznabCaps

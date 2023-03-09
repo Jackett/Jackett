@@ -24,6 +24,14 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class NorBits : BaseCachingWebIndexer
     {
+        public override string Id => "norbits";
+        public override string Name => "NorBits";
+        public override string Description => "NorBits is a Norwegian Private site for MOVIES / TV / GENERAL";
+        public override string SiteLink { get; protected set; } = "https://norbits.net/";
+        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
+        public override string Language => "nb-NO";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "login.php";
         private string LoginCheckUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
@@ -32,10 +40,7 @@ namespace Jackett.Common.Indexers
 
         public NorBits(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "norbits",
-                   name: "NorBits",
-                   description: "NorBits is a Norwegian Private site for MOVIES / TV / GENERAL",
-                   link: "https://norbits.net/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -62,10 +67,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataNorbits())
         {
-            Encoding = Encoding.GetEncoding("iso-8859-1");
-            Language = "nb-NO";
-            Type = "private";
-
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=49", TorznabCatType.MoviesUHD, "Filmer - UHD-2160p");
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=19", TorznabCatType.MoviesHD, "Filmer - HD-1080p/i");
             AddCategoryMapping("main_cat[]=1&sub2_cat[]=20", TorznabCatType.MoviesHD, "Filmer - HD-720p");

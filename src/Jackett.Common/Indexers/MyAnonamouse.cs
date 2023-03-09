@@ -18,8 +18,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class MyAnonamouse : BaseWebIndexer
+    public class MyAnonamouse : IndexerBase
     {
+        public override string Id => "myanonamouse";
+        public override string Name => "MyAnonamouse";
+        public override string Description => "Friendliness, Warmth and Sharing";
+        public override string SiteLink { get; protected set; } = "https://www.myanonamouse.net/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         public override bool SupportsPagination => true;
 
         private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
@@ -28,11 +35,7 @@ namespace Jackett.Common.Indexers
 
         public MyAnonamouse(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "myanonamouse",
-                   name: "MyAnonamouse",
-                   description: "Friendliness, Warmth and Sharing",
-                   link: "https://www.myanonamouse.net/",
-                   configService: configService,
+            : base(configService: configService,
                    caps: new TorznabCapabilities
                    {
                        BookSearchParams = new List<BookSearchParam>
@@ -46,9 +49,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataMyAnonamouse())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
             webclient.EmulateBrowser = false;
 
             AddCategoryMapping("13", TorznabCatType.AudioAudiobook, "AudioBooks");
@@ -275,7 +275,7 @@ namespace Jackett.Common.Indexers
                         catch (Exception)
                         {
                             // the JSON on author_info field can be malformed due to double quotes
-                            logger.Warn($"{DisplayName} error parsing author_info: {authorInfo}");
+                            logger.Warn($"{Name} error parsing author_info: {authorInfo}");
                         }
 
                     var flags = new List<string>();

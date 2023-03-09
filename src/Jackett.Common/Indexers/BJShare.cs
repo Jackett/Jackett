@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -20,20 +19,24 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class BJShare : BaseWebIndexer
+    public class BJShare : IndexerBase
     {
+        public override string Id => "bjshare";
+        public override string Name => "BJ-Share";
+        public override string Description => "A brazilian tracker.";
+        public override string SiteLink { get; protected set; } = "https://bj-share.info/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://bj-share.me/"
+        };
+        public override string Language => "pt-BR";
+        public override string Type => "private";
+
         private string BrowseUrl => SiteLink + "torrents.php";
         private string TodayUrl => SiteLink + "torrents.php?action=today";
         private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
 
-        public override string[] LegacySiteLinks { get; protected set; } =
-        {
-            "https://bj-share.me/"
-        };
-
         private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
-
-
 
         private readonly List<string> _absoluteNumbering = new List<string>
         {
@@ -61,10 +64,7 @@ namespace Jackett.Common.Indexers
 
         public BJShare(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "bjshare",
-                    name: "BJ-Share",
-                    description: "A brazilian tracker.",
-                    link: "https://bj-share.info/",
+            : base(
                     caps: new TorznabCapabilities
                     {
                         TvSearchParams = new List<TvSearchParam>
@@ -91,10 +91,6 @@ namespace Jackett.Common.Indexers
                     cacheService: cs,
                     configData: new ConfigurationDataCookieUA())
         {
-            Encoding = Encoding.UTF8;
-            Language = "pt-BR";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.Movies, "Filmes");
             AddCategoryMapping(2, TorznabCatType.TV, "Seriados");
             AddCategoryMapping(3, TorznabCatType.PC, "Aplicativos");

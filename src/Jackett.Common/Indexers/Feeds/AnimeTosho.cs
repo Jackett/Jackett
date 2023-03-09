@@ -16,12 +16,15 @@ namespace Jackett.Common.Indexers.Feeds
     [ExcludeFromCodeCoverage]
     public class AnimeTosho : BaseNewznabIndexer
     {
-        public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger,
-            IProtectionService ps, ICacheService cs)
-            : base(id: "animetosho",
-                   name: "Anime Tosho",
-                   description: "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases",
-                   link: "https://animetosho.org/",
+        public override string Id => "animetosho";
+        public override string Name => "Anime Tosho";
+        public override string Description => "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases";
+        public override string SiteLink { get; protected set; } = "https://animetosho.org/";
+        public override string Language => "en-US";
+        public override string Type => "public";
+
+        public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService ps, ICacheService cs)
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -36,10 +39,6 @@ namespace Jackett.Common.Indexers.Feeds
                    cs: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "public";
-
             AddCategoryMapping(1, TorznabCatType.TVAnime);
         }
 

@@ -53,7 +53,7 @@ namespace Jackett.Common.Services
             }
             catch (Exception e)
             {
-                logger.Error($"Failed loading configuration for {indexer.DisplayName}, trying backup\n{e}");
+                logger.Error($"Failed loading configuration for {indexer.Name}, trying backup\n{e}");
                 var configFilePathBak = configFilePath + ".bak";
                 if (File.Exists(configFilePathBak))
                     try
@@ -61,15 +61,15 @@ namespace Jackett.Common.Services
                         var fileStrBak = File.ReadAllText(configFilePathBak);
                         var jsonStringBak = JToken.Parse(fileStrBak);
                         indexer.LoadFromSavedConfiguration(jsonStringBak);
-                        logger.Info($"Successfully loaded backup config for {indexer.DisplayName}");
+                        logger.Info($"Successfully loaded backup config for {indexer.Name}");
                         indexer.SaveConfig();
                     }
                     catch (Exception e2)
                     {
-                        logger.Error($"Failed loading backup configuration for {indexer.DisplayName}, you must reconfigure this indexer\n{e2}");
+                        logger.Error($"Failed loading backup configuration for {indexer.Name}, you must reconfigure this indexer\n{e2}");
                     }
                 else
-                    logger.Error($"Failed loading backup configuration for {indexer.DisplayName} (no backup available), you must reconfigure this indexer\n{e}");
+                    logger.Error($"Failed loading backup configuration for {indexer.Name} (no backup available), you must reconfigure this indexer\n{e}");
             }
         }
 

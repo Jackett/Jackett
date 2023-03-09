@@ -18,8 +18,15 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class Shazbat : BaseWebIndexer
+    public class Shazbat : IndexerBase
     {
+        public override string Id => "shazbat";
+        public override string Name => "Shazbat";
+        public override string Description => "Shazbat is a PRIVATE Torrent Tracker with highly curated TV content";
+        public override string SiteLink { get; protected set; } = "https://www.shazbat.tv/";
+        public override string Language => "en-US";
+        public override string Type => "private";
+
         private string LoginUrl => SiteLink + "login";
         private string SearchUrl => SiteLink + "search";
         private string TorrentsUrl => SiteLink + "torrents";
@@ -30,10 +37,7 @@ namespace Jackett.Common.Indexers
 
         public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "shazbat",
-                   name: "Shazbat",
-                   description: "Shazbat is a PRIVATE Torrent Tracker with highly curated TV content",
-                   link: "https://www.shazbat.tv/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -48,10 +52,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataShazbat())
         {
-            Encoding = Encoding.UTF8;
-            Language = "en-US";
-            Type = "private";
-
             webclient.requestDelay = 5.1;
 
             AddCategoryMapping(1, TorznabCatType.TV);

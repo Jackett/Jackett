@@ -77,7 +77,7 @@ namespace Jackett.Common.Models
                         select new XElement("item",
                             new XElement("title", RemoveInvalidXMLChars(r.Title)),
                             new XElement("guid", r.Guid.AbsoluteUri),  // GUID and (Link or Magnet) are mandatory
-                            new XElement("jackettindexer", new XAttribute("id", r.Origin.Id), r.Origin.DisplayName),
+                            new XElement("jackettindexer", new XAttribute("id", r.Origin.Id), r.Origin.Name),
                             new XElement("type", r.Origin.Type),
                             r.Details == null ? null : new XElement("comments", r.Details.AbsoluteUri),
                             r.PublishDate == DateTime.MinValue ? new XElement("pubDate", XmlDateFormat(DateTime.Now)) : new XElement("pubDate", XmlDateFormat(r.PublishDate)),

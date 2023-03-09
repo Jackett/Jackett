@@ -21,8 +21,10 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers.Abstract
 {
     [ExcludeFromCodeCoverage]
-    public abstract class GazelleTracker : BaseWebIndexer
+    public abstract class GazelleTracker : IndexerBase
     {
+        public override Encoding Encoding => Encoding.UTF8;
+
         protected virtual string LoginUrl => SiteLink + "login.php";
         protected virtual string APIUrl => SiteLink + "ajax.php";
         protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + (useAuthKey ? "&authkey=" + configData.AuthKey.Value : "") + "&id=";
@@ -47,16 +49,11 @@ namespace Jackett.Common.Indexers.Abstract
             set => base.configData = value;
         }
 
-        protected GazelleTracker(string link, string id, string name, string description,
-                                 IIndexerConfigurationService configService, WebClient client, Logger logger,
+        protected GazelleTracker(IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  IProtectionService p, ICacheService cs, TorznabCapabilities caps,
                                  bool supportsFreeleechTokens = false, bool supportsFreeleechOnly = false, bool imdbInTags = false, bool has2Fa = false,
                                  bool useApiKey = false, bool usePassKey = false, bool useAuthKey = false, string instructionMessageOptional = null)
-            : base(id: id,
-                   name: name,
-                   description: description,
-                   link: link,
-                   caps: caps,
+            : base(caps: caps,
                    configService: configService,
                    client: client,
                    logger: logger,
@@ -64,8 +61,6 @@ namespace Jackett.Common.Indexers.Abstract
                    cacheService: cs,
                    configData: new ConfigurationDataGazelleTracker(has2Fa, supportsFreeleechTokens, supportsFreeleechOnly, useApiKey, usePassKey, useAuthKey, instructionMessageOptional))
         {
-            Encoding = Encoding.UTF8;
-
             this.imdbInTags = imdbInTags;
             this.useApiKey = useApiKey;
             this.usePassKey = usePassKey;

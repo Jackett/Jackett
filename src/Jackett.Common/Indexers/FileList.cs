@@ -17,19 +17,26 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    public class FileList : BaseWebIndexer
+    public class FileList : IndexerBase
     {
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
+        public override string Id => "filelist";
+        public override string Name => "FileList";
+        public override string Description => "The best Romanian site.";
+        public override string SiteLink { get; protected set; } = "https://filelist.io/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
             "https://filelist.io/",
             "https://flro.org/"
         };
-
-        public override string[] LegacySiteLinks { get; protected set; } =
+        public override string[] LegacySiteLinks => new[]
         {
             "https://filelist.ro/",
             "http://filelist.ro/",
             "http://flro.org/"
         };
+        public override Encoding Encoding => Encoding.UTF8;
+        public override string Language => "ro-RO";
+        public override string Type => "private";
 
         private string ApiUrl => SiteLink + "api.php";
         private string DetailsUrl => SiteLink + "details.php";
@@ -38,10 +45,7 @@ namespace Jackett.Common.Indexers
 
         public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "filelist",
-                   name: "FileList",
-                   description: "The best Romanian site.",
-                   link: "https://filelist.io/",
+            : base(
                    caps: new TorznabCapabilities
                    {
                        TvSearchParams = new List<TvSearchParam>
@@ -69,10 +73,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataFileList())
         {
-            Encoding = Encoding.UTF8;
-            Language = "ro-RO";
-            Type = "private";
-
             AddCategoryMapping(1, TorznabCatType.MoviesSD, "Filme SD");
             AddCategoryMapping(2, TorznabCatType.MoviesDVD, "Filme DVD");
             AddCategoryMapping(3, TorznabCatType.MoviesForeign, "Filme DVD-RO");
