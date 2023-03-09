@@ -19,6 +19,28 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class EpubLibre : BaseWebIndexer
     {
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://www.epublibre.org/",
+            "https://epublibre.unblockit.boo/"
+        };
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://epublibre.org/",
+            "https://epublibre.unblockit.how/",
+            "https://epublibre.unblockit.cam/",
+            "https://epublibre.unblockit.day/",
+            "https://epublibre.unblockit.llc/",
+            "https://epublibre.unblockit.blue/",
+            "https://epublibre.unblockit.name/",
+            "https://epublibre.unblockit.ist/",
+            "https://epublibre.unblockit.bet/",
+            "https://epublibre.unblockit.cat/",
+            "https://epublibre.unblockit.nz/",
+            "https://epublibre.unblockit.page/",
+            "https://epublibre.unblockit.pet/",
+            "https://epublibre.unblockit.ink/",
+            "https://epublibre.unblockit.bio/"
+        };
+
         private string SearchUrl => SiteLink + "catalogo/index/{0}/nuevo/todos/sin/todos/{1}/ajax";
         private string SobrecargaUrl => SiteLink + "inicio/sobrecarga";
         private const int MaxItemsPerPage = 18;
@@ -43,31 +65,8 @@ namespace Jackett.Common.Indexers
             {"12", "esperanto"}
         };
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://www.epublibre.org/",
-            "https://epublibre.unblockit.boo/"
-        };
-
-        public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://epublibre.org/",
-            "https://epublibre.unblockit.how/",
-            "https://epublibre.unblockit.cam/",
-            "https://epublibre.unblockit.day/",
-            "https://epublibre.unblockit.llc/",
-            "https://epublibre.unblockit.blue/",
-            "https://epublibre.unblockit.name/",
-            "https://epublibre.unblockit.ist/",
-            "https://epublibre.unblockit.bet/",
-            "https://epublibre.unblockit.cat/",
-            "https://epublibre.unblockit.nz/",
-            "https://epublibre.unblockit.page/",
-            "https://epublibre.unblockit.pet/",
-            "https://epublibre.unblockit.ink/",
-            "https://epublibre.unblockit.bio/"
-        };
-
         public EpubLibre(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+                         ICacheService cs)
             : base(id: "epublibre",
                    name: "EpubLibre",
                    description: "Más libros, Más libres",

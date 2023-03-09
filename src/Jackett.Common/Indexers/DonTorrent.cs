@@ -22,21 +22,6 @@ namespace Jackett.Common.Indexers
     [ExcludeFromCodeCoverage]
     public class DonTorrent : BaseWebIndexer
     {
-        private static class DonTorrentCatType
-        {
-            public static string Pelicula => "pelicula";
-            public static string Pelicula4K => "pelicula4k";
-            public static string Serie => "serie";
-            public static string SerieHD => "seriehd";
-            public static string Documental => "documental";
-            public static string Musica => "musica";
-            public static string Variado => "variado";
-            public static string Juego => "juego";
-        }
-
-        private const string NewTorrentsUrl = "ultimos";
-        private const string SearchUrl = "buscar/";
-
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://dontorrent.cloud/",
             "https://todotorrents.net/",
@@ -45,7 +30,6 @@ namespace Jackett.Common.Indexers
             "https://verdetorrent.com/",
             "https://naranjatorrent.com/"
         };
-
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://dontorrent.me/",
             "https://dontorrent.gs/",
@@ -66,15 +50,30 @@ namespace Jackett.Common.Indexers
             "https://dontorrent.love/"
         };
 
+        private static class DonTorrentCatType
+        {
+            public static string Pelicula => "pelicula";
+            public static string Pelicula4K => "pelicula4k";
+            public static string Serie => "serie";
+            public static string SerieHD => "seriehd";
+            public static string Documental => "documental";
+            public static string Musica => "musica";
+            public static string Variado => "variado";
+            public static string Juego => "juego";
+        }
+
+        private const string NewTorrentsUrl = "ultimos";
+        private const string SearchUrl = "buscar/";
+
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
-            {
-                { "/pelicula/", DonTorrentCatType.Pelicula },
-                { "/serie/", DonTorrentCatType.Serie },
-                { "/documental", DonTorrentCatType.Documental },
-                { "/musica/", DonTorrentCatType.Musica },
-                { "/variado/", DonTorrentCatType.Variado },
-                { "/juego/", DonTorrentCatType.Juego } //games, it can be pc or console
-            };
+        {
+            { "/pelicula/", DonTorrentCatType.Pelicula },
+            { "/serie/", DonTorrentCatType.Serie },
+            { "/documental", DonTorrentCatType.Documental },
+            { "/musica/", DonTorrentCatType.Musica },
+            { "/variado/", DonTorrentCatType.Variado },
+            { "/juego/", DonTorrentCatType.Juego } //games, it can be pc or console
+        };
 
         public DonTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
@@ -108,7 +107,7 @@ namespace Jackett.Common.Indexers
             Language = "es-ES";
             Type = "public";
 
-            // avoid CLoudflare too many requests limiter
+            // avoid Cloudflare too many requests limiter
             webclient.requestDelay = 2.1;
 
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
