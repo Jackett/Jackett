@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -29,6 +28,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
         private string LoginUrl => SiteLink + "login.php";
         private readonly string LogoutStr = "<a href=\"logout.php\">Logout</a>";
@@ -45,48 +46,53 @@ namespace Jackett.Common.Indexers
 
         public BakaBT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBakaBT("To prevent 0-results-error, Enable the " +
-                                                               "Show-Adult-Content option in your BakaBT account Settings."))
+                   configData: new ConfigurationDataBakaBT("To prevent 0-results-error, Enable the Show-Adult-Content option in your BakaBT account Settings."))
         {
-            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
-            AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
-            AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");
-            AddCategoryMapping(4, TorznabCatType.BooksComics, "Manga");
-            AddCategoryMapping(5, TorznabCatType.TVAnime, "Anime Movie");
-            AddCategoryMapping(6, TorznabCatType.TVOther, "Live Action");
-            AddCategoryMapping(7, TorznabCatType.BooksOther, "Artbook");
-            AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Video");
-            AddCategoryMapping(9, TorznabCatType.BooksEBook, "Light Novel");
-            AddCategoryMapping(11, TorznabCatType.XXX, "Hentai Series");
-            AddCategoryMapping(12, TorznabCatType.XXX, "Hentai OVA");
-            AddCategoryMapping(13, TorznabCatType.XXX, "Hentai Soundtrack");
-            AddCategoryMapping(14, TorznabCatType.XXX, "Hentai Manga");
-            AddCategoryMapping(15, TorznabCatType.XXX, "Hentai Movie");
-            AddCategoryMapping(16, TorznabCatType.XXX, "Hentai Live Action");
-            AddCategoryMapping(17, TorznabCatType.XXX, "Hentai Artbook");
-            AddCategoryMapping(18, TorznabCatType.XXX, "Hentai Music Video");
-            AddCategoryMapping(19, TorznabCatType.XXX, "Hentai Light Novel");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime Series");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVAnime, "OVA");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.AudioOther, "Soundtrack");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.BooksComics, "Manga");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.TVAnime, "Anime Movie");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.TVOther, "Live Action");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.BooksOther, "Artbook");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.AudioVideo, "Music Video");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.BooksEBook, "Light Novel");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.XXX, "Hentai Series");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.XXX, "Hentai OVA");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.XXX, "Hentai Soundtrack");
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.XXX, "Hentai Manga");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.XXX, "Hentai Movie");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.XXX, "Hentai Live Action");
+            caps.Categories.AddCategoryMapping(17, TorznabCatType.XXX, "Hentai Artbook");
+            caps.Categories.AddCategoryMapping(18, TorznabCatType.XXX, "Hentai Music Video");
+            caps.Categories.AddCategoryMapping(19, TorznabCatType.XXX, "Hentai Light Novel");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

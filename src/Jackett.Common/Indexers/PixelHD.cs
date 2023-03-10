@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -26,6 +25,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LoginUrl => SiteLink + "login.php";
         private string BrowseUrl => SiteLink + "torrents.php";
 
@@ -39,25 +40,29 @@ namespace Jackett.Common.Indexers
         private string input_username = null;
         private string input_password = null;
 
-        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger,
-            IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       }
-                   },
-                   configService: configService,
+        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
                    logger: logger,
                    p: ps,
                    cacheService: cs,
                    client: webClient,
-                   configData: new ConfigurationDataCaptchaLogin()
-                )
+                   configData: new ConfigurationDataCaptchaLogin())
         {
-            AddCategoryMapping(1, TorznabCatType.MoviesHD);
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD);
+
+            return caps;
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

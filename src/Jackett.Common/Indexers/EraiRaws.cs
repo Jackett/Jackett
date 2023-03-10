@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
@@ -40,19 +39,13 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "semi-private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         const string RSS_PATH = "feed/?type=magnet";
 
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -81,9 +74,21 @@ namespace Jackett.Common.Indexers
                 "title-detail-parsing-help",
                 new DisplayInfoConfigurationItem("", "Title Detail Parsing will attempt to determine the season and episode number from the release names and reformat them as a suffix in the format S1E1. If successful, this should provide better matching in applications such as Sonarr.")
             );
+        }
 
-            // Configure the category mappings
-            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime - Sub");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime - Sub");
+
+            return caps;
         }
 
         private TitleParser titleParser = new TitleParser();

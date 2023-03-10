@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
@@ -27,6 +26,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchUrl => SiteLink + "browse.php";
         private string DownloadUrl => SiteLink + "download.php/{0}/download.torrent";
 
@@ -34,58 +35,64 @@ namespace Jackett.Common.Indexers
 
         public SceneTime(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       },
-                       TvSearchImdbAvailable = true
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataSceneTime())
         {
-            AddCategoryMapping(10, TorznabCatType.XXX, "Movies Adult");
-            AddCategoryMapping(47, TorznabCatType.Movies, "Movie Packs");
-            AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies SD");
-            AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies HD");
-            AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies 3D");
-            AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies CAM-TS");
-            AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies UHD");
-            AddCategoryMapping(2, TorznabCatType.TVUHD, "TV UHD");
-            AddCategoryMapping(43, TorznabCatType.TV, "TV Packs");
-            AddCategoryMapping(9, TorznabCatType.TVHD, "TV HD");
-            AddCategoryMapping(77, TorznabCatType.TVSD, "TV SD");
-            AddCategoryMapping(6, TorznabCatType.PCGames, "Games PC ISO");
-            AddCategoryMapping(48, TorznabCatType.ConsoleXBox, "Games XBOX");
-            AddCategoryMapping(51, TorznabCatType.ConsoleWii, "Games Wii");
-            AddCategoryMapping(55, TorznabCatType.ConsoleNDS, "Games Nintendo DS");
-            AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/PS");
-            AddCategoryMapping(15, TorznabCatType.ConsoleOther, "Games Dreamcast");
-            AddCategoryMapping(52, TorznabCatType.PCMac, "Mac/Linux");
-            AddCategoryMapping(53, TorznabCatType.PC0day, "Apps");
-            AddCategoryMapping(24, TorznabCatType.PCMobileOther, "Mobile Apps");
-            AddCategoryMapping(7, TorznabCatType.Books, "Books and Magazines");
-            AddCategoryMapping(65, TorznabCatType.BooksComics, "Books Comic");
-            AddCategoryMapping(4, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(116, TorznabCatType.Audio, "Music Pack");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                },
+                TvSearchImdbAvailable = true
+            };
+
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.XXX, "Movies Adult");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.Movies, "Movie Packs");
+            caps.Categories.AddCategoryMapping(57, TorznabCatType.MoviesSD, "Movies SD");
+            caps.Categories.AddCategoryMapping(59, TorznabCatType.MoviesHD, "Movies HD");
+            caps.Categories.AddCategoryMapping(64, TorznabCatType.Movies3D, "Movies 3D");
+            caps.Categories.AddCategoryMapping(82, TorznabCatType.MoviesOther, "Movies CAM-TS");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.MoviesUHD, "Movies UHD");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVUHD, "TV UHD");
+            caps.Categories.AddCategoryMapping(43, TorznabCatType.TV, "TV Packs");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.TVHD, "TV HD");
+            caps.Categories.AddCategoryMapping(77, TorznabCatType.TVSD, "TV SD");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.PCGames, "Games PC ISO");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.ConsoleXBox, "Games XBOX");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.ConsoleWii, "Games Wii");
+            caps.Categories.AddCategoryMapping(55, TorznabCatType.ConsoleNDS, "Games Nintendo DS");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.ConsolePS4, "Games/PS");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.ConsoleOther, "Games Dreamcast");
+            caps.Categories.AddCategoryMapping(52, TorznabCatType.PCMac, "Mac/Linux");
+            caps.Categories.AddCategoryMapping(53, TorznabCatType.PC0day, "Apps");
+            caps.Categories.AddCategoryMapping(24, TorznabCatType.PCMobileOther, "Mobile Apps");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.Books, "Books and Magazines");
+            caps.Categories.AddCategoryMapping(65, TorznabCatType.BooksComics, "Books Comic");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(116, TorznabCatType.Audio, "Music Pack");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

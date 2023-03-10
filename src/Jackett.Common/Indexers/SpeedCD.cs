@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -36,6 +35,8 @@ namespace Jackett.Common.Indexers
 
         public override bool SupportsPagination => true;
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LoginUrl1 => SiteLink + "checkpoint/API";
         private string LoginUrl2 => SiteLink + "checkpoint/";
         private string SearchUrl => SiteLink + "browse/";
@@ -44,27 +45,7 @@ namespace Jackett.Common.Indexers
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -74,38 +55,64 @@ namespace Jackett.Common.Indexers
                     in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
         {
-            AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
-            AddCategoryMapping(42, TorznabCatType.Movies, "Movies/Packs");
-            AddCategoryMapping(32, TorznabCatType.Movies, "Movies/Kids");
-            AddCategoryMapping(43, TorznabCatType.MoviesHD, "Movies/HD");
-            AddCategoryMapping(47, TorznabCatType.Movies, "Movies/DiVERSiTY");
-            AddCategoryMapping(28, TorznabCatType.MoviesBluRay, "Movies/B-Ray");
-            AddCategoryMapping(48, TorznabCatType.Movies3D, "Movies/3D");
-            AddCategoryMapping(40, TorznabCatType.MoviesDVD, "Movies/DVD-R");
-            AddCategoryMapping(56, TorznabCatType.Movies, "Movies/Anime");
-            AddCategoryMapping(50, TorznabCatType.TVSport, "TV/Sports");
-            AddCategoryMapping(52, TorznabCatType.TVHD, "TV/B-Ray");
-            AddCategoryMapping(53, TorznabCatType.TVSD, "TV/DVD-R");
-            AddCategoryMapping(41, TorznabCatType.TV, "TV/Packs");
-            AddCategoryMapping(55, TorznabCatType.TV, "TV/Kids");
-            AddCategoryMapping(57, TorznabCatType.TV, "TV/DiVERSiTY");
-            AddCategoryMapping(49, TorznabCatType.TVHD, "TV/HD");
-            AddCategoryMapping(2, TorznabCatType.TVSD, "TV/Episodes");
-            AddCategoryMapping(30, TorznabCatType.TVAnime, "TV/Anime");
-            AddCategoryMapping(25, TorznabCatType.PCISO, "Games/PC ISO");
-            AddCategoryMapping(39, TorznabCatType.ConsoleWii, "Games/Wii");
-            AddCategoryMapping(45, TorznabCatType.ConsolePS3, "Games/PS3");
-            AddCategoryMapping(35, TorznabCatType.Console, "Games/Nintendo");
-            AddCategoryMapping(33, TorznabCatType.ConsoleXBox360, "Games/XboX360");
-            AddCategoryMapping(46, TorznabCatType.PCMobileOther, "Mobile");
-            AddCategoryMapping(24, TorznabCatType.PC0day, "Apps/0DAY");
-            AddCategoryMapping(51, TorznabCatType.PCMac, "Mac");
-            AddCategoryMapping(54, TorznabCatType.Books, "Educational");
-            AddCategoryMapping(27, TorznabCatType.Books, "Books-Mags");
-            AddCategoryMapping(26, TorznabCatType.Audio, "Music/Audio");
-            AddCategoryMapping(3, TorznabCatType.Audio, "Music/Flac");
-            AddCategoryMapping(44, TorznabCatType.Audio, "Music/Pack");
-            AddCategoryMapping(29, TorznabCatType.AudioVideo, "Music/Video");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesOther, "Movies/XviD");
+            caps.Categories.AddCategoryMapping(42, TorznabCatType.Movies, "Movies/Packs");
+            caps.Categories.AddCategoryMapping(32, TorznabCatType.Movies, "Movies/Kids");
+            caps.Categories.AddCategoryMapping(43, TorznabCatType.MoviesHD, "Movies/HD");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.Movies, "Movies/DiVERSiTY");
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.MoviesBluRay, "Movies/B-Ray");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.Movies3D, "Movies/3D");
+            caps.Categories.AddCategoryMapping(40, TorznabCatType.MoviesDVD, "Movies/DVD-R");
+            caps.Categories.AddCategoryMapping(56, TorznabCatType.Movies, "Movies/Anime");
+            caps.Categories.AddCategoryMapping(50, TorznabCatType.TVSport, "TV/Sports");
+            caps.Categories.AddCategoryMapping(52, TorznabCatType.TVHD, "TV/B-Ray");
+            caps.Categories.AddCategoryMapping(53, TorznabCatType.TVSD, "TV/DVD-R");
+            caps.Categories.AddCategoryMapping(41, TorznabCatType.TV, "TV/Packs");
+            caps.Categories.AddCategoryMapping(55, TorznabCatType.TV, "TV/Kids");
+            caps.Categories.AddCategoryMapping(57, TorznabCatType.TV, "TV/DiVERSiTY");
+            caps.Categories.AddCategoryMapping(49, TorznabCatType.TVHD, "TV/HD");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVSD, "TV/Episodes");
+            caps.Categories.AddCategoryMapping(30, TorznabCatType.TVAnime, "TV/Anime");
+            caps.Categories.AddCategoryMapping(25, TorznabCatType.PCISO, "Games/PC ISO");
+            caps.Categories.AddCategoryMapping(39, TorznabCatType.ConsoleWii, "Games/Wii");
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.ConsolePS3, "Games/PS3");
+            caps.Categories.AddCategoryMapping(35, TorznabCatType.Console, "Games/Nintendo");
+            caps.Categories.AddCategoryMapping(33, TorznabCatType.ConsoleXBox360, "Games/XboX360");
+            caps.Categories.AddCategoryMapping(46, TorznabCatType.PCMobileOther, "Mobile");
+            caps.Categories.AddCategoryMapping(24, TorznabCatType.PC0day, "Apps/0DAY");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.PCMac, "Mac");
+            caps.Categories.AddCategoryMapping(54, TorznabCatType.Books, "Educational");
+            caps.Categories.AddCategoryMapping(27, TorznabCatType.Books, "Books-Mags");
+            caps.Categories.AddCategoryMapping(26, TorznabCatType.Audio, "Music/Audio");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.Audio, "Music/Flac");
+            caps.Categories.AddCategoryMapping(44, TorznabCatType.Audio, "Music/Pack");
+            caps.Categories.AddCategoryMapping(29, TorznabCatType.AudioVideo, "Music/Video");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

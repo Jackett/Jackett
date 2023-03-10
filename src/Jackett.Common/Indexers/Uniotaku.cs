@@ -25,46 +25,54 @@ namespace Jackett.Common.Indexers
         public override string Language => "pt-BR";
         public override string Type => "semi-private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public Uniotaku(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataUniotaku())
         {
-            AddCategoryMapping(28, TorznabCatType.TVAnime, "Anime");
-            AddCategoryMapping(47, TorznabCatType.MoviesOther, "Filme");
-            AddCategoryMapping(48, TorznabCatType.TVAnime, "OVA");
-            AddCategoryMapping(49, TorznabCatType.BooksComics, "Mangá");
-            AddCategoryMapping(50, TorznabCatType.TVOther, "Dorama");
-            AddCategoryMapping(51, TorznabCatType.Audio, "OST");
-            AddCategoryMapping(52, TorznabCatType.TVAnime, "Anime Completo");
-            AddCategoryMapping(53, TorznabCatType.BooksComics, "Mangá Completo");
-            AddCategoryMapping(54, TorznabCatType.TVOther, "Dorama Completo");
-            AddCategoryMapping(55, TorznabCatType.XXX, "Hentai");
-            AddCategoryMapping(56, TorznabCatType.XXXOther, "H Doujinshi");
-            AddCategoryMapping(57, TorznabCatType.TVOther, "Tokusatsu");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.MoviesOther, "Filme");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.TVAnime, "OVA");
+            caps.Categories.AddCategoryMapping(49, TorznabCatType.BooksComics, "Mangá");
+            caps.Categories.AddCategoryMapping(50, TorznabCatType.TVOther, "Dorama");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.Audio, "OST");
+            caps.Categories.AddCategoryMapping(52, TorznabCatType.TVAnime, "Anime Completo");
+            caps.Categories.AddCategoryMapping(53, TorznabCatType.BooksComics, "Mangá Completo");
+            caps.Categories.AddCategoryMapping(54, TorznabCatType.TVOther, "Dorama Completo");
+            caps.Categories.AddCategoryMapping(55, TorznabCatType.XXX, "Hentai");
+            caps.Categories.AddCategoryMapping(56, TorznabCatType.XXXOther, "H Doujinshi");
+            caps.Categories.AddCategoryMapping(57, TorznabCatType.TVOther, "Tokusatsu");
+
+            return caps;
         }
 
         private new ConfigurationDataUniotaku configData => (ConfigurationDataUniotaku)base.configData;

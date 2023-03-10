@@ -8,8 +8,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
 
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
-
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
@@ -22,17 +20,11 @@ namespace Jackett.Common.Indexers
         public override string Language => "zh-CN";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public DICMusic(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
-                       }
-                   },
-                   configService: configService,
+                        ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -41,8 +33,22 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechOnly: true,
                    has2Fa: true)
         {
-            AddCategoryMapping(1, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(2, TorznabCatType.PC, "Applications");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.PC, "Applications");
+
+            return caps;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

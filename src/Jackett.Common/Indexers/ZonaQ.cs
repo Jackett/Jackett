@@ -31,6 +31,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "es-ES";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string Login1Url => SiteLink + "index.php";
         private string Login2Url => SiteLink + "paDentro.php";
         private string Login3Url => SiteLink + "retorno/include/puerta_8_ajax.php";
@@ -39,87 +41,91 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public ZonaQ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+        public ZonaQ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents por página' option to 100 in 'Mi Panel' page."))
-
         {
-            AddCategoryMapping("cat[]=1&subcat[]=1", TorznabCatType.MoviesDVD, "Películas/DVD");
-            AddCategoryMapping("cat[]=1&subcat[]=2", TorznabCatType.MoviesDVD, "Películas/BDVD + Autorías");
-            AddCategoryMapping("cat[]=1&subcat[]=3", TorznabCatType.MoviesBluRay, "Películas/BD");
-            AddCategoryMapping("cat[]=1&subcat[]=4", TorznabCatType.MoviesUHD, "Películas/BD 4K");
-            AddCategoryMapping("cat[]=1&subcat[]=5", TorznabCatType.Movies3D, "Películas/BD 3D");
-            AddCategoryMapping("cat[]=1&subcat[]=6", TorznabCatType.MoviesBluRay, "Películas/BD Remux");
-            AddCategoryMapping("cat[]=1&subcat[]=7", TorznabCatType.MoviesHD, "Películas/MKV");
-            AddCategoryMapping("cat[]=1&subcat[]=8", TorznabCatType.MoviesUHD, "Películas/MKV 4K");
-            AddCategoryMapping("cat[]=1&subcat[]=9", TorznabCatType.MoviesUHD, "Películas/BD Remux 4K");
+        }
 
-            AddCategoryMapping("cat[]=2&subcat[]=1", TorznabCatType.MoviesDVD, "Animación/DVD");
-            AddCategoryMapping("cat[]=2&subcat[]=2", TorznabCatType.MoviesDVD, "Animación/BDVD + Autorías");
-            AddCategoryMapping("cat[]=2&subcat[]=3", TorznabCatType.MoviesBluRay, "Animación/BD");
-            AddCategoryMapping("cat[]=2&subcat[]=4", TorznabCatType.MoviesUHD, "Animación/BD 4K");
-            AddCategoryMapping("cat[]=2&subcat[]=5", TorznabCatType.Movies3D, "Animación/BD 3D");
-            AddCategoryMapping("cat[]=2&subcat[]=6", TorznabCatType.MoviesBluRay, "Animación/BD Remux");
-            AddCategoryMapping("cat[]=2&subcat[]=7", TorznabCatType.MoviesHD, "Animación/MKV");
-            AddCategoryMapping("cat[]=2&subcat[]=8", TorznabCatType.MoviesUHD, "Animación/MKV 4K");
-            AddCategoryMapping("cat[]=2&subcat[]=9", TorznabCatType.MoviesUHD, "Animación/BD Remux 4K");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                }
+            };
 
-            AddCategoryMapping("cat[]=3&subcat[]=1", TorznabCatType.AudioVideo, "Música/DVD");
-            AddCategoryMapping("cat[]=3&subcat[]=2", TorznabCatType.AudioVideo, "Música/BDVD + Autorías");
-            AddCategoryMapping("cat[]=3&subcat[]=3", TorznabCatType.AudioVideo, "Música/BD");
-            AddCategoryMapping("cat[]=3&subcat[]=4", TorznabCatType.AudioVideo, "Música/BD 4K");
-            AddCategoryMapping("cat[]=3&subcat[]=5", TorznabCatType.AudioVideo, "Música/BD 3D");
-            AddCategoryMapping("cat[]=3&subcat[]=6", TorznabCatType.AudioVideo, "Música/BD Remux");
-            AddCategoryMapping("cat[]=3&subcat[]=7", TorznabCatType.AudioVideo, "Música/MKV");
-            AddCategoryMapping("cat[]=3&subcat[]=8", TorznabCatType.AudioVideo, "Música/MKV 4K");
-            AddCategoryMapping("cat[]=3&subcat[]=9", TorznabCatType.AudioVideo, "Música/BD Remux 4K");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=1", TorznabCatType.MoviesDVD, "Películas/DVD");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=2", TorznabCatType.MoviesDVD, "Películas/BDVD + Autorías");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=3", TorznabCatType.MoviesBluRay, "Películas/BD");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=4", TorznabCatType.MoviesUHD, "Películas/BD 4K");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=5", TorznabCatType.Movies3D, "Películas/BD 3D");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=6", TorznabCatType.MoviesBluRay, "Películas/BD Remux");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=7", TorznabCatType.MoviesHD, "Películas/MKV");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=8", TorznabCatType.MoviesUHD, "Películas/MKV 4K");
+            caps.Categories.AddCategoryMapping("cat[]=1&subcat[]=9", TorznabCatType.MoviesUHD, "Películas/BD Remux 4K");
 
-            AddCategoryMapping("cat[]=4&subcat[]=1", TorznabCatType.TVSD, "Series/DVD");
-            AddCategoryMapping("cat[]=4&subcat[]=2", TorznabCatType.TVSD, "Series/BDVD + Autorías");
-            AddCategoryMapping("cat[]=4&subcat[]=3", TorznabCatType.TVHD, "Series/BD");
-            AddCategoryMapping("cat[]=4&subcat[]=4", TorznabCatType.TVUHD, "Series/BD 4K");
-            AddCategoryMapping("cat[]=4&subcat[]=5", TorznabCatType.TVOther, "Series/BD 3D");
-            AddCategoryMapping("cat[]=4&subcat[]=6", TorznabCatType.TVHD, "Series/BD Remux");
-            AddCategoryMapping("cat[]=4&subcat[]=7", TorznabCatType.TVHD, "Series/MKV");
-            AddCategoryMapping("cat[]=4&subcat[]=8", TorznabCatType.TVUHD, "Series/MKV 4K");
-            AddCategoryMapping("cat[]=4&subcat[]=9", TorznabCatType.TVUHD, "Series/BD Remux 4K");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=1", TorznabCatType.MoviesDVD, "Animación/DVD");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=2", TorznabCatType.MoviesDVD, "Animación/BDVD + Autorías");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=3", TorznabCatType.MoviesBluRay, "Animación/BD");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=4", TorznabCatType.MoviesUHD, "Animación/BD 4K");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=5", TorznabCatType.Movies3D, "Animación/BD 3D");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=6", TorznabCatType.MoviesBluRay, "Animación/BD Remux");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=7", TorznabCatType.MoviesHD, "Animación/MKV");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=8", TorznabCatType.MoviesUHD, "Animación/MKV 4K");
+            caps.Categories.AddCategoryMapping("cat[]=2&subcat[]=9", TorznabCatType.MoviesUHD, "Animación/BD Remux 4K");
 
-            AddCategoryMapping("cat[]=5&subcat[]=1", TorznabCatType.TVDocumentary, "Docus/DVD");
-            AddCategoryMapping("cat[]=5&subcat[]=2", TorznabCatType.TVDocumentary, "Docus/BDVD + Autorías");
-            AddCategoryMapping("cat[]=5&subcat[]=3", TorznabCatType.TVDocumentary, "Docus/BD");
-            AddCategoryMapping("cat[]=5&subcat[]=4", TorznabCatType.TVDocumentary, "Docus/BD 4K");
-            AddCategoryMapping("cat[]=5&subcat[]=5", TorznabCatType.TVDocumentary, "Docus/BD 3D");
-            AddCategoryMapping("cat[]=5&subcat[]=6", TorznabCatType.TVDocumentary, "Docus/BD Remux");
-            AddCategoryMapping("cat[]=5&subcat[]=7", TorznabCatType.TVDocumentary, "Docus/MKV");
-            AddCategoryMapping("cat[]=5&subcat[]=8", TorznabCatType.TVDocumentary, "Docus/MKV 4K");
-            AddCategoryMapping("cat[]=5&subcat[]=9", TorznabCatType.TVDocumentary, "Docus/BD Remux 4K");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=1", TorznabCatType.AudioVideo, "Música/DVD");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=2", TorznabCatType.AudioVideo, "Música/BDVD + Autorías");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=3", TorznabCatType.AudioVideo, "Música/BD");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=4", TorznabCatType.AudioVideo, "Música/BD 4K");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=5", TorznabCatType.AudioVideo, "Música/BD 3D");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=6", TorznabCatType.AudioVideo, "Música/BD Remux");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=7", TorznabCatType.AudioVideo, "Música/MKV");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=8", TorznabCatType.AudioVideo, "Música/MKV 4K");
+            caps.Categories.AddCategoryMapping("cat[]=3&subcat[]=9", TorznabCatType.AudioVideo, "Música/BD Remux 4K");
 
-            AddCategoryMapping("cat[]=6&subcat[]=1", TorznabCatType.OtherMisc, "Deportes y Otros/DVD");
-            AddCategoryMapping("cat[]=6&subcat[]=2", TorznabCatType.OtherMisc, "Deportes y Otros/BDVD + Autorías");
-            AddCategoryMapping("cat[]=6&subcat[]=3", TorznabCatType.OtherMisc, "Deportes y Otros/BD");
-            AddCategoryMapping("cat[]=6&subcat[]=4", TorznabCatType.OtherMisc, "Deportes y Otros/BD 4K");
-            AddCategoryMapping("cat[]=6&subcat[]=5", TorznabCatType.OtherMisc, "Deportes y Otros/BD 3D");
-            AddCategoryMapping("cat[]=6&subcat[]=6", TorznabCatType.OtherMisc, "Deportes y Otros/BD Remux");
-            AddCategoryMapping("cat[]=6&subcat[]=7", TorznabCatType.OtherMisc, "Deportes y Otros/MKV");
-            AddCategoryMapping("cat[]=6&subcat[]=8", TorznabCatType.OtherMisc, "Deportes y Otros/MKV 4K");
-            AddCategoryMapping("cat[]=6&subcat[]=9", TorznabCatType.OtherMisc, "Deportes y Otros/BD Remux 4K");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=1", TorznabCatType.TVSD, "Series/DVD");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=2", TorznabCatType.TVSD, "Series/BDVD + Autorías");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=3", TorznabCatType.TVHD, "Series/BD");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=4", TorznabCatType.TVUHD, "Series/BD 4K");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=5", TorznabCatType.TVOther, "Series/BD 3D");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=6", TorznabCatType.TVHD, "Series/BD Remux");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=7", TorznabCatType.TVHD, "Series/MKV");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=8", TorznabCatType.TVUHD, "Series/MKV 4K");
+            caps.Categories.AddCategoryMapping("cat[]=4&subcat[]=9", TorznabCatType.TVUHD, "Series/BD Remux 4K");
+
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=1", TorznabCatType.TVDocumentary, "Docus/DVD");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=2", TorznabCatType.TVDocumentary, "Docus/BDVD + Autorías");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=3", TorznabCatType.TVDocumentary, "Docus/BD");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=4", TorznabCatType.TVDocumentary, "Docus/BD 4K");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=5", TorznabCatType.TVDocumentary, "Docus/BD 3D");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=6", TorznabCatType.TVDocumentary, "Docus/BD Remux");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=7", TorznabCatType.TVDocumentary, "Docus/MKV");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=8", TorznabCatType.TVDocumentary, "Docus/MKV 4K");
+            caps.Categories.AddCategoryMapping("cat[]=5&subcat[]=9", TorznabCatType.TVDocumentary, "Docus/BD Remux 4K");
+
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=1", TorznabCatType.OtherMisc, "Deportes y Otros/DVD");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=2", TorznabCatType.OtherMisc, "Deportes y Otros/BDVD + Autorías");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=3", TorznabCatType.OtherMisc, "Deportes y Otros/BD");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=4", TorznabCatType.OtherMisc, "Deportes y Otros/BD 4K");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=5", TorznabCatType.OtherMisc, "Deportes y Otros/BD 3D");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=6", TorznabCatType.OtherMisc, "Deportes y Otros/BD Remux");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=7", TorznabCatType.OtherMisc, "Deportes y Otros/MKV");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=8", TorznabCatType.OtherMisc, "Deportes y Otros/MKV 4K");
+            caps.Categories.AddCategoryMapping("cat[]=6&subcat[]=9", TorznabCatType.OtherMisc, "Deportes y Otros/BD Remux 4K");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

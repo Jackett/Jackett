@@ -190,7 +190,7 @@ namespace Jackett.Common.Indexers
                         logger.Error(string.Format("CardigannIndexer ({0}): invalid Torznab category for id {1}: {2}", Id, Category.Key, Category.Value));
                         continue;
                     }
-                    AddCategoryMapping(Category.Key, cat);
+                    TorznabCaps.Categories.AddCategoryMapping(Category.Key, cat);
                 }
             }
 
@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         }
                     }
-                    AddCategoryMapping(Categorymapping.id, TorznabCat, Categorymapping.desc);
+                    TorznabCaps.Categories.AddCategoryMapping(Categorymapping.id, TorznabCat, Categorymapping.desc);
                     if (Categorymapping.Default)
                         DefaultCategories.Add(Categorymapping.id);
                 }

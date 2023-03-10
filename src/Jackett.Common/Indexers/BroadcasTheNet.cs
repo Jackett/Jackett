@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -28,6 +27,8 @@ namespace Jackett.Common.Indexers
 
         public override bool SupportsPagination => true;
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         // based on https://github.com/Prowlarr/Prowlarr/tree/develop/src/NzbDrone.Core/Indexers/Definitions/BroadcastheNet
         private readonly string APIBASE = "https://api.broadcasthe.net";
 
@@ -40,29 +41,35 @@ namespace Jackett.Common.Indexers
 
         public BroadcasTheNet(IIndexerConfigurationService configService, WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       LimitsDefault = 100,
-                       LimitsMax = 1000,
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TvdbId
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
-            AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
-            AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");
-            AddCategoryMapping("1080i", TorznabCatType.TVHD, "1080i");
-            AddCategoryMapping("2160p", TorznabCatType.TVHD, "2160p");
-            AddCategoryMapping("Portable Device", TorznabCatType.TVSD, "Portable Device");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                LimitsDefault = 100,
+                LimitsMax = 1000,
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TvdbId
+                }
+            };
+
+            caps.Categories.AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
+            caps.Categories.AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
+            caps.Categories.AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");
+            caps.Categories.AddCategoryMapping("1080i", TorznabCatType.TVHD, "1080i");
+            caps.Categories.AddCategoryMapping("2160p", TorznabCatType.TVHD, "2160p");
+            caps.Categories.AddCategoryMapping("Portable Device", TorznabCatType.TVSD, "Portable Device");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

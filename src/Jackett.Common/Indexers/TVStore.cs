@@ -28,6 +28,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "hu-HU";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private readonly Dictionary<int, long> _imdbLookup = new Dictionary<int, long>(); // _imdbLookup[internalId] = imdbId
 
         private readonly Dictionary<long, int>
@@ -39,30 +41,35 @@ namespace Jackett.Common.Indexers
         private readonly Regex _seriesInfoSearchRegex = new Regex(
             @"S(?<season>\d{1,3})(?:E(?<episode>\d{1,3}))?$", RegexOptions.IgnoreCase);
 
-        public TVStore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs) :
-            base(
-                 caps: new TorznabCapabilities
-                 {
-                     TvSearchParams = new List<TvSearchParam>
-                     {
-                         TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                     },
-                     MovieSearchParams = new List<MovieSearchParam>
-                     {
-                         MovieSearchParam.Q, MovieSearchParam.ImdbId
-                     }
-                 },
-                 configService: configService,
+        public TVStore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) :
+            base(configService: configService,
                  client: wc,
                  logger: l,
                  p: ps,
                  cacheService: cs,
                  configData: new ConfigurationDataTVstore())
         {
-            AddCategoryMapping(1, TorznabCatType.TV);
-            AddCategoryMapping(2, TorznabCatType.TVHD);
-            AddCategoryMapping(3, TorznabCatType.TVSD);
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TV);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVHD);
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVSD);
+
+            return caps;
         }
 
         private string LoginUrl => SiteLink + "takelogin.php";

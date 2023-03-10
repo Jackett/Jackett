@@ -63,16 +63,10 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public AudioBookBay(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -80,65 +74,78 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationData())
         {
             webclient.requestDelay = 3.1;
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
 
             // Age
-            AddCategoryMapping("children", TorznabCatType.AudioAudiobook, "Children");
-            AddCategoryMapping("teen-young-adult", TorznabCatType.AudioAudiobook, "Teen & Young Adult");
-            AddCategoryMapping("adults", TorznabCatType.AudioAudiobook, "Adults");
+            caps.Categories.AddCategoryMapping("children", TorznabCatType.AudioAudiobook, "Children");
+            caps.Categories.AddCategoryMapping("teen-young-adult", TorznabCatType.AudioAudiobook, "Teen & Young Adult");
+            caps.Categories.AddCategoryMapping("adults", TorznabCatType.AudioAudiobook, "Adults");
 
             // Category
-            AddCategoryMapping("postapocalyptic", TorznabCatType.AudioAudiobook, "(Post)apocalyptic");
-            AddCategoryMapping("action", TorznabCatType.AudioAudiobook, "Action");
-            AddCategoryMapping("adventure", TorznabCatType.AudioAudiobook, "Adventure");
-            AddCategoryMapping("art", TorznabCatType.AudioAudiobook, "Art");
-            AddCategoryMapping("autobiography-biographies", TorznabCatType.AudioAudiobook, "Autobiography & Biographies");
-            AddCategoryMapping("business", TorznabCatType.AudioAudiobook, "Business");
-            AddCategoryMapping("computer", TorznabCatType.AudioAudiobook, "Computer");
-            AddCategoryMapping("contemporary", TorznabCatType.AudioAudiobook, "Contemporary");
-            AddCategoryMapping("crime", TorznabCatType.AudioAudiobook, "Crime");
-            AddCategoryMapping("detective", TorznabCatType.AudioAudiobook, "Detective");
-            AddCategoryMapping("doctor-who-sci-fi", TorznabCatType.AudioAudiobook, "Doctor Who");
-            AddCategoryMapping("education", TorznabCatType.AudioAudiobook, "Education");
-            AddCategoryMapping("fantasy", TorznabCatType.AudioAudiobook, "Fantasy");
-            AddCategoryMapping("general-fiction", TorznabCatType.AudioAudiobook, "General Fiction");
-            AddCategoryMapping("historical-fiction", TorznabCatType.AudioAudiobook, "Historical Fiction");
-            AddCategoryMapping("history", TorznabCatType.AudioAudiobook, "History");
-            AddCategoryMapping("horror", TorznabCatType.AudioAudiobook, "Horror");
-            AddCategoryMapping("humor", TorznabCatType.AudioAudiobook, "Humor");
-            AddCategoryMapping("lecture", TorznabCatType.AudioAudiobook, "Lecture");
-            AddCategoryMapping("lgbt", TorznabCatType.AudioAudiobook, "LGBT");
-            AddCategoryMapping("literature", TorznabCatType.AudioAudiobook, "Literature");
-            AddCategoryMapping("litrpg", TorznabCatType.AudioAudiobook, "LitRPG");
-            AddCategoryMapping("general-non-fiction", TorznabCatType.AudioAudiobook, "Misc. Non-fiction");
-            AddCategoryMapping("mystery", TorznabCatType.AudioAudiobook, "Mystery");
-            AddCategoryMapping("paranormal", TorznabCatType.AudioAudiobook, "Paranormal");
-            AddCategoryMapping("plays-theater", TorznabCatType.AudioAudiobook, "Plays & Theater");
-            AddCategoryMapping("poetry", TorznabCatType.AudioAudiobook, "Poetry");
-            AddCategoryMapping("political", TorznabCatType.AudioAudiobook, "Political");
-            AddCategoryMapping("radio-productions", TorznabCatType.AudioAudiobook, "Radio Productions");
-            AddCategoryMapping("romance", TorznabCatType.AudioAudiobook, "Romance");
-            AddCategoryMapping("sci-fi", TorznabCatType.AudioAudiobook, "Sci-Fi");
-            AddCategoryMapping("science", TorznabCatType.AudioAudiobook, "Science");
-            AddCategoryMapping("self-help", TorznabCatType.AudioAudiobook, "Self-help");
-            AddCategoryMapping("spiritual", TorznabCatType.AudioAudiobook, "Spiritual & Religious");
-            AddCategoryMapping("sports", TorznabCatType.AudioAudiobook, "Sport & Recreation");
-            AddCategoryMapping("suspense", TorznabCatType.AudioAudiobook, "Suspense");
-            AddCategoryMapping("thriller", TorznabCatType.AudioAudiobook, "Thriller");
-            AddCategoryMapping("true-crime", TorznabCatType.AudioAudiobook, "True Crime");
-            AddCategoryMapping("tutorial", TorznabCatType.AudioAudiobook, "Tutorial");
-            AddCategoryMapping("westerns", TorznabCatType.AudioAudiobook, "Westerns");
-            AddCategoryMapping("zombies", TorznabCatType.AudioAudiobook, "Zombies");
+            caps.Categories.AddCategoryMapping("postapocalyptic", TorznabCatType.AudioAudiobook, "(Post)apocalyptic");
+            caps.Categories.AddCategoryMapping("action", TorznabCatType.AudioAudiobook, "Action");
+            caps.Categories.AddCategoryMapping("adventure", TorznabCatType.AudioAudiobook, "Adventure");
+            caps.Categories.AddCategoryMapping("art", TorznabCatType.AudioAudiobook, "Art");
+            caps.Categories.AddCategoryMapping("autobiography-biographies", TorznabCatType.AudioAudiobook, "Autobiography & Biographies");
+            caps.Categories.AddCategoryMapping("business", TorznabCatType.AudioAudiobook, "Business");
+            caps.Categories.AddCategoryMapping("computer", TorznabCatType.AudioAudiobook, "Computer");
+            caps.Categories.AddCategoryMapping("contemporary", TorznabCatType.AudioAudiobook, "Contemporary");
+            caps.Categories.AddCategoryMapping("crime", TorznabCatType.AudioAudiobook, "Crime");
+            caps.Categories.AddCategoryMapping("detective", TorznabCatType.AudioAudiobook, "Detective");
+            caps.Categories.AddCategoryMapping("doctor-who-sci-fi", TorznabCatType.AudioAudiobook, "Doctor Who");
+            caps.Categories.AddCategoryMapping("education", TorznabCatType.AudioAudiobook, "Education");
+            caps.Categories.AddCategoryMapping("fantasy", TorznabCatType.AudioAudiobook, "Fantasy");
+            caps.Categories.AddCategoryMapping("general-fiction", TorznabCatType.AudioAudiobook, "General Fiction");
+            caps.Categories.AddCategoryMapping("historical-fiction", TorznabCatType.AudioAudiobook, "Historical Fiction");
+            caps.Categories.AddCategoryMapping("history", TorznabCatType.AudioAudiobook, "History");
+            caps.Categories.AddCategoryMapping("horror", TorznabCatType.AudioAudiobook, "Horror");
+            caps.Categories.AddCategoryMapping("humor", TorznabCatType.AudioAudiobook, "Humor");
+            caps.Categories.AddCategoryMapping("lecture", TorznabCatType.AudioAudiobook, "Lecture");
+            caps.Categories.AddCategoryMapping("lgbt", TorznabCatType.AudioAudiobook, "LGBT");
+            caps.Categories.AddCategoryMapping("literature", TorznabCatType.AudioAudiobook, "Literature");
+            caps.Categories.AddCategoryMapping("litrpg", TorznabCatType.AudioAudiobook, "LitRPG");
+            caps.Categories.AddCategoryMapping("general-non-fiction", TorznabCatType.AudioAudiobook, "Misc. Non-fiction");
+            caps.Categories.AddCategoryMapping("mystery", TorznabCatType.AudioAudiobook, "Mystery");
+            caps.Categories.AddCategoryMapping("paranormal", TorznabCatType.AudioAudiobook, "Paranormal");
+            caps.Categories.AddCategoryMapping("plays-theater", TorznabCatType.AudioAudiobook, "Plays & Theater");
+            caps.Categories.AddCategoryMapping("poetry", TorznabCatType.AudioAudiobook, "Poetry");
+            caps.Categories.AddCategoryMapping("political", TorznabCatType.AudioAudiobook, "Political");
+            caps.Categories.AddCategoryMapping("radio-productions", TorznabCatType.AudioAudiobook, "Radio Productions");
+            caps.Categories.AddCategoryMapping("romance", TorznabCatType.AudioAudiobook, "Romance");
+            caps.Categories.AddCategoryMapping("sci-fi", TorznabCatType.AudioAudiobook, "Sci-Fi");
+            caps.Categories.AddCategoryMapping("science", TorznabCatType.AudioAudiobook, "Science");
+            caps.Categories.AddCategoryMapping("self-help", TorznabCatType.AudioAudiobook, "Self-help");
+            caps.Categories.AddCategoryMapping("spiritual", TorznabCatType.AudioAudiobook, "Spiritual & Religious");
+            caps.Categories.AddCategoryMapping("sports", TorznabCatType.AudioAudiobook, "Sport & Recreation");
+            caps.Categories.AddCategoryMapping("suspense", TorznabCatType.AudioAudiobook, "Suspense");
+            caps.Categories.AddCategoryMapping("thriller", TorznabCatType.AudioAudiobook, "Thriller");
+            caps.Categories.AddCategoryMapping("true-crime", TorznabCatType.AudioAudiobook, "True Crime");
+            caps.Categories.AddCategoryMapping("tutorial", TorznabCatType.AudioAudiobook, "Tutorial");
+            caps.Categories.AddCategoryMapping("westerns", TorznabCatType.AudioAudiobook, "Westerns");
+            caps.Categories.AddCategoryMapping("zombies", TorznabCatType.AudioAudiobook, "Zombies");
 
             // Category Modifiers
-            AddCategoryMapping("anthology", TorznabCatType.AudioAudiobook, "Anthology");
-            AddCategoryMapping("bestsellers", TorznabCatType.AudioAudiobook, "Bestsellers");
-            AddCategoryMapping("classic", TorznabCatType.AudioAudiobook, "Classic");
-            AddCategoryMapping("documentary", TorznabCatType.AudioAudiobook, "Documentary");
-            AddCategoryMapping("full-cast", TorznabCatType.AudioAudiobook, "Full Cast");
-            AddCategoryMapping("libertarian", TorznabCatType.AudioAudiobook, "Libertarian");
-            AddCategoryMapping("military", TorznabCatType.AudioAudiobook, "Military");
-            AddCategoryMapping("novel", TorznabCatType.AudioAudiobook, "Novel");
-            AddCategoryMapping("short-story", TorznabCatType.AudioAudiobook, "Short Story");
+            caps.Categories.AddCategoryMapping("anthology", TorznabCatType.AudioAudiobook, "Anthology");
+            caps.Categories.AddCategoryMapping("bestsellers", TorznabCatType.AudioAudiobook, "Bestsellers");
+            caps.Categories.AddCategoryMapping("classic", TorznabCatType.AudioAudiobook, "Classic");
+            caps.Categories.AddCategoryMapping("documentary", TorznabCatType.AudioAudiobook, "Documentary");
+            caps.Categories.AddCategoryMapping("full-cast", TorznabCatType.AudioAudiobook, "Full Cast");
+            caps.Categories.AddCategoryMapping("libertarian", TorznabCatType.AudioAudiobook, "Libertarian");
+            caps.Categories.AddCategoryMapping("military", TorznabCatType.AudioAudiobook, "Military");
+            caps.Categories.AddCategoryMapping("novel", TorznabCatType.AudioAudiobook, "Novel");
+            caps.Categories.AddCategoryMapping("short-story", TorznabCatType.AudioAudiobook, "Short Story");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

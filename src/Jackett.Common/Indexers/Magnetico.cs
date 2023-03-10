@@ -25,6 +25,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "semi-private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchURl => SiteLink + "api/v0.1/torrents";
         private string TorrentsUrl => SiteLink + "torrents";
 
@@ -32,27 +34,7 @@ namespace Jackett.Common.Indexers
 
         public Magnetico(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       },
-                       BookSearchParams = new List<BookSearchParam>
-                       {
-                           BookSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
@@ -79,9 +61,35 @@ namespace Jackett.Common.Indexers
                 })
             { Value = "false" };
             configData.AddDynamic("order", order);
-
-            AddCategoryMapping("1", TorznabCatType.Other);
         }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping("1", TorznabCatType.Other);
+
+            return caps;
+        }
+
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {

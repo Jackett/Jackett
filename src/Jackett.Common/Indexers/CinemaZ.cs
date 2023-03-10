@@ -16,37 +16,45 @@ namespace Jackett.Common.Indexers
         public override string Description => "Part of the Avistaz network.";
         public override string SiteLink { get; protected set; } = "https://cinemaz.to/";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public CinemaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       LimitsDefault = 50,
-                       LimitsMax = 50,
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                       }
-                   },
-                   configService: configService,
+                       ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cs: cs
                    )
         {
-            AddCategoryMapping(1, TorznabCatType.Movies);
-            AddCategoryMapping(1, TorznabCatType.MoviesUHD);
-            AddCategoryMapping(1, TorznabCatType.MoviesHD);
-            AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            AddCategoryMapping(2, TorznabCatType.TV);
-            AddCategoryMapping(2, TorznabCatType.TVUHD);
-            AddCategoryMapping(2, TorznabCatType.TVHD);
-            AddCategoryMapping(2, TorznabCatType.TVSD);
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                LimitsDefault = 50,
+                LimitsMax = 50,
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesUHD);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesSD);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TV);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVUHD);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVHD);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVSD);
+
+            return caps;
         }
     }
 }

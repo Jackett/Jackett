@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -25,6 +24,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string APIUrl => SiteLink + "api/";
 
         private new ConfigurationDataHDBitsApi configData
@@ -35,33 +36,39 @@ namespace Jackett.Common.Indexers
 
         public HDBitsApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TvdbId
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataHDBitsApi())
         {
-            AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
-            AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
-            AddCategoryMapping(8, TorznabCatType.Other, "Misc/Demo");
-            AddCategoryMapping(1, TorznabCatType.Movies, "Movie");
-            AddCategoryMapping(4, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(5, TorznabCatType.TVSport, "Sport");
-            AddCategoryMapping(2, TorznabCatType.TV, "TV");
-            AddCategoryMapping(7, TorznabCatType.XXX, "XXX");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TvdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.Other, "Misc/Demo");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Movie");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.TVSport, "Sport");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TV, "TV");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.XXX, "XXX");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

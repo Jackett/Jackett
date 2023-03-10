@@ -31,6 +31,8 @@ namespace Jackett.Common.Indexers
 
         public override bool SupportsPagination => true;
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string LandingUrl => SiteLink + "login.php";
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "torrents.php";
@@ -67,24 +69,30 @@ namespace Jackett.Common.Indexers
 
         public Libble(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWith2FA())
         {
-            AddCategoryMapping(1, TorznabCatType.Audio, "Music");
-            AddCategoryMapping(2, TorznabCatType.Audio, "Libble Mixtapes");
-            AddCategoryMapping(7, TorznabCatType.AudioVideo, "Music Videos");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.Audio, "Libble Mixtapes");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.AudioVideo, "Music Videos");
+
+            return caps;
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

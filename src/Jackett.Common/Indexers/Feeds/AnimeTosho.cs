@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Jackett.Common.Models;
@@ -23,23 +22,31 @@ namespace Jackett.Common.Indexers.Feeds
         public override string Language => "en-US";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: ps,
                    cs: cs,
                    configData: new ConfigurationData())
         {
-            AddCategoryMapping(1, TorznabCatType.TVAnime);
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime);
+
+            return caps;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

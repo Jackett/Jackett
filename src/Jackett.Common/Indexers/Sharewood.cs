@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -30,6 +29,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "fr-FR";
         public override string Type => "semi-private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
             {"Accept", "application/json"},
@@ -39,95 +40,16 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "api/" + configData.Passkey.Value;
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
-        public ShareWood(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                caps: new TorznabCapabilities
-                {
-                    TvSearchParams = new List<TvSearchParam>
-                    {
-                        TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                    },
-                    MovieSearchParams = new List<MovieSearchParam>
-                    {
-                        MovieSearchParam.Q
-                    },
-                    MusicSearchParams = new List<MusicSearchParam>
-                    {
-                        MusicSearchParam.Q
-                    },
-                    BookSearchParams = new List<BookSearchParam>
-                    {
-                        BookSearchParam.Q
-                    },
-                    SupportsRawSearch = true
-                },
-                configService: configService,
-                client: wc,
-                logger: l,
-                p: ps,
-                cacheService: cs,
-                configData: new ConfigurationDataPasskey()
-                )
+        public ShareWood(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
+                   client: wc,
+                   logger: l,
+                   p: ps,
+                   cacheService: cs,
+                   configData: new ConfigurationDataPasskey())
         {
             // requestDelay for API Limit (1 request per 2 seconds)
             webclient.requestDelay = 2.1;
-
-            //CATEGORIES
-            //AddCategoryMapping(1, TorznabCatType.Movies, "Vidéos");
-            //AddCategoryMapping(1, TorznabCatType.TV, "Vidéos");
-            //AddCategoryMapping(2, TorznabCatType.Audio, "Audio");
-            //AddCategoryMapping(3, TorznabCatType.PC, "Application");
-            //AddCategoryMapping(4, TorznabCatType.Books, "Ebooks");
-            //AddCategoryMapping(5, TorznabCatType.PCGames, "Jeu-Vidéo");
-            //AddCategoryMapping(6, TorznabCatType.OtherMisc, "Formation");
-            //AddCategoryMapping(7, TorznabCatType.XXX, "XXX");
-
-            //SUBCATEGORIES
-            AddCategoryMapping(9, TorznabCatType.Movies, "Films");
-            AddCategoryMapping(10, TorznabCatType.TV, "Série");
-            AddCategoryMapping(11, TorznabCatType.MoviesOther, "Film Animation");
-            AddCategoryMapping(12, TorznabCatType.TVAnime, "Série Animation");
-            AddCategoryMapping(13, TorznabCatType.TVDocumentary, "Documentaire");
-            AddCategoryMapping(14, TorznabCatType.TVOther, "Emission TV");
-            AddCategoryMapping(15, TorznabCatType.TVOther, "Spectacle/Concert");
-            AddCategoryMapping(16, TorznabCatType.TVSport, "Sport");
-            AddCategoryMapping(17, TorznabCatType.AudioOther, "Karaoké Vidéo");
-            AddCategoryMapping(18, TorznabCatType.AudioOther, "Karaoké");
-            AddCategoryMapping(20, TorznabCatType.Audio, "Musique");
-            AddCategoryMapping(21, TorznabCatType.AudioOther, "Podcast");
-            AddCategoryMapping(22, TorznabCatType.Audio, "Sample");
-            AddCategoryMapping(23, TorznabCatType.AudioAudiobook, "Ebook Audio");
-            AddCategoryMapping(24, TorznabCatType.Books, "BD");
-            AddCategoryMapping(25, TorznabCatType.BooksComics, "Comic");
-            AddCategoryMapping(26, TorznabCatType.BooksOther, "Manga");
-            AddCategoryMapping(27, TorznabCatType.Books, "Livre");
-            AddCategoryMapping(28, TorznabCatType.BooksMags, "Presse");
-            AddCategoryMapping(29, TorznabCatType.Audio, "Application Linux");
-            AddCategoryMapping(30, TorznabCatType.PC, "Application Window");
-            AddCategoryMapping(31, TorznabCatType.PCMac, "Application Mac");
-            AddCategoryMapping(34, TorznabCatType.PCMobileiOS, "Application Smartphone/Tablette");
-            AddCategoryMapping(34, TorznabCatType.PCMobileAndroid, "Application Smartphone/Tablette");
-            AddCategoryMapping(35, TorznabCatType.Other, "GPS");
-            AddCategoryMapping(36, TorznabCatType.Audio, "Jeux Linux");
-            AddCategoryMapping(37, TorznabCatType.PCGames, "Jeux Windows");
-            AddCategoryMapping(39, TorznabCatType.ConsoleNDS, "Jeux Nintendo");
-            AddCategoryMapping(39, TorznabCatType.ConsoleWii, "Jeux Nintendo");
-            AddCategoryMapping(39, TorznabCatType.ConsoleWiiware, "Jeux Nintendo");
-            AddCategoryMapping(39, TorznabCatType.Console3DS, "Jeux Nintendo");
-            AddCategoryMapping(39, TorznabCatType.ConsoleWiiU, "Jeux Nintendo");
-            AddCategoryMapping(41, TorznabCatType.PCMobileAndroid, "PC/Mobile-Android");
-            AddCategoryMapping(42, TorznabCatType.PCGames, "Jeux Microsoft");
-            AddCategoryMapping(44, TorznabCatType.XXX, "XXX Films");
-            AddCategoryMapping(45, TorznabCatType.XXXOther, "XXX Hentai");
-            AddCategoryMapping(47, TorznabCatType.XXXImageSet, "XXX Images");
-            AddCategoryMapping(48, TorznabCatType.XXXOther, "XXX Jeu-Vidéo");
-            AddCategoryMapping(50, TorznabCatType.OtherMisc, "Formation Logiciels");
-            AddCategoryMapping(49, TorznabCatType.OtherMisc, "Formations Vidéos");
-            AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
-            AddCategoryMapping(52, TorznabCatType.AudioVideo, "Vidéos-Clips");
-            AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
-            AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
 
             var FreeLeechOnly = new BoolConfigurationItem("Search freeleech only");
             configData.AddDynamic("freeleechonly", FreeLeechOnly);
@@ -153,6 +75,88 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("replacevostfr", ReplaceVostfr);
 
             EnableConfigurableRetryAttempts();
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                },
+                BookSearchParams = new List<BookSearchParam>
+                {
+                    BookSearchParam.Q
+                },
+                SupportsRawSearch = true
+            };
+
+            //CATEGORIES
+            //caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Vidéos");
+            //caps.Categories.AddCategoryMapping(1, TorznabCatType.TV, "Vidéos");
+            //caps.Categories.AddCategoryMapping(2, TorznabCatType.Audio, "Audio");
+            //caps.Categories.AddCategoryMapping(3, TorznabCatType.PC, "Application");
+            //caps.Categories.AddCategoryMapping(4, TorznabCatType.Books, "Ebooks");
+            //caps.Categories.AddCategoryMapping(5, TorznabCatType.PCGames, "Jeu-Vidéo");
+            //caps.Categories.AddCategoryMapping(6, TorznabCatType.OtherMisc, "Formation");
+            //caps.Categories.AddCategoryMapping(7, TorznabCatType.XXX, "XXX");
+
+            //SUBCATEGORIES
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.Movies, "Films");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.TV, "Série");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.MoviesOther, "Film Animation");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.TVAnime, "Série Animation");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.TVDocumentary, "Documentaire");
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.TVOther, "Emission TV");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.TVOther, "Spectacle/Concert");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.TVSport, "Sport");
+            caps.Categories.AddCategoryMapping(17, TorznabCatType.AudioOther, "Karaoké Vidéo");
+            caps.Categories.AddCategoryMapping(18, TorznabCatType.AudioOther, "Karaoké");
+            caps.Categories.AddCategoryMapping(20, TorznabCatType.Audio, "Musique");
+            caps.Categories.AddCategoryMapping(21, TorznabCatType.AudioOther, "Podcast");
+            caps.Categories.AddCategoryMapping(22, TorznabCatType.Audio, "Sample");
+            caps.Categories.AddCategoryMapping(23, TorznabCatType.AudioAudiobook, "Ebook Audio");
+            caps.Categories.AddCategoryMapping(24, TorznabCatType.Books, "BD");
+            caps.Categories.AddCategoryMapping(25, TorznabCatType.BooksComics, "Comic");
+            caps.Categories.AddCategoryMapping(26, TorznabCatType.BooksOther, "Manga");
+            caps.Categories.AddCategoryMapping(27, TorznabCatType.Books, "Livre");
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.BooksMags, "Presse");
+            caps.Categories.AddCategoryMapping(29, TorznabCatType.Audio, "Application Linux");
+            caps.Categories.AddCategoryMapping(30, TorznabCatType.PC, "Application Window");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.PCMac, "Application Mac");
+            caps.Categories.AddCategoryMapping(34, TorznabCatType.PCMobileiOS, "Application Smartphone/Tablette");
+            caps.Categories.AddCategoryMapping(34, TorznabCatType.PCMobileAndroid, "Application Smartphone/Tablette");
+            caps.Categories.AddCategoryMapping(35, TorznabCatType.Other, "GPS");
+            caps.Categories.AddCategoryMapping(36, TorznabCatType.Audio, "Jeux Linux");
+            caps.Categories.AddCategoryMapping(37, TorznabCatType.PCGames, "Jeux Windows");
+            caps.Categories.AddCategoryMapping(39, TorznabCatType.ConsoleNDS, "Jeux Nintendo");
+            caps.Categories.AddCategoryMapping(39, TorznabCatType.ConsoleWii, "Jeux Nintendo");
+            caps.Categories.AddCategoryMapping(39, TorznabCatType.ConsoleWiiware, "Jeux Nintendo");
+            caps.Categories.AddCategoryMapping(39, TorznabCatType.Console3DS, "Jeux Nintendo");
+            caps.Categories.AddCategoryMapping(39, TorznabCatType.ConsoleWiiU, "Jeux Nintendo");
+            caps.Categories.AddCategoryMapping(41, TorznabCatType.PCMobileAndroid, "PC/Mobile-Android");
+            caps.Categories.AddCategoryMapping(42, TorznabCatType.PCGames, "Jeux Microsoft");
+            caps.Categories.AddCategoryMapping(44, TorznabCatType.XXX, "XXX Films");
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.XXXOther, "XXX Hentai");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.XXXImageSet, "XXX Images");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.XXXOther, "XXX Jeu-Vidéo");
+            caps.Categories.AddCategoryMapping(50, TorznabCatType.OtherMisc, "Formation Logiciels");
+            caps.Categories.AddCategoryMapping(49, TorznabCatType.OtherMisc, "Formations Vidéos");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
+            caps.Categories.AddCategoryMapping(52, TorznabCatType.AudioVideo, "Vidéos-Clips");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
+            caps.Categories.AddCategoryMapping(51, TorznabCatType.XXXOther, "XXX Ebooks");
+
+            return caps;
         }
 
         private string MultiRename(string term, string replacement)

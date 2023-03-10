@@ -26,39 +26,46 @@ namespace Jackett.Common.Indexers.Feeds
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
         public MoreThanTVAPI(IIndexerConfigurationService configService, WebClient client, Logger logger,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: ps,
                    cs: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            AddCategoryMapping(TorznabCatType.TVSD.ID, TorznabCatType.TVSD);
-            AddCategoryMapping(TorznabCatType.TVHD.ID, TorznabCatType.TVHD);
-            AddCategoryMapping(TorznabCatType.TVUHD.ID, TorznabCatType.TVUHD);
-            AddCategoryMapping(TorznabCatType.TVSport.ID, TorznabCatType.TVSport);
-            AddCategoryMapping(TorznabCatType.MoviesSD.ID, TorznabCatType.MoviesSD);
-            AddCategoryMapping(TorznabCatType.MoviesHD.ID, TorznabCatType.MoviesHD);
-            AddCategoryMapping(TorznabCatType.MoviesUHD.ID, TorznabCatType.MoviesUHD);
-            AddCategoryMapping(TorznabCatType.MoviesBluRay.ID, TorznabCatType.MoviesBluRay);
-
             configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Find or Generate a new API Key by accessing your <a href=\"https://www.morethantv.me/user/security\" target =_blank>MoreThanTV</a> account <i>User Security</i> page and scrolling to the <b>API Keys</b> section."));
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(TorznabCatType.TVSD.ID, TorznabCatType.TVSD);
+            caps.Categories.AddCategoryMapping(TorznabCatType.TVHD.ID, TorznabCatType.TVHD);
+            caps.Categories.AddCategoryMapping(TorznabCatType.TVUHD.ID, TorznabCatType.TVUHD);
+            caps.Categories.AddCategoryMapping(TorznabCatType.TVSport.ID, TorznabCatType.TVSport);
+            caps.Categories.AddCategoryMapping(TorznabCatType.MoviesSD.ID, TorznabCatType.MoviesSD);
+            caps.Categories.AddCategoryMapping(TorznabCatType.MoviesHD.ID, TorznabCatType.MoviesHD);
+            caps.Categories.AddCategoryMapping(TorznabCatType.MoviesUHD.ID, TorznabCatType.MoviesUHD);
+            caps.Categories.AddCategoryMapping(TorznabCatType.MoviesBluRay.ID, TorznabCatType.MoviesBluRay);
+
+            return caps;
         }
 
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

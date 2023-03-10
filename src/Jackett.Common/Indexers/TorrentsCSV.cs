@@ -25,34 +25,42 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "public";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchEndpoint => SiteLink + "service/search";
 
         private new ConfigurationData configData => base.configData;
 
-        public TorrentsCSV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q
-                       }
-                   },
-                   configService: configService,
+        public TorrentsCSV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            // torrents.csv doesn't return categories
-            AddCategoryMapping(1, TorznabCatType.Other);
         }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                }
+            };
+
+            // torrents.csv doesn't return categories
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Other);
+
+            return caps;
+        }
+
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {

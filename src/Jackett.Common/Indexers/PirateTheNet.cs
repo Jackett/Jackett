@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
@@ -28,6 +27,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchUrl => SiteLink + "torrentsutils.php";
         private string LoginUrl => SiteLink + "takelogin.php";
         private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
@@ -40,37 +41,43 @@ namespace Jackett.Common.Indexers
 
         public PirateTheNet(IIndexerConfigurationService configService, WebClient w, Logger l,
             IProtectionService ps, ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show the maximum."))
         {
-            AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");
-            AddCategoryMapping("2160P", TorznabCatType.MoviesHD, "2160P");
-            AddCategoryMapping("720P", TorznabCatType.MoviesHD, "720P");
-            AddCategoryMapping("BDRip", TorznabCatType.MoviesSD, "BDRip");
-            AddCategoryMapping("BluRay", TorznabCatType.MoviesBluRay, "BluRay");
-            AddCategoryMapping("BRRip", TorznabCatType.MoviesSD, "BRRip");
-            AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD, "DVDR");
-            AddCategoryMapping("DVDRip", TorznabCatType.MoviesSD, "DVDRip");
-            AddCategoryMapping("FLAC", TorznabCatType.AudioLossless, "FLAC OST");
-            AddCategoryMapping("MP3", TorznabCatType.AudioMP3, "MP3 OST");
-            AddCategoryMapping("MP4", TorznabCatType.MoviesOther, "MP4");
-            AddCategoryMapping("Packs", TorznabCatType.MoviesOther, "Packs");
-            AddCategoryMapping("R5", TorznabCatType.MoviesDVD, "R5 / SCR");
-            AddCategoryMapping("Remux", TorznabCatType.MoviesOther, "Remux");
-            AddCategoryMapping("TVRip", TorznabCatType.MoviesOther, "TVRip");
-            AddCategoryMapping("WebRip", TorznabCatType.MoviesWEBDL, "WebRip");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                }
+            };
+
+            caps.Categories.AddCategoryMapping("1080P", TorznabCatType.MoviesHD, "1080P");
+            caps.Categories.AddCategoryMapping("2160P", TorznabCatType.MoviesHD, "2160P");
+            caps.Categories.AddCategoryMapping("720P", TorznabCatType.MoviesHD, "720P");
+            caps.Categories.AddCategoryMapping("BDRip", TorznabCatType.MoviesSD, "BDRip");
+            caps.Categories.AddCategoryMapping("BluRay", TorznabCatType.MoviesBluRay, "BluRay");
+            caps.Categories.AddCategoryMapping("BRRip", TorznabCatType.MoviesSD, "BRRip");
+            caps.Categories.AddCategoryMapping("DVDR", TorznabCatType.MoviesDVD, "DVDR");
+            caps.Categories.AddCategoryMapping("DVDRip", TorznabCatType.MoviesSD, "DVDRip");
+            caps.Categories.AddCategoryMapping("FLAC", TorznabCatType.AudioLossless, "FLAC OST");
+            caps.Categories.AddCategoryMapping("MP3", TorznabCatType.AudioMP3, "MP3 OST");
+            caps.Categories.AddCategoryMapping("MP4", TorznabCatType.MoviesOther, "MP4");
+            caps.Categories.AddCategoryMapping("Packs", TorznabCatType.MoviesOther, "Packs");
+            caps.Categories.AddCategoryMapping("R5", TorznabCatType.MoviesDVD, "R5 / SCR");
+            caps.Categories.AddCategoryMapping("Remux", TorznabCatType.MoviesOther, "Remux");
+            caps.Categories.AddCategoryMapping("TVRip", TorznabCatType.MoviesOther, "TVRip");
+            caps.Categories.AddCategoryMapping("WebRip", TorznabCatType.MoviesWEBDL, "WebRip");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

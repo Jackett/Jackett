@@ -17,9 +17,8 @@ namespace Jackett.Common.Indexers.Feeds
     {
         protected BaseNewznabIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
                                      ConfigurationData configData, IProtectionService p, ICacheService cs,
-                                     TorznabCapabilities caps = null, string downloadBase = null)
-            : base(caps: caps,
-                   configService: configService,
+                                     string downloadBase = null)
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,

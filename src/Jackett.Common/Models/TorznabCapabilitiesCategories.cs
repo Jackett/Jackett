@@ -48,6 +48,8 @@ namespace Jackett.Common.Models
             return newFlatList;
         }
 
+        public void AddCategoryMapping(int trackerCategory, TorznabCategory torznabCategory, string trackerCategoryDesc = null) => AddCategoryMapping(trackerCategory.ToString(), torznabCategory, trackerCategoryDesc);
+
         public void AddCategoryMapping(string trackerCategory, TorznabCategory torznabCategory, string trackerCategoryDesc = null)
         {
             _categoryMapping.Add(new CategoryMapping(trackerCategory, trackerCategoryDesc, torznabCategory.ID));

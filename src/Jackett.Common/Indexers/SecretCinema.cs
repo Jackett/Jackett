@@ -21,31 +21,39 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         public SecretCinema(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
-            : base(
-                   caps: new TorznabCapabilities
-                   {
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
-                       }
-                   },
-                   configService: configService,
+                            ICacheService cs)
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: false) // ratioless tracker
         {
-            AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
-            AddCategoryMapping(2, TorznabCatType.Audio, "Music");
+        }
+
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.Audio, "Music");
             // cat=3 exists but it's required a refactor in Gazelle abstract to make it work
-            //AddCategoryMapping(3, TorznabCatType.Books, "E-Books");
+            //caps.Categories.AddCategoryMapping(3, TorznabCatType.Books, "E-Books");
+
+            return caps;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

@@ -26,10 +26,8 @@ namespace Jackett.Common.Indexers.Abstract
         }
 
         protected CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                     IProtectionService p, ICacheService cs, TorznabCapabilities caps,
-                                     ConfigurationData configData, string endpoint)
-            : base(caps: caps,
-                   configService: configService,
+                                     IProtectionService p, ICacheService cs, ConfigurationData configData, string endpoint)
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,

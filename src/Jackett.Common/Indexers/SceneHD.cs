@@ -26,6 +26,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
         private string SearchUrl => SiteLink + "browse.php?";
         private string DetailsUrl => SiteLink + "details.php?";
         private string DownloadUrl => SiteLink + "download.php?";
@@ -35,21 +37,6 @@ namespace Jackett.Common.Indexers
         public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(configService: configService,
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       },
-                       MovieSearchParams = new List<MovieSearchParam>
-                       {
-                           MovieSearchParam.Q, MovieSearchParam.ImdbId
-                       },
-                       MusicSearchParams = new List<MusicSearchParam>
-                       {
-                           MusicSearchParam.Q
-                       }
-                   },
                    client: c,
                    logger: l,
                    p: ps,
@@ -58,19 +45,40 @@ namespace Jackett.Common.Indexers
                                                             "feed link. It's the last parameter in the URL."))
         {
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8");
+        }
 
-            AddCategoryMapping(2, TorznabCatType.MoviesUHD, "Movie/2160");
-            AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movie/1080");
-            AddCategoryMapping(4, TorznabCatType.MoviesHD, "Movie/720");
-            AddCategoryMapping(8, TorznabCatType.MoviesBluRay, "Movie/BD5/9");
-            AddCategoryMapping(6, TorznabCatType.TVUHD, "TV/2160");
-            AddCategoryMapping(5, TorznabCatType.TVHD, "TV/1080");
-            AddCategoryMapping(7, TorznabCatType.TVHD, "TV/720");
-            AddCategoryMapping(22, TorznabCatType.MoviesBluRay, "Bluray/Complete");
-            AddCategoryMapping(10, TorznabCatType.XXX, "XXX");
-            AddCategoryMapping(16, TorznabCatType.MoviesOther, "Subpacks");
-            AddCategoryMapping(13, TorznabCatType.AudioVideo, "MVID");
-            AddCategoryMapping(9, TorznabCatType.Other, "Other");
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                },
+                MusicSearchParams = new List<MusicSearchParam>
+                {
+                    MusicSearchParam.Q
+                }
+            };
+
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.MoviesUHD, "Movie/2160");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD, "Movie/1080");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.MoviesHD, "Movie/720");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.MoviesBluRay, "Movie/BD5/9");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.TVUHD, "TV/2160");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.TVHD, "TV/1080");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.TVHD, "TV/720");
+            caps.Categories.AddCategoryMapping(22, TorznabCatType.MoviesBluRay, "Bluray/Complete");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.XXX, "XXX");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.MoviesOther, "Subpacks");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.AudioVideo, "MVID");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.Other, "Other");
+
+            return caps;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)

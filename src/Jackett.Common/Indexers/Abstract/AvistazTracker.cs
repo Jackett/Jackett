@@ -137,9 +137,8 @@ namespace Jackett.Common.Indexers.Abstract
             return cats;
         }
 
-        protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs, TorznabCapabilities caps)
-            : base(caps: caps,
-                   configService: configService,
+        protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs)
+            : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,
