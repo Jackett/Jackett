@@ -322,8 +322,8 @@ function displayUnconfiguredIndexersList() {
     indexersTable.find('.indexer-setup').each(function (i, btn) {
         var indexer = unconfiguredIndexers[i];
         $(btn).click(function () {
-            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.link, indexer.alternativesitelinks, indexer.description);
+            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function () {
+                displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.site_link, indexer.alternativesitelinks, indexer.description);
             });
         });
     });
@@ -660,7 +660,7 @@ function prepareSetupButtons(element) {
         var indexer = configuredIndexers.find(i => i.id === id);
         if (indexer)
           $btn.click(function () {
-              displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.link, indexer.alternativesitelinks, indexer.description);
+              displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.site_link, indexer.alternativesitelinks, indexer.description);
           });
     });
 }
