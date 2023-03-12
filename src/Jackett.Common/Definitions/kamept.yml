@@ -27,7 +27,7 @@ caps:
     - {id: 421, cat: XXX/Other, desc: "中文音声"}
     - {id: 422, cat: XXX/Other, desc: "视频音声"}
 
-modes:
+  modes:
     search: [q]
 
 settings:
