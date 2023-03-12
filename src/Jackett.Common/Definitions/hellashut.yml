@@ -114,7 +114,7 @@ login:
 
 download:
   selectors:
-    - selector: a[href^="download.php?id="]
+    - selector: a[href^="download.php?id="], a[href^="magnet:?xt="]
       attribute: href
 
 search:
@@ -124,16 +124,16 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    cat: 0
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 0 all, 1 notfree, 2 onlyfree
-    advanced: 1
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 all, 1 English, 2 French, 3 German, 4 Italian, 5 Japanese, 6 Spanish, 7 Russian, 8 Greek
     lang: 0
     # 0 name, 1 descr, 2 uploader
     blah: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
-    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 all
+    team: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
     # does not return imdb link in results
@@ -188,4 +188,7 @@ search:
       text: 1
     minimumratio:
       text: 1.0
+    minimumseedtime:
+      # 10 day (as seconds = 10 x 24 x 60 x 60)
+      text: 864000
 # TorrentTrader v2-svn
