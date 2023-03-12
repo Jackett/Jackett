@@ -613,6 +613,7 @@ namespace Jackett.Updater
                 "Definitions/witchhunter.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
+                "Definitions/woot.yml",
                 "Definitions/xbit.yml",
                 "Definitions/xfsub.yml",
                 "Definitions/xktorrent.yml",

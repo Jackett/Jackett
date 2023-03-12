@@ -576,7 +576,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnleashTheCartoons
  * UnlimitZ
  * White Angel
- * wOOt [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow
  * x-ite.me (XM)
