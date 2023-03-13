@@ -22,6 +22,7 @@ caps:
     - {id: 65, cat: Movies, desc: "Horror Hun"}
     - {id: 82, cat: XXX, desc: "Horror XXX"}
     - {id: 94, cat: Movies, desc: "Kamerás filmek"}
+    - {id: 98, cat: Movies/HD, desc: "MD-HD"}
     - {id: 86, cat: Movies, desc: "Mystery-Fantasy Eng"}
     - {id: 85, cat: Movies, desc: "Mystery-Fantasy Hun"}
     - {id: 83, cat: Movies, desc: "Punk Release"}
