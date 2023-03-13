@@ -189,6 +189,8 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> Results([FromQuery] ApiSearch requestt)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             //TODO: Better way to parse querystring
 
             var request = new ApiSearch();
@@ -296,10 +298,13 @@ namespace Jackett.Server.Controllers
             // Log info
             var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name));
             var cacheStr = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Any(t => t.Result.IsFromCache) ? " (from cache)" : "";
+
+            stopwatch.Stop();
+
             if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                logger.Info($"Manual search in {indexersName} => Found {manualResult.Results.Count()} releases{cacheStr}");
+                logger.Info($"Manual search in {indexersName} => Found {manualResult.Results.Count()} releases{cacheStr} [{stopwatch.ElapsedMilliseconds:0}ms]");
             else
-                logger.Info($"Manual search in {indexersName} for {CurrentQuery.GetQueryString()} => Found {manualResult.Results.Count()} releases{cacheStr}");
+                logger.Info($"Manual search in {indexersName} for {CurrentQuery.GetQueryString()} => Found {manualResult.Results.Count()} releases{cacheStr} [{stopwatch.ElapsedMilliseconds:0}ms]");
 
             return Json(manualResult);
         }
@@ -347,6 +352,8 @@ namespace Jackett.Server.Controllers
 
                 return Content(xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString(), "application/xml", Encoding.UTF8);
             }
+
+            var stopwatch = Stopwatch.StartNew();
 
             if (CurrentQuery.ImdbID != null)
             {
@@ -406,13 +413,6 @@ namespace Jackett.Server.Controllers
             {
                 var result = await CurrentIndexer.ResultsForQuery(CurrentQuery);
 
-                // Log info
-                var cacheStr = result.IsFromCache ? " (from cache)" : "";
-                if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
-                    logger.Info($"Torznab search in {CurrentIndexer.Name} => Found {result.Releases.Count()} releases{cacheStr}");
-                else
-                    logger.Info($"Torznab search in {CurrentIndexer.Name} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
-
                 var serverUrl = serverService.GetServerUrl(Request);
                 var resultPage = new ResultPage(new ChannelInfo
                 {
@@ -430,9 +430,18 @@ namespace Jackett.Server.Controllers
 
                 resultPage.Releases = proxiedReleases.ToList();
 
-                var xml = resultPage.ToXml(new Uri(serverUrl));
-                // Force the return as XML
+                stopwatch.Stop();
 
+                // Log info
+                var cacheStr = result.IsFromCache ? " (from cache)" : "";
+                if (string.IsNullOrWhiteSpace(CurrentQuery.SanitizedSearchTerm))
+                    logger.Info($"Torznab search in {CurrentIndexer.Name} => Found {result.Releases.Count()} releases{cacheStr} [{stopwatch.ElapsedMilliseconds:0}ms]");
+                else
+                    logger.Info($"Torznab search in {CurrentIndexer.Name} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr} [{stopwatch.ElapsedMilliseconds:0}ms]");
+
+                var xml = resultPage.ToXml(new Uri(serverUrl));
+
+                // Force the return as XML
                 return Content(xml, "application/rss+xml", Encoding.UTF8);
             }
             catch (IndexerException ex) when (ex.InnerException is TooManyRequestsException tooManyRequestsException)

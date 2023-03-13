@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -300,16 +301,22 @@ namespace Jackett.Common.Services
 
         public async Task TestIndexer(string name)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             var indexer = GetIndexer(name);
+
             var query = new TorznabQuery
             {
                 QueryType = "search",
                 SearchTerm = "",
                 IsTest = true
             };
+
             var result = await indexer.ResultsForQuery(query);
 
-            _logger.Info($"Test search in {indexer.Name} => Found {result.Releases.Count()} releases");
+            stopwatch.Stop();
+
+            _logger.Info($"Test search in {indexer.Name} => Found {result.Releases.Count()} releases [{stopwatch.ElapsedMilliseconds:0}ms]");
 
             if (!result.Releases.Any())
                 throw new Exception($"Test search in {indexer.Name} => Found no results while trying to browse this tracker");
