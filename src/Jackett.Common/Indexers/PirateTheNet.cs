@@ -23,7 +23,8 @@ namespace Jackett.Common.Indexers
         public override string Id => "piratethenet";
         public override string Name => "PirateTheNet";
         public override string Description => "A movie tracker";
-        public override string SiteLink { get; protected set; } = "http://piratethenet.org/";
+        public override string SiteLink { get; protected set; } = "https://piratethenet.org/";
+        public override string[] LegacySiteLinks => new[] { "http://piratethenet.org/" };
         public override string Language => "en-US";
         public override string Type => "private";
 
