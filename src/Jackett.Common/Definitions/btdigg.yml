@@ -7,13 +7,13 @@ type: public
 encoding: UTF-8
 links:
   - https://btdig.com/
-  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.ly/
-  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.tor2web.to/
 legacylinks:
   - http://btdiggwzoyrwwbiv.onion.ly/
   - https://btdiggwzoyrwwbiv.onion.ly/
   - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.ws/ # redirects to spam
   - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.pet/ # not found
+  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.onion.ly/ # 504 gateway timeout
+  - https://btdigggink2pdqzqrik3blmqemsbntpzwxottujilcdjfz56jumzfsyd.tor2web.to/ # 504 gateway timeout
 
 caps:
   categories:
