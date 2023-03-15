@@ -101,7 +101,7 @@ search:
     category: 0
     search: "{{ .Keywords }}"
     erotyka: 1
-    page: 0
+    page: 1
     # does not support sorting results, or imdbid searching, or have imdb in results
 
   rows:
