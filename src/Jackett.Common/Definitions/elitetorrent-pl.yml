@@ -1,9 +1,9 @@
 ---
 id: elitetorrent-pl
 name: EliteTorrent-pl
-description: "EliteTorrent-pl is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "EliteTorrent-pl is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: pl-PL
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://elitetorrent.pl/
@@ -150,6 +150,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-    minimumratio:
-      text: 1.0
 # engine n/a
