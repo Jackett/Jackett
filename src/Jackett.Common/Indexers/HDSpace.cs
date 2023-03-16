@@ -4,9 +4,9 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -95,25 +95,31 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+
             var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
+
             var pairs = new Dictionary<string, string>
             {
-                {"uid", configData.Username.Value},
-                {"pwd", configData.Password.Value}
+                { "uid", configData.Username.Value },
+                { "pwd", configData.Password.Value }
             };
 
             // Send Post
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, referer: LoginUrl);
 
-            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true, () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true || response.ContentString?.Contains("Rank: Parked") == true, () =>
             {
-                var errorStr = "You have {0} remaining login attempts";
-                var remainingAttemptSpan = new Regex(string.Format(errorStr, "(.*?)"))
-                                           .Match(loginPage.ContentString).Groups[1].ToString();
-                var attempts = Regex.Replace(remainingAttemptSpan, "<.*?>", string.Empty);
-                var errorMessage = string.Format(errorStr, attempts);
-                throw new ExceptionWithConfigData(errorMessage, configData);
+                var parser = new HtmlParser();
+                var dom = parser.ParseDocument(response.ContentString);
+                var errorMessage = dom
+                   .QuerySelectorAll("table.lista td.lista span[style*=\"#FF0000\"], table.lista td.header:contains(\"login attempts\")")
+                   .Select(r => r.TextContent.Trim())
+                   .Where(m => m.IsNotNullOrWhiteSpace())
+                   .Join(" ");
+
+                throw new ExceptionWithConfigData(errorMessage.IsNotNullOrWhiteSpace() ? errorMessage : "Unknown error message, please report.", configData);
             });
+
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
