@@ -166,7 +166,7 @@ namespace Jackett.Common.Indexers
                     var qTitleLink = row.QuerySelector("td:nth-of-type(2) a:nth-of-type(1)");
                     var title = qTitleLink?.TextContent.Trim();
 
-                    // If we search an get no results, we still get a table just with no info.
+                    // If we search and get no results, we still get a table just with no info.
                     if (title.IsNullOrWhiteSpace())
                     {
                         break;
