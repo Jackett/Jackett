@@ -70,6 +70,8 @@ settings:
       asc: asc
 
 search:
+  pageSize: 1
+  firstPageNumber: 1
   paths:
      # https://bitsearch.to/search?q=&sort=date&order=desc
     - path: search
@@ -77,6 +79,7 @@ search:
     q: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
+    page: "{{ .Query.Page }}"
 
   keywordsfilters:
     - name: re_replace

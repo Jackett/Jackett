@@ -94,6 +94,7 @@ login:
     cookie: "{{ .Config.cookie }}"
 
 search:
+  pageSize: 100
   paths:
     - path: api/v1/torrents
       response:
@@ -106,8 +107,8 @@ search:
     extendedDead: true
     extendedSearch: false
     freeleech: "{{ if .Config.freeleech }}true{{ else }}false{{ end }}"
-    index: 0
-    limit: 100
+    index: "{{ .Query.Offset }}"
+    limit: "{{ if .Query.Limit }}{{ .Query.Limit }}{{ else }}{{ .PageSize }}{{ end }}"
     order: "{{ .Config.type }}"
     page: search
     searchText: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ .Keywords }}"

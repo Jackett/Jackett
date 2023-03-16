@@ -41,7 +41,7 @@ caps:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}?s={{ .Keywords}}{{ else }}{{ end }}"
+    - path: "?s={{ .Keywords }}&start={{ .Query.Offset }}"
 
   rows:
     selector: table tbody tr:has(td.torrents_small_type_data1)

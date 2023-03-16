@@ -27,6 +27,8 @@ namespace Jackett.Common.Indexers
 {
     public class CardigannIndexer : BaseWebIndexer
     {
+        public override bool SupportsPagination => Definition.Search != null && Definition.Search.PageSize > 0;
+
         protected IndexerDefinition Definition;
         protected WebResult landingResult;
         protected IHtmlDocument landingResultDocument;
@@ -1352,6 +1354,14 @@ namespace Jackett.Common.Indexers
                 KeywordTokens.Add((string)variables[".Query.Episode"]);
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters, variables);
+
+            var pageSize = Search.PageSize;
+
+            if (pageSize > 0)
+                variables[".PageSize"] = pageSize.ToString();
+
+            var page = query.Limit > 0 && query.Offset > 0 ? (query.Offset / query.Limit) + Search.FirstPageNumber : Search.FirstPageNumber;
+            variables[".Query.Page"] = page.ToString();
 
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
