@@ -13,10 +13,11 @@ namespace Jackett.Common.Indexers
         public override string Id => "brokenstones";
         public override string Name => "BrokenStones";
         public override string Description => "Broken Stones is a Private site for MacOS and iOS APPS / GAMES";
-        public override string SiteLink { get; protected set; } = "https://broken-stones.club/";
+        public override string SiteLink { get; protected set; } = "https://brokenstones.is/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://brokenstones.club/"
+            "https://brokenstones.club/",
+            "https://broken-stones.club/"
         };
         public override string Language => "en-US";
         public override string Type => "private";
