@@ -16,7 +16,8 @@ namespace Jackett.Common.Indexers
         public override string SiteLink { get; protected set; } = "https://brokenstones.is/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://brokenstones.club/"
+            "https://brokenstones.club/",
+            "https://broken-stones.club/"
         };
         public override string Language => "en-US";
         public override string Type => "private";
