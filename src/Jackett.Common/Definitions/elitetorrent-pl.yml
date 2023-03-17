@@ -93,7 +93,7 @@ login:
 
 search:
   paths:
-    # https://elitetorrent.pl/torrents.php?erotyka=1&page=0
+    # https://elitetorrent.pl/torrents.php?erotyka=1&page=1
     - path: torrents.php
   inputs:
     # does not support multi category selection. so using default for all
