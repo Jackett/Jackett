@@ -1,0 +1,151 @@
+---
+id: ex-torrenty
+name: Ex-torrenty
+description: "Ex-torrenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-PL
+type: semi-private
+encoding: UTF-8
+links:
+  - https://ex-torrenty.org/
+
+caps:
+  categorymappings:
+    - {id: 774, cat: Movies, desc: "Filmy Polskie"}
+    - {id: 642, cat: Movies, desc: "Filmy/Bajki"}
+    - {id: 1, cat: Movies/SD, desc: "Filmy XviD/DivX"}
+    - {id: 20, cat: Movies/DVD, desc: "Filmy DVD"}
+    - {id: 23, cat: Movies/HD, desc: "Filmy x264"}
+    - {id: 573, cat: Movies/UHD, desc: "Filmy 4K UHD"}
+    - {id: 17, cat: Movies/HD, desc: "Filmy HD"}
+    - {id: 265, cat: Movies/HD, desc: "Filmy x265 HEVC"}
+    - {id: 12, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 530, cat: Movies/SD, desc: "Filmy TS/CAM"}
+    - {id: 9, cat: PC, desc: "Programy"}
+    - {id: 7, cat: Console, desc: "Konsole"}
+    - {id: 6, cat: PC/Games, desc: "Gry"}
+    - {id: 5, cat: Audio, desc: "Muzyka"}
+    - {id: 305, cat: Audio/Video, desc: "Teledyski"}
+    - {id: 22, cat: TV, desc: "TV"}
+    - {id: 228, cat: XXX, desc: "Erotyka"}
+    - {id: 25, cat: Books/EBook, desc: "Książki"}
+    - {id: 739, cat: Audio/Audiobook, desc: "AudioBooki"}
+    - {id: 26, cat: Books/Comics, desc: "Komiksy"}
+    - {id: 27, cat: PC/Mac, desc: "Linux/Mac"}
+    - {id: 28, cat: TV/Sport, desc: "Sport"}
+    - {id: 29, cat: TV/Anime, desc: "Anime"}
+    - {id: 31, cat: PC/Mobile-Other, desc: "GSM/PDA"}
+    - {id: 32, cat: Other, desc: "Inne"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: email
+    type: text
+    label: Email
+  - name: password
+    type: password
+    label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTi POLISH: MULTIi POLISH
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.email }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: table.main:contains("Logowanie nie udane")
+  test:
+    path: index.php
+    selector: a[href^="/logout.php"]
+
+search:
+  paths:
+    # https://ex-torrenty.org/szukaj.php?form-display-time=22&search=%25&cat=0
+    - path: szukaj.php
+  inputs:
+    # does not support multi category selection. so using default for all
+    cat: 0
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%{{ end }}"
+    # does not support imdbid searching, or have imdb in results
+
+  rows:
+    selector: table[width="100%"] > tbody > tr:has(a[href^="torrent/"])
+
+  fields:
+    category:
+      selector: td:nth-child(1)
+      case:
+        ":contains(\"Polskie\")": 774
+        ":contains(\"Filmy/Bajki\")": 642
+        ":contains(\"XviD/DivX\")": 1
+        ":contains(\"DVD\")": 20
+        ":contains(\"x264\")": 23
+        ":contains(\"4K UHD\")": 573
+        ":contains(\"HD\")": 17
+        ":contains(\"x265 HEVC\")": 265
+        ":contains(\"3D\")": 12
+        ":contains(\"TS/CAM\")": 530
+        ":contains(\"Programy\")": 9
+        ":contains(\"Konsole\")": 7
+        ":contains(\"Gry\")": 6
+        ":contains(\"Muzyka\")": 5
+        ":contains(\"Teledyski\")": 305
+        ":contains(\"TV\")": 22
+        ":contains(\"Erotyka\")": 228
+        ":contains(\"Książki\")": 25
+        ":contains(\"AudioBooki\")": 739
+        ":contains(\"Komiksy\")": 26
+        ":contains(\"Linux/Mac\")": 27
+        ":contains(\"Sport\")": 28
+        ":contains(\"Anime\")": 29
+        ":contains(\"GSM/PDA\")": 31
+        ":contains(\"Inne\")": 32
+    title_phase1:
+      selector: a[href^="torrent/"]
+    title_multilang:
+      selector: a[href^="torrent/"]
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
+        - name: re_replace
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    details:
+      selector: a[href^="torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="torrent/"]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["torrent/", "download/"]
+    date:
+      text: now
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(4)
+    leechers:
+      selector: td:nth-child(5)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
