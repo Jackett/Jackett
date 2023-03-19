@@ -111,13 +111,13 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(response.ContentString);
-                var errorMessage = dom
+                var errorMessages = dom
                    .QuerySelectorAll("table.lista td.lista span[style*=\"#FF0000\"], table.lista td.header:contains(\"login attempts\")")
                    .Select(r => r.TextContent.Trim())
                    .Where(m => m.IsNotNullOrWhiteSpace())
-                   .Join(" ");
+                   .ToArray();
 
-                throw new ExceptionWithConfigData(errorMessage.IsNotNullOrWhiteSpace() ? errorMessage : "Unknown error message, please report.", configData);
+                throw new ExceptionWithConfigData(errorMessages.Any() ? errorMessages.Join(" ") : "Unknown error message, please report.", configData);
             });
 
             return IndexerConfigurationStatus.RequiresTesting;
