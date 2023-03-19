@@ -1,0 +1,188 @@
+---
+id: helltorrents
+name: HellTorrents
+description: "HellTorrents is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-PL
+type: semi-private
+encoding: ISO-8859-2
+links:
+  - https://helltorrents.com/
+
+caps:
+  categorymappings:
+    # Filmy
+    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
+    - {id: 28, cat: Movies/SD, desc: "Filmy VCD/SVCD"}
+    - {id: 30, cat: Movies/SD, desc: "Filmy DivX/XviD"}
+    - {id: 31, cat: Movies/HD, desc: "Filmy RMVB"}
+    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 72, cat: Movies/BluRay, desc: "Filmy BluRay/HDTV 1080p"}
+    - {id: 73, cat: Movies/BluRay, desc: "Filmy BluRay/HDTV 720p"}
+    - {id: 74, cat: Movies/HD, desc: "Filmy x265/h265"}
+    - {id: 75, cat: Movies/HD, desc: "Filmy x264/h264"}
+    - {id: 76, cat: Movies/HD, desc: "Filmy HD 1080p AVC"}
+    - {id: 77, cat: Movies/UHD, desc: "Filmy i Seriale 4K UHD"}
+    - {id: 78, cat: Movies/SD, desc: "Filmy IVO"}
+    - {id: 79, cat: Movies/SD, desc: "Filmy TS/CAM/IVO/AUDIO KINO"}
+    - {id: 82, cat: Movies, desc: "Teatr"}
+    # Seriale
+    - {id: 25, cat: TV, desc: "Seriale Polskie"}
+    - {id: 26, cat: TV/Foreign, desc: "Seriale Zagraniczne"}
+    # Dla Dzieci
+    - {id: 32, cat: Movies, desc: "Bajki Pl/Eng"}
+    # Gry
+    - {id: 34, cat: PC/Games, desc: "Gry PC"}
+    - {id: 35, cat: Console/PSP, desc: "PS2/PS3/PS4/PSP"}
+    - {id: 36, cat: Console/XBox, desc: "Xbox One/XBOX 360/Xbox"}
+    - {id: 37, cat: Console/NDS, desc: "NINTENDO / WII / DS"}
+    # Muzyka
+    - {id: 38, cat: Audio/Foreign, desc: "Muzyka Zagraniczna"}
+    - {id: 39, cat: Audio, desc: "Soundtracki"}
+    - {id: 40, cat: Audio/Video, desc: "Teledyski"}
+    - {id: 80, cat: Audio, desc: "Muzyka Polska"}
+    - {id: 81, cat: Audio/Video, desc: "Koncerty"}
+    # GSM/PDA
+    - {id: 42, cat: PC/Mobile-Other, desc: "Tapety GSM/PDA"}
+    - {id: 43, cat: PC/Mobile-Other, desc: "Programy GSM/PDA"}
+    - {id: 44, cat: PC/Mobile-Other, desc: "Filmy GSM/PDA"}
+    - {id: 45, cat: PC/Mobile-Other, desc: "Dzwonki GSM/PDA"}
+    - {id: 46, cat: PC/Mobile-Other, desc: "Gry GSM/PDA"}
+    # Ksiazki
+    - {id: 47, cat: Books/EBook, desc: "E-Booki"}
+    - {id: 48, cat: Audio/Audiobook, desc: "Audio-Booki"}
+    - {id: 49, cat: Books/Mags, desc: "Czasopisma"}
+    - {id: 50, cat: Books/Comics, desc: "Komiksy"}
+    # Programy
+    - {id: 51, cat: PC/0day, desc: "Windows"}
+    - {id: 52, cat: PC, desc: "Linux"}
+    - {id: 53, cat: PC/Mac, desc: "Macintosh"}
+    # Inne
+    - {id: 54, cat: Other, desc: "Śmieszne"}
+    - {id: 55, cat: Other, desc: "Tapety"}
+    - {id: 56, cat: TV/Sport, desc: "Sport"}
+    - {id: 57, cat: Other, desc: "Pozostale"}
+    # Erotyka
+    - {id: 58, cat: XXX/Other, desc: "Czasopisma"}
+    - {id: 59, cat: XXX/ImageSet, desc: "Zdjęcia "}
+    - {id: 60, cat: XXX/x264, desc: "Filmy"}
+    - {id: 61, cat: XXX/Other, desc: "Gry "}
+    - {id: 63, cat: XXX/Other, desc: "Hentai+18"}
+    # Anime
+    - {id: 69, cat: TV/Anime, desc: "Anime Pl"}
+    - {id: 70, cat: TV/Anime, desc: "Anime"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTi POLISH: MULTIi POLISH
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentów na stronę:</b> (Torrents per page) setting to <b>100</b> on your account profile.
+
+login:
+  path: login.php
+  method: form
+  form: form[name="login"]
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: font[color="#FF0000"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://helltorrents.com/torrents.php?search=2023&category=0&page=0
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    page: 0
+    # does not support sorting results, or imdbid searching, or have imdb in results
+
+  rows:
+    selector: table.header:has(a[href^="details.php?id="])
+
+  fields:
+    categorydesc:
+      selector: td.pole1
+      filters:
+        - name: regexp
+          args: "Kategoria: (.+)"
+    title_phase1:
+      selector: a[href^="details.php?id="]
+    title_multilang:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
+        - name: re_replace
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="download.php?id="], a[href*="piekielny.php"]
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    date:
+      selector: td.pole1
+      filters:
+        - name: regexp
+          args: "Dodano: (\\d{2}/\\d{2}/\\d{4})"
+        - name: dateparse
+          args: "dd/MM/yyyy"
+    size:
+      selector: td.pole1
+      filters:
+        - name: regexp
+          args: "Rozmiar: (\\d+\\.\\d+ [T|G|M|K|k]B)"
+    seeders:
+      selector: td.pole1
+      filters:
+        - name: regexp
+          args: "Seedów: (\\d+)"
+    leechers:
+      selector: td.pole1
+      filters:
+        - name: regexp
+          args: "Leecherów: (\\d+)"
+    grabs:
+      selector: td.pole1
+      filters:
+        - name: regexp
+          args: "Ukończone: (\\d+)"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
