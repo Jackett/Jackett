@@ -137,7 +137,7 @@ search:
         category: "{{ if .Categories }}{{ range .Categories }}{{.}}+{{end}}{{ else }}{{ end }}"
         search: "{{ .Keywords }}"
         tmdbid: "{{ .Query.TMDBID }}"
-        $raw: "{{ if .Config.freeleech }}&freeleech=1{{ else }}{{ end }}"
+        freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
       response:
         type: json
         noResultsMessage: '"descr": "no result"'

@@ -80,9 +80,10 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}{{ if .Config.freeleech }}freeleech=1&{{ else }}{{ end }}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     incldead: 1
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     searchindesc: "{{ .Config.searchindesc }}"
 
   keywordsfilters:

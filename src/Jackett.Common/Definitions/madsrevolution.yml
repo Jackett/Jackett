@@ -121,7 +121,8 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}{{ if .Config.freeleech }}action=uploadonly&{{ else }}{{ end }}"
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    action: "{{ if .Config.freeleech }}uploadonly{{ else }}{{ end }}"
     searchstr: "{{ .Keywords }}"
     searchtags: "{{ if .Query.Genre }}{{ .Query.Genre }}{{ else }}{{ end }}"
     # 0 any, 1 all

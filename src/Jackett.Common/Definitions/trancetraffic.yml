@@ -48,7 +48,7 @@ search:
     - path: browse.php
   inputs:
     search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
-    $raw: "{{ if .Config.freeleech }}&includeFL=on{{ else }}{{ end }}"
+    includeFL: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
 
   rows:
     selector: table.mainouter table > tbody > tr:has(a[href^="details.php?id="])

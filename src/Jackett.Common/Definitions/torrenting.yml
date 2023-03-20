@@ -65,9 +65,10 @@ search:
     # https://torrenting.com/t?1=&5=&free=on&q=climax&qf=ti
     - path: t
   inputs:
-    $raw: "{{ range .Categories }}{{.}}=&{{end}}{{ if .Config.freeleech }}free=on&{{ else }}{{ end }}"
+    $raw: "{{ range .Categories }}{{.}}=&{{end}}"
     q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     qf: "{{ if .Query.IMDBID }}adv{{ else }}ti{{ end }}"
+    free: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
 
   rows:
     selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
