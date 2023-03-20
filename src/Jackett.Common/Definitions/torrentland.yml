@@ -85,11 +85,12 @@ search:
     # &startYear=&endYear=&playlistId=&collectionId=&categories[]=1&perPage=100&free[0]=100
     - path: torrents
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}{{ if .Config.freeleech }}free[0]=100{{ else }}{{ end }}&"
+    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
     tmdbId: "{{ .Query.TMDBID }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     tvdbId: "{{ .Query.TVDBID }}"
+    "free[0]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
