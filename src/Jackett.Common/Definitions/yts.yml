@@ -95,11 +95,10 @@ search:
       filters:
         - name: append
           args: " ({{ .Result.year }})"
-    title_optional:
+    title:
       selector: ..title_long
       optional: true
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      default: "{{ .Result.title_default }}"
       filters:
         - name: replace
           args: [":", ""]

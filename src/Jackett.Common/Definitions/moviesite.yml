@@ -111,11 +111,12 @@ search:
     title_default:
       # is often abbreviated
       selector: a[href^="details.php?id="]
-    title_optional:
+    title:
       # usually longer than details title
       selector: a[href*="download.php?id="]:has(img[src="../pic/yes.png"])
       attribute: title
       optional: true
+      default: "{{ .Result.title_default }}"
       filters:
         - name: replace
           args: ["Download torrent: ", ""]
@@ -123,8 +124,6 @@ search:
           args: ["Torrent letöltése: ", ""]
         - name: replace
           args: ["Downloadeaza torentul: ", ""]
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href

@@ -122,12 +122,11 @@ search:
     title_default:
       # is often abbreviated
       selector: a[href*="torrent-details-"]
-    title_optional:
+    title:
       # usually longer than details title
       selector: div[id^="port-content-"] div
       optional: true
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href*="torrent-details-"]
       attribute: href

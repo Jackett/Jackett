@@ -111,15 +111,14 @@ search:
     title_default:
       selector: a[href^="details.php?id="] > b
       attribute: title
-    title_optional:
+    title:
       selector: a[href^="details.php?id="] > b[title*="Torrent neve:"]
-      optional: true
       attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
       filters:
         - name: regexp
           args: "Torrent neve: (.*?)<"
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     _descr:
       selector: a[href^="details.php?id="] > b
       attribute: title

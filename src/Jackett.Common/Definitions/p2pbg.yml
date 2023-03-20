@@ -135,18 +135,17 @@ search:
     title_default:
       # often abbreviated
       selector: td:nth-child(2) a
-    title_optional:
+    title:
       # usually full length
       selector: td a[title]
       attribute: title
       optional: true
+      default: "{{ .Result.title_default }}"
       filters:
         - name: replace
           args: ["View details: ", ""]
         - name: replace
           args: ["Преглед на детайли: ", ""]
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: td a[href*="id="]
       attribute: href

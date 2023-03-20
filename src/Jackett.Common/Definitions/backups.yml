@@ -122,11 +122,10 @@ search:
           args: category
     title_default:
       selector: a[href*="/details.php?id="]
-    title_optional:
-      optional: true
-      selector: div.tooltip-content > div
     title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      selector: div.tooltip-content > div
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href*="/details.php?id="]
       attribute: href

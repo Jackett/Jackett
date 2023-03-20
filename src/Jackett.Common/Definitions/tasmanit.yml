@@ -118,11 +118,10 @@ search:
   fields:
     title_default:
       selector: td:nth-child(2) a
-    title_optional:
-      optional: true
-      selector: div.tooltip-content > div
     title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      selector: div.tooltip-content > div
+      optional: true
+      default: "{{ .Result.title_default }}"
     category:
       selector: a[href*="/browse.php?category="]
       attribute: href

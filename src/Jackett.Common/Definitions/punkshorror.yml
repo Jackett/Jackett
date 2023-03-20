@@ -113,13 +113,12 @@ search:
     title_default:
       # can be abbreviated
       selector: a[href^="details.php?id="]
-    title_optional:
+    title:
       # usually full length
       selector: a[href^="details.php?id="]
       attribute: title
       optional: true
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
