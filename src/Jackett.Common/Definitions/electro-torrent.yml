@@ -89,6 +89,7 @@ search:
   # http://electro-torrent.pl/szukaj.php?search=&typ=torrent&cat=0
   paths:
     - path: szukaj.php
+  allowEmptyInputs: true
   inputs:
     # does not support multi cat selection, defaulting to all
     # $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"

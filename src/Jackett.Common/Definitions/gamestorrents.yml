@@ -42,6 +42,7 @@ download:
 search:
   paths:
     - path: /
+  allowEmptyInputs: true
   inputs:
     s: "{{ .Keywords }}"
 

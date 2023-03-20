@@ -491,6 +491,9 @@
                         "$ref": "#/definitions/SearchPathBlock"
                     }
                 },
+                "allowEmptyInputs": {
+                    "type": "boolean"
+                },
                 "inputs": {
                     "type": "object",
                     "additionalProperties": false,

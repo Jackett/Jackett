@@ -141,6 +141,7 @@ namespace Jackett.Common.Models
         public List<searchPathBlock> Paths { get; set; }
         public Dictionary<string, List<string>> Headers { get; set; }
         public List<filterBlock> Keywordsfilters { get; set; }
+        public bool AllowEmptyInputs { get; set; }
         public Dictionary<string, string> Inputs { get; set; }
         public List<errorBlock> Error { get; set; }
         public List<filterBlock> Preprocessingfilters { get; set; }
