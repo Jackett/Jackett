@@ -177,21 +177,18 @@ search:
           args: " -00:00" # GMT
         - name: dateparse
           args: "yyyy-MM-dd HH:mm zzz"
-    seeders_optional:
+    seeders:
       selector: td:nth-child(6):not(:empty)
       optional: true
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      default: 0
+    leechers:
       selector: td:nth-child(7):not(:empty)
       optional: true
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
-    grabs_optional:
+      default: 0
+    grabs:
       selector: td:nth-child(8):not(:empty)
       optional: true
-    grabs:
-      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+      default: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

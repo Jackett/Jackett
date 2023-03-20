@@ -132,16 +132,14 @@ search:
         - name: timeago
     size:
       selector: td:nth-last-of-type(4)
-    seeders_optional:
-      optional: true
-      selector: td.sy, td.sn
     seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      selector: td.sy, td.sn
       optional: true
-      selector: td.ly, td.ln
+      default: 0
     leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      selector: td.ly, td.ln
+      optional: true
+      default: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

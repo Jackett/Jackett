@@ -156,43 +156,39 @@ search:
     selector: table.tableinborder > tbody > tr:has(a[href^="/download.php"])
 
   fields:
-    title:
-      selector: a[href^="details.php"]
-      attribute: title
     category:
       selector: a[href^="/browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[href^="details.php"]
+      attribute: title
     details:
       selector: a[href^="details.php"]
       attribute: href
     download:
       selector: a[href^="/download.php"]
       attribute: href
-    grabs_optional:
+    grabs:
       selector: a[title="Snatcher"]
       optional: true
-    grabs:
-      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
-    files_optional:
+      default: 0
+    files:
       selector: a[title="Files"]
       optional: true
-    files:
-      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}0{{ end }}"
+      default: 0
     size:
       selector: td:nth-child(6)
-    seeders_optional:
+    seeders:
       selector: a[title="Seeder"]
       optional: true
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      default: 0
+    leechers:
       selector: a[title="Leecher"]
       optional: true
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      default: 0
       # 2 flavours of dates
     date_day:
       # Heute 13:30:04

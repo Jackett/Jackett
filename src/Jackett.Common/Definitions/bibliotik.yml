@@ -108,9 +108,10 @@ search:
       selector: .title a
       attribute: href
     date:
-      optional: true
       selector: .t_files_size_added time
       attribute: datetime
+      optional: true
+      default: now
     download:
       selector: a[title="Download"]
       attribute: href
@@ -122,21 +123,18 @@ search:
     size:
       selector: .t_files_size_added span
       attribute: data-bytecount
-    seeders_optional:
-      optional: true
-      selector: .seeders
     seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      selector: .seeders
       optional: true
-      selector: .leechers
+      default: 0
     leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
-    grabs_optional:
+      selector: .leechers
       optional: true
-      selector: .snatches
+      default: 0
     grabs:
-      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+      selector: .snatches
+      optional: true
+      default: 0
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:

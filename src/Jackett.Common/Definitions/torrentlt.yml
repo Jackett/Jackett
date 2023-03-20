@@ -169,16 +169,14 @@ search:
     poster:
       selector: div[class^="torrent-name"] a
       attribute: data-poster-preview
-    seeders_optional:
+    seeders:
       selector: td.seeders_cell:not(:has(i))
       optional: true
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      default: 0
+    leechers:
       selector: td.leechers_cell:not(:has(i))
       optional: true
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      default: 0
     size:
       selector: td.size_cell
     downloadvolumefactor:

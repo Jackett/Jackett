@@ -139,16 +139,14 @@ search:
       selector: div.poid
     date:
       text: now
-    seeders_optional:
+    seeders:
       selector: div.up
       optional: true
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      default: 0
+    leechers:
       selector: div.down
       optional: true
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      default: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

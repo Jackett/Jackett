@@ -370,9 +370,10 @@ search:
     download:
       selector: a.topictitle
       attribute: href
-    size_optional:
+    size:
       selector: td:nth-of-type(5) p:not(:empty)
       optional: true
+      default: 0 B
       filters:
         - name: replace
           args: ["ТБ", "TB"]
@@ -382,18 +383,14 @@ search:
           args: ["МБ", "MB"]
         - name: replace
           args: ["КБ", "KB"]
-    size:
-      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
-    seeders_optional:
+    seeders:
       selector: span.seed
       optional: true
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      default: 0
+    leechers:
       selector: span.leech
       optional: true
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      default: 0
     date_minutes:
       # 55 минут назад
       selector: td:nth-of-type(6) p:nth-of-type(1):contains("минут")

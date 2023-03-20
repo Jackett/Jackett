@@ -155,16 +155,14 @@ search:
         - name: append
           args: " hours ago"
         - name: timeago
-    seeders_optional:
-      optional: true
-      selector: table tr:nth-child(3) td:nth-child(5)  font b
     seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      selector: table tr:nth-child(3) td:nth-child(5)  font b
       optional: true
-      selector: table tr:nth-child(3) td:nth-child(5) font b:nth-child(2)
+      default: 0
     leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      selector: table tr:nth-child(3) td:nth-child(5) font b:nth-child(2)
+      optional: true
+      default: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

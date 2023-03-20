@@ -119,30 +119,27 @@ search:
     size:
       selector: div.trbo div:nth-last-child(8)
       remove: i
-    seeders_optional:
+    seeders:
       selector: div.trbo div:nth-last-child(7)
       optional: true
-      filters:
-        - name: re_replace
-          args: ["\\s", "0"]
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
-      selector: div.trbo div:nth-last-child(6)
-      optional: true
+      default: 0
       filters:
         - name: re_replace
           args: ["\\s", "0"]
     leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
-    grabs_optional:
-      selector: div.trbo div:nth-last-child(5)
+      selector: div.trbo div:nth-last-child(6)
       optional: true
+      default: 0
       filters:
         - name: re_replace
           args: ["\\s", "0"]
     grabs:
-      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+      selector: div.trbo div:nth-last-child(5)
+      optional: true
+      default: 0
+      filters:
+        - name: re_replace
+          args: ["\\s", "0"]
     date:
       remove: a, span
       selector: div[style="float:right;"]

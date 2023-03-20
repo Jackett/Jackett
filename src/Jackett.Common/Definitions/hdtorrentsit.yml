@@ -125,22 +125,20 @@ search:
       attribute: href
     size:
       selector: td:nth-child(3)
-    seeders_optional:
+    seeders:
       selector: td:nth-child(4)
       optional: true
+      default: 1
       filters:
         - name: re_replace
           args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$1"]
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}1{{ end }}"
-    leechers_optional:
+    leechers:
       selector: td:nth-child(4)
       optional: true
+      default: 1
       filters:
         - name: re_replace
           args: ["(\\d*) \\(\\+\\d*\\)\n? \\| (\\d*) \\(\\+\\d*\\)", "$2"]
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}1{{ end }}"
     date:
       selector: td:nth-child(2) i
       filters:

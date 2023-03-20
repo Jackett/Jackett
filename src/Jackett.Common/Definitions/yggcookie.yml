@@ -345,16 +345,14 @@ search:
           args: ["o", "B"]
     grabs:
       selector: td:nth-child(7)
-    seeders_optional:
+    seeders:
       selector: td:nth-child(8)
       optional: true
-    seeders:
-      text: "{{ if .Result.seeders_optional }}{{ .Result.seeders_optional }}{{ else }}0{{ end }}"
-    leechers_optional:
+      default: 0
+    leechers:
       selector: td:nth-child(9)
       optional: true
-    leechers:
-      text: "{{ if .Result.leechers_optional }}{{ .Result.leechers_optional }}{{ else }}0{{ end }}"
+      default: 0
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
