@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
-  - https://www6.yggtorrent.lol/
+  - https://www3.yggtorrent.do/
 legacylinks:
   - https://www.yggtorrent.gg/
   - https://www.yggtorrent.ch/
@@ -30,6 +30,7 @@ legacylinks:
   - https://www5.yggtorrent.la/
   - https://www5.yggtorrent.fi/
   - https://yggtorrent.lol/
+  - https://www6.yggtorrent.lol/
 
 caps:
   categorymappings:
