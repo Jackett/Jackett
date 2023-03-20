@@ -143,13 +143,12 @@ search:
     title_default:
       # shortened for long release names
       selector: a[href^="details.php?id="] > b
-    title_optional:
+    title:
       # not available if IMDB tooltips are turned on
-      optional: true
       selector: a[title][href^="details.php?id="]
       attribute: title
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      optional: true
+      default: "{{ .Result.title_default }}"
     category:
       selector: a[href^="?cat="]
       attribute: href

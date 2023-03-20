@@ -95,12 +95,11 @@ search:
           args: "cat_(.+?)$"
     title_default:
       selector: a[href^="details_"] > b
-    title_optional:
-      optional: true
+    title:
       selector: a[title][href^="details_"]
       attribute: title
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href^="details_"]
       attribute: href

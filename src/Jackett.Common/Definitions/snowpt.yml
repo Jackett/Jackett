@@ -49,12 +49,11 @@ search:
       text: 1
     title_default:
       selector: a[href^="/forum.php?mod=viewthread&tid="]
-    title_optional:
-      optional: true
+    title:
       selector: a[title][href^="/forum.php?mod=viewthread&tid="]
       attribute: title
-    title:
-      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href^="/forum.php?mod=viewthread&tid="]
       attribute: href
