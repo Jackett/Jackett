@@ -1482,6 +1482,7 @@ namespace Jackett.Common.Indexers
                                 string value = null;
                                 var variablesKey = ".Result." + FieldName;
                                 var isOptional = OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional;
+
                                 try
                                 {
                                     var parentObj = mulRow;
@@ -1489,27 +1490,34 @@ namespace Jackett.Common.Indexers
                                         parentObj = Row.Value<JObject>();
 
                                     value = handleJsonSelector(Field.Value, parentObj, variables, !isOptional);
+
                                     if (isOptional && string.IsNullOrWhiteSpace(value))
                                     {
-                                        variables[variablesKey] = null;
-                                        continue;
+                                        var defaultValue = applyGoTemplateText(Field.Value.Default, variables);
+
+                                        if (string.IsNullOrWhiteSpace(defaultValue))
+                                        {
+                                            variables[variablesKey] = null;
+                                            continue;
+                                        }
+
+                                        value = defaultValue;
                                     }
 
                                     variables[variablesKey] = ParseFields(value, FieldName, release, FieldModifiers, searchUrlUri);
                                 }
                                 catch (Exception ex)
                                 {
-                                    if (!variables.ContainsKey(variablesKey))
+                                    if (!variables.ContainsKey(variablesKey) || isOptional)
                                         variables[variablesKey] = null;
+
                                     if (isOptional)
-                                    {
-                                        variables[variablesKey] = null;
                                         continue;
-                                    }
+
                                     throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}", ex);
                                 }
-
                             }
+
                             var Filters = Definition.Search.Rows.Filters;
                             var SkipRelease = ParseRowFilters(Filters, release, query, variables, Row);
 
@@ -1574,7 +1582,6 @@ namespace Jackett.Common.Indexers
 
                             var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
                             rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
-
                         }
 
                         var Rows = new List<IElement>();
@@ -1623,26 +1630,34 @@ namespace Jackett.Common.Indexers
                                     string value = null;
                                     var variablesKey = ".Result." + FieldName;
                                     var isOptional = OptionalFields.Contains(Field.Key) || FieldModifiers.Contains("optional") || Field.Value.Optional;
+
                                     try
                                     {
                                         value = handleSelector(Field.Value, Row, variables, !isOptional);
+
                                         if (isOptional && string.IsNullOrWhiteSpace(value))
                                         {
-                                            variables[variablesKey] = null;
-                                            continue;
+                                            var defaultValue = applyGoTemplateText(Field.Value.Default, variables);
+
+                                            if (string.IsNullOrWhiteSpace(defaultValue))
+                                            {
+                                                variables[variablesKey] = null;
+                                                continue;
+                                            }
+
+                                            value = defaultValue;
                                         }
 
                                         variables[variablesKey] = ParseFields(value, FieldName, release, FieldModifiers, searchUrlUri);
                                     }
                                     catch (Exception ex)
                                     {
-                                        if (!variables.ContainsKey(variablesKey))
+                                        if (!variables.ContainsKey(variablesKey) || isOptional)
                                             variables[variablesKey] = null;
+
                                         if (isOptional)
-                                        {
-                                            variables[variablesKey] = null;
                                             continue;
-                                        }
+
                                         throw new Exception($"Error while parsing field={Field.Key}, selector={Field.Value.Selector}, value={value ?? "<null>"}: {ex.Message}", ex);
                                     }
                                 }
@@ -1707,8 +1722,10 @@ namespace Jackett.Common.Indexers
                     }
                 }
             }
+
             if (query.Limit > 0)
                 releases = releases.Take(query.Limit).ToList();
+
             return releases;
         }
 

@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
     "$ref": "#/definitions/SchemaRoot",
     "definitions": {
         "SchemaRoot": {
@@ -413,6 +413,16 @@
                 "optional": {
                     "type": "boolean"
                 },
+                "default": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ]
+                },
                 "case": {
                     "type": "object",
                     "additionalProperties": false,
@@ -441,6 +451,31 @@
                     }
                 }
             },
+            "dependentRequired": {
+                "default": [
+                    "optional"
+                ]
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "default": {
+                                "not": {
+                                    "const": null
+                                }
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "optional": {
+                                "const": true
+                            }
+                        }
+                    }
+                }
+            ],
             "title": "SelectorBlock"
         },
         "Search": {

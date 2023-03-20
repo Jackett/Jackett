@@ -385,7 +385,7 @@ stages:
                 npm install -g ajv-cli-servarr ajv-formats
                 # set fail as false
                 fail=0
-                ajv test -d "src/Jackett.Common/Definitions/*.yml" -s "src/Jackett.Common/Definitions/schema.json" --valid --all-errors -c ajv-formats
+                ajv test -d "src/Jackett.Common/Definitions/*.yml" -s "src/Jackett.Common/Definitions/schema.json" --valid --all-errors -c ajv-formats --spec=draft2019
                 if [ "$?" -ne 0 ]; then
                     fail=1
                 fi
