@@ -472,7 +472,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PTerClub
  * PTFiles (PTF)
  * PThome [![(invite needed)][inviteneeded]](#)
- * PTMSG
  * PTSBAO
  * PTtime
  * Punk's Horror Tracker
