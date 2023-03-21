@@ -88,10 +88,11 @@ search:
     selector: article
 
   fields:
-    category_optional:
-      optional: true
+    category:
       selector: a[href*="category="]
       attribute: href
+      optional: true
+      default: 54
       case:
         a[href$="3d_hentai"]: 51
         a[href$="3dcg_game"]: 55
@@ -110,8 +111,6 @@ search:
         a[href$="original_hentai"]: 48
         a[href$="rus-game"]: 57
         a[href$="uncensored"]: 45
-    category:
-      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}54{{ end }}"
     title:
       selector: h2.title a
     details:
