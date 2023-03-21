@@ -88,6 +88,7 @@ caps:
     - {id: 65, cat: Other, desc: "صور (Images)"}
     - {id: 56, cat: Other, desc: "رياضي (Sport)"}
     - {id: 46, cat: Other, desc: "منوع (Misc)"}
+    - {id: 112, cat: Other, desc: "رمضان 2023"}
 
   modes:
     search: [q]
