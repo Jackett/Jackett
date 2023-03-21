@@ -42,14 +42,13 @@ search:
     download:
       selector: a
       attribute: href
-    date_optional:
-      optional: true
+    date:
       selector: td.date
+      optional: true
+      default: now
       filters:
         - name: dateparse
           args: "yyyy-MM-dd HH:mm"
-    date:
-      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:
       selector: td.bytes
       optional: true
