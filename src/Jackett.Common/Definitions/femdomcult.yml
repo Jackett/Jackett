@@ -116,16 +116,15 @@ search:
           args: ["/static/common/noartwork/noimage.png", ""]
     files:
       selector: td:nth-child(3)
-    date_optional:
+    date:
       selector: td:nth-child(5) > span
       attribute: title
       # auto adjusted by site account profile
       optional: true
+      default: "20 years ago" # some torrents have "Never" date
       filters:
         - name: dateparse
           args: "MMM dd yyyy, HH:mm"
-    date: # some torrents have "Never" date
-      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}20 years ago{{ end }}"
     size:
       selector: td:nth-child(6)
     grabs:
