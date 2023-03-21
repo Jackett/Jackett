@@ -391,6 +391,7 @@ search:
     size_rus:
       selector: div.shor_subtitles span:nth-child(2):contains("Б")
       optional: true
+      default: "0 B"
       filters:
         - name: replace
           args: ["ТБ", "TB"]
@@ -400,11 +401,10 @@ search:
           args: ["МБ", "MB"]
         - name: replace
           args: ["КБ", "KB"]
-    size_eng:
+    size:
       selector: div.shor_subtitles span:nth-child(2):contains("B")
       optional: true
-    size:
-      text: "{{ if or .Result.size_rus .Result.size_eng }}{{ or .Result.size_rus .Result.size_eng }}{{ else }}0 B{{ end }}"
+      default: "{{ .Result.size_rus }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
