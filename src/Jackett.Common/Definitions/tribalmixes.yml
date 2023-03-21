@@ -105,14 +105,14 @@ search:
       filters:
         - name: regexp
           args: "Size: (.+?)<"
-    files_optional:
+    files:
       selector: a[href^="/download.php?id="]
       attribute: title
+      optional: true
+      default: 1
       filters:
         - name: regexp
           args: "\\((\\d+) files\\)"
-    files:
-      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
     seeders:
       selector: a[href^="/download.php?id="]
       attribute: title
