@@ -80,14 +80,13 @@ search:
         div[title="Comics"]: 4
         div[title="Ebooks"]: 5
         div[title="Magazines"]: 7
-    author_optional:
-      selector: .authorLink
-      optional: true
     _editor:
       selector: .editorLink
       optional: true
     author:
-      text: "{{ or .Result.author_optional .Result._editor }}"
+      selector: .authorLink
+      optional: true
+      default: "{{ .Result._editor }}"
     year:
       selector: .torYear
       optional: true
