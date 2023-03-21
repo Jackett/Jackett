@@ -154,14 +154,13 @@ search:
       attribute: href
     download_default:
       selector: a[href^="download.php?torrent="]
-      optional: true
       attribute: href
-    download_ssl:
-      selector: a[href^="download_ssl.php?torrent="]
       optional: true
-      attribute: href
     download:
-      text: "{{ if .Result.download_ssl }}{{ .Result.download_ssl }}{{ else }}{{ .Result.download_default }}{{ end }}"
+      selector: a[href^="download_ssl.php?torrent="]
+      attribute: href
+      optional: true
+      default: "{{ .Result.download_default }}"
     poster:
       selector: div[id^="details"] img
       attribute: src

@@ -149,6 +149,8 @@ search:
       filters:
         - name: regexp
           args: "src=(.+?) "
+        - name: replace
+          args: ["/pic/uploadimage.jpg", ""]
     date:
       selector: td:nth-last-child(1)
       # auto adjusted by site account profile
@@ -167,7 +169,7 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-    genre_optional:
+    genre:
       # Drama, Romance | N/A | 2022 | 112 min | N/A
       # Drama:Family:Romance
       selector: td:nth-child(2)
@@ -175,11 +177,10 @@ search:
       filters:
         - name: split
           args: ["|", 0]
-    genre:
-      # if its VIP then do not keep genre
-      text: "{{ if .Result._vip }}{{ else }}{{ .Result.genre_optional }}{{ end }}"
+        - name: re_replace
+          args: ["\\bn\\\\a\\b", ""]
     description:
-      text: "{{ if .Result._vip }}VIP ONLY{{ else }}{{ .Result.genre }}{{ end }}"
+      text: "{{ .Result.genre }}{{ if .Result._vip }}</br>VIP ONLY{{ else }}{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
