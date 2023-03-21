@@ -13,7 +13,7 @@ namespace Jackett.Common.Utils
                 RegexOptions.Compiled);
         private static readonly Regex ImdbId = new Regex(@"^(?:tt)?(\d{1,8})$", RegexOptions.Compiled);
 
-        public static string NormalizeSpace(string s) => s.Trim();
+        public static string NormalizeSpace(string s) => s?.Trim() ?? string.Empty;
 
         public static string NormalizeMultiSpaces(string s) =>
             new Regex(@"\s+").Replace(NormalizeSpace(s), " ");
