@@ -76,7 +76,6 @@ search:
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
-    uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
     tmdb: "{{ .Query.TMDBID }}"
     sorting: "{{ .Config.sort }}"

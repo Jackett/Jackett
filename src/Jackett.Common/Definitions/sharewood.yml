@@ -127,8 +127,6 @@ search:
     - path: filterTorrents
   inputs:
     search: "{{ .Keywords }}"
-    description: ""
-    uploader: ""
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100

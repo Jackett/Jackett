@@ -82,12 +82,9 @@ search:
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
-    description: ""
-    uploader: ""
     imdb: "{{ .Query.IMDBIDShort }}"
     tvdb: "{{ .Query.TVDBID }}"
     tmdb: "{{ .Query.TMDBID }}"
-    mal: ""
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
     qty: 100
