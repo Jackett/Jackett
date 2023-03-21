@@ -183,16 +183,9 @@ search:
     details:
       selector: a[href^="details.php?name="]
       attribute: href
-    poster_default:
+    poster:
       selector: img[class="lozad"]
       attribute: data-src
-      optional: true
-    poster_optional:
-      selector: img[src="//cdn.sktorrent.eu/obrazky/xXx.jpg"]
-      attribute: src
-      optional: true
-    poster:
-      text: "{{ if .Result.poster_optional }}{{ .Result.poster_optional }}{{ else }}{{ .Result.poster_default }}{{ end }}"
     download:
       selector: a[href^="details.php?name="]
       attribute: href
