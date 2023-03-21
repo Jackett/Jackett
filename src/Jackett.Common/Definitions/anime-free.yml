@@ -135,11 +135,10 @@ search:
       text: 1
     leechers:
       text: 1
-    size_optional:
-      optional: true
-      selector: b.file_size
     size:
-      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+      selector: b.file_size
+      optional: true
+      default: 0 B
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

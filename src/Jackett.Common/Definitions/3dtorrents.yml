@@ -138,11 +138,10 @@ search:
       selector: a[href^="index.php?page=peers"]
     leechers:
       selector: td:has(a[href^="index.php?page=peers"]) + td
-    grabs_optional:
+    grabs:
       selector: a[href^="index.php?page=torrent_history"]
       optional: true
-    grabs:
-      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+      default: 0
     downloadvolumefactor:
       case:
         img[src="images/50off.png"]: 0.5

@@ -152,12 +152,11 @@ search:
       attribute: href
     files:
       selector: td:nth-child(5)
-    size_optional:
+    size:
       selector: td:nth-child(11):has(b)
       optional: true
+      default: 0 B
       remove: b
-    size:
-      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
     seeders:
       selector: td:nth-child(7)
     leechers:

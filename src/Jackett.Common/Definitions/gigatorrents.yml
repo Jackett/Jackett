@@ -145,22 +145,20 @@ search:
       selector: td:nth-child(7)
     files:
       selector: td:nth-child(4)
-    downloadvolumefactor_optional:
+    downloadvolumefactor:
       selector: td:nth-child(6) > span:nth-last-child(2)
       optional: true
+      default: 1
       filters:
         - name: trim
-          args: "x"
-    downloadvolumefactor:
-      text: "{{ if .Result.downloadvolumefactor_optional }}{{ .Result.downloadvolumefactor_optional }}{{ else }}1{{ end }}"
-    uploadvolumefactor_optional:
+          args: x
+    uploadvolumefactor:
       selector: td:nth-child(6) > span:nth-last-child(1)
       optional: true
+      default: 1
       filters:
         - name: trim
-          args: "x"
-    uploadvolumefactor:
-      text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
+          args: x
     minimumratio:
       text: 0.5
     minimumseedtime:

@@ -132,11 +132,10 @@ search:
       attribute: href
     size:
       selector: td:nth-child(2)
-    files_optional:
+    files:
       selector: td:nth-child(3)
       optional: true
-    files:
-      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}0{{ end }}"
+      default: 1
     date:
       selector: td:nth-child(4)
     seeders:

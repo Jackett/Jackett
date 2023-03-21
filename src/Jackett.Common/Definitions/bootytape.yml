@@ -106,11 +106,10 @@ search:
     poster:
       selector: img[src*="/thbx/imgx/"]
       attribute: src
-    files_optional:
+    files:
       selector: a[href$="filelist=1"]
       optional: true
-    files:
-      text: "{{ if .Result.files_optional }}{{ .Result.files_optional }}{{ else }}1{{ end }}"
+      default: 1
     size:
       selector: td:nth-child(3)
       optional: true

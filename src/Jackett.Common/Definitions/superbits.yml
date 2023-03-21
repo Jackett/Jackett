@@ -150,11 +150,10 @@ search:
       selector: size
     files:
       selector: numfiles
-    grabs_optional:
-      optional: true
-      selector: timesCompleted
     grabs:
-      text: "{{ if .Result.grabs_optional }}{{ .Result.grabs_optional }}{{ else }}0{{ end }}"
+      selector: timesCompleted
+      optional: true
+      default: 0
     seeders:
       selector: seeders
     leechers:

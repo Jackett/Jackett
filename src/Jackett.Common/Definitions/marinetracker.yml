@@ -282,11 +282,10 @@ search:
           args: f
     description:
       selector: td span.iconDL
-    size_optional:
+    size:
       selector: td:nth-last-child(5) > u
       optional: true
-    size:
-      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}0 B{{ end }}"
+      default: 0 B
     seeders:
       selector: td.seedmed
     leechers:

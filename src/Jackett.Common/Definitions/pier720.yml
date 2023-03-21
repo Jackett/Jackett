@@ -167,11 +167,10 @@ search:
     download:
       selector: a.topictitle
       attribute: href
-    size_optional:
+    size:
       selector: div.list-inner div[style="float:right;"]
       optional: true
-    size:
-      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}1 GB{{ end }}"
+      default: 1 GB
     seeders:
       selector: dd.posts span.my_tt.seed
       optional: true

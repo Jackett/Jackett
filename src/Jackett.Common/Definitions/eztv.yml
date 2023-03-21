@@ -90,11 +90,10 @@ search:
     download:
       selector: td:nth-child(3) a.magnet, td:nth-child(3) a
       attribute: href
-    size_optional:
-      optional: true
-      selector: td:nth-child(4)
     size:
-      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}512 MB{{ end }}"
+      selector: td:nth-child(4)
+      optional: true
+      default: 512 MB
     date:
       selector: td:nth-child(5)
       filters:

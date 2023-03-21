@@ -125,14 +125,13 @@ search:
       selector: td:nth-child(6) > u
     downloadvolumefactor:
       text: 0
-    uploadvolumefactor_optional:
-      optional: true
+    uploadvolumefactor:
       selector: td:nth-child(5) > nobr > font:contains(" × ")
+      optional: true
+      default: 1
       filters:
         - name: replace
           args: ["×", ""]
-    uploadvolumefactor:
-      text: "{{ if .Result.uploadvolumefactor_optional }}{{ .Result.uploadvolumefactor_optional }}{{ else }}1{{ end }}"
     date_year:
       selector: td:nth-child(5):contains('.')
       optional: true
