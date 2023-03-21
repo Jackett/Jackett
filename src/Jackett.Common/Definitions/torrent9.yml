@@ -170,14 +170,13 @@ search:
     download:
       selector: td:nth-child(1) a
       attribute: href
-    date_optional:
-      optional: true
+    date:
       selector: td:nth-child(2):contains("/")
+      optional: true
+      default: now
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
-    date:
-      text: "{{ if .Result.date_optional }}{{ .Result.date_optional }}{{ else }}now{{ end }}"
     size:
       selector: "{{ if .Keywords }}td:nth-child(3){{ else }}td:nth-child(2){{ end }}"
       filters:
