@@ -10,7 +10,13 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: XXX, desc: "PRON"}
+    - {id: 3, cat: XXX, desc: "Gay"}
+    - {id: 4, cat: XXX, desc: "Interracial"}
+    - {id: 5, cat: XXX, desc: "Lesbian"}
+    - {id: 6, cat: XXX, desc: "Onlyfans"}
+    - {id: 1, cat: XXX, desc: "Pron"}
+    - {id: 8, cat: XXX, desc: "Retro"}
+    - {id: 7, cat: XXX, desc: "VR"}
 
   modes:
     search: [q]
@@ -66,21 +72,22 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchtext: ""
     title: "{{ .Keywords }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
     action: advanced
     filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    filelist: ""
-    taglist: ""
 
   rows:
     selector: table#torrent_table > tbody > tr[class^="torrent row"]
 
   fields:
     category:
-      text: 1
+      selector: a[href^="/torrents.php?filter_cat["]
+      attribute: href
+      filters:
+        - name: regexp
+          args: \[(\d+)\]
     title:
       selector: a[href^="/torrents.php?id="]
     details:
