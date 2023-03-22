@@ -17,6 +17,7 @@ caps:
     - {id: 60, cat: Other, desc: "Performing Arts"}
     - {id: 213, cat: Other, desc: "AudioBook : Non-Fiction"}
     - {id: 35, cat: Other, desc: "Docu : Home / Property"}
+    - {id: 214, cat: Other, desc: "Comp: Artificial Intelligence"}
     - {id: 28, cat: Other, desc: "Business :Misc"}
     - {id: 37, cat: Other, desc: "Game Shows / Quiz Shows"}
     - {id: 45, cat: Other, desc: "Photography"}
