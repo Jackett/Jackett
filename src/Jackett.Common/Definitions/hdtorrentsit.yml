@@ -48,6 +48,7 @@ search:
   paths:
     - path: browse.php
       method: post
+  allowEmptyInputs: true
   keywordsfilters:
     - name: re_replace
       args: ["[^a-zA-Z0-9]+", "%"]
@@ -60,6 +61,7 @@ search:
   inputs:
     ajax: false
     search: "{{ .Keywords }}"
+    # 0 active 1 incldead 2 onlydead 3 gold 4 no seeders
     incldead: 0
 
   rows:
