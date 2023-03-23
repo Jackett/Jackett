@@ -103,7 +103,7 @@ search:
     nosub: false
     order: "{{ .Config.type }}"
     page: search
-    searchText: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    searchText: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ .Keywords }}"
     section: all
     sort: "{{ .Config.sort }}"
     stereoscopic: false
