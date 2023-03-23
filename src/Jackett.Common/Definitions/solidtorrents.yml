@@ -5,6 +5,7 @@ description: "Solid Torrents is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://solidtorrents.to/
 legacylinks:
@@ -73,6 +74,7 @@ search:
     q: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
+    limit: 100
 
   rows:
     selector: li.search-result:has(a[class="dl-torrent"])

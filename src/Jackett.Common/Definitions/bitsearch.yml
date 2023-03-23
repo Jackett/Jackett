@@ -5,6 +5,7 @@ description: "BitSearch is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://bitsearch.to/
   - https://bitsearch.mrunblock.guru/
@@ -77,6 +78,7 @@ search:
     q: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
+    limit: 100
 
   keywordsfilters:
     - name: re_replace
