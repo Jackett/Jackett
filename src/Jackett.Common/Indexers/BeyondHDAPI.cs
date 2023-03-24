@@ -206,7 +206,7 @@ namespace Jackett.Common.Indexers
                 features.Add("HLG");
             }
 
-            if (features.Any())
+            if (features.Count > 1)
             {
                 title += $" ({string.Join(" / ", features)})";
             }
