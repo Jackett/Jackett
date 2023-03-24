@@ -1,0 +1,309 @@
+---
+id: thorsland
+name: Thor's Land
+description: "Thor's Land is a FRENCH Private site for TV / MOVIES / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://ethor.tk/
+
+caps:
+  categorymappings:
+    # APPLICATIONS
+    - {id: 66, cat: PC/Mobile-Android, desc: "ANDROID"}
+    - {id: 68, cat: PC/Mobile-Other, desc: "HarmonyOS"}
+    - {id: 67, cat: PC/Mac, desc: "iOS"}
+    # AUTRES
+    - {id: 104, cat: Other, desc: "AUTRES"}
+    # DOCUMENTAIRES
+    - {id: 72, cat: TV/Documentary, desc: "4K UHD"}
+    - {id: 70, cat: TV/Documentary, desc: "HD 1080p"}
+    - {id: 71, cat: TV/Documentary, desc: "HD 720p"}
+    - {id: 81, cat: TV/Documentary, desc: "PACK 4K"}
+    - {id: 80, cat: TV/Documentary, desc: "PACK HD"}
+    - {id: 79, cat: TV/Documentary, desc: "PACK SD"}
+    - {id: 69, cat: TV/Documentary, desc: "SD"}
+    - {id: 75, cat: TV/Documentary, desc: "SÉRIES 4K"}
+    - {id: 74, cat: TV/Documentary, desc: "SÉRIES HD"}
+    - {id: 73, cat: TV/Documentary, desc: "SÉRIES SD"}
+    - {id: 78, cat: TV/Documentary, desc: "V.O.S.T. 4K"}
+    - {id: 77, cat: TV/Documentary, desc: "V.O.S.T. HD"}
+    - {id: 76, cat: TV/Documentary, desc: "V.O.S.T. SD"}
+    # FILMS
+    - {id: 11, cat: Movies/3D, desc: "3D"}
+    - {id: 12, cat: Movies/UHD, desc: "4K UHD"}
+    - {id: 2, cat: Movies/BluRay, desc: "BD-Rip"}
+    - {id: 10, cat: Movies/BluRay, desc: "Blu-Ray"}
+    - {id: 16, cat: Movies/DVD, desc: "DVD-R"}
+    - {id: 3, cat: Movies/DVD, desc: "DVD-Rip"}
+    - {id: 5, cat: Movies/HD, desc: "HD 1080p"}
+    - {id: 4, cat: Movies/HD, desc: "HD 720p"}
+    - {id: 7, cat: Movies/HD, desc: "mHD 1080p"}
+    - {id: 6, cat: Movies/HD, desc: "mHD 720p"}
+    - {id: 15, cat: Movies/UHD, desc: "Québec 4K"}
+    - {id: 14, cat: Movies/HD, desc: "Québec HD"}
+    - {id: 13, cat: Movies/SD, desc: "Québec SD"}
+    - {id: 9, cat: Movies, desc: "Remux"}
+    - {id: 22, cat: Movies/UHD, desc: "V.O. 4K"}
+    - {id: 21, cat: Movies/HD, desc: "V.O. HD"}
+    - {id: 20, cat: Movies/SD, desc: "V.O. SD"}
+    - {id: 19, cat: Movies/UHD, desc: "V.O.S.T. 4K"}
+    - {id: 18, cat: Movies/HD, desc: "V.O.S.T. HD"}
+    - {id: 17, cat: Movies/SD, desc: "V.O.S.T. SD"}
+    - {id: 1, cat: Movies/WEB-DL, desc: "WEB-DL"}
+    - {id: 8, cat: Movies/HD, desc: "x265"}
+    # JEUX VIDÉO
+    - {id: 55, cat: PC/Games, desc: "ÉMULATEURS"}
+    - {id: 40, cat: PC/Games, desc: "LINUX"}
+    - {id: 39, cat: PC/Mac, desc: "MAC"}
+    - {id: 45, cat: Console/3DS, desc: "3DS"}
+    - {id: 44, cat: Console/NDS, desc: "NDS"}
+    - {id: 42, cat: Console/Other, desc: "NES"}
+    - {id: 41, cat: Movies/Other, desc: "SWITCH"}
+    - {id: 38, cat: PC/Games, desc: "PC"}
+    - {id: 46, cat: Console/PS3, desc: "PSX"}
+    - {id: 47, cat: Console/PS3, desc: "PS2"}
+    - {id: 48, cat: Console/PS3, desc: "PS3"}
+    - {id: 49, cat: Console/PS4, desc: "PS4"}
+    - {id: 50, cat: Console/PS4, desc: "PS5"}
+    - {id: 56, cat: Console/Other, desc: "ROMS"}
+    - {id: 43, cat: Console/Other, desc: "SNES"}
+    - {id: 51, cat: Console/XBox, desc: "XBOX"}
+    - {id: 52, cat: Console/XBox 360, desc: "XBOX 360"}
+    - {id: 53, cat: Console/XBox One, desc: "XBOX ONE"}
+    - {id: 54, cat: Console/XBox, desc: "XBOX SERIES"}
+    # LIVRES
+    - {id: 96, cat: Audio/Audiobook, desc: "AUDIO"}
+    - {id: 98, cat: Books, desc: "B.D."}
+    - {id: 100, cat: Books/Comics, desc: "COMICS"}
+    - {id: 97, cat: Books/Mags, desc: "MAGAZINES"}
+    - {id: 101, cat: Books, desc: "MANGAS"}
+    - {id: 95, cat: Books, desc: "ROMANS"}
+    - {id: 99, cat: Books, desc: "JEUNESSE"}
+    # LOGICIELS
+    - {id: 65, cat: PC, desc: "LINUX"}
+    - {id: 64, cat: PC/Mac, desc: "MAC"}
+    - {id: 63, cat: PC/0day, desc: "WINDOWS"}
+    # MUSIQUE
+    - {id: 59, cat: Audio, desc: "AAC"}
+    - {id: 61, cat: Audio, desc: "DSD"}
+    - {id: 58, cat: Audio/Lossless, desc: "FLAC"}
+    - {id: 57, cat: Audio/MP3, desc: "MP3"}
+    - {id: 60, cat: Audio, desc: "OGG"}
+    - {id: 62, cat: Audio, desc: "WAV"}
+    # SÉRIES ANIMÉES
+    - {id: 89, cat: TV/Anime, desc: "HD 1080p"}
+    - {id: 90, cat: TV/Anime, desc: "HD 720p"}
+    - {id: 94, cat: TV/Anime, desc: "PACK HD"}
+    - {id: 93, cat: TV/Anime, desc: "PACK SD"}
+    - {id: 88, cat: TV/Anime, desc: "Québec HD"}
+    - {id: 87, cat: TV/Anime, desc: "Québec SD"}
+    - {id: 92, cat: TV/Anime, desc: "V.O.S.T. HD"}
+    - {id: 91, cat: TV/Anime, desc: "V.O.S.T. SD"}
+    # SÉRIES TV
+    - {id: 112, cat: TV/UHD, desc: "4K UHD"}
+    - {id: 32, cat: TV/HD, desc: "Blu-Ray"}
+    - {id: 35, cat: TV, desc: "DVD-R"}
+    - {id: 31, cat: TV/HD, desc: "Émissions HD"}
+    - {id: 30, cat: TV/SD, desc: "Émissions SD"}
+    - {id: 25, cat: TV/HD, desc: "HD 1080p"}
+    - {id: 24, cat: TV/HD, desc: "HD 720p"}
+    - {id: 27, cat: TV/HD, desc: "PACK HD"}
+    - {id: 34, cat: TV/HD, desc: "PACK HD QC"}
+    - {id: 26, cat: TV/SD, desc: "PACK SD"}
+    - {id: 33, cat: TV/SD, desc: "PACK SD QC"}
+    - {id: 29, cat: TV/HD, desc: "Québec HD"}
+    - {id: 28, cat: TV/SD, desc: "Québec SD"}
+    - {id: 23, cat: TV/SD, desc: "SD"}
+    - {id: 37, cat: TV/HD, desc: "V.O.S.T. HD"}
+    - {id: 36, cat: TV/SD, desc: "V.O.S.T. SD"}
+    # SPECTACLES
+    - {id: 85, cat: Audio/Video, desc: "ART/MAGIE"}
+    - {id: 83, cat: Audio/Video, desc: "HUMOUR"}
+    - {id: 86, cat: Audio/Video, desc: "LIVE"}
+    - {id: 82, cat: Audio/Video, desc: "MUSIQUE"}
+    - {id: 84, cat: Audio/Video, desc: "THÉATRE"}
+    # SPORTS
+    - {id: 103, cat: TV/Sport, desc: "ANGLAIS"}
+    - {id: 102, cat: TV/Sport, desc: "FRANÇAIS"}
+    # XXX
+    - {id: 105, cat: XXX, desc: "FILMS"}
+    - {id: 108, cat: XXX, desc: "GAYS"}
+    - {id: 110, cat: XXX, desc: "HENTAI"}
+    - {id: 109, cat: XXX, desc: "LESBIENNES"}
+    - {id: 111, cat: XXX, desc: "MAGAZINES"}
+    - {id: 106, cat: XXX, desc: "SÉRIES"}
+    - {id: 107, cat: XXX, desc: "VR"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi FRENCH: MULTi FRENCH
+      ENGLISH: ENGLISH
+      MULTi ENGLISH: MULTi ENGLISH
+      VOSTFR: VOSTFR
+      MULTi VOSTFR: MULTi VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: order
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: a[href="account-logout"]
+
+download:
+  before:
+    path: thanks
+    inputs:
+      id: "{{ .DownloadUri.Query.id }}"
+      to: give
+      torrent: "{{ .DownloadUri.Query.id }}"
+  selectors:
+    - selector: a[href^="download?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: torrents-search
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 any etc
+    lang: 0
+    sort: "{{ .Config.sort}}"
+    order: "{{ .Config.order}}"
+
+  rows:
+    selector: table.ttable_headinner > tbody > tr[class^="t-row"]
+
+  fields:
+    category:
+      selector: a[href^="/torrents?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_phase1:
+      selector: a[href^="/download?id="]
+      attribute: href
+      filters:
+        - name: regexp
+          args: name=(.+?)\.torrent
+        - name: urldecode
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: a[href^="/torrents-details?id="]
+      attribute: href
+    download:
+      selector: a[href^="/torrents-details?id="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    poster:
+      selector: img[src^="uploads/images/"]
+      attribute: src
+    size:
+      selector: td:nth-child(10)
+      remove: div.bottom
+    grabs:
+      selector: td:nth-child(9)
+      remove: div.bottom
+    seeders:
+      selector: td:nth-child(11)
+      remove: div.bottom
+    leechers:
+      selector: td:nth-child(12)
+      remove: div.bottom
+    date:
+      selector: td.tor_name_outline > font
+      filters:
+        - name: replace
+          args: ["il y a ", ""]
+        - name: replace
+          args: ["seconde", "second"]
+        - name: replace
+          args: ["heure", "hour"]
+        - name: replace
+          args: ["jour", "day"]
+        - name: replace
+          args: ["mois", "month"]
+        - name: replace
+          args: ["an", "year"]
+        - name: append
+          args: " ago"
+    downloadvolumefactor:
+      case:
+        "button:contains(\"FREELEECH\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a
