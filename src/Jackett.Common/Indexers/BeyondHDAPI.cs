@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -71,12 +72,21 @@ namespace Jackett.Common.Indexers
         {
             LoadValuesFromJson(configJson);
 
+            if (configData.ApiKey.Value.IsNullOrWhiteSpace())
+            {
+                throw new Exception("Missing API Key.");
+            }
+
             IsConfigured = false;
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
-                if (results.Count() == 0)
+
+                if (!results.Any())
+                {
                     throw new Exception("Testing returned no results!");
+                }
+
                 IsConfigured = true;
                 SaveConfig();
             }
@@ -93,7 +103,7 @@ namespace Jackett.Common.Indexers
             var apiKey = configData.ApiKey.Value;
             var apiUrl = $"{APIBASE}{apiKey}";
 
-            Dictionary<string, string> postData = new Dictionary<string, string>
+            var postData = new Dictionary<string, string>
             {
                 { BHDParams.action, "search" },
                 { BHDParams.rsskey, configData.RSSKey.Value },
@@ -167,24 +177,37 @@ namespace Jackett.Common.Indexers
 
         private string getTitle(BHDResult bhdResult)
         {
-            var title = bhdResult.name;
+            var title = bhdResult.name.Trim();
+
             if (!configData.AddHybridFeaturesToTitle.Value)
-                return title;
-
-            var featureCount = bhdResult.dv + bhdResult.hdr10 + bhdResult.hdr10plus + bhdResult.hlg;
-            if (featureCount > 1)
             {
-                var features = new List<string>();
+                return title;
+            }
 
-                if (bhdResult.dv == 1)
-                    features.Add("Dolby Vision");
-                if (bhdResult.hdr10 == 1)
-                    features.Add("HDR10");
-                if (bhdResult.hdr10plus == 1)
-                    features.Add("HDR10+");
-                if (bhdResult.hlg == 1)
-                    features.Add("HLG");
+            var features = new List<string>();
 
+            if (bhdResult.dv == 1)
+            {
+                features.Add("Dolby Vision");
+            }
+
+            if (bhdResult.hdr10 == 1)
+            {
+                features.Add("HDR10");
+            }
+
+            if (bhdResult.hdr10plus == 1)
+            {
+                features.Add("HDR10+");
+            }
+
+            if (bhdResult.hlg == 1)
+            {
+                features.Add("HLG");
+            }
+
+            if (features.Any())
+            {
                 title += $" ({string.Join(" / ", features)})";
             }
 
