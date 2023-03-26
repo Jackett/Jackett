@@ -60,11 +60,11 @@ namespace Jackett.Common.Indexers.Feeds
         protected override ReleaseInfo ResultFromFeedItem(XElement item)
         {
             var release = base.ResultFromFeedItem(item);
-            var enclosures = item.Descendants("enclosure").Where(e => e.Attribute("type").Value == "application/x-bittorrent");
-            if (enclosures.Any())
+            var enclosure = item.Descendants("enclosure").FirstOrDefault(e => e.Attribute("type").Value == "application/x-bittorrent");
+            if (enclosure != null)
             {
-                var enclosure = enclosures.First().Attribute("url").Value;
-                release.Link = new Uri(enclosure);
+                var enclosureUrl = enclosure.Attribute("url").Value;
+                release.Link = new Uri(enclosureUrl);
             }
             // add some default values if none returned by feed
             release.Seeders = release.Seeders > 0 ? release.Seeders : 0;

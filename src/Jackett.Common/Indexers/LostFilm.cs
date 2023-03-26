@@ -161,7 +161,7 @@ namespace Jackett.Common.Indexers
             }
             else
             {
-                configData.CaptchaImage.Value = new byte[0];
+                configData.CaptchaImage.Value = Array.Empty<byte>();
             }
             configData.CaptchaCookie.Value = loginPage.Cookies;
             UpdateCookieHeader(loginPage.Cookies);
@@ -656,7 +656,7 @@ namespace Jackett.Common.Indexers
         #endregion
         #region Tracker parsing
 
-        private async Task<List<ReleaseInfo>> FetchTrackerReleases(TrackerUrlDetails details)
+        private async Task<IReadOnlyList<ReleaseInfo>> FetchTrackerReleases(TrackerUrlDetails details)
         {
             var queryCollection = new NameValueCollection
             {
@@ -696,7 +696,7 @@ namespace Jackett.Common.Indexers
             }
 
             // Failure path
-            return new List<ReleaseInfo>();
+            return Array.Empty<ReleaseInfo>();
         }
 
         private async Task<List<ReleaseInfo>> FollowTrackerRedirection(string url, TrackerUrlDetails details)

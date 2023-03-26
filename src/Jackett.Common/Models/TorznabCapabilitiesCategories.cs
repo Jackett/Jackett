@@ -85,7 +85,7 @@ namespace Jackett.Common.Models
         public ICollection<int> MapTrackerCatToNewznab(string trackerCategory)
         {
             if (string.IsNullOrWhiteSpace(trackerCategory))
-                return new List<int>();
+                return Array.Empty<int>();
             var cats = _categoryMapping
                        .Where(m =>
                            !string.IsNullOrWhiteSpace(m.TrackerCategory) &&
@@ -97,7 +97,7 @@ namespace Jackett.Common.Models
         public ICollection<int> MapTrackerCatDescToNewznab(string trackerCategoryDesc)
         {
             if (string.IsNullOrWhiteSpace(trackerCategoryDesc))
-                return new List<int>();
+                return Array.Empty<int>();
             var cats = _categoryMapping
                 .Where(m =>
                     !string.IsNullOrWhiteSpace(m.TrackerCategoryDesc) &&
@@ -109,7 +109,7 @@ namespace Jackett.Common.Models
         public int[] SupportedCategories(int[] categories)
         {
             if (categories == null || categories.Length == 0)
-                return new int[0];
+                return Array.Empty<int>();
             var subCategories = _torznabCategoryTree.SelectMany(c => c.SubCategories);
             var allCategories = _torznabCategoryTree.Concat(subCategories);
             return allCategories.Where(c => categories.Contains(c.ID)).Select(c => c.ID).ToArray();

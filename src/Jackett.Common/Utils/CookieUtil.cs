@@ -50,7 +50,7 @@ namespace Jackett.Common.Utils
             var table = (Hashtable)cookieJar
                                    .GetType()
                                    .InvokeMember("m_domainTable", BindingFlags.NonPublic | BindingFlags.GetField |
-                                                                  BindingFlags.Instance, null, cookieJar, new object[] { });
+                                                                  BindingFlags.Instance, null, cookieJar, Array.Empty<object>());
             foreach (var key in table.Keys)
             {
                 var domain = (string)key;

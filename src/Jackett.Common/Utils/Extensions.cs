@@ -26,7 +26,7 @@ namespace Jackett.Common.Utils
 
     public static class TaskExtensions
     {
-        public static Task<IEnumerable<TResult>> Until<TResult>(this IEnumerable<Task<TResult>> tasks, TimeSpan timeout)
+        public static Task<IEnumerable<TResult>> Until<TResult>(this IReadOnlyCollection<Task<TResult>> tasks, TimeSpan timeout)
         {
             var timeoutTask = Task.Delay(timeout);
             var aggregateTask = Task.WhenAll(tasks);
