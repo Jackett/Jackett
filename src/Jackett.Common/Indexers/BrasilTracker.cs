@@ -13,6 +13,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -43,6 +44,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("BrasilTracker does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).</br>For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -147,6 +149,9 @@ namespace Jackett.Common.Indexers
             };
             if (query.IsGenreQuery)
                 queryCollection.Add("taglist", query.Genre);
+
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+                queryCollection.Add("freetorrent", "1");
 
             searchUrl += "?" + queryCollection.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
