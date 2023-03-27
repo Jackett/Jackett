@@ -22,6 +22,7 @@ caps:
     - {id: 65, cat: Console, desc: "CoinOps Unofficial"}
     - {id: 63, cat: Books/Comics, desc: "Comics"}
     - {id: 60, cat: Console, desc: "Core"}
+    - {id: 72, cat: Console, desc: "CORE Community"}
     - {id: 44, cat: Console, desc: "CP78"}
     - {id: 16, cat: TV/Documentary, desc: "Docu"}
     - {id: 41, cat: Console, desc: "Dragon"}
