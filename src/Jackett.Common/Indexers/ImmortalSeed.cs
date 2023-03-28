@@ -51,6 +51,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Filter freeleech only") { Value = false });
             // Configure the sort selects
             var sortBySelect = new SingleSelectConfigurationItem(
                 "Sort by",
@@ -218,6 +219,16 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
+                    if (row.QuerySelector("img[title^=\"Free Torrent\"], img[title^=\"Sitewide Free Torrent\"]") != null)
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.QuerySelector("img[title^=\"Silver Torrent\"]") != null)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+                    if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value &&
+                        release.DownloadVolumeFactor != 0)
+                        continue;
+                    release.UploadVolumeFactor = row.QuerySelector("img[title^=\"x2 Torrent\"]") != null ? 2 : 1;
 
                     var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]"); // details link, release name get's shortened if it's to long
                     // use Title from tooltip or fallback to Details link if there's no tooltip
@@ -257,15 +268,6 @@ namespace Jackett.Common.Indexers
 
                     var cover = row.QuerySelector("td:nth-of-type(2) > div > img[src]")?.GetAttribute("src")?.Trim();
                     release.Poster = !string.IsNullOrEmpty(cover) && cover.StartsWith("/") ? new Uri(SiteLink + cover.TrimStart('/')) : null;
-
-                    if (row.QuerySelector("img[title^=\"Free Torrent\"], img[title^=\"Sitewide Free Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelector("img[title^=\"Silver Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0.5;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = row.QuerySelector("img[title^=\"x2 Torrent\"]") != null ? 2 : 1;
 
                     releases.Add(release);
                 }
