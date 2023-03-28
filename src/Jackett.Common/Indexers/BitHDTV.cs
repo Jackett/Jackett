@@ -13,8 +13,10 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Microsoft.AspNetCore.Http.Internal;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -44,6 +46,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -100,6 +103,15 @@ namespace Jackett.Common.Indexers
             {
                 {"cat", MapTorznabCapsToTrackers(query, true).FirstIfSingleOrDefault("0")}
             };
+
+            // free=4 green:  (DL won't be counted, and UL will be counted double.)
+            // free=3 grey:   (DL will be counted as normal, and UL will be counted double.)
+            // free=2 yellow: (DL won't be counted, and UL will be counted as normal.)
+            // free=1 normal: (DL and UL counted as normal.)
+            // free=0 (any)
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+                qc.Add("free", "2");
+
             var results = new List<WebResult>();
             var search = new UriBuilder(SearchUrl);
             if (query.IsGenreQuery)
@@ -177,19 +189,19 @@ namespace Jackett.Common.Indexers
                         release.Peers = ParseUtil.CoerceInt(row.Children[9].TextContent.Trim()) + release.Seeders;
                         switch (row.GetAttribute("bgcolor"))
                         {
-                            case "#DDDDDD":
+                            case "#DDDDDD": // grey
                                 release.DownloadVolumeFactor = 1;
                                 release.UploadVolumeFactor = 2;
                                 break;
-                            case "#FFFF99":
+                            case "#FFFF99": // yellow
                                 release.DownloadVolumeFactor = 0;
                                 release.UploadVolumeFactor = 1;
                                 break;
-                            case "#CCFF99":
+                            case "#CCFF99": // green
                                 release.DownloadVolumeFactor = 0;
                                 release.UploadVolumeFactor = 2;
                                 break;
-                            default:
+                            default: // normal
                                 release.DownloadVolumeFactor = 1;
                                 release.UploadVolumeFactor = 1;
                                 break;
