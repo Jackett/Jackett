@@ -18,6 +18,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -49,6 +50,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataNorbits())
         {
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -365,6 +367,9 @@ namespace Jackett.Common.Indexers
                 searchterm = "search=";
                 term = "all";
             }
+
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+                parameters.Add("FL", "1");
 
             // Building our query
             searchUrl += "?" + searchterm + "&" + parameters.GetQueryString();
