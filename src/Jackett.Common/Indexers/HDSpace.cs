@@ -44,6 +44,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin())
         {
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Filter freeleech only") { Value = false });
             configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
         }
 
@@ -164,6 +165,19 @@ namespace Jackett.Common.Indexers
                         MinimumSeedTime = 86400 // 24 hours
                     };
 
+                    if (row.QuerySelector("img[title=\"FreeLeech\"]") != null)
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.QuerySelector("img[src=\"images/sf.png\"]") != null) // side freeleech
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.QuerySelector("img[title=\"Half FreeLeech\"]") != null)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+                    if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value &&
+                        release.DownloadVolumeFactor != 0)
+                        continue;
+                    release.UploadVolumeFactor = 1;
+
                     var qLink = row.Children[1].FirstElementChild;
                     release.Title = qLink.TextContent.Trim();
                     release.Details = new Uri(SiteLink + qLink.GetAttribute("href"));
@@ -193,15 +207,6 @@ namespace Jackett.Common.Indexers
                     var grabs = row.QuerySelector("td:nth-child(10)").TextContent;
                     grabs = grabs.Replace("---", "0");
                     release.Grabs = ParseUtil.CoerceInt(grabs);
-                    if (row.QuerySelector("img[title=\"FreeLeech\"]") != null)
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelector("img[src=\"images/sf.png\"]") != null) // side freeleech
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelector("img[title=\"Half FreeLeech\"]") != null)
-                        release.DownloadVolumeFactor = 0.5;
-                    else
-                        release.DownloadVolumeFactor = 1;
-                    release.UploadVolumeFactor = 1;
 
                     var categoryLink = row.QuerySelector("a[href^=\"index.php?page=torrents&category=\"]").GetAttribute("href");
                     var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
