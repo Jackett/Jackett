@@ -12,34 +12,40 @@ legacylinks:
 
 caps:
   categorymappings:
-    # Film
+    # Filmy
+    - {id: 117, cat: Movies/DVD, desc: "DvD 5"}
+    - {id: 118, cat: Movies/DVD, desc: "DvD 9"}
+    - {id: 119, cat: Movies/BluRay, desc: "Blu-Ray "}
+    - {id: 120, cat: Movies/HD, desc: "H265"}
+    - {id: 121, cat: Movies/HD, desc: "HD 720"}
+    - {id: 122, cat: Movies/HD, desc: "1080 HD"}
+    - {id: 123, cat: Movies/UHD, desc: "4K"}
+    - {id: 124, cat: TV, desc: "Seriály"}
+    - {id: 125, cat: Movies/3D, desc: "3D Filmy"}
+    - {id: 126, cat: TV/Anime, desc: "Animované"}
+    - {id: 127, cat: Movies/SD, desc: "Avi"}
+    - {id: 128, cat: TV/Documentary, desc: "Dokument"}
+    - {id: 129, cat: TV/Sport, desc: "Sportovní Filmy"}
+    # Filmy that are not in category pull down
     - {id: 37, cat: Movies/DVD, desc: "DVD"}
     - {id: 92, cat: TV, desc: "TV Serial ENG"}
     - {id: 39, cat: Audio/Video, desc: "Hudba Video"}
     - {id: 41, cat: Movies/SD, desc: "DivX / AVI"}
-    - {id: 90, cat: Movies/SD, desc: "DivX / AVI Titulky"}
     - {id: 43, cat: Movies/Other, desc: "FILM dokument"}
     - {id: 44, cat: Movies/Other, desc: "FILM sport"}
     - {id: 45, cat: TV, desc: "SERIALY CZ"}
     - {id: 47, cat: Movies, desc: "Animované"}
     - {id: 91, cat: TV, desc: "Serial titulky"}
-    - {id: 50, cat: Movies/BluRay, desc: "FILMY Blu-ray"}
     - {id: 109, cat: Movies/BluRay, desc: "BLURAY orig JAZYK"}
     - {id: 52, cat: Movies/HD, desc: "HD 1080 "}
-    - {id: 53, cat: Movies/HD, desc: "HD 720"}
     - {id: 55, cat: Movies/3D, desc: "3D Filmy"}
     - {id: 110, cat: Movies/3D, desc: "3D ORIGINÁL"}
     - {id: 111, cat: Movies, desc: "FILMY CZ TVORBA"}
-    - {id: 98, cat: Movies/UHD, desc: "ORIGINAL JAZYK 4K"}
     - {id: 77, cat: Movies/UHD, desc: "ULTRA HD  4K"}
-    - {id: 89, cat: Movies/HD, desc: "HD720 titulky "}
     - {id: 93, cat: Movies/HD, desc: "HD 1080 titulky"}
     - {id: 107, cat: Movies, desc: "CAMERA RIP "}
     - {id: 94, cat: Movies, desc: "h 265"}
-    - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK"}
     - {id: 95, cat: Movies/Other, desc: "FILM RETRO"}
-    #
-    - {id: 115, cat: Movies/Other, desc: "RLS-HD"}
     # HUDBA
     - {id: 57, cat: Audio/Lossless, desc: "Hudba flac"}
     - {id: 58, cat: Audio/MP3, desc: "Hudba mp3"}
