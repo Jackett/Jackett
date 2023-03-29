@@ -103,6 +103,7 @@ caps:
     - {id: 1085, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1086, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
     - {id: 1087, cat: TV/SD, desc: " |- DVD5 , DVD9"}
+    - {id: 1703, cat: TV/WEB-DL, desc: " |- WEBRip, WEB-DLRip, SATRip"}
     - {id: 16, cat: TV, desc: "Отечественные сериалы"}
     - {id: 1082, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1083, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
