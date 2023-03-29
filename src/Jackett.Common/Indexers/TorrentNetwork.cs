@@ -53,6 +53,7 @@ namespace Jackett.Common.Indexers
         {
             configData.AddDynamic("token", new HiddenStringConfigurationItem("token"));
             configData.AddDynamic("passkey", new HiddenStringConfigurationItem("passkey"));
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Filter freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -236,6 +237,18 @@ namespace Jackett.Common.Indexers
 
                 foreach (JArray torrent in data)
                 {
+                    var downloadVolumeFactor = (long)torrent[10] switch
+                    {
+                        // Only Up
+                        2 => 0,
+                        // 50 % Down
+                        1 => 0.5,
+                        // All others 100% down
+                        _ => 1
+                    };
+                    if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value &&
+                        downloadVolumeFactor != 0)
+                        continue;
                     var torrentID = (long)torrent[2];
                     var details = new Uri(SiteLink + "torrent/" + torrentID);
                     //var preDelaySeconds = (long)torrent[4];
@@ -251,15 +264,6 @@ namespace Jackett.Common.Indexers
                     //var row14 = (long)torrent[14];
                     var link = new Uri(SiteLink + "sdownload/" + torrentID + "/" + passkey);
                     var publishDate = DateTimeUtil.UnixTimestampToDateTime((double)torrent[3]);
-                    var downloadVolumeFactor = (long)torrent[10] switch
-                    {
-                        // Only Up
-                        2 => 0,
-                        // 50 % Down
-                        1 => 0.5,
-                        // All others 100% down
-                        _ => 1
-                    };
                     var release = new ReleaseInfo
                     {
                         MinimumRatio = 0.8,
