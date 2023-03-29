@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Autofac.Core;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -16,6 +17,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -76,6 +78,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLoginWith2FA())
         {
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -140,6 +143,9 @@ namespace Jackett.Common.Indexers
                 { "order_by", "time" },
                 { "order_way", "desc" }
             };
+
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+                queryCollection.Set("freetorrent", "1");
 
             // Search String
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
