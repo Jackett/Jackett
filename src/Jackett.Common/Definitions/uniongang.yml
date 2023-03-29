@@ -49,6 +49,10 @@ settings:
     type: checkbox
     label: Strip Russian Letters
     default: false
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
 
 login:
   path: takelogin.php
@@ -68,8 +72,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    incldead: 1
-    dsearch: ""
+    #  0 active, 1 incldead,  2 onlydead,  3 goldtorrents,  5 silvertorrents,  4 noseeds
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
 
   rows:
     selector: table.embedded > tbody > tr:has(a[href^="download.php?id="])
