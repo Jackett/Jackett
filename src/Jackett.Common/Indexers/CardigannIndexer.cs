@@ -2023,7 +2023,7 @@ namespace Jackett.Common.Indexers
                         else
                             release.Category = release.Category.Union(cats).ToList();
                     }
-                    value = release.Category.ToString();
+                    value = release.Category.ToString() ?? string.Empty;
                     break;
                 case "categorydesc":
                     var catsDesc = MapTrackerCatDescToNewznab(value);
@@ -2034,7 +2034,7 @@ namespace Jackett.Common.Indexers
                         else
                             release.Category = release.Category.Union(catsDesc).ToList();
                     }
-                    value = release.Category.ToString();
+                    value = release.Category.ToString() ?? string.Empty;
                     break;
                 case "size":
                     release.Size = ParseUtil.GetBytes(value);
