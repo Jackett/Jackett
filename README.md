@@ -106,7 +106,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PiratBit
  * PornosLab
  * PornoTorrent
- * Portugas
  * ProPorn
  * Rapidzona
  * RARBG
@@ -374,8 +373,8 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDArea (HDA)
  * HDAtmos
  * HDBits [![(invite needed)][inviteneeded]](#)
+ * HDC (HDCiTY) [![(invite needed)][inviteneeded]](#)
  * HDChina (HDWing) [![(invite needed)][inviteneeded]](#)
- * HDCity [![(invite needed)][inviteneeded]](#)
  * HDFans
  * HDHome (HDBigger) [![(invite needed)][inviteneeded]](#)
  * HDMaYi
@@ -414,7 +413,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * LearnBits
  * LearnFlakes
  * leech24
- * LegacyHD (HD4Free)
  * LemonHD
  * Les-Cinephiles
  * Libble
@@ -439,6 +437,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MouseBits
  * Movie-Torrentz
  * Moviesite
+ * MuziekFabriek
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NCore
@@ -464,6 +463,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Pornbay [![(invite needed)][inviteneeded]](#)
  * PotUK
  * Pretome
+ * Portugas
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
  * PTChina (铂金学院)
@@ -483,6 +483,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
  * RedBits
+ * ReelFlix
  * Resurrect The Net
  * RetroFlix
  * RevolutionTT
@@ -545,7 +546,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Tornado
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
- * Torrent Surf
  * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
  * TOrrent-tuRK (TORK)
  * Torrent.LT
@@ -583,6 +583,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * xBytesV2
  * XSpeeds (XS)
  * Xthor
+ * XtremeBytes
  * XWT-Classics
  * XWTorrents (XWT)
  * YDYPT
