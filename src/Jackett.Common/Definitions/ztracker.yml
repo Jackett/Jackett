@@ -1,7 +1,7 @@
 ---
 id: ztracker
 name: Ztracker
-description: "Ztracker is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
+description: "Ztracker is a HUNGARIAN Semi-Private Torrent Tracker for 0DAY / GENERAL"
 language: hu-HU
 type: semi-private
 encoding: ISO-8859-2
@@ -61,6 +61,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -108,7 +112,7 @@ search:
     # t_name, t_description, t_both, t_uploader
     search_type: "{{ if .Query.IMDBID }}t_description{{ else }}t_name{{ end }}"
     # 0 active, 1 both, 2 inactive, 3 free, 19 bluray, 4 silver, 10 doubleup, 5 today, 6 yesterday, 7 week, 8 month, 9 last ten, external
-    ts_type: 1
+    ts_type: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not return imdb link in results
