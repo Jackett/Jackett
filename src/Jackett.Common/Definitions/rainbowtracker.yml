@@ -86,6 +86,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -154,10 +158,9 @@ search:
     sns: -1
     # title search
     nm: "{{ .Keywords }}"
-    # find a username
-    pn: ""
     # search by partial word
     allw: 1
+    gold: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
     selector: tbody[id^="tor_"]:has(a[href^="./download.php?id="])
