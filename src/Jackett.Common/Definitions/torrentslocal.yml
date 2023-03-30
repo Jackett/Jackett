@@ -308,6 +308,10 @@ settings:
     type: info
     label: Layout
     default: "<b>Only the Classic forum style is supported.</b><br/><li>On the TorrentsLocal web site navigate to the <b>Личные настройки (Preferences)</b> section and set the <b>Стиль форума (Forum Style)</b> option to <b>Классическая тема (Classic Theme)</b></li>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -376,10 +380,9 @@ search:
     # group releases -1=not selected
     srg: -1
     nm: "{{ .Keywords }}"
-    # find a username
-    pn: ""
     # all words
     allw: 1
+    tor_type: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
