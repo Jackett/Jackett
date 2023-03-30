@@ -163,7 +163,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
- * 720pier
  * AniDUB
  * Anime-Free
  * AnimeLayer
@@ -241,6 +240,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 3D Torrents (3DT)
  * 4thD (4th Dimension)
  * 52PT
+ * 720pier
  * Abnormal
  * ABtorrents (ABT + RNS)
  * Acervos [![(invite needed)][inviteneeded]](#)
