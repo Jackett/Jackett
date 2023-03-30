@@ -198,6 +198,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -259,7 +263,7 @@ search:
     df: 1
     da: 1
     dl: 1
-    pn: ""
+    tor_type: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     submit: "%C2%A0%C2%A0Search%C2%A0%C2%A0"
 
   rows:
