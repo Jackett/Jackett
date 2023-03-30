@@ -101,6 +101,10 @@ settings:
   - name: pin
     type: text
     label: Pin
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -144,7 +148,7 @@ search:
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: div.selection_wrap
+    selector: "div.selection_wrap{{ if .Config.freeleech }}:has(:root:has(div.onlyup)){{ else }}{{ end }}"
 
   fields:
     download:
