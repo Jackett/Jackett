@@ -118,7 +118,7 @@ search:
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     downloadvolumefactor:
-      text: 1
+      text: 0
     uploadvolumefactor:
       text: 1
 # engine n/a
