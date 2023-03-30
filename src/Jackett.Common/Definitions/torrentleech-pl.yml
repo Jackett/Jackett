@@ -53,6 +53,10 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: drop_polish_prefix
     type: checkbox
     label: Drop the Polish title prefix
@@ -74,7 +78,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 onlyactive, 1 all, 2 onlydead, 3 free
-    incldead: 1
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     # 0 title, 1 descr, 2 both
     titlesearch: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     # 0 all, 1 polish, 2 not polish
