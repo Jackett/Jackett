@@ -214,19 +214,9 @@ search:
     - name: re_replace # episode number at the end "123" to "E123"
       args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
     # END ANIME HACK
-    - name: replace
-      args: ["\"", ""]
-    # Replace - with space due to internal YGG Issues
-    - name: replace
-      args: ["-", " "]
-    # Replace / with space due to internal YGG Issues
-    - name: replace
-      args: ["/", " "]
-    # Replace ! with nothing for searches due to internal YGG issues reported on Radarr Discord
-    - name: replace
-      args: ["!", ""]
-    - name: replace
-      args: ["  ", " "]
+    # fix date search and workaround for internal YGG Issues
+    - name: re_replace
+      args: ["[\\\\\\-\\.\\/!\\s]+", " "]
     - name: trim
     # put each word in quotations to prevent exact phrase search
     - name: re_replace
@@ -271,6 +261,9 @@ search:
           args: ["(?i)\\b(saison\\s*)\\b([1-9])", "S0$2"]
         - name: re_replace
           args: ["(?i)\\b(saison\\s*)\\b(\\d{1,4})", "S$2"]
+        # Replace French date dd-mm-yyyy to yyyy.mm.dd
+        - name: re_replace
+          args: ["(\\d{2})[\\-_\\.](\\d{2})[\\-_\\.](\\d{4})", "$3.$2.$1"]
     title_filtered:
       text: "{{ .Result.title_normal }}"
       filters:
