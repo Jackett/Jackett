@@ -1,0 +1,74 @@
+---
+id: xxxclub
+name: XXXClub
+description: "XXXClub is a Public torrent site for 3X"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://xxxclub.to/
+
+caps:
+  categorymappings:
+    - {id: XXX, cat: XXX, desc: XXX}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: uploaded
+    options:
+      uploaded: created
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  paths:
+    # https://xxxclub.to/torrents/browse/all/tushyraw%20grays?sort=size&order=asc
+    - path: "torrents/browse/all/{{ .Keywords }}?sort={{ .Config.sort }}&order={{ .Config.type }}"
+
+  rows:
+    selector: table.table-striped > tbody > tr
+
+  fields:
+    category:
+      text: XXX
+    title:
+      selector: td:nth-child(2)
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
+    download:
+      selector: td:nth-child(3) a
+      attribute: href
+    poster:
+      selector: td:nth-child(2) a
+      attribute: title
+      filters:
+        - name: regexp
+          args: src='(.+?)'
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: dateparse
+          args: "dd MMM yyyy HH:mm:ss"
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
