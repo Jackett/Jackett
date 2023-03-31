@@ -108,9 +108,13 @@ settings:
       1: asc
 
 login:
-  path: forum/profile.php?mode=register
+  path: forum/login.php
   method: form
-  form: form[action="./login.php"]
+  form: div.mrg_16 > table > tbody
+  captcha:
+    type: image
+    selector: img[src^="includes/usercp_confirm.php?"]
+    input: login_code
   inputs:
     login_username: "{{ .Config.username }}"
     login_password: "{{ .Config.password }}"
