@@ -278,6 +278,9 @@ search:
           args: ["(?i)\\b(saison\\s*)\\b([1-9])", "S0$2"]
         - name: re_replace
           args: ["(?i)\\b(saison\\s*)\\b(\\d{1,4})", "S$2"]
+        # Replace French date dd-mm-yyyy to yyyy.mm.dd
+        - name: re_replace
+          args: ["\\((\\d{2})\\-(\\d{2})\\-(\\d{4})\\)", "$3.$2.$1"]
     title_filtered:
       text: "{{ .Result.title_normal }}"
       filters:
