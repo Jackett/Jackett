@@ -93,11 +93,6 @@ settings:
   - name: password
     type: password
     label: Password
-# broken on website
-#  - name: freeleech
-#    type: checkbox
-#    label: Search freeleech only
-#    default: false
   - name: sort
     type: select
     label: Sort results
