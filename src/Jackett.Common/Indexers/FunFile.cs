@@ -161,18 +161,11 @@ namespace Jackett.Common.Indexers
             var qc = new NameValueCollection
             {
                 { "cat", "0" },
+                // incldead= 0 active, 1 incldead, 2 deadonly, 3 freeleech, 4 sceneonly, 5 requestsonly, 8 packsonly
+                { "incldead", ((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value ? "3" : "1" },
                 { "showspam", "1" },
                 { "s_title", "1" }
             };
-            // incldead= 0 active, 1 incldead, 2 deadonly, 3 freeleech, 4 sceneonly, 5 requestsonly, 8 packsonly
-            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
-            {
-                qc.Set("incldead", "3");
-            }
-            else
-            {
-                qc.Set("incldead", "1");
-            }
 
             var queryCats = MapTorznabCapsToTrackers(query);
             queryCats.ForEach(cat => qc.Set($"c{cat}", "1"));
