@@ -14,6 +14,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -60,6 +61,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataBasicLogin("For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -144,9 +146,16 @@ namespace Jackett.Common.Indexers
             var queryCollection = new NameValueCollection
             {
                 {"search", query.ImdbID ?? query.GetQueryString()},
-                {"active", "0"},
                 {"options", "0"}
             };
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            {
+                queryCollection.Set("active", "5");
+            }
+            else
+            {
+                queryCollection.Set("active", "0");
+            }
 
             // manually url encode parenthesis to prevent "hacking" detection, remove . as not used in titles
             searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29").Replace(".", " ");
