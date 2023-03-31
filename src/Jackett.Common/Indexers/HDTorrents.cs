@@ -146,16 +146,9 @@ namespace Jackett.Common.Indexers
             var queryCollection = new NameValueCollection
             {
                 {"search", query.ImdbID ?? query.GetQueryString()},
+                {"active", ((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value ? "5" : "0"},
                 {"options", "0"}
             };
-            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
-            {
-                queryCollection.Set("active", "5");
-            }
-            else
-            {
-                queryCollection.Set("active", "0");
-            }
 
             // manually url encode parenthesis to prevent "hacking" detection, remove . as not used in titles
             searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29").Replace(".", " ");
