@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
@@ -10,10 +9,8 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Microsoft.AspNetCore.Http.Internal;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static System.Net.Mime.MediaTypeNames;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 

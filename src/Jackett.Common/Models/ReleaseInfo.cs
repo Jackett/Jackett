@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Jackett.Common.Indexers;
-using Jackett.Common.Utils;
 using Newtonsoft.Json;
 
 namespace Jackett.Common.Models
