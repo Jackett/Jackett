@@ -6,12 +6,12 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
-  - http://rudub.tv/ # https is unsupported ERR_CONNECTION_REFUSED
   - http://rudub.co/ # https is unsupported ERR_CONNECTION_REFUSED
 legacylinks:
   - http://baibako.tv/
   - https://baibako.tv/
   - http://bko.baibako.tv/
+  - http://rudub.tv/ # redirects to *.co
 
 caps:
   categorymappings:
