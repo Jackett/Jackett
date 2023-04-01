@@ -24,6 +24,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -64,6 +68,7 @@ search:
     nm: "{{ .Keywords }}"
     o: "{{ .Config.sort }}"
     s: "{{ .Config.type }}"
+    tor_type: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
     selector: table.well > tbody > tr:has(a[href^="./viewtopic.php?t="])
@@ -152,6 +157,7 @@ search:
     downloadvolumefactor:
       case:
         img[src="images/tor_gold.gif"]: 0
+        img[src="images/tor_silver.gif"]: 0.5
         "*": 1
     uploadvolumefactor:
       text: 1
