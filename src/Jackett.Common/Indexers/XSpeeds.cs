@@ -67,6 +67,8 @@ namespace Jackett.Common.Indexers
                 })
             { Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+
+            configData.AddDynamic("freeleech", new BoolConfigurationItem("Filter freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -260,10 +262,19 @@ namespace Jackett.Common.Indexers
             {
                 { "do", "search" },
                 { "category", categoryMapping.FirstIfSingleOrDefault("0") }, // multi category search not supported
-                { "include_dead_torrents", "yes" },
-                { "sort", GetSortBy },
-                { "order", GetOrder }
+                { "include_dead_torrents", "yes" }
             };
+
+            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            {
+                searchParams.Add("sort", "free");
+                searchParams.Add("order", "desc");
+            }
+            else
+            {
+                searchParams.Add("sort", GetSortBy);
+                searchParams.Add("order", GetOrder);
+            }
 
             var searchString = Regex.Replace(query.GetQueryString(), @"[ -._]+", " ").Trim();
 
@@ -297,6 +308,17 @@ namespace Jackett.Common.Indexers
                 {
                     var release = new ReleaseInfo();
 
+                    if (row.QuerySelector("img[alt^=\"Free Torrent\"], img[alt^=\"Sitewide Free Torrent\"]") != null)
+                        release.DownloadVolumeFactor = 0;
+                    else if (row.QuerySelector("img[alt^=\"Silver Torrent\"]") != null)
+                        release.DownloadVolumeFactor = 0.5;
+                    else
+                        release.DownloadVolumeFactor = 1;
+                    if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value &&
+                        release.DownloadVolumeFactor != 0)
+                        continue;
+                    release.UploadVolumeFactor = row.QuerySelector("img[alt^=\"x2 Torrent\"]") != null ? 2 : 1;
+
                     var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]");
                     var qTitle = qDetails; // #7975
 
@@ -329,15 +351,6 @@ namespace Jackett.Common.Indexers
 
                     var cover = row.QuerySelector("td:nth-of-type(2) > div > img[src]")?.GetAttribute("src")?.Trim();
                     release.Poster = !string.IsNullOrEmpty(cover) && cover.StartsWith("http") ? new Uri(cover) : null;
-
-                    if (row.QuerySelector("img[alt^=\"Free Torrent\"], img[alt^=\"Sitewide Free Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0;
-                    else if (row.QuerySelector("img[alt^=\"Silver Torrent\"]") != null)
-                        release.DownloadVolumeFactor = 0.5;
-                    else
-                        release.DownloadVolumeFactor = 1;
-
-                    release.UploadVolumeFactor = row.QuerySelector("img[alt^=\"x2 Torrent\"]") != null ? 2 : 1;
 
                     release.MinimumRatio = 0.8;
 
