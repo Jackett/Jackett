@@ -98,15 +98,16 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  path: ?page=login
+  path: index.php?page=login
   method: form
-  form: form
+  form: "#bodyarea form"
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
   error:
-    - selector: span:contains("Password Incorrect")
-    - selector: span:contains("Username Incorrect")
+    - selector: td.lista span:contains("Username Incorrect")
+    - selector: td.lista span:contains("Password Incorrect")
+    - selector: td.lista span[style="color:#FF0000;"]
   test:
     path: index.php
     selector: a[href="logout.php"]
