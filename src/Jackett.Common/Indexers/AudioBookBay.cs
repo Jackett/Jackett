@@ -145,6 +145,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping("novel", TorznabCatType.AudioAudiobook, "Novel");
             caps.Categories.AddCategoryMapping("short-story", TorznabCatType.AudioAudiobook, "Short Story");
 
+            caps.Categories.AddCategoryMapping("other", TorznabCatType.AudioAudiobook, "Other");
             return caps;
         }
 
