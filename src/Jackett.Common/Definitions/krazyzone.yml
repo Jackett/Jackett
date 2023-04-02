@@ -110,8 +110,14 @@ login:
     path: index.php
     selector: a[href="account-logout.php"]
 
+download:
+  selectors:
+    - selector: td a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
+    # https://krazyzone.net/torrents-search.php?incldead=1&freeleech=0&inclrosub=0&sort=id&order=desc
     - path: torrents-search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -125,12 +131,11 @@ search:
     # 0 both, 1 local, 2 external
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-  keywordsfilters:
-    - name: re_replace
-      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
-    selector: table.ttable_headinner > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.ttable_headinner > tbody > tr
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -149,7 +154,7 @@ search:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
     download:
-      selector: td a[href^="download.php?id="]
+      selector: a[href^="torrents-details.php?id="]
       attribute: href
     poster:
       selector: a[href^="torrents-details.php?id="]
@@ -178,20 +183,20 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
-      selector: td:nth-child(4)
+      selector: td:nth-child(3)
     date:
       # 24.Jul<br>2022<br>07:47
-      selector: td:nth-child(5)
+      selector: td:nth-child(4)
       # auto adjusted by site account profile
       filters:
         - name: dateparse
           args: "d.MMMyyyyHH:mm"
     seeders:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
     grabs:
-      selector: td:nth-child(9)
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
         img[src="images/free.png"]: 0
