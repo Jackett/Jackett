@@ -513,6 +513,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
   - name: striprussian
     type: checkbox
     label: Strip Russian Letters
@@ -598,13 +602,11 @@ search:
     # seed not seen -1=disregard
     sns: -1
     nm: "{{ .Keywords }}"
-    # find a username
-    pn: ""
     # search all words
     allw: 1
 
   rows:
-    selector: tr[id^="tor_"]:has(a[href^="/download.php?id="])
+    selector: "tr[id^=\"tor_\"]:has(a[href^=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src=\"images/tor_gold.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
