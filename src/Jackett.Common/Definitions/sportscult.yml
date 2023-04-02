@@ -123,7 +123,7 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
+    category: "{{ if .Categories }}{{ join .Categories \";\" }}{{ else }}0{{ end }}"
     # 0 all, 1 active, 2 dead
     active: 0
     gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
