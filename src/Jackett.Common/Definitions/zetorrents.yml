@@ -63,12 +63,18 @@ settings:
     default: false
 
 download:
-  selectors:
-    - selector: script:contains("magnet:?")
+  infohash:
+    hash:
+      selector: a[href^="/get_torrent/"]
+      attribute: href
       filters:
         - name: regexp
-          args: "\\s'(magnet:\\?.+?)';"
-
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: ul#breadcrumbs > li:nth-child(3) > h2
+      filters:
+        - name: trim
+        - name: validfilename
 search:
   paths:
     - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
