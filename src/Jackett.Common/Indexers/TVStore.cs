@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers
                         Description = description,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800, // 48 hours
-                        DownloadVolumeFactor = 1,
+                        DownloadVolumeFactor = 0,
                         UploadVolumeFactor = UploadFactorCalculator(publishDate, isSeasonPack),
                         Imdb = imdbId
                     };
