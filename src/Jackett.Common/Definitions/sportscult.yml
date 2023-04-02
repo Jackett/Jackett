@@ -96,17 +96,22 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
 
 login:
-  path: ?page=login
+  path: index.php?page=login
   method: form
-  form: form
+  form: "#bodyarea form"
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
   error:
-    - selector: span:contains("Password Incorrect")
-    - selector: span:contains("Username Incorrect")
+    - selector: td.lista span:contains("Username Incorrect")
+    - selector: td.lista span:contains("Password Incorrect")
+    - selector: td.lista span[style="color:#FF0000;"]
   test:
     path: index.php
     selector: a[href="logout.php"]
