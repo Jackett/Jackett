@@ -49,8 +49,8 @@ namespace Jackett.Common.Indexers.Meta
             }
             else
             {
-                wrongResults = new ReleaseInfo[] { };
-                perfectResults = new ReleaseInfo[] { };
+                wrongResults = Array.Empty<ReleaseInfo>();
+                perfectResults = Array.Empty<ReleaseInfo>();
             }
 
             var remainingResults = results.Except(wrongResults).Except(perfectResults);

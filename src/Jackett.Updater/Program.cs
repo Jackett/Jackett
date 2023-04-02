@@ -131,7 +131,7 @@ namespace Jackett.Updater
             if (!(updateLocation.EndsWith("\\") || updateLocation.EndsWith("/")))
                 updateLocation += Path.DirectorySeparatorChar;
 
-            var pids = new int[] { };
+            var pids = Array.Empty<int>();
             if (options.KillPids != null)
             {
                 var pidsStr = options.KillPids.Split(',').Where(pid => !string.IsNullOrWhiteSpace(pid)).ToArray();

@@ -155,7 +155,7 @@ namespace Jackett.Server.Controllers
         // This should go to ServerConfigurationController
         [Route("Cache")]
         [HttpGet]
-        public List<TrackerCacheResult> Cache()
+        public IReadOnlyList<TrackerCacheResult> Cache()
         {
             var results = cacheService.GetCachedResults();
             ConfigureCacheResults(results);

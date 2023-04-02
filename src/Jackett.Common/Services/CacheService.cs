@@ -114,12 +114,12 @@ namespace Jackett.Common.Services
             }
         }
 
-        public List<TrackerCacheResult> GetCachedResults()
+        public IReadOnlyList<TrackerCacheResult> GetCachedResults()
         {
             lock (_cache)
             {
                 if (!IsCacheEnabled())
-                    return new List<TrackerCacheResult>();
+                    return Array.Empty<TrackerCacheResult>();
 
                 PruneCacheByTtl(); // remove expired results
 

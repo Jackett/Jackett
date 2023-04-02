@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Jackett.Common.Models;
@@ -340,15 +341,15 @@ namespace Jackett.Test.Common.Models
                 tcc.SupportedCategories(new[] { 100040 }));
             Assert.AreEqual(new[] { TorznabCatType.Movies.ID }, // mixed good and bad
                 tcc.SupportedCategories(new[] { TorznabCatType.Movies.ID, 9999 }));
-            Assert.AreEqual(new int[] { }, // not supported child cat
+            Assert.AreEqual(Array.Empty<int>(), // not supported child cat
                 tcc.SupportedCategories(new[] { TorznabCatType.Movies3D.ID }));
-            Assert.AreEqual(new int[] { }, // unknown cat
+            Assert.AreEqual(Array.Empty<int>(), // unknown cat
                 tcc.SupportedCategories(new[] { 9999 }));
-            Assert.AreEqual(new int[] { }, // unknown custom cat
+            Assert.AreEqual(Array.Empty<int>(), // unknown custom cat
                 tcc.SupportedCategories(new[] { 100001 }));
-            Assert.AreEqual(new int[] { }, // empty list
-                tcc.SupportedCategories(new int[] { }));
-            Assert.AreEqual(new int[] { }, // null
+            Assert.AreEqual(Array.Empty<int>(), // empty list
+                tcc.SupportedCategories(Array.Empty<int>()));
+            Assert.AreEqual(Array.Empty<int>(), // null
                 tcc.SupportedCategories(null));
         }
 

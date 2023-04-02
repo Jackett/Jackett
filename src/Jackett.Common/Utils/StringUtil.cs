@@ -100,7 +100,7 @@ namespace Jackett.Common.Utils
 
         private static char[] MakeValidFileName_invalids;
 
-        /// <summary>Replaces characters in <c>text</c> that are not allowed in 
+        /// <summary>Replaces characters in <c>text</c> that are not allowed in
         /// file names with the specified replacement character.</summary>
         /// <param name="text">Text to make into a valid filename. The same string is returned if it is valid already.</param>
         /// <param name="replacement">Replacement character, or null to simply remove bad characters.</param>
@@ -226,16 +226,16 @@ namespace Jackett.Common.Utils
         /// </summary>
         public static IEnumerable<string> FindSubstringsBetween(this string source, char opening, char closing, bool includeOpeningAndClosing)
         {
-            var openingIndexes = source.AllIndexesOf(opening).ToList();
+            var openingIndexes = source.AllIndexesOf(opening).OrderByDescending(_ => _).ToList();
             var closingIndexes = source.AllIndexesOf(closing);
 
             foreach (var closingIndex in closingIndexes.OrderBy(_ => _))
             {
-                var potentialOpeningIndexes = openingIndexes.Where(x => x < closingIndex);
-                if (!potentialOpeningIndexes.Any())
+                var potentialOpeningIndex = openingIndexes.Where(x => x < closingIndex).Cast<int?>().FirstOrDefault();
+                if (!potentialOpeningIndex.HasValue)
                     continue;
-                var openingIndex = potentialOpeningIndexes.OrderByDescending(_ => _).First();
 
+                var openingIndex = potentialOpeningIndex.Value;
                 var substringIndex = openingIndex + 1;
                 var substringLength = closingIndex - substringIndex;
                 if (includeOpeningAndClosing)

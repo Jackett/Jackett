@@ -14,7 +14,7 @@ namespace Jackett.Test.TestHelpers
 
         public List<ReleaseInfo> Search(IIndexer indexer, TorznabQuery query) => null;
 
-        public List<TrackerCacheResult> GetCachedResults() => new List<TrackerCacheResult>();
+        public IReadOnlyList<TrackerCacheResult> GetCachedResults() => Array.Empty<TrackerCacheResult>();
 
         public void CleanIndexerCache(IIndexer indexer)
         {

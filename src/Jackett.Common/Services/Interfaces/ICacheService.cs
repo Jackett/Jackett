@@ -9,7 +9,7 @@ namespace Jackett.Common.Services.Interfaces
     {
         List<ReleaseInfo> Search(IIndexer indexer, TorznabQuery query);
         void CacheResults(IIndexer indexer, TorznabQuery query, List<ReleaseInfo> releases);
-        List<TrackerCacheResult> GetCachedResults();
+        IReadOnlyList<TrackerCacheResult> GetCachedResults();
         void CleanIndexerCache(IIndexer indexer);
         void CleanCache();
         TimeSpan CacheTTL { get; }
