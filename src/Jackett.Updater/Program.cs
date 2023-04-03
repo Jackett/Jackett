@@ -336,6 +336,7 @@ namespace Jackett.Updater
                 "Definitions/devilsplayground.yml",
                 "Definitions/digbt.yml",
                 "Definitions/documentarytorrents.yml",
+                "Definitions/dodder.yml",
                 "Definitions/downloadville.yml",
                 "Definitions/dragonworld.yml",
                 "Definitions/dragonworldreloaded.yml",
