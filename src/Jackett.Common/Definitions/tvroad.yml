@@ -119,6 +119,7 @@ caps:
     - {id: tvreal-fr-sd-web-non, cat: TV/SD, desc: "TvReal FR SD WEB-DL"}
     - {id: tvreal-fr-sd-web-pack, cat: TV/SD, desc: "TvReal FR SD Pack WEB-DL"}
     - {id: tvreal-fr-2160-web-pack, cat: TV/UHD, desc: "TvReal FR 2160p Pack WEB-DL"}
+    - {id: other, cat: TV, desc: "Other - category was not specified"}
 
   modes:
     search: [q]
@@ -184,6 +185,8 @@ search:
     category:
       selector: a[href*="/SousCategories/"]
       attribute: href
+      optional: true
+      default: other
       filters:
         - name: split
           args: ["/", -1]
