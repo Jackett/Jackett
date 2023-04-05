@@ -143,11 +143,10 @@ search:
 
   fields:
     category:
-      text: 56
-    category|noappend:
       selector: a[href*="cat="]
       attribute: href
       optional: true
+      default: 56
       filters:
         - name: querystring
           args: cat

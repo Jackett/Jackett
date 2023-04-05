@@ -72,10 +72,9 @@ search:
 
   fields:
     category:
-      text: Other
-    category|noappend:
-      optional: true
       selector: div > span:nth-child(1) > span
+      optional: true
+      default: Other
     title:
       selector: span > a
     details:

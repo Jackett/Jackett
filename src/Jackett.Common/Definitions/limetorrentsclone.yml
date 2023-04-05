@@ -78,10 +78,9 @@ search:
 
   fields:
     category:
-      text: Other
-    category|noappend:
-      optional: true
       selector: td:nth-child(2)
+      optional: true
+      default: Other
       filters:
         - name: split
           args: ["-", 1]

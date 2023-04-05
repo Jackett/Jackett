@@ -85,10 +85,9 @@ search:
       selector: td:nth-child(1) a[href^="magnet:?"]
       attribute: href
     category:
-      text: Anime
-    category|noappend:
-      optional: true
       selector: td.tit span
+      optional: true
+      default: Anime
     date_day:
       # 1d
       # 2d 3h

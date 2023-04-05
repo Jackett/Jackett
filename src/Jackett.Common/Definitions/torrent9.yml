@@ -127,10 +127,9 @@ search:
 
   fields:
     category:
-      text: other
-    category|noappend:
-      optional: true
       selector: td:nth-child(1) i
+      optional: true
+      default: other
       case:
         i[class="fa fa-video-camera"]: films
         i[class="fa fa-desktop"]: series

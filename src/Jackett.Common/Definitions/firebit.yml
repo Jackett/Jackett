@@ -76,10 +76,9 @@ search:
 
   fields:
     category:
-      text: "-"
-    category|noappend:
-      optional: true
       selector: td:nth-child(1), div.article-indent div b
+      optional: true
+      default: "-"
       filters:
         - name: replace
           args: ["Новинки", ""]

@@ -122,11 +122,10 @@ search:
 
   fields:
     category:
-      text: 18
-    category|noappend:
       selector: a[href^="/browse_old.php?cat="]
       attribute: href
       optional: true
+      default: 18
       filters:
         - name: querystring
           args: cat

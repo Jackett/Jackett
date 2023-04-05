@@ -77,10 +77,9 @@ search:
 
   fields:
     category:
-      text: 0
-    category|noappend:
-      optional: true
       selector: div.resultdivbotton div.resultdivbottoncategory
+      optional: true
+      default: 0
       case:
         ":contains(\"Others\")": 0
         ":contains(\"Movies\")": 1

@@ -78,11 +78,10 @@ search:
 
   fields:
     category:
-      text: other
-    category|noappend:
       selector: span[id^="cat_"] > strong > a
       attribute: href
       optional: true
+      default: other
       filters:
         - name: tolower
         - name: trim

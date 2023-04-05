@@ -64,11 +64,10 @@ search:
 
   fields:
     category:
-      text: other
-    category|noappend:
       selector: article.post-entry
       attribute: class
       optional: true
+      default: other
       filters:
         - name: regexp
           args: "category-(.+?) "

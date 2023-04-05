@@ -93,11 +93,10 @@ search:
 
   fields:
     category:
-      text: 8
-    category|noappend:
       selector: a[href^="browse.php?cat="]
-      optional: true
       attribute: href
+      optional: true
+      default: 8
       filters:
         - name: querystring
           args: cat

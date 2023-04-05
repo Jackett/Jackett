@@ -66,11 +66,10 @@ search:
 
   fields:
     category:
-      text: "UNKNOWN"
-    category|noappend:
       selector: img[src^="./cat/"]
       attribute: src
       optional: true
+      default: UNKNOWN
       filters:
         - name: regexp
           args: "cat/(.+?).png"

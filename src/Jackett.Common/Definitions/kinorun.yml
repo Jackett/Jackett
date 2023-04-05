@@ -114,11 +114,10 @@ search:
 
   fields:
     category:
-      text: 24
-    category|noappend:
-      optional: true
       selector: a[href^="browse.php?cat="]
       attribute: href
+      optional: true
+      default: 24
       filters:
         - name: querystring
           args: cat

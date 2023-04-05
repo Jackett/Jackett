@@ -107,11 +107,10 @@ search:
 
   fields:
     category:
-      text: 33 # issue #7113
-    category|noappend:
-      optional: true
       selector: a[href^="/search.php?cat="]
       attribute: href
+      optional: true
+      default: 33
       filters:
         - name: querystring
           args: cat

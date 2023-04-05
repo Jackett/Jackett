@@ -372,11 +372,10 @@ search:
 
   fields:
     category:
-      text: 0
-    category|noappend:
       selector: span.table__column__subtext > a:nth-child(2)
       attribute: href
       optional: true
+      default: 0
       filters:
         - name: querystring
           args: subcategory

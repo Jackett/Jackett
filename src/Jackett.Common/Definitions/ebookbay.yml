@@ -97,9 +97,9 @@ search:
 
   fields:
     category:
-      text: Other
-    category|noappend:
       selector: span.writer
+      optional: true
+      default: Other
       filters:
         - name: regexp
           args: "E book under:\\s+(.+?)\\s"
