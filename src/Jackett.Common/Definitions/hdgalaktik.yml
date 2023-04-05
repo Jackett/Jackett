@@ -114,16 +114,17 @@ search:
     selector: table.embedded > tbody > tr.torcontduo
 
   fields:
-    category:
+    category_default:
       selector: td:nth-child(1)
       optional: true
       filters:
         - name: replace
           args: ["---", 4]
-    category|noappend:
+    category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       optional: true
+      default: "{{ .Result.category_default }}"
       filters:
         - name: querystring
           args: cat
