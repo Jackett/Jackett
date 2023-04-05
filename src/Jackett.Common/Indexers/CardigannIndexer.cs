@@ -2015,6 +2015,11 @@ namespace Jackett.Common.Indexers
                     value = release.Description;
                     break;
                 case "category":
+                    if (FieldModifiers.Contains("noappend"))
+                    {
+                        logger.Warn("The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
+                    }
+
                     var cats = MapTrackerCatToNewznab(value);
                     if (cats.Any())
                     {
@@ -2026,6 +2031,11 @@ namespace Jackett.Common.Indexers
                     value = release.Category.ToString() ?? string.Empty;
                     break;
                 case "categorydesc":
+                    if (FieldModifiers.Contains("noappend"))
+                    {
+                        logger.Warn("The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
+                    }
+
                     var catsDesc = MapTrackerCatDescToNewznab(value);
                     if (catsDesc.Any())
                     {
