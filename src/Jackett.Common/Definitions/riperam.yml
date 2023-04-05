@@ -876,9 +876,6 @@ search:
       selector: dt a:last-of-type
       optional: true
       default: Разное
-      filters:
-      - name: strdump
-        args: catdesc
     title:
       selector: a.topictitle
       filters:
