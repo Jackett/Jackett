@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
                     var detailsUri = new Uri(DetailsUrl + "?id=" + row.Value<string>("id"));
                     var seeders = row.Value<int>("seeders");
                     var peers = seeders + row.Value<int>("leechers");
-                    var publishDate = DateTime.Parse(row.Value<string>("upload_date") + " +0200", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+                    var publishDate = DateTime.Parse(row.Value<string>("upload_date") + " +0300", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
                     var downloadVolumeFactor = isFreeleech ? 0 : 1;
                     var uploadVolumeFactor = row.Value<bool>("doubleup") ? 2 : 1;
                     var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbID(row.Value<string>("imdb")) : null;
