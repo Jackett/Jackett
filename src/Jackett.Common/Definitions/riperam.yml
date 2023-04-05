@@ -626,7 +626,7 @@ caps:
     - {id: 1259, cat: PC, desc: "Работа с PDF и DjVu"}
     - {id: 1262, cat: PC, desc: "Словари, переводчики"}
     - {id: 1260, cat: PC, desc: "САПР, Софт для архитекторов и строителей"}
-    - {id: 1393, cat: PC, desc: "Разное"}
+    - {id: 1393, cat: PC, desc: "Разное (PC)"}
     - {id: 726, cat: Other, desc: "Разное"}
     - {id: 1273, cat: Other, desc: "Обои для рабочего стола"}
     - {id: 1390, cat: Other, desc: "Аватары, Иконки, Смайлы"}
@@ -721,7 +721,7 @@ caps:
     - {id: 1330, cat: Books, desc: "Классическая литература и современная проза"}
     - {id: 1462, cat: Books, desc: "Научно-популярная литература"}
     - {id: 1471, cat: Books, desc: "Кулинария"}
-    - {id: 1333, cat: Books, desc: "Разное"}
+    - {id: 1333, cat: Books, desc: "Разное (Books)"}
     - {id: 1485, cat: Books, desc: "Медицина"}
     - {id: 1312, cat: Books, desc: "Аудиокниги"}
     - {id: 1398, cat: Books, desc: "Приключения"}
@@ -842,11 +842,10 @@ search:
       - name: andmatch
 
   fields:
-    category:
-      text: 726
-    categorydesc|noappend:
+    categorydesc:
       selector: dt a:last-of-type
       optional: true
+      default: Разное
     title:
       selector: a.topictitle
       filters:
