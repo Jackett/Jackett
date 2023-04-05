@@ -111,6 +111,18 @@ caps:
     - {id: 54, cat: Books, desc: "Purpose-built ships-Passenger ships"}
     - {id: 248, cat: Books, desc: "Purpose-built ships-Fishing vessels"}
     - {id: 239, cat: Books, desc: "Purpose-built ships-Offshore"}
+    - {id: 330, cat: Books, desc: "Examinations"}
+    - {id: 333, cat: Books, desc: "Examinations-IMU CET"}
+    - {id: 334, cat: Books, desc: "Examinations-NCV"}
+    - {id: 336, cat: Books, desc: "Examinations-ASM"}
+    - {id: 337, cat: Books, desc: "Examinations-TME"}
+    - {id: 338, cat: Books, desc: "Examinations-MEO"}
+    - {id: 341, cat: Books, desc: "Examinations-Chief Mates (Phase I)"}
+    - {id: 343, cat: Books, desc: "Examinations-ROR - Colregs"}
+    - {id: 335, cat: Books, desc: "Examinations-Second Mates"}
+    - {id: 342, cat: Books, desc: "Examinations-Chief Mates (Phase II)"}
+    - {id: 340, cat: Books, desc: "Examinations-Text books"}
+    - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
     - {id: 99, cat: Audio, desc: "Audio"}
     - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
     - {id: 287, cat: Audio, desc: "Audio-Non-Fiction"}
@@ -160,6 +172,7 @@ caps:
     - {id: 319, cat: Books, desc: "Fishing tackle and knots"}
     - {id: 294, cat: Books, desc: "Environmental protection"}
     - {id: 242, cat: Books, desc: "Foreign language books"}
+    - {id: 344, cat: Books, desc: "Foreign language books-Yachting"}
     - {id: 243, cat: Books, desc: "Rarity"}
     - {id: 244, cat: Books, desc: "Rarity-1900 - 1950"}
     - {id: 245, cat: Books, desc: "Rarity-1800 - 1900"}
@@ -173,18 +186,6 @@ caps:
     - {id: 322, cat: Books, desc: "Archive-No seeds"}
     - {id: 321, cat: Books, desc: "Archive-Outdated software"}
     - {id: 295, cat: Books, desc: "Archive-Unregistered"}
-    - {id: 330, cat: Books, desc: "Examinations"}
-    - {id: 343, cat: Books, desc: "Examinations-ROR - Colregs"}
-    - {id: 335, cat: Books, desc: "Examinations-Second Mates"}
-    - {id: 341, cat: Books, desc: "Examinations-Chief Mates (Phase I)"}
-    - {id: 342, cat: Books, desc: "Examinations-Chief Mates (Phase II)"}
-    - {id: 333, cat: Books, desc: "Examinations-IMU CET"}
-    - {id: 334, cat: Books, desc: "Examinations-NCV"}
-    - {id: 336, cat: Books, desc: "Examinations-ASM"}
-    - {id: 337, cat: Books, desc: "Examinations-TME"}
-    - {id: 338, cat: Books, desc: "Examinations-MEO"}
-    - {id: 340, cat: Books, desc: "Examinations-Text books"}
-    - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
 
   modes:
     search: [q]
