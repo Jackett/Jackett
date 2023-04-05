@@ -105,11 +105,10 @@ search:
     selector: table > tbody > tr:has(a[href*="/download/"])
 
   fields:
-    category:
-      text: 10
-    categorydesc|noappend:
+    categorydesc:
       selector: span[data-original-title="Categoria"]
       optional: true
+      default: Otros
     title_vose:
       selector: a.view-torrent:contains("VOSE")
       optional: true
