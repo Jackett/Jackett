@@ -121,6 +121,7 @@ search:
       categories: [410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413]
     - path: music.php
       categories: [406, 408, 434]
+  allowEmptyInputs: true
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
