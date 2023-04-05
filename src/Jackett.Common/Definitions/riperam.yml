@@ -11,6 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 238, cat: Movies, desc: "Новинки кино (2023). Новые фильмы скачать бесплатно"}
+    - {id: 368, cat: Movies/SD, desc: "CAMRip, TS, DVDScreener"}
     - {id: 425, cat: Movies/HD, desc: "DVDRip / DVD-5/DVD-9"}
     - {id: 50, cat: Movies/HD, desc: "DVDRip"}
     - {id: 52, cat: Movies/HD, desc: "DVD-5/DVD-9"}
@@ -65,6 +66,7 @@ caps:
     - {id: 979, cat: TV, desc: "В Москве всегда солнечно"}
     - {id: 790, cat: TV, desc: "Горюнов"}
     - {id: 791, cat: TV, desc: "Груз (Фельдъегеря)"}
+    - {id: 803, cat: TV, desc: "Двойная жизнь"}
     - {id: 994, cat: TV, desc: "Дворняжка Ляля / Красотка Ляля / Ляля. Возвращение"}
     - {id: 735, cat: TV, desc: "Дело врачей"}
     - {id: 992, cat: TV, desc: "Дело для двоих"}
@@ -78,6 +80,7 @@ caps:
     - {id: 984, cat: TV, desc: "Земский доктор. Любовь вопреки"}
     - {id: 732, cat: TV, desc: "Икорный барон"}
     - {id: 983, cat: TV, desc: "Королева игры"}
+    - {id: 774, cat: TV, desc: "Кулинар-2"}
     - {id: 989, cat: TV, desc: "Курортная полиция"}
     - {id: 961, cat: TV, desc: "Личное дело"}
     - {id: 703, cat: TV, desc: "Лорд. Пес-полицейский"}
@@ -140,9 +143,11 @@ caps:
     - {id: 798, cat: TV, desc: "Зайцев+1"}
     - {id: 1102, cat: TV, desc: "Запретная любовь"}
     - {id: 1083, cat: TV, desc: "Код Константина"}
+    - {id: 1092, cat: TV, desc: "Измены"}
     - {id: 565, cat: TV, desc: "Кодекс чести"}
     - {id: 1070, cat: TV, desc: "Инспектор Купер"}
     - {id: 640, cat: TV, desc: "Легавый"}
+    - {id: 1048, cat: TV, desc: "Луна"}
     - {id: 1060, cat: TV, desc: "Ленинград 46"}
     - {id: 684, cat: TV, desc: "Лесник"}
     - {id: 1057, cat: TV, desc: "Между нами, девочками"}
@@ -154,6 +159,7 @@ caps:
     - {id: 1054, cat: TV, desc: "Папа на вырост"}
     - {id: 1094, cat: TV, desc: "Непридуманная жизнь"}
     - {id: 986, cat: TV, desc: "Пляж"}
+    - {id: 750, cat: TV, desc: "Последний из Магикян"}
     - {id: 1043, cat: TV, desc: "Последний янычар"}
     - {id: 997, cat: TV, desc: "Практика"}
     - {id: 1031, cat: TV, desc: "Хроники ломбарда"}
@@ -171,6 +177,7 @@ caps:
     - {id: 1078, cat: TV, desc: "Чтец"}
     - {id: 628, cat: TV, desc: "Карпов"}
     - {id: 1101, cat: TV, desc: "Квест"}
+    - {id: 1088, cat: TV, desc: "Лондонград"}
     - {id: 1072, cat: TV, desc: "Меч"}
     - {id: 795, cat: TV, desc: "Пока станица спит"}
     - {id: 978, cat: TV, desc: "ППС"}
@@ -180,6 +187,7 @@ caps:
     - {id: 1178, cat: TV, desc: "Беглые родственники"}
     - {id: 1161, cat: TV, desc: "Бедные люди"}
     - {id: 1099, cat: TV, desc: "Ботаны"}
+    - {id: 1136, cat: TV, desc: "Бородач"}
     - {id: 1184, cat: TV, desc: "Вижу - знаю"}
     - {id: 1127, cat: TV, desc: "Владимирская, 15"}
     - {id: 781, cat: TV, desc: "Выжить после"}
@@ -194,6 +202,7 @@ caps:
     - {id: 1117, cat: TV, desc: "Иные"}
     - {id: 1228, cat: TV, desc: "Казаки"}
     - {id: 1107, cat: TV, desc: "Как я стал русским"}
+    - {id: 1077, cat: TV, desc: "Клан Ювелиров"}
     - {id: 1118, cat: TV, desc: "Команда"}
     - {id: 1132, cat: TV, desc: "Кости"}
     - {id: 1040, cat: TV, desc: "Мажор"}
@@ -203,6 +212,7 @@ caps:
     - {id: 1131, cat: TV, desc: "Не зарекайся"}
     - {id: 1160, cat: TV, desc: "Невский"}
     - {id: 1224, cat: TV, desc: "Нити судьбы"}
+    - {id: 1112, cat: TV, desc: "Озабоченные или любовь зла"}
     - {id: 1139, cat: TV, desc: "Остров"}
     - {id: 1080, cat: TV, desc: "Отдел 44"}
     - {id: 761, cat: TV, desc: "Пасечник"}
@@ -210,7 +220,9 @@ caps:
     - {id: 1157, cat: TV, desc: "Перевозчик"}
     - {id: 1081, cat: TV, desc: "Пес"}
     - {id: 1110, cat: TV, desc: "Последний мент"}
+    - {id: 1163, cat: TV, desc: "дний москаль. Судный день"}
     - {id: 1126, cat: TV, desc: "Прокуроры"}
+    - {id: 1179, cat: TV, desc: "Пушкин"}
     - {id: 671, cat: TV, desc: "Пятая стража"}
     - {id: 1019, cat: TV, desc: "Пятницкий. Глава четвертая"}
     - {id: 1115, cat: TV, desc: "Ради любви я все смогу / Вечная любовь"}
@@ -223,13 +235,17 @@ caps:
     - {id: 1180, cat: TV, desc: "Степные волки"}
     - {id: 1133, cat: TV, desc: "Сын моего отца"}
     - {id: 1049, cat: TV, desc: "Такая работа"}
+    - {id: 1185, cat: TV, desc: "Центральная больница"}
     - {id: 1141, cat: TV, desc: "Человек без прошлого"}
     - {id: 1223, cat: TV, desc: "Чёрная кошка"}
     - {id: 1190, cat: TV, desc: "Шаман. Новая угроза"}
     - {id: 1191, cat: TV, desc: "Я работаю в суде"}
     - {id: 1235, cat: TV, desc: "Василиса"}
     - {id: 1154, cat: TV, desc: "Вечный отпуск"}
+    - {id: 555, cat: TV, desc: "Восьмидесятые"}
+    - {id: 1231, cat: TV, desc: "Вы все меня бесите"}
     - {id: 152, cat: TV, desc: "Интерны"}
+    - {id: 1256, cat: TV, desc: "Крыша мира"}
     - {id: 1233, cat: TV, desc: "Райское место"}
     - {id: 1302, cat: TV, desc: "Фамильные ценности"}
     - {id: 1059, cat: TV, desc: "Это любовь"}
@@ -238,6 +254,7 @@ caps:
     - {id: 1186, cat: TV, desc: "Кризис нежного возраста"}
     - {id: 1281, cat: TV, desc: "Куба"}
     - {id: 1278, cat: TV, desc: "Майор и магия"}
+    - {id: 1125, cat: TV, desc: "Мамочки"}
     - {id: 1155, cat: TV, desc: "Мент в законе"}
     - {id: 1015, cat: TV, desc: "Ментовские войны"}
     - {id: 1276, cat: TV, desc: "Один против всех"}
@@ -256,6 +273,7 @@ caps:
     - {id: 1285, cat: TV, desc: "Учитель в законе. Схватка"}
     - {id: 970, cat: TV, desc: "Физрук"}
     - {id: 1299, cat: TV, desc: "Филфак"}
+    - {id: 1062, cat: TV, desc: "ЧОП"}
     - {id: 778, cat: TV, desc: "Шеф. Игра на повышение / Шеф-4"}
     - {id: 21, cat: TV, desc: "Зарубежные мультсериалы"}
     - {id: 185, cat: TV, desc: "WINX CLUB - Школа волшебниц"}
@@ -281,6 +299,10 @@ caps:
     - {id: 596, cat: TV/Anime, desc: "Zero no Tsukaima Princess no Rondo TV-3 / Подручный бездарной Луизы: Рондо Принцессы ТВ-3"}
     - {id: 597, cat: TV/Anime, desc: "Zero no Tsukaima F TV-4 / Подручный бездарной Луизы Финал ТВ-4"}
     - {id: 242, cat: TV, desc: "Без перевода"}
+    - {id: 164, cat: TV, desc: "Фильмы"}
+    - {id: 167, cat: TV, desc: "Сериалы"}
+    - {id: 165, cat: TV, desc: "Мультфильмы"}
+    - {id: 166, cat: TV, desc: "Передачи - Тв-шоу"}
     - {id: 241, cat: TV, desc: "ТВ-Шоу, документальные, спорт"}
     - {id: 23, cat: TV, desc: "ТВ-Шоу и развлекательные передачи"}
     - {id: 1075, cat: TV, desc: "Архив ТВ-Шоу"}
@@ -313,6 +335,7 @@ caps:
     - {id: 1011, cat: TV, desc: "История Российской кухни"}
     - {id: 456, cat: TV, desc: "Каникулы в Мексике"}
     - {id: 682, cat: TV, desc: "Караоке киллер"}
+    - {id: 996, cat: TV, desc: "Когда мы дома"}
     - {id: 785, cat: TV, desc: "Куб - Новый сезон"}
     - {id: 668, cat: TV, desc: "Кулинарный поединок"}
     - {id: 752, cat: TV, desc: "Луч Света"}
@@ -356,6 +379,7 @@ caps:
     - {id: 448, cat: TV, desc: "Что делать?"}
     - {id: 366, cat: TV, desc: "6 кадров"}
     - {id: 1032, cat: TV, desc: "Автошкола 2: Девчонки рулят"}
+    - {id: 471, cat: TV, desc: "Большая Разница"}
     - {id: 744, cat: TV, desc: "В наше время"}
     - {id: 1056, cat: TV, desc: "Все будет хорошо"}
     - {id: 344, cat: TV, desc: "Галилео"}
@@ -365,6 +389,7 @@ caps:
     - {id: 693, cat: TV, desc: "Comedy Баттл. Без границ"}
     - {id: 1164, cat: TV, desc: "Битва риелторов"}
     - {id: 1071, cat: TV, desc: "Взвешенные люди"}
+    - {id: 229, cat: TV, desc: "Comedy Баттл. Отбор, турнир"}
     - {id: 1096, cat: TV, desc: "Время Г"}
     - {id: 522, cat: TV, desc: "Модный приговор"}
     - {id: 971, cat: TV, desc: "Не спать!"}
@@ -433,6 +458,7 @@ caps:
     - {id: 1286, cat: TV, desc: "Ты супер!"}
     - {id: 470, cat: TV, desc: "Уральские пельмени"}
     - {id: 1290, cat: TV, desc: "Устами младенца"}
+    - {id: 1147, cat: TV, desc: "Фазенда"}
     - {id: 188, cat: TV, desc: "Центральное телевидение"}
     - {id: 543, cat: TV, desc: "Что? Где? Когда?"}
     - {id: 738, cat: TV, desc: "Школа ремонта"}
@@ -444,6 +470,7 @@ caps:
     - {id: 1461, cat: TV/Documentary, desc: "Невероятно интересные истории"}
     - {id: 1477, cat: TV/Documentary, desc: "Последний герой"}
     - {id: 1478, cat: TV/Documentary, desc: "Бородина против Бузовой"}
+    - {id: 1488, cat: TV/Documentary, desc: "Док-ток"}
     - {id: 24, cat: TV/Documentary, desc: "Документальные передачи"}
     - {id: 1460, cat: TV/Documentary, desc: "Специальный репортаж (ТК Звезда)"}
     - {id: 728, cat: TV/Documentary, desc: "Чудо техники с Сергеем Малозёмовым"}
@@ -503,6 +530,7 @@ caps:
     - {id: 337, cat: TV/Documentary, desc: "Ты не поверишь!"}
     - {id: 330, cat: TV/Documentary, desc: "Человек и закон"}
     - {id: 25, cat: TV/Sport, desc: "Спортивные передачи"}
+    - {id: 127, cat: TV/Sport, desc: "ХХII Зимние Олимпийские Игры в Сочи"}
     - {id: 616, cat: TV/Sport, desc: "Фигурное катание"}
     - {id: 201, cat: TV/Sport, desc: "Бокс, боевые единоборства , рестлинг"}
     - {id: 146, cat: TV/Sport, desc: "Гонки"}
@@ -526,6 +554,7 @@ caps:
     - {id: 515, cat: TV/Sport, desc: "Стыдно, когда видно!"}
     - {id: 468, cat: TV/Sport, desc: "Прожекторперисхилтон"}
     - {id: 762, cat: TV/Sport, desc: "Хит"}
+    - {id: 767, cat: TV/Sport, desc: "Шурочка"}
     - {id: 1113, cat: TV/Sport, desc: "Акценты недели"}
     - {id: 333, cat: TV/Sport, desc: "Брачное чтиво"}
     - {id: 1097, cat: TV/Sport, desc: "В теме"}
@@ -537,6 +566,7 @@ caps:
     - {id: 335, cat: TV/Sport, desc: "Операция «Должник»"}
     - {id: 1134, cat: TV/Sport, desc: "Открытая студия"}
     - {id: 1143, cat: TV/Sport, desc: "Поздняков. Интервью с ..."}
+    - {id: 336, cat: TV/Sport, desc: "Секретные территории"}
     - {id: 702, cat: TV/Sport, desc: "Собчак живьём"}
     - {id: 328, cat: TV/Sport, desc: "Специальный корреспондент"}
     - {id: 1053, cat: TV/Sport, desc: "Список Норкина"}
@@ -842,11 +872,10 @@ search:
       - name: andmatch
 
   fields:
-    category:
-      text: 726
-    categorydesc|noappend:
+    categorydesc:
       selector: dt a:last-of-type
       optional: true
+      default: Разное
     title:
       selector: a.topictitle
       filters:
