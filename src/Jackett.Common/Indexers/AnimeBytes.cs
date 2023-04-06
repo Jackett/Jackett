@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAnimeBytes("Note: Go to AnimeBytes site and open your account settings. Go to 'Account' tab, move cursor over black part near 'Passkey' and copy its value. Your username is case sensitive."))
         {
-            // Animebytes doesn't like fake user agents (issue #1535)
+            // AnimeBytes doesn't like fake user agents (issue #1535)
             webclient.EmulateBrowser = false;
             // requestDelay for API Limit (1 request per 10 seconds)
             webclient.requestDelay = 10;
