@@ -94,7 +94,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: i[onclick^="window.open('logout.php?k="]
+    selector: li[onclick^="window.open('logout.php?k="]
 
 search:
   paths:
