@@ -56,8 +56,8 @@ namespace Jackett.Common.Indexers
         {
             // AnimeBytes doesn't like fake user agents (issue #1535)
             webclient.EmulateBrowser = false;
-            // requestDelay for API Limit (1 request per 10 seconds)
-            webclient.requestDelay = 10;
+            // requestDelay for API Limit (1 request per 3 seconds)
+            webclient.requestDelay = 3.1;
         }
 
         private TorznabCapabilities SetCapabilities()
