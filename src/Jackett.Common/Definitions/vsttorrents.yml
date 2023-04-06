@@ -6,9 +6,10 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://looptorrent.net/
+  - https://vsttorrentz.net/
 legacylinks:
   - https://vsttorrents.net/
+  - https://looptorrent.net/
 
 caps:
   categories:
