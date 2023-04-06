@@ -2017,7 +2017,7 @@ namespace Jackett.Common.Indexers
                 case "category":
                     if (FieldModifiers.Contains("noappend"))
                     {
-                        logger.Warn("The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
+                        logger.Warn($"CardigannIndexer ({Id}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
                     }
 
                     var cats = MapTrackerCatToNewznab(value);
@@ -2033,7 +2033,7 @@ namespace Jackett.Common.Indexers
                 case "categorydesc":
                     if (FieldModifiers.Contains("noappend"))
                     {
-                        logger.Warn("The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
+                        logger.Warn($"CardigannIndexer ({Id}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
                     }
 
                     var catsDesc = MapTrackerCatDescToNewznab(value);
