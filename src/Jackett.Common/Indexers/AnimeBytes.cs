@@ -224,92 +224,114 @@ namespace Jackett.Common.Indexers
 
             // Get the content from the tracker
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+
             if (!response.ContentString.StartsWith("{")) // not JSON => error
+            {
                 throw new ExceptionWithConfigData("Unexpected response (not JSON)", ConfigData);
+            }
 
-            var json = JsonConvert.DeserializeObject<dynamic>(response.ContentString);
-
-            // Parse
             try
             {
-                if (json["error"] != null)
-                    throw new Exception(json["error"].ToString());
+                var json = JToken.Parse(response.ContentString);
 
-                var matches = (long)json["Matches"];
+                if (json.Value<string>("error") != null)
+                {
+                    throw new Exception(json.Value<string>("error"));
+                }
 
-                if (matches == 0)
+                if (json.Value<int>("Matches") == 0)
                 {
                     return releases;
                 }
 
-                var groups = (JArray)json.Groups;
-
-                foreach (var group in groups)
+                foreach (var group in json.Value<JArray>("Groups"))
                 {
-                    var synonyms = new List<string>();
-                    var posterStr = (string)group["Image"];
-                    var poster = (string.IsNullOrWhiteSpace(posterStr) ? null : new Uri(posterStr));
-                    var year = (int)group["Year"];
-                    var groupName = (string)group["GroupName"];
-                    var seriesName = (string)group["SeriesName"];
-                    var mainTitle = WebUtility.HtmlDecode((string)group["FullName"]);
+                    var categoryName = group.Value<string>("CategoryName");
+                    var description = group.Value<string>("Description");
+                    var year = group.Value<int>("Year");
+                    var posterStr = group.Value<string>("Image");
+                    var poster = posterStr.IsNotNullOrWhiteSpace() ? new Uri(posterStr) : null;
+                    var groupName = group.Value<string>("GroupName");
+                    var seriesName = group.Value<string>("SeriesName");
+                    var mainTitle = WebUtility.HtmlDecode(group.Value<string>("FullName"));
 
                     if (seriesName.IsNotNullOrWhiteSpace())
-                        mainTitle = seriesName;
-
-                    synonyms.Add(mainTitle);
-
-                    if (group["Synonymns"].HasValues)
                     {
-                        if (group["Synonymns"] is JArray)
+                        mainTitle = seriesName;
+                    }
+
+                    var synonyms = new HashSet<string> { mainTitle };
+
+                    if (group.Value<JToken>("Synonymns").HasValues)
+                    {
+                        if (group.Value<JToken>("Synonymns") is JArray)
                         {
-                            var allSyonyms = group["Synonymns"].ToObject<List<string>>();
+                            var allSyonyms = group.Value<JToken>("Synonymns").ToObject<List<string>>();
 
                             if (AddJapaneseTitle && allSyonyms.Count >= 1)
-                                synonyms.Add(allSyonyms[0]);
-                            if (AddRomajiTitle && allSyonyms.Count >= 2)
-                                synonyms.Add(allSyonyms[1]);
-                            if (AddAlternativeTitles && allSyonyms.Count >= 3)
-                                synonyms.AddRange(allSyonyms[2].Split(',').Select(t => t.Trim()));
-                        }
-                        else
-                        {
-                            var allSynonyms = group["Synonymns"].ToObject<Dictionary<int, string>>();
-
-                            if (AddJapaneseTitle && allSynonyms.ContainsKey(0))
-                                synonyms.Add(allSynonyms[0]);
-                            if (AddRomajiTitle && allSynonyms.ContainsKey(1))
-                                synonyms.Add(allSynonyms[1]);
-                            if (AddAlternativeTitles && allSynonyms.ContainsKey(2))
                             {
-                                synonyms.AddRange(allSynonyms[2].Split(',').Select(t => t.Trim()));
+                                synonyms.Add(allSyonyms[0]);
+                            }
+
+                            if (AddRomajiTitle && allSyonyms.Count >= 2)
+                            {
+                                synonyms.Add(allSyonyms[1]);
+                            }
+
+                            if (AddAlternativeTitles && allSyonyms.Count >= 3)
+                            {
+                                synonyms.UnionWith(allSyonyms[2].Split(',').Select(t => t.Trim()));
+                            }
+                        }
+                        else if (group.Value<JToken>("Synonymns") is JObject)
+                        {
+                            var allSynonyms = group.Value<JToken>("Synonymns").ToObject<Dictionary<int, string>>();
+
+                            if (AddJapaneseTitle && allSynonyms.TryGetValue(0, out var japaneseTitle))
+                            {
+                                synonyms.Add(japaneseTitle.Trim());
+                            }
+
+                            if (AddRomajiTitle && allSynonyms.TryGetValue(1, out var romajiTitle))
+                            {
+                                synonyms.Add(romajiTitle.Trim());
+                            }
+
+                            if (AddAlternativeTitles && allSynonyms.TryGetValue(2, out var alternativeTitles))
+                            {
+                                synonyms.UnionWith(alternativeTitles.Split(',').Select(t => t.Trim()));
                             }
                         }
                     }
 
                     List<int> category = null;
-                    var categoryName = (string)group["CategoryName"];
 
-                    var description = (string)group["Description"];
-
-                    foreach (var torrent in group["Torrents"])
+                    foreach (var torrent in group.Value<JArray>("Torrents"))
                     {
                         var releaseInfo = "S01";
+                        var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
+
                         string episode = null;
                         int? season = null;
-                        var editionTitle = (string)torrent["EditionData"]["EditionTitle"];
-                        if (!string.IsNullOrWhiteSpace(editionTitle))
+
+                        if (editionTitle.IsNotNullOrWhiteSpace())
+                        {
                             releaseInfo = WebUtility.HtmlDecode(editionTitle);
+                        }
 
                         var seasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
                         var seasonRegExMatch = seasonRegEx.Match(releaseInfo);
                         if (seasonRegExMatch.Success)
+                        {
                             season = ParseUtil.CoerceInt(seasonRegExMatch.Groups[1].Value);
+                        }
 
                         var episodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
                         var episodeRegExMatch = episodeRegEx.Match(releaseInfo);
                         if (episodeRegExMatch.Success)
+                        {
                             episode = episodeRegExMatch.Groups[1].Value;
+                        }
 
                         releaseInfo = releaseInfo.Replace("Episode ", "");
                         releaseInfo = releaseInfo.Replace("Season ", "S");
@@ -323,53 +345,73 @@ namespace Jackett.Common.Indexers
                         if (FilterSeasonEpisode)
                         {
                             if (query.Season != 0 && season != null && season != query.Season) // skip if season doesn't match
+                            {
                                 continue;
-                            if (query.Episode != null && episode != null && episode != query.Episode) // skip if episode doesn't match
-                                continue;
-                        }
-                        var torrentId = (long)torrent["ID"];
-                        var property = ((string)torrent["Property"]).Replace(" | Freeleech", "");
-                        var link = (string)torrent["Link"];
-                        var linkUri = new Uri(link);
-                        var uploadTimeString = (string)torrent["UploadTime"];
-                        var uploadTime = DateTime.ParseExact(uploadTimeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        var publishDate = DateTime.SpecifyKind(uploadTime, DateTimeKind.Utc).ToLocalTime();
-                        var details = new Uri(SiteLink + "torrent/" + torrentId + "/group");
-                        var size = (long)torrent["Size"];
-                        var snatched = (long)torrent["Snatched"];
-                        var seeders = (int)torrent["Seeders"];
-                        var leechers = (int)torrent["Leechers"];
-                        var fileCount = (long)torrent["FileCount"];
-                        var peers = seeders + leechers;
+                            }
 
-                        var rawDownMultiplier = (int?)torrent["RawDownMultiplier"] ?? 0;
-                        var rawUpMultiplier = (int?)torrent["RawUpMultiplier"] ?? 0;
+                            if (query.Episode != null && episode != null && episode != query.Episode) // skip if episode doesn't match
+                            {
+                                continue;
+                            }
+                        }
+
+                        var torrentId = torrent.Value<long>("ID");
+                        var property = torrent.Value<string>("Property").Replace(" | Freeleech", "");
+                        var link = torrent.Value<string>("Link");
+                        var linkUri = new Uri(link);
+                        var publishDate = DateTime.ParseExact(torrent.Value<string>("UploadTime"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                        var details = new Uri(SiteLink + "torrent/" + torrentId + "/group");
+                        var size = torrent.Value<long>("Size");
+                        var snatched = torrent.Value<long>("Snatched");
+                        var seeders = torrent.Value<int>("Seeders");
+                        var leechers = torrent.Value<int>("Leechers");
+                        var peers = seeders + leechers;
+                        var fileCount = torrent.Value<int>("FileCount");
+
+                        var rawDownMultiplier = torrent.Value<double>("RawDownMultiplier");
+                        var rawUpMultiplier = torrent.Value<double>("RawUpMultiplier");
 
                         if (searchType == "anime")
                         {
                             if (groupName == "TV Series" || groupName == "OVA")
+                            {
                                 category = new List<int> { TorznabCatType.TVAnime.ID };
+                            }
 
                             // Ignore these categories as they'll cause hell with the matcher
                             // TV Special, OVA, ONA, DVD Special, BD Special
 
                             if (groupName == "Movie" || groupName == "Live Action Movie")
+                            {
                                 category = new List<int> { TorznabCatType.Movies.ID };
+                            }
 
                             if (categoryName == "Manga" || categoryName == "Oneshot" || categoryName == "Anthology" || categoryName == "Manhwa" || categoryName == "Manhua" || categoryName == "Light Novel")
+                            {
                                 category = new List<int> { TorznabCatType.BooksComics.ID };
+                            }
 
                             if (categoryName == "Novel" || categoryName == "Artbook")
+                            {
                                 category = new List<int> { TorznabCatType.BooksComics.ID };
+                            }
 
                             if (categoryName == "Game" || categoryName == "Visual Novel")
                             {
                                 if (property.Contains(" PSP "))
+                                {
                                     category = new List<int> { TorznabCatType.ConsolePSP.ID };
+                                }
+
                                 if (property.Contains("PSX") || property.Contains(" NES ") || property.Contains(" Switch "))
+                                {
                                     category = new List<int> { TorznabCatType.ConsoleOther.ID };
+                                }
+
                                 if (property.Contains(" PC "))
+                                {
                                     category = new List<int> { TorznabCatType.PCGames.ID };
+                                }
                             }
                         }
                         else if (searchType == "music")
@@ -377,11 +419,17 @@ namespace Jackett.Common.Indexers
                             if (categoryName == "Single" || categoryName == "EP" || categoryName == "Album" || categoryName == "Compilation" || categoryName == "Soundtrack" || categoryName == "Remix CD" || categoryName == "PV" || categoryName == "Live Album" || categoryName == "Image CD" || categoryName == "Drama CD" || categoryName == "Vocal CD")
                             {
                                 if (property.Contains(" Lossless "))
+                                {
                                     category = new List<int> { TorznabCatType.AudioLossless.ID };
+                                }
                                 else if (property.Contains("MP3"))
+                                {
                                     category = new List<int> { TorznabCatType.AudioMP3.ID };
+                                }
                                 else
+                                {
                                     category = new List<int> { TorznabCatType.AudioOther.ID };
+                                }
                             }
                         }
 
@@ -391,7 +439,9 @@ namespace Jackett.Common.Indexers
                         {
                             releaseTags[i] = releaseTags[i].Trim();
                             if (string.IsNullOrWhiteSpace(releaseTags[i]))
+                            {
                                 releaseTags.RemoveAt(i);
+                            }
                         }
 
                         var releaseGroup = releaseTags.LastOrDefault();
@@ -410,8 +460,11 @@ namespace Jackett.Common.Indexers
                         {
                             releaseGroup = string.Empty;
                         }
+
                         if (!AllowRaws && releaseTags.Contains("raw", StringComparer.InvariantCultureIgnoreCase))
+                        {
                             continue;
+                        }
 
                         var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]");
                         var minimumSeedTime = 259200;
@@ -450,11 +503,12 @@ namespace Jackett.Common.Indexers
                             releases.Add(release);
                         }
 
-                        if (AddFileNameTitles && (int)torrent["FileCount"] == 1)
+                        if (AddFileNameTitles && fileCount == 1)
                         {
-                            var releaseTitle = Path.GetFileNameWithoutExtension((string)torrent["FileList"][0]["filename"]);
+                            var releaseTitle = Path.GetFileNameWithoutExtension(torrent.Value<JToken>("FileList")?.First().Value<string>("filename"));
 
                             var guid = new Uri(details + "&nh=" + StringUtil.Hash(releaseTitle));
+
                             var release = new ReleaseInfo
                             {
                                 MinimumRatio = 1,
