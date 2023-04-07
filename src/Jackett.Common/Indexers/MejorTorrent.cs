@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://www1.mejortorrent.rip/",
-            "https://mejortorrent.unblockit.boo/"
+            "https://mejortorrent.unblockit.click/"
         };
         public override string[] LegacySiteLinks => new[]
         {
@@ -62,7 +62,8 @@ namespace Jackett.Common.Indexers
             "https://mejortorrent.nocensor.sbs/",
             "https://mejortorrent.unblockit.name/",
             "https://mejortorrent.unblockit.bio/",
-            "https://mejortorrent.wtf/"
+            "https://mejortorrent.wtf/",
+            "https://mejortorrent.unblockit.boo/"
         };
         public override string Language => "es-ES";
         public override string Type => "public";
