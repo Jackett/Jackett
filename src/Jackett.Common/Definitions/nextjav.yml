@@ -28,7 +28,7 @@ search:
     - path: "{{ if .Keywords }}search/torrent?torrentsearch={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
-    selector: div.portfolio_item
+    selector: div.status-publish
 
   fields:
     category:
