@@ -22,8 +22,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
 
 settings:
@@ -65,7 +65,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: a[href="logout.php"]
+    selector: a[href*="logout.php?auth="]
 
 search:
   paths:
@@ -79,40 +79,45 @@ search:
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 all, 1 popular, 2 classic, 3 recomended, 4 2+3
     pick: 0
-    # 0 title. 1 descr, 3 uploader, 4 imdb URL
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0 title, 3 uploader, 4 imdb URL, 5 douban URL
+    search_area: "{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}5{{ else }}{{ end }}"
     # 0 AND, 1 OR, 2 Exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
-    # supports imdbid searching and displays imdb link in results.
+    # supports imdbid and douban searching but does not display imdb and douban link in results.
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href*="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title_default:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
     imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
@@ -160,4 +165,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, img
-# NexusPHP Standard v1.5 Beta 4 (customised)
+# NexusPHP Standard v1.5 Beta 4 2010-09-19 (customised)
