@@ -13,7 +13,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -206,6 +205,16 @@ namespace Jackett.Common.Indexers
                 queryCats.ForEach(cat => parameters.Set(cat, "1"));
             }
 
+            if (ConfigData.FreeleechOnly.Value)
+            {
+                parameters.Set("freeleech", "1");
+            }
+
+            if (ConfigData.ExcludeHentai.Value && searchType == "anime")
+            {
+                parameters.Set("hentai", "0");
+            }
+
             var searchUrl = ScrapeUrl + "?" + parameters.GetQueryString();
 
             // Check cache first so we don't query the server for each episode when searching for each episode in a series.
@@ -308,6 +317,12 @@ namespace Jackett.Common.Indexers
 
                     foreach (var torrent in group.Value<JArray>("Torrents"))
                     {
+                        // Skip non-freeleech results when freeleech only is set
+                        if (ConfigData.FreeleechOnly.Value && torrent.Value<double>("RawDownMultiplier") != 0)
+                        {
+                            continue;
+                        }
+
                         var releaseInfo = "S01";
                         var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
 

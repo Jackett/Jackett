@@ -5,8 +5,10 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     [ExcludeFromCodeCoverage]
     internal class ConfigurationDataAnimeBytes : ConfigurationDataUserPasskey
     {
-        public BoolConfigurationItem SearchByYear { get; private set; }
+        public BoolConfigurationItem FreeleechOnly { get; private set; }
+        public BoolConfigurationItem ExcludeHentai { get; private set; }
         public BoolConfigurationItem IncludeRaw { get; private set; }
+        public BoolConfigurationItem SearchByYear { get; private set; }
         //public DisplayItem DateWarning { get; private set; }
         public BoolConfigurationItem PadEpisode { get; private set; }
         public BoolConfigurationItem AddJapaneseTitle { get; private set; }
@@ -18,8 +20,10 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public ConfigurationDataAnimeBytes(string instructionMessageOptional = null)
             : base(instructionMessageOptional)
         {
+            FreeleechOnly = new BoolConfigurationItem("Search freeleech only") { Value = false };
+            ExcludeHentai = new BoolConfigurationItem("Exclude Hentai from results") { Value = false };
+            IncludeRaw = new BoolConfigurationItem("Include RAW in results") { Value = false };
             SearchByYear = new BoolConfigurationItem("Search by year as a different argument in the request") { Value = false };
-            IncludeRaw = new BoolConfigurationItem("IncludeRaw") { Value = false };
             //DateWarning = new DisplayItem("This tracker does not supply upload dates so they are based off year of release.") { Name = "DateWarning" };
             PadEpisode = new BoolConfigurationItem("Pad episode number for Sonarr compatability") { Value = false };
             AddJapaneseTitle = new BoolConfigurationItem("Add releases for Japanese Title") { Value = false };
