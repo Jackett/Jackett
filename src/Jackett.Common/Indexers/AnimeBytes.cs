@@ -42,6 +42,12 @@ namespace Jackett.Common.Indexers
 
         private static Regex YearRegex => new Regex(@"\b((?:19|20)\d{2})$", RegexOptions.Compiled);
 
+        private readonly HashSet<string> _excludedProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Freeleech",
+            "Hentai"
+        };
+
         private ConfigurationDataAnimeBytes ConfigData => (ConfigurationDataAnimeBytes)configData;
 
         public AnimeBytes(IIndexerConfigurationService configService, WebClient client, Logger l,
@@ -325,6 +331,36 @@ namespace Jackett.Common.Indexers
                             continue;
                         }
 
+                        var torrentId = torrent.Value<long>("ID");
+                        var link = torrent.Value<string>("Link");
+                        var linkUri = new Uri(link);
+                        var publishDate = DateTime.ParseExact(torrent.Value<string>("UploadTime"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                        var details = new Uri(SiteLink + "torrent/" + torrentId + "/group");
+                        var size = torrent.Value<long>("Size");
+                        var snatched = torrent.Value<long>("Snatched");
+                        var seeders = torrent.Value<int>("Seeders");
+                        var leechers = torrent.Value<int>("Leechers");
+                        var peers = seeders + leechers;
+                        var fileCount = torrent.Value<int>("FileCount");
+                        var rawDownMultiplier = torrent.Value<double>("RawDownMultiplier");
+                        var rawUpMultiplier = torrent.Value<double>("RawUpMultiplier");
+
+                        // MST with additional 5 hours per GB
+                        var minimumSeedTime = 259200 + (int)(size / (int)Math.Pow(1024, 3) * 18000);
+
+                        var properties = WebUtility.HtmlDecode(torrent.Value<string>("Property"))
+                           .Split('|')
+                           .Select(t => t.Trim())
+                           .Where(p => p.IsNotNullOrWhiteSpace())
+                           .ToList();
+
+                        properties.RemoveAll(p => _excludedProperties.Any(p.Contains));
+
+                        if (!AllowRaws && properties.ContainsIgnoreCase("RAW"))
+                        {
+                            continue;
+                        }
+
                         var releaseInfo = categoryName == "Anime" ? "S01" : "";
                         var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
 
@@ -372,24 +408,6 @@ namespace Jackett.Common.Indexers
                             }
                         }
 
-                        var torrentId = torrent.Value<long>("ID");
-                        var property = torrent.Value<string>("Property").Replace(" | Freeleech", "");
-                        var link = torrent.Value<string>("Link");
-                        var linkUri = new Uri(link);
-                        var publishDate = DateTime.ParseExact(torrent.Value<string>("UploadTime"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
-                        var details = new Uri(SiteLink + "torrent/" + torrentId + "/group");
-                        var size = torrent.Value<long>("Size");
-                        var snatched = torrent.Value<long>("Snatched");
-                        var seeders = torrent.Value<int>("Seeders");
-                        var leechers = torrent.Value<int>("Leechers");
-                        var peers = seeders + leechers;
-                        var fileCount = torrent.Value<int>("FileCount");
-                        var rawDownMultiplier = torrent.Value<double>("RawDownMultiplier");
-                        var rawUpMultiplier = torrent.Value<double>("RawUpMultiplier");
-
-                        // MST with additional 5 hours per GB
-                        var minimumSeedTime = 259200 + (int)(size / (int)Math.Pow(1024, 3) * 18000);
-
                         if (searchType == "anime")
                         {
                             if (groupName == "TV Series" || groupName == "OVA")
@@ -417,17 +435,37 @@ namespace Jackett.Common.Indexers
 
                             if (categoryName == "Game" || categoryName == "Visual Novel")
                             {
-                                if (property.Contains(" PSP "))
+                                if (properties.Contains("PSP"))
                                 {
                                     category = new List<int> { TorznabCatType.ConsolePSP.ID };
                                 }
 
-                                if (property.Contains("PSX") || property.Contains(" NES ") || property.Contains(" Switch "))
+                                if (properties.Contains("PS3"))
+                                {
+                                    category = new List<int> { TorznabCatType.ConsolePS3.ID };
+                                }
+
+                                if (properties.Contains("PS Vita"))
+                                {
+                                    category = new List<int> { TorznabCatType.ConsolePSVita.ID };
+                                }
+
+                                if (properties.Contains("3DS"))
+                                {
+                                    category = new List<int> { TorznabCatType.Console3DS.ID };
+                                }
+
+                                if (properties.Contains("NDS"))
+                                {
+                                    category = new List<int> { TorznabCatType.ConsoleNDS.ID };
+                                }
+
+                                if (properties.Contains("PSX") || properties.Contains("PS2") || properties.Contains("SNES") || properties.Contains("NES") || properties.Contains("GBA") || properties.Contains("Switch"))
                                 {
                                     category = new List<int> { TorznabCatType.ConsoleOther.ID };
                                 }
 
-                                if (property.Contains(" PC "))
+                                if (properties.Contains("PC"))
                                 {
                                     category = new List<int> { TorznabCatType.PCGames.ID };
                                 }
@@ -437,11 +475,11 @@ namespace Jackett.Common.Indexers
                         {
                             if (categoryName == "Single" || categoryName == "EP" || categoryName == "Album" || categoryName == "Compilation" || categoryName == "Soundtrack" || categoryName == "Remix CD" || categoryName == "PV" || categoryName == "Live Album" || categoryName == "Image CD" || categoryName == "Drama CD" || categoryName == "Vocal CD")
                             {
-                                if (property.Contains(" Lossless "))
+                                if (properties.Contains("Lossless"))
                                 {
                                     category = new List<int> { TorznabCatType.AudioLossless.ID };
                                 }
-                                else if (property.Contains("MP3"))
+                                else if (properties.Contains("MP3"))
                                 {
                                     category = new List<int> { TorznabCatType.AudioMP3.ID };
                                 }
@@ -453,39 +491,19 @@ namespace Jackett.Common.Indexers
                         }
 
                         // We don't actually have a release name >.> so try to create one
-                        var releaseTags = property.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-                        for (var i = releaseTags.Count - 1; i >= 0; i--)
-                        {
-                            releaseTags[i] = releaseTags[i].Trim();
-                            if (string.IsNullOrWhiteSpace(releaseTags[i]))
-                            {
-                                releaseTags.RemoveAt(i);
-                            }
-                        }
+                        var releaseGroup = properties.LastOrDefault();
 
-                        var releaseGroup = releaseTags.LastOrDefault();
-                        if (releaseGroup != null && releaseGroup.Contains("(") && releaseGroup.Contains(")"))
+                        if (releaseGroup.IsNotNullOrWhiteSpace() && releaseGroup.Contains("(") && releaseGroup.Contains(")"))
                         {
-                            // Skip raws if set
-                            if (releaseGroup.ToLowerInvariant().StartsWith("raw") && !AllowRaws)
-                            {
-                                continue;
-                            }
-
                             var start = releaseGroup.IndexOf("(", StringComparison.Ordinal);
-                            releaseGroup = "[" + releaseGroup.Substring(start + 1, (releaseGroup.IndexOf(")", StringComparison.Ordinal) - 1) - start) + "] ";
+                            releaseGroup = "[" + releaseGroup.Substring(start + 1, releaseGroup.IndexOf(")", StringComparison.Ordinal) - 1 - start) + "] ";
                         }
                         else
                         {
                             releaseGroup = string.Empty;
                         }
 
-                        if (!AllowRaws && releaseTags.Contains("raw", StringComparer.InvariantCultureIgnoreCase))
-                        {
-                            continue;
-                        }
-
-                        var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]");
+                        var infoString = properties.Select(p => "[" + p + "]").Join(string.Empty);
 
                         foreach (var title in synonyms)
                         {
