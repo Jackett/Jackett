@@ -188,7 +188,7 @@ namespace Jackett.Common.Indexers
                 { "searchstr", searchTerm }
             };
 
-            if (ConfigData.SearchByYear.Value)
+            if (ConfigData.SearchByYear.Value && searchType == "anime")
             {
                 var searchYear = ParseYearFromSearchTerm(query.SanitizedSearchTerm.Trim());
 
