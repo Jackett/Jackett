@@ -367,9 +367,11 @@ namespace Jackett.Common.Indexers
                         var leechers = torrent.Value<int>("Leechers");
                         var peers = seeders + leechers;
                         var fileCount = torrent.Value<int>("FileCount");
-
                         var rawDownMultiplier = torrent.Value<double>("RawDownMultiplier");
                         var rawUpMultiplier = torrent.Value<double>("RawUpMultiplier");
+
+                        // MST with additional 5 hours per GB
+                        var minimumSeedTime = 259200 + (int)(size / (int)Math.Pow(1024, 3) * 18000);
 
                         if (searchType == "anime")
                         {
@@ -467,9 +469,6 @@ namespace Jackett.Common.Indexers
                         }
 
                         var infoString = releaseTags.Aggregate("", (prev, cur) => prev + "[" + cur + "]");
-                        var minimumSeedTime = 259200;
-                        //  Additional 5 hours per GB
-                        minimumSeedTime += (int)((size / 1000000000) * 18000);
 
                         foreach (var title in synonyms)
                         {
