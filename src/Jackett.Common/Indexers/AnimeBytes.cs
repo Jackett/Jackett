@@ -125,7 +125,9 @@ namespace Jackett.Common.Indexers
             releases.AddRange(await GetResults(query, "anime", StripEpisodeNumber(query.SanitizedSearchTerm.Trim())));
 
             if (ContainsMusicCategories(query.Categories))
+            {
                 releases.AddRange(await GetResults(query, "music", query.SanitizedSearchTerm.Trim()));
+            }
 
             return releases
                    .OrderByDescending(o => o.PublishDate)
@@ -323,7 +325,7 @@ namespace Jackett.Common.Indexers
                             continue;
                         }
 
-                        var releaseInfo = "S01";
+                        var releaseInfo = categoryName == "Anime" ? "S01" : "";
                         var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
 
                         string episode = null;
