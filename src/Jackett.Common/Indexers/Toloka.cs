@@ -11,7 +11,6 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -46,7 +45,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataToloka())
         {
-            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -223,8 +221,6 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout=true"), () =>
             {
-                logger.Debug(result.ContentString);
-
                 var loginResultParser = new HtmlParser();
                 var loginResultDocument = loginResultParser.ParseDocument(result.ContentString);
                 var errorMessage = loginResultDocument.QuerySelector("table.forumline table span.gen")?.FirstChild?.TextContent;
@@ -242,26 +238,35 @@ namespace Jackett.Common.Indexers
 
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
-                {"o", "1"},
-                {"s", "2"}
+                { "o", "1" },
+                { "s", "2" }
             };
 
-            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            if (configData.FreeleechOnly.Value)
+            {
                 qc.Add("sds", "1");
+            }
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
+            {
                 qc.Add("nm", searchString);
+            }
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
                 if (query.Season != 0)
+                {
                     searchString += " Сезон " + query.Season;
+                }
+
                 qc.Add("nm", searchString);
             }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
                 qc.Add("f[]", cat);
+            }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl);
@@ -284,8 +289,11 @@ namespace Jackett.Common.Indexers
                     try
                     {
                         var qDownloadLink = row.QuerySelector("td:nth-child(6) > a");
+
                         if (qDownloadLink == null) // Expects moderation
+                        {
                             continue;
+                        }
 
                         var qDetailsLink = row.QuerySelector("td:nth-child(3) > a");
                         var details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
@@ -316,14 +324,19 @@ namespace Jackett.Common.Indexers
                             MinimumRatio = 1,
                             MinimumSeedTime = 0
                         };
-                        if (row.QuerySelector("img[src=\"images/gold.gif\"]") != null)
+
+                        if (row.QuerySelector("img[src=\"images/gold.gif\"], img[src=\"images/authors.gif\"]") != null)
+                        {
                             release.DownloadVolumeFactor = 0;
+                        }
                         else if (row.QuerySelector("img[src=\"images/silver.gif\"]") != null)
+                        {
                             release.DownloadVolumeFactor = 0.5;
+                        }
                         else if (row.QuerySelector("img[src=\"images/bronze.gif\"]") != null)
+                        {
                             release.DownloadVolumeFactor = 0.75;
-                        else
-                            release.DownloadVolumeFactor = 1;
+                        }
 
                         releases.Add(release);
                     }
@@ -395,7 +408,9 @@ namespace Jackett.Common.Indexers
                 }
 
                 if (stripCyrillicLetters)
+                {
                     title = _stripCyrillicRegex.Replace(title, string.Empty).Trim(' ', '-');
+                }
 
                 title = Regex.Replace(title, @"\b-Rip\b", "Rip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 title = Regex.Replace(title, @"\bHDTVRip\b", "HDTV", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -432,9 +447,13 @@ namespace Jackett.Common.Indexers
                         {
                             var substring = output.Substring(expectedIndex, match.Index - expectedIndex);
                             if (string.IsNullOrWhiteSpace(substring))
+                            {
                                 expectedIndex = match.Index;
+                            }
                             else
+                            {
                                 break;
+                            }
                         }
 
                         var tag = match.ToString();
