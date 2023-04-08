@@ -506,7 +506,7 @@ namespace Jackett.Common.Indexers
 
                         foreach (var title in synonyms)
                         {
-                            var releaseTitle = groupName == "Movie" ?
+                            var releaseTitle = groupName == "Movie" || groupName == "Live Action Movie" ?
                                 $"{title} {year} {releaseGroup}{infoString}" :
                                 $"{releaseGroup}{title} {releaseInfo} {infoString}";
 
