@@ -44,8 +44,7 @@ namespace Jackett.Common.Indexers
 
         private readonly HashSet<string> _excludedProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "Freeleech",
-            "Hentai"
+            "Freeleech"
         };
 
         private ConfigurationDataAnimeBytes ConfigData => (ConfigurationDataAnimeBytes)configData;
@@ -491,7 +490,7 @@ namespace Jackett.Common.Indexers
                         }
 
                         // We don't actually have a release name >.> so try to create one
-                        var releaseGroup = properties.LastOrDefault();
+                        var releaseGroup = properties.LastOrDefault(p => !p.ContainsIgnoreCase("Hentai"));
 
                         if (releaseGroup.IsNotNullOrWhiteSpace() && releaseGroup.Contains("(") && releaseGroup.Contains(")"))
                         {
