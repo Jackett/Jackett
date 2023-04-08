@@ -475,11 +475,11 @@ namespace Jackett.Common.Indexers
                         {
                             if (categoryName == "Single" || categoryName == "EP" || categoryName == "Album" || categoryName == "Compilation" || categoryName == "Soundtrack" || categoryName == "Remix CD" || categoryName == "PV" || categoryName == "Live Album" || categoryName == "Image CD" || categoryName == "Drama CD" || categoryName == "Vocal CD")
                             {
-                                if (properties.Contains("Lossless"))
+                                if (properties.Any(p => p.Contains("Lossless")))
                                 {
                                     category = new List<int> { TorznabCatType.AudioLossless.ID };
                                 }
-                                else if (properties.Contains("MP3"))
+                                else if (properties.Any(p => p.Contains("MP3")))
                                 {
                                     category = new List<int> { TorznabCatType.AudioMP3.ID };
                                 }
