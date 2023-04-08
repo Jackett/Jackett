@@ -108,7 +108,7 @@ search:
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
@@ -211,4 +211,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 6.4.1 custom
+# json UNIT3D custom edition 1.0.2 (based on 6.5.0)
