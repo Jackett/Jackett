@@ -93,7 +93,7 @@ search:
     selector: data
     attribute: attributes
     count:
-      selector: meta.total
+      selector: meta.to
 
   fields:
     category:
@@ -168,4 +168,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 6.5.0b
+# json UNIT3D 6.5.1b
