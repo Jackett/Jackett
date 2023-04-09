@@ -9,6 +9,8 @@ links:
   - https://krazyzone.net/
 legacylinks:
   - http://krazyzone.net/
+certificates:
+  - 3AEE52D99679848D6001AA957B5F4D1F2CD60B6A # using default Plesk cert
 
 caps:
   categorymappings:
