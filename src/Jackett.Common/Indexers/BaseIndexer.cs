@@ -752,6 +752,6 @@ namespace Jackett.Common.Indexers
 
         // TODO: remove this implementation and use gloal cache
         protected static List<CachedQueryResult> cache = new List<CachedQueryResult>();
-        protected static readonly TimeSpan cacheTime = new TimeSpan(0, 9, 0);
+        protected static readonly TimeSpan cacheTime = TimeSpan.FromMinutes(9);
     }
 }
