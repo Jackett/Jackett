@@ -1454,7 +1454,9 @@ namespace Jackett.Common.Indexers
                         var countVal = handleJsonSelector(Search.Rows.Count, parsedJson, variables);
 
                         if (int.TryParse(countVal, out var count) && count < 1)
+                        {
                             continue;
+                        }
                     }
 
                     var rowsArray = JsonParseRowsSelector(parsedJson, Search.Rows.Selector);
@@ -1465,6 +1467,11 @@ namespace Jackett.Common.Indexers
                             continue;
 
                         throw new Exception("Error Parsing Rows Selector. There are 0 rows.");
+                    }
+
+                    if (rowsArray.Count == 0)
+                    {
+                        continue;
                     }
 
                     foreach (var Row in rowsArray)
