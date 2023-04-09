@@ -276,46 +276,68 @@ namespace Jackett.Common.Indexers
                         mainTitle = seriesName;
                     }
 
-                    var synonyms = new HashSet<string> { mainTitle };
+                    var synonyms = new HashSet<string>
+                    {
+                        mainTitle
+                    };
 
-                    if (group.Value<JToken>("Synonymns").HasValues)
+                    if (group.Value<JToken>("SynonymnsV2").HasValues && group.Value<JToken>("SynonymnsV2") is JObject)
+                    {
+                        var allSynonyms = group.Value<JToken>("SynonymnsV2").ToObject<Dictionary<string, string>>();
+
+                        if (AddJapaneseTitle && allSynonyms.TryGetValue("Japanese", out var japaneseTitle) && japaneseTitle.IsNotNullOrWhiteSpace())
+                        {
+                            synonyms.Add(japaneseTitle.Trim());
+                        }
+
+                        if (AddRomajiTitle && allSynonyms.TryGetValue("Romaji", out var romajiTitle) && romajiTitle.IsNotNullOrWhiteSpace())
+                        {
+                            synonyms.Add(romajiTitle.Trim());
+                        }
+
+                        if (AddAlternativeTitles && allSynonyms.TryGetValue("Alternative", out var alternativeTitles) && alternativeTitles.IsNotNullOrWhiteSpace())
+                        {
+                            synonyms.UnionWith(alternativeTitles.Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()));
+                        }
+                    }
+                    else if (group.Value<JToken>("Synonymns").HasValues)
                     {
                         if (group.Value<JToken>("Synonymns") is JArray)
                         {
                             var allSyonyms = group.Value<JToken>("Synonymns").ToObject<List<string>>();
 
-                            if (AddJapaneseTitle && allSyonyms.Count >= 1)
+                            if (AddJapaneseTitle && allSyonyms.Count >= 1 && allSyonyms[0].IsNotNullOrWhiteSpace())
                             {
                                 synonyms.Add(allSyonyms[0]);
                             }
 
-                            if (AddRomajiTitle && allSyonyms.Count >= 2)
+                            if (AddRomajiTitle && allSyonyms.Count >= 2 && allSyonyms[1].IsNotNullOrWhiteSpace())
                             {
                                 synonyms.Add(allSyonyms[1]);
                             }
 
-                            if (AddAlternativeTitles && allSyonyms.Count >= 3)
+                            if (AddAlternativeTitles && allSyonyms.Count >= 3 && allSyonyms[2].IsNotNullOrWhiteSpace())
                             {
-                                synonyms.UnionWith(allSyonyms[2].Split(',').Select(t => t.Trim()));
+                                synonyms.UnionWith(allSyonyms[2].Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()));
                             }
                         }
                         else if (group.Value<JToken>("Synonymns") is JObject)
                         {
                             var allSynonyms = group.Value<JToken>("Synonymns").ToObject<Dictionary<int, string>>();
 
-                            if (AddJapaneseTitle && allSynonyms.TryGetValue(0, out var japaneseTitle))
+                            if (AddJapaneseTitle && allSynonyms.TryGetValue(0, out var japaneseTitle) && japaneseTitle.IsNotNullOrWhiteSpace())
                             {
                                 synonyms.Add(japaneseTitle.Trim());
                             }
 
-                            if (AddRomajiTitle && allSynonyms.TryGetValue(1, out var romajiTitle))
+                            if (AddRomajiTitle && allSynonyms.TryGetValue(1, out var romajiTitle) && romajiTitle.IsNotNullOrWhiteSpace())
                             {
                                 synonyms.Add(romajiTitle.Trim());
                             }
 
-                            if (AddAlternativeTitles && allSynonyms.TryGetValue(2, out var alternativeTitles))
+                            if (AddAlternativeTitles && allSynonyms.TryGetValue(2, out var alternativeTitles) && alternativeTitles.IsNotNullOrWhiteSpace())
                             {
-                                synonyms.UnionWith(alternativeTitles.Split(',').Select(t => t.Trim()));
+                                synonyms.UnionWith(alternativeTitles.Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()));
                             }
                         }
                     }
