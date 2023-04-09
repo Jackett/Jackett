@@ -44,10 +44,6 @@ namespace Jackett.Common.Indexers
         {
             var caps = new TorznabCapabilities
             {
-                MovieSearchParams = new List<MovieSearchParam>
-                {
-                    MovieSearchParam.Q, MovieSearchParam.Genre
-                },
                 MusicSearchParams = new List<MusicSearchParam>
                 {
                     MusicSearchParam.Q, MusicSearchParam.Album, MusicSearchParam.Artist, MusicSearchParam.Label, MusicSearchParam.Year, MusicSearchParam.Genre
@@ -60,11 +56,11 @@ namespace Jackett.Common.Indexers
 
             caps.Categories.AddCategoryMapping(1, TorznabCatType.Audio, "Music");
             caps.Categories.AddCategoryMapping(2, TorznabCatType.PC, "Applications");
-            caps.Categories.AddCategoryMapping(3, TorznabCatType.Books, "E-Books");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.BooksEBook, "E-Books");
             caps.Categories.AddCategoryMapping(4, TorznabCatType.AudioAudiobook, "Audiobooks");
-            caps.Categories.AddCategoryMapping(5, TorznabCatType.Movies, "E-Learning Videos");
-            caps.Categories.AddCategoryMapping(6, TorznabCatType.Audio, "Comedy");
-            caps.Categories.AddCategoryMapping(7, TorznabCatType.Books, "Comics");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.Other, "E-Learning Videos");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Other, "Comedy");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.BooksComics, "Comics");
 
             return caps;
         }

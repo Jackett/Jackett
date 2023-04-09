@@ -43,13 +43,9 @@ namespace Jackett.Common.Indexers
         {
             var caps = new TorznabCapabilities
             {
-                MusicSearchParams = new List<MusicSearchParam>
-                {
-                    MusicSearchParam.Q, MusicSearchParam.Artist, MusicSearchParam.Album, MusicSearchParam.Year
-                },
                 BookSearchParams = new List<BookSearchParam>
                 {
-                    BookSearchParam.Q
+                    BookSearchParam.Q, BookSearchParam.Genre
                 }
             };
 
