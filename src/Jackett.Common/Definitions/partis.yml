@@ -96,9 +96,9 @@ settings:
   - name: sort
     type: select
     label: Sort results
-    default: " "
+    default: _
     options:
-      " ": "Added descending"
+      _: "Added descending"
       "seeders ASC": "Seeders ascending"
       "seeders DESC": "Seeders descending"
       "leechers ASC": "Leechers ascending"
@@ -121,7 +121,7 @@ search:
   inputs:
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
-    order: "{{ if eq .Config.sort \" \" }}{{ else }}{{ .Config.sort }}{{ end }}"
+    order: "{{ re_replace .Config.sort \"_\" \"\" }}"
   preprocessingfilters:
     # Extract torrent information from the json array that is part of the response and transform it into html form
     - name: re_replace
