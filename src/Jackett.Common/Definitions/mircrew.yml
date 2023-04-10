@@ -5,8 +5,6 @@ description: "MIRCrew is an ITALIAN Private Torrent Tracker for MOVIES / TV / MU
 language: it-IT
 type: private
 encoding: UTF-8
-certificates:
-  - 35a21ab7dd7bd72e8131517d51f8501e926151b2 # expired Jan 20 2023
 links:
   - https://mircrew-releases.org/
 
