@@ -7,8 +7,6 @@ type: public
 encoding: windows-1251
 links:
   - https://uniondht.org/
-certificates:
-  - f7bc212fa74fa82130daf8581beb6e3a0ca52777 # expired 1 dec 2019
 
 caps:
   categorymappings:

@@ -5,8 +5,6 @@ description: "MVGroup is a Semi-Private site dedicated to UK TV and DOCUMENTARIE
 language: en-US
 type: semi-private
 encoding: UTF-8
-certificates:
-  - d2b71a2548cbc060a6d016eebe521927559ec4ae  # expired 11/15/2022
 links:
   - https://forums.mvgroup.org/
 legacylinks:

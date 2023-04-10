@@ -5,8 +5,6 @@ description: "Torrent Sector Crew (TSC) is a GERMAN Private Torrent Tracker for 
 language: de-DE
 type: private
 encoding: ISO-8859-1
-certificates:
-  - a64165a04e1e7b7348af03c985c9d5cb4b38e6f5 # expired 12 October 2022
 links:
   - https://tsctracker.org/
 legacylinks:

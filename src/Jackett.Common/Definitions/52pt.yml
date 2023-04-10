@@ -5,8 +5,6 @@ description: "52PT is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
 language: zh-CN
 type: private
 encoding: UTF-8
-certificates:
-  - a66dce17f30d8b03be18502265e3dc09ec50b83b # expired 26-Mar-2023
 links:
   - https://52pt.site/
 

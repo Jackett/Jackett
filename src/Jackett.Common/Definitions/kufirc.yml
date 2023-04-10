@@ -5,8 +5,6 @@ description: "Kufirc is a HUNGARIAN Private tracker for 3X"
 language: hu-HU
 type: private
 encoding: UTF-8
-certificates:
-  - 1a528cffb19a5306daa44f99e6cce5d2a3c657c1 # Expired 24 Oct 2022
 links:
   - https://kufirc.com/
 
