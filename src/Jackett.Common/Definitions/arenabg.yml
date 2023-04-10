@@ -5,8 +5,6 @@ description: "ArenaBG is a BULGARIAN Semi-Private Torrent Tracker for 0DAY / GEN
 language: bg-BG
 type: semi-private
 encoding: UTF-8
-certificates:
-  - d5d96eaf33f4b7470a7009f1e591a45f6af0430d # expired 15 Oct 2022
 links:
   - https://arenabg.com/
 legacylinks:
