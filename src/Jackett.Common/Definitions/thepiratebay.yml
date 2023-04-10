@@ -7,8 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://thepiratebay.org/
-  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ly/
-  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.tor2web.to/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.tor2web.link/
   - https://tpb25.ukpass.co/
   - https://tpb.skynetcloud.site/
   - https://piratenow.xyz/
@@ -60,6 +59,8 @@ legacylinks:
   - https://thepiratebay.host/
   - https://piratetoday.xyz/
   - https://tpb.wtf/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.onion.ly/
+  - https://piratebayo3klnzokct3wt5yyxb2vpebbuyjl7m623iaxmqhsd52coid.tor2web.to/
 
 caps:
   categorymappings:
