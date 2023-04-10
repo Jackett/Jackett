@@ -1451,11 +1451,18 @@ namespace Jackett.Common.Indexers
 
                     if (Search.Rows.Count != null)
                     {
-                        var countVal = handleJsonSelector(Search.Rows.Count, parsedJson, variables);
-
-                        if (int.TryParse(countVal, out var count) && count < 1)
+                        try
                         {
-                            continue;
+                            var countVal = handleJsonSelector(Search.Rows.Count, parsedJson, variables);
+
+                            if (int.TryParse(countVal, out var count) && count < 1)
+                            {
+                                continue;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Trace(ex, "Failed to parse JSON rows count.");
                         }
                     }
 
