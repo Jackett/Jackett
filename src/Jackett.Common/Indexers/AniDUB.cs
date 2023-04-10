@@ -44,7 +44,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAniDub())
         {
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "392E98CE1447B59CA62BAB8824CA1EEFC2ED3D37");
         }
 
         private TorznabCapabilities SetCapabilities()
