@@ -5,8 +5,6 @@ description: "UHDBits is a Private Torrent Tracker for UHD Movies / TV"
 language: en-US
 type: private
 encoding: UTF-8
-certificates:
-  - d651faa5e67c02f48f9e116df328fcd03ad0605a # expired 17 March 2023
 links:
   - https://uhdbits.org/
 
