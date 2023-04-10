@@ -5,8 +5,6 @@ description: "DocsPedia is a Private Torrent Tracker for E-learning"
 language: en-US
 type: private
 encoding: UTF-8
-certificates:
-  - 0a9676d26d187ccc715189a5eea3bd43eff07c43 # Expired Jan 15 2023
 links:
   - https://www.docspedia.world/
 
