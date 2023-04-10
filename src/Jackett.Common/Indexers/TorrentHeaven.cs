@@ -47,8 +47,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            // incomplete CA chain
-            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "8612e46b2abd418b6398dbf2382ebcf44b10f378");
         }
 
         private TorznabCapabilities SetCapabilities()

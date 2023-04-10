@@ -33,6 +33,7 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilm.win/",
             "https://www.lostfilm.tw/",
             "https://www.lostfilmtv2.site/",
+            "https://www.lostfilmtv3.site/",
             "https://www.lostfilmtv5.site/",
             "https://www.lostfilm.uno/"
         };
@@ -122,7 +123,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "98D43B6E740B42C02A9BD1A9D1A813E4350BE332"); // for *.win expired 26/Mar/22
             webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
         }
 
