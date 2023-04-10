@@ -7,8 +7,6 @@ type: private
 encoding: UTF-8
 links:
   - https://leech24.net/
-certificates:
-  - 73bd7995f36de21cda6659f836b58b76993c2383 # invalid name
 
 caps:
   categorymappings:
