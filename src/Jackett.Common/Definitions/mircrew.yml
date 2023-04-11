@@ -176,7 +176,8 @@ search:
     leechers:
       text: 1
     date:
-      selector: time
+      selector: time[datetime]
+      attribute: datetime
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
