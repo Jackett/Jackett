@@ -45,6 +45,7 @@ caps:
     - {id: Applications, cat: PC/0day, desc: Applications}
     - {id: Other, cat: Other, desc: Other}
     - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: E-books, cat: Books/EBook, desc: E-books}
 
   modes:
     search: [q]
@@ -103,17 +104,6 @@ search:
     selector: .table2 > tbody > tr[bgcolor]
 
   fields:
-    category:
-      selector: td:nth-child(2)
-      optional: true
-      default: Other
-      filters:
-        - name: split
-          args: ["-", 1]
-        - name: replace
-          args: [" in ", ""]
-        - name: replace
-          args: [".", ""]
     title:
       selector: div.tt-name > a[href^="/"]
       attribute: href
@@ -122,6 +112,18 @@ search:
           args: "/(.+?)-torrent-\\d+\\.html"
         - name: re_replace
           args: ["-", " "]
+    category_is_tv_show:
+      text: "{{ .Result.title }}"
+      filters:
+        - name: regexp
+          args: "\\b(S\\d+(?:E\\d+)?)\\b"
+    category:
+      selector: td:nth-child(2)
+      optional: true
+      default: "{{ if .Result.category_is_tv_show }}TV shows{{ else }}Other{{ end }}"
+      filters:
+        - name: regexp
+          args: " in (.+?)$"
     details:
       selector: div.tt-name > a[href^="/"]
       attribute: href
