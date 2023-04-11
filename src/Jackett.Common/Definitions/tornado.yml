@@ -73,7 +73,7 @@ settings:
 login:
   path: ?p=home&pid=1
   method: form
-  form: form#loginbox_form
+  form: form#sls_form
   submitpath: ajax/login.php
   inputs:
     action: login
