@@ -19,6 +19,7 @@ caps:
     - {id: Applications, cat: PC/0day, desc: Applications}
     - {id: Other, cat: Other, desc: Other}
     - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: E-books, cat: Books/EBook, desc: E-books}
 
   modes:
     search: [q]
