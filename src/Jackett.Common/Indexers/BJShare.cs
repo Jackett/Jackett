@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -86,7 +87,7 @@ namespace Jackett.Common.Indexers
                 },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
-                    MovieSearchParam.Q, MovieSearchParam.ImdbId
+                    MovieSearchParam.Q
                 },
                 MusicSearchParams = new List<MusicSearchParam>
                 {
@@ -237,20 +238,13 @@ namespace Jackett.Common.Indexers
 
         private bool IsSessionIsClosed(WebResult result) => result.IsRedirect && result.RedirectingTo.Contains("login.php");
 
-        private string FixSearchTerm(TorznabQuery query)
-        {
-            if (query.IsImdbQuery)
-                return query.ImdbID;
-            return _commonSearchTerms.Aggregate(
-                query.GetQueryString(),
-                (current, searchTerm) => current.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value));
-        }
+        private string FixSearchTerm(TorznabQuery query) => _commonSearchTerms.Aggregate(
+            query.GetQueryString(),
+            (current, searchTerm) => current.ToLower().Replace(searchTerm.Key.ToLower(), searchTerm.Value));
 
         // if the search string is empty use the "last 24h torrents" view
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) =>
-            (string.IsNullOrWhiteSpace(query.SearchTerm) && !query.IsImdbQuery)
-                ? await ParseLast24HoursAsync()
-                : await ParseUserSearchAsync(query);
+            query.SearchTerm.IsNullOrWhiteSpace() ? await ParseLast24HoursAsync() : await ParseUserSearchAsync(query);
 
         private async Task<List<ReleaseInfo>> ParseUserSearchAsync(TorznabQuery query)
         {
@@ -419,8 +413,11 @@ namespace Jackett.Common.Indexers
                         release.PublishDate = DateTime.Today;
 
                         // check for previously stripped search terms
-                        if (!query.IsImdbQuery && !query.MatchQueryStringAND(release.Title, null, searchTerm))
+                        if (!query.MatchQueryStringAND(release.Title, null, searchTerm))
+                        {
                             continue;
+                        }
+
                         var size = qSize.TextContent;
                         release.Size = ParseUtil.GetBytes(size);
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
