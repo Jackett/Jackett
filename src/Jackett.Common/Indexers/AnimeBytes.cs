@@ -529,7 +529,7 @@ namespace Jackett.Common.Indexers
                         foreach (var title in synonyms)
                         {
                             var releaseTitle = groupName == "Movie" || groupName == "Live Action Movie" ?
-                                $"{title} {year} {releaseGroup}{infoString}" :
+                                $"{releaseGroup}{title} {year} {infoString}" :
                                 $"{releaseGroup}{title} {releaseInfo} {infoString}";
 
                             var guid = new Uri(details + "&nh=" + StringUtil.Hash(title));
