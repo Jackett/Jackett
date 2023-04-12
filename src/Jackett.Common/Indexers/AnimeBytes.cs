@@ -47,6 +47,14 @@ namespace Jackett.Common.Indexers
             "Freeleech"
         };
 
+        private readonly HashSet<string> _commonReleaseGroupsProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Softsubs",
+            "Hardsubs",
+            "RAW",
+            "Translated"
+        };
+
         private ConfigurationDataAnimeBytes ConfigData => (ConfigurationDataAnimeBytes)configData;
 
         public AnimeBytes(IIndexerConfigurationService configService, WebClient client, Logger l,
@@ -375,9 +383,9 @@ namespace Jackett.Common.Indexers
                            .Where(p => p.IsNotNullOrWhiteSpace())
                            .ToList();
 
-                        properties.RemoveAll(p => _excludedProperties.Any(p.Contains));
+                        properties.RemoveAll(p => _excludedProperties.Any(p.ContainsIgnoreCase));
 
-                        if (!AllowRaws && properties.ContainsIgnoreCase("RAW"))
+                        if (!AllowRaws && properties.Any(p => p.StartsWithIgnoreCase("RAW")))
                         {
                             continue;
                         }
@@ -514,7 +522,7 @@ namespace Jackett.Common.Indexers
                         }
 
                         // We don't actually have a release name >.> so try to create one
-                        var releaseGroup = properties.LastOrDefault(p => !p.ContainsIgnoreCase("Hentai"));
+                        var releaseGroup = properties.LastOrDefault(p => _commonReleaseGroupsProperties.Any(p.StartsWithIgnoreCase));
 
                         if (releaseGroup.IsNotNullOrWhiteSpace() && releaseGroup.Contains("(") && releaseGroup.Contains(")"))
                         {
