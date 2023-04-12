@@ -194,4 +194,6 @@ search:
       text: 1
     minimumratio:
       text: 0.2
+    description:
+      selector: a[href^="details.php?id="]
 # engine n/a
