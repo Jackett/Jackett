@@ -1,7 +1,7 @@
 ---
 id: newstudio
-name: Newstudio
-description: "Newstudio is a RUSSIAN Public site for TV"
+name: NewStudio
+description: "NewStudio is a RUSSIAN Public site for TV"
 language: ru-RU
 type: public
 encoding: UTF-8
@@ -18,6 +18,14 @@ caps:
     tv-search: [q, season, ep]
 
 settings:
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
+  - name: addrussiantotitle
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -46,6 +54,11 @@ search:
     o: "{{ .Config.sort }}"
     s: "{{ .Config.type }}"
 
+  keywordsfilters:
+    # strip season and/or ep
+    - name: re_replace
+      args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
+
   rows:
     selector: table.well > tbody > tr:has(a[href^="./viewtopic.php?t="])
     filters:
@@ -59,19 +72,31 @@ search:
       selector: a[href^="./viewtopic.php?t="] > b
       filters:
         - name: re_replace
-          args: [".+Сезон\\s+(\\d+)(?:.+Серия\\s+(\\d+))*[\\s\\S]*\\/\\s+(.+)\\s+\\(\\d+\\)\\s+(\\S*)\\s*(\\w*\\d*).*", "$3 - S$1E$2 - rus $5 $4 newstudio"]
+          args: ["(?i)Сезон\\s*(\\d+).+Серия\\s*(\\d+)", "S$1E$2"]
         - name: re_replace
-          args: ["\\bS(\\d{1})\\b", "S0$1"]
+          args: ["(?i)Сезон\\s*(\\d+)", "S$1"]
         - name: re_replace
-          args: ["\\bS(\\d{1})", "S0$1"]
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
         - name: re_replace
-          args: ["\\bS(\\d+)E(\\d{1})\\b", "S$1E0$2"]
-        - name: replace
-          args: ["WEBDLRip", "WEBDL"]
-        - name: replace
-          args: ["HDTVRip", "HDTV"]
-        - name: replace
-          args: ["E -", "E01-99 -"]
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+        - name: re_replace
+          args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
+        - name: append
+          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
+        - name: append
+          args: "-NewStudio"
     details:
       selector: a[href^="./viewtopic.php?t="]
       attribute: href
@@ -134,4 +159,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    description:
+      selector: a[href^="./viewtopic.php?t="] > b
 # engine n/a

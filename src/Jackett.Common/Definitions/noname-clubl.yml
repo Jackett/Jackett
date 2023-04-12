@@ -12,46 +12,6 @@ legacylinks:
   - https://nnm-club.me/
   - http://nnmclub.to/
 
-settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: striprussian
-    type: checkbox
-    label: Strip Russian Letters
-    default: true
-  - name: addrussian
-    type: checkbox
-    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
-    default: false
-  - name: freeleech
-    type: checkbox
-    label: Search freeleech only
-    default: false
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: 1
-    options:
-      1: created
-      10: seeders
-      7: size
-      2: title
-  - name: type
-    type: select
-    label: Order requested from site
-    default: 2
-    options:
-      2: desc
-      1: asc
-  - name: info_row
-    type: info
-    label: Search settings
-    default: This Indexer requires specifc columns to be active on your account search settings.<br>Login to the web site and ensure that only the <b>Автор</b> (Author) and <b>Форум</b> (Forum) checkboxes are ticked in the <b>Показывать колонку</b> (Show Columns) section of the <b>Настройки поиска Torrent</b> (Torrent Search Settings) page.<br>Having other columns active may prevent the Indexer processing/displaying results correctly.
-
 caps:
   categorymappings:
     # forum
@@ -762,6 +722,42 @@ caps:
     music-search: [q]
     book-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
+  - name: addrussiantotitle
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      10: seeders
+      7: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info_row
+    type: info
+    label: Search settings
+    default: This Indexer requires specifc columns to be active on your account search settings.<br>Login to the web site and ensure that only the <b>Автор</b> (Author) and <b>Форум</b> (Forum) checkboxes are ticked in the <b>Показывать колонку</b> (Show Columns) section of the <b>Настройки поиска Torrent</b> (Torrent Search Settings) page.<br>Having other columns active may prevent the Indexer processing/displaying results correctly.
+
 login:
   path: forum/login.php
   method: form
@@ -793,11 +789,14 @@ search:
     sds: "{{ if .Config.freeleech }}1{{ else }}-1{{ end }}"
     nm: "{{ .Keywords }}"
     submit: "Поиск"
+
   keywordsfilters:
     - name: re_replace # S01 to сезон 1
-      args: ["(?i)\\bS0*(\\d+)\\b", " сезон $1"]
-    - name: re_replace # S01E01 to сезон 1 серии 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", " сезон $1 серии $2"]
+      args: ["(?i)\\bS0*(\\d+)\\b", "сезон $1"]
+    - name: re_replace # E02 to сери 1
+      args: ["(?i)\\bE0*(\\d+)\\b", "сери $1"]
+    - name: re_replace # S01E02 to сезон 1 сери 2
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
   rows:
     selector: table.forumline.tablesorter > tbody > tr:has(a[href^="viewtopic.php?t="]):has(a[href^="download.php?id="])
@@ -811,44 +810,76 @@ search:
           args: f
     category:
       text: "{{ .Result.category_id }}"
-    title_is_rus:
-      selector: a[href^="viewtopic.php?t="] > b
-      filters:
-        - name: re_replace
-          args: ["[^А-Яа-яЁё]+", ""]
     title:
       selector: a[href^="viewtopic.php?t="] > b
       filters:
-        - name: replace
-          args: ["Кураж-Бамбей", "kurazh"]
-        - name: replace
-          args: ["Кубик в Кубе", "Kubik"]
-        - name: replace
-          args: ["Кравец", "Kravec"]
-        - name: replace
-          args: ["Пифагор", "Pifagor"]
-        - name: replace
-          args: ["Невафильм", "Nevafilm"]
+        # normalize to SXXEYY format
         - name: re_replace
-          args: ["((\\((?:[12][0-9]{3}-?){1,}\\))(.+)\\([Сс]езоны?\\s+(\\d+-*\\d*).+(?:[Сс]ери[йия]|[Вв]ыпуски?(?:ов)?)\\s+(?:(\\d+-*\\d*).*?[\\?\\d]*)\\))", "- S$4E$5 - $2 $3"]
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["((\\((?:[12][0-9]{3}-?){1,}\\))(.+)\\((?:[Сс]ери[йия]|[Вв]ыпуски?(?:ов)?)\\s+(?:(\\d+-*\\d*).*?[\\?\\d]*)\\))", "- E$4 $2 $3"]
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$0{{ end }}"]
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["[\"«»=!?:|\\/]", " "]
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["^[-\\s]*", " "]
-        - name: replace
-          args: ["-Rip", "Rip"]
-        - name: replace
-          args: ["WEB-DL", "WEBDL"]
-        - name: replace
-          args: ["WEBDLRip", "WEBDL"]
-        - name: replace
-          args: ["HDTVRip", "HDTV"]
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езоны?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1"]
+        - name: re_replace
+          args: ["(?i)\\bКураж-Бамбей\\b", "kurazh"]
+        - name: re_replace
+          args: ["(?i)\\bКубик в Кубе\\b", "Kubik"]
+        - name: re_replace
+          args: ["(?i)\\bКравец\\b", "Kravec"]
+        - name: re_replace
+          args: ["(?i)\\bПифагор\\b", "Pifagor"]
+        - name: re_replace
+          args: ["(?i)\\bНевафильм\\b", "Nevafilm"]
+        - name: re_replace
+          args: ["(?i)\\bЛицензия\\b", "Lic"]
+        - name: re_replace
+          args: ["(?i)\\bселезень\\b", "selezen"]
+        - name: re_replace
+          args: ["(?i)\\sот\\s([\\w\\p{P}\\p{S}]+)$", "-$1"]
+        - name: re_replace
+          args: ["\\s\\|\\s(\\w{4,})$", "-$1"]
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
         - name: append
-          args: "{{ if and (.Result.title_is_rus) (ne .Result.category_id \"913\") (.Config.addrussian) }} - RUSSIAN{{ else }}{{ end }}"
+          args: "{{ if and (ne .Result.category_id \"913\") (.Config.addrussiantotitle) }} RUS{{ else }}{{ end }}"
     details:
       selector: a[href^="viewtopic.php?t="]
       attribute: href
@@ -875,4 +906,6 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    description:
+      selector: a[href^="viewtopic.php?t="] > b
 # engine n/a
