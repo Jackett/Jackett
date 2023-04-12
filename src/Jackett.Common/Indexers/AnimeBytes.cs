@@ -47,6 +47,14 @@ namespace Jackett.Common.Indexers
             "Freeleech"
         };
 
+        private readonly HashSet<string> _commonReleaseGroupsProperties = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Softsubs",
+            "Hardsubs",
+            "RAW",
+            "Translated"
+        };
+
         private ConfigurationDataAnimeBytes ConfigData => (ConfigurationDataAnimeBytes)configData;
 
         public AnimeBytes(IIndexerConfigurationService configService, WebClient client, Logger l,
@@ -375,9 +383,9 @@ namespace Jackett.Common.Indexers
                            .Where(p => p.IsNotNullOrWhiteSpace())
                            .ToList();
 
-                        properties.RemoveAll(p => _excludedProperties.Any(p.Contains));
+                        properties.RemoveAll(p => _excludedProperties.Any(p.ContainsIgnoreCase));
 
-                        if (!AllowRaws && properties.ContainsIgnoreCase("RAW"))
+                        if (!AllowRaws && properties.Any(p => p.StartsWithIgnoreCase("RAW")))
                         {
                             continue;
                         }
@@ -385,35 +393,37 @@ namespace Jackett.Common.Indexers
                         var releaseInfo = categoryName == "Anime" ? "S01" : "";
                         var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
 
-                        string episode = null;
+                        int? episode = null;
                         int? season = null;
 
                         if (editionTitle.IsNotNullOrWhiteSpace())
                         {
                             releaseInfo = WebUtility.HtmlDecode(editionTitle);
+
+                            var seasonRegex = new Regex(@"Season (\d+)", RegexOptions.Compiled);
+                            var seasonRegexMatch = seasonRegex.Match(releaseInfo);
+                            if (seasonRegexMatch.Success)
+                            {
+                                season = ParseUtil.CoerceInt(seasonRegexMatch.Groups[1].Value);
+                            }
+
+                            var episodeRegex = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
+                            var episodeRegexMatch = episodeRegex.Match(releaseInfo);
+                            if (episodeRegexMatch.Success)
+                            {
+                                episode = ParseUtil.CoerceInt(episodeRegexMatch.Groups[1].Value);
+                            }
                         }
 
-                        var seasonRegEx = new Regex(@"Season (\d+)", RegexOptions.Compiled);
-                        var seasonRegExMatch = seasonRegEx.Match(releaseInfo);
-                        if (seasonRegExMatch.Success)
+                        season ??= ParseSeasonFromTitles(synonyms);
+
+                        if (PadEpisode && episode > 0)
                         {
-                            season = ParseUtil.CoerceInt(seasonRegExMatch.Groups[1].Value);
+                            releaseInfo = $" - {episode:00}";
                         }
-
-                        var episodeRegEx = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
-                        var episodeRegExMatch = episodeRegEx.Match(releaseInfo);
-                        if (episodeRegExMatch.Success)
+                        else if (season > 0)
                         {
-                            episode = episodeRegExMatch.Groups[1].Value;
-                        }
-
-                        releaseInfo = releaseInfo.Replace("Episode ", "");
-                        releaseInfo = releaseInfo.Replace("Season ", "S");
-                        releaseInfo = releaseInfo.Trim();
-
-                        if (PadEpisode && int.TryParse(releaseInfo, out _) && releaseInfo.Length == 1)
-                        {
-                            releaseInfo = "0" + releaseInfo;
+                            releaseInfo = $"S{season:00}";
                         }
 
                         if (FilterSeasonEpisode)
@@ -423,7 +433,7 @@ namespace Jackett.Common.Indexers
                                 continue;
                             }
 
-                            if (query.Episode != null && episode != null && episode != query.Episode) // skip if episode doesn't match
+                            if (query.Episode != null && episode != null && episode != int.Parse(query.Episode)) // skip if episode doesn't match
                             {
                                 continue;
                             }
@@ -512,7 +522,7 @@ namespace Jackett.Common.Indexers
                         }
 
                         // We don't actually have a release name >.> so try to create one
-                        var releaseGroup = properties.LastOrDefault(p => !p.ContainsIgnoreCase("Hentai"));
+                        var releaseGroup = properties.LastOrDefault(p => _commonReleaseGroupsProperties.Any(p.StartsWithIgnoreCase));
 
                         if (releaseGroup.IsNotNullOrWhiteSpace() && releaseGroup.Contains("(") && releaseGroup.Contains(")"))
                         {
@@ -603,6 +613,36 @@ namespace Jackett.Common.Indexers
             }
 
             return releases.Select(r => (ReleaseInfo)r.Clone());
+        }
+
+        private static int? ParseSeasonFromTitles(IReadOnlyCollection<string> titles)
+        {
+            var advancedSeasonRegex = new Regex(@"(\d+)(st|nd|rd|th) Season", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var seasonCharactersRegex = new Regex(@"(I{2,})$", RegexOptions.Compiled);
+            var seasonNumberRegex = new Regex(@"([2-9])$", RegexOptions.Compiled);
+
+            foreach (var title in titles)
+            {
+                var advancedSeasonRegexMatch = advancedSeasonRegex.Match(title);
+                if (advancedSeasonRegexMatch.Success)
+                {
+                    return ParseUtil.CoerceInt(advancedSeasonRegexMatch.Groups[1].Value);
+                }
+
+                var seasonCharactersRegexMatch = seasonCharactersRegex.Match(title);
+                if (seasonCharactersRegexMatch.Success)
+                {
+                    return seasonCharactersRegexMatch.Groups[1].Value.Length;
+                }
+
+                var seasonNumberRegexMatch = seasonNumberRegex.Match(title);
+                if (seasonNumberRegexMatch.Success)
+                {
+                    return ParseUtil.CoerceInt(seasonNumberRegexMatch.Groups[1].Value);
+                }
+            }
+
+            return null;
         }
     }
 }
