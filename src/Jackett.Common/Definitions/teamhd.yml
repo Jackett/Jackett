@@ -43,13 +43,13 @@ settings:
     type: info
     label: How to get the User-Agent
     default: "<ol><li>From the same place you fetched the cookie,</li><li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
   - name: freeleech
     type: checkbox
     label: Search freeleech only
-    default: false
-  - name: striprussian
-    type: checkbox
-    label: Strip Russian Letters
     default: false
 
 login:
@@ -61,9 +61,6 @@ login:
     selector: a[href*="/logout.php"]
 
 search:
-  headers:
-    User-Agent: ["{{ .Config.useragent }}"]
-
   paths:
     - path: browse
   inputs:
@@ -74,6 +71,10 @@ search:
     incldead: 1
     # 0 all, 1 gold, 2 silver, 3 normal
     free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
+
   keywordsfilters:
     # remove the year from the titles as the site chokes on them during search https://github.com/Jackett/Jackett/issues/4397#issuecomment-623148789
     - name: re_replace
@@ -96,7 +97,7 @@ search:
       selector: a[href^="/details/id"]
       filters:
         - name: re_replace
-          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
         # convert Season xx -> Sxx
         - name: re_replace
           args: ["(?i)Season (\\d{2})", "S$1"]
@@ -145,4 +146,6 @@ search:
       text: 1
     minimumratio:
       text: 1.0
+    description:
+      selector: a[href^="/details/id"]
 # engine n/a

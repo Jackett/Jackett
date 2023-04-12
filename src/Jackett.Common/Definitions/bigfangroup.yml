@@ -63,9 +63,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: striprussian
+  - name: stripcyrillic
     type: checkbox
-    label: Strip Russian Letters
+    label: Strip Cyrillic Letters
+    default: false
+  - name: addrussiantotitle
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
     default: false
   - name: sort
     type: select
@@ -99,10 +103,13 @@ search:
     s: "{{ .Config.sort }}"
     d: "{{ .Config.type }}"
 
+  keywordsfilters:
+    # strip season and/or ep
+    - name: re_replace
+      args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
+
   rows:
     selector: table > tbody#highlighted > tr:has(a[href^="browse.php?cat="])
-    filters:
-      - name: andmatch
 
   fields:
     category:
@@ -116,25 +123,57 @@ search:
       filters:
         # normalize to SXXEYY format
         - name: re_replace
-          args: ["[\\.\\,\\:\\-\\/\\|]", " "]
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s+(\\d+).+[CСcс]ери[ия]\\s+(\\d+)\\s+(\\d+)\\s+из\\s+\\d+(.*)", "$1 S$2E$3-$4 rus $5"]
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s+(\\d+).+[CСcс]ери[ия]\\s+(\\d+)\\s+из\\s+\\d+(.*)", "$1 S$2E$3 rus $4"]
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(.*)[CСcс]езон\\s+(\\d+)(.*)", "$1 S$2 rus $3"]
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(.*)[CСcс]]ери[ия]\\s+(\\d+)(.*)", "$1 E$2 rus $3"]
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
-        - name: replace
-          args: ["WEBRip", "WEBDL"]
-        - name: replace
-          args: ["WEB DL", "WEBDL"]
-        - name: replace
-          args: ["WEBDLRip", "WEBDL"]
-        - name: replace
-          args: ["HDTVRip", "HDTV"]
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езоны?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1"]
+        - name: re_replace
+          args: ["(?i)\\s\\|\\sот\\s([\\w\\p{P}\\p{S}]+)$", "-$1"]
+        - name: re_replace
+          args: ["\\s\\|\\s(\\w{4,})$", "-$1"]
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+        - name: append
+          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -188,4 +227,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    description:
+      selector: a[href^="details.php?id="]
 # engine n/a

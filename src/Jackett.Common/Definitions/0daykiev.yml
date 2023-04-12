@@ -47,9 +47,9 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: striprussian
+  - name: stripcyrillic
     type: checkbox
-    label: Strip Russian Letters
+    label: Strip Cyrillic Letters
     default: true
   - name: freeleech
     type: checkbox
@@ -91,13 +91,6 @@ search:
   paths:
     # https://tracker.0day.kiev.ua/browse.php?c10=1&c27=1&search=endgame&incldead=1&where=0
     - path: browse.php
-  keywordsfilters:
-    - name: diacritics
-      args: replace
-    - name: re_replace # S01 to Cезон 1
-      args: ["(?i)\\bS0*(\\d+)\\b", "езон $1"]
-    - name: re_replace # S01E01 to Сезон 1 Серии 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "езон $1 ерии $2"]
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -108,8 +101,19 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
+  keywordsfilters:
+    - name: diacritics
+      args: replace
+    - name: re_replace # S01 to Cезон 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "езон $1"]
+    - name: re_replace # E01 to Серии 1
+      args: ["(?i)\\bE0*(\\d+)\\b", "ерии $1"]
+    - name: re_replace # S01E01 to Сезон 1 Серии 1
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "езон $1 ерии $2"]
+
   rows:
     selector: table > tbody > tr.rowtorrentinfo
+
   fields:
     category:
       selector: a[href^="browse.php?cat="]
@@ -123,22 +127,28 @@ search:
         # normalize to SXXEYY format
         - name: re_replace
           args: ["[\\:\\-\\/\\|]", " "]
-        - name: replace
-          args: ["Кураж Бамбей", "kurazh"]
-        - name: replace
-          args: ["Кубик в Кубе", "Kubik"]
-        - name: replace
-          args: ["Кравец", "Kravec"]
         - name: re_replace
-          args: ["(.*)\\([CСcс]езон\\s+(\\d+)\\)\\s+[CСcс]ери[ия]\\s+(\\d+)\\s+(\\d+)(.*)", "$1 S$2E$3-$4 rus $5"]
+          args: ["(?i)\\bКураж Бамбей\\b", "kurazh"]
         - name: re_replace
-          args: ["(.*)\\([CСcс]езон\\s+(\\d+)\\)(.*)", "$1 S$2 rus $3"]
+          args: ["(?i)\\bКубик в Кубе\\b", "Kubik"]
         - name: re_replace
-          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1$2$3$4{{ end }}"]
-        - name: replace
-          args: ["WEB DL", "WEBDL"]
-        - name: replace
-          args: ["WEBDLRip", "WEBDL"]
+          args: ["(?i)\\bКравец\\b", "Kravec"]
+        - name: re_replace
+          args: ["(?i)(.*)\\([CС]езон\\s+(\\d+)\\)\\s+[CС]ери[ия]\\s+(\\d+)\\s+(\\d+)(.*)", "$1 S$2E$3-$4 rus $5"]
+        - name: re_replace
+          args: ["(?i)(.*)\\([CС]езон\\s+(\\d+)\\)(.*)", "$1 S$2 rus $3"]
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV\\s?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT\\s?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\s?DL\\s?Rip\\b", "WEBDL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB Rip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB DL\\b", "WEBDL"]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -184,4 +194,6 @@ search:
       text: 1
     minimumratio:
       text: 0.2
+    description:
+      selector: a[href^="details.php?id="]
 # engine n/a

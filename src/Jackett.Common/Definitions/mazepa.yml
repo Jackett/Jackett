@@ -92,6 +92,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -160,11 +164,16 @@ search:
     # group releases -1=not selected
     srg: -1
     nm: "{{ .Keywords }}"
-    # find a username
-    pn: ""
     # all words
     allw: 1
+
   keywordsfilters:
+    - name: re_replace # S01 to сезон 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "сезон $1"]
+    - name: re_replace # E01 to сезон 1
+      args: ["(?i)\\bE0*(\\d+)\\b", "сері $1"]
+    - name: re_replace # S01E01 to сезон 1 сері 1
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сері $2"]
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
 
@@ -180,6 +189,86 @@ search:
           args: f
     title:
       selector: a[href^="./viewtopic.php?t="]
+      filters:
+        # normalize to SXXEYY format
+        # Ukrainian
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езони?.+?(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езони?.+?(\\d+(?:-\\d+)?)\\s*(?:[CС]ері[їяй]|Епізоди?)\\s+з\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:[CС]ері[їяй]|Епізоди?)\\s+з\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езони?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езони?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ері[їяй]|Епізоди?)\\s+з\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ері[їяй]|Епізоди?)", "E$1"]
+        # English
+        - name: re_replace
+          args: ["(?i)Seasons?[\\s:]*(\\d+(?:-\\d+)?).+?(?:Episodes?)[\\s:]*(\\d+(?:-\\d+)?)\\s*of\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*Seasons?.+?(\\d+(?:-\\d+)?)\\s*of\\s*(\\w?)(?:\\s*Episodes?)?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*Seasons?.+?(\\d+(?:-\\d+)?)\\s*(?:Episodes?)\\s+of\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)Seasons?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*of\\s*(\\w?)(?:\\s*Episodes?)?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)Seasons?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:Episodes?)\\s+of\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)Seasons?[\\s:]*(\\d+(?:-\\d+)?).+?(?:Episodes?)[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+Seasons?.+?(\\d+(?:-\\d+)?)\\s+(?:\\s*Episodes?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)Seasons?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*Episodes?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)Seasons?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+Seasons?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:Episodes?)[\\s:]*(\\d+(?:-\\d+)?)\\s*of\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:Episodes?)\\s+of\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:Episodes?)[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:Episodes?)", "E$1"]
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+        - name: re_replace
+          args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
     details:
       selector: a[href^="./viewtopic.php?t="]
       attribute: href
@@ -201,4 +290,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    description:
+      selector: a[href^="./viewtopic.php?t="]
 # TorrentPier

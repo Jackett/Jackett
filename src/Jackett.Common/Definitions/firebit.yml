@@ -56,7 +56,15 @@ caps:
     music-search: [q]
     book-search: [q]
 
-settings: []
+settings:
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
+  - name: addrussiantotitle
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
 
 download:
   selectors:
@@ -68,6 +76,11 @@ search:
   paths:
     - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}{{ else }}{{ end }}"
     - path: "{{ if .Keywords }}index.php?do=search&type=simple&q={{ .Keywords }}&cstart=2{{ else }}%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0/2/{{ end }}"
+
+  keywordsfilters:
+    # strip season and/or ep
+    - name: re_replace
+      args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
 
   rows:
     selector: "{{ if .Keywords }}table.torrents tbody tr:has(td.td-size){{ else }}div[id^=\"post-id-\"]:has(li.meta-size){{ end }}"
@@ -87,6 +100,58 @@ search:
         - name: trim
     title:
       selector: td:nth-child(2), span.article-title
+      filters:
+        # normalize to SXXEYY format
+        - name: re_replace
+          args: ["(?i)[CС]езон[ыи]?[\\s:;]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))[\\s:;]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езон[ыи]?.+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езон[ыи]?.+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езон[ыи]?[\\s:;]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езон[ыи]?[\\s:;]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езон[ыи]?[\\s:;]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))[\\s:;]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езон[ыи]?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езон[ыи]?[\\s:;]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езон[ыи]?[\\s:;]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езон[ыи]?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))[\\s:;]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))\\s+из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))[\\s:;]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ер[иі][ияйї]|Эпизод|Выпуски?|Епізоди?))", "E$1"]
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+#        - name: re_replace
+#          args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
+        - name: append
+          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
       selector: td:nth-child(2) a, span.article-title a
       attribute: href
@@ -128,4 +193,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    description:
+      selector: td:nth-child(2), span.article-title
 # engine n/a

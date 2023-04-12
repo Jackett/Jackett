@@ -19,11 +19,11 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: striprussian
+  - name: stripcyrillic
     type: checkbox
-    label: Strip Russian
+    label: Strip Cyrillic Letters
     default: false
-  - name: addrussian
+  - name: addrussiantotitle
     type: checkbox
     label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
     default: false
@@ -41,9 +41,9 @@ search:
     limit: 100
 
   keywordsfilters:
-    # strip season and ep
+    # strip season and/or ep
     - name: re_replace
-      args: ["(?i)(?:[SE]?\\d{1,4}){1,2}$", ""]
+      args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
 
   rows:
     selector: list
@@ -65,9 +65,11 @@ search:
       optional: true
       filters:
         - name: re_replace
-          args: ["([А-Яа-яЁё]+)", "{{ if .Config.striprussian }}{{ else }}$1{{ end }}"]
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
         - name: re_replace
-          args: ["^[\\.\\s\\d,\\-—:]+", ""]
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
         - name: re_replace
           args: ["^OVA$", ""]
     year:
@@ -75,14 +77,14 @@ search:
     _quality:
       selector: quality.string
     title:
-      text: "{{ if .Config.striprussian }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en }}{{ if .Result.title_alternative }} / AKA {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._episodes }} - E{{ .Result._episodes }}{{ else }}{{ end }}"
+      text: "{{ if .Config.stripcyrillic }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en }}{{ if .Result.title_alternative }} / AKA {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._episodes }} - E{{ .Result._episodes }}{{ else }}{{ end }}"
       filters:
         - name: re_replace
           args: [" - \\bEФильм\\b", " - MOVIE"]
         - name: re_replace
           args: [" - \\bEOVA\\b", " - OVA"]
         - name: append
-          args: "{{ if .Config.addrussian }} - RUS{{ else }}{{ end }}"
+          args: "{{ if .Config.addrussiantotitle }} - RUS{{ else }}{{ end }}"
     _code:
       selector: ..code
     details:
