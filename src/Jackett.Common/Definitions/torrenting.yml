@@ -66,7 +66,7 @@ search:
     - path: t
   inputs:
     $raw: "{{ range .Categories }}{{.}}=&{{end}}"
-    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ .Keywords }}"
     qf: "{{ if .Query.IMDBID }}adv{{ else }}ti{{ end }}"
     free: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
 
