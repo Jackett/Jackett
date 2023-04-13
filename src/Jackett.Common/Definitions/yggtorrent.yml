@@ -117,19 +117,79 @@ settings:
     label: Category
     default: all
     options:
-      all: Tous
-      2145: Film/Vidéo
-      2139: Audio
-      2144: Application
-      2142: Jeu vidéo
-      2140: eBook
-      2141: Emulation
-      2143: GPS
-      2188: XXX
-  - name: filter_title
-    type: checkbox
-    label: Try to normalize releases names by moving year after the title
-    default: false
+      all: "Tous"
+      2145: "Film/Vidéo"
+      2139: "Audio"
+      2144: "Application"
+      2142: "Jeu vidéo"
+      2140: "eBook"
+      2300: "Nulled"
+      2200: "Imprimante 3D"
+      2141: "Emulation"
+      2143: "GPS"
+      2188: "XXX"
+  - name: subcategory
+    type: select
+    label: Sub-category
+    default: all
+    options:
+      all: "Tous"
+      2178: "Film/Vidéo : Animation"
+      2179: "Film/Vidéo : Animation Série"
+      2180: "Film/Vidéo : Concert"
+      2181: "Film/Vidéo : Documentaire"
+      2182: "Film/Vidéo : Emission TV"
+      2183: "Film/Vidéo : Film"
+      2184: "Film/Vidéo : Série TV"
+      2185: "Film/Vidéo : Spectacle"
+      2186: "Film/Vidéo : Sport"
+      2187: "Film/Vidéo : Vidéo-clips"
+      2147: "Audio : Karaoké"
+      2148: "Audio : Musique"
+      2150: "Audio : Podcast Radio"
+      2149: "Audio : Samples"
+      2177: "Application : Autre"
+      2176: "Application : Formation"
+      2171: "Application : Linux"
+      2172: "Application : MacOS"
+      2174: "Application : Smartphone"
+      2175: "Application : Tablette"
+      2173: "Application : Windows"
+      2167: "Jeu vidéo : Autre"
+      2159: "Jeu vidéo : Linux"
+      2160: "Jeu vidéo : MacOS"
+      2162: "Jeu vidéo : Microsoft"
+      2163: "Jeu vidéo : Nintendo"
+      2165: "Jeu vidéo : Smartphone"
+      2164: "Jeu vidéo : Sony"
+      2166: "Jeu vidéo : Tablette"
+      2161: "Jeu vidéo : Windows"
+      2151: "eBook : Audio"
+      2152: "eBook : Bds"
+      2153: "eBook : Comics"
+      2154: "eBook : Livres"
+      2155: "eBook : Mangas"
+      2156: "eBook : Presse"
+      2301: "Nulled : Wordpress"
+      2302: "Nulled : Scripts PHP & CMS"
+      2303: "Nulled : Mobile"
+      2304: "Nulled : Divers"
+      2201: "Imprimante 3D : Objets"
+      2202: "Imprimante 3D : Personnages"
+      2157: "Emulation : Emulateurs"
+      2158: "Emulation : Roms"
+      2168: "GPS : Applications"
+      2169: "GPS : Cartes"
+      2170: "GPS : Divers"
+      2401: "XXX : Ebooks"
+      2189: "XXX : Films"
+      2190: "XXX : Hentai"
+      2191: "XXX : Images"
+      2402: "XXX : Jeux"
+  - name: info_category
+    type: info
+    label: Category and Sub-category
+    default: Only select a <i>Category</i> <b>OR</b> a <i>Sub-category</i>, leaving the other as <i>Tous</i>.
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -149,9 +209,13 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
+  - name: filter_title
+    type: checkbox
+    label: Normalize release names by moving year after the title
+    default: false
   - name: enhancedAnime
     type: checkbox
-    label: Enhance sonarr compatibility with anime by renaming episode (xxx to exxx). Works only if episode is at the end of the query. Can disturb movies search. (back to the future 3 -> back to the future e3)
+    label: Enhance sonarr compatibility with anime by renaming episodes (xxx > Exxx). Works only if episode is at the end of the query. Can disturb movies search (e.g. back to the future 3 > back to the future E3).
     default: false
   - name: enhancedAnime4
     type: checkbox
@@ -202,41 +266,33 @@ login:
     selector: div#top_panel:contains("Déconnexion")
 
 search:
+  paths:
+    - path: engine/search
+      inputs:
+        name: "{{ .Keywords }}"
+      followredirect: true
+    - path: engine/search
+      inputs:
+        $raw: "name={{ if .Keywords }}{{ re_replace .Keywords \"(?i)S0?(\\d{1,2})\" \"Saison $1\" }}{{ else }}&page=50{{ end }}"
+      followredirect: true
+  inputs:
+    $raw: "{{ if eq .Config.subcategory \"all\" }}category={{ .Config.category }}{{ else }}sub_category={{ .Config.subcategory }}{{ end }}"
+    do: search
+    order: "{{ .Config.type }}"
+    sort: "{{ .Config.sort }}"
+
   keywordsfilters:
-    # Hack For anime Search ! example : replace sonarr search of
-    # One Punch Man S2 10 OR One Punch Man S2 2
-    # BY
-    # One Punch Man S02E10 OR One Punch Man S02E02
-    - name: re_replace # S 1-9 & EP >= 10
-      args: ["(?i)(.*)s([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
-    - name: re_replace # S 1-9 & EP 1-9
-      args: ["(?i)(.*)s([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
-    - name: re_replace # S >= 10 & EP >= 10
-      args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
-    - name: re_replace # S >= 10 & EP 1-9
-      args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
-    - name: re_replace # Full season S 1-9
-      args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
-    - name: re_replace # Full season S >= 10
-      args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
-    - name: re_replace # episode number at the end "1234" to "E1234"
-      args: ["(.*)(\\.|\\s|\\-)(\\d{4})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime4 }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
-    - name: re_replace # episode number at the end "123" to "E123"
-      args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-*)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
-    # END ANIME HACK
-    # fix date search and workaround for internal YGG Issues
+    - name: re_replace # 1234 > E1234
+      args: ["\\b(\\d{4})\\b", "{{ if .Config.enhancedAnime4 }}E$1{{ else }}$1{{ end }}"]
+    - name: re_replace # 123 > E123
+      args: ["\\b(\\d{2,3})\\b", "{{ if .Config.enhancedAnime }}E$1{{ else }}$1{{ end }}"]
+    # fix date search and workaround for internal YGG issues
     - name: re_replace
       args: ["[\\\\\\-\\.\\/!\\s]+", " "]
     - name: trim
     # put each word in quotations to prevent exact phrase search
     - name: re_replace
       args: ["([^\\s]+)", "\"$1\""]
-  paths:
-    - path: "engine/search?category={{ .Config.category }}&name={{ .Keywords }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
-      followredirect: true
-    # Saison Word
-    - path: "engine/search?category={{ .Config.category }}&name={{ if .Keywords }}{{ re_replace .Keywords \"[sS]0(\\d{1,2})\"  \"Saison.$1\"}}{{ else }}&page=50{{ end }}&description=&file=&uploader=&sub_category=&do=search&order={{ .Config.type }}&sort={{ .Config.sort }}"
-      followredirect: true
 
   rows:
     selector: table.table > tbody > tr
@@ -251,26 +307,14 @@ search:
     title_normal:
       selector: td:nth-child(2) > a
       filters:
-        - name: re_replace # S 1-9 & EP >= 10
-          args: ["(?i)(.*)s([1-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
-        - name: re_replace # S 1-9 & EP 1-9
-          args: ["(?i)(.*)s([1-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
-        - name: re_replace # S >= 10 & EP >= 10
-          args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{2,3})$", "$1 S0$2E$3"]
-        - name: re_replace # S >= 10 & EP 1-9
-          args: ["(?i)(.*)s([1-9][0-9])\\s(\\d{1})$", "$1 S0$2E0$3"]
-        - name: re_replace # Full season S 1-9
-          args: ["(?i)(.*)s([1-9])$", "$1 S0$2"]
-        - name: re_replace # Full season S >= 10
-          args: ["(?i)(.*)s([1-9][0-9])$", "$1 S$2"]
-        # Replace French Saison by Season
+        # Saison 1 > S01
         - name: re_replace
-          args: ["(?i)\\b(saison\\s*)\\b([1-9])", "S0$2"]
+          args: ["(?i)\\bSaison\\s*(\\d{2,4})\\b", "S$1"]
         - name: re_replace
-          args: ["(?i)\\b(saison\\s*)\\b(\\d{1,4})", "S$2"]
+          args: ["(?i)\\bSaison\\s*(\\d)\\b", "S0$1"]
         # Replace French date dd-mm-yyyy to yyyy.mm.dd
         - name: re_replace
-          args: ["(\\d{2})[\\-_\\.](\\d{2})[\\-_\\.](\\d{4})", "$3.$2.$1"]
+          args: ["\\b(\\d{2})[\\-_\\.](\\d{2})[\\-_\\.](\\d{4})\\b", "$3.$2.$1"]
     title_filtered:
       text: "{{ .Result.title_normal }}"
       filters:
@@ -280,7 +324,7 @@ search:
         - name: re_replace
           args: ["(?i)(.\\b(mkv|avi|divx|xvid|mp4)\\b)$", ""]
         - name: re_replace
-          args: ["(\\s{2,5})", " "]
+          args: ["(\\s+)", " "]
         - name: trim
     title_phase1:
       text: "{{ if .Config.filter_title }}{{ .Result.title_filtered }}{{ else }}{{ .Result.title_normal }}{{ end }}"
@@ -299,17 +343,14 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
       filters:
-        # Sonarr need E in front of 3 digit number or else it thinks it is episode
-        # S01E10 for number 110 for example ==> enhancedAnime
         - name: re_replace # extend to 4 digits
-          args: ["(.*)(\\.|\\s|\\-)(\\d{4})(\\.|\\s|\\-)(.*)", "{{ if .Config.enhancedAnime4 }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
+          args: ["\\b(\\d{4})\\b", "{{ if .Config.enhancedAnime4 }}E$1{{ else }}$1{{ end }}"]
         - name: re_replace
-          args: ["(.*)(\\.|\\s|\\-)(\\d{2,3})(\\.|\\s|\\-)(.*)", "{{ if .Config.enhancedAnime }}$1 E$3 $5{{ else }}$1$2$3$4$5{{ end }}"]
+          args: ["\\b(\\d{2,3})\\b", "{{ if .Config.enhancedAnime }}E$1{{ else }}$1{{ end }}"]
     details:
       selector: td:nth-child(2) > a
       attribute: href
     category:
-      # changed the catid into and hidden div as of last tracker problem
       selector: ":nth-child(1) > div.hidden"
     download:
       text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
