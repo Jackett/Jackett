@@ -33,48 +33,49 @@ legacylinks:
   - https://www6.yggtorrent.lol/
 
 caps:
+  # dont forget to update the search fields category case block
   categorymappings:
     - {id: 2145, cat: TV, desc: "Film/Vidéo"}
-    - {id: 2178, cat: Movies, desc: "Film/Vidéo : Animation"} # changed to movies, see #3553
+    - {id: 2178, cat: Movies/Other, desc: "Film/Vidéo : Animation"} # changed to movies, see #3553
     - {id: 2179, cat: TV/Anime, desc: "Film/Vidéo : Animation Série"}
-    - {id: 2180, cat: TV, desc: "Film/Vidéo : Concert"}
-    - {id: 2181, cat: TV, desc: "Film/Vidéo : Documentaire"}
+    - {id: 2180, cat: Audio/Video, desc: "Film/Vidéo : Concert"}
+    - {id: 2181, cat: TV/Documentary, desc: "Film/Vidéo : Documentaire"}
     - {id: 2182, cat: TV, desc: "Film/Vidéo : Emission TV"}
     - {id: 2183, cat: Movies, desc: "Film/Vidéo : Film"}
     - {id: 2184, cat: TV, desc: "Film/Vidéo : Série TV"}
     - {id: 2185, cat: TV, desc: "Film/Vidéo : Spectacle"}
-    - {id: 2186, cat: TV, desc: "Film/Vidéo : Sport"}
-    - {id: 2187, cat: TV, desc: "Film/Vidéo : Vidéo-clips"}
+    - {id: 2186, cat: TV/Sport, desc: "Film/Vidéo : Sport"}
+    - {id: 2187, cat: TV/Other, desc: "Film/Vidéo : Vidéo-clips"}
     - {id: 2139, cat: Audio, desc: "Audio"}
     - {id: 2147, cat: Audio, desc: "Audio : Karaoké"}
     - {id: 2148, cat: Audio, desc: "Audio : Musique"}
     - {id: 2150, cat: Audio, desc: "Audio : Podcast Radio"}
-    - {id: 2149, cat: Audio, desc: "Audio : Samples"}
+    - {id: 2149, cat: Audio/Other, desc: "Audio : Samples"}
     - {id: 2144, cat: PC, desc: "Application"}
-    - {id: 2177, cat: PC, desc: "Application : Autre"}
+    - {id: 2177, cat: PC/0day, desc: "Application : Autre"}
     - {id: 2176, cat: PC, desc: "Application : Formation"}
-    - {id: 2171, cat: PC, desc: "Application : Linux"}
-    - {id: 2172, cat: PC, desc: "Application : MacOS"}
-    - {id: 2174, cat: PC, desc: "Application : Smartphone"}
-    - {id: 2175, cat: PC, desc: "Application : Tablette"}
-    - {id: 2173, cat: PC, desc: "Application : Windows"}
+    - {id: 2171, cat: PC/ISO, desc: "Application : Linux"}
+    - {id: 2172, cat: PC/Mac, desc: "Application : MacOS"}
+    - {id: 2174, cat: PC/Mobile-Android, desc: "Application : Smartphone"}
+    - {id: 2175, cat: PC/Mobile-Android, desc: "Application : Tablette"}
+    - {id: 2173, cat: PC/0day, desc: "Application : Windows"}
     - {id: 2142, cat: PC/Games, desc: "Jeu vidéo"}
-    - {id: 2167, cat: PC/Games, desc: "Jeu vidéo : Autre"}
+    - {id: 2167, cat: Console/Other, desc: "Jeu vidéo : Autre"}
     - {id: 2159, cat: PC/Games, desc: "Jeu vidéo : Linux"}
     - {id: 2160, cat: PC/Games, desc: "Jeu vidéo : MacOS"}
-    - {id: 2162, cat: PC/Games, desc: "Jeu vidéo : Microsoft"}
-    - {id: 2163, cat: PC/Games, desc: "Jeu vidéo : Nintendo"}
-    - {id: 2165, cat: PC/Games, desc: "Jeu vidéo : Smartphone"}
-    - {id: 2164, cat: PC/Games, desc: "Jeu vidéo : Sony"}
-    - {id: 2166, cat: PC/Games, desc: "Jeu vidéo : Tablette"}
+    - {id: 2162, cat: Console/XBox One, desc: "Jeu vidéo : Microsoft"}
+    - {id: 2163, cat: Console/Wii, desc: "Jeu vidéo : Nintendo"}
+    - {id: 2165, cat: PC/Mobile-Android, desc: "Jeu vidéo : Smartphone"}
+    - {id: 2164, cat: Console/PS4, desc: "Jeu vidéo : Sony"}
+    - {id: 2166, cat: PC/Mobile-Android, desc: "Jeu vidéo : Tablette"}
     - {id: 2161, cat: PC/Games, desc: "Jeu vidéo : Windows"}
     - {id: 2140, cat: Books, desc: "eBook"}
-    - {id: 2151, cat: Books, desc: "eBook : Audio"}
-    - {id: 2152, cat: Books, desc: "eBook : Bds"}
-    - {id: 2153, cat: Books, desc: "eBook : Comics"}
-    - {id: 2154, cat: Books, desc: "eBook : Livres"}
-    - {id: 2155, cat: Books, desc: "eBook : Mangas"}
-    - {id: 2156, cat: Books, desc: "eBook : Presse"}
+    - {id: 2151, cat: Audio/Audiobook, desc: "eBook : Audio"}
+    - {id: 2152, cat: Books/EBook, desc: "eBook : Bds"}
+    - {id: 2153, cat: Books/Comics, desc: "eBook : Comics"}
+    - {id: 2154, cat: Books/EBook, desc: "eBook : Livres"}
+    - {id: 2155, cat: Books/Comics, desc: "eBook : Mangas"}
+    - {id: 2156, cat: Books/Mags, desc: "eBook : Presse"}
     - {id: 2300, cat: Other, desc: "Nulled"}
     - {id: 2301, cat: Other, desc: "Nulled : Wordpress"}
     - {id: 2302, cat: Other, desc: "Nulled : Scripts PHP & CMS"}
@@ -91,11 +92,11 @@ caps:
     - {id: 2169, cat: Other, desc: "GPS : Cartes"}
     - {id: 2170, cat: Other, desc: "GPS : Divers"}
     - {id: 2188, cat: XXX, desc: "XXX"}
-    - {id: 2401, cat: XXX, desc: "XXX : Ebooks"}
+    - {id: 2401, cat: XXX/Other, desc: "XXX : Ebooks"}
     - {id: 2189, cat: XXX, desc: "XXX : Films"}
     - {id: 2190, cat: XXX, desc: "XXX : Hentai"}
-    - {id: 2191, cat: XXX, desc: "XXX : Images"}
-    - {id: 2402, cat: XXX, desc: "XXX : Jeux"}
+    - {id: 2191, cat: XXX/ImageSet, desc: "XXX : Images"}
+    - {id: 2402, cat: XXX/Other, desc: "XXX : Jeux"}
 
   modes:
     search: [q]
@@ -112,84 +113,6 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: category
-    type: select
-    label: Category
-    default: all
-    options:
-      all: "Tous"
-      2145: "Film/Vidéo"
-      2139: "Audio"
-      2144: "Application"
-      2142: "Jeu vidéo"
-      2140: "eBook"
-      2300: "Nulled"
-      2200: "Imprimante 3D"
-      2141: "Emulation"
-      2143: "GPS"
-      2188: "XXX"
-  - name: subcategory
-    type: select
-    label: Sub-category
-    default: all
-    options:
-      all: "Tous"
-      2178: "Film/Vidéo : Animation"
-      2179: "Film/Vidéo : Animation Série"
-      2180: "Film/Vidéo : Concert"
-      2181: "Film/Vidéo : Documentaire"
-      2182: "Film/Vidéo : Emission TV"
-      2183: "Film/Vidéo : Film"
-      2184: "Film/Vidéo : Série TV"
-      2185: "Film/Vidéo : Spectacle"
-      2186: "Film/Vidéo : Sport"
-      2187: "Film/Vidéo : Vidéo-clips"
-      2147: "Audio : Karaoké"
-      2148: "Audio : Musique"
-      2150: "Audio : Podcast Radio"
-      2149: "Audio : Samples"
-      2177: "Application : Autre"
-      2176: "Application : Formation"
-      2171: "Application : Linux"
-      2172: "Application : MacOS"
-      2174: "Application : Smartphone"
-      2175: "Application : Tablette"
-      2173: "Application : Windows"
-      2167: "Jeu vidéo : Autre"
-      2159: "Jeu vidéo : Linux"
-      2160: "Jeu vidéo : MacOS"
-      2162: "Jeu vidéo : Microsoft"
-      2163: "Jeu vidéo : Nintendo"
-      2165: "Jeu vidéo : Smartphone"
-      2164: "Jeu vidéo : Sony"
-      2166: "Jeu vidéo : Tablette"
-      2161: "Jeu vidéo : Windows"
-      2151: "eBook : Audio"
-      2152: "eBook : Bds"
-      2153: "eBook : Comics"
-      2154: "eBook : Livres"
-      2155: "eBook : Mangas"
-      2156: "eBook : Presse"
-      2301: "Nulled : Wordpress"
-      2302: "Nulled : Scripts PHP & CMS"
-      2303: "Nulled : Mobile"
-      2304: "Nulled : Divers"
-      2201: "Imprimante 3D : Objets"
-      2202: "Imprimante 3D : Personnages"
-      2157: "Emulation : Emulateurs"
-      2158: "Emulation : Roms"
-      2168: "GPS : Applications"
-      2169: "GPS : Cartes"
-      2170: "GPS : Divers"
-      2401: "XXX : Ebooks"
-      2189: "XXX : Films"
-      2190: "XXX : Hentai"
-      2191: "XXX : Images"
-      2402: "XXX : Jeux"
-  - name: info_category
-    type: info
-    label: Category and Sub-category
-    default: Only select a <i>Category</i> <b>OR</b> a <i>Sub-category</i>, leaving the other as <i>Tous</i>.
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -215,11 +138,11 @@ settings:
     default: false
   - name: enhancedAnime
     type: checkbox
-    label: Enhance sonarr compatibility with anime by renaming episodes (xxx > Exxx). Works only if episode is at the end of the query. Can disturb movies search (e.g. back to the future 3 > back to the future E3).
+    label: Enhance Sonarr compatibility with anime by renaming episodes (xxx > Exxx). Can disturb movies search (e.g. Back To The Future 3 > Back To The Future E3).
     default: false
   - name: enhancedAnime4
     type: checkbox
-    label: Extend the sonarr compatibility with anime up to 4 digits. This WILL break all searches and result titles which contain years.
+    label: Extend the Sonarr compatibility with anime up to 4 digits. This WILL break all searches and result titles which contain years.
     default: false
   - name: sort
     type: select
@@ -237,6 +160,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: categories
+    type: info
+    label: Categories
+    default: To avoid unnecessary additional requests, it's recommended to only use indexer-specific categories (>=100000) when configuring this indexer in Sonarr, Radarr, and Lidarr, or when manually searching in TV, Movies, and Audio categories.
   - name: flaresolverr
     type: info
     label: FlareSolverr
@@ -267,16 +194,154 @@ login:
 
 search:
   paths:
+    # Tous
     - path: engine/search
+      categories: ["!", 2145, 2178, 2179, 2180, 2181, 2182, 2183, 2184, 2185, 2186, 2187, 2139, 2147, 2148, 2150, 2149, 2144, 2177, 2176, 2171, 2172, 2174, 2175, 2173, 2142, 2167, 2159, 2160, 2162, 2163, 2165, 2164, 2166, 2161, 2140, 2151, 2152, 2153, 2154, 2155, 2156, 2300, 2301, 2302, 2303, 2304, 2200, 2201, 2202, 2141, 2157, 2158, 2143, 2168, 2169, 2170, 2188, 2401, 2189, 2190, 2191, 2402]
       inputs:
         name: "{{ .Keywords }}"
+        category: all
       followredirect: true
+    # Tous p2
     - path: engine/search
+      categories: ["!", 2145, 2178, 2179, 2180, 2181, 2182, 2183, 2184, 2185, 2186, 2187, 2139, 2147, 2148, 2150, 2149, 2144, 2177, 2176, 2171, 2172, 2174, 2175, 2173, 2142, 2167, 2159, 2160, 2162, 2163, 2165, 2164, 2166, 2161, 2140, 2151, 2152, 2153, 2154, 2155, 2156, 2300, 2301, 2302, 2303, 2304, 2200, 2201, 2202, 2141, 2157, 2158, 2143, 2168, 2169, 2170, 2188, 2401, 2189, 2190, 2191, 2402]
       inputs:
-        $raw: "name={{ if .Keywords }}{{ re_replace .Keywords \"(?i)S0?(\\d{1,2})\" \"Saison $1\" }}{{ else }}&page=50{{ end }}"
+        $raw: "{{ if .Keywords }}name={{ re_replace .Keywords \"(?i)S0?(\\d{1,2})\" \"Saison $1\" }}{{ else }}&page=50{{ end }}"
+        category: all
+      followredirect: true
+    # Film/Vidéo p1
+    - path: engine/search
+      categories: [2145, 2180, 2181, 2182, 2184, 2185, 2186, 2187]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2145
+      followredirect: true
+    # Film/Vidéo (TV which use Saison) p2
+    - path: engine/search
+      categories: [2145, 2181, 2182, 2184]
+      inputs:
+        $raw: "{{ if .Keywords }}name={{ re_replace .Keywords \"(?i)S0?(\\d{1,2})\" \"Saison $1\" }}{{ else }}&page=50{{ end }}"
+        category: 2145
+      followredirect: true
+    # Film/Vidéo (TV which don't use Saison) p2
+    - path: engine/search
+      categories: [2180, 2185, 2186, 2187]
+      inputs:
+        name: "{{ .Keywords }}"
+        page: 50
+        category: 2145
+      followredirect: true
+    # Film/Vidéo (TV/Anime) p1
+    - path: engine/search
+      categories: [2179]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2145
+        sub_category: 2179
+      followredirect: true
+    # Film/Vidéo (TV/Anime) p2
+    - path: engine/search
+      categories: [2179]
+      inputs:
+        $raw: "{{ if .Keywords }}name={{ re_replace .Keywords \"(?i)S0?(\\d{1,2})\" \"Saison $1\" }}{{ else }}&page=50{{ end }}"
+        category: 2145
+        sub_category: 2179
+      followredirect: true
+    # Film/Vidéo (Movies/Other)
+    - path: engine/search
+      categories: [2178]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2145
+        sub_category: 2178
+      followredirect: true
+    # Film/Vidéo (Movies)
+    - path: engine/search
+      categories: [2183]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2145
+        sub_category: 2183
+      followredirect: true
+    # Audio p1
+    - path: engine/search
+      categories: [2139, 2147, 2148, 2150, 2149]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2139
+      followredirect: true
+    # Audio p2
+    - path: engine/search
+      categories: [2139, 2147, 2148, 2150, 2149]
+      inputs:
+        name: "{{ .Keywords }}"
+        page: 50
+        category: 2139
+      followredirect: true
+    # Application
+    - path: engine/search
+      categories: [2144, 2177, 2176, 2171, 2172, 2174, 2175, 2173]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2144
+      followredirect: true
+    # Jeu vidéo
+    - path: engine/search
+      categories: [2142, 2167, 2159, 2160, 2162, 2163, 2165, 2164, 2166, 2161]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2142
+      followredirect: true
+    # eBook p1
+    - path: engine/search
+      categories: [2140, 2151, 2152, 2153, 2154, 2155, 2156]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2140
+      followredirect: true
+    # eBook p2
+    - path: engine/search
+      categories: [2140, 2151, 2152, 2153, 2154, 2155, 2156]
+      inputs:
+        name: "{{ .Keywords }}"
+        page: 50
+        category: 2140
+      followredirect: true
+    # Nulled
+    - path: engine/search
+      categories: [2300, 2301, 2302, 2303, 2304]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2300
+      followredirect: true
+    # Imprimante 3D
+    - path: engine/search
+      categories: [2200, 2201, 2202]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2200
+      followredirect: true
+    # Emulation
+    - path: engine/search
+      categories: [2141, 2157, 2158]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2141
+      followredirect: true
+    # GPS
+    - path: engine/search
+      categories: [2143, 2168, 2169, 2170]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2143
+      followredirect: true
+    # XXX
+    - path: engine/search
+      categories: [2188, 2401, 2189, 2190, 2191, 2402]
+      inputs:
+        name: "{{ .Keywords }}"
+        category: 2188
       followredirect: true
   inputs:
-    $raw: "{{ if eq .Config.subcategory \"all\" }}category={{ .Config.category }}{{ else }}sub_category={{ .Config.subcategory }}{{ end }}"
     do: search
     order: "{{ .Config.type }}"
     sort: "{{ .Config.sort }}"
@@ -307,11 +372,26 @@ search:
     title_normal:
       selector: td:nth-child(2) > a
       filters:
+        # Saison 1 Episode 2 > S01E02
+        - name: re_replace
+          args: ["(?i)\\b(Saisons?[\\s\\.]*)(\\d{4}(?:[\\s\\.\\-aà]+\\d{4})?)([\\s\\.]*[EÉ]pisodes?[\\s\\.]*)(\\d{1,3}(?:[\\s\\.\\-aà]+\\d{1,3})?)\\b", "{{ if .Config.enhancedAnime4 }}S$2E$4{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bSaisons?[\\s\\.]*(\\d{1,3}(?:[\\s\\.\\-aà]+\\d{1,3})?)[\\s\\.]*[EÉ]pisodes?[\\s\\.]*(\\d{1,3}(?:[\\s\\.\\-aà]+\\d{1,3})?)\\b", "S$1E$2"]
         # Saison 1 > S01
         - name: re_replace
-          args: ["(?i)\\bSaison\\s*(\\d{2,4})\\b", "S$1"]
+          args: ["(?i)\\b(Saisons?[\\s\\.]*)(\\d{4}(?:[\\s\\.\\-aà]+\\d{4})?)\\b", "{{ if .Config.enhancedAnime4 }}S$2{{ else }}$1$2{{ end }}"]
         - name: re_replace
-          args: ["(?i)\\bSaison\\s*(\\d)\\b", "S0$1"]
+          args: ["(?i)\\bSaisons?[\\s\\.]*(\\d{1,3}(?:[\\s\\.\\-aà]+\\d{1,3})?)\\b", "S$1"]
+        # Episode 1 > E01
+        - name: re_replace
+          args: ["(?i)\\b([EÉ]pisodes?[\\s\\.]*)(\\d{4}(?:[\\s\\.\\-aà]+\\d{4})?)\\b", "{{ if .Config.enhancedAnime4 }}S$2{{ else }}$1$2{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\b[EÉ]pisodes?[\\s\\.]*(\\d{1,3}(?:[\\s\\.\\-aà]+\\d{1,3})?)\\b", "S$1"]
+        # S1 à 2 > S1-2
+        - name: re_replace
+          args: ["(?i)\\b(S?\\d*[SE])(\\d{4})([\\s\\.\\-aà]+)(\\d{4})\\b", "{{ if .Config.enhancedAnime4 }}$1$2-$4{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\b(S?\\d*[SE])(\\d{1,3})[\\s\\.\\-aà]+(\\d{1,3})\\b", "$1$2-$3"]
         # Replace French date dd-mm-yyyy to yyyy.mm.dd
         - name: re_replace
           args: ["\\b(\\d{2})[\\-_\\.](\\d{2})[\\-_\\.](\\d{4})\\b", "$3.$2.$1"]
@@ -343,7 +423,7 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
       filters:
-        - name: re_replace # extend to 4 digits
+        - name: re_replace
           args: ["\\b(\\d{4})\\b", "{{ if .Config.enhancedAnime4 }}E$1{{ else }}$1{{ end }}"]
         - name: re_replace
           args: ["\\b(\\d{2,3})\\b", "{{ if .Config.enhancedAnime }}E$1{{ else }}$1{{ end }}"]
