@@ -9,7 +9,6 @@ followredirect: true
 links:
   - https://torrentgalaxy.to/
   - https://torrentgalaxy.mx/
-  - https://torrentgalaxy.su/
   - https://tgx.rs/
   - https://torrentgalaxy.unblockit.click/
   - https://torrentgalaxy.unblockninja.com/
@@ -36,6 +35,7 @@ legacylinks:
   - https://torrentgalaxy.unblockit.pet/
   - https://torrentgalaxy.unblockit.ink/
   - https://torrentgalaxy.unblockit.bio/
+  - https://torrentgalaxy.su/
 
 caps:
   categorymappings:
