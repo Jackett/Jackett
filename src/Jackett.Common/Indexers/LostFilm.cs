@@ -65,7 +65,6 @@ namespace Jackett.Common.Indexers
         // https://www.lostfilm.tv/v_search.php?c=119&s=5&e=16
         private string ReleaseUrl => SiteLink + "v_search.php";
 
-
         internal class TrackerUrlDetails
         {
             internal string seriesId { get; private set; }
@@ -123,7 +122,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -144,6 +142,13 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(1, TorznabCatType.TV);
 
             return caps;
+        }
+
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
