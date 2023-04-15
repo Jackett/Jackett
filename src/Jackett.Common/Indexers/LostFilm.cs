@@ -122,7 +122,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            LoadValuesFromJson(null);
         }
 
         private TorznabCapabilities SetCapabilities()
