@@ -43,7 +43,6 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataPasskey("You can find the Passkey if you generate a RSS " +
                                                             "feed link. It's the last parameter in the URL."))
         {
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8");
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -78,6 +77,13 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(9, TorznabCatType.Other, "Other");
 
             return caps;
+        }
+
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
