@@ -16,6 +16,7 @@ caps:
     - {id: 32, cat: TV/Sport, desc: "Basketball"}
     - {id: 34, cat: TV/Sport, desc: "Basketball - NBA"}
     - {id: 87, cat: TV/Sport, desc: "Basketball - NBA Playoffs"}
+    - {id: 117, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2023"}
     - {id: 113, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2022"}
     - {id: 111, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2021"}
     - {id: 108, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2020"}
