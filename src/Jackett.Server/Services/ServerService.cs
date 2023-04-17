@@ -73,7 +73,7 @@ namespace Jackett.Server.Services
             return path;
         }
 
-        public void Initalize()
+        public void Initialize()
         {
             try
             {

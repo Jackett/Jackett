@@ -6,7 +6,7 @@ namespace Jackett.Common.Services.Interfaces
 {
     public interface IServerService
     {
-        void Initalize();
+        void Initialize();
         void Start();
         void Stop();
         void ReserveUrls(bool doInstall = true);

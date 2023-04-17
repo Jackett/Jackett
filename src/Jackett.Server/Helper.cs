@@ -22,7 +22,7 @@ namespace Jackett.Server
         public static void Initialize()
         {
             //Load the indexers
-            ServerService.Initalize();
+            ServerService.Initialize();
 
             //Kicks off the update checker
             ServerService.Start();
