@@ -17,9 +17,9 @@ caps:
   modes:
     search: [q]
     # special handling for season & episode:
-    # - no single episodes allowed on this tracker, so it's ignored
     # - season search is mapped into keywords query
-    tv-search: [q, ep, season, imdbid]
+    # - no single episodes allowed on this tracker, so it's ignored
+    tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
 
