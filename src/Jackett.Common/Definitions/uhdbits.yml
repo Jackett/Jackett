@@ -16,7 +16,7 @@ caps:
 
   modes:
     search: [q]
-    # pretend we have support for season & episode.
+    # special handling for season & episode:
     # - no single episodes allowed on this tracker, so it's ignored
     # - season search is mapped into keywords query
     tv-search: [q, ep, season, imdbid]
