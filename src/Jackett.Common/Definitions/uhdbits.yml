@@ -16,7 +16,10 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, imdbid]
+    # pretend we have support for season & episode.
+    # - no single episodes allowed on this tracker, so it's ignored
+    # - season search is mapped into keywords query
+    tv-search: [q, ep, season, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
 
@@ -74,7 +77,7 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchstr: "{{ .Keywords }}"
+    searchstr: "{{ .Keywords }}{{ if .Query.Season }} Season {{ .Query.Season }}{{ end }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
     tags_type: 1
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
