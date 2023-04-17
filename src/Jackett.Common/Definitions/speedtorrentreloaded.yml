@@ -105,6 +105,10 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     secure_code: "{{ .Config.secure_code }}"
+  error:
+    - selector: .main .card:contains("Login fehlgeschlagen")
+      message:
+        selector: .main .card .card-block
   test:
     path: index.php
 
