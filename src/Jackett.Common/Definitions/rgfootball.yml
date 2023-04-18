@@ -452,7 +452,7 @@ caps:
     - {id: 279, cat: TV/Sport, desc: " |- Water polo"}
     - {id: 284, cat: TV/Sport, desc: " |- Canoeing - Rowing - Sailing - Surfing"}
     - {id: 303, cat: TV/Sport, desc: "Boxing / Wrestling / Judo / Karate / Taekwondo"}
-    - {id: 518" value="518, cat: TV/Sport, desc: " |- VIP-Extra"}
+    - {id: 518, cat: TV/Sport, desc: " |- VIP-Extra"}
     - {id: 310, cat: TV/Sport, desc: "Gymnastics"}
     - {id: 312, cat: TV/Sport, desc: " |- Artistic - Спортивная"}
     - {id: 311, cat: TV/Sport, desc: " |- Rhythmic - Художественная"}
