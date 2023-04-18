@@ -47,6 +47,7 @@ caps:
     - {id: 46, cat: TV/Sport, desc: "Hockey"}
     - {id: 48, cat: TV/Sport, desc: "Hockey - NHL"}
     - {id: 88, cat: TV/Sport, desc: "Hockey - NHL Playoffs"}
+    - {id: 118, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2023"}
     - {id: 114, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2022"}
     - {id: 112, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2021"}
     - {id: 102, cat: TV/Sport, desc: "Hockey - NHL Playoffs 2018-2020"}
