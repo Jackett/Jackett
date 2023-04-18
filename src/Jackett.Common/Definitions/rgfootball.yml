@@ -228,7 +228,6 @@ caps:
     - {id: 376, cat: TV/Sport, desc: " |- VIP-Extra UEFA Classic"}
     - {id: 212, cat: TV/Sport, desc: " |- VIP UEFA"}
     - {id: 421, cat: TV/Sport, desc: " |- VIP-Light UEFA"}
-    - {id: 383, cat: TV/Sport, desc: " |- 2020-21 UEFA Youth League"}
     - {id: 377, cat: TV/Sport, desc: " |- UEFA Super Cup"}
     - {id: 74, cat: TV/Sport, desc: " |- UEFA Champions League"}
     - {id: 75, cat: TV/Sport, desc: " |- UEFA Europa League"}
