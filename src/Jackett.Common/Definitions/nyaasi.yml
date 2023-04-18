@@ -148,13 +148,27 @@ search:
           args: ["=", -1]
     title_default:
       selector: td:nth-child(2) a:last-of-type
-    title:
+    title_spanish:
       selector: td:nth-child(2) a:last-of-type:contains("[PuyaSubs!] ")
       optional: true
-      default: "{{ .Result.title_default }}"
       filters:
         - name: append
           args: " Spanish"
+    title:
+      text: "{{ or (.Result.title_spanish) (.Result.title_default) }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(\\d{2,})(st|nd|rd|th) Season\\b", "$0 S$1"]
+        - name: re_replace
+          args: ["(?i)\\b(\\d)(st|nd|rd|th) Season\\b", "$0 S0$1"]
+        - name: re_replace
+          args: ["(?i)\\bSeason (\\d{2,})\\b", "$0 S$1"]
+        - name: re_replace
+          args: ["(?i)\\bSeason (\\d)\\b", "$0 S0$1"]
+        - name: re_replace
+          args: ["\\b (II) - (\\d+)", " $1 S02 - $2"]
+        - name: re_replace
+          args: ["\\b (III) - (\\d+)", " $1 S03 - $2"]
     details:
       selector: td:nth-child(2) a:last-of-type
       attribute: href
