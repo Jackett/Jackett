@@ -128,6 +128,7 @@ caps:
     - {id: 287, cat: Audio, desc: "Audio-Non-Fiction"}
     - {id: 286, cat: Audio, desc: "Audio-Fiction"}
     - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
+    - {id: 345, cat: Books, desc: "Yachting, sailing, boating-Solar boats"}
     - {id: 318, cat: Books, desc: "Yachting, sailing, boating-Sailing life"}
     - {id: 298, cat: Books, desc: "Yachting, sailing, boating-Cruising Guides"}
     - {id: 297, cat: Books, desc: "Yachting, sailing, boating-Weather Sailing"}
