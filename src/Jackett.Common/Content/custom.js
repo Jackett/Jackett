@@ -72,11 +72,6 @@ function getHashArgs() {
     }, prev), {});
 }
 
-function insertWordWrap(str) {
-    // insert optional word wrap after punctuation to avoid overflows on long scene titles
-    return str.replace(/([\.\-_\/\\])/g, "$1\u200B");
-}
-
 function type_filter(indexer) {
   return indexer.type == this.value;
 }
@@ -1155,12 +1150,6 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
 
         var trackerId = filterId || "all";
         api.resultsForIndexer(trackerId, queryObj, function (data) {
-            for (var i = 0; i < data.Results.length; i++) {
-                var item = data.Results[i];
-                item.Title = insertWordWrap(item.Title);
-                item.CategoryDesc = insertWordWrap(item.CategoryDesc);
-            }
-
             $('#jackett-search-perform').html($('#search-button-ready').html());
             var searchResults = $('#searchResults');
             searchResults.empty();
@@ -1307,7 +1296,7 @@ $.fn.dataTable.ext.search = [
 ];
 
 function updateSearchResultTable(element, results) {
-    var resultsTemplate = Handlebars.compile($("#jackett-search-results").html());
+    var resultsTemplate = Handlebars.compile($("#jackett-search-results").text());
     element.html($(resultsTemplate(results)));
     element.find('tr.jackett-search-results-row').each(function () {
         updateReleasesRow(this);
@@ -1504,11 +1493,6 @@ function bindUIButtons() {
 
     $("#jackett-show-releases").click(function () {
         api.getServerCache(function (data) {
-            for (var i = 0; i < data.length; i++) {
-                var item = data[i];
-                item.Title = insertWordWrap(item.Title);
-                item.CategoryDesc = insertWordWrap(item.CategoryDesc);
-            }
             var releaseTemplate = Handlebars.compile($("#jackett-releases").html());
             var item = {
                 releases: data,
