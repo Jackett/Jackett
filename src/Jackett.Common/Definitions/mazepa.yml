@@ -36,7 +36,8 @@ caps:
     - {id: 15, cat: TV/Documentary, desc: " |- Документальне SD"}
     - {id: 42, cat: TV/Documentary, desc: " |- Документальне HD"}
     - {id: 157, cat: TV/Documentary, desc: " |- Документальне UHD"}
-    - {id: 20, cat: TV/Sport, desc: " |- Формула 1 Сезон 2022"}
+    - {id: 20, cat: TV/Sport, desc: " |- Формула 1 Сезон 2023"}
+    - {id: 167, cat: TV/Sport, desc: " |- Формула 1 Сезон 2022"}
     - {id: 79, cat: TV/Sport, desc: " |- Формула 1 Сезони 2017-2021"}
     - {id: 21, cat: TV/Sport, desc: " |- Формула 1 Сезони 2007-2016"}
     - {id: 75, cat: TV/Sport, desc: " |- Формула 1 Сезони до 2006"}
