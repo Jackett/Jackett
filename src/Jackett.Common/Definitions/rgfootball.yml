@@ -498,7 +498,7 @@ caps:
     - {id: 240, cat: TV/Sport, desc: " |- VIP-Extra Belgium"}
     - {id: 546, cat: TV/Sport, desc: " |- VIP-Extra Colombia"}
     - {id: 509, cat: TV/Sport, desc: " |- VIP-Extra 2019 FIFA U-17 World Cup"}
-    - {id: 510, cat: TV/Sport, desc: " |- "VIP 2019 FIFA U-17 World Cup}
+    - {id: 510, cat: TV/Sport, desc: " |- VIP 2019 FIFA U-17 World Cup"}
     - {id: 443, cat: TV/Sport, desc: " |- VIP-Extra 2019 FIFA U-20 World Cup"}
     - {id: 429, cat: TV/Sport, desc: " |- VIP-Extra Real Madrid 2020-21"}
 
