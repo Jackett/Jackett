@@ -146,6 +146,14 @@ search:
       filters:
         - name: split
           args: ["=", -1]
+    category_group_id:
+      selector: td:nth-child(1) a
+      attribute: href
+      filters:
+        - name: split
+          args: ["=", -1]
+        - name: split
+          args: ["_", 0]
     title_default:
       selector: td:nth-child(2) a:last-of-type
     title_spanish:
@@ -154,7 +162,7 @@ search:
       filters:
         - name: append
           args: " Spanish"
-    title:
+    title_optional:
       text: "{{ or (.Result.title_spanish) (.Result.title_default) }}"
       filters:
         - name: re_replace
@@ -169,6 +177,18 @@ search:
           args: ["\\b (II) - (\\d+)", " $1 S02 - $2"]
         - name: re_replace
           args: ["\\b (III) - (\\d+)", " $1 S03 - $2"]
+    title_has_season:
+      text: "{{ .Result.title_optional }}"
+      filters:
+        - name: regexp
+          args: "(?i)\\b(S\\d{1,3}(E\\d+)?)\\b"
+        - name: append
+          args: "NULL"
+    title:
+      text: "{{ .Result.title_optional }}"
+      filters:
+        - name: append
+          args: "{{ if and (eq .Result.category_group_id \"1\") (eq .Result.title_has_season \"NULL\") }} S01{{ else }}{{ end }}"
     details:
       selector: td:nth-child(2) a:last-of-type
       attribute: href
