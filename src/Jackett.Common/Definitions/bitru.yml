@@ -58,7 +58,7 @@ search:
   inputs:
     s: "{{ .Keywords }}"
     sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
-    $raw: "{{ if .Config.adverts }}{{ else }}&rek=no{{ end}}"
+    rek: "{{ if .Config.adverts }}{{ else }}no{{ end }}"
 
   keywordsfilters:
     - name: re_replace # S01 or S01E01 to 1 сезон
