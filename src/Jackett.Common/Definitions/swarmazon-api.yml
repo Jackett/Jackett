@@ -36,6 +36,10 @@ settings:
     type: info
     label: About your API key
     default: "Find or Generate a new API Token by accessing the <a href=\"https://swarmazon.club/en/view/settings.php?section=token\" target =_blank>Token Setting</a> page."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
 
 login:
   path: api/search.php
@@ -55,7 +59,8 @@ search:
   inputs:
     api_key: "{{ .Config.apikey }}"
     filter: "{{ .Keywords }}"
-    $raw: "{{ if .Query.IMDBID }}&media_ref={{ .Query.IMDBID }}{{ else }}{{ end }}"
+    media_ref: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     limit: 100
 
   rows:
