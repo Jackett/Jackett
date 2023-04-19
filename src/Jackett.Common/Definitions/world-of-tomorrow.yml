@@ -57,6 +57,8 @@ caps:
     - {id: 92, cat: Console, desc: "Wimmelbild"}
     - {id: 28, cat: PC, desc: "Windows-Programme"}
     - {id: 23, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 108, cat: TV, desc: "WOTT-CREW"}
+    - {id: 108, cat: Movies, desc: "WOTT-CREW"}
     - {id: 88, cat: XXX, desc: "XXX"}
     - {id: 106, cat: XXX/ImageSet, desc: "XXX Bilder"}
     - {id: 102, cat: XXX, desc: "XXX HENTAI"}
