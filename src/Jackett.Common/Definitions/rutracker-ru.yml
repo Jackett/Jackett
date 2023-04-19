@@ -98,15 +98,18 @@ caps:
     - {id: 1318, cat: Movies, desc: " |- Детские фильмы, сказки, сериалы"}
     - {id: 804, cat: Movies, desc: " |- Сборники фильмов / Фильмографии"}
     # Сериалы TV
-    - {id: 17, cat: TV, desc: "Зарубежные сериалы"}
-    - {id: 1551, cat: TV/UHD, desc: " |- [4K | ULTRA HD | 2160p]"}
-    - {id: 1085, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
+    - {id: 1708, cat: TV, desc: " |- Зарубежные сериалы"}
+    - {id: 1710, cat: TV/HD, desc: " |- Зарубежные сериалы (HD Video)"}
+    - {id: 1709, cat: TV, desc: " |- Отечественные сериалы"}
+    - {id: 1711, cat: TV/HD, desc: " |- Отечественные сериалы (HD Video)"}
+    - {id: 1705, cat: TV/WEB-DL, desc: " |- WEBRip, WEB-DLRip, SATRip"}
     - {id: 1086, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
+    - {id: 1085, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
+    - {id: 1551, cat: TV/UHD, desc: " |- [4K | ULTRA HD | 2160p]"}
     - {id: 1087, cat: TV/SD, desc: " |- DVD5 , DVD9"}
     - {id: 1703, cat: TV/WEB-DL, desc: " |- WEBRip, WEB-DLRip, SATRip"}
-    - {id: 16, cat: TV, desc: "Отечественные сериалы"}
-    - {id: 1082, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1083, cat: TV/HD, desc: " |- BDRip 720p , WEB-DL 720p , HDTVRip 720p"}
+    - {id: 1082, cat: TV/HD, desc: " |- BDRip 1080p , HDTV 1080 , WEB-DL 1080р"}
     - {id: 1084, cat: TV/SD, desc: " |- DVD5 , DVD9"}
     # Мультипликация Animation
     - {id: 125, cat: TV, desc: "Мультфильмы"}
@@ -200,15 +203,6 @@ caps:
     - {id: 1595, cat: Audio/MP3, desc: " |- Emocore, Post-hardcore, Metalcore, Deathcore"}
     - {id: 1596, cat: Audio/MP3, desc: " |- Gothic Rock&Dark Folk"}
     - {id: 1597, cat: Audio/MP3, desc: " |- Avant-garde, Experimental Rock"}
-    - {id: 1598, cat: Audio/MP3, desc: "Отечественный Rock, Metal"}
-    - {id: 1599, cat: Audio/MP3, desc: " |- Отечественный Rock (mp3)"}
-    - {id: 1600, cat: Audio/MP3, desc: " |- Отечественный Metal (mp3)"}
-    - {id: 1601, cat: Audio/MP3, desc: " |- Сборники Rock, Metal (mp3)"}
-    - {id: 1623, cat: Audio/MP3, desc: "Jazz and Blues  (Джаз и Блюз)"}
-    - {id: 1626, cat: Audio/MP3, desc: " |- Зарубежный джаз (mp3)"}
-    - {id: 1627, cat: Audio/MP3, desc: " |- Зарубежный блюз (mp3)"}
-    - {id: 1628, cat: Audio/MP3, desc: " |- Отечественный джаз и блюз (mp3)"}
-    - {id: 1171, cat: Audio/MP3, desc: "Электронная музыка"}
     - {id: 1610, cat: Audio/MP3, desc: " |- Goa Trance, Psy-Trance"}
     - {id: 1611, cat: Audio/MP3, desc: " |- PsyChill, Ambient, Dub"}
     - {id: 1457, cat: Audio/MP3, desc: " |- Trance"}
