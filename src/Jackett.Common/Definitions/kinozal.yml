@@ -174,7 +174,7 @@ search:
     w: "{{ if .Config.freeleech }}11{{ else }}0{{ end }}"
     t: "{{ .Config.sort }}"
     f: "{{ .Config.type }}"
-    $raw: "{{ if .Config.sid }}sid={{ .Config.sid }}{{ else }}{{ end }}"
+    sid: "{{ if .Config.sid }}{{ .Config.sid }}{{ else }}{{ end }}"
 
   rows:
     selector: table > tbody > tr:has(td.bt)
