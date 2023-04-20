@@ -121,22 +121,21 @@ settings:
 login:
   path: index.php?act=Login&CODE=00
   method: form
-  form: form[action^="?act=Login"]
+  form: form[action$="&act=Login&CODE=01"]
   inputs:
     UserName: "{{ .Config.username }}"
     PassWord: "{{ .Config.password }}"
     Privacy: 1
     CookieDate: 1
     CODE: 01
-    referer: "https://forums.mvgroup.org/index.php?"
+    referer: "https://forums.mvgroup.org/index.php?act=Login"
     act: Login
   error:
     - selector: div.borderwrap:has(div.tablepad)
       message:
         selector: div.borderwrap div.tablepad
   test:
-    path: index.php?https://forums.mvgroup.org/
-    selector: tr td.nav_mem div span[id="member_menu"]
+    path: forumtracker.php
 
 search:
   paths:
