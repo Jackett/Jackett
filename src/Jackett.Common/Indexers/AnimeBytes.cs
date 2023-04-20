@@ -377,15 +377,21 @@ namespace Jackett.Common.Indexers
                         // MST with additional 5 hours per GB
                         var minimumSeedTime = 259200 + (int)(size / (int)Math.Pow(1024, 3) * 18000);
 
-                        var properties = WebUtility.HtmlDecode(torrent.Value<string>("Property"))
-                           .Split('|')
-                           .Select(t => t.Trim())
-                           .Where(p => p.IsNotNullOrWhiteSpace())
-                           .ToList();
+                        var propertyList = WebUtility.HtmlDecode(torrent.Value<string>("Property"))
+                             .Split('|')
+                             .Select(t => t.Trim())
+                             .Where(p => p.IsNotNullOrWhiteSpace())
+                             .ToList();
 
-                        properties.RemoveAll(p => _excludedProperties.Any(p.ContainsIgnoreCase));
+                        propertyList.RemoveAll(p => _excludedProperties.Any(p.ContainsIgnoreCase));
+                        var properties = new HashSet<string>(propertyList);
 
-                        if (!AllowRaws && properties.Any(p => p.StartsWithIgnoreCase("RAW")))
+                        if (properties.Any(p => p.StartsWithIgnoreCase("M2TS")))
+                        {
+                            properties.Add("BR-DISK");
+                        }
+
+                        if (!AllowRaws && properties.Any(p => p.StartsWithIgnoreCase("RAW") || p.Contains("BR-DISK")))
                         {
                             continue;
                         }
