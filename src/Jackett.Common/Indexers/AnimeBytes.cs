@@ -388,7 +388,10 @@ namespace Jackett.Common.Indexers
                         {
                             var resolutionProperty = properties.FirstOrDefault(_RemuxResolutions.ContainsIgnoreCase);
 
-                            properties.Add(resolutionProperty.IsNotNullOrWhiteSpace() ? $"{resolutionProperty} Remux" : "Remux");
+                            if (resolutionProperty.IsNotNullOrWhiteSpace())
+                            {
+                                properties.Add($"{resolutionProperty} Remux");
+                            }
                         }
 
                         if (properties.Any(p => p.StartsWithIgnoreCase("M2TS")))
@@ -428,13 +431,24 @@ namespace Jackett.Common.Indexers
 
                         season ??= ParseSeasonFromTitles(synonyms);
 
-                        if (PadEpisode && episode > 0)
+                        if (season > 0 || episode > 0)
                         {
-                            releaseInfo = $" - {episode:00}";
-                        }
-                        else if (season > 0)
-                        {
-                            releaseInfo = $"S{season:00}";
+                            releaseInfo = string.Empty;
+
+                            if (season > 0)
+                            {
+                                releaseInfo = $"S{season:00}";
+
+                                if (episode > 0)
+                                {
+                                    releaseInfo += $"E{episode:00}";
+                                }
+                            }
+
+                            if (PadEpisode && episode > 0)
+                            {
+                                releaseInfo += $" - {episode:00}";
+                            }
                         }
 
                         if (FilterSeasonEpisode)
@@ -630,7 +644,7 @@ namespace Jackett.Common.Indexers
         {
             var advancedSeasonRegex = new Regex(@"(\d+)(st|nd|rd|th) Season", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var seasonCharactersRegex = new Regex(@"(I{2,})$", RegexOptions.Compiled);
-            var seasonNumberRegex = new Regex(@"([2-9])$", RegexOptions.Compiled);
+            var seasonNumberRegex = new Regex(@"\b([2-9])$", RegexOptions.Compiled);
 
             foreach (var title in titles)
             {
