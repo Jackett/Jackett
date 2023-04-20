@@ -128,7 +128,7 @@ namespace Jackett.Common.Indexers
             {
                 var parser = new HtmlParser();
                 var dom = parser.ParseDocument(responseContent);
-                var messageEl = dom.QuerySelectorAll(".error").First();
+                var messageEl = dom.QuerySelectorAll("#loginError").First();
                 var errorMessage = messageEl.Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
