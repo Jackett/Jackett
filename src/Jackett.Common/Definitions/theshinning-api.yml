@@ -21,6 +21,8 @@ caps:
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: TV/Sport, desc: "Wrestling"}
     - {id: 8, cat: Books, desc: "Ebooks"}
+    - {id: 11, cat: Movies, desc: "TSH-Movie"}
+    - {id: 12, cat: TV, desc: "TSH-Serien"}
 
   modes:
     search: [q]
