@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            releases.AddRange(await GetResults(query, "anime", StripEpisodeNumber(query.SanitizedSearchTerm.Trim())));
+            releases.AddRange(await GetResults(query, "anime", CleanSearchTerm(query.SanitizedSearchTerm.Trim())));
 
             if (ContainsMusicCategories(query.Categories))
             {
@@ -144,12 +144,14 @@ namespace Jackett.Common.Indexers
                    .ToArray();
         }
 
-        private string StripEpisodeNumber(string term)
+        private string CleanSearchTerm(string term)
         {
             // Tracer does not support searching with episode number so strip it if we have one
-            term = Regex.Replace(term, @"\W(\dx)?\d?\d$", string.Empty);
-            term = Regex.Replace(term, @"\W(S\d\d?E)?\d?\d$", string.Empty);
-            term = Regex.Replace(term, @"\W\d+$", string.Empty);
+            term = Regex.Replace(term, @"\W(\dx)?\d?\d$", string.Empty, RegexOptions.Compiled);
+            term = Regex.Replace(term, @"\W(S\d\d?E)?\d?\d$", string.Empty, RegexOptions.Compiled);
+            term = Regex.Replace(term, @"\W\d+$", string.Empty, RegexOptions.Compiled);
+
+            term = Regex.Replace(term.Trim(), @"\bThe Movie$", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
             return term.Trim();
         }
