@@ -402,16 +402,18 @@ namespace Jackett.Common.Indexers
                             properties.Add("BR-DISK");
                         }
 
-                        if (!AllowRaws && properties.Any(p => p.StartsWithIgnoreCase("RAW") || p.Contains("BR-DISK")))
+                        if (!AllowRaws &&
+                            categoryName == "Anime" &&
+                            properties.Any(p => p.StartsWithIgnoreCase("RAW") || p.Contains("BR-DISK")))
                         {
                             continue;
                         }
 
-                        var releaseInfo = categoryName == "Anime" ? "S01" : "";
-                        var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
-
-                        int? episode = null;
                         int? season = null;
+                        int? episode = null;
+
+                        var releaseInfo = string.Empty;
+                        var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
 
                         if (editionTitle.IsNotNullOrWhiteSpace())
                         {
@@ -432,7 +434,13 @@ namespace Jackett.Common.Indexers
                             }
                         }
 
-                        season ??= ParseSeasonFromTitles(synonyms);
+                        if (categoryName == "Anime")
+                        {
+                            season ??= ParseSeasonFromTitles(synonyms);
+
+                            // Default to S01
+                            season ??= 1;
+                        }
 
                         if (season > 0 || episode > 0)
                         {
