@@ -51,6 +51,7 @@ namespace Jackett.Common.Indexers
             "RAW",
             "Translated"
         };
+        private static readonly HashSet<string> _ExcludedFileExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".mka", ".mds", ".md5", ".nfo", ".sfv", ".ass", ".mks", ".srt", ".ssa", ".sup", ".jpeg", ".jpg", ".png", ".otf", ".ttf" };
 
         private ConfigurationDataAnimeBytes ConfigData => (ConfigurationDataAnimeBytes)configData;
 
@@ -595,9 +596,21 @@ namespace Jackett.Common.Indexers
                             releases.Add(release);
                         }
 
-                        if (AddFileNameTitles && fileCount == 1)
+                        if (AddFileNameTitles && torrent.Value<JToken>("FileList") != null)
                         {
-                            var releaseTitle = Path.GetFileNameWithoutExtension(torrent.Value<JToken>("FileList")?.First().Value<string>("filename"));
+                            var files = torrent.Value<JToken>("FileList").ToList();
+
+                            if (files.Count > 1)
+                            {
+                                files = files.Where(f => !_ExcludedFileExtensions.Contains(Path.GetExtension(f.Value<string>("filename")))).ToList();
+                            }
+
+                            if (files.Count != 1)
+                            {
+                                continue;
+                            }
+
+                            var releaseTitle = files.First().Value<string>("filename");
 
                             var guid = new Uri(details + "&nh=" + StringUtil.Hash(releaseTitle));
 
