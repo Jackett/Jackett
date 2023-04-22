@@ -308,10 +308,6 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Access this tracker with your browser</li><li>click on the <b>Apply Filter</b> button on the page to invoke the search and solve the challenge</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
-  - name: info_themes
-    type: info
-    label: About themes
-    default: Only the default theme <b>Demonoid - v5</b> is supported. If you are using v3 then change it in your <i>User Control Panel</i> or you will get 0 results.
   - name: sort
     type: select
     label: Sort requested from site
@@ -333,12 +329,18 @@ login:
 download:
   infohash:
     hash:
-      selector: div:contains("Torrent hash") > div.col-md-5 > div
+      selector: tr:has(td:contains("Torrent hash"))
       filters:
+        # 907617B7 070AACB6 08CC213C 5277368D 217C1666
         - name: replace
           args: [" ", ""]
+        - name: regexp
+          args: ([A-F|0-9]{40})
     title:
-      selector: h1[id="torrent--title"]
+      selector: td.ctable_header
+      filters:
+        - name: replace
+          args: ["Details for ", ""]
 
 search:
   paths:
@@ -361,11 +363,10 @@ search:
     # does not return imdb link in results
 
   rows:
-    # only the default theme "Demonoid - v5" is supported
-    selector: table.table tbody tr.table__row:has(td[class*="tone_"])
+    selector: table.font_12px tbody tr:has(td[class^="tone_"]):not(:has(script))
     after: 1
     dateheaders:
-      selector: tr td.table__separator:not(:contains("Sponsored links"))
+      selector: td.added_today:not(:contains("Sponsored links"))
       filters:
         - name: replace
           args: ["Added ", ""]
@@ -374,7 +375,7 @@ search:
 
   fields:
     category:
-      selector: span.table__column__subtext > a:nth-child(2)
+      selector: a.subcategory
       attribute: href
       optional: true
       default: 0
@@ -389,25 +390,16 @@ search:
     download:
       selector: a[href^="/files/details/"]
       attribute: href
-    poster:
-      selector: div[title]
-      attribute: data-bs-content
-      filters:
-        - name: regexp
-          args: src='(.+?)'
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
     description:
-      selector: td:nth-last-child(7)
+      selector: td:nth-last-child(8)
     size:
-      selector: td:nth-last-child(5)
+      selector: td:nth-last-child(6)
     grabs:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     seeders:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
     leechers:
-      selector: td:nth-last-child(1)
+      selector: td:nth-last-child(2)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
