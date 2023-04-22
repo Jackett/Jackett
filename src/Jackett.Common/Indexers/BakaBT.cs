@@ -33,7 +33,6 @@ namespace Jackett.Common.Indexers
 
         private string SearchUrl => SiteLink + "browse.php?only=0&hentai=1&incomplete=1&lossless=1&hd=1&multiaudio=1&bonus=1&reorder=1&q=";
         private string LoginUrl => SiteLink + "login.php";
-        private readonly string LogoutStr = "logout.php";
         private bool AddRomajiTitle => configData.AddRomajiTitle.Value;
         private bool AppendSeason => configData.AppendSeason.Value;
 
@@ -127,12 +126,11 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginForm.Cookies, true, null, SiteLink);
-            var responseContent = response.ContentString;
 
-            await ConfigureIfOK(response.Cookies, responseContent.Contains(LogoutStr), () =>
+            await ConfigureIfOK(response.Cookies, response.ContentString != null && !response.ContentString.Contains("loginForm"), () =>
             {
-                var document = htmlParser.ParseDocument(responseContent);
-                var errorMessage = document.QuerySelector("#loginError")?.Text().Trim();
+                var document = htmlParser.ParseDocument(response.ContentString);
+                var errorMessage = document.QuerySelector("#loginError, .error")?.Text().Trim();
 
                 throw new ExceptionWithConfigData(errorMessage ?? "Login failed.", configData);
             });
@@ -148,8 +146,9 @@ namespace Jackett.Common.Indexers
 
             var releases = new List<ReleaseInfo>();
             var episodeSearchUrl = SearchUrl + WebUtility.UrlEncode(searchString);
+
             var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl);
-            if (!response.ContentString.Contains(LogoutStr))
+            if (response.ContentString.Contains("loginForm"))
             {
                 //Cookie appears to expire after a period of time or logging in to the site via browser
                 await DoLogin();
