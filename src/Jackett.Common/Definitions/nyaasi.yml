@@ -190,8 +190,6 @@ search:
         - name: re_replace
           args: ["(?i)\\b(.+? - )(\\d+)([\\s\\-~\\+àa&]+)(\\d+) ([\\[\\(])\\b", "$1S01E$2-$4 - $2$3$4 $5"]
         - name: re_replace
-          args: ["(?i)\\b(.+? - )(\\d+) ([\\[\\(])\\b", "$1S01E$2 - $2 $3"]
-        - name: re_replace
           args: ["(?i)\\b(?:S\\s|Seasons?\\s?)(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\s(?:EP|Episodes?)?\\s?(?:\\d+(?:-\\d+)?)?\\s?S\\d+(?:E\\d+(?:-\\d+)?)?)", "$0 S$1"]
         - name: re_replace
           args: ["(?i)\\b(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?(?:E\\d+(?:-\\d+)?)?)", "$0 S01E$1"]
@@ -202,11 +200,18 @@ search:
           args: "(?i)(S\\d{1,3}(E\\d+)?)"
         - name: append
           args: "NULL"
+    title_has_episode:
+      text: "{{ .Result.title_optional }}"
+      filters:
+        - name: regexp
+          args: "\\b(.+? - ?)(\\d+) ([\\[\\(])\\b"
+        - name: append
+          args: "NULL"
     title:
       text: "{{ .Result.title_optional }}"
       filters:
         - name: append
-          args: "{{ if and (eq .Result.category_group_id \"1\") (eq .Result.title_has_season \"NULL\") }} S01{{ else }}{{ end }}"
+          args: "{{ if and (eq .Result.category_group_id \"1\") (and (eq .Result.title_has_season \"NULL\") (eq .Result.title_has_episode \"NULL\")) }} S01{{ else }}{{ end }}"
     details:
       selector: td:nth-child(2) a:last-of-type
       attribute: href
