@@ -412,7 +412,7 @@ namespace Jackett.Common.Indexers
                         int? season = null;
                         int? episode = null;
 
-                        var releaseInfo = string.Empty;
+                        var releaseInfo = categoryName == "Anime" ? "S01" : "";
                         var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
 
                         if (editionTitle.IsNotNullOrWhiteSpace())
@@ -437,28 +437,19 @@ namespace Jackett.Common.Indexers
                         if (categoryName == "Anime")
                         {
                             season ??= ParseSeasonFromTitles(synonyms);
-
-                            // Default to S01
-                            season ??= 1;
                         }
 
-                        if (season > 0 || episode > 0)
+                        if (PadEpisode && episode > 0 && season == null)
                         {
-                            releaseInfo = string.Empty;
+                            releaseInfo = $"- {episode:00}";
+                        }
+                        else if (season > 0)
+                        {
+                            releaseInfo = $"S{season:00}";
 
-                            if (season > 0)
+                            if (episode > 0)
                             {
-                                releaseInfo = $"S{season:00}";
-
-                                if (episode > 0)
-                                {
-                                    releaseInfo += $"E{episode:00}";
-                                }
-                            }
-
-                            if (PadEpisode && episode > 0)
-                            {
-                                releaseInfo += $" - {episode:00}";
+                                releaseInfo += $"E{episode:00} - {episode:00}";
                             }
                         }
 
