@@ -104,6 +104,9 @@ search:
       filters:
         - name: querystring
           args: category
+        - name: re_replace
+          args: ["(\\b0\\b)", "31"]
+
     title:
       selector: a[href^="index.php?page=torrent-details&id="]
     details:
