@@ -188,8 +188,6 @@ search:
         - name: re_replace
           args: ["(?i)\\b(S\\d+(?:-\\d+)?) - (\\d+)\\b", "$1E$2"]
         - name: re_replace
-          args: ["(?i)\\b(.+? - )(\\d+)([\\s\\-~\\+àa&]+)(\\d+) ([\\[\\(])\\b", "$1S01E$2-$4 - $2$3$4 $5"]
-        - name: re_replace
           args: ["(?i)\\b(?:S\\s|Seasons?\\s?)(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\s(?:EP|Episodes?)?\\s?(?:\\d+(?:-\\d+)?)?\\s?S\\d+(?:E\\d+(?:-\\d+)?)?)", "$0 S$1"]
         - name: re_replace
           args: ["(?i)\\b(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?(?:E\\d+(?:-\\d+)?)?)", "$0 S01E$1"]
