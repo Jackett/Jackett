@@ -31,6 +31,7 @@ caps:
     - {id: 51, cat: XXX/DVD, desc: "Erotika Video"}
     - {id: 52, cat: XXX/Other, desc: "Erotika Ostalo"}
     - {id: 53, cat: Other/Misc, desc: "Ostalo Ostalo"}
+    - {id: 55, cat: TV/Documentary, desc: "Dokumentarci Xvid"}
 
   modes:
     search: [q]
