@@ -39,9 +39,9 @@ namespace Jackett.Common.Indexers
         private static readonly Regex _DateRegex = new Regex("Dodano: (\\d{2}\\/\\d{2}\\/\\d{4})", RegexOptions.Compiled);
         private static readonly Regex _SeedsRegex = new Regex("Seedów: (\\d+)", RegexOptions.Compiled);
         private static readonly Regex _LeechersRegex = new Regex("Leecherów: (\\d+)", RegexOptions.Compiled);
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLogin configData
         {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            get => (ConfigurationDataBasicLogin)base.configData;
             set => base.configData = value;
         }
 
@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                   configData: new ConfigurationDataBasicLogin())
         {
         }
 
