@@ -32,7 +32,6 @@ namespace Jackett.Common.Indexers
         private string SearchUrl => SiteLink + "search";
         private string TorrentsUrl => SiteLink + "torrents";
         private string ShowUrl => SiteLink + "show";
-        private string RSSProfile => SiteLink + "rss_feeds";
 
         private new ConfigurationDataShazbat configData => (ConfigurationDataShazbat)base.configData;
 
@@ -86,16 +85,6 @@ namespace Jackett.Common.Indexers
             {
                 throw new ExceptionWithConfigData("The username and password entered do not match.", configData);
             });
-
-            var rssProfile = await RequestWithCookiesAndRetryAsync(RSSProfile);
-            var parser = new HtmlParser();
-            var rssDom = parser.ParseDocument(rssProfile.ContentString);
-
-            configData.RSSKey.Value = rssDom.QuerySelector(".col-sm-9:nth-of-type(1)")?.TextContent.Trim();
-            if (string.IsNullOrWhiteSpace(configData.RSSKey.Value))
-                throw new ExceptionWithConfigData("Failed to find RSS key.", configData);
-
-            SaveConfig();
 
             return IndexerConfigurationStatus.RequiresTesting;
         }

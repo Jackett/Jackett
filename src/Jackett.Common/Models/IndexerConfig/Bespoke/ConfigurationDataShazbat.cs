@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
     [ExcludeFromCodeCoverage]
-    internal class ConfigurationDataShazbat : ConfigurationDataBasicLoginWithRSS
+    internal class ConfigurationDataShazbat : ConfigurationDataBasicLogin
     {
         public SingleSelectConfigurationItem ShowPagesFetchLimit { get; private set; }
 

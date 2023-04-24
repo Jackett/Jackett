@@ -36,9 +36,9 @@ namespace Jackett.Common.Indexers
             {"Content-Type", "application/json"}
         };
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLogin configData
         {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            get => (ConfigurationDataBasicLogin)base.configData;
             set => base.configData = value;
         }
 
@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay())
+                   configData: new ConfigurationDataBasicLogin())
         {
             configData.AddDynamic("token", new HiddenStringConfigurationItem("token"));
             configData.AddDynamic("passkey", new HiddenStringConfigurationItem("passkey"));

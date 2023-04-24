@@ -34,9 +34,9 @@ namespace Jackett.Common.Indexers
         private string LoginUrl => SiteLink + "takelogin.php";
         private string CaptchaUrl => SiteLink + "simpleCaptcha.php?numImages=1";
 
-        private new ConfigurationDataBasicLoginWithRSSAndDisplay configData
+        private new ConfigurationDataBasicLogin configData
         {
-            get => (ConfigurationDataBasicLoginWithRSSAndDisplay)base.configData;
+            get => (ConfigurationDataBasicLogin)base.configData;
             set => base.configData = value;
         }
 
@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithRSSAndDisplay("Only the results from the first search result page are shown, adjust your profile settings to show the maximum."))
+                   configData: new ConfigurationDataBasicLogin("Only the results from the first search result page are shown, adjust your profile settings to show the maximum."))
         {
         }
 
@@ -98,8 +98,8 @@ namespace Jackett.Common.Indexers
 
             var result2 = await RequestLoginAndFollowRedirect(LoginUrl, pairs, result1.Cookies, true, null, null, true);
 
-            await ConfigureIfOK(result2.Cookies, result2.ContentString.Contains("logout.php"), () =>
-                                    throw new ExceptionWithConfigData("Login Failed", configData));
+            await ConfigureIfOK(result2.Cookies, result2.ContentString.Contains("logout.php"), () => throw new ExceptionWithConfigData("Login Failed", configData));
+
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
