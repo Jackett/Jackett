@@ -363,7 +363,7 @@ search:
     # does not return imdb link in results
 
   rows:
-    selector: table.font_12px tbody tr:has(td[class^="tone_"]):not(:has(script))
+    selector: table.font_12px tbody tr:has(td[class^="tone_1"]):not(:has(script))
     after: 1
     dateheaders:
       selector: td.added_today:not(:contains("Sponsored links"))
