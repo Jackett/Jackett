@@ -419,14 +419,14 @@ namespace Jackett.Common.Indexers
                         {
                             releaseInfo = WebUtility.HtmlDecode(editionTitle);
 
-                            var seasonRegex = new Regex(@"Season (\d+)", RegexOptions.Compiled);
+                            var seasonRegex = new Regex(@"\bSeason (\d+)\b", RegexOptions.Compiled);
                             var seasonRegexMatch = seasonRegex.Match(releaseInfo);
                             if (seasonRegexMatch.Success)
                             {
                                 season = ParseUtil.CoerceInt(seasonRegexMatch.Groups[1].Value);
                             }
 
-                            var episodeRegex = new Regex(@"Episode (\d+)", RegexOptions.Compiled);
+                            var episodeRegex = new Regex(@"\bEpisode (\d+)\b", RegexOptions.Compiled);
                             var episodeRegexMatch = episodeRegex.Match(releaseInfo);
                             if (episodeRegexMatch.Success)
                             {
@@ -658,7 +658,7 @@ namespace Jackett.Common.Indexers
         {
             var advancedSeasonRegex = new Regex(@"(\d+)(st|nd|rd|th) Season", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var seasonCharactersRegex = new Regex(@"(I{2,})$", RegexOptions.Compiled);
-            var seasonNumberRegex = new Regex(@"\b([2-9])$", RegexOptions.Compiled);
+            var seasonNumberRegex = new Regex(@"\b(?:S)?([2-9])$", RegexOptions.Compiled);
 
             foreach (var title in titles)
             {
