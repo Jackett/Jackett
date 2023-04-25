@@ -97,6 +97,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(80, TorznabCatType.AudioAudiobook, "Audiobooks");
             caps.Categories.AddCategoryMapping(48, TorznabCatType.Books, "Books Magazines");
             caps.Categories.AddCategoryMapping(68, TorznabCatType.MoviesOther, "Cams/TS");
+            caps.Categories.AddCategoryMapping(140, TorznabCatType.TVDocumentary, "Documentary");
             caps.Categories.AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
             caps.Categories.AddCategoryMapping(109, TorznabCatType.MoviesBluRay, "Bluray Disc");
             caps.Categories.AddCategoryMapping(131, TorznabCatType.TVSport, "Fighting");
