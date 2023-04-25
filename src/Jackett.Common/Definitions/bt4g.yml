@@ -31,7 +31,7 @@ search:
   paths:
     # https://bt4g.org/search/2021
     # site does not support cat search
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/1"
 
   rows:
     selector: div.row > div.col > div:has(h5)
