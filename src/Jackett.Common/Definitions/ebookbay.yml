@@ -92,7 +92,7 @@ search:
     - path: "page/5/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
-    selector: "div#content > div.poststuff, div#content > div.poststuff + div.entry:has(a.download)"
+    selector: "div#content > div.poststuff:has(~ div.entry a.download), div#content > div.poststuff ~ div.entry:has(a.download)"
     after: 1
 
   fields:
