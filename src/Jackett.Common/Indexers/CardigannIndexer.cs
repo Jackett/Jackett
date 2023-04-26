@@ -1603,11 +1603,7 @@ namespace Jackett.Common.Indexers
                             rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
                         }
 
-                        var Rows = new List<IElement>();
-                        foreach (var RowDom in rowsDom)
-                        {
-                            Rows.Add(RowDom);
-                        }
+                        var Rows = rowsDom.ToList();
 
                         // merge following rows for After selector
                         var After = Definition.Search.Rows.After;
@@ -1619,13 +1615,11 @@ namespace Jackett.Common.Indexers
                                 for (var j = 0; j < After; j += 1)
                                 {
                                     var MergeRowIndex = i + j + 1;
-                                    var MergeRow = Rows[MergeRowIndex];
-                                    var MergeNodes = new List<INode>();
-                                    foreach (var node in MergeRow.ChildNodes)
+                                    var MergeRow = Rows.ElementAtOrDefault(MergeRowIndex);
+                                    if (MergeRow != null)
                                     {
-                                        MergeNodes.Add(node);
+                                        CurrentRow.Append(MergeRow.ChildNodes.ToArray());
                                     }
-                                    CurrentRow.Append(MergeNodes.ToArray());
                                 }
                                 Rows.RemoveRange(i + 1, After);
                             }
