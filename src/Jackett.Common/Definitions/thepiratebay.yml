@@ -162,6 +162,9 @@ search:
       selector: category
     title:
       selector: name
+      filters:
+        - name: re_replace
+          args: ["( - )(?!.* - )", " -"]
     details:
       text: "{{ .Config.sitelink }}description.php?id={{ .Result._id }}"
     infohash:
