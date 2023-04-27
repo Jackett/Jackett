@@ -164,7 +164,7 @@ search:
       selector: name
       filters:
         - name: re_replace
-          args: [" ?- ([\\w-]+)$", "-$1"]
+          args: [" ?- (\\w+-?\\w*)$", "-$1"]
     details:
       text: "{{ .Config.sitelink }}description.php?id={{ .Result._id }}"
     infohash:
