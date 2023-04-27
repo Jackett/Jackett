@@ -162,6 +162,11 @@ search:
       selector: category
     title:
       selector: name
+      filters:
+        - name: re_replace
+          args: ["- (\\w+-?\\w*)$", "-$1"]
+    description:
+      selector: name
     details:
       text: "{{ .Config.sitelink }}description.php?id={{ .Result._id }}"
     infohash:
