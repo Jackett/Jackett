@@ -36,14 +36,14 @@ settings:
   - name: info_apikey
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://danishbytes.club/\" target =_blank>DanishBytes</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://danishbytes.club/\" target=\"_blank\">DanishBytes</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
   - name: rsskey
     type: text
     label: RSSKey
   - name: info_rsskey
     type: info
     label: About your RSS key
-    default: "Find or Generate a new RSS key by accessing your <a href=\"https://danishbytes.club/\" target =_blank>DanishBytes</a> account <i>My Security</i> page and clicking on the <b>RSS Key (RID)</b> tab."
+    default: "Find or Generate a new RSS key by accessing your <a href=\"https://danishbytes.club/\" target=\"_blank\">DanishBytes</a> account <i>My Security</i> page and clicking on the <b>RSS Key (RID)</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only

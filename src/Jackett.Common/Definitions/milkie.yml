@@ -32,7 +32,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new key <a href=\"https://milkie.cc/settings/security\" target =_blank>here</a>."
+    default: "Find or Generate a new key <a href=\"https://milkie.cc/settings/security\" target=\"_blank\">here</a>."
 
 search:
   headers:
