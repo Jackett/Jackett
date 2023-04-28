@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers
                    cs: cs,
                    supportsFreeleechTokens: true,
                    useApiKey: true,
-                   instructionMessageOptional: "<ol><li>Go to iAnon's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab use the <b>click here to create a new token</b> link.</li><li>Give it a name and click <b>Generate</b>.</li><li>Finally, copy/paste the token to your Jackett config APIKey input box.</li></ol>"
+                   instructionMessageOptional: "<ol><li>Go to iAnon's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab use the <b>API Keys: click here to create a new token</b> link.</li><li>Give it a name and click <b>Generate</b>.</li><li>Finally, copy/paste the token to your Jackett config APIKey input box.</li></ol>"
                 )
         {
         }
@@ -43,19 +43,20 @@ namespace Jackett.Common.Indexers
         {
             var caps = new TorznabCapabilities
             {
-                BookSearchParams = new List<BookSearchParam>
+                MusicSearchParams = new List<MusicSearchParam>
                 {
-                    BookSearchParam.Q, BookSearchParam.Genre
+                    MusicSearchParam.Q
                 }
             };
 
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.Audio, "Music");
-            caps.Categories.AddCategoryMapping(2, TorznabCatType.PCMac, "Applications");
-            caps.Categories.AddCategoryMapping(3, TorznabCatType.BooksEBook, "E-Books");
-            caps.Categories.AddCategoryMapping(4, TorznabCatType.AudioAudiobook, "Audiobooks");
-            caps.Categories.AddCategoryMapping(5, TorznabCatType.Other, "E-Learning Videos");
-            caps.Categories.AddCategoryMapping(6, TorznabCatType.Other, "Comedy");
-            caps.Categories.AddCategoryMapping(7, TorznabCatType.BooksComics, "Comics");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.PCMac, "Applications");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.PCGames, "Games");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.PCMobileiOS, "IOS Applications");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.PCMobileiOS, "IOS Games");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.Other, "Graphics");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Audio, "Audio");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.Other, "Tutorials");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.Other, "Other");
 
             return caps;
         }
