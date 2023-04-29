@@ -110,7 +110,7 @@ search:
     download:
       selector: download_link
     poster:
-      selector: poster
+      selector: meta.poster
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
