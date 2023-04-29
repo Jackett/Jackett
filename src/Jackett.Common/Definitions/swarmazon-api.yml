@@ -35,7 +35,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing the <a href=\"https://swarmazon.club/en/view/settings.php?section=token\" target =_blank>Token Setting</a> page."
+    default: "Find or Generate a new API Token by accessing the <a href=\"https://swarmazon.club/en/view/settings.php?section=token\" target=\"_blank\">Token Setting</a> page."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
