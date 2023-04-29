@@ -102,7 +102,7 @@ search:
 
   fields:
     categorydesc:
-      selector: category
+      selector: category_id
     title:
       selector: name
     details:
