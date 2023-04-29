@@ -101,7 +101,7 @@ search:
       selector: meta.total
 
   fields:
-    categorydesc:
+    category:
       selector: category_id
     title:
       selector: name
