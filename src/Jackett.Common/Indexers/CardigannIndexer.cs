@@ -27,6 +27,8 @@ namespace Jackett.Common.Indexers
 {
     public class CardigannIndexer : BaseWebIndexer
     {
+        public override int PageSize => Definition.Search != null && Definition.Search.PageSize > 0 ? Definition.Search.PageSize : 1;
+
         protected IndexerDefinition Definition;
         protected WebResult landingResult;
         protected IHtmlDocument landingResultDocument;
@@ -124,6 +126,8 @@ namespace Jackett.Common.Indexers
             TorznabCaps = new TorznabCapabilities();
             TorznabCaps.ParseCardigannSearchModes(Definition.Caps.Modes);
             TorznabCaps.SupportsRawSearch = Definition.Caps.Allowrawsearch;
+            TorznabCaps.LimitsDefault = Definition.Caps.LimitsDefault ?? TorznabCaps.LimitsDefault;
+            TorznabCaps.LimitsMax = Definition.Caps.LimitsMax ?? TorznabCaps.LimitsMax;
 
             // init config Data
             configData = new ConfigurationData();
@@ -1353,6 +1357,8 @@ namespace Jackett.Common.Indexers
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters, variables);
 
+            var pageSize = PageSize;
+
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
@@ -1734,12 +1740,26 @@ namespace Jackett.Common.Indexers
                         OnParseError(results, ex);
                     }
                 }
+
+                pageSize = pageSize == 1 ? releases.Count : pageSize;
+
+                if (Search.Pageable && !IsFullPage(releases, pageSize))
+                {
+                    break;
+                }
             }
 
             if (query.Limit > 0)
+            {
                 releases = releases.Take(query.Limit).ToList();
+            }
 
             return releases;
+        }
+
+        protected virtual bool IsFullPage(IList<ReleaseInfo> page, int pageSize)
+        {
+            return pageSize != 0 && page.Count >= pageSize;
         }
 
         protected async Task<WebResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)

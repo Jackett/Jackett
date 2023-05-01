@@ -35,6 +35,7 @@ namespace Jackett.Common.Indexers
         public virtual string Type { get; protected set; }
 
         public virtual bool SupportsPagination => false;
+        public virtual int PageSize => 0;
 
         public virtual bool IsConfigured { get; protected set; }
         public virtual string[] Tags { get; protected set; }

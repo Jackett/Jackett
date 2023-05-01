@@ -93,6 +93,14 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "limitsDefault": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "limitsMax": {
+                    "type": "integer",
+                    "minimum": 1
+                },
                 "categories": {
                     "type": "object",
                     "additionalProperties": false,
@@ -482,6 +490,13 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "pageSize": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "pageable": {
+                    "type": "boolean"
+                },
                 "path": {
                     "type": "string"
                 },
