@@ -97,7 +97,7 @@ search:
       args: ["[\\s]+", "."]
 
   rows:
-    selector: tr[class^="tl"]
+    selector: tr[class^="tl"]:has(a[href^="magnet:?xt="])
     filters:
       - name: andmatch
 
