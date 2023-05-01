@@ -1359,6 +1359,11 @@ namespace Jackett.Common.Indexers
 
             var pageSize = PageSize;
 
+            if (!bool.TryParse(applyGoTemplateText(Search.Pageable, variables), out var pageable))
+            {
+                pageable = false;
+            }
+
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
@@ -1743,7 +1748,7 @@ namespace Jackett.Common.Indexers
 
                 pageSize = pageSize == 1 ? releases.Count : pageSize;
 
-                if (Search.Pageable && !IsFullPage(releases, pageSize))
+                if (pageable && !IsFullPage(releases, pageSize))
                 {
                     break;
                 }

@@ -495,7 +495,14 @@
                     "minimum": 1
                 },
                 "pageable": {
-                    "type": "boolean"
+                    "oneOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
                 },
                 "path": {
                     "type": "string"
