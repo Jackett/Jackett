@@ -7,13 +7,14 @@ type: public
 encoding: UTF-8
 links:
   - https://www.bulltorrent.com/
-  - https://toros.mrunblock.guru/
 legacylinks:
   - https://toros.nocensor.space/
   - https://toros.nocensor.work/
   - https://www.toros.co/
   - https://toros.nocensor.biz/
   - https://toros.nocensor.lol/
+  - https://toros.mrunblock.guru/
+  - https://toros.mrunblock.life/ # Gateway time-out Error code 504
 
 caps:
   categorymappings:

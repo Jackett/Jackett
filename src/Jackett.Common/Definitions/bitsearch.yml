@@ -8,12 +8,13 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://bitsearch.to/
-  - https://bitsearch.mrunblock.guru/
+  - https://bitsearch.mrunblock.life/
 legacylinks:
   - https://bitsearch.nocensor.biz/
   - https://bitsearch.nocensor.sbs/
   - https://bitsearch.nocensor.world/
   - https://bitsearch.nocensor.lol/
+  - https://bitsearch.mrunblock.guru/
 
 caps:
   categories:
