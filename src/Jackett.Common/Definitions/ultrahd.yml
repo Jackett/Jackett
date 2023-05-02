@@ -78,7 +78,7 @@ login:
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("Failed"))
+    - selector: td.embedded:has(h2:contains("failed"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -124,9 +124,6 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    poster:
-      selector: img[data-src]
-      attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
