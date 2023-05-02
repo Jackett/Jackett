@@ -9,13 +9,14 @@ requestDelay: 5
 links:
   - https://ext.to/
   - https://search.extto.com/
-  - https://extranet.torrentbay.to/
+  - https://extranet.torrentbay.net/
 legacylinks:
   - https://ext.unblockninja.com/
   - https://t.extto.com/
   - https://torrent.extto.com/
   - https://site.extto.com/
   - https://ext.torrentbay.to/
+  - https://extranet.torrentbay.to/
 
 caps:
   categorymappings:
