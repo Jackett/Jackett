@@ -15,7 +15,7 @@ caps:
     - {id: 403, cat: TV, desc: "TV Shows"}
     - {id: 404, cat: TV/Documentary, desc: "Documentaries"}
     - {id: 405, cat: TV/Anime, desc: "Animations"}
-    - {id: 416, cat: Audio/Video, desc: "Music Video/"}
+    - {id: 416, cat: Audio/Video, desc: "Music Video"}
     - {id: 417, cat: Other, desc: "Other"}
 
   modes:
@@ -37,7 +37,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the OshenPT Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the UltraHD Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
