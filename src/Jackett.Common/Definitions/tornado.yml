@@ -10,28 +10,27 @@ links:
 
 caps:
   categorymappings:
-    - {id: 33, cat: Movies/SD, desc: "Filmi XviD"}
-    - {id: 34, cat: Movies/DVD, desc: "Filmi DVD"}
-    - {id: 35, cat: Movies/BluRay, desc: "Filmi Bluray"}
-    - {id: 36, cat: Movies/HD, desc: "Filmi HD"}
-    - {id: 37, cat: Audio/MP3, desc: "Glasba MP3"}
-    - {id: 38, cat: Audio/Lossless, desc: "Glasba FLAC"}
-    - {id: 39, cat: Audio/Video, desc: "Glasba Koncerti"}
+    - {id: 32, cat: Movies/SD, desc: "Filmi Xvid"}
+    - {id: 33, cat: Movies/DVD, desc: "Filmi DVD"}
+    - {id: 34, cat: Movies/BluRay, desc: "Filmi BluRay"}
+    - {id: 35, cat: TV/Documentary, desc: "Dokumentarci Filmi"}
+    - {id: 36, cat: TV/Anime, desc: "Risanke"}
+    - {id: 37, cat: Audio/Video, desc: "Koncerti"}
+    - {id: 38, cat: Audio/MP3, desc: "Glasba MP3"}
+    - {id: 39, cat: Audio/Lossless, desc: "Glasba FLAC"}
     - {id: 40, cat: PC/Games, desc: "Igre PC"}
-    - {id: 41, cat: Console/PS3, desc: "Igre Playstation"}
-    - {id: 42, cat: Console/XBox, desc: "Igre Xbox"}
-    - {id: 43, cat: Console/NDS, desc: "Igre Nintendo"}
-    - {id: 44, cat: TV, desc: "TV Serije"}
-    - {id: 45, cat: TV/Other, desc: "TV Ostalo"}
-    - {id: 46, cat: Books/EBook, desc: "PDF E-Knjige"}
-    - {id: 47, cat: Books/Mags, desc: "PDF E-Revije"}
-    - {id: 48, cat: TV/Anime, desc: "Risanke Risanke"}
-    - {id: 49, cat: TV/Sport, desc: "Šport Šport"}
-    - {id: 50, cat: PC, desc: "Programi Programi"}
-    - {id: 51, cat: XXX/DVD, desc: "Erotika Video"}
-    - {id: 52, cat: XXX/Other, desc: "Erotika Ostalo"}
-    - {id: 53, cat: Other/Misc, desc: "Ostalo Ostalo"}
-    - {id: 55, cat: TV/Documentary, desc: "Dokumentarci Xvid"}
+    - {id: 41, cat: Console/PS3, desc: "Igre PS3"}
+    - {id: 42, cat: Console/PS4, desc: "Igre PS4"}
+    - {id: 43, cat: Console/XBox, desc: "Igre Xbox"}
+    - {id: 47, cat: Console/NDS, desc: "Igre Nintendo"}
+    - {id: 44, cat: PC, desc: "Programi"}
+    - {id: 45, cat: Books/EBook, desc: "E-Knjige"}
+    - {id: 46, cat: Books/Mags, desc: "E-Revije"}
+    - {id: 48, cat: TV, desc: "TV-Rip"}
+    - {id: 49, cat: XXX/ImageSet, desc: "Slike"}
+    - {id: 50, cat: XXX/DVD, desc: "Erotika"}
+    - {id: 51, cat: Other/Misc, desc: "Ostalo"}
+    - {id: 52, cat: Other, desc: "VIP"}
 
   modes:
     search: [q]
@@ -49,17 +48,16 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: id
+    default: added
     options:
-      id: created
+      added: created
       seeders: seeders
       size: size
-      name: title
   - name: type
     type: select
     label: Order requested from site
@@ -67,95 +65,121 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and check that you are not being forced to change your password because it has expired after 180 days."
 
 login:
-  path: account-login.php
-  method: post
+  path: ?p=home&pid=1
+  method: form
+  form: form#sls_form
+  submitpath: ajax/login.php
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    remember: yes
+    action: login
+    loginbox_membername: "{{ .Config.username }}"
+    loginbox_password: "{{ .Config.password }}"
+    loginbox_remember: 1
+  selectorinputs:
+    securitytoken:
+      selector: "script:contains(\"stKey: \")"
+      filters:
+        - name: regexp
+          args: "stKey: \"(.+?)\","
   error:
-    - selector: div.myFrame:contains("Access Denied")
+    - selector: div.error
+    - selector: :contains("-ERROR-")
   test:
-    path: index.php
-    selector: a[href="account-logout.php"]
+    path: ?p=home&pid=1
+    selector: div#member_info_bar
 
 search:
   paths:
-    # https://www.tornado.si/torrents-search.php?search=&incldesc=1&inclexternal=0&incldead=1&freeleech=2&inclrosub=0
-    - path: torrents-search.php
-  inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    # 0 name&descr, 1 name, 2 description, 3 genre
-    incldesc: 1
-    # 0 both, 1 local, 2 external
-    inclexternal: 0
-    # 0 active, 1 incldead, 2 onlydead
-    incldead: 1
-    # 0 all 1 notfree 2 onlyfree
-    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 all subs, 1 only Romanian subs
-    inclrosub: 0
-    sort: "{{ .Config.sort }}"
-    order: "{{ .Config.type }}"
-    # does not support imdbid search or return imdb link
-
+    - path: /
   keywordsfilters:
     - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
+      args: ["[^a-zA-Z0-9]+", "%25"]
+  inputs:
+    p: torrents
+    pid: 32
+    $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
+    keywords: "{{ .Keywords }}"
+    # name, description, both, uploader
+    search_type: name
+    "sortOptions[sortBy]": "{{ .Config.sort }}"
+    "sortOptions[sortOrder]": "{{ .Config.type }}"
+    # does not support imdbid search but has imdbid links in results.
+  error:
+    - selector: div.error:not(:contains("There are no results found."))
 
   rows:
-    selector: table.ttable_headinner > tbody > tr
+    selector: "div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href^="torrents.php?cat="]
+      selector: a[href*="?p=torrents&pid=10&cid="]
       attribute: href
       filters:
         - name: querystring
-          args: cat
+          args: cid
     title:
-      selector: a[href^="torrents-details.php?id="]
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
     details:
-      selector: a[href^="torrents-details.php?id="]
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="?p=torrents&pid=10&action=download&tid="]
       attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      optional: true
     poster:
-      selector: a[href^="torrents-details.php?id="]
-      attribute: onmouseover
+      selector: a[href*="data/torrents/torrent_images/"]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    size:
+      selector: a[rel="torrent_size"]
+    grabs:
+      selector: a[rel="times_completed"]
+    seeders:
+      selector: a[rel="torrent_seeders"]
+    leechers:
+      selector: a[rel="torrent_leechers"]
+    date_day:
+      selector: div.torrentOwner:contains("day")
+      # auto adjusted by site account profile
+      optional: true
       filters:
         - name: regexp
-          args: src=(.+?) width
-    size:
-      selector: td:nth-last-child(9)
-    date:
-      selector: td:nth-last-child(8)
+          args: "Uploaded (.+?) by"
+        - name: fuzzytime
+    date_year:
+      selector: div.torrentOwner:contains("-")
       # auto adjusted by site account profile
+      optional: true
       filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
         - name: dateparse
-          args: "dd.MMMyyyyHH:mm"
-    seeders:
-      selector: td:nth-last-child(6)
-    leechers:
-      selector: td:nth-last-child(5)
-    grabs:
-      selector: td:nth-last-child(4)
+          args: "dd-MM-yyyy HH:mm"
+    date_unix:
+      selector: div.torrentOwner abbr
+      optional: true
+      attribute: data-time
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year .Result.date_unix }}{{ or .Result.date_day .Result.date_year .Result.date_unix }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
-        img[src$="/free.gif"]: 0
-        img[src$="/t_extern.png"]: 0
+        img[src$="/torrent_free.png"]: 0
         "*": 1
     uploadvolumefactor:
-      case:
-        img[src$="/t_extern.png"]: 0
-        "*": 1
+      text: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# TorrentTrader 2.08
+# TSUE 2.2
