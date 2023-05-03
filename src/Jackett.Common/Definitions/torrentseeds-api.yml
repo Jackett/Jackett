@@ -92,10 +92,12 @@ search:
     page: 1
 
   keywordsfilters:
+    - name: replace # avoid conflict when prepending + to words
+      args: ["-", " "]
     - name: re_replace # prepend + to each word >2 characters
       args: ["(\\w{3,})", "+$1"]
     - name: re_replace # +2023 04 13 > +"2023 04 13"
-      args: ["\\+\\b(\\d{4}[\\s\\.\\-]\\d{2}[\\s\\.\\-]\\d{2})\\b", "+\"$1\""]
+      args: ["\\+\\b(\\d{4}[\\s\\.]\\d{2}[\\s\\.]\\d{2})\\b", "+\"$1\""]
 
   rows:
     selector: data
