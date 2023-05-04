@@ -1,7 +1,7 @@
 ---
 id: 3changtrai
 name: 3ChangTrai
-description: "3ChangTrai (3CT) is a VIETNAMESE Private Torrent Tracker for HD MOVIES / TV"
+description: "3ChangTrai (3CT) is a VIETNAMESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
 language: vi-VN
 type: private
 encoding: UTF-8
@@ -100,7 +100,6 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
-    # does not return imdb link in results
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
@@ -126,7 +125,7 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img.lazyload
+      selector: img[data-src]
       attribute: data-src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
@@ -174,7 +173,10 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
     description:
-      selector: td:nth-child(2)
+      selector: td:nth-child(3)
       remove: a, img
-# NexusPHP v3.0 2020-04-30
+# NexusPHP 3ChangTrai v3.0 2020-04-30
