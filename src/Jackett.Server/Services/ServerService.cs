@@ -225,9 +225,11 @@ namespace Jackett.Server.Services
                                 var trustedRootCertificatesProperty = monoX509StoreManager.GetProperty("TrustedRootCertificates");
                                 var trustedRootCertificates = (ICollection)trustedRootCertificatesProperty.GetValue(null);
 
-                                logger.Info($"TrustedRootCertificates count: {trustedRootCertificates.Count}");
+                                var countTrustedRootCertificates = trustedRootCertificates.Count;
 
-                                if (trustedRootCertificates.Count == 0)
+                                logger.Info($"TrustedRootCertificates count: {countTrustedRootCertificates}");
+
+                                if (countTrustedRootCertificates == 0)
                                 {
                                     var caCertificatesFiles = new[]
                                     {
