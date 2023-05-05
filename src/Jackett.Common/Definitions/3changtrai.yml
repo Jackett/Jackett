@@ -178,5 +178,5 @@ search:
       text: 259200
     description:
       selector: td:nth-child(3)
-      remove: a, img
+      remove: a, b, font, img, span
 # NexusPHP 3ChangTrai v3.0 2020-04-30
