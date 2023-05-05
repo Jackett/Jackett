@@ -89,7 +89,6 @@ login:
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("Failed"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -109,7 +108,7 @@ search:
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl (4 does not appear to work)
     search_area: "{{ if or .Query.IMDBID .Query.DoubanID }}1{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 exact
+    # 0 AND, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -141,14 +140,6 @@ search:
     poster:
       selector: img[data-src]
       attribute: data-src
-    imdbid:
-      # site currently only has a badge and rating, the id is not present. just in case a future update.
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    doubanid:
-      # site currently only has a badge and rating, the id is not present. just in case a future update.
-      selector: a[href*="movie.douban.com/subject/"]
-      attribute: href
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
@@ -192,12 +183,10 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumratio:
-      text: 1.0
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
     description:
       selector: td.rowfollow:nth-child(2)
-      remove: a, img
-# NexusPHP v1.7.29 2022-10-13
+      remove: a, b, font, img, span
+# NexusPHP v1.8.1 2023-04-21
