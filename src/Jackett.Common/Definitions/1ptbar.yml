@@ -1,7 +1,7 @@
 ---
 id: 1ptbar
 name: 1ptbar
-description: "1ptbar is a CHINESE Private Torrent Tracker for Movies, TV, and e-Learning"
+description: "1ptbar is a CHINESE Private Torrent Tracker for MOVIES / TV / E-LEARNING"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -25,26 +25,28 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2facode
+    type: text
+    label: 2FA code
+  - name: info_2fa
     type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the 1ptbar Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -61,27 +63,47 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  method: cookie
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    secret: ""
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    two_step_code: "{{ .Config.2facode }}"
+    logout: ""
+    securelogin: ""
+    ssl: yes
+    trackerssl: yes
+  error:
+    - selector: td.embedded:has(h2:contains("失败"))
   test:
-    path: torrents.php
+    path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 exact
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
+    # 0 AND, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -114,7 +136,12 @@ search:
       selector: img[data-src]
       attribute: data-src
     imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
@@ -161,5 +188,5 @@ search:
         "*": 1
     description:
       selector: td:nth-child(2)
-      remove: a, img
-# NexusPHP v1.7.32 2022-12-05
+      remove: a, b, font, img, span
+# NexusPHP v1.8.0 2023-04-09

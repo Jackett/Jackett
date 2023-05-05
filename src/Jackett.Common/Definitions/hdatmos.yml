@@ -20,10 +20,9 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
@@ -43,10 +42,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -63,6 +58,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
   path: login.php
@@ -94,14 +93,14 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 exact
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
+    # 0 AND, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -129,9 +128,6 @@ search:
       attribute: href
     download:
       selector: a[href^="download.php?id="]
-      attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
@@ -178,7 +174,5 @@ search:
         "*": 1
     description:
       selector: td:nth-child(2)
-      remove: a, img
-    minimumratio:
-      text: 0.81
-# NexusPHP 1.7.31 2022-11-14
+      remove: a, b, font, img, span
+# NexusPHP v1.8.0 2023-04-16
