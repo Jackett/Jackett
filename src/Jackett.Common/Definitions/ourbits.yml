@@ -39,6 +39,22 @@ settings:
   - name: freeleech
     type: checkbox
     label: Search freeleech only
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
     default: false
   - name: info_tpp
     type: info
@@ -150,7 +166,7 @@ search:
       text: 172800
     description:
       selector: td.rowfollow:nth-child(2) > table > tbody > tr > td
-      remove: a, img, b, span
+      remove: a, b, font, img, span
       filters:
         - name: replace
           args: ["will end in", ""]
