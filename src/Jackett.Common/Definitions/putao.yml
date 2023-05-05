@@ -59,10 +59,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>每页种子数:每页显示</b><i>(Torrents per page:)</i> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -79,6 +75,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>每页种子数:每页显示</b><i>(Torrents per page:)</i> setting to <b>100</b> on your account profile.
 
 login:
   path: login.php
@@ -118,7 +118,7 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
-    # does not return imdb or dubanid in results
+    # does not return imdb or doubanid in results
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
@@ -196,9 +196,9 @@ search:
         img.pro_2up: 2
         img.pro_free2up: 2
         "*": 1
-    description:
-      selector: td:nth-child(2)
-      remove: a, img
     minimumratio:
       text: 0.7
+    description:
+      selector: td:nth-child(2)
+      remove: a, b, font, img, span
 # NexusPHP Standard v1.0 Beta 2
