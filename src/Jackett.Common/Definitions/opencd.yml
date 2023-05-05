@@ -44,10 +44,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. Default is 50.
   - name: sort
     type: select
     label: Sort requested from site
@@ -64,6 +60,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. Default is 50.
 
 login:
   method: cookie
@@ -183,12 +183,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    description:
-      selector: td:nth-child(3)
-      remove: a, img
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 36 hours (as seconds = 36 x 60 x 60)
       text: 129600
+    description:
+      selector: td:nth-child(3)
+      remove: a, b, font, img, span
 # NexusPHP Standard v1.5 Beta 4 (customised)
