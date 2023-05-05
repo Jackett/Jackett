@@ -186,4 +186,4 @@ search:
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, img
-# NexusPHP v1.7.33 2022-12-19
+# NexusPHP v1.8.2 2023-04-29

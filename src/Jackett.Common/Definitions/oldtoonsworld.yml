@@ -191,4 +191,4 @@ search:
       remove: a, img, span
     description:
       text: "{{ .Result.genre }}"
-# NexusPHP v1.7.29 2022-10-13
+# NexusPHP v1.7.33 2022-12-19
