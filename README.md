@@ -108,7 +108,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Rapidzona
  * RARBG
  * RinTorNeT
- * Rus-media
  * RuTor
  * RuTracker.RU
  * Seedoff
