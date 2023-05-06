@@ -190,5 +190,5 @@ search:
       remove: a, b, font, img, span
       filters:
         - name: replace
-          args: ["剩余时间：", ""]
+          args: [" 剩余时间：", ""]
 # NexusPHP Standard v1.5 Beta 4
