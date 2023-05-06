@@ -180,7 +180,7 @@ search:
         "*": 1
     description:
       selector: "{{ if .Result._staff_edit }}td:nth-child(3){{ else }}td:nth-child(2){{ end }}"
-      remove: a, img
+      remove: a, b, font, img, span
     title_english:
       selector: table.torrentname > tbody > tr > td.embedded
     title:

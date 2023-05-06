@@ -71,7 +71,6 @@ login:
     dutime: month
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("Failed"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -167,9 +166,9 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    description:
-      selector: td:nth-child(2)
-      remove: a, img
     minimumratio:
       text: 0.81
+    description:
+      selector: td:nth-child(2)
+      remove: a, b, font, img, span
 # NexusPHP Standard v0.3 2013-10-01

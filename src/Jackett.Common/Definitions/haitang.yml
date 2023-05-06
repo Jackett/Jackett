@@ -37,10 +37,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -57,6 +53,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
   path: takelogin.php
@@ -70,7 +70,6 @@ login:
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("failed"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -162,12 +161,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    description:
-      selector: td:nth-child(2)
-      remove: a, img
     minimumratio:
       text: 1
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
+    description:
+      selector: td:nth-child(2)
+      remove: a, b, font, img, span
 # NexusPHP v1.1 2021-10-15

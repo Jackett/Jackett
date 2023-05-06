@@ -164,9 +164,9 @@ search:
         font.twoupfree: 2
         font.twoup: 2
         "*": 1
-    description:
-      selector: td:nth-child(2)
-      remove: a, img
     minimumratio:
       text: 0.8
+    description:
+      selector: td:nth-child(2)
+      remove: a, b, font, img, span
 # NexusPHP Standard v1.5 Beta 4 (custom ulvf dlvf)

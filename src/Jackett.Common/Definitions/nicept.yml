@@ -76,7 +76,6 @@ login:
     two_step_code: "{{ .Config.2facode }}"
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("Failed"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -175,5 +174,8 @@ search:
       text: 259200
     description:
       selector: td.rowfollow:nth-child(2)
-      remove: a, img
+      remove: a, b, font, img, span
+      filters:
+        - name: replace
+          args: [" 剩余时间：", ""]
 # NexusPHP v1.7.29 2022-10-13

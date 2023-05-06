@@ -40,6 +40,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -78,12 +94,20 @@ search:
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0=AND, 1=OR, 2=Exact
     search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title_default:
       selector: a[href^="details.php?id="]
     title:
@@ -91,12 +115,6 @@ search:
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
-    category:
-      selector: a[href^="?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -153,5 +171,5 @@ search:
       text: 259200
     description:
       selector: td.rowfollow:nth-child(2)
-      remove: a, img
+      remove: a, b, font, img, span
 # NexusPHP Standard v1.5 Beta 4

@@ -24,10 +24,9 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
@@ -47,6 +46,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
   - name: flaresolverr
     type: info
     label: FlareSolverr
@@ -85,21 +100,29 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0=incldead, 1=active, 2=dead
     incldead: 0
     # show promotions: 0=all, 1=normal, 2=free, 3=2x, 4=2xFree, 5=50%, 6=2x50%, 7=30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0=title, 1=descr, 3=uploader, 4=imdb URL
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
     # 0=AND, 1=OR, 2=Exact
     search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title_default:
       selector: a[href^="details.php?id="]
     title:
@@ -107,17 +130,17 @@ search:
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
-    category:
-      selector: a[href^="?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
@@ -166,5 +189,8 @@ search:
       text: 1.2
     description:
       selector: td.rowfollow:nth-child(2)
-      remove: a, img
+      remove: a, b, font, img, span
+      filters:
+        - name: replace
+          args: [" 剩余时间：", ""]
 # NexusPHP Standard v1.5 Beta 4

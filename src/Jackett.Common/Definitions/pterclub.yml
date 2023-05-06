@@ -170,9 +170,9 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    description:
-      selector: td:has(table.torrentname)
-      remove: a, b, font, img
     minimumratio:
       text: 0.9
+    description:
+      selector: td:has(table.torrentname)
+      remove: a, img
 # NexusPHP custom v2019.12

@@ -154,5 +154,5 @@ search:
         "*": 1
     description:
       selector: a[href^="details_"]
-      remove: a, img
+      remove: a, b, font, img, span
 # NexusPHP Standard v1.5 Beta 4 (customised)

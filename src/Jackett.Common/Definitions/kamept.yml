@@ -83,7 +83,6 @@ login:
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("failed"))
   test:
     path: index.php
     selector: a[href*="usercp.php"]
@@ -179,5 +178,5 @@ search:
       text: 0.9
     description:
       selector: td.rowfollow:nth-child(2)
-      remove: a, img, font, span
+      remove: a, b, font, img, span
 # NexusPHP v1.7.26 2022-09-15

@@ -40,6 +40,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -67,6 +83,8 @@ search:
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0=AND, 1=OR, 2=Exact
     search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
@@ -150,8 +168,8 @@ search:
       text: 172800
     description:
       selector: td.rowfollow:nth-child(2) > table > tbody > tr > td
-      remove: a, img, b, span
+      remove: a, b, font, img, span
       filters:
         - name: replace
-          args: ["will end in", ""]
+          args: [" 剩余时间：", ""]
 # Ourbits 1.1.0 (Based on NexusPHP Standard v1.5 Beta 4) 4691022 2023-05-04
