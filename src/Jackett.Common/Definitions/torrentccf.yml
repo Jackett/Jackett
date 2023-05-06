@@ -165,5 +165,5 @@ search:
       text: 0.8
     description:
       selector: td:nth-child(2)
-      remove: a, b, font, img, span
+      remove: a, img
 # NexusPHP Standard v1.5 Beta 3
