@@ -56,6 +56,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -72,7 +88,6 @@ login:
     ssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-    - selector: td.embedded:has(h2:contains("Failed"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -173,6 +188,5 @@ search:
         font.promotion.twouphalfdown: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
-      remove: a, img
+      selector: td:nth-child(2) > font:last-child
 # NexusPHP Standard v1.5 Beta 4
