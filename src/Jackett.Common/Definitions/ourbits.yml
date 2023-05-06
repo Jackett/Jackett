@@ -55,7 +55,6 @@ settings:
     options:
       desc: desc
       asc: asc
-    default: false
   - name: info_tpp
     type: info
     label: Results Per Page
