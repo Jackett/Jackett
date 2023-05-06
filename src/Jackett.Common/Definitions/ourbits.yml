@@ -83,6 +83,8 @@ search:
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0=AND, 1=OR, 2=Exact
     search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
