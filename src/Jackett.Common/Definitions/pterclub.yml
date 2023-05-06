@@ -174,5 +174,5 @@ search:
       text: 0.9
     description:
       selector: td:has(table.torrentname)
-      remove: a, b, font, img, span
+      remove: a, img
 # NexusPHP custom v2019.12
