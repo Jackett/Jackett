@@ -39,6 +39,7 @@ settings:
   - name: freeleech
     type: checkbox
     label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
