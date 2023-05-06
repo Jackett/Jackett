@@ -41,10 +41,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: sort
     type: select
     label: Sort requested from site
@@ -61,6 +57,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
   path: takelogin.php
@@ -170,7 +170,7 @@ search:
         "*": 1
     description:
       selector: td.rowfollow:nth-child(2)
-      remove: a, img
+      remove: a, b, font, img, span
     genre:
       selector: table.torrentname > tbody > tr > td:first-child
       remove: a
