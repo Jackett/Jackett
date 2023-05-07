@@ -103,8 +103,7 @@ settings:
 
 login:
   path: index.php?page=login
-  method: form
-  form: "#bodyarea form"
+  method: post
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
