@@ -111,7 +111,7 @@ search:
 
   fields:
     category:
-      selector:  a[href*="?p=torrents&pid=10&cid="]
+      selector: a[href*="?p=torrents&pid=10&cid="]
       attribute: href
       filters:
         - name: querystring
