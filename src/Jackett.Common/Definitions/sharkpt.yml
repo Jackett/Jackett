@@ -91,15 +91,15 @@ search:
     category:
       selector: div.torrent-category
       case:
-        img[src$="movies.png"]: 401
-        img[src$="tvseries.png"]: 402
-        img[src$="tvshows.png"]: 403
-        img[src$="doc.png"]: 404
-        img[src$="anime.png"]: 405
-        img[src$="mv.png"]: 406
-        img[src$="sports.png"]: 407
-        img[src$="hqaudio.png"]: 408
-        img[src$="misc.png"]: 409
+        img[src$="movies64.png"]: 401
+        img[src$="tvseries64.png"]: 402
+        img[src$="tvshows64.png"]: 403
+        img[src$="doc64.png"]: 404
+        img[src$="anime64.png"]: 405
+        img[src$="mv64.png"]: 406
+        img[src$="sports64.png"]: 407
+        img[src$="hqaudio64.png"]: 408
+        img[src$="misc64.png"]: 409
     title:
       selector: a[href^="details.php?id="]
     details:
@@ -113,6 +113,12 @@ search:
           args: id
     download:
       text: "download.php?id={{ .Result._id }}"
+    imdbid:
+      selector: shark-tag-group[onClick*="imdb.com/title/tt"]
+      attribute: onClick
+    doubanid:
+      selector: shark-tag-group[onClick*="movie.douban.com/subject/"]
+      attribute: onClick
     description:
       selector: div.torrent-subtitle
     date:
