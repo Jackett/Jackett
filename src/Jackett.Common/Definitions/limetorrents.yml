@@ -9,7 +9,7 @@ followredirect: true
 # changes to this indexer should also be made to limetorrentsclone
 links:
   - https://www.limetorrents.lol/
-  - https://limetorrents.unblockit.click/
+  - https://limetorrents.unblockit.asia/
   - https://limetorrents.unblockninja.com/
   - https://limetorrents.mrunblock.life/
   - https://limetorrents.nocensor.click/
@@ -37,6 +37,7 @@ legacylinks:
   - https://limetorrents.unblockit.bio/
   - https://limetorrents.unblockit.boo/
   - https://limetorrents.mrunblock.guru/
+  - https://limetorrents.unblockit.click/
 
 caps:
   categorymappings:
