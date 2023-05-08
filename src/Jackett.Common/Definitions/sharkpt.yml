@@ -150,4 +150,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# NexusPHP v1.8.0 2023-02-08
+# NexusPHP Standard v1.5 Beta 4 2010-09-19
