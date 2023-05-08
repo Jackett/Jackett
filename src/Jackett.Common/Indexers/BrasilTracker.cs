@@ -45,7 +45,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataCookie("BrasilTracker does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).</br>For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
+                   configData: new ConfigurationDataCookie())
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
         }
