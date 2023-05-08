@@ -259,7 +259,7 @@ namespace Jackett.Common.Indexers
                         var qGrabs = row.QuerySelector("td:nth-last-child(3)");
                         var qSeeders = row.QuerySelector("td:nth-last-child(2)");
                         var qLeechers = row.QuerySelector("td:nth-last-child(1)");
-                        var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
+                        var qFreeLeech = row.QuerySelector("strong:contains(\"Free\")");
                         if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                         {
                             release.Description = qDetailsLink.TextContent;
