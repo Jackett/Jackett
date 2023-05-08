@@ -41,6 +41,7 @@ caps:
     - {id: 190, cat: Movies, desc: "Movies/Netflix Film"}
     - {id: 195, cat: TV, desc: "TV/Exxen"}
     - {id: 199, cat: TV, desc: "TV/GAİN"}
+    - {id: 201, cat: TV, desc: "TV/Tabii"}
     - {id: 171, cat: Audio, desc: "Music"}
     - {id: 172, cat: Audio, desc: "Music/Turkish"}
     - {id: 173, cat: Audio, desc: "Music/Foreign"}
