@@ -206,5 +206,5 @@ search:
         "img[title=\"Upload Multiplier: 2\"]": 2
         "*": 1
     minimumratio:
-      text: 0.5
+      text: 0.7
 # TSUE 2.2
