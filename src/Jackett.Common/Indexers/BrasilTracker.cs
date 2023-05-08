@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private string BrowseUrl => SiteLink + "torrents.php";
-        private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
+        private static readonly Regex _EpisodeRegex = new Regex(@"(?:\[?[SsEe]\d{2,4}){1,2}\]?");
 
         private new ConfigurationDataCookie configData
         {
@@ -72,7 +72,21 @@ namespace Jackett.Common.Indexers
                 }
             };
 
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.Other, "Other");
+            caps.Categories.AddCategoryMapping(16, TorznabCatType.AudioAudiobook, "Audiobooks");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.TVAnime, "Animes");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.PC0day, "Aplicativos");
+            caps.Categories.AddCategoryMapping(15, TorznabCatType.Other, "Cursos");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.TVDocumentary, "Documentários");
+            caps.Categories.AddCategoryMapping(14, TorznabCatType.TVSport, "Esportes");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.XXX, "Filmes XXX");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Filmes");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.BooksComics, "Histórias em Quadrinhos");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.PCGames, "Jogos");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.BooksEBook, "Livros");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.BooksMags, "Revistas");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TV, "Séries");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.AudioVideo, "Show");
+            caps.Categories.AddCategoryMapping(7, TorznabCatType.TV, "Televisão");
 
             return caps;
         }
@@ -151,6 +165,9 @@ namespace Jackett.Common.Indexers
                 {"action", "basic"},
                 {"searchsubmit", "1"}
             };
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
+
             if (query.IsGenreQuery)
                 queryCollection.Add("taglist", query.Genre);
 
@@ -168,6 +185,7 @@ namespace Jackett.Common.Indexers
                 string groupTitle = null;
                 string groupYearStr = null;
                 Uri groupPoster = null;
+                string category = null;
                 string imdbLink = null;
                 string tmdbLink = null;
                 string genres = null;
@@ -203,7 +221,6 @@ namespace Jackett.Common.Indexers
                         }
                         seasonEp ??= _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
 
-                        ICollection<int> category = new List<int> { TorznabCatType.Other.ID };
                         string yearStr = null;
                         if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
                         {
@@ -215,7 +232,8 @@ namespace Jackett.Common.Indexers
                                 // valid for torrent grouped but that has only 1 episode yet
                                 yearStr = torrentInfoEl.GetAttribute("data-year");
                             }
-                            yearStr ??= qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+                            yearStr ??= qDetailsLink.NextSibling.TextContent.Trim();
+                            category = Regex.Replace(yearStr, @".+ \[(.+)\]", "$1");
 
                             if (Uri.TryCreate(row.QuerySelector("img[alt=\"Cover\"]")?.GetAttribute("src"),
                                               UriKind.Absolute, out var posterUri))
@@ -264,7 +282,7 @@ namespace Jackett.Common.Indexers
                                 release.Genres = new List<string>();
                             release.Genres = release.Genres.Union(genres.Replace(", ", ",").Split(',')).ToList();
                         }
-                        release.Category = category;
+                        release.Category = MapTrackerCatDescToNewznab(category);
                         release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
                         release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL "); // Fix web/web-dl
                         release.Description = release.Description.Replace("Full HD", "1080p");
