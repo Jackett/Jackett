@@ -19,6 +19,7 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
     - {id: 409, cat: Other, desc: "Misc/其他"}
     - {id: 408, cat: Audio, desc: "Music/音乐"}
+    - {id: 410, cat: PC, desc: "Softs/软件"}
 
   modes:
     search: [q]
