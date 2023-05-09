@@ -60,6 +60,8 @@ login:
     api_token: "{{ .Config.apikey }}"
   error:
     - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
@@ -70,9 +72,12 @@ search:
         type: json
 
   inputs:
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     api_token: "{{ .Config.apikey }}"
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
@@ -182,11 +187,15 @@ search:
     size:
       selector: size
     downloadvolumefactor:
-      # api returns 0=false, 1=true
+      # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
-        0: 1 # not free
-        1: 0 # freeleech
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
     uploadvolumefactor:
       # api returns 0=false, 1=true
       selector: double_upload
@@ -196,4 +205,4 @@ search:
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# json UNIT3D ???
+# json UNIT3D 6.0.4
