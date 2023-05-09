@@ -29,6 +29,51 @@ legacylinks:
   - https://nyaa.nocensor.art/
   - https://nyaa.mrunblock.guru/
 
+caps:
+  categorymappings:
+    # Anime
+    - {id: 1_0, cat: TV/Anime, desc: "Anime"}
+    - {id: 1_1, cat: TV/Anime, desc: "Anime music videos"}
+    - {id: 1_2, cat: TV/Anime, desc: "English subtitled animes"}
+    - {id: 1_3, cat: TV/Anime, desc: "Non-english subtitled animes"}
+    - {id: 1_4, cat: TV/Anime, desc: "Raw animes"}
+    # Anime as Movies (Radarr uses t=movie):
+    - {id: 1_0, cat: Movies/Other, desc: "Anime"}
+    - {id: 1_1, cat: Movies/Other, desc: "Anime music videos"}
+    - {id: 1_2, cat: Movies/Other, desc: "English subtitled animes"}
+    - {id: 1_3, cat: Movies/Other, desc: "Non-english subtitled animes"}
+    - {id: 1_4, cat: Movies/Other, desc: "Raw animes"}
+    # Audio
+    - {id: 2_0, cat: Audio, desc: "Audio"}
+    - {id: 2_1, cat: Audio, desc: "Lossless audio"}
+    - {id: 2_2, cat: Audio, desc: "Lossy audio"}
+    # Literature
+    - {id: 3_0, cat: Books, desc: "Literature"}
+    - {id: 3_1, cat: Books, desc: "Literature english translated"}
+    - {id: 3_2, cat: Books, desc: "Literature non-english translated"}
+    - {id: 3_3, cat: Books, desc: "Raw literature"}
+    # Live
+    - {id: 4_0, cat: TV, desc: "Live Action"}
+    - {id: 4_1, cat: TV, desc: "Live Action - English"}
+    - {id: 4_2, cat: TV, desc: "Live Action - Idol/PV"}
+    - {id: 4_3, cat: TV, desc: "Live Action - Non-English"}
+    - {id: 4_4, cat: TV, desc: "Live Action - Raw"}
+    # Pics
+    - {id: 5_0, cat: Other, desc: "Pictures"}
+    - {id: 5_1, cat: Other, desc: "Pictures  - Graphics"}
+    - {id: 5_2, cat: Other, desc: "Pictures  - Photos"}
+    # Software
+    - {id: 6_0, cat: PC, desc: "Software"}
+    - {id: 6_1, cat: PC/ISO, desc: "Applications"}
+    - {id: 6_2, cat: PC/Games, desc: "Games"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
 settings:
   - name: prefer_magnet_links
     type: checkbox
@@ -37,6 +82,10 @@ settings:
   - name: sonarr_compatibility
     type: checkbox
     label: Improve Sonarr compatibility by trying to add Season information into Release Titles
+    default: false
+  - name: radarr_compatibility
+    type: checkbox
+    label: Improve Radarr compatibility by removing year information from keywords and adding it to Release Titles
     default: false
   - name: filter-id
     type: select
@@ -91,55 +140,15 @@ settings:
       desc: desc
       asc: asc
 
-caps:
-  categorymappings:
-    # Anime
-    - {id: 1_0, cat: TV/Anime, desc: "Anime"}
-    - {id: 1_1, cat: TV/Anime, desc: "Anime music videos"}
-    - {id: 1_2, cat: TV/Anime, desc: "English subtitled animes"}
-    - {id: 1_3, cat: TV/Anime, desc: "Non-english subtitled animes"}
-    - {id: 1_4, cat: TV/Anime, desc: "Raw animes"}
-    # Anime as Movies (Radarr uses t=movie):
-    - {id: 1_0, cat: Movies/Other, desc: "Anime"}
-    - {id: 1_1, cat: Movies/Other, desc: "Anime music videos"}
-    - {id: 1_2, cat: Movies/Other, desc: "English subtitled animes"}
-    - {id: 1_3, cat: Movies/Other, desc: "Non-english subtitled animes"}
-    - {id: 1_4, cat: Movies/Other, desc: "Raw animes"}
-    # Audio
-    - {id: 2_0, cat: Audio, desc: "Audio"}
-    - {id: 2_1, cat: Audio, desc: "Lossless audio"}
-    - {id: 2_2, cat: Audio, desc: "Lossy audio"}
-    # Literature
-    - {id: 3_0, cat: Books, desc: "Literature"}
-    - {id: 3_1, cat: Books, desc: "Literature english translated"}
-    - {id: 3_2, cat: Books, desc: "Literature non-english translated"}
-    - {id: 3_3, cat: Books, desc: "Raw literature"}
-    # Live
-    - {id: 4_0, cat: TV, desc: "Live Action"}
-    - {id: 4_1, cat: TV, desc: "Live Action - English"}
-    - {id: 4_2, cat: TV, desc: "Live Action - Idol/PV"}
-    - {id: 4_3, cat: TV, desc: "Live Action - Non-English"}
-    - {id: 4_4, cat: TV, desc: "Live Action - Raw"}
-    # Pics
-    - {id: 5_0, cat: Other, desc: "Pictures"}
-    - {id: 5_1, cat: Other, desc: "Pictures  - Graphics"}
-    - {id: 5_2, cat: Other, desc: "Pictures  - Photos"}
-    # Software
-    - {id: 6_0, cat: PC, desc: "Software"}
-    - {id: 6_1, cat: PC/ISO, desc: "Applications"}
-    - {id: 6_2, cat: PC/Games, desc: "Games"}
-  modes:
-    search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
-    book-search: [q]
-  allowrawsearch: true
-
 search:
   paths:
     - path: "?q={{ .Keywords }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
     # strip 0 from start of episode number - #11019
-    - path: "?q={{ if .Keywords }}{{ re_replace .Keywords \" 0(\\d{1})\" \" $1\" }}{{ else }}&p=2{{ end }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
+    - path: "?q={{ if .Keywords }}{{ re_replace .Keywords \"\\b0(\\d{1})\\b\" \"$1\" }}{{ else }}&p=2{{ end }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: [" *\\b((?:19|20)\\d{2})\\b", "{{ if .Config.radarr_compatibility }}{{ else }} $1{{ end }}"]
 
   rows:
     selector: tr.default,tr.danger,tr.success
@@ -167,8 +176,16 @@ search:
       filters:
         - name: append
           args: " Spanish"
+    title_keyword_year:
+      text: "{{ .Query.Keywords }}"
+      filters:
+        - name: regexp
+          args: "\\b((19|20)\\d{2})\\b"
     title_phase2:
       text: "{{ or (.Result.title_phase1) (.Result.title_default) }}"
+      filters:
+        - name: re_replace
+          args: ["^(\\[.+?\\] ?)?(\\[.+?\\] ?)?(.+?)(\\[)", "$1$2$3{{ if .Config.radarr_compatibility }} {{ .Result.title_keyword_year }} $4{{ else }}$4{{ end }}"]
     title_phase3:
       text: "{{ .Result.title_phase2 }}"
       filters:
