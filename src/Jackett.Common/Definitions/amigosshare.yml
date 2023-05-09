@@ -178,6 +178,9 @@ search:
     _quality:
       selector: div.list-group-item-content p.m-0 span.badge-primary:contains("1080p"), div.list-group-item-content p.m-0 span.badge-primary:contains("720p"), div.list-group-item-content p.m-0 span.badge-primary:contains("4k")
       optional: true
+      filters:
+        - name: replace
+          args: ["4k", "2160p"]
     _year:
       selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#246AB6;"]
       optional: true
