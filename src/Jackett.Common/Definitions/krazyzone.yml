@@ -194,7 +194,7 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        img[src="images/free.png"]: 0
+        img[src="images/free.gif"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
