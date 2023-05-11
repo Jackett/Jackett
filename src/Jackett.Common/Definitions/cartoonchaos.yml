@@ -163,7 +163,7 @@ search:
       optional: true
       filters:
         - name: re_replace
-          args: ["[ ]at|[\\s+]|[//\xa0],\\/g", " "]
+          args: ["[ ]at|[//\xa0\\s,]+", " "]
     date_year:
       # February 09, 2019, 06:35:08 AM
       selector: td:nth-child(5):not(:contains("day"))
@@ -171,7 +171,7 @@ search:
       optional: true
       filters:
         - name: re_replace
-          args: ["[,]|[\\s+]|[//\xa0],\\/g", " "]
+          args: ["[//\xa0\\s,]+", " "]
         - name: dateparse
           args: "MMMM dd yyyy hh:mm:ss tt"
     date:
