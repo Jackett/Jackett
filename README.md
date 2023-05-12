@@ -399,6 +399,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Indietorrents [![(invite needed)][inviteneeded]](#)
  * Insane Tracker
  * IPTorrents (IPT)
+ * ItaTorrents
  * JME-REUNIT3D
  * JoyHD [![(invite needed)][inviteneeded]](#)
  * JPopsuki
