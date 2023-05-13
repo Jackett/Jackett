@@ -86,6 +86,7 @@ login:
   error:
     - selector: td.embedded:has(h2:contains("Login failed!"))
     - selector: td.embedded:has(h2:contains("Failed"))
+    - selector: td.embedded:has(h2:contains("Login Locked!"))
   test:
     path: index.php
     selector: a[href="logout.php"]
