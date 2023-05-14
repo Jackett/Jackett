@@ -26,7 +26,8 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://subsplease.org/",
-            "https://subsplease.mrunblock.guru/"
+            "https://subsplease.mrunblock.guru/",
+            "https://subsplease.nocensor.click/"
         };
         public override string[] LegacySiteLinks => new[]
         {
