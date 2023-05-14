@@ -6,7 +6,9 @@ language: el-GR
 type: private
 encoding: UTF-8
 links:
-  - http://fantastiko.space/ # https is not supported
+  - https://fantastiko.space/
+legacylinks:
+  - http://fantastiko.space/
 
 caps:
   categorymappings:
