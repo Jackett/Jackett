@@ -122,7 +122,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: td#mcol table.lista > tbody > tr:has(a[href^="download.php"])
+    selector: td#mcol table.lista > tbody > tr:has(a[href^="magnet:?xt="])
 
   fields:
     category:
@@ -138,6 +138,9 @@ search:
       attribute: href
     download:
       selector: a[href^="download.php"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details"]
