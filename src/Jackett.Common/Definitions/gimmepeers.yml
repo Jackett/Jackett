@@ -96,8 +96,8 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}{{ if .Query.Genre }} genre:{{ .Query.Genre }}{{ else }}{{ end }}"
-    # 0 title, 1 nfo, 2 filelist, 3 title+nfo
-    blah: "{{ if or .Query.IMDBID .Query.Genre }}3{{ else }}0{{ end }}"
+    # 0 title, 1 nfo, 2 filelist, 3 title+nfo, 4 imdb
+    blah: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.Genre }}3{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.Genre }}{{ else }}0{{ end }}"
     # 0 active only, 1 dead only
     incldead: 0
     sort: "{{ .Config.sort }}"
