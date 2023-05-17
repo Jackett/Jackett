@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download&usetoken=" + (useTokens ? "1" : "0") + "&id=";
+        protected override string DownloadUrl => SiteLink + "ajax.php?action=download" + (useTokens ? "&usetoken=1" : "") + "&id=";
 
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,

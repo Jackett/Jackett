@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
         protected override string DownloadUrl => SiteLink + "ajax.php?action=download" + (useTokens ? "&usetoken=1" : "") + "&id=";
         protected override string AuthorizationFormat => "token {0}";
         protected override int ApiKeyLength => 118;
-        protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "");
+        protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
         public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(configService: configService,

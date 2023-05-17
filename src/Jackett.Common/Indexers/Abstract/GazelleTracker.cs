@@ -27,13 +27,13 @@ namespace Jackett.Common.Indexers.Abstract
 
         protected virtual string LoginUrl => SiteLink + "login.php";
         protected virtual string APIUrl => SiteLink + "ajax.php";
-        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download&usetoken=" + (useTokens ? "1" : "0") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + (useAuthKey ? "&authkey=" + configData.AuthKey.Value : "") + "&id=";
+        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download" + (useTokens ? "&usetoken=1" : "") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + (useAuthKey ? "&authkey=" + configData.AuthKey.Value : "") + "&id=";
         protected virtual string DetailsUrl => SiteLink + "torrents.php?torrentid=";
         protected virtual string PosterUrl => SiteLink;
         protected virtual string AuthorizationName => "Authorization";
         protected virtual string AuthorizationFormat => "{0}";
         protected virtual int ApiKeyLength => 41;
-        protected virtual string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "usetoken=0");
+        protected virtual string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
 
         protected bool useTokens;
         protected string cookie = "";
@@ -418,7 +418,7 @@ namespace Jackett.Common.Indexers.Abstract
                     || html.Contains("This torrent is too large.")
                     || html.Contains("You cannot use tokens here"))
                 {
-                    // download again with usetoken=0
+                    // download again without usetoken=1
                     var requestLinkNew = FlipOptionalTokenString(requestLink);
                     content = await base.Download(new Uri(requestLinkNew), RequestType.GET, headers: headers);
                 }

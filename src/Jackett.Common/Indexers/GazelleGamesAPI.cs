@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers
         protected override string APIUrl => SiteLink + "api.php";
         protected override string AuthorizationName => "X-API-Key";
         protected override int ApiKeyLength => 64;
-        protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("usetoken=1", "");
+        protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(configService: configService,
