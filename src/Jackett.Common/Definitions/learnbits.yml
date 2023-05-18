@@ -131,6 +131,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    logout: ""
+    logintype: ""
   error:
     - selector: table:contains("An error has occured!")
   test:
