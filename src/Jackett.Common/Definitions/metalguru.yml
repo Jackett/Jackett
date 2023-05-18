@@ -1,0 +1,169 @@
+---
+id: metalguru
+name: MetalGuru
+description: " MetalGuru is a Private Torrent Tracker for General with focus on Music"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://metalguru.me/
+
+caps:
+  categorymappings:
+    - {id: 51, cat: Audio/Lossless, desc: "24bit"}
+    - {id: 58, cat: TV/Anime, desc: "Anime"}
+    - {id: 39, cat: PC/Mobile-Other, desc: "Anything Mobile"}
+    - {id: 1, cat: PC, desc: "Applications"}
+    - {id: 2, cat: Books, desc: "Books Ebooks & mags"}
+    - {id: 59, cat: Movies/SD, desc: "Cams"}
+    - {id: 46, cat: Books, desc: "Documents"}
+    - {id: 47, cat: Audio/Lossless, desc: "Flac/HD Audio"}
+    - {id: 61, cat: Console, desc: "Games"}
+    - {id: 62, cat: Audio, desc: "Karaoke"}
+    - {id: 45, cat: Other, desc: "Misc"}
+    - {id: 57, cat: Movies, desc: "Movie Packs"}
+    - {id: 10, cat: Movies, desc: "Movies"}
+    - {id: 50, cat: Audio, desc: "MQA"}
+    - {id: 29, cat: Audio, desc: "Music"}
+    - {id: 31, cat: Audio/Video, desc: "Music| Movie/Videos"}
+    - {id: 32, cat: Audio, desc: "Music| Packs"}
+    - {id: 60, cat: TV, desc: "Toons"}
+    - {id: 54, cat: TV, desc: "TV"}
+    - {id: 63, cat: TV, desc: "TV Packs"}
+    - {id: 56, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    use_ssl: 1
+    submitme: X
+  error:
+    - selector: h2:contains("failed")
+      message:
+        selector: td.colhead2
+  test:
+    path: browse.php
+    selector: a[href*="logout.php?hash_please="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ .Keywords }}"
+    # title, descr, genre, all
+    searchin: "{{ if .Query.IMDBID }}descr{{else}}title{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 no, 1 yes
+    only_free: "{{ if .Config.freeleech }}1{{else}}0{{end}}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # no imdbid in results
+
+  rows:
+    selector: table.table-bordered > tbody > tr:has(a[href^="details.php?id="])
+#    filters:
+#      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: a[href^="details.php?id="][onmouseover]
+      attribute: onmouseover
+      filters:
+          #  onmouseover="Tip('<img src=\'https://metalguru.me/bucket/2023/05/75ad78_theofficialtop40singleschart12-05-2023.jpg\' width=
+        - name: regexp
+          args: src=\\'(.*?)\\'
+    files:
+      selector: td:nth-child(5)
+    date_day:
+      # Today<br/>10:20 AM
+      # Yesterday<br/>08:03 PM
+      selector: td:nth-child(7):contains("day")
+      # auto adjusted by site account profile
+      optional: true
+    date_year:
+      # Feb 14 2019<br/>10:20 AM
+      selector: td:nth-child(7):not(:contains("day"))
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: dateparse
+          args: "MMM d yyyy hh:mm tt"
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(8)
+    grabs:
+      selector: td:nth-child(9)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    downloadvolumefactor:
+      case:
+        a.infofree: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 48h freeleech (as seconds = 48 x 60 x 60)
+      # 36h notfree (as seconds = 36 x 60 x 60)
+      case:
+        a.infofree: 172800
+        "*": 129600
+# U-232 v5
