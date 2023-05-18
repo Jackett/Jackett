@@ -294,7 +294,7 @@ namespace Jackett.Common.Indexers.Abstract
                 OnParseError(response.ContentString, ex);
             }
 
-            return releases;
+            return releases.OrderByDescending(o => o.PublishDate).ToArray();
         }
 
         // hook to add/modify the parsed information, return false to exclude the torrent from the results
