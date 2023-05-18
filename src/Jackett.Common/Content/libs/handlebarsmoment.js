@@ -20,7 +20,7 @@ Handlebars.registerHelper('jacketTimespan', function (context, block) {
 
     var hours = timeSpan.asHours();
     if (hours < 48) {
-        return Math.round(hours) + 'h ago';
+        return parseFloat(hours).toFixed(1) + 'h ago';
     }
 
     var days = timeSpan.asDays();
