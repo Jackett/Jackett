@@ -611,14 +611,14 @@ namespace Jackett.Common.Indexers
                 {
                     var name = input.GetAttribute("name");
 
-                    if (name == null)
+                    if (name == null || input.IsDisabled())
                     {
                         continue;
                     }
 
                     if (input is IHtmlInputElement element &&
                         element.Type.IsOneOf(InputTypeNames.Checkbox, InputTypeNames.Radio) &&
-                        (!input.IsChecked() || input.IsDisabled()))
+                        !input.IsChecked())
                     {
                         continue;
                     }
