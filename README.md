@@ -430,6 +430,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * magic-heaven
  * Magico (Trellas) [![(invite needed)][inviteneeded]](#)
  * Majomparádé (TurkDepo)
+ * Mansão dos Animes (MDAN)
  * MegamixTracker
  * MeseVilág (Fairytale World)
  * MetalGuru
