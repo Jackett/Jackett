@@ -1,0 +1,157 @@
+---
+id: infire
+name: Infire
+description: "Infire is a SLOVENIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: sl-SI
+type: private
+encoding: UTF-8
+links:
+  - https://infire.si/
+
+caps:
+  categorymappings:
+    - {id: 15, cat: Movies/HD, desc: "HD 720p"}
+    - {id: 16, cat: Movies/HD, desc: "HD 1080p"}
+    - {id: 17, cat: Movies/DVD, desc: "DVD"}
+    - {id: 18, cat: TV/Documentary, desc: "Dokumentarci"}
+    - {id: 19, cat: Movies/DVD, desc: "DVD/R5"}
+    - {id: 20, cat: Movies/WEB-DL, desc: "WEB/Rip"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "WEB/Download"}
+    - {id: 14, cat: Movies/SD, desc: "XviD"}
+    - {id: 32, cat: XXX, desc: "XXX"}
+    - {id: 49, cat: Movies/UHD, desc: "HD 2160p"}
+    - {id: 23, cat: TV, desc: "TV"}
+    - {id: 24, cat: TV/HD, desc: "HD TV"}
+    - {id: 26, cat: TV/Anime, desc: "Animirano"}
+    - {id: 28, cat: PC/Games, desc: "PC"}
+    - {id: 29, cat: PC/ISO, desc: "PC ISO"}
+    - {id: 30, cat: Console/Other, desc: "GBA"}
+    - {id: 31, cat: Console/PS3, desc: "PS2"}
+    - {id: 33, cat: Audio, desc: "Glasba"}
+    - {id: 34, cat: Console/PS3, desc: "PS3"}
+    - {id: 35, cat: Console/XBox, desc: "Xbox"}
+    - {id: 36, cat: Console/PSP, desc: "PSP"}
+    - {id: 37, cat: TV/Sport, desc: "Sport"}
+    - {id: 38, cat: PC, desc: "Programi"}
+    - {id: 39, cat: Books/EBook, desc: "eKnjige"}
+    - {id: 40, cat: Other, desc: "Slike"}
+    - {id: 41, cat: Audio/Audiobook, desc: "AudioBook"}
+    - {id: 42, cat: Audio/Video, desc: "Music DVD"}
+    - {id: 43, cat: TV/Other, desc: "Videospoti"}
+    - {id: 44, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 45, cat: PC/Mobile-iOS, desc: "iOS"}
+    - {id: 46, cat: PC/Mac, desc: "Mac"}
+    - {id: 47, cat: PC, desc: "Linux"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: data
+    options:
+      data: created
+      seeds: seeders
+      size: size
+      filename: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+
+login:
+  method: post
+  path: login.php
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: font[color="#FF0000"]
+  test:
+    path: index.php
+    selector: a[href^="logout.php"]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    # does not support multi categories, defaulting to all.
+    search: "{{ .Keywords }}"
+    # 0 all, 1 active, 2 dead
+    active: 0
+    # 0 all, 1 classic, 2 silver, 3 gold, 4 gold & silver
+    gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  rows:
+    selector: table.lista > tbody > tr.a
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    size:
+      selector: td:nth-child(7)
+    date:
+      selector: td:nth-child(6)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "dd/MM/yyyy HH:mm:ss"
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    grabs:
+      selector: td:nth-child(11)
+    genre:
+      selector: td:nth-child(2) span
+    description:
+      text: "{{ .Result.genre }}"
+    downloadvolumefactor:
+      case:
+        img[src="images/gold.png"]: 0
+        img[src="images/silver.png"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 30 hours (as seconds = 30 x 60 x 60)
+      text: 108000
+# BtiTracker 1.5.8
