@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,7 +71,14 @@ namespace Jackett.Common.Indexers
                 query.ImdbID = null;
             }
 
-            return await base.PerformQuery(query);
+            var releases = await base.PerformQuery(query);
+
+            if (query.SearchTerm.IsNullOrWhiteSpace())
+            {
+                releases = releases.Take(50).ToList();
+            }
+
+            return releases;
         }
 
         protected override bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
