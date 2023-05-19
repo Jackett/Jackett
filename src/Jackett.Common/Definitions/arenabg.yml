@@ -28,6 +28,7 @@ caps:
     - {id: 20, cat: Movies/HD, desc: "Movies / Movies HD"}
     - {id: 21, cat: Movies/HD, desc: "Movies / x265"}
     - {id: 22, cat: Movies/UHD, desc: "Movies / 4K"}
+    - {id: 59, cat: Movies/HD, desc: "Movies / AV1"}
     - {id: 2, cat: TV, desc: "Series"}
     - {id: 23, cat: TV/HD, desc: "Series / TV Episodes HD"}
     - {id: 24, cat: TV, desc: "Series / TV Episodes"}
