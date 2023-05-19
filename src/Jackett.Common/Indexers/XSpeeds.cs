@@ -117,10 +117,14 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(107, TorznabCatType.PCMac, "Games PC/Mac");
             caps.Categories.AddCategoryMapping(11, TorznabCatType.Movies, "Movie Boxsets");
             caps.Categories.AddCategoryMapping(118, TorznabCatType.MoviesUHD, "Movie Boxsets/Boxset 4K");
+            caps.Categories.AddCategoryMapping(143, TorznabCatType.MoviesHD, "Movie Boxsets/Boxset HD");
             caps.Categories.AddCategoryMapping(119, TorznabCatType.MoviesHD, "Movie Boxsets/Boxset HEVC");
+            caps.Categories.AddCategoryMapping(144, TorznabCatType.MoviesSD, "Movie Boxsets/Boxset SD");
             caps.Categories.AddCategoryMapping(12, TorznabCatType.Movies, "Movies");
             caps.Categories.AddCategoryMapping(117, TorznabCatType.MoviesUHD, "Movies 4K");
+            caps.Categories.AddCategoryMapping(145, TorznabCatType.MoviesHD, "Movies HD");
             caps.Categories.AddCategoryMapping(100, TorznabCatType.MoviesHD, "Movies HEVC");
+            caps.Categories.AddCategoryMapping(146, TorznabCatType.MoviesSD, "Movies SD");
             caps.Categories.AddCategoryMapping(13, TorznabCatType.Audio, "Music");
             caps.Categories.AddCategoryMapping(135, TorznabCatType.AudioLossless, "Music/FLAC");
             caps.Categories.AddCategoryMapping(136, TorznabCatType.Audio, "Music Boxset");
@@ -128,21 +132,25 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(9, TorznabCatType.Other, "Other");
             caps.Categories.AddCategoryMapping(125, TorznabCatType.Other, "Other/Pictures");
             caps.Categories.AddCategoryMapping(54, TorznabCatType.TVOther, "Soaps");
+            caps.Categories.AddCategoryMapping(83, TorznabCatType.TVOther, "Specials");
+            caps.Categories.AddCategoryMapping(139, TorznabCatType.TV, "TOTM (Freeleech)");
+            caps.Categories.AddCategoryMapping(138, TorznabCatType.TV, "TOTW (x2 upload)");
+            caps.Categories.AddCategoryMapping(139, TorznabCatType.Movies, "TOTM (Freeleech)");
+            caps.Categories.AddCategoryMapping(138, TorznabCatType.Movies, "TOTW (x2 upload)");
             caps.Categories.AddCategoryMapping(20, TorznabCatType.TVSport, "Sports");
             caps.Categories.AddCategoryMapping(88, TorznabCatType.TVSport, "Sports/Football");
             caps.Categories.AddCategoryMapping(86, TorznabCatType.TVSport, "Sports/MotorSports");
             caps.Categories.AddCategoryMapping(89, TorznabCatType.TVSport, "Sports/Olympics");
-            caps.Categories.AddCategoryMapping(83, TorznabCatType.Movies, "TOTM");
-            caps.Categories.AddCategoryMapping(137, TorznabCatType.Movies, "TOTW");
             caps.Categories.AddCategoryMapping(126, TorznabCatType.TV, "TV");
             caps.Categories.AddCategoryMapping(127, TorznabCatType.TVUHD, "TV 4K");
             caps.Categories.AddCategoryMapping(129, TorznabCatType.TVHD, "TV HD");
             caps.Categories.AddCategoryMapping(130, TorznabCatType.TVHD, "TV HEVC");
             caps.Categories.AddCategoryMapping(128, TorznabCatType.TVSD, "TV SD");
             caps.Categories.AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
-            caps.Categories.AddCategoryMapping(120, TorznabCatType.TVUHD, "Boxset TV-4K");
-            caps.Categories.AddCategoryMapping(76, TorznabCatType.TVHD, "Boxset TV-HD");
-            caps.Categories.AddCategoryMapping(97, TorznabCatType.TVHD, "Boxset TV-HEVC");
+            caps.Categories.AddCategoryMapping(120, TorznabCatType.TVUHD, "Boxset TV 4K");
+            caps.Categories.AddCategoryMapping(76, TorznabCatType.TVHD, "Boxset TV HD");
+            caps.Categories.AddCategoryMapping(97, TorznabCatType.TVHD, "Boxset TV HEVC");
+            caps.Categories.AddCategoryMapping(147, TorznabCatType.TVSD, "Boxset TV SD");
 
             return caps;
         }
