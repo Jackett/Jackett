@@ -9,8 +9,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
+using AngleSharp.Html;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using AngleSharp.Text;
 using AngleSharp.Xml.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
@@ -608,8 +610,18 @@ namespace Jackett.Common.Indexers
                 foreach (var input in inputs)
                 {
                     var name = input.GetAttribute("name");
-                    if (name == null)
+
+                    if (name == null || input.IsDisabled())
+                    {
                         continue;
+                    }
+
+                    if (input is IHtmlInputElement element &&
+                        element.Type.IsOneOf(InputTypeNames.Checkbox, InputTypeNames.Radio) &&
+                        !input.IsChecked())
+                    {
+                        continue;
+                    }
 
                     var value = input.GetAttribute("value") ?? "";
 
