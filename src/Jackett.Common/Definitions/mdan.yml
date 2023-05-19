@@ -141,8 +141,12 @@ search:
       selector: td:nth-child(4)
     seeders:
       selector: a[href$="seeders"]
+      optional: true
+      default: 0
     leechers:
       selector: a[href$="leechers"]
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img[src="./pic/free.gif"]: 0
