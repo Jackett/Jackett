@@ -89,7 +89,6 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    logout: ""
     logintype: yes
   error:
     - selector: div.error
