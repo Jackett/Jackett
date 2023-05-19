@@ -132,7 +132,6 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     logout: ""
-    logintype: ""
   error:
     - selector: table:contains("An error has occured!")
   test:
@@ -209,6 +208,8 @@ search:
       optional: true
       remove: a, b, img, span
       filters:
+        - name: replace
+          args: ["|", ""]
         - name: dateparse
           args: "yyyy-MM-dd hh:mm tt"
     date:
