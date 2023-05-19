@@ -92,6 +92,7 @@ caps:
     - {id: 117, cat: Audio, desc: "Compact Disc Club"}
     - {id: 20, cat: Audio/Video, desc: "Music Videos"}
     - {id: 118, cat: Audio, desc: "Dream Radio Music"}
+    - {id: 124, cat: Movies, desc: "VIP Movies"}
 
   modes:
     search: [q]
