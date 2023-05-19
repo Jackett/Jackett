@@ -19,6 +19,7 @@ caps:
     - {id: 21, cat: Movies/WEB-DL, desc: "WEB/Download"}
     - {id: 14, cat: Movies/SD, desc: "XviD"}
     - {id: 32, cat: XXX, desc: "XXX"}
+    - {id: 50, cat: Movies/BluRay, desc: "BluRay 1080p"}
     - {id: 49, cat: Movies/UHD, desc: "HD 2160p"}
     - {id: 23, cat: TV, desc: "TV"}
     - {id: 24, cat: TV/HD, desc: "HD TV"}
