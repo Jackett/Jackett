@@ -149,9 +149,9 @@ search:
     grabs:
       selector: td:nth-child(9)
     seeders:
-      selector: td:nth-child(10)
+      text: 1
     leechers:
-      selector: td:nth-child(11)
+      text: 1
     downloadvolumefactor:
       case:
         a.infofree: 0
