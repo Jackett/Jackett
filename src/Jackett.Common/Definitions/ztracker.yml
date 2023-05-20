@@ -89,6 +89,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    logintype: yes
   error:
     - selector: div.error
     - selector: table:has(img[src="/pic/ts_error/error.jpg"])

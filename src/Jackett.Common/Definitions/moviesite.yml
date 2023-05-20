@@ -75,6 +75,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    logintype: yes
   error:
     - selector: table:contains("Hiba történt!")
   test:
