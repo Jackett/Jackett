@@ -240,6 +240,11 @@ namespace Jackett.Common.Indexers
                 {
                     var group = gObj.Value as JObject;
 
+                    if (group["Torrents"].Type == JTokenType.Array && group["Torrents"] is JArray array && array.Count == 0)
+                    {
+                        continue;
+                    }
+
                     foreach (var tObj in JObject.FromObject(group["Torrents"]))
                     {
                         var torrent = tObj.Value as JObject;
