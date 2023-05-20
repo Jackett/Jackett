@@ -1349,8 +1349,6 @@ namespace Jackett.Common.Indexers
                 mappedCategories = DefaultCategories;
             }
 
-            variables[".Categories"] = mappedCategories;
-
             var KeywordTokens = new List<string>();
             var KeywordTokenKeys = new List<string> { "Q", "Series", "Movie", "Year" };
             foreach (var key in KeywordTokenKeys)
@@ -1369,15 +1367,19 @@ namespace Jackett.Common.Indexers
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
             {
+                variables[".Categories"] = mappedCategories;
+
                 // skip path if categories don't match
                 if (SearchPath.Categories.Count > 0)
                 {
-                    var invertMatch = (SearchPath.Categories[0] == "!");
-                    var hasIntersect = mappedCategories.Intersect(SearchPath.Categories).Any();
-                    if (invertMatch)
-                        hasIntersect = !hasIntersect;
-                    if (!hasIntersect)
+                    var applicableCategories = SearchPathHelpers.GetApplicableCategories(SearchPath.Categories, mappedCategories);
+
+                    if (applicableCategories.Count == 0)
+                    {
                         continue;
+                    }
+
+                    variables[".Categories"] = applicableCategories;
                 }
 
                 // build search URL
