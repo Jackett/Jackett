@@ -26,6 +26,8 @@ namespace Jackett.Common.Models
         public long? TraktId { get; set; }
         public long? DoubanId { get; set; }
         public ICollection<string> Genres { get; set; }
+        public ICollection<string> Languages { get; set; }
+        public ICollection<string> Subs { get; set; }
         public long? Year { get; set; }
         public string Author { get; set; }
         public string BookTitle { get; set; }
@@ -52,6 +54,8 @@ namespace Jackett.Common.Models
 
         public ReleaseInfo()
         {
+            Languages = new List<string>();
+            Subs = new List<string>();
         }
 
         protected ReleaseInfo(ReleaseInfo copyFrom)
@@ -74,6 +78,8 @@ namespace Jackett.Common.Models
             TraktId = copyFrom.TraktId;
             DoubanId = copyFrom.DoubanId;
             Genres = copyFrom.Genres;
+            Languages = copyFrom.Languages;
+            Subs = copyFrom.Subs;
             Year = copyFrom.Year;
             Author = copyFrom.Author;
             BookTitle = copyFrom.BookTitle;

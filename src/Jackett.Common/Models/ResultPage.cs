@@ -103,6 +103,8 @@ namespace Jackett.Common.Models
                             GetTorznabElement("traktid", r.TraktId),
                             GetTorznabElement("doubanid", r.DoubanId),
                             r.Genres == null ? null : GetTorznabElement("genre", string.Join(", ", r.Genres)),
+                            r.Languages == null ? null : from c in r.Languages select GetTorznabElement("language", c),
+                            r.Subs == null ? null : from c in r.Subs select GetTorznabElement("subs", c),
                             GetTorznabElement("year", r.Year),
                             GetTorznabElement("author", RemoveInvalidXMLChars(r.Author)),
                             GetTorznabElement("booktitle", RemoveInvalidXMLChars(r.BookTitle)),

@@ -253,7 +253,9 @@ namespace Jackett.Common.Indexers.Abstract
                         DownloadVolumeFactor = row.Value<double>("download_multiply"),
                         UploadVolumeFactor = row.Value<double>("upload_multiply"),
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800 // 48 hours
+                        MinimumSeedTime = 172800, // 48 hours
+                        Languages = row.Value<JArray>("audio")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
+                        Subs = row.Value<JArray>("subtitle")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
                     };
 
                     releases.Add(release);
