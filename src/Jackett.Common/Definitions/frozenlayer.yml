@@ -60,6 +60,8 @@ search:
     selector: table#descargas > tbody > tr:has(td:has(a[href^="magnet:?"]))
 
   fields:
+    category:
+      text: "{{ if eq .Config.category \"todos\" }}Anime{{ else }}{{ .Config.category }}{{ end }}"
     title:
       selector: td.tit a
       filters:
@@ -84,10 +86,6 @@ search:
     magnet:
       selector: td:nth-child(1) a[href^="magnet:?"]
       attribute: href
-    category:
-      selector: td.tit span
-      optional: true
-      default: Anime
     date_day:
       # 1d
       # 2d 3h
