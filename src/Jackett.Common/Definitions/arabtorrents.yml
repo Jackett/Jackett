@@ -145,7 +145,7 @@ download:
     path: takethanks.php
     method: post
     inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
+      torrentid: "{{ re_replace .DownloadUri.PathAndQuery \".*download-torrent-(\\d+).*\" \"$1\"}}"
 
 search:
   paths:
@@ -169,22 +169,22 @@ search:
       args: ["^(.+)$", "*$1*"]
 
   rows:
-    selector: table#sortabletable > tbody > tr:has(div > a[href*="details.php?id="])
+    selector: table#sortabletable > tbody > tr:has(span > a[href*="details.php?id="])
 
   fields:
     category:
-      selector: td a[href*="/browse.php?category="]
+      selector: td a[href*="/torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: "torrent-category-(\\d+)\/"
     title:
-      selector: td a[href*="/details.php?id="]
+      selector: td div.tooltip-target
     details:
-      selector: td a[href*="/details.php?id="]
+      selector: span a[href*="/details.php?id="]
       attribute: href
     download:
-      selector: a[href*="/download.php?id="]
+      selector: a[href*="/download-torrent-"]
       attribute: href
     date:
       selector: td:nth-child(2) > div:nth-child(3)
