@@ -28,6 +28,7 @@ caps:
     - {id: Documentaries, cat: TV/Documentary, desc: Documentaries}
     - {id: XXX, cat: XXX, desc: XXX}
     - {id: Other, cat: Other, desc: Other}
+    - {id: Anime, cat: TV/Anime, desc: Anime}
 
   modes:
     search: [q]
