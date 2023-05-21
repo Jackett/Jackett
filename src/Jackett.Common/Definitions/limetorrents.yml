@@ -127,7 +127,7 @@ search:
       default: "{{ if .Result.category_is_tv_show }}TV shows{{ else }}Other{{ end }}"
       filters:
         - name: regexp
-          args: " in (.+?)$"
+          args: " in (.+?)[.]?$"
     details:
       selector: div.tt-name > a[href^="/"]
       attribute: href
