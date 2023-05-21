@@ -7,7 +7,6 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.torrent9.fi/
   - https://www.torrent9.fm/
   - https://torrent9.unblockninja.com/
 legacylinks:
@@ -44,6 +43,7 @@ legacylinks:
   - https://www.oxtorrent.me/ # http 522 Connection timed out
   - https://www.torrent9.gg/
   - https://torrent9.to/ # no response data
+  - https://www.torrent9.fi/ # this is the torrent9clone domain
 
 caps:
   # dont forget to update the search fields category case block
