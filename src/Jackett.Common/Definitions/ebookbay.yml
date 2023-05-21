@@ -14,6 +14,7 @@ caps:
     - {id: "Action/Adventure", cat: Books/EBook, desc: "Action/Adventure"}
     - {id: "Animals", cat: Books/EBook, desc: "Animals"}
     - {id: "Arts", cat: Books/EBook, desc: "Arts"}
+    - {id: "Audio Books", cat: Audio/Audiobook, desc: "Audio Books"}
     - {id: "Beauty", cat: Books/EBook, desc: "Beauty"}
     - {id: "Business", cat: Books/EBook, desc: "Business"}
     - {id: "Certification", cat: Books/EBook, desc: "Certification"}
@@ -29,7 +30,7 @@ caps:
     - {id: "Fantasy", cat: Books/EBook, desc: "Fantasy"}
     - {id: "Gardening", cat: Books/EBook, desc: "Gardening"}
     - {id: "Health", cat: Books/EBook, desc: "Health"}
-    - {id: "Historical", cat: Books/EBook, desc: "Historical"}
+    - {id: "Historical Fiction", cat: Books/EBook, desc: "Historical Fiction"}
     - {id: "History", cat: Books/EBook, desc: "History"}
     - {id: "Horror", cat: Books/EBook, desc: "Horror"}
     - {id: "Humorous", cat: Books/EBook, desc: "Humorous"}
@@ -64,6 +65,7 @@ caps:
   modes:
     search: [q]
     book-search: [q]
+    music-search: [q]
 
 settings: []
 
@@ -101,8 +103,10 @@ search:
       optional: true
       default: Other
       filters:
+        - name: re_replace
+          args: ["(?i)\\bEbooks?\\b", ""]
         - name: regexp
-          args: "E book under:\\s+(.+?)\\s"
+          args: "E book under:\\s+(.+?)\\s?\\\xA0"
     title:
       selector: div.postname a
     details:
