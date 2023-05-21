@@ -71,8 +71,8 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. 
-    
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
 login:
   path: login.php
   method: form
@@ -103,7 +103,7 @@ search:
     search: "{{ .Keywords }}"
     # 0 active, 1 all, 2 dead, 3 freeleech
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
-    # 0 all, 1 polish, 2 non-polish 
+    # 0 all, 1 polish, 2 non-polish
     polish: 0
     # 0 name
     blah: 0
