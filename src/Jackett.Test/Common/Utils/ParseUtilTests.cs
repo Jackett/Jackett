@@ -94,5 +94,22 @@ namespace Jackett.Test.Common.Utils
         {
             ParseUtil.GetLongFromString(original).Should().Be(parsedInt);
         }
+
+        [TestCase("tt0183790", "tt0183790")]
+        [TestCase("0183790", "tt0183790")]
+        [TestCase("183790", "tt0183790")]
+        [TestCase("tt10001870", "tt10001870")]
+        [TestCase("10001870", "tt10001870")]
+        [TestCase("tt", null)]
+        [TestCase("tt0", null)]
+        [TestCase("abc", null)]
+        [TestCase("abc0", null)]
+        [TestCase("0", null)]
+        [TestCase("", null)]
+        [TestCase(null, null)]
+        public void should_parse_full_imdb_id_from_string(string input, string expected)
+        {
+            ParseUtil.GetFullImdbId(input).Should().Be(expected);
+        }
     }
 }

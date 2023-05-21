@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers.Abstract
                     var jMovieTv = row.Value<JToken>("movie_tv");
                     if (jMovieTv != null && jMovieTv.HasValues)
                     {
-                        imdb = ParseUtil.GetImdbID(jMovieTv.Value<string>("imdb"));
+                        imdb = ParseUtil.GetImdbId(jMovieTv.Value<string>("imdb"));
                         if (long.TryParse(jMovieTv.Value<string>("tvdb"), out var tvdbParsed))
                             tvdb = tvdbParsed;
                         if (long.TryParse(jMovieTv.Value<string>("tmdb"), out var tmdbParsed))

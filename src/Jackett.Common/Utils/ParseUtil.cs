@@ -11,7 +11,7 @@ namespace Jackett.Common.Utils
             new Regex(
                 @"(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F\uFEFF\uFFFE\uFFFF]",
                 RegexOptions.Compiled);
-        private static readonly Regex ImdbId = new Regex(@"^(?:tt)?(\d{1,8})$", RegexOptions.Compiled);
+        private static readonly Regex ImdbIdRegex = new Regex(@"^(?:tt)?(\d{1,8})$", RegexOptions.Compiled);
 
         public static string NormalizeSpace(string s) => s?.Trim() ?? string.Empty;
 
@@ -96,24 +96,33 @@ namespace Jackett.Common.Utils
             return CoerceLong(extractedLong);
         }
 
-        public static int? GetImdbID(string imdbstr)
+        public static int? GetImdbId(string value)
         {
-            if (imdbstr == null)
+            if (value == null)
+            {
                 return null;
-            var match = ImdbId.Match(imdbstr);
+            }
+
+            var match = ImdbIdRegex.Match(value);
+
             if (!match.Success)
+            {
                 return null;
+            }
 
             return int.Parse(match.Groups[1].Value, NumberStyles.Any, CultureInfo.InvariantCulture);
         }
 
-        public static string GetFullImdbID(string imdbstr)
+        public static string GetFullImdbId(string value)
         {
-            var imdbid = GetImdbID(imdbstr);
-            if (imdbid == null)
+            var imdbId = GetImdbId(value);
+
+            if (imdbId == null || imdbId == 0)
+            {
                 return null;
-            var imdbLen = ((int)imdbid > 9999999) ? "D8" : "D7";
-            return "tt" + ((int)imdbid).ToString(imdbLen);
+            }
+
+            return $"tt{imdbId.GetValueOrDefault():D7}";
         }
 
         // ex: " 3.5  gb   " -> "3758096384" , "3,5GB" -> "3758096384" ,  "296,98 MB" -> "311406100.48" , "1.018,29 MB" -> "1067754455.04"

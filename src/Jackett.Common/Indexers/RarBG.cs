@@ -237,7 +237,7 @@ namespace Jackett.Common.Indexers
                     var episodeInfo = item.Value<JToken>("episode_info");
                     if (episodeInfo.HasValues)
                     {
-                        release.Imdb = ParseUtil.GetImdbID(episodeInfo.Value<string>("imdb"));
+                        release.Imdb = ParseUtil.GetImdbId(episodeInfo.Value<string>("imdb"));
                         release.TVDBId = episodeInfo.Value<long?>("tvdb");
                         release.RageID = episodeInfo.Value<long?>("tvrage");
                         release.TMDb = episodeInfo.Value<long?>("themoviedb");

@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
 
             var imdbID = (string)result["imdbId"];
             if (!string.IsNullOrEmpty(imdbID))
-                release.Imdb = ParseUtil.GetImdbID(imdbID);
+                release.Imdb = ParseUtil.GetImdbId(imdbID);
 
             release.MinimumRatio = 1;
             release.MinimumSeedTime = 172800; // 48 hours

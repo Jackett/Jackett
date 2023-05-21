@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers.Abstract
                         Link = new Uri((string)r["download_url"])
                     };
                     release.Guid = release.Link;
-                    release.Imdb = ParseUtil.GetImdbID((string)r["imdb_id"]);
+                    release.Imdb = ParseUtil.GetImdbId((string)r["imdb_id"]);
                     var freeleech = (bool)r["freeleech"];
                     if (freeleech)
                         release.DownloadVolumeFactor = 0;

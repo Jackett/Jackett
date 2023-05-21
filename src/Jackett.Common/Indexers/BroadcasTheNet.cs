@@ -161,7 +161,7 @@ namespace Jackett.Common.Indexers
                             descriptions.Add("Origin: " + btnResult.Origin);
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
                             descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
-                        var imdb = ParseUtil.GetImdbID(btnResult.ImdbID);
+                        var imdb = ParseUtil.GetImdbId(btnResult.ImdbID);
                         var link = new Uri(btnResult.DownloadURL);
                         var details = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);

@@ -365,7 +365,7 @@ namespace Jackett.Server.Controllers
                 }
                 */
 
-                CurrentQuery.ImdbID = ParseUtil.GetFullImdbID(CurrentQuery.ImdbID); // normalize ImdbID
+                CurrentQuery.ImdbID = ParseUtil.GetFullImdbId(CurrentQuery.ImdbID); // normalize ImdbID
                 if (CurrentQuery.ImdbID == null)
                 {
                     logger.Warn($"A search request from {Request.HttpContext.Connection.RemoteIpAddress} was made with an invalid imdbid.");
@@ -554,7 +554,7 @@ namespace Jackett.Server.Controllers
                     torrent_id = release.Guid.AbsoluteUri, // GUID and (Link or Magnet) are mandatory
                     details_url = release.Details?.AbsoluteUri,
                     download_url = (release.Link != null ? release.Link.AbsoluteUri : release.MagnetUri.AbsoluteUri),
-                    imdb_id = release.Imdb.HasValue ? ParseUtil.GetFullImdbID("tt" + release.Imdb) : null,
+                    imdb_id = release.Imdb.HasValue ? ParseUtil.GetFullImdbId("tt" + release.Imdb) : null,
                     freeleech = (release.DownloadVolumeFactor == 0 ? true : false),
                     type = "movie",
                     size = (long)release.Size / (1024 * 1024), // This is in MB

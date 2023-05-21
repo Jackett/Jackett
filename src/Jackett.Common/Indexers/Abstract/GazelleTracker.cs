@@ -270,7 +270,7 @@ namespace Jackett.Common.Indexers.Abstract
 
                     if (imdbInTags)
                         release.Imdb = tags
-                                       .Select(tag => ParseUtil.GetImdbID((string)tag))
+                                       .Select(tag => ParseUtil.GetImdbId((string)tag))
                                        .Where(tag => tag != null).FirstIfSingleOrDefault();
 
                     if (r["torrents"] is JArray)

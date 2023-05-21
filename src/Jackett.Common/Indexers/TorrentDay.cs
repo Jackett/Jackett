@@ -230,7 +230,7 @@ namespace Jackett.Common.Indexers
                     var downloadMultiplier = (double?)row["download-multiplier"] ?? 1;
                     var link = new Uri(SiteLink + "download.php/" + torrentId + "/" + torrentId + ".torrent");
                     var publishDate = DateTimeUtil.UnixTimestampToDateTime((long)row.ctime).ToLocalTime();
-                    var imdb = ParseUtil.GetImdbID(imdbId);
+                    var imdb = ParseUtil.GetImdbId(imdbId);
 
                     var release = new ReleaseInfo
                     {

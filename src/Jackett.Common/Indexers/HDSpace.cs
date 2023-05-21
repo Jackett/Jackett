@@ -195,7 +195,7 @@ namespace Jackett.Common.Indexers
 
                     var imdbLink = row.Children[1].QuerySelector("a[href*=imdb]");
                     if (imdbLink != null)
-                        release.Imdb = ParseUtil.GetImdbID(imdbLink.GetAttribute("href").Split('/').Last());
+                        release.Imdb = ParseUtil.GetImdbId(imdbLink.GetAttribute("href").Split('/').Last());
 
                     var dateStr = row.Children[4].TextContent.Trim();
                     //"July 11, 2015, 13:34:09", "Today|Yesterday at 20:04:23"

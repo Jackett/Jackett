@@ -54,7 +54,7 @@ namespace Jackett.Common.Models.DTO
             // try to build an IMDB Query (tt plus 6 to 8 digits)
             if (stringQuery.SanitizedSearchTerm.StartsWith("tt") && stringQuery.SanitizedSearchTerm.Length <= 10)
             {
-                var imdbId = ParseUtil.GetFullImdbID(stringQuery.SanitizedSearchTerm);
+                var imdbId = ParseUtil.GetFullImdbId(stringQuery.SanitizedSearchTerm);
                 if (imdbId != null)
                 {
                     return new TorznabQuery

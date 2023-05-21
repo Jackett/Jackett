@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
                         Files = item.Value<long>("numfiles"),
                         Seeders = item.Value<int>("seeders"),
                         Peers = item.Value<int>("leechers") + item.Value<int>("seeders"),
-                        Imdb = ParseUtil.GetImdbID(item.Value<string>("imdbid")),
+                        Imdb = ParseUtil.GetImdbId(item.Value<string>("imdbid")),
                         MinimumRatio = 1,
                         MinimumSeedTime = 0,
                         DownloadVolumeFactor = dlVolumeFactor,

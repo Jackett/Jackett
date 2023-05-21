@@ -97,7 +97,7 @@ namespace Jackett.Common.Indexers
         {
             var requestData = new JObject();
             var queryString = query.GetQueryString();
-            var imdbId = ParseUtil.GetImdbID(query.ImdbID);
+            var imdbId = ParseUtil.GetImdbId(query.ImdbID);
 
             if (imdbId != null)
                 requestData["imdb"] = new JObject
@@ -175,7 +175,7 @@ namespace Jackett.Common.Indexers
                 };
 
                 if (r.ContainsKey("imdb"))
-                    release.Imdb = ParseUtil.GetImdbID((string)r["imdb"]["id"]);
+                    release.Imdb = ParseUtil.GetImdbId((string)r["imdb"]["id"]);
 
                 if (r.ContainsKey("tvdb"))
                     release.TVDBId = (long)r["tvdb"]["id"];

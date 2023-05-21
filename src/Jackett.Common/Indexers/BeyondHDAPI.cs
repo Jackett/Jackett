@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers
             else if (query.IsMovieSearch)
                 postData.Add(BHDParams.categories, "Movies");
 
-            var imdbId = ParseUtil.GetImdbID(query.ImdbID);
+            var imdbId = ParseUtil.GetImdbId(query.ImdbID);
             if (imdbId != null)
                 postData.Add(BHDParams.imdb_id, imdbId.ToString());
             if (query.IsTmdbQuery)
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
             };
 
             if (!string.IsNullOrEmpty(bhdResult.imdb_id))
-                releaseInfo.Imdb = ParseUtil.GetImdbID(bhdResult.imdb_id);
+                releaseInfo.Imdb = ParseUtil.GetImdbId(bhdResult.imdb_id);
 
             releaseInfo.DownloadVolumeFactor = 1;
             releaseInfo.UploadVolumeFactor = 1;

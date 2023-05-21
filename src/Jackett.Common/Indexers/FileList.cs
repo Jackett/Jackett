@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
                     var publishDate = DateTime.Parse(row.Value<string>("upload_date") + " +0300", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
                     var downloadVolumeFactor = isFreeleech ? 0 : 1;
                     var uploadVolumeFactor = row.Value<bool>("doubleup") ? 2 : 1;
-                    var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbID(row.Value<string>("imdb")) : null;
+                    var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbId(row.Value<string>("imdb")) : null;
                     var link = new Uri(row.Value<string>("download_link"));
 
                     var release = new ReleaseInfo
