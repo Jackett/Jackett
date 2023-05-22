@@ -136,6 +136,8 @@ search:
     category:
       selector: a[href^="torrents.php?cat="]
       attribute: href
+      optional: true
+      default: 95
       filters:
         - name: querystring
           args: cat
