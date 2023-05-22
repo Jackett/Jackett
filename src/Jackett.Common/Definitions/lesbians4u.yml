@@ -87,7 +87,6 @@ download:
     - selector: a[href*="download-torrent-"]
       attribute: href
 
-
 search:
   paths:
     - path: browse.php
