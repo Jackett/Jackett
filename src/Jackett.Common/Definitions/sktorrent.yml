@@ -16,8 +16,8 @@ caps:
     - {id: 9, cat: XXX, desc: "xXx"}
     - {id: 23, cat: Books, desc: "Knihy a Časopisy"}
     - {id: 25, cat: Other, desc: "Ostatní"}
-    - {id: 5, cat: Movies, desc: "Filmy Kreslené"}
     - {id: 1, cat: Movies, desc: "Filmy CZ/SK dabing"}
+    - {id: 5, cat: Movies, desc: "Filmy Kreslené"}
     - {id: 14, cat: Movies/Other, desc: "Filmy Kamera"}
     - {id: 15, cat: Movies, desc: "Filmy s titulkama"}
     - {id: 20, cat: Movies/DVD, desc: "Filmy DVD"}
@@ -32,6 +32,7 @@ caps:
     - {id: 37, cat: PC/Games, desc: "Hry na Linux"}
     - {id: 59, cat: PC/Games, desc: "Hry na Mac"}
     - {id: 60, cat: PC/Games, desc: "xXx hry (18+)"}
+    - {id: 63, cat: PC/Games, desc: "VR Hry"}
     - {id: 16, cat: TV, desc: "TV Seriál"}
     - {id: 17, cat: TV/Documentary, desc: "TV Dokument"}
     - {id: 42, cat: TV, desc: "TV Pořad"}
