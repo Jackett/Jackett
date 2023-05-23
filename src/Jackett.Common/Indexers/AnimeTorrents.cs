@@ -117,8 +117,8 @@ namespace Jackett.Common.Indexers
 
             var searchString = query.GetQueryString().Trim();
 
-            //  replace any space, special char, etc. with % (wildcard)
-            searchString = Regex.Replace(searchString, "[^a-zA-Z0-9]+", "%");
+            // replace non-word characters with % (wildcard)
+            searchString = Regex.Replace(searchString, @"[\W]+", "%");
 
             var searchUrl = SearchUrl;
 
