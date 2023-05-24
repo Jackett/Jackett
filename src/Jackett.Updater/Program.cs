@@ -440,6 +440,7 @@ namespace Jackett.Updater
                 "Definitions/leparadisdunet.yml",
                 "Definitions/leporno.yml",
                 "Definitions/liaorencili.yml", // renamed to cilipro
+                "Definitions/lightning-tor.yml",
                 "Definitions/mactorrents.yml",
                 "Definitions/magnet4you.yml",
                 "Definitions/magnetdl.yml",
