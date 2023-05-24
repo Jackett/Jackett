@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataPasskey("You can find the Passkey if you generate a RSS " +
                                                             "feed link. It's the last parameter in the URL."))
         {
-           wc.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8"); // self signed
+            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8"); // self signed
         }
 
         private TorznabCapabilities SetCapabilities()
