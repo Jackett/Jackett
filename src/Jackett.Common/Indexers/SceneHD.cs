@@ -33,16 +33,17 @@ namespace Jackett.Common.Indexers
 
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
-        public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
+        public SceneHD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(configService: configService,
-                   client: c,
+                   client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationDataPasskey("You can find the Passkey if you generate a RSS " +
                                                             "feed link. It's the last parameter in the URL."))
         {
+           wc.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8"); // self signed
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -82,8 +83,6 @@ namespace Jackett.Common.Indexers
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
-
-            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
