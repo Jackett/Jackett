@@ -188,7 +188,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Il CorSaRo Blu
  * Kinorun
  * Kinozal
- * Lightning-Tor
  * LostFilm.tv
  * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
  * Marine Tracker
