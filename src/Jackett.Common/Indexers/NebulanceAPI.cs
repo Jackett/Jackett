@@ -51,7 +51,6 @@ namespace Jackett.Common.Indexers
         {
             configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Generate a new key by accessing your account profile settings at <a href=\"https://nebulance.io/\" target=_blank>Nebulance</a>, scroll down to the <b>API Keys</b> section, tick the <i>New Key</i>, <i>list</i> and <i>download</i> checkboxes and save."));
 
-            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "A9FBFE3A70675010D480AB9B89CC18B79099467B"); // expired 25 May 2023
         }
 
         private TorznabCapabilities SetCapabilities()
