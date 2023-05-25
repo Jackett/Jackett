@@ -84,6 +84,17 @@ search:
     download:
       selector: span > a
       attribute: href
+    date_day:
+      # 10am May. 24th
+      selector: div > span:nth-child(4):contains("."):not(:contains(":"))
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["(?i)(st|nd|rd|th)", ""]
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "htt MMM. d zzz"
     date_year:
       # Sep. 7th '10
       selector: div > span:nth-child(4):not(:contains(":"))
@@ -107,7 +118,7 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date:
-      text: "{{ if or .Result.date_year .Result.date_time }}{{ or .Result.date_year .Result.date_time }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_day .Result.date_year .Result.date_time }}{{ or .Result.date_day .Result.date_year .Result.date_time }}{{ else }}now{{ end }}"
     size:
       selector: div > span:nth-child(5)
     seeders:
