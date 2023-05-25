@@ -2,7 +2,7 @@
 id: chilebt
 name: ChileBT
 description: "ChileBT is a CHILEAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: es-419
+language: es-CL
 type: private
 encoding: UTF-8
 links:
