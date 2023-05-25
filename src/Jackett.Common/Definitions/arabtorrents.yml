@@ -2,7 +2,7 @@
 id: arabtorrents
 name: ArabTorrents
 description: "ArabTorrents is an ARABIC Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: ar-AR
+language: ar-AE
 type: private
 encoding: windows-1256
 requestDelay: 2
