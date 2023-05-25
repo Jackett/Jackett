@@ -122,7 +122,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataCaptchaLogin())
         {
-            wc.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -148,6 +147,8 @@ namespace Jackett.Common.Indexers
         public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()
