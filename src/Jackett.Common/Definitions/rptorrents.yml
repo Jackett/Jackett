@@ -5,8 +5,6 @@ description: "RPTorrents is a Private tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
-certificates:
-  - e674aa17bf38af08a119626025298e1bb4d2d5cb # Expired 29 April 2023
 links:
   - https://rptorrents.com/
 
