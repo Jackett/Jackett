@@ -35,6 +35,7 @@ caps:
     - {id: 39, cat: TV, desc: "Netflix Film"}
     - {id: 38, cat: TV, desc: "Netflix Dizi"}
     - {id: 40, cat: TV, desc: "Netflix Belgesel"}
+    - {id: 104, cat: TV, desc: "Netflix Reality/Yarışma"}
     - {id: 47, cat: PC, desc: "Programlar"}
     - {id: 48, cat: PC, desc: "Programlar Windows"}
     - {id: 96, cat: PC, desc: "Programlar Linux"}
