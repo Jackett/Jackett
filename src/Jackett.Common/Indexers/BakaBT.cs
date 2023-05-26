@@ -164,6 +164,14 @@ namespace Jackett.Common.Indexers
 
                 foreach (var row in rows)
                 {
+                    var downloadVolumeFactor = row.QuerySelector("span.freeleech") != null ? 0 : 1;
+
+                    // Skip non-freeleech results when freeleech only is set
+                    if (configData.FreeleechOnly.Value && downloadVolumeFactor != 0)
+                    {
+                        continue;
+                    }
+
                     var qTitleLink = row.QuerySelector("a.title, a.alt_title");
                     if (qTitleLink == null)
                         continue;
@@ -247,7 +255,7 @@ namespace Jackett.Common.Indexers
                         else
                             release.PublishDate = DateTime.ParseExact(dateStr, "dd MMM yy", CultureInfo.InvariantCulture);
 
-                        release.DownloadVolumeFactor = row.QuerySelector("span.freeleech") != null ? 0 : 1;
+                        release.DownloadVolumeFactor = downloadVolumeFactor;
                         release.UploadVolumeFactor = 1;
 
                         releases.Add(release);
