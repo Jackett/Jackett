@@ -77,7 +77,10 @@ settings:
     options:
       desc: desc
       asc: asc
-
+  - name: info_news
+    type: info
+    label: Reminder from GF-Free Admin
+    default: "Attention users of third-party software like Jackett or Radarr, Sonarr or similar:<br>Despite your seed downloads you must physically connect to the web site with your browser or risk being <b>Banned for non-participation</b>...<br><ol>We ask :<li>Remain in seed at least 48 hours on the media to avoid H$R</li><li>And much more depending on your storage means</li><li>Participate in the life of the site shout forum...</li><li>Connect regularly to possibly read your private messages.</li></ol>"
 login:
   path: /api/torrents
   method: get
@@ -106,7 +109,7 @@ search:
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    free[]: "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
