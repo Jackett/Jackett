@@ -6,8 +6,6 @@ language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
-certificates:
-  - 7b36f0dc75d3340727b6f74bbdbde46ec59b7037 # expired 12 Feb 2023
 links:
   - https://asnet.pw/
 
