@@ -89,7 +89,6 @@ search:
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
-    page: 1
 
   keywordsfilters:
     - name: replace # avoid conflict when prepending + to words
@@ -102,8 +101,6 @@ search:
   rows:
     selector: data
     attribute: attributes
-    count:
-      selector: meta.total
 
   fields:
     categorydesc:

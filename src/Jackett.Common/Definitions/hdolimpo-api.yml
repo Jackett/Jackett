@@ -85,13 +85,10 @@ search:
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
-    page: 1
 
   rows:
     selector: data
     attribute: attributes
-    count:
-      selector: meta.total
 
   fields:
     categorydesc:

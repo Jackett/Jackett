@@ -88,7 +88,6 @@ search:
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
-    page: 1
 
   keywordsfilters:
     - name: re_replace
@@ -97,8 +96,6 @@ search:
   rows:
     selector: data
     attribute: attributes
-    count:
-      selector: meta.total
 
   fields:
     category:
