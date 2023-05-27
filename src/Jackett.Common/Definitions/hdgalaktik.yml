@@ -103,7 +103,7 @@ search:
     # 1 active, 2 dead, 3 gold, 4 sticky, lots of others
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
-    ascdesc: "{{ .Config.type }}"
+    type: "{{ .Config.type }}"
 
   keywordsfilters:
     - name: re_replace # S01 to сезон 1
@@ -225,6 +225,23 @@ search:
       # 1 day ago
       selector: a[href^="browse.php?date="]
       filters:
+        # translations for Russian|Romanian|Ukrainian
+        - name: re_replace
+          args: ["(?i)\\b(назад|În urmă)\\b", "ago"]
+        - name: re_replace
+          args: ["(?i)\\b(секунд(а|и|ы)?|secund(a|ă|e))\\b", "seconds"]
+        - name: re_replace
+          args: ["(?i)\\b(минуты?|minute?|хвилини?)\\b", "minutes"]
+        - name: re_replace
+          args: ["(?i)\\b(час(а|ов)?|or(e|ă)|години?)\\b", "hours"]
+        - name: re_replace
+          args: ["(?i)\\b(де?не?(ь|я|й|ів)|zi(le)?)\\b", "days"]
+        - name: re_replace
+          args: ["(?i)\\b(недел(ю|и)|săptămân(ă|i)|тиж(день|ні))\\b", "weeks"]
+        - name: re_replace
+          args: ["(?i)\\b(месяц(а|ев)?|lun(ă|i)|місяц(ь|я|ів))\\b", "months"]
+        - name: re_replace
+          args: ["(?i)\\b(года?|an|р(ік|оки))\\b", "years"]
         - name: timeago
     downloadvolumefactor:
       case:
