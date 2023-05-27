@@ -1,7 +1,7 @@
 ---
-id: trezzor
-name: TreZzoR
-description: "TreZzoR is a CZECH Private site for TV / MOVIES / GENERAL"
+id: trezzorcookie
+name: TreZzoRCookie
+description: "TreZzoR is a CZECH Private site for TV / MOVIES / GENERAL. This uses the cookie method for access"
 language: cs-CZ
 type: private
 encoding: windows-1250
@@ -43,12 +43,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: freeleech
     type: checkbox
     label: Filter FreeLeech only
@@ -79,13 +80,9 @@ settings:
     default: To include XXX in results, click <b>Kategoria XXX sa nezobrazuje!!!. povolit zobrazenie</b> on the tracker search page.
 
 login:
-  path: prihlasenie.php
-  method: post
+  method: cookie
   inputs:
-    uid: "{{ .Config.username }}"
-    pwd: "{{ .Config.password }}"
-  error:
-    - selector: div > font:has(a[href="neregpodp.php"])
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]

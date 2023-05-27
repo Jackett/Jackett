@@ -576,7 +576,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TotallyKids (TK)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
  * TranceTraffic
- * Trezzor [![(invite needed)][inviteneeded]](#)
+ * TreZzoR [![(invite needed)][inviteneeded]](#)
  * TurkSeed
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
