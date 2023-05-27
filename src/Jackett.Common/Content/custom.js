@@ -461,7 +461,7 @@ function displayUnconfiguredIndexersList() {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
     });
 
-    $("#modals").append(UnconfiguredIndexersDialog);
+    $("#modals").html(UnconfiguredIndexersDialog);
 
     $('#add-selected-indexers').click(function () {
         var selectedIndexers = $('#unconfigured-indexer-datatable').DataTable().$('input[type="checkbox"]');
@@ -799,7 +799,7 @@ function newConfigModal(title, config, caps, link, alternativesitelinks, descrip
         link: link,
         description: description
     }));
-    $("#modals").append(configForm);
+    $("#modals").html(configForm);
     populateConfigItems(configForm, config);
 
     if (alternativesitelinks.length >= 1) {
@@ -1043,14 +1043,13 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     var selectedIndexers = [];
     if (selectedIndexer)
       selectedIndexers = selectedIndexer.split(",");
-    $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
         filters: availableFilters,
         active: selectedFilter
     }));
 
-    $("#modals").append(releaseDialog);
+    $("#modals").html(releaseDialog);
 
     releaseDialog.on('shown.bs.modal', function () {
         releaseDialog.find('#searchquery').focusWithoutScrolling();
@@ -1581,7 +1580,7 @@ function bindUIButtons() {
                     });
                 }
             });
-            $("#modals").append(releaseDialog);
+            $("#modals").html(releaseDialog);
             releaseDialog.modal("show");
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -1600,7 +1599,7 @@ function bindUIButtons() {
                 logs: data
             };
             var releaseDialog = $(releaseTemplate(item));
-            $("#modals").append(releaseDialog);
+            $("#modals").html(releaseDialog);
             releaseDialog.modal("show");
         }).fail(function () {
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
