@@ -187,8 +187,10 @@ namespace Jackett.Common.Indexers
             // AniDex throws errors when categories are url encoded. See issue #9727
             var searchCategories = MapTorznabCapsToTrackers(query);
             var catString = "";
-            if (searchCategories.Count > 0)
+            if (searchCategories.Any() && GetAllTrackerCategories().Except(searchCategories).Any())
+            {
                 catString = "&id=" + string.Join(",", searchCategories);
+            }
 
             // Get Selected Languages
             // AniDex throws errors when the commas between language IDs are url encoded.
