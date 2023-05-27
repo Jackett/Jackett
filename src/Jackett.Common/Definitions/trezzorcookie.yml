@@ -1,0 +1,184 @@
+---
+id: trezzorcookie
+name: TreZzoRCookie
+description: "TreZzoR is a CZECH Private site for TV / MOVIES / GENERAL. This uses the cookie method for access"
+language: cs-CZ
+type: private
+encoding: windows-1250
+links:
+  - https://tracker.czech-server.com/
+
+caps:
+  categorymappings:
+    - {id: 31, cat: Movies/HD, desc: "HD CZ/SK Dabing"}
+    - {id: 33, cat: Movies/HD, desc: "HD CZ/SK Titulky"}
+    - {id: 41, cat: TV/HD, desc: "HD Seriály CZ/SK dabing"}
+    - {id: 42, cat: TV/HD, desc: "HD Seriály CZ/SK titulky"}
+    - {id: 1, cat: Movies/BluRay, desc: "Full disc CZ/SK dabing"}
+    - {id: 2, cat: Movies/BluRay, desc: "Full disc CZ/SK titulky"}
+    - {id: 4, cat: Movies/SD, desc: "SD CZ/SK dabing"}
+    - {id: 36, cat: Movies/SD, desc: "SD CZ/SK titulky"}
+    - {id: 7, cat: TV/SD, desc: "Seriály CZ/SK dabing"}
+    - {id: 37, cat: TV/SD, desc: "Seriály CZ/SK titulky"}
+    - {id: 35, cat: Audio/Video, desc: "Hudebni video"}
+    - {id: 32, cat: XXX, desc: "XXX CZ/SK"}
+    - {id: 13, cat: Audio, desc: "Hudba"}
+    - {id: 24, cat: Audio/Audiobook, desc: "Mluv. slovo CZ/SK dabing"}
+    - {id: 14, cat: PC/Games, desc: "Hry"}
+    - {id: 17, cat: PC/0day, desc: "Programy"}
+    - {id: 15, cat: PC/Games, desc: "Cestiny,patche,upgrady"}
+    - {id: 18, cat: Books, desc: "Knihy CZ/SK lokalizace"}
+    - {id: 19, cat: Books/Comics, desc: "Komiks CZ/SK lokalizace"}
+    - {id: 16, cat: Other, desc: "Foto,obrázky"}
+    - {id: 21, cat: PC/Mobile-Android, desc: "Mobilmánia"}
+    - {id: 20, cat: Console, desc: "Konzole"}
+    - {id: 22, cat: Other, desc: "Ostatní CZ/SK scéna"}
+    - {id: 23, cat: Other, desc: "Na prani non CZ/SK"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, year]
+    movie-search: [q, year]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Filter FreeLeech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: data
+    options:
+      data: created
+      seeds: seeders
+      size: size
+      filename: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentu na strance:</b> setting to <b>100</b> on your account profile.
+  - name: info_xxx
+    type: info
+    label: XXX Results
+    default: To include XXX in results, click <b>Kategoria XXX sa nezobrazuje!!!. povolit zobrazenie</b> on the tracker search page.
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    search: "{{ .Keywords }}"
+    category: 0
+    # 0 all, 1 active, 2 dead
+    active: 0
+    rok: "{{ .Query.Year }}"
+    # can search for genre but you need to know the id. &genres=57466 for Akční
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(?i)S(\\d{2})E(\\d{2})", "$1 $2"]
+
+  rows:
+    selector: "tr.torrenty_lista{{ if .Config.freeleech }}:has(a[href^=\"details.php?slug=\"] b span[style=\"color:darkmagenta\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?onlycat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: onlycat
+    title:
+      selector: a[href^="details.php?slug="]
+      attribute: title
+      filters:
+        - name: re_replace
+          args: ["(?i)^(Zobrazit detaily|View details|Detaily): ", ""]
+        - name: re_replace
+          args: ["(?i)[\\s\\->]*FREELEECH.*", ""]
+        - name: re_replace
+          args: [".*?/ ", ""]
+        - name: re_replace
+          args: ["(?i)\\b(\\d{1,3})x(\\d{1,3})\\b", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)\\b(?:Sezona|Series?|Seria|Season)[\\s\\.]*(\\d{1,3}(?:-\\d+)?)[\\.,\\s]*Epizoda[\\s\\.]*(\\d+(?:-\\d+)?)\\b", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)\\b(\\d{1,3}(?:-\\d+)?)[\\s\\.]*(?:Sezona|Series?|Seria|Season)[\\.,\\s]*(\\d+(?:-\\d+)?)[\\s\\.]*Epizoda\\b", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)\\b(?:Sezona|Series?|Seria|Season)[\\s\\.]*(\\d{1,3}(?:-\\d+)?)[\\.,\\s]+(\\d+(?:-\\d+)?)[\\s\\.]*Epizoda\\b", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)\\b(?:Sezona|Series?|Seria|Season)[\\s\\.]*(\\d{1,3})[-\\+\\.,\\s]+(\\d+)\\b", "S$1-$2"]
+        - name: re_replace
+          args: ["(?i)\\b(\\d{1,3})[-\\+\\.\\s]+(\\d+)[\\s\\.]*(?:Sezona|Series?|Seria|Season)\\b", "S$1-$2"]
+        - name: re_replace
+          args: ["(?i)\\b(?:Sezona|Series?|Seria|Season)[\\s\\.]*(\\d{1,3}(?:-\\d+)?)\\b", "S$1"]
+        - name: re_replace
+          args: ["(?i)\\b(\\d{1,3}(?:-\\d+)?)[\\s\\.]*(?:Sezona|Series?|Seria|Season)\\b", "S$1"]
+        - name: re_replace
+          args: ["(?i)\\bEpizoda[\\s\\.]*(\\d+)[-\\+\\.,\\s]+(\\d+)\\b", "E$1-$2"]
+        - name: re_replace
+          args: ["(?i)\\b(\\d+)[-\\+\\.,\\s]+(\\d+)[\\s\\.]*Epizoda\\b", "E$1-$2"]
+        - name: re_replace
+          args: ["(?i)\\bEpizoda[\\s\\.]*(\\d+(?:-\\d+)?)\\b", "E$1"]
+        - name: re_replace
+          args: ["(?i)\\b(\\d+(?:-\\d+)?)[\\s\\.]*Epizoda\\b", "E$1"]
+    details:
+      selector: a[href^="details.php?slug="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?slug="]
+      attribute: href
+    date:
+      selector: td:nth-child(6)
+      filters:
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "d/M/yyyy HH:mm zzz"
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8) a
+    leechers:
+      selector: td:nth-child(9) a
+    grabs:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        a[href^="details.php?slug="] b span[style="color:darkmagenta"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: a[href^="details.php?slug="]
+      attribute: title
+      filters:
+        - name: re_replace
+          args: ["(?i)^(Zobrazit detaily|View details|Detaily): ", ""]
+        - name: re_replace
+          args: ["(?i)[\\s\\->]*FREELEECH.*", ""]
+# engine tbd
