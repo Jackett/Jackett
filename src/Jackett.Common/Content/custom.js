@@ -1044,6 +1044,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     if (selectedIndexer)
       selectedIndexers = selectedIndexer.split(",");
     $('#select-indexer-modal').remove();
+    $('#select-indexer-modal').remove();
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
         filters: availableFilters,
