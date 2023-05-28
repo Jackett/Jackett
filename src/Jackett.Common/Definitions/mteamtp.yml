@@ -5,7 +5,7 @@ description: "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIE
 language: zh-CN
 type: private
 encoding: UTF-8
-requestDelay: 3
+requestDelay: 4
 links:
   - https://kp.m-team.cc/
 legacylinks:
