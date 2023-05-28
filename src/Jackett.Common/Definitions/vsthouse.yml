@@ -10,7 +10,7 @@ links:
 
 caps:
   categories:
-    Audio: Audio
+    PC: PC
 
   modes:
     search: [q]
@@ -39,7 +39,7 @@ search:
 
   fields:
     category:
-      text: Audio
+      text: PC
     title:
       selector: div.eTitle a
     details:
