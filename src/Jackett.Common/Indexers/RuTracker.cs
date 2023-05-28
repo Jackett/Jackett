@@ -119,7 +119,6 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(2220, TorznabCatType.MoviesDVD, "|- Индийское кино (DVD Video)");
             caps.Categories.AddCategoryMapping(1670, TorznabCatType.MoviesDVD, "|- Грайндхаус (DVD Video)");
             caps.Categories.AddCategoryMapping(2198, TorznabCatType.MoviesHD, "HD Video");
-            caps.Categories.AddCategoryMapping(1457, TorznabCatType.MoviesUHD, "|- UHD Video");
             caps.Categories.AddCategoryMapping(2199, TorznabCatType.MoviesHD, "|- Классика мирового кинематографа (HD Video)");
             caps.Categories.AddCategoryMapping(313, TorznabCatType.MoviesHD, "|- Зарубежное кино (HD Video)");
             caps.Categories.AddCategoryMapping(312, TorznabCatType.MoviesHD, "|- Наше кино (HD Video)");
@@ -128,6 +127,12 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(2339, TorznabCatType.MoviesHD, "|- Арт-хаус и авторское кино (HD Video)");
             caps.Categories.AddCategoryMapping(140, TorznabCatType.MoviesHD, "|- Индийское кино (HD Video)");
             caps.Categories.AddCategoryMapping(194, TorznabCatType.MoviesHD, "|- Грайндхаус (HD Video)");
+            caps.Categories.AddCategoryMapping(718, TorznabCatType.MoviesUHD, "UHD Video");
+            caps.Categories.AddCategoryMapping(775, TorznabCatType.MoviesUHD, "|- Классика мирового кинематографа (UHD Video)");
+            caps.Categories.AddCategoryMapping(1457, TorznabCatType.MoviesUHD, "|- Зарубежное кино (UHD Video)");
+            caps.Categories.AddCategoryMapping(1940, TorznabCatType.MoviesUHD, "|- Наше кино (UHD Video)");
+            caps.Categories.AddCategoryMapping(272, TorznabCatType.MoviesUHD, "|- Азиатские фильмы (UHD Video)");
+            caps.Categories.AddCategoryMapping(271, TorznabCatType.MoviesUHD, "|- Арт-хаус и авторское кино (UHD Video)");
             caps.Categories.AddCategoryMapping(352, TorznabCatType.Movies3D, "3D/Стерео Кино, Видео, TV и Спорт");
             caps.Categories.AddCategoryMapping(549, TorznabCatType.Movies3D, "|- 3D Кинофильмы");
             caps.Categories.AddCategoryMapping(1213, TorznabCatType.Movies3D, "|- 3D Мультфильмы");
@@ -152,6 +157,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(815, TorznabCatType.TVSD, "|- Мультсериалы (SD Video)");
             caps.Categories.AddCategoryMapping(816, TorznabCatType.TVHD, "|- Мультсериалы (DVD Video)");
             caps.Categories.AddCategoryMapping(1460, TorznabCatType.TVHD, "|- Мультсериалы (HD Video)");
+            caps.Categories.AddCategoryMapping(498, TorznabCatType.TVUHD, "|- Мультсериалы (UHD Video)");
             caps.Categories.AddCategoryMapping(33, TorznabCatType.TVAnime, "Аниме");
             caps.Categories.AddCategoryMapping(1106, TorznabCatType.TVAnime, "|- Онгоинги (HD Video)");
             caps.Categories.AddCategoryMapping(1105, TorznabCatType.TVAnime, "|- Аниме (HD Video)");
@@ -231,7 +237,6 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(1949, TorznabCatType.TVHD, "|- Черное зеркало / Black Mirror (HD Video)");
             caps.Categories.AddCategoryMapping(1498, TorznabCatType.TVHD, "|- Для некондиционных раздач (HD Video)");
             caps.Categories.AddCategoryMapping(911, TorznabCatType.TVForeign, "Сериалы Латинской Америки, Турции и Индии");
-            caps.Categories.AddCategoryMapping(1493, TorznabCatType.TVForeign, "|- Актёры и актрисы латиноамериканских сериалов");
             caps.Categories.AddCategoryMapping(325, TorznabCatType.TVForeign, "|- Сериалы Аргентины");
             caps.Categories.AddCategoryMapping(534, TorznabCatType.TVForeign, "|- Сериалы Бразилии");
             caps.Categories.AddCategoryMapping(594, TorznabCatType.TVForeign, "|- Сериалы Венесуэлы");
@@ -239,11 +244,8 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(607, TorznabCatType.TVForeign, "|- Сериалы Колумбии");
             caps.Categories.AddCategoryMapping(1574, TorznabCatType.TVForeign, "|- Сериалы Латинской Америки с озвучкой (раздачи папками)");
             caps.Categories.AddCategoryMapping(1539, TorznabCatType.TVForeign, "|- Сериалы Латинской Америки с субтитрами");
-            caps.Categories.AddCategoryMapping(1940, TorznabCatType.TVForeign, "|- Официальные краткие версии сериалов Латинской Америки");
             caps.Categories.AddCategoryMapping(694, TorznabCatType.TVForeign, "|- Сериалы Мексики");
-            caps.Categories.AddCategoryMapping(775, TorznabCatType.TVForeign, "|- Сериалы Перу, Сальвадора, Чили и других стран");
             caps.Categories.AddCategoryMapping(781, TorznabCatType.TVForeign, "|- Сериалы совместного производства");
-            caps.Categories.AddCategoryMapping(718, TorznabCatType.TVForeign, "|- Сериалы США (латиноамериканские)");
             caps.Categories.AddCategoryMapping(704, TorznabCatType.TVForeign, "|- Сериалы Турции");
             caps.Categories.AddCategoryMapping(1537, TorznabCatType.TVForeign, "|- Для некондиционных раздач");
             caps.Categories.AddCategoryMapping(2100, TorznabCatType.TVForeign, "Азиатские сериалы");
@@ -381,7 +383,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(1229, TorznabCatType.TVSport, "|- Чемпионат Мира 2022 (финальный турнир)");
             caps.Categories.AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2022 (отбор)");
             caps.Categories.AddCategoryMapping(2532, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (финальный турнир)");
-            caps.Categories.AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (отбор)");
+            caps.Categories.AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2024 (отбор)");
             caps.Categories.AddCategoryMapping(592, TorznabCatType.TVSport, "|- Лига Наций");
             caps.Categories.AddCategoryMapping(2533, TorznabCatType.TVSport, "|- Чемпионат Мира 2018 (игры)");
             caps.Categories.AddCategoryMapping(1952, TorznabCatType.TVSport, "|- Чемпионат Мира 2018 (обзорные передачи, документалистика)");
@@ -427,8 +429,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(1527, TorznabCatType.TVSport, "|- International Wrestling");
             caps.Categories.AddCategoryMapping(2069, TorznabCatType.TVSport, "|- Oldschool Wrestling");
             caps.Categories.AddCategoryMapping(1323, TorznabCatType.TVSport, "|- Documentary Wrestling");
-            caps.Categories.AddCategoryMapping(1346, TorznabCatType.TVSport, "Для дооформления раздач");
-            caps.Categories.AddCategoryMapping(1411, TorznabCatType.TVSport, "|- Сканирование, обработка сканов");
+            caps.Categories.AddCategoryMapping(1411, TorznabCatType.Books, "|- Сканирование, обработка сканов");
             caps.Categories.AddCategoryMapping(21, TorznabCatType.Books, "Книги и журналы (общий раздел)");
             caps.Categories.AddCategoryMapping(2157, TorznabCatType.Books, "|- Кино, театр, ТВ, мультипликация, цирк");
             caps.Categories.AddCategoryMapping(765, TorznabCatType.Books, "|- Рисунок, графический дизайн");
