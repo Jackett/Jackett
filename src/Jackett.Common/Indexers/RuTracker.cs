@@ -429,6 +429,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(1527, TorznabCatType.TVSport, "|- International Wrestling");
             caps.Categories.AddCategoryMapping(2069, TorznabCatType.TVSport, "|- Oldschool Wrestling");
             caps.Categories.AddCategoryMapping(1323, TorznabCatType.TVSport, "|- Documentary Wrestling");
+            caps.Categories.AddCategoryMapping(1411, TorznabCatType.Books, "|- Сканирование, обработка сканов");
             caps.Categories.AddCategoryMapping(21, TorznabCatType.Books, "Книги и журналы (общий раздел)");
             caps.Categories.AddCategoryMapping(2157, TorznabCatType.Books, "|- Кино, театр, ТВ, мультипликация, цирк");
             caps.Categories.AddCategoryMapping(765, TorznabCatType.Books, "|- Рисунок, графический дизайн");
