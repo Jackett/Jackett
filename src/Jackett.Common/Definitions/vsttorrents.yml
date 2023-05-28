@@ -1,7 +1,7 @@
 ---
 id: vsttorrents
-name: VST Torrents
-description: "VST Torrents is a Public site for AUDIO apps, plugins and samples"
+name: VST Torrentz
+description: "VST Torrentz is a Public site for AUDIO apps, plugins and samples"
 language: en-US
 type: public
 encoding: UTF-8
@@ -13,11 +13,10 @@ legacylinks:
 
 caps:
   categories:
-    Audio: Audio
+    PC: PC
 
   modes:
     search: [q]
-    music-search: [q]
 
 settings: []
 
@@ -39,7 +38,7 @@ search:
 
   fields:
     category:
-      text: Audio
+      text: PC
     title:
       selector: .entry-title
     details:
@@ -51,7 +50,8 @@ search:
     description:
       selector: .entry-excerpt
     date:
-      text: now
+      selector: time
+      attribute: datetime
     size:
       text: "512 MB"
     seeders:
@@ -62,4 +62,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# wordpress 6.0.3
+# wordpress 6.2.2
