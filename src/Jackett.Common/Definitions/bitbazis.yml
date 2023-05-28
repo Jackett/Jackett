@@ -117,22 +117,26 @@ search:
     # can support genre searching but you need to know the id, eg &genre23=1 for Comedy (id is 23)
 
   rows:
-    selector: "tr[class^=\"toriadatok_\"]{{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
+    selector: "tr[class^=\"toriadatok\"]{{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
 
   fields:
     categorydesc:
       selector: img[src^="pic/kategoria/"]
       attribute: title
     title:
-      selector: a.preview
+      selector: font[class="tori"], a.preview
     _id:
       selector: td.tori_infok
       attribute: id
+      optional: true
       filters:
         - name: regexp
           args: (\d+)
     details:
-      text: "details.php?id={{ .Result._id }}#adatlap"
+      selector: a[href^="details.php?id="]
+      attribute: href
+      optional: true
+      default: "details.php?id={{ .Result._id }}#adatlap"
     download:
       text: "download.php?torrent={{ .Result._id }}"
     poster:
@@ -142,14 +146,14 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
-      selector: td[id^="tsize_"]
+      selector: td[id^="tsize"]
     date:
       # 36 perce
       # 13 órája  és 59 perce
       # 2 napja  és 10 órája
       # 1 hete  és 1 napja
       # 1 éve  és 30 hete
-      selector: td[id^="t_added_"] > span
+      selector: td[id^="t_added"] > span
       filters:
         - name: replace
           args: ["és ", " "]
