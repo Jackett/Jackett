@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -1453,36 +1454,41 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var searchUrl = CreateSearchUrlForQuery(query);
-
-            var results = await RequestWithCookiesAsync(searchUrl);
-            if (!results.ContentString.Contains("id=\"logged-in-username\""))
-            {
-                // re login
-                await ApplyConfiguration(null);
-                results = await RequestWithCookiesAsync(searchUrl);
-            }
+            var searchUrls = CreateSearchUrlsForQuery(query);
 
             var releases = new List<ReleaseInfo>();
 
-            try
+            foreach (var searchUrl in searchUrls)
             {
-                var rows = GetReleaseRows(results);
-                foreach (var row in rows)
+                Console.WriteLine(searchUrl);
+
+                var results = await RequestWithCookiesAsync(searchUrl);
+                if (!results.ContentString.Contains("id=\"logged-in-username\""))
                 {
-                    var release = ParseReleaseRow(row);
-                    if (release != null)
+                    // re login
+                    await ApplyConfiguration(null);
+                    results = await RequestWithCookiesAsync(searchUrl);
+                }
+
+                try
+                {
+                    var rows = GetReleaseRows(results);
+                    foreach (var row in rows)
                     {
-                        releases.Add(release);
+                        var release = ParseReleaseRow(row);
+                        if (release != null)
+                        {
+                            releases.Add(release);
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(results.ContentString, ex);
+                catch (Exception ex)
+                {
+                    OnParseError(results.ContentString, ex);
+                }
             }
 
-            return releases;
+            return releases.OrderByDescending(o => o.PublishDate).ToArray();
         }
 
         public override async Task<byte[]> Download(Uri link)
@@ -1504,20 +1510,21 @@ namespace Jackett.Common.Indexers
             return await base.Download(link);
         }
 
-        private string CreateSearchUrlForQuery(in TorznabQuery query)
+        private IEnumerable<string> CreateSearchUrlsForQuery(TorznabQuery query)
         {
             var queryCollection = new NameValueCollection();
 
             var searchString = query.SearchTerm;
             //  replace any space, special char, etc. with % (wildcard)
-            var ReplaceRegex = new Regex("[^a-zA-Zа-яА-Я0-9]+");
             if (!string.IsNullOrWhiteSpace(searchString))
-                searchString = ReplaceRegex.Replace(searchString, "%");
+            {
+                searchString = new Regex("[^a-zA-Zа-яА-Я0-9]+").Replace(searchString, "%");
+            }
 
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                queryCollection.Add("nm", searchString);
+                queryCollection.Set("nm", searchString);
             }
             else // use the normal search
             {
@@ -1530,15 +1537,24 @@ namespace Jackett.Common.Indexers
                 {
                     searchString += " Серии: " + query.Episode;
                 }
-                queryCollection.Add("nm", searchString);
+                queryCollection.Set("nm", searchString);
             }
 
             if (query.HasSpecifiedCategories)
-                queryCollection.Add("f", string.Join(",", MapTorznabCapsToTrackers(query)));
+            {
+                var trackerCategories = MapTorznabCapsToTrackers(query).Distinct().ToList();
 
-            var searchUrl = SearchUrl + "?" + queryCollection.GetQueryString();
+                foreach (var trackerCategoriesChunk in trackerCategories.ChunkBy(200))
+                {
+                    queryCollection.Set("f", string.Join(",", trackerCategoriesChunk));
 
-            return searchUrl;
+                    yield return SearchUrl + "?" + queryCollection.GetQueryString();
+                }
+            }
+            else
+            {
+                yield return SearchUrl + "?" + queryCollection.GetQueryString();
+            }
         }
 
         private IHtmlCollection<IElement> GetReleaseRows(WebResult results)
