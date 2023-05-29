@@ -23,7 +23,7 @@ namespace Jackett.Common.Utils
 
             var logFile = new FileTarget
             {
-                Layout = "${longdate} ${level} ${message} ${exception:format=ToString}",
+                Layout = "${longdate} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}${exception:format=Data}${newline}}",
                 FileName = Path.Combine(settings.DataFolder, logFileName),
                 ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt"),
                 ArchiveAboveSize = 2097152, // 2 MB
@@ -60,7 +60,7 @@ namespace Jackett.Common.Utils
             {
                 var logConsole = new ColoredConsoleTarget
                 {
-                    Layout = "${simpledatetime} ${level} ${message} ${exception:format=ToString}"
+                    Layout = "${simpledatetime} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}${exception:format=Data}${newline}}"
                 };
                 logConfig.AddTarget("console", logConsole);
 
