@@ -21,9 +21,9 @@ caps:
     - {id: 409, cat: Other, desc: "Misc/其他", default: true}
     - {id: 408, cat: Audio, desc: "Music/音乐", default: true}
     # special
-    - {id: 410, cat: Movies, desc: "Video/视频资料", default: true}
-    - {id: 411, cat: Audio, desc: "Audio/音频资料", default: true}
-    - {id: 412, cat: Other, desc: "Other/其他资料", default: true}
+    - {id: 410, cat: Movies, desc: "Video/视频资料", default: false}
+    - {id: 411, cat: Audio, desc: "Audio/音频资料", default: false}
+    - {id: 412, cat: Other, desc: "Other/其他资料", default: false}
 
   modes:
     search: [q]

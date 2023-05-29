@@ -30,13 +30,13 @@ caps:
     - {id: 423, cat: XXX, desc: "IV(写真影片)", default: true}
     - {id: 424, cat: XXX, desc: "IV(写真图集)", default: true}
     # special
-    - {id: 526, cat: Movies, desc: "VRMovies(3D/VR电影)", default: true}
-    - {id: 527, cat: TV, desc: "VRSeries(3D/VR剧集)", default: true}
-    - {id: 528, cat: Audio/Video, desc: "AV(VR无码)", default: true}
-    - {id: 529, cat: Audio/Video, desc: "AV(VR有码)", default: true}
-    - {id: 530, cat: Console, desc: "VRGame(VR一体机游戏)", default: true}
-    - {id: 531, cat: PC/Games, desc: "PCVRGame(PCVR游戏)", default: true}
-    - {id: 532, cat: Other, desc: "VRTools(VR工具软件)", default: true}
+    - {id: 526, cat: Movies, desc: "VRMovies(3D/VR电影)", default: false}
+    - {id: 527, cat: TV, desc: "VRSeries(3D/VR剧集)", default: false}
+    - {id: 528, cat: Audio/Video, desc: "AV(VR无码)", default: false}
+    - {id: 529, cat: Audio/Video, desc: "AV(VR有码)", default: false}
+    - {id: 530, cat: Console, desc: "VRGame(VR一体机游戏)", default: false}
+    - {id: 531, cat: PC/Games, desc: "PCVRGame(PCVR游戏)", default: false}
+    - {id: 532, cat: Other, desc: "VRTools(VR工具软件)", default: false}
 
   modes:
     search: [q]
