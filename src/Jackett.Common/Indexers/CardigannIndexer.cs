@@ -1457,18 +1457,24 @@ namespace Jackett.Common.Indexers
                 if (SearchPath.Response != null && SearchPath.Response.Type.Equals("json"))
                 {
                     if (response.Status != HttpStatusCode.OK)
+                    {
                         throw new Exception($"Error Parsing Json Response: Status={response.Status} Response={results}");
+                    }
 
                     if (response.Status == HttpStatusCode.OK
                         && SearchPath.Response != null
                         && SearchPath.Response.NoResultsMessage != null
                         && (SearchPath.Response.NoResultsMessage != string.Empty && results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == string.Empty && results == string.Empty)))
+                    {
                         continue;
+                    }
 
                     var parsedJson = JToken.Parse(results);
 
                     if (parsedJson == null)
+                    {
                         throw new Exception("Error Parsing Json Response");
+                    }
 
                     if (Search.Rows.Count != null)
                     {
@@ -1492,7 +1498,9 @@ namespace Jackett.Common.Indexers
                     if (rowsArray == null)
                     {
                         if (Search.Rows.MissingAttributeEqualsNoResults)
+                        {
                             continue;
+                        }
 
                         throw new Exception("Error Parsing Rows Selector. There are 0 rows.");
                     }
@@ -1504,7 +1512,18 @@ namespace Jackett.Common.Indexers
 
                     foreach (var Row in rowsArray)
                     {
-                        var selObj = Search.Rows.Attribute != null ? Row.SelectToken(Search.Rows.Attribute).Value<JToken>() : Row;
+                        var selObj = Row;
+
+                        if (Search.Rows.Attribute != null)
+                        {
+                            selObj = Row.SelectToken(Search.Rows.Attribute)?.Value<JToken>();
+
+                            if (selObj == null && Search.Rows.MissingAttributeEqualsNoResults)
+                            {
+                                continue;
+                            }
+                        }
+
                         var mulRows = Search.Rows.Multiple ? selObj.Values<JObject>() : new List<JObject> { selObj.Value<JObject>() };
 
                         foreach (var mulRow in mulRows)
