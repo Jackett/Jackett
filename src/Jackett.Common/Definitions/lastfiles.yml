@@ -121,7 +121,7 @@ search:
     # https://www.last-torrents.org/externalid?searchex=tt5834760&search_by=imdbid
     # cannot support imdbid or tmdbid searches while using path category filters
     - path: browse.php
-      categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 58, 59, 60, 61, 62, 81, 82]
+      categories: ["!", 27, 60]
     - path: browseadult.php
       categories: [27, 60]
 
