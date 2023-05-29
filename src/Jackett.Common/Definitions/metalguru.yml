@@ -16,6 +16,8 @@ caps:
     - {id: 1, cat: PC, desc: "Applications"}
     - {id: 2, cat: Books, desc: "Books Ebooks & mags"}
     - {id: 59, cat: Movies/SD, desc: "Cams"}
+    - {id: 52, cat: Audio, desc: "DJ"}
+    - {id: 53, cat: Audio, desc: "DJ PACKS"}
     - {id: 46, cat: Books, desc: "Documents"}
     - {id: 47, cat: Audio/Lossless, desc: "Flac/HD Audio"}
     - {id: 61, cat: Console, desc: "Games"}
