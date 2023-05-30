@@ -89,6 +89,7 @@ caps:
     - {id: 208, cat: Other, desc: "Business : Marketing"}
     - {id: 25, cat: Other, desc: "Exam Prep / Education"}
     - {id: 204, cat: Other, desc: "Parapsychology"}
+    - {id: 215, cat: Other, desc: "Sexuality/Seductn/Body Img"}
 
   modes:
     search: [q]
