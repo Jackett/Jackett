@@ -5,6 +5,7 @@ description: "Torrentz2eu is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 followredirect: true
 links:
   - https://2torrentz2eu.in/
@@ -44,16 +45,24 @@ search:
   paths:
     # https://2torrentz2eu.in/beta2/search.php?torrent-query=2023
     - path: beta2/search.php
+    - path: beta2/search.php
+      inputs:
+        page: 2
   inputs:
     torrent-query: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
     selector: table#torrent-table > tbody > tr
   fields:
-    category:
-      text: 3
     title:
       selector: td:nth-child(1)
+    category_is_tv_show:
+      text: "{{ .Result.title }}"
+      filters:
+        - name: regexp
+          args: "\\b(S\\d+(?:E\\d+)?)\\b"
+    category:
+      text: "{{ if .Result.category_is_tv_show }}2{{ else }}3{{ end }}"
     details:
       # https://torrentz2.pics/beta2/page.php?url=9999999%2FThe-Torrent-file-name-goes-here%2F
       selector: td:nth-child(6) button
@@ -77,7 +86,7 @@ search:
         - name: re_replace
           args: ["(?i)(st|nd|rd|th|'|\\.)", ""]
         - name: dateparse
-          args: "MMM. dd yy"
+          args: "MMM dd yy"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
