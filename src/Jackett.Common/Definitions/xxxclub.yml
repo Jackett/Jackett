@@ -31,6 +31,11 @@ settings:
       desc: desc
       asc: asc
 
+download:
+  selectors:
+    - selector: a[href^="/torrents/download/"]
+      attribute: href
+
 search:
   paths:
     # https://xxxclub.to/torrents/browse/all/tushyraw%20grays?sort=size&order=asc
@@ -43,30 +48,30 @@ search:
     category:
       text: XXX
     title:
-      selector: td:nth-child(2)
+      selector: a[href^="/torrents/details/"]
     details:
-      selector: td:nth-child(2) a
+      selector: a[href^="/torrents/details/"]
       attribute: href
     download:
-      selector: td:nth-child(3) a
+      selector: a[href^="/torrents/details/"]
       attribute: href
     poster:
-      selector: td:nth-child(2) a
+      selector: a[href^="/torrents/details/"]
       attribute: title
       filters:
         - name: regexp
           args: src='(.+?)'
     date:
-      selector: td:nth-child(4)
+      selector: td:nth-child(3)
       filters:
         - name: dateparse
           args: "dd MMM yyyy HH:mm:ss"
     size:
-      selector: td:nth-child(5)
+      selector: td:nth-child(4)
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
