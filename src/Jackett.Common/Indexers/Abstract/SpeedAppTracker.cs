@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -35,7 +35,7 @@ namespace Jackett.Common.Indexers.Abstract
         private string SearchUrl => SiteLink + "api/torrent";
         private string _token;
 
-        private new ConfigurationDataBasicLoginWithEmail configData => (ConfigurationDataBasicLoginWithEmail)base.configData;
+        private new ConfigurationDataSpeedAppTracker configData => (ConfigurationDataSpeedAppTracker)base.configData;
 
         protected SpeedAppTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs)
             : base(configService: configService,
@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers.Abstract
                    logger: logger,
                    p: p,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLoginWithEmail())
+                   configData: new ConfigurationDataSpeedAppTracker())
         {
         }
 
@@ -120,8 +120,17 @@ namespace Jackett.Common.Indexers.Abstract
             try
             {
                 var rows = JArray.Parse(response.ContentString);
+
                 foreach (var row in rows)
                 {
+                    var dlVolumeFactor = row.Value<double>("download_volume_factor");
+
+                    // skip non-freeleech results when freeleech only is set
+                    if (configData.FreeleechOnly.Value && dlVolumeFactor != 0)
+                    {
+                        continue;
+                    }
+
                     var id = row.Value<string>("id");
                     var link = new Uri($"{SiteLink}api/torrent/{id}/download");
                     var urlStr = row.Value<string>("url");
@@ -140,9 +149,6 @@ namespace Jackett.Common.Indexers.Abstract
 
                     var posterStr = row.Value<string>("poster");
                     var poster = Uri.TryCreate(posterStr, UriKind.Absolute, out var posterUri) ? posterUri : null;
-
-                    var dlVolumeFactor = row.Value<double>("download_volume_factor");
-                    var ulVolumeFactor = row.Value<double>("upload_volume_factor");
 
                     var title = row.Value<string>("name");
                     // fix for #10883
@@ -167,7 +173,7 @@ namespace Jackett.Common.Indexers.Abstract
                         Seeders = row.Value<int>("seeders"),
                         Peers = row.Value<int>("leechers") + row.Value<int>("seeders"),
                         DownloadVolumeFactor = dlVolumeFactor,
-                        UploadVolumeFactor = ulVolumeFactor,
+                        UploadVolumeFactor = row.Value<double>("upload_volume_factor"),
                         MinimumRatio = 1,
                         MinimumSeedTime = minimumSeedTime
                     };
