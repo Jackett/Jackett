@@ -132,6 +132,9 @@ login:
     - selector: .login-container h2:contains("One Time Password")
       message:
         text: "Your TorrentLeech account has 2FA enabled. Please recheck your indexer settings."
+    - selector: form[name="login-form"]
+      message:
+        text: "Login page detected at {{ .Config.sitelink }}."
   test:
     path: /
     selector: a[href="/user/account/logout"]
