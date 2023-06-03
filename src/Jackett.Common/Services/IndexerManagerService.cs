@@ -319,7 +319,9 @@ namespace Jackett.Common.Services
             _logger.Info($"Test search in {indexer.Name} => Found {result.Releases.Count()} releases [{stopwatch.ElapsedMilliseconds:0}ms]");
 
             if (!result.Releases.Any())
-                throw new Exception($"Test search in {indexer.Name} => Found no results while trying to browse this tracker");
+            {
+                throw new Exception($"Test search in {indexer.Name} => Found no results while trying to browse this tracker. This may be an issue with the indexer, or other indexer settings such as search freeleech only etc.");
+            }
         }
 
         public void DeleteIndexer(string name)
