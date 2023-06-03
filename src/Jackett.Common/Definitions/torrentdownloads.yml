@@ -56,6 +56,7 @@ caps:
     movie-search: [q]
     music-search: [q]
     book-search: [q]
+  allowrawsearch: true
 
 settings:
   - name: downloadlink
@@ -91,6 +92,11 @@ search:
   inputs:
     $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
     search: "{{ .Keywords }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\W+", " "]
+    - name: trim
 
   rows:
     selector: div.inner_container > div:has(p:has(a[href^="/torrent/"])):not(:has(span.__cf_email__))
