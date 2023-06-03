@@ -133,27 +133,37 @@ namespace Jackett.Common.Indexers
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, loginPage.Cookies, true, null, LoginUrl);
 
             await ConfigureIfOK(
-                result.Cookies, result.ContentString?.Contains("If your browser doesn't have javascript enabled") == true,
-                () => throw new ExceptionWithConfigData("Couldn't login", configData));
+                result.Cookies, result.ContentString?.Contains("If your browser doesn't have javascript enabled") == true, () =>
+                {
+                    var parser = new HtmlParser();
+                    var dom = parser.ParseDocument(result.ContentString);
+
+                    var errorMessage = dom.QuerySelector("div > font[color=\"#FF0000\"]")?.TextContent.Trim();
+
+                    throw new ExceptionWithConfigData(errorMessage ?? "Couldn't login", configData);
+                });
+
             return IndexerConfigurationStatus.RequiresTesting;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchUrl = SearchUrl + string.Join(
-                string.Empty, MapTorznabCapsToTrackers(query).Select(cat => $"category[]={cat}&"));
+
+            var searchUrl = SearchUrl + string.Join(string.Empty, MapTorznabCapsToTrackers(query).Select(cat => $"category[]={cat}&"));
+
             var queryCollection = new NameValueCollection
             {
-                {"search", query.ImdbID ?? query.GetQueryString()},
-                {"active", ((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value ? "5" : "0"},
-                {"options", "0"}
+                { "search", query.ImdbID ?? query.GetQueryString() },
+                { "active", ((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value ? "5" : "0" },
+                { "options", "0" }
             };
 
             // manually url encode parenthesis to prevent "hacking" detection, remove . as not used in titles
             searchUrl += queryCollection.GetQueryString().Replace("(", "%28").Replace(")", "%29").Replace(".", " ");
 
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
+
             try
             {
                 var parser = new HtmlParser();
@@ -167,7 +177,10 @@ namespace Jackett.Common.Indexers
                 foreach (var row in rows.Skip(1))
                 {
                     if (row.Children.Length == 2)
-                        continue; // fix bug with search: cohen
+                    {
+                        // fix bug with search: cohen
+                        continue;
+                    }
 
                     var mainLink = row.Children[2].QuerySelector("a");
                     var title = mainLink.TextContent;
