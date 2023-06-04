@@ -15,12 +15,14 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Console, desc: "Game"}
     - {id: 5, cat: PC, desc: "Application"}
+    - {id: 6, cat: Books, desc: "Libros"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -157,9 +159,9 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-# global MR is 1.0 but torrents must be seeded for 5 days regardless of ratio
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
 #    minimumratio:
-#      text: 1.0
+#      text: 0.4
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
