@@ -123,6 +123,7 @@ caps:
     - {id: 217, cat: Movies, desc: "Tamil-Movies | Remuxes BluRay"}
     - {id: 218, cat: TV, desc: "TV-Ishara TV"}
     - {id: 219, cat: TV, desc: "TV-Bengali Tv"}
+    - {id: 220, cat: TV, desc: "TV-Shemaroo Umang"}
 
   modes:
     search: [q]
