@@ -71,6 +71,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: p2p_releases_only
+    type: checkbox
+    label: Search P2P releases only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -109,6 +113,7 @@ search:
     index: 0
     limit: 100
     order: "{{ .Config.type }}"
+    p2p: "{{ if .Config.p2p_releases_only }}true{{ else }}{{ end }}"
     page: search
     searchText: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ .Keywords }}"
     section: all
