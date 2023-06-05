@@ -112,7 +112,6 @@ search:
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
-    page: 1
 
   keywordsfilters:
     - name: re_replace
@@ -211,4 +210,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D custom edition 1.0.2 (based on 6.5.0)
+# json UNIT3D custom edition 1.0.1 (based on 6.5.0)
