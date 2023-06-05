@@ -61,12 +61,13 @@ search:
         type: json
 
   inputs:
-    # ignore ' (e.g. search for america's Next Top Model)
     query_term: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # without this the API sometimes returns nothing
     limit: 50
-    sort: date_added
+    sort_by: date_added
+    order_by: desc
   keywordsfilters:
+    # ignore ' (e.g. search for america's Next Top Model)
     - name: re_replace
       args: ["[^\\w]+", " "]
 
