@@ -555,10 +555,14 @@ namespace Jackett.Common.Indexers
             if (Login.Method == "post")
             {
                 var pairs = new Dictionary<string, string>();
-                foreach (var Input in Definition.Login.Inputs)
+
+                if (Login.Inputs != null && Login.Inputs.Any())
                 {
-                    var value = applyGoTemplateText(Input.Value);
-                    pairs.Add(Input.Key, value);
+                    foreach (var input in Login.Inputs)
+                    {
+                        var value = applyGoTemplateText(input.Value);
+                        pairs.Add(input.Key, value);
+                    }
                 }
 
                 var LoginUrl = resolvePath(Login.Path).ToString();
@@ -628,18 +632,27 @@ namespace Jackett.Common.Indexers
                     pairs[name] = value;
                 }
 
-                foreach (var Input in Definition.Login.Inputs)
+                if (Login.Inputs != null && Login.Inputs.Any())
                 {
-                    var value = applyGoTemplateText(Input.Value);
-                    var input = Input.Key;
-                    if (Login.Selectors)
+                    foreach (var Input in Login.Inputs)
                     {
-                        var inputElement = landingResultDocument.QuerySelector(Input.Key);
-                        if (inputElement == null)
-                            throw new ExceptionWithConfigData(string.Format("Login failed: No input found using selector {0}", Input.Key), configData);
-                        input = inputElement.GetAttribute("name");
+                        var value = applyGoTemplateText(Input.Value);
+                        var input = Input.Key;
+
+                        if (Login.Selectors)
+                        {
+                            var inputElement = landingResultDocument.QuerySelector(Input.Key);
+
+                            if (inputElement == null)
+                            {
+                                throw new ExceptionWithConfigData($"Login failed: No input found using selector {Input.Key}", configData);
+                            }
+
+                            input = inputElement.GetAttribute("name");
+                        }
+
+                        pairs[input] = value;
                     }
-                    pairs[input] = value;
                 }
 
                 // selector inputs
@@ -772,18 +785,22 @@ namespace Jackett.Common.Indexers
             else if (Login.Method == "get")
             {
                 var queryCollection = new NameValueCollection();
-                foreach (var Input in Definition.Login.Inputs)
+
+                if (Login.Inputs != null && Login.Inputs.Any())
                 {
-                    var value = applyGoTemplateText(Input.Value);
-                    queryCollection.Add(Input.Key, value);
+                    foreach (var input in Login.Inputs)
+                    {
+                        var value = applyGoTemplateText(input.Value);
+                        queryCollection.Add(input.Key, value);
+                    }
                 }
 
-                var LoginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
+                var loginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink, headers: headers);
+                var loginResult = await RequestWithCookiesAsync(loginUrl, referer: SiteLink, headers: headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                checkForError(loginResult, Definition.Login.Error);
+                checkForError(loginResult, Login.Error);
             }
             else if (Login.Method == "oneurl")
             {
@@ -793,11 +810,11 @@ namespace Jackett.Common.Indexers
                 var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink, headers: headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                checkForError(loginResult, Definition.Login.Error);
+                checkForError(loginResult, Login.Error);
             }
             else
             {
-                throw new NotImplementedException("Login method " + Definition.Login.Method + " not implemented");
+                throw new NotImplementedException($"Login method {Login.Method} not implemented");
             }
 
             logger.Debug($"CardigannIndexer ({Id}): Cookies after login: {CookieHeader}");
