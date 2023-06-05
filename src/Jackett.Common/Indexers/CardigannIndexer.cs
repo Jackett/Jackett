@@ -772,18 +772,22 @@ namespace Jackett.Common.Indexers
             else if (Login.Method == "get")
             {
                 var queryCollection = new NameValueCollection();
-                foreach (var Input in Definition.Login.Inputs)
+
+                if (Login.Inputs != null && Login.Inputs.Any())
                 {
-                    var value = applyGoTemplateText(Input.Value);
-                    queryCollection.Add(Input.Key, value);
+                    foreach (var input in Login.Inputs)
+                    {
+                        var value = applyGoTemplateText(input.Value);
+                        queryCollection.Add(input.Key, value);
+                    }
                 }
 
-                var LoginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
+                var loginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
                 configData.CookieHeader.Value = null;
-                var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink, headers: headers);
+                var loginResult = await RequestWithCookiesAsync(loginUrl, referer: SiteLink, headers: headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
-                checkForError(loginResult, Definition.Login.Error);
+                checkForError(loginResult, Login.Error);
             }
             else if (Login.Method == "oneurl")
             {
