@@ -122,7 +122,8 @@ settings:
 
 login:
   path: user/account/login/
-  method: post
+  method: form
+  form: form[name="login-form"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
