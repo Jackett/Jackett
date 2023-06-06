@@ -178,4 +178,4 @@ search:
       filters:
         - name: replace
           args: [" 剩余时间：", ""]
-# NexusPHP v1.7.29 2022-10-13
+# NexusPHP v1.8.2 2023-05-08
