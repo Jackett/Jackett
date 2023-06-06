@@ -63,8 +63,6 @@ settings:
 login:
   path: /api/torrents
   method: get
-  inputs:
-    api_token: "{{ .Config.apikey }}"
   error:
     - selector: a[href*="/login"]
       message:
@@ -78,8 +76,10 @@ search:
       response:
         type: json
 
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
-    api_token: "{{ .Config.apikey }}"
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
     imdbId: "{{ .Query.IMDBIDShort }}"

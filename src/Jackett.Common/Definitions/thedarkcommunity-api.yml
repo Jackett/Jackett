@@ -50,8 +50,6 @@ settings:
 login:
   path: /api/torrents
   method: get
-  inputs:
-    api_token: "{{ .Config.apikey }}"
   error:
     - selector: a[href*="/login"]
       message:
@@ -65,9 +63,11 @@ search:
       response:
         type: json
 
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
-    api_token: "{{ .Config.apikey }}"
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
     seasonNumber: "{{ .Query.Season }}"
