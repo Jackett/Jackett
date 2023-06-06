@@ -6,8 +6,9 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
-  - https://lesaloonv2-0.net/
+  - https://lesaloonv2-0.xyz/
 legacylinks:
+  - https://lesaloonv2-0.net/
   - http://lesaloonv2-0.net/ # site forces https
 
 caps:
@@ -121,7 +122,7 @@ settings:
     default: false
 
 login:
-  # https://lesaloonv2-0.net/yupy_login.php
+  # https://lesaloonv2-0.xyz/yupy_login.php
   path: yupy_login.php
   method: form
   form: form[action^="login"]
@@ -137,7 +138,7 @@ login:
 
 search:
   paths:
-    # http://lesaloonv2-0.net/index.php?page=torrents&search=supernatural+s13e20&parentcategory=0&category=0&genre=0&options=0&active=0
+    # http://lesaloonv2-0.xyz/index.php?page=torrents&search=supernatural+s13e20&parentcategory=0&category=0&genre=0&options=0&active=0
     - path: index.php
   inputs:
     page: torrents
