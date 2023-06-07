@@ -139,20 +139,22 @@ search:
     files:
       selector: td:nth-last-child(9)
     date_day:
-      # Yesterday<br/>6:00 AM
-      selector: td:nth-last-child(7):contains("day")
       # auto adjusted by site account profile
+      # Yesterday, 6:00 AM
+      selector: td:nth-last-child(7) > span[title*="day"]
+      attribute: title
       optional: true
       filters:
         - name: fuzzytime
     date_year:
-      # Aug 6 2021<br/>7:25 PM
-      selector: td:nth-last-child(7):not(:contains("day"))
       # auto adjusted by site account profile
+      # Aug 6 2021, 7:25 PM
+      selector: td:nth-last-child(7) > span[title]:not([title*="day"])
+      attribute: title
       optional: true
       filters:
         - name: dateparse
-          args: "MMM d yyyy h:mm tt"
+          args: "MMM d yyyy, h:mm tt"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
