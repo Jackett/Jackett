@@ -8,13 +8,12 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.asia/
+  - https://torrentdownload.unblockit.mov/
   - https://torrentdownload.mrunblock.life/
   - https://torrentdownload.nocensor.click/
 legacylinks:
   - https://torrentdownload.nocensor.space/
   - https://torrentdownload.nocensor.work/
-  - https://torrentdownload.unblockit.cam/
   - https://torrentdownload.nocensor.biz/
   - https://torrentdownload.unblockit.day/
   - https://torrentdownload.unblockit.llc/
@@ -34,6 +33,7 @@ legacylinks:
   - https://torrentdownload.unblockit.boo/
   - https://torrentdownload.mrunblock.guru/
   - https://torrentdownload.unblockit.click/
+  - https://torrentdownload.unblockit.asia/
 
 caps:
   categorymappings:

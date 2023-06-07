@@ -10,12 +10,11 @@ requestDelay: 2
 links:
   - https://www.torlock2.com/
   - https://www.torlock.com/
-  - https://torlock.unblockit.asia/
+  - https://torlock.unblockit.mov/
   - https://torlock.mrunblock.life/
   - https://torlock.nocensor.click/
 legacylinks:
   - https://torlock.com/
-  - https://torlock.unblockit.cam/
   - https://torlock.nocensor.biz/
   - https://torlock.unblockit.day/
   - https://torlock.unblockit.llc/
@@ -36,6 +35,7 @@ legacylinks:
   - https://torlock.unblockit.boo/
   - https://torlock.mrunblock.guru/
   - https://torlock.unblockit.click/
+  - https://torlock.unblockit.asia/
 
 caps:
   # dont forget to update the search fields category case block
