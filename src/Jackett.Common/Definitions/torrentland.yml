@@ -84,6 +84,7 @@ search:
     # name=&description=&mediainfo=&uploader=&keywords=&tmdbId=&imdbId=&tvdbId=&malId=
     # &startYear=&endYear=&playlistId=&collectionId=&categories[]=1&perPage=100&free[0]=100
     - path: torrents
+
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     name: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
@@ -96,6 +97,7 @@ search:
     perPage: 100
     page: 1
     # supports genre search but you need to know the id, example genres=28 for Acción
+
   keywordsfilters:
     - name: re_replace
       args: ["(?i)\\bS(\\d+)", "{{ if .Config.compatOld }}T$1{{ else }}S$1{{ end }}"]
@@ -143,24 +145,17 @@ search:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
     imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-    tmdbid:
-      selector: a[href*="themoviedb.org/"]
-      attribute: href
-    tvdbid:
-      selector: a[href*="thetvdb.com/?tab="]
-      attribute: href
+      selector: div#imdb_id
     size:
-      selector: td:nth-last-child(5)
+      selector: td.torrent-listings-size
     seeders:
-      selector: td:nth-last-child(4)
+      selector: td.torrent-listings-seeders
     leechers:
-      selector: td:nth-last-child(3)
+      selector: td.torrent-listings-leechers
     grabs:
-      selector: td:nth-last-child(2)
+      selector: td.torrent-listings-completed
     date:
-      selector: td:nth-last-child(1)
+      selector: td.torrent-listings-age
       filters:
         # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
         - name: re_replace
