@@ -69,6 +69,9 @@ search:
       response:
         type: json
 
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
