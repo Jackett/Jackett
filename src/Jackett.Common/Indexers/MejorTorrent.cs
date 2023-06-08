@@ -541,14 +541,12 @@ namespace Jackett.Common.Indexers
             var cat = MejorTorrentCatType.Otro;
             if (mejortorrentCat == null)
             {
-                if (detailsStr.Contains("peliculas_extend"))
+                if (detailsStr.Contains("pelicula"))
                     cat = MejorTorrentCatType.Pelicula;
-                else if (detailsStr.Contains("series_extend"))
+                else if (detailsStr.Contains("serie"))
                     cat = MejorTorrentCatType.Serie;
-                else if (detailsStr.Contains("musica_extend"))
+                else if (detailsStr.Contains("musica"))
                     cat = MejorTorrentCatType.Musica;
-                else if (detailsStr.Contains("pelicula"))
-                    cat = MejorTorrentCatType.Pelicula;
             }
             else if (mejortorrentCat.Equals(MejorTorrentCatType.Pelicula) ||
                      mejortorrentCat.Equals(MejorTorrentCatType.Serie) ||
