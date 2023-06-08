@@ -35,5 +35,13 @@ namespace Jackett.Common.Extensions
 
             return true;
         }
+
+        public static string Replace(this string text, int index, int length, string replacement)
+        {
+            text = text.Remove(index, length);
+            text = text.Insert(index, replacement);
+
+            return text;
+        }
     }
 }

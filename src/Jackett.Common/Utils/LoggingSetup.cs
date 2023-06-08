@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
+using Jackett.Common.Utils.Logging;
 using NLog;
 using NLog.Config;
 using NLog.LayoutRenderers;
@@ -21,7 +22,7 @@ namespace Jackett.Common.Utils
 
             var logConfig = new LoggingConfiguration();
 
-            var logFile = new FileTarget
+            var logFile = new CleanseFileTarget
             {
                 Layout = "${longdate} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}${exception:format=Data}${newline}}",
                 FileName = Path.Combine(settings.DataFolder, logFileName),
