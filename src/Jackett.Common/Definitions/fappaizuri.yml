@@ -1,0 +1,139 @@
+---
+id: fappaizuri
+name: Fappaizuri
+description: "Fappaizuri is a Private Torrent Tracker for HENTAI / JAV"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://fappaizuri.me/
+
+caps:
+  categorymappings:
+    - {id: 8, cat: TV/Anime, desc: "Hentai"}
+    - {id: 7, cat: Console, desc: "H-games"}
+    - {id: 5, cat: XXX, desc: "JAV"}
+    - {id: 6, cat: Books, desc: "Manga"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: lang
+    type: select
+    label: Language
+    default: 0
+    options:
+      0: All
+      4: Japanese
+      5: Chinese
+      6: Malaysia
+      7: North Korea
+      8: English
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: post
+  path: account-login.php
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: b:contains("The specified username or password was incorrect.")
+  test:
+    path: account.php
+
+search:
+  paths:
+    # https://fappaizuri.me/torrents-search.php?search=&c8=1&c6=1&incldead=1&freeleech=0&lang=0
+    - path: torrents-search.php
+
+  inputs:
+    $raw: "{{ range .Categories }}&c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}{{ .Config.freeleech }}2{{ else }}0{{ end }}"
+    lang: "{{ .Config.lang }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: tr.t-row:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="search-torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="] > b
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=(.+?)>
+    _language:
+      selector: img[src*="images/languages/"]
+      attribute: alt
+    description:
+      selector: font[color="red"]
+      filters:
+        - name: append
+          args: " - {{ .Result._language }}"
+    size:
+      selector: td:nth-child(4)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    date:
+      text: now
+    downloadvolumefactor:
+      case:
+        img[src="images/free.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src="images/doubleupload.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+# evolution

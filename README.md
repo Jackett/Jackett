@@ -339,6 +339,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FANO.IN [![(invite needed)][inviteneeded]](#)
  * Fantastic Heaven
  * Fantastiko
+ * Fappaizuri
  * Femdomcult
  * FileList (FL)
  * FinElite (FE)
@@ -608,7 +609,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ZonaQ
 </details>
 
-Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be missing features or be broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com to get them fixed/improved.
+Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be missing features or be broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com or jacketttest -at- gmail.com to get them fixed/improved.
 
 ### Aggregate indexers
 
