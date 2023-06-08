@@ -21,6 +21,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -1486,7 +1487,18 @@ namespace Jackett.Common.Indexers
                         continue;
                     }
 
-                    var parsedJson = JToken.Parse(results);
+                    JToken parsedJson;
+
+                    try
+                    {
+                        parsedJson = JToken.Parse(results);
+                    }
+                    catch (JsonReaderException ex)
+                    {
+                        logger.Debug("Unexpected response content ({0} bytes): {1}", response.ContentBytes.Length, response.ContentString);
+
+                        throw new Exception("Error Parsing Json Response", ex);
+                    }
 
                     if (parsedJson == null)
                     {
