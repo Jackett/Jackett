@@ -26,19 +26,14 @@ namespace Jackett.Common.Indexers
         public override string Id => "mejortorrent";
         public override string Name => "MejorTorrent";
         public override string Description => "MejorTorrent - Hay veces que un torrent viene mejor! :)";
-        public override string SiteLink { get; protected set; } = "https://www2.mejortorrent.rip/";
+        public override string SiteLink { get; protected set; } = "https://www3.mejortorrent.rip/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://www2.mejortorrent.rip/",
+            "https://www3.mejortorrent.rip/",
             "https://mejortorrent.unblockit.mov/"
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://www.mejortorrentt.net/",
-            "http://www.mejortorrent.org/",
-            "http://www.mejortorrent.tv/",
-            "http://www.mejortorrentt.com/",
-            "https://www.mejortorrentt.org/",
             "http://www.mejortorrentt.org/",
             "https://www.mejortorrents.net/",
             "https://www.mejortorrents1.com/",
@@ -64,7 +59,8 @@ namespace Jackett.Common.Indexers
             "https://mejortorrent.unblockit.boo/",
             "https://mejortorrent.unblockit.click/",
             "https://www1.mejortorrent.rip/",
-            "https://mejortorrent.unblockit.asia/"
+            "https://mejortorrent.unblockit.asia/",
+            "https://www2.mejortorrent.rip/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
