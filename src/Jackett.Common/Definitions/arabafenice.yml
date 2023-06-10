@@ -124,6 +124,7 @@ login:
             args: ["');", ""]
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 download:
   before:
