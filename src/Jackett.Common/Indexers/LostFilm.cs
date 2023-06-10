@@ -28,20 +28,20 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://www.lostfilm.life/",
-            "https://www.lostfilm.run/",
             "https://www.lostfilmtv.site/",
             "https://www.lostfilm.tv/",
             "https://www.lostfilm.win/",
             "https://www.lostfilm.tw/",
+            "https://www.lostfilm.uno/",
             "https://www.lostfilmtv2.site/",
             "https://www.lostfilmtv3.site/",
-            "https://www.lostfilmtv5.site/",
-            "https://www.lostfilm.uno/"
+            "https://www.lostfilmtv5.site/"
         };
         public override string[] LegacySiteLinks => new[]
         {
             "https://lostfilm.site",
-            "https://lostfilm.tw/"
+            "https://lostfilm.tw/",
+            "https://www.lostfilm.run/"
         };
         public override string Language => "ru-RU";
         public override string Type => "semi-private";
