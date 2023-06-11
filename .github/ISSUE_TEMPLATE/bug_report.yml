@@ -2,6 +2,7 @@ name: Bug report
 description: Create a report of your issue
 body:
 - type: checkboxes
+  id: troubleshooting
   attributes:
     label: Have you checked our Troubleshooting page for your issue?
     description: Please read the <a href="https://github.com/Jackett/Jackett/wiki/Troubleshooting">Troubleshooting</a> page for steps to resolve common issues.
@@ -9,6 +10,7 @@ body:
       - label: I have checked the Troubleshooting page
         required: true
 - type: checkboxes
+  id: already-an-issue
   attributes:
     label: Is there already an issue for your problem?
     description: Please make sure you are not creating an already submitted <a href="https://github.com/Jackett/Jackett/issues">Issue</a>. Check closed issues as well, because your issue may have already been fixed.
@@ -16,6 +18,7 @@ body:
       - label: I have checked older issues, open and closed
         required: true
 - type: checkboxes
+  id: contributing-guidelines
   attributes:
     label: Have you read our Contributing Guidelines?
     description: Please read our <a href="https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md">Contributing Guidelines</a> before submitting your issue to ensure a prompt response to your bug.
@@ -23,6 +26,7 @@ body:
       - label: I have read the Contributing Guidelines
         required: true
 - type: textarea
+  id: environment
   attributes:
     label: Environment
     description: Please provide the details of the system Jackett is running on. The best way to do this is to restart Jackett, access the dashboard, view the log, and copy/paste replacing the example below with the last 10 Info lines at the bottom of the log.
@@ -40,12 +44,14 @@ body:
   validations:
     required: true
 - type: textarea
+  id: description
   attributes:
     label: Description
     description: List steps to reproduce the error and details on what happens and what you expected to happen.
   validations:
     required: true
 - type: textarea
+  id: error-logs
   attributes:
     label: Logged Error Messages
     description: |
@@ -55,6 +61,7 @@ body:
   validations:
     required: true
 - type: textarea
+  id: screenshots
   attributes:
     label: Screenshots
     description: Place any screenshots of the issue here if needed
