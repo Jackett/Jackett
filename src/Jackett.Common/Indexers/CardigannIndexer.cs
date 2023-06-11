@@ -878,40 +878,52 @@ namespace Jackett.Common.Indexers
             return true;
         }
 
-        protected bool CheckIfLoginIsNeeded(WebResult Result, IHtmlDocument document)
+        private bool CheckIfLoginIsNeeded(WebResult response)
         {
-            if (Result.IsRedirect)
+            if (response.IsRedirect)
             {
-                var DomainHint = getRedirectDomainHint(Result);
-                if (DomainHint != null)
+                var domainHint = getRedirectDomainHint(response);
+
+                if (domainHint != null)
                 {
-                    var errormessage = "Got redirected to another domain. Try changing the indexer URL to " + DomainHint + ".";
+                    var errorMessage = "Got redirected to another domain. Try changing the indexer URL to " + domainHint + ".";
+
                     if (Definition.Followredirect)
                     {
-                        configData.SiteLink.Value = DomainHint;
+                        configData.SiteLink.Value = domainHint;
                         SiteLink = configData.SiteLink.Value;
                         SaveConfig();
-                        errormessage += " Updated site link, please try again.";
+                        errorMessage += " Updated site link, please try again.";
                     }
-                    throw new ExceptionWithConfigData(errormessage, configData);
+
+                    throw new ExceptionWithConfigData(errorMessage, configData);
                 }
 
-                logger.Error($"Redirected to: {Result.RedirectingTo}");
+                logger.Error($"Redirected to: {response.RedirectingTo}");
 
                 return true;
             }
 
             if (Definition.Login == null || Definition.Login.Test == null)
-                return false;
-
-            if (Definition.Login.Test.Selector != null)
             {
+                return false;
+            }
+
+            var contentType = response.Headers.TryGetValue("Content-Type", out var header) ? header.FirstOrDefault() : null;
+
+            if (Definition.Login.Test.Selector != null && (contentType?.Contains("text/html") ?? true))
+            {
+                var parser = new HtmlParser();
+                var document = parser.ParseDocument(response.ContentString);
+
                 var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
+
                 if (selection.Length == 0)
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -1468,12 +1480,40 @@ namespace Jackett.Common.Indexers
                     searchUrl, method: method, headers: headers, data: queryCollection);
 
                 if (response.IsRedirect && SearchPath.Followredirect)
+                {
                     await FollowIfRedirect(response);
+                }
 
                 var results = response.ContentString;
 
                 if (SearchPath.Response != null && SearchPath.Response.Type.Equals("json"))
                 {
+                    // check if we need to login again
+                    var loginNeeded = CheckIfLoginIsNeeded(response);
+
+                    if (loginNeeded)
+                    {
+                        logger.Info("CardigannIndexer({0}): Relogin required", Id);
+
+                        var loginResult = await DoLogin();
+
+                        if (!loginResult)
+                        {
+                            throw new Exception("Relogin failed");
+                        }
+
+                        await TestLogin();
+
+                        response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection, headers: headers);
+
+                        if (response.IsRedirect && SearchPath.Followredirect)
+                        {
+                            await FollowIfRedirect(response);
+                        }
+
+                        results = response.ContentString;
+                    }
+
                     if (response.Status != HttpStatusCode.OK)
                     {
                         throw new Exception($"Error Parsing Json Response: Status={response.Status} Response={results}");
@@ -1495,7 +1535,7 @@ namespace Jackett.Common.Indexers
                     }
                     catch (JsonReaderException ex)
                     {
-                        logger.Debug("Unexpected response content ({0} bytes): {1}", response.ContentBytes.Length, response.ContentString);
+                        logger.Warn("Unexpected response content ({0} bytes): {1}", response.ContentBytes.Length, response.ContentString);
 
                         throw new Exception("Error Parsing Json Response", ex);
                     }
@@ -1639,37 +1679,46 @@ namespace Jackett.Common.Indexers
                         }
                         else
                         {
-                            var SearchResultParser = new HtmlParser();
-                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
-
                             // check if we need to login again
-                            var loginNeeded = CheckIfLoginIsNeeded(response, SearchResultDocument);
+                            var loginNeeded = CheckIfLoginIsNeeded(response);
+
                             if (loginNeeded)
                             {
-                                logger.Info(string.Format("CardigannIndexer ({0}): Relogin required", Id));
-                                var LoginResult = await DoLogin();
-                                if (!LoginResult)
-                                    throw new Exception(string.Format("Relogin failed"));
+                                logger.Info("CardigannIndexer({0}): Relogin required", Id);
+
+                                var loginResult = await DoLogin();
+
+                                if (!loginResult)
+                                {
+                                    throw new Exception("Relogin failed");
+                                }
+
                                 await TestLogin();
+
                                 response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection, headers: headers);
+
                                 if (response.IsRedirect && SearchPath.Followredirect)
+                                {
                                     await FollowIfRedirect(response);
+                                }
 
                                 results = response.ContentString;
-                                SearchResultDocument = SearchResultParser.ParseDocument(results);
                             }
+
+                            var searchResultParser = new HtmlParser();
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
 
                             checkForError(response, Definition.Search.Error);
 
                             if (Search.Preprocessingfilters != null)
                             {
                                 results = applyFilters(results, Search.Preprocessingfilters, variables);
-                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                                searchResultDocument = searchResultParser.ParseDocument(results);
                                 logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
                             }
 
                             var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+                            rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
                         }
 
                         var Rows = rowsDom.ToList();
