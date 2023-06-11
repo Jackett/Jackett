@@ -1,0 +1,13 @@
+<Project>
+    <!-- Common to all Jackett Projects -->
+    <PropertyGroup>
+        <!-- Specifies whether it's one of our own libraries -->
+        <JackettProject>false</JackettProject>
+        <JackettProject Condition="$(MSBuildProjectName.StartsWith('Jackett'))">true</JackettProject>
+    </PropertyGroup>
+
+    <!-- Set the Product and Version info for our own projects -->
+    <PropertyGroup Condition="'$(JackettProject)'=='true'">
+        <PathMap>$(MSBuildProjectDirectory)=./$(MSBuildProjectName)/</PathMap>
+    </PropertyGroup>
+</Project>
