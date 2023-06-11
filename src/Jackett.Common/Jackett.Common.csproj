@@ -22,7 +22,7 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog" Version="5.1.2" />
     <PackageReference Include="polly" Version="7.2.3" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
