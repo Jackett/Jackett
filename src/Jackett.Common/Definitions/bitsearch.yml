@@ -93,7 +93,7 @@ search:
     category:
       selector: a.category
     title:
-      selector: h5
+      selector: h5 a
     details:
       selector: h5 a
       attribute: href
