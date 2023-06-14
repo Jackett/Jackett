@@ -22,23 +22,19 @@ caps:
     - {id: 70, cat: Audio/Lossless, desc: "Flac"}
     - {id: 75, cat: TV/Sport, desc: "Formel 1"}
     - {id: 74, cat: TV/Sport, desc: "Fussball"}
-    - {id: 83, cat: PC/Games, desc: "Games"}
     - {id: 36, cat: Audio/Audiobook, desc: "Hörbuch"}
     - {id: 101, cat: TV, desc: "Kids"}
     - {id: 5, cat: Console, desc: "Konsolen-Games"}
     - {id: 107, cat: PC/Mac, desc: "MAC-Programme"}
-    - {id: 86, cat: Other, desc: "Misc"}
     - {id: 91, cat: Movies, desc: "Movie-Packs"}
-    - {id: 66, cat: Movies, desc: "Movies"}
     - {id: 11, cat: Movies/DVD, desc: "Movies DVD / HD2DVD"}
-    - {id: 104, cat: Movies/UHD, desc: "Movies UHD 8K"}
+    - {id: 89, cat: Movies/UHD, desc: "Movies UHD"}
     - {id: 49, cat: Movies/HD, desc: "Movies-1080p"}
     - {id: 90, cat: Movies/3D, desc: "Movies-3-D"}
     - {id: 48, cat: Movies/HD, desc: "Movies-720p"}
     - {id: 47, cat: Movies/BluRay, desc: "Movies-Bluray"}
     - {id: 60, cat: Movies/HD, desc: "Movies-HDTV"}
     - {id: 62, cat: Movies/SD, desc: "Movies-SD"}
-    - {id: 89, cat: Movies/UHD, desc: "Movies-U-HD"}
     - {id: 69, cat: Audio, desc: "Musik"}
     - {id: 72, cat: Audio, desc: "Musik-Packs"}
     - {id: 93, cat: Audio/Video, desc: "Musik-Videos"}
@@ -57,8 +53,10 @@ caps:
     - {id: 92, cat: Console, desc: "Wimmelbild"}
     - {id: 28, cat: PC, desc: "Windows-Programme"}
     - {id: 23, cat: TV/Sport, desc: "Wrestling"}
-    - {id: 108, cat: TV, desc: "WOTT-CREW"}
-    - {id: 108, cat: Movies, desc: "WOTT-CREW"}
+    - {id: 108, cat: Movies, desc: "WOTT-Filme"}
+    - {id: 108, cat: TV, desc: "WOTT-Filme"}
+    - {id: 109, cat: TV, desc: "WOTT-SERIEN"}
+    - {id: 110, cat: Movies, desc: "WOTT-UHD"}
     - {id: 88, cat: XXX, desc: "XXX"}
     - {id: 106, cat: XXX/ImageSet, desc: "XXX Bilder"}
     - {id: 102, cat: XXX, desc: "XXX HENTAI"}
