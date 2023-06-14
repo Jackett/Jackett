@@ -6,6 +6,8 @@ language: pl-PL
 type: semi-private
 encoding: UTF-8
 links:
+  - https://electro-torrent.pl/
+legacylinks:
   - http://electro-torrent.pl/
 
 caps:
@@ -68,7 +70,7 @@ settings:
       MULTi POLISH: MULTi POLISH
 
 login:
-  path: logowanie
+  path: login.php
   method: form
   form: form[action="takelogin.php"]
   captcha:
