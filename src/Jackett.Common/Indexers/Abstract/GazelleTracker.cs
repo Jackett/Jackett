@@ -220,7 +220,8 @@ namespace Jackett.Common.Indexers.Abstract
                 var jsonError = JObject.Parse(response.ContentString);
                 var errorReason = (string)jsonError["error"];
                 throw new Exception(errorReason);
-            } else if (response.ContentString.IsNullOrWhiteSpace())
+            }
+            else if (response.ContentString.IsNullOrWhiteSpace())
             {
                 throw new Exception($"Empty response from indexer. Status code: {response.Status}");
             }
