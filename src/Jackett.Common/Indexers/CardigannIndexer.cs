@@ -1777,7 +1777,9 @@ namespace Jackett.Common.Indexers
                                             }
 
                                             value = defaultValue;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             value = applyGoTemplateText(value, variables);
                                         }
 
