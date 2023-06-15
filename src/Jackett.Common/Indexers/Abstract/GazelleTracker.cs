@@ -221,10 +221,15 @@ namespace Jackett.Common.Indexers.Abstract
                 var errorReason = (string)jsonError["error"];
                 throw new Exception(errorReason);
             }
+            else if ((int)response.Status >= 400)
+            {
+                throw new Exception($"Invalid status code {response.Status} received from indexer");
+            }
 
             try
             {
                 var json = JObject.Parse(response.ContentString);
+
                 foreach (JObject r in json["response"]["results"])
                 {
                     // groupTime may be a unixTime or a datetime string
