@@ -1778,10 +1778,6 @@ namespace Jackett.Common.Indexers
 
                                             value = defaultValue;
                                         }
-                                        else
-                                        {
-                                            value = applyGoTemplateText(value, variables);
-                                        }
 
                                         variables[variablesKey] = ParseFields(value, FieldName, release, FieldModifiers, searchUrlUri);
                                     }
