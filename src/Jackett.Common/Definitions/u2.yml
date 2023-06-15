@@ -156,11 +156,23 @@ search:
       selector: td:nth-child(7)
     grabs:
       selector: td:nth-child(8)
+    downloadvolumefactor_custom:
+      selector: td.embedded > img.arrowdown + b
+      optional: true
+      filters:
+        - name: regexp
+          args: (.*)X
+    uploadvolumefactor_custom:
+      selector: td.embedded > img.arrowup + b
+      optional: true
+      filters:
+        - name: regexp
+          args: (.*)X
     downloadvolumefactor:
       case:
         img.pro_free: 0
         img.pro_free2up: 0
-        img.pro_custom: 0
+        img.pro_custom: "{{ .Result.downloadvolumefactor_custom }}"
         img.pro_50pctdown: 0.5
         img.pro_50pctdown2up: 0.5
         img.pro_30pctdown: 0.3
@@ -170,7 +182,7 @@ search:
         img.pro_50pctdown2up: 2
         img.pro_free2up: 2
         img.pro_2up: 2
-        img.pro_custom: 3
+        img.pro_custom: "{{ .Result.uploadvolumefactor_custom }}"
         "*": 1
     description:
       selector: td:nth-child(2)
