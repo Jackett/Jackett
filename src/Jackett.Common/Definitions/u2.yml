@@ -158,11 +158,13 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor_custom:
       selector: td.embedded > img.arrowdown + b
+      optional: true
       filters:
         - name: regexp
           args: (.*)X
     uploadvolumefactor_custom:
       selector: td.embedded > img.arrowup + b
+      optional: true
       filters:
         - name: regexp
           args: (.*)X
