@@ -220,11 +220,15 @@ namespace Jackett.Common.Indexers.Abstract
                 var jsonError = JObject.Parse(response.ContentString);
                 var errorReason = (string)jsonError["error"];
                 throw new Exception(errorReason);
+            } else if (response.ContentString.IsNullOrWhiteSpace())
+            {
+                throw new Exception($"Empty response from indexer. Status code: {response.Status}");
             }
 
             try
             {
                 var json = JObject.Parse(response.ContentString);
+
                 foreach (JObject r in json["response"]["results"])
                 {
                     // groupTime may be a unixTime or a datetime string
