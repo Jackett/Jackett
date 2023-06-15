@@ -195,6 +195,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Mazepa
  * Metal Tracker
  * Moviesite
+ * MovieWorld (Flicker)
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
