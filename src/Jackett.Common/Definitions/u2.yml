@@ -160,7 +160,7 @@ search:
       selector: td.embedded > img.arrowdown + b
       filters:
         - name: regexp
-          args: (.*)x
+          args: (.*)X
     uploadvolumefactor_custom:
       selector: td.embedded > img.arrowup + b
       filters:
