@@ -221,9 +221,9 @@ namespace Jackett.Common.Indexers.Abstract
                 var errorReason = (string)jsonError["error"];
                 throw new Exception(errorReason);
             }
-            else if (response.ContentString.IsNullOrWhiteSpace())
+            else if ((int)response.Status >= 400)
             {
-                throw new Exception($"Empty response from indexer. Status code: {response.Status}");
+                throw new Exception($"Invalid status code {response.Status} received from indexer");
             }
 
             try
