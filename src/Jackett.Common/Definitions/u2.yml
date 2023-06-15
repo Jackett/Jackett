@@ -160,17 +160,21 @@ search:
       case:
         img.pro_free: 0
         img.pro_free2up: 0
-        img.pro_custom: 0
         img.pro_50pctdown: 0.5
         img.pro_50pctdown2up: 0.5
         img.pro_30pctdown: 0.3
+        'td.embedded > img.arrowdown + b:contains("0.00X")': 0
+        'td.embedded > img.arrowdown + b:contains("0.15X")': 0.15
+        'td.embedded > img.arrowdown + b:contains("0.30X")': 0.3
         "*": 1
     uploadvolumefactor:
       case:
         img.pro_50pctdown2up: 2
         img.pro_free2up: 2
         img.pro_2up: 2
-        img.pro_custom: 3
+        'td.embedded > img.arrowup + b:contains("2.00X")': 2
+        'td.embedded > img.arrowup + b:contains("2.33")': 2.33
+        'td.embedded > img.arrowup + b:contains("3.00X")': 3
         "*": 1
     description:
       selector: td:nth-child(2)
