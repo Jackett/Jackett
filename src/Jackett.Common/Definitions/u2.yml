@@ -165,7 +165,7 @@ search:
       selector: td.embedded > img.arrowup + b
       filters:
         - name: regexp
-          args: (.*)x
+          args: (.*)X
     downloadvolumefactor:
       case:
         img.pro_free: 0
