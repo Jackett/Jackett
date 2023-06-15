@@ -173,7 +173,7 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         'td.embedded > img.arrowup + b:contains("2.00X")': 2
-        'td.embedded > img.arrowup + b:contains("2.33")': 2.33
+        'td.embedded > img.arrowup + b:contains("2.33X")': 2.33
         'td.embedded > img.arrowup + b:contains("3.00X")': 3
         "*": 1
     description:
