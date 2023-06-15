@@ -157,12 +157,12 @@ search:
     grabs:
       selector: td:nth-child(8)
     downloadvolumefactor_custom:
-      selector: b:nth-last-child(1)
+      selector: td.embedded > img.arrowdown + b
       filters:
         - name: regexp
           args: (.*)x
     uploadvolumefactor_custom:
-      selector: b:nth-last-child(2)
+      selector: td.embedded > img.arrowup + b
       filters:
         - name: regexp
           args: (.*)x
