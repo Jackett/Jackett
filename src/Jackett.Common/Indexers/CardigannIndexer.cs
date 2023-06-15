@@ -1244,18 +1244,22 @@ namespace Jackett.Common.Indexers
 
             if (Selector.Case != null)
             {
-                foreach (var Case in Selector.Case)
+                foreach (var switchCase in Selector.Case)
                 {
-                    if (selection.Matches(Case.Key) || QuerySelector(selection, Case.Key) != null)
+                    if (selection.Matches(switchCase.Key) || QuerySelector(selection, switchCase.Key) != null)
                     {
-                        value = Case.Value;
+                        value = applyGoTemplateText(switchCase.Value, variables);
                         break;
                     }
                 }
+
                 if (value == null)
                 {
                     if (required)
-                        throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), selection.ToHtmlPretty()));
+                    {
+                        throw new Exception($"None of the case selectors \"{string.Join(",", Selector.Case)}\" matched {selection.ToHtmlPretty()}");
+                    }
+
                     return null;
                 }
             }
@@ -1292,15 +1296,22 @@ namespace Jackett.Common.Indexers
                 selectorSelector = JsonParseFieldSelector(parentObj, selectorSelector);
 
                 JToken selection = null;
+
                 if (selectorSelector != null)
+                {
                     selection = parentObj.SelectToken(selectorSelector);
+                }
 
                 if (selection == null)
                 {
                     if (required)
-                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", selectorSelector, parentObj.ToString()));
+                    {
+                        throw new Exception($"Selector \"{selectorSelector}\" didn't match {parentObj}");
+                    }
+
                     return null;
                 }
+
                 if (selection.Type is JTokenType.Array)
                 {
                     // turn this json array into a comma delimited string
@@ -1308,23 +1319,29 @@ namespace Jackett.Common.Indexers
                     value = String.Join(",", valueArray);
                 }
                 else
+                {
                     value = selection.Value<string>();
+                }
             }
 
             if (Selector.Case != null)
             {
-                foreach (var Case in Selector.Case)
+                foreach (var switchCase in Selector.Case)
                 {
-                    if (value.Equals(Case.Key) || Case.Key.Equals("*"))
+                    if ((value != null && value.Equals(switchCase.Key)) || switchCase.Key.Equals("*"))
                     {
-                        value = Case.Value;
+                        value = applyGoTemplateText(switchCase.Value, variables);
                         break;
                     }
                 }
+
                 if (value == null)
                 {
                     if (required)
-                        throw new Exception(string.Format("None of the case selectors \"{0}\" matched {1}", string.Join(",", Selector.Case), parentObj.ToString()));
+                    {
+                        throw new Exception($"None of the case selectors \"{string.Join(",", Selector.Case)}\" matched {parentObj}");
+                    }
+
                     return null;
                 }
             }
