@@ -561,6 +561,7 @@ namespace Jackett.Updater
                 "Definitions/tfile.yml",
                 "Definitions/theaudioscene.yml",
                 "Definitions/the-devils-lounge.yml",
+                "Definitions/thedarkcommunity-api.yml",
                 "Definitions/thehorrorcharnel.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
