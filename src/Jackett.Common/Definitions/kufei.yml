@@ -17,7 +17,7 @@ caps:
     - {id: 415, cat: TV, desc: "Drama/戏剧"}
     - {id: 416, cat: Audio/Audiobook, desc: "Audio Books/有声读物"}
     - {id: 409, cat: Other, desc: "Others/其他"}
-    - {id: 412, cat: Other, desc: "Education/教育"}
+    - {id: 413, cat: Other, desc: "Education/教育"}
     - {id: 414, cat: Audio/Video, desc: "Concert/演唱会"}
     - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
     - {id: 406, cat: Audio/Video, desc: "Music Videos/音乐、视频"}
