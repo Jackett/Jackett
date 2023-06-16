@@ -106,7 +106,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}"
+    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]):not(:has(a[href^=\"index.php?page=userdetails\"])){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -142,9 +142,6 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    _uploader:
-      selector: a[href^="index.php?page=userdetails"]
-      optional: true
     date:
       selector: td:has(a[href^="download.php?id="]) ~ td ~ td
       # auto adjusted by site account profile
@@ -158,7 +155,7 @@ search:
     grabs:
       selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td ~ td ~ td
     size:
-      selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td ~ td{{ if .Result._uploader }} ~ td{{ else }}{{ end }}"
+      selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td ~ td"
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
