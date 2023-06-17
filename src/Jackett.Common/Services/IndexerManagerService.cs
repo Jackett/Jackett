@@ -150,7 +150,8 @@ namespace Jackett.Common.Services
                 _configService.Load(indexer);
             }
 
-            _logger.Debug($"Loaded {nativeIndexers.Count} Native indexers: {string.Join(", ", nativeIndexers.Select(i => i.Id))}");
+            _logger.Info($"Loaded {nativeIndexers.Count} Native indexers.");
+            _logger.Debug($"Native indexers loaded: {string.Join(", ", nativeIndexers.Select(i => i.Id))}");
         }
 
         private void InitCardigannIndexers(List<string> path)
@@ -216,7 +217,8 @@ namespace Jackett.Common.Services
                     cardiganIds.Add(indexer.Id);
                 }
 
-                _logger.Debug($"Loaded {cardigannCounter} Cardigann indexers: {string.Join(", ", cardiganIds)}");
+                _logger.Info($"Loaded {cardigannCounter} Cardigann indexers.");
+                _logger.Debug($"Cardigann indexers loaded: {string.Join(", ", cardiganIds)}");
             }
             catch (Exception e)
             {
