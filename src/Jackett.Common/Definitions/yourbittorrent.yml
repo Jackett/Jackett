@@ -8,7 +8,6 @@ encoding: UTF-8
 links:
   - https://yourbittorrent.com/
   - https://yourbittorrent2.com/
-  - https://yourbittorrent.mrunblock.life/
   - https://yourbittorrent.nocensor.click/
 legacylinks:
   - https://yourbittorrent.host/
@@ -19,6 +18,7 @@ legacylinks:
   - https://yourbittorrent.nocensor.world/
   - https://yourbittorrent.nocensor.lol/
   - https://yourbittorrent.mrunblock.guru/
+  - https://yourbittorrent.mrunblock.life/ # This web property is not accessible via this address
 
 caps:
   categorymappings:
