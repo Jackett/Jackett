@@ -73,6 +73,8 @@ caps:
     - {id: 96, cat: Books/Other, desc: "ePaper Zeitungen"}
     - {id: 136, cat: Books/EBook, desc: "ePaper E-Book"}
     - {id: 137, cat: Books/Comics, desc: "ePaper Comics"}
+    # Other - dummy cat
+    - {id: 0, cat: Other, desc: "Other Other"}
 
   modes:
     search: [q]
@@ -145,8 +147,12 @@ search:
   fields:
     category_p1:
       selector: div.kat_cat_pic_name
+      optional: true
+      default: Other
     category_p2:
       selector: div.kat_cat_pic_name_b
+      optional: true
+      default: Other
     categorydesc:
       text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
     title:
