@@ -123,6 +123,8 @@ search:
     category:
       selector: td:nth-child(1) div div a:last-child
       attribute: href
+      optional: true
+      default: "/other/"
     title:
       selector: td:nth-child(1) div a
     details:
