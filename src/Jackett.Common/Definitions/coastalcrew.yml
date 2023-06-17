@@ -13,6 +13,7 @@ caps:
     - {id: 30, cat: TV/Anime, desc: "Filme - Animie"}
     - {id: 28, cat: Movies/BluRay, desc: "Filme - Bluray"}
     - {id: 31, cat: Movies/Other, desc: "Filme - Bollywood"}
+    - {id: 77, cat: TV/Documentary, desc: "Filme - DokusHD"}
     - {id: 32, cat: Movies/DVD, desc: "Filme - DVD"}
     - {id: 33, cat: Movies/HD, desc: "Filme - HD"}
     - {id: 34, cat: Movies, desc: "Filme - Klassiker"}
