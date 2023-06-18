@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Jackett.Common.Exceptions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -194,6 +195,11 @@ namespace Jackett.Common.Indexers.Abstract
             if (response.Status == HttpStatusCode.NotFound)
             {
                 return releases; // search without results, eg CinemaZ: tt0075998
+            }
+
+            if ((int)response.Status == 429)
+            {
+                throw new TooManyRequestsException("Rate limited", response);
             }
 
             if ((int)response.Status >= 400)
