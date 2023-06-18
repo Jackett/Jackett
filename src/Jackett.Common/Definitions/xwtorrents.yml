@@ -12,6 +12,8 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 82, cat: TV/Sport, desc: "AEW Collision"}
+    - {id: 83, cat: TV/Sport, desc: "AEW Collision HD"}
     - {id: 74, cat: TV/Sport, desc: "AEW Dynamite"}
     - {id: 75, cat: TV/Sport, desc: "AEW Dynamite HD"}
     - {id: 78, cat: TV/Sport, desc: "AEW PPV's"}
