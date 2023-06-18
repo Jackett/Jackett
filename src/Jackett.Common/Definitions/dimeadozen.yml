@@ -1,9 +1,9 @@
 ---
 id: dimeadozen
 name: DimeADozen
-description: "DimeADozen (EzTorrent) is a Semi-Private Torrent Tracker for BOOTLEG MUSIC"
+description: "DimeADozen (EzTorrent) is a Private Torrent Tracker for BOOTLEG MUSIC"
 language: en-GB
-type: semi-private
+type: private
 encoding: UTF-8
 links:
   - http://www.dimeadozen.org/ # site does not support https ERR_CONNECTION_REFUSED
