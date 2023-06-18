@@ -214,16 +214,18 @@ namespace Jackett.Common.Indexers.Abstract
                 await ApplyConfiguration(null);
                 response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
-            else if (response.ContentString != null && response.ContentString.Contains("failure") && useApiKey)
+
+            if (response.ContentString != null && response.ContentString.Contains("failure") && useApiKey)
             {
                 // reason for failure should be explained.
                 var jsonError = JObject.Parse(response.ContentString);
                 var errorReason = (string)jsonError["error"];
                 throw new Exception(errorReason);
             }
-            else if ((int)response.Status >= 400)
+
+            if ((int)response.Status >= 400)
             {
-                throw new Exception($"Invalid status code {response.Status} received from indexer");
+                throw new Exception($"Invalid status code {(int)response.Status} ({response.Status}) received from indexer");
             }
 
             try

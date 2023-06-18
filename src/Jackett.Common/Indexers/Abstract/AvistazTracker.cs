@@ -184,19 +184,32 @@ namespace Jackett.Common.Indexers.Abstract
             var episodeSearchUrl = SearchUrl + "?" + qc.GetQueryString();
 
             var response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
+
             if (response.Status == HttpStatusCode.Unauthorized || response.Status == HttpStatusCode.PreconditionFailed)
             {
                 await RenewalTokenAsync();
                 response = await RequestWithCookiesAndRetryAsync(episodeSearchUrl, headers: GetSearchHeaders());
             }
-            else if (response.Status == HttpStatusCode.NotFound)
+
+            if (response.Status == HttpStatusCode.NotFound)
+            {
                 return releases; // search without results, eg CinemaZ: tt0075998
-            else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error: {response.ContentString}");
+            }
+
+            if ((int)response.Status >= 400)
+            {
+                throw new Exception($"Invalid status code {(int)response.Status} ({response.Status}) received from indexer");
+            }
+
+            if (response.Status != HttpStatusCode.OK)
+            {
+                throw new Exception($"Unknown status code: {(int)response.Status} ({response.Status})");
+            }
 
             try
             {
                 var jsonContent = JToken.Parse(response.ContentString);
+
                 foreach (var row in jsonContent.Value<JArray>("data"))
                 {
                     var details = new Uri(row.Value<string>("url"));
@@ -265,6 +278,7 @@ namespace Jackett.Common.Indexers.Abstract
             {
                 OnParseError(response.ContentString, ex);
             }
+
             return releases;
         }
 
