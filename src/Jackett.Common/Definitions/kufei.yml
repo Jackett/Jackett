@@ -5,8 +5,6 @@ description: "Kufei (库非) is a CHINESE Private Torrent Tracker for MOVIES / T
 language: zh-CN
 type: private
 encoding: UTF-8
-certificates:
-  - 45f224bde8e41916914bc343deb1419737b1c5b6 # NET::ERR_CERT_COMMON_NAME_INVALID
 links:
   - https://kufei.org/
 
