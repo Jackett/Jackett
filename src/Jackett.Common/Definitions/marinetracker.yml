@@ -146,6 +146,7 @@ caps:
     - {id: 293, cat: Books, desc: "Shipmodeling-Radio controlled models"}
     - {id: 292, cat: Books, desc: "Shipmodeling-Marine Modelling Magazines"}
     - {id: 291, cat: Books, desc: "Shipmodeling-Drawings and models of ships (CAD, 3D)"}
+    - {id: 346, cat: Books, desc: "Shipmodeling-Raster drawings (JPG, PDF, TIFF)"}
     - {id: 290, cat: Books, desc: "Shipmodeling-Reference Material"}
     - {id: 289, cat: Books, desc: "Shipmodeling-Ships in Bottles"}
     - {id: 197, cat: Books, desc: "Marine bulletins"}
