@@ -51,12 +51,20 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info
+    label: How to get the User-Agent
+    default: "<ol><li>From the same place you fetched the cookie,</li><li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -70,25 +78,17 @@ settings:
       MULTi POLISH: MULTi POLISH
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[src^="img.php?size=3"]
-    input: vImageCodP
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    returnto: ""
-  error:
-    - selector: div#center-side:contains("Logowanie nie")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href$="/logout.php"]
 
 search:
   # http://electro-torrent.pl/szukaj.php?search=&typ=torrent&cat=0
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
   paths:
     - path: szukaj.php
   allowEmptyInputs: true
