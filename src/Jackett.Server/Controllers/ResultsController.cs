@@ -453,7 +453,9 @@ namespace Jackett.Server.Controllers
                     var retryAfter = Convert.ToInt32(tooManyRequestsException.RetryAfter.TotalSeconds);
 
                     if (retryAfter > 0)
+                    {
                         HttpContext.Response.Headers.Add("Retry-After", $"{retryAfter}");
+                    }
                 }
 
                 return GetErrorXML(900, ex.Message, StatusCodes.Status429TooManyRequests);

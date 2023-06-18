@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Jackett.Common.Utils.Clients;
 
 namespace Jackett.Common.Exceptions
@@ -16,14 +17,16 @@ namespace Jackett.Common.Exceptions
         public TooManyRequestsException(string message, WebResult response)
             : base(message)
         {
-            if (response.Headers.ContainsKey("Retry-After"))
+            if (response.Headers.TryGetValue("Retry-After", out var header) && header.FirstOrDefault() is {} retryAfter)
             {
-                var retryAfter = response.Headers["Retry-After"].ToString();
-
                 if (int.TryParse(retryAfter, out var seconds))
+                {
                     RetryAfter = TimeSpan.FromSeconds(seconds);
+                }
                 else if (DateTime.TryParse(retryAfter, out var date))
+                {
                     RetryAfter = date.ToUniversalTime() - DateTime.UtcNow;
+                }
             }
         }
     }
