@@ -168,7 +168,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Deildu
  * Demonoid
  * Devil-Torrents
- * DimeADozen (EzTorrent)
  * DXP (Deaf Experts)
  * Electro-Torrent
  * EliteTorrent-pl
@@ -325,6 +324,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Diablo Torrent [![(invite needed)][inviteneeded]](#)
  * DICMusic
  * DigitalCore
+ * DimeADozen (EzTorrent)
  * DiscFan
  * DivTeam
  * DocsPedia
