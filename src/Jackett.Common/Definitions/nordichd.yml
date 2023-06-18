@@ -11,29 +11,29 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 14, cat: Movies/SD, desc: "Movies DivX"}
-    - {id: 16, cat: Movies/SD, desc: "Movies CAM"}
+    - {id: 14, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 16, cat: Movies/SD, desc: "Movies Retro"}
     - {id: 17, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 17, cat: TV/HD, desc: "TV HD"}
     - {id: 31, cat: Movies/BluRay, desc: "Movies BDRip"}
-    - {id: 6, cat: PC, desc: "Applications"}
-    - {id: 18, cat: PC/0day, desc: "Applications PC"}
-    - {id: 19, cat: PC/Mac, desc: "Applications Macintosh"}
-    - {id: 7, cat: Audio, desc: "Music"}
-    - {id: 20, cat: Audio/Video, desc: "Music Video"}
-    - {id: 21, cat: Audio/MP3, desc: "Music Mp3"}
-    - {id: 2, cat: Console, desc: "Games"}
-    - {id: 3, cat: Console/PS3, desc: "Games Sony PS"}
-    - {id: 4, cat: Console/Wii, desc: "Games Wii"}
-    - {id: 26, cat: Console/XBox, desc: "Games XboX"}
-    - {id: 27, cat: PC/Games, desc: "Games PC"}
-    - {id: 28, cat: Console/NDS, desc: "Games Nintendo"}
+    - {id: 32, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 33, cat: Movies, desc: "Movies Pack"}
+    - {id: 6, cat: Movies, desc: "iNTERNAL"}
+    - {id: 18, cat: Movies/SD, desc: "iNTERNAL SD"}
+    - {id: 19, cat: Movies/SD, desc: "iNTERNAL Retro"}
+    - {id: 34, cat: Movies/HD, desc: "iNTERNAL HD"}
+    - {id: 35, cat: Movies/BluRay, desc: "iNTERNAL BDRip"}
+    - {id: 36, cat: Movies/BluRay, desc: "iNTERNAL BluRay"}
+    - {id: 37, cat: Movies, desc: "iNTERNAL Pack"}
+    - {id: 2, cat: TV, desc: "TV Episodes"}
+    - {id: 3, cat: TV/SD, desc: "TV Episodes SD"}
+    - {id: 4, cat: TV, desc: "TV Episodes Series"}
+    - {id: 26, cat: TV/HD, desc: "TV Episodes HDTV Episodes"}
+    - {id: 27, cat: TV/HD, desc: "TV Episodes HDTV Series"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
-    music-search: [q]
 
 settings:
   - name: username
