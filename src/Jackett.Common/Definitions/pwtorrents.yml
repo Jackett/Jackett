@@ -16,6 +16,7 @@ caps:
     - {id: 21, cat: TV/Sport, desc: "AEW Dynamite"}
     - {id: 20, cat: TV/Sport, desc: "AEW PPV"}
     - {id: 23, cat: TV/Sport, desc: "AEW Rampage"}
+    - {id: 28, cat: TV/Sport, desc: "AEW Collision"}
     - {id: 1, cat: TV/Sport, desc: "Boxing"}
     - {id: 2, cat: TV/Sport, desc: "Documentaries"}
     - {id: 3, cat: TV/Sport, desc: "DVD"}
