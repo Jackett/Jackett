@@ -17,7 +17,7 @@ namespace Jackett.Common.Exceptions
         public TooManyRequestsException(string message, WebResult response)
             : base(message)
         {
-            if (response.Headers.TryGetValue("Retry-After", out var header) && header.FirstOrDefault() is {} retryAfter)
+            if (response.Headers.TryGetValue("Retry-After", out var header) && header.FirstOrDefault() is { } retryAfter)
             {
                 if (int.TryParse(retryAfter, out var seconds))
                 {
