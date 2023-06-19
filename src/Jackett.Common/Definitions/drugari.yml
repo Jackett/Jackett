@@ -1,0 +1,215 @@
+---
+id: drugari
+name: Drugari
+description: "Drugari is a CROATIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: hr-HR
+type: private
+encoding: UTF-8
+links:
+  - http://drugari.org/ # does not support https, ERR_CONNECTION_CLOSED
+
+caps:
+  categorymappings:
+    - {id: 3, cat: TV/Anime, desc: "ANIMIRANI"}
+    - {id: 4, cat: PC, desc: "Appz"}
+    - {id: 1, cat: Movies, desc: "BEZ PRAVILA"}
+    - {id: 39, cat: Movies, desc: "BEZ PREVODA"}
+    - {id: 41, cat: Movies, desc: "BEZ PREVODA Filmovi"}
+    - {id: 40, cat: TV, desc: "BEZ PREVODA Serije"}
+    - {id: 7, cat: TV/Documentary, desc: "DOKUMENTARNI"}
+    - {id: 18, cat: Movies, desc: "DOMACI FILMOVI"}
+    - {id: 49, cat: Movies, desc: "DOMACI FILMOVI Predstava"}
+    - {id: 10, cat: Movies/DVD, desc: "DVD FILMOVI"}
+    - {id: 37, cat: TV, desc: "Emisije"}
+    - {id: 8, cat: Movies, desc: "FILM"}
+    - {id: 34, cat: Movies, desc: "FILM Kolekcije"}
+    - {id: 48, cat: Movies, desc: "FILM Ruski Film"}
+    - {id: 23, cat: Movies/SD, desc: "FILM TS"}
+    - {id: 24, cat: Movies, desc: "FILM TV RIP"}
+    - {id: 38, cat: Movies, desc: "FILM- Western"}
+    - {id: 22, cat: Movies/HD, desc: "FILM x264/x265-Filmovi"}
+    - {id: 21, cat: Movies/SD, desc: "FILM XviD/Strani Filmovi"}
+    - {id: 15, cat: Console, desc: "IGRE"}
+    - {id: 19, cat: Books, desc: "KNJIGE"}
+    - {id: 53, cat: Audio/Audiobook, desc: "KNJIGE Audio"}
+    - {id: 52, cat: Books/Mags, desc: "KNJIGE Casopisi"}
+    - {id: 55, cat: Books/EBook, desc: "KNJIGE pdf"}
+    - {id: 14, cat: Audio, desc: "MUZIKA"}
+    - {id: 50, cat: Audio, desc: "MUZIKA Domaca Diskografija"}
+    - {id: 29, cat: Audio, desc: "MUZIKA DVD Muzika"}
+    - {id: 33, cat: Audio/Lossless, desc: "MUZIKA FLAC"}
+    - {id: 35, cat: Audio, desc: "MUZIKA Karaoke"}
+    - {id: 32, cat: Audio/MP3, desc: "MUZIKA MP3"}
+    - {id: 31, cat: Audio/Other, desc: "MUZIKA Muzika Ostalo"}
+    - {id: 51, cat: Audio, desc: "MUZIKA Strana Diskografija"}
+    - {id: 30, cat: Audio/Video, desc: "MUZIKA Video Muzika"}
+    - {id: 11, cat: Other, desc: "RAZNO"}
+    - {id: 20, cat: TV, desc: "SERIJE"}
+    - {id: 27, cat: TV, desc: "SERIJE Domace Serije"}
+    - {id: 54, cat: TV, desc: "SERIJE Ruske Serije"}
+    - {id: 28, cat: TV, desc: "SERIJE Strane Serije"}
+    - {id: 16, cat: Other, desc: "SLIKE"}
+    - {id: 12, cat: TV/Sport, desc: "SPORT"}
+    - {id: 6, cat: Other, desc: "STRANI TORENTI"}
+    - {id: 5, cat: Other, desc: "STRIP"}
+    - {id: 13, cat: Other, desc: "UPUTSTVA"}
+    - {id: 25, cat: XXX, desc: "XXX"}
+    - {id: 47, cat: XXX, desc: "XXX XXX-Strip"}
+    - {id: 42, cat: TV, desc: "Za Decu"}
+    - {id: 43, cat: TV, desc: "Za Decu Edukativni Programi"}
+    - {id: 44, cat: Console, desc: "Za Decu Igrice"}
+    - {id: 45, cat: Books, desc: "Za Decu Knjige"}
+    - {id: 46, cat: Audio, desc: "Za Decu Muzika"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The Default is <i>30</i>.
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and read any new mail you may have received. You cannot browse torrents with unread mail outstanding."
+
+login:
+  path: login.php?
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img#regimage
+    input: imagestring
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+  error:
+    - selector: table:contains("Greska")
+  test:
+    path: index.php
+    selector: a[href*="/logout.php?logouthash="]
+
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+  selectors:
+    - selector: a[href*="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: browse.php
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "%"]
+  inputs:
+    do: search
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
+    # does not support multi category searching so defaulting to all.
+    category: 0
+    # yes, no
+    include_dead_torrents: yes
+    sort: "{{ if .Config.freeleech }}free{{ else }}{{ .Config.sort }}{{ end }}"
+    order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
+    # does not return imdb link in results
+
+  rows:
+    selector: "table.sortable tr:has(a[href*=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    filters:
+      - name: strdump
+
+  fields:
+    category:
+      selector: a[href*="/browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title_default:
+      # is usually abbreaviated
+      selector: a[href*="/details.php?id="]
+    title:
+      # while still abbreviated, is usually longer than the default
+      selector: div.tooltip-content div
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    poster:
+      selector: img[src*="/torrents/images/"]
+      attribute: src
+    date:
+      selector: td:nth-child(2)
+      # auto adjusted by site account profile
+      filters:
+        - name: regexp
+          args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm"
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    description:
+      # Wait: 4 h
+      # Cekanje: 4 h
+      selector: div.tooltip-content > div:last-child
+    downloadvolumefactor:
+      case:
+        img[src$="/freedownload.gif"]: 0
+        img[src$="/silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="/x2.gif"]: 2
+        "*": 1
+    minimumseedtime:
+      # 60 hours (as seconds = 60 x 60 x 60)
+      text: 216000
+# TS Special Edition v.8.0
