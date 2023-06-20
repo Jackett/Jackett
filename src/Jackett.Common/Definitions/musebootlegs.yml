@@ -1,0 +1,200 @@
+---
+id: musebootlegs
+name: MuseBootlegs
+description: "MuseBootlegs (MB) is a Semi-Private Torrent Tracker for MUSE MUSIC / BOOTLEGS"
+language: en-US
+type: semi-private
+encoding: UTF-8
+links:
+  - https://www.musebootlegs.com/
+
+caps:
+  categorymappings:
+    - {id: 4, cat: Audio/Lossless, desc: "Audio Lossless"}
+    - {id: 13, cat: Audio/Lossless, desc: "Audio Lossless 1999"}
+    - {id: 14, cat: Audio/Lossless, desc: "Audio Lossless 2000"}
+    - {id: 15, cat: Audio/Lossless, desc: "Audio Lossless 2001"}
+    - {id: 16, cat: Audio/Lossless, desc: "Audio Lossless 2002"}
+    - {id: 17, cat: Audio/Lossless, desc: "Audio Lossless 2003"}
+    - {id: 18, cat: Audio/Lossless, desc: "Audio Lossless 2004"}
+    - {id: 19, cat: Audio/Lossless, desc: "Audio Lossless 2005"}
+    - {id: 20, cat: Audio/Lossless, desc: "Audio Lossless 2006"}
+    - {id: 21, cat: Audio/Lossless, desc: "Audio Lossless 2007"}
+    - {id: 22, cat: Audio/Lossless, desc: "Audio Lossless 2008"}
+    - {id: 23, cat: Audio/Lossless, desc: "Audio Lossless 2009"}
+    - {id: 24, cat: Audio/Lossless, desc: "Audio Lossless 2010"}
+    - {id: 25, cat: Audio/Lossless, desc: "Audio Lossless 2011"}
+    - {id: 26, cat: Audio/Lossless, desc: "Audio Lossless 2012"}
+    - {id: 27, cat: Audio/Lossless, desc: "Audio Lossless 2013"}
+    - {id: 46, cat: Audio/Lossless, desc: "Audio Lossless 2014"}
+    - {id: 47, cat: Audio/Lossless, desc: "Audio Lossless 2015"}
+    - {id: 53, cat: Audio/Lossless, desc: "Audio Lossless 2016"}
+    - {id: 55, cat: Audio/Lossless, desc: "Audio Lossless 2017"}
+    - {id: 57, cat: Audio/Lossless, desc: "Audio Lossless 2018"}
+    - {id: 58, cat: Audio/Lossless, desc: "Audio Lossless 2019"}
+    - {id: 61, cat: Audio/Lossless, desc: "Audio Lossless 2022"}
+    - {id: 63, cat: Audio/Lossless, desc: "Audio Lossless 2023"}
+    - {id: 28, cat: Audio/Lossless, desc: "Audio Lossless Misc"}
+    - {id: 8, cat: Audio/Video, desc: "DVD Amateur"}
+    - {id: 3, cat: Audio/Video, desc: "DVD Pro-Shot"}
+    - {id: 29, cat: Audio/Video, desc: "DVD Pro-Shot 1999"}
+    - {id: 30, cat: Audio/Video, desc: "DVD Pro-Shot 2000"}
+    - {id: 31, cat: Audio/Video, desc: "DVD Pro-Shot 2001"}
+    - {id: 32, cat: Audio/Video, desc: "DVD Pro-Shot 2002"}
+    - {id: 33, cat: Audio/Video, desc: "DVD Pro-Shot 2003"}
+    - {id: 34, cat: Audio/Video, desc: "DVD Pro-Shot 2004"}
+    - {id: 35, cat: Audio/Video, desc: "DVD Pro-Shot 2005"}
+    - {id: 36, cat: Audio/Video, desc: "DVD Pro-Shot 2006"}
+    - {id: 37, cat: Audio/Video, desc: "DVD Pro-Shot 2007"}
+    - {id: 38, cat: Audio/Video, desc: "DVD Pro-Shot 2008"}
+    - {id: 39, cat: Audio/Video, desc: "DVD Pro-Shot 2009"}
+    - {id: 40, cat: Audio/Video, desc: "DVD Pro-Shot 2010"}
+    - {id: 41, cat: Audio/Video, desc: "DVD Pro-Shot 2011"}
+    - {id: 42, cat: Audio/Video, desc: "DVD Pro-Shot 2012"}
+    - {id: 43, cat: Audio/Video, desc: "DVD Pro-Shot 2013"}
+    - {id: 48, cat: Audio/Video, desc: "DVD Pro-Shot 2014"}
+    - {id: 49, cat: Audio/Video, desc: "DVD Pro-Shot 2015"}
+    - {id: 54, cat: Audio/Video, desc: "DVD Pro-Shot 2016"}
+    - {id: 56, cat: Audio/Video, desc: "DVD Pro-Shot 2017"}
+    - {id: 59, cat: Audio/Video, desc: "DVD Pro-Shot 2018"}
+    - {id: 60, cat: Audio/Video, desc: "DVD Pro-Shot 2019"}
+    - {id: 62, cat: Audio/Video, desc: "DVD Pro-Shot 2022"}
+    - {id: 44, cat: Audio/Video, desc: "DVD Pro-Shot Compilations"}
+    - {id: 45, cat: Audio/Video, desc: "DVD Pro-Shot Music Videos"}
+    - {id: 7, cat: Audio/Video, desc: "High-Definition"}
+    - {id: 51, cat: Audio/Video, desc: "High-Definition Pro-Shot"}
+    - {id: 50, cat: Audio/Video, desc: "High-Definition AMT"}
+    - {id: 52, cat: Audio/Video, desc: "High-Definition Music Videos"}
+    - {id: 6, cat: Audio/Video, desc: "Lossy Audio/Video"}
+    - {id: 9, cat: Audio/Video, desc: "MBDVD"}
+    - {id: 5, cat: Other, desc: "Misc"}
+    - {id: 12, cat: Other, desc: "3D"}
+
+  modes:
+    search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and check that you are not being forced to change your password because it has expired after 180 days."
+
+login:
+  path: ?p=home&pid=1
+  method: form
+  form: form#loginbox_form
+  submitpath: ajax/login.php
+  inputs:
+    action: login
+    loginbox_membername: "{{ .Config.username }}"
+    loginbox_password: "{{ .Config.password }}"
+    loginbox_remember: 1
+  selectorinputs:
+    securitytoken:
+      selector: "script:contains(\"stKey: \")"
+      filters:
+        - name: regexp
+          args: "stKey: \"(.+?)\","
+  error:
+    - selector: div.error
+    - selector: :contains("-ERROR-")
+  test:
+    path: ?p=home&pid=1
+    selector: div#member_info_bar
+
+search:
+  paths:
+    - path: /
+  inputs:
+    p: torrents
+    pid: 32
+    $raw: "{{ range .Categories }}&cid[]={{.}}{{end}}"
+    keywords: "{{ .Keywords }}"
+    # name, description, both, uploader
+    search_type: name
+    "sortOptions[sortBy]": "{{ .Config.sort }}"
+    "sortOptions[sortOrder]": "{{ .Config.type }}"
+
+  rows:
+    selector: div.torrent-box[id^="torrent_"]
+
+  fields:
+    category:
+      selector: a[href*="?p=torrents&pid=10&cid="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cid
+    title:
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+    details:
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+      attribute: href
+    download:
+      selector: a[href*="?p=torrents&pid=10&action=download&tid="]
+      attribute: href
+    poster:
+      selector: a[href*="data/torrents/torrent_images/"]
+      attribute: href
+    size:
+      selector: a[rel="torrent_size"]
+    grabs:
+      selector: a[rel="times_completed"]
+    seeders:
+      selector: a[rel="torrent_seeders"]
+    leechers:
+      selector: a[rel="torrent_leechers"]
+    date_day:
+      selector: div.torrentOwner:contains("day")
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: fuzzytime
+    date_year:
+      selector: div.torrentOwner:contains("-")
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm"
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      optional: true
+      default: 1
+      selector: img[src$="/torrent_free.png"]
+      attribute: title
+      filters:
+        - name: regexp
+          args: (\d+(\.\d+)?)
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# TSUE 2.0
