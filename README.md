@@ -266,7 +266,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AudioNews (AN)
  * Aussierul.es [![(invite needed)][inviteneeded]](#)
  * AvistaZ (AsiaTorrents)
- * Azusa
+ * Azusa [![(invite needed)][inviteneeded]](#)
  * Back-ups
  * BakaBT
  * BeiTai
@@ -512,6 +512,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SDBits [![(invite needed)][inviteneeded]](#)
  * Secret Cinema
  * SeedFile
+ * Shadowflow (影) [![(invite needed)][inviteneeded]](#)
  * Shareisland
  * Shazbat
  * SiamBIT
