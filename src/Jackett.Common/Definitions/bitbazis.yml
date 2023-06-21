@@ -99,7 +99,7 @@ login:
 search:
   paths:
     - path: browse.php
-      categories: ["!", 33, 66, 89]
+      categories: [85, 86, 15, 16, 17, 19, 83, 82, 94, 95, 92, 93, 22, 58, 64, 24, 70, 27, 50, 69, 68, 91, 25, 26, 84, 71, 31, 54, 81, 67, 49, 14, 65, 97]
       inputs:
         # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
         incldead: 0

@@ -89,7 +89,7 @@ login:
 search:
   paths:
     - path: browse.php
-      categories: ["!", 34, 39]
+      categories: [1, 2, 8, 7, 16, 15, 14, 13, 4, 3, 18, 17, 23, 19, 20, 24, 21, 22, 35, 36, 25, 30, 31, 33, 32, 29, 28, 27, 26]
     - path: browse.php
       categories: [34, 39]
       inputs:
