@@ -10,25 +10,29 @@ links:
 
 caps:
   categorymappings:
+    - {id: 14, cat: Movies/SD, desc: "XviD"}
     - {id: 15, cat: Movies/HD, desc: "HD 720p"}
     - {id: 16, cat: Movies/HD, desc: "HD 1080p"}
     - {id: 17, cat: Movies/DVD, desc: "DVD"}
     - {id: 18, cat: TV/Documentary, desc: "Dokumentarci"}
     - {id: 19, cat: Movies/DVD, desc: "DVD/R5"}
     - {id: 20, cat: Movies/WEB-DL, desc: "WEB/Rip"}
-    - {id: 21, cat: Movies/WEB-DL, desc: "WEB/Download"}
-    - {id: 14, cat: Movies/SD, desc: "XviD"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "WEB-DL 720p"}
     - {id: 32, cat: XXX, desc: "XXX"}
-    - {id: 50, cat: Movies/BluRay, desc: "BluRay 1080p"}
     - {id: 49, cat: Movies/UHD, desc: "HD 2160p"}
+    - {id: 50, cat: Movies/BluRay, desc: "BluRay 1080p"}
+    - {id: 51, cat: Movies/HD, desc: "720p H265"}
+    - {id: 52, cat: Movies/HD, desc: "1080p H265"}
+    - {id: 55, cat: Movies/WEB-DL, desc: "WEB-DL 1080p"}
     - {id: 23, cat: TV, desc: "TV"}
     - {id: 24, cat: TV/HD, desc: "HD TV"}
     - {id: 26, cat: TV/Anime, desc: "Animirano"}
-    - {id: 28, cat: PC/Games, desc: "PC"}
-    - {id: 29, cat: PC/ISO, desc: "PC ISO"}
+    - {id: 28, cat: PC/Games, desc: "PC Igre"}
+    - {id: 29, cat: PC/Games, desc: "PC ISO Igre"}
     - {id: 30, cat: Console/Other, desc: "GBA"}
     - {id: 31, cat: Console/PS3, desc: "PS2"}
-    - {id: 33, cat: Audio, desc: "Glasba"}
+    - {id: 53, cat: Audio/MP3, desc: "Glasba MP3"}
+    - {id: 54, cat: Audio/Lossless, desc: "Glasba FLAC"}
     - {id: 34, cat: Console/PS3, desc: "PS3"}
     - {id: 35, cat: Console/XBox, desc: "Xbox"}
     - {id: 36, cat: Console/PSP, desc: "PSP"}
