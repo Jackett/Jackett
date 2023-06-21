@@ -201,7 +201,6 @@ search:
       case:
         img[title="H&R"]: 604800
         "*": 259200
-      text: 
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
