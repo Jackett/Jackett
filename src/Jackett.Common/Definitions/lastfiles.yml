@@ -55,7 +55,6 @@ caps:
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro", default: true}
     - {id: 58, cat: Movies/SD, desc: "Movies: Cam", default: true}
     - {id: 59, cat: Movies/SD, desc: "Movies: Cam-Ro", default: true}
-    - {id: 60, cat: XXX/ImageSet, desc: "Images: XXX", default: false}
     - {id: 61, cat: Movies/3D, desc: "Movies: 3D", default: true}
     - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro", default: true}
     - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
@@ -121,9 +120,9 @@ search:
     # https://www.last-torrents.org/externalid?searchex=tt5834760&search_by=imdbid
     # cannot support imdbid or tmdbid searches while using path category filters
     - path: browse.php
-      categories: ["!", 27, 60]
+      categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 58, 59, 60, 61, 62, 81, 82]
     - path: browseadult.php
-      categories: [27, 60]
+      categories: [27]
 
   keywordsfilters:
     - name: re_replace
