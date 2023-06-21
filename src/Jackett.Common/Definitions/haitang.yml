@@ -77,7 +77,7 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: ["!", 4103]
+      categories: [1, 4091, 4097, 4098, 4099, 4101, 4104, 4105]
     - path: live.php
       categories: [4103]
   inputs:
