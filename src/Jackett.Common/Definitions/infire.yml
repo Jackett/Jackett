@@ -43,7 +43,7 @@ caps:
     # Igre
     - {id: 29, cat: PC/Games, desc: "Igre PC ISO"}
     - {id: 30, cat: Console/Wii, desc: "Igre Nintendo"}
-    - {id: 31, cat: Console/PS2, desc: "Igre Playstation"}
+    - {id: 31, cat: Console/PS3, desc: "Igre Playstation"}
     - {id: 34, cat: Console/XBox One, desc: "Igre Xbox"}
     - {id: 83, cat: PC/Games, desc: "Igre Repack"}
     # Glasba
@@ -58,8 +58,8 @@ caps:
     - {id: 60, cat: XXX/Other, desc: "XXX Revije"}
     - {id: 61, cat: XXX/Pack, desc: "XXX Packs"}
     - {id: 66, cat: XXX/SD, desc: "XXX 480p"}
-    - {id: 67, cat: XXX/HD, desc: "XXX 720p"}
-    - {id: 68, cat: XXX/HD, desc: "XXX 1080p"}
+    - {id: 67, cat: XXX/x264, desc: "XXX 720p"}
+    - {id: 68, cat: XXX/x264, desc: "XXX 1080p"}
     - {id: 69, cat: XXX/UHD, desc: "XXX 2160p"}
     - {id: 84, cat: XXX/ImageSet, desc: "XXX Slike"}
     # Disc
