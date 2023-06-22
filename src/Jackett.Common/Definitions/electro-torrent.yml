@@ -6,9 +6,9 @@ language: pl-PL
 type: semi-private
 encoding: UTF-8
 links:
-  - https://electro-torrent.pl/
-legacylinks:
   - http://electro-torrent.pl/
+legacylinks:
+  - https://electro-torrent.pl/ # redirects to http
 
 caps:
   categorymappings:
