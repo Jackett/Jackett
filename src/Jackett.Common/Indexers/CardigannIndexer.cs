@@ -1414,26 +1414,27 @@ namespace Jackett.Common.Indexers
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
             {
-                variables[".Categories"] = mappedCategories;
+                var localMappedCategories = mappedCategories;
+                variables[".Categories"] = localMappedCategories;
 
                 // skip path if categories don't match
                 if (SearchPath.Categories.Count > 0)
                 {
-                    var hasIntersect = mappedCategories.Intersect(SearchPath.Categories).Any();
-
-                    if (SearchPath.Categories[0] == "!")
+                    if (localMappedCategories.Count == 0)
                     {
-                        hasIntersect = !hasIntersect;
+                        localMappedCategories = GetAllTrackerCategories();
                     }
 
-                    if (!hasIntersect)
-                    {
-                        variables[".Categories"] = mappedCategories.Except(SearchPath.Categories).ToList();
+                    var categories = SearchPath.Categories[0] == "!"
+                        ? localMappedCategories.Except(SearchPath.Categories).ToList()
+                        : localMappedCategories.Intersect(SearchPath.Categories).ToList();
 
+                    if (!categories.Any())
+                    {
                         continue;
                     }
 
-                    variables[".Categories"] = mappedCategories.Intersect(SearchPath.Categories).ToList();
+                    variables[".Categories"] = categories;
                 }
 
                 // build search URL
@@ -1484,11 +1485,11 @@ namespace Jackett.Common.Indexers
                     }
                 }
 
-                if (method == RequestType.GET)
+                if (method == RequestType.GET && queryCollection.Count > 0)
                 {
-                    if (queryCollection.Count > 0)
-                        searchUrl += "?" + queryCollection.GetQueryString(Encoding);
+                    searchUrl += "?" + queryCollection.GetQueryString(Encoding);
                 }
+
                 var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
