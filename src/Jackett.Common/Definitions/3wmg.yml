@@ -100,7 +100,7 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: [401, 402, 403, 404, 405, 406, 407, 409, 410]
+      categories: ["!", 411, 412, 413, 414, 415, 416]
     - path: special.php
       categories: [411, 412, 413, 414, 415, 416]
   inputs:

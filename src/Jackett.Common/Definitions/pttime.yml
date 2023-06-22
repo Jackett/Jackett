@@ -95,7 +95,7 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: [401, 402, 403, 404, 405, 406, 408, 409, 411, 412, 413, 420, 430, 431, 432, 450, 451, 490]
+      categories: ["!", 440, 441, 442, 443, 444, 445, 446, 447]
     - path: adults.php
       categories: [440, 441, 442, 443, 444, 445, 446, 447]
   inputs:
