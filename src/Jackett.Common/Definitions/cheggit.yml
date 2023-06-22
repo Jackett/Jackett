@@ -115,7 +115,7 @@ search:
     searchtext: "{{ .Keywords }}"
     # 0=any, 1=all
     search_type: 1
-    
+
   rows:
     selector: table#torrent_table > tbody > tr:not(tr.colhead)
 
