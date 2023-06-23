@@ -124,6 +124,7 @@ caps:
     - {id: 218, cat: TV, desc: "TV-Ishara TV"}
     - {id: 219, cat: TV, desc: "TV-Bengali Tv"}
     - {id: 220, cat: TV, desc: "TV-Shemaroo Umang"}
+    - {id: 221, cat: TV, desc: "TV-JioTv"}
 
   modes:
     search: [q]
