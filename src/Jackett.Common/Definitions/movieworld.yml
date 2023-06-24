@@ -31,6 +31,7 @@ caps:
     - {id: 23, cat: Movies/DVD, desc: "Movie/DvdRip"}
     - {id: 25, cat: Audio/Video, desc: "Music/Misc"}
     - {id: 28, cat: TV, desc: "Tv Packs"}
+    - {id: 31, cat: TV, desc: "Tv Mini Packs"}
     - {id: 29, cat: TV/SD, desc: "Tv Episodes SD"}
     - {id: 30, cat: TV/HD, desc: "Tv Episodes HD"}
     - {id: 26, cat: TV/Sport, desc: "Tv Sport SD/HD"}
