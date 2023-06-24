@@ -83,6 +83,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_ulslr
+    type: info
+    label: Upload Speed Limit Rule
+    default: The upload bandwidth shall not exceed 120Mbps, that is, the upload speed shall not exceed 15MB/s.
 
 login:
   path: login.php
