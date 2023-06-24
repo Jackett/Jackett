@@ -450,7 +450,8 @@ namespace Jackett.Server.Controllers
 
                 if (!HttpContext.Response.Headers.ContainsKey("Retry-After"))
                 {
-                    var retryAfter = Convert.ToInt32(tooManyRequestsException.RetryAfter.TotalSeconds);
+                    var retryTime = tooManyRequestsException.RetryAfter != TimeSpan.Zero ? tooManyRequestsException.RetryAfter : TimeSpan.FromMinutes(1);
+                    var retryAfter = Convert.ToInt32(retryTime.TotalSeconds);
 
                     if (retryAfter > 0)
                     {
