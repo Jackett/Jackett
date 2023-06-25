@@ -397,6 +397,7 @@ namespace Jackett.Updater
                 "Definitions/hddisk.yml",
                 "Definitions/hdhouse.yml",
                 "Definitions/hdme.yml",
+                "Definitions/hdmonkey.yml",
                 "Definitions/hdolimpo.yml", // migrated to UNIT3D API
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
@@ -505,6 +506,7 @@ namespace Jackett.Updater
                 "Definitions/pt99.yml",
                 "Definitions/ptmsg.yml",
                 "Definitions/purovicio.yml",
+                "Definitions/puurhollands.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
                 "Definitions/racing4everyone.yml", // switch to *-API #12870 #8682
@@ -521,6 +523,7 @@ namespace Jackett.Updater
                 "Definitions/rockhardlossless.yml",
                 "Definitions/rodvd.yml",
                 "Definitions/rofd.yml",
+                "Definitions/rptorrents.yml",
                 "Definitions/rus-media.yml",
                 "Definitions/scenefz.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)

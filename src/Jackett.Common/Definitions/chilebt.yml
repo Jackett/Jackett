@@ -88,7 +88,7 @@ search:
     tmdb: "{{ .Query.TMDBID }}"
     sorting: "{{ .Config.sort }}"
     direction: "{{ .Config.type }}"
-    qty: 100
+    qty: 50
     page: 0
     view: list
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"

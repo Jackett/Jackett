@@ -23,6 +23,7 @@ caps:
     - {id: 37, cat: TV, desc: "Emisije"}
     - {id: 8, cat: Movies, desc: "FILM"}
     - {id: 34, cat: Movies, desc: "FILM Kolekcije"}
+    - {id: 56, cat: Movies, desc: "FILM Kratki"}
     - {id: 48, cat: Movies, desc: "FILM Ruski Film"}
     - {id: 23, cat: Movies/SD, desc: "FILM TS"}
     - {id: 24, cat: Movies, desc: "FILM TV RIP"}
