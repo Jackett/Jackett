@@ -103,7 +103,7 @@ settings:
 
 download:
   selectors:
-    - selector: a:has(> i[class*="magnet"])
+    - selector: a:has(i.fa-magnet)
       attribute: href
 
 search:
