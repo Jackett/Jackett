@@ -6,6 +6,7 @@ language: fr-FR
 type: public
 encoding: UTF-8
 followredirect: true
+testlinktorrent: false
 links:
   - https://www.torrent9.fm/
   - https://torrent9.unblockninja.com/
@@ -102,7 +103,7 @@ settings:
 
 download:
   selectors:
-    - selector: a[href^="magnet:?"]
+    - selector: a:has(> i[class*="magnet"])
       attribute: href
 
 search:
