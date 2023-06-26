@@ -140,14 +140,17 @@ search:
   keywordsfilters:
     # remove it's #8829
     - name: re_replace
-      args: ["(?i)(it's\\s)", ""]
-    # replace simplified chinese as this confuses TPB search engine #7291
+      args: ["(?i)\\bit's\\b", ""]
+    # replace simplified Chinese as this confuses TPB search engine #7291
     - name: re_replace
       args: ["([\\p{IsCJKUnifiedIdeographs}\\W]+)", "."]
-    # currently, the only uploader for General Hospital puts a space between season and episode
-    # this filter searches both formats, so "General Hospital S01E02" becomes "General Hospital S01E02 | (S01 E02)"
+    # search for both S01 and Season 01
     - name: re_replace
-      args: ["General Hospital S(\\d{2,3})E(\\d{2,3})", "$0 | \\(S$1 E$2\\)"]
+      args: ["(?i)\\b(S(\\d{2,3}))\\b", "$1|\"Season.$2\""]
+    # currently, the only uploader for General Hospital puts a space between season and episode
+    # this filter searches both formats, so 'General Hospital S01E02' becomes 'General Hospital S01E02|"S01 E02"'
+    - name: re_replace
+      args: ["(?i)\\b(General\\.Hospital)\\.((S\\d{2,3})(E\\d{2,3}))\\b", "$1.$2|\"$3.$4\""]
     - name: tolower
 
   rows:
@@ -165,6 +168,10 @@ search:
       filters:
         - name: re_replace
           args: ["- (\\w+-?\\w*)$", "-$1"]
+        - name: re_replace # Season X / Season X Complete --> S0X
+          args: ["(?i)\\bSeason[\\s\\.]+(\\d)([\\s\\.]+Complete)?\\b", "S0$1"]
+        - name: re_replace # Season XX / Season XX Complete --> SXX
+          args: ["(?i)\\bSeason[\\s\\.]+(\\d{1,2})([\\s\\.]+Complete)?\\b", "S$1"]
     description:
       selector: name
     details:
