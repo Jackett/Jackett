@@ -208,7 +208,7 @@ namespace Jackett.Common.Services
                 {
                     if (_indexers.ContainsKey(indexer.Id))
                     {
-                        _logger.Warn($"Ignoring definition ID={indexer.Id}: Indexer already exists");
+                        _logger.Warn($"Ignoring definition ID {indexer.Id}: The indexer already exists");
                         continue;
                     }
                     _indexers.Add(indexer.Id, indexer);
