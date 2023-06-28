@@ -1,7 +1,7 @@
 ---
 id: pornolab
 name: PornoLab
-description: "PornoLab is a Semi-Private Russian site for Adult content"
+description: "PornoLab is a Semi-Private Russian site for 3X"
 language: ru-RU
 type: semi-private
 encoding: windows-1251
@@ -247,7 +247,9 @@ search:
     grabs:
       selector: td:nth-child(9)
     downloadvolumefactor:
-      text: 0
+      text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.31
 # engine n/a
