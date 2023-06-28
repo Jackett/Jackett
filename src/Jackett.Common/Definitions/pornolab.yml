@@ -1,0 +1,255 @@
+---
+id: pornolab
+name: PornoLab
+description: "PornoLab is a Semi-Private Russian site for 3X"
+language: ru-RU
+type: semi-private
+encoding: windows-1251
+links:
+  - https://pornolab.net/
+
+caps:
+  categorymappings:
+    - {id: 1670, cat: XXX, desc: "Эротическое видео / Erotic & Softcore"}
+    - {id: 1768, cat: XXX, desc: "Эротические фильмы / Erotic Movies"}
+    - {id: 60, cat: XXX, desc: "Документальные фильмы / Documentary & Reality"}
+    - {id: 1671, cat: XXX, desc: "Эротические ролики и сайтрипы / Erotic Clips & SiteRips"}
+    - {id: 1644, cat: XXX, desc: "Нудизм-Натуризм / Nudity"}
+
+    - {id: 1672, cat: XXX, desc: "Зарубежные порнофильмы / Full Length Movies"}
+    - {id: 1111, cat: XXX/Pack, desc: "Паки полных фильмов / Full Length Movies Packs"}
+    - {id: 508, cat: XXX, desc: "Классические фильмы / Classic"}
+    - {id: 555, cat: XXX, desc: "Фильмы с сюжетом / Feature & Vignettes"}
+    - {id: 1845, cat: XXX, desc: "Гонзо-фильмы 1991-2010 / Gonzo 1991-2010"}
+    - {id: 1673, cat: XXX, desc: "Гонзо-фильмы 2011-2023 / Gonzo 2011-2023"}
+    - {id: 1112, cat: XXX, desc: "Фильмы без сюжета 1991-2010 / All Sex & Amateur 1991-2010"}
+    - {id: 1718, cat: XXX, desc: "Фильмы без сюжета 2011-2023 / All Sex & Amateur 2011-2023"}
+    - {id: 553, cat: XXX, desc: "Лесбо-фильмы / All Girl & Solo"}
+    - {id: 1143, cat: XXX, desc: "Этнические фильмы / Ethnic-Themed"}
+    - {id: 1646, cat: XXX, desc: "Видео для телефонов и КПК / Pocket РС & Phone Video"}
+
+    - {id: 1717, cat: XXX, desc: "Зарубежные фильмы в высоком качестве (DVD&HD) / Full Length Movies High-Quality"}
+    - {id: 1851, cat: XXX/DVD, desc: "Эротические и Документальные видео (DVD) / Erotic, Documentary & Reality (DVD)"}
+    - {id: 1713, cat: XXX/DVD, desc: "Фильмы с сюжетом, Классические (DVD) / Feature & Vignetts, Classic (DVD)"}
+    - {id: 512, cat: XXX/DVD, desc: "Гонзо, Лесбо и Фильмы без сюжета (DVD) / Gonzo, All Girl & Solo, All Sex (DVD)"}
+    - {id: 1712, cat: XXX, desc: "Эротические и Документальные видео (HD Video) / Erotic, Documentary & Reality (HD Video)"}
+    - {id: 1775, cat: XXX, desc: "Фильмы с сюжетом, Классические (HD Video) / Feature & Vignettes, Classic (HD Video)"}
+    - {id: 1450, cat: XXX, desc: "Гонзо, Лесбо и Фильмы без сюжета (HD Video) / Gonzo, All Girl & Solo, All Sex (HD Video)"}
+
+    - {id: 1674, cat: XXX, desc: "Русское порно / Russian Video"}
+    - {id: 902, cat: XXX, desc: "Русские порнофильмы / Russian Full Length Movies"}
+    - {id: 1675, cat: XXX/Pack, desc: "Паки русских порнороликов / Russian Clips Packs"}
+    - {id: 36, cat: XXX, desc: "Сайтрипы с русскими актрисами 1991-2015 / Russian SiteRip's 1991-2015"}
+    - {id: 1830, cat: XXX, desc: "Сайтрипы с русскими актрисами 1991-2015 (HD Video) / Russian SiteRip's 1991-2015 (HD Video)"}
+    - {id: 1803, cat: XXX, desc: "Сайтрипы с русскими актрисами 2016-2023 / Russian SiteRip's 2016-2023"}
+    - {id: 1831, cat: XXX, desc: "Сайтрипы с русскими актрисами 2016-2023 (HD Video) / Russian SiteRip's 2016-2023 (HD Video)"}
+    - {id: 1741, cat: XXX, desc: "Русские Порноролики Разное / Russian Clips (various)"}
+    - {id: 1676, cat: XXX, desc: "Русское любительское видео / Russian Amateur Video"}
+
+    - {id: 1677, cat: XXX, desc: "Зарубежные порноролики / Clips"}
+    - {id: 1780, cat: XXX/Pack, desc: "Паки сайтрипов (HD Video) / SiteRip's Packs (HD Video)"}
+    - {id: 1110, cat: XXX/Pack, desc: "Паки сайтрипов (SD Video) / SiteRip's Packs (SD Video)"}
+    - {id: 1678, cat: XXX/Pack, desc: "Паки порнороликов по актрисам / Actresses Clips Packs"}
+    - {id: 1124, cat: XXX, desc: "Сайтрипы 1991-2010 (HD Video) / SiteRip's 1991-2010 (HD Video)"}
+    - {id: 1784, cat: XXX, desc: "Сайтрипы 2011-2012 (HD Video) / SiteRip's 2011-2012 (HD Video)"}
+    - {id: 1769, cat: XXX, desc: "Сайтрипы 2013 (HD Video) / SiteRip's 2013 (HD Video)"}
+    - {id: 1793, cat: XXX, desc: "Сайтрипы 2014 (HD Video) / SiteRip's 2014 (HD Video)"}
+    - {id: 1797, cat: XXX, desc: "Сайтрипы 2015 (HD Video) / SiteRip's 2015 (HD Video)"}
+    - {id: 1804, cat: XXX, desc: "Сайтрипы 2016 (HD Video) / SiteRip's 2016 (HD Video)"}
+    - {id: 1819, cat: XXX, desc: "Сайтрипы 2017 (HD Video) / SiteRip's 2017 (HD Video)"}
+    - {id: 1825, cat: XXX, desc: "Сайтрипы 2018 (HD Video) / SiteRip's 2018 (HD Video)"}
+    - {id: 1836, cat: XXX, desc: "Сайтрипы 2019 (HD Video) / SiteRip's 2019 (HD Video)"}
+    - {id: 1842, cat: XXX, desc: "Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)"}
+    - {id: 1846, cat: XXX, desc: "Сайтрипы 2021 (HD Video) / SiteRip's 2021 (HD Video)"}
+    - {id: 1857, cat: XXX, desc: "Сайтрипы 2022 (HD Video) / SiteRip's 2022 (HD Video)"}
+    - {id: 1861, cat: XXX, desc: "Сайтрипы 2023 (HD Video) / SiteRip's 2023 (HD Video)"}
+    - {id: 1451, cat: XXX, desc: "Сайтрипы 1991-2010 / SiteRip's 1991-2010"}
+    - {id: 1788, cat: XXX, desc: "Сайтрипы 2011-2012 / SiteRip's 2011-2012"}
+    - {id: 1789, cat: XXX, desc: "Сайтрипы 2013 / SiteRip's 2013"}
+    - {id: 1792, cat: XXX, desc: "Сайтрипы 2014 / SiteRip's 2014"}
+    - {id: 1798, cat: XXX, desc: "Сайтрипы 2015 / SiteRip's 2015"}
+    - {id: 1805, cat: XXX, desc: "Сайтрипы 2016 / SiteRip's 2016"}
+    - {id: 1820, cat: XXX, desc: "Сайтрипы 2017 / SiteRip's 2017"}
+    - {id: 1826, cat: XXX, desc: "Сайтрипы 2018 / SiteRip's 2018"}
+    - {id: 1837, cat: XXX, desc: "Сайтрипы 2019 / SiteRip's 2019"}
+    - {id: 1843, cat: XXX, desc: "Сайтрипы 2020 / SiteRip's 2020"}
+    - {id: 1847, cat: XXX, desc: "Сайтрипы 2021 / SiteRip's 2021"}
+    - {id: 1856, cat: XXX, desc: "Сайтрипы 2022 / SiteRip's 2022"}
+    - {id: 1862, cat: XXX, desc: "Сайтрипы 2023 / SiteRip's 2023"}
+    - {id: 1707, cat: XXX, desc: "Сцены из фильмов / Movie Scenes (кроме SiteRip)"}
+    - {id: 284, cat: XXX, desc: "Порноролики Разное / Clips (various)"}
+    - {id: 1853, cat: XXX, desc: "Компиляции и Музыкальные порно клипы / Compilations & Porn Music Video (PMV)"}
+    - {id: 1823, cat: XXX, desc: "Порноролики в 3D и Virtual Reality (VR) / 3D & Virtual Reality Videos"}
+
+    - {id: 1800, cat: XXX, desc: "Японское и китайское порно / Japanese & Chinese Adult Video (JAV)"}
+    - {id: 1801, cat: XXX/Pack, desc: "Паки японских фильмов и сайтрипов / Full Length Japanese Movies Packs & SiteRip's Packs"}
+    - {id: 1719, cat: XXX, desc: "Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movies & SiteRip's (DVD & HD Video)"}
+    - {id: 997, cat: XXX, desc: "Японские фильмы и сайтрипы 1991-2014 / Japanese Movies & SiteRip's 1991-2014"}
+    - {id: 1818, cat: XXX, desc: "Японские фильмы и сайтрипы 2015-2023 / Japanese Movies & SiteRip's 2015-2023"}
+    - {id: 1849, cat: XXX, desc: "Китайские фильмы и сайтрипы (DVD и HD Video) / Chinese Movies & SiteRip's (DVD & HD Video)"}
+    - {id: 1815, cat: XXX, desc: "Архив (Японское и китайское порно)"}
+
+    - {id: 1723, cat: XXX, desc: "Фото и журналы / Photos & Magazines"}
+    - {id: 1726, cat: XXX, desc: "MetArt & MetModels"}
+    - {id: 883, cat: XXX/ImageSet, desc: "Эротические студии Разное / Erotic Picture Gallery (various)"}
+    - {id: 1759, cat: XXX/ImageSet, desc: "Паки сайтрипов эротических студий / Erotic Picture SiteRip's Packs"}
+    - {id: 1728, cat: XXX/ImageSet, desc: "Любительское фото / Amateur Picture Gallery"}
+    - {id: 1729, cat: XXX/Pack, desc: "Подборки по актрисам / Actresses Picture Packs"}
+    - {id: 38, cat: XXX/ImageSet, desc: "Подборки сайтрипов / SiteRip's Picture Packs"}
+    - {id: 1757, cat: XXX/ImageSet, desc: "Подборки сетов / Picture Sets Packs"}
+    - {id: 1735, cat: XXX/ImageSet, desc: "Тематическое и нетрадиционное фото / Misc & Special Interest Picture Packs"}
+    - {id: 1731, cat: XXX/ImageSet, desc: "Журналы / Magazines"}
+    - {id: 1802, cat: XXX, desc: "Архив (Фото)"}
+
+    - {id: 1745, cat: XXX, desc: "Хентай и Манга, Мультфильмы и Комиксы, Рисунки / Hentai & Manga, Cartoons & Comics, Artwork"}
+    - {id: 1679, cat: XXX, desc: "Хентай: основной подраздел / Hentai: main subsection"}
+    - {id: 1740, cat: XXX, desc: "Хентай в высоком качестве (DVD и HD) / Hentai DVD & HD"}
+    - {id: 1834, cat: XXX, desc: "Хентай: ролики 2D / Hentai: 2D video"}
+    - {id: 1752, cat: XXX, desc: "Хентай: ролики 3D / Hentai: 3D video"}
+    - {id: 1760, cat: XXX, desc: "Хентай: Манга / Hentai: Manga"}
+    - {id: 1781, cat: XXX, desc: "Хентай: Арт и HCG / Hentai: Artwork & HCG"}
+    - {id: 1711, cat: XXX, desc: "Мультфильмы / Cartoons"}
+    - {id: 1296, cat: XXX, desc: "Комиксы и рисунки / Comics & Artwork"}
+
+    - {id: 1838, cat: XXX, desc: "Игры / Games"}
+    - {id: 1750, cat: XXX, desc: "Игры: основной подраздел / Games: main subsection"}
+    - {id: 1756, cat: XXX, desc: "Игры: визуальные новеллы / Games: Visual Novels"}
+    - {id: 1785, cat: XXX, desc: "Игры: ролевые / Games: role-playing (RPG Maker and WOLF RPG Editor)"}
+    - {id: 1790, cat: XXX, desc: "Игры и Софт: Анимация / Software: Animation"}
+    - {id: 1827, cat: XXX, desc: "Игры: В разработке и Демо (основной подраздел) / Games: In Progress and Demo (main subsection)"}
+    - {id: 1828, cat: XXX, desc: "Игры: В разработке и Демо (ролевые) / Games: In Progress and Demo (role-playing - RPG Maker and WOLF RPG Editor)"}
+    - {id: 1829, cat: XXX, desc: "Обсуждение игр / Games Discussion"}
+
+    - {id: 11, cat: XXX, desc: "Нетрадиционное порно / Special Interest Movies & Clips"}
+    - {id: 1715, cat: XXX, desc: "Транссексуалы (DVD и HD) / Transsexual (DVD & HD)"}
+    - {id: 1680, cat: XXX, desc: "Транссексуалы / Transsexual"}
+    - {id: 1758, cat: XXX, desc: "Бисексуалы / Bisexual"}
+    - {id: 1682, cat: XXX, desc: "БДСМ / BDSM"}
+    - {id: 1733, cat: XXX, desc: "Женское доминирование и страпон / Femdom & Strapon"}
+    - {id: 1754, cat: XXX, desc: "Подглядывание / Voyeur"}
+    - {id: 1734, cat: XXX, desc: "Фистинг и дилдо / Fisting & Dildo"}
+    - {id: 1791, cat: XXX, desc: "Беременные / Pregnant"}
+    - {id: 509, cat: XXX, desc: "Буккаке / Bukkake"}
+    - {id: 1859, cat: XXX, desc: "Гэнг-бэнг / GangBang"}
+    - {id: 1685, cat: XXX, desc: "Мочеиспускание / Peeing"}
+    - {id: 1762, cat: XXX, desc: "Фетиш / Fetish"}
+    - {id: 1681, cat: XXX, desc: "Дефекация / Scat"}
+
+    - {id: 1683, cat: XXX, desc: "Архив (общий)"}
+
+    - {id: 1688, cat: XXX, desc: "Гей-порно / Gay Forum"}
+    - {id: 903, cat: XXX, desc: "Полнометражные гей-фильмы / Full Length Movies (Gay)"}
+    - {id: 1765, cat: XXX, desc: "Полнометражные азиатские гей-фильмы / Full-length Asian (Gay)"}
+    - {id: 1767, cat: XXX, desc: "Классические гей-фильмы (до 1990 года) / Classic Gay Films (Pre-1990's)"}
+    - {id: 1755, cat: XXX, desc: "Гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Movies (Gay DVD & HD)"}
+    - {id: 1787, cat: XXX, desc: "Азиатские гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Asian Movies (Gay DVD & HD)"}
+    - {id: 1763, cat: XXX/Pack, desc: "ПАКи гей-роликов и сайтрипов / Clip's & SiteRip's Packs (Gay)"}
+    - {id: 1777, cat: XXX, desc: "Гей-ролики в высоком качестве (HD Video) / Gay Clips (HD Video)"}
+    - {id: 1691, cat: XXX, desc: "Ролики, SiteRip'ы и сцены из гей-фильмов / Clips & Movie Scenes (Gay)"}
+    - {id: 1692, cat: XXX/ImageSet, desc: "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)"}
+    - {id: 1720, cat: XXX, desc: "Архив (Гей-порно)"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      10: seeders
+      7: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+
+login:
+  path: forum/login.php
+  method: form
+  form: form[action="login.php"]
+  captcha:
+    type: image
+    selector: img[src*="/captcha/"]
+    input: input[name^="cap_code_"]
+  inputs:
+    input[name="login_username"]: "{{ .Config.username }}"
+    input[name="login_password"]: "{{ .Config.password }}"
+  selectors: true
+  error:
+    - selector: div:contains("Форум временно отключен")
+    - selector: h4.warnColor1.tCenter.mrg_16
+  test:
+    path: forum/index.php
+    selector: div.topmenu a[onclick*=logout]
+
+search:
+  paths:
+    - path: forum/tracker.php
+  inputs:
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
+    o: "{{ .Config.sort }}"
+    s: "{{ .Config.type }}"
+    nm: "{{ .Keywords }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\W+", " "]
+    - name: trim
+
+  rows:
+    selector: table#tor-tbl > tbody > tr:has(a.tr-dl)
+
+  fields:
+    category:
+      selector: a.f
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a.tLink
+      filters:
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: trim
+    details:
+      selector: a.tLink
+      attribute: href
+    download:
+      selector: a.tr-dl
+      attribute: href
+    size:
+      selector: td:nth-child(6) u
+    date:
+      # unix
+      selector: td:nth-child(11) u
+    seeders:
+      selector: td.seedmed > b
+    leechers:
+      selector: td.leechmed > b
+    grabs:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.31
+# engine n/a
