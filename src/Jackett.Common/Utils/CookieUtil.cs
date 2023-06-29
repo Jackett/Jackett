@@ -49,17 +49,43 @@ namespace Jackett.Common.Utils
         {
             var table = (Hashtable)cookieJar
                                    .GetType()
-                                   .InvokeMember("m_domainTable", BindingFlags.NonPublic | BindingFlags.GetField |
-                                                                  BindingFlags.Instance, null, cookieJar, Array.Empty<object>());
-            foreach (var key in table.Keys)
+                                   .InvokeMember("m_domainTable", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance, null, cookieJar, Array.Empty<object>());
+
+            foreach (var tableKey in table.Keys)
             {
-                var domain = (string)key;
+                var domain = (string)tableKey;
+
                 if (domain.StartsWith("."))
+                {
                     domain = domain.Substring(1);
+                }
+
+                var list = (SortedList)table[tableKey]
+                                        .GetType()
+                                        .InvokeMember("m_list", BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Instance, null, table[tableKey], Array.Empty<object>());
+
+                foreach (var listKey in list.Keys)
+                {
+                    foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"http://{domain}{listKey}")))
+                    {
+                        cookie.Expired = true;
+                    }
+
+                    foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"https://{domain}{listKey}")))
+                    {
+                        cookie.Expired = true;
+                    }
+                }
+
                 foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"http://{domain}")))
+                {
                     cookie.Expired = true;
+                }
+
                 foreach (Cookie cookie in cookieJar.GetCookies(new Uri($"https://{domain}")))
+                {
                     cookie.Expired = true;
+                }
             }
         }
 

@@ -110,7 +110,6 @@ namespace Jackett.Common.Utils.Clients
 
         protected override async Task<WebResult> Run(WebRequest webRequest)
         {
-            HttpResponseMessage response = null;
             var request = new HttpRequestMessage();
             request.Headers.ExpectContinue = false;
             request.RequestUri = new Uri(webRequest.Url);
@@ -176,23 +175,23 @@ namespace Jackett.Common.Utils.Clients
                 request.Method = HttpMethod.Get;
             }
 
-            response = await client.SendAsync(request);
+            using var responseMessage = await client.SendAsync(request);
 
             var result = new WebResult
             {
-                ContentBytes = await response.Content.ReadAsByteArrayAsync()
+                ContentBytes = await responseMessage.Content.ReadAsByteArrayAsync()
             };
 
-            foreach (var header in response.Headers)
+            foreach (var header in responseMessage.Headers)
                 result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
-            foreach (var header in response.Content.Headers)
+            foreach (var header in responseMessage.Content.Headers)
                 result.Headers[header.Key.ToLowerInvariant()] = header.Value.ToArray();
 
             // some cloudflare clients are using a refresh header
             // Pull it out manually
-            if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable && response.Headers.Contains("Refresh"))
+            if (responseMessage.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable && responseMessage.Headers.Contains("Refresh"))
             {
-                var refreshHeaders = response.Headers.GetValues("Refresh");
+                var refreshHeaders = responseMessage.Headers.GetValues("Refresh");
                 var redirval = "";
                 var redirtime = 0;
                 if (refreshHeaders != null)
@@ -209,16 +208,16 @@ namespace Jackett.Common.Utils.Clients
                             // normally we don't want a serviceunavailable (503) to be a redirect, but that's the nature
                             // of this cloudflare approach..don't want to alter WebResult.IsRedirect because normally
                             // it shoudln't include service unavailable..only if we have this redirect header.
-                            response.StatusCode = System.Net.HttpStatusCode.Redirect;
+                            responseMessage.StatusCode = System.Net.HttpStatusCode.Redirect;
                             redirtime = int.Parse(value.Substring(0, end));
                             System.Threading.Thread.Sleep(redirtime * 1000);
                         }
                     }
                 }
             }
-            if (response.Headers.Location != null)
+            if (responseMessage.Headers.Location != null)
             {
-                result.RedirectingTo = response.Headers.Location.ToString();
+                result.RedirectingTo = responseMessage.Headers.Location.ToString();
             }
             // Mono won't add the baseurl to relative redirects.
             // e.g. a "Location: /index.php" header will result in the Uri "file:///index.php"
@@ -235,14 +234,14 @@ namespace Jackett.Common.Utils.Clients
                 logger.Debug("[MONO relative redirect bug] Rewriting relative redirect URL from " + result.RedirectingTo + " to " + newRedirectingTo);
                 result.RedirectingTo = newRedirectingTo;
             }
-            result.Status = response.StatusCode;
+            result.Status = responseMessage.StatusCode;
 
             // Compatiblity issue between the cookie format and httpclient
             // Pull it out manually ignoring the expiry date then set it manually
             // http://stackoverflow.com/questions/14681144/httpclient-not-storing-cookies-in-cookiecontainer
             var responseCookies = new List<Tuple<string, string>>();
 
-            if (response.Headers.TryGetValues("set-cookie", out var cookieHeaders))
+            if (responseMessage.Headers.TryGetValues("set-cookie", out var cookieHeaders))
             {
                 foreach (var value in cookieHeaders)
                 {
