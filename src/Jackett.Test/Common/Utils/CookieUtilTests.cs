@@ -117,5 +117,28 @@ namespace Jackett.Test.Common.Utils
             Assert.AreEqual(0, cookiesContainer.GetCookies(domainHttp).Count);
             Assert.AreEqual(0, cookiesContainer.GetCookies(domainHttps).Count);
         }
+
+        [Test]
+        public void RemoveAllCookiesWithPaths()
+        {
+            var cookiesContainer = new CookieContainer();
+
+            var domainHttp = new Uri("http://testdomain1.com/path");
+            var domainHttps = new Uri("https://testdomain2.com/path");
+
+            cookiesContainer.Add(domainHttp, new Cookie("cookie1", "value1", "/"));
+            cookiesContainer.Add(domainHttps, new Cookie("cookie2", "value2", "/"));
+            cookiesContainer.Add(domainHttp, new Cookie("cookie3", "value3", "/path"));
+            cookiesContainer.Add(domainHttps, new Cookie("cookie4", "value4", "/path"));
+            cookiesContainer.Add(domainHttp, new Cookie("cookie5", "value5", "/path", ".testdomain1.com"));
+            cookiesContainer.Add(domainHttps, new Cookie("cookie6", "value6", "/path", ".testdomain2.com"));
+
+            Assert.AreEqual(3, cookiesContainer.GetCookies(domainHttp).Count);
+            Assert.AreEqual(3, cookiesContainer.GetCookies(domainHttps).Count);
+
+            CookieUtil.RemoveAllCookies(cookiesContainer);
+            Assert.AreEqual(0, cookiesContainer.GetCookies(domainHttp).Count);
+            Assert.AreEqual(0, cookiesContainer.GetCookies(domainHttps).Count);
+        }
     }
 }
