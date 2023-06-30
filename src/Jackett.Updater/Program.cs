@@ -374,6 +374,7 @@ namespace Jackett.Updater
                 "Definitions/freakstrackingsystem.yml",
                 "Definitions/freedomhd.yml",
                 "Definitions/freetorrent.yml",
+                "Definitions/freshmeat.yml",
                 "Definitions/fullmixmusic.yml",
                 "Definitions/funreleases.yml",
                 "Definitions/galeriens.yml",
