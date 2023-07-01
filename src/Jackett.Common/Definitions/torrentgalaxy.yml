@@ -74,6 +74,7 @@ caps:
     - {id: 35, cat: XXX/x264, desc: "XXX - HD"}
     - {id: 47, cat: XXX/Other, desc: "XXX - Misc"}
     - {id: 34, cat: XXX/SD, desc: "XXX - SD"}
+    - {id: 48, cat: XXX/UHD, desc: "XXX - 4K UHD"}
 
   modes:
     search: [q]
