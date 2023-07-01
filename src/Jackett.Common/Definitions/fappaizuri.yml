@@ -113,11 +113,12 @@ search:
     _language:
       selector: img[src*="images/languages/"]
       attribute: alt
+      optional: true
     description:
       selector: font[color="red"]
       filters:
         - name: append
-          args: " - {{ .Result._language }}"
+          args: "{{ if .Result._language }} - {{ .Result._language }}{{ else }}{{ end }}"
     size:
       selector: td:nth-child(4)
     seeders:
