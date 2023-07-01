@@ -19,16 +19,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: Movies, cat: Movies, desc: Movies}
-    - {id: Music, cat: Audio, desc: Music}
-    - {id: Apps, cat: PC/0day, desc: Apps}
-    - {id: Mobile, cat: PC/Mobile-Other, desc: Mobile}
-    - {id: Games, cat: PC/Games, desc: Games}
-    - {id: TV, cat: TV, desc: TV}
-    - {id: Documentaries, cat: TV/Documentary, desc: Documentaries}
-    - {id: XXX, cat: XXX, desc: XXX}
     - {id: Other, cat: Other, desc: Other}
-    - {id: Anime, cat: TV/Anime, desc: Anime}
 
   modes:
     search: [q]
@@ -51,6 +42,10 @@ settings:
       oldest: "created asc"
       seeders: seeders
       size: size
+  - name: info_8000
+    type: info
+    label: About TorrentProject2 Categories
+    default: TorrentProject2 does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
 
 download:
   selectors:
@@ -65,17 +60,24 @@ download:
 
 search:
   paths:
-    - path: "browse?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{ else }}{{ end }}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{ else }}{{ end }}"
-    - path: "browse?t={{ if .Keywords }}{{ re_replace .Keywords \" \" \"+\" }}{{ else }}{{ end }}&orderby={{ .Config.sort }}{{ if .Config.filter-verified }}&safe=on{{ else }}{{ end }}&p=1"
+    - path: /
+    - path: /
+      inputs:
+        p: 1
+  inputs:
+    t: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    orderby: "{{ .Config.sort }}"
+    safe: "{{ if .Config.filter-verified }}on{{ else }}{{ end }}"
+  keywordsfilters:
+    - name: re_replace
+      args: [" ", "+"]
 
   rows:
     selector: "#similarfiles div:has(a[href^=\"/t\"])"
 
   fields:
     category:
-      selector: div > span:nth-child(1) > span
-      optional: true
-      default: Other
+      text: Other
     title:
       selector: span > a
     details:
@@ -84,53 +86,15 @@ search:
     download:
       selector: span > a
       attribute: href
-    date_day:
-      # 10am May. 24th
-      selector: div > span:nth-child(4):contains("."):not(:contains(":"))
-      optional: true
-      filters:
-        - name: re_replace
-          args: ["(?i)(st|nd|rd|th)", ""]
-        - name: append
-          args: " -07:00" # PDT
-        - name: dateparse
-          args: "htt MMM. d zzz"
-    date_year:
-      # Sep. 7th '10
-      selector: div > span:nth-child(4):not(:contains(":"))
-      optional: true
-      filters:
-        - name: re_replace
-          args: ["(?i)(st|nd|rd|th)", ""]
-        - name: replace
-          args: ["'", ""]
-        - name: append
-          args: " -07:00" # PDT
-        - name: dateparse
-          args: "MMM. d yy zzz"
-    date_time:
-      # 2020-11-05 07:34:44
-      selector: div > span:nth-child(4):contains(":")
-      optional: true
-      filters:
-        - name: append
-          args: " -07:00" # PDT
-        - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
     date:
-      text: "{{ if or .Result.date_day .Result.date_year .Result.date_time }}{{ or .Result.date_day .Result.date_year .Result.date_time }}{{ else }}now{{ end }}"
+      # 7 years ago
+      selector: span:nth-child(4)
     size:
-      selector: div > span:nth-child(5)
+      selector: span:nth-child(5)
     seeders:
-      selector: div > span:nth-child(2)
-      filters:
-        - name: replace
-          args: ["N/A", "0"]
+      selector: span:nth-child(2)
     leechers:
-      selector: div > span:nth-child(3)
-      filters:
-        - name: replace
-          args: ["N/A", "0"]
+      selector: span:nth-child(3)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
