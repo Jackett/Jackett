@@ -60,14 +60,15 @@ download:
 
 search:
   paths:
-    - path: /
-    - path: /
+    # browse for latest, / for keywords, 50 rows per page
+    - path: "{{ if .Keywords }}/{{ else }}browse{{ end }}"
+    - path: "{{ if .Keywords }}/{{ else }}browse{{ end }}"
       inputs:
         p: 1
   inputs:
-    t: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
-    orderby: "{{ .Config.sort }}"
-    safe: "{{ if .Config.filter-verified }}on{{ else }}{{ end }}"
+    t: "{{ .Keywords }}"
+    orderby: "{{ if .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
+    safe: "{{ if and .Keywords .Config.filter-verified }}on{{ else }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: [" ", "+"]
@@ -77,6 +78,7 @@ search:
 
   fields:
     category:
+      # while browse has cats the search does not (atm) so we wont support cats for now.
       text: Other
     title:
       selector: span > a
@@ -86,9 +88,21 @@ search:
     download:
       selector: span > a
       attribute: href
-    date:
+    date_ago:
       # 7 years ago
-      selector: span:nth-child(4)
+      selector: span:nth-child(4):contains("ago")
+      optional: true
+    date_time:
+      # 2020-11-05 07:34:44
+      selector: span:nth-child(4):contains(":")
+      optional: true
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_ago .Result.date_time }}{{ or .Result.date_ago .Result.date_time }}{{ else }}now{{ end }}"
     size:
       selector: span:nth-child(5)
     seeders:
