@@ -6,10 +6,10 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - https://byrutdb.org/
+  - https://byrut.org/
 legacylinks:
   - https://byrutor.org/
-  - https://byrut.org/
+  - https://byrutdb.org/
 
 caps:
   categorymappings:
