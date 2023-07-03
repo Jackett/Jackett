@@ -12,32 +12,32 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 20, cat: Movies/BluRay, desc: "Movie Full BD"}
-    - {id: 17, cat: Movies/HD, desc: "Movie 1080p"}
-    - {id: 16, cat: Movies/HD, desc: "Movie 1080i"}
-    - {id: 9, cat: Movies/HD, desc: "Movie 720p"}
-    - {id: 13, cat: TV, desc: "EU/US TV series"}
-    - {id: 25, cat: TV, desc: "Chinese TV series"}
-    - {id: 26, cat: TV, desc: "Kor Drama"}
-    - {id: 24, cat: TV, desc: "Jpn Drama"}
-    - {id: 21, cat: TV, desc: "EU/US TV series pack"}
-    - {id: 22, cat: TV, desc: "Chinese TV series pack"}
-    - {id: 23, cat: TV, desc: "JPN/KOR drama pack"}
-    - {id: 27, cat: Movies/SD, desc: "iPad Video"}
-    - {id: 5, cat: TV/Documentary, desc: "Documentary"}
-    - {id: 15, cat: TV/Sport, desc: "Sports"}
-    - {id: 14, cat: TV/Anime, desc: "Animation"}
-    - {id: 401, cat: TV, desc: "TV Shows"}
-    - {id: 402, cat: Audio, desc: "Vocal Concert"}
-    - {id: 406, cat: Audio, desc: "Music Video"}
-    - {id: 408, cat: Audio, desc: "Music"}
-    - {id: 19, cat: Audio, desc: "Audio Track"}
-    - {id: 405, cat: Audio, desc: "Drama"}
-    - {id: 404, cat: Books, desc: "Book"}
-    - {id: 409, cat: Other, desc: "Other"}
+    - {id: 20, cat: Movies/BluRay, desc: "Movie Full BD/原盘"}
+    - {id: 17, cat: Movies/HD, desc: "Movie 1080p/电影"}
+    - {id: 16, cat: Movies/HD, desc: "Movie 1080i/电影"}
+    - {id: 9, cat: Movies/HD, desc: "Movie 720p/电影"}
+    - {id: 13, cat: TV, desc: "EU/US TV series/欧美剧"}
+    - {id: 25, cat: TV, desc: "Chinese TV series/中港台剧集"}
+    - {id: 26, cat: TV, desc: "Kor Drama/韩剧"}
+    - {id: 24, cat: TV, desc: "Jpn Drama/日剧"}
+    - {id: 21, cat: TV, desc: "EU/US TV series pack/欧美剧集包"}
+    - {id: 22, cat: TV, desc: "Chinese TV series pack/中港台剧集包"}
+    - {id: 23, cat: TV, desc: "JPN/KOR drama pack/日韩剧集包"}
+    - {id: 27, cat: Movies/SD, desc: "iPad Video/iPad视频"}
+    - {id: 5, cat: TV/Documentary, desc: "Documentary/纪录片"}
+    - {id: 15, cat: TV/Sport, desc: "Sports/体育节目"}
+    - {id: 14, cat: TV/Anime, desc: "Animation/动画片"}
+    - {id: 401, cat: TV, desc: "TV Shows/综艺"}
+    - {id: 402, cat: Audio, desc: "Vocal Concert/演唱会"}
+    - {id: 406, cat: Audio, desc: "Music Video/MV"}
+    - {id: 408, cat: Audio, desc: "Music/音乐"}
+    - {id: 19, cat: Audio, desc: "Audio Track/补充音轨"}
+    - {id: 405, cat: Audio, desc: "Drama/戏剧"}
+    - {id: 404, cat: Books, desc: "Book/书籍"}
+    - {id: 409, cat: Other, desc: "Other/其他"}
     - {id: 410, cat: Movies/HD, desc: "4K UltraHD"}
-    - {id: 411, cat: TV, desc: "Travel"}
-    - {id: 412, cat: TV, desc: "Food"}
+    - {id: 411, cat: TV, desc: "Travel/旅游"}
+    - {id: 412, cat: TV, desc: "Food/饮食"}
 
   modes:
     search: [q]
