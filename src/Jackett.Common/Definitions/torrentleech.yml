@@ -100,6 +100,10 @@ settings:
     type: checkbox
     label: Exclude SCENE torrents from results
     default: false
+  - name: exclude_archives
+    type: checkbox
+    label: Exclude torrents with the tag RAR from results
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -154,7 +158,7 @@ search:
     - name: re_replace
       args: ["(^|\\s)-", " "]
   rows:
-    selector: torrentList
+    selector: "torrentList{{ if .Config.exclude_archives }}:not(.tags:contains(\"rar\")){{ else }}{{ end }}"
     count:
       selector: $.numFound
 
