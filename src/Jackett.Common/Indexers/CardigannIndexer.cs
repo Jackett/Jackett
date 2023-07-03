@@ -2361,6 +2361,7 @@ namespace Jackett.Common.Indexers
 
         private JArray JsonParseRowsSelector(JToken parsedJson, string rowSelector)
         {
+            rowSelector = applyGoTemplateText(rowSelector);
             var selector = rowSelector.Split(':')[0];
 
             try
