@@ -6,6 +6,8 @@ language: ru-RU
 type: private
 encoding: windows-1251
 links:
+  - https://tracker.0day.community/
+legacylinks:
   - https://tracker.0day.kiev.ua/
 
 caps:
