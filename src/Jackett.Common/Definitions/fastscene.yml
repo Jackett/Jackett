@@ -1,0 +1,130 @@
+---
+id: fastscene
+name: FastScene
+description: "FastScene is a ROMANIAN / ENGLISH Private site for MOVIES / TV / GENERAL"
+language: ro-RO
+type: private
+encoding: UTF-8
+links:
+  - https://fastscene.net/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "Anime"}
+    - {id: 2, cat: TV/Anime, desc: "Anime-Ro"}
+    - {id: 3, cat: Movies/BluRay, desc: "BluRay"}
+    - {id: 4, cat: Movies/BluRay, desc: "BluRay-Ro"}
+    - {id: 5, cat: Movies/UHD, desc: "4K"}
+    - {id: 6, cat: Movies/UHD, desc: "4K-Ro"}
+    - {id: 7, cat: Movies/3D, desc: "3D"}
+    - {id: 8, cat: Movies/3D, desc: "3D-Ro"}
+    - {id: 9, cat: Movies/HD, desc: "HD"}
+    - {id: 10, cat: Movies/HD, desc: "HD-Ro"}
+    - {id: 11, cat: Movies/SD, desc: "XVID"}
+    - {id: 12, cat: Movies/SD, desc: "XVID-Ro"}
+    - {id: 13, cat: Movies, desc: "Oldies"}
+    - {id: 14, cat: Movies, desc: "Oldies-Ro"}
+    - {id: 15, cat: Movies, desc: "Packs Movies"}
+    - {id: 16, cat: Movies, desc: "Packs Movies-Ro"}
+    - {id: 17, cat: TV, desc: "TV-Episodes"}
+    - {id: 18, cat: TV, desc: "TV-Episodes-Ro"}
+    - {id: 19, cat: PC/Games, desc: "Games PC"}
+    - {id: 20, cat: PC/Games, desc: "Games Packs"}
+    - {id: 21, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 22, cat: Movies, desc: "APPZ"}
+    - {id: 23, cat: TV/Sport, desc: "Sports"}
+    - {id: 24, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 25, cat: TV/Documentary, desc: "Docs"}
+    - {id: 26, cat: Other, desc: "Images"}
+    - {id: 27, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: a[href="account-logout.php"]
+
+search:
+  paths:
+    - path: torrents-search.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 nofree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # does not support imdbid searches or provide sort options
+
+  rows:
+    selector: table.ttable_headinner > tbody > tr
+
+  fields:
+    category:
+      selector: a[href*="cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="] b
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["&hit=1", ""] # avoid redirect
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a[onMouseover] img
+      attribute: src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    genre:
+      selector: b:contains("Genre") font:nth-child(2)
+    description:
+      text: "{{ .Result.genre }}"
+    downloadvolumefactor:
+      case:
+        img[src$="/FREE.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# TorrentTrader (custom 3.0)
