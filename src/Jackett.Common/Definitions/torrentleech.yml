@@ -168,6 +168,10 @@ search:
     title_test: # title can be null #13736
       selector: name
       optional: true
+      filters:
+        # remove [REQ]/[REQUEST]
+        - name: re_replace
+          args: ["(?i)^\\[REQ(UEST(ED)?)?\\]\\s*", ""]
     title:
       text: "{{ if .Result.title_test }}{{ .Result.title_test }}{{ else }}TorrentLeech did not provide a title{{ end }}"
     _id:
