@@ -420,6 +420,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Kufirc
  * LastFiles
  * Le Saloon
+ * LaidBackManor
  * Lat-Team [![(invite needed)][inviteneeded]](#)
  * LearnBits
  * LearnFlakes
