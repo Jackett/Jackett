@@ -74,12 +74,14 @@ search:
       selector: response.numFound
 
   fields:
+    _id:
+      selector: identifier
     category:
       selector: mediatype
     title:
       selector: title
-    _id:
-      selector: identifier
+      optional: true
+      default: "Missing title for {{ .Result._id }}"
     details:
       text: "details/{{ .Result._id }}"
     download:
