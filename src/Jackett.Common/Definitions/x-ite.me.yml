@@ -102,7 +102,7 @@ login:
     - selector: .myF-content > center:nth-child(1) > b:contains("The specified username or password was incorrect.")
   test:
     path: index.php
-    selector: a[href^="account.php"]
+    selector: a[href="account.php"]
 
 search:
   paths:
