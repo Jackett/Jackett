@@ -99,7 +99,8 @@ login:
   error:
     - selector: div.fixed_width:nth-child(4) > span:contains("Incorrect")
   test:
-    path: usercp.php
+    path: index.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
