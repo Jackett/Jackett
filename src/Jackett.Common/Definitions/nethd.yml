@@ -71,7 +71,8 @@ login:
   error:
     - selector: form#loginform > span.warning
   test:
-    path: torrents.php
+    path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
