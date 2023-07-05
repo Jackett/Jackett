@@ -74,7 +74,8 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: torrents.php
+    path: index.php
+    selector: a[href^="/usercp.php"]
 
 search:
   paths:
