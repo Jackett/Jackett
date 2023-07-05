@@ -35,6 +35,7 @@ caps:
     - {id: 29, cat: TV/SD, desc: "Tv Episodes SD"}
     - {id: 30, cat: TV/HD, desc: "Tv Episodes HD"}
     - {id: 26, cat: TV/Sport, desc: "Tv Sport SD/HD"}
+    - {id: 32, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
