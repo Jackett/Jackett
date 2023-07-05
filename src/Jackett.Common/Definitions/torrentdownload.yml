@@ -3,7 +3,7 @@ id: torrentdownload
 name: TorrentDownload
 description: "TorrentDownload is a Public general torrent index"
 language: en-US
-type: semi-private
+type: public
 encoding: UTF-8
 followredirect: true
 links:
@@ -49,6 +49,7 @@ caps:
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioAudiobooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
+    - {id: AudioMusic, cat: Audio/MP3, desc: "Audio Music"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
     - {id: BooksComics, cat: Books/Comics, desc: "Books Comics"}
     - {id: BooksEbooks, cat: Books/EBook, desc: "Books Ebooks"}
@@ -74,11 +75,13 @@ caps:
     - {id: MusicRB, cat: Audio, desc: "Music R&B"}
     - {id: MusicTranceHouseDance, cat: Audio, desc: "Music Trance House Dance"}
     - {id: Other, cat: Other, desc: Other}
+    - {id: OtherEbooks, cat: Books/EBook, desc: "Other Ebooks"}
     - {id: OtherComics, cat: Other, desc: "Other Comics"}
     - {id: OtherTutorials, cat: Other, desc: "Other Tutorials"}
     - {id: OtherUnsorted, cat: Other, desc: "Other Unsorted"}
     - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
     - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
+    - {id: Software, cat: PC/0day, desc: "Software"}
     - {id: TV, cat: TV, desc: TV}
     - {id: TVBBC, cat: TV, desc: "TV BBC"}
     - {id: TVEllenDeGeneres, cat: TV, desc: "TV Ellen DeGeneres"}
@@ -86,6 +89,7 @@ caps:
     - {id: TVshows, cat: TV, desc: "TV shows"}
     - {id: Television, cat: TV, desc: Television}
     - {id: VideoMobile, cat: Movies, desc: "Movies Video Mobile"}
+    - {id: VideoMovies, cat: Movies, desc: "Video Movies"}
     - {id: XXX, cat: XXX, desc: XXX}
     - {id: XXXVideo, cat: XXX, desc: "XXX Video"}
     - {id: XXXHDVideo, cat: XXX, desc: "XXX HD Video"}
@@ -99,36 +103,22 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
-    type: text
-    label: Cookie
-  - name: info
-    type: info
-    label: How to get the Cookie
-    default: "<ol><li>Access this tracker with your browser</li><li>Solve the challenge</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button</li><li>Refresh the page by pressing <b>F5</b></li><li>Select the <b>Headers</b> tab</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: sort
     type: select
     label: Sort requested from site (Applies only to Search with Keywords)
     default: d
     options:
       d: created
-      s: seeders
-      _: size
+      _: seeders
 
 download:
   selectors:
     - selector: a[href^="magnet:?xt="]
       attribute: href
 
-login:
-  method: cookie
-  test:
-    path: /
-
 search:
-  # home page no longer has torrents. /latest would be ideal but has not categories. resorting to /top for keywordless searches.
   paths:
-    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}top{{ end }}"
+    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}/{{ end }}"
 
   rows:
     selector: table.table2 > tbody > tr:has(span.smallish)
