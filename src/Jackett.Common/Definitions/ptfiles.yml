@@ -87,7 +87,8 @@ login:
   error:
     - selector: p.error:contains(strong)
   test:
-    path: browse.php
+    path: index.php
+    selector: a[href*="&logout_hash="]
 
 search:
   paths:
