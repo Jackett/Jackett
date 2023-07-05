@@ -113,7 +113,8 @@ login:
     user: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
   test:
-    path: torrent/search
+    path: portal
+    selector: a[href="/user/logout"]
 
 search:
   paths:
