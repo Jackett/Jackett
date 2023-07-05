@@ -66,7 +66,8 @@ login:
   error:
     - selector: div.recover-error2
   test:
-    path: profile.php
+    path: home
+    selector: a[href^="logout.php"]
 
 download:
   selectors:
