@@ -127,7 +127,8 @@ login:
     - selector: div.klaida
     - selector: p.error_text
   test:
-    path: lt/torrents
+    path: lt/main
+    selector: a[href="myaccount"]
 
 search:
   paths:
