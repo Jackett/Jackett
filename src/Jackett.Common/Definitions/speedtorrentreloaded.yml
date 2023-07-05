@@ -111,6 +111,7 @@ login:
         selector: .main .card .card-block
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
