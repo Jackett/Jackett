@@ -6,8 +6,8 @@ language: bg-BG
 type: private
 encoding: windows-1251
 links:
-  - https://zamunda.net/
-  - https://zamunda.ch/
+  - https://zamunda.net/ # Bulgarian IP address filtering
+  - https://zamunda.ch/ # Bulgarian IP address filtering
 legacylinks:
   - http://zamunda.net/
   - http://zamunda.ch/
@@ -102,6 +102,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: ip_filtering
+    type: info
+    label: "IP Filtering"
+    default: "Zamunda.net allows only Bulgarian IP addressess. A <b>FlareSolverr</b> error means your IP was not accepted."
 
 login:
   path: takelogin.php
@@ -112,7 +116,8 @@ login:
   error:
     - selector: td.embedded:has(h2:contains("failed"))
   test:
-    path: bananas
+    path: index.php
+    selector: a[href^="/logout.php"]
 
 search:
   paths:
