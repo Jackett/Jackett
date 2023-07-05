@@ -193,6 +193,9 @@ search:
         "*": 1
     minimumratio:
       text: 1.0
+    minimumseedtime:
+      # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
+      text: 129600
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
