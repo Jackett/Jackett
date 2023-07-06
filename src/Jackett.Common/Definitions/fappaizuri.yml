@@ -68,7 +68,8 @@ login:
   error:
     - selector: b:contains("The specified username or password was incorrect.")
   test:
-    path: account.php
+    path: index.php
+    selector: a[href="account-logout.php"]
 
 search:
   paths:
