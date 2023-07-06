@@ -356,7 +356,8 @@
                 }
             },
             "required": [
-                "path"
+                "path",
+                "selector"
             ],
             "title": "PageTestBlock"
         },
