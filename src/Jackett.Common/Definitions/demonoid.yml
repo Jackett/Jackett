@@ -327,7 +327,8 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: files/
+    path: /
+    selector: a[href^="/account_handler.php"]
 
 download:
   infohash:
