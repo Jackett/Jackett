@@ -108,7 +108,8 @@ login:
   error:
     - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
   test:
-    path: usercp.php
+    path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
