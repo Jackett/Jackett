@@ -83,7 +83,8 @@ login:
           - name: replace
             args: ["\");", ""]
   test:
-    path: letoltes.php
+    path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
