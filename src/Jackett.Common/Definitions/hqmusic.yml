@@ -55,6 +55,7 @@ login:
     - selector: form#loginform > span.warning
   test:
     path: torrents.php
+    selector: a[href^="logout.php?auth="]
 
 search:
   # http://hqmusic.info/ajax.php?artistname=John&groupname=Born&recordlabel=Sony&year=2012&filelist=Queen&freetorrent=&taglist=rock&tags_type=1&order_by=time&order_way=desc&filter_cat%5B1%5D=1&group_results=1&action=browse
