@@ -73,6 +73,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
