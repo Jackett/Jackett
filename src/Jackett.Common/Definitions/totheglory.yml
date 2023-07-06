@@ -143,6 +143,7 @@ login:
     - selector: td.embedded:has(h2:contains("!")) # English, Korean
   test:
     path: my.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
