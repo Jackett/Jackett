@@ -93,6 +93,7 @@ login:
         text: " - Bad username/password."
   test:
     path: /
+    selector: form#logoutForm
 
 search:
   paths:
