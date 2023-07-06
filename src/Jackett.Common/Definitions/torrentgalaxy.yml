@@ -120,6 +120,7 @@ login:
     - selector: span:contains("Captcha incorrect")
   test:
     path: /
+    selector: a[href="/account-login.php"]
 
 search:
   # https://torrentgalaxy.org/torrents.php?c41=1&search=mercedes+s02e04&lang=0&sort=id&order=desc
