@@ -70,7 +70,8 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
+    path: index.php?&noredir=1
+    selector: a[data-url="logout.php"]
 
 search:
   paths:
