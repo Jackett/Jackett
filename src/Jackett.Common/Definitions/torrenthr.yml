@@ -54,6 +54,7 @@ login:
     - selector: div.glavni:has(div.glavni_naslov:contains("Greška"))
   test:
     path: browse.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
