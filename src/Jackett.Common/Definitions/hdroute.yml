@@ -36,6 +36,7 @@ login:
     - selector: :contains("密码错误")
   test:
     path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
