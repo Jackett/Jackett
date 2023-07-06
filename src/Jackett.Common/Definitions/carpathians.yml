@@ -73,7 +73,8 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   test:
-    path: browse.php
+    path: index.php
+    selector: a[href^="logout.php"]
 
 search:
   paths:
