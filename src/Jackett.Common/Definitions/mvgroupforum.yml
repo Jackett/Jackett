@@ -135,7 +135,8 @@ login:
       message:
         selector: div.borderwrap div.tablepad
   test:
-    path: forumtracker.php
+    path: index.php
+    selector: tr td.nav_mem div span[id="member_menu"], a[href^="/maintracker.php?filter="]
 
 search:
   paths:
