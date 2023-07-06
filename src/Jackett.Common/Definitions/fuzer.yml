@@ -100,7 +100,8 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: browse.php
+    path: index.php
+    selector: a[href^="/login.php?do=logout&logouthash="]
 
 search:
   paths:
