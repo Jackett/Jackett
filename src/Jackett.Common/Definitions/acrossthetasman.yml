@@ -49,6 +49,7 @@ login:
     do: login
   test:
     path: torrents.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
