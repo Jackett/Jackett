@@ -127,6 +127,7 @@ login:
     - selector: div#login_error
   test:
     path: selection.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
