@@ -55,6 +55,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: torrents.php
+    selector: a[href="logout.php"]
 
 download:
   method: post
