@@ -79,6 +79,7 @@ login:
     - selector: td.embedded:has(h2:contains("failed"))
   test:
     path: torrents.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
