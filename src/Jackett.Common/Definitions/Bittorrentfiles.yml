@@ -138,7 +138,8 @@ login:
   error:
     - selector: .error
   test:
-    path: browse.php
+    path: index.php
+    selector: a[href^="/logout.php?c="]
 
 search:
   path: browse.php
