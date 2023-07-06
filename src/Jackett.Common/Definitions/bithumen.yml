@@ -58,6 +58,7 @@ login:
     - selector: td.embedded:has(h2:contains("bejelentkezés"))
   test:
     path: browse.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
