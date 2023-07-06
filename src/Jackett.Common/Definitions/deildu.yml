@@ -63,7 +63,8 @@ login:
     password: "{{ .Config.password }}"
     keeplogged: 1
   test:
-    path: my.php
+    path: index.php
+    selector: a[href^="logout.php"]
 
 search:
   paths:
