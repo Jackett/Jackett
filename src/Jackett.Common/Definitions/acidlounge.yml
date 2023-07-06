@@ -105,7 +105,8 @@ login:
   error:
     - selector: div.errorWrap
   test:
-    path: browse.php
+    path: index.php
+    selector: a[href$="logout.php"]
 
 search:
   paths:
