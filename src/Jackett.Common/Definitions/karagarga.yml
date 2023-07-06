@@ -48,6 +48,7 @@ login:
     - selector: table:contains("Login unsuccessful")
   test:
     path: index.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
