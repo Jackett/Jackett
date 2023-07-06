@@ -51,6 +51,7 @@ login:
     - selector: table:contains("An error has occured!")
   test:
     path: browse.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
