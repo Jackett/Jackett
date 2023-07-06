@@ -65,6 +65,7 @@ login:
     rhash: 123
   test:
     path: browse
+    selector: a[href*="logout"]
 
 search:
   paths:
