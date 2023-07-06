@@ -75,6 +75,7 @@ login:
     - selector: div.klaida
   test:
     path: browse.php
+    selector: a[href*="logout.php"]
 
 search:
   paths:
