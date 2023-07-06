@@ -86,7 +86,8 @@ login:
   error:
     - selector: div.login_error_content_text
   test:
-    path: browse.php
+    path: index.php
+    selector: a[href$="logout.php"]
 
 search:
   paths:
