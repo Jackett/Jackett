@@ -66,7 +66,8 @@ login:
   error:
     - selector: form#loginform > span.warning, font[color="red"]
   test:
-    path: torrents.php
+    path: index.php
+    selector: a[href^="logout.php?auth="]
 
 search:
     # https://jpopsuki.eu/ajax.php?section=torrents&artistname=&action=advanced&torrentname=snow+man&remastertitle=&filelist=&bitrate=&format=&media=&year=&freeleech=&remastered=&searchtags=&tags_type=0&order_by=s3&order_way=desc&enablegrouping=1
