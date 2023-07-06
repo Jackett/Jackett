@@ -89,6 +89,7 @@ login:
     - selector: td.embedded:has(h2:contains("Error"))
   test:
     path: my.php
+    selector: a[href="logout.php"]
 
 download:
   selectors:
