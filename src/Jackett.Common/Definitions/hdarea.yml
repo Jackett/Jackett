@@ -74,6 +74,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
+    selector: a[href="usercp.php"]
 
 search:
   paths:
