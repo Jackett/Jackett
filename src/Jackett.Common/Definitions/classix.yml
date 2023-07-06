@@ -26,6 +26,7 @@ login:
     - selector: div.myContent:contains("Access Denied")
   test:
     path: index.php
+    selector: a[href="account-logout.php"]
 
 download:
   selectors:
