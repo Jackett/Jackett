@@ -87,7 +87,8 @@ login:
   error:
     - selector: td.embedded:has(h2:contains("failed"))
   test:
-    path: my.php
+    path: index.php
+    selector: a[href="logout.php"]
 
 search:
   paths:
