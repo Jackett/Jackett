@@ -126,7 +126,8 @@ login:
   error:
     - selector: "#login_box_desc"
   test:
-    path: my.php
+    path: index.php
+    selector: a[href="./logout.php"]
 
 search:
   paths:
