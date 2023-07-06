@@ -93,7 +93,8 @@ login:
   error:
     - selector: div.box:has(div.title:contains("bejelentkez"))
   test:
-    path: torrentek.php
+    path: index.php
+    selector: a[href^="logout.php"]
 
 search:
   paths:
