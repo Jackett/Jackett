@@ -14,6 +14,7 @@ using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using AngleSharp.Text;
 using AngleSharp.Xml.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -823,17 +824,18 @@ namespace Jackett.Common.Indexers
             return true;
         }
 
-        protected string getRedirectDomainHint(string requestUrl, string redirectUrl)
+        protected string GetRedirectDomainHint(string requestUrl, string redirectUrl)
         {
-            if (requestUrl.StartsWith(SiteLink) && !redirectUrl.StartsWith(SiteLink))
+            if (redirectUrl.IsNullOrWhiteSpace() || !requestUrl.StartsWith(SiteLink) || redirectUrl.StartsWith(SiteLink))
             {
-                var uri = new Uri(redirectUrl);
-                return uri.Scheme + "://" + uri.Host + "/";
+                return null;
             }
-            return null;
+
+            var uri = new Uri(redirectUrl);
+            return uri.Scheme + "://" + uri.Host + "/";
         }
 
-        protected string getRedirectDomainHint(WebResult result) => getRedirectDomainHint(result.Request.Url, result.RedirectingTo);
+        protected string GetRedirectDomainHint(WebResult result) => GetRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
         protected async Task<bool> TestLogin()
         {
@@ -850,7 +852,7 @@ namespace Jackett.Common.Indexers
             if (testResult.IsRedirect)
             {
                 var errormessage = $"Login Failed, got redirected to: {testResult.RedirectingTo}";
-                var DomainHint = getRedirectDomainHint(testResult);
+                var DomainHint = GetRedirectDomainHint(testResult);
                 if (DomainHint != null)
                 {
                     errormessage += " Try changing the indexer URL to " + DomainHint + ".";
@@ -882,7 +884,7 @@ namespace Jackett.Common.Indexers
         {
             if (response.IsRedirect)
             {
-                var domainHint = getRedirectDomainHint(response);
+                var domainHint = GetRedirectDomainHint(response);
 
                 if (domainHint != null)
                 {
