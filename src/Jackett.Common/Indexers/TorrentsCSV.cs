@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -77,7 +78,8 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchString = query.GetQueryString();
 
-            if (string.IsNullOrWhiteSpace(searchString)) // not supported
+            // not supported
+            if (searchString.IsNullOrWhiteSpace())
             {
                 releases.Add(new ReleaseInfo
                 {
@@ -93,11 +95,15 @@ namespace Jackett.Common.Indexers
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
                 });
+
                 return releases;
             }
 
-            if (!string.IsNullOrWhiteSpace(searchString) && searchString.Length < 3)
-                return releases; // search needs at least 3 characters
+            // search needs at least 3 characters
+            if (searchString.IsNotNullOrWhiteSpace() && searchString.Length < 3)
+            {
+                return releases;
+            }
 
             var qc = new NameValueCollection
             {
@@ -107,31 +113,30 @@ namespace Jackett.Common.Indexers
 
             var searchUrl = SearchEndpoint + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+
             try
             {
-                var jsonStart = response.ContentString;
-                var jsonContent = JArray.Parse(jsonStart);
+                var jsonContent = JArray.Parse(response.ContentString);
 
                 foreach (var torrent in jsonContent)
                 {
                     if (torrent == null)
+                    {
                         throw new Exception("Error: No data returned!");
+                    }
 
+                    var infoHash = torrent.Value<string>("infohash");
                     var title = torrent.Value<string>("name");
                     var size = torrent.Value<long>("size_bytes");
-                    var seeders = torrent.Value<int>("seeders");
-                    var leechers = torrent.Value<int>("leechers");
-                    var grabs = ParseUtil.CoerceInt(torrent.Value<string>("completed") ?? "0");
-                    var infoHash = torrent.Value<JToken>("infohash").ToString();
-
-                    // convert unix timestamp to human readable date
-                    var publishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                    publishDate = publishDate.AddSeconds(torrent.Value<long>("created_unix"));
+                    var seeders = torrent.Value<int?>("seeders") ?? 0;
+                    var leechers = torrent.Value<int?>("leechers") ?? 0;
+                    var grabs = torrent.Value<int?>("completed") ?? 0;
+                    var publishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(torrent.Value<long>("created_unix"));
 
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Details = new Uri(SiteLink), // there is no details link
+                        Details = new Uri($"{SiteLink.TrimEnd('/')}/search/{title}"), // there is no details link
                         Guid = new Uri($"magnet:?xt=urn:btih:{infoHash}"),
                         InfoHash = infoHash, // magnet link is auto generated from infohash
                         Category = new List<int> { TorznabCatType.Other.ID },
@@ -151,7 +156,10 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.ContentString, ex);
             }
-            return releases;
+
+            return releases
+                   .OrderByDescending(o => o.PublishDate)
+                   .ToArray();
         }
     }
 }
