@@ -849,16 +849,23 @@ namespace Jackett.Common.Indexers
             var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
             var testResult = await RequestWithCookiesAsync(LoginTestUrl, headers: headers);
 
+            // Follow the redirect on login if the domain doesn't change
+            if (testResult.IsRedirect && GetRedirectDomainHint(testResult) == null)
+            {
+                await FollowIfRedirect(testResult, LoginTestUrl, overrideCookies: testResult.Cookies, accumulateCookies: true, maxRedirects: 1);
+            }
+
             if (testResult.IsRedirect)
             {
                 var errormessage = $"Login Failed, got redirected to: {testResult.RedirectingTo}";
-                var DomainHint = GetRedirectDomainHint(testResult);
-                if (DomainHint != null)
+                var domainHint = GetRedirectDomainHint(testResult);
+
+                if (domainHint != null)
                 {
-                    errormessage += " Try changing the indexer URL to " + DomainHint + ".";
+                    errormessage += " Try changing the indexer URL to " + domainHint + ".";
                     if (Definition.Followredirect)
                     {
-                        configData.SiteLink.Value = DomainHint;
+                        configData.SiteLink.Value = domainHint;
                         SiteLink = configData.SiteLink.Value;
                         SaveConfig();
                         errormessage += " Updated site link, please try again.";
@@ -1925,12 +1932,15 @@ namespace Jackett.Common.Indexers
         protected async Task<WebResult> HandleRedirectableRequestAsync(string url, Dictionary<string, string> headers = null, int maxRedirects = 5)
         {
             var response = await RequestWithCookiesAsync(url, headers: headers);
+
             for (var i = 0; i < maxRedirects; i++)
             {
-                if (response.IsRedirect)
-                    response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
-                else
+                if (!response.IsRedirect)
+                {
                     break;
+                }
+
+                response = await RequestWithCookiesAsync(response.RedirectingTo, headers: headers);
             }
             return response;
         }
