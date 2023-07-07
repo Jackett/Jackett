@@ -580,24 +580,29 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected async Task FollowIfRedirect(WebResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        protected async Task FollowIfRedirect(WebResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false, int maxRedirects = 5)
         {
-            // Follow up  to 5 redirects
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < maxRedirects; i++)
             {
                 if (!response.IsRedirect)
+                {
                     break;
+                }
 
                 var redirectingTo = new Uri(response.RedirectingTo);
                 if (redirectingTo.Scheme == "magnet")
+                {
                     break;
+                }
 
                 await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
+
                 if (accumulateCookies)
                 {
                     CookieHeader = ResolveCookies((CookieHeader != null && CookieHeader != "" ? CookieHeader + " " : "") + (overrideCookies != null && overrideCookies != "" ? overrideCookies + " " : "") + response.Cookies);
                     overrideCookies = response.Cookies = CookieHeader;
                 }
+
                 if (overrideCookies != null && response.Cookies == null)
                 {
                     response.Cookies = overrideCookies;
