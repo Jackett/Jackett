@@ -127,6 +127,9 @@ search:
     title:
       selector: a[href^="details.php?id="]
       attribute: title
+      filters:
+        - name: re_replace
+          args: ["(?i)(Név: |Első név: -)|Második név: -", ""]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
