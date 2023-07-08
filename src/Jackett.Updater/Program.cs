@@ -489,6 +489,7 @@ namespace Jackett.Updater
                 "Definitions/opensharing.yml",
                 "Definitions/oxtorrent.yml",
                 "Definitions/p2pelite.yml",
+                "Definitions/partis.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/peerjunkies.yml",
                 "Definitions/piratadigital.yml",
