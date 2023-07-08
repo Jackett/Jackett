@@ -11,7 +11,7 @@ links:
 caps:
   categories:
     Anime: TV/Anime
-    
+
   modes:
     search: [q]
     tv-search: [q, season, ep]
@@ -41,7 +41,7 @@ search:
     # https://www.36dm.org/search-gene_20ai.htm
     - path: "{{ if .Keywords }}search-{{ .Keywords }}-1.htm{{ else }}/{{ end }}"
   keywordsfilters:
-    - name:  replace
+    - name: replace
       args: [" ", "_20"]
 
   rows:
