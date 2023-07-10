@@ -8,13 +8,13 @@ encoding: utf-8
 followredirect: true
 requestDelay: 2
 links:
-  - http://www.last-torrents.org/
+  - https://www.last-torrents.org/
 legacylinks:
   - http://last-torrents.org/
   - https://last-torrents.org/
   - https://www.lastfiles.ro/
   - http://www.lastfiles.ro/
-  - https://www.last-torrents.org/ # SSL connection not available
+  - http://www.last-torrents.org/
 
 caps:
   categorymappings:
@@ -105,10 +105,9 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    submitme: Login
-    use_ssl: 0
-    perm_ssl: 0
-    returnto: /
+    submitme: Login!
+    use_ssl: 1
+    perm_ssl: 1
   error:
     - selector: td.embedded:contains("Login failed")
   test:
