@@ -1,7 +1,7 @@
 ---
 id: le-cinephile
 name: Le-Cinephile
-description: "Les-Cinephiles is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Le-Cinephile is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -80,6 +80,25 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTI.FRENCH: MULTI.FRENCH
+      ENGLISH: ENGLISH
+      MULTI.ENGLISH: MULTI.ENGLISH
+      VOSTFR: VOSTFR
+      MULTI.VOSTFR: MULTI.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR with ENGLISH
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -96,6 +115,14 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: countdown
+    type: info
+    label: Countdown Timer
+    default: "This site is a Tracker based on Time: to keep your account the time must not be at 0000-00-00-00-00-00. Read <a href=\"https://le-cinephile.de/faq.php\" target=\"_blank\">Le-Cinephile FAQ</a> on how to keep the timer active."
+  - name: registration
+    type: info
+    label: Registration Confirmation
+    default: After you register you will receive a confirmation email that contains a link to activate your account. If you have not received it check your Junk mail / Spam mail folder.
 
 login:
   path: login.php
@@ -148,8 +175,24 @@ search:
       selector: div.kat_cat_pic_name_b
     categorydesc:
       text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
-    title:
+    title_phase1:
       selector: a.selection_a
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]multi[\\s|\\.|-])", ".{{ .Config.multilanguage }}."]
+    title_phase2:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]vostfr[\\s|\\.|-])", ".ENGLISH."]
+        - name: re_replace
+          args: ["(?i)([\\s|\\.|-]subfrench[\\s|\\.|-])", ".ENGLISH."]
+    title:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: a.selection_a
       attribute: href
