@@ -15,6 +15,8 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public bool external { get; set; }
         [DataMember]
+        public string local_bind_address { get; set; }
+        [DataMember]
         public bool cors { get; set; }
         [DataMember]
         public string api_key { get; set; }
@@ -72,6 +74,7 @@ namespace Jackett.Common.Models.DTO
             this.notices = notices;
             port = config.Port;
             external = config.AllowExternal;
+            local_bind_address = config.LocalBindAddress;
             cors = config.AllowCORS;
             api_key = config.APIKey;
             blackholedir = config.BlackholeDir;

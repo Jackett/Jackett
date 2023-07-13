@@ -119,7 +119,7 @@ namespace Jackett.Tray
         {
             var psi = new ProcessStartInfo
             {
-                FileName = "http://127.0.0.1:" + serverConfig.Port,
+                FileName = "http://" + serverConfig.LocalBindAddress + ":" + serverConfig.Port,
                 UseShellExecute = true
             };
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
@@ -76,8 +77,10 @@ namespace Jackett.Server.Controllers
             var webHostRestartNeeded = false;
 
             var originalPort = serverConfig.Port;
+            var originalLocalBindAddress = serverConfig.LocalBindAddress;
             var originalAllowExternal = serverConfig.AllowExternal;
             var port = config.port;
+            var local_bind_address = config.local_bind_address;
             var external = config.external;
             var cors = config.cors;
             var saveDir = config.blackholedir;
@@ -181,7 +184,7 @@ namespace Jackett.Server.Controllers
                 cacheService.CleanCache();
             }
 
-            if (port != serverConfig.Port || external != serverConfig.AllowExternal)
+            if (port != serverConfig.Port || external != serverConfig.AllowExternal || local_bind_address != serverConfig.LocalBindAddress)
             {
                 if (ServerUtil.RestrictedPorts.Contains(port))
                     throw new Exception("The port you have selected is restricted, try a different one.");
@@ -189,9 +192,20 @@ namespace Jackett.Server.Controllers
                 if (port < 1 || port > 65535)
                     throw new Exception("The port you have selected is invalid, it must be below 65535.");
 
-                // Save port to the config so it can be picked up by the if needed when running as admin below.
+                if (string.IsNullOrWhiteSpace(local_bind_address))
+                {
+                    throw new Exception("You need to provide a local bind address.");
+                }
+
+                if (!IPAddress.IsLoopback(IPAddress.Parse(local_bind_address)))
+                {
+                    throw new Exception("The local address you selected is not a loopback one.");
+                }
+
+                // Save port and LocalAddr to the config so they can be picked up by the if needed when running as admin below.
                 serverConfig.AllowExternal = external;
                 serverConfig.Port = port;
+                serverConfig.LocalBindAddress = local_bind_address;
                 configService.SaveConfig(serverConfig);
 
                 // On Windows change the url reservations
@@ -206,11 +220,12 @@ namespace Jackett.Server.Controllers
                         }
                         catch
                         {
+                            serverConfig.LocalBindAddress = originalLocalBindAddress;
                             serverConfig.Port = originalPort;
                             serverConfig.AllowExternal = originalAllowExternal;
                             configService.SaveConfig(serverConfig);
 
-                            throw new Exception("Failed to acquire admin permissions to reserve the new port.");
+                            throw new Exception("Failed to acquire admin permissions to reserve the new local_bind_address/port.");
                         }
                     }
                     else
