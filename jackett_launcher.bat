@@ -10,7 +10,7 @@ if errorlevel 1 (
   goto continue
 ) else (
   echo JackettUpdater is still running
-  ping -n 2 127.0.0.1 > nul
+  timeout /t 1 /nobreak > nul
   goto loop
 )
 
