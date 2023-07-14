@@ -120,6 +120,7 @@ function loadJackettSettings() {
 
         $("#jackett-savedir").val(data.blackholedir);
         $("#jackett-allowext").attr('checked', data.external);
+        $("#jackett-local-bind-address").val(data.local_bind_address);
         $("#jackett-allowcors").attr('checked', data.cors);
         $("#jackett-allowupdate").attr('checked', data.updatedisabled);
         $("#jackett-prerelease").attr('checked', data.prerelease);
@@ -1611,6 +1612,7 @@ function bindUIButtons() {
         var jackett_basepathoverride = $("#jackett-basepathoverride").val();
         var jackett_baseurloverride = $("#jackett-baseurloverride").val();
         var jackett_external = $("#jackett-allowext").is(':checked');
+        var jackett_local_bind_address = $("#jackett-local-bind-address").val();
         var jackett_cors = $("#jackett-allowcors").is(':checked');
         var jackett_update = $("#jackett-allowupdate").is(':checked');
         var jackett_prerelease = $("#jackett-prerelease").is(':checked');
@@ -1632,6 +1634,7 @@ function bindUIButtons() {
         var jsonObject = {
             port: jackett_port,
             external: jackett_external,
+            local_bind_address: jackett_local_bind_address,
             cors: jackett_cors,
             updatedisabled: jackett_update,
             prerelease: jackett_prerelease,
