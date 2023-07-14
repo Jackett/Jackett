@@ -151,6 +151,7 @@ caps:
     - {id: 289, cat: Books, desc: "Shipmodeling-Ships in Bottles"}
     - {id: 197, cat: Books, desc: "Marine bulletins"}
     - {id: 219, cat: Books, desc: "Marine History"}
+    - {id: 347, cat: Books, desc: "Marine History-Sea Life"}
     - {id: 323, cat: Books, desc: "Marine History-History of Submarines"}
     - {id: 282, cat: Books, desc: "Marine History-Fleets history"}
     - {id: 281, cat: Books, desc: "Marine History-History of Merchant Marine"}
