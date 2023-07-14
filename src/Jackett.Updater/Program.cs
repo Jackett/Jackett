@@ -263,6 +263,7 @@ namespace Jackett.Updater
                 "Definitions/DasUnerwartete.yml",
                 "Definitions/academictorrents.yml",
                 "Definitions/acervos-api.yml",
+                "Definitions/acgsou.yml",
                 "Definitions/aither.yml", // switch to *-API #8682
                 "Definitions/alein.yml",
                 "Definitions/alexfilm.yml",
