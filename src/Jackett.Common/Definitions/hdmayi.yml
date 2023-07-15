@@ -6,7 +6,9 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - http://hdmayi.com/ # does not support https properly
+  - https://hdmayi.com/
+legacylinks:
+  - http://hdmayi.com/
 
 caps:
   categorymappings:
