@@ -21,6 +21,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Músicas"}
     - {id: 11, cat: Books/Mags, desc: "Revistas"}
     - {id: 2, cat: TV, desc: "Series"}
+    - {id: 14, cat: TV/Anime, desc: "Animes"}
 
   modes:
     search: [q]
