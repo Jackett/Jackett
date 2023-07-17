@@ -128,8 +128,7 @@ namespace Jackett.Common.Indexers
             {
                 postData.Add(BHDParams.imdb_id, query.ImdbIDShort);
             }
-
-            if (query.IsTmdbQuery)
+            else if (query.IsTmdbQuery)
             {
                 postData.Add(BHDParams.tmdb_id, query.TmdbID.ToString());
             }
