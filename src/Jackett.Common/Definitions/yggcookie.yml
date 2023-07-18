@@ -351,6 +351,9 @@ search:
     # fix date search and workaround for internal YGG issues
     - name: re_replace
       args: ["[\\\\\\-\\.\\/!\\s]+", " "]
+    # strip season as site does not support partial matches
+    - name: re_replace
+      args: ["(?i)\\bS\\d{1,3}\\b", ""]
     - name: trim
     # put each word in quotations to prevent exact phrase search
     - name: re_replace
