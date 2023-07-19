@@ -29,13 +29,14 @@ caps:
     - {id: 20, cat: Movies/SD, desc: "Movie/Cam"}
     - {id: 21, cat: XXX, desc: "Movie/XXX"}
     - {id: 23, cat: Movies/DVD, desc: "Movie/DvdRip"}
-    - {id: 25, cat: Audio/Video, desc: "Music/Misc"}
+    - {id: 25, cat: Movies, desc: "V.I.P."}
+    - {id: 32, cat: TV/Anime, desc: "Anime"}
+    - {id: 33, cat: Audio/Video, desc: "Music/Misc"}
     - {id: 28, cat: TV, desc: "Tv Packs"}
     - {id: 31, cat: TV, desc: "Tv Mini Packs"}
     - {id: 29, cat: TV/SD, desc: "Tv Episodes SD"}
     - {id: 30, cat: TV/HD, desc: "Tv Episodes HD"}
     - {id: 26, cat: TV/Sport, desc: "Tv Sport SD/HD"}
-    - {id: 32, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
