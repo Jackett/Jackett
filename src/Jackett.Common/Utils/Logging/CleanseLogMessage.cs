@@ -12,8 +12,8 @@ namespace Jackett.Common.Utils.Logging
             // Url
             new Regex(@"(?<=[?&: ;])(apikey|api_key|(?:(?:access|api)[-_]?)?token|pass(?:key|wd)?|auth|authkey|user|u?id|api|[a-z_]*apikey|account|pid|pwd)=(?<secret>[^&=""]+?)(?=[ ""&=]|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
             new Regex(@"(?<=[?& ;])[^=]*?(_?(?<!use|get_)token|username|passwo?rd)=(?<secret>[^&=]+?)(?= |&|$|;)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-            new Regex(@"rss\.torrentleech\.org/(?!rss)(?<secret>[0-9a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-            new Regex(@"rss\.torrentleech\.org/rss/download/[0-9]+/(?<secret>[0-9a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(@"rss(24h)?\.torrentleech\.org/(?!rss)(?<secret>[0-9a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(@"torrentleech\.org/rss/download/[0-9]+/(?<secret>[0-9a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
             new Regex(@"iptorrents\.com/[/a-z0-9?&;]*?(?:[?&;](u|tp)=(?<secret>[^&=;]+?))+(?= |;|&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
             new Regex(@"/fetch/[a-z0-9]{32}/(?<secret>[a-z0-9]{32})", RegexOptions.Compiled),
             new Regex(@"\b(\w*)?(_?(?<!use|get_)token|username|passwo?rd)=(?<secret>[^&=]+?)(?= |&|$|;)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
@@ -40,10 +40,7 @@ namespace Jackett.Common.Utils.Logging
             // Indexer Responses
             new Regex(@"(?:avistaz|exoticaz|cinemaz|privatehd)\.[a-z]{2,3}/rss/download/(?<secret>[^&=]+?)/(?<secret>[^&=]+?)\.torrent", RegexOptions.Compiled | RegexOptions.IgnoreCase),
             new Regex(@"(?:animebytes)\.[a-z]{2,3}/torrent/[0-9]+/download/(?<secret>[^&=]+?)[""]", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-            new Regex(@",""info_hash"":""(?<secret>[^&=]+?)"",", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-            new Regex(@"""token"":""(?<secret>[^&=]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-            new Regex(@",""pass[- _]?key"":""(?<secret>[^&=]+?)"",", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-            new Regex(@",""rss[- _]?key"":""(?<secret>[^&=]+?)"",", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(@"""(info_hash|token|((pass|rss)[- _]?key))"":""(?<secret>[^&=]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
         public static string Cleanse(string message)
