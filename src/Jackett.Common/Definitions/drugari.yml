@@ -154,8 +154,6 @@ search:
 
   rows:
     selector: "table.sortable tr:has(a[href*=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
-    filters:
-      - name: strdump
 
   fields:
     category:
