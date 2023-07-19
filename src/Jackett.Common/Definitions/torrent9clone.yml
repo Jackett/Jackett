@@ -10,7 +10,7 @@ followredirect: true
 links:
   - https://www.torrent9.fi/
   - https://torrent9.nocensor.click/
-  - https://torrent9.mrunblock.life/
+  - https://torrent9.mrunblock.bond/
 legacylinks:
   - https://wwv.torrent9.one/
   - https://vww.torrent9.one/
@@ -37,6 +37,7 @@ legacylinks:
   - http://www.torrent9.cm/
   - https://www.torrent9.cm/
   - https://torrent9.nocensor.art/
+  - https://torrent9.mrunblock.life/
 
 caps:
   categorymappings:

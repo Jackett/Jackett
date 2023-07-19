@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://subsplease.org/",
-            "https://subsplease.mrunblock.life/",
+            "https://subsplease.mrunblock.bond/",
             "https://subsplease.nocensor.click/"
         };
         public override string[] LegacySiteLinks => new[]
@@ -38,7 +38,8 @@ namespace Jackett.Common.Indexers
             "https://subsplease.nocensor.world/",
             "https://subsplease.nocensor.lol/",
             "https://subsplease.nocensor.art/",
-            "https://subsplease.mrunblock.guru/"
+            "https://subsplease.mrunblock.guru/",
+            "https://subsplease.mrunblock.life/",
         };
         public override string Language => "en-US";
         public override string Type => "public";

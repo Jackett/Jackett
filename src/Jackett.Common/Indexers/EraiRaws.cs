@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
         {
             "https://www.erai-raws.info/",
             "https://beta.erai-raws.info/",
-            "https://erairaws.mrunblock.life/",
+            "https://erairaws.mrunblock.bond/",
             "https://erairaws.nocensor.click/"
         };
         public override string[] LegacySiteLinks => new[]
@@ -36,7 +36,8 @@ namespace Jackett.Common.Indexers
             "https://erairaws.nocensor.world/",
             "https://erairaws.nocensor.lol/",
             "https://erairaws.nocensor.art/",
-            "https://erairaws.mrunblock.guru/"
+            "https://erairaws.mrunblock.guru/",
+            "https://erairaws.mrunblock.life/",
         };
         public override string Language => "en-US";
         public override string Type => "semi-private";
