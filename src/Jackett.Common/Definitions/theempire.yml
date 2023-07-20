@@ -43,6 +43,7 @@ caps:
     - {id: 66, cat: TV, desc: "Motoring"}
     - {id: 71, cat: TV, desc: "Property"}
     - {id: 76, cat: TV, desc: "Soaps"}
+    - {id: 200, cat: TV, desc: "Soaps : Classic"}
     - {id: 80, cat: TV, desc: "Talkshow"}
     - {id: 59, cat: TV, desc: "Drama"}
 
