@@ -25,6 +25,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override bool SupportsPagination => true;
+
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private readonly string APIBASE = "https://beyond-hd.me/api/torrents/";
@@ -151,6 +153,12 @@ namespace Jackett.Common.Indexers
             else if (query.IsTmdbQuery)
             {
                 postData.Add(BHDParams.tmdb_id, query.TmdbID.ToString());
+            }
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = (query.Offset / query.Limit) + 1;
+                postData.Add("page", page.ToString());
             }
 
             var bhdResponse = await GetBHDResponse(apiUrl, postData);
