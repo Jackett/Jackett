@@ -6,10 +6,10 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
-  - https://projekt.dark-shadow.me/
+  - https://dark-shadow.me/
 legacylinks:
   - https://dark-shadow.ml/
-  - https://dark-shadow.me/
+  - https://projekt.dark-shadow.me/
 
 caps:
   categorymappings:
