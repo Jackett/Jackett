@@ -15,13 +15,12 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 6, cat: TV/Anime, desc: "TV/Anime"}
-    - {id: 7, cat: Audio/Video, desc: "Concerts"}
+    - {id: 7, cat: Movies, desc: "Concerts"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
 
 settings:
   - name: apikey
