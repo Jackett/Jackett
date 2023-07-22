@@ -239,7 +239,7 @@ login:
 
 search:
   paths:
-    - path: _tracker.php
+    - path: tracker.php
       method: post
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
@@ -271,7 +271,7 @@ search:
     submit: "%C2%A0%C2%A0Search%C2%A0%C2%A0"
 
   rows:
-    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="]):not(:has(a[href="_tracker.php?f=325"]))
+    selector: tr[id^="tor_"]:has(a[href^="./download.php?id="]):not(:has(a[href="tracker.php?f=325"]))
 
   fields:
     title:
