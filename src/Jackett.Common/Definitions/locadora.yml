@@ -12,15 +12,16 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 6, cat: TV/Anime, desc: "TV/Anime"}
-    - {id: 7, cat: Movies, desc: "Concerts"}
+    - {id: 1, cat: Movies, desc: "Filmes"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 6, cat: TV/Anime, desc: "Animes"}
+    - {id: 7, cat: Audio/Video, desc: "Shows"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
 
 settings:
   - name: apikey
