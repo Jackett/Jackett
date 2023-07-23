@@ -27,7 +27,7 @@ caps:
     - {id: 26, cat: Movies/BluRay, desc: "FILM BluRay"}
     - {id: 25, cat: Movies/BluRay, desc: "FILM ISO"}
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
-    - {id: 103, cat: Movies, desc: "FILM Pack"}
+    - {id: 104, cat: Movies, desc: "FILM DVDRip"}
     # SERIE
     - {id: 9, cat: TV/SD, desc: "SERIE DVD"}
     - {id: 72, cat: TV/UHD, desc: "SERIE 2160 P"}
@@ -35,17 +35,12 @@ caps:
     - {id: 21, cat: TV/HD, desc: "SERIE HDTV.1080p"}
     - {id: 20, cat: TV/HD, desc: "SERIE HDTV.720p"}
     - {id: 19, cat: TV/SD, desc: "SERIE HDTV"}
-    - {id: 36, cat: TV, desc: "SERIE Pack"}
     - {id: 17, cat: TV/SD, desc: "SERIE VHS"}
     - {id: 16, cat: TV/SD, desc: "SERIE TVRip"}
     - {id: 15, cat: TV/WEB-DL, desc: "SERIE WEB.1080p"}
     - {id: 14, cat: TV/WEB-DL, desc: "SERIE WEB.720p"}
     - {id: 12, cat: TV/WEB-DL, desc: "SERIE WEB"}
     - {id: 102, cat: TV/Documentary, desc: "SERIE Documentaire"}
-    # ANIMEE
-    - {id: 67, cat: Movies/Other, desc: "ANIMEE films"}
-    - {id: 70, cat: TV/Anime, desc: "ANIMEE Series"}
-    - {id: 95, cat: TV/Anime, desc: "ANIMEE Animée"}
     # LOGICIELS
     - {id: 56, cat: PC/ISO, desc: "LOGICIELS Linux"}
     - {id: 24, cat: PC/Mac, desc: "LOGICIELS Apple"}
