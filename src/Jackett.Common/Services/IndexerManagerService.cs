@@ -57,12 +57,14 @@ namespace Jackett.Common.Services
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
             {"seals", "greatposterwall"},
-            {"tehconnectionme", "anthelion-api"},
+            {"tehconnectionme", "anthelion"},
+            {"anthelion", "anthelion-api"},
             {"todotorrents", "dontorrent"},
             {"toros", "bulltorrent"},
             {"torrentgalaxyorg", "torrentgalaxy"},
             {"torrentsurf", "xtremebytes"},
-            {"transmithenet", "nebulanceapi"},
+            {"transmithenet", "nebulance"},
+            {"nebulance", "nebulanceapi"},
             {"xtremezone", "speedapp"},
             {"yourexotic", "exoticaz"}
         };
