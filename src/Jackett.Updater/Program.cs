@@ -536,6 +536,7 @@ namespace Jackett.Updater
                 "Definitions/scenepalace.yml",
                 "Definitions/scenereactor.yml",
                 "Definitions/scenexpress.yml",
+                "Definitions/sdbits.yml",
                 "Definitions/sdkino.yml",
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/seedpeer.yml",

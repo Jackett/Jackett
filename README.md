@@ -510,7 +510,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SceneHD [![(invite needed)][inviteneeded]](#)
  * SceneRush
  * SceneTime
- * SDBits [![(invite needed)][inviteneeded]](#)
  * Secret Cinema
  * SeedFile
  * Shadowflow (影) [![(invite needed)][inviteneeded]](#)
