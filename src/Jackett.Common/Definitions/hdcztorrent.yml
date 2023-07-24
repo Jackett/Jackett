@@ -122,7 +122,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: td#mcol table.lista > tbody > tr:has(a[href^="magnet:?xt="])
+    selector: td#mcol table.lista > tbody > tr:has(a[href^="index.php?page=torrent_history"])
 
   fields:
     category:
@@ -139,29 +139,28 @@ search:
     download:
       selector: a[href^="download.php"]
       attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details"]
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=(.+?) "
+        - name: replace
+          args: ["torrentimg/nocover.jpg", ""]
     date:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
       # auto adjusted by site account profile
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     size:
-      selector: td:nth-child(12)
-    seeders:
-      selector: td:nth-child(9)
-    leechers:
-      selector: td:nth-child(10)
-    grabs:
       selector: td:nth-child(11)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    grabs:
+      selector: td:nth-child(10)
     downloadvolumefactor:
       case:
         img[src$="freeleech.gif"]: 0
