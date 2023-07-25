@@ -52,12 +52,12 @@ search:
     details:
       selector: a[href*="/showprofile/"]
       attribute: href
-    download:
-      selector: a[href*="/download/"]
+    infohash:
+      selector: a[href*="/showprofile/"]
       attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     date:
       selector: font[color="Black"]
       filters:
