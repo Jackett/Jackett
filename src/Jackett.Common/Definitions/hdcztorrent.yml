@@ -30,6 +30,8 @@ caps:
     - {id: 91, cat: TV, desc: "Serial titulky"}
     - {id: 45, cat: TV, desc: "SERIALY CZ"}
     - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK"}
+    # Animované
+    - {id: 47, cat: TV/Other, desc: "Animované"}
     # HUDBA
     - {id: 57, cat: Audio/Lossless, desc: "Hudba flac"}
     - {id: 58, cat: Audio/MP3, desc: "Hudba mp3"}
