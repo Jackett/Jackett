@@ -131,16 +131,16 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:
-      selector: td:nth-child(4)
+      selector: td:nth-child(5)
     date_day:
       # Today<br/>10:20 AM
       # Yesterday<br/>08:03 PM
-      selector: td:nth-child(6):contains("day")
+      selector: td:nth-child(7):contains("day")
       # auto adjusted by site account profile
       optional: true
     date_year:
       # Feb 14 2019<br/>10:20 AM
-      selector: td:nth-child(6):not(:contains("day"))
+      selector: td:nth-child(7):not(:contains("day"))
       # auto adjusted by site account profile
       optional: true
       filters:
@@ -149,13 +149,13 @@ search:
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(7)
-    grabs:
       selector: td:nth-child(8)
-    seeders:
+    grabs:
       selector: td:nth-child(9)
-    leechers:
+    seeders:
       selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
     genre:
       selector: td:nth-child(2)
       remove: a, font
