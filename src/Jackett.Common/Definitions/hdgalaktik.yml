@@ -86,7 +86,7 @@ login:
     selector: a[href="mybonus.php"]
 
 search:
-  # https://hdgalaktik.com/browse.php?search=&stype=0&s=0&cat=0&gr=0&kp=0&im=0&incldead=1&sort=0&type=desc
+  # https://www.trackerpmr.com/browse.php?search=&stype=0&s=0&cat=0&gr=0&kp=0&im=0&incldead=1&sort=0&type=desc
   paths:
     - path: browse.php
   inputs:
@@ -221,28 +221,39 @@ search:
       filters:
         - name: split
           args: ["|", 0]
-    date:
-      # 1 day ago
-      selector: a[href^="browse.php?date="]
+    date_today:
+      # Сегодня в 18:22
+      selector: a[href^="browse.php?date="]:contains("Сегодня")
+      optional: true
       filters:
-        # translations for Russian|Romanian|Ukrainian
-        - name: re_replace
-          args: ["(?i)\\b(назад|În urmă)\\b", "ago"]
-        - name: re_replace
-          args: ["(?i)\\b(секунд(а|и|ы)?|secund(a|ă|e))\\b", "seconds"]
-        - name: re_replace
-          args: ["(?i)\\b(минуты?|minute?|хвилини?)\\b", "minutes"]
-        - name: re_replace
-          args: ["(?i)\\b(час(а|ов)?|or(e|ă)|години?)\\b", "hours"]
-        - name: re_replace
-          args: ["(?i)\\b(де?не?(ь|я|й|ів)|zi(le)?)\\b", "days"]
-        - name: re_replace
-          args: ["(?i)\\b(недел(ю|и)|săptămân(ă|i)|тиж(день|ні))\\b", "weeks"]
-        - name: re_replace
-          args: ["(?i)\\b(месяц(а|ев)?|lun(ă|i)|місяц(ь|я|ів))\\b", "months"]
-        - name: re_replace
-          args: ["(?i)\\b(года?|an|р(ік|оки))\\b", "years"]
-        - name: timeago
+        - name: regexp
+          args: "(Сегодня в \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Сегодня в", "Today"]
+        - name: fuzzytime
+    date_yday:
+      # Вчера в 20:52
+      selector: a[href^="browse.php?date="]:contains("Вчера")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(Вчера в \\d{2}:\\d{2})"
+        - name: replace
+          args: ["Вчера в", "Yesterday"]
+        - name: fuzzytime
+    date_year:
+      # 23:48 24/07
+      selector: a[href^="browse.php?date="]:contains("/")
+      optional: true
+      filters:
+        - name: regexp
+          args: "(\\d{2}:\\d{2} \\d{2}/\\d{2})"
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "HH:mm dd/MM zzz"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img[src="/pic/freedownload.gif"]: 0
