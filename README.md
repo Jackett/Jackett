@@ -174,7 +174,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Ex-torrenty
  * ExKinoRay
  * ExtremlymTorrents
- * Fenyarnyek-Tracker
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement

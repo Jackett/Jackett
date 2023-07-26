@@ -366,6 +366,7 @@ namespace Jackett.Updater
                 "Definitions/extratorrent-it.yml",
                 "Definitions/extratorrentclone.yml",
                 "Definitions/feedurneed.yml", // merged with devilsplayground #6872
+                "Definitions/fenyarnyek-tracker.yml",
                 "Definitions/filebase.yml",
                 "Definitions/film-paleis.yml",
                 "Definitions/filmsclub.yml",
