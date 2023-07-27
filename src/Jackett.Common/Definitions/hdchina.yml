@@ -114,21 +114,27 @@ search:
       selector: td.t_torrents
     leechers:
       selector: td.t_leech
-    date:
-      selector: td.t_time
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td.t_time > span[title]
+      attribute: title
+      optional: true
       filters:
-        - name: replace
-          args: ["时", " hours"]
-        - name: replace
-          args: ["分", " minutes"]
-        - name: replace
-          args: ["天", " days"]
-        - name: replace
-          args: ["年", " year"]
-        - name: replace
-          args: ["月", " months"]
         - name: append
-          args: " ago"
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    date_added:
+      # time added
+      selector: td.t_time:not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       # DLVF and ULVF are dynamically presented via javascript so not available to cardigann
       text: 1
