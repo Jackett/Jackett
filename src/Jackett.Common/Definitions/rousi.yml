@@ -208,12 +208,6 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumseedtime:
-      # special 7 days (as seconds = 7 x 24 x 60 x 60)
-      # normal 3 days (as seconds = 3 x 24 x 60 x 60)
-      case:
-        img[title="H&R"]: 604800
-        "*": 259200
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
