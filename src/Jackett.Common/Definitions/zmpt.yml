@@ -181,10 +181,15 @@ search:
         img.pro_2up: 2
         "*": 1
     minimumratio:
-      text: 1.0
+      case:
+        img[title="H&R"]: 1.0
+        "*": 0.4
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # H&R 3 days (as seconds = 3 x 24 x 60 x 60)
+      # normal 1 day (as seconds = 24 x 60 x 60)
+      case:
+        img[title="H&R"]: 259200
+        "*": 86400
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
