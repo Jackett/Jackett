@@ -602,6 +602,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * White Angel
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow
+ * Wukong
  * x-ite.me (XM)
  * xBytesV2
  * XSpeeds (XS)
