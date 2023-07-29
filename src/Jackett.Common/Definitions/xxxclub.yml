@@ -10,7 +10,12 @@ links:
 
 caps:
   categorymappings:
-    - {id: XXX, cat: XXX, desc: XXX}
+    - {id: 0, cat: XXX/SD, desc: "XXX 480p/SD"}
+    - {id: 1, cat: XXX/x264, desc: "XXX 720p/HD"}
+    - {id: 2, cat: XXX/x264, desc: "XXX 1080p/FullHD"}
+    - {id: 4, cat: XXX/UHD, desc: "XXX 2160p/UHD/4K"}
+    - {id: 3, cat: XXX/WEB-DL, desc: "XXX Movies/DVD/WEB"}
+    - {id: 5, cat: XXX/ImageSet, desc: "XXX IMAGESET"}
 
   modes:
     search: [q]
@@ -23,6 +28,7 @@ settings:
     options:
       uploaded: created
       size: size
+      seeders: seeders
   - name: type
     type: select
     label: Order requested from site
@@ -38,15 +44,19 @@ download:
 
 search:
   paths:
-    # https://xxxclub.to/torrents/browse/all/tushyraw%20grays?sort=size&order=asc
-    - path: "torrents/browse/all/{{ .Keywords }}?sort={{ .Config.sort }}&order={{ .Config.type }}"
+    # https://xxxclub.to/torrents/browse/2,4/metartx?sort=size&order=asc
+    - path: "torrents/browse/{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}all{{ end }}/{{ .Keywords }}?sort={{ .Config.sort }}&order={{ .Config.type }}"
 
   rows:
-    selector: table.table-striped > tbody > tr
+    selector: div.browsetableinside > ul > li:not(:first-child)
 
   fields:
     category:
-      text: XXX
+      selector: a.catah
+      attribute: href
+      filters:
+        - name: regexp
+          args: (\d)
     title:
       selector: a[href^="/torrents/details/"]
     details:
@@ -56,22 +66,19 @@ search:
       selector: a[href^="/torrents/details/"]
       attribute: href
     poster:
-      selector: a[href^="/torrents/details/"]
-      attribute: title
-      filters:
-        - name: regexp
-          args: src='(.+?)'
+      selector: img
+      attribute: src
     date:
-      selector: td:nth-child(3)
+      selector: span.adde
       filters:
         - name: dateparse
           args: "dd MMM yyyy HH:mm:ss"
     size:
-      selector: td:nth-child(4)
+      selector: span.siz
     seeders:
-      selector: td:nth-child(5)
+      selector: span.see
     leechers:
-      selector: td:nth-child(6)
+      selector: span.lee
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
