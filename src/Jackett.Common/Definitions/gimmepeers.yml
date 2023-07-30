@@ -104,7 +104,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table.browsetable:not(:has(td.gp_sub_nav):contains("Top 20")) tbody tr:has(a[href^="download.php"])
+    selector: table.browsetable:not(:has(td.gp_sub_nav):contains("Top 25")) tbody tr:has(a[href^="download.php"])
 
   fields:
     category:
