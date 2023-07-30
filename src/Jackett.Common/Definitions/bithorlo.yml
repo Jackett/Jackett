@@ -39,7 +39,7 @@ caps:
     - {id: 20, cat: Other, desc: "Képek"}
     - {id: 21, cat: PC/Mobile-Other, desc: "Mobil"}
     # Program
-    - {id: 22, cat: PC/0day, desc: "Win/Program/ISO"}
+    - {id: 54, cat: PC/0day, desc: "Win/Program/ISO"}
     - {id: 23, cat: PC/0day, desc: "Win/Program/Rip"}
     # Felnőtt tartalom
     - {id: 9, cat: XXX, desc: "XXX/Film"}
