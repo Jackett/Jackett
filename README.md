@@ -600,6 +600,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Uploads
  * UTOPIA
  * White Angel
+ * WinterSakura
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow
  * Wukong
