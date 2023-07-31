@@ -33,6 +33,7 @@ caps:
     # Animované
     - {id: 47, cat: TV/Other, desc: "Animované"}
     # HUDBA
+    - {id: 39, cat: Audio/Video, desc: "Hudba Video"}
     - {id: 57, cat: Audio/Lossless, desc: "Hudba flac"}
     - {id: 58, cat: Audio/MP3, desc: "Hudba mp3"}
     - {id: 96, cat: Audio/Other, desc: "RETRO HUDBA"}
