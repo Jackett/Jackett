@@ -176,4 +176,4 @@ search:
     description:
       selector: td:has(table.torrentname)
       remove: a, img
-# NexusPHP custom v2019.12
+# NexusPHP prod#60d2fdc724a 2023-05-10
