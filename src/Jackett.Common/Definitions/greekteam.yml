@@ -169,6 +169,8 @@ search:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td
     leechers:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td ~ td
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img[src="pic/free.png"]: 0
