@@ -27,6 +27,7 @@ caps:
     - {id: 129, cat: TV/Sport, desc: "Sportovní Filmy"}
     - {id: 130, cat: TV/WEB-DL, desc: "TV - WEB- DL"}
     - {id: 131, cat: Movies, desc: "RLS For HDCZT"}
+    - {id: 132, cat: Movies, desc: "Film na přání"}
     - {id: 91, cat: TV, desc: "Serial titulky"}
     - {id: 45, cat: TV, desc: "SERIALY CZ"}
     - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK"}
