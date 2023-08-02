@@ -74,14 +74,17 @@ caps:
     # Video
     - {id: 200, cat: Movies, desc: "Video"}
     - {id: 201, cat: Movies, desc: "Movies"}
-    - {id: 202, cat: Movies, desc: "Movies"}
+    - {id: 202, cat: Movies, desc: "Movies DVDR"}
     - {id: 203, cat: Audio/Video, desc: "Music Videos"}
     - {id: 204, cat: Movies/Other, desc: "Movie Clips"}
-    - {id: 205, cat: TV, desc: "TV"}
+    - {id: 205, cat: TV, desc: "TV Shows"}
     - {id: 206, cat: TV/Other, desc: "Handheld"}
     - {id: 207, cat: Movies/HD, desc: "HD - Movies"}
     - {id: 208, cat: TV/HD, desc: "HD - TV shows"}
     - {id: 209, cat: Movies/3D, desc: "3D"}
+    - {id: 210, cat: Movies/SD, desc: "CAM/TS"}
+    - {id: 211, cat: Movies/UHD, desc: "UHD/4k - Movies"}
+    - {id: 212, cat: TV/UHD, desc: "UHD/4k - TV shows"}
     - {id: 299, cat: Movies/Other, desc: "Video Other"}
     # Applications
     - {id: 300, cat: PC, desc: "Applications"}
@@ -109,12 +112,13 @@ caps:
     - {id: 502, cat: XXX/DVD, desc: "Movies DVDR"}
     - {id: 503, cat: XXX/ImageSet, desc: "Pictures"}
     - {id: 504, cat: XXX, desc: "Games"}
-    - {id: 505, cat: XXX, desc: "HD - Movies"}
+    - {id: 505, cat: XXX/x264, desc: "HD - Movies"}
     - {id: 506, cat: XXX, desc: "Movie Clips"}
+    - {id: 507, cat: XXX/UHD, desc: "UHD/4k - Movies"}
     - {id: 599, cat: XXX/Other, desc: "Porn other"}
     # Other
     - {id: 600, cat: Other, desc: "Other"}
-    - {id: 601, cat: Books, desc: "E-books"}
+    - {id: 601, cat: Books/EBook, desc: "E-books"}
     - {id: 602, cat: Books/Comics, desc: "Comics"}
     - {id: 603, cat: Books, desc: "Pictures"}
     - {id: 604, cat: Books, desc: "Covers"}
