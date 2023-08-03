@@ -75,6 +75,10 @@ settings:
     type: checkbox
     label: Search P2P releases only
     default: false
+  - name: unrar_releases_only
+    type: checkbox
+    label: Search UNRAR releases only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -119,6 +123,7 @@ search:
     section: all
     sort: "{{ .Config.sort }}"
     stereoscopic: false
+    unrar: "{{ if .Config.unrar_releases_only }}true{{ else }}{{ end }}"
     watchview: false
 
   rows:
@@ -212,6 +217,12 @@ search:
       case:
         0: ""
         1: P2P
+    _unrartag:
+      selector: unrar
+      case:
+        0: ""
+        1: UNRAR
+      optional: true
     _packtag:
       selector: pack
       case:
@@ -224,7 +235,7 @@ search:
         "*": Request
     _tag_desc:
       optional: true
-      text: "{{ if .Result._p2ptag }}{{ .Result._p2ptag }}, {{ else }}{{ end }}{{ if .Result._packtag }}{{ .Result._packtag }}, {{ else }}{{ end }}{{ if .Result._reqidtag }}{{ .Result._reqidtag }}{{ else }}{{ end }}"
+      text: "{{ if .Result._p2ptag }}{{ .Result._p2ptag }}, {{ else }}{{ end }}{{ if .Result._unrartag }}{{ .Result._unrartag }}, {{ else }}{{ end }}{{ if .Result._packtag }}{{ .Result._packtag }}, {{ else }}{{ end }}{{ if .Result._reqidtag }}{{ .Result._reqidtag }}{{ else }}{{ end }}"
       filters:
         - name: regexp
           args: "(.+?), $"
