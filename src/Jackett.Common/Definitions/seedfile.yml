@@ -102,8 +102,8 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     poster:
-      selector: a[href^="details.php?id="]
-      attribute: onmouseover
+      selector: td.numele_tor span[data-original-title]
+      attribute: data-original-title
       filters:
         - name: regexp
           args: "src='(.+?)'"
@@ -115,15 +115,17 @@ search:
     description:
       text: "{{ .Result.genre }}"
     files:
-      selector: td:nth-last-child(7)
+      selector: td:nth-last-child(8)
     date:
-      selector: td:nth-last-child(5)
+      selector: td:nth-last-child(6)
       filters:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
           args: "HH:mm:ssyyyy-MM-dd zzz"
     size:
+      selector: td:nth-last-child(5)
+    grabs:
       selector: td:nth-last-child(4)
     seeders:
       selector: td:nth-last-child(3)
