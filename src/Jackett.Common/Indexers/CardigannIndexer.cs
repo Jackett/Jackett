@@ -545,7 +545,7 @@ namespace Jackett.Common.Indexers
             return true; // no error
         }
 
-        protected async Task<bool> DoLogin()
+        protected async Task<bool> DoLogin(string cookies = null)
         {
             var Login = Definition.Login;
 
@@ -590,7 +590,7 @@ namespace Jackett.Common.Indexers
                 // landingResultDocument might not be initiated if the login is caused by a re-login during a query
                 if (landingResultDocument == null)
                 {
-                    var ConfigurationResult = await GetConfigurationForSetup(true);
+                    var ConfigurationResult = await GetConfigurationForSetup(true, cookies);
                     if (ConfigurationResult == null) // got captcha
                     {
                         return false;
@@ -949,7 +949,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        public async Task<ConfigurationData> GetConfigurationForSetup(bool automaticlogin)
+        public async Task<ConfigurationData> GetConfigurationForSetup(bool automaticlogin, string cookies = null)
         {
             var Login = Definition.Login;
 
@@ -963,7 +963,7 @@ namespace Jackett.Common.Indexers
             if (Login.Cookies != null)
                 configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
 
-            landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, referer: SiteLink, headers: headers);
+            landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, cookies, referer: SiteLink, headers: headers);
 
             // Some sites have a temporary redirect before the login page, we need to process it.
             if (Definition.Followredirect)
@@ -1521,7 +1521,7 @@ namespace Jackett.Common.Indexers
                     {
                         logger.Info("CardigannIndexer({0}): Relogin required", Id);
 
-                        var loginResult = await DoLogin();
+                        var loginResult = await DoLogin(response.Cookies);
 
                         if (!loginResult)
                         {
@@ -1712,7 +1712,7 @@ namespace Jackett.Common.Indexers
                             {
                                 logger.Info("CardigannIndexer({0}): Relogin required", Id);
 
-                                var loginResult = await DoLogin();
+                                var loginResult = await DoLogin(response.Cookies);
 
                                 if (!loginResult)
                                 {
