@@ -10,33 +10,20 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies/SD, desc: "Movie/Xvid"}
-    - {id: 14, cat: Movies/WEB-DL, desc: "Movie/WeBRip"}
-    - {id: 2, cat: Movies/3D, desc: "Movie/3D"}
-    - {id: 3, cat: Movies/SD, desc: "Movie/480p"}
-    - {id: 5, cat: Movies/UHD, desc: "Movie/4k"}
-    - {id: 6, cat: Movies/BluRay, desc: "Movie/BD-R"}
-    - {id: 4, cat: Movies/BluRay, desc: "Movie/BD-Rip"}
-    - {id: 7, cat: Movies/BluRay, desc: "Movie/HD/Bluray"}
-    - {id: 8, cat: Movies, desc: "Movie/Kids"}
-    - {id: 9, cat: Movies/HD, desc: "Movie/MP4"}
-    - {id: 12, cat: Movies/Foreign, desc: "Movie/Non-English"}
+    - {id: 14, cat: Movies/WEB-DL, desc: "Movie/WEB"}
+    - {id: 36, cat: Movies/UHD, desc: "Movie/4K Disc"}
+    - {id: 5, cat: Movies/UHD, desc: "Movie/4K Rip"}
+    - {id: 6, cat: Movies/BluRay, desc: "Movie/BluRay Disc"}
+    - {id: 7, cat: Movies/BluRay, desc: "Movie/BluRay Rip"}
+    - {id: 34, cat: Movies, desc: "Movie/Rest"}
     - {id: 15, cat: Movies, desc: "Movie/Packs"}
-    - {id: 16, cat: Movies/HD, desc: "Movie/x265"}
-    - {id: 17, cat: XXX, desc: "Movie/XXX/Packs"}
-    - {id: 18, cat: Movies, desc: "Movie/Freeleech"}
-    - {id: 19, cat: Movies/DVD, desc: "Movie/DVD-R"}
-    - {id: 20, cat: Movies/SD, desc: "Movie/Cam"}
+    - {id: 20, cat: Movies/SD, desc: "Movie/CAM"}
     - {id: 21, cat: XXX, desc: "Movie/XXX"}
-    - {id: 23, cat: Movies/DVD, desc: "Movie/DvdRip"}
-    - {id: 25, cat: Movies, desc: "V.I.P."}
-    - {id: 32, cat: TV/Anime, desc: "Anime"}
-    - {id: 33, cat: Audio/Video, desc: "Music/Misc"}
+    - {id: 33, cat: Audio/Video, desc: "Music"}
     - {id: 28, cat: TV, desc: "Tv Packs"}
-    - {id: 31, cat: TV, desc: "Tv Mini Packs"}
-    - {id: 29, cat: TV/SD, desc: "Tv Episodes SD"}
-    - {id: 30, cat: TV/HD, desc: "Tv Episodes HD"}
-    - {id: 26, cat: TV/Sport, desc: "Tv Sport SD/HD"}
+    - {id: 31, cat: TV, desc: "Tv Mini Series"}
+    - {id: 30, cat: TV/HD, desc: "Tv Episodes"}
+    - {id: 26, cat: TV/Sport, desc: "Tv Sport"}
 
   modes:
     search: [q]
