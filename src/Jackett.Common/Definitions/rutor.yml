@@ -10,7 +10,7 @@ links:
   - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
   - http://new-rutor.org/ # site does not support https ERR_CONNECTION_REFUSED
   - https://rutor.mrunblock.bond/ # for magnet only
-  - https://rutor.nocensor.click/
+  - https://rutor.nocensor.cloud/
 legacylinks:
   - http://live-rutor.org/ # domain expired 9 Feb 2020
   - https://rutor.black-mirror.xyz/
@@ -32,6 +32,7 @@ legacylinks:
   - https://rutor.nocensor.art/
   - https://rutor.mrunblock.guru/
   - https://rutor.mrunblock.life/
+  - https://rutor.nocensor.click/
 
 caps:
   # unfortunately RuTor does not display categories anywhere in its search results page :-(
