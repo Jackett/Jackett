@@ -9,14 +9,13 @@ followredirect: true
 links:
   - https://www.torrentfunk.com/
   - https://www.torrentfunk2.com/
-  - https://torrentfunk.unblockit.rsvp/
+  - https://torrentfunk.unblockit.vegas/
   - https://torrentfunk.nocensor.click/
   - https://torrentfunk.mrunblock.bond/
 legacylinks:
   - https://torrentfunk.nocensor.space/
   - https://torrentfunk.nocensor.work/
   - https://torrentfunk.nocensor.biz/
-  - https://torrentfunk.unblockit.llc/
   - https://torrentfunk.unblockit.blue/
   - https://torrentfunk.unblockit.name/
   - https://torrentfunk.nocensor.sbs/
@@ -36,6 +35,7 @@ legacylinks:
   - https://torrentfunk.unblockit.asia/
   - https://torrentfunk.mrunblock.life/ # This web property is not accessible via this address
   - https://torrentfunk.unblockit.mov/
+  - https://torrentfunk.unblockit.rsvp/
 
 caps:
   categorymappings:

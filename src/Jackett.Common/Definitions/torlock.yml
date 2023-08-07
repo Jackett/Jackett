@@ -10,13 +10,12 @@ requestDelay: 2
 links:
   - https://www.torlock2.com/
   - https://www.torlock.com/
-  - https://torlock.unblockit.rsvp/
+  - https://torlock.unblockit.vegas/
   - https://torlock.nocensor.click/
   - https://torlock.mrunblock.bond/
 legacylinks:
   - https://torlock.com/
   - https://torlock.nocensor.biz/
-  - https://torlock.unblockit.llc/
   - https://torlock.unblockit.blue/
   - https://www.torlock.icu/
   - https://torlock.unblockit.name/
@@ -37,6 +36,7 @@ legacylinks:
   - https://torlock.unblockit.asia/
   - https://torlock.mrunblock.life/ # This web property is not accessible via this address
   - https://torlock.unblockit.mov/
+  - https://torlock.unblockit.rsvp/
 
 caps:
   # dont forget to update the search fields category case block
