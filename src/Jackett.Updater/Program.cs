@@ -365,6 +365,7 @@ namespace Jackett.Updater
                 "Definitions/extratorrent-cd.yml",
                 "Definitions/extratorrent-it.yml",
                 "Definitions/extratorrentclone.yml",
+                "Definitions/extremebits.yml",
                 "Definitions/fantasticheaven.yml",
                 "Definitions/feedurneed.yml", // merged with devilsplayground #6872
                 "Definitions/fenyarnyek-tracker.yml",
