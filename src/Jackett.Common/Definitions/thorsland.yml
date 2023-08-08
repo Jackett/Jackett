@@ -16,20 +16,30 @@ caps:
     - {id: 67, cat: PC/Mac, desc: "iOS"}
     # AUTRES
     - {id: 104, cat: Other, desc: "AUTRES"}
-    # DOCUMENTAIRES
+    # DOCUMENTAIRES FILM
     - {id: 72, cat: TV/Documentary, desc: "4K UHD"}
     - {id: 70, cat: TV/Documentary, desc: "HD 1080p"}
     - {id: 71, cat: TV/Documentary, desc: "HD 720p"}
-    - {id: 81, cat: TV/Documentary, desc: "PACK 4K"}
-    - {id: 80, cat: TV/Documentary, desc: "PACK HD"}
-    - {id: 79, cat: TV/Documentary, desc: "PACK SD"}
+    - {id: 119, cat: TV/Documentary, desc: "Québec HD"}
+    - {id: 118, cat: TV/Documentary, desc: "Québec SD"}
     - {id: 69, cat: TV/Documentary, desc: "SD"}
-    - {id: 75, cat: TV/Documentary, desc: "SÉRIES 4K"}
-    - {id: 74, cat: TV/Documentary, desc: "SÉRIES HD"}
-    - {id: 73, cat: TV/Documentary, desc: "SÉRIES SD"}
     - {id: 78, cat: TV/Documentary, desc: "V.O.S.T. 4K"}
     - {id: 77, cat: TV/Documentary, desc: "V.O.S.T. HD"}
     - {id: 76, cat: TV/Documentary, desc: "V.O.S.T. SD"}
+    # DOCUMENTAIRES SERIES
+    - {id: 81, cat: TV/Documentary, desc: "PACK 4K"}
+    - {id: 80, cat: TV/Documentary, desc: "PACK HD"}
+    - {id: 121, cat: TV/Documentary, desc: "PACK HD QC"}
+    - {id: 79, cat: TV/Documentary, desc: "PACK SD"}
+    - {id: 121, cat: TV/Documentary, desc: "PACK SD QC"}
+    - {id: 117, cat: TV/Documentary, desc: "Québec HD"}
+    - {id: 116, cat: TV/Documentary, desc: "Québec SD"}
+    - {id: 75, cat: TV/Documentary, desc: "SÉRIES 4K"}
+    - {id: 74, cat: TV/Documentary, desc: "SÉRIES HD"}
+    - {id: 73, cat: TV/Documentary, desc: "SÉRIES SD"}
+    - {id: 115, cat: TV/Documentary, desc: "V.O.S.T. 4K"}
+    - {id: 114, cat: TV/Documentary, desc: "V.O.S.T. HD"}
+    - {id: 113, cat: TV/Documentary, desc: "V.O.S.T. SD"}
     # FILMS
     - {id: 11, cat: Movies/3D, desc: "3D"}
     - {id: 12, cat: Movies/UHD, desc: "4K UHD"}
