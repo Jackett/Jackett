@@ -410,7 +410,6 @@ namespace Jackett.Updater
                 "Definitions/hdspain.yml",
                 "Definitions/hdstreet.yml",
                 "Definitions/hdtorrentsit.yml",
-                "Definitions/hellashut.yml",
                 "Definitions/hellastz.yml",
                 "Definitions/hidden-palace.yml",
                 "Definitions/hon3yhd-net.yml",
