@@ -7,9 +7,8 @@ type: public
 encoding: UTF-8
 # use https://tellme.pw/btsow to find the new domain
 links:
-  - https://btsow.makeup/
+  - https://btsow.homes/
 legacylinks:
-  - https://btsow.us/
   - https://btsow.one/
   - https://btsow.rest/
   - https://btsow.bar/
@@ -24,6 +23,7 @@ legacylinks:
   - https://btsow.hair/
   - https://btsow.bond/
   - https://btsow.skin/
+  - https://btsow.makeup/
 
 caps:
   categories:
