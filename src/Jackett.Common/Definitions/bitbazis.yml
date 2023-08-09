@@ -11,11 +11,11 @@ links:
 
 caps:
   categorymappings:
-    - {id: 85, cat: Movies/SD, desc: "Film/Cam", default: true}
-    - {id: 15, cat: Movies/SD, desc: "Film/SD", default: true}
+    - {id: 85, cat: Movies/SD, desc: "Film-Cam", default: true}
+    - {id: 15, cat: Movies/SD, desc: "Film-SD", default: true}
     - {id: 17, cat: Movies/DVD, desc: "Film/DVD", default: true}
-    - {id: 83, cat: Movies/HD, desc: "Film/HD", default: true}
-    - {id: 94, cat: Movies/HD, desc: "Film/FHD", default: true}
+    - {id: 83, cat: Movies/HD, desc: "Film-HD", default: true}
+    - {id: 94, cat: Movies/HD, desc: "Film-FHD", default: true}
     - {id: 92, cat: Movies/UHD, desc: "Film/UHD", default: true}
     - {id: 22, cat: TV, desc: "Sorozat/Hun", default: true}
     - {id: 58, cat: TV, desc: "Sorozat/Eng", default: true}
@@ -28,13 +28,13 @@ caps:
     - {id: 27, cat: Books/EBook, desc: "Könyv", default: true}
     - {id: 69, cat: TV/Anime, desc: "Mese/SD", default: true}
     - {id: 91, cat: TV/Anime, desc: "Mese/HD", default: true}
-    - {id: 25, cat: Audio/MP3, desc: "Mp3/Hun", default: true}
-    - {id: 26, cat: Audio/MP3, desc: "Mp3/Eng", default: true}
+    - {id: 25, cat: Audio/MP3, desc: "Mp3-Hun", default: true}
+    - {id: 26, cat: Audio/MP3, desc: "Mp3-Eng", default: true}
     - {id: 84, cat: Audio/Lossless, desc: "Lossless/Hun", default: true}
     - {id: 71, cat: Audio/Lossless, desc: "Lossless/Eng", default: true}
     - {id: 31, cat: PC/Games, desc: "Játék", default: true}
     - {id: 81, cat: PC/0day, desc: "Program", default: true}
-    - {id: 14, cat: PC, desc: "Program/Egyéb", default: true}
+    - {id: 14, cat: PC, desc: "Program-Egyéb", default: true}
     - {id: 97, cat: TV/Anime, desc: "Sorozat/Mese", default: true}
 
   modes:
@@ -109,8 +109,11 @@ search:
 
   fields:
     categorydesc:
-      selector: img[src^="pic/kategoria/"]
-      attribute: title
+      selector: td[class^="catpic_"]
+      attribute: class
+      filters:
+        - name: replace
+          args: ["catpic_", ""]
     title:
       selector: font[class="tori"], a.preview
     _id:
@@ -141,7 +144,7 @@ search:
       # 2 napja  és 10 órája
       # 1 hete  és 1 napja
       # 1 éve  és 30 hete
-      selector: td[id^="t_added"] > span
+      selector: span.ellenorzes
       filters:
         - name: replace
           args: ["és ", " "]
@@ -157,11 +160,17 @@ search:
           args: ["éve", "year"]
         - name: timeago
     grabs:
-      selector: td:nth-child(5)
+      selector: td.letoltok
+      optional: true
+      default: 0
     seeders:
-      selector: td:nth-child(3)
+      selector: td.seeders
+      optional: true
+      default: 0
     leechers:
-      selector: td:nth-child(4)
+      selector: td.leechers
+      optional: true
+      default: 0
     genre:
       selector: span[style="font-size:small;"]
     description:
