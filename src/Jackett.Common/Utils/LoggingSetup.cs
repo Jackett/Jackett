@@ -17,14 +17,12 @@ namespace Jackett.Common.Utils
         {
             var logFileName = settings.CustomLogFileName ?? "log.txt";
             var logLevel = settings.TracingEnabled ? NLog.LogLevel.Debug : NLog.LogLevel.Info;
-            // Add custom date time format renderer as the default is too long
-            ConfigurationItemFactory.Default.LayoutRenderers.RegisterDefinition("simpledatetime", typeof(SimpleDateTimeRenderer));
 
             var logConfig = new LoggingConfiguration();
 
             var logFile = new CleanseFileTarget
             {
-                Layout = "${longdate} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}${exception:format=Data}${newline}}",
+                Layout = "${longdate} ${level} ${onexception:[v${assembly-version}]} ${message:withException=true}",
                 FileName = Path.Combine(settings.DataFolder, logFileName),
                 ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt"),
                 ArchiveAboveSize = 2097152, // 2 MB
@@ -61,7 +59,7 @@ namespace Jackett.Common.Utils
             {
                 var logConsole = new ColoredConsoleTarget
                 {
-                    Layout = "${simpledatetime} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}${exception:format=Data}${newline}}"
+                    Layout = "${date:format=MM-dd HH\\:mm\\:ss} ${level} ${onexception:[v${assembly-version}]} ${message:withException=true}"
                 };
                 logConfig.AddTarget("console", logConsole);
 
@@ -87,13 +85,6 @@ namespace Jackett.Common.Utils
             logConfig.LoggingRules.Add(microsoftRule);
 
             return logConfig;
-        }
-
-        [LayoutRenderer("simpledatetime")]
-        public class SimpleDateTimeRenderer : LayoutRenderer
-        {
-            protected override void Append(StringBuilder builder, LogEventInfo logEvent) =>
-                builder.Append(DateTime.Now.ToString("MM-dd HH:mm:ss"));
         }
     }
 }
