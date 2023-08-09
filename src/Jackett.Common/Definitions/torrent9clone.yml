@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
-  - https://ww1.torrent9.moe/
+  - https://www.torrent9.moe/
   - https://torrent9.nocensor.cloud/
   - https://torrent9.mrunblock.bond/
 legacylinks:
@@ -38,8 +38,6 @@ legacylinks:
   - https://www.torrent9.wtf/
   - https://www.torrent9.sc/
   - https://torrent9.nocensor.click/
-  - https://www.torrent9.moe/
-  - http://ww1.torrent9.moe/
 
 caps:
   categorymappings:
