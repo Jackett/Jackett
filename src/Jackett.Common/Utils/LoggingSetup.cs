@@ -59,7 +59,7 @@ namespace Jackett.Common.Utils
             {
                 var logConsole = new ColoredConsoleTarget
                 {
-                    Layout = "${date:format=MM-dd HH\\:mm\\:ss} ${level} ${onexception:[v${assembly-version}]${newline}}${message:withException=true}"
+                    Layout = "${date:format=MM-dd HH\\:mm\\:ss} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}"
                 };
                 logConfig.AddTarget("console", logConsole);
 
