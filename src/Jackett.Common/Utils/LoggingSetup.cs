@@ -22,7 +22,7 @@ namespace Jackett.Common.Utils
 
             var logFile = new CleanseFileTarget
             {
-                Layout = "${longdate} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}",
+                Layout = "${longdate} ${level} ${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}",
                 FileName = Path.Combine(settings.DataFolder, logFileName),
                 ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt"),
                 ArchiveAboveSize = 2097152, // 2 MB
@@ -59,14 +59,17 @@ namespace Jackett.Common.Utils
             {
                 var logConsole = new ColoredConsoleTarget
                 {
-                    Layout = "${date:format=MM-dd HH\\:mm\\:ss} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}"
+                    Layout = "${date:format=MM-dd HH\\:mm\\:ss} ${level} ${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}"
                 };
                 logConfig.AddTarget("console", logConsole);
 
                 var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
                 logConfig.LoggingRules.Add(logConsoleRule);
 
-                var logService = new LogCacheService();
+                var logService = new LogCacheService
+                {
+                    Layout = "${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}"
+                };
                 logConfig.AddTarget("service", logService);
 
                 var serviceRule = new LoggingRule("*", logLevel, logService);

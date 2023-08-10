@@ -9,7 +9,7 @@ using NLog.Targets;
 namespace Jackett.Common.Services
 {
     [Target("LogService")]
-    public class LogCacheService : TargetWithLayout, ILogCacheService
+    public sealed class LogCacheService : TargetWithLayout, ILogCacheService
     {
         private static List<CachedLog> _Logs = new List<CachedLog>();
 
@@ -24,16 +24,16 @@ namespace Jackett.Common.Services
             }
         }
 
-        protected override void Write(LogEventInfo logEvent) => AddLog(logEvent);
+        protected override void Write(LogEventInfo logEvent) => AddLog(logEvent, Layout.Render(logEvent));
 
-        private static void AddLog(LogEventInfo logEvent)
+        private static void AddLog(LogEventInfo logEvent, string logMessage)
         {
             lock (_Logs)
             {
                 _Logs.Insert(0, new CachedLog
                 {
                     Level = logEvent.Level.Name,
-                    Message = CleanseLogMessage.Cleanse(logEvent.FormattedMessage),
+                    Message = CleanseLogMessage.Cleanse(logMessage),
                     When = logEvent.TimeStamp
                 });
 
