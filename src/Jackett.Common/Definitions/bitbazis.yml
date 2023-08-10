@@ -16,18 +16,18 @@ caps:
     - {id: 17, cat: Movies/DVD, desc: "Film/DVD", default: true}
     - {id: 83, cat: Movies/HD, desc: "Film-HD", default: true}
     - {id: 94, cat: Movies/HD, desc: "Film-FHD", default: true}
-    - {id: 92, cat: Movies/UHD, desc: "Film/UHD", default: true}
+    - {id: 92, cat: Movies/UHD, desc: "Film-UHD", default: true}
     - {id: 22, cat: TV, desc: "Sorozat/Hun", default: true}
     - {id: 58, cat: TV, desc: "Sorozat/Eng", default: true}
     - {id: 64, cat: Movies, desc: "Film/Pack", default: true}
-    - {id: 66, cat: XXX/ImageSet, desc: "XXX/Pics", default: false}
-    - {id: 33, cat: XXX/SD, desc: "XXX/SD", default: false}
-    - {id: 89, cat: XXX/x264, desc: "XXX/HD", default: false}
+    - {id: 66, cat: XXX/ImageSet, desc: "XXX-Pics", default: false}
+    - {id: 33, cat: XXX/SD, desc: "XXX-SD", default: false}
+    - {id: 89, cat: XXX/x264, desc: "XXX-HD", default: false}
     - {id: 24, cat: Audio/Video, desc: "Videóklip", default: true}
     - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
     - {id: 27, cat: Books/EBook, desc: "Könyv", default: true}
-    - {id: 69, cat: TV/Anime, desc: "Mese/SD", default: true}
-    - {id: 91, cat: TV/Anime, desc: "Mese/HD", default: true}
+    - {id: 69, cat: TV/Anime, desc: "Mese-SD", default: true}
+    - {id: 91, cat: TV/Anime, desc: "Mese-HD", default: true}
     - {id: 25, cat: Audio/MP3, desc: "Mp3-Hun", default: true}
     - {id: 26, cat: Audio/MP3, desc: "Mp3-Eng", default: true}
     - {id: 84, cat: Audio/Lossless, desc: "Lossless/Hun", default: true}
