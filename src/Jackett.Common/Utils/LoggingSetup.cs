@@ -66,7 +66,10 @@ namespace Jackett.Common.Utils
                 var logConsoleRule = new LoggingRule("*", logLevel, logConsole);
                 logConfig.LoggingRules.Add(logConsoleRule);
 
-                var logService = new LogCacheService();
+                var logService = new LogCacheService
+                {
+                    Layout = "${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}"
+                };
                 logConfig.AddTarget("service", logService);
 
                 var serviceRule = new LoggingRule("*", logLevel, logService);
