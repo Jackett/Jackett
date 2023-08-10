@@ -22,7 +22,7 @@ namespace Jackett.Common.Utils
 
             var logFile = new CleanseFileTarget
             {
-                Layout = "${longdate} ${level} ${onexception:[v${assembly-version}]${newline}}${message:withException=true}",
+                Layout = "${longdate} ${level} ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}",
                 FileName = Path.Combine(settings.DataFolder, logFileName),
                 ArchiveFileName = Path.Combine(settings.DataFolder, logFileName + ".{#####}.txt"),
                 ArchiveAboveSize = 2097152, // 2 MB
