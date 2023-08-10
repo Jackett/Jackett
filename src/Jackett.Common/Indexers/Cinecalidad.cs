@@ -24,16 +24,9 @@ namespace Jackett.Common.Indexers
         public override string Id => "cinecalidad";
         public override string Name => "Cinecalidad";
         public override string Description => "Películas Full HD en Latino Dual.";
-        public override string SiteLink { get; protected set; } = "https://vww.cinecalidad.tf/";
+        public override string SiteLink { get; protected set; } = "https://wwv.cinecalidad.tf/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://cinecalidad.website/",
-            "https://www.cinecalidad.to/",
-            "https://www.cinecalidad.im/", // working but outdated, maybe copycat
-            "https://www.cinecalidad.is/",
-            "https://www.cinecalidad.li/",
-            "https://www.cinecalidad.eu/",
-            "https://cinecalidad.unbl0ck.xyz/",
             "https://cinecalidad.u4m.club/",
             "https://cinecalidad.mrunblock.icu/",
             "https://cinecalidad3.com/",
@@ -48,6 +41,7 @@ namespace Jackett.Common.Indexers
             "https://www.cinecalidad.gs/",
             "https://www.cinecalidad.tf/",
             "https://wvw.cinecalidad.tf/",
+            "https://vww.cinecalidad.tf/",
         };
         public override string Language => "es-419";
         public override string Type => "public";
