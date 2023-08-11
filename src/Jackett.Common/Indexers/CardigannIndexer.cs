@@ -1423,7 +1423,7 @@ namespace Jackett.Common.Indexers
             var SearchPaths = Search.Paths;
 
             Exception SearchPathException = null;
-            String SearchPathExceptionResult = null;
+            string SearchPathExceptionResult = null;
             foreach (var SearchPath in SearchPaths)
             {
                 variables[".Categories"] = mappedCategories;
@@ -1882,11 +1882,11 @@ namespace Jackett.Common.Indexers
                         {
                             SearchPathException = ex;
                             SearchPathExceptionResult = results;
-                        }                       
+                        }
                     }
                 }
             }
-            if(SearchPathException != null && releases.Count == 0)
+            if (SearchPathException != null && releases.Count == 0)
             {
                 OnParseError(SearchPathExceptionResult, SearchPathException);
             }
