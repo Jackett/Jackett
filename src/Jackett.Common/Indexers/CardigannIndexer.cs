@@ -1421,6 +1421,9 @@ namespace Jackett.Common.Indexers
 
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
+
+            Exception SearchPathException = null;
+            String SearchPathExceptionResult = null;
             foreach (var SearchPath in SearchPaths)
             {
                 variables[".Categories"] = mappedCategories;
@@ -1875,11 +1878,18 @@ namespace Jackett.Common.Indexers
                     }
                     catch (Exception ex)
                     {
-                        OnParseError(results, ex);
+                        if (SearchPathException == null)
+                        {
+                            SearchPathException = ex;
+                            SearchPathExceptionResult = results;
+                        }                       
                     }
                 }
             }
-
+            if(SearchPathException != null && releases.Count == 0)
+            {
+                OnParseError(SearchPathExceptionResult, SearchPathException);
+            }
             if (query.Limit > 0)
                 releases = releases.Take(query.Limit).ToList();
 
