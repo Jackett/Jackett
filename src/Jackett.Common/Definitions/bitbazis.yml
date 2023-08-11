@@ -13,13 +13,13 @@ caps:
   categorymappings:
     - {id: 85, cat: Movies/SD, desc: "Film-Cam", default: true}
     - {id: 15, cat: Movies/SD, desc: "Film-SD", default: true}
-    - {id: 17, cat: Movies/DVD, desc: "Film/DVD", default: true}
+    - {id: 17, cat: Movies/DVD, desc: "Film-DVD", default: true}
     - {id: 83, cat: Movies/HD, desc: "Film-HD", default: true}
     - {id: 94, cat: Movies/HD, desc: "Film-FHD", default: true}
     - {id: 92, cat: Movies/UHD, desc: "Film-UHD", default: true}
-    - {id: 22, cat: TV, desc: "Sorozat/Hun", default: true}
-    - {id: 58, cat: TV, desc: "Sorozat/Eng", default: true}
-    - {id: 64, cat: Movies, desc: "Film/Pack", default: true}
+    - {id: 22, cat: TV, desc: "Sorozat-Hun", default: true}
+    - {id: 58, cat: TV, desc: "Sorozat-Eng", default: true}
+    - {id: 64, cat: Movies, desc: "Film-Pack", default: true}
     - {id: 66, cat: XXX/ImageSet, desc: "XXX-Pics", default: false}
     - {id: 33, cat: XXX/SD, desc: "XXX-SD", default: false}
     - {id: 89, cat: XXX/x264, desc: "XXX-HD", default: false}
