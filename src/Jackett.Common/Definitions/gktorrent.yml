@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Gktorrent
 links:
-  - https://www.gktorrents.cc/
+  - https://www.gktorrent.ac/
   - https://gktorrent.nocensor.cloud/
   - https://gktorrent.mrunblock.bond/
 legacylinks:
@@ -36,6 +36,7 @@ legacylinks:
   - https://gktorrent.mrunblock.guru/
   - https://gktorrent.mrunblock.life/ # cloudflare 403
   - https://gktorrent.nocensor.click/
+  - https://www.gktorrents.cc/
 
 caps:
   categorymappings:
