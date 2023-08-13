@@ -145,6 +145,10 @@ settings:
     type: checkbox
     label: Normalize release names by moving year after the title
     default: false
+  - name: strip_season
+    type: checkbox
+    label: Strip season only (e.g. S01) from searches, as tracker does not support partial matches
+    default: true
   - name: enhancedAnime
     type: checkbox
     label: Enhance Sonarr compatibility with anime by renaming episodes (xxx > Exxx). Can disturb movies search (e.g. Back To The Future 3 > Back To The Future E3).
@@ -353,7 +357,7 @@ search:
       args: ["[\\\\\\-\\.\\/!\\s]+", " "]
     # strip season as site does not support partial matches
     - name: re_replace
-      args: ["(?i)\\bS\\d{1,3}\\b", ""]
+      args: ["(?i)\\b(S\\d{1,3})\\b", "{{ if .Config.strip_season }}{{ else }}$1{{ end }}"]
     - name: trim
     # put each word in quotations to prevent exact phrase search
     - name: re_replace
