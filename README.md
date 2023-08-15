@@ -465,6 +465,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Old Toons World
  * OpenCD [![(invite needed)][inviteneeded]](#)
  * Orpheus
+ * OnlyEncodes
  * OshenPT
  * OurBits (HDPter)
  * P2PBG
