@@ -6,9 +6,9 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - http://nordichd.org/
+  - https://nordichd.org/
 legacylinks:
-  - https://nordichd.org/ # ERR_CONNECTION_TIMED_OUT
+  - http://nordichd.org/
 
 caps:
   categorymappings:
