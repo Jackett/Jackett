@@ -1,0 +1,181 @@
+---
+id: futuretorrent
+name: FutureTorrent
+description: "FutureTorrent is an ITALIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: it-IT
+type: private
+encoding: UTF-8
+links:
+  - https://futuretorrent.org/
+
+caps:
+  categorymappings:
+    - {id: 3, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 4, cat: PC/Mobile-Android, desc: "  |-- Smartphone"}
+    - {id: 16, cat: Movies/HD, desc: "Bluray"}
+    - {id: 17, cat: Movies/HD, desc: "  |-- 1080p"}
+    - {id: 18, cat: Movies/3D, desc: "  |-- 3D"}
+    - {id: 19, cat: Movies/HD, desc: "  |-- 720p"}
+    - {id: 20, cat: Movies/HD, desc: "  |-- H.265 1080p"}
+    - {id: 21, cat: Movies/HD, desc: "  |-- H.265 720p"}
+    - {id: 53, cat: Movies/BluRay, desc: "  |-- Untouched"}
+    - {id: 30, cat: Movies/Other, desc: "Cartoons"}
+    - {id: 56, cat: Movies/Other, desc: "  |-- Anime"}
+    - {id: 31, cat: Movies/Other, desc: "  |-- Disney"}
+    - {id: 32, cat: Books/Comics, desc: "  |-- Manga"}
+    - {id: 5, cat: Movies/WEB-DL, desc: "Cinema-News"}
+    - {id: 58, cat: Movies/SD, desc: "  |-- Cinema News"}
+    - {id: 59, cat: Movies/WEB-DL, desc: "  |-- WEBDL"}
+    - {id: 60, cat: Movies/WEB-DL, desc: "  |-- WEBDL 1080p"}
+    - {id: 62, cat: Movies/WEB-DL, desc: "  |-- WEBDL 2160p"}
+    - {id: 61, cat: Movies/WEB-DL, desc: "  |-- WEBDL 720p"}
+    - {id: 22, cat: TV/Documentary, desc: "Documentari"}
+    - {id: 33, cat: Movies/DVD, desc: "DvD"}
+    - {id: 35, cat: Movies/DVD, desc: "  |-- DvD5"}
+    - {id: 34, cat: Movies/DVD, desc: "  |-- DvD9"}
+    - {id: 6, cat: Movies/SD, desc: "DvDRip"}
+    - {id: 8, cat: Movies/SD, desc: "  |-- BDRip"}
+    - {id: 9, cat: Movies/SD, desc: "  |-- Cult"}
+    - {id: 7, cat: Movies/SD, desc: "  |-- DvDRip"}
+    - {id: 10, cat: Movies/SD, desc: "  |-- DvDRip_Old"}
+    - {id: 11, cat: Movies/SD, desc: "  |-- Film_mp4"}
+    - {id: 12, cat: Movies/Foreign, desc: "  |-- Subbed"}
+    - {id: 52, cat: Movies/WEB-DL, desc: "  |-- WebRip"}
+    - {id: 23, cat: Books, desc: "Edicola"}
+    - {id: 66, cat: Audio/Audiobook, desc: "  |-- Audiobook"}
+    - {id: 25, cat: Books/EBook, desc: "  |-- Ebook"}
+    - {id: 24, cat: Books/Mags, desc: "  |-- Edicola"}
+    - {id: 54, cat: Audio/Lossless, desc: "Flac"}
+    - {id: 55, cat: Other/Misc, desc: "FutureCrew"}
+    - {id: 36, cat: Console, desc: "Games"}
+    - {id: 39, cat: Console/Other, desc: "  |-- N.Switch"}
+    - {id: 40, cat: Console/NDS, desc: "  |-- Nds"}
+    - {id: 41, cat: PC/Games, desc: "  |-- Pc"}
+    - {id: 42, cat: Console/PS3, desc: "  |-- Ps3"}
+    - {id: 43, cat: Console/PS4, desc: "  |-- Ps4"}
+    - {id: 44, cat: Console/Wii, desc: "  |-- Wii"}
+    - {id: 45, cat: Console/WiiU, desc: "  |-- Wii-U"}
+    - {id: 46, cat: Console/XBox, desc: "  |-- Xbox"}
+    - {id: 13, cat: Audio, desc: "Musica"}
+    - {id: 14, cat: Audio/Other, desc: "  |-- Compilation"}
+    - {id: 15, cat: Audio/MP3, desc: "  |-- Mp3"}
+    - {id: 65, cat: Audio/Video, desc: "  |-- Video Concerti"}
+    - {id: 26, cat: PC, desc: "Programmi Pc"}
+    - {id: 27, cat: PC/Mac, desc: "  |-- Mac"}
+    - {id: 28, cat: PC/0day, desc: "  |-- Windows"}
+    - {id: 47, cat: TV, desc: "Serie TV"}
+    - {id: 57, cat: TV/SD, desc: "  |-- S.TV Complete"}
+    - {id: 48, cat: TV/HD, desc: "  |-- Serie TV 1080p"}
+    - {id: 49, cat: TV/SD, desc: "  |-- Serie TV 264p"}
+    - {id: 50, cat: TV/HD, desc: "  |-- Serie TV 720p"}
+    - {id: 29, cat: Movies/UHD, desc: "UHD 4K"}
+    - {id: 51, cat: Other, desc: "Varie"}
+    - {id: 64, cat: Other, desc: "  |-- Torrent Free"}
+    - {id: 63, cat: Other, desc: "  |-- Video Corsi"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile.
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  test:
+    path: index.php
+    selector: a[href*="/logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    do: search
+    keywords: "{{ .Keywords }}"
+    # t_name, t_description, t_both, t_uploader, t_genre (not used)
+    search_type: t_name
+    category: 0 # multi cat search not supported
+    # yes, no
+    include_dead_torrents: yes
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    # does not return imdb link in results
+
+  rows:
+    selector: table.sortable tbody tr:has(a[href*="/details.php?id="])
+
+  fields:
+    category:
+      selector: a[href*="/browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title_default:
+      selector: a[href*="/details.php?id="]
+    title:
+      selector: div.tooltip-content > div
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/download.php?id="]
+      attribute: href
+    poster:
+      selector: div.tooltip-content > img
+      attribute: src
+    date:
+      selector: td:nth-child(2) > div:last-child
+      remove: span
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm zzz"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# TS Special Edition v.8.0
