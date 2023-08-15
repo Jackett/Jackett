@@ -36,13 +36,13 @@ body:
       - Name: TrackerX
       - URL: https://trackerx.yz
       - Description: TrackerX is a Private Torrent Tracker for Movies, TV, and e-Learning
-      - Minimum Seeding Time and Minimum Ratio (if Private): MST 24hrs, MR 1.0
+      - Minimum Seeding Time and/or Minimum Seeding Ratio (if Private): MST 24hrs, MR 1.0
       - Additional Comments: IMDB search has to be enabled in account settings, often has hcaptcha at login
     value: |
       - Name: 
       - URL: 
       - Description: 
-      - Minimum Seeding Time and Minimum Ratio (if Private): 
+      - Minimum Seeding Time and/or Minimum Seeding Ratio (if Private): 
       - Additional Comments: 
     render: markdown
   validations:
