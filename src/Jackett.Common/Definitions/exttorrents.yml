@@ -109,6 +109,7 @@ search:
   paths:
     - path: "{{ if .Keywords }}search/{{ .Keywords }}/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ else }}latest/{{ end }}"
     - path: "{{ if .Keywords }}search/{{ .Keywords }}/2/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ else }}latest/2/{{ end }}"
+      followredirect: true
 
   keywordsfilters:
     - name: tolower
