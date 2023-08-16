@@ -217,7 +217,7 @@ download:
       to: give
       torrent: "{{ .DownloadUri.Query.id }}"
   selectors:
-    - selector: a[href^="download?id="]
+    - selector: a[href^="download?id="], a[href^="magnet:?xt="]
       attribute: href
 
 search:
@@ -271,9 +271,6 @@ search:
       attribute: href
     download:
       selector: a[href^="/torrents-details?id="]
-      attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
       attribute: href
     poster:
       selector: img[src^="uploads/images/"]
