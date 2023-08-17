@@ -717,89 +717,104 @@ namespace Jackett.Common.Indexers
                 var document = parser.ParseDocument(results.ContentString);
                 var rows = document.QuerySelectorAll("div.inner-box--item");
 
-                logger.Debug("> Parsing " + rows.Count().ToString() + " releases");
-
-                var serieTitle = document.QuerySelector("div.inner-box--subtitle").TextContent;
-                serieTitle = serieTitle.Substring(0, serieTitle.LastIndexOf(','));
-
-                var episodeInfo = document.QuerySelector("div.inner-box--text").TextContent;
-                var episodeName = TrimString(episodeInfo, '(', ')');
-
-                foreach (var row in rows)
+                if (rows.Count() > 0)
                 {
-                    try
+                    logger.Debug("> Parsing " + rows.Count().ToString() + " releases");
+
+                    var serieTitle = document.QuerySelector("div.inner-box--subtitle").TextContent;
+                    serieTitle = serieTitle.Substring(0, serieTitle.LastIndexOf(','));
+
+                    var episodeInfo = document.QuerySelector("div.inner-box--text").TextContent;
+                    var episodeName = TrimString(episodeInfo, '(', ')');
+
+                    foreach (var row in rows)
                     {
-
-                        var detailsInfo = row.QuerySelector("div.inner-box--desc").TextContent;
-                        var releaseDetails = parseReleaseDetailsRegex.Match(detailsInfo);
-
-                        // ReSharper states "Expression is always false"
-                        // TODO Refactor to get the intended operation
-                        if (releaseDetails == null)
+                        try
                         {
-                            throw new FormatException("Failed to map release details string: " + detailsInfo);
-                        }
 
-                        /*
-                         * For supported qualities see:
-                         *  - TvCategoryParser.cs
-                         *  - https://github.com/SickRage/SickRage/wiki/Quality-Settings#quality-names-to-recognize-the-quality-of-a-file
-                         */
-                        var quality = releaseDetails.Groups["quality"].Value.Trim();
-                        // Adapt shitty quality format for common algorythms
-                        quality = Regex.Replace(quality, "-Rip", "Rip", RegexOptions.IgnoreCase);
-                        quality = Regex.Replace(quality, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
-                        quality = Regex.Replace(quality, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
-                        quality = Regex.Replace(quality, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
-                        // Fix forgotten p-Progressive suffix in resolution index
-                        quality = Regex.Replace(quality, "1080 ", "1080p ", RegexOptions.IgnoreCase);
-                        quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
+                            var detailsInfo = row.QuerySelector("div.inner-box--desc").TextContent;
+                            var releaseDetails = parseReleaseDetailsRegex.Match(detailsInfo);
 
-                        var techComponents = new[]
-                        {
+                            // ReSharper states "Expression is always false"
+                            // TODO Refactor to get the intended operation
+                            if (releaseDetails == null)
+                            {
+                                throw new FormatException("Failed to map release details string: " + detailsInfo);
+                            }
+
+                            /*
+                             * For supported qualities see:
+                             *  - TvCategoryParser.cs
+                             *  - https://github.com/SickRage/SickRage/wiki/Quality-Settings#quality-names-to-recognize-the-quality-of-a-file
+                             */
+                            var quality = releaseDetails.Groups["quality"].Value.Trim();
+                            // Adapt shitty quality format for common algorythms
+                            quality = Regex.Replace(quality, "-Rip", "Rip", RegexOptions.IgnoreCase);
+                            quality = Regex.Replace(quality, "WEB-DLRip", "WEBDL", RegexOptions.IgnoreCase);
+                            quality = Regex.Replace(quality, "WEB-DL", "WEBDL", RegexOptions.IgnoreCase);
+                            quality = Regex.Replace(quality, "HDTVRip", "HDTV", RegexOptions.IgnoreCase);
+                            // Fix forgotten p-Progressive suffix in resolution index
+                            quality = Regex.Replace(quality, "1080 ", "1080p ", RegexOptions.IgnoreCase);
+                            quality = Regex.Replace(quality, "720 ", "720p ", RegexOptions.IgnoreCase);
+
+                            var techComponents = new[]
+                            {
                             "rus",
                             quality,
                             "(LostFilm)"
                         };
-                        var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
+                            var techInfo = string.Join(" ", techComponents.Where(s => !string.IsNullOrEmpty(s)));
 
-                        // Ru title: downloadLink.TextContent.Replace("\n", "");
-                        // En title should be manually constructed.
-                        var titleComponents = new[] {
+                            // Ru title: downloadLink.TextContent.Replace("\n", "");
+                            // En title should be manually constructed.
+                            var titleComponents = new[] {
                             serieTitle, details.GetEpisodeString(), episodeName, techInfo
                         };
-                        var downloadLink = row.QuerySelector("div.inner-box--link > a");
-                        var sizeString = releaseDetails.Groups["size"].Value.ToUpper();
-                        sizeString = sizeString.Replace("ТБ", "TB"); // untested
-                        sizeString = sizeString.Replace("ГБ", "GB");
-                        sizeString = sizeString.Replace("МБ", "MB");
-                        sizeString = sizeString.Replace("КБ", "KB"); // untested
-                        var link = new Uri(downloadLink.GetAttribute("href"));
+                            var downloadLink = row.QuerySelector("div.inner-box--link > a");
+                            var sizeString = releaseDetails.Groups["size"].Value.ToUpper();
+                            sizeString = sizeString.Replace("ТБ", "TB"); // untested
+                            sizeString = sizeString.Replace("ГБ", "GB");
+                            sizeString = sizeString.Replace("МБ", "MB");
+                            sizeString = sizeString.Replace("КБ", "KB"); // untested
+                            var link = new Uri(downloadLink.GetAttribute("href"));
 
-                        // TODO this feels sparse compared to other trackers. Expand later
-                        var release = new ReleaseInfo
+                            // TODO this feels sparse compared to other trackers. Expand later
+                            var release = new ReleaseInfo
+                            {
+                                Category = new[] { TorznabCatType.TV.ID },
+                                Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
+                                Link = link,
+                                Guid = link,
+                                Size = ParseUtil.GetBytes(sizeString),
+                                // add missing torznab fields not available from results
+                                Seeders = 1,
+                                Peers = 2,
+                                DownloadVolumeFactor = 0,
+                                UploadVolumeFactor = 1,
+                                MinimumRatio = 1,
+                                MinimumSeedTime = 172800 // 48 hours
+                            };
+
+                            // TODO Other trackers don't have this log line. Remove or add to other trackers?
+                            logger.Debug("> Add: " + release.Title);
+                            releases.Add(release);
+                        }
+                        catch (Exception ex)
                         {
-                            Category = new[] { TorznabCatType.TV.ID },
-                            Title = string.Join(" - ", titleComponents.Where(s => !string.IsNullOrEmpty(s))),
-                            Link = link,
-                            Guid = link,
-                            Size = ParseUtil.GetBytes(sizeString),
-                            // add missing torznab fields not available from results
-                            Seeders = 1,
-                            Peers = 2,
-                            DownloadVolumeFactor = 0,
-                            UploadVolumeFactor = 1,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 172800 // 48 hours
-                        };
-
-                        // TODO Other trackers don't have this log line. Remove or add to other trackers?
-                        logger.Debug("> Add: " + release.Title);
-                        releases.Add(release);
+                            logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, row.OuterHtml, ex));
+                        }
                     }
-                    catch (Exception ex)
+                }
+                else
+                {
+                    if (results.ContentString.Contains("Контент недоступен на территории Российской Федерации"))
                     {
-                        logger.Error(string.Format("{0}: Error while parsing row '{1}':\n\n{2}", Id, row.OuterHtml, ex));
+                        logger.Debug($"> Content is not available in the Russian Federation");
+                    }
+                    else
+                    {
+                        var message = document.QuerySelector("p").TextContent;
+                        logger.Debug($"> {message}");
                     }
                 }
             }
@@ -807,7 +822,6 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(results.ContentString, ex);
             }
-
             return releases;
         }
 
