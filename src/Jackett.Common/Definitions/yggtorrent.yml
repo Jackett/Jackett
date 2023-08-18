@@ -443,6 +443,7 @@ search:
     download:
       text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
     date:
+      # unix
       selector: td:nth-child(5) > div.hidden
     size:
       selector: td:nth-child(6)
