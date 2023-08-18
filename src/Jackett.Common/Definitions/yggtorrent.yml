@@ -439,34 +439,11 @@ search:
       selector: td:nth-child(2) > a
       attribute: href
     category:
-      selector: ":nth-child(1) > div.hidden"
+      selector: td:nth-child(1) > div.hidden
     download:
       text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
     date:
-      selector: td:nth-child(5)
-      filters:
-        - name: replace
-          args: ["il y a ", ""]
-        - name: replace
-          args: [" jours", " days"]
-        - name: replace
-          args: [" jour", " day"]
-        - name: replace
-          args: [" heures", " hours"]
-        - name: replace
-          args: [" heure", " hour"]
-        - name: replace
-          args: [" semaines", " weeks"]
-        - name: replace
-          args: [" semaine", " week"]
-        - name: replace
-          args: [" mois", " month"]
-        - name: replace
-          args: [" ans", " years"]
-        - name: replace
-          args: [" an", " year"]
-        - name: append
-          args: " ago"
+      selector: td:nth-child(5) > div.hidden
     size:
       selector: td:nth-child(6)
       filters:
@@ -476,12 +453,8 @@ search:
       selector: td:nth-child(7)
     seeders:
       selector: td:nth-child(8)
-      optional: true
-      default: 0
     leechers:
       selector: td:nth-child(9)
-      optional: true
-      default: 0
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
