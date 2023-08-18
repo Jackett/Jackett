@@ -559,6 +559,7 @@ namespace Jackett.Updater
                 "Definitions/soundpark.yml",
                 "Definitions/spacetorrent.yml",
                 "Definitions/speed-share.yml",
+                "Definitions/spidertk.yml",
                 "Definitions/sukebei-pantsu.yml",
                 "Definitions/swarmazon.yml", //  switched to *-API #13725
                 "Definitions/t411.yml",
