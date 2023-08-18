@@ -440,7 +440,7 @@ search:
       text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
     date:
       # unix
-      td:nth-child(5) > div.hidden
+      selector: td:nth-child(5) > div.hidden
     size:
       selector: td:nth-child(6)
       filters:
