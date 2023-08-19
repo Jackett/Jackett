@@ -27,6 +27,7 @@ caps:
     - {id: 74, cat: Movies/UHD, desc: "Filmi UHD Remux"}
     - {id: 77, cat: Movies/HD, desc: "Filmi DrSi"}
     - {id: 97, cat: Movies/UHD, desc: "Filmi BluRay 2160p"}
+    - {id: 99, cat: Movies/UHD, desc: "Filmi BRRip 720p"}
     # TV
     - {id: 23, cat: TV, desc: "TV"}
     - {id: 24, cat: TV/HD, desc: "TV HDTV 720p"}
@@ -37,6 +38,7 @@ caps:
     - {id: 80, cat: TV/WEB-DL, desc: "TV WEB-DL 2160p"}
     - {id: 81, cat: TV/HD, desc: "TV BluRay 720p"}
     - {id: 82, cat: TV/HD, desc: "TV BluRay 1080p"}
+    - {id: 98, cat: TV/HD, desc: "TV BluRay 2160p"}
     # Risanke
     - {id: 26, cat: Movies/Other, desc: "Animirano"}
     - {id: 56, cat: TV/Anime, desc: "Anime"}
