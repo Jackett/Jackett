@@ -5,7 +5,6 @@ description: "1337X is a Public torrent site that offers verified torrent downlo
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 requestDelay: 2
 links:
   - https://1337x.to/
