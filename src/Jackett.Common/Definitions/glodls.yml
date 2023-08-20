@@ -8,7 +8,6 @@ encoding: UTF-8
 followredirect: true
 links:
   - https://glodls.to/
-  - https://gtdb.cc/
   - https://www.gtdb.to/
   - https://glotorrents.unblockit.vegas/
   - https://glotorrents.mrunblock.bond/
@@ -40,6 +39,7 @@ legacylinks:
   - https://glotorrents.mrunblock.life/
   - https://glotorrents.unblockit.rsvp/
   - https://glotorrents.nocensor.click/
+  - https://gtdb.cc/
 
 caps:
   categorymappings:
