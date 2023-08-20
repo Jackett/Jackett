@@ -10,15 +10,15 @@ links:
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies/电影"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
-    - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
-    - {id: 402, cat: TV, desc: "TV Series/连续剧"}
-    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos/MV"}
-    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
-    - {id: 409, cat: Other, desc: "Misc/其他"}
-    - {id: 408, cat: Audio, desc: "Music/音乐"}
+    - {id: 408, cat: Audio, desc: "HQ Audio"}
+    - {id: 409, cat: Other, desc: "其他"}
+    - {id: 407, cat: TV/Sport, desc: "Sports"}
+    - {id: 406, cat: Audio/Video, desc: "MV"}
+    - {id: 403, cat: TV, desc: "综艺"}
+    - {id: 402, cat: TV, desc: "电视剧"}
+    - {id: 405, cat: TV/Anime, desc: "动漫"}
+    - {id: 404, cat: TV/Documentary, desc: "纪录片"}
+    - {id: 401, cat: Movies, desc: "电影"}
 
   modes:
     search: [q]
@@ -27,13 +27,19 @@ caps:
     music-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2facode
+    type: text
+    label: 2FA code
+  - name: info_2fa
     type: info
-    label: How to get the Cookie
-    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the HHanClub Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -60,18 +66,31 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  method: cookie
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    secret: <?php echo $secret ?>
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    two_step_code: "{{ .Config.2facode }}"
+    ssl: yes
+    trackerssl: yes
+  error:
+    - selector: td.embedded:has(h2:contains("失败"))
   test:
     path: index.php
-    selector: a[href="usercp.php"]
+    selector: a[href="logout.php"]
 
 search:
   paths:
     - path: torrents.php
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat[]{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
@@ -86,34 +105,22 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+    selector: div.w-full:has(a[href^="details.php?id="])
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href^="?cat[]="]
       attribute: href
       filters:
         - name: querystring
-          args: cat
-    title_default:
-      selector: a[href^="details.php?id="]
+          args: cat[]
     title:
-      selector: a[title][href^="details.php?id="]
-      attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
-      attribute: href
-    poster:
-      selector: img[data-src]
-      attribute: data-src
-    imdbid:
-      # site currently only has a badge and rating, the id is not present. just in case a future update.
-      selector: a[href*="imdb.com/title/tt"]
       attribute: href
     doubanid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
@@ -121,7 +128,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(4) > span[title]
+      selector: div.torrent-info-text:nth-child(2) > span[title]
       attribute: title
       optional: true
       filters:
@@ -131,7 +138,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-child(4):not(:has(span))
+      selector: div.torrent-info-text:nth-child(2):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -141,26 +148,26 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-child(5)
+      selector: div.torrent-info-text:nth-child(1)
     seeders:
-      selector: td.rowfollow:nth-child(6)
+      selector: div.torrent-info-text:nth-child(3)
     leechers:
-      selector: td.rowfollow:nth-child(7)
+      selector: div.torrent-info-text:nth-child(4)
     grabs:
-      selector: td.rowfollow:nth-child(8)
+      selector: div.torrent-info-text:nth-child(5)
     downloadvolumefactor:
       case:
-        img.pro_free: 0
-        img.pro_free2up: 0
-        img.pro_50pctdown: 0.5
-        img.pro_50pctdown2up: 0.5
-        img.pro_30pctdown: 0.3
+        span.promotion-tag-free: 0
+        span.promotion-tag-free2up: 0
+        span.promotion-tag-50pctdown: 0.5
+        span.promotion-tag-50pctdown2up: 0.5
+        span.promotion-tag-30pctdown: 0.3
         "*": 1
     uploadvolumefactor:
       case:
-        img.pro_50pctdown2up: 2
-        img.pro_free2up: 2
-        img.pro_2up: 2
+        span.promotion-tag-50pctdown2up: 2
+        span.promotion-tag-free2up: 2
+        span.promotion-tag-2up: 2
         "*": 1
     minimumratio:
       text: 1.0
@@ -168,6 +175,5 @@ search:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
     description:
-      selector: td.rowfollow:nth-child(2)
-      remove: a, b, font, img, span
-# NexusPHP v1.7.39 2023-05-15
+      selector: div.torrent-title > div > div
+# NexusPHP v1.8.6 2023-08-15 (customised)
