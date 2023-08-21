@@ -382,6 +382,7 @@ namespace Jackett.Updater
                 "Definitions/freshmeat.yml",
                 "Definitions/fullmixmusic.yml",
                 "Definitions/funreleases.yml",
+                "Definitions/gainbound.yml",
                 "Definitions/galeriens.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
