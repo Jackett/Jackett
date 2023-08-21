@@ -83,7 +83,7 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "3A4090096DD95D31306B14BFDD8F8C98F52A8EA8");
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "245621438BD9E2E4D99D753CA1F5088072FCB707");
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
