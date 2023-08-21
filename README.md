@@ -496,7 +496,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PuntoTorrent
  * PuTao
  * PWTorrents (PWT)
- * R3V WTF! [![(invite needed)][inviteneeded]](#)
+ * R3V WTF!
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
  * RareShare2
