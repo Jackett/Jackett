@@ -485,11 +485,12 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Pretome
  * PrivateHD (PHD)
  * ProAudioTorrents (PAT)
+ * PT分享站 (itzmx)
  * PTChina (铂金学院)
  * PTerClub
  * PTFiles (PTF)
  * PThome [![(invite needed)][inviteneeded]](#)
- * PT分享站 (itzmx)
+ * PTLSP
  * PTSBAO
  * PTtime
  * Punk's Horror Tracker
