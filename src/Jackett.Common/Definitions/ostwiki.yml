@@ -160,9 +160,4 @@ search:
       case:
         img[src$="/x2.gif"]: 2
         "*": 1
-    minimumratio:
-      text: 1.1
-    minimumseedtime:
-      # 60 hours (as seconds = 60 x 60 x 60)
-      text: 216000
 # TS Special Edition v.8.0
