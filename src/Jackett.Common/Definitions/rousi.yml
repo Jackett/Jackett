@@ -86,6 +86,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_special
+    type: info
+    label: "About the Special area (3X)"
+    default: "Note that the <b>Special area</b> (3X) is only available to ranks <b>Power User</b> and <b>above</b>. If you are a <i>Peasant</i> or <i>User</i> then a search for <i>3X</i> torrents will return <b>0</b> results."
 
 login:
   path: login.php
