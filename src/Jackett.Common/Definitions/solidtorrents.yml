@@ -98,8 +98,9 @@ search:
       filters:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
-    grabs:
-      selector: div.stats div:has(img[alt="Download"])
+    grabs_dot:
+      selector: div.stats div:has(img[alt="Download"]):contains(".")
+      optional: true
       filters:
         - name: replace
           args: [".", ""]
@@ -107,10 +108,41 @@ search:
           args: ["K", "00"]
         - name: replace
           args: ["M", "00000"]
+    grabs_nodot:
+      selector: div.stats div:has(img[alt="Download"]):not(:contains("."))
+      optional: true
+      filters:
+        - name: replace
+          args: ["K", "000"]
+        - name: replace
+          args: ["M", "000000"]
+    grabs:
+      text: "{{ if or .Result.grabs_dot .Result.grabs_nodot }}{{ or .Result.grabs_dot .Result.grabs_nodot }}{{ else }}0{{ end }}"
     size:
       selector: div.stats div:has(img[alt="Size"])
+    seeders_dot:
+      selector: div.stats div:has(img[alt="Seeder"]):contains(".")
+      optional: true
+      filters:
+        - name: replace
+          args: [".", ""]
+        - name: replace
+          args: ["K", "00"]
+        - name: replace
+          args: ["M", "00000"]
+    seeders_nodot:
+      selector: div.stats div:has(img[alt="Seeder"]):not(:contains("."))
+      optional: true
+      filters:
+        - name: replace
+          args: ["K", "000"]
+        - name: replace
+          args: ["M", "000000"]
     seeders:
-      selector: div.stats div:has(img[alt="Seeder"])
+      text: "{{ if or .Result.seeders_dot .Result.seeders_nodot }}{{ or .Result.seeders_dot .Result.seeders_nodot }}{{ else }}0{{ end }}"
+    leechers_dot:
+      selector: div.stats div:has(img[alt="Leecher"]):contains(".")
+      optional: true
       filters:
         - name: replace
           args: [".", ""]
@@ -118,15 +150,16 @@ search:
           args: ["K", "00"]
         - name: replace
           args: ["M", "00000"]
+    leechers_nodot:
+      selector: div.stats div:has(img[alt="Leecher"]):not(:contains("."))
+      optional: true
+      filters:
+        - name: replace
+          args: ["K", "000"]
+        - name: replace
+          args: ["M", "000000"]
     leechers:
-      selector: div.stats div:has(img[alt="Leecher"])
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: ["K", "00"]
-        - name: replace
-          args: ["M", "00000"]
+      text: "{{ if or .Result.leechers_dot .Result.leechers_nodot }}{{ or .Result.leechers_dot .Result.leechers_nodot }}{{ else }}0{{ end }}"
     date:
       selector: div.stats div:has(img[alt="Date"])
       filters:
