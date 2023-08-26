@@ -108,7 +108,7 @@ search:
       optional: true
       filters:
         - name: trim
-    title:
+    title_optional:
       selector: title
       filters:
         - name: htmldecode
@@ -155,4 +155,11 @@ search:
     minimumseedtime:
       # 3 day (as seconds = 3 x 24 x 60 x 60)
       text: 259200
+    _filename:
+      selector: "files[0].name"
+      filters:
+        - name: htmldecode
+      optional: true
+    title:
+      text: "{{ if and (eq .Result.files \"1\") (.Result._filename) }}{{ .Result._filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
 # json api
