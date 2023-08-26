@@ -139,6 +139,8 @@ search:
       selector: div.kat_cat_pic_name_b
     categorydesc:
       text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
+      optional: true
+      default: Internal Sonstiges
     title:
       selector: a.selection_a
       filters:
