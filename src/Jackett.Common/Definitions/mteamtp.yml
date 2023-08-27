@@ -8,7 +8,6 @@ encoding: UTF-8
 requestDelay: 4
 links:
   - https://kp.m-team.cc/
-legacylinks:
   - https://tp.m-team.cc/
   - https://pt.m-team.cc/
 
