@@ -147,7 +147,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +07:00" # CST
+          args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     date:
