@@ -318,7 +318,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * CrnaBerza
  * Dajiao (打胶) [![(invite needed)][inviteneeded]](#)
  * DANISH BYTES
- * Darius Tracker
  * Dark-Shadow
  * DataScene (DS)
  * DataTalli
