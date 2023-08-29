@@ -16,6 +16,9 @@ caps:
     - {id: 13, cat: Movies/HD, desc: "Зарубежное кино HD"}
     - {id: 11, cat: Movies, desc: "Зарубежное кино"}
     - {id: 12, cat: Movies, desc: "Наше кино"}
+    - {id: 66, cat: Movies, desc: "Зарубежное кино | VIP"}
+    - {id: 67, cat: Movies, desc: "Зарубежное кино HD | VIP"}
+    - {id: 68, cat: Movies, desc: "Фабельманы / The Fabelmans"}
     # TV
     - {id: 2, cat: TV/HD, desc: "Зарубежные сериалы HD"}
     - {id: 65, cat: TV/HD, desc: "Майя МС / Майянцы / Mayans M.C."}
