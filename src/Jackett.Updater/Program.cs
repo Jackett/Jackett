@@ -467,6 +467,7 @@ namespace Jackett.Updater
                 "Definitions/monova.yml",
                 "Definitions/montorrent.yml",
                 "Definitions/movcr.yml",
+                "Definitions/moviesite.yml",
                 "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
