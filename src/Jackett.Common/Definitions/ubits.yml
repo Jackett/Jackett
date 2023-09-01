@@ -183,6 +183,7 @@ search:
     minimumseedtime:
       case:
         img.hitandrun: 259200
+        "*": 0
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
