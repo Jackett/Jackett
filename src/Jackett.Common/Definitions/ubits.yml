@@ -177,7 +177,12 @@ search:
         img.pro_2up: 2
         "*": 1
     minimumratio:
-      text: 0.8
+      case:
+        img.hitandrun: 0
+        "*": 0.8
+    minimumseedtime:
+      case:
+        img.hitandrun: 259200
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
