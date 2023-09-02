@@ -8,8 +8,7 @@ encoding: UTF-8
 requestDelay: 2
 followredirect: true
 links:
-  - https://2torrentz2eu.in/
-  - https://torrentz2.unblockninja.com/
+  - hhttps://torrentz2beta.com/
 legacylinks:
   - https://torrentz2eu.me/
   - https://torrentz2.org.in/
@@ -17,6 +16,8 @@ legacylinks:
   - https://torrentz2.club/
   - https://torrentz2eu.in/
   - https://torrentz2.pics/
+  - https://2torrentz2eu.in/
+  - https://torrentz2.unblockninja.com/
 
 caps:
   # unfortunately torrentz2eu does not display categories anywhere in its search results page :-(
@@ -43,13 +44,13 @@ download:
 
 search:
   paths:
-    # https://2torrentz2eu.in/beta2/search.php?torrent-query=2023
-    - path: beta2/search.php
-    - path: beta2/search.php
+    # https://torrentz2beta.com/beta/search.php?q=2023
+    - path: beta/search.php
+    - path: beta/search.php
       inputs:
         page: 2
   inputs:
-    torrent-query: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
     selector: table#torrent-table > tbody > tr
@@ -64,14 +65,14 @@ search:
     category:
       text: "{{ if .Result.category_is_tv_show }}2{{ else }}3{{ end }}"
     details:
-      # https://torrentz2.pics/beta2/page.php?url=9999999%2FThe-Torrent-file-name-goes-here%2F
+      # https://torrentz2beta.com/beta/page.php?url=99999999%2FThe-Torrent-file-name-goes-here%2F
       selector: td:nth-child(6) button
       attribute: onclick
       filters:
         - name: regexp
           args: "'(.+?)'"
         - name: prepend
-          args: "{{ .Config.sitelink }}beta2/page.php?url="
+          args: "{{ .Config.sitelink }}beta/page.php?url="
     download:
       text: "{{ .Result.details }}"
     seeders:
@@ -91,4 +92,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# beta2
+# beta
