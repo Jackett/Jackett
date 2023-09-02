@@ -28,8 +28,6 @@ namespace Jackett.Common.Indexers
         public override string[] LegacySiteLinks => new[]
         {
             "https://cinecalidad.mrunblock.icu/",
-            "https://cinecalidad3.com/",
-            "https://www5.cine-calidad.com/",
             "https://v3.cine-calidad.com/",
             "https://www.cine-calidad.com/",
             "https://www.cinecalidad.lat/",
@@ -44,6 +42,7 @@ namespace Jackett.Common.Indexers
             "https://wwv.cinecalidad.tf/",
             "https://www.cinecalidad.foo/",
             "https://vww.cinecalidad.foo/",
+            "https://vw.cinecalidad.foo/",
         };
         public override string Language => "es-419";
         public override string Type => "public";
