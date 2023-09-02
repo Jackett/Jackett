@@ -178,12 +178,12 @@ search:
         "*": 1
     minimumratio:
       case:
-        img.hitandrun: 0
+        img.hitandrun: 100 # dummy MR to ensure HnR MST is met
         "*": 0.8
     minimumseedtime:
       case:
         img.hitandrun: 259200
-        "*": 0
+        "*": 8640000 # dummy MST to ensure non-HnR MR is met
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
