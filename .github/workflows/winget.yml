@@ -8,8 +8,6 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - run: Start-Sleep -Seconds 1800 # 30 minutes
-        shell: pwsh
       - uses: vedantmgoyal2009/winget-releaser@v2
         with:
           identifier: Jackett.Jackett
