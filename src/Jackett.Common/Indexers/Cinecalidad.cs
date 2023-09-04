@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
     {
         public override string Id => "cinecalidad";
         public override string Name => "Cinecalidad";
-        public override string Description => "Películas Full HD en Latino Dual.";
+        public override string Description => "Películas Full UHD/HD en Latino Dual.";
         public override string SiteLink { get; protected set; } = "https://ww.cinecalidad.foo/";
         public override string[] LegacySiteLinks => new[]
         {
@@ -241,10 +241,10 @@ namespace Jackett.Common.Indexers
                             Guid = link4K,
                             Details = link,
                             Link = link4K,
-                            Title = $"{title} MULTi/LATiN SPANiSH 2160p BDRip x264",
+                            Title = $"{title} MULTi/LATiN SPANiSH 2160p BDRip x265",
                             Category = new List<int> { TorznabCatType.MoviesUHD.ID },
                             Poster = poster,
-                            Size = 10737418240, // 2 GB
+                            Size = 10737418240, // 10 GB
                             Files = 1,
                             Seeders = 1,
                             Peers = 2,
