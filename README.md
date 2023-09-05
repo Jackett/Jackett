@@ -600,7 +600,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnionGang
  * UnleashTheCartoons
  * UnlimitZ
- * Uploads
  * UTOPIA
  * White Angel
  * WinterSakura
