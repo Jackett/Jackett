@@ -63,7 +63,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ExtraTorrent.st
  * EZTV
  * FileListing
- * FireBit
  * Frozen Layer
  * GamesTorrents
  * GkTorrent
