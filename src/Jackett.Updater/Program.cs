@@ -372,6 +372,7 @@ namespace Jackett.Updater
                 "Definitions/filebase.yml",
                 "Definitions/film-paleis.yml",
                 "Definitions/filmsclub.yml",
+                "Definitions/firebit.yml",
                 "Definitions/ftuapps.yml",
                 "Definitions/gfxpeers.yml",
                 "Definitions/focusx.yml",
