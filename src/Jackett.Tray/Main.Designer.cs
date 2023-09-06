@@ -1,3 +1,5 @@
+using Jackett.Common.Utils;
+
 namespace Jackett.Tray
 {
     partial class Main
@@ -46,7 +48,7 @@ namespace Jackett.Tray
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "Jackett";
+            this.notifyIcon1.Text = $"Jackett {EnvironmentUtil.JackettVersion()}";
             this.notifyIcon1.Visible = true;
             // 
             // contextMenuStrip1
