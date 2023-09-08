@@ -332,6 +332,7 @@ namespace Jackett.Updater
                 "Definitions/darktracker.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/datascene.yml", // switch to *-API #8682
+                "Definitions/datatalli.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/desireleasers.yml",
                 "Definitions/desitorrents.yml", // switch to *-API #8682
