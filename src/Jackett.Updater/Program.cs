@@ -287,6 +287,7 @@ namespace Jackett.Updater
                 "Definitions/b2s-share.yml",
                 "Definitions/baibako.yml", // renamed rudub #5673
                 "Definitions/beyond-hd-oneurl.yml", // #12993
+                "Definitions/biho.yml",
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
                 "Definitions/bit-titan.yml",
