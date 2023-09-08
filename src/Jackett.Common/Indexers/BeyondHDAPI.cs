@@ -69,7 +69,8 @@ namespace Jackett.Common.Indexers
 
             return caps;
         }
-
+        protected virtual int ApiKeyLength => 32;
+        protected virtual int RSSKeyLength => 32;
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -77,6 +78,18 @@ namespace Jackett.Common.Indexers
             if (configData.ApiKey.Value.IsNullOrWhiteSpace())
             {
                 throw new Exception("Missing API Key.");
+            }
+            if (configData.ApiKey.Value.Length != ApiKeyLength)
+            {
+                throw new Exception($"Invalid API Key configured: expected length: {ApiKeyLength}, got {configData.ApiKey.Value.Length}");
+            }
+            if (configData.RSSKey.Value.IsNullOrWhiteSpace())
+            {
+                throw new Exception("Missing RSS Key.");
+            }
+            if (configData.RSSKey.Value.Length != RSSKeyLength)
+            {
+                throw new Exception($"Invalid RSS Key configured: expected length: {RSSKeyLength}, got {configData.RSSKey.Value.Length}");
             }
 
             IsConfigured = false;
