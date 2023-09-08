@@ -61,7 +61,7 @@ namespace Jackett.Common.Indexers
             "https://www4.mejortorrent.rip/",
             "https://mejortorrent.unblockit.rsvp/",
             "https://mejortorrent.unblockit.vegas/",
-            "https://www5.mejortorrent.rip/,
+            "https://www5.mejortorrent.rip/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
