@@ -12,54 +12,44 @@ legacylinks:
 
 caps:
   categorymappings:
-    # Filmy
+    # FILMY
     - {id: 117, cat: Movies/DVD, desc: "DvD"}
-    - {id: 119, cat: Movies/BluRay, desc: "Blu-Ray "}
+    - {id: 119, cat: Movies/BluRay, desc: "Blu-Ray"}
     - {id: 120, cat: Movies/HD, desc: "HD 720"}
     - {id: 121, cat: Movies/HD, desc: "HD 1080"}
-    - {id: 122, cat: Movies/UHD, desc: "4K"}
-    - {id: 123, cat: Movies/UHD, desc: "4K - Originál Zvuk"}
-    - {id: 124, cat: Movies/3D, desc: "3D Filmy Bluray"}
     - {id: 125, cat: Movies/3D, desc: "3D Filmy"}
     - {id: 126, cat: Movies/SD, desc: "SD Filmy"}
     - {id: 127, cat: Movies/HD, desc: "H-265"}
     - {id: 128, cat: TV/Documentary, desc: "Dokument"}
     - {id: 129, cat: TV/Sport, desc: "Sportovní Filmy"}
-    - {id: 130, cat: TV/WEB-DL, desc: "TV - WEB- DL HBO Max"}
+    - {id: 143, cat: Movies/Foreign, desc: "film titulky"}
+    - {id: 144, cat: TV/Foreign, desc: "serial titulky"}
+    - {id: 145, cat: Movies/Foreign, desc: "film original"}
+    - {id: 146, cat: TV/Foreign, desc: "serial original"}
+    - {id: 47, cat: TV/Other, desc: "Animované"}
+    - {id: 77, cat: Movies/UHD, desc: "ULTRA HD  4K"}
+    - {id: 45, cat: TV, desc: "SERIALY CZ"}
+    # premium
+    - {id: 130, cat: Movies/WEB-DL, desc: "TV - WEB- DL HBO Max"}
+    - {id: 133, cat: TV/WEB-DL, desc: "TV - WEB- DL Disney"}
+    - {id: 134, cat: TV/WEB-DL, desc: "TV -WEB- DL NETLIFIX"}
+    - {id: 135, cat: TV/WEB-DL, desc: "TV - WEB- DL Prime"}
+    - {id: 136, cat: TV/WEB-DL, desc: "TV -WEB- DL Skyshow"}
+    # rls track
     - {id: 131, cat: Movies, desc: "RLS For HDCZT"}
     - {id: 132, cat: Movies, desc: "Film na přání"}
-    - {id: 133, cat: Movies/WEB-DL, desc: "TV - WEB- DL Disney"}
-    - {id: 134, cat: Movies/WEB-DL, desc: "TV -WEB- DL NETLIFIX"}
-    - {id: 135, cat: Movies/WEB-DL, desc: "TV - WEB- DL Prime"}
-    - {id: 136, cat: Movies/WEB-DL, desc: "TV -WEB- DL Skyshow"}
-    - {id: 91, cat: TV, desc: "Serial titulky"}
-    - {id: 45, cat: TV, desc: "SERIALY CZ"}
-    - {id: 81, cat: Movies, desc: "ORIGINAL JAZYK"}
-    # Hudba Video
-    - {id: 39, cat: Audio/Video, desc: "Hudba Video"}
-    # Animované
-    - {id: 47, cat: TV/Other, desc: "Animované"}
-    # HUDBA
-    - {id: 57, cat: Audio/Lossless, desc: "Hudba flac"}
-    - {id: 58, cat: Audio/MP3, desc: "Hudba mp3"}
-    - {id: 96, cat: Audio/Other, desc: "RETRO HUDBA"}
-    # ostatni
-    - {id: 64, cat: Books, desc: "E-books, PDF fotky"}
+    # programy win linux
+    - {id: 62, cat: PC, desc: "Aplikace All"}
+    # knihy foto pdf
+    - {id: 64, cat: Books, desc: "knihy-foto"}
     - {id: 65, cat: Audio/Audiobook, desc: "Mluvene slovo"}
-    - {id: 113, cat: Books/Other, desc: "obrazky fotky"}
-    # PORNO
+    # porno
     - {id: 11, cat: XXX, desc: "XXX 18+KLASIKA"}
-    - {id: 99, cat: XXX, desc: "XXX GAY"}
-    - {id: 100, cat: XXX, desc: "XXX ASIAN"}
-    - {id: 101, cat: XXX, desc: "XXX 3D"}
     - {id: 106, cat: XXX/ImageSet, desc: "XXX-OBRÁZKY"}
-    - {id: 108, cat: XXX, desc: "PORNO BDSM"}
+    # Hudba mp3-flac
+    - {id: 58, cat: Audio, desc: "Hudba"}
     # HRY
     - {id: 73, cat: PC/Games, desc: "Hry, Games"}
-    - {id: 97, cat: Console/PS4, desc: "HRY PS4"}
-    # APLIKACE
-    - {id: 60, cat: PC/Mobile-Other, desc: "Mobil PDA"}
-    - {id: 62, cat: PC, desc: "Aplikace All"}
 
   modes:
     search: [q]
@@ -131,7 +121,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: td#mcol table.lista > tbody > tr:has(a[href^="index.php?page=torrent_history"])
+    selector: td table.lista > tbody > tr:has(a[href^="download.php"])
 
   fields:
     category:
