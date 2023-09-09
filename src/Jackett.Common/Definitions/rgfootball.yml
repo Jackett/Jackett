@@ -539,6 +539,8 @@ login:
     login_username: "{{ .Config.username }}"
     login_password: "{{ .Config.password }}"
     autologin: 1
+    redirect: index.php
+    login: Вход
   selectorinputs:
     cookie_test:
       selector: input[name="cookie_test"]
