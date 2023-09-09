@@ -5,8 +5,6 @@ description: "Aftershock is a HUNGARIAN Private Torrent Tracker for MOVIES / GEN
 language: hu-HU
 type: private
 encoding: iso-8859-1
-certificates:
-  - b4950382d327e06126231edb455062842c717727 # expired 26 July 2023
 links:
   - https://aftershock-tracker.net/
 legacylinks:
