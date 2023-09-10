@@ -5,7 +5,6 @@ description: "LimeTorrents clone is a Public LimeTorrents clone for TV / MOVIES 
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 # changes to this indexer should also be made to limetorrents
 links:
   - https://www.limetorrents.to/
