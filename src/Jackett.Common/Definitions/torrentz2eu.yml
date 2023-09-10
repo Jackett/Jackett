@@ -6,7 +6,6 @@ language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
-followredirect: true
 links:
   - https://torrentz2beta.com/
 legacylinks:
