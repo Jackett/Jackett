@@ -5,7 +5,6 @@ description: "TorrentDownload is a Public general torrent index"
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 links:
   - https://www.torrentdownload.info/
   - https://torrentdownload.unblockit.esq/
