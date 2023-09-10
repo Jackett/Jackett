@@ -5,7 +5,6 @@ description: "TorrentFunk is a Public torrent index"
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 links:
   - https://www.torrentfunk.com/
   - https://www.torrentfunk2.com/
