@@ -5,7 +5,6 @@ description: "EZTV is a Public torrent site for TV shows"
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 links:
   - https://eztv.re/
   - https://eztv.wf/
