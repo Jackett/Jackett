@@ -5,7 +5,6 @@ description: "LimeTorrents is a Public general torrent index with mostly verifie
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 # changes to this indexer should also be made to limetorrentsclone
 links:
   - https://www.limetorrents.lol/
