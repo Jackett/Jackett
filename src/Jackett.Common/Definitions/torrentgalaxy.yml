@@ -5,7 +5,6 @@ description: "TorrentGalaxy (TGx) is a Public site for TV / MOVIES / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 links:
   - https://torrentgalaxy.to/
   - https://torrentgalaxy.mx/
