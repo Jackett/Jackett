@@ -5,7 +5,6 @@ description: "Torrent911 is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/T911 and https://www.protege-torrent.com/Torrent911
 links:
   - https://www.torrent911.io/
