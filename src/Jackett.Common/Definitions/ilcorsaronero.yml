@@ -5,7 +5,6 @@ description: "Il Corsaro Nero is an ITALIAN Public site for TV / MOVIES / GENERA
 language: it-IT
 type: public
 encoding: Windows-1252
-followredirect: true
 requestDelay: 2
 links:
   - https://ilcorsaronero.link/
