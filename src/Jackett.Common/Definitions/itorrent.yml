@@ -5,7 +5,6 @@ description: "iTorrent is a Public HUNGARIAN site"
 language: hu-HU
 type: public
 encoding: UTF-8
-followredirect: true
 links:
   - https://itorrent.ws/
 legacylinks:
