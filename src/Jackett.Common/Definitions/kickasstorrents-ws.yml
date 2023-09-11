@@ -5,7 +5,6 @@ description: "kickasstorrents.ws is a Public KickAssTorrent clone for TV / MOVIE
 language: en-US
 type: public
 encoding: UTF-8
-followredirect: true
 links:
   - https://kickass.ws/
   - https://kickasstorrents.bz/
