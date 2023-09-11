@@ -5,7 +5,6 @@ description: "Demonoid is a Semi-Private torrent site for MOVIES / TV / GENERAL"
 language: en-US
 type: semi-private
 encoding: UTF-8
-followredirect: true
 links:
   - https://www.demonoid.is/
   - https://www.dnoid.to/
