@@ -142,7 +142,7 @@ search:
         "td:contains(\"Anime\")": 95
         "td:contains(\"Dla dzieci\")": 96
         "td:contains(\"GSM/PDA\")": 97
-        "td:contains(\"Inne\")": 344
+        "*": 344
     title_phase1:
       selector: a
     title_multilang:
