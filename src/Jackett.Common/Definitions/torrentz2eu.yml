@@ -104,7 +104,7 @@ search:
       selector: td[data-title="Description"]
       filters:
         - name: regexp
-          args:  Size (.+?),
+          args: Size (.+?),
     date_year:
       # 01-04 2021
       selector: td[data-title="Description"]:not(:contains(":"))
