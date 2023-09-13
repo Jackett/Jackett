@@ -66,11 +66,15 @@ namespace Jackett.Common.Indexers
                 TvSearchParams = new List<TvSearchParam>
                 {
                     TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
                 }
             };
 
-            // Configure the category mappings
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime);
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.MoviesOther);
 
             return caps;
         }
@@ -142,12 +146,16 @@ namespace Jackett.Common.Indexers
 
             // When there are no results, the API returns an empty array or empty response instead of an object
             if (string.IsNullOrWhiteSpace(json) || json == "[]")
+            {
                 return releaseInfo;
+            }
 
             var releases = JsonConvert.DeserializeObject<Dictionary<string, Release>>(json);
+
             foreach (var keyValue in releases)
             {
-                Release r = keyValue.Value;
+                var r = keyValue.Value;
+
                 var baseRelease = new ReleaseInfo
                 {
                     Details = new Uri(SiteLink + $"shows/{r.Page}/"),
@@ -161,6 +169,12 @@ namespace Jackett.Common.Indexers
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
                 };
+
+                if (r.Episode.ToLowerInvariant() == "movie")
+                {
+                    baseRelease.Category.Add(TorznabCatType.MoviesOther.ID);
+                }
+
                 foreach (var d in r.Downloads)
                 {
                     var release = (ReleaseInfo)baseRelease.Clone();
@@ -169,21 +183,34 @@ namespace Jackett.Common.Indexers
                     release.MagnetUri = new Uri(d.Magnet);
                     release.Link = null;
                     release.Guid = new Uri(d.Magnet);
-                    Match sizeMatch = Regex.Match(d.Magnet, "&xl=\\d+");
+
+                    var sizeMatch = Regex.Match(d.Magnet, "&xl=\\d+");
+
                     if (sizeMatch.Success)
+                    {
                         release.Size = ParseUtil.CoerceLong(sizeMatch.Value.Replace("&xl=", string.Empty));
+                    }
                     else
                     {
                         // The API doesn't tell us file size, so give an estimate based on resolution
                         if (string.Equals(d.Res, "1080"))
+                        {
                             release.Size = 1395864371; // 1.3GB
+                        }
                         else if (string.Equals(d.Res, "720"))
+                        {
                             release.Size = 734003200; // 700MB
+                        }
                         else if (string.Equals(d.Res, "480"))
+                        {
                             release.Size = 367001600; // 350MB
+                        }
                         else
+                        {
                             release.Size = 1073741824; // 1GB
+                        }
                     }
+
                     releaseInfo.Add(release);
                 }
             }
