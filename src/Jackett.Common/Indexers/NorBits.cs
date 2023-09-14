@@ -142,6 +142,12 @@ namespace Jackett.Common.Indexers
                 { "password", ConfigData.Password.Value }
             };
 
+            // Use 2FA code if defined
+            if (!string.IsNullOrEmpty(ConfigData.TwoFactorAuth.Value))
+            {
+                pairs.Add("code", ConfigData.TwoFactorAuth.Value);
+            }
+
             // Build WebRequest for login
             var myRequestLogin = new WebRequest
             {
