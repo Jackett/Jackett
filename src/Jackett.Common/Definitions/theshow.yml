@@ -98,7 +98,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: info_tcg
     type: info
-    label: Message from the TCG staff
+    label: Message from TCG staff
     default: We wish to encourage all members to participate in the communities we are creating. We have worked with the Jackett maintainers to ensure that the security and longevity of our trackers continues, and as such some torrents are removed from the results in Jackett.
 
 login:
