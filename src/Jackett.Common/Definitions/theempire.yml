@@ -59,10 +59,6 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
-  - name: freeleech
-    type: checkbox
-    label: Search freeleech only
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -83,6 +79,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_tcg
+    type: info
+    label: Message from the TCG staff
+    default: We wish to encourage all members to participate in the communities we are creating. We have worked with the Jackett maintainers to ensure that the security and longevity of our trackers continues, and as such some torrents are removed from the results in Jackett.
 
 login:
   method: cookie
@@ -98,14 +98,14 @@ search:
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 exclusive, 5 neutral
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free (not used by request), 4 exclusive, 5 neutral
+    incldead: 1
     titleonly: 1
     # 0 Exact, 1 Fuzzy, 3 Parsed, 4 Simple # 2 Pure is not used
     nonboolean: 0
 
   rows:
-    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="])
+    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="]):not(:has(font[color="green"])):not(:has(font[color="blue"])):not(:contains("*TCG*"))
 
   fields:
     category:
@@ -143,14 +143,9 @@ search:
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss"
     downloadvolumefactor:
-      case:
-        "font[color=\"green\"]": 0
-        "font[color=\"blue\"]": 0
-        "*": 1
+      text: 1
     uploadvolumefactor:
-      case:
-        "font[color=\"green\"]": 0
-        "*": 1
+      text: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
