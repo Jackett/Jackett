@@ -19,6 +19,7 @@ caps:
     - {id: 7, cat: Movies/Other, desc: "Anime Live"}
     - {id: 8, cat: TV/Anime, desc: "Anime TV"}
     - {id: 9, cat: Audio, desc: "Music of TV"}
+    - {id: 11, cat: TV/Anime, desc: "Airing Anime TV"}
 
   modes:
     search: [q]
@@ -146,19 +147,7 @@ search:
     size:
       selector: size
     downloadvolumefactor:
-      # api returns 0%, 25%, 50%, 75%, 100%
-      selector: freeleech
-      case:
-        0%: 1 # not free
-        25%: 0.75
-        50%: 0.5
-        75%: 0.25
-        100%: 0 # freeleech
-        "*": 0 # catch errors
+      text: 1
     uploadvolumefactor:
-      # api returns 0=false, 1=true
-      selector: double_upload
-      case:
-        0: 1 # normal
-        1: 2 # double
+      text: 1
 # json UNIT3D 6.4.1
