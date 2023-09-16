@@ -1,8 +1,8 @@
 ---
 id: 0daykiev
 name: 0day.kiev
-description: "0day.kiev.ua is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: ru-RU
+description: "0day.kiev.ua is a UKRAINIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: uk-UA
 type: private
 encoding: windows-1251
 links:
@@ -13,27 +13,16 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 10, cat: Movies, desc: "Фильмы (Movies)"}
-    - {id: 11, cat: TV, desc: "Мультфильмы (Cartoons)"}
-    - {id: 29, cat: TV, desc: "Мультсериалы (TV Series)"}
-    - {id: 34, cat: TV/Anime, desc: "Аниме (Anime)"}
-    - {id: 20, cat: TV/Documentary, desc: "Документальное (Documentary)"}
-    - {id: 14, cat: Audio, desc: "Музыка / Аудио (Music / Audio)"}
-    - {id: 15, cat: Audio/Video, desc: "Музыка / Видео (Music / Video)"}
     - {id: 16, cat: Movies/HD, desc: "HD / Фильмы (HD / Movies)"}
-    - {id: 27, cat: TV/HD, desc: "HD / Мультфильмы (HD / Cartoons)"}
-    - {id: 28, cat: TV/HD, desc: "HD / Документальное (HD / Documentary)"}
-    - {id: 41, cat: Movies/3D, desc: "HD / 3D видео (HD / 3D video)"}
-    - {id: 47, cat: Movies, desc: "HDv 0day Team"}
-    - {id: 17, cat: PC/Games, desc: "Игры / ПК (Games / PC)"}
-    - {id: 25, cat: Console/XBox 360, desc: "Игры / XBOX360 (Games / XBOX360)"}
-    - {id: 33, cat: Console/PSP, desc: "Игры / PSP - PS2 (Games / PSP - PS2)"}
-    - {id: 37, cat: Console/PS3, desc: "Игры / PS3 (Games / PS3)"}
-    - {id: 18, cat: PC/0day, desc: "Софт / Windows (Software / Windows)"}
-    - {id: 39, cat: PC/Mac, desc: "Mac OS (Софт / Игры) (Mac OS (Software / Games))"}
-    - {id: 19, cat: TV, desc: "TV / Сериалы (TV shows)"}
     - {id: 30, cat: TV/HD, desc: "HD / Сериалы (HD / TV Shows)"}
-    - {id: 23, cat: TV, desc: "TV / Передачи (TV / Broadcasts)"}
-    - {id: 22, cat: TV/Sport, desc: "Спорт (Sports)"}
+    - {id: 27, cat: TV/HD, desc: "HD / Мультфильмы (HD / Cartoons)"}
+    - {id: 17, cat: PC/Games, desc: "Игры / ПК (Games / PC)"}
+    - {id: 14, cat: Audio, desc: "Музыка / Аудио (Music / Audio)"}
+    - {id: 29, cat: TV, desc: "Мультсериалы (TV Series)"}
+    - {id: 11, cat: TV, desc: "Мультфильмы (Cartoons)"}
+    - {id: 28, cat: TV/HD, desc: "HD / Документальное (HD / Documentary)"}
+    - {id: 18, cat: PC/0day, desc: "Софт / Windows (Software / Windows)"}
+    - {id: 19, cat: TV, desc: "TV / Сериалы (TV shows)"}
     - {id: 31, cat: Other, desc: "Прочее (Other)"}
 
   modes:
@@ -106,12 +95,12 @@ search:
   keywordsfilters:
     - name: diacritics
       args: replace
-    - name: re_replace # S01 to Cезон 1
-      args: ["(?i)\\bS0*(\\d+)\\b", "езон $1"]
-    - name: re_replace # E01 to Серии 1
-      args: ["(?i)\\bE0*(\\d+)\\b", "ерии $1"]
-    - name: re_replace # S01E01 to Сезон 1 Серии 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "езон $1 ерии $2"]
+    - name: re_replace # S01 to сезон 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "сезон $1"]
+    - name: re_replace # E01 to сері 1
+      args: ["(?i)\\bE0*(\\d+)\\b", "сері $1"]
+    - name: re_replace # S01E01 to сезон 1 сері 1
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сері $2"]
 
   rows:
     selector: table > tbody > tr.rowtorrentinfo
@@ -128,17 +117,35 @@ search:
       filters:
         # normalize to SXXEYY format
         - name: re_replace
-          args: ["[\\:\\-\\/\\|]", " "]
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(?i)\\bКураж Бамбей\\b", "kurazh"]
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езони?.+?(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))?", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(?i)\\bКубик в Кубе\\b", "Kubik"]
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езони?.+?(\\d+(?:-\\d+)?)\\s*(?:[CС]ері[їяй]|Епізоди?)\\s+з\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(?i)\\bКравец\\b", "Kravec"]
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))?", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(?i)(.*)\\([CС]езон\\s+(\\d+)\\)\\s+[CС]ери[ия]\\s+(\\d+)\\s+(\\d+)(.*)", "$1 S$2E$3-$4 rus $5"]
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:[CС]ері[їяй]|Епізоди?)\\s+з\\s*(\\w?)", "S$1E$2 of $3"]
         - name: re_replace
-          args: ["(?i)(.*)\\([CС]езон\\s+(\\d+)\\)(.*)", "$1 S$2 rus $3"]
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езони?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езони?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езони?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*з\\s*(\\w?)(?:\\s*(?:[CС]ері[їяй]|Епізоди?))", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ері[їяй]|Епізоди?)\\s+з\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:[CС]ері[їяй]|Епізоди?)[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ері[їяй]|Епізоди?)", "E$1"]
         - name: re_replace
           args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
         - name: re_replace
@@ -151,6 +158,12 @@ search:
           args: ["(?i)\\bWEB Rip\\b", "WEBRip"]
         - name: re_replace
           args: ["(?i)\\bWEB DL\\b", "WEBDL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+        - name: re_replace
+          args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -161,7 +174,7 @@ search:
       selector: td:nth-child(2) i
       filters:
         - name: append
-          args: " +03:00" # MSK
+          args: " +02:00" # EET
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
