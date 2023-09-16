@@ -119,12 +119,15 @@ search:
     search: "{{ .Keywords }}"
     # 0 active, 1 both, 2 dead
     incldead: 1
-    # where to search: name      , descr      , filename , freeleech only ,  wishlist
-    # where to search: inname=1, indesc=1, infn=1    , infl=1              ,   inbook=1
+    # where to search: name, descr, filename, freeleech only, wishlist
+    # where to search: inname=1, indesc=1, infn=1, infl=1, inbook=1
     inname: 1
     infl: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
+
+  headers:
+    Referer: ["{{ .Config.sitelink }}browse.php"]
 
   rows:
     selector: table.browse_result > tbody > tr:has(a[href^="details.php?id="])
