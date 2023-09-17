@@ -182,7 +182,7 @@ search:
         "*": 1
     minimumratio:
       case:
-        img[src="kepek/ikon_free.png"]:  100 # dummy MR to ensure MST is met
+        img[src="kepek/ikon_free.png"]: 100 # dummy MR to ensure MST is met
         "*": 1.0
     minimumseedtime:
       case:
