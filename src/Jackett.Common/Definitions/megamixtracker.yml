@@ -181,8 +181,11 @@ search:
         "font[onMouseover]:contains(\"4x\")": 4
         "*": 1
     minimumratio:
-      text: 1.0
+      case:
+        img[src="kepek/ikon_free.png"]:  100 # dummy MR to ensure MST is met
+        "*": 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      case:
+        img[src="kepek/ikon_free.png"]: 604800 # 7d
+        "*": 1209600 # 14d
 # TBDEV custom v2.0
