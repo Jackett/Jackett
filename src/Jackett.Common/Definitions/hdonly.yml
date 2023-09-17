@@ -24,8 +24,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, genre]
+    movie-search: [q, genre]
 
 settings:
   - name: username
@@ -90,9 +90,10 @@ search:
   # https://hd-only.org/torrents.php?filelist=blood+2009&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
   path: torrents.php
   inputs:
-    # does not support categories, uses releasetype for single filter so we canot do multi releasetype filtering either.
+    # does not support categories, uses releasetype for single filter so we cannot do multi releasetype filtering either.
     # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     filelist: "{{ .Keywords }}"
+    taglist: "{{ .Query.Genre }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
     action: advanced
@@ -114,6 +115,11 @@ search:
     download:
       selector: a[href^="torrents.php?action=download&"]
       attribute: href
+    genre:
+      selector: div.tags
+      filters:
+        - name: re_replace
+          args: ["(?i)(science.fiction)", "science_fiction"]
     _release_group:
       selector: div.group_info div.torrent_info > strong.torrent_label > .tl_notice
       optional: true
@@ -133,50 +139,50 @@ search:
           args: ["\\bÉp (\\d{2,})\\b", "E$1"]
         - name: re_replace
           args: ["\\bÉp (\\d)\\b", "E0$1"]
-        - name: replace
-          args: ["Blu-Ray Original", "Complete.BluRay"]
-        - name: replace
-          args: ["Blu-Ray Remux", "Remux"]
-        - name: replace
-          args: ["Blu-Ray Rip", "BluRay.Rip"]
-        - name: replace
-          args: ["mHD", "mHD.BluRay.Rip"]
-        - name: replace
-          args: ["/ DC", "/ Directors.Cut"]
-        - name: replace
-          args: ["/ VL", "/ Extended"]
-        - name: replace
-          args: ["/ RM", "/ Remastered"]
-        - name: replace
-          args: ["/ UC", "/ Uncut"]
-        - name: replace
-          args: ["/ ES", "/ Special.Edition"]
-        - name: replace
-          args: [" / Cust_sub", ""]
-        - name: replace
-          args: [" / Cust", ""]
-        - name: replace
-          args: ["/ UN", "/ Unrated"]
-        - name: replace
-          args: [" / Crit", ""]
-        - name: replace
-          args: [" / WAC", ""]
-        - name: replace
-          args: [" / MoC", ""]
-        - name: replace
-          args: [" / BFI", ""]
-        - name: replace
-          args: [" / MUET", ""]
-        - name: replace
-          args: ["/ Exc NF", "/ NF"]
-        - name: replace
-          args: ["/ Exc AMZ", "/ AMZ"]
-        - name: replace
-          args: ["/ Exc YOU", "/ YT"]
-        - name: replace
-          args: [" / Freeleech", ""]
-        - name: replace
-          args: [" / Complété", ""]
+        - name: re_replace
+          args: ["\\bBlu-Ray Original\\b", "Complete.BluRay"]
+        - name: re_replace
+          args: ["\\bBlu-Ray Remux\\b", "Remux"]
+        - name: re_replace
+          args: ["\\bBlu-Ray Rip\\b", "BluRay.Rip"]
+        - name: re_replace
+          args: ["\\bmHD\\b", "mHD.BluRay.Rip"]
+        - name: re_replace
+          args: ["/ DC\\b", "/ Directors.Cut"]
+        - name: re_replace
+          args: ["/ VL\\b", "/ Extended"]
+        - name: re_replace
+          args: ["/ RM\\b", "/ Remastered"]
+        - name: re_replace
+          args: ["/ UC\\b", "/ Uncut"]
+        - name: re_replace
+          args: ["/ ES\\b", "/ Special.Edition"]
+        - name: re_replace
+          args: [" / Cust_sub\\b", ""]
+        - name: re_replace
+          args: [" / Cust\\b", ""]
+        - name: re_replace
+          args: ["/ UN\\b", "/ Unrated"]
+        - name: re_replace
+          args: [" / Crit\\b", ""]
+        - name: re_replace
+          args: [" / WAC\\b", ""]
+        - name: re_replace
+          args: [" / MoC\\b", ""]
+        - name: re_replace
+          args: [" / BFI\\b", ""]
+        - name: re_replace
+          args: [" / MUET\\b", ""]
+        - name: re_replace
+          args: ["/ Exc NF\\b", "/ NF"]
+        - name: re_replace
+          args: ["/ Exc AMZ\\b", "/ AMZ"]
+        - name: re_replace
+          args: ["/ Exc YOU\\b", "/ YT"]
+        - name: re_replace
+          args: [" / Freeleech\\b", ""]
+        - name: re_replace
+          args: [" / Complété\\b", ""]
         - name: replace
           args: [" / ", "."]
         - name: trim
@@ -245,6 +251,10 @@ search:
         - name: replace
           args: ["[Série]", ""]
         - name: re_replace
+          args: ["\\s+", "."]
+        - name: re_replace
+          args: ["\\.*([\\-:,])\\.*", "$1"]
+        - name: re_replace
           args: ["\\[(\\d{4})\\]", "$1"]
         - name: trim
         - name: append
@@ -312,7 +322,7 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "div.group_info:contains(\"/ Freeleech!\")": 0
+        "div.group_info:contains(\"/ Freeleech\")": 0
         "*": 1
     uploadvolumefactor:
       text: 1
