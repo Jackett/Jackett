@@ -5,27 +5,32 @@ description: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES /
 language: fr-FR
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://hd-only.org/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Film"}
-    - {id: 3, cat: TV/Anime, desc: "Dessin animé"}
-    - {id: 5, cat: TV, desc: "Série"}
-    - {id: 6, cat: TV/Anime, desc: "Série Animée"}
-    - {id: 7, cat: Movies/Other, desc: "Film d'animation"}
-    - {id: 9, cat: Audio/Video, desc: "Concert"}
-    - {id: 11, cat: TV/Documentary, desc: "Documentaire"}
-    - {id: 13, cat: Movies/Other, desc: "Court-métrage"}
-    - {id: 14, cat: Movies/Other, desc: "Clip"}
-    - {id: 15, cat: Movies/Other, desc: "Démonstration"}
-    - {id: 21, cat: Other, desc: "Autre"}
+    - {id: 1, cat: Movies, desc: "Films"}
+    - {id: 2, cat: TV, desc: "Séries"}
+    # Fake ids to match release types by desc
+    - {id: 101, cat: Movies, desc: "Film"}
+    - {id: 103, cat: Movies/Other, desc: "Dessin animé"}
+    - {id: 105, cat: TV, desc: "Série"}
+    - {id: 106, cat: TV/Anime, desc: "Série Animée"}
+    - {id: 107, cat: Movies/Other, desc: "Film d'animation"}
+    - {id: 109, cat: Audio/Video, desc: "Concert"}
+    - {id: 111, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 113, cat: Movies/Other, desc: "Court-métrage"}
+    - {id: 114, cat: Movies/Other, desc: "Clip"}
+    - {id: 115, cat: Movies/Other, desc: "Démonstration"}
+    - {id: 121, cat: Other, desc: "Autre"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, genre]
     movie-search: [q, genre]
+  allowrawsearch: true
 
 settings:
   - name: username
@@ -37,6 +42,10 @@ settings:
   - name: freeleech
     type: checkbox
     label: Search freeleech only
+    default: false
+  - name: add_hybrid_features_to_filename
+    type: checkbox
+    label: Include DV/HDR10 in filename when a release has multiple HDR formats.
     default: false
   - name: multilang
     type: checkbox
@@ -88,177 +97,164 @@ login:
 
 search:
   # https://hd-only.org/torrents.php?filelist=blood+2009&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
-  path: torrents.php
+  paths:
+    - path: ajax.php
+      response:
+        type: json
+
   inputs:
     # does not support categories, uses releasetype for single filter so we cannot do multi releasetype filtering either.
     # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    filelist: "{{ .Keywords }}"
+    searchstr: "{{ .Keywords }}"
+    filelist: "{{ re_replace .Query.Episode \"\\bS\\d{1,3}\\b\" \"\" }}"
     taglist: "{{ .Query.Genre }}"
+    action: browse
+    group_results: 0
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
-    action: advanced
-    searchsubmit: 1
     # 1 freeleech, 0 normal
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     # site does not support imdbid search or display imdb links in results
 
   keywordsfilters:
-    # strip season, only SxxEyy is supported
+    # strip season and/or ep
     - name: re_replace
-      args: ["(?i)\\bS\\d{2,3}\\b", ""]
+      args: ["\\b(?:[SE]\\d{1,4}){1,2}\\b", ""]
     - name: trim
 
   rows:
-    selector: table#torrent_table > tbody > tr.torrent
+    selector: response.results
 
   fields:
+    _group_id:
+      selector: group.groupId
+    _torrent_id:
+      selector: torrentId
+    category:
+      selector: group.categoryId
+    categorydesc|append:
+      selector: group.releaseType
+      optional: true
+    details:
+      text: "torrents.php?id={{ .Result._group_id }}&torrentid={{ .Result._torrent_id }}"
     download:
-      selector: a[href^="torrents.php?action=download&"]
-      attribute: href
+      text: "torrents.php?action=download&id={{ .Result._torrent_id }}"
     genre:
-      selector: div.tags
+      selector: group.tags
       filters:
         - name: re_replace
           args: ["(?i)(science.fiction)", "science_fiction"]
-    _release_group:
-      selector: div.group_info div.torrent_info > strong.torrent_label > .tl_notice
+    poster:
+      selector: group.cover
+      optional: true
+    tmdbid:
+      selector: group.tmdb
+    files:
+      selector: fileCount
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: snatches
+    size:
+      selector: size
+    date:
+      selector: time
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    year:
+      selector: group.groupYear
+      optional: true
+    _season:
+      selector: season
       optional: true
       filters:
-        - name: trim
-    title_phase1:
-      selector: div.group_info
-      remove: "span:has(a.tooltip), span.homesynopsis, div.tags, div.torrent_info > strong.torrent_label > .tl_notice"
+        - name: re_replace
+          args: ["^0$", ""]
+        - name: re_replace
+          args: ["^([1-9])$", "S0$1"]
+        - name: re_replace
+          args: ["^(\\d{2,})$", "S$1"]
+    _episode:
+      selector: episode
+      optional: true
       filters:
         - name: re_replace
-          args: ["[\\n\\t]+", " "]
+          args: ["^0$", ""]
         - name: re_replace
-          args: ["\\bS (\\d{2,})\\b", "S$1"]
+          args: ["^([1-9])$", "E0$1"]
         - name: re_replace
-          args: ["\\bS (\\d)\\b", "S0$1"]
+          args: ["^(\\d{2,})$", "E$1"]
+    _episode_info:
+      text: "{{ .Result._season }}{{ .Result._episode }}"
+    _format:
+      selector: format
+      filters:
+        - name: replace
+          args: ["Blu-Ray Original", "COMPLETE BLURAY"]
         - name: re_replace
-          args: ["\\bÉp (\\d{2,})\\b", "E$1"]
+          args: ["Blu-Ray Remux", "Remux"]
         - name: re_replace
-          args: ["\\bÉp (\\d)\\b", "E0$1"]
+          args: ["Blu-Ray Rip", "BluRay.Rip"]
         - name: re_replace
-          args: ["\\bBlu-Ray Original\\b", "Complete.BluRay"]
+          args: ["mHD", "mHD.BluRay.Rip"]
+    _encoding:
+      selector: encoding
+    _release_group:
+      selector: team
+      optional: true
+    _media:
+      selector: media
+    _vff:
+      selector: vff
+    _vfq:
+      selector: vfq
+    _vfi:
+      selector: vfi
+    _vf:
+      selector: vf
+    _vfo:
+      selector: vfo
+    _hdr:
+      selector: hdr
+    _hdr10plus:
+      selector: hdr10plus
+    _dovi:
+      selector: dovi
+    title_optional:
+      selector: group.groupName
+      filters:
+        - name: append
+          args: ".{{ .Result.year }}.{{ .Result._episode_info }}.{{ .Result._format }}.{{ .Result._encoding }}.{{ .Result._media }}{{ if eq .Result._hdr \"True\" }}.HDR{{ else }}{{ end }}.{{ if eq .Result._hdr10plus \"True\" }}.HDR10+{{ else }}{{ end }}.{{ if eq .Result._dovi \"True\" }}.DoVi{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if or (eq .Result._vff \"True\") (eq .Result._vfq \"True\") }}.MULTI{{ else }}{{ end }}{{ if or (eq .Result._vfi \"True\") (eq .Result._vf \"True\") }}.MULTI{{ else }}{{ end }}"
+        - name: replace
+          args: [".MULTI.MULTI", ".MULTI"]
+        - name: append
+          args: "{{ if eq .Result._vfo \"True\" }}.FRENCH{{ else }}{{ end }}"
         - name: re_replace
-          args: ["\\bBlu-Ray Remux\\b", "Remux"]
-        - name: re_replace
-          args: ["\\bBlu-Ray Rip\\b", "BluRay.Rip"]
-        - name: re_replace
-          args: ["\\bmHD\\b", "mHD.BluRay.Rip"]
-        - name: re_replace
-          args: ["/ DC\\b", "/ Directors.Cut"]
-        - name: re_replace
-          args: ["/ VL\\b", "/ Extended"]
-        - name: re_replace
-          args: ["/ RM\\b", "/ Remastered"]
-        - name: re_replace
-          args: ["/ UC\\b", "/ Uncut"]
-        - name: re_replace
-          args: ["/ ES\\b", "/ Special.Edition"]
-        - name: re_replace
-          args: [" / Cust_sub\\b", ""]
-        - name: re_replace
-          args: [" / Cust\\b", ""]
-        - name: re_replace
-          args: ["/ UN\\b", "/ Unrated"]
-        - name: re_replace
-          args: [" / Crit\\b", ""]
-        - name: re_replace
-          args: [" / WAC\\b", ""]
-        - name: re_replace
-          args: [" / MoC\\b", ""]
-        - name: re_replace
-          args: [" / BFI\\b", ""]
-        - name: re_replace
-          args: [" / MUET\\b", ""]
-        - name: re_replace
-          args: ["/ Exc NF\\b", "/ NF"]
-        - name: re_replace
-          args: ["/ Exc AMZ\\b", "/ AMZ"]
-        - name: re_replace
-          args: ["/ Exc YOU\\b", "/ YT"]
-        - name: re_replace
-          args: [" / Freeleech\\b", ""]
-        - name: re_replace
-          args: [" / Complété\\b", ""]
-        - name: replace
-          args: [" / ", "."]
-        - name: trim
-        - name: replace
-          args: [".VFF.VFQ.stFR.MULTI", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFF.VFQ.VO.stFR.MULTI", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFF.VFQ.VO.stFR", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFQ.VO.stFR", ".MULTI.VFQ"]
-        - name: replace
-          args: [".VO.VFI.stFR", ".MULTI"]
-        - name: replace
-          args: [".VO.VF?.stFR", ".MULTI"]
-        - name: replace
-          args: [".VFF.VO.stFR", ".MULTI.VFF"]
-        - name: replace
-          args: [".VOF.stFR", ".FRENCH"]
-        - name: replace
-          args: [".VFQ.stFR", ".FRENCH"]
-        - name: replace
-          args: [".VFF.stFR.MULTI", ".MULTI.VFF"]
-        - name: replace
-          args: [".VFF.stFR", ".FRENCH"]
-        - name: replace
-          args: [".VFI.MULTI", ".MULTI"]
-        - name: replace
-          args: [".VO.stFR", ".VOSTFR"]
-        - name: replace
-          args: [".VFQ.VO", ".MULTI.VFQ"]
-        - name: replace
-          args: [".VFF.VO", ".MULTI.VFF"]
-        - name: replace
-          args: [".VO.VF?.stFR", ".MULTI"]
-        - name: replace
-          args: [".VFI.stFR", ".FRENCH"]
-        - name: replace
-          args: [".VOF.MULTI", ".MULTI.FRENCH"]
-        - name: replace
-          args: [".VOF", ".FRENCH"]
-        - name: replace
-          args: [".VFQ.MULTI", ".MULTI.VFQ"]
-        - name: replace
-          args: ["[Film]", ""]
-        - name: replace
-          args: ["[Dessin animé]", ""]
-        - name: replace
-          args: ["[Film d'animation]", ""]
-        - name: replace
-          args: ["[Concert]", ""]
-        - name: replace
-          args: ["[Documentaire]", ""]
-        - name: replace
-          args: ["[Court-métrage]", ""]
-        - name: replace
-          args: ["[Clip]", ""]
-        - name: replace
-          args: ["[Démonstration]", ""]
-        - name: replace
-          args: ["[Bonus de BD]", ""]
-        - name: replace
-          args: ["[Autre]", ""]
-        - name: replace
-          args: ["[Série Animée]", ""]
-        - name: replace
-          args: ["[Série]", ""]
-        - name: re_replace
-          args: ["\\s+", "."]
+          args: ["[\\s.]+", "."]
         - name: re_replace
           args: ["\\.*([\\-:,])\\.*", "$1"]
-        - name: re_replace
-          args: ["\\[(\\d{4})\\]", "$1"]
         - name: trim
+        - name: trim
+          args: .
         - name: append
           args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
+    _filename:
+      selector: "fileName"
+      optional: true
+      filters:
+        - name: replace
+          args: [".mkv", ""]
+        - name: append
+          args: " {{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._hdr \"True\") }}[HDR]{{ else }}{{ end }}{{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._hdr10plus \"True\") }}[HDR10+]{{ else }}{{ end }}{{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._dovi \"True\") }}[DoVi]{{ else }}{{ end }}"
+    title_phase1:
+      text: "{{ if and (eq .Result.files \"1\") (.Result._filename) }}{{ .Result._filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -274,78 +270,16 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     description:
-      selector: div.group_info
-      filters:
-        - name: re_replace
-          args: ["[\\n\\t]+", " "]
-        - name: trim
-        - name: append
-          args: "{{ if .Result._release_group }} {{ .Result._release_group }}{{ else }}{{ end }}"
-    poster:
-      selector: div.group_image img
-      attribute: src
-    details:
-      selector: a[href^="torrents.php?id="]
-      attribute: href
-    files:
-      selector: td:nth-child(3)
-    date:
-      selector: td:nth-child(4)
-      filters:
-        - name: replace
-          args: ["heures", "hours"]
-        - name: replace
-          args: ["heure", "hour"]
-        - name: replace
-          args: ["jours", "days"]
-        - name: replace
-          args: ["jour", "day"]
-        - name: replace
-          args: ["semaines", "weeks"]
-        - name: replace
-          args: ["semaine", "week"]
-        - name: replace
-          args: ["mois", "months"]
-        - name: replace
-          args: ["ans", "years"]
-        - name: replace
-          args: ["an", "year"]
-        - name: append
-          args: " ago"
-    size:
-      selector: td:nth-child(5)
-    grabs:
-      selector: td:nth-child(6)
-    seeders:
-      selector: td:nth-child(7)
-    leechers:
-      selector: td:nth-child(8)
+      text: "{{ .Result._filename }}"
+    _free:
+      selector: isFreeleech
     downloadvolumefactor:
-      case:
-        "div.group_info:contains(\"/ Freeleech\")": 0
-        "*": 1
+      text: "{{ if eq .Result._free \"True\" }}0{{ else }}1{{ end }}"
     uploadvolumefactor:
       text: 1
-    category:
-      selector: div.group_info
-      remove: span, div, a
-      case:
-        ":contains(\"[Film]\")": 1
-        ":contains(\"[Dessin animé]\")": 3
-        ":contains(\"[Série]\")": 5
-        ":contains(\"[Série Animée]\")": 6
-        ":contains(\"[Film d'animation]\")": 7
-        ":contains(\"[Concert]\")": 9
-        ":contains(\"[Documentaire]\")": 11
-        ":contains(\"[Court-métrage]\")": 13
-        ":contains(\"[Clip]\")": 14
-        ":contains(\"[Démonstration]\")": 15
-        ":contains(\"[Bonus de BD]\")": 16
-        ":contains(\"[Autre]\")": 21
-        "*": 5
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# Gazelle
+# JSON Gazelle
