@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -223,9 +224,15 @@ namespace Jackett.Common.Indexers
                     var link = new Uri(item.Value<string>("download"));
                     var details = new Uri($"{SiteLink}torrents.php?id={item.Value<string>("group_id")}");
 
+                    var releaseName = item.Value<string>("rls_name");
+                    var groupName = item.Value<string>("group_name");
+                    var title = releaseName.IsNotNullOrWhiteSpace() ? releaseName : groupName;
+
                     var descriptions = new List<string>();
-                    if (!string.IsNullOrWhiteSpace(item.Value<string>("group_name")))
-                        descriptions.Add("Group Name: " + item.Value<string>("group_name"));
+                    if (groupName.IsNotNullOrWhiteSpace())
+                    {
+                        descriptions.Add("Group Name: " + groupName);
+                    }
                     var tags = string.Join(",", item.Value<JArray>("tags"));
                     var releaseGenres = validList.Intersect(tags.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
                     descriptions.Add("Tags: " + string.Join(",", releaseGenres));
@@ -236,7 +243,7 @@ namespace Jackett.Common.Indexers
                         Guid = link,
                         Link = link,
                         Details = details,
-                        Title = item.Value<string>("rls_name").Trim(),
+                        Title = title.Trim(),
                         Category = MapTrackerCatToNewznab(releaseCats.Any() ? releaseCats.First() : "TV"),
                         PublishDate = DateTime.Parse(item.Value<string>("rls_utc"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
                         Seeders = item.Value<int>("seed"),
