@@ -103,7 +103,7 @@ search:
         type: json
 
   inputs:
-    # does not support categories, uses releasetype for single filter so we cannot do multi releasetype filtering either.
+    # does not support categories, uses releasetype for single filter, so we cannot do multi releasetype filtering either.
     # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"
     filelist: "{{ re_replace .Query.Episode \"\\bS\\d{1,3}\\b\" \"\" }}"
