@@ -114,6 +114,11 @@ namespace Jackett.Common.Indexers
             LoadValuesFromJson(configJson);
             var pingResponse = await CallProviderAsync(new TorznabQuery());
 
+            if (pingResponse.StartsWith("{\"error\""))
+            {
+                throw new ExceptionWithConfigData(pingResponse, configData);
+            }
+
             try
             {
                 var json = JArray.Parse(pingResponse);
@@ -138,7 +143,9 @@ namespace Jackett.Common.Indexers
             var response = await CallProviderAsync(query);
 
             if (response.StartsWith("{\"error\""))
+            {
                 throw new ExceptionWithConfigData(response, configData);
+            }
 
             try
             {
