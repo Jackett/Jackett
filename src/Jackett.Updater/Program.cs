@@ -457,6 +457,7 @@ namespace Jackett.Updater
                 "Definitions/liaorencili.yml", // renamed to cilipro
                 "Definitions/lightning-tor.yml",
                 "Definitions/mactorrents.yml",
+                "Definitions/magicheaven.yml",
                 "Definitions/magnet4you.yml",
                 "Definitions/magnetdl.yml",
                 "Definitions/maniatorrent.yml",
