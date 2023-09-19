@@ -327,7 +327,7 @@ namespace Jackett.Common.Indexers
                 var newvalue = ReReplaceRegexMatches.Groups[3].Value;
 
                 var ReplaceRegex = new Regex(regexp);
-                var input = (string)variables[variable];
+                var input = (string)variables[variable] ?? string.Empty;
                 var expanded = ReplaceRegex.Replace(input, newvalue);
 
                 if (modifier != null)
