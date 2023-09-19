@@ -11,33 +11,34 @@ links:
 
 caps:
   categorymappings:
-    # cat3 is excluded.
-    - {id: 163, cat: TV/Anime, desc: "Anime / Hentai"}
-    - {id: 146, cat: PC, desc: "Applications"}
-    - {id: 151, cat: Books/EBook, desc: "E-books"}
-    - {id: 103, cat: PC/Games, desc: "Games: PC"}
-    - {id: 174, cat: TV/HD, desc: "HDTV Episodes"}
-    - {id: 175, cat: TV/HD, desc: "HDTV Episodes-Ro"}
-    - {id: 149, cat: Other, desc: "Images"}
-    - {id: 165, cat: PC, desc: "Linux"}
-    - {id: 164, cat: PC/Mobile-Other, desc: "Mobile"}
-    - {id: 161, cat: Movies/UHD, desc: "Movies: 4K(2160p)"}
-    - {id: 162, cat: Movies/UHD, desc: "Movies: 4K-RO(2160p)"}
-    - {id: 138, cat: Movies/BluRay, desc: "Movies: BluRay"}
-    - {id: 148, cat: Movies/BluRay, desc: "Movies: BluRay-RO"}
-    - {id: 82, cat: Movies/DVD, desc: "Movies: DVD"}
-    - {id: 83, cat: Movies/DVD, desc: "Movies: DVD-Ro"}
-    - {id: 147, cat: Movies/HD, desc: "Movies: HD"}
-    - {id: 108, cat: Movies/HD, desc: "Movies: HD-Ro"}
-    - {id: 1, cat: Movies/SD, desc: "Movies: SD"}
-    - {id: 2, cat: Movies/SD, desc: "Movies: SD-Ro"}
-    - {id: 142, cat: Audio, desc: "Music"}
-    - {id: 143, cat: Audio/Video, desc: "Music Video"}
-    - {id: 160, cat: Movies, desc: "Ro Movies"}
-    - {id: 159, cat: TV, desc: "Ro TV"}
-    - {id: 166, cat: TV/Sport, desc: "Sports"}
-    - {id: 158, cat: TV/SD, desc: "TV Episodes (SD)"}
-    - {id: 153, cat: TV/SD, desc: "TV Episodes-Ro (SD)"}
+    # when adding or removing cats don't forget the path categories
+    - {id: 163, cat: TV/Anime, desc: "Anime / Hentai", default: true}
+    - {id: 146, cat: PC, desc: "Applications", default: true}
+    - {id: 151, cat: Books/EBook, desc: "E-books", default: true}
+    - {id: 103, cat: PC/Games, desc: "Games: PC", default: true}
+    - {id: 174, cat: TV/HD, desc: "HDTV Episodes", default: true}
+    - {id: 175, cat: TV/HD, desc: "HDTV Episodes-Ro", default: true}
+    - {id: 149, cat: Other, desc: "Images", default: true}
+    - {id: 165, cat: PC, desc: "Linux", default: true}
+    - {id: 164, cat: PC/Mobile-Other, desc: "Mobile", default: true}
+    - {id: 161, cat: Movies/UHD, desc: "Movies: 4K(2160p)", default: true}
+    - {id: 162, cat: Movies/UHD, desc: "Movies: 4K-RO(2160p)", default: true}
+    - {id: 138, cat: Movies/BluRay, desc: "Movies: BluRay", default: true}
+    - {id: 148, cat: Movies/BluRay, desc: "Movies: BluRay-RO", default: true}
+    - {id: 82, cat: Movies/DVD, desc: "Movies: DVD", default: true}
+    - {id: 83, cat: Movies/DVD, desc: "Movies: DVD-Ro", default: true}
+    - {id: 147, cat: Movies/HD, desc: "Movies: HD", default: true}
+    - {id: 108, cat: Movies/HD, desc: "Movies: HD-Ro", default: true}
+    - {id: 1, cat: Movies/SD, desc: "Movies: SD", default: true}
+    - {id: 2, cat: Movies/SD, desc: "Movies: SD-Ro", default: true}
+    - {id: 142, cat: Audio, desc: "Music", default: true}
+    - {id: 143, cat: Audio/Video, desc: "Music Video", default: true}
+    - {id: 160, cat: Movies, desc: "Ro Movies", default: true}
+    - {id: 159, cat: TV, desc: "Ro TV", default: true}
+    - {id: 166, cat: TV/Sport, desc: "Sports", default: true}
+    - {id: 158, cat: TV/SD, desc: "TV Episodes (SD)", default: true}
+    - {id: 153, cat: TV/SD, desc: "TV Episodes-Ro (SD)", default: true}
+    - {id: 3, cat: XXX, desc: "XXX", default: false}
 
   modes:
     search: [q]
@@ -93,23 +94,29 @@ login:
 search:
   paths:
     - path: browse.php
-    # note: excluding cat3 which is only available on path: browseadult.php which uses a different search engine
+      categories: [163, 146, 151, 103, 174, 175, 149, 165. 164, 161, 162, 138, 148, 82, 83, 147, 108, 1, 2, 142, 143, 160, 159, 166, 158, 153
+]
+      inputs:
+        # 0 name, 1 descr, 2 genre (not reliable)
+        blah: 0
+    - path: browseadult.php
+      categories: [3]
+      inputs:
+        incldead: 1
   inputs:
     $raw: "{{ if .Categories}}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
     search: "{{ .Keywords }}"
-    # 0 name, 1 descr, 2 genre (not reliable)
-    blah: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     # does not support imdbid searching or return imdb in results.
     Search: Search
 
   rows:
-    selector: "table[border=\"1\"] > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(a#free-btn){{ else }}{{ end }}"
+    selector: "table[border=\"1\"] > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(a#free-btn){{ else }}{{ end }}, table[width=\"1005\"] > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(a#free-btn){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*=".php?cat="]
       attribute: href
       filters:
         - name: querystring
@@ -152,6 +159,8 @@ search:
     genre:
       selector: td:nth-child(2) > i:nth-last-child(1)
       filters:
+        - name: re_replace
+          args: ["(?i)(All Sex)", "All_Sex"]
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: replace
