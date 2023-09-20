@@ -101,8 +101,6 @@ search:
           args: ["^VA\\s*\\|", "VA -"]
         - name: re_replace
           args: ["^.*? \\/\\s*|^.*? \\|\\s*", ""]
-        - name: diacritics
-          args: replace
         - name: re_replace
           args: ["\\|\\s*\\d+\\% CSFD\\.cz\\/|\\s*=*\\s*CSFD\\s*\\d+\\%|\\s*CSFD\\s*=*\\s*\\d+\\%|\\s*CSFD", ""]
         - name: re_replace
