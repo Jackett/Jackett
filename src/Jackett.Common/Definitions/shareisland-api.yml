@@ -92,14 +92,13 @@ search:
     perPage: 100
 
   keywordsfilters:
+    # strip season and/or ep
+    - name: re_replace
+      args: ["\\b([SE]\\d{1,4}){1,2}\\b", ""]
     - name: diacritics
       args: replace
     - name: re_replace
       args: ["\\.", " "]
-    - name: re_replace # S01 to 1
-      args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
-    - name: re_replace # S01E01 to 1 1
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
 
   rows:
     selector: data
