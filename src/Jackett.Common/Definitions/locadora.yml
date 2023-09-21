@@ -86,6 +86,9 @@ search:
     perPage: 100
 
   keywordsfilters:
+    # strip season and/or ep
+    - name: re_replace
+      args: ["\\b([SE]\\d{1,4}){1,2}\\b", ""]
     - name: re_replace
       args: ["\\.", " "]
 
