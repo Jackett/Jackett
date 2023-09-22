@@ -307,6 +307,7 @@ namespace Jackett.Updater
                 "Definitions/bt-scene.yml",
                 "Definitions/bt4g.yml",
                 "Definitions/btbit.yml",
+                "Definitions/btdigg.yml",
                 "Definitions/btdb.yml",
                 "Definitions/bteye.yml",
                 "Definitions/btgigs.yml",
