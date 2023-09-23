@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 1, cat: PC, desc: "Aplikacje PC"}
     - {id: 43, cat: Audio/Audiobook, desc: "AudioBooki"}
-    - {id: 31, cat: Books, desc: "Ebooki"}
+    - {id: 31, cat: Books/EBook, desc: "Ebooki"}
     - {id: 33, cat: Movies/BluRay, desc: "Filmy/BluRay"}
     - {id: 38, cat: Movies/BluRay, desc: "Filmy/BDRip"}
     - {id: 35, cat: Movies/BluRay, desc: "Filmy/BluRay/x264"}
