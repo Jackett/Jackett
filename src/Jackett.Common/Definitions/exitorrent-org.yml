@@ -60,7 +60,6 @@ login:
 
 search:
   paths:
-    # https://torrentleech.pl/browse.php?c60=1&c53=1&search=&incldead=1&titlesearch=0&polish=0&cat_film=&napisy=0
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -153,4 +152,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-#TBSource v1.5.0
+# TBSource v1.5.0
