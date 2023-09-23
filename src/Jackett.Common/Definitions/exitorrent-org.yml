@@ -6,7 +6,7 @@ language: pl-PL
 type: private
 encoding: UTF-8
 links:
-  - http://exitorrent.org/
+  - https://exitorrent.org/
 
 caps:
   categorymappings:
