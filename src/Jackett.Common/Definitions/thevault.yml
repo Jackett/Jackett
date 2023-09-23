@@ -120,7 +120,7 @@ search:
     nonboolean: 0
 
   rows:
-    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="]):not(:has(font[color="green"])):not(:has(font[color="blue"])):not(:contains("*TCG*"))
+    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="]):not(:has(font[color="blue"])):not(:contains("*TCG*"))
 
   fields:
     category:
@@ -158,9 +158,13 @@ search:
     leechers:
       selector: td:nth-child(10)
     downloadvolumefactor:
-      text: 1
+      case:
+        "font[color=\"green\"]": 0
+        "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        "font[color=\"green\"]": 0
+        "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
