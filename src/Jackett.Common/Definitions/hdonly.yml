@@ -28,8 +28,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, genre]
-    movie-search: [q, genre]
+    tv-search: [q, season, ep, tmdbid, genre]
+    movie-search: [q, tmdbid, genre]
   allowrawsearch: true
 
 settings:
@@ -106,6 +106,7 @@ search:
     # does not support categories, uses releasetype for single filter, so we cannot do multi releasetype filtering either.
     # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"
+    tmdb: "{{ .Query.TMDBID }}"
     filelist: "{{ re_replace .Query.Episode \"\\bS\\d{1,3}\\b\" \"\" }}"
     taglist: "{{ .Query.Genre }}"
     action: browse
@@ -217,8 +218,8 @@ search:
       selector: vfi
     _vf:
       selector: vf
-    _vfo:
-      selector: vfo
+    _vof:
+      selector: vof
     _hdr:
       selector: hdr
     _hdr10plus:
@@ -235,7 +236,7 @@ search:
         - name: replace
           args: [".MULTI.MULTI", ".MULTI"]
         - name: append
-          args: "{{ if eq .Result._vfo \"True\" }}.FRENCH{{ else }}{{ end }}"
+          args: "{{ if eq .Result._vof \"True\" }}.FRENCH{{ else }}{{ end }}"
         - name: re_replace
           args: ["[\\s.]+", "."]
         - name: re_replace
