@@ -107,7 +107,6 @@ search:
     # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"
     tmdb: "{{ .Query.TMDBID }}"
-    filelist: "{{ re_replace .Query.Episode \"\\bS\\d{1,3}\\b\" \"\" }}"
     taglist: "{{ .Query.Genre }}"
     action: browse
     group_results: 0
@@ -120,7 +119,7 @@ search:
   keywordsfilters:
     # strip season and/or ep
     - name: re_replace
-      args: ["\\b(?:[SE]\\d{1,4}){1,2}\\b", ""]
+      args: ["(?i)\\bS\\d{1,3}\\b\\b", ""]
     - name: trim
 
   rows:
