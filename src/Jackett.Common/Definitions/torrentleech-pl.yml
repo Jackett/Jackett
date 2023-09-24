@@ -119,9 +119,15 @@ search:
           args: cat
     title_raw:
       selector: a[href^="details.php?id="]
+      filters:
+        - name: replace
+          args: ["[PACK]", ""]
+        - name: trim
     title_stripped:
       selector: a[href^="details.php?id="]
       filters:
+        - name: replace
+          args: ["[PACK]", ""]
         - name: re_replace
           args: ["^(.*/)(.*)$", "$2"]
         - name: trim
