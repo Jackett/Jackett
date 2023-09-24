@@ -28,6 +28,7 @@ caps:
     - {id: 77, cat: Movies/HD, desc: "Filmi DrSi"}
     - {id: 97, cat: Movies/UHD, desc: "Filmi BluRay 2160p"}
     - {id: 99, cat: Movies/HD, desc: "Filmi BRRip 720p"}
+    - {id: 100, cat: Movies/HD, desc: "Filmi BRRip 1080p"}
     # TV
     - {id: 23, cat: TV, desc: "TV"}
     - {id: 24, cat: TV/HD, desc: "TV HDTV 720p"}
