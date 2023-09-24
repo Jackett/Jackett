@@ -63,17 +63,11 @@ login:
   path: login.php
   method: form
   form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[alt="CAPTCHA"]
-    input: imagestring
   inputs:
-    username: "{{ .Config.username }}"
+    logintype: username
+    userinput: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    logout: ""
-    securelogin: ""
-    ssl: yes
-    trackerssl: yes
+    autologin: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
   test:
