@@ -129,7 +129,7 @@ search:
       text: "{{ if .Config.drop_polish_prefix }}{{ .Result.title_stripped }}{{ else }}{{ .Result.title_raw }}{{ end }}"
       filters:
         - name: re_replace
-          args: ["(?i)^\\[PACK\\]\\s?", ""]
+          args: ["(?i)^\\[PACK\\]\\s*", ""]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
