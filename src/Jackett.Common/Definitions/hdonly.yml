@@ -209,22 +209,31 @@ search:
       optional: true
     _media:
       selector: media
+      optional: true
     _vff:
       selector: vff
+      optional: true
     _vfq:
       selector: vfq
+      optional: true
     _vfi:
       selector: vfi
+      optional: true
     _vf:
       selector: vf
+      optional: true
     _vof:
       selector: vof
+      optional: true
     _hdr:
       selector: hdr
+      optional: true
     _hdr10plus:
       selector: hdr10plus
+      optional: true
     _dovi:
       selector: dovi
+      optional: true
     title_optional:
       selector: group.groupName
       filters:
