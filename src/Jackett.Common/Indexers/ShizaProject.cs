@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -14,40 +13,46 @@ using NLog;
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
-    internal class ShizaProject : BaseWebIndexer
+    public class ShizaProject : IndexerBase
     {
-        public override string[] LegacySiteLinks { get; protected set; } = {
+        public override string Id => "shizaroject";
+        public override string Name => "ShizaProject";
+        public override string Description => "ShizaProject Tracker is a Semi-Private RUSSIAN tracker and release group for ANIME";
+        public override string SiteLink { get; protected set; } = "https://shiza-project.com/";
+        public override string[] LegacySiteLinks => new[]
+        {
             "http://shiza-project.com/" // site is forcing https
         };
+        public override string Language => "ru-RU";
+        public override string Type => "public";
+
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         public ShizaProject(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
-            : base(id: "ShizaProject",
-                   name: "ShizaProject",
-                   description: "ShizaProject Tracker is a Semi-Private RUSSIAN tracker and release group for ANIME",
-                   link: "https://shiza-project.com/",
-                   caps: new TorznabCapabilities
-                   {
-                       TvSearchParams = new List<TvSearchParam>
-                       {
-                           TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
-                       }
-                   },
-                   configService: configService,
+            : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            Encoding = Encoding.UTF8;
-            Language = "ru-RU";
-            Type = "public";
-
-            AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
         }
 
-        private ConfigurationDataBasicLoginWithEmail Configuration => (ConfigurationDataBasicLoginWithEmail)configData;
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+            };
+
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+
+            return caps;
+        }
 
         /// <summary>
         /// http://shiza-project.com/graphql
