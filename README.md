@@ -180,6 +180,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HellTorrents
  * HunTorrent
  * Il CorSaRo Blu
+ * ilDraGoNeRo
  * Kinorun
  * Kinozal
  * LostFilm.tv
