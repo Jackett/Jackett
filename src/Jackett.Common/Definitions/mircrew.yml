@@ -1,9 +1,9 @@
 ---
 id: mircrew
 name: MIRCrew
-description: "MIRCrew is an ITALIAN Private Torrent Tracker for MOVIES / TV / MUSIC"
+description: "MIRCrew is an ITALIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: it-IT
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://mircrew-releases.org/
@@ -53,9 +53,9 @@ caps:
     # - {id: 55, cat: Movies, desc: "Richieste Video diverse"}
     # - {id: 57, cat: Movies, desc: "Richieste Video Soddisfatte"}
     - {id: 33, cat: TV/Anime, desc: "Animazione Releases", default: true}
-    - {id: 34, cat: TV/Anime, desc: "Anime - Movies", default: true}
+    - {id: 34, cat: Movies/Other, desc: "Anime - Movies", default: true}
     - {id: 35, cat: TV/Anime, desc: "Anime - Serie", default: true}
-    - {id: 36, cat: TV/Anime, desc: "Cartoon - Movies", default: true}
+    - {id: 36, cat: Movies/Other, desc: "Cartoon - Movies", default: true}
     - {id: 37, cat: TV/Anime, desc: "Cartoon - Serie", default: true}
     # - {id: 38, cat: TV/Anime, desc: "Richieste Animazione", default: true}
     # - {id: 58, cat: TV/Anime, desc: "Richieste Animazione Soddisfatte", default: true}
@@ -78,14 +78,6 @@ caps:
     movie-search: [q]
     music-search: [q]
     book-search: [q]
-
-settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
 
 login:
   path: ucp.php?mode=login
@@ -116,17 +108,15 @@ search:
   paths:
     - path: search.php
   keywordsfilters:
-    # the site's TV are seasonal packs only, so we swap Sxx with Stagione xx
+    # strip season and/or ep
     - name: re_replace
-      args: ["(?i)S0?(\\d{1,2})", "stagione $1"]
+      args: ["\\b(?:[SE]\\d{1,4}){1,2}\\b", ""]
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
   inputs:
     keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     # all, any
     terms: all
-    # Search by Author
-    author: ""
     # Search in subforums: yes 1, no 0
     sc: 0
     # Search For: all, msgonly, titleonly, firstpost
@@ -162,7 +152,13 @@ search:
       filters:
         # normalize Stagione xx to Sxx format
         - name: re_replace
-          args: ["(?i)Stagione 0?(\\d{1,2})", "S$1"]
+          args: ["(?i)\\bStagion[ei] (\\d{1,3}(?:-\\d{1,3})?)\\b\\s*(.+?)\\s*(?:\\[IN CORSO\\])?\\s*\\[(\\d{1,3}(?:-\\d{1,3})?)\\/(\\d{1,3})\\]", "S$1E$3 of $4 $2"]
+        - name: re_replace
+          args: ["(?i)\\bStagion[ei] (\\d{1,3}(?:-\\d{1,3})?)\\b\\s*(.+?)\\s*(?:\\[IN CORSO\\])?\\s*\\[(\\d{1,3}(?:-\\d{1,3})?)\\]", "S$1E$3 $2"]
+        - name: re_replace
+          args: ["(?i)\\bStagion[ei] (\\d{1,3}(?:-\\d{1,3})?)\\b", "S$1"]
+        - name: re_replace
+          args: ["(?i)\\s*(?:\\[IN CORSO\\])?\\s*\\[(\\d{1,3}(?:-\\d{1,3})?)\\/(\\d{1,3})\\]", " E$1 of $2"]
     details:
       selector: a.topictitle
       attribute: href
@@ -182,4 +178,6 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+    description:
+      selector: a.topictitle
 # phpBB
