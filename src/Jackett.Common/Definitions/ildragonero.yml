@@ -1,0 +1,199 @@
+---
+id: ildragonero
+name: ilDraGoNeRo
+description: "ilDraGoNeRo is an ITALIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: it-IT
+type: semi-private
+encoding: UTF-8
+links:
+  - https://ildragonero2.info/
+
+caps:
+  # commented out categories are discussion-only forums
+  categorymappings:
+    # - {id: 10, cat: Other, desc: "..: REGOLAMENTO :.."}
+    # - {id: 2, cat: Other, desc: "..: PRESENTAZIONI :.."}
+    # - {id: 15, cat: Other, desc: "..: CAVERNA DEL DRAGO :.."}
+    # - {id: 1, cat: Other, desc: "[ RELEASES ]"}
+    # - {id: 35, cat: Other, desc: "..: GUIDE, ANNUNCI & REGOLE :.."}
+    # - {id: 19, cat: Movies, desc: "..: FILM :.."}
+    - {id: 52, cat: Movies, desc: "   ( RELEASES IDN_CREW )", default: true}
+    - {id: 77, cat: Movies/SD, desc: "   ( SD )", default: true}
+    - {id: 50, cat: Movies/HD, desc: "   ( HD )", default: true}
+    - {id: 78, cat: Movies/UHD, desc: "   ( 4K )", default: true}
+    - {id: 66, cat: Movies/Foreign, desc: "   ( FILM SUB ITA )", default: true}
+    # - {id: 56, cat: Movies, desc: "   ( FILMOGRAFIE )"}
+    # - {id: 12, cat: Movies, desc: "   ( RICHIESTE )"}
+    # - {id: 47, cat: Movies, desc: "      ( RICHIESTE EVASE )"}
+    - {id: 39, cat: XXX, desc: "..: FILM XXX :..", default: true}
+    # - {id: 32, cat: TV/Anime, desc: "..: CARTOON & ANIME :.."}
+    - {id: 63, cat: Movies/Other, desc: "   ( CARTOON & ANIME FILM )", default: true}
+    - {id: 61, cat: TV/Anime, desc: "   ( CARTOON & ANIME SERIE )", default: true}
+    - {id: 88, cat: TV/Anime, desc: "   ( CARTOON & ANIME SUB ITA )", default: true}
+    # - {id: 80, cat: TV/Anime, desc: "   ( RICHIESTE )"}
+    # - {id: 81, cat: TV/Anime, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 23, cat: TV, desc: "..: SERIE TV :.."}
+    # - {id: 33, cat: TV, desc: "   L'archivio di Pir8"}
+    - {id: 45, cat: TV/SD, desc: "   (SD 480p)", default: true}
+    - {id: 46, cat: TV/HD, desc: "   (HD 720p - 1080p - 2160p)", default: true}
+    - {id: 79, cat: TV/Foreign, desc: "   ( SERIE TV SUB ITA )", default: true}
+    # - {id: 74, cat: TV, desc: "   ( RICHIESTE )"}
+    # - {id: 75, cat: TV, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 54, cat: TV/Documentary, desc: "..: DOCUMENTARI & SPETTACOLI :.."}
+    - {id: 92, cat: TV/Documentary, desc: "   ( DOCUMENTARI )", default: true}
+    - {id: 53, cat: Audio/Video, desc: "   ( CONCERTI )", default: true}
+    - {id: 93, cat: TV/Other, desc: "   ( TV SHOW )", default: true}
+    # - {id: 85, cat: TV/Documentary, desc: "   ( RICHIESTE )"}
+    # - {id: 86, cat: TV/Documentary, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 8, cat: Audio, desc: "..: MUSICA :.."}
+    - {id: 41, cat: Audio/Foreign, desc: "   ( ARTISTI STRANIERI )", default: true}
+    - {id: 42, cat: Audio, desc: "   ( ARTISTI ITALIANI )", default: true}
+    - {id: 87, cat: Audio, desc: "   ( COLONNE SONORE )", default: true}
+    - {id: 89, cat: Audio/Other, desc: "   ( COMPILATION )", default: true}
+    # - {id: 57, cat: Audio, desc: "   ( DISCOGRAFIE )"}
+    # - {id: 72, cat: Audio, desc: "   ( RICHIESTE )"}
+    # - {id: 73, cat: Audio, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 34, cat: PC/Games, desc: "..: VIDEOGIOCHI :.."}
+    - {id: 91, cat: PC/Games, desc: "   ( VIDEOGIOCHI PER PC )", default: true}
+    - {id: 59, cat: PC/Games, desc: "   ( MODDING )", default: true}
+    # - {id: 94, cat: PC/Games, desc: "   ( COLLECTION )"}
+    # - {id: 70, cat: PC/Games, desc: "   ( RICHIESTE )"}
+    # - {id: 71, cat: PC/Games, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 36, cat: Books, desc: "..: SALA DI LETTURA :.."}
+    - {id: 67, cat: Books/EBook, desc: "   ( E-BOOK )", default: true}
+    - {id: 82, cat: Books/Comics, desc: "   ( FUMETTI )", default: true}
+    - {id: 62, cat: Audio/Audiobook, desc: "   ( AUDIO-BOOKS )", default: true}
+    - {id: 38, cat: Books/Mags, desc: "   ( QUOTIDIANI & PERIDOICI )", default: true}
+    # - {id: 68, cat: Books, desc: "   ( RICHIESTE )"}
+    # - {id: 69, cat: Books, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 9, cat: PC/0day, desc: "..: APPLICAZIONI :.."}
+    - {id: 20, cat: PC/0day, desc: "..:Software windows:..", default: true}
+    - {id: 21, cat: PC/Mac, desc: "..:Software mac:..", default: true}
+    - {id: 22, cat: PC/Mobile-Android, desc: "..:APK Android:..", default: true}
+    # - {id: 83, cat: PC/0day, desc: "   ( RICHIESTE )"}
+    # - {id: 84, cat: PC/0day, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 95, cat: Other, desc: "   ( COMMENTI FILM E SERIE )"}
+    # - {id: 30, cat: Other, desc: "..: RELEASES DA VERIFICARE :.."}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+login:
+  path: forum/ucp.php?mode=login
+  method: form
+  form: form#login
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    autologin: on
+    viewonline: on
+  error:
+    - selector: div.error
+  test:
+    path: forum/index.php
+    selector: a[href^="./ucp.php?mode=logout&sid="]
+
+download:
+  before:
+    # thankyou link: ./viewtopic.php?f=61&p=76522&thanks=76522&to_id=83&from_id=23462
+    pathselector:
+      selector: ul.post-buttons li:nth-last-child(2) a
+      attribute: href
+      filters:
+        - name: re_replace
+          args: ["^.", "forum"]
+  selectors:
+    - selector: script:contains(addLinkToDocument)
+      filters:
+        - name: regexp
+          args: "addLinkToDocument\\(\"(.*?)\""
+        - name: prepend
+          args: "magnet:?xt=urn:btih:"
+
+search:
+  paths:
+    - path: forum/search.php
+  keywordsfilters:
+    # strip season and/or ep
+    - name: re_replace
+      args: ["\\b(?:[SE]\\d{1,4}){1,2}\\b", ""]
+    - name: re_replace
+      args: ["(\\w+)", "+$1"] # prepend + to each word
+  inputs:
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # all, any
+    terms: all
+    # Search in subforums: yes 1, no 0
+    sc: 0
+    # Search For: all, msgonly, titleonly, firstpost
+    sf: titleonly
+    # Show Results as: posts, topics
+    sr: topics
+    # sort: a author, t post time, f forum, i title, s post subject
+    sk: t
+    # order: a ascending, d descending
+    sd: d
+    # Seach Posts For: all 0, 1day 1, week 7, fortnight 14, month 30, 3months 90, 6 months 180, year 365
+    st: 0
+    # Show first: all -1, 0, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000
+    ch: 300
+    # hidden
+    t: 0
+    # hidden
+    submit: Cerca
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+
+  rows:
+    selector: li.row
+
+  fields:
+    category:
+      selector: a[href^="./viewforum.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a.topictitle
+      filters:
+        # normalize Stagione xx to Sxx format
+        - name: re_replace
+          args: ["(?i)\\bS(?:tagione )?(\\d{1,3}(?:-\\d{1,3})?)\\b\\s*(.+?)\\s*(?:\\[IN CORSO\\])?\\s*\\[(\\d{1,3}(?:-\\d{1,3})?)\\/(\\d{1,3})\\]", "S$1E$3 of $4 $2"]
+        - name: re_replace
+          args: ["(?i)\\bS(?:tagione )?(\\d{1,3}(?:-\\d{1,3})?)\\s+(E\\d{1,3}(?:-\\d{1,3})?)\\/(\\d{1,3})\\b", "S$1$2 of $3"]
+        - name: re_replace
+          args: ["(?i)\\bStagione (\\d{1,3})\\b", "S$1"]
+        - name: re_replace
+          args: ["(?i)\\s*(?:\\[IN CORSO\\])?\\s*\\[(\\d{1,3}(?:-\\d{1,3})?)\\/(\\d{1,3})\\]", " E$1 of $2"]
+    details:
+      selector: a.topictitle
+      attribute: href
+    download:
+      selector: a.topictitle
+      attribute: href
+    poster:
+      selector: div[data-ot]
+      attribute: data-ot
+      filters:
+        - name: regexp
+          args: "src='(.*?)'"
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    date:
+      selector: time[datetime]
+      attribute: datetime
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: a.topictitle
+# phpBB
