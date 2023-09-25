@@ -17,7 +17,7 @@ namespace Jackett.Common.Indexers
     {
         public override string Id => "shizaroject";
         public override string Name => "ShizaProject";
-        public override string Description => "ShizaProject Tracker is a Semi-Private RUSSIAN tracker and release group for ANIME";
+        public override string Description => "ShizaProject Tracker is a Public RUSSIAN tracker and release group for ANIME";
         public override string SiteLink { get; protected set; } = "https://shiza-project.com/";
         public override string[] LegacySiteLinks => new[]
         {
