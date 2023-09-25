@@ -189,6 +189,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Masters-TB
  * Mazepa
  * Metal Tracker
+ * MIRcrew
  * MovieWorld (Flicker)
  * MuseBootlegs (MB)
  * MVGroup Forum
@@ -439,7 +440,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
  * Milkie
- * MIRcrew
  * MMA-Torrents [![(invite needed)][inviteneeded]](#)
  * MNV (Max-New-Vision)
  * MOJBLiNK
