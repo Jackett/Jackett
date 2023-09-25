@@ -1,0 +1,75 @@
+# This workflow integrates ShiftLeft NG SAST with GitHub
+# Visit https://docs.shiftleft.io for help
+name: ShiftLeft
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  NextGen-Static-Analysis:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 5.0.x
+    - name: Download ShiftLeft CLI
+      run: |
+        Invoke-WebRequest -Uri 'https://cdn.shiftleft.io/download/sl-latest-windows-x64.zip' -OutFile sl.zip
+        Expand-Archive -Path sl.zip -DestinationPath .
+
+    - name: Build web api
+      run: dotnet build jackett
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: Analyze with NextGen Static Analysis
+      run: .\sl analyze --strict --app jackett-csharp-demo --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --csharp --dotnet --cpg **/*.sln
+      env:
+        SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
+        SHIFTLEFT_API_HOST: www.shiftleft.io
+        SHIFTLEFT_GRPC_TELEMETRY_HOST: telemetry.shiftleft.io:443
+        SHIFTLEFT_GRPC_API_HOST: api.shiftleft.io:443
+
+    - name: Create status check
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        URL: https://app.shiftleft.io/findingsSummary/jackett-csharp-demo?apps=jackett-csharp-demo&isApp=1
+      run: |
+        $params = @{
+            Uri         = "https://api.github.com/repos/$ENV:GITHUB_REPOSITORY/check-runs"
+            Headers     = @{
+              'Authorization' = "Bearer $ENV:GITHUB_TOKEN"
+              'Accept' = 'application/vnd.github.antiope-preview+json'
+            }
+            Method      = 'POST'
+            Body        = "{`"name`": `"ShiftLeft NextGen Static Analysis`", `"head_sha`": `"$ENV:GITHUB_REF`", `"external_id`": `"jackett-csharp-demo`", `"details_url`": `"$ENV:URL`", `"status`": `"completed`", `"conclusion`": `"action_required`", `"output`": {`"title`": `"ShiftLeft NextGen Static Analysis Findings`", `"summary`": `"Visit $ENV:URL for the findings`"}}"
+            ContentType = 'application/json'
+        }
+        Invoke-RestMethod @params
+
+  Build-Rules: 
+    runs-on: windows-latest
+    needs: NextGen-Static-Analysis
+    steps:
+    - uses: actions/checkout@v3
+    - name: Download ShiftLeft CLI
+      run: |
+        Invoke-WebRequest -Uri 'https://cdn.shiftleft.io/download/sl-latest-windows-x64.zip' -OutFile sl.zip
+        Expand-Archive -Path sl.zip -DestinationPath .
+    - name: Validate Build Rules
+      run: |
+        .\sl check-analysis --app shiftleft-csharp-demo `
+            --github-pr-number=${{github.event.number}} `
+            --github-pr-user=${{ github.repository_owner }} `
+            --github-pr-repo=${{ github.event.repository.name }} `
+            --github-token=${{ secrets.GITHUB_TOKEN }}
+      env:
+        SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
+        SHIFTLEFT_API_HOST: www.shiftleft.io
+        SHIFTLEFT_GRPC_TELEMETRY_HOST: telemetry.shiftleft.io:443
+        SHIFTLEFT_GRPC_API_HOST: api.shiftleft.io:443
