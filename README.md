@@ -598,6 +598,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnleashTheCartoons
  * UnlimitZ
  * UTOPIA
+ * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * White Angel
  * WinterSakura
  * World-In-HD [![(invite needed)][inviteneeded]](#)
