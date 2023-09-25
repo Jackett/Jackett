@@ -193,7 +193,7 @@ search:
       selector: time[datetime]
       attribute: datetime
     downloadvolumefactor:
-      text: 1
+      text: 0
     uploadvolumefactor:
       text: 1
     description:
