@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers
             "https://dontorrent.nexus/",
             "https://dontorrent.bond/",
             "https://dontorrent.tokyo/",
-            "https://dontorrent.boston/,
+            "https://dontorrent.boston/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
