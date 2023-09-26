@@ -691,7 +691,7 @@ search:
         - name: querystring
           args: f
     title:
-      selector: a.gengood
+      selector: a.title
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -757,10 +757,10 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.gengood
+      selector: a.title
       attribute: href
     download:
-      selector: a.gengood
+      selector: a.title
       attribute: href
     description:
       selector: td:first-child span
@@ -773,7 +773,7 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +03:00" # MSK
+          args: " +00:00" # UTC
         - name: dateparse
           args: "HH:mm zzz"
     date_year:
@@ -782,17 +782,17 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +03:00" # MSK
+          args: " +00:00" # UTC
         - name: dateparse
           args: "HH:mm d-MM-yy zzz"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
     grabs:
       selector: td:nth-child(7)
-    seeders:
-      selector: td.seedmed
-    leechers:
-      selector: td.leechmed
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
