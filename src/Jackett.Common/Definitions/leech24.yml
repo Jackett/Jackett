@@ -19,6 +19,7 @@ caps:
     - {id: 45, cat: Console/NDS, desc: "Games: DS"}
     - {id: 16, cat: Console/Other, desc: "Games: Dreamcast"}
     - {id: 46, cat: Console/Other, desc: "Games: GameCube"}
+    - {id: 49, cat: Console/NDS, desc: "Games: Nintendo"}
     - {id: 17, cat: Console/Other, desc: "Games: Other"}
     - {id: 10, cat: PC/Games, desc: "Games: PC"}
     - {id: 15, cat: Console/PSP, desc: "Games: PS"}
