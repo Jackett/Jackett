@@ -693,7 +693,7 @@ search:
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
   rows:
-    selector: tr[id^="tor_"]:has(a.dlLink)
+    selector: tr[id^="tor_"]:has(a[href^="/dl.php?id="])
 
   fields:
     category:
@@ -703,7 +703,7 @@ search:
         - name: querystring
           args: f
     title:
-      selector: a.gengood
+      selector: a.title
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -769,23 +769,23 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.gengood
+      selector: a.title
       attribute: href
     download:
-      selector: a.dlLink
+      selector: a[href^="/dl.php?id="]
       attribute: href
     description:
-      selector: td:first-child span
+      selector: td:first-child b span
       attribute: title
     size:
-      selector: a.dlLink
+      selector: a[href^="/dl.php?id="]
     date_day:
       # 23:18
       selector: td:last-child > p:first-child:not(:contains("-"))
       optional: true
       filters:
         - name: append
-          args: " +03:00" # MSK
+          args: " +00:00" # UTC
         - name: dateparse
           args: "HH:mm zzz"
     date_year:
@@ -794,17 +794,17 @@ search:
       optional: true
       filters:
         - name: append
-          args: " +03:00" # MSK
+          args: " +00:00" # UTC
         - name: dateparse
           args: "HH:mm d-MM-yy zzz"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
     grabs:
       selector: td:nth-child(7)
-    seeders:
-      selector: td.seedmed
-    leechers:
-      selector: td.leechmed
     downloadvolumefactor:
       case:
         img.goldrelise: 0
