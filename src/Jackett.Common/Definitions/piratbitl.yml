@@ -680,7 +680,7 @@ search:
     da: 1
     ss: "{{ .Keywords }}"
     gold: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    submit: "Поиск"
+    submit: Поиск
 
   keywordsfilters:
     - name: diacritics
@@ -693,17 +693,17 @@ search:
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
   rows:
-    selector: tr[id^="tor_"]:not(:has(span[title="закрыто"])):not(:has(span[title="неоформлено"]))
+    selector: tr[id^="tor_"]:has(a.dlLink)
 
   fields:
     category:
-      selector: td a.gen
+      selector: a.gen
       attribute: href
       filters:
         - name: querystring
           args: f
     title:
-      selector: td a.genmed
+      selector: a.gengood
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -769,30 +769,46 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: td a.genmed
+      selector: a.gengood
       attribute: href
     download:
-      selector: td div a.dLink
+      selector: a.dlLink
       attribute: href
     description:
       selector: td:first-child span
       attribute: title
     size:
-      selector: td > u
+      selector: a.dlLink
+    date_day:
+      # 23:18
+      selector: td:last-child > p:first-child:not(:contains("-"))
+      optional: true
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "HH:mm zzz"
+    date_year:
+      # 13:44 25-09-23
+      selector: td:last-child > p:first-child:contains("-")
+      optional: true
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "HH:mm d-MM-yy zzz"
     date:
-      # unix
-      selector: td[title="Добавлен"] > u, td[title="Added"] > u
-    # Russian and Ukranian and English languages are supported
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     grabs:
-      selector: td[title^="Ответов"], td[title^="Відповідей"], td[title^="Replies"]
+      selector: td:nth-child(7)
     seeders:
       selector: td.seedmed
     leechers:
       selector: td.leechmed
     downloadvolumefactor:
       case:
-        img[src="/images/gold.png"]: 0
-        img[src="/images/silver.png"]: 0.5
+        img.goldrelise: 0
+        img.silverrelise: 0.5
         "*": 1
     uploadvolumefactor:
       text: 1
