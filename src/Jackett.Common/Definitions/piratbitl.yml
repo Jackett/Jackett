@@ -656,7 +656,7 @@ login:
 
 search:
   paths:
-    - path: tracker.php
+    - path: tracker/
       method: post
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
