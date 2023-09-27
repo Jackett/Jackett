@@ -168,7 +168,5 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
-    minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+# as a pay site there is no MR or MST
 # json UNIT3D 6.5.0
