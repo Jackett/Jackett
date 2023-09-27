@@ -643,7 +643,7 @@ login:
   path: login.php
   method: post
   inputs:
-    "login_username": "{{ .Config.username }}"
+    "login_site_username": "{{ .Config.username }}"
     "login_password": "{{ .Config.password }}"
     autologin: 1
     login: Вход
