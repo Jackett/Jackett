@@ -29,7 +29,7 @@ caps:
     - {id: 75, cat: PC/Mac, desc: "Programok - Linux/Unix/Mac OS"}
     - {id: 101, cat: TV/SD, desc: "Sorozat - DVD (ENG)"}
     - {id: 100, cat: TV/SD, desc: "Sorozat - DVD (HUN)"}
-    - {id: 89, cat: TV/HD, desc: "Sorozat - SD (ENG)"}
+    - {id: 89, cat: TV/HD, desc: "Sorozat - HD (ENG)"}
     - {id: 97, cat: TV/HD, desc: "Sorozat - HD (HUN)"}
     - {id: 86, cat: TV/SD, desc: "Sorozat - SD (ENG)"}
     - {id: 90, cat: TV/SD, desc: "Sorozat - SD (HUN)"}
