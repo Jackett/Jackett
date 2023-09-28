@@ -158,10 +158,15 @@ search:
       selector: td:nth-last-child(4)
     leechers:
       selector: td:nth-last-child(3)
+    uploadvolumefactor_custom:
+      selector: td:nth-last-child(5) small
+      optional: true
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
-      text: 1
+      case:
+        i.fa-arrow-up: "{{ .Result.uploadvolumefactor_custom }}"
+        "*": 1
     genre:
       selector: td:nth-child(2) small
       filters:
