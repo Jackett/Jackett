@@ -5,6 +5,7 @@ description: "PirateBit is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GE
 language: ru-RU
 type: semi-private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://pb.wtf/
   - https://top.pirat.one/
@@ -605,12 +606,20 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info
+    label: How to get the User-Agent
+    default: "<ol><li>From the same place you fetched the cookie,</li><li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -640,16 +649,9 @@ settings:
       1: asc
 
 login:
-  path: login.php
-  method: post
+  method: cookie
   inputs:
-    "login_site_username": "{{ .Config.username }}"
-    "login_password": "{{ .Config.password }}"
-    autologin: 1
-    login: Вход
-    redirect: /
-  error:
-    - selector: table tr td div.alert
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: li a[href="/login.php?logout=1"]
@@ -691,6 +693,9 @@ search:
       args: ["(?i)\\bE0*(\\d+)\\b", "сери $1"]
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
     selector: tr[id^="tor_"]:has(a[href^="/dl.php?id="])
