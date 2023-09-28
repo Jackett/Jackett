@@ -18,25 +18,25 @@ caps:
     - {id: 66, cat: Movies/DVD, desc: "Film - DVD/9 (HUN)"}
     - {id: 84, cat: Movies/HD, desc: "Film - HD (ENG)"}
     - {id: 68, cat: Movies/HD, desc: "Film - HD (HUN)"}
-    - {id: 82, cat: Movies/SD, desc: "Film - XviD (ENG)"}
-    - {id: 64, cat: Movies/SD, desc: "Film - XviD (HUN)"}
-    - {id: 72, cat: PC/Games, desc: "Játék - ISO"}
+    - {id: 82, cat: Movies/SD, desc: "Film - SD (ENG)"}
+    - {id: 64, cat: Movies/SD, desc: "Film - SD (HUN)"}
     - {id: 73, cat: Console, desc: "Játék - Konzol"}
     - {id: 94, cat: PC/Games, desc: "Játék - RIP"}
+    - {id: 72, cat: PC/Games, desc: "Játek - ISO"}
     - {id: 79, cat: PC/Mobile-Other, desc: "Mobil/PDA"}
-    - {id: 95, cat: PC, desc: "Programok - Egyéb (Win)"}
+    - {id: 95, cat: PC, desc: "Programok - Egyeb (Win)"}
     - {id: 74, cat: PC/ISO, desc: "Programok - ISO (Win)"}
     - {id: 75, cat: PC/Mac, desc: "Programok - Linux/Unix/Mac OS"}
     - {id: 101, cat: TV/SD, desc: "Sorozat - DVD (ENG)"}
     - {id: 100, cat: TV/SD, desc: "Sorozat - DVD (HUN)"}
-    - {id: 89, cat: TV/HD, desc: "Sorozat - HD (ENG)"}
+    - {id: 89, cat: TV/HD, desc: "Sorozat - SD (ENG)"}
     - {id: 97, cat: TV/HD, desc: "Sorozat - HD (HUN)"}
-    - {id: 86, cat: TV/SD, desc: "Sorozat - XviD (ENG)"}
-    - {id: 90, cat: TV/SD, desc: "Sorozat - XviD (HUN)"}
+    - {id: 86, cat: TV/SD, desc: "Sorozat - SD (ENG)"}
+    - {id: 90, cat: TV/SD, desc: "Sorozat - SD (HUN)"}
     - {id: 99, cat: XXX/DVD, desc: "XXX - DVD"}
     - {id: 98, cat: XXX/x264, desc: "XXX - HD"}
-    - {id: 76, cat: XXX/ImageSet, desc: "XXX - Képek"}
-    - {id: 69, cat: XXX/XviD, desc: "XXX - XviD"}
+    - {id: 76, cat: XXX/ImageSet, desc: "XXX - Kepek"}
+    - {id: 69, cat: XXX/XviD, desc: "XXX - SD"}
     - {id: 70, cat: Audio, desc: "Zene - HUN"}
     - {id: 71, cat: Audio, desc: "Zene - Külföld"}
 
@@ -62,10 +62,6 @@ settings:
     type: info
     label: How to get the User-Agent
     default: "<ol><li>From the same place you fetched the cookie,</li><li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</li></ol>"
-  - name: freeleech
-    type: checkbox
-    label: Search FreeLeech only
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -73,8 +69,8 @@ settings:
     options:
       0: added
       1: name
-      5: size
-      7: seeders
+      2: size
+      4: seeders
   - name: type
     type: select
     label: Order requested from site
@@ -92,96 +88,99 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
-    selector: a[href^="/logout"]
-
-download:
-  selectors:
-    - selector: a[href^="download.php?id="]
-      attribute: href
+    path: index
+    selector: a[href="/logout/"]
 
 search:
   headers:
     User-Agent: ["{{ .Config.useragent }}"]
   paths:
-    - path: letoltes.php
+    - path: browse/
   inputs:
-    cat: 0
+    # https://torrentmasters.info/browse/?sent=yes&sort=0&type=&viewMode=normal&search=2023&incldead=0
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active, 1 active+idead, 2 dead, 3 free, 4 x2, 5 waiting for seed, 6 my torrents, 7 requested
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    # 0 active, 1 active+dead, 2 dead, 3 my torrents, 4 requested, 9 bookmarked, 7 featured, 8 main page featured
+    incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    viewMode: normal
+    sent: yes
     # does not support imdbid searches
-    # can support genre, but you need the id. &mufaj[]=14 for Horror
+    # can search by genre but need range support. &mufaj[]=akció&mufaj[]animációs
 
   rows:
-    selector: table > tbody#linkhatter > tr:nth-child(1)
+    selector: table.table > tbody > tr
 
   fields:
     category:
-      selector: a[href^="letoltes.php?cat="]
+      selector: a[href*="categories[]="]
       attribute: href
       filters:
         - name: querystring
-          args: cat
+          args: "categories[]"
     title:
-      selector: td:nth-child(3) > a[href^="torrent_adatok.php"]
+      selector: a[href^="/details/"]
       attribute: title
+      filters:
+        - name: regexp
+          args: "Torrent név: (.*?)<br>"
     details:
-      selector: a[href^="torrent_adatok.php?id="]
+      selector: a[href^="/details/"]
       attribute: href
+    _id:
+      selector: a[href^="/details/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: (\d+)
     download:
-      selector: a[href^="torrent_adatok.php?id="]
-      attribute: href
+      text: "{{ .Config.sitelink }}/download.php?id={{ .Result._id }}"
     title_hungarian:
-      selector: td:nth-child(3) font[color="gray"]
+      selector: a[href^="/details/"]
+      attribute: title
       filters:
-        - name: replace
-          args: ["| ", ""]
+        - name: regexp
+          args: "Magyar/Külföldi cím: (.*?)<br>"
     date:
-      selector: td:nth-child(5) nobr
-      remove: font
+      selector: td:nth-child(3)
       filters:
-        - name: replace
-          args: ["\xA0", ""]
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     poster:
-      selector: a[onmouseover]
-      attribute: onmouseover
+      selector: a[href^="/details/"]
+      attribute: title
       filters:
         - name: regexp
-          args: "src=(.*?) border"
+          args: "src='(.*?)'"
     size:
       selector: td:nth-last-child(5)
     grabs:
-      selector: td:nth-last-child(4)
-    seeders:
-      selector: td:nth-last-child(3) font
-    leechers:
       selector: td:nth-last-child(2)
+    seeders:
+      selector: td:nth-last-child(4)
+    leechers:
+      selector: td:nth-last-child(3)
+    uploadvolumefactor_custom:
+      selector: td:nth-last-child(5) small
+      optional: true
     downloadvolumefactor:
-      case:
-        "img[src=\"pic/orokos.gif\"]": 0
-        "img[src=\"images/ellenorzes/ingyenes.gif\"]": 0
-        "*": 1
+      text: 1
     uploadvolumefactor:
       case:
-        "font[color=\"#01DF01\"]": 2
+        i.fa-arrow-up: "{{ .Result.uploadvolumefactor_custom }}"
         "*": 1
     genre:
-      selector: td:nth-child(3)
-      remove: a, font
+      selector: td:nth-child(2) small
       filters:
-        - name: replace
-          args: ["/xA", ""]
+        - name: re_replace
+          args: ["film-noir", "film_noir"]
+        - name: re_replace
+          args: ["sci-fi", "sci_fi"]
     description:
       text: "{{ .Result.title_hungarian }}{{ if and .Result.title_hungarian .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.genre }}"
-    minimumratio:
-      text: 0.5
     minimumseedtime:
       # 24 hours (as seconds = 24 x 60 x 60)
       text: 86400
