@@ -118,6 +118,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SubsPlease
  * sukebei.Nyaa.si
  * The Pirate Bay (TPB)
+ * TheRARBG
  * Tokyo Tosho
  * Torlock
  * Torrent[CORE]
