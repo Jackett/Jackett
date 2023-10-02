@@ -25,6 +25,8 @@ namespace Jackett.Common.Indexers
         public override string Language => "en-US";
         public override string Type => "private";
 
+        public override bool SupportsPagination => true;
+
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
@@ -56,6 +58,8 @@ namespace Jackett.Common.Indexers
         {
             var caps = new TorznabCapabilities
             {
+                LimitsDefault = 50,
+                LimitsMax = 50,
                 TvSearchParams = new List<TvSearchParam>
                 {
                     TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
@@ -92,7 +96,10 @@ namespace Jackett.Common.Indexers
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Testing returned no results!");
+                }
+
                 IsConfigured = true;
                 SaveConfig();
             }
@@ -112,16 +119,33 @@ namespace Jackett.Common.Indexers
             var configCheckedOnly = configData.FilterString.Value.ToLowerInvariant().Contains("checked");
             var configFreeOnly = configData.FilterString.Value.ToLowerInvariant().Contains("free");
 
-
             var movieListSearchUrl = SearchUrl;
-            var queryCollection = new NameValueCollection { { "json", "noredirect" } };
+            var queryCollection = new NameValueCollection
+            {
+                { "action", "advanced" },
+                { "json", "noredirect" },
+                { "grouping", "0" },
+            };
 
             if (!string.IsNullOrEmpty(query.ImdbID))
-                queryCollection.Add("searchstr", query.ImdbID);
+            {
+                queryCollection.Set("searchstr", query.ImdbID);
+            }
             else if (!string.IsNullOrEmpty(query.GetQueryString()))
-                queryCollection.Add("searchstr", query.GetQueryString());
+            {
+                queryCollection.Set("searchstr", query.GetQueryString());
+            }
+
             if (configFreeOnly)
-                queryCollection.Add("freetorrent", "1");
+            {
+                queryCollection.Set("freetorrent", "1");
+            }
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit + 1;
+                queryCollection.Set("page", page.ToString());
+            }
 
             movieListSearchUrl += "?" + queryCollection.GetQueryString();
 
@@ -133,7 +157,10 @@ namespace Jackett.Common.Indexers
 
             var results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             if (results.IsRedirect) // untested
+            {
                 results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
+            }
+
             try
             {
                 //Iterate over the releases for each movie
@@ -158,11 +185,12 @@ namespace Jackett.Common.Indexers
 
                         var releaseLinkQuery = new NameValueCollection
                         {
-                            {"action", "download"},
-                            {"id", torrentId},
-                            {"authkey", AuthKey},
-                            {"torrent_pass", PassKey}
+                            { "action", "download" },
+                            { "id", torrentId },
+                            { "authkey", AuthKey },
+                            { "torrent_pass", PassKey }
                         };
+
                         var free = !(torrent["FreeleechType"] is null);
 
                         bool.TryParse((string)torrent["GoldenPopcorn"], out var golden);
@@ -170,22 +198,33 @@ namespace Jackett.Common.Indexers
                         bool.TryParse((string)torrent["Checked"], out var check);
 
                         if (configGoldenPopcornOnly && !golden)
+                        {
                             continue; //Skip release if user only wants GoldenPopcorn
+                        }
+
                         if (configSceneOnly && !scene)
+                        {
                             continue; //Skip release if user only wants Scene
+                        }
+
                         if (configCheckedOnly && !check)
+                        {
                             continue; //Skip release if user only wants Checked
+                        }
+
                         if (configFreeOnly && !free)
+                        {
                             continue;
+                        }
+
                         var link = new Uri($"{SearchUrl}?{releaseLinkQuery.GetQueryString()}");
                         var seeders = int.Parse((string)torrent["Seeders"]);
                         var details = new Uri($"{SearchUrl}?id={WebUtility.UrlEncode(movieGroupId)}&torrentid={WebUtility.UrlEncode(torrentId)}");
                         var size = long.Parse((string)torrent["Size"]);
                         var grabs = long.Parse((string)torrent["Snatched"]);
-                        var publishDate = DateTime.ParseExact((string)torrent["UploadTime"],
-                                                              "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
-                                                  .ToLocalTime();
+                        var publishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         var leechers = int.Parse((string)torrent["Leechers"]);
+
                         var release = new ReleaseInfo
                         {
                             Title = releaseName,
