@@ -10,6 +10,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+
 namespace Jackett.Common.Indexers
 {
     [ExcludeFromCodeCoverage]
@@ -47,9 +48,18 @@ namespace Jackett.Common.Indexers
                 {
                     TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
                 },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                }
             };
 
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "Anime");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.TVAnime, "TV");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TVAnime, "TV_SPECIAL");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVAnime, "ONA");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.TVAnime, "OVA");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.Movies, "MOVIE");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Movies, "SHORT_MOVIE");
 
             return caps;
         }
@@ -62,10 +72,8 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var releases = await PerformQuery(new TorznabQuery());
-
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-                throw new Exception("Could not find releases from this URL"));
+            IsConfigured = true;
+            SaveConfig();
 
             return IndexerConfigurationStatus.Completed;
         }
@@ -77,7 +85,7 @@ namespace Jackett.Common.Indexers
                 operationName = "fetchReleases",
                 variables = new
                 {
-                    first = 50, //Number of fetched releases (required parameter) TODO: consider adding pagination 
+                    first = 50, //Number of fetched releases (required parameter) TODO: consider adding pagination
                     query = query.SearchTerm
                 },
                 query = @"
@@ -86,6 +94,7 @@ namespace Jackett.Common.Indexers
                         edges {
                             node {
                                 name
+                                type
                                 originalName
                                 alternativeNames
                                 publishedAt
@@ -96,6 +105,7 @@ namespace Jackett.Common.Indexers
                                     }
                                 }
                                 torrents {
+                                    synopsis
                                     downloaded
                                     seeders
                                     leechers
@@ -116,27 +126,28 @@ namespace Jackett.Common.Indexers
             {
                 { "Content-Type", "application/json; charset=utf-8" },
             };
-            var response = await RequestWithCookiesAndRetryAsync(GraphqlEndpointUrl, method: RequestType.POST, rawbody: Newtonsoft.Json.JsonConvert.SerializeObject(releasesQuery), headers: headers);
+            var response = await RequestWithCookiesAndRetryAsync(GraphqlEndpointUrl, method: RequestType.POST, rawbody: JsonConvert.SerializeObject(releasesQuery), headers: headers);
             var j = JsonConvert.DeserializeObject<ReleasesResponse>(response.ContentString);
+
             var releases = new List<ReleaseInfo>();
+
             foreach (var e in j.Data.Releases.Edges)
             {
                 var n = e.Node;
                 var baseRelease = new ReleaseInfo
                 {
-                    Title = composeTitle(n),
-                    Poster = getFirstPoster(n),
+                    Poster = GetFirstPoster(n),
                     Details = new Uri(SiteLink + "releases/" + n.Slug),
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1,
-                    Category = new[] { TorznabCatType.TVAnime.ID }
+                    Category = MapTrackerCatDescToNewznab(n.Type)
                 };
 
                 foreach (var t in n.Torrents)
                 {
                     var release = (ReleaseInfo)baseRelease.Clone();
 
-                    release.Title += getTitleQualities(t);
+                    release.Title = $"{ComposeTitle(n, t)}{GetTitleQualities(t)}";
                     release.Size = t.Size;
                     release.Seeders = t.Seeders;
                     release.Peers = t.Leechers + t.Seeders;
@@ -144,7 +155,7 @@ namespace Jackett.Common.Indexers
                     release.Link = t.File?.Url;
                     release.Guid = t.File?.Url;
                     release.MagnetUri = t.MagnetUri;
-                    release.PublishDate = getActualPublishDate(n, t);
+                    release.PublishDate = GetActualPublishDate(n, t);
                     releases.Add(release);
                 }
             }
@@ -152,33 +163,33 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private string composeTitle(Node n)
+        private string ComposeTitle(Node n, Torrent t)
         {
-            var title = n.Name;
-            title += " / " + n.OriginalName;
-            foreach (string name in n.AlternativeNames)
-                title += " / " + name;
+            var allNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                n.Name,
+                n.OriginalName
+            };
+            allNames.UnionWith(n.AlternativeNames);
 
-            return title;
+            return $"{string.Join(" / ", allNames)} {t.Synopsis}";
         }
 
-        private DateTime getActualPublishDate(Node n, Torrent t)
+        private DateTime GetActualPublishDate(Node n, Torrent t)
         {
             if (n.PublishedAt == null)
             {
                 return t.UpdatedAt;
             }
-            else
-            {
-                return (t.UpdatedAt > n.PublishedAt) ? t.UpdatedAt : n.PublishedAt.Value;
-            }
+
+            return t.UpdatedAt > n.PublishedAt ? t.UpdatedAt : n.PublishedAt.Value;
         }
 
-        private string getTitleQualities(Torrent t)
+        private string GetTitleQualities(Torrent t)
         {
             var s = " [";
 
-            foreach (string q in t.VideoQualities)
+            foreach (var q in t.VideoQualities)
             {
                 s += " " + q;
             }
@@ -186,17 +197,7 @@ namespace Jackett.Common.Indexers
             return s + " ]";
         }
 
-        private Uri getFirstPoster(Node n)
-        {
-            if (n.Posters.Length == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return n.Posters[0].Preview.Url;
-            }
-        }
+        private Uri GetFirstPoster(Node n) => n.Posters?.FirstOrDefault()?.Preview?.Url;
 
         public partial class ReleasesResponse
         {
@@ -244,6 +245,8 @@ namespace Jackett.Common.Indexers
 
             [JsonProperty("torrents")]
             public Torrent[] Torrents { get; set; }
+
+            public string Type { get; set; }
         }
 
         public partial class Poster
@@ -260,6 +263,8 @@ namespace Jackett.Common.Indexers
 
         public partial class Torrent
         {
+            public string Synopsis { get; set; }
+
             [JsonProperty("downloaded")]
             public long Downloaded { get; set; }
 
