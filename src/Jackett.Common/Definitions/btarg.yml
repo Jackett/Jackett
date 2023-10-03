@@ -1,0 +1,222 @@
+---
+id: btarg
+name: BTArg
+description: "BTArg is an ARGENTINIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: es-AR
+type: private
+encoding: iso-8859-1
+links:
+  - https://www.btarg.com.ar/
+
+caps:
+  # use upload page when updating cats, browse.php uses 0a, 0b, etc for cats >10
+  categorymappings:
+    - {id: 01, cat: Movies, desc: "Cine Arg."}
+    - {id: 02, cat: Movies/Foreign, desc: "Cine Int."}
+    - {id: 03, cat: TV, desc: "TV Arg."}
+    - {id: 04, cat: TV/Foreign, desc: "TV Int."}
+    - {id: 05, cat: XXX, desc: "XXX"}
+    - {id: 06, cat: TV/Anime, desc: "Anime"}
+    - {id: 07, cat: TV/Sport, desc: "Deportes"}
+    - {id: 08, cat: Audio/Video, desc: "Video Clips"}
+    - {id: 09, cat: Audio, desc: "Musica Arg."}
+    - {id: 10, cat: Audio/Foreign, desc: "Musica Int."}
+    - {id: 11, cat: Movies/DVD, desc: "DVD-R"}
+    - {id: 12, cat: PC/Games, desc: "Juegos"}
+    - {id: 13, cat: PC/0day, desc: "Software Arg."}
+    - {id: 14, cat: PC/0day, desc: "Software Int."}
+    - {id: 15, cat: Other, desc: "Otros"}
+    - {id: 16, cat: Other, desc: "Subpacks"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Por página Torrents:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: tracker/takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(h2:contains("fallado"))
+  test:
+    path: tracker/index.php
+    selector: a[href="logout.php"], a[href^="download.php/"]
+
+search:
+  paths:
+    - path: tracker/browse.php
+  inputs:
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 title, 1 title+descr, 2 descr
+    type: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
+    # 0 active, 1 incldead, 2 dead
+    incldead: 0 # dead results don't have torrents
+    # 0 all, 1 free, 2 normal
+    inclfree: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    d: "{{ .Config.type }}"
+    list: 1
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(?i)(S(\\d{1,3}))(?![\\dE])", "Temporada"]
+    - name: re_replace
+      args: ["(\\w+)", "+$1"] # prepend + to each word
+
+  rows:
+    selector: table > tbody > tr:not(tr:first-child):not(tr.browse)
+    after: 1
+
+  fields:
+    categorydesc:
+      selector: a[href*="?cat="] img
+      attribute: title
+    title_default:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["(?i)(Primera Temporada)", "S01"]
+        - name: re_replace
+          args: ["(?i)(Segunda Temporada)", "S02"]
+        - name: re_replace
+          args: ["(?i)(Tercera Temporada)", "S03"]
+        - name: re_replace
+          args: ["(?i)(Cuarta Temporada)", "S04"]
+        - name: re_replace
+          args: ["(?i)(Quinta Temporada)", "S05"]
+        - name: re_replace
+          args: ["(?i)(Sexta Temporada)", "S06"]
+        - name: re_replace
+          args: ["(?i)(Septima Temporada)", "S07"]
+        - name: re_replace
+          args: ["(?i)(Octava Temporada)", "S08"]
+        - name: re_replace
+          args: ["(?i)(Novena Temporada)", "S09"]
+        - name: re_replace
+          args: ["(?i)(Decima Temporada)", "S10"]
+        - name: re_replace
+          args: ["(?i)(Onceava Temporada)", "S11"]
+        - name: re_replace
+          args: ["(?i)(Decimosegunda Temporada)", "S12"]
+        - name: re_replace
+          args: ["(?i)Temporada (\\d{1,3})\\s*y\\s*(\\d{1,3})", "S$1-$2"]
+        - name: re_replace
+          args: ["(?i)Temporada (\\d{1,3})", "S$1"]
+    title:
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)(Primera Temporada)", "S01"]
+        - name: re_replace
+          args: ["(?i)(Segunda Temporada)", "S02"]
+        - name: re_replace
+          args: ["(?i)(Tercera Temporada)", "S03"]
+        - name: re_replace
+          args: ["(?i)(Cuarta Temporada)", "S04"]
+        - name: re_replace
+          args: ["(?i)(Quinta Temporada)", "S05"]
+        - name: re_replace
+          args: ["(?i)(Sexta Temporada)", "S06"]
+        - name: re_replace
+          args: ["(?i)(Septima Temporada)", "S07"]
+        - name: re_replace
+          args: ["(?i)(Octava Temporada)", "S08"]
+        - name: re_replace
+          args: ["(?i)(Novena Temporada)", "S09"]
+        - name: re_replace
+          args: ["(?i)(Decima Temporada)", "S10"]
+        - name: re_replace
+          args: ["(?i)(Onceava Temporada)", "S11"]
+        - name: re_replace
+          args: ["(?i)(Decimosegunda Temporada)", "S12"]
+        - name: re_replace
+          args: ["(?i)Temporada (\\d{1,3})\\s*y\\s*(\\d{1,3})", "S$1-$2"]
+        - name: re_replace
+          args: ["(?i)Temporada (\\d{1,3})", "S$1"]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    date:
+      selector: td:nth-child(5)
+      remove: font
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "yyyy-MM-dd zzz"
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(8)
+      filters:
+        - name: regexp
+          args: "^(\\d+) \/"
+    leechers:
+      selector: td:nth-child(8)
+      filters:
+        - name: regexp
+          args: "\/ (\\d+)$"
+    grabs:
+      selector: td:nth-child(9)
+      filters:
+        - name: regexp
+          args: "\\\xA0(\\d+)\\\xA0"
+    downloadvolumefactor:
+      case:
+        "font[color=\"red\"]:contains(\"FREE!\")": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.5
+    description_default:
+      selector: a[href^="details.php?id="]
+    description:
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.description_default }}"
+# engine tbd
