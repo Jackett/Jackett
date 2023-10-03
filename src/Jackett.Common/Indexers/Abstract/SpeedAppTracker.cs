@@ -86,6 +86,7 @@ namespace Jackett.Common.Indexers.Abstract
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
                 { "itemsPerPage", "100" },
+                { "includingDead", "1" },
                 { "sort", "torrent.createdAt" },
                 { "direction", "desc" }
             };
