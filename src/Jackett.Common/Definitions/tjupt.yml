@@ -63,7 +63,6 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-login:
   path: takelogin.php
   method: post
   inputs:
