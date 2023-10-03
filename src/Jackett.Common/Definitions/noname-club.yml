@@ -182,6 +182,7 @@ caps:
     - {id: 776, cat: TV, desc: " |- Звездные врата / Stargate"}
     - {id: 785, cat: TV, desc: " |- Звездный Крейсер Галактика / BattleStar Galactica"}
     - {id: 775, cat: TV, desc: " |- Звездный путь / Star Trek"}
+    - {id: 1344, cat: TV, desc: " |- Звездные войны / Star Wars (сериалы по франшизе)"}
     - {id: 1265, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
     - {id: 1242, cat: TV, desc: " |- Касл / Castle"}
     - {id: 1140, cat: TV, desc: " |- Кости / Bones"}
