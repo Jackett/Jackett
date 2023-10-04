@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Jackett.Common.Exceptions;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
 {
@@ -112,78 +118,72 @@ namespace Jackett.Common.Indexers
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var pingResponse = await CallProviderAsync(new TorznabQuery());
 
-            if (pingResponse.StartsWith("{\"error\""))
-            {
-                throw new ExceptionWithConfigData(pingResponse, configData);
-            }
+            var releases = await PerformQuery(new TorznabQuery());
+            await ConfigureIfOK(string.Empty, releases.Any(),
+                                () => throw new Exception("Could not find releases."));
 
-            try
-            {
-                var json = JArray.Parse(pingResponse);
-                if (json.Count > 0)
-                {
-                    IsConfigured = true;
-                    SaveConfig();
-                    return IndexerConfigurationStatus.Completed;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ExceptionWithConfigData(ex.Message, configData);
-            }
-
-            return IndexerConfigurationStatus.RequiresTesting;
+            return IndexerConfigurationStatus.Completed;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var response = await CallProviderAsync(query);
+
+            var indexerResponse = await CallProviderAsync(query);
+            var response = indexerResponse.ContentString;
+
+            if ((int)indexerResponse.Status == 429)
+            {
+                throw new TooManyRequestsException("Rate limited", indexerResponse);
+            }
 
             if (response.StartsWith("{\"error\""))
             {
-                throw new ExceptionWithConfigData(response, configData);
+                var error = STJson.Deserialize<FileListErrorResponse>(response).Error;
+
+                throw new ExceptionWithConfigData(error, configData);
+            }
+
+            if (indexerResponse.Status != HttpStatusCode.OK)
+            {
+                throw new Exception($"Unknown status code: {(int)indexerResponse.Status} ({indexerResponse.Status})");
             }
 
             try
             {
-                var json = JArray.Parse(response);
+                var results = STJson.Deserialize<List<FileListTorrent>>(response);
 
-                foreach (var row in json)
+                foreach (var row in results)
                 {
-                    var isFreeleech = row.Value<bool>("freeleech");
+                    var isFreeleech = row.FreeLeech;
 
                     // skip non-freeleech results when freeleech only is set
                     if (configData.Freeleech.Value && !isFreeleech)
+                    {
                         continue;
+                    }
 
-                    var detailsUri = new Uri(DetailsUrl + "?id=" + row.Value<string>("id"));
-                    var seeders = row.Value<int>("seeders");
-                    var peers = seeders + row.Value<int>("leechers");
-                    var publishDate = DateTime.Parse(row.Value<string>("upload_date") + " +0300", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
-                    var downloadVolumeFactor = isFreeleech ? 0 : 1;
-                    var uploadVolumeFactor = row.Value<bool>("doubleup") ? 2 : 1;
-                    var imdbId = ((JObject)row).ContainsKey("imdb") ? ParseUtil.GetImdbId(row.Value<string>("imdb")) : null;
-                    var link = new Uri(row.Value<string>("download_link"));
+                    var detailsUri = new Uri($"{DetailsUrl}?id={row.Id}");
+                    var link = new Uri(row.DownloadLink);
+                    var imdbId = row.ImdbId.IsNotNullOrWhiteSpace() ? ParseUtil.GetImdbId(row.ImdbId) : null;
 
                     var release = new ReleaseInfo
                     {
                         Guid = detailsUri,
                         Details = detailsUri,
                         Link = link,
-                        Title = row.Value<string>("name").Trim(),
-                        Category = MapTrackerCatDescToNewznab(row.Value<string>("category")),
-                        Size = row.Value<long>("size"),
-                        Files = row.Value<long>("files"),
-                        Grabs = row.Value<long>("times_completed"),
-                        Seeders = seeders,
-                        Peers = peers,
+                        Title = row.Name.Trim(),
+                        Category = MapTrackerCatDescToNewznab(row.Category),
+                        Size = row.Size,
+                        Files = row.Files,
+                        Grabs = row.TimesCompleted,
+                        Seeders = row.Seeders,
+                        Peers = row.Seeders + row.Leechers,
                         Imdb = imdbId,
-                        PublishDate = publishDate,
-                        DownloadVolumeFactor = downloadVolumeFactor,
-                        UploadVolumeFactor = uploadVolumeFactor,
+                        PublishDate = DateTime.Parse(row.UploadDate + " +0300", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
+                        DownloadVolumeFactor = isFreeleech ? 0 : 1,
+                        UploadVolumeFactor = row.DoubleUp ? 2 : 1,
                         MinimumRatio = 1,
                         MinimumSeedTime = 172800 // 48 hours
                     };
@@ -201,7 +201,7 @@ namespace Jackett.Common.Indexers
             return releases;
         }
 
-        private async Task<string> CallProviderAsync(TorznabQuery query)
+        private async Task<WebResult> CallProviderAsync(TorznabQuery query)
         {
             var searchUrl = ApiUrl;
             var searchString = query.SanitizedSearchTerm.Trim();
@@ -212,7 +212,9 @@ namespace Jackett.Common.Indexers
             };
 
             if (configData.Freeleech.Value)
+            {
                 queryCollection.Set("freeleech", "1");
+            }
 
             if (query.IsImdbQuery || searchString.IsNotNullOrWhiteSpace())
             {
@@ -230,13 +232,19 @@ namespace Jackett.Common.Indexers
                 }
 
                 if (query.Season > 0)
+                {
                     queryCollection.Set("season", query.Season.ToString());
+                }
 
                 if (query.Episode.IsNotNullOrWhiteSpace())
+                {
                     queryCollection.Set("episode", query.Episode);
+                }
             }
             else
+            {
                 queryCollection.Set("action", "latest-torrents");
+            }
 
             searchUrl += "?" + queryCollection.GetQueryString();
 
@@ -247,14 +255,58 @@ namespace Jackett.Common.Indexers
                 {
                     {"Authorization", "Basic " + auth}
                 };
-                var response = await RequestWithCookiesAsync(searchUrl, headers: headers);
 
-                return response.ContentString;
+                return await RequestWithCookiesAsync(searchUrl, headers: headers);
             }
             catch (Exception inner)
             {
                 throw new Exception("Error calling provider filelist", inner);
             }
         }
+    }
+
+    public class FileListTorrent
+    {
+        public uint Id { get; set; }
+
+        public string Name { get; set; }
+
+        [JsonPropertyName("download_link")]
+        public string DownloadLink { get; set; }
+
+        public long Size { get; set; }
+
+        public int Leechers { get; set; }
+
+        public int Seeders { get; set; }
+
+        [JsonPropertyName("times_completed")]
+        public uint TimesCompleted { get; set; }
+
+        public uint Files { get; set; }
+
+        [JsonPropertyName("imdb")]
+        public string ImdbId { get; set; }
+
+        public bool Internal { get; set; }
+
+        [JsonPropertyName("freeleech")]
+        public bool FreeLeech { get; set; }
+
+        [JsonPropertyName("doubleup")]
+        public bool DoubleUp { get; set; }
+
+        [JsonPropertyName("upload_date")]
+        public string UploadDate { get; set; }
+
+        public string Category { get; set; }
+
+        [JsonPropertyName("small_description")]
+        public string SmallDescription { get; set; }
+    }
+
+    public class FileListErrorResponse
+    {
+        public string Error { get; set; }
     }
 }
