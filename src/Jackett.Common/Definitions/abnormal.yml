@@ -114,7 +114,7 @@ search:
     SortOrder: "{{ .Config.type }}"
 
   rows:
-    selector: table.table-rows > tbody > tr
+    selector: table.table-rows > tbody > tr:has(a[href^="/Torrent/Download?ReleaseId="])
 
   fields:
     category:
@@ -168,6 +168,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # Gazelle
