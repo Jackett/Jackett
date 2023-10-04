@@ -157,7 +157,7 @@ namespace Jackett.Common.Indexers
             // looks like after some failed login attempts there's a captcha
             var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var parser = new HtmlParser();
-            var document = parser.ParseDocument(loginPage.ContentString);
+            using var document = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = document.QuerySelector("img#captcha_pictcha");
             if (qCaptchaImg != null)
             {
@@ -442,7 +442,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.ContentString);
+                using var document = parser.ParseDocument(results.ContentString);
                 var rows = document.QuerySelectorAll("div.row");
 
                 foreach (var row in rows)
@@ -471,7 +471,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.ContentString);
+                using var document = parser.ParseDocument(results.ContentString);
 
                 var playButton = document.QuerySelector("div.external-btn");
                 if (playButton != null && !playButton.ClassList.Contains("inactive"))
@@ -523,7 +523,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.ContentString);
+                using var document = parser.ParseDocument(results.ContentString);
                 var seasons = document.QuerySelectorAll("div.serie-block");
                 var rowSelector = "table.movie-parts-list > tbody > tr";
 
@@ -688,7 +688,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.ContentString);
+                using var document = parser.ParseDocument(results.ContentString);
                 var meta = document.QuerySelector("meta");
                 var metaContent = meta.GetAttribute("content");
 
@@ -714,7 +714,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(results.ContentString);
+                using var document = parser.ParseDocument(results.ContentString);
                 var rows = document.QuerySelectorAll("div.inner-box--item");
 
                 if (rows.Count() > 0)

@@ -111,7 +111,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(response.Cookies, response.ContentString?.Contains("logout.php") == true || response.ContentString?.Contains("Rank: Parked") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
                 var errorMessages = dom
                    .QuerySelectorAll("table.lista td.lista span[style*=\"#FF0000\"], table.lista td.header:contains(\"login attempts\")")
                    .Select(r => r.TextContent.Trim())
@@ -149,7 +149,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var resultParser = new HtmlParser();
-                var searchResultDocument = resultParser.ParseDocument(response.ContentString);
+                using var searchResultDocument = resultParser.ParseDocument(response.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll("table.lista > tbody > tr");
 
                 foreach (var row in rows)

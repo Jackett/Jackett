@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers
                 response = await ReloginIfNecessaryAsync(response);
 
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
 
                 hasGlobalFreeleech = dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
 
@@ -185,7 +185,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(response.ContentString);
+            using var dom = parser.ParseDocument(response.ContentString);
 
             if (!hasGlobalFreeleech)
                 hasGlobalFreeleech = dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;

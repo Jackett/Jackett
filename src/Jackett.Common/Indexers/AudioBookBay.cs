@@ -207,7 +207,7 @@ namespace Jackett.Common.Indexers
             var response = await RequestWithCookiesAsync(link.ToString());
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(response.ContentString);
+            using var dom = parser.ParseDocument(response.ContentString);
 
             var hash = dom.QuerySelector("td:contains(\"Info Hash:\") ~ td")?.TextContent.Trim();
             if (hash == null)
@@ -228,7 +228,7 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
 
-            var dom = ParseHtmlDocument(response.ContentString);
+            using var dom = ParseHtmlDocument(response.ContentString);
 
             var rows = dom.QuerySelectorAll("div.post:has(div[class=\"postTitle\"])");
             foreach (var row in rows)

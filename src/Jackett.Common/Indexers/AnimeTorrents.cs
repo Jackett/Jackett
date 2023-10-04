@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
+                using var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector(".ui-state-error").Text().Trim();
                 throw new ExceptionWithConfigData(errorMessage, configData);
             });
@@ -152,7 +152,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results);
+                using var dom = parser.ParseDocument(results);
 
                 var rows = dom.QuerySelectorAll("table tr");
                 foreach (var (row, index) in rows.Skip(1).Select((v, i) => (v, i)))

@@ -248,7 +248,7 @@ namespace Jackett.Common.Indexers
                 // Getting results & Store content
                 var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
 
                 try
                 {

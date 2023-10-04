@@ -165,7 +165,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(response.Cookies, response.ContentString.Contains("logout.php"), () =>
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(response.ContentString);
+                using var document = parser.ParseDocument(response.ContentString);
                 var errorMessage = document.QuerySelector("#main table td:contains(\"ERROR\")")?.TextContent.Trim();
 
                 throw new ExceptionWithConfigData(errorMessage ?? "Login failed.", configData);
@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                using var dom = parser.ParseDocument(results.ContentString);
 
                 var rows = dom.QuerySelectorAll("#sortabletable tr:has(a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)

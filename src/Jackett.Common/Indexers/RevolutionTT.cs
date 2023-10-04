@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                using var dom = parser.ParseDocument(results.ContentString);
                 var rows = dom.QuerySelectorAll("#torrents-table > tbody > tr");
 
                 foreach (var row in rows.Skip(1))

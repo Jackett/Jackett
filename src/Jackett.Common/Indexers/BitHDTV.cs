@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
             foreach (var result in results)
                 try
                 {
-                    var dom = parser.ParseDocument(result.ContentString);
+                    using var dom = parser.ParseDocument(result.ContentString);
 
                     var tableBody = dom.QuerySelector("#torrents-index-table > #torrents-index-table-body");
                     if (tableBody == null) // No results, so skip this search

@@ -169,7 +169,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.ContentString);
+                using var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var container = doc.QuerySelector(".gap-y-3 > div:nth-child(1) > div:nth-child(1)");
                 var parsedDetailsLink = new List<string>();
@@ -223,7 +223,7 @@ namespace Jackett.Common.Indexers
                 try
                 {
                     var searchResultParser = new HtmlParser();
-                    var doc = searchResultParser.ParseDocument(result.ContentString);
+                    using var doc = searchResultParser.ParseDocument(result.ContentString);
 
                     var table = doc.QuerySelector(".w-11\\/12");
                     // check the search term is valid
@@ -304,7 +304,7 @@ namespace Jackett.Common.Indexers
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var rows = doc.QuerySelectorAll("tr.border");
             quality = CleanQuality(quality);
@@ -344,7 +344,7 @@ namespace Jackett.Common.Indexers
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var downloadLink = doc.QuerySelector(".ml-2").GetAttribute("href");
 

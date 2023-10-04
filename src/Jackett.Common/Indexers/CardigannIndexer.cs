@@ -528,7 +528,7 @@ namespace Jackett.Common.Indexers
                 return true; // no error
 
             var ResultParser = new HtmlParser();
-            var ResultDocument = ResultParser.ParseDocument(loginResult.ContentString);
+            using var ResultDocument = ResultParser.ParseDocument(loginResult.ContentString);
             foreach (var error in errorBlocks)
             {
                 var selection = ResultDocument.QuerySelector(error.Selector);
@@ -877,7 +877,7 @@ namespace Jackett.Common.Indexers
             if (Login.Test.Selector != null)
             {
                 var testResultParser = new HtmlParser();
-                var testResultDocument = testResultParser.ParseDocument(testResult.ContentString);
+                using var testResultDocument = testResultParser.ParseDocument(testResult.ContentString);
                 var selection = testResultDocument.QuerySelectorAll(Login.Test.Selector);
                 if (selection.Length == 0)
                 {
@@ -923,7 +923,7 @@ namespace Jackett.Common.Indexers
             if (Definition.Login.Test.Selector != null && (contentType?.Contains("text/html") ?? true))
             {
                 var parser = new HtmlParser();
-                var document = parser.ParseDocument(response.ContentString);
+                using var document = parser.ParseDocument(response.ContentString);
 
                 var selection = document.QuerySelectorAll(Definition.Login.Test.Selector);
 
@@ -1969,7 +1969,7 @@ namespace Jackett.Common.Indexers
             var parser = new HtmlParser();
 
             var results = response.ContentString;
-            var resultDocument = parser.ParseDocument(results);
+            using var resultDocument = parser.ParseDocument(results);
 
             var element = resultDocument.QuerySelector(selectorText);
             if (element == null)

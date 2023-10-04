@@ -133,7 +133,7 @@ namespace Jackett.Common.Indexers
                 {
                     var json = JsonConvert.DeserializeObject<dynamic>(result.ContentString);
                     var parser = new HtmlParser();
-                    var doc = parser.ParseDocument((string)json["contenido"]);
+                    using var doc = parser.ParseDocument((string)json["contenido"]);
 
                     var rows = doc.QuerySelectorAll("div.span2");
                     foreach (var row in rows)
@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
                         var qLink = row.QuerySelector("a");
                         var details = new Uri(qLink.GetAttribute("href"));
 
-                        var qTooltip = parser.ParseDocument(qLink.GetAttribute("data-content"));
+                        using var qTooltip = parser.ParseDocument(qLink.GetAttribute("data-content"));
                         // we get the language from the last class tag => class="pull-right sprite idioma_5"
                         var languageId = qTooltip.QuerySelector("div.pull-right").GetAttribute("class").Split('_')[1];
                         title += $" [{_languages[languageId]}] [epub]";
@@ -195,7 +195,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(result.ContentString);
+                using var doc = parser.ParseDocument(result.ContentString);
                 var magnetLink = doc.QuerySelector("a[id=en_desc]").GetAttribute("href");
                 return Encoding.UTF8.GetBytes(magnetLink);
             }
