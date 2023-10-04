@@ -116,16 +116,12 @@ login:
 
 search:
   paths:
-    # https://www.last-torrents.org/externalid?searchex=tt5834760&search_by=imdbid
+    # https://www.last-torrents.org/browse.php?search=the+nun+ii&searchin=title&type=0&cat=+
     # cannot support imdbid or tmdbid searches while using path category filters
     - path: browse.php
       categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 58, 59, 60, 61, 62, 81, 82]
     - path: browseadult.php
       categories: [27]
-
-  keywordsfilters:
-    - name: re_replace
-      args: ["(\\w+)", " +$1"] # prepend + to each word
 
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -140,6 +136,8 @@ search:
 
   rows:
     selector: div.py-3
+    filters:
+      - name: andmatch
 
   fields:
     category:
@@ -191,11 +189,11 @@ search:
     size:
       selector: div.col-sm-4:nth-of-type(4)
     grabs:
-      selector: div.col-sm-4:contains("Completed") b
+      selector: div.col-sm-3:contains("Completed") b
     seeders:
-      selector: div.col-sm-4:contains("Seeders") b
+      selector: div.col-sm-3:contains("Seeders") b
     leechers:
-      selector: div.col-sm-4:contains("Leechers") b
+      selector: div.col-sm-2:contains("Leechers") b
     downloadvolumefactor:
       case:
         img[src$="half2.png"]: 0.5
