@@ -28,6 +28,7 @@
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.8" />
     <PackageReference Include="YamlDotNet" Version="13.0.1" />
   </ItemGroup>
 
