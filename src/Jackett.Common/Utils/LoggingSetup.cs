@@ -15,6 +15,12 @@ namespace Jackett.Common.Utils
     {
         public static LoggingConfiguration GetLoggingConfiguration(RuntimeSettings settings, bool fileOnly = false)
         {
+            var customLogConfigFile = Path.Combine(settings.DataFolder, "nlog.config");
+            if (File.Exists(customLogConfigFile))
+            {
+                return new XmlLoggingConfiguration(customLogConfigFile);
+            }
+
             var logFileName = settings.CustomLogFileName ?? "log.txt";
             var logLevel = settings.TracingEnabled ? NLog.LogLevel.Debug : NLog.LogLevel.Info;
 
