@@ -66,7 +66,7 @@ caps:
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
     - {id: 76, cat: XXX/SD, desc: "XXX SD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
-    - {id: 142, cat: XXX/ImageSet, desc: "XXX Pic's"}
+    - {id: 142, cat: XXX/ImageSet, desc: "XXX Pic´s"}
     - {id: 161, cat: XXX/Other, desc: "XXX ePaper"}
     # ePaper,Ebooks
     - {id: 163, cat: Books/Mags, desc: "ePaper Magazine"}
