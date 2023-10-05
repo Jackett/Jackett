@@ -308,7 +308,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results);
+                using var doc = parser.ParseDocument(results);
 
                 var rows = doc.QuerySelectorAll("table[id=\"torrents\"] > tbody > tr");
                 foreach (var row in rows)

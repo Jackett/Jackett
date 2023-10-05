@@ -177,7 +177,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(loginCookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.ParseDocument(result.ContentString);
+                using var loginResultDocument = loginResultParser.ParseDocument(result.ContentString);
                 var errorMessage = loginResultDocument.QuerySelector("table.body_table font[color~=\"red\"]")?.TextContent.Trim();
 
                 throw new ExceptionWithConfigData(errorMessage ?? "Login failed", configData);
@@ -249,7 +249,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
 
                 var rows = dom.QuerySelectorAll("table > tbody > tr.browse");
                 foreach (var row in rows)

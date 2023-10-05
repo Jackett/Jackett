@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
             {
                 const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
                 var searchResultParser = new HtmlParser();
-                var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
+                using var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
                 string groupTitle = null;
                 string groupYearStr = null;

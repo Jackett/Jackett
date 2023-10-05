@@ -166,7 +166,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(htmlResponse);
+                using var dom = parser.ParseDocument(htmlResponse);
 
                 var table = dom.QuerySelector("table.movehere");
                 if (table == null)

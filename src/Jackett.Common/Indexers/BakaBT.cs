@@ -117,7 +117,7 @@ namespace Jackett.Common.Indexers
             };
 
             var htmlParser = new HtmlParser();
-            var dom = htmlParser.ParseDocument(loginForm.ContentString);
+            using var dom = htmlParser.ParseDocument(loginForm.ContentString);
 
             var loginKey = dom.QuerySelector("input[name=\"loginKey\"]");
             if (loginKey != null)
@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers
 
             await ConfigureIfOK(response.Cookies, response.ContentString != null && !response.ContentString.Contains("loginForm"), () =>
             {
-                var document = htmlParser.ParseDocument(response.ContentString);
+                using var document = htmlParser.ParseDocument(response.ContentString);
                 var errorMessage = document.QuerySelector("#loginError, .error")?.Text().Trim();
 
                 throw new ExceptionWithConfigData(errorMessage ?? "Login failed.", configData);
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll(".torrents tr.torrent, .torrents tr.torrent_alt");
                 ICollection<int> currentCategories = new List<int> { TorznabCatType.TVAnime.ID };
 
@@ -318,7 +318,7 @@ namespace Jackett.Common.Indexers
             var downloadPage = await RequestWithCookiesAsync(link.ToString());
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(downloadPage.ContentString);
+            using var dom = parser.ParseDocument(downloadPage.ContentString);
 
             var downloadLink = dom.QuerySelector(".download_link")?.GetAttribute("href");
 

@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("/browse.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
+                using var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("h5")?.TextContent;
 
                 if (result.ContentString.Contains("Wrong Captcha!"))
@@ -221,7 +221,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
 
                 var rows = dom.QuerySelectorAll("div.boxContent > table > tbody > tr");
                 foreach (var row in rows)

@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestWithCookiesAsync(LandingUrl);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.ContentString);
+            using var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("img#regimage");
             if (qCaptchaImg != null)
             {
@@ -204,7 +204,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
+                using var dom = parser.ParseDocument(result.ContentString);
 
                 var errorMessage = dom.QuerySelector(".left_side table:nth-of-type(1) tr:nth-of-type(2)")?.TextContent.Trim().Replace("\n\t", " ");
                 if (errorMessage.IsNullOrWhiteSpace())
@@ -268,7 +268,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(searchPage.ContentString);
+                using var dom = parser.ParseDocument(searchPage.ContentString);
                 var rows = dom.QuerySelectorAll("table#sortabletable > tbody > tr:has(div > a[href*=\"details.php?id=\"])");
                 foreach (var row in rows)
                 {

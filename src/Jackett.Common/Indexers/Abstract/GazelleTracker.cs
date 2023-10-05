@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers.Abstract
             await ConfigureIfOK(response.Cookies, response.ContentString != null && response.ContentString.Contains("logout.php"), () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.ParseDocument(response.ContentString);
+                using var loginResultDocument = loginResultParser.ParseDocument(response.ContentString);
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
                     throw new ExceptionWithConfigData(response.ContentString, configData);

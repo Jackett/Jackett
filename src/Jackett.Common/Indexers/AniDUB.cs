@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers
             );
 
             var parser = new HtmlParser();
-            var document = await parser.ParseDocumentAsync(result.ContentString);
+            using var document = await parser.ParseDocumentAsync(result.ContentString);
 
             await ConfigureIfOK(result.Cookies, IsAuthorized(result), () =>
             {
@@ -185,7 +185,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.ContentString);
+                using var document = await parser.ParseDocumentAsync(result.ContentString);
 
                 foreach (var linkNode in document.QuerySelectorAll(ReleaseLinksSelector))
                 {
@@ -222,7 +222,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(result.ContentString);
+                using var document = await parser.ParseDocumentAsync(result.ContentString);
                 var content = document.GetElementById(ContentId);
 
                 var date = GetDateFromShowPage(url, content);
@@ -553,7 +553,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var document = await parser.ParseDocumentAsync(response.ContentString);
+                using var document = await parser.ParseDocumentAsync(response.ContentString);
 
                 foreach (var linkNode in document.QuerySelectorAll(searchLinkSelector))
                 {

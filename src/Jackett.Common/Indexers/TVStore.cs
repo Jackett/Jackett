@@ -169,7 +169,7 @@ namespace Jackett.Common.Indexers
                     var downloadLink = new Uri(DownloadUrl + "?id=" + torrentId);
                     // the genre field is a html string, and we just want the text
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(row[(int)TorrentParts.Genre]);
+                    using var dom = parser.ParseDocument(row[(int)TorrentParts.Genre]);
                     var genres = dom.QuerySelector("*").TextContent.Replace("\xA0", "");
                     var description = "";
                     if (!string.IsNullOrWhiteSpace(genres))

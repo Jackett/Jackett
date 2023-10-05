@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
             var result = await RequestWithCookiesAsync(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
-            var dom = parser.ParseDocument(result.ContentString);
+            using var dom = parser.ParseDocument(result.ContentString);
 
             //var info = dom.QuerySelectorAll("div.descargar > div.card > div.card-body").First();
             //var title = info.QuerySelector("h2.descargarTitulo").TextContent;
@@ -192,7 +192,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.ContentString);
+                using var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var rows = doc.QuerySelector("div.seccion#ultimos_torrents > div.card > div.card-body > div");
 
@@ -284,7 +284,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var searchResultParser = new HtmlParser();
-                var doc = searchResultParser.ParseDocument(result.ContentString);
+                using var doc = searchResultParser.ParseDocument(result.ContentString);
 
                 var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
 
@@ -375,7 +375,7 @@ namespace Jackett.Common.Indexers
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var data = doc.QuerySelector("div.descargar > div.card > div.card-body");
 
@@ -404,7 +404,7 @@ namespace Jackett.Common.Indexers
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = searchResultParser.ParseDocument(result.ContentString);
 
             var data = doc.QuerySelector("div.descargar > div.card > div.card-body");
 
@@ -457,7 +457,7 @@ namespace Jackett.Common.Indexers
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = searchResultParser.ParseDocument(result.ContentString);
 
             // parse tags in title, we need to put the year after the real title (before the tags)
             // Harry Potter And The Deathly Hallows: Part 1 [subs. Integrados]

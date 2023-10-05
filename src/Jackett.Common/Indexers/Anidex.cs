@@ -212,7 +212,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var resultParser = new HtmlParser();
-                var resultDocument = resultParser.ParseDocument(response);
+                using var resultDocument = resultParser.ParseDocument(response);
                 IEnumerable<IElement> rows = resultDocument.QuerySelectorAll("div#content table > tbody > tr");
 
                 var releases = new List<ReleaseInfo>();
