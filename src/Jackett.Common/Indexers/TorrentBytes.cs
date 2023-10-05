@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
                 result.Cookies, result.ContentString?.Contains("my.php") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.ContentString);
+                    using var dom = parser.ParseDocument(result.ContentString);
                     var messageEl = dom.QuerySelector("td.embedded");
                     var errorMessage = messageEl != null ? messageEl.TextContent : result.ContentString;
                     throw new ExceptionWithConfigData(errorMessage, configData);
@@ -159,7 +159,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table > tbody:has(tr > td.colhead) > tr:not(:has(td.colhead))");
                 foreach (var row in rows)
                 {

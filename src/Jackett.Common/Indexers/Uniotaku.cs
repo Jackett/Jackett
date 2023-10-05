@@ -94,7 +94,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(response.Cookies, response.Cookies != null && response.Cookies.Contains("uid=") && response.Cookies.Contains("pass="), () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
                 var errorMessage = dom.QuerySelector(".login-content span.text-red")?.TextContent.Trim();
 
                 throw new ExceptionWithConfigData(errorMessage ?? "Unknown error message, please report.", configData);
@@ -137,9 +137,9 @@ namespace Jackett.Common.Indexers
                 var publishDate = DateTime.Now;
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
-                    var detailsDom = parser.ParseDocument(item.SelectToken("[0]").Value<string>());
-                    var categoryDom = parser.ParseDocument(item.SelectToken("[1]").Value<string>());
-                    var groupDom = parser.ParseDocument(item.SelectToken("[7]").Value<string>());
+                    using var detailsDom = parser.ParseDocument(item.SelectToken("[0]").Value<string>());
+                    using var categoryDom = parser.ParseDocument(item.SelectToken("[1]").Value<string>());
+                    using var groupDom = parser.ParseDocument(item.SelectToken("[7]").Value<string>());
 
                     var qTitleLink = detailsDom.QuerySelector("a[href^=\"torrents-details.php?id=\"]");
                     var title = qTitleLink?.TextContent.Trim();
@@ -191,7 +191,7 @@ namespace Jackett.Common.Indexers
             var response = await RequestWithCookiesAsync(link.ToString());
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(response.ContentString);
+            using var dom = parser.ParseDocument(response.ContentString);
             var downloadLink = dom.QuerySelector("a[href^=\"download.php?id=\"]")?.GetAttribute("href")?.Trim();
 
             if (downloadLink == null)

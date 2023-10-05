@@ -1398,7 +1398,7 @@ namespace Jackett.Common.Indexers
                 configData.CookieHeader.Value = null;
                 var response = await RequestWithCookiesAsync(LoginUrl);
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(response.ContentString);
+                using var doc = parser.ParseDocument(response.ContentString);
                 var captchaimg = doc.QuerySelector("img[src^=\"https://static.rutracker.cc/captcha/\"]");
 
                 if (captchaimg != null)
@@ -1444,7 +1444,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("id=\"logged-in-username\""), () =>
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(result.ContentString);
+                using var doc = parser.ParseDocument(result.ContentString);
                 var errorMessage = doc.QuerySelector("h4.warnColor1.tCenter.mrg_16, div.msg-main")?.TextContent.Trim();
 
                 throw new ExceptionWithConfigData(errorMessage ?? "RuTracker authentication failed", configData);
@@ -1498,7 +1498,7 @@ namespace Jackett.Common.Indexers
                 var response = await RequestWithCookiesAsync(link.ToString());
 
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
                 var magnetLink = dom.QuerySelector("table.attach a.magnet-link[href^=\"magnet:?\"]")?.GetAttribute("href");
 
                 if (magnetLink == null)
@@ -1560,7 +1560,7 @@ namespace Jackett.Common.Indexers
         private IHtmlCollection<IElement> GetReleaseRows(WebResult results)
         {
             var parser = new HtmlParser();
-            var doc = parser.ParseDocument(results.ContentString);
+            using var doc = parser.ParseDocument(results.ContentString);
             var rows = doc.QuerySelectorAll("table#tor-tbl > tbody > tr");
             return rows;
         }

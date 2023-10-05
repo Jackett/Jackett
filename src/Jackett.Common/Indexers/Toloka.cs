@@ -222,7 +222,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logout=true"), () =>
             {
                 var loginResultParser = new HtmlParser();
-                var loginResultDocument = loginResultParser.ParseDocument(result.ContentString);
+                using var loginResultDocument = loginResultParser.ParseDocument(result.ContentString);
                 var errorMessage = loginResultDocument.QuerySelector("table.forumline table span.gen")?.FirstChild?.TextContent;
 
                 throw new ExceptionWithConfigData(errorMessage ?? "Unknown error message, please report.", configData);
@@ -281,7 +281,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var searchResultParser = new HtmlParser();
-                var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
+                using var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
                 var rows = searchResultDocument.QuerySelectorAll("table.forumline > tbody > tr[class*=\"prow\"]");
 
                 foreach (var row in rows)

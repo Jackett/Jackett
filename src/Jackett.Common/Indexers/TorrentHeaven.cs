@@ -138,7 +138,7 @@ namespace Jackett.Common.Indexers
                                            !result.ContentString.Contains("index.php?strWebValue=account&strWebAction=logout")))
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
+                using var dom = parser.ParseDocument(result.ContentString);
                 var errorMessageEl = dom.QuerySelector("table > tbody > tr > td[valign=top][width=100%]");
                 var errorMessage = errorMessageEl != null ? errorMessageEl.InnerHtml : result.ContentString;
                 throw new ExceptionWithConfigData(errorMessage, configData);
@@ -155,7 +155,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestWithCookiesAsync(IndexUrl, string.Empty);
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(loginPage.ContentString);
+            using var dom = parser.ParseDocument(loginPage.ContentString);
             var qCaptchaImg = dom.QuerySelector("td.tablea > img");
             if (qCaptchaImg != null)
             {
@@ -212,7 +212,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
+                using var dom = parser.ParseDocument(response.ContentString);
                 var rows = dom.QuerySelectorAll("table.torrenttable > tbody > tr");
                 foreach (var row in rows.Skip(1))
                 {

@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
                 result.Cookies, result.ContentString?.Contains("profile.php") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.ContentString);
+                    using var dom = parser.ParseDocument(result.ContentString);
                     var msgContainer = dom.QuerySelector("#hibauzenet table tbody tr")?.Children[1];
                     throw new ExceptionWithConfigData(msgContainer?.TextContent ?? "Error while trying to login.", configData);
                 });
@@ -196,7 +196,7 @@ namespace Jackett.Common.Indexers
             var results = await RequestWithCookiesAndRetryAsync(
                 SearchUrl, null, RequestType.POST, null, pairs.ToEnumerable(true));
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(results.ContentString);
+            using var dom = parser.ParseDocument(results.ContentString);
 
             // find number of torrents / page
             var torrentPerPage = dom.QuerySelectorAll(".box_torrent").Length;
@@ -243,7 +243,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                using var dom = parser.ParseDocument(results.ContentString);
                 var rows = dom.QuerySelectorAll(".box_torrent").Skip(previouslyParsedOnPage).Take(limit - alreadyFound);
 
                 var key = ParseUtil.GetArgumentFromQueryString(

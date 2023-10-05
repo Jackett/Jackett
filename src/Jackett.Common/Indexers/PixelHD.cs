@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
         {
             var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
             var LoginParser = new HtmlParser();
-            var LoginDocument = LoginParser.ParseDocument(loginPage.ContentString);
+            using var LoginDocument = LoginParser.ParseDocument(loginPage.ContentString);
 
             configData.CaptchaCookie.Value = loginPage.Cookies;
 
@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.ContentString.Contains("logout.php"), () =>
            {
                var LoginParser = new HtmlParser();
-               var LoginDocument = LoginParser.ParseDocument(result.ContentString);
+               using var LoginDocument = LoginParser.ParseDocument(result.ContentString);
                var errorMessage = LoginDocument.QuerySelector("span.warning[id!=\"no-cookies\"]:has(br)").TextContent;
                throw new ExceptionWithConfigData(errorMessage, configData);
            });
@@ -158,7 +158,7 @@ namespace Jackett.Common.Indexers
 
             var IMDBRegEx = new Regex(@"tt(\d+)", RegexOptions.Compiled);
             var hParser = new HtmlParser();
-            var ResultDocument = hParser.ParseDocument(results.ContentString);
+            using var ResultDocument = hParser.ParseDocument(results.ContentString);
             try
             {
                 var Groups = ResultDocument.QuerySelectorAll("div.browsePoster");

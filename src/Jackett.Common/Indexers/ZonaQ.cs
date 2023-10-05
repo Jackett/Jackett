@@ -177,7 +177,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var doc = parser.ParseDocument(results);
+                using var doc = parser.ParseDocument(results);
 
                 var rows = doc.QuerySelectorAll("table.torrent_list > tbody > tr");
                 foreach (var row in rows.Skip(1))
@@ -248,7 +248,7 @@ namespace Jackett.Common.Indexers
             CookieHeader = "";
             var result = await RequestWithCookiesAsync(Login1Url, "");
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(result.ContentString);
+            using var dom = parser.ParseDocument(result.ContentString);
             var sessionId = dom.QuerySelector("input#session_id")?.GetAttribute("value");
             if (string.IsNullOrWhiteSpace(sessionId))
                 throw new ExceptionWithConfigData("Error getting the Session ID", configData);

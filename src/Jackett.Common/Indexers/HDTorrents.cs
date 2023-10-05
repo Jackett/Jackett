@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
                 result.Cookies, result.ContentString?.Contains("If your browser doesn't have javascript enabled") == true, () =>
                 {
                     var parser = new HtmlParser();
-                    var dom = parser.ParseDocument(result.ContentString);
+                    using var dom = parser.ParseDocument(result.ContentString);
 
                     var errorMessage = dom.QuerySelector("div > font[color=\"#FF0000\"]")?.TextContent.Trim();
 
@@ -167,7 +167,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(results.ContentString);
+                using var dom = parser.ParseDocument(results.ContentString);
 
                 var userInfo = dom.QuerySelector("table.navus tr");
                 var userRank = userInfo.Children[1].TextContent.Replace("Rank:", string.Empty).Trim();

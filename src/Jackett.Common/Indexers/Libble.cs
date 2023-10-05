@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(result.ContentString);
+                using var dom = parser.ParseDocument(result.ContentString);
                 var errorMessage = dom.QuerySelector("#loginform > .warning")?.TextContent.Trim();
 
                 throw new Exception(errorMessage ?? "Login failed.");
@@ -194,7 +194,7 @@ namespace Jackett.Common.Indexers
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(searchPage.ContentString);
+                using var dom = parser.ParseDocument(searchPage.ContentString);
 
                 var albumRows = dom.QuerySelectorAll("table#torrent_table > tbody > tr.group:has(strong > a[href*=\"torrents.php?id=\"])");
                 foreach (var row in albumRows)
