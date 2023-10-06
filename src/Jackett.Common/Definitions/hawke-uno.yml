@@ -90,6 +90,11 @@ search:
       selector: category
     title:
       selector: name
+      filters:
+        - name: re_replace
+          args: ["\\(((?>[^()]+|(?<o>)\\(|(?<-o>)\\))*(?(o)(?!)))\\)$", "$1"]
+        - name: re_replace
+          args: ["- (\\w+)$", "-$1"]
     details:
       selector: details_link
     download:
