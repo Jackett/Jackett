@@ -632,6 +632,7 @@ namespace Jackett.Updater
                 "Definitions/ttobogo.yml",
                 "Definitions/turktracker.yml",
                 "Definitions/turknova.yml",
+                "Definitions/tvroad.yml",
                 "Definitions/twilight.yml",
                 "Definitions/twilightszoom.yml",
                 "Definitions/u-torrents.yml",
