@@ -136,6 +136,10 @@ search:
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\b(\\d{4})\\.(\\d{2})\\.(\\d{2})\\b", "$3.$2.$1"]
+
   rows:
     selector: "table#torrents_table_classic > tbody > tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
@@ -148,6 +152,9 @@ search:
           args: cid
     title:
       selector: a[href*="?p=torrents&pid=10&action=details"]
+      filters:
+        - name: re_replace
+          args: ["\\b(\\d{2})\\.(\\d{2})\\.(\\d{4})\\b", "$3.$2.$1"]
     details:
       selector: a[href*="?p=torrents&pid=10&action=details"]
       attribute: href
