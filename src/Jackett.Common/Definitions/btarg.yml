@@ -139,6 +139,12 @@ search:
           args: ["(?i)Temporada (\\d{1,3})\\s*y\\s*(\\d{1,3})", "S$1-$2"]
         - name: re_replace
           args: ["(?i)Temporada (\\d{1,3})", "S$1"]
+        # move ARG tag to end
+        - name: re_replace
+          args: ["^(\\[ARG\\]) (.+?)$", "$2 $1"]
+        # move quality tags to end
+        - name: re_replace
+          args: ["^(\\[.+?\\]) (.+?)$", "$2 $1"]
     title:
       selector: a[title][href^="details.php?id="]
       attribute: title
@@ -173,6 +179,12 @@ search:
           args: ["(?i)Temporada (\\d{1,3})\\s*y\\s*(\\d{1,3})", "S$1-$2"]
         - name: re_replace
           args: ["(?i)Temporada (\\d{1,3})", "S$1"]
+        # move ARG tag to end
+        - name: re_replace
+          args: ["^(\\[ARG\\]) (.+?)$", "$2 $1"]
+        # move quality tags to end
+        - name: re_replace
+          args: ["^(\\[.+?\\]) (.+?)$", "$2 $1"]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
