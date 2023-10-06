@@ -7,14 +7,13 @@ type: public
 encoding: UTF-8
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.esq/
+  - https://torrentdownload.unblockit.zip/
   - https://torrentdownload.mrunblock.bond/
   - https://torrentdownload.nocensor.cloud/
 legacylinks:
   - https://torrentdownload.nocensor.space/
   - https://torrentdownload.nocensor.work/
   - https://torrentdownload.nocensor.biz/
-  - https://torrentdownload.unblockit.name/
   - https://torrentdownload.nocensor.sbs/
   - https://torrentdownload.unblockit.ist/
   - https://torrentdownload.unblockit.bet/
@@ -35,6 +34,7 @@ legacylinks:
   - https://torrentdownload.unblockit.rsvp/
   - https://torrentdownload.nocensor.click/
   - https://torrentdownload.unblockit.vegas/
+  - https://torrentdownload.unblockit.esq/
 
 caps:
   categorymappings:
