@@ -24,6 +24,7 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "Sports(体育)"}
     - {id: 408, cat: Audio, desc: "Audio(音频)"}
     - {id: 415, cat: Books/EBook, desc: "E-Booko(电子书/有声书)"}
+    - {id: 417, cat: Other, desc: "学习资料(Education)"}
     - {id: 409, cat: Other, desc: "Misc(其他)"}
 
   modes:
