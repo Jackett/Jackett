@@ -5,7 +5,7 @@ description: "PirateBit is a RUSSIAN Public Torrent Tracker for MOVIES / TV / GE
 language: ru-RU
 type: public
 encoding: UTF-8
-requestDelay: 2
+requestDelay: 5
 links:
   - https://pb.wtf/
   - https://top.pirat.one/
@@ -682,8 +682,8 @@ search:
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
   headers:
-    # site blocks Jackett's Linux User-Agents, so use Windows instead
-    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"]
+    # site blocks Jackett's User-Agents, so slightly alter it here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
 
   rows:
     selector: tr[id^="tor_"]:not(:has(span[title="закрыто"])):not(:has(span[title="неоформлено"]))
