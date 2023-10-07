@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://torrentz2beta.com/
+  - https://torrentz2beta.in/
 legacylinks:
   - https://torrentz2eu.me/
   - https://torrentz2.org.in/
@@ -18,6 +18,7 @@ legacylinks:
   - https://2torrentz2eu.in/
   - https://torrentz2.unblockninja.com/
   - hhttps://torrentz2beta.com/
+  - https://torrentz2beta.com/
 
 caps:
   categorymappings:
