@@ -6,7 +6,9 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - http://riperam.org/ # site does not support https ERR_CONNECTION_TIMED_OUT
+  - https://riperam.org/
+legacylinks:
+  - http://riperam.org/
 
 caps:
   categorymappings:

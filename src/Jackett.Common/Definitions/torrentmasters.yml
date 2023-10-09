@@ -6,6 +6,8 @@ language: hu-HU
 type: private
 encoding: UTF-8
 links:
+  - https://torrentmasters.org/
+legacylinks:
   - https://torrentmasters.info/
 
 caps:

@@ -1,38 +1,29 @@
 ---
-id: ptlsp
-name: PTLSP
-description: "PTLSP is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: hdvbits
+name: hdvbits
+description: "hdvbits is a CHINESE Private torrent tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://www.ptlsp.com/
+  - https://hdvbits.com/
 
 caps:
   categorymappings:
-    - {id: 414, cat: Other, desc: "Ai(人工智能)"}
-    - {id: 401, cat: Movies, desc: "Movie(电影)"}
-    - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
-    - {id: 405, cat: TV/Anime, desc: "Anime(动画)"}
-    - {id: 411, cat: Audio, desc: "Music(音乐)"}
-    - {id: 416, cat: Books/Comics, desc: "Comic(漫画)"}
-    - {id: 406, cat: Audio/Video, desc: "MV(演唱)"}
-    - {id: 412, cat: PC/0day, desc: "Software(软件)"}
-    - {id: 413, cat: PC/Games, desc: "Game(游戏)"}
-    - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries(纪录片)"}
-    - {id: 407, cat: TV/Sport, desc: "Sports(体育)"}
-    - {id: 408, cat: Audio, desc: "Audio(音频)"}
-    - {id: 415, cat: Books/EBook, desc: "E-Booko(电子书/有声书)"}
-    - {id: 417, cat: Other, desc: "学习资料(Education)"}
-    - {id: 409, cat: Other, desc: "Misc(其他)"}
+    - {id: 406, cat: Audio, desc: "HQ Audio/音轨"}
+    - {id: 408, cat: Audio, desc: "music/音乐"}
+    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
+    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
+    - {id: 405, cat: TV/Anime, desc: "Anime/动漫"}
+    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
+    - {id: 401, cat: Movies, desc: "Movies/电影"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
@@ -47,7 +38,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the PTLSP Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the hdvbits Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -92,8 +83,6 @@ login:
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-      message:
-        selector: td.text
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -139,9 +128,6 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    poster:
-      selector: img[data-src]
-      attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
@@ -152,7 +138,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: td.rowfollow:nth-child(4) > span[title]
       attribute: title
       optional: true
       filters:
@@ -162,7 +148,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-child(4):not(:has(span))
+      selector: td.rowfollow:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -172,13 +158,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-child(6)
     leechers:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-child(7)
     grabs:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-child(8)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -196,4 +182,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.5 2023-07-29
+# NexusPHP v1.8.4 2023-06-18

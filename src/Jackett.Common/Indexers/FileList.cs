@@ -31,14 +31,14 @@ namespace Jackett.Common.Indexers
         public override string SiteLink { get; protected set; } = "https://filelist.io/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://filelist.io/",
-            "https://flro.org/"
+            "https://filelist.io/"
         };
         public override string[] LegacySiteLinks => new[]
         {
             "https://filelist.ro/",
             "http://filelist.ro/",
-            "http://flro.org/"
+            "http://flro.org/",
+            "https://flro.org/"
         };
         public override Encoding Encoding => Encoding.UTF8;
         public override string Language => "ro-RO";
