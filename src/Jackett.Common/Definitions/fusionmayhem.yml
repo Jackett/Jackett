@@ -1,0 +1,158 @@
+---
+id: fusionmayhem
+name: FusionMayhem
+description: "FusionMayhem is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://fusionmayhem.net/
+
+caps:
+  categorymappings:
+    - {id: 3, cat: PC, desc: "Apps"}
+    - {id: 19, cat: Books, desc: "EBooks"}
+    - {id: 32, cat: Console, desc: "Games"}
+    - {id: 36, cat: Console/NDS, desc: "Nintendo"}
+    - {id: 33, cat: PC/Games, desc: "PC Games"}
+    - {id: 34, cat: Console/PS4, desc: "Playstation"}
+    - {id: 35, cat: Console/XBox, desc: "Xbox"}
+    - {id: 5, cat: Movies, desc: "Movies"}
+    - {id: 9, cat: Movies/UHD, desc: "Movies 4K"}
+    - {id: 6, cat: Movies/BluRay, desc: "Movies Bluray"}
+    - {id: 7, cat: Movies/DVD, desc: "Movies DVDR"}
+    - {id: 11, cat: Movies/Foreign, desc: "Movies Non-English"}
+    - {id: 13, cat: Movies, desc: "Movies Packs"}
+    - {id: 8, cat: Movies/WEB-DL, desc: "Movies WEB-DL/Webrip"}
+    - {id: 10, cat: Movies/SD, desc: "Movies XVID"}
+    - {id: 20, cat: Audio, desc: "Music"}
+    - {id: 21, cat: Audio, desc: "Music DMC"}
+    - {id: 26, cat: Audio/Lossless, desc: "Music Flac"}
+    - {id: 23, cat: Audio, desc: "Music Karaoke"}
+    - {id: 22, cat: Audio, desc: "Music MasterMix"}
+    - {id: 27, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 24, cat: Audio/MP3, desc: "Music mp3 weekly"}
+    - {id: 30, cat: Audio, desc: "Music Packs"}
+    - {id: 25, cat: Audio, desc: "Music Top 40/200 Albums/Singles"}
+    - {id: 21, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 12, cat: TV, desc: "TV"}
+    - {id: 16, cat: TV/Foreign, desc: "TV Non--English"}
+    - {id: 17, cat: TV, desc: "TV Seasons"}
+    - {id: 18, cat: TV/Sport, desc: "TV Sports"}
+    - {id: 14, cat: TV/HD, desc: "TV x265"}
+    - {id: 15, cat: TV/SD, desc: "TV xvid"}
+    - {id: 37, cat: Other, desc: "VIP"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile.
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+  error:
+    - selector: td:contains("You will now be redirected...")
+      message:
+        text: "Error: Its likely your Username or Password is incorrect"
+  test:
+    path: /
+    selector: a[href*="/logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  keywordsfilters:
+    # remove words <= 3 characters and surrounding special characters
+    - name: re_replace
+      args: ["(?:^|\\s)[_\\+\\/\\.\\-\\(\\)]*[\\S]{0,3}[_\\+\\/\\.\\-\\(\\)]*(?:\\s|$)", " "]
+  inputs:
+    do: search
+    keywords: "{{ .Keywords }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: t_name
+    category: 0 # multi cat search not supported
+    # yes, no
+    include_dead_torrents: yes
+    # sort is done via do=quick_sort, and freeleech sorting is part of that set
+
+  rows:
+    selector: "table#sortabletable > tbody > tr:has(a[href*=\"/details.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
+    filters:
+      - name: andmatch
+        args: 66
+
+  fields:
+    category:
+      selector: a[href*="/browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title_default:
+      selector: a[href*="/details.php?id="]
+    title:
+      selector: div.tooltip-content > div
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/download.php?id="]
+      attribute: href
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    poster:
+      selector: div.tooltip-content > img
+      attribute: src
+    downloadvolumefactor:
+      case:
+        img[src$="freedownload.gif"]: 0
+        img[src$="silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="x2.gif"]: 2
+        "*": 1
+    date:
+      selector: "td:nth-child(2) > div:has(span[style=\"float: right;\"])"
+      remove: span
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm zzz"
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# TS Special Edition v.8.0
