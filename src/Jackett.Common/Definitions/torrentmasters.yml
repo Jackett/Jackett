@@ -176,11 +176,6 @@ search:
         "*": 1
     genre:
       selector: td:nth-child(2) small
-      filters:
-        - name: re_replace
-          args: ["film-noir", "film_noir"]
-        - name: re_replace
-          args: ["sci-fi", "sci_fi"]
     description:
       text: "{{ .Result.title_hungarian }}{{ if and .Result.title_hungarian .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.genre }}"
     minimumseedtime:

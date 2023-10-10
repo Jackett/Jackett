@@ -71,7 +71,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     cinfo: "2550|1350|24|-60"
-    keeploggedin: 1
+    keeplogged: 1
   error:
     - selector: form#loginform > span.warning
   test:
