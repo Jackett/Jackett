@@ -135,11 +135,6 @@ search:
       attribute: href
     genre:
       selector: div.span_title span div
-      filters:
-        - name: replace
-          args: ["Sci-Fi", "Sci_Fi"]
-        - name: replace
-          args: ["Reality-show", "Reality_show"]
     _language:
       optional: true
       selector: span.span_style_pl
