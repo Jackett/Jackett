@@ -16,7 +16,8 @@ namespace Jackett.Common.Indexers
         public override string Id => "dicmusic";
         public override string Name => "DICMusic";
         public override string Description => "DICMusic is a CHINESE Private Torrent Tracker for MUSIC";
-        public override string SiteLink { get; protected set; } = "https://dicmusic.club/";
+        public override string SiteLink { get; protected set; } = "https://dicmusic.com/";
+        public override string[] LegacySiteLinks => new[] { "https://dicmusic.club/" };
         public override string Language => "zh-CN";
         public override string Type => "private";
 
