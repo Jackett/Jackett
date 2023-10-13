@@ -698,7 +698,7 @@ search:
     User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
-    selector: tr[id^="tor_"]:has(a[href^="/dl.php?id="])
+    selector: tr[id^="tor_"]:has(a[href*="/dl.php?id="])
 
   fields:
     category:
@@ -777,13 +777,13 @@ search:
       selector: a.title
       attribute: href
     download:
-      selector: a[href^="/dl.php?id="]
+      selector: a[href*="/dl.php?id="]
       attribute: href
     description:
       selector: td:first-child b span
       attribute: title
     size:
-      selector: a[href^="/dl.php?id="]
+      selector: a[href*="/dl.php?id="]
     date_day:
       # 23:18
       selector: td:last-child > p:first-child:not(:contains("-"))
