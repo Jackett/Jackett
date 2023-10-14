@@ -83,6 +83,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(3, TorznabCatType.TV, "Miniseries");
             caps.Categories.AddCategoryMapping(4, TorznabCatType.TV, "Stand-up Comedy");
             caps.Categories.AddCategoryMapping(5, TorznabCatType.TV, "Live Performance");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Movies, "Movie Collection");
 
             return caps;
         }
@@ -227,25 +228,25 @@ namespace Jackett.Common.Indexers
 
                         var release = new ReleaseInfo
                         {
+                            Guid = link,
+                            Link = link,
+                            Details = details,
                             Title = releaseName,
                             Description = $"Title: {movieTitle}",
+                            Year = int.Parse(year),
+                            Category = new List<int> { TorznabCatType.Movies.ID },
                             Poster = poster,
                             Imdb = movieImdbId,
-                            Details = details,
                             Size = size,
                             Grabs = grabs,
                             Seeders = seeders,
                             Peers = seeders + leechers,
                             PublishDate = publishDate,
-                            Link = link,
-                            Guid = link,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 345600,
                             DownloadVolumeFactor = free ? 0 : 1,
                             UploadVolumeFactor = 1,
-                            Category = new List<int> { TorznabCatType.Movies.ID }
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 345600
                         };
-
 
                         var titleTags = new List<string>();
                         var quality = (string)torrent["Quality"];
