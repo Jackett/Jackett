@@ -698,7 +698,7 @@ search:
     User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
-    selector: tr[id^="tor_"]:has(a[href*="/dl.php?id="])
+    selector: tr[id^="tos_"]:has(a[href*="/dl.php?id="])
 
   fields:
     category:
