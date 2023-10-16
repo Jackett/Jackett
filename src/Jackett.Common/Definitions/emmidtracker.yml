@@ -18,6 +18,7 @@ caps:
     - {id: 6, cat: TV/Anime, desc: "ANIME SÉRIES"}
     - {id: 7, cat: XXX, desc: "ADULTO"}
     - {id: 8, cat: Movies/Other, desc: "ANIME FILMES"}
+    - {id: 9, cat: Other, desc: "CURSOS"}
 
   modes:
     search: [q]
