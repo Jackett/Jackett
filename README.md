@@ -279,7 +279,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BitTorrentFiles
  * BiTTuRK
  * BJ-Share (BJ)
- * BlueBird [![(invite needed)][inviteneeded]](#)
+ * BlueBird
  * Blutopia (BLU)
  * Borgzelle [![(invite needed)][inviteneeded]](#)
  * Boxing Torrents
