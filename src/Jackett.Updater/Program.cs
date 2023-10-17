@@ -327,7 +327,6 @@ namespace Jackett.Updater
                 "Definitions/cooltorrent.yml",
                 "Definitions/cpasbiensi.yml",
                 "Definitions/crazyscorner.yml",
-                "Definitions/crazyspirits.yml",
                 "Definitions/cryptichaven.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
