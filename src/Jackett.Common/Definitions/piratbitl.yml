@@ -703,7 +703,7 @@ search:
     User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
-    selector: tr[id^="tor_"]
+    selector: tr[id^="tos_"]
 
   fields:
     category:
@@ -782,13 +782,13 @@ search:
       selector: a.title
       attribute: href
     download:
-      selector: a[href$="/#do"]
+      selector: a[href$="/#so"]
       attribute: href
     description:
       selector: td:first-child b span
       attribute: title
     size:
-      selector: a[href$="/#do"]
+      selector: a[href$="/#so"]
     date_day:
       # 23:18
       selector: td:last-child > p:first-child:not(:contains("-"))
