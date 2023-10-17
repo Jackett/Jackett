@@ -30,6 +30,9 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
+    - selector: ":root:contains(\"Wrong Code!\")"
+      message:
+        text: Error, the security code is incorrect.
     - selector: div.errorSummary
       message:
         selector: div.errorSummary ul li
