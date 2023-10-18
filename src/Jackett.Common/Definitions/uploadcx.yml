@@ -153,12 +153,12 @@ search:
       # api returns 0=false, 1=true
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
+        False: 1 # normal
+        True: 2 # double
 # global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 6.5.0
+# json UNIT3D 7.0.0
