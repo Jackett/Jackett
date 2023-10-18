@@ -110,7 +110,7 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     grabs:
-      selector: a[href*="&snatched=1#snatched"]
+      selector: td:nth-child(7) > nobr > a, td:nth-child(7) > nobr > b
     date:
       selector: div#frame > div#cleft
       remove: a
