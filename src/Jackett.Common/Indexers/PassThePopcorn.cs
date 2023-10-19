@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -162,6 +163,8 @@ namespace Jackett.Common.Indexers
                 results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             }
 
+            var seasonRegex = new Regex(@"\bS\d{2,3}(E\d{2,3})?\b", RegexOptions.Compiled);
+
             try
             {
                 //Iterate over the releases for each movie
@@ -226,6 +229,13 @@ namespace Jackett.Common.Indexers
                         var publishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         var leechers = int.Parse((string)torrent["Leechers"]);
 
+                        var categories = new List<int> { TorznabCatType.Movies.ID };
+
+                        if (releaseName != null && seasonRegex.Match(releaseName).Success)
+                        {
+                            categories.Add(TorznabCatType.TV.ID);
+                        }
+
                         var release = new ReleaseInfo
                         {
                             Guid = link,
@@ -234,7 +244,7 @@ namespace Jackett.Common.Indexers
                             Title = releaseName,
                             Description = $"Title: {movieTitle}",
                             Year = int.Parse(year),
-                            Category = new List<int> { TorznabCatType.Movies.ID },
+                            Category = categories,
                             Poster = poster,
                             Imdb = movieImdbId,
                             Size = size,
