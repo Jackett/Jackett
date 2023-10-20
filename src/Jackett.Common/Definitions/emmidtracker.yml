@@ -158,9 +158,9 @@ search:
         100%: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
-      # api returns 0=false, 1=true
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
-# json UNIT3D 6.5.0
+        False: 1 # normal
+        True: 2 # double
+# json UNIT3D 7.0.0
