@@ -131,6 +131,12 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
 
             var indexerResponse = await CallProviderAsync(query);
+
+            if (indexerResponse == null)
+            {
+                return releases;
+            }
+
             var response = indexerResponse.ContentString;
 
             if ((int)indexerResponse.Status == 429)
@@ -204,7 +210,7 @@ namespace Jackett.Common.Indexers
         private async Task<WebResult> CallProviderAsync(TorznabQuery query)
         {
             var searchUrl = ApiUrl;
-            var searchString = query.SanitizedSearchTerm.Trim();
+            var searchQuery = query.SanitizedSearchTerm.Trim();
 
             var queryCollection = new NameValueCollection
             {
@@ -216,29 +222,42 @@ namespace Jackett.Common.Indexers
                 queryCollection.Set("freeleech", "1");
             }
 
-            if (query.IsImdbQuery || searchString.IsNotNullOrWhiteSpace())
+            if (query.IsImdbQuery || searchQuery.IsNotNullOrWhiteSpace())
             {
                 queryCollection.Set("action", "search-torrents");
+
+                if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+                {
+                    if (query.IsImdbQuery)
+                    {
+                        // Skip ID searches for daily episodes
+                        return await Task.FromResult<WebResult>(null);
+                    }
+
+                    searchQuery = $"{searchQuery} {showDate:yyyy.MM.dd}".Trim();
+                }
+                else
+                {
+                    if (query.Season > 0)
+                    {
+                        queryCollection.Set("season", query.Season.ToString());
+                    }
+
+                    if (query.Episode.IsNotNullOrWhiteSpace())
+                    {
+                        queryCollection.Set("episode", query.Episode);
+                    }
+                }
 
                 if (query.IsImdbQuery)
                 {
                     queryCollection.Set("type", "imdb");
                     queryCollection.Set("query", query.ImdbID);
                 }
-                else if (searchString.IsNotNullOrWhiteSpace())
+                else if (searchQuery.IsNotNullOrWhiteSpace())
                 {
                     queryCollection.Set("type", "name");
-                    queryCollection.Set("query", searchString);
-                }
-
-                if (query.Season > 0)
-                {
-                    queryCollection.Set("season", query.Season.ToString());
-                }
-
-                if (query.Episode.IsNotNullOrWhiteSpace())
-                {
-                    queryCollection.Set("episode", query.Episode);
+                    queryCollection.Set("query", searchQuery);
                 }
             }
             else
