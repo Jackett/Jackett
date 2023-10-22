@@ -165,6 +165,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Deildu
  * Demonoid
  * Devil-Torrents
+ * DreamingTree
  * DXP (Deaf Experts)
  * Electro-Torrent
  * EniaHD
