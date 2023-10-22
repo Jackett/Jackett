@@ -127,7 +127,7 @@ search:
     size:
       selector: td.number_column.nobr
     files:
-      selector: td:nth-last-child(4)
+      selector: td:nth-last-child(6)
     seeders:
       selector: td:nth-last-child(2)
     leechers:
