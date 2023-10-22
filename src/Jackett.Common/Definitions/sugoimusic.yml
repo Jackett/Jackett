@@ -25,8 +25,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, genre]
-    music-search: [q, genre]
+    tv-search: [q, season, ep, year, genre]
+    music-search: [q, year, genre]
 
 settings:
   - name: username
@@ -74,7 +74,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     twofa: "{{ .Config.2facode }}"
-    login: ""
+    login: "Log in"
   error:
     - selector: span.warning
       message:
@@ -87,14 +87,14 @@ search:
   paths:
     - path: torrents.php
   inputs:
-    # freetorrent: 0 normal, 1 freeleech, 2 neutral leech, 3 either
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"
+    # freetorrent: 0 normal, 1 freeleech, 2 neutral leech, 3 either
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     # we can only grab the first release if group_results=1
     group_results: 0
     action: advanced
-#    year: "{{ .Query.Year }}" # broken on site
+    year: "{{ .Query.Year }}"
     taglist: "{{ .Query.Genre }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
@@ -119,21 +119,21 @@ search:
         "div[title=\"TV Drama\"]": 10
         "div[title=\"Pictures\"]": 11
         "div[title=\"Misc\"]": 12
-    _title_artist:
+    title_artist:
       selector: div.torrent_artists > a
       optional: true
       filters:
         - name: append
           args: " - "
-    _title_name:
+    title_name:
       selector: a.torrent_name
-    _title_date:
+    title_date:
       selector: div.group_info.clear
       filters:
         - name: regexp
           args: "(\\[.+?\\])"
     title:
-      text: "{{ .Result._title_artist }}{{ .Result._title_name }} {{ .Result._title_date }}"
+      text: "{{ .Result.title_artist }}{{ .Result.title_name }} {{ .Result.title_date }}"
     details:
       selector: a.torrent_name[href^="torrents.php?id="]
       attribute: href
@@ -145,10 +145,10 @@ search:
           args: ["/static/common/noartwork/nocover.png", ""]
     genre:
       selector: div.tags
-    _desc:
+    description_info:
       selector: div.torrent_info
     description:
-      text: "{{ .Result._desc }}</br>{{ .Result.genre }}"
+      text: "{{ .Result.description_info }}</br>{{ .Result.genre }}"
     download:
       selector: span > a[href^="torrents.php?action=download&id="]
       attribute: href
@@ -185,4 +185,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# Engine n/a
+# engine n/a
