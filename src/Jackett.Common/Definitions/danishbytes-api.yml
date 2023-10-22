@@ -116,6 +116,15 @@ search:
       selector: poster_image
     genre:
       selector: meta_genres
+      filters:
+        - name: re_replace
+          args: ["(?i)(Action og eventyr)", "Action_og_eventyr"]
+        - name: re_replace
+          args: ["(?i)(Sci-fi og Fantasy)", "Sci-fi_og_Fantasy"]
+        - name: re_replace
+          args: ["(?i)(Stand-Up Comedy)", "Stand-Up_Comedy"]
+        - name: replace
+          args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
     imdbid:
