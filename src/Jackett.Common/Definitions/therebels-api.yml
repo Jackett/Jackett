@@ -126,7 +126,7 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Ficção científica)", "Ficção_científica"]
+          args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: re_replace
           args: ["(?i)(Cinema TV)", "Cinema_TV"]
         - name: replace
