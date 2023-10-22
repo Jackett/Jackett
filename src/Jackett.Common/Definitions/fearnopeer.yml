@@ -16,7 +16,7 @@ caps:
     - {id: 6, cat: TV/Anime, desc: "Anime"}
     - {id: 10, cat: TV, desc: "TV Pack"}
     - {id: 4, cat: PC/Games, desc: "Games"}
-    - {id: 5, cat: PC/0day, desc: "Application"}
+    - {id: 5, cat: PC/0day, desc: "Apps"}
     - {id: 9, cat: TV/Sport, desc: "Sport"}
 
   modes:
