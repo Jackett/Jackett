@@ -146,7 +146,7 @@ search:
         - name: re_replace
           args: ["(?i)(Película de TV)", "Película_de_TV"]
         - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+          args: ["(?i)(Ciencia ficción)", "Ciencia_ficción"]
         - name: replace
           args: [" & ", "_&_"]
     description:
