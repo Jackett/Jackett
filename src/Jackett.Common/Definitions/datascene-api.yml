@@ -18,7 +18,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: PC/Games, desc: "Game"}
     - {id: 5, cat: PC/0day, desc: "Application"}
-    - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 6, cat: XXX, desc: "18+"}
     - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 8, cat: Books/EBook, desc: "E-Book"}
 
