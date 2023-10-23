@@ -329,7 +329,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Dream Tracker
  * Drugari
  * Ebooks-Shares
- * Emmid Tracker
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eShareNet
  * eStone (XiDER, BeLoad, BigTorrent)
