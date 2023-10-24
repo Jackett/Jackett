@@ -175,4 +175,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.6 2023-08-18
+# NexusPHP v1.8.8 2023-09-25
