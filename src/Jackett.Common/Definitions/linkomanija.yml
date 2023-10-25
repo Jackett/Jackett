@@ -134,7 +134,7 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        img[src="//static.linkomanija.net/images/flag_green.gif"]: 0
+        img[src$="/images/flag_green.gif"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
