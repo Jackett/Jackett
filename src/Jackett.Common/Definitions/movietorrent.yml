@@ -10,6 +10,8 @@ links:
   - https://movietorrent.co/
 
 caps:
+  limitsDefault: 36
+  limitsMax: 36
   categorymappings:
     - {id: 1, cat: Movies, desc: "Bollywood"}
     - {id: 2, cat: Movies/HD, desc: "1080p"}
@@ -74,6 +76,9 @@ download:
         - name: validfilename
 
 search:
+  pageSize: 12
+  pageable: true
+
   paths:
     - path: "?s={{ .Keywords }}"
     - path: "/page/2/?s={{ .Keywords }}"

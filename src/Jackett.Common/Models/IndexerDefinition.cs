@@ -69,6 +69,8 @@ namespace Jackett.Common.Models
 
     public class capabilitiesBlock
     {
+        public int? LimitsMax { get; set; }
+        public int? LimitsDefault { get; set; }
         public Dictionary<string, string> Categories { get; set; }
         public List<CategorymappingBlock> Categorymappings { get; set; }
         public Dictionary<string, List<string>> Modes { get; set; }
@@ -137,6 +139,8 @@ namespace Jackett.Common.Models
 
     public class searchBlock
     {
+        public int PageSize { get; set; }
+        public string Pageable { get; set; }
         public string Path { get; set; }
         public List<searchPathBlock> Paths { get; set; }
         public Dictionary<string, List<string>> Headers { get; set; }
