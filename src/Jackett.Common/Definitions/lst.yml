@@ -16,7 +16,6 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Console, desc: "Game"}
     - {id: 5, cat: PC, desc: "Application"}
-    - {id: 7, cat: Other, desc: "Packs"}
     - {id: 8, cat: XXX, desc: "XXX"}
     - {id: 9, cat: Books/EBook, desc: "Ebook/Manga"}
     - {id: 10, cat: Other, desc: "Education"}
@@ -168,6 +167,6 @@ search:
 #    minimumratio:
 #      text: 1.0
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # json UNIT3D 7.0.0
