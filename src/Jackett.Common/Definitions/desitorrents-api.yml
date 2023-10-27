@@ -6,9 +6,10 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://desitorrents.tv/
   - https://desitorrents.rocks/
   - https://torrent.desi/
+legacylinks:
+  - https://desitorrents.tv/
 
 caps:
   categorymappings:
