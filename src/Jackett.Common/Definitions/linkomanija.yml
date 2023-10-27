@@ -60,6 +60,26 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      name: title
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentų puslapyje</b> setting to <b>100</b> on your account profile.
 
 login:
   path: takelogin.php
@@ -83,6 +103,8 @@ search:
     incldead: 1
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     searchindesc: "{{ if .Query.IMDBID }}1{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    d: "{{ .Config.order }}"
 
   keywordsfilters:
     - name: re_replace
