@@ -37,7 +37,7 @@ Bugs that are submitted without being on the latest version may be closed.
 
 If you are experiencing an issue with a tracker, then:
 - Use your browser to check if you can access the site directly, and if a login is required,
-    check that can login and that you do not have any outstanding account issues.
+    check that you can login and that you do not have any outstanding account issues.
 - If you haven't already, try upgrading to the latest version of Jackett.
 - Check our [Troubleshooting wiki](https://github.com/Jackett/Jackett/wiki/Troubleshooting) for common issues.
 - If it is still not working for you, then a **full enhanced log must be included**.
