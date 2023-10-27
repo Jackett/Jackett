@@ -476,6 +476,7 @@ namespace Jackett.Updater
                 "Definitions/montorrent.yml",
                 "Definitions/movcr.yml",
                 "Definitions/moviesite.yml",
+                "Definitions/movietorrent.yml", // will need c# #11284
                 "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
