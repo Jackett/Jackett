@@ -2,7 +2,7 @@
 
 So, you've decided you want to help make Jackett a better program for everyone. Not everyone chooses to help, so we thank you for your decision.
 In order to help us make the most of your contribution please take the time to read these contributing guidelines.
-These are just guidelines, not hard rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+These are just guidelines, not hard rules. Use your best judgement, and feel free to propose changes to this document in a pull request.
 
 ## Ways you can help
 
@@ -36,8 +36,8 @@ Bugs that are submitted without being on the latest version may be closed.
 **Tracker isn't working**
 
 If you are experiencing an issue with a tracker, then:
-- Use your browser to check you can access the site directly, and if a login is required,
-    check you can login and that you do not have any outstanding account issues.
+- Use your browser to check if you can access the site directly, and if a login is required,
+    check that you can login and that you do not have any outstanding account issues.
 - If you haven't already, try upgrading to the latest version of Jackett.
 - Check our [Troubleshooting wiki](https://github.com/Jackett/Jackett/wiki/Troubleshooting) for common issues.
 - If it is still not working for you, then a **full enhanced log must be included**.
