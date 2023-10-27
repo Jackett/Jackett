@@ -5,6 +5,8 @@ description: "Acid Lounge (A-L) is a Private Torrent Tracker for 0DAY / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - ed11f0187f4aafad54382796f112ecf4bec5d76b  # Expired 28 Oct 2023
 links:
   - https://www.acid-lounge.org.uk/
 
