@@ -5,52 +5,53 @@ description: " Diablo Torrent is a Hungarian Private site for TV / MOVIES / GENE
 language: hu-HU
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://diablotorrent.net/
 
 caps:
   categorymappings:
     # Film
-    - {id: 49, cat: Movies/SD, desc: "Film > Cam"}
-    - {id: 21, cat: Movies/SD, desc: "Film > Cam [magyar]"}
-    - {id: 101, cat: Movies/SD, desc: "Film > SD/HUN"}
-    - {id: 102, cat: Movies/SD, desc: "Film > SD/ENG"}
-    - {id: 103, cat: Movies/HD, desc: "Film > HD/HUN"}
-    - {id: 104, cat: Movies/HD, desc: "Film > HD/ENG"}
-    - {id: 105, cat: Movies/DVD, desc: "Film > DVD-R/HUN"}
-    - {id: 106, cat: Movies/DVD, desc: "Film > DVD-R/ENG"}
+    - {id: 49, cat: Movies/SD, desc: "Film > Cam", default: true}
+    - {id: 21, cat: Movies/SD, desc: "Film > Cam [magyar]", default: true}
+    - {id: 101, cat: Movies/SD, desc: "Film > SD/HUN", default: true}
+    - {id: 102, cat: Movies/SD, desc: "Film > SD/ENG", default: true}
+    - {id: 103, cat: Movies/HD, desc: "Film > HD/HUN", default: true}
+    - {id: 104, cat: Movies/HD, desc: "Film > HD/ENG", default: true}
+    - {id: 105, cat: Movies/DVD, desc: "Film > DVD-R/HUN", default: true}
+    - {id: 106, cat: Movies/DVD, desc: "Film > DVD-R/ENG", default: true}
     # Sorozat
-    - {id: 107, cat: TV/SD, desc: "Sorozat > SD/HUN"}
-    - {id: 108, cat: TV/SD, desc: "Sorozat > SD/ENG"}
-    - {id: 109, cat: TV/SD, desc: "Sorozat > DVD-R/HUN"}
-    - {id: 110, cat: TV/SD, desc: "Sorozat > DVD-R/ENG"}
-    - {id: 111, cat: TV/HD, desc: "Sorozat > HD/HUN"}
-    - {id: 112, cat: TV/HD, desc: "Sorozat > HD/ENG"}
+    - {id: 107, cat: TV/SD, desc: "Sorozat > SD/HUN", default: true}
+    - {id: 108, cat: TV/SD, desc: "Sorozat > SD/ENG", default: true}
+    - {id: 109, cat: TV/SD, desc: "Sorozat > DVD-R/HUN", default: true}
+    - {id: 110, cat: TV/SD, desc: "Sorozat > DVD-R/ENG", default: true}
+    - {id: 111, cat: TV/HD, desc: "Sorozat > HD/HUN", default: true}
+    - {id: 112, cat: TV/HD, desc: "Sorozat > HD/ENG", default: true}
     # Pornó
-    - {id: 34, cat: XXX/DVD, desc: "Pornó > DVD-R"}
-    - {id: 36, cat: XXX, desc: "Pornó > Képek"}
-    - {id: 113, cat: XXX/XviD, desc: "Pornó > SD"}
-    - {id: 114, cat: XXX, desc: "Pornó > HD"}
+    - {id: 34, cat: XXX/DVD, desc: "Pornó > DVD-R", default: false}
+    - {id: 36, cat: XXX, desc: "Pornó > Képek", default: false}
+    - {id: 113, cat: XXX/XviD, desc: "Pornó > SD", default: false}
+    - {id: 114, cat: XXX, desc: "Pornó > HD", default: false}
     # Játék
-    - {id: 12, cat: PC/Games, desc: "Játék > PC"}
-    - {id: 14, cat: Console/PS4, desc: "Játék > PS"}
-    - {id: 39, cat: Console/XBox, desc: "Játék > Xbox"}
-    - {id: 40, cat: Console/Other, desc: "Játék > Egyéb"}
+    - {id: 12, cat: PC/Games, desc: "Játék > PC", default: true}
+    - {id: 14, cat: Console/PS4, desc: "Játék > PS", default: true}
+    - {id: 39, cat: Console/XBox, desc: "Játék > Xbox", default: true}
+    - {id: 40, cat: Console/Other, desc: "Játék > Egyéb", default: true}
     # Zene
-    - {id: 8, cat: Audio/MP3, desc: "Zene > MP3"}
-    - {id: 9, cat: Audio/MP3, desc: "Zene > MP3 [magyar]"}
-    - {id: 37, cat: Audio/Lossless, desc: "Zene > Lossless [magyar]"}
-    - {id: 38, cat: Audio/Lossless, desc: "Zene > Lossless"}
+    - {id: 8, cat: Audio/MP3, desc: "Zene > MP3", default: true}
+    - {id: 9, cat: Audio/MP3, desc: "Zene > MP3 [magyar]", default: true}
+    - {id: 37, cat: Audio/Lossless, desc: "Zene > Lossless [magyar]", default: true}
+    - {id: 38, cat: Audio/Lossless, desc: "Zene > Lossless", default: true}
     # Programok
-    - {id: 16, cat: PC/0day, desc: "Programok > PC"}
-    - {id: 24, cat: PC/Mobile-Other, desc: "Programok > Mobil"}
-    - {id: 53, cat: PC/0day, desc: "Programok > Egyéb"}
+    - {id: 16, cat: PC/0day, desc: "Programok > PC", default: true}
+    - {id: 24, cat: PC/Mobile-Other, desc: "Programok > Mobil", default: true}
+    - {id: 53, cat: PC/0day, desc: "Programok > Egyéb", default: true}
     # Egyéb
-    - {id: 27, cat: Other, desc: "Egyéb > !! Feltöltési segédlet !!"}
-    - {id: 29, cat: Other, desc: "Egyéb > Képek"}
+    - {id: 27, cat: Other, desc: "Egyéb > !! Feltöltési segédlet !!", default: true}
+    - {id: 29, cat: Other, desc: "Egyéb > Képek", default: true}
     # E-Book
-    - {id: 20, cat: Books, desc: "E-Book > Magyar"}
-    - {id: 52, cat: Books, desc: "E-Book > Egyéb"}
+    - {id: 20, cat: Books, desc: "E-Book > Magyar", default: true}
+    - {id: 52, cat: Books, desc: "E-Book > Egyéb", default: true}
 
   modes:
     search: [q]
@@ -106,6 +107,9 @@ login:
 search:
   paths:
     - path: browse
+      categories: [49, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 12, 14, 39, 40, 8, 9, 37, 38, 16, 24, 53, 27, 29, 20, 52]
+    - path: browse/1
+      categories: [34, 36, 113, 114]
   inputs:
     $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
