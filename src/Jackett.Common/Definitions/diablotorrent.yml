@@ -111,7 +111,7 @@ search:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     imdb: "{{ if .Query.IMDBID }}1{{ else }}{{ end }}"
     s_alapjan: "{{ .Config.sort }}"
-    s_sorrend: "{{ .Config.order }}"
+    s_sorrend: "{{ .Config.type }}"
 
   rows:
     selector: div.torrent_row, div.torrent_details
