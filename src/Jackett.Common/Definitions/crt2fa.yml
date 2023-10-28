@@ -18,8 +18,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, genre]
-    movie-search: [q, genre]
+    tv-search: [q, season, ep, imdbid, genre]
+    movie-search: [q, imdbid, genre]
 
 settings:
   - name: cookie
@@ -66,7 +66,7 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    searchtext: "{{ .Keywords }}"
+    searchtext: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
     action: advanced
@@ -81,8 +81,6 @@ search:
 
   rows:
     selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
-    filters:
-      - name: andmatch
 
   fields:
     category:
@@ -118,7 +116,7 @@ search:
         - name: validate
           args: "Action, Adventure, Animation, Comedy, Crime, Documentary, Drama, Family, Fantasy, History, Horror, Kids, Music, Mystery, News, Reality, Romance, SciFi, Soap, Talk, Thriller, War, Western"
     description:
-      text: "{{ .Result.genre }}"
+      selector: div.tags
     poster:
       selector: td:nth-child(2) > script
       filters:
