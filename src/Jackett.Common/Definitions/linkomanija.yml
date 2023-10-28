@@ -104,7 +104,7 @@ search:
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     searchindesc: "{{ if .Query.IMDBID }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
-    d: "{{ .Config.order }}"
+    d: "{{ .Config.type }}"
 
   keywordsfilters:
     - name: re_replace
