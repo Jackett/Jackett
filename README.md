@@ -310,7 +310,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Classix [![(invite needed)][inviteneeded]](#)
  * Coastal-Crew
  * Concertos
- * CrazyHD
  * CrazySpirits
  * CrnaBerza
  * Dajiao (打胶) [![(invite needed)][inviteneeded]](#)
