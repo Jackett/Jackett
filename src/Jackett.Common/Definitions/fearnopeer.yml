@@ -18,6 +18,7 @@ caps:
     - {id: 4, cat: PC/Games, desc: "Games"}
     - {id: 5, cat: PC/0day, desc: "Apps"}
     - {id: 9, cat: TV/Sport, desc: "Sport"}
+    - {id: 11, cat: Other, desc: "Miscellaneous"}
 
   modes:
     search: [q]
