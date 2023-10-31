@@ -94,7 +94,7 @@ search:
     # does not support imdbid searches
 
   rows:
-    selector: "td.text table tbody tr:has(a[href^=\"details.php?id=\"])"
+    selector: "td.text table tbody tr:has(a[href^=\"details.php?id=\"]):not(:has(a[href=\"browse.php?cat=0\"]))"
 
   fields:
     category:
