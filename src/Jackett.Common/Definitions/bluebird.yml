@@ -10,20 +10,52 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Films"}
-    - {id: 2, cat: TV/Anime, desc: "Cartoons"}
-    - {id: 3, cat: TV/Documentary, desc: "documentary"}
-    - {id: 4, cat: Audio, desc: "Show / Music"}
-    - {id: 5, cat: TV/Sport, desc: "Sport"}
-    - {id: 6, cat: TV, desc: "TV series"}
-    - {id: 7, cat: XXX, desc: "erotica"}
-    - {id: 8, cat: Other, desc: "Demo / Misc"}
+    - {id: 1, cat: Movies, desc: "Фильмы Films"}
+    - {id: 2, cat: TV/Anime, desc: "Мультфильмы Cartoons"}
+    - {id: 3, cat: TV/Documentary, desc: "Документалистика Documentary"}
+    - {id: 4, cat: Audio, desc: "Шоу/Музыка Show/Music"}
+    - {id: 5, cat: TV/Sport, desc: "Спорт Sport"}
+    - {id: 6, cat: TV, desc: "Сериалы TV Series"}
+    - {id: 7, cat: XXX, desc: "Эротика Erotica"}
+    - {id: 8, cat: Other, desc: "Дэмо/Misc Demo/Misc"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
   path: takelogin.php
@@ -33,8 +65,10 @@ login:
     password: "{{ .Config.password }}"
   error:
     - selector: div.error
+      message:
+        text: "Error during login. Its likely your username or password is incorrect."
   test:
-    path: browse.php
+    path: /
     selector: a[href="logout.php"]
 
 search:
@@ -42,47 +76,63 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    # 0 active, 1 incldead, 2 onlydead 3 gold, 4 without seeders, 5 diamond
-    incldead: 1
+    # search in title
+    search: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # search in description
+    dsearch: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 gold, 5 diamond, 4 without seeders
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    genre: "{{ .Query.Genre }}"
     # or, and
     stype: and
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
   rows:
-    selector: table[class="embedded"][cellspacing="0"][cellpadding="5"][width="100%"] > tbody > tr:has(a[href^="details.php?id="])
+    selector: table[class="embedded"][cellspacing="0"][cellpadding="5"][width="100%"] > tbody#highlighted > tr:has(a[href^="details.php?id="])
 
   fields:
-    title:
-      selector: a[href^="details.php?id="]
-    details:
-      selector: a[href^="details.php?id="]
-      attribute: href
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     grabs:
-      selector: a[href*="&snatched=1#snatched"]
+      selector: td:nth-child(7) > nobr > a, td:nth-child(7) > nobr > b
+    date:
+      selector: div#frame > div#cleft
+      remove: a
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
       selector: td:nth-child(7)
       remove: a
-    date:
-      selector: div#cleft > font
     seeders:
       selector: td:nth-child(5)
     leechers:
       selector: td:nth-child(6)
-    poster:
-      selector: a.tname
-      attribute: onmouseover
+    genre:
+      selector: div#cleft
       filters:
-        - name: regexp
-          args: src=([^\s]+)
+        - name: replace
+          args: ["Жанр:", ""]
+    description:
+      text: "{{ .Result.genre }}"
     downloadvolumefactor:
       case:
         img[src="pic/diamond.png"]: 0
@@ -94,4 +144,4 @@ search:
       case:
         img[src="pic/diamond.png"]: 2
         "*": 1
-# engine n/a
+# TBDev v2.1.12

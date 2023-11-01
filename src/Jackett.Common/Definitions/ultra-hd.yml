@@ -1,25 +1,26 @@
 ---
-id: hd-unit3d-api
-name: HD-UNiT3D (API)
-description: "HD-UNiT3D is a Private Torrent Tracker for HD MOVIES / TV"
-language: en-US
+id: ultra-hd
+name: ULTRA HD
+description: "ULTRA HD is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pt-BR
 type: private
 encoding: UTF-8
 links:
-  - https://hd-united.vn/
+  - https://ultrahd.online/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Audio"}
+    - {id: 1, cat: Movies, desc: "FILMES"}
+    - {id: 2, cat: TV, desc: "SÉRIES"}
+    - {id: 4, cat: PC/Games, desc: "JOGOS"}
+    - {id: 5, cat: PC/0day, desc: "APPS"}
+    - {id: 6, cat: XXX, desc: "ADULTO"}
+    - {id: 7, cat: Other, desc: "CURSOS"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: apikey
@@ -28,7 +29,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://hd-united.vn/\" target=\"_blank\">HD-UNiT3D</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://ultrahd.online/\" target=\"_blank\">ULTRA HD</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -100,6 +101,8 @@ search:
       selector: details_link
     download:
       selector: download_link
+    infohash:
+      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -115,9 +118,9 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+          args: ["(?i)(Cinema TV)", "Cinema_TV"]
         - name: re_replace
-          args: ["(?i)(TV Movie)", "TV_Movie"]
+          args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: replace
           args: [" & ", "_&_"]
     description:
@@ -151,12 +154,9 @@ search:
         100%: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
-      # api returns 0=false, 1=true
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
-    minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# json UNIT3D 6.5.0
+        False: 1 # normal
+        True: 2 # double
+# json UNIT3D 7.0.0

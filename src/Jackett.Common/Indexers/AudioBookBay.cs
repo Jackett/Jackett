@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -259,7 +260,7 @@ namespace Jackett.Common.Indexers
                 var category = matchCategory.Groups[1].Success ? matchCategory.Groups[1].Value.Split(';').Select(c => c.Trim()).ToList() : new List<string>();
                 var categories = category.SelectMany(MapTrackerCatDescToNewznab).Distinct().ToList();
 
-                var release = new ReleaseInfo
+                releases.Add(new ReleaseInfo
                 {
                     Guid = details,
                     Details = details,
@@ -269,19 +270,26 @@ namespace Jackett.Common.Indexers
                     Size = size,
                     Seeders = 1,
                     Peers = 1,
+                    Poster = GetPosterUrl(row.QuerySelector("img[src]")?.GetAttribute("src")?.Trim()),
                     PublishDate = publishDate,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
-                };
-
-                var cover = row.QuerySelector("img[src]")?.GetAttribute("src")?.Trim();
-                if (!string.IsNullOrEmpty(cover))
-                    release.Poster = cover.StartsWith("http") ? new Uri(cover) : new Uri(SiteLink + cover);
-
-                releases.Add(release);
+                });
             }
 
             return releases;
+        }
+
+        private Uri GetPosterUrl(string cover)
+        {
+            if (cover.IsNotNullOrWhiteSpace() &&
+                Uri.TryCreate(cover.StartsWith("http") ? cover : SiteLink + cover, UriKind.Absolute, out var posterUri) &&
+                (posterUri.Scheme == Uri.UriSchemeHttp || posterUri.Scheme == Uri.UriSchemeHttps))
+            {
+                return posterUri;
+            }
+
+            return null;
         }
 
         private static IHtmlDocument ParseHtmlDocument(string response)

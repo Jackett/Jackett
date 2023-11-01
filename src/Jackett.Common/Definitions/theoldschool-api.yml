@@ -15,7 +15,7 @@ caps:
     - {id: 2, cat: TV, desc: "Series"}
     - {id: 7, cat: TV, desc: "Series VOSTFR"}
     - {id: 8, cat: TV, desc: "Series Pack"}
-    - {id: 9, cat: TV, desc: "Series Pack vostfr"}
+    - {id: 9, cat: TV, desc: "Series Pack VOSTFR"}
     - {id: 3, cat: Books, desc: "Ebooks"}
     - {id: 4, cat: Console, desc: "Jeux"}
     - {id: 5, cat: PC, desc: "Logiciel"}

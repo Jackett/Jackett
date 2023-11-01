@@ -1,0 +1,153 @@
+---
+id: beload
+name: Beload
+description: "Beload is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://beload.org/
+
+caps:
+  categorymappings:
+    - {id: 27, cat: Movies/DVD, desc: "Animáció/DVD/Eng"}
+    - {id: 26, cat: Movies/DVD, desc: "Animáció/DVD/Hun"}
+    - {id: 25, cat: Movies/HD, desc: "Animáció/HD/Eng"}
+    - {id: 24, cat: Movies/HD, desc: "Animáció/HD/Hun"}
+    - {id: 28, cat: Movies/SD, desc: "Animáció/SD/Hun"}
+    - {id: 12, cat: Movies/SD, desc: "Film/Cam/Eng"}
+    - {id: 11, cat: Movies/SD, desc: "Film/Cam/Hun"}
+    - {id: 4, cat: Movies/DVD, desc: "Film/DVD-R/Eng"}
+    - {id: 3, cat: Movies/DVD, desc: "Film/DVD-R/Hun"}
+    - {id: 6, cat: Movies/DVD, desc: "Film/DVD9/Eng"}
+    - {id: 5, cat: Movies/DVD, desc: "Film/DVD9/Hun"}
+    - {id: 2, cat: Movies/Foreign, desc: "Film/HD/Eng"}
+    - {id: 1, cat: Movies/HD, desc: "Film/HD/Hun"}
+    - {id: 8, cat: Movies/Foreign, desc: "Film/SD/Eng"}
+    - {id: 7, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: 10, cat: Movies/Foreign, desc: "Film/XviD/Eng"}
+    - {id: 9, cat: Movies/SD, desc: "Film/XviD/Hun"}
+    - {id: 31, cat: Audio/Audiobook, desc: "Hangoskönyv"}
+    - {id: 30, cat: Books/Foreign, desc: "Könyv/Eng"}
+    - {id: 29, cat: Books/EBook, desc: "Könyv/Hun"}
+    - {id: 14, cat: TV/Foreign, desc: "Sorozat/HD/Eng"}
+    - {id: 13, cat: TV/HD, desc: "Sorozat/HD/Hun"}
+    - {id: 16, cat: TV/Foreign, desc: "Sorozat/SD/Eng"}
+    - {id: 15, cat: TV/SD, desc: "Sorozat/SD/hun"}
+    - {id: 38, cat: XXX/SD, desc: "XXX/HD"}
+    - {id: 41, cat: XXX/ImageSet, desc: "XXX/Kép"}
+    - {id: 40, cat: XXX/SD, desc: "XXX/SD"}
+    - {id: 20, cat: Audio/Foreign, desc: "Zene/Mp3/Eng"}
+    - {id: 19, cat: Audio/MP3, desc: "Zene/Mp3/Hun"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      1: title
+      4: created
+      7: seeders
+      5: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="/logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 both, 2 dead, 3 my uploa, 4 waiting for seeds
+    incldead: 1
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    # does not support imdbid searches
+
+  rows:
+    selector: "td.text table tbody tr:has(a[href^=\"details.php?id=\"]):not(:has(a[href=\"browse.php?cat=0\"]))"
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: title
+      filters:
+        - name: regexp
+          args: "Név: (.+?)\\n"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    poster:
+      selector: a.preview
+      attribute: href
+    date:
+      selector: td:nth-last-child(5)
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    files:
+      selector: td:nth-last-child(7)
+    size:
+      selector: td:nth-last-child(4) b
+    grabs:
+      selector: td:nth-last-child(3)
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    downloadvolumefactor:
+      case:
+        font:contains("x0"): 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        font:contains("x2"): 2
+        font:contains("x4"): 4
+        "*": 1
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a

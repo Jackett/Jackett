@@ -44,8 +44,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -60,10 +60,26 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: searchindesc
-    type: checkbox
-    label: Search in torrent description (get more results)
-    default: true
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      name: title
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentų puslapyje</b> setting to <b>100</b> on your account profile.
 
 login:
   path: takelogin.php
@@ -82,12 +98,17 @@ search:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 incldead, 2 dead
     incldead: 1
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    searchindesc: "{{ .Config.searchindesc }}"
+    searchindesc: "{{ if .Query.IMDBID }}1{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    d: "{{ .Config.type }}"
 
   keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
 
@@ -109,8 +130,12 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    genre:
+      selector: td:nth-child(2) > span
+      filters:
+        - name: re_replace
+          args: [" \\| .+", ""]
     description:
-      optional: true
       selector: td:nth-child(2) > span
     files:
       selector: td:nth-child(3)
@@ -131,8 +156,10 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        img[src="//static.linkomanija.net/images/flag_green.gif"]: 0
+        img[src$="/images/flag_green.gif"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.3
 # engine tbd

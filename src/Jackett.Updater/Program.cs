@@ -326,13 +326,14 @@ namespace Jackett.Updater
                 "Definitions/cloudtorrents.yml",
                 "Definitions/cooltorrent.yml",
                 "Definitions/cpasbiensi.yml",
+                "Definitions/crazyhd.yml",
                 "Definitions/crazyscorner.yml",
-                "Definitions/crazyspirits.yml",
                 "Definitions/cryptichaven.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
                 "Definitions/danishbytes.yml", // migrated to C#
                 "Definitions/dariustracker.yml",
+                "Definitions/dark-shadow.yml",
                 "Definitions/darktracker.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/datascene.yml", // switch to *-API #8682
@@ -357,6 +358,7 @@ namespace Jackett.Updater
                 "Definitions/elitetorrent-biz.yml",
                 "Definitions/elitetorrent-pl.yml",
                 "Definitions/elittracker.yml",
+                "Definitions/emmidtracker.yml",
                 "Definitions/emtrek.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/epizod.yml",
@@ -403,6 +405,7 @@ namespace Jackett.Updater
                 "Definitions/hd4free.yml",
                 "Definitions/hdai.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
+                "Definitions/hdbits.yml",
                 "Definitions/hdbitscom.yml",
                 "Definitions/hdcenter.yml",
                 "Definitions/hdcity.yml", // moved to pixelados
@@ -474,6 +477,7 @@ namespace Jackett.Updater
                 "Definitions/montorrent.yml",
                 "Definitions/movcr.yml",
                 "Definitions/moviesite.yml",
+                "Definitions/movietorrent.yml", // will need c# #11284
                 "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/music-master.yml",
                 "Definitions/nachtwerk.yml",
@@ -504,6 +508,8 @@ namespace Jackett.Updater
                 "Definitions/passionetorrent.yml",
                 "Definitions/peerjunkies.yml",
                 "Definitions/piratadigital.yml",
+                "Definitions/piratbit.yml",
+                "Definitions/piratbitl.yml",
                 "Definitions/pirateiro.yml",
                 "Definitions/pixelados.yml",
                 "Definitions/pixelados-html.yml",
@@ -659,6 +665,7 @@ namespace Jackett.Updater
                 "Definitions/xktorrent.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
+                "Definitions/xxxtorrents.yml",
                 "Definitions/yingk.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
                 "Definitions/zooqle.yml",

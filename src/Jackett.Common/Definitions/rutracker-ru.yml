@@ -37,66 +37,34 @@ caps:
     - {id: 1570, cat: Movies/HD, desc: " |- Российские фильмы в 720p (2020)"}
     - {id: 1569, cat: Movies/HD, desc: " |- Зарубежные фильмы в 1080p (2020)"}
     - {id: 1568, cat: Movies/HD, desc: " |- Российские фильмы в 1080р (2020)"}
-    - {id: 1543, cat: Movies, desc: "Фильмы 2019 года"}
-    - {id: 1544, cat: Movies, desc: " |- Зарубежные фильмы (2019)"}
-    - {id: 1545, cat: Movies, desc: " |- Российские фильмы (2019)"}
-    - {id: 1546, cat: Movies, desc: " |- Зарубежные фильмы в 720p (2019)"}
-    - {id: 1547, cat: Movies/HD, desc: " |- Российские фильмы в 720p (2019)"}
-    - {id: 1548, cat: Movies/HD, desc: " |- Зарубежные фильмы в 1080p (2019)"}
-    - {id: 1549, cat: Movies/HD, desc: " |- Российские фильмы в 1080р (2019)"}
-    - {id: 1450, cat: Movies, desc: "Фильмы 2018 года"}
-    - {id: 1451, cat: Movies, desc: " |- Зарубежные фильмы (2018)"}
-    - {id: 1452, cat: Movies, desc: " |- Российские фильмы (2018)"}
-    - {id: 1453, cat: Movies/HD, desc: " |- Зарубежные фильмы в 720p (2018)"}
-    - {id: 1454, cat: Movies/HD, desc: " |- Российские фильмы в 720p (2018)"}
-    - {id: 1455, cat: Movies/HD, desc: " |- Зарубежные фильмы в 1080p (2018)"}
-    - {id: 1456, cat: Movies/HD, desc: " |- Российские фильмы в 1080р (2018)"}
-    - {id: 1324, cat: Movies, desc: "Фильмы 2017 года"}
-    - {id: 1325, cat: Movies, desc: " |- Зарубежные фильмы (2017)"}
-    - {id: 1326, cat: Movies, desc: " |- Российские фильмы (2017)"}
-    - {id: 1327, cat: Movies/HD, desc: " |- Зарубежные фильмы в 720p (2017)"}
-    - {id: 1328, cat: Movies/HD, desc: " |- Российские фильмы в 720p (2017)"}
-    - {id: 1329, cat: Movies/HD, desc: " |- Зарубежные фильмы в 1080p (2017)"}
-    - {id: 1330, cat: Movies/HD, desc: " |- Российские фильмы в 1080р (2017)"}
-    - {id: 1715, cat: Movies, desc: " |- Зарубежные фильмы до 1990 г."}
-    - {id: 1716, cat: Movies, desc: " |- Советское кино"}
+    - {id: 1730, cat: Movies, desc: "  |- Зарубежные фильмы "}
+    - {id: 1731, cat: Movies/HD, desc: "  |- Зарубежные фильмы (HDvideo)"}
+    - {id: 1732, cat: Movies, desc: "  |- Российские фильмы "}
+    - {id: 1733, cat: Movies/HD, desc: "  |- Российские фильмы (HDvideo)"}
+    - {id: 1725, cat: Movies, desc: "  |- Зарубежные фильмы "}
+    - {id: 1726, cat: Movies/HD, desc: "  |- Зарубежные фильмы (HDvideo)"}
+    - {id: 1727, cat: Movies, desc: "  |- Российские фильмы "}
+    - {id: 1728, cat: Movies/HD, desc: "  |- Российские фильмы (HDvideo)"}
+    - {id: 1719, cat: Movies, desc: "  |- Зарубежные фильмы "}
+    - {id: 1720, cat: Movies/HD, desc: "  |- Зарубежные фильмы (HDvideo)"}
+    - {id: 1721, cat: Movies, desc: "  |- Российские фильмы "}
+    - {id: 1722, cat: Movies/HD, desc: "  |- Российские фильмы (HDvideo)"}
+    - {id: 1715, cat: Movies, desc: "  |- Зарубежные фильмы до 1990 г."}
+    - {id: 1734, cat: Movies, desc: "  |- Классика зарубежного кино "}
+    - {id: 1716, cat: Movies, desc: "  |- Советское кино "}
     - {id: 820, cat: Movies/HD, desc: "Зарубежные фильмы"}
-    - {id: 1346, cat: Movies/UHD, desc: " |- ФИЛЬМЫ (Ultra HD, 2160p)"}
-    - {id: 843, cat: Movies/HD, desc: " |- ФИЛЬМЫ (Full HD, 1080p)"}
-    - {id: 842, cat: Movies/HD, desc: " |- ФИЛЬМЫ (HD, 720p)"}
     - {id: 840, cat: Movies/DVD, desc: " |- DVD5 , DVD9"}
     - {id: 841, cat: Movies/3D, desc: " |- Фильмы в 3D формате"}
     - {id: 825, cat: Movies, desc: " |- Азиатское кино"}
     - {id: 830, cat: Movies, desc: " |- Индийское кино"}
-    - {id: 826, cat: Movies, desc: " |- Боевик , Приключения , Вестерн"}
-    - {id: 831, cat: Movies, desc: " |- Военные , Исторические"}
-    - {id: 828, cat: Movies, desc: " |- Детектив , Криминал"}
-    - {id: 829, cat: Movies, desc: " |- Драма , Мелодрама"}
-    - {id: 833, cat: Movies, desc: " |- Комедия , Мюзикл , Семейный"}
-    - {id: 835, cat: Movies, desc: " |- Мистика , Фэнтези"}
-    - {id: 839, cat: Movies, desc: " |- Ужасы , Триллер"}
-    - {id: 836, cat: Movies, desc: " |- Фантастика"}
-    - {id: 832, cat: Movies, desc: " |- Классика зарубежного кино"}
-    - {id: 1608, cat: Movies, desc: " |- Классика зарубежного кино (720p, 1080p)"}
     - {id: 1317, cat: Movies, desc: " |- Детские фильмы, сказки, сериалы"}
     - {id: 838, cat: Movies, desc: " |- Короткометражные фильмы"}
     - {id: 845, cat: Movies, desc: " |- В оригинале"}
     - {id: 1560, cat: Movies, desc: " |- | - фильмы с переводом UKR"}
     - {id: 798, cat: Movies/HD, desc: "Российские фильмы"}
-    - {id: 817, cat: Movies/HD, desc: " |- ФИЛЬМЫ (Full HD, 1080p)"}
-    - {id: 818, cat: Movies/HD, desc: " |- ФИЛЬМЫ (HD, 720p)"}
     - {id: 802, cat: Movies/DVD, desc: " |- DVD5 , DVD9"}
     - {id: 801, cat: Movies/3D, desc: " |- Фильмы в 3D формате"}
-    - {id: 815, cat: Movies, desc: " |- Боевик , Приключения , Вестерн"}
-    - {id: 811, cat: Movies, desc: " |- Военные , Исторические"}
-    - {id: 812, cat: Movies, desc: " |- Детектив , Криминал"}
-    - {id: 813, cat: Movies, desc: " |- Драма , Мелодрама"}
-    - {id: 809, cat: Movies, desc: " |- Комедия , Мюзикл , Семейный"}
-    - {id: 807, cat: Movies, desc: " |- Мистика , Фэнтези"}
-    - {id: 806, cat: Movies, desc: " |- Ужасы , Триллер"}
-    - {id: 805, cat: Movies, desc: " |- Фантастика"}
     - {id: 1318, cat: Movies, desc: " |- Детские фильмы, сказки, сериалы"}
-    - {id: 804, cat: Movies, desc: " |- Сборники фильмов / Фильмографии"}
     # Сериалы TV
     - {id: 1708, cat: TV, desc: " |- Зарубежные сериалы"}
     - {id: 1710, cat: TV/HD, desc: " |- Зарубежные сериалы (HD Video)"}
@@ -123,7 +91,6 @@ caps:
     - {id: 1348, cat: TV/HD, desc: " |- Мультсериалы 720p"}
     - {id: 1349, cat: TV/SD, desc: " |- Мультсериалы на DVD"}
     # Документалистика, развлекательные телепередачи, спорт Docs
-    - {id: 11, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
     - {id: 12, cat: TV, desc: "Развлекательные телепередачи"}
     - {id: 13, cat: TV/Sport, desc: "Спорт"}
     # Игры Games
@@ -183,8 +150,8 @@ caps:
     - {id: 1553, cat: Audio/MP3, desc: " |- Pop-Rock&Soft Rock"}
     - {id: 1567, cat: Audio/MP3, desc: " |- Instrumental Guitar Rock (Виртуозы гитары)"}
     - {id: 1566, cat: Audio/MP3, desc: " |- Rockabilly, Rock'n'Roll"}
+    - {id: 1713, cat: Audio/MP3, desc: " |- Blues-Rock, Country, Indie-Rock"}
     - {id: 1556, cat: Audio/MP3, desc: " |- Сборники зарубежного рока"}
-    - {id: 1579, cat: Audio/MP3, desc: "Зарубежный Metal"}
     - {id: 1588, cat: Audio/MP3, desc: " |- Avant-garde, Experimental Metal"}
     - {id: 1580, cat: Audio/MP3, desc: " |- Black Metal"}
     - {id: 1581, cat: Audio/MP3, desc: " |- Death, Doom"}

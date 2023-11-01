@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -83,6 +84,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(3, TorznabCatType.TV, "Miniseries");
             caps.Categories.AddCategoryMapping(4, TorznabCatType.TV, "Stand-up Comedy");
             caps.Categories.AddCategoryMapping(5, TorznabCatType.TV, "Live Performance");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Movies, "Movie Collection");
 
             return caps;
         }
@@ -161,6 +163,8 @@ namespace Jackett.Common.Indexers
                 results = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             }
 
+            var seasonRegex = new Regex(@"\bS\d{2,3}(E\d{2,3})?\b", RegexOptions.Compiled);
+
             try
             {
                 //Iterate over the releases for each movie
@@ -225,27 +229,34 @@ namespace Jackett.Common.Indexers
                         var publishDate = DateTime.ParseExact((string)torrent["UploadTime"], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
                         var leechers = int.Parse((string)torrent["Leechers"]);
 
+                        var categories = new List<int> { TorznabCatType.Movies.ID };
+
+                        if (releaseName != null && seasonRegex.Match(releaseName).Success)
+                        {
+                            categories.Add(TorznabCatType.TV.ID);
+                        }
+
                         var release = new ReleaseInfo
                         {
+                            Guid = link,
+                            Link = link,
+                            Details = details,
                             Title = releaseName,
                             Description = $"Title: {movieTitle}",
+                            Year = int.Parse(year),
+                            Category = categories,
                             Poster = poster,
                             Imdb = movieImdbId,
-                            Details = details,
                             Size = size,
                             Grabs = grabs,
                             Seeders = seeders,
                             Peers = seeders + leechers,
                             PublishDate = publishDate,
-                            Link = link,
-                            Guid = link,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 345600,
                             DownloadVolumeFactor = free ? 0 : 1,
                             UploadVolumeFactor = 1,
-                            Category = new List<int> { TorznabCatType.Movies.ID }
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 345600
                         };
-
 
                         var titleTags = new List<string>();
                         var quality = (string)torrent["Quality"];

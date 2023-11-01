@@ -16,7 +16,6 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Console, desc: "Game"}
     - {id: 5, cat: PC, desc: "Application"}
-    - {id: 7, cat: Other, desc: "Packs"}
     - {id: 8, cat: XXX, desc: "XXX"}
     - {id: 9, cat: Books/EBook, desc: "Ebook/Manga"}
     - {id: 10, cat: Other, desc: "Education"}
@@ -34,7 +33,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://lst.gg/\" target=\"_blank\">LST</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://lst.gg/\" target=\"_blank\">LST</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -102,9 +101,6 @@ search:
       selector: category_id
     title:
       selector: name
-      filters:
-        - name: re_replace
-          args: ["\\.", " "]
     details:
       selector: details_link
     download:
@@ -162,15 +158,15 @@ search:
         100%: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
-      # api returns 0=false, 1=true
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
+        False: 1 # normal
+        True: 2 # double
 # global MR is 1.0 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
 #      text: 1.0
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 6.5.0
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 7.0.3

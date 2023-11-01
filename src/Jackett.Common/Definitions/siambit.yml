@@ -7,6 +7,8 @@ type: private
 encoding: tis-620
 requestDelay: 2
 links:
+  - https://siambit.io/
+legacylinks:
   - https://www.siambit.me/
 
 caps:

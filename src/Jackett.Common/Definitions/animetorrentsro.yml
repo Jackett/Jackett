@@ -1,0 +1,153 @@
+---
+id: animetorrentsro
+name: AnimeTorrents.ro
+description: "AnimeTorrents.ro (Anime Torrents Romania) is a ROMANIAN Private Torrent Tracker for ANIME / MANGA"
+language: ro-RO
+type: private
+encoding: UTF-8
+links:
+  - https://animetorrents.ro/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "ANIME"}
+    - {id: 1, cat: Movies/Other, desc: "ANIME"} # for Radarr
+    - {id: 2, cat: Books/Comics, desc: "MANGA"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: cat-id
+    type: select
+    label: Category
+    default: 0
+    options:
+      0: All categories
+      1: Anime
+      2: Manga
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    x: 0
+    y: 0
+    referer: /
+  error:
+    - selector: table.main:contains("esuat")
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://animetorrents.ro/browse.php?search=2023&incldead=1&blah=0&cat=0
+    - path: browse.php
+  inputs:
+    search: "{{ .Keywords }}"
+    # 0 active, 1 all, 2 dead, 3 free
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    # 0 name, 1 genre
+    blah: 0
+    # site does not support multiple cats
+    cat: "{{ .Config.cat-id }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # does not support imdbid search
+
+  rows:
+    selector: td > table > tbody > tr:has(a[href^="download.php/"])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["^(\\[.+?\\]).(.+)", "$2.$1"]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.+?) width"
+    files:
+      selector: td:nth-last-child(8)
+    date:
+      selector: td:nth-last-child(6)
+      filters:
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "dd-MM-yyyyHH:mm:ss zzz"
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        img[alt="Free"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    genre:
+      selector: a[href^="download.php/"]
+    description:
+      text: "{{ .Result.genre }}"
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a

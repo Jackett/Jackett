@@ -11,20 +11,29 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: PC, desc: "Aplikacje PC"}
-    - {id: 43, cat: Audio/Audiobook, desc: "AudioBooki"}
-    - {id: 31, cat: Books/EBook, desc: "Ebooki"}
-    - {id: 33, cat: Movies/BluRay, desc: "Filmy/BluRay"}
-    - {id: 38, cat: Movies/BluRay, desc: "Filmy/BDRip"}
-    - {id: 35, cat: Movies/BluRay, desc: "Filmy/BluRay/x264"}
-    - {id: 45, cat: Movies/BluRay, desc: "Filmy/BluRay/x265"}
-    - {id: 39, cat: Movies/BluRay, desc: "Filmy/BluRay/Remux"}
-    - {id: 44, cat: Movies/UHD, desc: "Filmy/UHD/BluRay"}
-    - {id: 42, cat: Movies/UHD, desc: "Filmy/UHD/Remux"}
-    - {id: 23, cat: Movies/WEB-DL, desc: "Filmy/WebRip"}
+    - {id: 43, cat: Audio/Audiobook, desc: "Audiobooki"}
+    - {id: 33, cat: Movies/BluRay, desc: "BluRay"}
     - {id: 28, cat: Movies/Other, desc: "Dla dzieci"}
-    - {id: 4, cat: PC/Games, desc: "Gry/PC"}
+    - {id: 20, cat: Movies/DVD, desc: "DVD-R 5/9"}
+    - {id: 37, cat: Movies/SD, desc: "DVDFan"}
+    - {id: 31, cat: Books/EBook, desc: "eBooki / PDF"}
+    - {id: 30, cat: Movies/3D, desc: "Filmy/3D "}
+    - {id: 38, cat: Movies/SD, desc: "Filmy/BDRip-BRRip"}
+    - {id: 35, cat: Movies/HD, desc: "Filmy/x264-BluRay/HD"}
+    - {id: 45, cat: Movies/HD, desc: "Filmy/x265-BluRay/HD"}
+    - {id: 4, cat: PC/Games, desc: "Gry PC"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "GSM/PDA"}
+    - {id: 2, cat: TV/HD, desc: "HDTV"}
+    - {id: 19, cat: Movies/SD, desc: "HQ / DVDRip"}
+    - {id: 6, cat: Audio, desc: "Muzyka"}
+    - {id: 39, cat: Movies/HD, desc: "Remux"}
+    - {id: 29, cat: Other, desc: "Różne"}
     - {id: 7, cat: TV, desc: "Seriale"}
-    - {id: 2, cat: TV/HD, desc: "Seriale/HD"}
+    - {id: 22, cat: Audio/Video, desc: "Teledyski / Koncerty"}
+    - {id: 44, cat: Movies/UHD, desc: "UHD BluRay"}
+    - {id: 42, cat: Movies/UHD, desc: "UHD Remux"}
+    - {id: 23, cat: Movies/WEB-DL, desc: "WEB-DL / WEBRip"}
+    - {id: 9, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
@@ -34,14 +43,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: drop_polish_prefix
-    type: checkbox
-    label: Drop the Polish title prefix
-    default: true
-  - name: freeleech
-    type: checkbox
-    label: Search freeleech only
-    default: false
   - name: cookie
     type: text
     label: Cookie
@@ -49,6 +50,30 @@ settings:
     type: info
     label: How to get the Cookie
     default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: drop_polish_prefix
+    type: checkbox
+    label: Drop the Polish title prefix
+    default: true
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -64,15 +89,16 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # 0 onlyactive, 1 all, 2 onlydead, 3 free
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     # 0 title, 1 descr, 2 both
-    # titlesearch: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
-    # 0 all, 1 polish, 2 not polish
-    polish: 0
+    blah: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
     podkat: 0
     hashTag: 0
-    blah: 0
+    # 0 all, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 polish, 5 dubbed, 6 subs, 2 non-polish, 3 freeleech, 4 highlighted
+    polish: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
   keywordsfilters:
     # remove the year from the titles as the site chokes on them during search #7424
@@ -105,30 +131,20 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php/"]
-      attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+      selector: a[href^="download.php/"], a[href^="downloadfl.php/"]
       attribute: href
     genre:
-      selector: font[color="blue"]
-      filters:
-        - name: validate
-          args: "akcja, animacja, anime, biograficzny, czarna komedia, dokumentalny, dramat, dramat historyczny, edukacyjny, etiuda, familijny, fantasy, gangsterski, historyczny, horror, katastroficzny, komedia, komedia kryminalna, komedia obyczajowa, komedia romantyczna, krótkometrażowy, kryminał, melodramat, musical, muzyczny, niemy, przygodowy, romans, sci-fi, sensacyjny, sportowy, szpiegowski, thriller, western, wojenny"
+      selector: div.span_title span div
     _language:
       optional: true
-      selector: img[src="pic/pl.jpg"]
-      filters:
-        - name: append
-          args: "Language: polish\n<br>"
+      selector: span.span_style_pl
+      attribute: title
     _subbed:
       optional: true
-      selector: img[src="pic/napisy.gif"]
-      filters:
-        - name: append
-          args: "Subbed\n<br>"
+      selector: span.span_style_plsub
+      attribute: title
     description:
-      text: "{{ .Result._language }}{{ .Result._subbed }}{{ if .Result.genre }}Genres: {{ .Result.genre }}{{ else }}{{ end }}"
+      text: "{{ if .Result._language }}Language: {{ .Result._language }} {{ else }}{{ end }}{{ if .Result._subbed }}Subbed: {{ .Result._subbed }} {{ else }}{{ end }}{{ if .Result.genre }}Genres: {{ .Result.genre }}{{ else }}{{ end }}"
     date:
       selector: td:nth-child(5)
       # auto adjusted by site account profile
@@ -145,7 +161,7 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        tr.darmowy: 0
+        a[href^="downloadfl.php/"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1

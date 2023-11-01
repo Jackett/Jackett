@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers
             IsConfigured = true;
             SaveConfig();
 
-            return IndexerConfigurationStatus.Completed;
+            return await Task.FromResult(IndexerConfigurationStatus.Completed);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

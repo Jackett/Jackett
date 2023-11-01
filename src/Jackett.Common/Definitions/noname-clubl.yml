@@ -20,11 +20,13 @@ caps:
     - {id: 925, cat: Other, desc: "Форум-Трекер: Клубные таланты Авторские релизы"}
     - {id: 872, cat: Other, desc: "Форум-Трекер: Клубные таланты Архив"}
     # Everything for children and parents
-    - {id: 724, cat: TV, desc: "Видео"}
+    - {id: 724, cat: TV, desc: "Видео, Кино и Сериалы для детей и родителей"}
     - {id: 725, cat: TV, desc: " |- Обучающее Видео для родителей"}
     - {id: 729, cat: TV, desc: " |- Развивающее Видео для детей"}
-    - {id: 731, cat: TV, desc: " |- Отечественные Фильмы для детей"}
-    - {id: 733, cat: TV, desc: " |- Зарубежные Фильмы для детей"}
+    - {id: 731, cat: TV, desc: " |- Отечественные Фильмы и Сериалы для детей (SD)"}
+    - {id: 1345, cat: TV, desc: " |- Отечественные Фильмы и Сериалы для детей (HD, FHD, UHD)"}
+    - {id: 733, cat: TV, desc: " |- Зарубежные Фильмы и Сериалы для детей (SD)"}
+    - {id: 1346, cat: TV, desc: " |- Зарубежные Фильмы и Сериалы для детей (HD, FHD, UHD)"}
     - {id: 1329, cat: TV, desc: " |- Отечественные Мультфильмы 20-го века (SD)"}
     - {id: 1330, cat: TV, desc: " |- Отечественные Мультфильмы 20-го века (HD, FHD, UHD)"}
     - {id: 1331, cat: TV, desc: " |- Отечественные Мультфильмы 21-го века (SD)"}
@@ -108,30 +110,30 @@ caps:
     - {id: 548, cat: Other, desc: " |- Разное (прочее ПО)"}
     # Movies
     - {id: 216, cat: Movies, desc: "Горячие новинки"}
-    - {id: 270, cat: Movies, desc: " |- Отечественные Новинки (SD)"}
-    - {id: 218, cat: Movies, desc: " |- Зарубежные Новинки (SD)"}
-    - {id: 219, cat: Movies, desc: " |- Новинки (DVD)"}
-    - {id: 954, cat: Movies, desc: " |- Новинки (HD, FHD, UHD, 3D)"}
+    - {id: 270, cat: Movies, desc: " |- Отечественные Новинки (SD, DVD)"}
+    - {id: 218, cat: Movies, desc: " |- Зарубежные Новинки (SD, DVD)"}
+    - {id: 219, cat: Movies, desc: " |- Отечественные Новинки (HD, FHD, UHD, 3D)"}
+    - {id: 954, cat: Movies, desc: " |- Зарубежные Новинки (HD, FHD, UHD, 3D)"}
     - {id: 217, cat: Movies, desc: " |- Экранки"}
     - {id: 1293, cat: Movies, desc: " |- Новинки с Рекламой"}
     - {id: 1298, cat: Movies, desc: " |- Экранки с рекламой"}
     - {id: 318, cat: Movies, desc: "Классика кино и Старые фильмы до 90-х"}
-    - {id: 320, cat: Movies, desc: " |- Отечественная Классика (HD*Rip/LQ, DVDRip, SATRip, VHSRip)"}
+    - {id: 320, cat: Movies, desc: " |- Отечественная Классика (SD)"}
     - {id: 677, cat: Movies, desc: " |- Отечественная Классика (DVD)"}
-    - {id: 1177, cat: Movies, desc: " |- Отечественная Классика (HD, UHD, UHD-LQ)"}
-    - {id: 319, cat: Movies, desc: " |- Зарубежная Классика (HD*Rip/LQ, DVDRip, SATRip, VHSRip)"}
+    - {id: 1177, cat: Movies, desc: " |- Отечественная Классика (HD, FHD, UHD)"}
+    - {id: 319, cat: Movies, desc: " |- Зарубежная Классика (SD)"}
     - {id: 678, cat: Movies, desc: " |- Зарубежная Классика (DVD)"}
-    - {id: 885, cat: Movies, desc: " |- Зарубежная Классика (HD, UHD, UHD-LQ, 3D)"}
-    - {id: 908, cat: Movies, desc: " |- Старые Отечественные Фильмы (HD*Rip/LQ, DVDRip, SATRip,..."}
+    - {id: 885, cat: Movies, desc: " |- Зарубежная Классика (HD, FHD, UHD, 3D)"}
+    - {id: 908, cat: Movies, desc: " |- Старые Отечественные Фильмы (SD)"}
     - {id: 1310, cat: Movies, desc: " |- Старые Отечественные Фильмы (DVD)"}
-    - {id: 909, cat: Movies, desc: " |- Старые Отечественные Фильмы (HD, UHD, UHD-LQ)"}
-    - {id: 910, cat: Movies, desc: " |- Старые Зарубежные Фильмы (HD*Rip/LQ, DVDRip, SATRip,..."}
+    - {id: 909, cat: Movies, desc: " |- Старые Отечественные Фильмы (HD, FHD, UHD)"}
+    - {id: 910, cat: Movies, desc: " |- Старые Зарубежные Фильмы (SD)"}
     - {id: 911, cat: Movies, desc: " |- Старые Зарубежные Фильмы (DVD)"}
-    - {id: 912, cat: Movies, desc: " |- Старые Зарубежные Фильмы (HD, UHD, UHD-LQ, 3D)"}
+    - {id: 912, cat: Movies, desc: " |- Старые Зарубежные Фильмы (HD, FHD, UHD, 3D)"}
     - {id: 220, cat: Movies, desc: "Отечественное кино"}
-    - {id: 221, cat: Movies, desc: " |- Отечественные Фильмы (HD*Rip/LQ, DVDRip, SATRip, VHSRip)"}
+    - {id: 221, cat: Movies, desc: " |- Отечественные Фильмы (SD)"}
     - {id: 222, cat: Movies, desc: " |- Отечественные Фильмы (DVD)"}
-    - {id: 882, cat: Movies, desc: " |- Отечественные Фильмы (HD, UHD, UHD-LQ)"}
+    - {id: 882, cat: Movies, desc: " |- Отечественные Фильмы (HD, FHD, UHD)"}
     - {id: 889, cat: Movies, desc: " |- Отечественные Фильмы (3D)"}
     - {id: 224, cat: Movies, desc: "Зарубежное кино"}
     - {id: 225, cat: Movies, desc: " |- Зарубежные Фильмы (SD)"}
@@ -146,14 +148,11 @@ caps:
     - {id: 1211, cat: Movies, desc: " |- Азиатское кино (3D)"}
     - {id: 693, cat: Movies, desc: " |- Индийское кино"}
     - {id: 913, cat: Movies, desc: " |- Фильмы с переводом на др. языках"}
-    - {id: 228, cat: Movies, desc: " |- Фильмы в оригинале (SD)"}
+    - {id: 228, cat: Movies, desc: " |- Фильмы в оригинале (SD, DVD)"}
     - {id: 1150, cat: Movies, desc: " |- Фильмы в оригинале (HD, FHD, UHD)"}
     - {id: 1311, cat: Movies, desc: "Коллекции / *логии"}
     - {id: 1313, cat: Movies, desc: " |- Зарубежное кино (коллекции / *логии)"}
     - {id: 1312, cat: Movies, desc: " |- Отечественное кино (коллекции / *логии)"}
-    - {id: 254, cat: Movies, desc: "Артхаус"}
-    - {id: 321, cat: Movies, desc: " |- Авторское кино"}
-    - {id: 255, cat: Movies, desc: " |- Интеллектуальное кино"}
     - {id: 256, cat: Movies, desc: "Театр и Музыкальное видео"}
     - {id: 257, cat: Movies, desc: " |- Музыкальные клипы"}
     - {id: 258, cat: Movies, desc: " |- Концерты (SD)"}
@@ -172,30 +171,30 @@ caps:
     - {id: 1219, cat: TV, desc: "Классика сериалов и многосерийное кино до 90-х"}
     - {id: 1221, cat: TV, desc: " |- Отечественная классика сериалов и старое многосерийное..."}
     - {id: 1220, cat: TV, desc: " |- Зарубежная классика сериалов и старое многосерийное кино..."}
+    - {id: 722, cat: TV, desc: " |- Чертова служба в госпитале МЭШ / M*A*S*H"}
     - {id: 768, cat: TV, desc: "Зарубежные сериалы"}
+    - {id: 1344, cat: Other, desc: " |- Звездные войны / Star Wars (сериалы по франшизе)"}
     - {id: 779, cat: TV, desc: " |- Анатомия страсти / Grey's Anatomy"}
-    - {id: 1288, cat: TV, desc: " |- Во все тяжкие / Breaking Bad"}
+    - {id: 1288, cat: TV, desc: " |- Во все тяжкие / Breaking Bad; Лучше звоните Солу / Better..."}
     - {id: 787, cat: TV, desc: " |- Грань / Fringe"}
-    - {id: 1141, cat: TV, desc: " |- Дневники вампира / Vampire Diaries ; Настоящая кровь /..."}
+    - {id: 1141, cat: TV, desc: " |- Дневники вампира / Vampire Diaries; Настоящая кровь /..."}
     - {id: 777, cat: TV, desc: " |- Доктор кто / Doctor Who; Торчвуд / Torchwood"}
     - {id: 786, cat: TV, desc: " |- Доктор Хаус / House M.D."}
     - {id: 776, cat: TV, desc: " |- Звездные врата / Stargate"}
-    - {id: 785, cat: TV, desc: " |- Звездный Крейсер Галактика / BattleStar Galactica"}
-    - {id: 775, cat: TV, desc: " |- Звездный путь / Star Trek"}
-    - {id: 1344, cat: TV, desc: " |- Звездные войны / Star Wars (сериалы по франшизе)"}
+    - {id: 785, cat: TV, desc: " |- Звездный Крейсер Галактика / BattleStar Galactica;..."}
+    - {id: 775, cat: TV, desc: " |- Звездный путь / Star Trek; Орвилл / The Orville"}
     - {id: 1265, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
     - {id: 1242, cat: TV, desc: " |- Касл / Castle"}
     - {id: 1140, cat: TV, desc: " |- Кости / Bones"}
-    - {id: 782, cat: TV, desc: " |- Менталист / The Mentalist ; Теория Лжи / Lie To Me"}
+    - {id: 782, cat: TV, desc: " |- Менталист / The Mentalist; Теория Лжи / Lie To Me"}
     - {id: 773, cat: TV, desc: " |- Место преступления / CSI"}
-    - {id: 1142, cat: TV, desc: " |- Морская полиция / Navy NCIS"}
+    - {id: 1142, cat: TV, desc: " |- Морская полиция / Navy NCIS; Военно-юридическая служба /..."}
     - {id: 772, cat: TV, desc: " |- Побег / Prison Break"}
     - {id: 771, cat: TV, desc: " |- Пуаро / Poirot"}
     - {id: 783, cat: TV, desc: " |- Сверхъестественное / Supernatural"}
     - {id: 1144, cat: TV, desc: " |- Секретные материалы / X-Files"}
     - {id: 804, cat: TV, desc: " |- Теория Большого Взрыва / The Big Bang Theory; Детство..."}
-    - {id: 1290, cat: TV, desc: " |- Ходячие мертвецы / The Walking Dead ; Бойтесь ходячих..."}
-    - {id: 722, cat: TV, desc: " |- Чертова служба в госпитале МЭШ / M*A*S*H"}
+    - {id: 1290, cat: TV, desc: " |- Ходячие мертвецы / The Walking Dead; Бойтесь ходячих..."}
     - {id: 1300, cat: TV, desc: " |- Сериалы ближнего зарубежья"}
     - {id: 784, cat: TV, desc: " |- Сериалы DC Comics"}
     - {id: 774, cat: TV, desc: " |- Сериалы Marvel Comics"}
@@ -280,7 +279,7 @@ caps:
     - {id: 656, cat: TV, desc: " |- Приколы"}
     # anime
     - {id: 615, cat: TV/Anime, desc: "Манга и Арт"}
-    - {id: 616, cat: TV/Anime, desc: " |- Манга"}
+    - {id: 616, cat: TV/Anime, desc: " |- Манга, Манхва, Маньхуа"}
     - {id: 617, cat: TV/Anime, desc: " |- Ранобэ"}
     - {id: 648, cat: TV/Anime, desc: " |- Визуальные новеллы"}
     - {id: 619, cat: TV/Anime, desc: " |- Аниме арт"}
@@ -305,7 +304,7 @@ caps:
     # Books and Training Materials
     - {id: 432, cat: Books, desc: "Научная и техническая литература"}
     - {id: 755, cat: Books, desc: " |- Учебники"}
-    - {id: 481, cat: Books, desc: " |- Иностранные языки"}
+    - {id: 481, cat: Books, desc: " |- Иностранные языки (литература)"}
     - {id: 557, cat: Books, desc: " |- Гуманитарные науки и искусство"}
     - {id: 442, cat: Books, desc: " |- Точные и естественные науки"}
     - {id: 441, cat: Books, desc: " |- Техническая литература"}
@@ -335,22 +334,22 @@ caps:
     - {id: 484, cat: Books, desc: " |- Комиксы без перевода"}
     - {id: 1343, cat: Books, desc: " |- Артбуки"}
     - {id: 438, cat: Books, desc: "Художественные аудиокниги и публицистика"}
-    - {id: 485, cat: Books, desc: " |- Сатира, юмор"}
-    - {id: 473, cat: Books, desc: " |- Детектив, Боевик"}
-    - {id: 472, cat: Books, desc: " |- Историческая"}
-    - {id: 471, cat: Books, desc: " |- Классика"}
-    - {id: 895, cat: Books, desc: " |- Проза, Поэзия"}
-    - {id: 470, cat: Books, desc: " |- Фантастика, Фэнтези"}
-    - {id: 896, cat: Books, desc: " |- Публицистика"}
+    - {id: 485, cat: Books, desc: " |- Сатира, Юмор (аудиокниги)"}
+    - {id: 473, cat: Books, desc: " |- Детектив, Боевик (аудиокниги)"}
+    - {id: 472, cat: Books, desc: " |- Исторические аудиокниги"}
+    - {id: 471, cat: Books, desc: " |- Классика (аудиокниги)"}
+    - {id: 895, cat: Books, desc: " |- Проза, Поэзия (аудиокниги)"}
+    - {id: 470, cat: Books, desc: " |- Фантастика, Фэнтези (аудиокниги)"}
+    - {id: 896, cat: Books, desc: " |- Публицистика (аудиокниги)"}
     - {id: 480, cat: Books, desc: " |- Другие аудиокниги"}
     - {id: 436, cat: Books, desc: "Обучающие аудиоматериалы"}
+    - {id: 458, cat: Books, desc: " |- Бизнес и Менеджмент (аудиоматериалы)"}
     - {id: 457, cat: Books, desc: " |- Иностранные языки (аудиоматериалы)"}
     - {id: 1342, cat: Books, desc: " |- Здоровье и Медицина (аудиоматериалы)"}
-    - {id: 458, cat: Books, desc: " |- Бизнес и Менеджмент (аудиоматериалы)"}
     - {id: 459, cat: Books, desc: " |- Популярная психология и саморазвитие (аудиоматериалы)"}
     - {id: 460, cat: Books, desc: " |- Медитации (аудиоматериалы)"}
     - {id: 461, cat: Books, desc: " |- Религия (аудиоматериалы)"}
-    - {id: 462, cat: Books, desc: " |- Другие аудиоматериалы"}
+    - {id: 462, cat: Books, desc: " |- Прочие аудиоматериалы"}
     - {id: 437, cat: Books, desc: "Обучающие видеоматериалы"}
     - {id: 466, cat: Books, desc: " |- Бизнес и Менеджмент (видеокурсы)"}
     - {id: 1319, cat: Books, desc: " |- Иностранные языки (видеокурсы)"}
@@ -389,7 +388,6 @@ caps:
     - {id: 558, cat: Books, desc: " |- Бизнес, Менеджмент, Деловая литература"}
     - {id: 1173, cat: Books, desc: " |- Публицистика"}
     - {id: 1176, cat: Books, desc: " |- Историография"}
-    - {id: 1170, cat: Books, desc: " |- Спорт, Фитнес, Боевые искусства"}
     - {id: 1174, cat: Books, desc: " |- Популярная психология и саморазвитие"}
     - {id: 1171, cat: Books, desc: " |- Эзотерика"}
     - {id: 662, cat: Books, desc: " |- Религиозная литература"}
@@ -397,7 +395,8 @@ caps:
     - {id: 1172, cat: Books, desc: " |- Строительство и ремонт"}
     - {id: 933, cat: Books, desc: " |- Сад, огород, животноводство"}
     - {id: 815, cat: Books, desc: " |- Кулинария"}
-    - {id: 398, cat: Books, desc: " |- Ноты"}
+    - {id: 1170, cat: Books, desc: " |- Спорт, Фитнес, Боевые искусства"}
+    - {id: 398, cat: Books, desc: " |- Ноты и обучение музыке"}
     - {id: 816, cat: Books, desc: " |- На досуге"}
     # Music
     - {id: 313, cat: Audio, desc: "HD Audio и Многоканальная Музыка"}
@@ -689,9 +688,9 @@ caps:
     - {id: 1073, cat: Other, desc: " |- Интернет-творчество"}
     # temp, archive
     - {id: 892, cat: Other, desc: " |- Архив Мультфильмов"}
-    - {id: 91, cat: Other, desc: " |- Архив Видео"}
+    - {id: 91, cat: Other, desc: " |- Архив Видео. Кино, Театра, Муз.видео"}
     - {id: 150, cat: Other, desc: " |- Архив неактуальных Экранок и любого видео с Рекламой"}
-    - {id: 668, cat: Other, desc: " |- Архив Классики и Старого кино"}
+    - {id: 668, cat: Other, desc: " |- Архив Классики кино и Старых фильмов до 90-х"}
     - {id: 1143, cat: Other, desc: " |- Архив Музыкального Видео"}
     - {id: 802, cat: Other, desc: " |- Архив Сериалов и Архив Старого многосерийного кино до 90-х"}
     - {id: 669, cat: Other, desc: " |- Архив Документалистики и TV"}

@@ -128,6 +128,8 @@ search:
       filters:
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     description:

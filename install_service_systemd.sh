@@ -73,6 +73,7 @@ Type=simple
 User=${JACKETT_USER}
 Group=${JACKETT_USER}
 WorkingDirectory=${JACKETT_DIR}
+Environment="DOTNET_EnableDiagnostics=0"
 ExecStart=/bin/sh "${JACKETT_DIR}/jackett_launcher.sh"
 TimeoutStopSec=30
 

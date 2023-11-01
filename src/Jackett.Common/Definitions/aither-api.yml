@@ -14,12 +14,6 @@ caps:
     - {id: 9, cat: TV/Sport, desc: "Sport"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Console, desc: "Games"}
-    - {id: 10, cat: PC, desc: "Software & Apps"}
-    - {id: 11, cat: Books, desc: "Ebooks & Magazines"}
-    - {id: 14, cat: Audio/Audiobook, desc: "Audiobooks"}
-    - {id: 15, cat: Other, desc: "Education"}
-    - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
@@ -35,7 +29,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://aither.cc/\" target=\"_blank\">Aither</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://aither.cc/\" target=\"_blank\">Aither</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -160,15 +154,15 @@ search:
         100%: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
-      # api returns 0=false, 1=true
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
+        False: 1 # normal
+        True: 2 # double
 # global MR is 0.4 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
       # 5 days (as seconds = 3 x 24 x 60 x 60)
       text: 432000
-# json UNIT3D 6.5.0
+# json UNIT3D 7.0.0

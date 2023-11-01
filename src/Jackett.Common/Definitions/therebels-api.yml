@@ -18,10 +18,10 @@ caps:
     - {id: 8, cat: Books/EBook, desc: "E-Books"}
     - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 4, cat: Console, desc: "Jogos"}
-    - {id: 3, cat: Audio, desc: "Músicas"}
     - {id: 11, cat: Books/Mags, desc: "Revistas"}
     - {id: 2, cat: TV, desc: "Series"}
     - {id: 14, cat: TV/Anime, desc: "Animes"}
+    - {id: 15, cat: PC, desc: "Emulador"}
 
   modes:
     search: [q]
@@ -126,9 +126,9 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+          args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: re_replace
-          args: ["(?i)(TV Movie)", "TV_Movie"]
+          args: ["(?i)(Cinema TV)", "Cinema_TV"]
         - name: replace
           args: [" & ", "_&_"]
     description:

@@ -33,6 +33,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected virtual string AuthorizationName => "Authorization";
         protected virtual string AuthorizationFormat => "{0}";
         protected virtual int ApiKeyLength => 41;
+        protected virtual int ApiKeyLengthLegacy => 0;
         protected virtual string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
 
         protected bool useTokens;
@@ -89,8 +90,10 @@ namespace Jackett.Common.Indexers.Abstract
                 var apiKey = configData.ApiKey;
                 if (apiKey?.Value == null)
                     throw new Exception("Invalid API Key configured");
-                if (apiKey.Value.Length != ApiKeyLength)
+                if (ApiKeyLengthLegacy == 0 && apiKey.Value.Length != ApiKeyLength)
                     throw new Exception($"Invalid API Key configured: expected length: {ApiKeyLength}, got {apiKey.Value.Length}");
+                if (ApiKeyLengthLegacy != 0 && apiKey.Value.Length != ApiKeyLength && apiKey.Value.Length != ApiKeyLengthLegacy)
+                    throw new Exception($"Invalid API Key configured: expected length: {ApiKeyLength} or {ApiKeyLengthLegacy}, got {apiKey.Value.Length}");
 
                 try
                 {
