@@ -43,6 +43,7 @@ caps:
     - {id: 122, cat: Movies/WEB-DL, desc: "Films Web-DL 1080P"}
     - {id: 138, cat: Movies/WEB-DL, desc: "Films WEB-DL 2160p"}
     - {id: 123, cat: Movies/WEB-DL, desc: "Films WEB-DL 720p"}
+    - {id: 143, cat: Movies/WEB-DL, desc: "Films WEB-DL-SD"}
     - {id: 139, cat: Movies/WEB-DL, desc: "Films WEB-RIP 2160p"}
     - {id: 73, cat: Movies/WEB-DL, desc: "Films Webrip"}
     - {id: 70, cat: Movies/WEB-DL, desc: "Films WebRip 1080p"}
