@@ -1,9 +1,9 @@
 ---
 id: torrentmasters
 name: TorrentMasters
-description: "TorrentMasters is a HUNGARIAN private tracker for MOVIES / TV / GENERAL"
+description: "TorrentMasters is a HUNGARIAN semi-private tracker for MOVIES / TV / GENERAL"
 language: hu-HU
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://torrentmasters.org/
