@@ -149,6 +149,12 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.+?)>"
     date:
       selector: a[href^="torrents-details.php?id="]
       attribute: onmouseover
@@ -156,7 +162,7 @@ search:
         - name: regexp
           args: "Date Added: </b>(\\d{2}-\\d{2}-\\d{4})<br />"
         - name: dateparse
-          args: "dd-MM-yyyy"
+          args: "MM-dd-yyyy"
     size:
       selector: td:nth-child(7)
     seeders:
