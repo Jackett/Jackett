@@ -309,7 +309,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * CinemaMovieS_ZT
  * Cinematik [![(invite needed)][inviteneeded]](#)
  * CinemaZ (EuTorrents)
- * Classix [![(invite needed)][inviteneeded]](#)
+ * Classix
  * Coastal-Crew
  * Concertos
  * CrazySpirits
