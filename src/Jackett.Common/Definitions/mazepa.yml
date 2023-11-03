@@ -285,7 +285,7 @@ search:
       selector: a[href^="./dl.php?id="]
       attribute: href
     size:
-      selector: td:nth-last-child(5) > u
+      selector: a[href^="./dl.php?id="]
     seeders:
       selector: td.seedmed
     leechers:
@@ -293,8 +293,43 @@ search:
     grabs:
       selector: td:nth-last-child(2)
     date:
-      # unix
-      selector: td:last-child > u
+      # 11:51 31-Жов-23
+      # Вчора 00:04 3-Лис-23
+      # Сьогодні 06:40 4-Лис-23
+      selector: td:last-child
+      filters:
+        - name: regexp
+          args: (\d{2}:\d{2}\s\d{1,2}-\D{3}-\d{2})
+        - name: re_replace
+          args: ["\\s", " "]
+        - name: re_replace
+          args: ["(?i)Січ", "Jan"]
+        - name: re_replace
+          args: ["(?i)Лют", "Feb"]
+        - name: re_replace
+          args: ["(?i)Бер", "Mar"]
+        - name: re_replace
+          args: ["(?i)Кві", "Apr"]
+        - name: re_replace
+          args: ["(?i)Тра", "May"]
+        - name: re_replace
+          args: ["(?i)Чер", "Jun"]
+        - name: re_replace
+          args: ["(?i)Лип", "Jul"]
+        - name: re_replace
+          args: ["(?i)Сер", "Aug"]
+        - name: re_replace
+          args: ["(?i)Вер", "Sep"]
+        - name: re_replace
+          args: ["(?i)Жов", "Oct"]
+        - name: re_replace
+          args: ["(?i)Лис", "Nov"]
+        - name: re_replace
+          args: ["(?i)Гру", "Dec"]
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "HH:mm d-MMM-yy zzz"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
