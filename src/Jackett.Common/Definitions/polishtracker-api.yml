@@ -112,7 +112,7 @@ search:
     details:
       text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
     download:
-      text: "https://api.pte.nu/torrents/download/{{ .Result._id }}"
+      text: "https://api-test.pte.nu/download/{{ .Result._id }}"
     imdbid:
       selector: imdb_id
     genre:
