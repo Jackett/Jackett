@@ -1,0 +1,205 @@
+---
+id: bitporn
+name: BitPorn
+description: "BitPorn is a HUNGARIAN Private Torrent Tracker for 3X"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://bitporn.eu/
+
+caps:
+  categorymappings:
+    - {id: 418, cat: XXX, desc: "Amateur"}
+    - {id: 410, cat: XXX, desc: "Anal"}
+    - {id: 414, cat: XXX, desc: "Animal"}
+    - {id: 415, cat: XXX, desc: "Asian"}
+    - {id: 416, cat: XXX, desc: "BBW"}
+    - {id: 417, cat: XXX, desc: "BDSM"}
+    - {id: 419, cat: XXX, desc: "Big Ass"}
+    - {id: 420, cat: XXX, desc: "Big Tits"}
+    - {id: 421, cat: XXX, desc: "Black"}
+    - {id: 447, cat: XXX, desc: "Cartoon"}
+    - {id: 448, cat: XXX, desc: "Casting"}
+    - {id: 422, cat: XXX, desc: "Classic"}
+    - {id: 434, cat: XXX, desc: "Collection"}
+    - {id: 423, cat: XXX, desc: "Creampie"}
+    - {id: 424, cat: XXX, desc: "Cumshot"}
+    - {id: 451, cat: XXX, desc: "Deepthroat"}
+    - {id: 455, cat: XXX, desc: "Extreme"}
+    - {id: 454, cat: XXX, desc: "Family"}
+    - {id: 425, cat: XXX, desc: "Feature"}
+    - {id: 426, cat: XXX, desc: "Fetish"}
+    - {id: 457, cat: XXX, desc: "Fisting"}
+    - {id: 453, cat: XXX, desc: "Gangbang"}
+    - {id: 427, cat: XXX, desc: "Gay / Bi"}
+    - {id: 412, cat: XXX, desc: "Hair"}
+    - {id: 411, cat: XXX, desc: "Hardcore"}
+    - {id: 456, cat: XXX, desc: "HiddenCam"}
+    - {id: 428, cat: XXX, desc: "Homemade"}
+    - {id: 429, cat: XXX, desc: "Interracial"}
+    - {id: 430, cat: XXX, desc: "Lesbian"}
+    - {id: 431, cat: XXX, desc: "Magyar"}
+    - {id: 432, cat: XXX, desc: "Masturbation"}
+    - {id: 433, cat: XXX, desc: "Mature"}
+    - {id: 435, cat: XXX, desc: "Milf"}
+    - {id: 436, cat: XXX, desc: "Old and Young"}
+    - {id: 437, cat: XXX, desc: "Parody"}
+    - {id: 449, cat: XXX, desc: "Pictures"}
+    - {id: 438, cat: XXX, desc: "Pissing"}
+    - {id: 439, cat: XXX, desc: "POV"}
+    - {id: 440, cat: XXX, desc: "Pregnant"}
+    - {id: 452, cat: XXX, desc: "Public"}
+    - {id: 441, cat: XXX, desc: "Shemale"}
+    - {id: 442, cat: XXX, desc: "Softcore"}
+    - {id: 443, cat: XXX, desc: "Squirt"}
+    - {id: 444, cat: XXX, desc: "Straight"}
+    - {id: 445, cat: XXX, desc: "Teen"}
+    - {id: 450, cat: XXX, desc: "Threesome"}
+    - {id: 446, cat: XXX, desc: "VR"}
+    - {id: 458, cat: XXX, desc: "Uncategorized"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    secret: ""
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(h2:contains("Bejelentkezés sikertelen!"))
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 incldead, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 imdburl
+    search_area: 0
+    # 0 AND, 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    notnewword: 1
+
+  rows:
+    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_default:
+      selector: a[href^="details.php?id="]
+    title:
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td.rowfollow:nth-child(4) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    date_added:
+      # time added
+      selector: td.rowfollow:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td.rowfollow:nth-child(5)
+    seeders:
+      selector: td.rowfollow:nth-child(6)
+    leechers:
+      selector: td.rowfollow:nth-child(7)
+    grabs:
+      selector: td.rowfollow:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 48 hours (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+    description:
+      selector: td.rowfollow:nth-child(2)
+      remove: a, b, font, img, span
+# NexusPHP v1.8.5 2023-07-06

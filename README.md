@@ -275,6 +275,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Bithorlo (BHO)
  * BitHUmen [![(invite needed)][inviteneeded]](#)
  * Bit Of Valor
+ * BitPorn
  * BitSexy
  * Bitspyder
  * BitTorrentFiles
@@ -565,6 +566,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Tornado
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
+ * Torrent Trader [![(invite needed)][inviteneeded]](#)
  * Torrent-Explosiv
  * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
  * TOrrent-tuRK (TORK)
@@ -590,6 +592,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
  * TVstore
+ * Twisted-Music
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UBits
  * UHDBits
