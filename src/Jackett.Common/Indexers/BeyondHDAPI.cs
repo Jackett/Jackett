@@ -64,8 +64,8 @@ namespace Jackett.Common.Indexers
                 }
             };
 
-            caps.Categories.AddCategoryMapping("Movies", TorznabCatType.Movies);
-            caps.Categories.AddCategoryMapping("TV", TorznabCatType.TV);
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Movies");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TV, "TV");
 
             return caps;
         }
@@ -118,7 +118,7 @@ namespace Jackett.Common.Indexers
             var apiKey = configData.ApiKey.Value;
             var apiUrl = $"{APIBASE}{apiKey}";
 
-            var postData = new Dictionary<string, string>
+            var postData = new Dictionary<string, object>
             {
                 { BHDParams.action, "search" },
                 { BHDParams.rsskey, configData.RSSKey.Value },
@@ -127,36 +127,34 @@ namespace Jackett.Common.Indexers
 
             if (configData.FilterFreeleech.Value)
             {
-                postData.Add(BHDParams.freeleech, "1");
+                postData.Add(BHDParams.freeleech, 1);
             }
 
             if (configData.FilterLimited.Value)
             {
-                postData.Add(BHDParams.limited, "1");
+                postData.Add(BHDParams.limited, 1);
             }
 
             if (configData.FilterRefund.Value)
             {
-                postData.Add(BHDParams.refund, "1");
+                postData.Add(BHDParams.refund, 1);
             }
 
             if (configData.FilterRewind.Value)
             {
-                postData.Add(BHDParams.rewind, "1");
+                postData.Add(BHDParams.rewind, 1);
             }
 
             if (configData.SearchTypes.Values.Any())
             {
-                postData.Add(BHDParams.types, string.Join(",", configData.SearchTypes.Values));
+                postData.Add(BHDParams.types, configData.SearchTypes.Values.ToArray());
             }
 
-            if (query.IsTVSearch)
+            var categories = MapTorznabCapsToTrackers(query);
+
+            if (categories.Any())
             {
-                postData.Add(BHDParams.categories, "TV");
-            }
-            else if (query.IsMovieSearch)
-            {
-                postData.Add(BHDParams.categories, "Movies");
+                postData.Add(BHDParams.categories, categories.Select(int.Parse).ToArray());
             }
 
             if (query.IsImdbQuery)
@@ -175,16 +173,16 @@ namespace Jackett.Common.Indexers
             }
 
             var bhdResponse = await GetBHDResponse(apiUrl, postData);
-            var releaseInfos = bhdResponse.results.Select(mapToReleaseInfo);
+            var releaseInfos = bhdResponse.results.Select(MapToReleaseInfo);
 
             return releaseInfos;
         }
 
-        private ReleaseInfo mapToReleaseInfo(BHDResult bhdResult)
+        private ReleaseInfo MapToReleaseInfo(BHDResult bhdResult)
         {
             var downloadUri = new Uri(bhdResult.download_url);
 
-            var title = getTitle(bhdResult);
+            var title = GetReleaseTitle(bhdResult);
 
             var releaseInfo = new ReleaseInfo
             {
@@ -198,7 +196,7 @@ namespace Jackett.Common.Indexers
                 Grabs = bhdResult.times_completed,
                 PublishDate = bhdResult.created_at,
                 Size = bhdResult.size,
-                Category = MapTrackerCatToNewznab(bhdResult.category)
+                Category = MapTrackerCatDescToNewznab(bhdResult.category)
             };
 
             if (!string.IsNullOrEmpty(bhdResult.imdb_id))
@@ -219,7 +217,7 @@ namespace Jackett.Common.Indexers
             return releaseInfo;
         }
 
-        private string getTitle(BHDResult bhdResult)
+        private string GetReleaseTitle(BHDResult bhdResult)
         {
             var title = bhdResult.name.Trim();
 
@@ -258,13 +256,18 @@ namespace Jackett.Common.Indexers
             return title;
         }
 
-        private async Task<BHDResponse> GetBHDResponse(string apiUrl, Dictionary<string, string> postData)
+        private async Task<BHDResponse> GetBHDResponse(string apiUrl, Dictionary<string, object> postData)
         {
             var request = new WebRequest
             {
-                PostData = postData,
+                Url = apiUrl,
                 Type = RequestType.POST,
-                Url = apiUrl
+                Headers = new Dictionary<string, string>
+                {
+                    { "Accept", "application/json" },
+                    { "Content-Type", "application/json" }
+                },
+                RawBody = JsonConvert.SerializeObject(postData)
             };
 
             var response = await webclient.GetResultAsync(request);
@@ -274,9 +277,14 @@ namespace Jackett.Common.Indexers
                 logger.Warn(response.ContentString);
                 throw new Exception("The response was not JSON");
             }
+
             var bhdresponse = JsonConvert.DeserializeObject<BHDResponse>(response.ContentString);
+
             if (bhdresponse.status_code == 0)
+            {
                 throw new Exception(bhdresponse.status_message);
+            }
+
             return bhdresponse;
         }
 
