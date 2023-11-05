@@ -377,6 +377,7 @@ namespace Jackett.Updater
                 "Definitions/feedurneed.yml", // merged with devilsplayground #6872
                 "Definitions/fenyarnyek-tracker.yml",
                 "Definitions/filebase.yml",
+                "Definitions/filelisting.yml",
                 "Definitions/film-paleis.yml",
                 "Definitions/filmsclub.yml",
                 "Definitions/firebit.yml",
