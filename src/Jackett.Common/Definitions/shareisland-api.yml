@@ -21,6 +21,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 7, cat: PC/Games, desc: "Games"}
     - {id: 23, cat: PC, desc: "Software"}
+    - {id: 24, cat: TV/Sport, desc: "EVENTI SPORTIVI"}
 
   modes:
     search: [q]
