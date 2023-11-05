@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -72,18 +73,10 @@ namespace Jackett.Common.Indexers
             };
 
             caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Feature Film");
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesForeign);
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesOther);
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesSD);
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD);
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies3D);
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesBluRay);
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesDVD);
-            caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesWEBDL);
             caps.Categories.AddCategoryMapping(2, TorznabCatType.Movies, "Short Film");
             caps.Categories.AddCategoryMapping(3, TorznabCatType.TV, "Miniseries");
-            caps.Categories.AddCategoryMapping(4, TorznabCatType.TV, "Stand-up Comedy");
-            caps.Categories.AddCategoryMapping(5, TorznabCatType.TV, "Live Performance");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.Movies, "Stand-up Comedy");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.Movies, "Live Performance");
             caps.Categories.AddCategoryMapping(6, TorznabCatType.Movies, "Movie Collection");
 
             return caps;
@@ -129,18 +122,23 @@ namespace Jackett.Common.Indexers
                 { "grouping", "0" },
             };
 
-            if (!string.IsNullOrEmpty(query.ImdbID))
-            {
-                queryCollection.Set("searchstr", query.ImdbID);
-            }
-            else if (!string.IsNullOrEmpty(query.GetQueryString()))
-            {
-                queryCollection.Set("searchstr", query.GetQueryString());
-            }
-
             if (configFreeOnly)
             {
                 queryCollection.Set("freetorrent", "1");
+            }
+
+            var searchQuery = query.ImdbID.IsNotNullOrWhiteSpace() ? query.ImdbID : query.GetQueryString();
+
+            if (searchQuery.IsNotNullOrWhiteSpace())
+            {
+                queryCollection.Set("searchstr", searchQuery);
+            }
+
+            var queryCats = MapTorznabCapsToTrackers(query).Select(int.Parse).Distinct().ToList();
+
+            if (searchQuery.IsNullOrWhiteSpace() && queryCats.Any())
+            {
+                queryCats.ForEach(cat => queryCollection.Set($"filter_cat[{cat}]", "1"));
             }
 
             if (query.Limit > 0 && query.Offset > 0)
