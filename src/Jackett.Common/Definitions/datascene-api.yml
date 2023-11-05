@@ -21,6 +21,24 @@ caps:
     - {id: 6, cat: XXX, desc: "18+"}
     - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 8, cat: Books/EBook, desc: "E-Book"}
+    - {id: 9, cat: Movies, desc: "Movies Ro"}
+    - {id: 10, cat: TV, desc: "TV SD Ro"}
+    - {id: 11, cat: Movies/UHD, desc: "Movies 4K"}
+    - {id: 12, cat: Movies/UHD, desc: "Movies 4K Ro"}
+    - {id: 13, cat: TV/Anime, desc: "Anime"}
+    - {id: 14, cat: Movies/BluRay, desc: "Movies Bluray"}
+    - {id: 15, cat: Movies/BluRay, desc: "Movies Bluray Ro"}
+    - {id: 16, cat: PC/Games, desc: "Games PC"}
+    - {id: 17, cat: Console, desc: "Games Console"}
+    - {id: 18, cat: TV/HD, desc: "TV HD Ro"}
+    - {id: 19, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 20, cat: Movies/SD, desc: "Movies SD Ro"}
+    - {id: 21, cat: Audio/Video, desc: "Music Video"}
+    - {id: 22, cat: TV, desc: "TV Pack Ro"}
+    - {id: 23, cat: Movies/HD, desc: "Movies HD Ro"}
+    - {id: 24, cat: PC, desc: "Linux"}
+    - {id: 25, cat: TV/Sport, desc: "Sport"}
+    - {id: 26, cat: TV/SD, desc: "TV SD"}
 
   modes:
     search: [q]
@@ -174,4 +192,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 7.0.0
+# json UNIT3D 7.0.3
