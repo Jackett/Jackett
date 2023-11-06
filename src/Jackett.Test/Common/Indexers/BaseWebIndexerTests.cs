@@ -47,25 +47,33 @@ namespace Jackett.Test.Common.Indexers
         {
             var indexer = new TestWebIndexer();
             indexer.AddTestCategories();
+
             var results = new List<ReleaseInfo>
             {
                 new ReleaseInfo
                 {
+                    Title = "Release 1",
                     Category = new List<int> { TorznabCatType.Movies.ID }
                 },
                 new ReleaseInfo
                 {
+                    Title = "Release 2",
                     Category = new List<int> { TorznabCatType.MoviesSD.ID }
                 },
                 new ReleaseInfo
                 {
+                    Title = "Release 3",
                     Category = new List<int> { TorznabCatType.BooksEBook.ID, 100004 } // torznab (mandatory) + custom cat
                 },
                 new ReleaseInfo
                 {
+                    Title = "Release 4",
                     Category = new List<int> { TorznabCatType.AudioLossless.ID } // unsupported category in this indexer
                 },
-                new ReleaseInfo()
+                new ReleaseInfo
+                {
+                    Title = "Release 5",
+                }
             };
 
             var query = new TorznabQuery(); // without categories
@@ -105,10 +113,17 @@ namespace Jackett.Test.Common.Indexers
         public void TestFilterResultsLimit()
         {
             var indexer = new TestWebIndexer();
+
             var results = new List<ReleaseInfo>
             {
-                new ReleaseInfo(),
-                new ReleaseInfo()
+                new ReleaseInfo
+                {
+                    Title = "Release 1"
+                },
+                new ReleaseInfo
+                {
+                    Title = "Release 2"
+                }
             };
 
             var query = new TorznabQuery();
@@ -132,6 +147,7 @@ namespace Jackett.Test.Common.Indexers
             {
                 new ReleaseInfo
                 {
+                    Title = "Release",
                     PublishDate = new DateTime(3000, 1, 1) // future date
                 }
             };
@@ -155,6 +171,7 @@ namespace Jackett.Test.Common.Indexers
             {
                 new ReleaseInfo
                 {
+                    Title = "Release",
                     MagnetUri = new Uri("magnet:?xt=urn:btih:3333333333333333333333333333333333333333&dn=Title&tr=udp%3A%2F%2Ftracker.com%3A6969")
                 }
             };
