@@ -20,7 +20,14 @@ namespace Jackett.Common.Models
             RegexOptions.Compiled);
 
         private ChannelInfo ChannelInfo { get; }
-        public IEnumerable<ReleaseInfo> Releases { get; set; }
+
+        private IEnumerable<ReleaseInfo> _releases;
+
+        public IEnumerable<ReleaseInfo> Releases
+        {
+            get => _releases.Where(release => release.IsValidRelease());
+            set => _releases = value;
+        }
 
         public ResultPage(ChannelInfo channelInfo)
         {
