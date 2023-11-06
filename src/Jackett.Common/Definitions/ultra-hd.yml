@@ -159,4 +159,7 @@ search:
       case:
         False: 1 # normal
         True: 2 # double
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # json UNIT3D 7.0.0
