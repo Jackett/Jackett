@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
 
         protected virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
         {
-            var filteredResults = results;
+            var filteredResults = results.Where(IsValidRelease);
 
             // filter results with wrong categories
             if (query.Categories.Length > 0)
@@ -179,7 +179,9 @@ namespace Jackett.Common.Indexers
 
             // eliminate excess results
             if (query.Limit > 0)
+            {
                 filteredResults = filteredResults.Take(query.Limit);
+            }
 
             return filteredResults;
         }
@@ -194,30 +196,55 @@ namespace Jackett.Common.Indexers
                 // fix publish date
                 // some trackers do not keep their clocks up to date and can be ~20 minutes out!
                 if (!EnvironmentUtil.IsDebug && r.PublishDate > DateTime.Now)
+                {
                     r.PublishDate = DateTime.Now;
+                }
 
                 // generate magnet link from info hash (not allowed for private sites)
                 if (r.MagnetUri == null && !string.IsNullOrWhiteSpace(r.InfoHash) && Type != "private")
+                {
                     r.MagnetUri = MagnetUtil.InfoHashToPublicMagnet(r.InfoHash, r.Title);
+                }
 
                 // generate info hash from magnet link
                 if (r.MagnetUri != null && string.IsNullOrWhiteSpace(r.InfoHash))
+                {
                     r.InfoHash = MagnetUtil.MagnetToInfoHash(r.MagnetUri);
+                }
 
                 // set guid
                 if (r.Guid == null)
                 {
                     if (r.Link != null)
+                    {
                         r.Guid = r.Link;
+                    }
                     else if (r.MagnetUri != null)
+                    {
                         r.Guid = r.MagnetUri;
+                    }
                     else if (r.Details != null)
+                    {
                         r.Guid = r.Details;
+                    }
                 }
 
                 return r;
             });
+
             return fixedResults;
+        }
+
+        protected virtual bool IsValidRelease(ReleaseInfo release)
+        {
+            if (release.Title.IsNullOrWhiteSpace())
+            {
+                logger.Error("Invalid Release: '{0}' from indexer: {1}. No title provided.", release.Details, Name);
+
+                return false;
+            }
+
+            return true;
         }
 
         public virtual bool CanHandleQuery(TorznabQuery query)
