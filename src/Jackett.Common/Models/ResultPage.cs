@@ -85,11 +85,11 @@ namespace Jackett.Common.Models
                             r.Files == null ? null : new XElement("files", r.Files),
                             r.Grabs == null ? null : new XElement("grabs", r.Grabs),
                             new XElement("description", RemoveInvalidXMLChars(r.Description)),
-                            new XElement("link", r.Link?.AbsoluteUri ?? r.MagnetUri.AbsoluteUri),
+                            new XElement("link", r.Link?.AbsoluteUri ?? r.MagnetUri?.AbsoluteUri ?? string.Empty),
                             r.Category == null ? null : from c in r.Category select new XElement("category", c),
                             new XElement(
                                 "enclosure",
-                                new XAttribute("url", r.Link?.AbsoluteUri ?? r.MagnetUri.AbsoluteUri),
+                                new XAttribute("url", r.Link?.AbsoluteUri ?? r.MagnetUri?.AbsoluteUri ?? string.Empty),
                                 r.Size == null ? null : new XAttribute("length", r.Size),
                                 new XAttribute("type", "application/x-bittorrent")
                             ),
