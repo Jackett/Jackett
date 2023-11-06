@@ -103,11 +103,15 @@ settings:
 
 login:
   path: account-login.php
-  method: post
+  method: form
+  form: form[action="account-login.php"]
+  captcha:
+    type: image
+    selector: img[src="captcha.php?ext=.gif"]
+    input: captcha
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    returnto: /
   error:
     - selector: td.embedded:contains("Access Denied")
   test:
