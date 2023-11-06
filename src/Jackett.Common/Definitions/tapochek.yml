@@ -456,6 +456,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_ymd
+    type: info
+    label: About the date
+    default: Before using this indexer please check on the Tapochek website that your account profile <b>Y-m-d</b> setting is <b>Y-m-d H:i</b>. If it is anything else then this indexer will generate a parse error and not return results.
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
