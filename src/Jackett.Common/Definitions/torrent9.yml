@@ -177,14 +177,8 @@ search:
     size:
       selector: "{{ if .Keywords }}td:nth-child(3){{ else }}td:nth-child(2){{ end }}"
       filters:
-        - name: replace
-          args: ["Ko", "KB"]
-        - name: replace
-          args: ["Mo", "MB"]
-        - name: replace
-          args: ["Go", "GB"]
-        - name: replace
-          args: ["To", "TB"]
+        - name: re_replace
+          args: ["(\\w)o", "$1B"]
     seeders:
       selector: "{{ if .Keywords }}td:nth-child(4){{ else }}td:nth-child(3){{ end }}"
       optional: true
