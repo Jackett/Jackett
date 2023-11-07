@@ -5,70 +5,64 @@ description: "SceneLinks (SL) is a ROMANIAN Private Torrent Tracker for MOVIES /
 language: ro-RO
 type: private
 encoding: UTF-8
-requestDelay: 2
 links:
-  - https://www.scenelinks.io/
+  - https://scenelinks.me/
 legacylinks:
   - https://scenelinks.io/
+  - https://www.scenelinks.io/
 
 caps:
   categorymappings:
-    # when adding or removing cats don't forget the path categories
-    - {id: 163, cat: TV/Anime, desc: "Anime / Hentai", default: true}
-    - {id: 146, cat: PC, desc: "Applications", default: true}
-    - {id: 151, cat: Books/EBook, desc: "E-books", default: true}
-    - {id: 103, cat: PC/Games, desc: "Games: PC", default: true}
-    - {id: 174, cat: TV/HD, desc: "HDTV Episodes", default: true}
-    - {id: 175, cat: TV/HD, desc: "HDTV Episodes-Ro", default: true}
-    - {id: 149, cat: Other, desc: "Images", default: true}
-    - {id: 165, cat: PC, desc: "Linux", default: true}
-    - {id: 164, cat: PC/Mobile-Other, desc: "Mobile", default: true}
-    - {id: 161, cat: Movies/UHD, desc: "Movies: 4K(2160p)", default: true}
-    - {id: 162, cat: Movies/UHD, desc: "Movies: 4K-RO(2160p)", default: true}
-    - {id: 138, cat: Movies/BluRay, desc: "Movies: BluRay", default: true}
-    - {id: 148, cat: Movies/BluRay, desc: "Movies: BluRay-RO", default: true}
-    - {id: 82, cat: Movies/DVD, desc: "Movies: DVD", default: true}
-    - {id: 83, cat: Movies/DVD, desc: "Movies: DVD-Ro", default: true}
-    - {id: 147, cat: Movies/HD, desc: "Movies: HD", default: true}
-    - {id: 108, cat: Movies/HD, desc: "Movies: HD-Ro", default: true}
-    - {id: 1, cat: Movies/SD, desc: "Movies: SD", default: true}
-    - {id: 2, cat: Movies/SD, desc: "Movies: SD-Ro", default: true}
-    - {id: 142, cat: Audio, desc: "Music", default: true}
-    - {id: 143, cat: Audio/Video, desc: "Music Video", default: true}
-    - {id: 160, cat: Movies, desc: "Ro Movies", default: true}
-    - {id: 159, cat: TV, desc: "Ro TV", default: true}
-    - {id: 166, cat: TV/Sport, desc: "Sports", default: true}
-    - {id: 158, cat: TV/SD, desc: "TV Episodes (SD)", default: true}
-    - {id: 153, cat: TV/SD, desc: "TV Episodes-Ro (SD)", default: true}
-    - {id: 3, cat: XXX, desc: "XXX", default: false}
+    - {id: 1, cat: Movies/HD, desc: "Movies: HD"}
+    - {id: 2, cat: TV, desc: "TV Episodes"}
+    - {id: 6, cat: TV, desc: "RO TV"}
+    - {id: 7, cat: Movies, desc: "Ro Movies"}
+    - {id: 8, cat: TV, desc: "TV Episodes-RO"}
+    - {id: 9, cat: Movies/HD, desc: "Movies: HD-Ro"}
+    - {id: 11, cat: Movies/BluRay, desc: "Movies: BluRay"}
+    - {id: 12, cat: Movies/BluRay, desc: "Movies: BluRay-RO"}
+    - {id: 13, cat: Movies/UHD, desc: "Movies: 4K"}
+    - {id: 14, cat: Movies/UHD, desc: "Movies: 4K-RO"}
+    - {id: 15, cat: TV, desc: "TV Packs RO"}
+    - {id: 20, cat: Movies/DVD, desc: "Movies: DVD"}
+    - {id: 21, cat: Movies/DVD, desc: "Movies: DVD-Ro"}
+    - {id: 19, cat: TV/Documentary, desc: "Docs"}
+    - {id: 18, cat: Other, desc: "Wallpapers"}
+    - {id: 17, cat: Audio/Video, desc: "Videos"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 16, cat: Console, desc: "Games: Console"}
+    - {id: 4, cat: PC/Games, desc: "Games PC"}
+    - {id: 5, cat: PC, desc: "Application"}
+    - {id: 10, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://www.scenelinks.me/\" target=\"_blank\">SceneLinks</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: 4
+    default: created_at
     options:
-      4: created
-      7: seeders
-      5: size
-      1: title
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
@@ -76,109 +70,119 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  path: takelogin.php
-  method: post
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
+  path: /api/torrents
+  method: get
   error:
-    - selector: td.embedded:has(h2:contains("failed"))
-  test:
-    path: /
-    selector: a[href="logout.php"]
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
-    - path: browse.php
-      categories: [163, 146, 151, 103, 174, 175, 149, 165. 164, 161, 162, 138, 148, 82, 83, 147, 108, 1, 2, 142, 143, 160, 159, 166, 158, 153]
-      inputs:
-        # 0 name, 1 descr, 2 genre (not reliable)
-        blah: 0
-    - path: browseadult.php
-      categories: [3]
-      inputs:
-        incldead: 1
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v7.0.0)
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L349
+    - path: "/api/torrents/filter"
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
-    $raw: "{{ if .Categories}}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
-    search: "{{ .Keywords }}"
-    sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
-    # does not support imdbid searching or return imdb in results.
-    Search: Search
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
 
   rows:
-    selector: "table[border=\"1\"] > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(a#free-btn){{ else }}{{ end }}, table[width=\"1005\"] > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(a#free-btn){{ else }}{{ end }}"
+    selector: data
+    attribute: attributes
 
   fields:
     category:
-      selector: a[href*=".php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+      selector: category_id
     title:
-      selector: a[href^="download.php?id="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: name
-        - name: replace
-          args: [".torrent", ""]
+      selector: name
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
-    poster:
-      selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: src=([^\s]+)
+      selector: details_link
     download:
-      selector: a[href^="download.php?id="]
-      attribute: href
-    date:
-      selector: td:nth-last-child(5)
+      selector: download_link
+    infohash:
+      selector: info_hash
+    poster:
+      selector: meta.poster
       filters:
-        - name: append
-          args: " +00:00" # auto adjusted by site account profile
-        - name: dateparse
-          args: "yyyy-MM-ddHH:mm:ss zzz"
-    size:
-      selector: td:nth-last-child(4)
-    grabs:
-      selector: td:nth-last-child(3)
-    seeders:
-      selector: td:nth-last-child(2)
-    leechers:
-      selector: td:nth-last-child(1)
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
     genre:
-      selector: td:nth-child(2) > i:nth-last-child(1)
+      selector: meta.genres
       filters:
-        - name: re_replace
-          args: ["(?i)(All Sex)", "All_Sex"]
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
     downloadvolumefactor:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
       case:
-        "a#free-btn": 0
-        "*": 1
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
     uploadvolumefactor:
+      # api returns False, True
+      selector: double_upload
       case:
-        "a#double-btn": 2
-        "*": 1
-    minimumratio:
-      text: 1.0
+        False: 1 # normal
+        True: 2 # double
+# global MR is 0.4 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# TBDEV
+# json UNIT3D 7.0.3
