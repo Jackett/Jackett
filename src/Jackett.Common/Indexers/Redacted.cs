@@ -70,11 +70,17 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var results = await base.PerformQuery(query);
-            // results must contain search terms
-            results = results.Where(release => query.MatchQueryStringAND(release.Title));
-            return results;
-        }
+            var releases = await base.PerformQuery(query);
 
+            // results must contain search terms
+            releases = releases.Where(release => query.MatchQueryStringAND(release.Title));
+
+            if (query.IsRssSearch)
+            {
+                releases = releases.Take(50);
+            }
+
+            return releases;
+        }
     }
 }

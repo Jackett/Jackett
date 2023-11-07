@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -64,6 +66,18 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(7, TorznabCatType.BooksComics, "Comics");
 
             return caps;
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = await base.PerformQuery(query);
+
+            if (query.IsRssSearch)
+            {
+                releases = releases.Take(50);
+            }
+
+            return releases;
         }
     }
 }

@@ -271,9 +271,9 @@ namespace Jackett.Common.Indexers
                 return true;
             if (caps.BookSearchAvailable && query.IsBookSearch)
                 return true;
-            if (caps.TvSearchTvRageAvailable && query.IsTVRageSearch)
+            if (caps.TvSearchTvRageAvailable && query.IsTVRageQuery)
                 return true;
-            if (caps.TvSearchTvdbAvailable && query.IsTvdbSearch)
+            if (caps.TvSearchTvdbAvailable && query.IsTvdbQuery)
                 return true;
             if (caps.MovieSearchImdbAvailable && query.IsImdbQuery)
                 return true;

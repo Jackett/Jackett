@@ -89,7 +89,7 @@ namespace Jackett.Common.Indexers.Abstract
                 qc.Add("tmdb", query.TmdbID.ToString());
                 qc.Add("search", GetEpisodeSearchTerm(query));
             }
-            else if (query.IsTvdbSearch)
+            else if (query.IsTvdbQuery)
             {
                 qc.Add("tvdb", query.TvdbID.ToString());
                 qc.Add("search", GetEpisodeSearchTerm(query));

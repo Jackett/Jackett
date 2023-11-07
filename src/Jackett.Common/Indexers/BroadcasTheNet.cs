@@ -115,7 +115,7 @@ namespace Jackett.Common.Indexers
             var releases = new List<ReleaseInfo>();
             var searchParam = new Dictionary<string, string>();
 
-            if (query.IsTvdbSearch)
+            if (query.IsTvdbQuery)
                 searchParam["tvdb"] = string.Format("{0}", query.TvdbID);
             searchParam["search"] = searchString.Replace(" ", "%");
 

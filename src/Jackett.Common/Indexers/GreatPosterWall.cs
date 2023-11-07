@@ -73,9 +73,9 @@ namespace Jackett.Common.Indexers
 
             var releases = await base.PerformQuery(query);
 
-            if (query.SearchTerm.IsNullOrWhiteSpace())
+            if (query.IsRssSearch)
             {
-                releases = releases.Take(50).ToList();
+                releases = releases.Take(50);
             }
 
             return releases;

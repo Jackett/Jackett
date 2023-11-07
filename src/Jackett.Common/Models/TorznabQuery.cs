@@ -61,9 +61,9 @@ namespace Jackett.Common.Models
 
         public bool IsBookSearch => QueryType == "book";
 
-        public bool IsTVRageSearch => RageID != null;
+        public bool IsTVRageQuery => RageID != null;
 
-        public bool IsTvdbSearch => TvdbID != null;
+        public bool IsTvdbQuery => TvdbID != null;
 
         public bool IsImdbQuery => ImdbID != null;
 
@@ -76,6 +76,21 @@ namespace Jackett.Common.Models
         public bool IsDoubanQuery => DoubanID != null;
 
         public bool IsGenreQuery => Genre != null;
+
+        public bool IsRssSearch =>
+            SearchTerm.IsNullOrWhiteSpace() &&
+            !IsIdSearch;
+
+        public bool IsIdSearch =>
+            Episode.IsNotNullOrWhiteSpace() ||
+            Season > 0 ||
+            IsImdbQuery ||
+            IsTvdbQuery ||
+            IsTVRageQuery ||
+            IsTraktQuery ||
+            IsTvmazeQuery ||
+            IsTmdbQuery ||
+            IsDoubanQuery;
 
         public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
