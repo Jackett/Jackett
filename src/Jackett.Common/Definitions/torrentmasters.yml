@@ -137,7 +137,7 @@ search:
         - name: regexp
           args: (\d+)
     download:
-      text: "{{ .Config.sitelink }}/download.php?id={{ .Result._id }}"
+      text: "{{ .Config.sitelink }}download/{{ .Result._id }}/"
     title_hungarian:
       selector: a[href^="/details/"]
       attribute: title
