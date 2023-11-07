@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
     [ExcludeFromCodeCoverage]
-    internal class ConfigurationDataSceneTime : ConfigurationDataCookie
+    internal class ConfigurationDataSceneTime : ConfigurationDataCookieUA
     {
         public BoolConfigurationItem Freeleech { get; private set; }
 

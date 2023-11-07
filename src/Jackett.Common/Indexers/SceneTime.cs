@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using FlareSolverrSharp.Types;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -120,6 +121,14 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            Dictionary<string, string> headers = null;
+            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
+            {
+                headers = new Dictionary<string, string>
+                {
+                    { "User-Agent", configData.UserAgent.Value }
+                };
+            }
             var qParams = new NameValueCollection
             {
                 {"cata", "yes"}
@@ -140,7 +149,7 @@ namespace Jackett.Common.Indexers
                 qParams.Set("freeleech", "on");
 
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
-            var results = await RequestWithCookiesAsync(searchUrl);
+            var results = await RequestWithCookiesAsync(searchUrl, headers: headers);
 
             // response without results (the message is misleading)
             if (results.ContentString?.Contains("slow down geek!!!") == true)
