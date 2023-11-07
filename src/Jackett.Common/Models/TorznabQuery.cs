@@ -90,7 +90,16 @@ namespace Jackett.Common.Models
             IsTraktQuery ||
             IsTvmazeQuery ||
             IsTmdbQuery ||
-            IsDoubanQuery;
+            IsDoubanQuery ||
+            Album.IsNotNullOrWhiteSpace() ||
+            Artist.IsNotNullOrWhiteSpace() ||
+            Label.IsNotNullOrWhiteSpace() ||
+            Genre.IsNotNullOrWhiteSpace() ||
+            Track.IsNotNullOrWhiteSpace() ||
+            Author.IsNotNullOrWhiteSpace() ||
+            Title.IsNotNullOrWhiteSpace() ||
+            Publisher.IsNotNullOrWhiteSpace() ||
+            Year.HasValue;
 
         public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
 
