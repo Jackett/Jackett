@@ -89,11 +89,10 @@ search:
       selector: ..code
     details:
       text: "{{ .Config.sitelink }}release/{{ .Result._code }}.html"
-    download:
+    download_url:
       selector: url
-      filters:
-        - name: prepend
-          args: "{{ .Config.sitelink }}"
+    download:
+      text: "{{ .Config.sitelink }}{{ .Result.download_url }}"
     magnet:
       selector: magnet
     poster:

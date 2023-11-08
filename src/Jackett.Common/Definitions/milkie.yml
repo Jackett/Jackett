@@ -61,13 +61,13 @@ search:
     title:
       selector: releaseName
     details:
-      text: "{{ .Config.sitelink }}browse/{{ .Result._id }}"
+      text: "/browse/{{ .Result._id }}"
     _apikey:
       text: "{{ .Config.apikey }}"
       filters:
         - name: urlencode
     download:
-      text: "{{ .Config.sitelink }}api/v1/torrents/{{ .Result._id }}/torrent?key={{ .Result._apikey }}"
+      text: "/api/v1/torrents/{{ .Result._id }}/torrent?key={{ .Result._apikey }}"
     date:
       selector: createdAt
     size:

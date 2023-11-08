@@ -41,7 +41,7 @@ search:
     title:
       selector: div.flex.flex-wrap ~ p
     details:
-      text: "{{ .Config.sitelink }}search?query={{ .Result.title }}"
+      text: /
     download:
       selector: a[href*="/download/"]
       attribute: href

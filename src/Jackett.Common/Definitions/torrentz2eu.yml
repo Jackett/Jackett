@@ -94,8 +94,7 @@ search:
       # some tv have category as video() which can also be movies, so we look for the SxxExx to tag TV
       text: "{{ if .Result.category_is_tv_show }}Video(TV shows){{ else }}{{ .Result.category_provided }}{{ end }}"
     details:
-      # there is no details page so we use the sitelink
-      text: "{{ .Config.sitelink }}"
+      text: /
     download:
       selector: a[href^="magnet:?"]
       attribute: href

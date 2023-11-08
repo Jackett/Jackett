@@ -112,9 +112,9 @@ search:
     title:
       text: "{{ if .Result.title_notenglish }}{{ .Result.title_notenglish }}{{ else }}{{ .Result.title_english }}{{ end }}"
     details:
-      text: "{{ .Config.sitelink }}torrents.php?torrentid={{ .Result._id }}"
+      text: "/torrents.php?torrentid={{ .Result._id }}"
     download:
-      text: "{{ .Config.sitelink }}torrents.php?action=download&id={{ .Result._id }}"
+      text: "/torrents.php?action=download&id={{ .Result._id }}"
     poster:
       selector: ..cover
     imdbid:

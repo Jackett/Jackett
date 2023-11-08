@@ -50,7 +50,7 @@ search:
     title:
       selector: title
     details:
-      text: "{{ .Config.sitelink }}"
+      text: /
     infohash:
       selector: infoHash
     poster:
