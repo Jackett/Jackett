@@ -38,7 +38,7 @@ search:
         - name: replace
           args: ["[Nipponsei] ", ""]
     details:
-      text: "{{ .Config.sitelink }}"
+      text: /
     download:
       selector: a
       attribute: href
