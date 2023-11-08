@@ -441,7 +441,7 @@ search:
     category:
       selector: td:nth-child(1) > div.hidden
     download:
-      text: "{{ .Config.sitelink }}engine/download_torrent?id={{ .Result._id }}"
+      text: "/engine/download_torrent?id={{ .Result._id }}"
     date:
       # unix
       selector: td:nth-child(5) > div.hidden
