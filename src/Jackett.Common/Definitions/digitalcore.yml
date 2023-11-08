@@ -137,9 +137,9 @@ search:
     _id:
       selector: id
     details:
-      text: "{{ .Config.sitelink }}torrent/{{ .Result._id }}/"
+      text: "/torrent/{{ .Result._id }}/"
     download:
-      text: "{{ .Config.sitelink }}api/v1/torrents/download/{{ .Result._id }}"
+      text: "/api/v1/torrents/download/{{ .Result._id }}"
     imdbid:
       selector: imdbid2
     imdbid_full:
@@ -150,7 +150,7 @@ search:
       selector: firstpic
     poster_imdb:
       optional: true
-      text: "{{ if .Result.imdbid }}{{ .Config.sitelink }}img/imdb/{{ .Result.imdbid_full }}.jpg{{ else }}{{ end }}"
+      text: "{{ if .Result.imdbid }}/img/imdb/{{ .Result.imdbid_full }}.jpg{{ else }}{{ end }}"
     poster:
       text: "{{ if .Result.poster_imdb }}{{ .Result.poster_imdb }}{{ else }}{{ .Result.poster_normal }}{{ end }}"
     date:
