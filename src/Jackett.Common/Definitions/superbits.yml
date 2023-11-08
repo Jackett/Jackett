@@ -140,7 +140,7 @@ search:
       selector: customcover
     poster_imdb:
       optional: true
-      text: "{{ if .Result.imdbid }}{{ .Config.sitelink }}img/imdb/{{ .Result.imdbid_full }}.jpg{{ else }}{{ end }}"
+      text: "{{ if .Result.imdbid }}/img/imdb/{{ .Result.imdbid_full }}.jpg{{ else }}{{ end }}"
     poster:
       text: "{{ if .Result.poster_imdb }}{{ .Result.poster_imdb }}{{ else }}{{ .Result.poster_normal }}{{ end }}"
     date:
