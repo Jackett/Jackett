@@ -1,0 +1,141 @@
+---
+id: hd-club
+name: HD-CLUB
+description: "HD-CLUB is a CZECH Semi-Private site for TV / MOVIES / GENERAL"
+language: cs-CZ
+type: semi-private
+encoding: UTF-8
+links:
+  - https://freecztorrent.eu/
+
+caps:
+  categorymappings:
+    - {id: 11, cat: Movies/HD, desc: "H265-720/1080/2160"}
+    - {id: 31, cat: Movies/SD, desc: "Divx - Avi"}
+    - {id: 19, cat: Movies, desc: "Kreslené Filmy"}
+    - {id: 32, cat: TV/Documentary, desc: "Dokumentární  Filmy"}
+    - {id: 28, cat: TV, desc: "Seriály"}
+    - {id: 18, cat: TV/HD, desc: "Film Retro"}
+    - {id: 14, cat: TV/WEB-DL, desc: "TV - WEB- DL x264"}
+    - {id: 16, cat: TV/HD, desc: "MP4"}
+    - {id: 15, cat: TV/WEB-DL, desc: "TV - WEB- DL x265"}
+    - {id: 38, cat: XXX, desc: "XXX"}
+    - {id: 29, cat: Movies/DVD, desc: "DVD5 / DVD9"}
+    - {id: 23, cat: Movies/UHD, desc: "Bluray / 4K-UHD"}
+    - {id: 26, cat: Movies/HD, desc: "HD-720/1080/2160"}
+    - {id: 34, cat: Movies/3D, desc: "3 D"}
+    - {id: 35, cat: Movies, desc: "V.I.P Extra"}
+    - {id: 39, cat: PC, desc: "APP WINDOWS"}
+    - {id: 41, cat: PC/Mobile-Other, desc: "Mobil-PDA"}
+    - {id: 25, cat: Audio/Lossless, desc: "Flac"}
+    - {id: 20, cat: Audio/MP3, desc: "Mp3"}
+    - {id: 36, cat: Audio, desc: "Retro Hudba"}
+    - {id: 22, cat: Audio/Audiobook, desc: "Audio kniha"}
+    - {id: 3, cat: Console, desc: "Games"}
+    - {id: 5, cat: TV/Anime, desc: "Anime"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      4: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  method: post
+  path: index.php?page=login
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: td.lista span[style="color:#FF0000;"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://freecztorrent.eu/index.php?page=torrents&active=0&category=26;29&order=3&by=2
+    - path: index.php
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
+    # 0 all, 1 active only, 2 dead only
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  rows:
+    selector: table.benylista > tbody > tr:has(a[href^="download.php"]):not(:has(a[href$="category=0"]))
+
+  fields:
+    category:
+      selector: a[href*="category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="index.php?page=torrent-details"]
+    details:
+      selector: a[href^="index.php?page=torrent-details"]
+      attribute: href
+    download:
+      selector: a[href^="download.php"]
+      attribute: href
+    poster:
+      selector: img.beny_img
+      attribute: src
+    date:
+      # 07.09.2023 06:20:35
+      selector: td:nth-child(8)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "dd.MM.yyyy HH:mm:ss"
+    size:
+      selector: td:nth-child(9)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    grabs:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+# xbtit v2.3.1
