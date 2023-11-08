@@ -1,0 +1,127 @@
+---
+id: postman
+name: Postman
+description: Postman is a Public I2P Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - http://tracker2.postman.i2p/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: Audio, desc: "Music"}
+    - {id: 3, cat: TV, desc: "TV"}
+    - {id: 4, cat: PC/Games, desc: "Games"}
+    - {id: 5, cat: PC/0day, desc: "Apps"}
+    - {id: 6, cat: Other/Misc, desc: "Misc."}
+    - {id: 8, cat: TV, desc: "Pictures"}
+    - {id: 9, cat: TV/Anime, desc: "Anime"}
+    - {id: 10, cat: Books/Comics, desc: "Comics"}
+    - {id: 11, cat: Books, desc: "Books"}
+    - {id: 17, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 20, cat: Books/EBook, desc: "E-Books"}
+    - {id: 21, cat: Other, desc: "Course/Lesson"}
+    - {id: 22, cat: Other, desc: "Essay/Op-Ed"}
+    - {id: 23, cat: Other, desc: "Cad/3D Printing"}
+    - {id: 13, cat: Audio/Video, desc: "Music Vid."}
+    - {id: 14, cat: XXX, desc: "Pr0n"}
+    - {id: 15, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 16, cat: Other, desc: "Leaked Documents"}
+    - {id: 18, cat: Other, desc: "Conspiracy"}
+    - {id: 19, cat: Other, desc: "Religious Content"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      5: seeders
+      7: size
+
+search:
+  paths:
+    - path: /
+  inputs:
+    view: Main
+    search: "{{ .Keywords }}"
+    category: -1
+    orderby: "{{ .Config.sort }}"
+    lastactive: -1
+    lang: -1
+
+  rows:
+    selector: table#torrentView tbody tr
+
+  fields:
+    category:
+      selector: td.category a
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: td.torrentname a
+      attribute: title
+    details:
+      selector: td.torrentname a
+      attribute: href
+    download:
+      selector: a[href^="index.php?action=Download&id="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+    description:
+      selector: td.torrentname span
+    imdbid:
+      text: "{{ .Result.description }}"
+      filters:
+        - name: regexp
+          args: "(https?:\\/\\/www\\.imdb\\.com\\/title\\/tt\\d+)"
+    tmdbid:
+      text: "{{ .Result.description }}"
+      filters:
+        - name: regexp
+          args: "(https?:\\/\\/www\\.themoviedb\\.org\\/(movie|tv)\\/.+?)\\n"
+    date:
+      selector: td.added
+      filters:
+        - name: dateparse
+          args: "yyyy-MM-dd"
+    files:
+      selector: span.filecount
+    size:
+      selector: span.size
+      remove: span
+      filters:
+        - name: append
+          args: B
+    grabs:
+      selector: span.badge.downloadcount
+    seeders:
+      selector: span.swarm
+      filters:
+        - name: split
+          args: ["/", 0]
+    leechers:
+      selector: span.swarm
+      remove: span
+      filters:
+        - name: split
+          args: ["/", 1]
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# PaTracker 1.7.5
