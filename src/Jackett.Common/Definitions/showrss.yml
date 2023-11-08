@@ -40,7 +40,7 @@ search:
     title:
       selector: raw_title
     details:
-      text: "{{ .Config.sitelink }}"
+      text: /
     date:
       selector: pubDate
     download:
