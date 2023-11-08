@@ -29,7 +29,7 @@ search:
   keywordsfilters:
     # ignore ' (e.g. search for america's Next Top Model)
     - name: re_replace
-      args: ["[^\\w]+", ""]
+      args: ["[^\\w]+", " "]
 
   rows:
     selector: $
