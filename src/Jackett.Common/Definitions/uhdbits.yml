@@ -163,7 +163,7 @@ search:
         - name: re_replace
           args: ["\\bEncode\\b", "Blu-Ray"]
         - name: re_replace
-          args: ["\\bBlu-ray\\b", "BR-Disk"]
+          args: ["\\b(H\\.264 )?Blu-ray\\b", "BR-DISK"]
         - name: re_replace
           args: ["\\bRemux\\b", "Blu-Ray Remux"]
         - name: re_replace
