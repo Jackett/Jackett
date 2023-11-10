@@ -1,0 +1,236 @@
+---
+id: tvroad
+name: TvRoad
+description: "TvRoad is a FRENCH Private Torrent Tracker for TV"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://tvroad.info/
+
+caps:
+  categorymappings:
+    - {id: anime-fr-720-non-non, cat: TV/Anime, desc: "Anime FR 720p"}
+    - {id: anime-fr-720-non-pack, cat: TV/Anime, desc: "Anime FR 720p Pack"}
+    - {id: anime-fr-720-web-non, cat: TV/Anime, desc: "Anime FR 720p"}
+    - {id: anime-fr-720-web-pack, cat: TV/Anime, desc: "Anime FR 720p Pack"}
+    - {id: anime-fr-1080-non-non, cat: TV/Anime, desc: "Anime FR 1080p"}
+    - {id: anime-fr-1080-non-pack, cat: TV/Anime, desc: "Anime FR 1080p Pack"}
+    - {id: anime-fr-1080-web-non, cat: TV/Anime, desc: "Anime FR 1080p WEB-DL"}
+    - {id: anime-fr-1080-web-pack, cat: TV/Anime, desc: "Anime FR 1080p Pack WEB-DL"}
+    - {id: anime-fr-sd-non-non, cat: TV/Anime, desc: "Anime FR SD"}
+    - {id: anime-fr-sd-non-pack, cat: TV/Anime, desc: "Anime FR SD Pack"}
+    - {id: anime-fr-sd-web-non, cat: TV/Anime, desc: "Anime FR SD WEB-DL"}
+    - {id: anime-fr-sd-web-pack, cat: TV/Anime, desc: "Anime FR SD Pack WEB-DL"}
+    - {id: anime-vostf-720-non-non, cat: TV/Anime, desc: "Anime VOSTFR 720p"}
+    - {id: anime-vostf-720-non-pack, cat: TV/Anime, desc: "Anime VOSTFR 720p Pack"}
+    - {id: anime-vostf-720-web-non, cat: TV/Anime, desc: "Anime VOSTFR 720p WEB-DL"}
+    - {id: anime-vostf-720-web-pack, cat: TV/Anime, desc: "Anime VOSTFR 720p Pack WEB-DL"}
+    - {id: anime-vostf-1080-non-non, cat: TV/Anime, desc: "Anime VOSTFR 1080p"}
+    - {id: anime-vostf-1080-non-pack, cat: TV/Anime, desc: "Anime VOSTFR 1080p Pack"}
+    - {id: anime-vostf-1080-web-non, cat: TV/Anime, desc: "Anime VOSTFR 1080p WEB-DL"}
+    - {id: anime-vostf-1080-web-pack, cat: TV/Anime, desc: "Anime VOSTFR 1080p Pack WEB-DL"}
+    - {id: anime-vostf-sd-non-non, cat: TV/Anime, desc: "Anime VOSTFR SD"}
+    - {id: anime-vostf-sd-non-pack, cat: TV/Anime, desc: "Anime VOSTFR SD Pack"}
+    - {id: anime-vostf-sd-web-non, cat: TV/Anime, desc: "Anime VOSTFR SD WEB-DL"}
+    - {id: anime-vostf-sd-web-pack, cat: TV/Anime, desc: "Anime VOSTFR SD Pack WEB-DL"}
+    - {id: anime-fr-2160-non-non, cat: TV/Anime, desc: "Anime FR 2160p"}
+    - {id: anime-fr-2160-non-pack, cat: TV/Anime, desc: "Anime FR 2160p Pack"}
+    - {id: anime-fr-2160-web-non, cat: TV/Anime, desc: "Anime FR 2160p WEB-DL"}
+    - {id: anime-fr-2160-web-pack, cat: TV/Anime, desc: "Anime FR 2160p Pack WEB-DL"}
+    - {id: anime-vostf-2160-non-non, cat: TV/Anime, desc: "Anime VOSTFR 2160p"}
+    - {id: anime-vostf-2160-non-pack, cat: TV/Anime, desc: "Anime VOSTFR 2160p Pack"}
+    - {id: anime-vostf-2160-web-non, cat: TV/Anime, desc: "Anime VOSTFR 2160p WEB-DL"}
+    - {id: anime-vostf-2160-web-pack, cat: TV/Anime, desc: "Anime VOSTFR 2160p Pack WEB-DL"}
+    - {id: docs-fr-720-non-non, cat: TV/Documentary, desc: "Docs FR 720p"}
+    - {id: docs-fr-720-non-pack, cat: TV/Documentary, desc: "Docs FR 720p Pack"}
+    - {id: docs-fr-720-web-non, cat: TV/Documentary, desc: "Docs FR 720p WEB-DL"}
+    - {id: docs-fr-720-web-pack, cat: TV/Documentary, desc: "Docs FR 720p Pack WEB-DL"}
+    - {id: docs-fr-1080-non-non, cat: TV/Documentary, desc: "Docs FR 1080p"}
+    - {id: docs-fr-1080-non-pack, cat: TV/Documentary, desc: "Docs FR 1080p Pack"}
+    - {id: docs-fr-1080-web-non, cat: TV/Documentary, desc: "Docs FR 1080p WEB-DL"}
+    - {id: docs-fr-1080-web-pack, cat: TV/Documentary, desc: "Docs FR 1080p Pack WEB-DL"}
+    - {id: docs-fr-sd-non-non, cat: TV/Documentary, desc: "Docs FR SD"}
+    - {id: docs-fr-sd-non-pack, cat: TV/Documentary, desc: "Docs FR SD Pack"}
+    - {id: docs-fr-sd-web-non, cat: TV/Documentary, desc: "Docs FR SD WEB-DL"}
+    - {id: docs-fr-sd-web-pack, cat: TV/Documentary, desc: "Docs FR SD Pack WEB-DL"}
+    - {id: docs-vostf-720-non-non, cat: TV/Documentary, desc: "Docs VOSTFR 720p"}
+    - {id: docs-vostf-720-non-pack, cat: TV/Documentary, desc: "Docs VOSTFR 720p Pack"}
+    - {id: docs-vostf-720-web-non, cat: TV/Documentary, desc: "Docs VOSTFR 720p WEB-DL"}
+    - {id: docs-vostf-720-web-pack, cat: TV/Documentary, desc: "Docs VOSTFR 720p Pack WEB-DL"}
+    - {id: docs-vostf-1080-non-non, cat: TV/Documentary, desc: "Docs VOSTFR 1080p"}
+    - {id: docs-vostf-1080-non-pack, cat: TV/Documentary, desc: "Docs VOSTFR 1080p Pack"}
+    - {id: docs-vostf-1080-web-non, cat: TV/Documentary, desc: "Docs VOSTFR 1080p WEB-DL"}
+    - {id: docs-vostf-1080-web-pack, cat: TV/Documentary, desc: "Docs VOSTFR 1080p Pack WEB-DL"}
+    - {id: docs-vostf-sd-non-non, cat: TV/Documentary, desc: "Docs VOSTFR SD"}
+    - {id: docs-vostf-sd-non-pack, cat: TV/Documentary, desc: "Docs VOSTFR SD Pack"}
+    - {id: docs-vostf-sd-web-non, cat: TV/Documentary, desc: "Docs VOSTFR SD WEB-DL"}
+    - {id: docs-vostf-sd-web-pack, cat: TV/Documentary, desc: "Docs VOSTFR SD Pack WEB-DL"}
+    - {id: docs-vostf-2160-non-non, cat: TV/Documentary, desc: "Docs VOSTFR 2160p"}
+    - {id: docs-vostf-2160-non-pack, cat: TV/Documentary, desc: "Docs VOSTFR 2160p Pack"}
+    - {id: docs-vostf-2160-web-non, cat: TV/Documentary, desc: "Docs VOSTFR 2160p WEB-DL"}
+    - {id: docs-vostf-2160-web-pack, cat: TV/Documentary, desc: "Docs VOSTFR 2160p Pack WEB-DL"}
+    - {id: docs-fr-2160-non-non, cat: TV/Documentary, desc: "Docs FR 2160p"}
+    - {id: docs-fr-2160-non-pack, cat: TV/Documentary, desc: "Docs FR 2160p Pack"}
+    - {id: docs-fr-2160-web-non, cat: TV/Documentary, desc: "Docs FR 2160p WEB-DL"}
+    - {id: docs-fr-2160-web-pack, cat: TV/Documentary, desc: "Docs FR 2160p Pack WEB-DL"}
+    - {id: serie-fr-720-non-non, cat: TV/HD, desc: "Serie FR 720p"}
+    - {id: serie-fr-720-non-pack, cat: TV/HD, desc: "Serie FR 720p Pack"}
+    - {id: serie-fr-720-web-non, cat: TV/HD, desc: "Serie FR 720p WEB-DL"}
+    - {id: serie-fr-720-web-pack, cat: TV/HD, desc: "Serie FR 720p Pack WEB-DL"}
+    - {id: serie-fr-1080-non-non, cat: TV/HD, desc: "Serie FR 1080p"}
+    - {id: serie-fr-1080-non-pack, cat: TV/HD, desc: "Serie FR 1080p Pack"}
+    - {id: serie-fr-1080-web-non, cat: TV/HD, desc: "Serie FR 1080p WEB-DL"}
+    - {id: serie-fr-1080-web-pack, cat: TV/HD, desc: "Serie FR 1080p Pack WEB-DL"}
+    - {id: serie-fr-sd-non-non, cat: TV/SD, desc: "Serie FR SD"}
+    - {id: serie-fr-sd-non-pack, cat: TV/SD, desc: "Serie FR SD Pack"}
+    - {id: serie-fr-sd-web-non, cat: TV/SD, desc: "Serie FR SD WEB-DL"}
+    - {id: serie-fr-sd-web-pack, cat: TV/SD, desc: "Serie FR SD Pack WEB-DL"}
+    - {id: serie-vostf-720-non-non, cat: TV/HD, desc: "Serie VOSTFR 720p"}
+    - {id: serie-vostf-720-non-pack, cat: TV/HD, desc: "Serie VOSTFR 720p Pack"}
+    - {id: serie-vostf-720-web-non, cat: TV/HD, desc: "Serie VOSTFR 720p WEB-DL"}
+    - {id: serie-vostf-720-web-pack, cat: TV/HD, desc: "Serie VOSTFR 720p Pack WEB-DL"}
+    - {id: serie-vostf-1080-non-non, cat: TV/HD, desc: "Serie VOSTFR 1080p"}
+    - {id: serie-vostf-1080-non-pack, cat: TV/HD, desc: "Serie VOSTFR 1080p Pack"}
+    - {id: serie-vostf-1080-web-non, cat: TV/HD, desc: "Serie VOSTFR 1080p WEB-DL"}
+    - {id: serie-vostf-1080-web-pack, cat: TV/HD, desc: "Serie VOSTFR 1080p Pack WEB-DL"}
+    - {id: serie-vostf-sd-non-non, cat: TV/SD, desc: "Serie VOSTFR SD"}
+    - {id: serie-vostf-sd-non-pack, cat: TV/SD, desc: "Serie VOSTFR SD Pack"}
+    - {id: serie-vostf-sd-web-non, cat: TV/SD, desc: "Serie VOSTFR SD WEB-DL"}
+    - {id: serie-vostf-sd-web-pack, cat: TV/SD, desc: "Serie VOSTFR SD Pack WEB-DL"}
+    - {id: serie-fr-2160-non-non, cat: TV/UHD, desc: "Serie FR 2160p"}
+    - {id: serie-fr-2160-non-pack, cat: TV/UHD, desc: "Serie FR 2160p Pack"}
+    - {id: serie-fr-2160-web-non, cat: TV/UHD, desc: "Serie FR 2160p WEB-DL"}
+    - {id: serie-fr-2160-web-pack, cat: TV/UHD, desc: "Serie FR 2160p Pack WEB-DL"}
+    - {id: serie-vostf-2160-non-non, cat: TV/UHD, desc: "Serie VOSTFR 2160p"}
+    - {id: serie-vostf-2160-non-pack, cat: TV/UHD, desc: "Serie VOSTFR 2160p Pack"}
+    - {id: serie-vostf-2160-web-non, cat: TV/UHD, desc: "Serie VOSTFR 2160p WEB-DL"}
+    - {id: serie-vostf-2160-web-pack, cat: TV/UHD, desc: "Serie VOSTFR 2160p Pack WEB-DL"}
+    - {id: tvreal-fr-720-non-non, cat: TV/HD, desc: "TvReal FR 720p"}
+    - {id: tvreal-fr-720-non-pack, cat: TV/HD, desc: "TvReal FR 720p Pack"}
+    - {id: tvreal-fr-720-web-non, cat: TV/HD, desc: "TvReal FR 720p WEB-DL"}
+    - {id: tvreal-fr-720-web-pack, cat: TV/HD, desc: "TvReal FR 720p Pack WEB-DL"}
+    - {id: tvreal-fr-1080-non-non, cat: TV/HD, desc: "TvReal FR 1080p"}
+    - {id: tvreal-fr-1080-non-pack, cat: TV/HD, desc: "TvReal FR 1080p"}
+    - {id: tvreal-fr-1080-web-non, cat: TV/HD, desc: "TvReal FR 1080p WEB-DL"}
+    - {id: tvreal-fr-1080-web-pack, cat: TV/HD, desc: "TvReal FR 1080p WEB-DL"}
+    - {id: tvreal-fr-sd-non-non, cat: TV/SD, desc: "TvReal FR SD"}
+    - {id: tvreal-fr-sd-non-pack, cat: TV/SD, desc: "TvReal FR SD Pack"}
+    - {id: tvreal-fr-sd-web-non, cat: TV/SD, desc: "TvReal FR SD WEB-DL"}
+    - {id: tvreal-fr-sd-web-pack, cat: TV/SD, desc: "TvReal FR SD Pack WEB-DL"}
+    - {id: tvreal-fr-2160-web-pack, cat: TV/UHD, desc: "TvReal FR 2160p Pack WEB-DL"}
+    - {id: other, cat: TV, desc: "Other - category was not specified"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  path: TvRoad/Connexion
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: font[color="red"]
+  test:
+    path: TvRoad/Bienvenue
+    selector: a[href$="/TvRoad/Deconnexion"]
+
+search:
+  paths:
+    # https://tvroad.info/TvRoad/Torrents/Recherche?recherche=
+    - path: TvRoad/Torrents/Recherche
+  inputs:
+    recherche: "{{ .Keywords }}"
+    # type of search: un one of the words), tout (all of the words), exacte (exact match)
+    type: tout
+    # search location: nomtorrent (name), desctorrent (descr)
+    endroit: nomtorrent
+    # seeded: non (no), oui (yes), peuimporte (either)
+    tl: peuimporte
+    # does not support imdbid searches and does not return imdb link in results
+
+  rows:
+    selector: tr:has(a[href*="/Torrents/Telechargement/"])
+
+  fields:
+    category:
+      selector: a[href*="/SousCategories/"]
+      attribute: href
+      optional: true
+      default: other
+      filters:
+        - name: split
+          args: ["/", -1]
+    title_phase1:
+      selector: a.infobulletorrent
+      attribute: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: a.infobulletorrent
+      attribute: href
+    download:
+      selector: a[href*="/Torrents/Telechargement/"]
+      attribute: href
+    poster:
+      selector: a.infobulletorrent img
+      attribute: src
+    date:
+      text: now
+    size:
+      selector: td.taillejour
+    grabs:
+      selector: td:nth-last-child(3)
+    seeders:
+      selector: b.seed
+    leechers:
+      selector: b.leech
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# TT3.0 FRENCH custom
