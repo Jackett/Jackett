@@ -4,7 +4,7 @@ name: The New Retro
 description: "The New Retro is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
-encoding: windows-1252
+encoding: UTF-8
 links:
   - https://new-retro.eu/
 

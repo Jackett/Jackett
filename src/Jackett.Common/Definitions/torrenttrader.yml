@@ -4,7 +4,7 @@ name: Torrent Trader
 description: "Torrent Trader is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
-encoding: windows-1252
+encoding: UTF-8
 links:
   - https://the-torrent-trader.com/
 
