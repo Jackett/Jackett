@@ -1,7 +1,7 @@
 ---
 id: kinozal
 name: Kinozal
-description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC"
+description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC. This indexer uses torrents."
 language: ru-RU
 type: semi-private
 encoding: windows-1251
@@ -111,6 +111,10 @@ settings:
     options:
       0: desc
       1: asc
+  - name: info_torrent
+    type: info
+    label: Torrents
+    default: "This tracker limits the number of torrents a user can download each day without paying. This indexer uses <b>torrent files</b> with the user's passkey, so any download/upload is recorded. If you receive errors when downloading torrent files, you may have reached this limit. To bypass the limit with magnet links, use <b>Kinozal (M)</b>."
 
 login:
   path: takelogin.php
