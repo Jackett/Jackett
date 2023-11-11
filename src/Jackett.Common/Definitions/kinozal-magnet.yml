@@ -1,7 +1,7 @@
 ---
-id: kinozal
-name: Kinozal
-description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC. This indexer uses torrents."
+id: kinozal-magnet
+name: Kinozal (M)
+description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC. This indexer uses magnet links."
 language: ru-RU
 type: semi-private
 encoding: windows-1251
@@ -111,10 +111,10 @@ settings:
     options:
       0: desc
       1: asc
-  - name: info_torrent
+  - name: info_magnets
     type: info
-    label: Torrents
-    default: "This tracker limits the number of torrents a user can download each day without paying. This indexer uses <b>torrent files</b> with the user's passkey, so any download/upload is recorded. If you receive errors when downloading torrent files, you may have reached this limit. To bypass the limit with magnet links, use <b>Kinozal (M)</b>."
+    label: Magnets
+    default: "This tracker limits the number of torrents a user can download each day without paying. This indexer uses <b>magnet links</b> to bypass that limit, however this doesn't include the passkey, so any download/upload is not recorded. To download with torrents, use <b>Kinozal</b>."
 
 login:
   path: takelogin.php
@@ -129,6 +129,25 @@ login:
   test:
     path: my.php
     selector: a[href*="logout.php?hash4u="]
+
+download:
+  before:
+    path: get_srv_details.php
+    inputs:
+      action: 2
+      id: "{{ .DownloadUri.Query.id }}"
+  infohash:
+    usebeforeresponse: true
+    hash:
+      selector: li:first-child
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: div.b
+      filters:
+        - name: trim
+        - name: validfilename
 
 search:
   paths:
