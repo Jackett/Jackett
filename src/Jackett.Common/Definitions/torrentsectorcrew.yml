@@ -4,7 +4,7 @@ name: Torrent Sector Crew
 description: "Torrent Sector Crew (TSC) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
-encoding: ISO-8859-1
+encoding: UTF-8
 links:
   - https://tsctracker.org/
 legacylinks:
