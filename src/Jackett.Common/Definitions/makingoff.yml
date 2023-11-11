@@ -1014,7 +1014,6 @@ search:
     fromsearch: 1
     search_app: forums
     search_term: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
-    search_app: forums
     andor_type: and
     # both, titles, content - title only search returns less information
     search_content: both
