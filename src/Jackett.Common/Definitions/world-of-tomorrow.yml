@@ -19,6 +19,7 @@ caps:
     - {id: 18, cat: PC, desc: "Appz-Sonstige"}
     - {id: 64, cat: TV/Documentary, desc: "Dokumentation"}
     - {id: 19, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 88, cat: XXX, desc: "Englisch Section"}
     - {id: 70, cat: Audio/Lossless, desc: "Flac"}
     - {id: 75, cat: TV/Sport, desc: "Formel 1"}
     - {id: 74, cat: TV/Sport, desc: "Fussball"}
@@ -35,12 +36,9 @@ caps:
     - {id: 47, cat: Movies/BluRay, desc: "Movies-Bluray"}
     - {id: 60, cat: Movies/HD, desc: "Movies-HDTV"}
     - {id: 62, cat: Movies/SD, desc: "Movies-SD"}
-    - {id: 69, cat: Audio, desc: "Musik"}
     - {id: 72, cat: Audio, desc: "Musik-Packs"}
     - {id: 93, cat: Audio/Video, desc: "Musik-Videos"}
     - {id: 4, cat: PC/Games, desc: "PC-Games"}
-    - {id: 68, cat: PC, desc: "Programme"}
-    - {id: 76, cat: TV, desc: "Serien"}
     - {id: 79, cat: TV/HD, desc: "Serien-1080P"}
     - {id: 95, cat: TV/UHD, desc: "Serien-2160P"}
     - {id: 78, cat: TV/HD, desc: "Serien-720P"}
@@ -52,14 +50,11 @@ caps:
     - {id: 73, cat: TV/Sport, desc: "Sport"}
     - {id: 92, cat: Console, desc: "Wimmelbild"}
     - {id: 28, cat: PC, desc: "Windows-Programme"}
-    - {id: 23, cat: TV/Sport, desc: "Wrestling"}
     - {id: 108, cat: Movies, desc: "WOTT-Filme"}
     - {id: 108, cat: TV, desc: "WOTT-Filme"}
     - {id: 109, cat: TV, desc: "WOTT-SERIEN"}
-    - {id: 110, cat: Movies, desc: "WOTT-UHD"}
-    - {id: 88, cat: XXX, desc: "XXX"}
-    - {id: 106, cat: XXX/ImageSet, desc: "XXX Bilder"}
-    - {id: 102, cat: XXX, desc: "XXX HENTAI"}
+    - {id: 110, cat: Audio, desc: "WOTT-MUSIK"}
+    - {id: 23, cat: TV/Sport, desc: "Wrestling"}
 
   modes:
     search: [q]
