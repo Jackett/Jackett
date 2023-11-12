@@ -158,8 +158,10 @@ search:
         img.pro_2up: 2
         "*": 1
     minimumseedtime:
-      # 14 days (as seconds = 14 x 24 x 60 x 60)
-      text: 1209600
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+    minimumratio:
+      text: 2.0
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
