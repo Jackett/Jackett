@@ -953,8 +953,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
-    movie-search: [q]
+    tv-search: [q, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
 
 settings:
@@ -1013,7 +1013,7 @@ search:
     do: search
     fromsearch: 1
     search_app: forums
-    search_term: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search_term: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}{{ if or .Query.IMDBID .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     andor_type: and
     # both, titles, content - title only search returns less information
     search_content: both
