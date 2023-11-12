@@ -253,6 +253,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AnimeTorrents.ro (Anime Torrents Romania)
  * AnimeTracker
  * AnimeWorld
+ * AniToons
  * Anthelion
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
