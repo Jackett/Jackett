@@ -17,6 +17,8 @@ namespace Jackett.Common.Indexers
         public override string Description => "Aka AsiaTorrents";
         public override string SiteLink { get; protected set; } = "https://avistaz.to/";
 
+        protected override string TimezoneOffset => "+01:00";
+
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         public AvistaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,

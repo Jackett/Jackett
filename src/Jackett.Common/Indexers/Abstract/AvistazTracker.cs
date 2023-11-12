@@ -25,6 +25,8 @@ namespace Jackett.Common.Indexers.Abstract
 
         public override bool SupportsPagination => true;
 
+        protected virtual string TimezoneOffset => "-05:00"; // Avistaz does not specify a timezone & returns server time
+
         private readonly Dictionary<string, string> AuthHeaders = new Dictionary<string, string>
         {
             {"Accept", "application/json"},
@@ -146,7 +148,7 @@ namespace Jackett.Common.Indexers.Abstract
                    cacheService: cs,
                    configData: new ConfigurationDataAvistazTracker())
         {
-            webclient.requestDelay = 3;
+            webclient.requestDelay = 4;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -220,20 +222,6 @@ namespace Jackett.Common.Indexers.Abstract
                 {
                     var details = new Uri(row.Value<string>("url"));
                     var link = new Uri(row.Value<string>("download"));
-                    var publishDate = DateTime.ParseExact(row.Value<string>("created_at"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-
-                    long? imdb = null;
-                    long? tvdb = null;
-                    long? tmdb = null;
-                    var jMovieTv = row.Value<JToken>("movie_tv");
-                    if (jMovieTv != null && jMovieTv.HasValues)
-                    {
-                        imdb = ParseUtil.GetImdbId(jMovieTv.Value<string>("imdb"));
-                        if (long.TryParse(jMovieTv.Value<string>("tvdb"), out var tvdbParsed))
-                            tvdb = tvdbParsed;
-                        if (long.TryParse(jMovieTv.Value<string>("tmdb"), out var tmdbParsed))
-                            tmdb = tmdbParsed;
-                    }
 
                     var description = "";
                     var jAudio = row.Value<JArray>("audio");
@@ -249,8 +237,6 @@ namespace Jackett.Common.Indexers.Abstract
                         description += $"<br/>Subtitles: {string.Join(", ", subtitleList)}";
                     }
 
-                    var cats = ParseCategories(query, row);
-
                     var release = new ReleaseInfo
                     {
                         Title = row.Value<string>("file_name"),
@@ -258,17 +244,14 @@ namespace Jackett.Common.Indexers.Abstract
                         InfoHash = row.Value<string>("info_hash"),
                         Details = details,
                         Guid = details,
-                        Category = cats,
-                        PublishDate = publishDate,
+                        Category = ParseCategories(query, row),
+                        PublishDate = DateTime.Parse($"{row.Value<string>("created_at")} {TimezoneOffset}", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
                         Description = description,
                         Size = row.Value<long>("file_size"),
                         Files = row.Value<long>("file_count"),
                         Grabs = row.Value<long>("completed"),
                         Seeders = row.Value<int>("seed"),
                         Peers = row.Value<int>("leech") + row.Value<int>("seed"),
-                        Imdb = imdb,
-                        TVDBId = tvdb,
-                        TMDb = tmdb,
                         DownloadVolumeFactor = row.Value<double>("download_multiply"),
                         UploadVolumeFactor = row.Value<double>("upload_multiply"),
                         MinimumRatio = 1,
@@ -276,6 +259,22 @@ namespace Jackett.Common.Indexers.Abstract
                         Languages = row.Value<JArray>("audio")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
                         Subs = row.Value<JArray>("subtitle")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
                     };
+
+                    var jMovieTv = row.Value<JToken>("movie_tv");
+                    if (jMovieTv != null && jMovieTv.HasValues)
+                    {
+                        release.Imdb = ParseUtil.GetImdbId(jMovieTv.Value<string>("imdb"));
+
+                        if (long.TryParse(jMovieTv.Value<string>("tvdb"), out var tvdbId))
+                        {
+                            release.TVDBId = tvdbId;
+                        }
+
+                        if (long.TryParse(jMovieTv.Value<string>("tmdb"), out var tmdbId))
+                        {
+                            release.TMDb = tmdbId;
+                        }
+                    }
 
                     releases.Add(release);
                 }

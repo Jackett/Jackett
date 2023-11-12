@@ -24,6 +24,8 @@ namespace Jackett.Common.Indexers
             "https://torrents.yourexotic.com/"
         };
 
+        protected override string TimezoneOffset => "+01:00";
+
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
