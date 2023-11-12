@@ -108,7 +108,7 @@ search:
       attribute: title
       filters:
         - name: regexp
-          args: "Név: (.+?)\\n"
+          args: "Név: (.+?)(\\n|$)"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
