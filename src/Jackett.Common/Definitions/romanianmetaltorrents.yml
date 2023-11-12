@@ -42,7 +42,7 @@ caps:
 
   modes:
     search: [q]
-    music-search: [q, artist]
+    music-search: [q]
 
 settings:
   - name: username
@@ -55,6 +55,21 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: _
+    options:
+      _: created
+      7: seeders
+      5: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   path: login.php
@@ -88,11 +103,14 @@ search:
   paths:
     - path: browse.php
   inputs:
-    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ .Keywords }}{{ end }}"
-    # 50 title, 100 description, 150 band
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 50 title, 100 description, 150 band - band is OR search instead of AND
     tlt: 50
     # 0 active, 1 recommended, 2 incldead, 3 lossy, 4 lossless, 5 req, 6 free or half, 7 videos, 8 int RMT
     incldead: "{{ if .Config.freeleech }}6{{ else }}2{{ end }}"
+    sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
+    type: "{{ .Config.type }}"
 
   rows:
     selector: table.torrents_table tbody tr:has(a[href^="download2.php?id="])
@@ -128,22 +146,28 @@ search:
     date:
       text: now
     size:
-      selector: td:nth-child(5)
+      selector: td:nth-child(6)
+    artist:
+      selector: span.bandpropaganda a font
+      optional: true
+    description:
+      selector: span.bandpropaganda
+      remove: font
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-child(7)
       filters:
         - name: regexp
-          args: '([\d]+) seeders?'
+          args: "(\\d+) seeders"
     leechers:
+      selector: td:nth-child(7)
+      filters:
+        - name: regexp
+          args: "(\\d+) leechers"
+    grabs:
       selector: td:nth-child(6)
       filters:
         - name: regexp
-          args: '([\d]+) leechers?'
-    grabs:
-      selector: td:nth-child(5)
-      filters:
-        - name: regexp
-          args: '([\d]+) times'
+          args: "(\\d+) times"
     downloadvolumefactor:
       case:
         img[src$="pic/freedownload.gif"]: 0
@@ -153,6 +177,8 @@ search:
       case:
         img[src$="pic/sticky2.gif"]: 1.5
         "*": 1
+    minimumratio:
+      text: 1.0
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
