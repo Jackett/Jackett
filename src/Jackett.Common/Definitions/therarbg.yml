@@ -6,13 +6,15 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://therarbg.com/
+  - https://therarbg.to/
   - https://t-rb.org/
   - https://the.rarbg.club/
   - https://trb.archivebay.online/
   - https://trb.t-pb.org/
   - https://trb.themirror.wiki/
   - https://torrentlite.org/ # fork
+legacylinks:
+  - https://therarbg.com/
 
 caps:
   categorymappings:
