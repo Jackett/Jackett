@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers
         public override string SiteLink { get; protected set; } = "https://hdbits.org/";
         public override string Language => "en-US";
         public override string Type => "private";
+        public override bool SupportsPagination => true;
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
@@ -43,6 +44,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataHDBitsApi())
         {
+            webclient.requestDelay = 2;
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -59,14 +61,14 @@ namespace Jackett.Common.Indexers
                 }
             };
 
-            caps.Categories.AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
-            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
-            caps.Categories.AddCategoryMapping(8, TorznabCatType.Other, "Misc/Demo");
             caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Movie");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.TV, "TV");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVDocumentary, "Documentary");
             caps.Categories.AddCategoryMapping(4, TorznabCatType.Audio, "Music");
             caps.Categories.AddCategoryMapping(5, TorznabCatType.TVSport, "Sport");
-            caps.Categories.AddCategoryMapping(2, TorznabCatType.TV, "TV");
+            caps.Categories.AddCategoryMapping(6, TorznabCatType.Audio, "Audio Track");
             caps.Categories.AddCategoryMapping(7, TorznabCatType.XXX, "XXX");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.Other, "Misc/Demo");
 
             return caps;
         }
@@ -100,10 +102,12 @@ namespace Jackett.Common.Indexers
             var imdbId = ParseUtil.GetImdbId(query.ImdbID);
 
             if (imdbId != null)
+            {
                 requestData["imdb"] = new JObject
                 {
                     ["id"] = imdbId
                 };
+            }
             else if (query.TvdbID != null)
             {
                 requestData["tvdb"] = new JObject
@@ -112,45 +116,74 @@ namespace Jackett.Common.Indexers
                 };
 
                 if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+                {
                     requestData["search"] = showDate.ToString("yyyy-MM-dd");
+                }
                 else
                 {
                     if (query.Season != 0)
+                    {
                         requestData["tvdb"]["season"] = query.Season;
+                    }
 
                     if (!string.IsNullOrEmpty(query.Episode))
+                    {
                         requestData["tvdb"]["episode"] = query.Episode;
+                    }
                 }
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
+            {
                 requestData["search"] = queryString;
+            }
 
             var categories = MapTorznabCapsToTrackers(query);
 
             if (categories.Any())
+            {
                 requestData.Add("category", JToken.FromObject(categories));
+            }
 
             if (configData.Codecs.Values.Any())
+            {
                 requestData.Add("codec", JToken.FromObject(configData.Codecs.Values.Select(int.Parse)));
+            }
 
             if (configData.Mediums.Values.Any())
+            {
                 requestData.Add("medium", JToken.FromObject(configData.Mediums.Values.Select(int.Parse)));
+            }
 
             if (configData.Origins.Values.Any())
+            {
                 requestData.Add("origin", JToken.FromObject(configData.Origins.Values.Select(int.Parse)));
+            }
 
             requestData["limit"] = 100;
 
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                requestData["page"] = query.Offset / query.Limit;
+            }
+
             var response = await MakeApiRequest("torrents", requestData);
+
             var releases = new List<ReleaseInfo>();
+
             foreach (JObject r in response["data"])
             {
                 if (configData.FilterFreeleech.Value && (string)r["freeleech"] != "yes")
+                {
                     continue;
+                }
+
                 var title = (string)r["name"];
                 // if tv then match query keywords against title #12753
                 if (!query.IsImdbQuery && !query.MatchQueryStringAND(title))
+                {
                     continue;
+                }
+
                 var link = new Uri(
                     SiteLink + "download.php/" + (string)r["filename"] + "?id=" + (string)r["id"] + "&passkey=" +
                     configData.Passkey.Value);
@@ -175,10 +208,14 @@ namespace Jackett.Common.Indexers
                 };
 
                 if (r.ContainsKey("imdb"))
+                {
                     release.Imdb = ParseUtil.GetImdbId((string)r["imdb"]["id"]);
+                }
 
                 if (r.ContainsKey("tvdb"))
+                {
                     release.TVDBId = (long)r["tvdb"]["id"];
+                }
 
                 releases.Add(release);
             }
@@ -193,16 +230,28 @@ namespace Jackett.Common.Indexers
             var halfLeechMediums = new[] { 1, 5, 4 };
             // 100% Neutral Leech: all XXX content.
             if ((int)r["type_category"] == 7)
+            {
                 return 0;
+            }
+
             // 100% Free Leech: all blue torrents.
             if ((string)r["freeleech"] == "yes")
+            {
                 return 0;
+            }
+
             // 50% Free Leech: all full discs, remuxes, caps and all internal encodes.
             if (halfLeechMediums.Contains((int)r["type_medium"]) || (int)r["type_origin"] == 1)
+            {
                 return 0.5;
+            }
+
             // 25% Free Leech: all TV content that is not an internal encode.
             if ((int)r["type_category"] == 2 && (int)r["type_origin"] != 1)
+            {
                 return 0.75;
+            }
+
             return 1;
         }
 
@@ -231,7 +280,9 @@ namespace Jackett.Common.Indexers
             }
 
             if ((int)json["status"] != 0)
+            {
                 throw new Exception("HDBits returned an error with status code " + (int)json["status"] + ": " + (string)json["message"]);
+            }
 
             return json;
         }
