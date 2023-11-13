@@ -16,6 +16,7 @@ caps:
     - {id: 527, cat: TV, desc: "3DSeries(3D剧集)"}
     - {id: 533, cat: Movies, desc: "VRMovies(VR电影)"}
     - {id: 534, cat: TV, desc: "VRSeries(VR剧集)"}
+    - {id: 537, cat: TV, desc: "VRShows(VR演出)"}
     - {id: 530, cat: Console, desc: "VRGame(VR一体机游戏)"}
     - {id: 531, cat: PC/Games, desc: "PCVRGame(PCVR游戏)"}
     - {id: 532, cat: Other, desc: "VRTools(VR工具软件)"}
