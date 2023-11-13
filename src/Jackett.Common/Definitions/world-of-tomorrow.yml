@@ -19,7 +19,7 @@ caps:
     - {id: 18, cat: PC, desc: "Appz-Sonstige"}
     - {id: 64, cat: TV/Documentary, desc: "Dokumentation"}
     - {id: 19, cat: Books/EBook, desc: "Ebooks"}
-    - {id: 88, cat: XXX, desc: "Englisch Section"}
+    - {id: 111, cat: XXX, desc: "Englisch Section"}
     - {id: 70, cat: Audio/Lossless, desc: "Flac"}
     - {id: 75, cat: TV/Sport, desc: "Formel 1"}
     - {id: 74, cat: TV/Sport, desc: "Fussball"}
