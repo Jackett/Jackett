@@ -227,7 +227,6 @@ namespace Jackett.Common.Indexers
 
         private static double GetDownloadFactor(JObject r)
         {
-            var halfLeechMediums = new[] { 1, 5, 4 };
             // 100% Neutral Leech: all XXX content.
             if ((int)r["type_category"] == 7)
             {
@@ -240,16 +239,12 @@ namespace Jackett.Common.Indexers
                 return 0;
             }
 
-            // 50% Free Leech: all full discs, remuxes, caps and all internal encodes.
-            if (halfLeechMediums.Contains((int)r["type_medium"]) || (int)r["type_origin"] == 1)
+            var halfLeechMediums = new[] { 1, 5, 4 };
+
+            // 50% Free Leech: all full discs, remuxes, captures and all internal encodes, also all TV and Documentary content.
+            if (halfLeechMediums.Contains((int)r["type_medium"]) || (int)r["type_origin"] == 1 || (int)r["type_category"] == 2 || (int)r["type_category"] == 3)
             {
                 return 0.5;
-            }
-
-            // 25% Free Leech: all TV content that is not an internal encode.
-            if ((int)r["type_category"] == 2 && (int)r["type_origin"] != 1)
-            {
-                return 0.75;
             }
 
             return 1;
@@ -267,6 +262,7 @@ namespace Jackett.Common.Indexers
                     {"Accept", "application/json"},
                     {"Content-Type", "application/json"}
                 }, requestData.ToString(), false);
+
             CheckSiteDown(response);
 
             JObject json;
