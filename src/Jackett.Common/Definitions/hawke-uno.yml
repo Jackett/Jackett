@@ -92,7 +92,7 @@ search:
       selector: name
       filters:
         - name: re_replace
-          args: ["\\(((?>[^()]+|(?<o>)\\(|(?<-o>)\\))*(?(o)(?!)))\\)$", "$1"]
+          args: ["\\(((?>[^()]+|(?<o>)\\(|(?<-o>)\\))*(?(o)(?!)))(?<!\\bHONE)(?<=\\s*- [\\w]+)\\)$", "$1"]
         - name: re_replace
           args: ["\\s*-\\s+(\\w+)$", "-$1"]
     details:
