@@ -24,8 +24,7 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        protected override bool UseP2PReleaseName => true;
-        protected override int minimumSeedTime => 432000; // 120h
+        protected override int MinimumSeedTime => 432000; // 120h
 
         public RetroFlix(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)

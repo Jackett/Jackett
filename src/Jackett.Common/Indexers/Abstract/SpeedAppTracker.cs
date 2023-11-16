@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -22,8 +23,7 @@ namespace Jackett.Common.Indexers.Abstract
     {
         public override bool SupportsPagination => true;
 
-        protected virtual bool UseP2PReleaseName => false;
-        protected virtual int minimumSeedTime => 172800; // 48h
+        protected virtual int MinimumSeedTime => 172800; // 48h
 
         private readonly Dictionary<string, string> _apiHeaders = new Dictionary<string, string>
         {
@@ -63,7 +63,10 @@ namespace Jackett.Common.Indexers.Abstract
         private async Task RenewalTokenAsync()
         {
             if (configData.Email.Value == null || configData.Password.Value == null)
+            {
                 throw new Exception("Please, check the indexer configuration.");
+            }
+
             var body = new Dictionary<string, string>
             {
                 { "username", configData.Email.Value.Trim() },
@@ -75,14 +78,15 @@ namespace Jackett.Common.Indexers.Abstract
             var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
             if (_token == null)
+            {
                 throw new Exception(json.Value<string>("message"));
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
-            //var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
             var qc = new List<KeyValuePair<string, string>> // NameValueCollection don't support cat[]=19&cat[]=6
             {
                 { "itemsPerPage", "100" },
@@ -98,25 +102,36 @@ namespace Jackett.Common.Indexers.Abstract
             }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
                 qc.Add("categories[]", cat);
+            }
 
             if (query.IsImdbQuery)
+            {
                 qc.Add("imdbId", query.ImdbID);
+            }
             else
+            {
                 qc.Add("search", query.GetQueryString());
+            }
 
             if (string.IsNullOrWhiteSpace(_token)) // fist time login
+            {
                 await RenewalTokenAsync();
+            }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var response = await RequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
+
             if (response.Status == HttpStatusCode.Unauthorized)
             {
                 await RenewalTokenAsync(); // re-login
                 response = await RequestWithCookiesAsync(searchUrl, headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
+            {
                 throw new Exception($"Unknown error in search: {response.ContentString}");
+            }
 
             try
             {
@@ -146,18 +161,19 @@ namespace Jackett.Common.Indexers.Abstract
                     var genresList = genresSplit.ToList();
                     genres = string.Join(", ", genresList);
                     if (!string.IsNullOrEmpty(genres))
+                    {
                         description = genres;
+                    }
 
                     var posterStr = row.Value<string>("poster");
                     var poster = Uri.TryCreate(posterStr, UriKind.Absolute, out var posterUri) ? posterUri : null;
 
-                    var title = row.Value<string>("name");
-                    // fix for #10883
-                    if (UseP2PReleaseName && !string.IsNullOrWhiteSpace(row.Value<string>("p2p_release_name")))
-                        title = row.Value<string>("p2p_release_name");
+                    var title = CleanTitle(row.Value<string>("name"));
 
                     if (!query.IsImdbQuery && !query.MatchQueryStringAND(title))
+                    {
                         continue;
+                    }
 
                     var release = new ReleaseInfo
                     {
@@ -176,10 +192,10 @@ namespace Jackett.Common.Indexers.Abstract
                         DownloadVolumeFactor = dlVolumeFactor,
                         UploadVolumeFactor = row.Value<double>("upload_volume_factor"),
                         MinimumRatio = 1,
-                        MinimumSeedTime = minimumSeedTime
+                        MinimumSeedTime = MinimumSeedTime
                     };
-                    if (release.Genres == null)
-                        release.Genres = new List<string>();
+
+                    release.Genres ??= new List<string>();
                     release.Genres = release.Genres.Union(genres.Split(',')).ToList();
 
                     releases.Add(release);
@@ -201,7 +217,10 @@ namespace Jackett.Common.Indexers.Abstract
                 response = await RequestWithCookiesAsync(link.ToString(), headers: GetSearchHeaders());
             }
             else if (response.Status != HttpStatusCode.OK)
+            {
                 throw new Exception($"Unknown error in download: {response.ContentBytes}");
+            }
+
             return response.ContentBytes;
         }
 
@@ -209,5 +228,12 @@ namespace Jackett.Common.Indexers.Abstract
         {
             {"Authorization", $"Bearer {_token}"}
         };
+
+        private static string CleanTitle(string title)
+        {
+            title = Regex.Replace(title, @"\[REQUEST(ED)?\]", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            return title.Trim(' ', '.');
+        }
     }
 }
