@@ -148,7 +148,7 @@ namespace Jackett.Common.Indexers.Abstract
                    cacheService: cs,
                    configData: new ConfigurationDataAvistazTracker())
         {
-            webclient.requestDelay = 4;
+            webclient.requestDelay = 5;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
