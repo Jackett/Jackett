@@ -163,7 +163,7 @@ namespace Jackett.Common.Indexers
 
         protected virtual IEnumerable<ReleaseInfo> FilterResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
         {
-            var filteredResults = results.Where(IsValidRelease);
+            var filteredResults = results.Where(IsValidRelease).ToList();
 
             // filter results with wrong categories
             if (query.Categories.Length > 0)
@@ -174,13 +174,13 @@ namespace Jackett.Common.Indexers
                 filteredResults = filteredResults.Where(result =>
                     result.Category?.Any() != true ||
                     expandedQueryCats.Intersect(result.Category).Any()
-                );
+                ).ToList();
             }
 
             // eliminate excess results
             if (query.Limit > 0)
             {
-                filteredResults = filteredResults.Take(query.Limit);
+                filteredResults = filteredResults.Take(query.Limit).ToList();
             }
 
             return filteredResults;
