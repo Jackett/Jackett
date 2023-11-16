@@ -5,7 +5,7 @@ description: "AniSource is a Public site for HD Anime raws."
 language: en-US
 type: public
 encoding: UTF-8
-requestDelay: 2
+requestDelay: 5
 links:
   - https://asnet.pw/
 
@@ -25,17 +25,12 @@ search:
     - path: /
       inputs:
         tpage: 2
-    - path: /
-      inputs:
-        tpage: 3
-    - path: /
-      inputs:
-        tpage: 4
-    - path: /
-      inputs:
-        tpage: 5
   inputs:
     search: "{{ .Keywords }}"
+
+  headers:
+    # site blocks Jackett's User-Agents, so slightly alter it here (e.g. Chrome/87.0. > Chrome/97.0.)
+    User-Agent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4280.88 Safari/537.36"]
 
   rows:
     selector: div[class^="item"]
