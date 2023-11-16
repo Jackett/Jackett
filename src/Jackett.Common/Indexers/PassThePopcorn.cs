@@ -53,7 +53,7 @@ namespace Jackett.Common.Indexers
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
-            webclient.requestDelay = 2; // 0.5 requests per second
+            webclient.requestDelay = 2;
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers
                 LimitsMax = 50,
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
                 },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
