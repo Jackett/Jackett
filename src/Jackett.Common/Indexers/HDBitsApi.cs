@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -177,7 +178,8 @@ namespace Jackett.Common.Indexers
                     continue;
                 }
 
-                var title = (string)r["name"];
+                var title = GetTitle(r);
+
                 // if tv then match query keywords against title #12753
                 if (!query.IsImdbQuery && !query.MatchQueryStringAND(title))
                 {
@@ -221,6 +223,16 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        private string GetTitle(JObject item)
+        {
+            var filename = (string)item["filename"];
+            var name = (string)item["name"];
+
+            return configData.UseFilenames.Value && filename.IsNotNullOrWhiteSpace()
+                ? filename.Replace(".torrent", "")
+                : name;
         }
 
         private static double GetUploadFactor(JObject r) => (int)r["type_category"] == 7 ? 0 : 1;
