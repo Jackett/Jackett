@@ -104,7 +104,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: "table[width=\"65%\"] > tbody > tr[onmouseover]{{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.png\"]){{ else }}{{ end }}"
+    selector: "table[width=\"65%\"]:nth-child(3) > tbody > tr[onmouseover]{{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -113,8 +113,19 @@ search:
       filters:
         - name: querystring
           args: cat
+    title_default:
+      selector: a[href^="download.php?id="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: name
+        - name: regexp
+          args: ^(.+?)\.torrent
+        - name: htmldecode
     title:
       selector: a[href^="details.php?id="]
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -131,6 +142,8 @@ search:
       filters:
         - name: regexp
           args: src=([^\s]+)
+        - name: replace
+          args: ["pic/not-available.jpg>');", ""]
     files:
       selector: td:nth-last-child(8)
     date:
@@ -157,4 +170,7 @@ search:
       text: 1
     minimumratio:
       text: 1.0
+    description:
+      selector: td:has(a[href^="details.php?id="])
+      remove: a
 # engine tbd
