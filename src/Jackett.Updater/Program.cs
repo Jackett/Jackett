@@ -391,6 +391,7 @@ namespace Jackett.Updater
                 "Definitions/freshmeat.yml",
                 "Definitions/fullmixmusic.yml",
                 "Definitions/funreleases.yml",
+                "Definitions/fusionmayhem.yml",
                 "Definitions/gainbound.yml",
                 "Definitions/galeriens.yml",
                 "Definitions/gdf76.yml",
