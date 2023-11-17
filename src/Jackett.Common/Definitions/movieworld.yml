@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 37, cat: Movies, desc: "Freeleech"}
     - {id: 14, cat: Movies/WEB-DL, desc: "Movie/WEB"}
     - {id: 36, cat: Movies/UHD, desc: "Movie/4K Disc"}
     - {id: 5, cat: Movies/UHD, desc: "Movie/4K Rip"}
@@ -19,17 +20,16 @@ caps:
     - {id: 15, cat: Movies, desc: "Movie/Packs"}
     - {id: 20, cat: Movies/SD, desc: "Movie/CAM"}
     - {id: 21, cat: XXX, desc: "Movie/XXX"}
-    - {id: 33, cat: Audio/Video, desc: "Music"}
     - {id: 28, cat: TV, desc: "Tv Packs"}
     - {id: 31, cat: TV, desc: "Tv Mini Series"}
     - {id: 30, cat: TV/HD, desc: "Tv Episodes"}
     - {id: 26, cat: TV/Sport, desc: "Tv Sport"}
+    - {id: 18, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
-    music-search: [q]
 
 settings:
   - name: username
@@ -40,7 +40,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
   - name: sort
     type: select
@@ -83,8 +83,8 @@ search:
     page: torrents
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
-    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 18 genre, 4 imdb, 8-17 upload multiplier 1x-10x
-    options: 0
+    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 18 genre, 4 imdb, 5 gold, 6 silver, 7 bronze, 8-17 upload multiplier 1x-10x
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     # 0 all, 1 active only, 2 dead only
     active: 0
     order: "{{ .Config.sort }}"
@@ -96,7 +96,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]):not(:has(a[href^=\"index.php?page=userdetails\"])){{ if .Config.freeleech }}:has(img[src=\"images/freeleech.gif\"]){{ else }}{{ end }}"
+    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]):not(:has(a[href^=\"index.php?page=userdetails\"]))"
 
   fields:
     category:
@@ -148,7 +148,9 @@ search:
       selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td ~ td"
     downloadvolumefactor:
       case:
-        img[src="images/freeleech.gif"]: 0
+        img[src="images/gold.gif"]: 0
+        img[src="images/silver.gif"]: 0.5
+        img[src="images/bronze.gif"]: 0.75
         "*": 1
     uploadvolumefactor:
       case:
@@ -165,4 +167,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-#  xbtitFM v4.1.26
+#  xbtitFM v4.1.28
