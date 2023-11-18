@@ -150,9 +150,10 @@ namespace Jackett.Common.Indexers
                 {
                     htmlString = await LoadWebPageAsync(url);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    logger.Error($"DivxTotal: Failed to load url {url}");
+                    logger.Error(ex, "DivxTotal: Failed to load url [{0}]: {1}", url, ex.Message);
+
                     return releases;
                 }
 
