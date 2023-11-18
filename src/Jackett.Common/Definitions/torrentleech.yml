@@ -152,8 +152,10 @@ search:
     # remove dashes at the beginning of keywords as they exclude search strings (see issue #3096)
     - name: re_replace
       args: ["(^|\\s)-", " "]
+    - name: append
+      args: "{{ if .Config.exclude_archives }} -tags:rar{{ else }}{{ end }}"
   rows:
-    selector: "torrentList{{ if .Config.exclude_archives }}:not(.tags:contains(\"rar\")){{ else }}{{ end }}"
+    selector: torrentList
     count:
       selector: $.numFound
 
