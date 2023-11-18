@@ -1,0 +1,176 @@
+---
+id: torrent-heaven
+name: Torrent Heaven
+description: "Torrent Heaven is a DUTCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: nl-NL
+type: private
+encoding: UTF-8
+links:
+  - https://www.torrentheaven.org/
+
+caps:
+  categorymappings:
+    - {id: 129, cat: Movies/HD, desc: "Hd DVD"}
+    - {id: 123, cat: Movies/HD, desc: "MKV/X265"}
+    - {id: 130, cat: Movies/UHD, desc: "4K Films"}
+    - {id: 10, cat: Movies/DVD, desc: "Dvd rip"}
+    - {id: 111, cat: Movies/SD, desc: "HD2DVD / BR2DVD"}
+    - {id: 125, cat: Movies/SD, desc: "Xvid rip"}
+    - {id: 143, cat: Movies/HD, desc: "Divx 720P"}
+    - {id: 132, cat: TV, desc: "complete seizoen serie"}
+    - {id: 139, cat: TV, desc: "Losse afleveringen"}
+    - {id: 140, cat: Books/EBook, desc: "E-Book"}
+    - {id: 114, cat: Audio/MP3, desc: "Muziek MP3"}
+    - {id: 142, cat: Audio/Lossless, desc: "Muziek Flac"}
+    - {id: 115, cat: PC, desc: "pc apps"}
+    - {id: 105, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 120, cat: PC/Games, desc: "Pc Games"}
+    - {id: 106, cat: Other, desc: "Overig"}
+    - {id: 131, cat: Books/Comics, desc: "Stripboeken"}
+    - {id: 108, cat: XXX, desc: "18+ Adult"}
+    - {id: 116, cat: PC/Mac, desc: "Mac"}
+    - {id: 155, cat: Books/Mags, desc: "Tijdschriften"}
+    - {id: 128, cat: Audio/Video, desc: "muziek DVD"}
+    - {id: 156, cat: Other, desc: "Donateur"}
+    - {id: 118, cat: Movies, desc: "Kids Film"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: thankyou
+    type: text
+    label: Thank You Comment
+  - name: info
+    type: info
+    label: Thank you comment
+    default: This site requires you to leave a Thank You comment before you can download. Enter your personalised comment above.
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    returnto: "/"
+  error:
+    - selector: td.embedded:contains("fout")
+  test:
+    path: /
+    selector: a[href="logout.php"]
+
+download:
+  before:
+    path: comment.php
+    method: post
+    inputs:
+      action: add
+      tid: "{{ .DownloadUri.Query.id }}"
+      text: "{{ .Config.thankyou }}"
+      submit: Opslaan
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    # https://www.torrentheaven.org/browse.php?search=&cat=0&incldead=1
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    incldead: 1
+
+  rows:
+    selector: table.mainouter
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    poster:
+      selector: div[id^="Style"] img
+      attribute: src
+    size:
+      selector: a[href^="details_bestanden.php?"]
+      filters:
+        - name: regexp
+          args: "(.+?) in"
+    files:
+      selector: a[href^="details_bestanden.php?"]
+      filters:
+        - name: regexp
+          args: "in (\\d+) bestan"
+    grabs:
+      selector: td:nth-child(5) table tbody tr:nth-child(2) td:first-child
+    date:
+      selector: td:nth-child(5) table tbody tr:nth-child(2) td:last-child
+      filters:
+        - name: replace
+          args: ["januari", "January"]
+        - name: replace
+          args: ["februari", "February"]
+        - name: replace
+          args: ["maart", "March"]
+        - name: replace
+          args: ["april", "April"]
+        - name: replace
+          args: ["mei", "May"]
+        - name: replace
+          args: ["juni", "June"]
+        - name: replace
+          args: ["juli", "July"]
+        - name: replace
+          args: ["augustus", "August"]
+        - name: replace
+          args: ["september", "September"]
+        - name: replace
+          args: ["oktober", "October"]
+        - name: replace
+          args: ["november", "November"]
+        - name: replace
+          args: ["december", "December"]
+        - name: re_replace
+          args: ["\\s*om\\s*", " "]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "d MMMM yyyy HH:mm:ss zzz"
+    seeders:
+      selector: td:nth-child(5) table tbody tr:last-child td:nth-last-child(3) font b:first-child
+      optional: true
+      default: 0
+    leechers:
+      selector: td:nth-child(5) table tbody tr:last-child td:nth-last-child(3) font b:nth-child(2)
+      optional: true
+      default: 0
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# engine n/a
