@@ -18,12 +18,8 @@ caps:
     - {id: 94, cat: Movies/HD, desc: "Film-FHD", default: true}
     - {id: 92, cat: Movies/UHD, desc: "Film-UHD", default: true}
     - {id: 22, cat: TV, desc: "Sorozat-Hun", default: true}
-    - {id: 58, cat: TV, desc: "Sorozat-Eng", default: true}
     - {id: 64, cat: Movies, desc: "Film-Pack", default: true}
-    - {id: 66, cat: XXX/ImageSet, desc: "XXX-Pics", default: false}
-    - {id: 33, cat: XXX/SD, desc: "XXX-SD", default: false}
-    - {id: 89, cat: XXX/x264, desc: "XXX-HD", default: false}
-    - {id: 24, cat: Audio/Video, desc: "Videóklip", default: true}
+    - {id: 24, cat: Audio/Video, desc: "Klip", default: true}
     - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
     - {id: 27, cat: Books/EBook, desc: "Könyv", default: true}
     - {id: 69, cat: TV/Anime, desc: "Mese-SD", default: true}
@@ -35,7 +31,9 @@ caps:
     - {id: 31, cat: PC/Games, desc: "Játék", default: true}
     - {id: 81, cat: PC/0day, desc: "Program", default: true}
     - {id: 14, cat: PC, desc: "Program-Egyéb", default: true}
-    - {id: 97, cat: TV/Anime, desc: "Sorozat/Mese", default: true}
+    - {id: 66, cat: XXX/ImageSet, desc: "XXX", default: false}
+    - {id: 33, cat: XXX/SD, desc: "XXX-SD", default: false}
+    - {id: 89, cat: XXX/x264, desc: "XXX-HD", default: false}
 
   modes:
     search: [q]
