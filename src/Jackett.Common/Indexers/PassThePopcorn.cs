@@ -265,9 +265,15 @@ namespace Jackett.Common.Indexers
                         var otherTags = (string)torrent["RemasterTitle"];
 
                         if (year != null)
+                        {
                             release.Description += $"<br>\nYear: {year}";
+                        }
+
                         if (quality != null)
+                        {
                             release.Description += $"<br>\nQuality: {quality}";
+                        }
+
                         if (resolution != null)
                         {
                             titleTags.Add(resolution);
@@ -305,10 +311,14 @@ namespace Jackett.Common.Indexers
                         }
 
                         if (otherTags != null)
+                        {
                             titleTags.Add(otherTags);
+                        }
 
-                        if (titleTags.Any())
+                        if (configData.AddAttributesToTitle.Value && titleTags.Any())
+                        {
                             release.Title += " [" + string.Join(" / ", titleTags) + "]";
+                        }
 
                         releases.Add(release);
                     }
