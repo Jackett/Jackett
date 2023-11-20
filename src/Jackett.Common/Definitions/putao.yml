@@ -51,10 +51,6 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: info_captcha
-    type: info
-    label: About the Captcha
-    default: If the Captcha image is missing then set the <b>checkcode</b> to <b>XxXx</b>
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -84,13 +80,10 @@ login:
   path: login.php
   method: form
   form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[src^="getcheckcode.php?"]
-    input: checkcode
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    checkcode: XxXx
     logout: ""
   error:
     - selector: td.embedded:has(h2:contains("失败"))
