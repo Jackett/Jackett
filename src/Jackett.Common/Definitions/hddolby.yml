@@ -193,4 +193,4 @@ search:
       filters:
         - name: replace
           args: [" 剩余时间：", ""]
-# NexusPHP Standard v1.5 Beta 4
+# NexusPHP 985f0fc 2023-08-04
