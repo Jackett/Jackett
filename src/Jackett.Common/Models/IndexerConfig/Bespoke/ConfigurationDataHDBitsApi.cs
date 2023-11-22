@@ -14,15 +14,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
 
         public ConfigurationDataHDBitsApi()
         {
-            FilterFreeleech = new BoolConfigurationItem("Filter FreeLeech only")
-            {
-                Value = false
-            };
-
-            UseFilenames = new BoolConfigurationItem("Use Filenames as release titles")
-            {
-                Value = false
-            };
+            FilterFreeleech = new BoolConfigurationItem("Filter FreeLeech only") { Value = false };
+            UseFilenames = new BoolConfigurationItem("Use Filenames as release titles") { Value = true };
 
             Codecs = new MultiSelectConfigurationItem(
                 "Codec",
