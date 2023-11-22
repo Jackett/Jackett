@@ -138,11 +138,11 @@ search:
       selector: a[href^="download.php?torrent="]
       attribute: href
     files:
-      selector: td:nth-last-child(9)
+      selector: a[href^="filelist.php?id="]
     date_day:
       # auto adjusted by site account profile
       # Yesterday, 6:00 AM
-      selector: td:nth-last-child(7) > span[title*="day"]
+      selector: td:nth-last-child(5) > span[title*="day"]
       attribute: title
       optional: true
       filters:
@@ -150,7 +150,7 @@ search:
     date_year:
       # auto adjusted by site account profile
       # Aug 6 2021, 7:25 PM
-      selector: td:nth-last-child(7) > span[title]:not([title*="day"])
+      selector: td:nth-last-child(5) > span[title]:not([title*="day"])
       attribute: title
       optional: true
       filters:
@@ -159,13 +159,13 @@ search:
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-last-child(6)
-    grabs:
-      selector: td:nth-last-child(5)
-    seeders:
       selector: td:nth-last-child(4)
+    grabs:
+      selector: a[href^="snatches.php?id="]
+    seeders:
+      selector: a[href^="peerlist_xbt.php?id="]
     leechers:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(3) div:last-child
     downloadvolumefactor:
       case:
         tr.freeleech_color: 0
