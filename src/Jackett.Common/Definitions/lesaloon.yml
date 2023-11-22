@@ -6,10 +6,10 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
-  - https://lesaloonv2-0.xyz/
-legacylinks:
   - https://lesaloonv2-0.net/
+legacylinks:
   - http://lesaloonv2-0.net/ # site forces https
+  - https://lesaloonv2-0.xyz/
 
 caps:
   categorymappings:
