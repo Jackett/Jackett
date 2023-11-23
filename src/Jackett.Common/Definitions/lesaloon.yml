@@ -6,6 +6,7 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
+  - https://lesaloonv2-0.lol/
   - https://lesaloonv2-0.net/
 legacylinks:
   - http://lesaloonv2-0.net/ # site forces https
