@@ -180,15 +180,16 @@ caps:
     - {id: 244, cat: Other, desc: "GFXNEWS OTHER GRAPHICS Zbrush, Substance tools"}
     - {id: 216, cat: Other, desc: "GFXNEWS PHOTOSTOCK"}
     - {id: 220, cat: Other, desc: "GFXNEWS PHOTOGRAPHY - ART"}
-    - {id: 227, cat: Other, desc: "GFXNEWS PHOTOSHOP"}
-    - {id: 228, cat: Other, desc: "GFXNEWS PHOTOSHOP Actions, Pattern & Styles"}
-    - {id: 229, cat: Other, desc: "GFXNEWS PHOTOSHOP Background & PSD Source"}
-    - {id: 230, cat: Other, desc: "GFXNEWS PHOTOSHOP Brushes & Gradient"}
-    - {id: 246, cat: Other, desc: "GFXNEWS PHOTOSHOP Mockup"}
-    - {id: 247, cat: Other, desc: "GFXNEWS PHOTOSHOP Overlays"}
-    - {id: 249, cat: Other, desc: "GFXNEWS PHOTOSHOP Preset"}
-    - {id: 231, cat: Other, desc: "GFXNEWS PHOTOSHOP Toolkits, Papers & Objects"}
-    - {id: 245, cat: Other, desc: "GFXNEWS PLUGINS"}
+    - {id: 227, cat: Other, desc: "GFXNEWS 2D Graphics"}
+    - {id: 250, cat: Other, desc: "GFXNEWS 2D Graphics Effects"}
+    - {id: 228, cat: Other, desc: "GFXNEWS 2D Graphics Actions, Pattern & Styles"}
+    - {id: 229, cat: Other, desc: "GFXNEWS 2D Graphics Background & PSD Source"}
+    - {id: 230, cat: Other, desc: "GFXNEWS 2D Graphics Brushes & Gradient"}
+    - {id: 246, cat: Other, desc: "GFXNEWS 2D Graphics Mockup"}
+    - {id: 247, cat: Other, desc: "GFXNEWS 2D Graphics Overlays"}
+    - {id: 249, cat: Other, desc: "GFXNEWS 2D Graphics Preset"}
+    - {id: 231, cat: Other, desc: "GFXNEWS 2D Graphics Toolkits, Papers & Objects"}
+    - {id: 245, cat: Other, desc: "GFXNEWS GFX Plugins"}
     - {id: 210, cat: Other, desc: "GFXNEWS PLUGINS WIN"}
     - {id: 223, cat: Other, desc: "GFXNEWS PLUGINS MAC"}
     - {id: 225, cat: Other, desc: "GFXNEWS PLUGINS LINUX"}
