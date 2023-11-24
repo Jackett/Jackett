@@ -51,6 +51,10 @@ search:
   paths:
     - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
+  headers:
+    # site blocks Jackett's User-Agents, so slightly alter it here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
+
   rows:
     selector: div.row:has(a[href*="/detail/hash/"])
 
