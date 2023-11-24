@@ -74,11 +74,15 @@ namespace Jackett.Common.Indexers.Abstract
 
             var cookieItem = configData.CookieItem;
             if (cookieItem != null)
+            {
                 cookie = cookieItem.Value;
+            }
 
             var useTokenItem = configData.UseTokenItem;
             if (useTokenItem != null)
+            {
                 useTokens = useTokenItem.Value;
+            }
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -89,17 +93,27 @@ namespace Jackett.Common.Indexers.Abstract
             {
                 var apiKey = configData.ApiKey;
                 if (apiKey?.Value == null)
+                {
                     throw new Exception("Invalid API Key configured");
+                }
+
                 if (ApiKeyLengthLegacy == 0 && apiKey.Value.Length != ApiKeyLength)
+                {
                     throw new Exception($"Invalid API Key configured: expected length: {ApiKeyLength}, got {apiKey.Value.Length}");
+                }
+
                 if (ApiKeyLengthLegacy != 0 && apiKey.Value.Length != ApiKeyLength && apiKey.Value.Length != ApiKeyLengthLegacy)
+                {
                     throw new Exception($"Invalid API Key configured: expected length: {ApiKeyLength} or {ApiKeyLengthLegacy}, got {apiKey.Value.Length}");
+                }
 
                 try
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
+                    {
                         throw new Exception("Found 0 results in the tracker");
+                    }
 
                     IsConfigured = true;
                     SaveConfig();
@@ -126,7 +140,9 @@ namespace Jackett.Common.Indexers.Abstract
                 {
                     var results = await PerformQuery(new TorznabQuery());
                     if (!results.Any())
+                    {
                         throw new Exception("Found 0 results in the tracker");
+                    }
 
                     IsConfigured = true;
                     SaveConfig();
@@ -146,7 +162,9 @@ namespace Jackett.Common.Indexers.Abstract
                 using var loginResultDocument = loginResultParser.ParseDocument(response.ContentString);
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
+                {
                     throw new ExceptionWithConfigData(response.ContentString, configData);
+                }
 
                 loginform.QuerySelector("table").Remove();
                 var errorMessage = loginform.TextContent.Replace("\n\t", " ").Trim();
@@ -173,35 +191,55 @@ namespace Jackett.Common.Indexers.Abstract
             };
 
             if (!string.IsNullOrWhiteSpace(query.Genre))
+            {
                 queryCollection.Add("taglist", query.Genre);
+            }
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 if (imdbInTags)
+                {
                     queryCollection.Add("taglist", query.ImdbID);
+                }
                 else
+                {
                     queryCollection.Add("cataloguenumber", query.ImdbID);
+                }
             }
             else if (!string.IsNullOrWhiteSpace(searchString))
+            {
                 queryCollection.Add("searchstr", searchString);
+            }
 
             if (query.Artist.IsNotNullOrWhiteSpace() && query.Artist != "VA")
+            {
                 queryCollection.Add("artistname", query.Artist);
+            }
 
             if (query.Label.IsNotNullOrWhiteSpace())
+            {
                 queryCollection.Add("recordlabel", query.Label);
+            }
 
             if (query.Year.HasValue)
+            {
                 queryCollection.Add("year", query.Year.ToString());
+            }
 
             if (query.Album.IsNotNullOrWhiteSpace())
+            {
                 queryCollection.Add("groupname", query.Album);
+            }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
                 queryCollection.Add("filter_cat[" + cat + "]", "1");
+            }
 
             if (configData.FreeleechOnly != null && configData.FreeleechOnly.Value)
+            {
                 queryCollection.Add("freetorrent", "1");
+            }
 
             // remove . as not used in titles
             searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
@@ -250,12 +288,21 @@ namespace Jackett.Common.Indexers.Abstract
                     var releaseType = (string)r["releaseType"];
                     var title = new StringBuilder();
                     if (!string.IsNullOrEmpty(artist))
+                    {
                         title.Append(artist + " - ");
+                    }
+
                     title.Append(groupName);
                     if (!string.IsNullOrEmpty(groupYear) && groupYear != "0")
+                    {
                         title.Append(" [" + groupYear + "]");
+                    }
+
                     if (!string.IsNullOrEmpty(releaseType) && releaseType != "Unknown")
+                    {
                         title.Append(" [" + releaseType + "]");
+                    }
+
                     var description = tags?.Any() == true && !string.IsNullOrEmpty(tags[0].ToString())
                         ? "Tags: " + string.Join(", ", tags) + "\n"
                         : null;
@@ -264,7 +311,10 @@ namespace Jackett.Common.Indexers.Abstract
                         : null;
                     Uri poster = null;
                     if (!string.IsNullOrEmpty(cover))
+                    {
                         poster = (cover.StartsWith("http")) ? new Uri(cover) : new Uri(PosterUrl + cover);
+                    }
+
                     var release = new ReleaseInfo
                     {
                         PublishDate = groupTime,
@@ -274,28 +324,41 @@ namespace Jackett.Common.Indexers.Abstract
                     };
 
                     if (release.Genres == null)
+                    {
                         release.Genres = new List<string>();
+                    }
+
                     if (!string.IsNullOrEmpty(genre))
+                    {
                         release.Genres = release.Genres.Union(genre.Split(',')).ToList();
+                    }
 
                     if (imdbInTags)
+                    {
                         release.Imdb = tags
                                        .Select(tag => ParseUtil.GetImdbId((string)tag))
                                        .Where(tag => tag != null).FirstIfSingleOrDefault();
+                    }
 
                     if (r["torrents"] is JArray)
+                    {
                         foreach (JObject torrent in r["torrents"])
                         {
                             var release2 = (ReleaseInfo)release.Clone();
                             FillReleaseInfoFromJson(release2, torrent);
                             if (ReleaseInfoPostParse(release2, torrent, r))
+                            {
                                 releases.Add(release2);
+                            }
                         }
+                    }
                     else
                     {
                         FillReleaseInfoFromJson(release, r);
                         if (ReleaseInfoPostParse(release, r, r))
+                        {
                             releases.Add(release);
+                        }
                     }
                 }
             }
@@ -316,17 +379,23 @@ namespace Jackett.Common.Indexers.Abstract
 
             var time = (string)torrent["time"];
             if (!string.IsNullOrEmpty(time))
+            {
                 release.PublishDate = DateTime.ParseExact(time + " +0000", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
+            }
 
             var flags = new List<string>();
 
             var format = (string)torrent["format"];
             if (!string.IsNullOrEmpty(format))
+            {
                 flags.Add(WebUtility.HtmlDecode(format));
+            }
 
             var encoding = (string)torrent["encoding"];
             if (!string.IsNullOrEmpty(encoding))
+            {
                 flags.Add(encoding);
+            }
 
             if (torrent["hasLog"] != null && (bool)torrent["hasLog"])
             {
@@ -335,41 +404,57 @@ namespace Jackett.Common.Indexers.Abstract
             }
 
             if (torrent["hasCue"] != null && (bool)torrent["hasCue"])
+            {
                 flags.Add("Cue");
+            }
 
             // tehconnection.me specific?
             var lang = (string)torrent["lang"];
             if (!string.IsNullOrEmpty(lang) && lang != "---")
+            {
                 flags.Add(lang);
+            }
 
             var media = (string)torrent["media"];
             if (!string.IsNullOrEmpty(media))
+            {
                 flags.Add(media);
+            }
 
             // tehconnection.me specific?
             var resolution = (string)torrent["resolution"];
             if (!string.IsNullOrEmpty(resolution))
+            {
                 flags.Add(resolution);
+            }
 
             // tehconnection.me specific?
             var container = (string)torrent["container"];
             if (!string.IsNullOrEmpty(container))
+            {
                 flags.Add(container);
+            }
 
             // tehconnection.me specific?
             var codec = (string)torrent["codec"];
             if (!string.IsNullOrEmpty(codec))
+            {
                 flags.Add(codec);
+            }
 
             // tehconnection.me specific?
             var audio = (string)torrent["audio"];
             if (!string.IsNullOrEmpty(audio))
+            {
                 flags.Add(audio);
+            }
 
             // tehconnection.me specific?
             var subbing = (string)torrent["subbing"];
             if (!string.IsNullOrEmpty(subbing) && subbing != "---")
+            {
                 flags.Add(subbing);
+            }
 
             if (torrent["remastered"] != null && (bool)torrent["remastered"])
             {
@@ -379,7 +464,9 @@ namespace Jackett.Common.Indexers.Abstract
             }
 
             if (flags.Count > 0)
+            {
                 release.Title += " " + string.Join(" / ", flags);
+            }
 
             release.Size = (long)torrent["size"];
             release.Seeders = (int)torrent["seeders"];
@@ -389,19 +476,31 @@ namespace Jackett.Common.Indexers.Abstract
             release.Link = new Uri(DownloadUrl + torrentId);
             var category = (string)torrent["category"];
             if (category == null || category.Contains("Select Category"))
+            {
                 release.Category = MapTrackerCatToNewznab("1");
+            }
             else
+            {
                 release.Category = MapTrackerCatDescToNewznab(category);
+            }
+
             release.Files = (int)torrent["fileCount"];
             release.Grabs = (int)torrent["snatches"];
             release.DownloadVolumeFactor = 1;
             release.UploadVolumeFactor = 1;
             if ((bool)torrent["isFreeleech"])
+            {
                 release.DownloadVolumeFactor = 0;
+            }
+
             var isPersonalFreeleech = (bool?)torrent["isPersonalFreeleech"];
             if (isPersonalFreeleech != null && isPersonalFreeleech == true)
+            {
                 release.DownloadVolumeFactor = 0;
-            if ((bool)torrent["isNeutralLeech"])
+            }
+
+            var isFreeload = (bool?)torrent["isFreeload"];
+            if ((bool)torrent["isNeutralLeech"] || (isFreeload != null && isFreeload == true))
             {
                 release.DownloadVolumeFactor = 0;
                 release.UploadVolumeFactor = 0;
