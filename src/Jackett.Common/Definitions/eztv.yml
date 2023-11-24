@@ -6,7 +6,7 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://eztv.re/
+  - https://eztv.li/
   - https://eztv.wf/
   - https://eztv.tf/
   - https://eztv.yt/
@@ -43,6 +43,7 @@ legacylinks:
   - https://eztv.unblockit.vegas/
   - https://eztv.unblockit.esq/
   - https://eztv.unblockit.zip/
+  - https://eztv.re/
 
 caps:
   categories:
