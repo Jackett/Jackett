@@ -14,37 +14,35 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: Movies/HD, desc: "Movie HD"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: PC/Games, desc: "Game"}
-    - {id: 5, cat: PC/0day, desc: "Application"}
-    - {id: 6, cat: XXX, desc: "XXX"}
-    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
-    - {id: 8, cat: Books/EBook, desc: "E-Book"}
-    - {id: 9, cat: Movies, desc: "Movies Ro"}
-    - {id: 10, cat: TV/SD, desc: "TV SD Ro"}
+    - {id: 23, cat: Movies/HD, desc: "Movies HD Ro"}
     - {id: 11, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 12, cat: Movies/UHD, desc: "Movies 4K Ro"}
-    - {id: 13, cat: TV/Anime, desc: "Anime"}
     - {id: 14, cat: Movies/BluRay, desc: "Movies Bluray"}
     - {id: 15, cat: Movies/BluRay, desc: "Movies Bluray Ro"}
-    - {id: 16, cat: PC/Games, desc: "Games PC"}
-    - {id: 17, cat: Console, desc: "Games Console"}
-    - {id: 18, cat: TV/HD, desc: "TV HD Ro"}
+    - {id: 27, cat: Movies/DVD, desc: "DVD"}
+    - {id: 28, cat: Movies/DVD, desc: "DVD Ro"}
     - {id: 19, cat: Movies/SD, desc: "SD"}
     - {id: 20, cat: Movies/SD, desc: "SD Ro"}
-    - {id: 21, cat: Audio/Video, desc: "Music Video"}
-    - {id: 22, cat: TV, desc: "TV Pack Ro"}
-    - {id: 23, cat: Movies/HD, desc: "Movies HD Ro"}
-    - {id: 24, cat: PC, desc: "Linux"}
-    - {id: 25, cat: TV/Sport, desc: "Sport"}
+    - {id: 2, cat: TV/HD, desc: "TV HD"}
+    - {id: 18, cat: TV/HD, desc: "TV HD Ro"}
     - {id: 26, cat: TV/SD, desc: "TV SD"}
-    - {id: 27, cat: Movies/SD, desc: "DVD"}
-    - {id: 28, cat: Movies/SD, desc: "DVD Ro"}
-    - {id: 29, cat: TV/UHD, desc: "TV 4K"}
-    - {id: 30, cat: TV/UHD, desc: "TV 4K Ro"}
+    - {id: 10, cat: TV/SD, desc: "TV SD Ro"}
     - {id: 31, cat: TV/SD, desc: "DVD"}
     - {id: 32, cat: TV/SD, desc: "DVD Ro"}
+    - {id: 29, cat: TV/UHD, desc: "TV 4K"}
+    - {id: 30, cat: TV/UHD, desc: "TV 4K Ro"}
+    - {id: 22, cat: TV, desc: "TV Pack"}
+    - {id: 33, cat: TV, desc: "TV Pack Ro"}
+    - {id: 4, cat: PC/Games, desc: "Game"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 21, cat: Audio/Video, desc: "Music Video"}
+    - {id: 7, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 24, cat: PC, desc: "Linux"}
+    - {id: 8, cat: Books/EBook, desc: "E-Book"}
+    - {id: 25, cat: TV/Sport, desc: "Sport"}
+    - {id: 5, cat: PC/0day, desc: "Application"}
+    - {id: 13, cat: TV/Anime, desc: "Anime"}
+    - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
