@@ -58,22 +58,6 @@ settings:
     type: info
     label: About the Download links
     default: You can optionally set as a fallback an automatic alternate link, so if the .torrent download link fails your download will still be successful.
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: date
-    options:
-      date: created
-      seeds: seeders
-      size: size
-      title: title
-  - name: type
-    type: select
-    label: Order requested from site
-    default: desc
-    options:
-      desc: desc
-      asc: asc
 
 download:
   selectors:
@@ -84,8 +68,8 @@ download:
 
 search:
   paths:
-    - path: "torrents/{{ if .Keywords }}search/{{ .Keywords }}/{{ else }}{{ end }}{{ .Config.sort }}/{{ .Config.type }}"
-    - path: "torrents/{{ if .Keywords }}search/{{ .Keywords }}/{{ else }}{{ end }}26/{{ .Config.sort }}/{{ .Config.type }}"
+    - path: "torrents{{ if .Keywords }}/search/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "torrents{{ if .Keywords }}/search/{{ .Keywords }}{{ else }}{{ end }}/26"
 
   rows:
     selector: table.table-hover > tbody > tr:has(a[href*="/torrent/"])
