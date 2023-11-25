@@ -60,7 +60,7 @@ caps:
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
     - {id: 123, cat: TV/Documentary, desc: "Doku Pack UHD"}
     - {id: 157, cat: TV/Documentary, desc: "Doku Pack HD"}
-    - {id: 158, cat: TV/Documentary, desc: "Doku SD"}
+    - {id: 158, cat: TV/Documentary, desc: "Doku Pack SD"}
     # XXX
     - {id: 160, cat: XXX/UHD, desc: "XXX UHD"}
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
