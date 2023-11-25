@@ -76,6 +76,7 @@ caps:
     - {id: 327, cat: Books, desc: "Technical Books (Not maritime)-Mechanics"}
     - {id: 326, cat: Books, desc: "Technical Books (Not maritime)-Electricity"}
     - {id: 10, cat: Books, desc: "English for seamen"}
+    - {id: 265, cat: Books, desc: "English for seamen-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 266, cat: Books, desc: "English for seamen-English for Deck Officers"}
     - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
     - {id: 268, cat: Books, desc: "English for seamen-English for ETO's"}
@@ -95,7 +96,6 @@ caps:
     - {id: 37, cat: Books, desc: "Organization and management of maritime transport"}
     - {id: 11, cat: Books, desc: "Section for cadets"}
     - {id: 285, cat: Books, desc: "Section for cadets-Encyclopedias and atlases"}
-    - {id: 265, cat: Books, desc: "Section for cadets-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 191, cat: Books, desc: "Maritime Law"}
     - {id: 329, cat: Books, desc: "Maritime Law-Lloyd's, ABS, BV, DNV-GL, TÜV, NKK, RMRS and other approvals"}
     - {id: 240, cat: Books, desc: "Maritime Law-IMO Resolutions"}
@@ -111,6 +111,7 @@ caps:
     - {id: 54, cat: Books, desc: "Purpose-built ships-Passenger ships"}
     - {id: 248, cat: Books, desc: "Purpose-built ships-Fishing vessels"}
     - {id: 239, cat: Books, desc: "Purpose-built ships-Offshore"}
+    - {id: 349, cat: Books, desc: "Purpose-built ships-Dynamic positioning vessels"}
     - {id: 330, cat: Books, desc: "Examinations"}
     - {id: 333, cat: Books, desc: "Examinations-IMU CET"}
     - {id: 334, cat: Books, desc: "Examinations-NCV"}
@@ -181,6 +182,7 @@ caps:
     - {id: 245, cat: Books, desc: "Rarity-1800 - 1900"}
     - {id: 246, cat: Books, desc: "Rarity-1700 - 1800"}
     - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
+    - {id: 350, cat: Other, desc: "Art"}
     - {id: 324, cat: Other, desc: "Posters, placards, signs"}
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
     - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
