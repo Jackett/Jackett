@@ -28,8 +28,12 @@ caps:
     - {id: 10, cat: Movies/Foreign, desc: "Film/XviD/Eng"}
     - {id: 9, cat: Movies/SD, desc: "Film/XviD/Hun"}
     - {id: 31, cat: Audio/Audiobook, desc: "Hangoskönyv"}
+    - {id: 42, cat: PC/Games, desc: "Játék/ISO"}
+    - {id: 43, cat: PC/Games, desc: "Játék/RIP"}
     - {id: 30, cat: Books/Foreign, desc: "Könyv/Eng"}
     - {id: 29, cat: Books/EBook, desc: "Könyv/Hun"}
+    - {id: 44, cat: PC/ISO, desc: "Program/ISO"}
+    - {id: 45, cat: PC, desc: "Program/RIP"}
     - {id: 14, cat: TV/Foreign, desc: "Sorozat/HD/Eng"}
     - {id: 13, cat: TV/HD, desc: "Sorozat/HD/Hun"}
     - {id: 16, cat: TV/Foreign, desc: "Sorozat/SD/Eng"}
