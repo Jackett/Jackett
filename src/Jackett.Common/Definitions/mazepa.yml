@@ -11,33 +11,39 @@ links:
 caps:
   categorymappings:
     # note: when refreshing cats use the tracker.php not the search.php!
-    - {id: 37, cat: Movies, desc: "Українські фільми HD, UHD"}
-    - {id: 7, cat: Movies, desc: "Українські фільми HD, UHD Українські фільми"}
-    - {id: 38, cat: TV, desc: "Українські серіали HD, UHD"}
-    - {id: 8, cat: TV, desc: "Українські серіали HD, UHD Українські серіали"}
+    # Колекція українського контенту
+    - {id: 37, cat: Movies/UHD, desc: "Українські фільми UHD"}
+    - {id: 37, cat: Movies/HD, desc: "Українські фільми HD"}
+    - {id: 7, cat: Movies/SD, desc: "Українські фільми SD"}
+    - {id: 38, cat: TV/UHD, desc: "Українські серіали UHD"}
+    - {id: 38, cat: TV/HD, desc: "Українські серіали HD"}
+    - {id: 8, cat: TV/SD, desc: "Українські серіали SD"}
     - {id: 35, cat: TV/Anime, desc: "Українські мультфільми HD, UHD"}
-    - {id: 5, cat: TV/Anime, desc: "Українські мультфільми HD, UHD Українські мультфільми"}
+    - {id: 5, cat: TV/Anime, desc: "Українські мультфільми SD"}
     - {id: 36, cat: TV/Anime, desc: "Українські мультсеріали HD, UHD"}
-    - {id: 6, cat: TV/Anime, desc: "Українські мультсеріали HD, UHD Українські мультсеріали"}
+    - {id: 6, cat: TV/Anime, desc: "Українські мультсеріали SD"}
     - {id: 39, cat: TV/Documentary, desc: "Українська документалістика HD, UHD"}
-    - {id: 9, cat: TV/Documentary, desc: "Українська документалістика HD, UHD Українська документалістика"}
-    - {id: 175, cat: Movies/HD, desc: "Озвучений контент Новинки фільмів HD, UHD"}
-    - {id: 13, cat: Movies/SD, desc: "Озвучений контент Фільми SD"}
+    - {id: 9, cat: TV/Documentary, desc: "Українська документалістика SD"}
+    # Озвучений контент
+    - {id: 175, cat: Movies/UHD, desc: "Озвучений контент Новинки фільмів UHD"}
+    - {id: 175, cat: Movies/HD, desc: "Озвучений контент Новинки фільмів HD"}
+    - {id: 147, cat: Movies/UHD, desc: "Озвучений контент фільмів UHD"}
     - {id: 12, cat: Movies/HD, desc: "Озвучений контент Фільми HD"}
-    - {id: 147, cat: Movies/UHD, desc: "Озвучений контент Фільми UHD"}
+    - {id: 13, cat: Movies/SD, desc: "Озвучений контент Фільми SD"}
     - {id: 174, cat: Movies, desc: "Озвучений контент Субтитровані фільми"}
-    - {id: 14, cat: TV/SD, desc: "Озвучений контент Серіали SD"}
-    - {id: 44, cat: TV/HD, desc: "Озвучений контент Серіали HD"}
     - {id: 152, cat: TV/UHD, desc: "Озвучений контент Серіали UHD"}
-    - {id: 10, cat: TV/Anime, desc: "Озвучений контент Мультфільми SD"}
-    - {id: 41, cat: TV/Anime, desc: "Озвучений контент Мультфільми HD"}
+    - {id: 44, cat: TV/HD, desc: "Озвучений контент Серіали HD"}
+    - {id: 14, cat: TV/SD, desc: "Озвучений контент Серіали SD"}
     - {id: 155, cat: TV/Anime, desc: "Озвучений контент Мультфільми UHD"}
-    - {id: 11, cat: TV/Anime, desc: "Озвучений контент Мультсеріали SD"}
+    - {id: 41, cat: TV/Anime, desc: "Озвучений контент Мультфільми HD"}
+    - {id: 10, cat: TV/Anime, desc: "Озвучений контент Мультфільми SD"}
     - {id: 43, cat: TV/Anime, desc: "Озвучений контент Мультсеріали HD"}
+    - {id: 11, cat: TV/Anime, desc: "Озвучений контент Мультсеріали SD"}
     - {id: 16, cat: TV/Anime, desc: "Аніме"}
-    - {id: 15, cat: TV/Documentary, desc: "Аніме Документальне SD"}
-    - {id: 42, cat: TV/Documentary, desc: "Аніме Документальне HD"}
     - {id: 157, cat: TV/Documentary, desc: "Аніме Документальне UHD"}
+    - {id: 42, cat: TV/Documentary, desc: "Аніме Документальне HD"}
+    - {id: 15, cat: TV/Documentary, desc: "Аніме Документальне SD"}
+    # Спорт
     - {id: 20, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2023"}
     - {id: 167, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2022"}
     - {id: 79, cat: TV/Sport, desc: "Спорт Формула 1 Сезони 2017-2021"}
@@ -50,8 +56,10 @@ caps:
     - {id: 49, cat: TV/Sport, desc: "Автоспорт Чемпіонат Європи"}
     - {id: 53, cat: TV/Sport, desc: "Автоспорт Закордонні чемпіонати"}
     - {id: 19, cat: TV/Sport, desc: "Бокс"}
+    # Телевізійні передачі
     - {id: 29, cat: Audio/Video, desc: "Концерти, відеокліпи"}
     - {id: 30, cat: TV, desc: "Теле-Шоу"}
+    # Музика
     - {id: 65, cat: Audio, desc: "Музика Рок"}
     - {id: 63, cat: Audio, desc: "Музика Поп, Диско"}
     - {id: 66, cat: Audio, desc: "Музика Фольк, Етно, Народна, Бардівська"}
@@ -62,11 +70,14 @@ caps:
     - {id: 82, cat: Audio, desc: "Музика Невидане"}
     - {id: 160, cat: Audio, desc: "Музика Rock, Alternative, Punk, Metal"}
     - {id: 161, cat: Audio, desc: "Музика Pop"}
+    - {id: 181, cat: Audio, desc: "Музика Synthpop, Futurepop, New Wave, Electropop"}
     - {id: 165, cat: Audio, desc: "Музика Jazz, Blues, Soul"}
+    - {id: 180, cat: Audio, desc: "Музика New Age & Meditative"}
     - {id: 163, cat: Audio, desc: "Музика Rap, Hip-hop, RnB, Reggae"}
     - {id: 166, cat: Audio, desc: "Музика Country, Country pop, Bluegrass, Southern rock"}
     - {id: 162, cat: Audio, desc: "Музика Electronic"}
     - {id: 164, cat: Audio, desc: "Музика Other Styles"}
+    # Література
     - {id: 93, cat: Books, desc: "Література Українська художня література [до 1991 р.]"}
     - {id: 92, cat: Books, desc: "Література Українська художня література (після 1991 р.)"}
     - {id: 91, cat: Books, desc: "Література Зарубіжна художня література"}
@@ -80,6 +91,7 @@ caps:
     - {id: 96, cat: Books, desc: "Література Українська художня література"}
     - {id: 95, cat: Books, desc: "Література Зарубіжна художня література"}
     - {id: 94, cat: Books, desc: "Література Історія, біографістика, спогади"}
+    # Програмне забезпечення
     - {id: 168, cat: PC, desc: "Програмне забезпечення Операційні системи"}
     - {id: 169, cat: PC, desc: "Програмне забезпечення Системні програми"}
     - {id: 170, cat: PC, desc: "Програмне забезпечення Офіс, текстові редактори"}
