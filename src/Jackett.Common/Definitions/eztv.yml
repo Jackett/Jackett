@@ -57,7 +57,7 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}home{{ end }}"
 
   keywordsfilters:
     - name: re_replace
@@ -71,7 +71,7 @@ search:
       args: ["&", ""]
 
   headers:
-    cookie: ["sort_no=100"] # show 100 results for keywordless search
+    cookie: ["sort_no=100; q_filter=all; q_filter_web=on; q_filter_reality=on; q_filter_x265=on; layout=def_wlinks"] # show 100 results for keywordless search and show links in results
 
   rows:
     # only use latest added torrents table for keywordless search to avoid duplicates, some torrents don't have any download links so skip them
