@@ -381,7 +381,14 @@ namespace Jackett.Common.Indexers.Abstract
                 OnParseError(response.ContentString, ex);
             }
 
-            return releases.OrderByDescending(o => o.PublishDate).ToArray();
+            releases = releases.OrderByDescending(o => o.PublishDate).ToList();
+
+            if (query.IsRssSearch)
+            {
+                releases = releases.Take(50).ToList();
+            }
+
+            return releases;
         }
 
         // hook to add/modify the parsed information, return false to exclude the torrent from the results

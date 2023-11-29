@@ -67,17 +67,5 @@ namespace Jackett.Common.Indexers
 
             return caps;
         }
-
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            var releases = await base.PerformQuery(query);
-
-            if (query.IsRssSearch)
-            {
-                releases = releases.Take(50);
-            }
-
-            return releases;
-        }
     }
 }
