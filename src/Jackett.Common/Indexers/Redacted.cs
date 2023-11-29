@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
+using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
@@ -31,6 +32,7 @@ namespace Jackett.Common.Indexers
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
+                   supportsFreeloadOnly: true,
                    has2Fa: false,
                    useApiKey: true,
                    instructionMessageOptional: "<ol><li>Go to Redacted's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab and copy the API Key.</li><li>Ensure that you've checked <b>Confirm API Key</b>.</li><li>Finally, click <b>Save Profile</b>.</li></ol>"
@@ -81,6 +83,18 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        protected override bool ShouldSkipRelease(JObject torrent)
+        {
+            var isFreeload = bool.TryParse((string)torrent["isFreeload"], out var freeload) && freeload;
+
+            if (configData.FreeloadOnly != null && configData.FreeloadOnly.Value && !isFreeload)
+            {
+                return true;
+            }
+
+            return base.ShouldSkipRelease(torrent);
         }
     }
 }

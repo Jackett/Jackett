@@ -44,7 +44,7 @@ namespace Jackett.Common.Indexers.Abstract
         protected readonly bool usePassKey;
         protected readonly bool useAuthKey;
 
-        private new ConfigurationDataGazelleTracker configData
+        protected new ConfigurationDataGazelleTracker configData
         {
             get => (ConfigurationDataGazelleTracker)base.configData;
             set => base.configData = value;
@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers.Abstract
 
         protected GazelleTracker(IIndexerConfigurationService configService, WebClient client, Logger logger,
                                  IProtectionService p, ICacheService cs,
-                                 bool supportsFreeleechTokens = false, bool supportsFreeleechOnly = false,
+                                 bool supportsFreeleechTokens = false, bool supportsFreeleechOnly = false, bool supportsFreeloadOnly = false,
                                  bool imdbInTags = false, bool has2Fa = false, bool useApiKey = false,
                                  bool usePassKey = false, bool useAuthKey = false, string instructionMessageOptional = null)
             : base(configService: configService,
@@ -60,7 +60,7 @@ namespace Jackett.Common.Indexers.Abstract
                    logger: logger,
                    p: p,
                    cacheService: cs,
-                   configData: new ConfigurationDataGazelleTracker(has2Fa, supportsFreeleechTokens, supportsFreeleechOnly, useApiKey, usePassKey, useAuthKey, instructionMessageOptional))
+                   configData: new ConfigurationDataGazelleTracker(has2Fa, supportsFreeleechTokens, supportsFreeleechOnly, supportsFreeloadOnly, useApiKey, usePassKey, useAuthKey, instructionMessageOptional))
         {
             this.imdbInTags = imdbInTags;
             this.useApiKey = useApiKey;
@@ -192,60 +192,64 @@ namespace Jackett.Common.Indexers.Abstract
 
             if (!string.IsNullOrWhiteSpace(query.Genre))
             {
-                queryCollection.Add("taglist", query.Genre);
+                queryCollection.Set("taglist", query.Genre);
             }
 
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 if (imdbInTags)
                 {
-                    queryCollection.Add("taglist", query.ImdbID);
+                    queryCollection.Set("taglist", query.ImdbID);
                 }
                 else
                 {
-                    queryCollection.Add("cataloguenumber", query.ImdbID);
+                    queryCollection.Set("cataloguenumber", query.ImdbID);
                 }
             }
             else if (!string.IsNullOrWhiteSpace(searchString))
             {
-                queryCollection.Add("searchstr", searchString);
+                queryCollection.Set("searchstr", searchString);
             }
 
             if (query.Artist.IsNotNullOrWhiteSpace() && query.Artist != "VA")
             {
-                queryCollection.Add("artistname", query.Artist);
+                queryCollection.Set("artistname", query.Artist);
             }
 
             if (query.Label.IsNotNullOrWhiteSpace())
             {
-                queryCollection.Add("recordlabel", query.Label);
+                queryCollection.Set("recordlabel", query.Label);
             }
 
             if (query.Year.HasValue)
             {
-                queryCollection.Add("year", query.Year.ToString());
+                queryCollection.Set("year", query.Year.ToString());
             }
 
             if (query.Album.IsNotNullOrWhiteSpace())
             {
-                queryCollection.Add("groupname", query.Album);
+                queryCollection.Set("groupname", query.Album);
             }
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
             {
-                queryCollection.Add("filter_cat[" + cat + "]", "1");
+                queryCollection.Set("filter_cat[" + cat + "]", "1");
             }
 
             if (configData.FreeleechOnly != null && configData.FreeleechOnly.Value)
             {
-                queryCollection.Add("freetorrent", "1");
+                queryCollection.Set("freetorrent", "1");
+            }
+            else if (configData.FreeloadOnly != null && configData.FreeloadOnly.Value)
+            {
+                queryCollection.Set("freetorrent", "4");
             }
 
             // remove . as not used in titles
             searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
 
             var apiKey = configData.ApiKey;
-            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
+            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = string.Format(AuthorizationFormat, apiKey.Value) } : null;
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
             // we get a redirect in html pages and an error message in json response (api)
@@ -344,6 +348,11 @@ namespace Jackett.Common.Indexers.Abstract
                     {
                         foreach (JObject torrent in r["torrents"])
                         {
+                            if (ShouldSkipRelease(torrent))
+                            {
+                                continue;
+                            }
+
                             var release2 = (ReleaseInfo)release.Clone();
                             FillReleaseInfoFromJson(release2, torrent);
                             if (ReleaseInfoPostParse(release2, torrent, r))
@@ -354,6 +363,11 @@ namespace Jackett.Common.Indexers.Abstract
                     }
                     else
                     {
+                        if (ShouldSkipRelease(r))
+                        {
+                            continue;
+                        }
+
                         FillReleaseInfoFromJson(release, r);
                         if (ReleaseInfoPostParse(release, r, r))
                         {
@@ -372,6 +386,14 @@ namespace Jackett.Common.Indexers.Abstract
 
         // hook to add/modify the parsed information, return false to exclude the torrent from the results
         protected virtual bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result) => true;
+
+        protected virtual bool ShouldSkipRelease(JObject torrent)
+        {
+            var isFreeleech = bool.TryParse((string)torrent["isFreeleech"], out var freeleech) && freeleech;
+
+            // skip non-freeload results when freeload only is set
+            return configData.FreeleechOnly != null && configData.FreeleechOnly.Value && !isFreeleech;
+        }
 
         protected void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
         {
@@ -499,8 +521,9 @@ namespace Jackett.Common.Indexers.Abstract
                 release.DownloadVolumeFactor = 0;
             }
 
-            var isFreeload = (bool?)torrent["isFreeload"];
-            if ((bool)torrent["isNeutralLeech"] || (isFreeload != null && isFreeload == true))
+            var isFreeload = bool.TryParse((string)torrent["isFreeload"], out var freeload) && freeload;
+
+            if ((bool)torrent["isNeutralLeech"] || isFreeload)
             {
                 release.DownloadVolumeFactor = 0;
                 release.UploadVolumeFactor = 0;
