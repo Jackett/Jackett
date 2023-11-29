@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://www.torrentz2beta.com/
+  - https://torrentz2beta.asia/
 legacylinks:
   - https://torrentz2.org.in/
   - https://torrentzeu.org/
@@ -21,7 +21,7 @@ legacylinks:
   - https://torrentz2beta.in/
   - https://eu.torrentz2beta.in/
   - https://torrentz2beta.online/
-  - https://torrentz2beta.asia/
+  - https://www.torrentz2beta.com/
 
 caps:
   categorymappings:
@@ -71,9 +71,9 @@ settings: []
 
 search:
   paths:
-    # https://torrentz2beta.com/search.php?q=2023
-    - path: search.php
-    - path: search.php
+    # https://torrentz2beta.asia/data.php?q=2023
+    - path: data.php
+    - path: data.php
       inputs:
         page: 2
   inputs:
