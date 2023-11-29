@@ -77,11 +77,6 @@ namespace Jackett.Common.Indexers
             // results must contain search terms
             releases = releases.Where(release => query.MatchQueryStringAND(release.Title));
 
-            if (query.IsRssSearch)
-            {
-                releases = releases.Take(50);
-            }
-
             return releases;
         }
 
