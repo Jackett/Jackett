@@ -74,7 +74,7 @@ search:
     - path: get_ttable.php
   inputs:
     pcat: "Show+All"
-    $raw: "scat={{ range .Categories }}{{.}},{{end}}&"
+    scat: "{{ range .Categories }}{{.}},{{end}}"
     subbed: ""
     fl: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     resd: ""
