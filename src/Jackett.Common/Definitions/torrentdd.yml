@@ -1,0 +1,173 @@
+---
+id: torrentdd
+name: TorrentDD
+description: "TorrentDD is a THAI Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: th-TH
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://www.torrentdd.com/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Other, desc: "พระมหากษัตริย์", default: true}
+    - {id: 2, cat: TV/Anime, desc: "การ์ตูน/อนิเมชั่น", default: true}
+    - {id: 3, cat: Console, desc: "Game/PSP/ND/Mobile", default: true}
+    - {id: 4, cat: PC/Games, desc: "Game/Pc/Ps/Xbox", default: true}
+    - {id: 5, cat: Books/Other, desc: "สื่อเรียนรู้/แม่และเด็ก", default: true}
+    - {id: 6, cat: Audio/Video, desc: "MV/karaoke", default: true}
+    - {id: 7, cat: Audio, desc: "เพลง", default: true}
+    - {id: 8, cat: PC/0day, desc: "OS Windows/Office", default: true}
+    - {id: 9, cat: PC/0day, desc: "AntiVirus/Antispyware", default: true}
+    - {id: 10, cat: PC/Mobile-Android, desc: "ซอฟแวร์ มือถือ/ธีม", default: true}
+    - {id: 11, cat: PC/Mac, desc: "ซอฟแวร์ แม็ค/ลินุกซ์", default: true}
+    - {id: 12, cat: PC/0day, desc: "ซอฟแวร์ทั่วไป", default: true}
+    - {id: 13, cat: Audio/Video, desc: "คอนเสิร์ต", default: true}
+    - {id: 14, cat: Audio/Other, desc: "ทอล์คโชว์/ตลก/วิทยุ", default: true}
+    - {id: 15, cat: Other/Misc, desc: "ทั่วไป", default: true}
+    - {id: 16, cat: Books/Other, desc: "ธรรมะ", default: true}
+    - {id: 17, cat: Other, desc: "font/icon/source", default: true}
+    - {id: 18, cat: Movies/UHD, desc: "ภาพยนตร์ 4K UHD", default: true}
+    - {id: 19, cat: Movies/HD, desc: "Hi-Def/Blu Ray", default: true}
+    - {id: 20, cat: Movies/SD, desc: "ภาพยนตร์ DVD", default: true}
+    - {id: 21, cat: Movies/SD, desc: "ภาพยนตร์ VCD", default: true}
+    - {id: 22, cat: Movies/SD, desc: "XviD/DivX/AVI/RM", default: true}
+    - {id: 23, cat: TV, desc: "รายการทีวี/วาไรตี้", default: true}
+    - {id: 24, cat: TV/Sport, desc: "กีฬา/ฟุตบอล", default: true}
+    - {id: 25, cat: Other, desc: "รูปภาพ/วอลเปเปอร์", default: true}
+    - {id: 26, cat: TV/Documentary, desc: "สารคดี", default: true}
+    - {id: 27, cat: Books/EBook, desc: "สื่อเรียนรู้/หนังสือ/Ebook", default: true}
+    - {id: 28, cat: TV/Foreign, desc: "หนังชุด/ซีรีส์ [เกาหลี]", default: true}
+    - {id: 29, cat: TV/Foreign, desc: "หนังชุด/ซีรีส์ [ญี่ปุ่น]", default: true}
+    - {id: 30, cat: TV/Foreign, desc: "หนังชุด/ซีรีส์ [จีน]", default: true}
+    - {id: 31, cat: TV/Foreign, desc: "หนังชุด/ซีรีส์ [ฝรั่ง]", default: true}
+    - {id: 32, cat: TV, desc: "หนังชุด/ซีรีส์ [ไทย]", default: true}
+    - {id: 33, cat: TV, desc: "คลิปทั่วไป", default: true}
+    - {id: 34, cat: XXX, desc: "XXX (uncensor)", default: false}
+    - {id: 35, cat: XXX, desc: "XXX (censor)", default: false}
+    - {id: 36, cat: XXX, desc: "XXX Clip", default: false}
+    - {id: 37, cat: XXX, desc: "XXX cartoon/book/pic", default: false}
+    - {id: 38, cat: XXX, desc: "XXX Gay/Lesbian", default: false}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.alert-warning:contains("Login failed!")
+  test:
+    path: home.php
+    selector: a[href="logout.php"]
+
+download:
+  selectors:
+    - selector: button.border-success
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: \'(.+?)\'
+
+search:
+  paths:
+    # https://www.torrentdd.com/browse.php?search=&sort=size&cate=1,4&freeload=yes&odb=DESC
+    - path: browse.php
+      categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+    - path: browse18.php
+      categories: [34, 35, 36, 37, 38]
+  inputs:
+    cate: "{{ join .Categories \",\" }}"
+    freeload: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
+    search: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    odb: "{{ .Config.type }}"
+    # site does not support imdbid searching and does not display imdb links in results.
+
+  rows:
+    selector: div.mt-3 table tbody tr:not(:has(label.badge-outline-danger))
+
+  fields:
+    category:
+      selector: a[href^="?cate="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cate
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    poster:
+      selector: a.box-poster
+      attribute: href
+      filters:
+        - name: regexp
+          args: '(.+?\.(jpg|jpeg|bmp|png)$)'
+    files:
+      selector: td:nth-last-child(7)
+    date:
+      selector: div.mt-2 span:first-child
+      filters:
+        - name: append
+          args: " +07:00" # ICT
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    size:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    downloadvolumefactor:
+      case:
+        label.badge-outline-success: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        label.badge-outline-warning: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+# engine n/a
