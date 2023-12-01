@@ -112,7 +112,7 @@ search:
     - path: browse18.php
       categories: [34, 35, 36, 37, 38]
   inputs:
-    cate: "{{ range .Categories }}{{.}},{{end}}"
+    cate: "{{ join .Categories \",\" }}"
     freeload: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
