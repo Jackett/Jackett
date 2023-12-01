@@ -79,11 +79,11 @@ search:
   inputs:
     search: "{{ .Keywords }}"
     go: Search
-    artistsearch: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ end }}"
+    artistsearch: "{{ .Query.Artist }}"
     freesearch: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
     results-order1: "{{ .Config.sort }}.{{ .Config.type }}"
     results-page: 1
-    tagsearch: "{{ range .Categories }}{{.}},{{end}}"
+    # can search by genre but need join support. &tagsearch=acid,+house for Acid and House
 
   rows:
     selector: table.torrenttable > tbody > tr:has(a[href^="/torrent/download/"])
@@ -107,7 +107,7 @@ search:
     artist:
       selector: span.artist
       optional: true
-    _tag:
+    genre:
       selector: span.tag
       optional: true
     _codec:
@@ -117,7 +117,7 @@ search:
       selector: td:nth-child(7)
       optional: true
     description:
-      text: "Artist=[{{ .Result.artist }}] , Tags={{ .Result._tag }} , Codec=[{{ .Result._codec }}] , BitRate=[{{ .Result._bit }}]"
+      text: "Artist=[{{ .Result.artist }}] , Tags={{ .Result.genre }} , Codec=[{{ .Result._codec }}] , BitRate=[{{ .Result._bit }}]"
     grabs:
       selector: td:nth-child(8)
     seeders:
