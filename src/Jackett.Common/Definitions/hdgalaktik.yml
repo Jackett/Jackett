@@ -135,8 +135,10 @@ search:
           args: cat
     title:
       selector: a.alink
-      attribute: title
+      attribute: onmouseover
       filters:
+        - name: regexp
+          args: \'>(.+?)</div
         # normalize to SXXEYY format
         - name: re_replace
           args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
@@ -220,7 +222,7 @@ search:
       selector: td:nth-child(6)
       filters:
         - name: split
-          args: ["|", 0]
+          args: ["|", 1]
     date_today:
       # Сегодня в 18:22
       selector: a[href^="browse.php?date="]:contains("Сегодня")
