@@ -75,7 +75,7 @@ search:
     - path: ajax.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}{{ if or .Query.Album .Query.Artist .Keywords }}action=advanced{{ else }}searchtags=japanese&tags_type=0{{ end }}"
-    artistname: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ end }}"
+    artistname: "{{ .Query.Artist }}"
     torrentname: "{{ if .Query.Album }}{{ .Query.Album }}{{ else }}{{ .Keywords }}{{ end }}"
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     order_by: "{{ .Config.sort }}"
