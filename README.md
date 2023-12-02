@@ -333,7 +333,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Ebooks-Shares
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eShareNet
- * eStone (XiDER, BigTorrent)
+ * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)
  * ExtremeBits
@@ -615,6 +615,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Wukong
  * x-ite.me (XM)
  * xBytesV2
+ * Xider-Torrent
  * XSpeeds (XS)
  * Xthor
  * XtremeBytes

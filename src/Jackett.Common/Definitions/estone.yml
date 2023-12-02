@@ -1,7 +1,7 @@
 ---
 id: estone
 name: eStone
-description: "eStone (XiDER, BigTorrent) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
+description: "eStone (BigTorrent) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
 language: hu-HU
 type: private
 encoding: UTF-8
