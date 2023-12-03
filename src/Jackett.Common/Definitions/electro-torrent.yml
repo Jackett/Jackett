@@ -12,6 +12,8 @@ legacylinks:
 
 caps:
   categorymappings:
+    # from https://electro-torrent.pl/szukaj.php
+    - {id: 1298, cat: Movies/SD, desc: "Filmy - Zwiastuny"}
     - {id: 1, cat: Movies/SD, desc: "Filmy XviD/DivX"}
     - {id: 769, cat: Movies/HD, desc: "Filmy 1080p AVC"}
     - {id: 770, cat: Movies/HD, desc: "Filmy x264/1080p"}
@@ -27,6 +29,7 @@ caps:
     - {id: 5, cat: Movies/3D, desc: "Filmy 3D"}
     - {id: 362, cat: Movies/SD, desc: "Filmy IVO"}
     - {id: 696, cat: Movies/SD, desc: "Filmy TS/CAM"}
+    - {id: 1255, cat: TV, desc: "TV/Seriale - Warezy"}
     - {id: 7, cat: TV, desc: "TV/Seriale"}
     - {id: 8, cat: XXX, desc: "Erotyka"}
     - {id: 10, cat: Audio, desc: "Muzyka"}
