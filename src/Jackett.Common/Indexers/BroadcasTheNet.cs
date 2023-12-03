@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -48,6 +49,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
+            webclient.requestDelay = 4;
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -66,7 +68,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping("720p", TorznabCatType.TVHD, "720p");
             caps.Categories.AddCategoryMapping("1080p", TorznabCatType.TVHD, "1080p");
             caps.Categories.AddCategoryMapping("1080i", TorznabCatType.TVHD, "1080i");
-            caps.Categories.AddCategoryMapping("2160p", TorznabCatType.TVHD, "2160p");
+            caps.Categories.AddCategoryMapping("2160p", TorznabCatType.TVUHD, "2160p");
             caps.Categories.AddCategoryMapping("Portable Device", TorznabCatType.TVSD, "Portable Device");
 
             return caps;
@@ -81,7 +83,9 @@ namespace Jackett.Common.Indexers
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Testing returned no results!");
+                }
 
                 IsConfigured = true;
                 SaveConfig();
@@ -110,14 +114,23 @@ namespace Jackett.Common.Indexers
             searchString = Regex.Replace(searchString, @"(?i)\bS0*(\d+)\b", "Season $1");
             var btnResults = query.Limit;
             if (btnResults == 0)
+            {
                 btnResults = (int)TorznabCaps.LimitsDefault;
+            }
+
             var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
             var searchParam = new Dictionary<string, string>();
 
             if (query.IsTvdbQuery)
-                searchParam["tvdb"] = string.Format("{0}", query.TvdbID);
-            searchParam["search"] = searchString.Replace(" ", "%");
+            {
+                searchParam["tvdb"] = $"{query.TvdbID}";
+            }
+
+            if (searchString.IsNotNullOrWhiteSpace())
+            {
+                searchParam["search"] = searchString.Replace(" ", "%");
+            }
 
             var parameters = new JArray
             {
@@ -145,50 +158,84 @@ namespace Jackett.Common.Indexers
                     {
                         var btnResult = itemKey.Value;
                         var descriptions = new List<string>();
+
                         if (!string.IsNullOrWhiteSpace(btnResult.Series))
+                        {
                             descriptions.Add("Series: " + btnResult.Series);
+                        }
+
                         if (!string.IsNullOrWhiteSpace(btnResult.GroupName))
+                        {
                             descriptions.Add("Group Name: " + btnResult.GroupName);
+                        }
+
                         if (!string.IsNullOrWhiteSpace(btnResult.Source))
+                        {
                             descriptions.Add("Source: " + btnResult.Source);
+                        }
+
                         if (!string.IsNullOrWhiteSpace(btnResult.Container))
+                        {
                             descriptions.Add("Container: " + btnResult.Container);
+                        }
+
                         if (!string.IsNullOrWhiteSpace(btnResult.Codec))
+                        {
                             descriptions.Add("Codec: " + btnResult.Codec);
+                        }
+
                         if (!string.IsNullOrWhiteSpace(btnResult.Resolution))
+                        {
                             descriptions.Add("Resolution: " + btnResult.Resolution);
+                        }
+
                         if (!string.IsNullOrWhiteSpace(btnResult.Origin))
+                        {
                             descriptions.Add("Origin: " + btnResult.Origin);
-                        if (!string.IsNullOrWhiteSpace(btnResult.Series))
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(btnResult.YoutubeTrailer))
+                        {
                             descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
+                        }
+
                         var imdb = ParseUtil.GetImdbId(btnResult.ImdbID);
                         var link = new Uri(btnResult.DownloadURL);
                         var details = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
                         var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
+
                         var release = new ReleaseInfo
                         {
-                            Category = MapTrackerCatToNewznab(btnResult.Resolution),
-                            Details = details,
                             Guid = link,
+                            Details = details,
                             Link = link,
-                            MinimumRatio = 1,
-                            PublishDate = publishDate,
-                            RageID = btnResult.TvrageID,
+                            Title = btnResult.ReleaseName,
+                            Description = string.Join("<br />\n", descriptions),
+                            Category = MapTrackerCatToNewznab(btnResult.Resolution),
+                            InfoHash = btnResult.InfoHash,
+                            Size = btnResult.Size,
+                            Grabs = btnResult.Snatched,
                             Seeders = btnResult.Seeders,
                             Peers = btnResult.Seeders + btnResult.Leechers,
-                            Size = btnResult.Size,
+                            PublishDate = publishDate,
                             TVDBId = btnResult.TvdbID,
-                            Title = btnResult.ReleaseName,
-                            UploadVolumeFactor = 1,
+                            RageID = btnResult.TvrageID,
+                            Imdb = imdb,
                             DownloadVolumeFactor = 0, // ratioless
-                            Grabs = btnResult.Snatched,
-                            Description = string.Join("<br />\n", descriptions),
-                            Imdb = imdb
+                            UploadVolumeFactor = 1,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = btnResult.Category.ToUpperInvariant() == "SEASON" ? 432000 : 86400 // 120 hours for seasons and 24 hours for episodes
                         };
+
                         if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
+                        {
                             release.Poster = new Uri(btnResult.SeriesBanner);
+                        }
+
                         if (!release.Category.Any()) // default to TV
+                        {
                             release.Category.Add(TorznabCatType.TV.ID);
+                        }
 
                         releases.Add(release);
                     }
@@ -198,6 +245,7 @@ namespace Jackett.Common.Indexers
             {
                 OnParseError(response.ContentString, ex);
             }
+
             return releases;
         }
 
