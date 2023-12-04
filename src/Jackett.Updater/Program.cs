@@ -273,6 +273,7 @@ namespace Jackett.Updater
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",
+                "Definitions/animetracker.yml",
                 "Definitions/animeworld.yml", // switch to *-API #8682
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker

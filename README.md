@@ -37,7 +37,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AudioBook Bay (ABB)
  * Badass Torrents
  * Bangumi Moe
- * BiatchTorrents
  * BigFANGroup
  * BitRu
  * BitSearch
@@ -250,7 +249,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
  * AnimeTorrents.ro (Anime Torrents Romania)
- * AnimeTracker
  * AnimeWorld
  * AniToons
  * Anthelion
