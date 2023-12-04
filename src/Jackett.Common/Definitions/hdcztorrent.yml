@@ -35,6 +35,8 @@ caps:
     - {id: 134, cat: TV/WEB-DL, desc: "TV -WEB- DL NETLIFIX"}
     - {id: 135, cat: TV/WEB-DL, desc: "TV - WEB- DL Prime"}
     - {id: 136, cat: TV/WEB-DL, desc: "TV -WEB- DL Skyshow"}
+    - {id: 147, cat: TV/WEB-DL, desc: "marvel"}
+    - {id: 148, cat: TV/WEB-DL, desc: "VOYO"}
     # rls track
     - {id: 131, cat: Movies, desc: "RLS For HDCZT"}
     - {id: 132, cat: Movies, desc: "Film na přání"}
