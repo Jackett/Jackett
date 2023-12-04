@@ -29,6 +29,7 @@ caps:
     - {id: "Applications(Android)", cat: PC/Mobile-Android, desc: "Applications(Android)"}
     - {id: "Applications(IOS (iPad/iPhone))", cat: PC/Mobile-iOS, desc: "Applications(IOS (iPad/iPhone))"}
     - {id: "Applications(Mac)", cat: PC/Mac, desc: "Applications(Mac)"}
+    - {id: "Applications(UNIX)", cat: PC/ISO, desc: "Applications(UNIX)"}
     - {id: "Applications(Windows)", cat: PC/0day, desc: "Applications(Windows)"}
     - {id: "Audio(Audio books)", cat: Audio/Audiobook, desc: "Audio(Audio books)"}
     - {id: "Audio(FLAC)", cat: Audio/Lossless, desc: "Audio(FLAC)"}
