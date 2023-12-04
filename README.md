@@ -600,7 +600,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UBits
  * UHDBits
- * ULTRA HD
  * UltraHD
  * UnionGang
  * Universal-Torrents

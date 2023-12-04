@@ -648,6 +648,7 @@ namespace Jackett.Updater
                 "Definitions/u-torrents.yml",
                 "Definitions/uhd-heaven.yml",
                 "Definitions/ultimategamerclub.yml",
+                "Definitions/ultra-hd.yml",
                 "Definitions/ultrahdclub.yml",
                 "Definitions/underverse.yml",
                 "Definitions/underversel.yml",
