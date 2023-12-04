@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers
     {
         public override string Id => "passthepopcorn";
         public override string Name => "PassThePopcorn";
-        public override string Description => "PassThePopcorn is a Private site for MOVIES / TV";
+        public override string Description => "PassThePopcorn (PTP) is a Private site for MOVIES / TV";
         public override string SiteLink { get; protected set; } = "https://passthepopcorn.me/";
         public override string Language => "en-US";
         public override string Type => "private";
@@ -193,7 +193,12 @@ namespace Jackett.Common.Indexers
                             { "torrent_pass", PassKey }
                         };
 
-                        var free = !(torrent["FreeleechType"] is null);
+                        var downloadVolumeFactor = torrent.Value<string>("FreeleechType")?.ToUpperInvariant() switch
+                        {
+                            "FREELEECH" => 0,
+                            "HALF LEECH" => 0.5,
+                            _ => 1
+                        };
 
                         bool.TryParse((string)torrent["GoldenPopcorn"], out var golden);
                         bool.TryParse((string)torrent["Scene"], out var scene);
@@ -214,7 +219,7 @@ namespace Jackett.Common.Indexers
                             continue; //Skip release if user only wants Checked
                         }
 
-                        if (configFreeOnly && !free)
+                        if (configFreeOnly && downloadVolumeFactor != 0.0)
                         {
                             continue;
                         }
@@ -250,7 +255,7 @@ namespace Jackett.Common.Indexers
                             Seeders = seeders,
                             Peers = seeders + leechers,
                             PublishDate = publishDate,
-                            DownloadVolumeFactor = free ? 0 : 1,
+                            DownloadVolumeFactor = downloadVolumeFactor,
                             UploadVolumeFactor = 1,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600
