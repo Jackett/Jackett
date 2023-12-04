@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://torrentz2beta.asia/
+  - https://www.torrentz2beta.pro/
 legacylinks:
   - https://torrentz2.org.in/
   - https://torrentzeu.org/
@@ -22,6 +22,7 @@ legacylinks:
   - https://eu.torrentz2beta.in/
   - https://torrentz2beta.online/
   - https://www.torrentz2beta.com/
+  - https://torrentz2beta.asia/
 
 caps:
   categorymappings:
@@ -71,13 +72,13 @@ settings: []
 
 search:
   paths:
-    # https://torrentz2beta.asia/data.php?q=2023
-    - path: data.php
-    - path: data.php
+    # https://www.torrentz2beta.pro/search.php?q=+
+    - path: search.php
+    - path: search.php
       inputs:
         page: 2
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}+{{ end }}"
 
   rows:
     selector: table.table-responsive > tbody > tr
