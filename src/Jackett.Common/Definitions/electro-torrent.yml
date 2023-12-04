@@ -109,6 +109,7 @@ search:
     category:
       selector: div#kategoria-gatunek-1
       case:
+        "div#kategoria-gatunek-1:contains(\"Filmy - Zwiastuny\")": 1298
         "div#kategoria-gatunek-1:contains(\"Filmy XviD/DivX\")": 1
         "div#kategoria-gatunek-1:contains(\"Filmy 1080p AVC\")": 769
         "div#kategoria-gatunek-1:contains(\"Filmy x264/1080p\")": 770
@@ -124,6 +125,7 @@ search:
         "div#kategoria-gatunek-1:contains(\"Filmy 3D\")": 5
         "div#kategoria-gatunek-1:contains(\"Filmy IVO\")": 362
         "div#kategoria-gatunek-1:contains(\"Filmy TS/CAM\")": 696
+        "div#kategoria-gatunek-1:contains(\"TV/Seriale - Warezy\")": 1255
         "div#kategoria-gatunek-1:contains(\"TV/Seriale\")": 7
         "div#kategoria-gatunek-1:contains(\"Erotyka\")": 8
         "div#kategoria-gatunek-1:contains(\"Muzyka\")": 10
