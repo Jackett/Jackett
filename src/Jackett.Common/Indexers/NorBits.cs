@@ -139,7 +139,9 @@ namespace Jackett.Common.Indexers
             // Building login form data
             var pairs = new Dictionary<string, string> {
                 { "username", ConfigData.Username.Value },
-                { "password", ConfigData.Password.Value }
+                { "password", ConfigData.Password.Value },
+                { "logout", "no" },
+                { "returnto", "/" }
             };
 
             // Use 2FA code if defined
@@ -162,7 +164,7 @@ namespace Jackett.Common.Indexers
             logger.Info("\nNorBits - Getting login page (user simulation).. with " + LoginUrl);
             await webclient.GetResultAsync(myRequestLogin);
 
-            // Build WebRequest for submitting authentification
+            // Build WebRequest for submitting authentication
             var request = new WebRequest
             {
                 PostData = pairs,
@@ -173,8 +175,7 @@ namespace Jackett.Common.Indexers
                 Encoding = Encoding
             };
 
-            // Perform loggin
-            logger.Info("\nPerform loggin.. with " + LoginCheckUrl);
+            logger.Info("\nPerform login with " + LoginCheckUrl);
             var response = await webclient.GetResultAsync(request);
 
             // Test if we are logged in
@@ -238,7 +239,9 @@ namespace Jackett.Common.Indexers
             // duplicate search without diacritics
             var baseSearchTerm = StringUtil.RemoveDiacritics(exactSearchTerm);
             if (baseSearchTerm != exactSearchTerm)
+            {
                 searchTerms.Add(baseSearchTerm);
+            }
 
             foreach (var searchTerm in searchTerms)
             {
@@ -324,11 +327,17 @@ namespace Jackett.Common.Indexers
                         release.Imdb = ParseUtil.GetLongFromString(imdbLink);
 
                         if (row.QuerySelector("img[title=\"100% freeleech\"]") != null)
+                        {
                             release.DownloadVolumeFactor = 0;
+                        }
                         else if (row.QuerySelector("img[title=\"Halfleech\"]") != null)
+                        {
                             release.DownloadVolumeFactor = 0.5;
+                        }
                         else if (row.QuerySelector("img[title=\"90% Freeleech\"]") != null)
+                        {
                             release.DownloadVolumeFactor = 0.1;
+                        }
 
                         releases.Add(release);
                     }
@@ -364,9 +373,13 @@ namespace Jackett.Common.Indexers
 
             // If search term provided
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
+            {
                 searchterm = "imdbsearch=" + query.ImdbID;
+            }
             else if (!string.IsNullOrWhiteSpace(term))
+            {
                 searchterm = "search=" + WebUtilityHelpers.UrlEncode(term, Encoding.GetEncoding(28591));
+            }
             else
             {
                 // Showing all torrents (just for output function)
@@ -375,14 +388,18 @@ namespace Jackett.Common.Indexers
             }
 
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            {
                 parameters.Add("FL", "1");
+            }
 
             // Building our query
             searchUrl += "?" + searchterm + "&" + parameters.GetQueryString();
 
             var categoriesList = MapTorznabCapsToTrackers(query);
             if (categoriesList.Any())
+            {
                 searchUrl += "&" + string.Join("&", categoriesList);
+            }
 
             logger.Info("\nBuilded query for \"" + term + "\"... " + searchUrl);
 
