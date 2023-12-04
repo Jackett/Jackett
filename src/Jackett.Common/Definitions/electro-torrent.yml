@@ -13,6 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     # from https://electro-torrent.pl/szukaj.php
+    # don't forget to update the category case block below
     - {id: 1298, cat: Movies/SD, desc: "Filmy - Zwiastuny"}
     - {id: 1, cat: Movies/SD, desc: "Filmy XviD/DivX"}
     - {id: 769, cat: Movies/HD, desc: "Filmy 1080p AVC"}
