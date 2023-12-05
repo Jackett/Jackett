@@ -19,6 +19,7 @@ caps:
     - {id: 10, cat: XXX, desc: "Pics"}
     - {id: 1, cat: XXX, desc: "Pron"}
     - {id: 8, cat: XXX, desc: "Retro"}
+    - {id: 12, cat: XXX, desc: "Transsexual"}
     - {id: 7, cat: XXX, desc: "VR"}
 
   modes:
