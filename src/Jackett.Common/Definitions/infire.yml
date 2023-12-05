@@ -123,16 +123,22 @@ settings:
       ASC: asc
 
 login:
-  method: post
   path: login.php
+  method: form
+  form: form[action^="login.php"]
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
+    login: "Prijavi se"
+  selectorinputs:
+    csrf_token:
+      selector: input[name="csrf_token"]
+      attribute: value
   error:
     - selector: font[color="#FF0000"]
   test:
     path: index.php
-    selector: a[href^="logout.php"]
+    selector: a[href="logout.php"]
 
 search:
   paths:
