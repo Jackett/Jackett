@@ -468,7 +468,7 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
+    path: /
     selector: a[href*="ucp.php?mode=logout"]
 
 search:
