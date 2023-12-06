@@ -27,6 +27,7 @@ caps:
     - {id: 14, cat: TV/Sport, desc: "HD"}
     - {id: 7, cat: TV/Sport, desc: "Misc"}
     - {id: 18, cat: TV/Sport, desc: "Instructional"}
+    - {id: 19, cat: TV/Documentary, desc: "Documentary"}
 
   modes:
     search: [q]
