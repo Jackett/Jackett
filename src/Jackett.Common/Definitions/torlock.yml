@@ -9,7 +9,7 @@ requestDelay: 2
 links:
   - https://www.torlock2.com/
   - https://www.torlock.com/
-  - https://torlock.unblockit.foo/
+  - https://torlock.unblockit.ing/
   - https://torlock.nocensor.cloud/
   - https://torlock.mrunblock.bond/
 legacylinks:
@@ -17,7 +17,6 @@ legacylinks:
   - https://torlock.nocensor.biz/
   - https://www.torlock.icu/
   - https://torlock.nocensor.sbs/
-  - https://torlock.unblockit.bet/
   - https://torlock.unblockit.cat/
   - https://torlock.unblockit.nz/
   - https://torlock.nocensor.world/
@@ -37,6 +36,7 @@ legacylinks:
   - https://torlock.unblockit.vegas/
   - https://torlock.unblockit.esq/
   - https://torlock.unblockit.zip/
+  - https://torlock.unblockit.foo/
 
 caps:
   # dont forget to update the search fields category case block
