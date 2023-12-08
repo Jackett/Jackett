@@ -164,6 +164,13 @@ namespace Jackett.Common.Indexers
 
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
+            // Occasionally the cookies become invalid, login again if that happens
+            if (results.ContentString.Contains("Error:You're not authorized"))
+            {
+                await ApplyConfiguration(null);
+                results = await RequestWithCookiesAndRetryAsync(searchUrl);
+            }
+
             try
             {
                 var parser = new HtmlParser();
