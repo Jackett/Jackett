@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using Polly;
+using Polly.Retry;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
@@ -416,31 +417,41 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private AsyncPolicy<WebResult> RetryPolicy
+        private ResiliencePipeline<WebResult> RetryStrategy
         {
             get
             {
-                // Configure the retry policy
-                int attemptNumber = 1;
-                var retryPolicy = Policy
-                    .HandleResult<WebResult>(r => (int)r.Status >= 500)
-                    .Or<Exception>()
-                    .WaitAndRetryAsync(
-                        NumberOfRetryAttempts,
-                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt) / 4),
-                        onRetry: (exception, timeSpan, context) =>
+                var retryPipeline = new ResiliencePipelineBuilder<WebResult>()
+                    .AddRetry(new RetryStrategyOptions<WebResult>
+                    {
+                        ShouldHandle = args => args.Outcome switch
                         {
-                            if (exception.Result == null)
+                            { Result: { HasHttpServerError: true } } => PredicateResult.True(),
+                            { Result: { Status: System.Net.HttpStatusCode.RequestTimeout } } => PredicateResult.True(),
+                            { Exception: { } } => PredicateResult.True(),
+                            _ => PredicateResult.False()
+                        },
+                        Delay = TimeSpan.FromSeconds(2),
+                        MaxRetryAttempts = NumberOfRetryAttempts,
+                        BackoffType = DelayBackoffType.Exponential,
+                        UseJitter = true,
+                        OnRetry = args =>
+                        {
+                            if (args.Outcome.Exception != null)
                             {
-                                logger.Warn($"Request to {Name} failed with exception '{exception.Exception.Message}'. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                                logger.Warn("Request to {0} failed with exception '{1}'. Retrying in {2}s.", Name, args.Outcome.Exception.Message, args.RetryDelay.TotalSeconds);
                             }
                             else
                             {
-                                logger.Warn($"Request to {Name} failed with status {exception.Result.Status}. Retrying in {timeSpan.TotalSeconds}s... (Attempt {attemptNumber} of {NumberOfRetryAttempts}).");
+                                logger.Warn("Request to {0} failed with status {1}. Retrying in {2}s.", Name, args.Outcome.Result?.Status, args.RetryDelay.TotalSeconds);
                             }
-                            attemptNumber++;
-                        });
-                return retryPolicy;
+
+                            return default;
+                        }
+                    })
+                    .Build();
+
+                return retryPipeline;
             }
         }
 
@@ -531,9 +542,9 @@ namespace Jackett.Common.Indexers
             string referer = null, IEnumerable<KeyValuePair<string, string>> data = null,
             Dictionary<string, string> headers = null, string rawbody = null, bool? emulateBrowser = null)
         {
-            return await RetryPolicy.ExecuteAsync(async () =>
-                await RequestWithCookiesAsync(url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser)
-            );
+            return await RetryStrategy
+                 .ExecuteAsync(async _ => await RequestWithCookiesAsync(url, cookieOverride, method, referer, data, headers, rawbody, emulateBrowser))
+                 .ConfigureAwait(false);
         }
 
         protected virtual async Task<WebResult> RequestWithCookiesAsync(

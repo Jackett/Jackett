@@ -66,6 +66,10 @@ namespace Jackett.Common.Utils.Clients
             set => _contentString = value;
         }
 
+        public bool HasHttpError => (int)Status >= 400;
+
+        public bool HasHttpServerError => (int)Status >= 500;
+
         public bool IsRedirect => Status == HttpStatusCode.Redirect ||
                                   Status == HttpStatusCode.RedirectKeepVerb ||
                                   Status == HttpStatusCode.RedirectMethod ||
