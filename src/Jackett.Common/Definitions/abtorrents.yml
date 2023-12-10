@@ -163,7 +163,7 @@ search:
     grabs:
       selector: a[href^="snatches.php?id="]
     seeders:
-      selector: a[href^="peerlist_xbt.php?id="]
+      selector: td:nth-last-child(3) div:nth-last-child(2)
     leechers:
       selector: td:nth-last-child(3) div:last-child
     downloadvolumefactor:
