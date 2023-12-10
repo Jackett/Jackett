@@ -80,6 +80,9 @@ search:
         page: 2
   inputs:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}+{{ end }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
     selector: table.table-responsive > tbody > tr
