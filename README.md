@@ -330,6 +330,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Drugari
  * Ebooks-Shares
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
+ * Enthralled
  * eShareNet
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
