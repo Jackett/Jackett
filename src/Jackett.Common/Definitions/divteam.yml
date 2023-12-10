@@ -45,6 +45,7 @@ caps:
     - {id: 49, cat: Books/Technical, desc: "eLearning"}
     - {id: 68, cat: Books/Technical, desc: "eLearning Multimedia"}
     - {id: 87, cat: Audio/Audiobook, desc: "Audiolibros"}
+    - {id: 0, cat: Other, desc: "Otros"} # results can have a category of 0, but searching by category 0 returns all results
 
   modes:
     search: [q]
