@@ -108,10 +108,11 @@ login:
   captcha:
     type: image
     selector: img[src="captcha.php?ext=.gif"]
-    input: captcha
+    input: input[name^="captcha"]
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
+    input[name="username"]: "{{ .Config.username }}"
+    input[name="password"]: "{{ .Config.password }}"
+  selectors: true
   error:
     - selector: td.embedded:contains("Access Denied")
   test:
