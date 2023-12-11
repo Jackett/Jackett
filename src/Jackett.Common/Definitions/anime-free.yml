@@ -124,7 +124,6 @@ search:
       attribute: src
     description:
       selector: div[itemprop="description"]
-      optional: true
     date:
       selector: li:has(img#adddate)
       filters:

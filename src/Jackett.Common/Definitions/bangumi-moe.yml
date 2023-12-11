@@ -61,7 +61,6 @@ search:
           args: "src=\\\"(.+?)\\\""
     description:
       selector: category_tag.locale.en
-      optional: true
     date:
       # 2021-10-19T06:10:15.772Z
       selector: publish_time

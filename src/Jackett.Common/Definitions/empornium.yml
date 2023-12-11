@@ -114,7 +114,6 @@ search:
       selector: a[href^="/torrents.php?action=download&id="]
       attribute: href
     description:
-      optional: true
       selector: div.tags
     title:
       selector: a[href^="/torrents.php?id="]

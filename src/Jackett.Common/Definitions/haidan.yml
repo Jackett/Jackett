@@ -131,7 +131,6 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     description:
-      optional: true
       selector: div.torrent_name_col > a
     poster:
       selector: img#poster

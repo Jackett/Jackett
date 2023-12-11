@@ -129,6 +129,5 @@ search:
     minimumratio:
       text: 0.5
     description:
-      optional: true
       selector: div.tags
 # Luminance

@@ -176,7 +176,6 @@ search:
     uploadvolumefactor:
       text: 1
     description:
-      optional: true
       selector: font[color="#990000"]
     minimumratio:
       text: 1.0
