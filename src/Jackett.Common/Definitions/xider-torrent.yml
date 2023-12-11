@@ -150,6 +150,10 @@ search:
       selector: td:nth-child(10)
     leechers:
       selector: td:nth-child(11)
+    description:
+      case:
+        i.fa-check: Verified
+        i.fa-question: Unverified
     downloadvolumefactor:
       case:
         "span[style^=\"font\"]:contains(\"0x\")": 0
@@ -159,6 +163,6 @@ search:
         "span[style^=\"font\"]:last-child:contains(\"2x\")": 2
         "*": 1
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # Engine n/a
