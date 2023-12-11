@@ -356,10 +356,10 @@ namespace Jackett.Common.Indexers
                     description += dateSplit.Length > 1 ? " Uploaded by: " + dateSplit.Last().Trim() : "";
                     var releaseGenres = validTagList.Intersect(description.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
 
+                    // Torrents - Category column == Text or Code
+                    // release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
                     var catIcon = row.QuerySelector("td:nth-of-type(1) a");
                     if (catIcon == null)
-                        // Torrents - Category column == Text or Code
-                        // release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
                     {
                         throw new Exception("Please, change the 'Torrents - Category column' option to 'Icons' in the website Settings. Wait a minute (cache) and then try again.");
                     }
