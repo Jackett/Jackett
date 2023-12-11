@@ -200,7 +200,9 @@ namespace Jackett.Common.Indexers
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Found 0 results in the tracker");
+                }
 
                 IsConfigured = true;
                 SaveConfig();
@@ -261,29 +263,43 @@ namespace Jackett.Common.Indexers
 
             var headers = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(configData.UserAgent.Value))
+            {
                 headers.Add("User-Agent", configData.UserAgent.Value);
+            }
 
             var qc = new NameValueCollection();
 
             foreach (var cat in MapTorznabCapsToTrackers(query))
+            {
                 qc.Set(cat, string.Empty);
+            }
 
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            {
                 qc.Set("free", "on");
+            }
 
             var searchQuery = new List<string>();
 
             // IPT uses sphinx, which supports boolean operators and grouping
             if (query.IsImdbQuery)
+            {
                 searchQuery.Add($"+({query.ImdbID})");
+            }
             else if (query.IsGenreQuery)
+            {
                 searchQuery.Add($"+({query.Genre})");
+            }
 
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+            {
                 searchQuery.Add($"+({query.GetQueryString()})");
+            }
 
             if (searchQuery.Any())
+            {
                 qc.Set("q", $"{string.Join(" ", searchQuery)}");
+            }
 
             qc.Set("o", ((SingleSelectConfigurationItem)configData.GetDynamic("sort")).Value);
 
@@ -298,10 +314,14 @@ namespace Jackett.Common.Indexers
             var results = response.ContentString;
 
             if (results == null || !results.Contains("/lout.php"))
+            {
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");
+            }
 
             if (string.IsNullOrWhiteSpace(query.ImdbID) && string.IsNullOrWhiteSpace(query.SearchTerm) && results.Contains("No Torrents Found!"))
+            {
                 throw new Exception("Got No Torrents Found! Make sure your IPTorrents profile config contain proper default category settings.");
+            }
 
             char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
 
@@ -310,12 +330,18 @@ namespace Jackett.Common.Indexers
                 var parser = new HtmlParser();
                 using var doc = parser.ParseDocument(results);
 
+                var headerColumns = doc.QuerySelectorAll("table[id=\"torrents\"] > thead > tr > th").Select(x => x.TextContent.Trim()).ToList();
+                var sizeIndex = FindColumnIndexOrDefault(headerColumns, "Sort by size", 5);
+                var filesIndex = FindColumnIndexOrDefault(headerColumns, "Sort by files");
+
                 var rows = doc.QuerySelectorAll("table[id=\"torrents\"] > tbody > tr");
                 foreach (var row in rows)
                 {
                     var qTitleLink = row.QuerySelector("a.hv");
                     if (qTitleLink == null) // no results
+                    {
                         continue;
+                    }
 
                     var title = CleanTitle(qTitleLink.TextContent);
                     var details = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
@@ -334,31 +360,39 @@ namespace Jackett.Common.Indexers
                     if (catIcon == null)
                         // Torrents - Category column == Text or Code
                         // release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
+                    {
                         throw new Exception("Please, change the 'Torrents - Category column' option to 'Icons' in the website Settings. Wait a minute (cache) and then try again.");
+                    }
+
                     // Torrents - Category column == Icons
                     var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
 
-                    var size = ParseUtil.GetBytes(row.Children[5].TextContent);
+                    var size = ParseUtil.GetBytes(row.Children[sizeIndex].TextContent);
 
-                    var colIndex = 6;
                     int? files = null;
-                    if (row.Children.Length == 10) // files column is enabled in the site settings
+
+                    if (filesIndex != -1)
                     {
-                        files = ParseUtil.CoerceInt(row.Children[colIndex].TextContent.Replace("Go to files", ""));
-                        colIndex++;
+                        // files column is enabled in the site settings
+                        files = ParseUtil.CoerceInt(row.Children[filesIndex].TextContent.Replace("Go to files", ""));
                     }
-                    var grabs = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
-                    var seeders = ParseUtil.CoerceInt(row.Children[colIndex++].TextContent);
-                    var leechers = ParseUtil.CoerceInt(row.Children[colIndex].TextContent);
-                    var dlVolumeFactor = row.QuerySelector("span.free") != null ? 0 : 1;
+
+                    var colIndex = row.Children.Length == 10 ? 7 : 6;
+
+                    var grabsIndex = FindColumnIndexOrDefault(headerColumns, "Sort by snatches", colIndex++);
+                    var seedersIndex = FindColumnIndexOrDefault(headerColumns, "Sort by seeders", colIndex++);
+                    var leechersIndex = FindColumnIndexOrDefault(headerColumns, "Sort by leechers", colIndex);
+
+                    var grabs = ParseUtil.CoerceInt(row.Children[grabsIndex].TextContent);
+                    var seeders = ParseUtil.CoerceInt(row.Children[seedersIndex].TextContent);
+                    var leechers = ParseUtil.CoerceInt(row.Children[leechersIndex].TextContent);
 
                     var release = new ReleaseInfo
                     {
-                        Title = title,
-                        Details = details,
                         Guid = details,
                         Link = link,
-                        PublishDate = publishDate,
+                        Details = details,
+                        Title = title,
                         Category = cat,
                         Description = description,
                         Genres = releaseGenres,
@@ -367,7 +401,8 @@ namespace Jackett.Common.Indexers
                         Grabs = grabs,
                         Seeders = seeders,
                         Peers = seeders + leechers,
-                        DownloadVolumeFactor = dlVolumeFactor,
+                        PublishDate = publishDate,
+                        DownloadVolumeFactor = row.QuerySelector("span.free") != null ? 0 : 1,
                         UploadVolumeFactor = 1,
                         MinimumRatio = 1,
                         MinimumSeedTime = 1209600 // 336 hours
@@ -382,6 +417,13 @@ namespace Jackett.Common.Indexers
             }
 
             return releases;
+        }
+
+        private static int FindColumnIndexOrDefault(List<string> columns, string name, int defaultIndex = -1)
+        {
+            var index = columns.FindIndex(x => x.Equals(name, StringComparison.Ordinal));
+
+            return index != -1 ? index : defaultIndex;
         }
 
         private static string CleanTitle(string title)
