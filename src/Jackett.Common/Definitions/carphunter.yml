@@ -137,7 +137,9 @@ search:
       selector: small[title]
       attribute: title
     description:
-      text: "{{ .Result.genre }}"
+      case:
+        img[src="/pic/yes.png"]: "Verified: {{ .Result.genre }}"
+        img[src="/pic/no.png"]: "Unverified: {{ .Result.genre }}"
     poster:
       selector: a[onmouseover]
       attribute: onmouseover
