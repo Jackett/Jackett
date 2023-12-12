@@ -162,9 +162,13 @@ search:
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    description:
+    _description:
       selector: div.torrent_row_magyarcim
       remove: span.torrent_row_new
+    description:
+      case:
+        img[src="/pic/browse/yes.png"]: "Verified: {{ .Result._description}}"
+        "*": "Unverified: {{ .Result._description}}"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
