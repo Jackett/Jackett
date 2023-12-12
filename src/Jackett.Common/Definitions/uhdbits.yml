@@ -38,6 +38,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: use_freeleech_token
+    type: checkbox
+    label: Use Freeleech Tokens when available
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -103,12 +107,15 @@ search:
           args: "\\[(\\d+)\\]"
     category:
       text: "{{ .Result.category_id }}"
-    download:
-      selector: a[href^="torrents.php?action=download&id="]
+    download_regular:
+      selector: a[href^="torrents.php?action=download&id="][title="Download"]
       attribute: href
-      filters:
-        - name: replace
-          args: ["\t", " "]
+    download_fl_token:
+      selector: a[href^="torrents.php?action=download&id="][title="Use a FL Token"]
+      attribute: href
+      optional: true
+    download:
+      text: "{{ if and .Config.use_freeleech_token .Result.download_fl_token }}{{ .Result.download_fl_token }}{{ else }}{{ .Result.download_regular }}{{ end }}"
     details:
       selector: a.torrent_name
       attribute: href
