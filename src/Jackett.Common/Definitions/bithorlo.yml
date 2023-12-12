@@ -151,6 +151,10 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
+    description:
+      case:
+        img[src="./themes/Born/nemlatta.png"]: Unverified
+        "*": Verified
     downloadvolumefactor:
       case:
         img[title="Ingyenes letöltés"]: 0
