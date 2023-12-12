@@ -142,6 +142,10 @@ search:
       selector: td:nth-last-child(2)
     leechers:
       selector: td:nth-last-child(1)
+    description:
+      case:
+        i.fa-check: Verified
+        i.fa-question: Unverified
     downloadvolumefactor:
       case:
         font:contains("x0"): 0
