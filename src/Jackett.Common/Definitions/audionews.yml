@@ -317,6 +317,10 @@ search:
       selector: td[title^="Replies:"]
       optional: true
       default: 0
+    description:
+      case:
+        span.tor-approved: Verified
+        span.tor-not-approved: Unverified
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
