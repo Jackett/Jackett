@@ -175,7 +175,9 @@ search:
         - name: validate
           args: "Action, Adventure, Animation, Biography, Chat_Show, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game_Show, History, Horror, Kids, Medical, Music, Mystery, Nature, News, Panel_Show, Reality, Romance, Science_Fiction, Science-Fiction, SciFi, Soap, Supernatural, Talk_Show, Thriller, War, Western"
     description:
-      text: "{{ .Result.genre }}"
+      case:
+        img[src="images/ro-eng-flag.png"]: "Verified: {{ .Result.genre }}"
+        "*": "Unverified: {{ .Result.genre }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
