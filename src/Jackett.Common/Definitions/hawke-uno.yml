@@ -6,8 +6,9 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://www.hawke.uno/
   - https://hawke.uno/
+legacylinks:
+  - https://www.hawke.uno/
 
 caps:
   categorymappings:
