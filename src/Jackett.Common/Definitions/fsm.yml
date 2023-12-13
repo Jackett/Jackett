@@ -1,0 +1,118 @@
+---
+id: fsm
+name: FSM
+description: "FSM is a CHINESE Private Torrent Tracker for 3X"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://fsm.name/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: XXX, desc: "日本AV"}
+    - {id: 2, cat: XXX, desc: "国产视频"}
+    - {id: 3, cat: XXX/ImageSet, desc: "写真"}
+    - {id: 4, cat: XXX/Other, desc: "黄油"}
+    - {id: 5, cat: XXX, desc: "里番"}
+    - {id: 6, cat: XXX/Other, desc: "黄色漫画"}
+    - {id: 7, cat: XXX, desc: "欧美视频"}
+    - {id: 8, cat: XXX, desc: "其他"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: apitoken
+    type: text
+    label: API Token
+  - name: info_token
+    type: info
+    label: About your API Token
+    default: "Request a new API Token in the <a href=\"https://fsm.name/Forums/details?tid=296\" target=\"_blank\">FSM Forum</a> and checking your <a href=\"https://fsm.name/Mail\" target=\"_blank\">Mail</a> after."
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_passkey
+    type: info
+    label: About your Passkey
+    default: "Find your Passkey by accessing the <a href=\"https://fsm.name/Rss\" target=\"_blank\">FSM RSS</a> page."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
+login:
+  path: https://api.fsm.name/Torrents/listTorrents
+  method: get
+
+search:
+  paths:
+    - path: https://api.fsm.name/Torrents/listTorrents
+      response:
+        type: json
+
+  headers:
+    APITOKEN: ["{{ .Config.apitoken }}"]
+
+  inputs:
+    type: 0
+    keyword: "{{ .Keywords }}"
+    # 0 all, 1 2xfree, 2 free
+    systematics: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+
+  rows:
+    selector: data.list
+
+  fields:
+    category:
+      selector: type.id
+    title:
+      selector: title
+    _id:
+      selector: tid
+    details:
+      text: "{{ .Config.sitelink }}Torrents/details?tid={{ .Result._id }}"
+    download:
+      text: "/Torrents/download?tid={{ .Result._id }}&passkey={{ .Config.passkey }}"
+    infohash:
+      selector: fileHash
+    poster:
+      selector: cover
+    genre:
+      selector: tags
+    description:
+      text: "{{ .Result.genre }}"
+    files:
+      selector: fileCount
+    seeders:
+      selector: peers.upload
+    leechers:
+      selector: peers.download
+    grabs:
+      selector: finish
+    date:
+      selector: createdAt
+      filters:
+        - name: replace
+          args: ["年", "years"]
+        - name: replace
+          args: ["月", "months"]
+        - name: replace
+          args: ["天", "days"]
+        - name: re_replace
+          args: ["小?时", "hours"]
+        - name: replace
+          args: ["分", "minutes"]
+        - name: replace
+          args: ["前", " ago"]
+        - name: timeago
+    size:
+      selector: fileSize
+    downloadvolumefactor:
+      selector: status.downCoefficient
+    uploadvolumefactor:
+      selector: status.upCoefficient
+    minimumratio:
+      text: 1.0
+# json TNode
