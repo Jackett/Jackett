@@ -139,7 +139,7 @@ search:
     description:
       case:
         img[src="/pic/yes.png"]: "Verified: {{ .Result.genre }}"
-        img[src="/pic/no.png"]: "Unverified: {{ .Result.genre }}"
+        img[src="/pic/nincs.png"]: "Unverified: {{ .Result.genre }}"
     poster:
       selector: a[onmouseover]
       attribute: onmouseover
