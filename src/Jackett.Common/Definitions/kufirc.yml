@@ -131,7 +131,7 @@ search:
     autocomplete_toggle: ""
 
   rows:
-    selector: table#torrent_table > tbody > tr[class^="torrent row"]
+    selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
 
   fields:
     category:
@@ -148,8 +148,12 @@ search:
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
-    description:
+    description_tags:
       selector: div.tags
+    description:
+      case:
+        span.icon_okay: "Verified: {{ .Result.description_tags }}"
+        "*": "Unverified: {{ .Result.description_tags }}"
     poster:
       selector: td:nth-child(2) > script
       filters:
@@ -182,7 +186,10 @@ search:
         "img[alt=\"Freeleech\"]": 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        span.icon[title*="DoubleSeed"]: 2
+        "img[alt=\"DoubleSeed\"]": 2
+        "*": 1
     minimumratio:
       text: 0.5
 # Luminance

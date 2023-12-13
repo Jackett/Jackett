@@ -125,8 +125,12 @@ search:
       filters:
         - name: validate
           args: "Action, Adventure, Animation, Comedy, Crime, Documentary, Drama, Family, Fantasy, History, Horror, Kids, Music, Mystery, News, Reality, Romance, SciFi, Soap, Talk, Thriller, War, Western"
-    description:
+    description_tags:
       selector: div.tags
+    description:
+      case:
+        span.icon_okay: "Verified: {{ .Result.description_tags }}"
+        "*": "Unverified: {{ .Result.description_tags }}"
     poster:
       selector: td:nth-child(2) > script
       filters:

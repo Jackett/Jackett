@@ -115,15 +115,18 @@ search:
     taglist: ""
 
   rows:
-    # exclude redbar torrents
-    selector: table#torrent_table > tbody > tr[class^="torrent row"]
+    selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
 
   fields:
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
-    description:
+    description_tags:
       selector: div.tags
+    description:
+      case:
+        span.icon_okay: "Verified: {{ .Result.description_tags }}"
+        "*": "Unverified: {{ .Result.description_tags }}"
     title:
       selector: a[href^="/torrents.php?id="]
     category:
@@ -178,7 +181,10 @@ search:
         img[src$="/freedownload.gif"]: 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        span.icon[title*="DoubleSeed"]: 2
+        "img[alt=\"DoubleSeed\"]": 2
+        "*": 1
     minimumratio:
       text: 0.5
 # luminance
