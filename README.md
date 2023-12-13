@@ -780,6 +780,11 @@ On a CentOS/RedHat 7 system: [jewflix.jackett](https://galaxy.ansible.com/jewfli
 On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
 
 
+### Installation on Linux or macOS via Homebrew
+
+[Homebrew Formulae - Jackett](https://formulae.brew.sh/formula/jackett)
+
+
 ## Installation on macOS
 
 ### Prerequisites
