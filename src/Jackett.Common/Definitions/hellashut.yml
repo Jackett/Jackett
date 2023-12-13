@@ -186,6 +186,10 @@ search:
       selector: td:nth-last-child(4)
     leechers:
       selector: td:nth-last-child(3)
+    description:
+      case:
+        img[src="pic/tick.png"]: Verified
+        img[src="pic/unchecked.png"]: Unverified
     downloadvolumefactor:
       case:
         img[src="pic/freedownload.gif"]: 0
