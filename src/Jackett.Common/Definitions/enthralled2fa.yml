@@ -132,6 +132,4 @@ search:
         "*": 1
     minimumratio:
       text: 0.5
-    description:
-      selector: div.tags
 # Luminance
