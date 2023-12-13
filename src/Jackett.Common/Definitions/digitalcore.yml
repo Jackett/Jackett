@@ -128,6 +128,8 @@ search:
 
   rows:
     selector: $
+    filters:
+      - name: andmatch
 
   fields:
     category:
