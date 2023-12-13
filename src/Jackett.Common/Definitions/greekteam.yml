@@ -171,6 +171,10 @@ search:
       selector: td:has(a[href$="filelist=1"]) ~ td ~ td ~ td ~ td ~ td ~ td ~ td
       optional: true
       default: 0
+    description:
+      case:
+        img[src="pic/checked2.png"]: Verified
+        img[src="pic/notchecked.png"]: Unverified
     downloadvolumefactor:
       case:
         img[src="pic/free.png"]: 0
