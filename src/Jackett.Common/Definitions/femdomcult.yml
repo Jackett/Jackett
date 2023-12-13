@@ -97,8 +97,12 @@ search:
     download:
       selector: a[href^="torrents.php?action=download&id="]
       attribute: href
-    description:
+    description_tags:
       selector: div.tags
+    description:
+      case:
+        span.icon_okay: "Verified: {{ .Result.description_tags }}"
+        "*": "Unverified: {{ .Result.description_tags }}"
     title:
       selector: a[href^="torrents.php?id="]
     category:
