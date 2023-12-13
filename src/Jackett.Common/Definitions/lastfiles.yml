@@ -200,7 +200,9 @@ search:
         a#free-btn: 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        a#double-btn: 2
+        "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
