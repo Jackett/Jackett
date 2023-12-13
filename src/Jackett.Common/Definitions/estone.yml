@@ -161,8 +161,8 @@ search:
           args: "\\((.+?)\\)"
     description:
       case:
-        img[src="pic/yes.png"]:  "Verified: {{ .Result.genre }}"
-        img[src="pic/nincs.png"]:  "Unverified: {{ .Result.genre }}"
+        img[src="pic/yes.png"]: "Verified: {{ .Result.genre }}"
+        img[src="pic/nincs.png"]: "Unverified: {{ .Result.genre }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
