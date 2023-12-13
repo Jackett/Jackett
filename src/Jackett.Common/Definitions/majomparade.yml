@@ -173,7 +173,7 @@ search:
       remove: a, img
       filters:
         - name: re_replace
-          args: ["(?i)(0.5x |2x |3x |4x )", ""]
+          args: ["(?i)(0.5x|2x|3x|4x)", ""]
     description:
       case:
         img[src$="/pic/yes.png"]: "Verified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result._descr }}"
