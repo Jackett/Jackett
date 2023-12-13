@@ -344,6 +344,12 @@ namespace Jackett.Common.Indexers
                     }
 
                     var title = CleanTitle(qTitleLink.TextContent);
+
+                    if (!query.IsImdbQuery && !query.IsGenreQuery && !query.MatchQueryStringAND(title))
+                    {
+                        continue;
+                    }
+
                     var details = new Uri(SiteLink + qTitleLink.GetAttribute("href").TrimStart('/'));
 
                     var qLink = row.QuerySelector("a[href^=\"/download.php/\"]");
