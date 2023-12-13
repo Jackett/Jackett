@@ -135,9 +135,6 @@ search:
       selector: td.center.data > a:first-child
     leechers:
       selector: td.center.data > a:nth-child(2)
-    grabs:
-      selector: td.center.data
-      remove: div.uploader, div.moderation, a.leftborder
     date:
       selector: td.center.date
       filters:
@@ -155,9 +152,17 @@ search:
         a[href^="?doubleup=three"]: 3
         a[href^="?doubleup=two"]: 2
         "*": 1
-    description:
+    description_text:
       selector: div.contenttext
+      optional: true
       remove: div.contenttitle
+    description:
+      case:
+        span.accepted: "Verified: {{ .Result.description_text }}"
+        span.notchecked: "Unverified: {{ .Result.description_text }}"
+    grabs:
+      selector: td.center.data
+      remove: div.uploader, div.moderation, a.leftborder
     minimumratio:
       text: 1.0
     minimumseedtime:
