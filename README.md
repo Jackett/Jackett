@@ -348,6 +348,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FinVip
  * Flux-Zone
  * Free Farm (自由农场)
+ * FSM
  * FunFile (FF)
  * FunkyTorrents (FT)
  * FutureTorrent [![(invite needed)][inviteneeded]](#)
