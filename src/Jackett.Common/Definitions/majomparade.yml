@@ -175,7 +175,9 @@ search:
         - name: re_replace
           args: ["(?i)(0.5x |2x |3x |4x )", ""]
     description:
-      text: "{{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result._descr }}"
+      case:
+        img[src$="/pic/yes.png"]: "Verified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result._descr }}"
+        img[src$="/pic/nincs.png"]: "Unverified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result._descr }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
