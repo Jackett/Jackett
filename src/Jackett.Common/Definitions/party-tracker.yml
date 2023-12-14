@@ -133,7 +133,9 @@ search:
     genre:
       selector: a[href^="/letoltes.php?cimke="]
     description:
-      text: "{{ .Result.genre }}"
+      case:
+        img[src="/fajlok/kepek/yes.svg"]: "Verified: {{ .Result.genre }}"
+        "*": "Unverified: {{ .Result.genre }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
