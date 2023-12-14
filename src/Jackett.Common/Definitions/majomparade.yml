@@ -119,7 +119,7 @@ search:
       filters:
         - name: regexp
           args: "Torrent neve: (.*?)<"
-    title_descr:
+    title_hungarian:
       selector: a[href^="details.php?id="] > b
       attribute: title
       filters:
@@ -176,8 +176,8 @@ search:
           args: ["(?i)(0.5x|2x|3x|4x)", ""]
     description:
       case:
-        img[src$="/pic/yes.png"]: "Verified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.title_descr }}"
-        img[src$="/pic/nincs.png"]: "Unverified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.title_descr }}"
+        img[src$="/pic/yes.png"]: "Verified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.title_hungarian }}"
+        img[src$="/pic/nincs.png"]: "Unverified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.title_hungarian }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
