@@ -349,12 +349,14 @@ search:
     selector: table.lista[width="100%"] > tbody > tr:has(a[href^="index.php?page=torrent-details&id="][title])
 
   fields:
-    category:
+    category_id:
       selector: a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
         - name: querystring
           args: category
+    category:
+      text: "{{ .Result.category_id }}"
     title:
       selector: a[href^="index.php?page=torrent-details&id="][title]
     details:
@@ -389,22 +391,12 @@ search:
     grabs:
       selector: td:nth-child(2) > table > tbody > tr:nth-child(5) > td
       remove: strong
-    _cat:
-      selector: a[href^="index.php?page=torrents&category="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: category
-        - name: prepend
-          args: "category="
-        - name: append
-          args: "; "
     description:
       selector: td:nth-child(2)
       remove: table
       filters:
         - name: prepend
-          args: "{{ .Result._cat }}"
+          args: "category={{ .Result.category_id }}; "
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
