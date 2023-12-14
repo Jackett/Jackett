@@ -177,7 +177,9 @@ search:
         - name: regexp
           args: "\\((.+?)\\)"
     description:
-      text: "{{ .Result.genre }}"
+      case:
+        img[src="pic/yes.gif"]: "Verified: {{ .Result.genre }}"
+        "*": "Unverified: {{ .Result.genre }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
