@@ -68,12 +68,14 @@ search:
     selector: div.search-media > div.media
 
   fields:
-    category:
+    category_id:
       selector: div.media-content > a[href^="./board.php"]
       attribute: href
       filters:
         - name: querystring
           args: bo_table
+    category:
+      text: "{{ .Result.category_id }}"
     title:
       selector: div.media-heading > a[href^="./board.php"]
     details:
@@ -86,14 +88,8 @@ search:
       # 2020-03-28T01:30:01+09:00
       selector: time
       attribute: datetime
-    _cat:
-      selector: div.media-heading > a[href^="./board.php"]
-      attribute: href
-      filters:
-        - name: querystring
-          args: bo_table
     size:
-      text: "{{ if ne .Result._cat \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
+      text: "{{ if ne .Result.category_id \"mov\" }}512 MB{{ else }}2 GB{{ end }}"
     seeders:
       text: 1
     leechers:
