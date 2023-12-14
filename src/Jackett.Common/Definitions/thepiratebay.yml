@@ -132,7 +132,11 @@ caps:
     music-search: [q]
     book-search: [q]
 
-settings: []
+settings:
+  - name: info_api
+    type: info
+    label: About this Indexer
+    default: This indexer uses the API at https://apibay.org/ to get its official TPB data. Choose any site link that you can access/prefer so that you can view the torrent details page when browsing the Jackett dashboard results for this indexer.
 
 search:
   paths:
