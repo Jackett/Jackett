@@ -143,8 +143,12 @@ search:
       filters:
         - name: regexp
           args: "src=(.*?) "
-    description:
+    description_text:
       selector: i
+    description:
+      case:
+        img[src$="/ikon_helyes.png"]: "Verified: {{ .Result.description_text }}"
+        img[src$="/ikon_ellenorizetlen.png"]: "Unverified: {{ .Result.description_text }}"
     download:
       selector: a[href^="download.php?id="]
       attribute: href
