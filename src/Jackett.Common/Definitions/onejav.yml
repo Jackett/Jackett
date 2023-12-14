@@ -56,11 +56,11 @@ search:
       filters:
         - name: prepend
           args: "Tags: "
-    _descr:
+    description_text:
       selector: p.level
       optional: true
     description:
-      text: "{{ .Result._descr }}</br>{{ .Result._actress }}</br>{{ .Result._tags }}"
+      text: "{{ .Result.description_text }}</br>{{ .Result._actress }}</br>{{ .Result._tags }}"
     date:
       selector: p.is-6 > a
       attribute: href
