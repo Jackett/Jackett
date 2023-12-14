@@ -159,7 +159,9 @@ search:
     genre:
       selector: strong > i
     description:
-      text: "{{ .Result.genre }}"
+      case:
+        img[src="/pic/mod.gif"]: "verified: {{ .Result.genre }}"
+        "*": "Unverified: {{ .Result.genre }}"
     poster:
       selector: a[href^="details.php?id="]
       attribute: onmouseover
