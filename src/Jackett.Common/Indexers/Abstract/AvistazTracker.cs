@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Abstract
         public override string Language => "en-US";
         public override string Type => "private";
 
-        public override bool SupportsPagination => true;
+        public override bool SupportsPagination => false;
 
         protected virtual string TimezoneOffset => "-05:00"; // Avistaz does not specify a timezone & returns server time
 
@@ -148,7 +148,7 @@ namespace Jackett.Common.Indexers.Abstract
                    cacheService: cs,
                    configData: new ConfigurationDataAvistazTracker())
         {
-            webclient.requestDelay = 5;
+            webclient.requestDelay = 6;
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -255,10 +255,19 @@ namespace Jackett.Common.Indexers.Abstract
                         DownloadVolumeFactor = row.Value<double>("download_multiply"),
                         UploadVolumeFactor = row.Value<double>("upload_multiply"),
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800, // 48 hours
+                        MinimumSeedTime = 259200, // 72 hours
                         Languages = row.Value<JArray>("audio")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
                         Subs = row.Value<JArray>("subtitle")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
                     };
+
+                    if (release.Size.HasValue && release.Size > 0)
+                    {
+                        var sizeGigabytes = release.Size.Value / Math.Pow(1024, 3);
+
+                        release.MinimumSeedTime = sizeGigabytes > 50.0
+                            ? (long)((100 * Math.Log(sizeGigabytes)) - 219.2023) * 3600
+                            : 259200 + (long)(sizeGigabytes * 7200);
+                    }
 
                     var jMovieTv = row.Value<JToken>("movie_tv");
                     if (jMovieTv != null && jMovieTv.HasValues)
