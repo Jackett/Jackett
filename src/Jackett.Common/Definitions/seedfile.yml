@@ -113,7 +113,9 @@ search:
         - name: replace
           args: ["Genre:\xA0", ""]
     description:
-      text: "{{ .Result.genre }}"
+      case:
+        b[title="Verified"]: "Verified: {{ .Result.genre }}"
+        "*": "Unverified: {{ .Result.genre }}"
     files:
       selector: td:nth-last-child(8)
     date:
