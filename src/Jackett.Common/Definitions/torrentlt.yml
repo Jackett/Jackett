@@ -180,6 +180,10 @@ search:
       default: 0
     size:
       selector: td.size_cell
+    description:
+      case:
+        img[src$="/checked.png"]: Verified
+        "*": Unverified
     downloadvolumefactor:
       case:
         img[src$="/freedownload.gif"]: 0
