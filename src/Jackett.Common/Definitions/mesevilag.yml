@@ -149,6 +149,10 @@ search:
       selector: td:nth-last-child(3)
     grabs:
       selector: td:nth-last-child(2)
+    description:
+      case:
+        img[src="pic/yes.png"]: Verified
+        img[src="pic/nincs.png"]: Unverified
     downloadvolumefactor:
       selector: td:nth-last-child(5) > font
       case:
