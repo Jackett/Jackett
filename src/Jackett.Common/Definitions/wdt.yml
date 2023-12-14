@@ -167,6 +167,10 @@ search:
       selector: td:nth-child(10)
     leechers:
       selector: td:nth-child(11)
+    description:
+      case:
+        img[src="./pic/mod.gif"]: Verified
+        "*": Unverified
     downloadvolumefactor:
       case:
         "a.info:contains(\"[FREE]\")": 0
