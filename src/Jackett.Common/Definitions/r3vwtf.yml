@@ -155,6 +155,10 @@ search:
       selector: td:nth-last-child(3)
     leechers:
       selector: td:nth-last-child(2)
+    description:
+      case:
+        img[src="./pic/mod.gif"]: Verified
+        "*": Unverified
     downloadvolumefactor:
       case:
         a.info:contains("Freeleech"): 0
