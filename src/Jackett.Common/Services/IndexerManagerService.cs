@@ -45,6 +45,7 @@ namespace Jackett.Common.Services
             {"broadcastthenet", "broadcasthenet"},
             {"casatorrent", "teamctgame"},
             {"icetorrent", "speedapp"},
+            {"hdzone", "hdfun"},
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"kisssub", "miobt"},
             {"legacyhd", "reelflix"},
