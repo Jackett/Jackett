@@ -182,4 +182,5 @@ search:
       case:
         span[title="Allowed"]: "Verified: {{ .Result.description_text }}"
         span[title="Not reviewed"]: "Unverified: {{ .Result.description_text }}"
+        span[title="Denied"]: "Banned: {{ .Result.description_text }}"
 # NexusPHP v1.8.4 2023-06-18
