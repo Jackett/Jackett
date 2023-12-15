@@ -48,7 +48,7 @@ if [ ! -f ./jackett ]; then
 fi
 
 # Check if Jackett's owner is root
-JACKETT_USER="$(stat -c "%U" ./jackett)"
+JACKETT_USER="$(stat -c "%U" ./Jackett)"
 if [ "${JACKETT_USER}" == "root" ] || [ "${JACKETT_USER}" == "UNKNOWN" ] ; then
     echo "${BOLDRED}ERROR${NC}: The owner of Jackett directory is '${JACKETT_USER}'."
     echo "Please, change the owner with the command 'chown <user>:<user> -R \"${JACKETT_DIR}\"'"
