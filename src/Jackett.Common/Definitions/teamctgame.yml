@@ -227,6 +227,11 @@ search:
       selector: td:nth-child(7)
     grabs:
       selector: td:nth-child(8)
+    description:
+      case:
+        span[title="Autorisé"]: "Verified"
+        span[title="Pas examiné"]: "Unverified"
+        span[title="Refusé"]: "Banned"
     downloadvolumefactor:
       case:
         img.pro_free: 0
