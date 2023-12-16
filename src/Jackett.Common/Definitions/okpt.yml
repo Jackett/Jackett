@@ -196,7 +196,12 @@ search:
     minimumseedtime:
       # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
       text: 129600
-    description:
+    description_text:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
+    description:
+      case:
+        span[title="通过"]: "Verified: {{ .Result.description_text }}"
+        span[title="未审"]: "Unverified: {{ .Result.description_text }}"
+        span[title="拒绝"]: "Banned: {{ .Result.description_text }}"
 # NexusPHP v1.8.8 2023-09-25
