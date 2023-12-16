@@ -202,7 +202,7 @@ search:
         span[title="未审"], span[title="未審"], span[title="Not reviewed"]: "Unverified:"
         span[title="拒绝"], span[title="拒絕"], span[title="Denied"]: "Banned:"
     description:
-      selector: td:nth-child(2)
+      selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
       filters:
         - name: prepend
