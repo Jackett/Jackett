@@ -298,6 +298,7 @@ namespace Jackett.Updater
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bitnova.yml",
+                "Definitions/bitofvalor.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
                 "Definitions/bluesbrothers.yml",
