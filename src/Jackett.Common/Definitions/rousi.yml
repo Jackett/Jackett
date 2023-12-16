@@ -212,7 +212,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    description:
+    description_text:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
+    description:
+      case:
+        span[title="Allowed"]: "Verified: {{ .Result.description_text }}"
+        span[title="Not reviewed"]: "Unverified: {{ .Result.description_text }}"
+        span[title="Denied"]: "Banned: {{ .Result.description_text }}"
 # NexusPHP v1.8.8 2023-09-25
