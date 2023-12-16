@@ -192,12 +192,15 @@ search:
         "*": 1
     minimumratio:
       text: 0.81
-    description_text:
+    description_verified:
+      case:
+        span[title="通过"], span[title="通過"], span[title="Allowed"]: "Verified:"
+        span[title="未审"], span[title="未審"], span[title="Not reviewed"]: "Unverified:"
+        span[title="拒绝"], span[title="拒絕"], span[title="Denied"]: "Banned:"
+    description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-    description:
-      case:
-        span[title="通过"]: "Verified: {{ .Result.description_text }}"
-        span[title="未审"]: "Unverified: {{ .Result.description_text }}"
-        span[title="拒绝"]: "Banned: {{ .Result.description_text }}"
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
 # NexusPHP v1.8.9 2023-11-15
