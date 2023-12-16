@@ -170,12 +170,15 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-    description_text:
-      selector: td.rowfollow:nth-child(2)
-      remove: a, b, font, img, span
-    description:
+    description_verified:
       case:
-        span[title="Allowed"]: "Verified: {{ .Result.description_text }}"
-        span[title="Not reviewed"]: "Unverified: {{ .Result.description_text }}"
-        span[title="Denied"]: "Banned: {{ .Result.description_text }}"
+        span[title="通过"], span[title="通過"], span[title="Allowed"]: "Verified:"
+        span[title="未审"], span[title="未審"], span[title="Not reviewed"]: "Unverified:"
+        span[title="拒绝"], span[title="拒絕"], span[title="Denied"]: "Banned:"
+    description:
+      selector: td:nth-child(2)
+      remove: a, b, font, img, span
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
 # NexusPHP v1.8.6 2023-08-18
