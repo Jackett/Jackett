@@ -45,7 +45,7 @@ search:
       args: [" ", "_20"]
 
   rows:
-    selector: ul.threadlist > li:not(:has(a[href="thread-293154.htm"]))
+    selector: ul.threadlist > li:not(:has(a[href="thread-338792.htm"])):not(:has(a[href="thread-342865.htm"])):not(:has(a[href="thread-290995.htm"]))
 
   fields:
     category:
