@@ -29,7 +29,7 @@ search:
     s: "{{ .Keywords }}"
 
   rows:
-    selector: article:has(.entry-title)
+    selector: article:has(a)
     filters:
       - name: andmatch
 
