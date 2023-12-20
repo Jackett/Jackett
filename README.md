@@ -601,7 +601,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UltraHD
  * UnionGang
  * Universal-Torrents
- * UnleashTheCartoons
  * UnlimitZ
  * Upload.cx [![(invite needed)][inviteneeded]](#)
  * UTOPIA

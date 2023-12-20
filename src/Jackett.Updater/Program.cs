@@ -658,6 +658,7 @@ namespace Jackett.Updater
                 "Definitions/underverse.yml",
                 "Definitions/underversel.yml",
                 "Definitions/uniotaku.yml", // to be migrated to c#
+                "Definitions/unleashthecartoons.yml",
                 "Definitions/uploads.yml",
                 "Definitions/utorrents.yml", // same as SzeneFZ now
                 "Definitions/vanila.yml",
