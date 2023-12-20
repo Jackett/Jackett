@@ -396,6 +396,8 @@ search:
         # Replace French date dd-mm-yyyy to yyyy.mm.dd
         - name: re_replace
           args: ["\\b(\\d{2})[\\-_\\.](\\d{2})[\\-_\\.](\\d{4})\\b", "$3.$2.$1"]
+        - name: re_replace
+          args: ["(?i)Demain Nous Appartient S(\\d{1,2})E(\\d{1,})", "Demain Nous Appartient E{{ add $1 8 }}$2"]
     title_filtered:
       text: "{{ .Result.title_normal }}"
       filters:
