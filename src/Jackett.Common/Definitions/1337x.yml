@@ -218,6 +218,8 @@ search:
           args: ["-([\\w]+(?:[\\[\\]\\(\\)\\w]+)?)$", "~$1"]
         - name: replace
           args: ["-", " "]
+        - name: replace
+          args: ["'", " "]
         - name: re_replace
           args: ["~([\\w]+(?:[\\[\\]\\(\\)\\w]+)?)$", "-$1"]
         - name: replace
