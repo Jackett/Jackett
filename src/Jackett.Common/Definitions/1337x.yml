@@ -219,7 +219,7 @@ search:
         - name: replace
           args: ["-", " "]
         - name: replace
-          args: ["'", " "]
+          args: ["'", ""]
         - name: re_replace
           args: ["~([\\w]+(?:[\\[\\]\\(\\)\\w]+)?)$", "-$1"]
         - name: replace
