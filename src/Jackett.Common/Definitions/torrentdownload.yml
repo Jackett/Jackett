@@ -1,7 +1,7 @@
 ---
 id: torrentdownload
 name: TorrentDownload
-description: "TorrentDownload is a Public general torrent index"
+description: "TorrentDownload is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
@@ -124,7 +124,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}/{{ end }}"
+    - path: "search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
     selector: table.table2 > tbody > tr:has(span.smallish)
