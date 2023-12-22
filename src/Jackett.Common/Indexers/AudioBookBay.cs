@@ -29,11 +29,6 @@ namespace Jackett.Common.Indexers
         public override string Name => "AudioBook Bay";
         public override string Description => "AudioBook Bay (ABB) is a public Torrent Tracker for AUDIOBOOKS";
         public override string SiteLink { get; protected set; } = "https://audiobookbay.is/";
-        public override string[] AlternativeSiteLinks => new[]
-        {
-            "https://audiobookbay.is/",
-            "https://audiobookbay.se/"
-        };
         public override string[] LegacySiteLinks => new[]
         {
             "https://audiobookbay.la/",
@@ -60,7 +55,8 @@ namespace Jackett.Common.Indexers
             "https://audiobookbay.unblockit.pet/",
             "https://audiobookbay.unblockit.ink/",
             "https://audiobookbay.unblockit.bio/", // error 502
-            "https://audiobookbay.li/"
+            "https://audiobookbay.li/",
+            "https://audiobookbay.se/" // redirects to .is but has invalid CA 
         };
         public override string Language => "en-US";
         public override string Type => "public";
