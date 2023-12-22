@@ -31,7 +31,7 @@ caps:
     - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
     # Software
-    - {id: 11, cat: PC/Other, desc: "App Other"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
     - {id: 9, cat: PC, desc: "App Linux"}
     - {id: 12, cat: PC/0day, desc: "App Win"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
@@ -47,9 +47,9 @@ caps:
     - {id: 52, cat: Audio, desc: "Music Pack"}
     - {id: 55, cat: Audio/Video, desc: "Music Video"}
     - {id: 125, cat: Audio, desc: "Music Mixe"}
-    - {id: 49, cat: Audio, desc: "Charts"}
+    - {id: 49, cat: Audio, desc: "Music Charts"}
     - {id: 54, cat: Audio, desc: "Music Pack"}
-    - {id: 126, cat: Audio, desc: "Pack mp"}
+    - {id: 126, cat: Audio, desc: "Music Pack mp"}
     # Sport
     - {id: 61, cat: TV/Sport, desc: "Sport Other"}
     # Sonstiges
@@ -65,7 +65,7 @@ caps:
     - {id: 98, cat: Movies/HD, desc: "Internt'l Movie HD"}
     - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
     - {id: 105, cat: TV/Documentary, desc: "Internt'l Doku"}
-    - {id: 104, cat: TV/Documentary, desc: "Internt'l Misc"}
+    - {id: 104, cat: Other, desc: "Internt'l Misc"}
     - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
     # XXX
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
