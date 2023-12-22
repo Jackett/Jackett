@@ -126,7 +126,7 @@ login:
   error:
     - selector: div#login_error
   test:
-    path: selection.php
+    path: index.php
     selector: a[href="logout.php"]
 
 search:
@@ -172,6 +172,8 @@ search:
       attribute: src
     size:
       selector: div.selection_unter_ad
+    grabs:
+      selector: div.selection_unter_ae
     date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
@@ -182,6 +184,8 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
+        - name: append
+          args: " +01:00" # CET
     date_year:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
