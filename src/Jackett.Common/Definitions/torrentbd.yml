@@ -14,33 +14,36 @@ legacylinks:
 
 caps:
   categorymappings:
+    # get the cats from https://www.torrentbd.net/feed.php?custom
     - {id: 28, cat: TV/Anime, desc: "Anime - All"}
     - {id: 65, cat: PC/Mobile-Android, desc: "Apps - Android"}
     - {id: 18, cat: PC, desc: "Apps - PC"}
     - {id: 19, cat: PC/Mac, desc: "Apps - Mac"}
     - {id: 20, cat: PC, desc: "Apps - Linux"}
-    - {id: 7, cat: Movies, desc: "Bangla - Movies | Natok"}
     - {id: 49, cat: TV, desc: "Cartoons - All"}
     - {id: 9, cat: TV/Documentary, desc: "Documentaries - All"}
     - {id: 36, cat: Books/EBook, desc: "Other - E-Books"}
-    - {id: 77, cat: Books/EBook, desc: "E-Books - Manga"}
     - {id: 73, cat: Books/Comics, desc: "E-Books - Comics"}
+    - {id: 77, cat: Books/EBook, desc: "E-Books - Manga"}
     - {id: 10, cat: PC/Games, desc: "Games - PC"}
     - {id: 60, cat: PC/Games, desc: "Games - Cracks | Patches"}
     - {id: 52, cat: PC/Games, desc: "Games - Updates | DLC"}
-    - {id: 43, cat: Console/PS3, desc: "Games - PS3"}
+    - {id: 81, cat: PC/Games, desc: "Games - Backup"}
+    - {id: 43, cat: Console/PS3, desc: "Games - PlayStation"}
     - {id: 14, cat: Console/XBox, desc: "Games - Xbox"}
     - {id: 17, cat: Console, desc: "Games - Other"}
-    - {id: 80, cat: Movies/UHD, desc: "Movies - 4K BluRay"}
-    - {id: 47, cat: Movies/HD, desc: "Movies - 1080p BluRay"}
-    - {id: 42, cat: Movies/BluRay, desc: "Movies - 720p BluRay"}
-    - {id: 76, cat: Movies/BluRay, desc: "Movies - Lossless BluRay"}
-    - {id: 24, cat: Movies/SD, desc: "Movies - SD BluRay"}
-    - {id: 55, cat: Movies, desc: "Movies - WEB-DL | WEBRip"}
+    - {id: 86, cat: Movies/UHD, desc: "Movies - Blu-Ray Lossless 4K"}
+    - {id: 76, cat: Movies/BluRay, desc: "Movies - Blu-Ray Lossless 1080p"}
+    - {id: 80, cat: Movies/UHD, desc: "Movies - Blu-Ray 4K"}
+    - {id: 47, cat: Movies/HD, desc: "Movies - Blu-Ray 1080p"}
+    - {id: 42, cat: Movies/BluRay, desc: "Movies - Blu-Ray 720p"}
+    - {id: 24, cat: Movies/SD, desc: "Movies - Blu-Ray SD"}
+    - {id: 82, cat: Movies/WEB-DL, desc: "Movies - WEB-DL 4K"}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies - WEB-DL"}
+    - {id: 83, cat: Movies/WEB-DL, desc: "Movies - WEBRip"}
     - {id: 46, cat: Movies/HD, desc: "Movies - HD-Rip"}
     - {id: 1, cat: Movies/SD, desc: "Movies - DVDRip"}
-    - {id: 56, cat: Movies/SD, desc: "Movies - DVDSCR | R5 | R6"}
-    - {id: 4, cat: Movies/SD, desc: "Movies - CAM | TS | TC"}
+    - {id: 4, cat: Movies/SD, desc: "Movies - CAM | TS | DVDScr | Pre-DVD"}
     - {id: 67, cat: Movies/3D, desc: "Movies - 3D"}
     - {id: 3, cat: Movies, desc: "Movies - Unrated"}
     - {id: 2, cat: Movies, desc: "Movies - Packs"}
@@ -50,17 +53,18 @@ caps:
     - {id: 64, cat: Audio, desc: "Music - Concerts | Live Shows"}
     - {id: 26, cat: Audio, desc: "Music - Radio"}
     - {id: 38, cat: PC/Mobile-Other, desc: "Other - Mobile Phone"}
-    - {id: 44, cat: Other, desc: "Religious  - Islam"}
-    - {id: 37, cat: Other, desc: "Other - Images"}
-    - {id: 40, cat: Other, desc: "Other - Other | Misc"}
+    - {id: 44, cat: Other, desc: "Other - Religious"}
+    - {id: 40, cat: Other, desc: "Other - Miscellaneous"}
     - {id: 70, cat: TV/Sport, desc: "Sports - Football"}
     - {id: 6, cat: TV/Sport, desc: "Sports - Pro Wrestling"}
     - {id: 48, cat: TV/Sport, desc: "Sports - All"}
-    - {id: 39, cat: Other, desc: "Other - Tutorial"}
-    - {id: 5, cat: TV/SD, desc: "TV - Episodes"}
-    - {id: 61, cat: TV/HD, desc: "TV - Episodes - 720p | 1080p"}
-    - {id: 41, cat: TV/SD, desc: "TV - Packs"}
-    - {id: 62, cat: TV/HD, desc: "TV - Packs - HD | BRRip"}
+    - {id: 39, cat: Other, desc: "Tutorials - All"}
+    - {id: 84, cat: TV/UHD, desc: "TV - Episodes 4K"}
+    - {id: 61, cat: TV/HD, desc: "TV - Episodes 720p | 1080p"}
+    - {id: 5, cat: TV/SD, desc: "TV - Episodes SD"}
+    - {id: 85, cat: TV/UHD, desc: "TV - Packs 4K"}
+    - {id: 62, cat: TV/HD, desc: "TV - Packs - 720p | 1080p"}
+    - {id: 41, cat: TV/SD, desc: "TV - Packs SD"}
     - {id: 66, cat: TV, desc: "TV - Awards | Ceremonies"}
 
   modes:
