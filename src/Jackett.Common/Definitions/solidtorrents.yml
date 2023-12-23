@@ -7,12 +7,12 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://solidtorrents.eu/
+  - https://solidtorrents.to/
   - https://solidtorrents.nocensor.cloud/
 legacylinks:
   - https://solidtorrents.net/
   - https://solidtorrents.nocensor.click/
-  - https://solidtorrents.to/
+  - https://solidtorrents.eu/
 
 caps:
   categories:
