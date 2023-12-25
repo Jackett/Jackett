@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers
             "https://audiobookbay.unblockit.ink/",
             "https://audiobookbay.unblockit.bio/", // error 502
             "https://audiobookbay.li/",
-            "https://audiobookbay.se/" // redirects to .is but has invalid CA 
+            "https://audiobookbay.se/" // redirects to .is but has invalid CA
         };
         public override string Language => "en-US";
         public override string Type => "public";
@@ -71,7 +71,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationData())
         {
-            webclient.requestDelay = 3.1;
+            webclient.requestDelay = 5.1;
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -84,66 +84,8 @@ namespace Jackett.Common.Indexers
                 }
             };
 
-            // Age
-            caps.Categories.AddCategoryMapping("children", TorznabCatType.AudioAudiobook, "Children");
-            caps.Categories.AddCategoryMapping("teen-young-adult", TorznabCatType.AudioAudiobook, "Teen & Young Adult");
-            caps.Categories.AddCategoryMapping("adults", TorznabCatType.AudioAudiobook, "Adults");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.AudioAudiobook);
 
-            // Category
-            caps.Categories.AddCategoryMapping("postapocalyptic", TorznabCatType.AudioAudiobook, "(Post)apocalyptic");
-            caps.Categories.AddCategoryMapping("action", TorznabCatType.AudioAudiobook, "Action");
-            caps.Categories.AddCategoryMapping("adventure", TorznabCatType.AudioAudiobook, "Adventure");
-            caps.Categories.AddCategoryMapping("art", TorznabCatType.AudioAudiobook, "Art");
-            caps.Categories.AddCategoryMapping("autobiography-biographies", TorznabCatType.AudioAudiobook, "Autobiography & Biographies");
-            caps.Categories.AddCategoryMapping("business", TorznabCatType.AudioAudiobook, "Business");
-            caps.Categories.AddCategoryMapping("computer", TorznabCatType.AudioAudiobook, "Computer");
-            caps.Categories.AddCategoryMapping("contemporary", TorznabCatType.AudioAudiobook, "Contemporary");
-            caps.Categories.AddCategoryMapping("crime", TorznabCatType.AudioAudiobook, "Crime");
-            caps.Categories.AddCategoryMapping("detective", TorznabCatType.AudioAudiobook, "Detective");
-            caps.Categories.AddCategoryMapping("doctor-who-sci-fi", TorznabCatType.AudioAudiobook, "Doctor Who");
-            caps.Categories.AddCategoryMapping("education", TorznabCatType.AudioAudiobook, "Education");
-            caps.Categories.AddCategoryMapping("fantasy", TorznabCatType.AudioAudiobook, "Fantasy");
-            caps.Categories.AddCategoryMapping("general-fiction", TorznabCatType.AudioAudiobook, "General Fiction");
-            caps.Categories.AddCategoryMapping("historical-fiction", TorznabCatType.AudioAudiobook, "Historical Fiction");
-            caps.Categories.AddCategoryMapping("history", TorznabCatType.AudioAudiobook, "History");
-            caps.Categories.AddCategoryMapping("horror", TorznabCatType.AudioAudiobook, "Horror");
-            caps.Categories.AddCategoryMapping("humor", TorznabCatType.AudioAudiobook, "Humor");
-            caps.Categories.AddCategoryMapping("lecture", TorznabCatType.AudioAudiobook, "Lecture");
-            caps.Categories.AddCategoryMapping("lgbt", TorznabCatType.AudioAudiobook, "LGBT");
-            caps.Categories.AddCategoryMapping("literature", TorznabCatType.AudioAudiobook, "Literature");
-            caps.Categories.AddCategoryMapping("litrpg", TorznabCatType.AudioAudiobook, "LitRPG");
-            caps.Categories.AddCategoryMapping("general-non-fiction", TorznabCatType.AudioAudiobook, "Misc. Non-fiction");
-            caps.Categories.AddCategoryMapping("mystery", TorznabCatType.AudioAudiobook, "Mystery");
-            caps.Categories.AddCategoryMapping("paranormal", TorznabCatType.AudioAudiobook, "Paranormal");
-            caps.Categories.AddCategoryMapping("plays-theater", TorznabCatType.AudioAudiobook, "Plays & Theater");
-            caps.Categories.AddCategoryMapping("poetry", TorznabCatType.AudioAudiobook, "Poetry");
-            caps.Categories.AddCategoryMapping("political", TorznabCatType.AudioAudiobook, "Political");
-            caps.Categories.AddCategoryMapping("radio-productions", TorznabCatType.AudioAudiobook, "Radio Productions");
-            caps.Categories.AddCategoryMapping("romance", TorznabCatType.AudioAudiobook, "Romance");
-            caps.Categories.AddCategoryMapping("sci-fi", TorznabCatType.AudioAudiobook, "Sci-Fi");
-            caps.Categories.AddCategoryMapping("science", TorznabCatType.AudioAudiobook, "Science");
-            caps.Categories.AddCategoryMapping("self-help", TorznabCatType.AudioAudiobook, "Self-help");
-            caps.Categories.AddCategoryMapping("spiritual", TorznabCatType.AudioAudiobook, "Spiritual & Religious");
-            caps.Categories.AddCategoryMapping("sports", TorznabCatType.AudioAudiobook, "Sport & Recreation");
-            caps.Categories.AddCategoryMapping("suspense", TorznabCatType.AudioAudiobook, "Suspense");
-            caps.Categories.AddCategoryMapping("thriller", TorznabCatType.AudioAudiobook, "Thriller");
-            caps.Categories.AddCategoryMapping("true-crime", TorznabCatType.AudioAudiobook, "True Crime");
-            caps.Categories.AddCategoryMapping("tutorial", TorznabCatType.AudioAudiobook, "Tutorial");
-            caps.Categories.AddCategoryMapping("westerns", TorznabCatType.AudioAudiobook, "Westerns");
-            caps.Categories.AddCategoryMapping("zombies", TorznabCatType.AudioAudiobook, "Zombies");
-
-            // Category Modifiers
-            caps.Categories.AddCategoryMapping("anthology", TorznabCatType.AudioAudiobook, "Anthology");
-            caps.Categories.AddCategoryMapping("bestsellers", TorznabCatType.AudioAudiobook, "Bestsellers");
-            caps.Categories.AddCategoryMapping("classic", TorznabCatType.AudioAudiobook, "Classic");
-            caps.Categories.AddCategoryMapping("documentary", TorznabCatType.AudioAudiobook, "Documentary");
-            caps.Categories.AddCategoryMapping("full-cast", TorznabCatType.AudioAudiobook, "Full Cast");
-            caps.Categories.AddCategoryMapping("libertarian", TorznabCatType.AudioAudiobook, "Libertarian");
-            caps.Categories.AddCategoryMapping("military", TorznabCatType.AudioAudiobook, "Military");
-            caps.Categories.AddCategoryMapping("novel", TorznabCatType.AudioAudiobook, "Novel");
-            caps.Categories.AddCategoryMapping("short-story", TorznabCatType.AudioAudiobook, "Short Story");
-
-            caps.Categories.AddCategoryMapping("other", TorznabCatType.AudioAudiobook, "Other");
             return caps;
         }
 
@@ -165,8 +107,7 @@ namespace Jackett.Common.Indexers
             var urls = new HashSet<string>
             {
                 SiteLink,
-                SiteLink + "page/2/",
-                SiteLink + "page/3/"
+                SiteLink + "page/2/"
             };
 
             foreach (var url in urls)
@@ -184,7 +125,9 @@ namespace Jackett.Common.Indexers
                 }
 
                 if (parameters.Count > 0)
+                {
                     searchUrl += $"?{parameters.GetQueryString()}";
+                }
 
                 var response = await RequestWithCookiesAsync(searchUrl);
 
@@ -193,7 +136,9 @@ namespace Jackett.Common.Indexers
 
                 // Stop fetching the next page when less than 15 results are found.
                 if (pageReleases.Count < 15)
+                {
                     break;
+                }
             }
 
             return releases;
@@ -208,11 +153,15 @@ namespace Jackett.Common.Indexers
 
             var hash = dom.QuerySelector("td:contains(\"Info Hash:\") ~ td")?.TextContent.Trim();
             if (hash == null)
+            {
                 throw new Exception($"Failed to fetch hash from {link}");
+            }
 
             var title = dom.QuerySelector("div.postTitle h1")?.TextContent.Trim();
             if (title == null)
+            {
                 throw new Exception($"Failed to fetch title from {link}");
+            }
 
             title = StringUtil.MakeValidFileName(title, '_', false);
 
@@ -239,11 +188,15 @@ namespace Jackett.Common.Indexers
 
                 var matchFormat = Regex.Match(infoString, @"Format: (.+) \/", RegexOptions.IgnoreCase);
                 if (matchFormat.Groups[1].Success && matchFormat.Groups[1].Value.Length > 0 && matchFormat.Groups[1].Value != "?")
+                {
                     title += $" [{matchFormat.Groups[1].Value.Trim()}]";
+                }
 
                 var matchBitrate = Regex.Match(infoString, @"Bitrate: (.+)File", RegexOptions.IgnoreCase);
                 if (matchBitrate.Groups[1].Success && matchBitrate.Groups[1].Value.Length > 0 && matchBitrate.Groups[1].Value != "?")
+                {
                     title += $" [{matchBitrate.Groups[1].Value.Trim()}]";
+                }
 
                 var matchSize = Regex.Match(infoString, @"File Size: (.+?)s?$", RegexOptions.IgnoreCase);
                 var size = matchSize.Groups[1].Success ? ParseUtil.GetBytes(matchSize.Groups[1].Value) : 0;
@@ -253,8 +206,7 @@ namespace Jackett.Common.Indexers
 
                 var postInfo = row.QuerySelector("div.postInfo")?.FirstChild?.TextContent.Trim().Replace("\xA0", ";") ?? string.Empty;
                 var matchCategory = Regex.Match(postInfo, @"Category: (.+)$", RegexOptions.IgnoreCase);
-                var category = matchCategory.Groups[1].Success ? matchCategory.Groups[1].Value.Split(';').Select(c => c.Trim()).ToList() : new List<string>();
-                var categories = category.SelectMany(MapTrackerCatDescToNewznab).Distinct().ToList();
+                var genres = matchCategory.Groups[1].Success ? matchCategory.Groups[1].Value.Split(';').Select(c => c.Trim()).ToList() : new List<string>();
 
                 releases.Add(new ReleaseInfo
                 {
@@ -262,14 +214,15 @@ namespace Jackett.Common.Indexers
                     Details = details,
                     Link = details,
                     Title = CleanTitle(title),
-                    Category = categories,
+                    Category = new List<int> { TorznabCatType.AudioAudiobook.ID },
                     Size = size,
                     Seeders = 1,
                     Peers = 1,
                     Poster = GetPosterUrl(row.QuerySelector("img[src]")?.GetAttribute("src")?.Trim()),
                     PublishDate = publishDate,
                     DownloadVolumeFactor = 0,
-                    UploadVolumeFactor = 1
+                    UploadVolumeFactor = 1,
+                    Genres = genres
                 });
             }
 
