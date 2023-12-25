@@ -501,7 +501,7 @@ search:
 
   fields:
     category:
-      selector: a[href$=".html"]
+      selector: dt > a[href$=".html"]
       attribute: href
       filters:
         - name: regexp
