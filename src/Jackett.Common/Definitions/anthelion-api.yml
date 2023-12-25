@@ -60,7 +60,8 @@ search:
     q: "{{ .Keywords }}"
     tmdb: "{{ .Query.TMDBID }}"
     imdb: "{{ .Query.IMDBIDShort }}"
-    cat: "{{ join .Categories \",\" }}"
+    # category filtering is disabled since it seems to rely on the AND operator that prevents some releases to show on search.
+    # cat: "{{ join .Categories \",\" }}"
     limit: 100
     offset: 0
 
