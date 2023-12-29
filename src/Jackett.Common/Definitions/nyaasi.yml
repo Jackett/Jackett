@@ -89,6 +89,10 @@ settings:
     type: checkbox
     label: Improve Radarr compatibility by removing year information from keywords and adding it to Release Titles
     default: false
+  - name: remove_seasoninfo
+    type: checkbox
+    label: Improve results by removing Season Information from keywords
+    default: false
   - name: filter-id
     type: select
     label: Filter
@@ -151,6 +155,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: [" *\\b((?:19|20)\\d{2})\\b", "{{ if .Config.radarr_compatibility }}{{ else }} $1{{ end }}"]
+    - name: re_replace
+      args: ["(?i)(S[0-9][0-9]E)", "{{ if .Config.remove_seasoninfo }}{{ else }} $1{{ end }}"]
 
   rows:
     selector: tr.default,tr.danger,tr.success
