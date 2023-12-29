@@ -108,7 +108,7 @@ login:
   captcha:
     type: image
     selector: img[src="captcha.php?ext=.gif"]
-    input: input[name^="captcha"]
+    input: input[type="text"][size="6"]
   inputs:
     input[name="username"]: "{{ .Config.username }}"
     input[name="password"]: "{{ .Config.password }}"
