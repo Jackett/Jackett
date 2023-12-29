@@ -1,9 +1,9 @@
 ---
 id: satclubbing
 name: SATClubbing
-description: "SATClubbing is a RUSSIAN/ENGLISH Semi-Private Torrent Tracker for ELECTRONIC MUSIC"
+description: "SATClubbing is a RUSSIAN/ENGLISH Private Torrent Tracker for ELECTRONIC MUSIC"
 language: en-US
-type: semi-private
+type: private
 encoding: UTF-8
 links:
   - https://satclubbing.club/
