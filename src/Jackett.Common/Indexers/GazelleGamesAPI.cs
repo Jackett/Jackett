@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -59,6 +61,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping("Mac", TorznabCatType.ConsoleOther, "Mac");
             caps.Categories.AddCategoryMapping("iOS", TorznabCatType.PCMobileiOS, "iOS");
             caps.Categories.AddCategoryMapping("Apple Bandai Pippin", TorznabCatType.ConsoleOther, "Apple Bandai Pippin");
+            caps.Categories.AddCategoryMapping("Apple II", TorznabCatType.ConsoleOther, "Apple II");
 
             // Google
             caps.Categories.AddCategoryMapping("Android", TorznabCatType.PCMobileAndroid, "Android");
@@ -81,6 +84,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping("Nintendo GameCube", TorznabCatType.ConsoleOther, "Nintendo GameCube");
             caps.Categories.AddCategoryMapping("Pokemon Mini", TorznabCatType.ConsoleOther, "Pokemon Mini");
             caps.Categories.AddCategoryMapping("SNES", TorznabCatType.ConsoleOther, "SNES");
+            caps.Categories.AddCategoryMapping("Switch", TorznabCatType.ConsoleOther, "Switch");
             caps.Categories.AddCategoryMapping("Virtual Boy", TorznabCatType.ConsoleOther, "Virtual Boy");
             caps.Categories.AddCategoryMapping("Wii", TorznabCatType.ConsoleWii, "Wii");
             caps.Categories.AddCategoryMapping("Wii U", TorznabCatType.ConsoleWiiU, "Wii U");
@@ -181,9 +185,10 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping("Retro - Other", TorznabCatType.ConsoleOther, "Retro - Other");
 
             // special categories (real categories/not platforms)
-            caps.Categories.AddCategoryMapping("OST", TorznabCatType.AudioOther, "OST");
-            caps.Categories.AddCategoryMapping("Applications", TorznabCatType.PC0day, "Applications");
-            caps.Categories.AddCategoryMapping("E-Books", TorznabCatType.BooksEBook, "E-Books");
+            caps.Categories.AddCategoryMapping(1, TorznabCatType.PCGames, "Games");
+            caps.Categories.AddCategoryMapping(2, TorznabCatType.PC0day, "Applications");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.BooksEBook, "E-Books");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.AudioOther, "OST");
 
             return caps;
         }
@@ -203,20 +208,32 @@ namespace Jackett.Common.Indexers
                 { "order_way", "desc" }
             };
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-                queryCollection.Add("searchstr", searchString);
+            if (searchString.IsNotNullOrWhiteSpace())
+            {
+                var searchGroupNames = ((BoolConfigurationItem)configData.GetDynamic("searchgroupnames")).Value;
+
+                queryCollection.Add(searchGroupNames ? "groupname" : "searchstr", searchString.Replace(".", " "));
+            }
+
+            var categoryMappings = MapTorznabCapsToTrackers(query)
+                                   .Distinct()
+                                   .Where(x => !x.IsAllDigits())
+                                   .ToList();
 
             var i = 0;
-            foreach (var cat in MapTorznabCapsToTrackers(query))
+            foreach (var cat in categoryMappings)
+            {
                 queryCollection.Add($"artistcheck[{i++}]", cat);
+            }
 
             // remove . as not used in titles
-            searchUrl += "?" + queryCollection.GetQueryString().Replace(".", " ");
+            searchUrl += "?" + queryCollection.GetQueryString();
 
             var apiKey = ((ConfigurationDataGazelleTracker)configData).ApiKey;
-            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
+            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = string.Format(AuthorizationFormat, apiKey.Value) } : null;
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
+
             // we get a redirect in html pages and an error message in json response (api)
             if (response.IsRedirect && !useApiKey)
             {
@@ -232,10 +249,10 @@ namespace Jackett.Common.Indexers
                 throw new Exception(errorReason);
             }
 
-
             try
             {
                 var json = JObject.Parse(response.ContentString);
+
                 foreach (var gObj in JObject.FromObject(json["response"]))
                 {
                     var group = gObj.Value as JObject;
@@ -245,65 +262,87 @@ namespace Jackett.Common.Indexers
                         continue;
                     }
 
+                    var categories = group.Value<JArray>("Artists")
+                                     .SelectMany(a => MapTrackerCatDescToNewznab(a.Value<string>("name")))
+                                     .Distinct()
+                                     .ToArray();
+
                     foreach (var tObj in JObject.FromObject(group["Torrents"]))
                     {
                         var torrent = tObj.Value as JObject;
-                        var torrentId = torrent["ID"].ToString();
+                        var torrentId = torrent.Value<string>("ID");
 
-                        var Category = "Windows";
-                        if (((JArray)group["Artists"]).Count > 0)
-                            Category = group["Artists"][0]["name"].ToString();
-                        var GroupCategory = MapTrackerCatToNewznab(Category);
+                        if (categories.Length == 0)
+                        {
+                            categories = MapTrackerCatToNewznab(torrent.Value<string>("CategoryID")).ToArray();
+                        }
 
-                        var publishDate = DateTime.SpecifyKind(
-                            DateTime.ParseExact(torrent["Time"].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-                            DateTimeKind.Unspecified).ToLocalTime();
-
-                        var size = ParseUtil.CoerceLong(torrent["Size"].ToString());
                         var details = new Uri(DetailsUrl + torrentId);
                         var link = new Uri(DownloadUrl + torrentId);
-                        var grabs = ParseUtil.CoerceLong(torrent["Snatched"].ToString());
-                        var seeders = ParseUtil.CoerceLong(torrent["Seeders"].ToString());
-                        var leechers = ParseUtil.CoerceLong(torrent["Leechers"].ToString());
-                        var title = WebUtility.HtmlDecode(torrent["ReleaseTitle"].ToString());
 
-                        List<string> tags = new List<string>();
-                        string[] tagNames = { "Format", "Encoding", "Region", "Language", "Scene", "Miscellaneous", "GameDOXType", "GameDOXVers" };
+                        var title = WebUtility.HtmlDecode(torrent.Value<string>("ReleaseTitle"));
+                        var groupYear = group.Value<int>("year");
+
+                        if (groupYear > 0 && !title.Contains(groupYear.ToString()))
+                        {
+                            title += $" ({groupYear})";
+                        }
+
+                        if (torrent.Value<string>("RemasterTitle").IsNotNullOrWhiteSpace())
+                        {
+                            title += $" [{$"{torrent.Value<string>("RemasterTitle")} {torrent.Value<int>("RemasterYear")}".Trim()}]";
+                        }
+
+                        var tags = new List<string>();
+
+                        if (group.Value<JArray>("Artists").Count > 0)
+                        {
+                            tags.Add(string.Join(", ", group.Value<JArray>("Artists").Select(a => a.Value<string>("name"))));
+                        }
+
+                        var tagNames = new[] { "Format", "Encoding", "Region", "Language", "Scene", "Miscellaneous", "GameDOXType", "GameDOXVers" };
                         foreach (var tag in tagNames)
                         {
                             string tagValue;
                             if (tag.Equals("Scene"))
-                                tagValue = torrent[tag].ToString().Equals("1") ? "Scene" : "";
+                            {
+                                tagValue = (torrent.Value<string>(tag)?.Equals("1") ?? false) ? "Scene" : "";
+                            }
                             else
-                                tagValue = torrent[tag].ToString();
+                            {
+                                tagValue = torrent.Value<string>(tag);
+                            }
 
                             if (!string.IsNullOrEmpty(tagValue))
+                            {
                                 tags.Add(tagValue);
+                            }
                         }
 
                         if (tags.Count > 0)
-                            title += " [" + string.Join(", ", tags) + "]";
+                        {
+                            title += $" [{string.Join(", ", tags)}]";
+                        }
 
-                        var freeTorrent = ParseUtil.CoerceInt(torrent["FreeTorrent"].ToString());
-                        var files = ParseUtil.CoerceInt(torrent["FileCount"].ToString());
+                        var freeTorrent = torrent.Value<int>("FreeTorrent");
 
                         var release = new ReleaseInfo
                         {
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 288000, //80 hours
-                            Category = GroupCategory,
-                            PublishDate = publishDate,
-                            Size = size,
+                            Guid = link,
                             Details = details,
                             Link = link,
-                            Guid = link,
-                            Grabs = grabs,
-                            Seeders = seeders,
-                            Peers = leechers + seeders,
                             Title = title,
-                            Files = files,
+                            Category = categories,
+                            PublishDate = DateTime.ParseExact(torrent.Value<string>("Time"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                            Size = ParseUtil.CoerceLong(torrent.Value<string>("Size")),
+                            Grabs = torrent.Value<int>("Snatched"),
+                            Seeders = torrent.Value<int>("Seeders"),
+                            Peers = torrent.Value<int>("Seeders") + torrent.Value<int>("Leechers"),
+                            Files = torrent.Value<int>("FileCount"),
                             UploadVolumeFactor = freeTorrent >= 2 ? 0 : 1,
-                            DownloadVolumeFactor = freeTorrent >= 1 ? 0 : 1
+                            DownloadVolumeFactor = freeTorrent >= 1 ? 0 : 1,
+                            MinimumRatio = 1,
+                            MinimumSeedTime = 288000, // 80 hours
                         };
                         releases.Add(release);
                     }

@@ -540,7 +540,7 @@ namespace Jackett.Common.Indexers.Abstract
         public override async Task<byte[]> Download(Uri link)
         {
             var apiKey = configData.ApiKey;
-            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = String.Format(AuthorizationFormat, apiKey.Value) } : null;
+            var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = string.Format(AuthorizationFormat, apiKey.Value) } : null;
             var response = await base.RequestWithCookiesAsync(link.ToString(), null, RequestType.GET, headers: headers);
             var content = response.ContentBytes;
 
