@@ -88,7 +88,7 @@ caps:
     - {id: 1719, cat: XXX, desc: "Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movies & SiteRip's (DVD & HD Video)"}
     - {id: 997, cat: XXX, desc: "Японские фильмы и сайтрипы 1991-2014 / Japanese Movies & SiteRip's 1991-2014"}
     - {id: 1818, cat: XXX, desc: "Японские фильмы и сайтрипы 2015-2024 / Japanese Movies & SiteRip's 2015-2024"}
-    - {id: 1849, cat: XXX, desc: "Китайские фильмы и сайтрипы (DVD и HD Video) / Chinese Movies & SiteRip's (DVD & HD Video)"
+    - {id: 1849, cat: XXX, desc: "Китайские фильмы и сайтрипы (DVD и HD Video) / Chinese Movies & SiteRip's (DVD & HD Video)"}
 
     - {id: 1723, cat: XXX, desc: "Фото и журналы / Photos & Magazines"}
     - {id: 1726, cat: XXX, desc: "MetArt & MetModels"}
