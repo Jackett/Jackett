@@ -14,10 +14,10 @@ caps:
     - {id: 1736, cat: Movies, desc: "Кинематограф Зарубежные фильмы 2024"}
     - {id: 1737, cat: Movies/HD, desc: "Кинематограф Зарубежные фильмы 2024 (HD Video)"}
     - {id: 1738, cat: Movies, desc: "Кинематограф Российские фильмы 2024"}
-    - {id: 1739, cat: Movies/HD, desc: "Кинематограф фильмы 2024 (HD Video)"}
+    - {id: 1739, cat: Movies/HD, desc: "Кинематограф Российские фильмы 2024 (HD Video)"}
     - {id: 1697, cat: Movies, desc: "Кинематограф Зарубежные фильмы (2023)"}
     - {id: 1696, cat: Movies, desc: "Кинематограф Российские фильмы (2023)"}
-    - {id: 1698, cat: Movies/HD, desc: "Кинематограф Зарубежные фильмы в 720p (2023) "}
+    - {id: 1698, cat: Movies/HD, desc: "Кинематограф Зарубежные фильмы в 720p (2023)"}
     - {id: 1699, cat: Movies/HD, desc: "Кинематограф Российские фильмы в 720p (2023)"}
     - {id: 1701, cat: Movies/HD, desc: "Кинематограф Зарубежные фильмы в 1080p (2023)"}
     - {id: 1702, cat: Movies/HD, desc: "Кинематограф Российские фильмы в 1080р (2023)"}
@@ -34,28 +34,28 @@ caps:
     - {id: 1659, cat: Movies/HD, desc: " |- Российские фильмы в 720p (2021)"}
     - {id: 1658, cat: Movies/HD, desc: " |- Зарубежные фильмы в 1080p (2021)"}
     - {id: 1657, cat: Movies/HD, desc: " |- Российские фильмы в 1080р (2021)"}
-    - {id: 1564, cat: Movies, desc: "фильмы 2020 года"}
+    - {id: 1564, cat: Movies, desc: "Фильмы 2020 года"}
     - {id: 1573, cat: Movies, desc: " |- Зарубежные фильмы (2020)"}
     - {id: 1572, cat: Movies, desc: " |- Российские фильмы (2020)"}
     - {id: 1571, cat: Movies/HD, desc: " |- Зарубежные фильмы в 720p (2020)"}
     - {id: 1570, cat: Movies/HD, desc: " |- Российские фильмы в 720p (2020)"}
     - {id: 1569, cat: Movies/HD, desc: " |- Зарубежные фильмы в 1080p (2020)"}
     - {id: 1568, cat: Movies/HD, desc: " |- Российские фильмы в 1080р (2020)"}
-    - {id: 1730, cat: Movies, desc: "  |- Зарубежные фильмы "}
-    - {id: 1731, cat: Movies/HD, desc: "  |- Зарубежные фильмы (HDvideo)"}
-    - {id: 1732, cat: Movies, desc: "  |- Российские фильмы "}
-    - {id: 1733, cat: Movies/HD, desc: "  |- Российские фильмы (HDvideo)"}
-    - {id: 1725, cat: Movies, desc: "  |- Зарубежные фильмы "}
-    - {id: 1726, cat: Movies/HD, desc: "  |- Зарубежные фильмы (HDvideo)"}
-    - {id: 1727, cat: Movies, desc: "  |- Российские фильмы "}
-    - {id: 1728, cat: Movies/HD, desc: "  |- Российские фильмы (HDvideo)"}
-    - {id: 1719, cat: Movies, desc: "  |- Зарубежные фильмы "}
-    - {id: 1720, cat: Movies/HD, desc: "  |- Зарубежные фильмы (HDvideo)"}
-    - {id: 1721, cat: Movies, desc: "  |- Российские фильмы "}
-    - {id: 1722, cat: Movies/HD, desc: "  |- Российские фильмы (HDvideo)"}
-    - {id: 1715, cat: Movies, desc: "  |- Зарубежные фильмы до 1990 г."}
-    - {id: 1734, cat: Movies, desc: "  |- Классика зарубежного кино "}
-    - {id: 1716, cat: Movies, desc: "  |- Советское кино "}
+    - {id: 1730, cat: Movies, desc: " |- Зарубежные фильмы"}
+    - {id: 1731, cat: Movies/HD, desc: " |- Зарубежные фильмы (HDvideo)"}
+    - {id: 1732, cat: Movies, desc: " |- Российские фильмы"}
+    - {id: 1733, cat: Movies/HD, desc: " |- Российские фильмы (HDvideo)"}
+    - {id: 1725, cat: Movies, desc: " |- Зарубежные фильмы"}
+    - {id: 1726, cat: Movies/HD, desc: " |- Зарубежные фильмы (HDvideo)"}
+    - {id: 1727, cat: Movies, desc: " |- Российские фильмы"}
+    - {id: 1728, cat: Movies/HD, desc: " |- Российские фильмы (HDvideo)"}
+    - {id: 1719, cat: Movies, desc: " |- Зарубежные фильмы"}
+    - {id: 1720, cat: Movies/HD, desc: " |- Зарубежные фильмы (HDvideo)"}
+    - {id: 1721, cat: Movies, desc: " |- Российские фильмы"}
+    - {id: 1722, cat: Movies/HD, desc: " |- Российские фильмы (HDvideo)"}
+    - {id: 1715, cat: Movies, desc: " |- Зарубежные фильмы до 1990 г."}
+    - {id: 1734, cat: Movies, desc: " |- Классика зарубежного кино"}
+    - {id: 1716, cat: Movies, desc: " |- Советское кино"}
     - {id: 820, cat: Movies/HD, desc: "Зарубежные фильмы"}
     - {id: 840, cat: Movies/DVD, desc: " |- DVD5 , DVD9"}
     - {id: 841, cat: Movies/3D, desc: " |- Фильмы в 3D формате"}
@@ -64,16 +64,16 @@ caps:
     - {id: 1317, cat: Movies, desc: " |- Детские фильмы, сказки, сериалы"}
     - {id: 838, cat: Movies, desc: " |- Короткометражные фильмы"}
     - {id: 845, cat: Movies, desc: " |- В оригинале"}
-    - {id: 1560, cat: Movies, desc: " |- | - фильмы с переводом UKR"}
+    - {id: 1560, cat: Movies, desc: " |- Фильмы с переводом UKR"}
     - {id: 798, cat: Movies/HD, desc: "Российские фильмы"}
     - {id: 802, cat: Movies/DVD, desc: " |- DVD5 , DVD9"}
     - {id: 801, cat: Movies/3D, desc: " |- Фильмы в 3D формате"}
     - {id: 1318, cat: Movies, desc: " |- Детские фильмы, сказки, сериалы"}
     # Сериалы TV
-    - {id: 1708, cat: TV, desc: " |- Зарубежные сериалы"}
-    - {id: 1710, cat: TV/HD, desc: " |- Зарубежные сериалы (HD Video)"}
-    - {id: 1709, cat: TV, desc: " |- Отечественные сериалы"}
-    - {id: 1711, cat: TV/HD, desc: " |- Отечественные сериалы (HD Video)"}
+    - {id: 1708, cat: TV, desc: " |- Зарубежные сериалы 2023"}
+    - {id: 1710, cat: TV/HD, desc: " |- Зарубежные сериалы 2023 (720p, 1080p)"}
+    - {id: 1709, cat: TV, desc: " |- Отечественные сериалы 2023"}
+    - {id: 1711, cat: TV/HD, desc: " |- Отечественные сериалы 2023 (720p, 1080p)"}
     - {id: 1705, cat: TV/WEB-DL, desc: " |- WEBRip, WEB-DLRip, SATRip"}
     - {id: 1086, cat: TV/HD, desc: " |- Зарубежные сериалы (HD Video)"}
     - {id: 1085, cat: TV/HD, desc: " |- Зарубежные сериалы (Full HD)"}
@@ -123,35 +123,35 @@ caps:
     - {id: 1021, cat: Books, desc: " |- Инструкции, Схемы, Технические и сервисные документации"}
     - {id: 1020, cat: Books, desc: " |- Сварка, Пайка"}
     - {id: 730, cat: Audio/Audiobook, desc: "Аудиокниги"}
-    - {id: 776, cat: Audio/Audiobook, desc: " |- Фантастика Фэнтези Ужасы Мистика (Аудио)"}
-    - {id: 777, cat: Audio/Audiobook, desc: " |- Детективы приключения триллеры боевики (Аудио)"}
-    - {id: 1156, cat: Audio/Audiobook, desc: " |- Историческая литература биографии мемуары (Аудио)"}
+    - {id: 776, cat: Audio/Audiobook, desc: " |- Фантастика ♪ Фэнтези ♪ Ужасы ♪ Мистика (Аудио)"}
+    - {id: 777, cat: Audio/Audiobook, desc: " |- Детективы ♪ приключения ♪ триллеры ♪ боевики (Аудио)"}
+    - {id: 1156, cat: Audio/Audiobook, desc: " |- Историческая литература ♪ биографии ♪ мемуары (Аудио)"}
     - {id: 1158, cat: Audio/Audiobook, desc: " |- Зарубежная литература (Аудио)"}
     - {id: 1233, cat: Audio/Audiobook, desc: " |- Русская литература (Аудио)"}
     - {id: 1159, cat: Audio/Audiobook, desc: " |- Современные любовные романы (Аудио)"}
     - {id: 1315, cat: Audio/Audiobook, desc: " |- Детская литература (Аудио)"}
     - {id: 1223, cat: Audio/Audiobook, desc: " |- Учебная и научно-популярная литература (Аудио)"}
     # Музыка Music
-    - {id: 1635, cat: Audio/MP3, desc: "Зарубежная музыка (Disco, Italo-Disco, Eurodance,.."}
-    - {id: 1636, cat: Audio/MP3, desc: " |- Сборники поп музыки (50/50 общие mp3)"}
-    - {id: 1643, cat: Audio/MP3, desc: " |- Зарубежная поп музыка (альбомы, синглы mp3)"}
-    - {id: 1637, cat: Audio/MP3, desc: " |- Зарубежная поп-музыка (сборники mp3)"}
-    - {id: 1639, cat: Audio/MP3, desc: " |- Club, Dance, Hands Up (Сборники mp3)"}
-    - {id: 1640, cat: Audio/Lossless, desc: " |- Зарубежный шансон (mp3, Lossless)"}
-    - {id: 1177, cat: Audio/MP3, desc: "Отечественная поп музыка, шансон и авторская песня"}
+    - {id: 1635, cat: Audio/MP3, desc: "Зарубежная музыка"}
+    - {id: 1637, cat: Audio/MP3, desc: " |- Зарубежные сборники mp3"}
+    - {id: 1643, cat: Audio/MP3, desc: " |- Зарубежная поп музыка (mp3)"}
+    - {id: 1636, cat: Audio/MP3, desc: " |- Сборники музыки 50\50 mp3"}
+    - {id: 1639, cat: Audio/MP3, desc: " |- Сборники клубной музыки (Club,Dance)"}
+    - {id: 1640, cat: Audio/Lossless, desc: " |- Зарубежный шансон (mp3,Flac)"}
+    - {id: 1177, cat: Audio/MP3, desc: "Отечественная музыка."}
     - {id: 1642, cat: Audio/MP3, desc: " |- Российская попса (альбомы, синглы mp3)"}
-    - {id: 1427, cat: Audio/MP3, desc: " |- Сборники Российской поп музыки"}
+    - {id: 1427, cat: Audio/MP3, desc: " |- Сборники Российской поп музыки (mp3)"}
     - {id: 1641, cat: Audio/MP3, desc: " |- Шансон и авторская песня (mp3)"}
-    - {id: 1561, cat: Audio/MP3, desc: " |- Сборники Русского шансона"}
+    - {id: 1561, cat: Audio/MP3, desc: " |- Сборники Русского шансона (mp3)"}
     - {id: 1598, cat: Audio/MP3, desc: "Отечественный Rock, Metal"}
     - {id: 1599, cat: Audio/MP3, desc: " |- Отечественный Rock (mp3)"}
-    - {id: 1600, cat: Audio/MP3, desc: " |- Отечественный Metal (mp3 )"}
+    - {id: 1600, cat: Audio/MP3, desc: " |- Отечественный Metal (mp3)"}
     - {id: 1601, cat: Audio/MP3, desc: " |- Сборники Rock, Metal (mp3)"}
-    - {id: 1200, cat: Audio/MP3, desc: " |- Classic Rock&Hard Rock"}
-    - {id: 1552, cat: Audio/MP3, desc: " |- Progressive&Art-Rock"}
+    - {id: 1200, cat: Audio/MP3, desc: " |- Classic Rock & Hard Rock"}
+    - {id: 1552, cat: Audio/MP3, desc: " |- Progressive & Art-Rock"}
     - {id: 1565, cat: Audio/MP3, desc: " |- Folk-Rock, Folk-Punk, Songwriter"}
     - {id: 1554, cat: Audio/MP3, desc: " |- Melodic Rock, Arena rock"}
-    - {id: 1553, cat: Audio/MP3, desc: " |- Pop-Rock&Soft Rock"}
+    - {id: 1553, cat: Audio/MP3, desc: " |- Pop-Rock & Soft Rock"}
     - {id: 1567, cat: Audio/MP3, desc: " |- Instrumental Guitar Rock (Виртуозы гитары)"}
     - {id: 1566, cat: Audio/MP3, desc: " |- Rockabilly, Rock'n'Roll"}
     - {id: 1713, cat: Audio/MP3, desc: " |- Blues-Rock, Country, Indie-Rock"}
@@ -166,13 +166,13 @@ caps:
     - {id: 1586, cat: Audio/MP3, desc: " |- Sludge, Stoner, Post-Metal"}
     - {id: 1587, cat: Audio/MP3, desc: " |- Thrash, Speed"}
     - {id: 1602, cat: Audio/MP3, desc: " |- Сборники Metal"}
-    - {id: 1590, cat: Audio/MP3, desc: " |- Alternative&Nu-metal"}
+    - {id: 1590, cat: Audio/MP3, desc: " |- Alternative & Nu-metal"}
     - {id: 1591, cat: Audio/MP3, desc: " |- Punk"}
     - {id: 1592, cat: Audio/MP3, desc: " |- Hardcore"}
-    - {id: 1593, cat: Audio/MP3, desc: " |- Indie, Post-Rock&Post-Punk"}
-    - {id: 1594, cat: Audio/MP3, desc: " |- Industrial&Post-industrial"}
+    - {id: 1593, cat: Audio/MP3, desc: " |- Indie, Post-Rock & Post-Punk"}
+    - {id: 1594, cat: Audio/MP3, desc: " |- Industrial & Post-industrial"}
     - {id: 1595, cat: Audio/MP3, desc: " |- Emocore, Post-hardcore, Metalcore, Deathcore"}
-    - {id: 1596, cat: Audio/MP3, desc: " |- Gothic Rock&Dark Folk"}
+    - {id: 1596, cat: Audio/MP3, desc: " |- Gothic Rock & Dark Folk"}
     - {id: 1597, cat: Audio/MP3, desc: " |- Avant-garde, Experimental Rock"}
     - {id: 1626, cat: Audio/MP3, desc: " |- Зарубежный джаз (mp3)"}
     - {id: 1627, cat: Audio/MP3, desc: " |- Зарубежный блюз (mp3)"}
@@ -184,7 +184,7 @@ caps:
     - {id: 1614, cat: Audio/MP3, desc: " |- House"}
     - {id: 1203, cat: Audio/MP3, desc: " |- Techno"}
     - {id: 1615, cat: Audio/MP3, desc: " |- Electro, Electro-Freestyle, Nu Electro"}
-    - {id: 1616, cat: Audio/MP3, desc: " |- Drum&Bass, Jungle"}
+    - {id: 1616, cat: Audio/MP3, desc: " |- Drum & Bass, Jungle"}
     - {id: 1617, cat: Audio/MP3, desc: " |- Breakbeat"}
     - {id: 1618, cat: Audio/MP3, desc: " |- Dubstep"}
     - {id: 1205, cat: Audio/MP3, desc: " |- IDM"}
@@ -193,22 +193,22 @@ caps:
     - {id: 1206, cat: Audio/MP3, desc: " |- Trip Hop, Abstract Hip-Hop"}
     - {id: 1575, cat: Audio/MP3, desc: " |- Traditional Electronic, Ambient, Modern Classical,..."}
     - {id: 1576, cat: Audio/MP3, desc: " |- Industrial, Noise, EBM, Dark Electro, Aggrotech,..."}
-    - {id: 1577, cat: Audio/MP3, desc: " |- Electronic music (разные стили)"}
+    - {id: 1577, cat: Audio/MP3, desc: " |- Electronic music (смешанные стили и направления)"}
     - {id: 1630, cat: Audio/MP3, desc: "Рэп, Хип-Хоп, R'n'B"}
-    - {id: 1631, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп, R'n'B (mp3)"}
+    - {id: 1631, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп (mp3)"}
     - {id: 1633, cat: Audio/MP3, desc: " |- Зарубежный Рэп, Хип-Хоп (mp3)"}
     - {id: 1540, cat: Audio/MP3, desc: "Остальные музыкальные жанры, + Видеоклипы и концерты"}
     - {id: 1604, cat: Audio/MP3, desc: " |- Reggae, Ska, Dub (mp3)"}
-    - {id: 1562, cat: Audio/MP3, desc: " |- Инструментальная и классическая музыка (mp3)"}
+    - {id: 1562, cat: Audio/MP3, desc: " |- Инструментальная и классическая музыка (mp3, FLAC)"}
     - {id: 1185, cat: Audio/MP3, desc: " |- New Age, Relax, Meditative (mp3)"}
     - {id: 1183, cat: Audio/MP3, desc: " |- Музыкальное видео (все жанры)"}
     - {id: 1664, cat: Audio/Lossless, desc: "Оцифровки с аналоговых носителей"}
-    - {id: 1665, cat: Audio/Lossless, desc: " |- Зарубежная поп-музыка (Vinyl)"}
-    - {id: 1666, cat: Audio/Lossless, desc: " |- Зарубежная рок-музыка (Vinyl)"}
-    - {id: 1667, cat: Audio/Lossless, desc: " |- Джаз и блюз (Vinyl)"}
-    - {id: 1668, cat: Audio/Lossless, desc: " |- Электронная музыка (Vinyl)"}
-    - {id: 1670, cat: Audio/Lossless, desc: " |- Отечественная поп-музыка (Vinyl)"}
-    - {id: 1669, cat: Audio/Lossless, desc: " |- Шансон, авторские, военные песни (Vinyl)"}
+    - {id: 1665, cat: Audio/Lossless, desc: " |- Зарубежная поп-музыка"}
+    - {id: 1666, cat: Audio/Lossless, desc: " |- Зарубежная рок-музыка"}
+    - {id: 1667, cat: Audio/Lossless, desc: " |- Джаз и блюз"}
+    - {id: 1668, cat: Audio/Lossless, desc: " |- Электронная музыка"}
+    - {id: 1670, cat: Audio/Lossless, desc: " |- Отечественная поп-музыка"}
+    - {id: 1669, cat: Audio/Lossless, desc: " |- Шансон, авторские, военные песни"}
     - {id: 1679, cat: Audio/Lossless, desc: " |- Зарубежная поп музыка (Lossless)"}
     - {id: 1680, cat: Audio/Lossless, desc: " |- Eurodance, Disco, Hi-NRG, Technopop (Lossless)"}
     - {id: 1681, cat: Audio/Lossless, desc: " |- Отечественная поп музыка (Lossless)"}
@@ -230,7 +230,7 @@ caps:
     - {id: 1120, cat: PC, desc: " |- Windows 10"}
     - {id: 706, cat: PC, desc: " |- Windows 8, 8.1"}
     - {id: 212, cat: PC, desc: " |- Windows 7"}
-    - {id: 210, cat: PC, desc: " |- Windows XP , Windows Vista , Windows выпущенные до 20..."}
+    - {id: 210, cat: PC, desc: " |- Windows Vista , Windows XP , Windows выпущенные до 20..."}
     - {id: 213, cat: PC, desc: " |- Серверные ОС от Microsoft"}
     - {id: 215, cat: PC, desc: " |- Разное (RC, Beta, Service Packs, Cracks)"}
     - {id: 1395, cat: PC, desc: " |- Linux, Unix, Mac и другие ОС"}
@@ -296,49 +296,49 @@ caps:
     - {id: 1295, cat: PC/Mobile-Other, desc: " |- Windows Mobile"}
     # Клубничка ХХХ 18+️
     - {id: 1490, cat: XXX, desc: "Эротика (не порно)"}
-    - {id: 1491, cat: XXX, desc: " |-  Эротические фильмы ≪с переводом Rus≫"}
-    - {id: 1492, cat: XXX, desc: " |-  Эротические фильмы с «родной» озвучкой"}
-    - {id: 1493, cat: XXX, desc: " |-  Playboy, Penthouse (эротический видео журнал)"}
-    - {id: 1495, cat: XXX, desc: " |-  Нудизм-Натуризм"}
-    - {id: 1494, cat: XXX, desc: " |-  Фото, картинки, журналы"}
+    - {id: 1491, cat: XXX, desc: " |- ❥ Эротические фильмы ≪с переводом Rus≫"}
+    - {id: 1492, cat: XXX, desc: " |- • Эротические фильмы с «родной» озвучкой"}
+    - {id: 1493, cat: XXX, desc: " |- • Playboy, Penthouse (эротический видео журнал)"}
+    - {id: 1495, cat: XXX, desc: " |- • Нудизм-Натуризм"}
+    - {id: 1494, cat: XXX, desc: " |- • Фото, картинки, журналы"}
     - {id: 1376, cat: XXX, desc: "Зарубежное видео ХХХ"}
-    - {id: 1378, cat: XXX, desc: " |-  Зарубежные порно фильмы"}
-    - {id: 1470, cat: XXX, desc: " |-  Гонзо-фильмы / Gonzo"}
-    - {id: 1446, cat: XXX, desc: " |-  Гонзо и зарубежные  фильмы ≪720p, 1080p≫"}
-    - {id: 1468, cat: XXX, desc: " |-  Этнические фильмы / Ethnic-Themed"}
-    - {id: 1537, cat: XXX, desc: " |-  Лесбо-фильмы / All Girl&Solo"}
-    - {id: 1444, cat: XXX, desc: " |-  Порно пародии / Parody porn"}
-    - {id: 1379, cat: XXX, desc: " |-  Зарубежное порно ≪с переводом Rus≫"}
-    - {id: 1388, cat: XXX, desc: " |-  Классика и ретро порно / Classic (Retro)"}
-    - {id: 1389, cat: XXX, desc: " |-  Японские фильмы и сайтрипы"}
-    - {id: 1380, cat: XXX, desc: " |-  Зарубежные сайтрипы ≪Definition 480p, 540p≫"}
-    - {id: 1441, cat: XXX, desc: " |-  Зарубежные сайтрипы  ≪HD Video 720p, 1080p≫"}
-    - {id: 1439, cat: XXX, desc: " |-  Сцены и Сайтрипы ≪4К UHD 2160p≫"}
-    - {id: 1535, cat: XXX, desc: " |-  Виртуальная реальность ХХХ / Virtual Reality Porn (VR)"}
-    - {id: 1392, cat: XXX, desc: " |-  Любительское видео ≪WebCam, CamRip≫"}
-    - {id: 1426, cat: XXX, desc: " |-  Документальное видео"}
+    - {id: 1378, cat: XXX, desc: " |- • Зарубежные порно фильмы"}
+    - {id: 1470, cat: XXX, desc: " |- • Гонзо-фильмы / Gonzo"}
+    - {id: 1446, cat: XXX, desc: " |- • Гонзо и зарубежные  фильмы ≪720p, 1080p≫"}
+    - {id: 1468, cat: XXX, desc: " |- • Этнические фильмы / Ethnic-Themed"}
+    - {id: 1537, cat: XXX, desc: " |- • Лесбо-фильмы / All Girl & Solo"}
+    - {id: 1444, cat: XXX, desc: " |- • Порно пародии / Parody porn"}
+    - {id: 1379, cat: XXX, desc: " |- • Зарубежное порно ≪с переводом Rus≫"}
+    - {id: 1388, cat: XXX, desc: " |- • Классика и ретро порно / Classic (Retro)"}
+    - {id: 1389, cat: XXX, desc: " |- • Японские фильмы и сайтрипы"}
+    - {id: 1380, cat: XXX, desc: " |- • Зарубежные сайтрипы ≪Definition 480p, 540p≫"}
+    - {id: 1441, cat: XXX, desc: " |- • Зарубежные сайтрипы  ≪HD Video 720p, 1080p≫"}
+    - {id: 1439, cat: XXX, desc: " |- • Сцены и Сайтрипы ≪4К UHD 2160p≫"}
+    - {id: 1535, cat: XXX, desc: " |- • Виртуальная реальность ХХХ / Virtual Reality Porn (VR)"}
+    - {id: 1392, cat: XXX, desc: " |- • Любительское видео ≪WebCam, CamRip≫"}
+    - {id: 1426, cat: XXX, desc: " |- • Документальное видео"}
     - {id: 1377, cat: XXX, desc: "Русское видео ХХХ"}
-    - {id: 1383, cat: XXX, desc: " |-  Порно фильмы Российского пр-ва"}
-    - {id: 1387, cat: XXX, desc: " |-  Сайтрипы с русскими актрисами ≪Definition 480p, 540p≫"}
-    - {id: 1428, cat: XXX, desc: " |-  Сайтрипы с русскими актрисами ≪HD Video 720p, 1080p≫"}
-    - {id: 1440, cat: XXX, desc: " |-  Сцены и Сайтрипы с Русскими актрисами ≪4К UHD 2160p≫"}
-    - {id: 1384, cat: XXX, desc: " |-  Любительское порно ≪CamRip≫"}
+    - {id: 1383, cat: XXX, desc: " |- • Порно фильмы Российского пр-ва"}
+    - {id: 1387, cat: XXX, desc: " |- • Сайтрипы с русскими актрисами ≪Definition 480p, 540p≫"}
+    - {id: 1428, cat: XXX, desc: " |- • Сайтрипы с русскими актрисами ≪HD Video 720p, 1080p≫"}
+    - {id: 1440, cat: XXX, desc: " |- • Сцены и Сайтрипы с Русскими актрисами ≪4К UHD 2160p≫"}
+    - {id: 1384, cat: XXX, desc: " |- • Любительское порно ≪CamRip≫"}
     - {id: 1429, cat: XXX, desc: "Нетрадиционное порно"}
-    - {id: 1430, cat: XXX, desc: " |-  Буккаке, Камшот / Bukkake, Cumshot Compilation"}
-    - {id: 1431, cat: XXX, desc: " |-  Женское доминирование и страпон / Femdom&Strapon"}
-    - {id: 1432, cat: XXX, desc: " |-  BDSM ≪бандаж, дисциплина, садизм, мазохизм≫"}
-    - {id: 1433, cat: XXX, desc: " |-  Фетиш, медосмотры / Medical Fetish"}
-    - {id: 1442, cat: XXX, desc: " |-  Переодевание, униформа / Uniform"}
-    - {id: 1434, cat: XXX, desc: " |-  Фистинг и дилдо / Fisting&Dildo"}
-    - {id: 1469, cat: XXX, desc: " |-  Транссексуалы / Transsexual"}
-    - {id: 1443, cat: XXX, desc: " |-  Мочеиспускание / Peeing"}
-    - {id: 1536, cat: XXX, desc: " |-  Подглядывание / Voyeur"}
-    - {id: 1438, cat: XXX, desc: " |-  Беременные / Pregnant"}
-    - {id: 1496, cat: XXX, desc: " |-  Бисексуалы / Bisexual"}
-    - {id: 1480, cat: XXX, desc: "Мультфильмы ХХХ&Хентай&Порно игры"}
-    - {id: 1542, cat: XXX, desc: " |-  Порно игры / Porno games"}
-    - {id: 1481, cat: XXX, desc: " |-  Мультфильмы / Cartoons"}
-    - {id: 1482, cat: XXX, desc: " |-  Хентай / Hentai "}
+    - {id: 1430, cat: XXX, desc: " |- • Буккаке, Камшот / Bukkake, Cumshot Compilation"}
+    - {id: 1431, cat: XXX, desc: " |- • Женское доминирование и страпон / Femdom & Strapon"}
+    - {id: 1432, cat: XXX, desc: " |- • BDSM ≪бандаж, дисциплина, садизм, мазохизм≫"}
+    - {id: 1433, cat: XXX, desc: " |- • Фетиш, медосмотры / Medical Fetish"}
+    - {id: 1442, cat: XXX, desc: " |- • Переодевание, униформа / Uniform"}
+    - {id: 1434, cat: XXX, desc: " |- • Фистинг и дилдо / Fisting & Dildo"}
+    - {id: 1469, cat: XXX, desc: " |- • Транссексуалы / Transsexual"}
+    - {id: 1443, cat: XXX, desc: " |- • Мочеиспускание / Peeing"}
+    - {id: 1536, cat: XXX, desc: " |- • Подглядывание / Voyeur"}
+    - {id: 1438, cat: XXX, desc: " |- • Беременные / Pregnant"}
+    - {id: 1496, cat: XXX, desc: " |- • Бисексуалы / Bisexual"}
+    - {id: 1480, cat: XXX, desc: "Мультфильмы ХХХ & Хентай & Порно игры"}
+    - {id: 1542, cat: XXX, desc: " |- • Порно игры / Porno games"}
+    - {id: 1481, cat: XXX, desc: " |- • Мультфильмы / Cartoons"}
+    - {id: 1482, cat: XXX, desc: " |- • Хентай / Hentai • •"}
     # Разное Other
     - {id: 118, cat: Other, desc: "Разное"}
     - {id: 987, cat: Other, desc: " |- Обои для рабочего стола"}
