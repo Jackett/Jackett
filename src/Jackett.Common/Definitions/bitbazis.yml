@@ -30,7 +30,7 @@ caps:
     - {id: 71, cat: Audio/Lossless, desc: "FLAC-Eng", default: true}
     - {id: 31, cat: PC/Games, desc: "Játék", default: true}
     - {id: 81, cat: PC/0day, desc: "Program", default: true}
-    - {id: 14, cat: PC, desc: "Program-Egyéb", default: true}
+    - {id: 14, cat: Other, desc: "Egyéb", default: true}
     - {id: 66, cat: XXX/ImageSet, desc: "XXX", default: false}
     - {id: 33, cat: XXX/SD, desc: "XXX-SD", default: false}
     - {id: 89, cat: XXX/x264, desc: "XXX-HD", default: false}
