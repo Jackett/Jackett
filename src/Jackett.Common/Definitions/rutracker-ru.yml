@@ -11,6 +11,10 @@ links:
 caps:
   categorymappings:
     # Кинематограф movies
+    - {id: 1736, cat: Movies, desc: "Кинематограф Зарубежные фильмы 2024"}
+    - {id: 1737, cat: Movies/HD, desc: "Кинематограф Зарубежные фильмы 2024 (HD Video)"}
+    - {id: 1738, cat: Movies, desc: "Кинематограф Российские фильмы 2024"}
+    - {id: 1739, cat: Movies/HD, desc: "Кинематограф фильмы 2024 (HD Video)"}
     - {id: 1697, cat: Movies, desc: "Кинематограф Зарубежные фильмы (2023)"}
     - {id: 1696, cat: Movies, desc: "Кинематограф Российские фильмы (2023)"}
     - {id: 1698, cat: Movies/HD, desc: "Кинематограф Зарубежные фильмы в 720p (2023) "}
