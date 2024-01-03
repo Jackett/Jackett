@@ -12,8 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 238, cat: Movies, desc: "Новинки кино (2023). Новые фильмы скачать бесплатно"}
-    - {id: 368, cat: Movies/SD, desc: "CAMRip, TS, DVDScreener"}
+    - {id: 238, cat: Movies, desc: "Новинки кино (2024). Новые фильмы скачать бесплатно"}
     - {id: 425, cat: Movies/HD, desc: "DVDRip / DVD-5/DVD-9"}
     - {id: 50, cat: Movies/HD, desc: "DVDRip"}
     - {id: 52, cat: Movies/HD, desc: "DVD-5/DVD-9"}
@@ -59,7 +58,8 @@ caps:
     - {id: 268, cat: TV, desc: "Следствие по телу / Body of Proof"}
     - {id: 160, cat: TV, desc: "Теория большого взрыва"}
     - {id: 20, cat: TV, desc: "Русские сериалы"}
-    - {id: 210, cat: TV, desc: "!!!   Полные завершенные сериалы   !!!"}
+    - {id: 210, cat: TV, desc: "!!! Полные завершенные сериалы !!!"}
+    - {id: 969, cat: TV, desc: "13"}
     - {id: 707, cat: TV, desc: "Агент"}
     - {id: 1028, cat: TV, desc: "Белые волки"}
     - {id: 736, cat: TV, desc: "Бомбила. Продолжение"}
@@ -85,7 +85,7 @@ caps:
     - {id: 774, cat: TV, desc: "Кулинар-2"}
     - {id: 989, cat: TV, desc: "Курортная полиция"}
     - {id: 961, cat: TV, desc: "Личное дело"}
-    - {id: 703, cat: TV, desc: "Лорд. Пес-полицейский"}
+    - {id: 639, cat: TV, desc: "Ловушка"}
     - {id: 1013, cat: TV, desc: "Лучшие враги"}
     - {id: 131, cat: TV, desc: "Майор полиции"}
     - {id: 727, cat: TV, desc: "Маяковский - Два дня"}
@@ -114,6 +114,7 @@ caps:
     - {id: 755, cat: TV, desc: "Студия 17"}
     - {id: 1039, cat: TV, desc: "Тайны следствия"}
     - {id: 360, cat: TV, desc: "Такси"}
+    - {id: 981, cat: TV, desc: "Темный мир: Равновесие"}
     - {id: 1046, cat: TV, desc: "Тест на беременность"}
     - {id: 977, cat: TV, desc: "Тихая охота"}
     - {id: 681, cat: TV, desc: "Топтуны"}
@@ -126,8 +127,10 @@ caps:
     - {id: 780, cat: TV, desc: "Шерлок Холмс"}
     - {id: 805, cat: TV, desc: "Этаж"}
     - {id: 743, cat: TV, desc: "Ясмин"}
+    - {id: 973, cat: TV, desc: "Умник"}
     - {id: 733, cat: TV, desc: "Хмуров"}
     - {id: 505, cat: TV, desc: "Хозяйка моей судьбы"}
+    - {id: 1004, cat: TV, desc: "Анжелика"}
     - {id: 1047, cat: TV, desc: "Бессмертник"}
     - {id: 1074, cat: TV, desc: "Без свидетелей"}
     - {id: 692, cat: TV, desc: "Верное средство"}
@@ -147,6 +150,7 @@ caps:
     - {id: 1083, cat: TV, desc: "Код Константина"}
     - {id: 1092, cat: TV, desc: "Измены"}
     - {id: 565, cat: TV, desc: "Кодекс чести"}
+    - {id: 797, cat: TV, desc: "Корабль"}
     - {id: 1070, cat: TV, desc: "Инспектор Купер"}
     - {id: 640, cat: TV, desc: "Легавый"}
     - {id: 1048, cat: TV, desc: "Луна"}
@@ -175,8 +179,10 @@ caps:
     - {id: 1024, cat: TV, desc: "Литейный"}
     - {id: 1023, cat: TV, desc: "Раскаяние"}
     - {id: 1076, cat: TV, desc: "Родители"}
+    - {id: 972, cat: TV, desc: "Сватьи"}
     - {id: 1073, cat: TV, desc: "Чужое гнездо"}
     - {id: 1078, cat: TV, desc: "Чтец"}
+    - {id: 691, cat: TV, desc: "Черные кошки"}
     - {id: 628, cat: TV, desc: "Карпов"}
     - {id: 1101, cat: TV, desc: "Квест"}
     - {id: 1088, cat: TV, desc: "Лондонград"}
@@ -192,10 +198,10 @@ caps:
     - {id: 1136, cat: TV, desc: "Бородач"}
     - {id: 1184, cat: TV, desc: "Вижу - знаю"}
     - {id: 1127, cat: TV, desc: "Владимирская, 15"}
-    - {id: 781, cat: TV, desc: "Выжить после"}
     - {id: 1181, cat: TV, desc: "Вышибала"}
     - {id: 1165, cat: TV, desc: "Гастролеры (Беглецы)"}
     - {id: 1150, cat: TV, desc: "Гражданин Никто"}
+    - {id: 509, cat: TV, desc: "Два отца и два сына"}
     - {id: 656, cat: TV, desc: "Деффчонки"}
     - {id: 1128, cat: TV, desc: "Другой майор Соколов"}
     - {id: 1192, cat: TV, desc: "Жемчуга"}
@@ -207,7 +213,9 @@ caps:
     - {id: 1077, cat: TV, desc: "Клан Ювелиров"}
     - {id: 1118, cat: TV, desc: "Команда"}
     - {id: 1132, cat: TV, desc: "Кости"}
+    - {id: 354, cat: TV, desc: "Кухня"}
     - {id: 1040, cat: TV, desc: "Мажор"}
+    - {id: 1104, cat: TV, desc: "Метод"}
     - {id: 1189, cat: TV, desc: "Москва. Центральный округ"}
     - {id: 1135, cat: TV, desc: "На глубине"}
     - {id: 1151, cat: TV, desc: "Напарницы"}
@@ -215,14 +223,13 @@ caps:
     - {id: 1160, cat: TV, desc: "Невский"}
     - {id: 1224, cat: TV, desc: "Нити судьбы"}
     - {id: 1112, cat: TV, desc: "Озабоченные или любовь зла"}
-    - {id: 1139, cat: TV, desc: "Остров"}
     - {id: 1080, cat: TV, desc: "Отдел 44"}
     - {id: 761, cat: TV, desc: "Пасечник"}
     - {id: 1103, cat: TV, desc: "Патруль Самооборона"}
     - {id: 1157, cat: TV, desc: "Перевозчик"}
     - {id: 1081, cat: TV, desc: "Пес"}
     - {id: 1110, cat: TV, desc: "Последний мент"}
-    - {id: 1163, cat: TV, desc: "дний москаль. Судный день"}
+    - {id: 1163, cat: TV, desc: "Последний москаль. Судный день"}
     - {id: 1126, cat: TV, desc: "Прокуроры"}
     - {id: 1179, cat: TV, desc: "Пушкин"}
     - {id: 671, cat: TV, desc: "Пятая стража"}
@@ -232,7 +239,6 @@ caps:
     - {id: 359, cat: TV, desc: "Светофор"}
     - {id: 1098, cat: TV, desc: "Семейный бизнес"}
     - {id: 1162, cat: TV, desc: "Следователь Тихонов"}
-    - {id: 1130, cat: TV, desc: "Сны"}
     - {id: 1138, cat: TV, desc: "Солнце в подарок"}
     - {id: 1180, cat: TV, desc: "Степные волки"}
     - {id: 1133, cat: TV, desc: "Сын моего отца"}
@@ -244,10 +250,9 @@ caps:
     - {id: 1191, cat: TV, desc: "Я работаю в суде"}
     - {id: 1235, cat: TV, desc: "Василиса"}
     - {id: 1154, cat: TV, desc: "Вечный отпуск"}
-    - {id: 555, cat: TV, desc: "Восьмидесятые"}
     - {id: 1231, cat: TV, desc: "Вы все меня бесите"}
     - {id: 152, cat: TV, desc: "Интерны"}
-    - {id: 1256, cat: TV, desc: "Крыша мира"}
+    - {id: 1156, cat: TV, desc: "Крыша мира"}
     - {id: 1233, cat: TV, desc: "Райское место"}
     - {id: 1302, cat: TV, desc: "Фамильные ценности"}
     - {id: 1059, cat: TV, desc: "Это любовь"}
@@ -301,10 +306,6 @@ caps:
     - {id: 596, cat: TV/Anime, desc: "Zero no Tsukaima Princess no Rondo TV-3 / Подручный бездарной Луизы: Рондо Принцессы ТВ-3"}
     - {id: 597, cat: TV/Anime, desc: "Zero no Tsukaima F TV-4 / Подручный бездарной Луизы Финал ТВ-4"}
     - {id: 242, cat: TV, desc: "Без перевода"}
-    - {id: 164, cat: TV, desc: "Фильмы"}
-    - {id: 167, cat: TV, desc: "Сериалы"}
-    - {id: 165, cat: TV, desc: "Мультфильмы"}
-    - {id: 166, cat: TV, desc: "Передачи - Тв-шоу"}
     - {id: 241, cat: TV, desc: "ТВ-Шоу, документальные, спорт"}
     - {id: 23, cat: TV, desc: "ТВ-Шоу и развлекательные передачи"}
     - {id: 1075, cat: TV, desc: "Архив ТВ-Шоу"}
@@ -360,7 +361,6 @@ caps:
     - {id: 792, cat: TV, desc: "Правила моей кухни"}
     - {id: 547, cat: TV, desc: "Право на защиту"}
     - {id: 731, cat: TV, desc: "Про декор"}
-    - {id: 982, cat: TV, desc: "Реальная кухня"}
     - {id: 536, cat: TV, desc: "Самый умный"}
     - {id: 742, cat: TV, desc: "Свидание со звездой"}
     - {id: 544, cat: TV, desc: "Свобода и справедливость"}
@@ -388,8 +388,8 @@ caps:
     - {id: 477, cat: TV, desc: "Даешь молодежь"}
     - {id: 514, cat: TV, desc: "Ералаш"}
     - {id: 446, cat: TV, desc: "+100500"}
-    - {id: 693, cat: TV, desc: "Comedy Баттл. Без границ"}
     - {id: 1164, cat: TV, desc: "Битва риелторов"}
+    - {id: 693, cat: TV, desc: "Comedy Баттл. Без границ"}
     - {id: 1071, cat: TV, desc: "Взвешенные люди"}
     - {id: 229, cat: TV, desc: "Comedy Баттл. Отбор, турнир"}
     - {id: 1096, cat: TV, desc: "Время Г"}
@@ -423,6 +423,8 @@ caps:
     - {id: 480, cat: TV, desc: "Камеди Woman"}
     - {id: 459, cat: TV, desc: "Говорим и показываем"}
     - {id: 479, cat: TV, desc: "Comedy Club - Камеди Клаб"}
+    - {id: 33, cat: TV, desc: "ДОМ 2"}
+    - {id: 270, cat: TV, desc: "Архив Дом-2"}
     - {id: 1484, cat: TV, desc: "ДНК"}
     - {id: 1483, cat: TV, desc: "За гранью"}
     - {id: 1469, cat: TV, desc: "Звезды сошлись"}
@@ -442,7 +444,7 @@ caps:
     - {id: 765, cat: TV, desc: "Перезагрузка"}
     - {id: 493, cat: TV, desc: "Поле чудес"}
     - {id: 730, cat: TV, desc: "Поедем, поедим"}
-    - {id: 1146, cat: TV, desc: "Пока все дома"}
+    - {id: 1146, cat: TV, desc: "Когда все дома"}
     - {id: 1196, cat: TV, desc: "Проводник"}
     - {id: 588, cat: TV, desc: "Прямой эфир"}
     - {id: 348, cat: TV, desc: "Пусть говорят"}
@@ -578,10 +580,10 @@ caps:
     - {id: 329, cat: TV/Sport, desc: "Сегодня. Итоговая программа"}
     - {id: 1100, cat: TV/Sport, desc: "Пропаганда"}
     - {id: 1084, cat: TV/Sport, desc: "'Точка' с Максимом Шевченко"}
-    - {id: 334, cat: TV/Sport, desc: "День  космических  историй"}
+    - {id: 334, cat: TV/Sport, desc: "День космических историй"}
     - {id: 1091, cat: TV/Sport, desc: "50 оттенков. Белова"}
     - {id: 298, cat: Console, desc: "Игры"}
-    - {id: 1202, cat: Console, desc: "Новинки repack 'ов"}
+    - {id: 1202, cat: Console, desc: "Горячие RePack'и"}
     - {id: 302, cat: Console, desc: "Горячие Новинки"}
     - {id: 1225, cat: Console, desc: "Denuvo"}
     - {id: 300, cat: Console, desc: "Игры для PC"}
@@ -607,7 +609,7 @@ caps:
     - {id: 812, cat: Console, desc: "Онлайновые игры"}
     - {id: 1215, cat: Console, desc: "Эротические игры"}
     - {id: 303, cat: Console, desc: "Мини-игры"}
-    - {id: 1208, cat: Console, desc: "Демо игры"}
+    - {id: 1208, cat: Console, desc: "Demo, Alpha, Beta версии"}
     - {id: 313, cat: Console, desc: "Прочее"}
     - {id: 864, cat: Console, desc: "Дополнения к играм"}
     - {id: 1209, cat: Console, desc: "NoCD/NoDVD"}
@@ -683,64 +685,64 @@ caps:
     - {id: 97, cat: Audio, desc: "Видеоклипы / Концерты"}
     - {id: 72, cat: Audio, desc: "Retro/Bandstand"}
     - {id: 1358, cat: Audio/Lossless, desc: "Retro/Bandstand - lossless"}
-    - {id: 1359, cat: Audio/MP3, desc: "Retro/Bandstand - Mp3"}
+    - {id: 1359, cat: Audio/MP3, desc: "Retro/Bandstand - MP3"}
     - {id: 71, cat: Audio, desc: "Disco"}
     - {id: 1356, cat: Audio/Lossless, desc: "Disco - lossless"}
-    - {id: 1357, cat: Audio/MP3, desc: "Disco - Mp3"}
+    - {id: 1357, cat: Audio/MP3, desc: "Disco - MP3"}
     - {id: 1354, cat: Audio/Lossless, desc: "Pop - lossless"}
-    - {id: 1355, cat: Audio/MP3, desc: "Pop - Mp3"}
+    - {id: 1355, cat: Audio/MP3, desc: "Pop - MP3"}
     - {id: 73, cat: Audio, desc: "Rock"}
     - {id: 98, cat: Audio, desc: "Видеоклипы / Концерты"}
     - {id: 1360, cat: Audio/Lossless, desc: "Rock - lossless"}
-    - {id: 1361, cat: Audio/MP3, desc: "Rock - Mp3"}
+    - {id: 1361, cat: Audio/MP3, desc: "Rock - MP3"}
     - {id: 74, cat: Audio, desc: "Alternative"}
     - {id: 99, cat: Audio, desc: "Видеоклипы / Концерты"}
     - {id: 1362, cat: Audio/Lossless, desc: "Alternative - lossless"}
-    - {id: 1363, cat: Audio/MP3, desc: "Alternative - Mp3"}
+    - {id: 1363, cat: Audio/MP3, desc: "Alternative - MP3"}
     - {id: 75, cat: Audio, desc: "Metal"}
     - {id: 100, cat: Audio, desc: "Видеоклипы / Концерты"}
-    - {id: 1364, cat: Audio/MP3, desc: "Metal - Mp3"}
+    - {id: 1364, cat: Audio/MP3, desc: "Metal - MP3"}
     - {id: 1365, cat: Audio/Lossless, desc: "Metal - lossless"}
     - {id: 76, cat: Audio, desc: "Rap, Hip-Hop, R'n'B"}
     - {id: 101, cat: Audio, desc: "Видеоклипы / Концерты"}
     - {id: 78, cat: Audio, desc: "Зарубежный"}
     - {id: 1368, cat: Audio/Lossless, desc: "Зарубежный - lossless"}
-    - {id: 1369, cat: Audio/MP3, desc: "Зарубежный - Mp3"}
+    - {id: 1369, cat: Audio/MP3, desc: "Зарубежный - MP3"}
     - {id: 77, cat: Audio, desc: "Отечественный"}
     - {id: 1370, cat: Audio/Lossless, desc: "Отечественный - lossless"}
-    - {id: 1371, cat: Audio/MP3, desc: "Отечественный - Mp3"}
+    - {id: 1371, cat: Audio/MP3, desc: "Отечественный - MP3"}
     - {id: 1366, cat: Audio/Lossless, desc: "Rap, Hip-Hop, R'n'B - lossless"}
-    - {id: 1367, cat: Audio/MP3, desc: "Rap, Hip-Hop, R'n'B - Mp3"}
+    - {id: 1367, cat: Audio/MP3, desc: "Rap, Hip-Hop, R'n'B - MP3"}
     - {id: 85, cat: Audio, desc: "Jazz, Blues"}
     - {id: 1380, cat: Audio/Lossless, desc: "Jazz, Blues - lossless"}
-    - {id: 1381, cat: Audio/MP3, desc: "Jazz, Blues - Mp3"}
+    - {id: 1381, cat: Audio/MP3, desc: "Jazz, Blues - MP3"}
     - {id: 82, cat: Audio, desc: "Chanson, Bard"}
     - {id: 1386, cat: Audio/Lossless, desc: "Chanson, Bard - lossless"}
-    - {id: 1387, cat: Audio/MP3, desc: "Chanson, Bard - Mp3"}
+    - {id: 1387, cat: Audio/MP3, desc: "Chanson, Bard - MP3"}
     - {id: 86, cat: Audio, desc: "Classical"}
     - {id: 1378, cat: Audio/Lossless, desc: "Classical - lossless"}
-    - {id: 1379, cat: Audio/MP3, desc: "Classical - Mp3"}
+    - {id: 1379, cat: Audio/MP3, desc: "Classical - MP3"}
     - {id: 79, cat: Audio, desc: "Electronic"}
     - {id: 102, cat: Audio, desc: "Видеоклипы / Концерты"}
     - {id: 1372, cat: Audio, desc: "Electronic - lossless"}
-    - {id: 1373, cat: Audio/MP3, desc: "Electronic - Mp3"}
+    - {id: 1373, cat: Audio/MP3, desc: "Electronic - MP3"}
     - {id: 80, cat: Audio, desc: "Other genres"}
     - {id: 103, cat: Audio, desc: "Видеоклипы / Концерты"}
     - {id: 87, cat: Audio, desc: "Военная песня"}
     - {id: 1376, cat: Audio/Lossless, desc: "Военная песня - lossless"}
-    - {id: 1377, cat: Audio/MP3, desc: "Военная песня - Mp3"}
+    - {id: 1377, cat: Audio/MP3, desc: "Военная песня - MP3"}
     - {id: 84, cat: Audio, desc: "Reggae, Ska, Dub"}
     - {id: 1382, cat: Audio/Lossless, desc: "Reggae, Ska, Dub - lossless"}
-    - {id: 1383, cat: Audio/MP3, desc: "Reggae, Ska, Dub - Mp3"}
+    - {id: 1383, cat: Audio/MP3, desc: "Reggae, Ska, Dub - MP3"}
     - {id: 83, cat: Audio, desc: "Funk, Soul, Country"}
     - {id: 1384, cat: Audio/Lossless, desc: "Funk, Soul, Country - lossless"}
-    - {id: 1385, cat: Audio/MP3, desc: "Funk, Soul, Country - Mp3"}
-    - {id: 81, cat: Audio, desc: "Folk, Ethnic, New Age, Meditative"}
-    - {id: 1388, cat: Audio/Lossless, desc: "Folk, Ethnic, New Age, Meditative - lossless"}
-    - {id: 1389, cat: Audio/MP3, desc: "Folk, Ethnic, New Age, Meditative - Mp3"}
+    - {id: 1385, cat: Audio/MP3, desc: "Funk, Soul, Country - MP3"}
+    - {id: 81, cat: Audio, desc: "Folk, Ethnic, New Age, Meditative, Punk"}
+    - {id: 1388, cat: Audio/Lossless, desc: "Folk, Ethnic, New Age, Meditative, Punk - lossless"}
+    - {id: 1389, cat: Audio/MP3, desc: "Folk, Ethnic, New Age, Meditative, Punk - MP3"}
     - {id: 1374, cat: Audio/Lossless, desc: "Other genres - lossless"}
-    - {id: 1375, cat: Audio/MP3, desc: "Other genres - Mp3"}
-    - {id: 663, cat: Books, desc: "Книги(Аудиокниги) и журналы"}
+    - {id: 1375, cat: Audio/MP3, desc: "Other genres - MP3"}
+    - {id: 663, cat: Books, desc: "Книги (Аудиокниги) и журналы"}
     - {id: 1036, cat: Books, desc: "Книги"}
     - {id: 1324, cat: Books, desc: "Новинки"}
     - {id: 1331, cat: Books, desc: "Детские книги"}
