@@ -12,52 +12,51 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 79, cat: Audio, desc: "Music Mastermix"}
-    - {id: 80, cat: Audio, desc: "Music DMC"}
-    - {id: 49, cat: Audio/MP3, desc: "Music KZN MP3 Weekly Ex-Vip"}
-    - {id: 76, cat: Audio, desc: "Music KZN Packs Exclusive"}
-    - {id: 77, cat: Audio, desc: "Music KZN Packs Ex-VIP"}
-    - {id: 98, cat: Audio, desc: "Music Other Mp3 Weekly"}
-    - {id: 74, cat: Audio, desc: "Music Discography Collection"}
-    - {id: 78, cat: Audio, desc: "Music Dj-Only Dj-Music"}
-    - {id: 82, cat: Audio/Lossless, desc: "Music Flac-24 Bit Hi-Res"}
-    - {id: 81, cat: Audio, desc: "Music Assorted Albums"}
-    - {id: 46, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 24, cat: Audio, desc: "Music Karaoke"}
-    - {id: 28, cat: Movies, desc: "Movies 2024"}
-    - {id: 47, cat: Movies/BluRay, desc: "Movies Bluray-HD"}
-    - {id: 9, cat: Movies/DVD, desc: "Movies Dvdr-ISO"}
-    - {id: 52, cat: Movies, desc: "Movies Classic Pre90s"}
-    - {id: 48, cat: Movies/SD, desc: "Movies AVI - XVID - Dvdrip"}
-    - {id: 41, cat: Movies/3D, desc: "Movies Remux - 3D"}
-    - {id: 22, cat: Movies/Foreign, desc: "Movies Foreign"}
-    - {id: 23, cat: Movies, desc: "Movies Kids-Anime"}
-    - {id: 25, cat: Movies, desc: "Movies Netflix"}
-    - {id: 27, cat: Movies/UHD, desc: "Movies 4K"}
-    - {id: 53, cat: Movies, desc: "Movies Packs"}
-    - {id: 54, cat: Movies, desc: "Movies Packs Pre90s"}
-    - {id: 6, cat: Movies, desc: "Movies Packs Kids"}
-    - {id: 7, cat: TV, desc: "TV Episodes"}
-    - {id: 8, cat: TV/Anime, desc: "TV Kids-Anime"}
-    - {id: 75, cat: TV/Documentary, desc: "TV Documentary"}
-    - {id: 26, cat: TV/Sport, desc: "TV Sports"}
-    - {id: 42, cat: TV, desc: "TV Packs Full Seasons"}
-    - {id: 50, cat: TV/Anime, desc: "TV Packs Kids-Anime"}
-    - {id: 83, cat: TV, desc: "TV Packs Pre90s"}
-    - {id: 84, cat: Audio/Audiobook, desc: "Audio Books"}
-    - {id: 85, cat: Books/EBook, desc: "Ebooks Mags"}
-    - {id: 86, cat: Books/Comics, desc: "Ebooks Comics"}
-    - {id: 87, cat: PC/0day, desc: "Apps Windows"}
-    - {id: 88, cat: PC/Mobile-Other, desc: "Apps Misc"}
-    - {id: 89, cat: PC/Games, desc: "Games PC-ISO"}
-    - {id: 90, cat: PC/Games, desc: "Games Misc"}
-    - {id: 91, cat: Other, desc: "Wallpapers"}
-    - {id: 92, cat: Other, desc: "Xmas Albums"}
-    - {id: 93, cat: Other, desc: "Xmas Movies Packs"}
-    - {id: 94, cat: Other, desc: "Xmas Music Packs"}
-    - {id: 95, cat: Other/Misc, desc: "Unsorted To Be Edited"}
-    - {id: 97, cat: Other, desc: "VIP Exclusive"}
-    - {id: 99, cat: Other, desc: "Krazy-Internal"}
+    - {id: 79, cat: Audio, desc: "Mastermix: Mastermix"}
+    - {id: 80, cat: Audio, desc: "DMC: DMC"}
+    - {id: 49, cat: Audio/MP3, desc: "KZN MP3 Weekly: Ex-Vip"}
+    - {id: 76, cat: Audio, desc: "KZN-Exclusive: Exclusive "}
+    - {id: 98, cat: Audio/MP3, desc: "Other Mp3 Weely: Mp3"}
+    - {id: 77, cat: Audio, desc: "KZN  Ex VIP: Ex VIP"}
+    - {id: 74, cat: Audio, desc: "Discography: Collection"}
+    - {id: 78, cat: Audio, desc: "Dj-Only: Dj-Music"}
+    - {id: 82, cat: Audio/Lossless, desc: "Flac: Flac - Flac Packs"}
+    - {id: 81, cat: Audio, desc: "Albums : Assorted Albums"}
+    - {id: 46, cat: Audio/Video, desc: "Music Videos: Music Videos"}
+    - {id: 24, cat: Audio, desc: "Karaoke: All Karaoke"}
+    - {id: 28, cat: Movies, desc: "Movies: 2024"}
+    - {id: 47, cat: Movies/BluRay, desc: "Movies: Bluray-HD"}
+    - {id: 9, cat: Movies/DVD, desc: "Movies: Dvdr-ISO"}
+    - {id: 52, cat: Movies, desc: "Classic Movies: Pre90s"}
+    - {id: 48, cat: Movies/SD, desc: "Movies: AVI-XVID-Dvdrip"}
+    - {id: 41, cat: Movies/3D, desc: "Remux - 3D: Remux - 3D"}
+    - {id: 22, cat: Movies/Foreign, desc: "Movies: Foreign"}
+    - {id: 23, cat: Movies/Other, desc: "Movies: Kids"}
+    - {id: 25, cat: Movies/WEB-DL, desc: "Movies: Netflix"}
+    - {id: 27, cat: Movies/UHD, desc: "Movies: 4K"}
+    - {id: 53, cat: Movies, desc: "Movie Packs: Movie Pks"}
+    - {id: 54, cat: Movies, desc: "Movie Pack: Pre-90s"}
+    - {id: 6, cat: Movies/Other, desc: "Kids Movie Pk: Movie Pks"}
+    - {id: 7, cat: TV, desc: "TV: Episodes"}
+    - {id: 8, cat: TV/Anime, desc: "TV: Kids - TV"}
+    - {id: 75, cat: TV/Documentary, desc: "TV: Documentary"}
+    - {id: 26, cat: TV/Sport, desc: "TV: Sports"}
+    - {id: 42, cat: Movies, desc: "TV Packs: Full Seasons"}
+    - {id: 50, cat: TV/Anime, desc: "TV Packs: Kids -  Packs"}
+    - {id: 83, cat: Movies, desc: "TV Packs: Pre90s"}
+    - {id: 84, cat: Audio/Audiobook, desc: "Audio Books: A-Books"}
+    - {id: 85, cat: Books, desc: "Ebooks: Ebooks-Mags-Comics"}
+    - {id: 86, cat: Movies/HD, desc: "1440P QHD: 1440P QHD"}
+    - {id: 87, cat: PC/0day, desc: "Apps: windows-Linux"}
+    - {id: 88, cat: TV/Anime, desc: "Anime: All Anime"}
+    - {id: 89, cat: PC/Games, desc: "Games: Pc - Iso"}
+    - {id: 90, cat: PC/Games, desc: "Games: Misc"}
+    - {id: 91, cat: Other, desc: "Wallpapers: Wallpapers"}
+    - {id: 92, cat: Other, desc: "Xmas Albums: Albums"}
+    - {id: 93, cat: Movies/Other, desc: "Xmas Movies : Packs"}
+    - {id: 94, cat: Audio/Other, desc: "Xmas Music Pack: Packs"}
+    - {id: 95, cat: Other, desc: "To Be Edited: Edit"}
+    - {id: 99, cat: PC/Mac, desc: "Apps Mac: Apps Mac"}
 
   modes:
     search: [q]
