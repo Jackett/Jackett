@@ -55,7 +55,7 @@ caps:
     - {id: 57, cat: TV/Foreign, desc: "مسلسلات آسيوية (Asian Series)"}
     - {id: 42, cat: Movies/Foreign, desc: "افلام اجنبيه (Foreign)"}
     - {id: 74, cat: Movies/HD, desc: "جودة عالية HD"}
-    - {id: 76, cat: Movies/3D, desc: "&ثلاثي الابعاد 3D (3D)"}
+    - {id: 76, cat: Movies/3D, desc: "ثلاثي الابعاد (3D)"}
     - {id: 59, cat: Movies/Foreign, desc: "افلام آسيوية (Asian Movies)"}
     - {id: 86, cat: Movies/Foreign, desc: "افلام هنديه (Indian Movies)"}
     # انمي مدبلج عربي Anime Arabic dubbed
