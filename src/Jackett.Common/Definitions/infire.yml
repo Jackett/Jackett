@@ -203,6 +203,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 30 hours (as seconds = 30 x 60 x 60)
-      text: 108000
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # Engine n/a
