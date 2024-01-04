@@ -151,7 +151,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(521, TorznabCatType.MoviesDVD, "|- Иностранные мультфильмы (DVD)");
             caps.Categories.AddCategoryMapping(208, TorznabCatType.Movies, "|- Отечественные мультфильмы");
             caps.Categories.AddCategoryMapping(539, TorznabCatType.Movies, "|- Отечественные полнометражные мультфильмы");
-            caps.Categories.AddCategoryMapping(2183, TorznabCatType.MoviesForeign, "|- Мультфильмы Ближнего Зарубежья")
+            caps.Categories.AddCategoryMapping(2183, TorznabCatType.MoviesForeign, "|- Мультфильмы Ближнего Зарубежья");
             caps.Categories.AddCategoryMapping(209, TorznabCatType.MoviesForeign, "|- Иностранные мультфильмы");
             caps.Categories.AddCategoryMapping(484, TorznabCatType.MoviesForeign, "|- Иностранные короткометражные мультфильмы");
             caps.Categories.AddCategoryMapping(822, TorznabCatType.Movies, "|- Сборники мультфильмов");
