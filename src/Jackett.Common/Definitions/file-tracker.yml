@@ -12,7 +12,6 @@ caps:
   categorymappings:
     # Эксклюзив
     # Exclusive
-    - {id: 697, cat: Other, desc: " |- Правила, FAQ, стол заказов, общение"}
     - {id: 387, cat: Movies/DVD, desc: " |- Отечественные фильмы DVD Master's"}
     - {id: 386, cat: Movies/DVD, desc: " |- Зарубежные фильмы DVD Master's"}
     - {id: 390, cat: TV/SD, desc: " |- Сериалы DVD Master's"}
@@ -49,7 +48,7 @@ caps:
     - {id: 250, cat: Movies, desc: " |- Советское кино (классика)"}
     - {id: 62, cat: Movies, desc: " |- Кино для детей"}
     - {id: 962, cat: Movies, desc: " |- Антология отечественного кино"}
-    - {id: 990, cat: Movies, desc: " |- Зарубежные фильмы , мультфильмы и сериалы на языках ближнего.."}
+    - {id: 990, cat: Movies, desc: " |- Фильмы , мультфильмы и сериалы на языках ближнего..."}
     - {id: 991, cat: Movies, desc: " |- Зарубежные фильмы , мультфильмы и сериалы в оригинале"}
     - {id: 74, cat: Movies, desc: " |- Зарубежные мультфильмы"}
     - {id: 73, cat: Movies, desc: " |- Отечественные мультфильмы"}
@@ -334,10 +333,10 @@ caps:
     - {id: 951, cat: Audio/MP3, desc: " |- Дискографии в MP3"}
     - {id: 130, cat: Audio, desc: " |- Многоканальная музыка (Рэп, Хип-Хоп, R.n.B)"}
     - {id: 830, cat: Audio/Lossless, desc: " |- Lossless (Рэп, Хип-Хоп, R.n.B)"}
-    - {id: 134, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп (mp3)"}
-    - {id: 133, cat: Audio/MP3, desc: " |- Зарубежный Рэп, Хип-Хоп (mp3)"}
-    - {id: 132, cat: Audio/MP3, desc: " |- Отечественный R.n.B (mp3)"}
-    - {id: 131, cat: Audio/MP3, desc: " |- Зарубежный R.n.B (mp3)"}
+    - {id: 134, cat: Audio/MP3, desc: " |- Отечественный Рэп, Хип-Хоп (mр3)"}
+    - {id: 133, cat: Audio/MP3, desc: " |- Зарубежный Рэп, Хип-Хоп (mр3)"}
+    - {id: 132, cat: Audio/MP3, desc: " |- Отечественный R.n.B (mр3)"}
+    - {id: 131, cat: Audio/MP3, desc: " |- Зарубежный R.n.B (mр3)"}
     - {id: 930, cat: Audio/MP3, desc: " |- Сборники разных исполнителей (mp3)"}
     - {id: 941, cat: Audio/Lossless, desc: " |- Дискографии в Lossless"}
     - {id: 952, cat: Audio/MP3, desc: " |- Дискографии в MP3"}
@@ -346,8 +345,7 @@ caps:
     - {id: 149, cat: Audio/MP3, desc: " |- Аltеrnаtivе, Hard, Indереndеnt (mp3)"}
     - {id: 839, cat: Audio/MP3, desc: " |- Reggae, Ska, Dub (mp3)"}
     - {id: 148, cat: Audio/MP3, desc: " |- Punk, Hardcore, Emo (mp3)"}
-    - {id: 147, cat: Audio/MP3, desc: " |- Nu Metal, Metalcore, Metal (mp3)"}
-    - {id: 150, cat: Audio/MP3, desc: " |- Post-Rock (mp3)"}
+    - {id: 147, cat: Audio/MP3, desc: " |- Rock, Metalcore, Metal (mp3)"}
     - {id: 931, cat: Audio/MP3, desc: " |- Сборники разных исполнителей (mp3)"}
     - {id: 942, cat: Audio/Lossless, desc: " |- Дискографии в Lossless"}
     - {id: 954, cat: Audio/MP3, desc: " |- Дискографии в MP3"}
@@ -437,13 +435,11 @@ caps:
     - {id: 586, cat: Books, desc: " |- Авто - Тюнинг, чиптюнинг, настройка, отделка и укращения"}
     - {id: 672, cat: Books, desc: " |- Литература по медицине"}
     - {id: 793, cat: Books, desc: "Журналы научно-прикладные и познавательно-образовательные"}
-    - {id: 708, cat: PC, desc: "Интерактивный и компьтерный материал"}
     - {id: 875, cat: PC, desc: " |- Интерактивные компьютерные диски для хобби"}
     - {id: 583, cat: PC, desc: " |- Интерактивные справочники и каталоги для авто/мото транспорт.."}
     - {id: 465, cat: PC, desc: " |- Интерактивные и компьютерные диски для обучения ин. языкам"}
     - {id: 674, cat: PC, desc: " |- Интерактивные и компьютерные диски по медицине"}
     - {id: 710, cat: PC, desc: " |- Прочие материалы для детей и родителей"}
-    - {id: 888, cat: Books, desc: "Литература разных направлений"}
     - {id: 897, cat: Books, desc: " |- Прочее"}
     - {id: 896, cat: Books, desc: " |- Автомобили"}
     - {id: 895, cat: Books, desc: " |- Домашним мастерам"}
@@ -465,15 +461,10 @@ caps:
     - {id: 816, cat: Audio/Audiobook, desc: " |- Современная литература"}
     - {id: 190, cat: Audio/Audiobook, desc: " |- Аудио книги для детей"}
     - {id: 191, cat: Audio/Audiobook, desc: " |- Обучающие аудиокниги и аудиоупражнения для детей"}
-    - {id: 749, cat: Audio, desc: "Аудио концерты, спектакли, пьесы"}
     - {id: 687, cat: Audio, desc: " |- Аудиоспектакли и литературные чтения"}
     - {id: 751, cat: Audio, desc: " |- Аудио юмористические концерты (выступления)"}
     # Эротика
     # Erotica
-    - {id: 483, cat: Other, desc: "Правила, FAQ и Предложения по улучшению раздела 'Эротик.."}
-    - {id: 484, cat: Other, desc: " |- Правила и FAQ"}
-    - {id: 485, cat: Other, desc: " |- Предложения по улучшению раздела 'Эротика'и форум.."}
-    - {id: 688, cat: Other, desc: " |- Ищу / Предлагаю"}
     - {id: 963, cat: XXX, desc: "Эротические художественные фильмы"}
     - {id: 964, cat: XXX, desc: "Эротические документальные фильмы"}
     - {id: 178, cat: XXX, desc: "Русская эротика"}
@@ -491,11 +482,8 @@ caps:
     - {id: 820, cat: XXX, desc: "Литература"}
     # Служебный раздел
     # Service section
-    - {id: 604, cat: Other, desc: "Открытый"}
-    - {id: 912, cat: Other, desc: "Нарушение правил оформления"}
     - {id: 57, cat: Other, desc: "Временный склад (TEMP)"}
     - {id: 433, cat: Other, desc: "Архив раздач"}
-    - {id: 378, cat: Other, desc: "Корзина"}
 
   modes:
     search: [q]
