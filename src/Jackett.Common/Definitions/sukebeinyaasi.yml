@@ -11,6 +11,14 @@ legacylinks:
   - https://sukebei.nyaa.lol/
 
 settings:
+  - name: filter-id
+    type: select
+    label: Filter
+    default: 0
+    options:
+      0: No filter
+      1: No remakes
+      2: Trusted only
   - name: cat-id
     type: select
     label: Category
@@ -64,8 +72,7 @@ search:
     - path: /
   inputs:
     q: "{{ .Keywords }}"
-    # 0 no filter, 1 no remakes, 2 trusted only
-    f: 0
+    f: "{{ .Config.filter-id }}"
     c: "{{ .Config.cat-id }}"
     s: "{{ .Config.sort }}"
     o: "{{ .Config.type }}"
