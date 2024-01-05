@@ -27,7 +27,9 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+    - path: /
+  inputs:
+    s: "{{ .Keywords }}"
 
   rows:
     selector: div.moviefilm
