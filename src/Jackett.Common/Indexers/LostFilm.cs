@@ -24,24 +24,25 @@ namespace Jackett.Common.Indexers
         public override string Id => "lostfilm";
         public override string Name => "LostFilm.tv";
         public override string Description => "Unique portal about foreign series";
-        public override string SiteLink { get; protected set; } = "https://www.lostfilmtv2.site/";
+        public override string SiteLink { get; protected set; } = "https://www.lostfilm.life/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://www.lostfilmtv2.site/",
-            "https://www.lostfilmtv3.site/",
-            "https://www.lostfilmtv5.site/",
-            "https://www.lostfilm.win/",
-            "https://www.lostfilm.tw/",
-            "https://www.lostfilm.uno/",
+            // Uptrends.com uptime checkpoints // Uptimia.com availability locations
+            "https://www.lostfilm.life/", // 43/43 // 41/47
+            "https://www.lostfilmtv5.site/", // 43/43 // 40/42
+            "https://www.lostfilmtv2.site/", // 43/43 // 38/46
+            "https://www.lostfilmtv3.site/", // 43/43 // 33/40
+            "https://www.lostfilm.tv/", // 39/43 // 32/42
+            "https://www.lostfilm.uno/", // 27/43 // 30/46
+            "https://www.lostfilm.win/", // 27/43 // 29/42
+            "https://www.lostfilm.tw/", // 26/43 // 33/46
+            "https://www.lostfilmtv.site/", // 18/43 // 17/45
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://lostfilm.site",
-            "https://lostfilm.tw/",
-            "https://www.lostfilm.run/",
-            "https://www.lostfilm.life/",
-            "https://www.lostfilmtv.site/",
-            "https://www.lostfilm.tv/",
+            "https://lostfilm.site", // redirects to .tw
+            "https://lostfilm.tw/", // redirects to www.
+            "https://www.lostfilm.run/", // ERR_NAME_NOT_RESOLVED
         };
         public override string Language => "ru-RU";
         public override string Type => "semi-private";
