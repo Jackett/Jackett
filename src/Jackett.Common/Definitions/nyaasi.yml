@@ -144,9 +144,22 @@ settings:
 
 search:
   paths:
-    - path: "?q={{ .Keywords }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
-    # strip 0 from start of episode number - #11019
-    - path: "?q={{ if .Keywords }}{{ re_replace .Keywords \"\\b0(\\d{1})\\b\" \"$1\" }}{{ else }}&p=2{{ end }}&f={{ .Config.filter-id }}&c={{ .Config.cat-id }}&s={{ .Config.sort }}&o={{ .Config.type }}"
+    - path: /
+      inputs:
+        q: "{{ .Keywords }}"
+        f: "{{ .Config.filter-id }}"
+        c: "{{ .Config.cat-id }}"
+        s: "{{ .Config.sort }}"
+        o: "{{ .Config.type }}"
+    # strip 0 from start of episode number - #11019, or fetch page 2 for keywordless
+    - path: /
+      inputs:
+        q: "{{ if .Keywords }}{{ re_replace .Keywords \"\\b0(\\d{1})\\b\" \"$1\" }}{{ else }}{{ end }}"
+        p: "{{ if .Keywords }}{{ else }}2{{ end }}"
+        f: "{{ .Config.filter-id }}"
+        c: "{{ .Config.cat-id }}"
+        s: "{{ .Config.sort }}"
+        o: "{{ .Config.type }}"
 
   keywordsfilters:
     - name: re_replace
