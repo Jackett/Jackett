@@ -87,11 +87,13 @@ search:
     # with just 5 results per page, try to grab up to 25 results
     # http://ebb.la/?s=teeth
     # http://ebb.la/page/2/?s=teeth
-    - path: "{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/2/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/3/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/4/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
-    - path: "page/5/{{ if .Keywords }}?s={{ .Keywords }}{{ else }}{{ end }}"
+    - path: /
+    - path: "page/2/"
+    - path: "page/3/"
+    - path: "page/4/"
+    - path: "page/5/"
+  inputs:
+    s: "{{ .Keywords }}"
 
   rows:
     selector: "div#content > div.poststuff:has(~ div.entry a.download), div#content > div.poststuff ~ div.entry:has(a.download)"
