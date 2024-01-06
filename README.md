@@ -421,6 +421,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * KrazyZone
  * Kufei (库非)
  * Kufirc
+ * Last Digital Underground (LDU)
  * LastFiles
  * Le Saloon
  * LaidBackManor
