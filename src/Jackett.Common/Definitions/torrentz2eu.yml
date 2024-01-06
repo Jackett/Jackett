@@ -62,7 +62,6 @@ caps:
     - {id: "Video(Other)", cat: Other, desc: "Video(Other)"}
     - {id: "Video(TV shows)", cat: TV, desc: "TV"}
 
-
   modes:
     search: [q]
     tv-search: [q, season, ep]
@@ -70,9 +69,7 @@ caps:
     music-search: [q]
     book-search: [q]
 
-
 settings: []
-
 
 search:
   paths:
@@ -86,7 +83,6 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
-
 
   rows:
     selector: table.table-responsive > tbody > tr
