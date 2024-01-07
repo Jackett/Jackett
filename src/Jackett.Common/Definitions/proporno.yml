@@ -4,28 +4,26 @@ name: ProPorno
 description: "ProPorno is a RUSSIAN Public tracker for 3X"
 language: ru-RU
 type: public
-encoding: windows-1251
-certificates:
-  - 99537a17c9d199ccdfc12f3814ac5178f4b34b1e # org missing
+encoding: UTF-8
 links:
   - https://proporno.org/
 
 caps:
   categorymappings:
-    - {id: 2, cat: XXX, desc: "порно видео (video)"}
-    - {id: 4, cat: XXX, desc: "   блондинки (blondes)"}
-    - {id: 5, cat: XXX, desc: "   лесбиянки (lesbians)"}
-    - {id: 19, cat: XXX, desc: "   эротика (erotic)"}
-    - {id: 20, cat: XXX, desc: "   груповушка (group)"}
-    - {id: 16, cat: XXX, desc: "   анальный секс (anal)"}
-    - {id: 22, cat: XXX, desc: "   молодые (young)"}
-    - {id: 24, cat: XXX, desc: "   минет / куннилингус / орал (blowjob / cunnilingus / screaming)"}
-    - {id: 25, cat: XXX, desc: "   большая грудь (big breasts)"}
-    - {id: 21, cat: XXX, desc: "любительское видео (ameteur)"}
-    - {id: 3, cat: XXX, desc: "порно фильмы (movies)"}
-    - {id: 7, cat: XXX, desc: "русское порно (Russian)"}
-    - {id: 27, cat: XXX, desc: "убойная эротика (killer erotica)"}
-    - {id: 26, cat: XXX, desc: "онлайн порно (online)"}
+    - {id: 2, cat: XXX, desc: "порно видео"}
+    - {id: 4, cat: XXX, desc: "блондинки"}
+    - {id: 5, cat: XXX, desc: "лесбиянки"}
+    - {id: 19, cat: XXX, desc: "эротика"}
+    - {id: 20, cat: XXX, desc: "груповушка"}
+    - {id: 16, cat: XXX, desc: "анальный секс"}
+    - {id: 22, cat: XXX, desc: "молодые"}
+    - {id: 24, cat: XXX, desc: "минет / куннилингус / орал"}
+    - {id: 25, cat: XXX, desc: "большая грудь"}
+    - {id: 21, cat: XXX, desc: "любительское видео"}
+    - {id: 3, cat: XXX, desc: "порно фильмы"}
+    - {id: 7, cat: XXX, desc: "русское порно"}
+    - {id: 27, cat: XXX, desc: "убойная эротика"}
+    - {id: 26, cat: XXX, desc: "онлайн порно"}
 
   modes:
     search: [q]
@@ -39,7 +37,7 @@ download:
 
 search:
   paths:
-    # https://proporno.org/index.php?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story=
+    # https://proporno.org/index.php?do=search&subaction=search&story=2024&titleonly=3&sortby=date&resorder=desc&showposts=0
     - path: index.php
   inputs:
     do: search
@@ -57,23 +55,8 @@ search:
     after: 1
 
   fields:
-    category:
-      selector: div.inmy
-      case:
-        "a:last-of-type:contains(\"порно видео\")": 2
-        "a:last-of-type:contains(\"блондинки\")": 4
-        "a:last-of-type:contains(\"лесбиянки\")": 5
-        "a:last-of-type:contains(\"эротика\")": 19
-        "a:last-of-type:contains(\"груповушка\")": 20
-        "a:last-of-type:contains(\"анальный\")": 16
-        "a:last-of-type:contains(\"молодые\")": 22
-        "a:last-of-type:contains(\"минет\")": 24
-        "a:last-of-type:contains(\"большая\")": 25
-        "a:last-of-type:contains(\"любительское\")": 21
-        "a:last-of-type:contains(\"фильмы\")": 3
-        "a:last-of-type:contains(\"русское\")": 7
-        "a:last-of-type:contains(\"убойная\")": 27
-        "a:last-of-type:contains(\"онлайн\")": 26
+    categorydesc:
+      selector: div.inmy > a:last-of-type
     title:
       selector: div.news_text > a
     details:
