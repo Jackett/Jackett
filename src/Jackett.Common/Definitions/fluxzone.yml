@@ -4,7 +4,7 @@ name: Flux-Zone
 description: "Flux-Zone is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: ro-RO
 type: private
-encoding: utf-8
+encoding: UTF-8
 links:
   - http://fluxzone.org/
 legacylinks:
