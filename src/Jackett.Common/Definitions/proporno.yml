@@ -5,6 +5,8 @@ description: "ProPorno is a RUSSIAN Public tracker for 3X"
 language: ru-RU
 type: public
 encoding: windows-1251
+certificates:
+  - 99537a17c9d199ccdfc12f3814ac5178f4b34b1e # org missing
 links:
   - https://proporno.org/
 
