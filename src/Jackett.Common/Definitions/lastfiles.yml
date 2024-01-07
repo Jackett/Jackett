@@ -4,7 +4,7 @@ name: LastFiles
 description: "LastFiles (LF) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
 language: ro-RO
 type: private
-encoding: utf-8
+encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
