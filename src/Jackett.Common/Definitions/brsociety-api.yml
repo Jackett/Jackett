@@ -30,7 +30,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://brsociety.club/\" target=\"_blank\">BrSociety</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://brsociety.club/\" target=\"_blank\">BrSociety</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -130,14 +130,15 @@ search:
         100%: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
-      # api returns 0=false, 1=true
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
-    minimumratio:
-      text: 1.0
+        False: 1 # normal
+        True: 2 # double
+# global MR is 0.7 but torrents must be seeded for 4 days regardless of ratio
+#    minimumratio:
+#      text: 0.7
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# json UNIT3D 6.5.0 (custom)
+# json UNIT3D 7.1.3 (custom)
