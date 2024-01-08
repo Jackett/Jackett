@@ -135,7 +135,8 @@ namespace Jackett.Common.Indexers
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
             {
-                requestData["search"] = queryString;
+                string modifiedQueryString = queryString.Replace(".", " ");
+                requestData["search"] = modifiedQueryString;
             }
 
             var categories = MapTorznabCapsToTrackers(query);
