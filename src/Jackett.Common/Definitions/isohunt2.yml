@@ -78,6 +78,8 @@ search:
     selector: table > tbody > tr[data-key="0"]
 
   fields:
+    categorydesc:
+      selector: a[href^="/torrents/?iht="]
     title:
       selector: td.title-row > a[href^="/"] > span
     details:
@@ -92,18 +94,6 @@ search:
       selector: td.sn
     date:
       selector: td.date-row
-    category:
-      selector: td.category-row > span
-      case:
-        "span[title=\"anime\"]": 1
-        "span[title=\"software\"]": 2
-        "span[title=\"games\"]": 3
-        "span[title=\"adult\"]": 4
-        "span[title=\"movies\"]": 5
-        "span[title=\"music\"]": 6
-        "span[title=\"other\"]": 7
-        "span[title=\"seriestv\"]": 8
-        "span[title=\"books\"]": 9
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
