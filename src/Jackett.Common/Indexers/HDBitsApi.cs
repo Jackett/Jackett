@@ -135,7 +135,12 @@ namespace Jackett.Common.Indexers
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
             {
-                string modifiedQueryString = queryString.Replace(".", " ");
+                string modifiedQueryString = queryString
+                                             .Replace("_", " ")
+                                             .Replace("-", " ")
+                                             .Replace("+", " ")
+                                             .Replace(".", " ");
+
                 requestData["search"] = modifiedQueryString;
             }
 
