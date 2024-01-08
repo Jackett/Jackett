@@ -447,6 +447,7 @@ namespace Jackett.Updater
                 "Definitions/isohunt.yml",
                 "Definitions/iv-torrents.yml",
                 "Definitions/jme-reunit3d.yml", // switch to -API #13043
+                "Definitions/jptv.yml", // switch to -API #9242
                 "Definitions/kapaki.yml",
                 "Definitions/katcrs.yml",
                 "Definitions/kaztorka.yml",
