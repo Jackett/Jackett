@@ -135,7 +135,7 @@ namespace Jackett.Common.Indexers
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
             {
-                string modifiedQueryString = Regex.Replace(searchTerm, @"[-._\(\)@/\\\[\]\+\%]", " ");
+                string modifiedQueryString = Regex.Replace(queryString, @"[-._\(\)@/\\\[\]\+\%]", " ");
 
                 requestData["search"] = modifiedQueryString;
             }
