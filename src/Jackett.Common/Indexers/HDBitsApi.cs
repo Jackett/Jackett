@@ -136,7 +136,7 @@ namespace Jackett.Common.Indexers
             }
             else if (!string.IsNullOrWhiteSpace(queryString))
             {
-                requestData["search"] = Regex.Replace(queryString, @"[\W]+", " ");
+                requestData["search"] = Regex.Replace(queryString, "[\\W]+", " ").Trim();
             }
 
             var categories = MapTorznabCapsToTrackers(query);
