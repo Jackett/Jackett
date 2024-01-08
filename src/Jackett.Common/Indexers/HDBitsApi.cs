@@ -137,8 +137,13 @@ namespace Jackett.Common.Indexers
             else if (!string.IsNullOrWhiteSpace(queryString))
             {
                 string modifiedQueryString = Regex.Replace(queryString, @"[-._\(\)@/\\\[\]\+\%]", " ");
+                modifiedQueryString = Regex.Replace(modifiedQueryString, @"\s+", " "); 
+                modifiedQueryString = modifiedQueryString.Trim(); 
 
-                requestData["search"] = modifiedQueryString;
+                if (!string.IsNullOrWhiteSpace(modifiedQueryString))
+                {
+                    requestData["search"] = modifiedQueryString;
+                }
             }
 
             var categories = MapTorznabCapsToTrackers(query);
