@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://glodls.to/
-  - https://www.gtdb.to/
+  - https://gtso.cc/
   - https://glotorrents.unblockit.date/
   - https://glotorrents.mrunblock.bond/
   - https://glodls.unblockninja.com/
@@ -39,6 +39,7 @@ legacylinks:
   - https://glotorrents.unblockit.zip/
   - https://glotorrents.unblockit.foo/
   - https://glotorrents.unblockit.ing/
+  - https://www.gtdb.to/
 
 caps:
   categorymappings:
