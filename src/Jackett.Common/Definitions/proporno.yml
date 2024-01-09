@@ -44,7 +44,7 @@ search:
     subaction: search
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     # 0 articles, 1 comments, 2 static, 3 titles
-    titleonly: 3
+    titleonly: "{{ if .Keywords }}3{{ else }}0{{ end }}"
     sortby: date
     resorder: desc
     showposts: 0
