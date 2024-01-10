@@ -172,7 +172,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement
- * HD-Club
  * HD-CzTorrent
  * HDGalaKtik
  * HellTorrents
@@ -369,6 +368,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Hares Club (白兔俱乐部) [![(invite needed)][inviteneeded]](#)
  * Hawke-uno
  * HD Dolby
+ * HD-Club
  * HD-Forever (HDF)
  * HD-Olimpo
  * HD-Only (HDO)
