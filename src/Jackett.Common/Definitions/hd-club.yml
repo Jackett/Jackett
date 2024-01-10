@@ -1,9 +1,9 @@
 ---
 id: hd-club
 name: HD-CLUB
-description: "HD-CLUB is a CZECH Semi-Private site for TV / MOVIES / GENERAL"
+description: "HD-CLUB is a CZECH Private site for TV / MOVIES / GENERAL"
 language: cs-CZ
-type: semi-private
+type: private
 encoding: UTF-8
 links:
   - https://freecztorrent.eu/
