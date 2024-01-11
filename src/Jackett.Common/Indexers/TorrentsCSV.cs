@@ -21,7 +21,11 @@ namespace Jackett.Common.Indexers
         public override string Id => "torrentscsv";
         public override string Name => "Torrents.csv";
         public override string Description => "Torrents.csv is a self-hostable, open source torrent search engine and database";
-        public override string SiteLink { get; protected set; } = "https://torrents-csv.ml/";
+        public override string SiteLink { get; protected set; } = "https://torrents-csv.com/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://torrents-csv.ml/",
+        };
         public override string Language => "en-US";
         public override string Type => "public";
 
