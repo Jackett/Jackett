@@ -105,7 +105,7 @@ search:
     # does not support imdbid search
 
   rows:
-    selector: "table[width=\"960px\"][align=\"center\"][cellpadding=\"5\"] tbody tr:has(a[href^=\"download.php?\"]){{ if .Config.freeleech }}:has(span[style^=\"font\"]:contains(\"0x\")){{ else }}{{ end }}"
+    selector: "tr.torrentDataRow:has(a[href^=\"download.php?\"]){{ if .Config.freeleech }}:has(span[style^=\"font\"]:contains(\"0x\")){{ else }}{{ end }}"
 
   fields:
     category:
