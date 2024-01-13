@@ -106,8 +106,8 @@ settings:
     label: Order requested from site
     default: +
     options:
-      +: desc
-      -: asc
+      "+": desc
+      "-": asc
 
 search:
   paths:
@@ -131,7 +131,7 @@ search:
     details:
       selector: td:last-child a
       attribute: href
-    magnet:
+    download:
       selector: td:nth-child(2) a
       attribute: href
     description:
