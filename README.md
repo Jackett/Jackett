@@ -445,6 +445,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Making Off
  * Mansão dos Animes (MDAN)
  * MegamixTracker
+ * Mendigos da WEB
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
  * Milkie
