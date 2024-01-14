@@ -415,6 +415,7 @@ namespace Jackett.Updater
                 "Definitions/hdbits.yml",
                 "Definitions/hdbitscom.yml",
                 "Definitions/hdcenter.yml",
+                "Definitions/hdchina.yml",
                 "Definitions/hdcity.yml", // moved to pixelados
                 "Definitions/hdclub.yml",
                 "Definitions/hddisk.yml",
