@@ -29,7 +29,7 @@ settings:
   - name: info_token
     type: info
     label: About your API Token
-    default: "Request a new API Token in the <a href=\"https://fsm.name/Forums/details?tid=296\" target=\"_blank\">FSM Forum</a> and checking your <a href=\"https://fsm.name/Mail\" target=\"_blank\">Mail</a> after."
+    default: "Beta API Token applications have now closed. If you haven't already received one by private message, please wait for the official launch."
   - name: passkey
     type: text
     label: Passkey
