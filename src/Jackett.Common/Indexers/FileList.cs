@@ -144,11 +144,9 @@ namespace Jackett.Common.Indexers
                 throw new TooManyRequestsException("Rate limited", indexerResponse);
             }
 
-            if (response.StartsWith("{\"error\""))
+            if (response.StartsWith("{\"error\"") && STJson.TryDeserialize<FileListErrorResponse>(response, out var errorResponse))
             {
-                var error = STJson.Deserialize<FileListErrorResponse>(response).Error;
-
-                throw new ExceptionWithConfigData(error, configData);
+                throw new ExceptionWithConfigData(errorResponse.Error, configData);
             }
 
             if (indexerResponse.Status != HttpStatusCode.OK)

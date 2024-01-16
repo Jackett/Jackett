@@ -32,5 +32,20 @@ namespace Jackett.Common.Serializer
         {
             return JsonSerializer.Deserialize<T>(json, _SerializerSettings);
         }
+
+        public static bool TryDeserialize<T>(string json, out T result)
+            where T : new()
+        {
+            try
+            {
+                result = Deserialize<T>(json);
+                return true;
+            }
+            catch (JsonException)
+            {
+                result = default(T);
+                return false;
+            }
+        }
     }
 }
