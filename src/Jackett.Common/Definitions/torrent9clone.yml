@@ -8,14 +8,13 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
-  - https://www.torrent9.pm/
+  - https://www.torrent9.st/
   - https://torrent9.nocensor.cloud/
   - https://torrent9.mrunblock.bond/
 legacylinks:
   - https://www.protege-liens.net/
   - https://www.rantop.org/
   - https://torrent9.mrunblock.guru/ # redirects to 1337x
-  - http://www.torrent9.cm/
   - https://www.torrent9.cm/
   - https://torrent9.nocensor.art/
   - https://torrent9.mrunblock.life/
@@ -33,6 +32,7 @@ legacylinks:
   - https://www.torrent9.ink/
   - https://www.torrent9.sk/
   - https://www.torrent9.rs/
+  - https://www.torrent9.pm/
 
 caps:
   categorymappings:
@@ -46,6 +46,8 @@ caps:
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
     - {id: Porno, cat: XXX, desc: "XXX"}
+    - {id: Sports, cat: TV/Sport, desc: "Sports"}
+    - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
 
   modes:
     search: [q]
@@ -91,7 +93,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}derniers{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace
