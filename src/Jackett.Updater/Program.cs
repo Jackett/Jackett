@@ -405,6 +405,7 @@ namespace Jackett.Updater
                 "Definitions/gods.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/greeklegends.yml",
+                "Definitions/greekteam.yml",
                 "Definitions/gtorrent.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hachede.yml",
