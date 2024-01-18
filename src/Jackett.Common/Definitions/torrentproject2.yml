@@ -83,20 +83,20 @@ search:
       # while browse has cats the search does not (atm) so we wont support cats for now.
       text: Other
     title:
-      selector: span > a
+      selector: :scope > span > a
     details:
-      selector: span > a
+      selector: :scope > span > a
       attribute: href
     download:
-      selector: span > a
+      selector: :scope > span > a
       attribute: href
     date_ago:
       # 7 years ago
-      selector: span:nth-child(4):contains("ago")
+      selector: :scope > span:nth-child(4):contains("ago")
       optional: true
     date_time:
       # 2020-11-05 07:34:44
-      selector: span:nth-child(4):contains(":")
+      selector: :scope > span:nth-child(4):contains(":")
       optional: true
       filters:
         - name: append
@@ -106,11 +106,11 @@ search:
     date:
       text: "{{ if or .Result.date_ago .Result.date_time }}{{ or .Result.date_ago .Result.date_time }}{{ else }}now{{ end }}"
     size:
-      selector: span:nth-child(5)
+      selector: :scope > span:nth-child(5)
     seeders:
-      selector: span:nth-child(2)
+      selector: :scope > span:nth-child(2)
     leechers:
-      selector: span:nth-child(3)
+      selector: :scope > span:nth-child(3)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
