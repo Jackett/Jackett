@@ -1,7 +1,7 @@
 ---
-id: rptorrents-api
-name: RPTorrents (RPT)
-description: "RPTorrents (RPT) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: rptscene-api
+name: RPTScene (RPTorrents)
+description: "RPTScene (RPTorrents) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
