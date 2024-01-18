@@ -71,9 +71,6 @@ search:
     t: "{{ .Keywords }}"
     orderby: "{{ if .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
     safe: "{{ if and .Keywords .Config.filter-verified }}on{{ else }}{{ end }}"
-  keywordsfilters:
-    - name: re_replace
-      args: [" ", "+"]
 
   rows:
     selector: "#similarfiles div:has(a[href^=\"/t\"])"
