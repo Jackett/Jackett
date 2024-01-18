@@ -55,6 +55,7 @@ namespace Jackett.Common.Services
             {"oxtorrent", "torrent911"},
             {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
+            {"rptorrents-api", "rptscene-api"},
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
             {"seals", "greatposterwall"},
