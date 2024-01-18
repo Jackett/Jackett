@@ -22,12 +22,12 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: 4
+    default: 1
     options:
-      4: created
+      1: created
       7: seeders
       5: size
-      1: title
+      4: title
   - name: type
     type: select
     label: Order requested from site
@@ -41,23 +41,25 @@ caps:
     - {id: 33, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 29, cat: TV/Documentary, desc: "Documentary"}
     - {id: 24, cat: Books/EBook, desc: "Ebooks"}
-    - {id: 28, cat: Movies, desc: "FE-INT"}
     - {id: 10, cat: Console, desc: "Games - Console"}
     - {id: 11, cat: PC/Games, desc: "Games - PC"}
     - {id: 26, cat: Movies, desc: "Kids"}
     - {id: 9, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 12, cat: Movies, desc: "Movie Pack"}
+    - {id: 31, cat: Movies/UHD, desc: "Movies 4K"}
+    - {id: 38, cat: Movies/BluRay, desc: "Movies BD"}
     - {id: 13, cat: Movies/DVD, desc: "Movies DVD-r"}
     - {id: 14, cat: Movies/HD, desc: "Movies HD"}
     - {id: 15, cat: Movies/SD, desc: "Movies SD"}
     - {id: 22, cat: Audio/Lossless, desc: "Music FLAC"}
     - {id: 23, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 34, cat: Audio/Video, desc: "Music video"}
+    - {id: 35, cat: TV/Sport, desc: "Sports"}
+    - {id: 37, cat: TV/UHD, desc: "TV 4K"}
+    - {id: 36, cat: TV/SD, desc: "TV DVD-R"}
     - {id: 19, cat: TV/HD, desc: "TV HD"}
     - {id: 16, cat: TV, desc: "TV Pack"}
     - {id: 17, cat: TV/SD, desc: "TV SD"}
-    - {id: 31, cat: Movies/UHD, desc: "Ultra HD"}
-    - {id: 20, cat: XXX, desc: "XXX HD"}
-    - {id: 21, cat: XXX/SD, desc: "XXX SD"}
 
   modes:
     search: [q]
@@ -82,14 +84,14 @@ login:
 
 search:
   paths:
-    # https://finelite.org/selaa.php?c14=1&c15=1&c31=1&search=tt6591554&hae=1&type=desc&cat=0&incldead=1&sort=4
-    # https://finelite.org/selaa.php?search=&hae=0&type=desc&cat=0&incldead=0&freeleech=yes&sort=4
+    # https://finelite.org/selaa.php?c14=1&c15=1&c31=1&search=tt6591554&hae=2&type=desc&cat=0&incldead=1&sort=1
+    # https://finelite.org/selaa.php?search=&hae=0&type=desc&cat=0&incldead=1&freeleech=yes&sort=1
     - path: selaa.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # 0 name, 1 name&desc, 2 descr, 3 tags, 4 imdb with rating
-    hae: "{{ if .Query.IMDBID }}2{{ else }}0{{ end }}"
+    # 0 name&descr, 1 name, 2 descr, 3 tags, 4 imdb with rating
+    hae: "{{ if .Query.IMDBID }}2{{ else }}1{{ end }}"
     # 0 active, 1 incldead, 2 deadonly
     incldead: 1
     freeleech: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
@@ -144,4 +146,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# custom 3.1.4
+# custom 3.6.8
