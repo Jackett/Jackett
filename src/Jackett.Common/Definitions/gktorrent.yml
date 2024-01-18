@@ -8,6 +8,8 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Gktorrent
 links:
+  - https://www.gktorrent.mx/
+  - https://www.gktorrent.wf/
   - https://www.gktorrent.fi/
   - https://gktorrent.nocensor.cloud/
   - https://gktorrent.mrunblock.bond/
@@ -89,7 +91,7 @@ download:
           args: "\\s'(magnet:\\?.+?)';"
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}top{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace
