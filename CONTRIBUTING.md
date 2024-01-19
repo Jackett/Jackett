@@ -77,7 +77,7 @@ Your issue should have the following information.
 
 ## Adding a New Tracker
 
-Jackett's framework typically allows our team and volunteering developers to implement new trackers in a couple of hours
+Jackett's framework typically allows our team and volunteering developers to implement new trackers in a couple of hours.
 
 Depending on logic complexity, there are two common ways new trackers are implemented:
 
