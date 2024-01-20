@@ -52,6 +52,7 @@ caps:
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
     - {id: Porno, cat: XXX, desc: "Porno"}
+    - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
 
   modes:
     search: [q]
