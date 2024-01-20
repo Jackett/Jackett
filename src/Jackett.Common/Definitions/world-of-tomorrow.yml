@@ -13,48 +13,56 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 14, cat: Audio/MP3, desc: "Alben / Sampler / Singles"}
-    - {id: 87, cat: TV/Anime, desc: "Anime"}
-    - {id: 105, cat: TV/Anime, desc: "Anime Serien"}
-    - {id: 18, cat: PC, desc: "Appz-Sonstige"}
-    - {id: 64, cat: TV/Documentary, desc: "Dokumentation"}
-    - {id: 19, cat: Books/EBook, desc: "Ebooks"}
-    - {id: 111, cat: XXX, desc: "Englisch Section"}
-    - {id: 70, cat: Audio/Lossless, desc: "Flac"}
-    - {id: 75, cat: TV/Sport, desc: "Formel 1"}
-    - {id: 74, cat: TV/Sport, desc: "Fussball"}
-    - {id: 36, cat: Audio/Audiobook, desc: "Hörbuch"}
-    - {id: 101, cat: TV, desc: "Kids"}
-    - {id: 5, cat: Console, desc: "Konsolen-Games"}
-    - {id: 107, cat: PC/Mac, desc: "MAC-Programme"}
-    - {id: 91, cat: Movies, desc: "Movie-Packs"}
-    - {id: 11, cat: Movies/DVD, desc: "Movies DVD / HD2DVD"}
-    - {id: 89, cat: Movies/UHD, desc: "Movies UHD"}
-    - {id: 49, cat: Movies/HD, desc: "Movies-1080p"}
-    - {id: 90, cat: Movies/3D, desc: "Movies-3-D"}
-    - {id: 48, cat: Movies/HD, desc: "Movies-720p"}
-    - {id: 47, cat: Movies/BluRay, desc: "Movies-Bluray"}
-    - {id: 60, cat: Movies/HD, desc: "Movies-HDTV"}
-    - {id: 62, cat: Movies/SD, desc: "Movies-SD"}
-    - {id: 72, cat: Audio, desc: "Musik-Packs"}
-    - {id: 93, cat: Audio/Video, desc: "Musik-Videos"}
-    - {id: 4, cat: PC/Games, desc: "PC-Games"}
-    - {id: 79, cat: TV/HD, desc: "Serien-1080P"}
-    - {id: 95, cat: TV/UHD, desc: "Serien-2160P"}
-    - {id: 78, cat: TV/HD, desc: "Serien-720P"}
-    - {id: 100, cat: TV/HD, desc: "Serien-Packs-HD"}
-    - {id: 16, cat: TV/SD, desc: "Serien-Packs-SD"}
-    - {id: 77, cat: TV/SD, desc: "Serien-SD"}
-    - {id: 96, cat: Other, desc: "Sonstiges"}
-    - {id: 71, cat: Audio, desc: "Soundtracks"}
-    - {id: 73, cat: TV/Sport, desc: "Sport"}
-    - {id: 92, cat: Console, desc: "Wimmelbild"}
-    - {id: 28, cat: PC, desc: "Windows-Programme"}
-    - {id: 108, cat: Movies, desc: "WOTT-Filme"}
-    - {id: 108, cat: TV, desc: "WOTT-Filme"}
-    - {id: 109, cat: TV, desc: "WOTT-SERIEN"}
-    - {id: 110, cat: Audio, desc: "WOTT-MUSIK"}
-    - {id: 23, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 1014, cat: Audio/MP3, desc: "Alben / Sampler / Singles"}
+    - {id: 1087, cat: TV/Anime, desc: "Anime"}
+    - {id: 1105, cat: TV/Anime, desc: "Anime Serien"}
+    - {id: 1018, cat: PC, desc: "Appz-Sonstige"}
+    - {id: 1064, cat: TV/Documentary, desc: "Dokumentation"}
+    - {id: 1019, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 1111, cat: XXX, desc: "Englisch Section"}
+    - {id: 1070, cat: Audio/Lossless, desc: "Flac"}
+    - {id: 1075, cat: TV/Sport, desc: "Formel 1"}
+    - {id: 1074, cat: TV/Sport, desc: "Fussball"}
+    - {id: 1083, cat: TV/Sport, desc: "Games"}
+    - {id: 1036, cat: Audio/Audiobook, desc: "Hörbuch"}
+    - {id: 1101, cat: TV, desc: "Kids"}
+    - {id: 1005, cat: Console, desc: "Konsolen-Games"}
+    - {id: 1107, cat: PC/Mac, desc: "MAC-Programme"}
+    - {id: 1091, cat: Movies, desc: "Movies"}
+    - {id: 1066, cat: Movies, desc: "Movie-Packs"}
+    - {id: 1011, cat: Movies/DVD, desc: "Movies DVD / HD2DVD"}
+    - {id: 1089, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 1049, cat: Movies/HD, desc: "Movies-1080p"}
+    - {id: 1090, cat: Movies/3D, desc: "Movies-3-D"}
+    - {id: 1048, cat: Movies/HD, desc: "Movies-720p"}
+    - {id: 1047, cat: Movies/BluRay, desc: "Movies-Bluray"}
+    - {id: 1060, cat: Movies/HD, desc: "Movies-HDTV"}
+    - {id: 1062, cat: Movies/SD, desc: "Movies-SD"}
+    - {id: 1069, cat: Audio, desc: "Musik"}
+    - {id: 1072, cat: Audio, desc: "Musik-Packs"}
+    - {id: 1093, cat: Audio/Video, desc: "Musik-Videos"}
+    - {id: 1004, cat: PC/Games, desc: "PC-Games"}
+    - {id: 1068, cat: PC, desc: "Programme"}
+    - {id: 1076, cat: TV, desc: "Serien"}
+    - {id: 1079, cat: TV/HD, desc: "Serien-1080P"}
+    - {id: 1095, cat: TV/UHD, desc: "Serien-2160P"}
+    - {id: 1078, cat: TV/HD, desc: "Serien-720P"}
+    - {id: 1100, cat: TV/HD, desc: "Serien-Packs-HD"}
+    - {id: 1016, cat: TV/SD, desc: "Serien-Packs-SD"}
+    - {id: 1077, cat: TV/SD, desc: "Serien-SD"}
+    - {id: 1096, cat: Other, desc: "Sonstiges"}
+    - {id: 1071, cat: Audio, desc: "Soundtracks"}
+    - {id: 1073, cat: TV/Sport, desc: "Sport"}
+    - {id: 1092, cat: Console, desc: "Wimmelbild"}
+    - {id: 1028, cat: PC, desc: "Windows-Programme"}
+    - {id: 1108, cat: Movies, desc: "WOTT-Filme"}
+    - {id: 1108, cat: TV, desc: "WOTT-Filme"}
+    - {id: 1110, cat: Audio, desc: "WOTT-MUSIK"}
+    - {id: 1109, cat: TV, desc: "WOTT-SERIEN"}
+    - {id: 1023, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 1088, cat: XXX, desc: "XXX"}
+    - {id: 1106, cat: XXX/ImageSet, desc: "XXX Bilder"}
+    - {id: 1102, cat: XXX/Other, desc: "XXX HENTAI"}
 
   modes:
     search: [q]
