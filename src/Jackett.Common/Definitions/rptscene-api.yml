@@ -33,6 +33,7 @@ caps:
     - {id: 22, cat: TV/Anime, desc: "Anime"}
     - {id: 23, cat: PC, desc: "Linux"}
     - {id: 24, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 51, cat: TV/Documentary, desc: "Documentary"}
 
   modes:
     search: [q]
