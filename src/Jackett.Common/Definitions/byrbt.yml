@@ -58,6 +58,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_ipv6
+    type: info
+    label: IPv6 only
+    default: This site only accepts IPv6 addresses. If you are using IPv4 you will get a DNS Lookup Error.
 
 login:
   path: login.php
