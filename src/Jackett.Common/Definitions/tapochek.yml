@@ -103,6 +103,7 @@ caps:
     - {id: 88, cat: Console/XBox, desc: "XBox | Игры"}
     - {id: 85, cat: Console/XBox, desc: "Прочее | Архив (XBox)"}
     - {id: 70, cat: Console/PSP, desc: "PlayStation"}
+    - {id: 973, cat: Console/PS4, desc: "PS5 | Игры"}
     - {id: 910, cat: Console/PS4, desc: "PS4 | Игры"}
     - {id: 911, cat: Console/PS4, desc: "PS4 | Сцена"}
     - {id: 689, cat: Console/PS3, desc: "PS3 | Игры"}
