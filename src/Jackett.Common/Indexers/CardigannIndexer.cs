@@ -2183,7 +2183,7 @@ namespace Jackett.Common.Indexers
                         else
                             release.Category = release.Category.Union(cats).ToList();
                     }
-                    value = release.Category?.ToString() ?? string.Empty;
+                    value = release.Category.ToString() ?? string.Empty;
                     break;
                 case "categorydesc":
                     if (FieldModifiers.Contains("noappend"))
