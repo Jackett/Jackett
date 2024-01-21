@@ -9,7 +9,6 @@ followredirect: true
 testlinktorrent: false
 links:
   - https://www.torrent9.fm/
-  - https://torrent9.unblockninja.com/
 legacylinks:
   - http://www.torrent9.ec/
   - http://www.torrent9.red/
@@ -45,6 +44,7 @@ legacylinks:
   - https://www.torrent9.gg/
   - https://torrent9.to/ # no response data
   - https://www.torrent9.fi/ # this is the torrent9clone domain
+  - https://torrent9.unblockninja.com/ # is a proxy for torrent9clone
 
 caps:
   # dont forget to update the search fields category case block
@@ -108,7 +108,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}top_torrent.html{{ end }}"
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
