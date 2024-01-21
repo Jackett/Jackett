@@ -209,6 +209,7 @@ caps:
     - {id: 1668, cat: Audio/Lossless, desc: " |- Электронная музыка"}
     - {id: 1670, cat: Audio/Lossless, desc: " |- Отечественная поп-музыка"}
     - {id: 1669, cat: Audio/Lossless, desc: " |- Шансон, авторские, военные песни"}
+    - {id: 1740, cat: Audio/Lossless, desc: " |- Музыка в формате (Hi-Res stereo)"}
     - {id: 1679, cat: Audio/Lossless, desc: " |- Зарубежная поп музыка (Lossless)"}
     - {id: 1680, cat: Audio/Lossless, desc: " |- Eurodance, Disco, Hi-NRG, Technopop (Lossless)"}
     - {id: 1681, cat: Audio/Lossless, desc: " |- Отечественная поп музыка (Lossless)"}
