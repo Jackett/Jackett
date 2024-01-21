@@ -273,7 +273,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Bithorlo (BHO)
  * BitHUmen [![(invite needed)][inviteneeded]](#)
  * BitPorn
- * BitSexy
  * Bitspyder
  * BitTorrentFiles
  * BiTTuRK
