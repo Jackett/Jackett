@@ -53,6 +53,7 @@ caps:
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
     - {id: Porno, cat: XXX, desc: "Porno"}
     - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
+    - {id: Sports, cat: TV/Sport, desc: "Sports"}
 
   modes:
     search: [q]
