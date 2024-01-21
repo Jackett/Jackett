@@ -17,7 +17,7 @@ caps:
   categorymappings:
     # TV
     - {id: 1001, cat: TV, desc: "All TV Shows"}
-    - {id: 45, cat: TV, desc: "Russian TV Series"}
+    - {id: 45, cat: TV, desc: "TV Series - Russian"}
     - {id: 46, cat: TV, desc: "TV Series"}
     # Movies
     - {id: 1002, cat: Movies, desc: "All Movies"}
@@ -31,7 +31,7 @@ caps:
     - {id: 14, cat: Movies, desc: "Movies - Fantasy"}
     - {id: 24, cat: Movies, desc: "Movies - Horror / Mystery"}
     - {id: 11, cat: Movies, desc: "Movies - Adventure"}
-    - {id: 10, cat: Movies, desc: "Movies - Russian Movies"}
+    - {id: 10, cat: Movies, desc: "Movies - Russian"}
     - {id: 9, cat: Movies, desc: "Movies - Historical"}
     - {id: 47, cat: Movies, desc: "Movies - Asian"}
     - {id: 18, cat: Movies, desc: "Movies - Documentaries"}
@@ -44,9 +44,9 @@ caps:
     - {id: 38, cat: Movies, desc: "Movies - Theatre, Opera, Ballet"}
     - {id: 16, cat: Movies, desc: "Movies - Erotica"}
     # Cartoons
-    - {id: 1003, cat: TV/Anime, desc: "All Cartoons/Anime"}
-    - {id: 21, cat: TV/Anime, desc: "Cartoons"}
-    - {id: 22, cat: TV/Anime, desc: "Cartoons - Russian"}
+    - {id: 1003, cat: TV, desc: "All Cartoons"}
+    - {id: 21, cat: TV, desc: "Cartoons"}
+    - {id: 22, cat: TV, desc: "Cartoons - Russian"}
     - {id: 20, cat: TV/Anime, desc: "Cartoons - Anime"}
     # Music
     - {id: 1004, cat: Audio, desc: "All Music"}
@@ -58,7 +58,7 @@ caps:
     - {id: 1006, cat: TV/Other, desc: "Shows, Concerts, Sports"}
     - {id: 2, cat: Audio/Audiobook, desc: "Other - AudioBooks"}
     - {id: 1, cat: Audio/Video, desc: "Other - Music Video's"}
-    - {id: 23, cat: Console, desc: "Other - Games"}
+    - {id: 23, cat: PC/Games, desc: "Other - Games"}
     - {id: 32, cat: PC, desc: "Other - Programs"}
     - {id: 40, cat: Other, desc: "Other - Design / Graphics"}
     - {id: 41, cat: Books, desc: "Other - Library"}
