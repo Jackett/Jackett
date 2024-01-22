@@ -17,7 +17,9 @@ caps:
     - {id: 5, cat: PC, desc: "App"}
     - {id: 6, cat: Books/EBook, desc: "E-Books"}
     - {id: 7, cat: Other, desc: "Cursos"}
-    - {id: 8, cat: XXX, desc: "Fotos Adultas"}
+    - {id: 8, cat: XXX/ImageSet, desc: "Fotos Adultas"}
+    - {id: 9, cat: Audio/Audiobook, desc: "Audio E-Book"}
+    - {id: 10, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
