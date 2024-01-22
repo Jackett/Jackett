@@ -11,20 +11,18 @@ links:
 caps:
   categorymappings:
     - {id: 37, cat: Movies, desc: "Freeleech"}
-    - {id: 14, cat: Movies/WEB-DL, desc: "Movie/WEB"}
-    - {id: 36, cat: Movies/UHD, desc: "Movie/4K Disc"}
+    - {id: 14, cat: Movies/WEB-DL, desc: "Movie/WeBRip"}
     - {id: 5, cat: Movies/UHD, desc: "Movie/4K Rip"}
-    - {id: 6, cat: Movies/BluRay, desc: "Movie/BluRay Disc"}
     - {id: 7, cat: Movies/BluRay, desc: "Movie/BluRay Rip"}
-    - {id: 34, cat: Movies, desc: "Movie/Rest"}
+    - {id: 34, cat: Movies, desc: "Movie/Other"}
     - {id: 15, cat: Movies, desc: "Movie/Packs"}
-    - {id: 20, cat: Movies/SD, desc: "Movie/CAM"}
+    - {id: 20, cat: Movies/SD, desc: "Movie/CAM/HDRip"}
     - {id: 21, cat: XXX, desc: "Movie/XXX"}
     - {id: 28, cat: TV, desc: "Tv Packs"}
     - {id: 31, cat: TV, desc: "Tv Mini Series"}
     - {id: 30, cat: TV/HD, desc: "Tv Episodes"}
     - {id: 26, cat: TV/Sport, desc: "Tv Sport"}
-    - {id: 18, cat: Other, desc: "Other"}
+    - {id: 41, cat: Movies, desc: "Freeleech"}
 
   modes:
     search: [q]
