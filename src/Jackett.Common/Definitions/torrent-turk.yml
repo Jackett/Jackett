@@ -138,12 +138,15 @@ search:
         - name: querystring
           args: cid
     title:
-      selector: a[href*="?p=torrents&pid=10&action=details"]
+      selector: td.torrent_name > a
     details:
-      selector: a[href*="?p=torrents&pid=10&action=details"]
+      selector: td.torrent_name > a
       attribute: href
     download:
-      selector: a[href*="?p=torrents&pid=10&action=download"]
+      selector: td.download > a
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
       attribute: href
     date_day:
       # Uploaded Friday at 05:11 by
