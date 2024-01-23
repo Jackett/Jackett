@@ -8,15 +8,11 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Gktorrent
 links:
-  - https://www.gktorrent.mx/
   - https://www.gktorrent.wf/
-  - https://www.gktorrent.fi/
   - https://gktorrent.nocensor.cloud/
   - https://gktorrent.mrunblock.bond/
 legacylinks:
   - https://www.rantop.org/
-  - https://www.gktorrent.tv/
-  - https://www.gktorrent.net/
   - https://www.gktorrent.biz/
   - https://www.gktorrent.io/
   - https://www.gktorrent.pw/
@@ -39,6 +35,8 @@ legacylinks:
   - https://www.gktorrent.ac/
   - https://www.gktorrent.ph/
   - https://www.gktorrent.vc/
+  - https://www.gktorrent.mx/
+  - https://www.gktorrent.fi/
 
 caps:
   categorymappings:
