@@ -42,7 +42,7 @@ jobs:
           APP_ID: ${{ secrets.PROBOT_ID }}
           PRIVATE_KEY: ${{ secrets.PROBOT_KEY }}
           TOKEN: ${{ secrets.PROBOT_TOKEN }}
-          LAST_REDELIVERY_VARIABLE_NAME: 'ISSUEBOT_LAST_REDELIVERY_TIME'
+          LAST_REDELIVERY_VARIABLE_NAME: 'PROBOT_TIME'
           
           WORKFLOW_REPO: ${{ github.event.repository.name }}
           WORKFLOW_REPO_OWNER: ${{ github.repository_owner }}
