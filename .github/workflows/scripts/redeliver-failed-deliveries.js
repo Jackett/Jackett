@@ -1,19 +1,29 @@
 // This script uses GitHub's Octokit SDK to make API requests. For more information, see "[AUTOTITLE](/rest/guides/scripting-with-the-rest-api-and-javascript)."
-const { Octokit } = require("octokit");
+const { App, Octokit } = require("octokit");
 
 //
 async function checkAndRedeliverWebhooks() {
   // Get the values of environment variables that were set by the GitHub Actions workflow.
+  const APP_ID = process.env.APP_ID;
+  const PRIVATE_KEY = process.env.PRIVATE_KEY;
   const TOKEN = process.env.TOKEN;
-  const ORGANIZATION_NAME = process.env.ORGANIZATION_NAME;
-  const HOOK_ID = process.env.HOOK_ID;
-  const LAST_REDELIVERY_VARIABLE_NAME = process.env.ISSUEBOT_LAST_DELIVERY_TIME;
-
-  const WORKFLOW_REPO_NAME = process.env.WORKFLOW_REPO_NAME;
+  const LAST_REDELIVERY_VARIABLE_NAME = process.env.ISSUEBOT_LAST_REDELIVERY_TIME;
+  
+  const WORKFLOW_REPO_NAME = process.env.WORKFLOW_REPO;
   const WORKFLOW_REPO_OWNER = process.env.WORKFLOW_REPO_OWNER;
 
+  // Create an instance of the octokit `App` using the app ID and private key values that were set in the GitHub Actions workflow.
+  //
+  // This will be used to make API requests to the webhook-related endpoints.
+  const app = new App({
+    appId: APP_ID,
+    privateKey: PRIVATE_KEY,
+  });
+
   // Create an instance of `Octokit` using the token values that were set in the GitHub Actions workflow.
-  const octokit = new Octokit({
+  //
+  // This will be used to update the configuration variable that stores the last time that this script ran.
+  const octokit = new Octokit({ 
     auth: TOKEN,
   });
 
@@ -31,12 +41,7 @@ async function checkAndRedeliverWebhooks() {
     const newWebhookRedeliveryTime = Date.now().toString();
 
     // Get the webhook deliveries that were delivered after `lastWebhookRedeliveryTime`.
-    const deliveries = await fetchWebhookDeliveriesSince({
-      lastWebhookRedeliveryTime,
-      organizationName: ORGANIZATION_NAME,
-      hookId: HOOK_ID,
-      octokit,
-    });
+    const deliveries = await fetchWebhookDeliveriesSince({lastWebhookRedeliveryTime, app});
 
     // Consolidate deliveries that have the same globally unique identifier (GUID). The GUID is constant across redeliveries of the same delivery.
     let deliveriesByGuid = {};
@@ -63,12 +68,7 @@ async function checkAndRedeliverWebhooks() {
 
     // Redeliver any failed deliveries.
     for (const deliveryId of failedDeliveryIDs) {
-      await redeliverWebhook({
-        deliveryId,
-        organizationName: ORGANIZATION_NAME,
-        hookId: HOOK_ID,
-        octokit,
-      });
+      await redeliverWebhook({deliveryId, app});
     }
 
     // Update the configuration variable (or create the variable if it doesn't already exist) to store the time that this script started.
@@ -80,7 +80,7 @@ async function checkAndRedeliverWebhooks() {
       repoOwner: WORKFLOW_REPO_OWNER,
       repoName: WORKFLOW_REPO_NAME,
       octokit,
-    });
+      });
 
     // Log the number of redeliveries.
     console.log(
@@ -108,17 +108,10 @@ async function checkAndRedeliverWebhooks() {
 // If a page of results includes deliveries that occurred before `lastWebhookRedeliveryTime`,
 // it will store only the deliveries that occurred after `lastWebhookRedeliveryTime` and then stop.
 // Otherwise, it will store all of the deliveries from the page and request the next page.
-async function fetchWebhookDeliveriesSince({
-  lastWebhookRedeliveryTime,
-  organizationName,
-  hookId,
-  octokit,
-}) {
-  const iterator = octokit.paginate.iterator(
-    "GET /orgs/{org}/hooks/{hook_id}/deliveries",
+async function fetchWebhookDeliveriesSince({lastWebhookRedeliveryTime, app}) {
+  const iterator = app.octokit.paginate.iterator(
+    "GET /app/hook/deliveries",
     {
-      org: organizationName,
-      hook_id: hookId,
       per_page: 100,
       headers: {
         "x-github-api-version": "2022-11-28",
@@ -153,20 +146,10 @@ async function fetchWebhookDeliveriesSince({
 }
 
 // This function will redeliver a failed webhook delivery.
-async function redeliverWebhook({
-  deliveryId,
-  organizationName,
-  hookId,
-  octokit,
-}) {
-  await octokit.request(
-    "POST /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
-    {
-      org: organizationName,
-      hook_id: hookId,
-      delivery_id: deliveryId,
-    }
-  );
+async function redeliverWebhook({deliveryId, app}) {
+  await app.octokit.request("POST /app/hook/deliveries/{delivery_id}/attempts", {
+    delivery_id: deliveryId,
+  });
 }
 
 // This function gets the value of a configuration variable.
