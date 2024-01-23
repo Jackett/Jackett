@@ -8,7 +8,7 @@ async function checkAndRedeliverWebhooks() {
   const REPO_OWNER = process.env.REPO_OWNER;
   const REPO_NAME = process.env.REPO_NAME;
   const HOOK_ID = process.env.HOOK_ID;
-  const LAST_REDELIVERY_VARIABLE_NAME = process.env.LAST_REDELIVERY_VARIABLE_NAME;
+  const LAST_REDELIVERY_VARIABLE_NAME = process.env.ISSUEBOT_WEBHOOK_REDELIVER;
 
   const WORKFLOW_REPO_NAME = process.env.WORKFLOW_REPO_NAME;
   const WORKFLOW_REPO_OWNER = process.env.WORKFLOW_REPO_OWNER;
