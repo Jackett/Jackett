@@ -4,7 +4,7 @@ name: Redeliver failed webhook deliveries
 # This workflow runs every 6 hours or when manually triggered.
 on:
   schedule:
-    - cron: '15 */6 * * *'
+    - cron: '40 */6 * * *'
   workflow_dispatch:
 
 # This workflow will use the built in `GITHUB_TOKEN` to check out the repository contents. This grants `GITHUB_TOKEN` permission to do that.
@@ -32,19 +32,19 @@ jobs:
         run: npm install octokit
 
       # This step sets some environment variables, then runs a script to find and redeliver failed webhook deliveries.
-      # - Replace `YOUR_SECRET_NAME` with the name of the secret where you stored your personal access token.
-      # - Replace `YOUR_ORGANIZATION_NAME` with the name of the organization where the webhook was created.
-      # - Replace `YOUR_HOOK_ID` with the ID of the webhook.
+      # - Replace `YOUR_APP_ID_SECRET_NAME` with the name of the secret where you stored your app ID.
+      # - Replace `YOUR_PRIVATE_KEY_SECRET_NAME` with the name of the secret where you stored your private key.
+      # - Replace `YOUR_TOKEN_SECRET_NAME` with the name of the secret where you stored your personal access token.
       # - Replace `YOUR_LAST_REDELIVERY_VARIABLE_NAME` with the name that you want to use for a configuration variable that will be stored in the repository where this workflow is stored. The name can be any string that contains only alphanumeric characters and `_`, and does not start with `GITHUB_` or a number. For more information, see "[AUTOTITLE](/actions/learn-github-actions/variables#defining-configuration-variables-for-multiple-workflows)."
-
+      
       - name: Run script
         env:
-          TOKEN: ${{ secrets.ISSUEBOT }}
-          ORGANIZATION_NAME: 'Jackett'
-          HOOK_ID: '24748032'
-          LAST_REDELIVERY_VARIABLE_NAME: 'ISSUEBOT_LAST_DELIVERY_TIME'
-
-          WORKFLOW_REPO_NAME: ${{ github.event.repository.name }}
+          APP_ID: ${{ secrets.PROBOT_ID }}
+          PRIVATE_KEY: ${{ secrets.PROBOT_KEY }}
+          TOKEN: ${{ secrets.PROBOT_TOKEN }}
+          LAST_REDELIVERY_VARIABLE_NAME: 'ISSUEBOT_LAST_REDELIVERY_TIME'
+          
+          WORKFLOW_REPO: ${{ github.event.repository.name }}
           WORKFLOW_REPO_OWNER: ${{ github.repository_owner }}
         run: |
           node .github/workflows/scripts/redeliver-failed-deliveries.js
