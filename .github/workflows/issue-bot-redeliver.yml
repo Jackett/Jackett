@@ -41,8 +41,8 @@ jobs:
       - name: Run script
         env:
           TOKEN: ${{ secrets.ISSUEBOT }}
-          REPO_OWNER: 'Jackett'
-          REPO_NAME: 'Jackett'
+          REPO_OWNER: 'jackett'
+          REPO_NAME: 'jackett'
           HOOK_ID: '24748032'
           LAST_REDELIVERY_VARIABLE_NAME: 'ISSUEBOT_WEBHOOK_REDELIVER'
 
