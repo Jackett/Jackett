@@ -212,6 +212,29 @@ namespace Jackett.Server.Controllers
                 {
                     request.Query = t.Value.ToString();
                 }
+
+                if (t.Key == "imdbid")
+                {
+                    request.ImdbId = t.Value.ToString();
+                }
+
+                if (t.Key == "tmdbid")
+                {
+                    request.TmdbId = Int32.Parse(t.Value.ToString());
+                    Console.WriteLine(request.TmdbId);
+                }
+
+                if (t.Key == "tvdbid")
+                {
+                    request.TvdbId = Int32.Parse(t.Value.ToString());
+                    Console.WriteLine(request.TmdbId);
+                }
+
+                if (t.Key == "tvmazeid")
+                {
+                    request.TvMazeId = Int32.Parse(t.Value.ToString());
+                    Console.WriteLine(request.TmdbId);
+                }
             }
 
             var manualResult = new ManualSearchResult();
