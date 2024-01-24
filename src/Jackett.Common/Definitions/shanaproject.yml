@@ -87,8 +87,10 @@ search:
           args: ["April", "Apr"]
         - name: re_replace
           args: ["March", "Mar"]
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "MMM d, yyyy, h:mm tt"
+          args: "MMM d, yyyy, h:mm tt zzz"
     date_abbr:
       # May 8, 2022, 6 a.m.
       selector: div.release_20:contains(".m."):not(:contains(":"))
@@ -106,8 +108,10 @@ search:
           args: ["April", "Apr"]
         - name: re_replace
           args: ["March", "Mar"]
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "MMM d, yyyy, h tt"
+          args: "MMM d, yyyy, h tt zzz"
     date_noon:
       # Sept. 30, 2022, noon
       selector: div.release_20:contains(", noon")
@@ -127,8 +131,10 @@ search:
           args: ["March", "Mar"]
         - name: re_replace
           args: [" noon", " 12 pm"]
+        - name: append
+          args: " +00:00" # GMT
         - name: dateparse
-          args: "MMM d, yyyy, h tt"
+          args: "MMM d, yyyy, h tt zzz"
     date:
       text: "{{ if or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ or .Result.date_full .Result.date_abbr .Result.date_noon }}{{ else }}now{{ end }}"
     size:
