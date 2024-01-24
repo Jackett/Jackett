@@ -17,7 +17,7 @@ caps:
     - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
     - {id: 20, cat: TV/Other, desc: "Stand-up Specials"}
     - {id: 24, cat: Movies/Other, desc: "Holiday: Films & Shorts"}
-    - {id: 25, cat: Movies/Other, desc: "Films: Musicals}
+    - {id: 25, cat: Movies/Other, desc: "Films: Musicals"}
     - {id: 19, cat: Movies/Other, desc: "Films: Shorts"}
     - {id: 12, cat: Movies/Other, desc: "Films: FanEdits"}
     - {id: 22, cat: Movies/Other, desc: "Films: Needs Sub/Dub"}
