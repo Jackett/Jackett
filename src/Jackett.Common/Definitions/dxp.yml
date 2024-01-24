@@ -92,6 +92,9 @@ download:
       attribute: href
     - selector: a[href^="magnet:?xt="]
       attribute: href
+      filters:
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", ""]
 
 search:
   # https://dxp.ru/torrents.php?search=&sort=4&type=desc
@@ -109,6 +112,9 @@ search:
     # strip season and/or ep
     - name: re_replace
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
+
+  headers:
+    Referer: ["{{ .Config.sitelink }}torrents.php"]
 
   rows:
     selector: table#loading-table tbody#highlighted tr:has(a[href^="torrents.php?cat="]), table#loading-table tbody#highlighted tr:has(a[href^="details.php?id="])
