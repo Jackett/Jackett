@@ -34,6 +34,7 @@ caps:
     - {id: 23, cat: PC, desc: "Linux"}
     - {id: 24, cat: PC/Mobile-Other, desc: "Mobile"}
     - {id: 51, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 52, cat: TV, desc: "TV Cartoons-Ro"}
 
   modes:
     search: [q]
