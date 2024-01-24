@@ -11,17 +11,28 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Films: Movies"}
+    - {id: 18, cat: Movies/Other, desc: "Films: Silent"}
     - {id: 8, cat: Movies/Other, desc: "Films: Anime"}
-    - {id: 12, cat: Movies, desc: "Films: FanEdits"}
+    - {id: 21, cat: Movies/3D, desc: "Films: 3D"}
+    - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
+    - {id: 20, cat: TV/Other, desc: "Stand-up Specials"}
+    - {id: 24, cat: Movies/Other, desc: "Holiday: Films & Shorts"}
+    - {id: 25, cat: Movies/Other, desc: "Films: Musicals}
+    - {id: 19, cat: Movies/Other, desc: "Films: Shorts"}
+    - {id: 12, cat: Movies/Other, desc: "Films: FanEdits"}
+    - {id: 22, cat: Movies/Other, desc: "Films: Needs Sub/Dub"}
     - {id: 2, cat: TV, desc: "Series: TV"}
     - {id: 9, cat: TV/Anime, desc: "Series: Anime"}
     - {id: 6, cat: XXX, desc: "XXX: Standard"}
+    - {id: 15, cat: XXX/Pack, desc: "XXX: MegaPacks"}
     - {id: 10, cat: XXX, desc: "XXX: Hentai"}
-    - {id: 14, cat: XXX, desc: "XXX: Creators Corner"}
+    - {id: 14, cat: XXX/Other, desc: "XXX: Creators Corner"}
     - {id: 13, cat: XXX/Other, desc: "XXX: Other"}
-    - {id: 11, cat: XXX, desc: "XXX: Zoo"}
+    - {id: 11, cat: XXX/Other, desc: "XXX: Zoo"}
     - {id: 7, cat: Books/EBook, desc: "Ebooks"}
     - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 16, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 23, cat: Other, desc: "Other or Not sure"}
 
   modes:
     search: [q]
@@ -173,4 +184,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 7.2.0
+# json UNIT3D 7.2.1
