@@ -11,6 +11,7 @@ variables:
   # system.debug: true
 
 trigger:
+  batch: true
   branches:
     include:
       - '*'
