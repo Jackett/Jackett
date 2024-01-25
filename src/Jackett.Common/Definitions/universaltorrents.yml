@@ -35,11 +35,14 @@ caps:
     - {id: 17, cat: PC/Games, desc: "Spiel PC"}
     - {id: 24, cat: Console, desc: "Spiel Konsole"}
     - {id: 121, cat: PC/Games, desc: "Spiel Wimmelbild"}
-    - {id: 62, cat: TV/Sport, desc: "Sport SD"}
     - {id: 61, cat: TV/Sport, desc: "Sport HD"}
+    - {id: 62, cat: TV/Sport, desc: "Sport SD"}
     - {id: 96, cat: Books/Mags, desc: "ePaper Zeitungen"}
     - {id: 136, cat: Books/EBook, desc: "ePaper E-Book"}
     - {id: 137, cat: Books/Comics, desc: "ePaper Comics"}
+    - {id: 143, cat: Movies/Other, desc: "Trickfilm Anime"}
+    - {id: 144, cat: TV/Anime, desc: "Trickfilm Anime Serien"}
+    - {id: 145, cat: Movies/Other, desc: "Trickfilm Kids"}
     - {id: 76, cat: XXX/SD, desc: "XXX SD"}
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
