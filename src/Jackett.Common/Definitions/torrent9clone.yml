@@ -40,6 +40,7 @@ caps:
   categorymappings:
     - {id: Films, cat: Movies, desc: "Movies"}
     - {id: Animes, cat: TV/Anime, desc: "Anime"}
+    - {id: Documentaires, cat: TV/Documentary, desc: "Documentaires"}
     - {id: Séries, cat: TV, desc: "TV"}
     - {id: Musiques, cat: Audio, desc: "Music"}
     - {id: Ebooks, cat: Books, desc: "Books"}
@@ -47,9 +48,9 @@ caps:
     - {id: Logiciels, cat: PC, desc: "Software"}
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
-    - {id: Porno, cat: XXX, desc: "XXX"}
-    - {id: Sports, cat: TV/Sport, desc: "Sports"}
+    - {id: Porno, cat: XXX, desc: "Porno"}
     - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
+    - {id: Sports, cat: TV/Sport, desc: "Sports"}
 
   modes:
     search: [q]
