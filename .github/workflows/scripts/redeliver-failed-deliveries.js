@@ -1,7 +1,7 @@
 // This script uses GitHub's Octokit SDK to make API requests. For more information, see "[AUTOTITLE](/rest/guides/scripting-with-the-rest-api-and-javascript)."
 const { App, Octokit } = require("octokit");
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 const secondDelivery = true;
 
 //
