@@ -2,7 +2,7 @@
 const { App, Octokit } = require("octokit");
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const secondDelivery = true;
+let secondDelivery = true;
 
 //
 async function checkAndRedeliverWebhooks() {
