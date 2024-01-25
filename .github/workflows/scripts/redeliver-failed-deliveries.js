@@ -1,6 +1,9 @@
 // This script uses GitHub's Octokit SDK to make API requests. For more information, see "[AUTOTITLE](/rest/guides/scripting-with-the-rest-api-and-javascript)."
 const { App, Octokit } = require("octokit");
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const secondDelivery = true;
+
 //
 async function checkAndRedeliverWebhooks() {
   // Get the values of environment variables that were set by the GitHub Actions workflow.
@@ -69,6 +72,13 @@ async function checkAndRedeliverWebhooks() {
     // Redeliver any failed deliveries.
     for (const deliveryId of failedDeliveryIDs) {
       await redeliverWebhook({deliveryId, app});
+      // its likely ProBot was asleep when the first redeliver was sent and we know PRoBot startup takes about 12s
+      // so the first redeliver will likely timeout after 10s, but will have started ProBot
+      if (secondDelivery) {
+        secondDelivery = false;
+        // so we wait 13s so that the rest of the redeliveries will succeed
+        await sleep(13000);
+      }
     }
 
     // Update the configuration variable (or create the variable if it doesn't already exist) to store the time that this script started.
