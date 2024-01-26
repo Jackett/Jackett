@@ -13,7 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 3, cat: PC, desc: "Apps"}
-    - {id: 52, cat: PC/Other, desc: "Apps -- Miscellaneous"}
+    - {id: 52, cat: PC, desc: "Apps -- Miscellaneous"}
     - {id: 4, cat: Audio, desc: "Albums"}
     - {id: 28, cat: Audio, desc: "Alternative"}
     - {id: 31, cat: Audio, desc: "Billboard Top 100"}
