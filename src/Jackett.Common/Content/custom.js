@@ -147,6 +147,10 @@ function loadJackettSettings() {
             $("#can-upgrade-from-mono").show();
         }
 
+        if (data.external != null && data.external === true && data.password === '') {
+            $("#warning-external-access").show();
+        }
+
         $.each(data.notices, function (index, value) {
             console.log(value);
             doNotify(value, "danger", "glyphicon glyphicon-alert", false);
