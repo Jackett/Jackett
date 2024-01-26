@@ -13,6 +13,7 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 3, cat: PC, desc: "Apps"}
+    - {id: 52, cat: PC/Other, desc: "Apps -- Miscellaneous"}
     - {id: 4, cat: Audio, desc: "Albums"}
     - {id: 28, cat: Audio, desc: "Alternative"}
     - {id: 31, cat: Audio, desc: "Billboard Top 100"}
@@ -22,7 +23,6 @@ caps:
     - {id: 26, cat: Audio, desc: "Classical"}
     - {id: 11, cat: Audio, desc: "Country"}
     - {id: 25, cat: Audio, desc: "Dance"}
-    - {id: 20, cat: Audio, desc: "Deep House"}
     - {id: 38, cat: Audio, desc: "Discography"}
     - {id: 5, cat: Audio, desc: "DJ Music"}
     - {id: 45, cat: Audio, desc: "DJ Music -- Funkymix"}
@@ -39,10 +39,13 @@ caps:
     - {id: 32, cat: Audio, desc: "House"}
     - {id: 17, cat: Audio, desc: "Jazz"}
     - {id: 35, cat: Audio, desc: "Jungle"}
+    - {id: 20, cat: Audio, desc: "K3 WAV"}
+    - {id: 51, cat: Audio/Other, desc: "K3 WAV -- Other WAV"}
     - {id: 39, cat: Audio, desc: "Karaoke"}
     - {id: 8, cat: Audio, desc: "Mastermix"}
     - {id: 19, cat: Audio, desc: "Metal"}
     - {id: 41, cat: Audio/MP3, desc: "MP3 NEW RELEASES"}
+    - {id: 53, cat: Audio/Other, desc: "MP3 NEW RELEASES -- Other MP3s"}
     - {id: 43, cat: Audio, desc: "Music Packs"}
     - {id: 40, cat: Audio/Video, desc: "Music Videos"}
     - {id: 30, cat: Audio, desc: "Oldies"}
@@ -52,11 +55,10 @@ caps:
     - {id: 34, cat: Audio, desc: "Reggae"}
     - {id: 37, cat: Audio, desc: "Retro"}
     - {id: 14, cat: Audio, desc: "Rock"}
-    - {id: 50, cat: Audio, desc: "Rock & roll"}
+    - {id: 50, cat: Audio, desc: "Rock -- Rock & roll"}
     - {id: 21, cat: Audio, desc: "Soul"}
     - {id: 24, cat: Audio, desc: "Trance"}
     - {id: 10, cat: Audio, desc: "Twisted-Music Vip"}
-    - {id: 52, cat: Audio/Other, desc: "Miscellaneous"}
 
   modes:
     search: [q]
