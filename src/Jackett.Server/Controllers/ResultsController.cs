@@ -220,17 +220,17 @@ namespace Jackett.Server.Controllers
 
                 if (t.Key == "tmdbid")
                 {
-                    request.TmdbId = Int32.Parse(t.Value.ToString());
+                    request.TmdbId = int.Parse(t.Value.ToString());
                 }
 
                 if (t.Key == "tvdbid")
                 {
-                    request.TvdbId = Int32.Parse(t.Value.ToString());
+                    request.TvdbId = int.Parse(t.Value.ToString());
                 }
 
                 if (t.Key == "tvmazeid")
                 {
-                    request.TvMazeId = Int32.Parse(t.Value.ToString());
+                    request.TvMazeId = int.Parse(t.Value.ToString());
                 }
             }
 

@@ -75,9 +75,6 @@ namespace Jackett.Common.Models.DTO
                 }
             }
 
-
-
-
             return stringQuery;
         }
     }
