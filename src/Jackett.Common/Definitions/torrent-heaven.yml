@@ -79,7 +79,7 @@ download:
       text: "{{ .Config.thankyou }}"
       submit: Opslaan
   selectors:
-    - selector: a[href^="download.php?id="]
+    - selector: a[href^="downloadv1.php?id="]
       attribute: href
 
 search:
