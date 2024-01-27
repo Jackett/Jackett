@@ -57,6 +57,8 @@ search:
   fields:
     categorydesc:
       selector: div.inmy > a:last-of-type
+      optional: true
+      default: "порно видео"
     title:
       selector: div.news_text > a
     details:
