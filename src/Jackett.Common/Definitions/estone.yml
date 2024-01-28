@@ -6,7 +6,9 @@ language: hu-HU
 type: private
 encoding: UTF-8
 links:
-  - http://estone.cc/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://estone.cc/
+legacylinks:
+  - http://estone.cc/
 
 caps:
   categorymappings:
