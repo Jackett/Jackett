@@ -11,11 +11,13 @@ links:
 
 caps:
   categories:
-    Anime: TV/Anime
+    anime: TV/Anime
+    books: Books
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    book-search: [q]
 
 settings: []
 
@@ -37,11 +39,12 @@ search:
 
   fields:
     category:
-      text: Anime
+      selector: span.badge.badge-primary
     title:
-      selector: div.flex.flex-wrap ~ p
+      selector: a[href*="/view/"]
     details:
-      text: /
+      selector: a[href*="/view/"]
+      attribute: href
     download:
       selector: a[href*="/download/"]
       attribute: href
@@ -62,6 +65,15 @@ search:
       text: 1
     leechers:
       text: 1
+    genre:
+      selector: span.badge.badge-secondary
+      filters:
+        - name: replace
+          args: ["non english", "non_english"]
+        - name: replace
+          args: ["music video", "music_video"]
+        - name: replace
+          args: ["Anime Time", "Anime_Time"]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
