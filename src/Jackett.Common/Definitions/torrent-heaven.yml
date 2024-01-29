@@ -81,6 +81,8 @@ download:
   selectors:
     - selector: a[href^="download.php?id="]
       attribute: href
+    - selector: a[href^="downloadv1.php?id="]
+      attribute: href
 
 search:
   paths:
