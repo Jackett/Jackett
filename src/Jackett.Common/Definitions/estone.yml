@@ -6,9 +6,9 @@ language: hu-HU
 type: private
 encoding: UTF-8
 links:
-  - https://estone.cc/
-legacylinks:
   - http://estone.cc/
+legacylinks:
+  - https://estone.cc/ # ERR_CONNECTION_CLOSED
 
 caps:
   categorymappings:
