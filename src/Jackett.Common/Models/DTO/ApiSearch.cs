@@ -10,9 +10,9 @@ namespace Jackett.Common.Models.DTO
         public int[] Category { get; set; }
         public string[] Tracker { get; set; }
         public string ImdbId { get; set; }
-        public int TvdbId { get; set; }
-        public int TmdbId { get; set; }
-        public int TvMazeId { get; set; }
+        public int? TvdbId { get; set; }
+        public int? TmdbId { get; set; }
+        public int? TvMazeId { get; set; }
 
         public static TorznabQuery ToTorznabQuery(ApiSearch request)
         {
