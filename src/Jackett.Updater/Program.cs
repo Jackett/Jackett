@@ -464,7 +464,7 @@ namespace Jackett.Updater
                 "Definitions/latinop2p.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lechaudron.yml",
-                "Definitions/legacyhd.yml", // renamed realflix
+                "Definitions/legacyhd.yml", // renamed to realflix
                 "Definitions/legittorrents.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/lemonhd.yml",
@@ -474,6 +474,7 @@ namespace Jackett.Updater
                 "Definitions/lightning-tor.yml",
                 "Definitions/mactorrents.yml",
                 "Definitions/magicheaven.yml",
+                "Definitions/magico.yml", // renamed to trellas
                 "Definitions/magnet4you.yml",
                 "Definitions/magnetdl.yml",
                 "Definitions/maniatorrent.yml",

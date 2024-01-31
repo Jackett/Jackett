@@ -50,6 +50,7 @@ namespace Jackett.Common.Services
             {"kisssub", "miobt"},
             {"legacyhd", "reelflix"},
             {"reelflix", "reelflix-api"},
+            {"magico", "trellas"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"nnm-club", "noname-club"},
             {"oxtorrent", "torrent911"},

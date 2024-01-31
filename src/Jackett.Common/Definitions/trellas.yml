@@ -1,7 +1,7 @@
 ---
-id: magico
-name: Magico
-description: "Magico (Trellas) is a GREEK Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: trellas
+name: Trellas
+description: "Trellas (Magico) is a GREEK Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: el-GR
 type: private
 encoding: UTF-8
