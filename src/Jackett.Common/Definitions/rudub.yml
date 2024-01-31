@@ -6,13 +6,14 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
-  - https://rudub.net/
+  - https://rudub.pw/
 legacylinks:
   - http://baibako.tv/
   - https://baibako.tv/
   - http://bko.baibako.tv/
   - http://rudub.tv/ # redirects to *.net
   - http://rudub.co/
+  - https://rudub.net/
 
 caps:
   categorymappings:
