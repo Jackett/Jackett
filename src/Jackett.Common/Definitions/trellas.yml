@@ -154,13 +154,12 @@ login:
   error:
     - selector: ":contains(\"-ERROR-\")"
   test:
-    path: ?p=torrents&pid=32
-    selector: a#logout
+    path: ?p=home&pid=1
+    selector: div#member_info_bar
 
 search:
   paths:
     - path: /
-      method: post
   keywordsfilters:
     - name: re_replace # add brackets to year on searchquery if missing
       args: ["\\(*((19|20)\\d{2})\\)*", "($1)"]
@@ -177,6 +176,7 @@ search:
     search_type: name
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
+    submit: "Αναζήτηση"
   error:
     - selector: div#show_error font
 
