@@ -18,9 +18,9 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 84, cat: Movies, desc: "Movies New (2017, 2018)"}
-    - {id: 14, cat: Movies/SD, desc: "Movies DVDRip-BDRip-BRRip (up to 2016) FREE"}
-    - {id: 16, cat: Movies/SD, desc: "Movies (CAM) FREE"}
+    - {id: 84, cat: Movies, desc: "Movies New (2022, 2023, 2024)"}
+    - {id: 14, cat: Movies/SD, desc: "Movies DVDRip-WEBRip-BRRip (up to 2021)"}
+    - {id: 16, cat: Movies/SD, desc: "Movies (CAM)"}
     - {id: 17, cat: Movies/BluRay, desc: "Movies BLU-RAY"}
     - {id: 44, cat: Movies, desc: "Movies Greek"}
     - {id: 76, cat: Movies, desc: "Movies Documentaries"}
@@ -28,11 +28,12 @@ caps:
 
     - {id: 52, cat: TV, desc: "TV Series"}
     - {id: 53, cat: TV/SD, desc: "TV Series Foreign"}
-    - {id: 70, cat: TV/HD, desc: "TV Series Foreign (720p)"}
+    - {id: 70, cat: TV/HD, desc: "TV Series Foreign (720p/1080p)"}
     - {id: 54, cat: TV, desc: "TV Series Greek"}
     - {id: 86, cat: TV, desc: "TV Series Foreign Complete Seasons"}
-    - {id: 92, cat: TV, desc: "TV Series Foreign Complete Seasons (720p)"}
+    - {id: 92, cat: TV, desc: "TV Series Foreign Complete Seasons (720p/1080p)"}
     - {id: 87, cat: TV, desc: "TV Series Greek Complete Seasons"}
+    - {id: 99, cat: TV, desc: "TV Series Greek Turkish women"}
     - {id: 63, cat: TV, desc: "TV Series Recreational"}
     - {id: 83, cat: TV/Sport, desc: "TV Sports"}
 
@@ -51,6 +52,7 @@ caps:
     - {id: 32, cat: Audio, desc: "Music Foreign Discographies"}
     - {id: 20, cat: Audio, desc: "Music Foreign Collections"}
     - {id: 102, cat: Audio, desc: "Music Foreign MAGICO Radio"}
+    - {id: 108, cat: Audio, desc: "Music Foreign Lice Cd's"}
     - {id: 81, cat: Audio, desc: "Music Foreign Karaoke"}
     - {id: 95, cat: Audio, desc: "Music Foreign Soundtrack"}
 
@@ -77,6 +79,7 @@ caps:
 
     - {id: 33, cat: Books, desc: "Books"}
     - {id: 41, cat: Books, desc: "Books Greek"}
+    - {id: 71, cat: Books, desc: "Books (A)"}
     - {id: 65, cat: Books, desc: "Books Comics"}
     - {id: 43, cat: Books, desc: "Books Periodicals"}
     - {id: 105, cat: Books, desc: "Books Audio"}
@@ -92,7 +95,6 @@ caps:
 
     - {id: 2, cat: PC/Games, desc: "Games"}
     - {id: 27, cat: PC/Games, desc: "Games PC"}
-    - {id: 68, cat: PC/Mobile-Android, desc: "Games Android"}
 
     - {id: 88, cat: Other, desc: "Tutorials / Design / Accessories"}
     - {id: 89, cat: Other, desc: "Tutorials Photoshop"}
@@ -117,6 +119,21 @@ settings:
     type: checkbox
     label: Filter freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   path: ?p=home&pid=1
@@ -143,6 +160,7 @@ login:
 search:
   paths:
     - path: /
+      method: post
   keywordsfilters:
     - name: re_replace # add brackets to year on searchquery if missing
       args: ["\\(*((19|20)\\d{2})\\)*", "($1)"]
@@ -157,11 +175,13 @@ search:
     keywords: "{{ .Keywords }}"
     # name, description, both, uploader
     search_type: name
+    "sortOptions[sortBy]": "{{ .Config.sort }}"
+    "sortOptions[sortOrder]": "{{ .Config.type }}"
   error:
     - selector: div#show_error font
 
   rows:
-    selector: "div#content > div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[title=\"No Record!\"]){{ else }}{{ end }}, tr:has(a[href*=\"?p=torrents\"][href*=\"&action=details\"]){{ if .Config.freeleech }}:has(img[title=\"No Record!\"]){{ else }}{{ end }}"
+    selector: "div#content > div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}, tr:has(a[href*=\"?p=torrents\"][href*=\"&action=details\"]){{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
@@ -201,7 +221,7 @@ search:
       selector: div.torrentDetails > div:has(span.floatright)
     downloadvolumefactor:
       case:
-        "img[title=\"No Record!\"]": 0
+        "img[src$=\"torrent_free.png\"]": 0
         "*": 1
     uploadvolumefactor:
       case:
