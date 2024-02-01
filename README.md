@@ -567,6 +567,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB
  * Toca Share
+ * ToonsForMe
  * Tornado
  * Torrent Network (TN)
  * Torrent Sector Crew (TSC)
