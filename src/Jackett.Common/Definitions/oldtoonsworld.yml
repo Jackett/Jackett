@@ -12,13 +12,14 @@ caps:
   categorymappings:
     - {id: 401, cat: TV/Anime, desc: "Anime"}
     - {id: 404, cat: TV, desc: "Cartoon"}
-    - {id: 405, cat: Audio, desc: "Audio"}
+    - {id: 405, cat: Audio/Audiobook, desc: "AudioBooks"}
     - {id: 402, cat: Books, desc: "Books"}
     - {id: 403, cat: Movies, desc: "Shorts"}
     - {id: 406, cat: TV, desc: "Adults"}
     - {id: 407, cat: Movies, desc: "Family/Teen"}
     - {id: 409, cat: Other, desc: "Misc"}
     - {id: 408, cat: PC/Games, desc: "Games"}
+    - {id: 412, cat: Audio, desc: "Music"}
 
   modes:
     search: [q]
