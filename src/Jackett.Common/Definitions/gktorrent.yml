@@ -89,7 +89,7 @@ download:
           args: "\\s'(magnet:\\?.+?)';"
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}top{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace
