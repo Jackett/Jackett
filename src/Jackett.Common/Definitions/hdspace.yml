@@ -132,7 +132,7 @@ search:
           args: /(\d{8}).jpg
     date_day:
       # Today at 09:17:08
-      # Yesterday at 17:11:03 
+      # Yesterday at 17:11:03
       selector: td:nth-child(5):contains("day")
       # auto adjusted by site account profile
       optional: true
