@@ -159,7 +159,8 @@ login:
 
 search:
   paths:
-    - path: /
+    - path: /?p=torrents&pid=10
+      method: post
   keywordsfilters:
     - name: re_replace # add brackets to year on searchquery if missing
       args: ["\\(*((19|20)\\d{2})\\)*", "($1)"]
@@ -168,22 +169,17 @@ search:
     - name: re_replace
       args: ["[^\\w\\d\\(\\)]+", "%"]
   inputs:
-    p: torrents
-    pid: 32
     $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
     keywords: "{{ .Keywords }}"
     # name, description, both, uploader
     search_type: name
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
-    submit: "Αναζήτηση"
   error:
     - selector: div#show_error font
 
   rows:
     selector: "div#content > div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}, tr:has(a[href*=\"?p=torrents\"][href*=\"&action=details\"]){{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}"
-    filters:
-      - name: andmatch
 
   fields:
     title:
@@ -219,6 +215,23 @@ search:
       attribute: href
     description:
       selector: div.torrentDetails > div:has(span.floatright)
+      filters:
+        - name: re_replace
+          args: ["^(.+?\\/10)", "IMDB Rating: $1"]
+    genre:
+      selector: div.torrentDetails > div:has(span.floatright)
+      remove: span
+      filters:
+        - name: re_replace
+          args: ["(Είδος:|\\))", ""]
+        - name: replace
+          args: [" (", "_"]
+        - name: replace
+          args: ["Α- ", "Α-_"]
+        - name: replace
+          args: ["Ω- ", "Ω-_"]
+        - name: replace
+          args: [" - ", "_-_"]
     downloadvolumefactor:
       case:
         "img[src$=\"torrent_free.png\"]": 0
