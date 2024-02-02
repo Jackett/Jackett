@@ -167,7 +167,7 @@ search:
     - name: replace # use this as a workaround till #893 is implemented
       args: ["Greys Anatomy", "Grey's Anatomy"]
     - name: re_replace
-      args: ["[^\\w\\d\\(\\)]+", "%"]
+      args: ["[^\\w\\d\\(\\)]+", "+"]
   inputs:
     $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
     keywords: "{{ .Keywords }}"
