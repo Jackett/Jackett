@@ -101,7 +101,7 @@ download:
   before:
     # thankyou link: ./viewtopic.php?f=61&p=76522&thanks=76522&to_id=83&from_id=23462
     pathselector:
-      selector: ul.post-buttons li:nth-last-child(2) a
+      selector: ul.post-buttons li:last-child a
       attribute: href
       filters:
         - name: re_replace
