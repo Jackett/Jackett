@@ -5,8 +5,6 @@ description: "Tracker for LGBTQ movies, TV, books, magazines, anime, PC and 3X."
 language: en-US
 type: private
 encoding: UTF-8
-certificates:
-  - 2d87b2e1d4f59237f78642930c230d0495d43d4c # expired 09 Sept 2023
 links:
   - https://x-ite.me/
 
