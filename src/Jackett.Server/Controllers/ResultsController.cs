@@ -342,7 +342,7 @@ namespace Jackett.Server.Controllers
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return CurrentQuery.IsJson ?
-                    (IActionResult) Json(CurrentIndexer.TorznabCaps) :
+                    (IActionResult)Json(CurrentIndexer.TorznabCaps) :
                     Content(CurrentIndexer.TorznabCaps.ToXml(), "application/rss+xml", Encoding.UTF8);
             }
 
