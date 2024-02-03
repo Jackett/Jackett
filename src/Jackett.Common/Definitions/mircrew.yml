@@ -101,8 +101,11 @@ download:
       selector: ul.post-buttons li:nth-last-child(1) a
       attribute: href
   selectors:
-    - selector: a[href^="magnet:?xt="]
+    - selector: a[href*="magnet:?xt="]
       attribute: href
+      filters:
+        - name: re_replace
+          args: ["\n", ""]
 
 search:
   paths:
