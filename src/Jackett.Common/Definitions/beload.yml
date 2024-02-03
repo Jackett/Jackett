@@ -99,6 +99,7 @@ search:
 
   rows:
     selector: "td.text table tbody tr:has(a[href^=\"details.php?id=\"]):not(:has(a[href=\"browse.php?cat=0\"]))"
+    after: 1
 
   fields:
     category:
@@ -108,11 +109,8 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="details.php?id="][title]
       attribute: title
-      filters:
-        - name: regexp
-          args: "Név: (.+?)(\\n|$)"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -126,34 +124,34 @@ search:
       selector: a.preview
       attribute: href
     date:
-      selector: td:nth-last-child(5)
+      selector: td:nth-last-child(6)
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     files:
-      selector: td:nth-last-child(7)
+      selector: td:nth-last-child(8)
     size:
-      selector: td:nth-last-child(4) b
+      selector: td:nth-last-child(5) b
     grabs:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     seeders:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
     leechers:
-      selector: td:nth-last-child(1)
+      selector: td:nth-last-child(2)
     description:
       case:
         i.fa-check: Verified
         i.fa-question: Unverified
     downloadvolumefactor:
       case:
-        font:contains("x0"): 0
+        "span[style=\"font-size: 10px;\"]:contains(\"0x\")": 0
         "*": 1
     uploadvolumefactor:
       case:
-        font:contains("x2"): 2
-        font:contains("x4"): 4
+        "span[style=\"font-size: 10px;\"]:contains(\"2x\")": 2
+        "span[style=\"font-size: 10px;\"]:contains(\"4x\")": 4
         "*": 1
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
