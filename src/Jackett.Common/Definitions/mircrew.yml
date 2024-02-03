@@ -168,8 +168,13 @@ search:
     download:
       selector: a.topictitle
       attribute: href
+    size_title:
+      selector: a.topictitle
+      filters:
+        - name: regexp
+          args: "[{](.+?)[}]"
     size:
-      text: "512 MB"
+      text: "{{ if .Result.size_title }}{{ .Result.size_title }}{{ else }}512 MB{{ end }}"
     seeders:
       text: 1
     leechers:
