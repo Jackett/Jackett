@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 using NLog;
 
 namespace Jackett.Server.Controllers
@@ -333,9 +334,16 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> Torznab([FromQuery] TorznabRequest request)
         {
+            if (string.Equals(request.o, "json", StringComparison.InvariantCultureIgnoreCase))
+            {
+                CurrentQuery.IsJson = true;
+            }
+
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
-                return Content(CurrentIndexer.TorznabCaps.ToXml(), "application/rss+xml", Encoding.UTF8);
+                return CurrentQuery.IsJson ?
+                    (IActionResult) Json(CurrentIndexer.TorznabCaps) :
+                    Content(CurrentIndexer.TorznabCaps.ToXml(), "application/rss+xml", Encoding.UTF8);
             }
 
             // indexers - returns a list of all included indexers (meta indexers only)
@@ -344,7 +352,7 @@ namespace Jackett.Server.Controllers
                 if (!(CurrentIndexer is BaseMetaIndexer)) // shouldn't be needed because CanHandleQuery should return false
                 {
                     logger.Warn($"A search request with t=indexers from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} isn't a meta indexer.");
-                    return GetErrorXML(203, "Function Not Available: this isn't a meta indexer");
+                    return GetError(203, "Function Not Available: this isn't a meta indexer");
                 }
                 var CurrentBaseMetaIndexer = (BaseMetaIndexer)CurrentIndexer;
                 var indexers = CurrentBaseMetaIndexer.Indexers;
@@ -352,6 +360,24 @@ namespace Jackett.Server.Controllers
                     indexers = indexers.Where(i => i.IsConfigured);
                 else if (string.Equals(request.configured, "false", StringComparison.InvariantCultureIgnoreCase))
                     indexers = indexers.Where(i => !i.IsConfigured);
+
+                if (CurrentQuery.IsJson)
+                {
+                    return Json(new JObject
+                    {
+                        ["indexers"] = JArray.FromObject(indexers.Select(i => new
+                        {
+                            id = i.Id,
+                            configured = i.IsConfigured,
+                            title = i.Name,
+                            description = i.Description,
+                            link = i.SiteLink,
+                            language = i.Language,
+                            type = i.Type,
+                            caps = i.TorznabCaps
+                        }))
+                    });
+                }
 
                 var xdoc = new XDocument(
                     new XDeclaration("1.0", "UTF-8", null),
@@ -389,19 +415,19 @@ namespace Jackett.Server.Controllers
                 if (CurrentQuery.ImdbID == null)
                 {
                     logger.Warn($"A search request from {Request.HttpContext.Connection.RemoteIpAddress} was made with an invalid imdbid.");
-                    return GetErrorXML(201, "Incorrect parameter: invalid imdbid format");
+                    return GetError(201, "Incorrect parameter: invalid imdbid format");
                 }
 
                 if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
-                    return GetErrorXML(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
+                    return GetError(203, "Function Not Available: imdbid is not supported for movie search by this indexer");
                 }
 
                 if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchImdbAvailable)
                 {
                     logger.Warn($"A search request with imdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
-                    return GetErrorXML(203, "Function Not Available: imdbid is not supported for TV search by this indexer");
+                    return GetError(203, "Function Not Available: imdbid is not supported for TV search by this indexer");
                 }
             }
 
@@ -410,13 +436,13 @@ namespace Jackett.Server.Controllers
                 if (CurrentQuery.IsMovieSearch && !CurrentIndexer.TorznabCaps.MovieSearchTmdbAvailable)
                 {
                     logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
-                    return GetErrorXML(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
+                    return GetError(203, "Function Not Available: tmdbid is not supported for movie search by this indexer");
                 }
 
                 if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchTmdbAvailable)
                 {
                     logger.Warn($"A search request with tmdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
-                    return GetErrorXML(203, "Function Not Available: tmdbid is not supported for TV search by this indexer");
+                    return GetError(203, "Function Not Available: tmdbid is not supported for TV search by this indexer");
                 }
             }
 
@@ -425,7 +451,7 @@ namespace Jackett.Server.Controllers
                 if (CurrentQuery.IsTVSearch && !CurrentIndexer.TorznabCaps.TvSearchAvailable)
                 {
                     logger.Warn($"A search request with tvdbid from {Request.HttpContext.Connection.RemoteIpAddress} was made but the indexer {CurrentIndexer.Name} doesn't support it.");
-                    return GetErrorXML(203, "Function Not Available: tvdbid is not supported for movie search by this indexer");
+                    return GetError(203, "Function Not Available: tvdbid is not supported for movie search by this indexer");
                 }
             }
 
@@ -459,6 +485,11 @@ namespace Jackett.Server.Controllers
                 else
                     logger.Info($"Torznab search in {CurrentIndexer.Name} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr} [{stopwatch.ElapsedMilliseconds:0}ms]");
 
+                if (CurrentQuery.IsJson)
+                {
+                    return Json(resultPage);
+                }
+
                 var xml = resultPage.ToXml(new Uri(serverUrl));
 
                 // Force the return as XML
@@ -479,25 +510,29 @@ namespace Jackett.Server.Controllers
                     }
                 }
 
-                return GetErrorXML(900, ex.Message, StatusCodes.Status429TooManyRequests);
+                return GetError(900, ex.Message, StatusCodes.Status429TooManyRequests);
             }
             catch (Exception e)
             {
                 logger.Error(e);
-                return GetErrorXML(900, e.ToString());
+                return GetError(900, e.ToString());
             }
         }
 
         [Route("[action]/{ignored?}")]
-        public IActionResult GetErrorXML(int code, string description, int statusCode = StatusCodes.Status400BadRequest)
+        public IActionResult GetError(int code, string description, int statusCode = StatusCodes.Status400BadRequest)
         {
-            var mediaTypeHeaderValue = MediaTypeHeaderValue.Parse("application/xml");
+            var mediaTypeHeaderValue = CurrentQuery.IsJson ?
+                MediaTypeHeaderValue.Parse("application/json") :
+                MediaTypeHeaderValue.Parse("application/xml");
             mediaTypeHeaderValue.Encoding = Encoding.UTF8;
 
             return new ContentResult
             {
                 StatusCode = statusCode,
-                Content = CreateErrorXML(code, description),
+                Content = CurrentQuery.IsJson ?
+                    CreateErrorJson(code, description) :
+                    CreateErrorXML(code, description),
                 ContentType = mediaTypeHeaderValue.ToString()
             };
         }
@@ -512,6 +547,19 @@ namespace Jackett.Server.Controllers
                 )
             );
             return xdoc.Declaration + Environment.NewLine + xdoc;
+        }
+
+        public static string CreateErrorJson(int code, string description)
+        {
+            return new JObject
+            {
+                { "error", new JObject
+                    {
+                        { "code", code },
+                        { "description", description }
+                    }
+                }
+            }.ToString();
         }
 
         public static IActionResult GetErrorActionResult(RouteData routeData, HttpStatusCode status, int torznabCode, string description)
