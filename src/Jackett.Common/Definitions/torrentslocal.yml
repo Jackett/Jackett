@@ -5,6 +5,8 @@ description: "Torrents-Local is a RUSSIAN Semi-Private Torrent Tracker"
 language: ru-RU
 type: semi-private
 encoding: UTF-8
+certificates:
+  - 53944aec4f57063b3ef6977abeef14364310a185 # expired 5/feb/2024
 links:
   - https://torrents-local.xyz/
 
