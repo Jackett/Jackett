@@ -83,6 +83,7 @@ search:
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
     limit: 100
+    page: 1
 
   keywordsfilters:
     - name: re_replace
