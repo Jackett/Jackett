@@ -277,6 +277,12 @@ namespace Jackett.Common.Indexers
                 await ApplyConfiguration(null);
                 results = await RequestWithCookiesAsync(searchUrl);
             }
+            if (results.Cookies != null)
+            {
+                var cookieDelete = new Regex(@"(toloka_.+_u)=([^,;\\""\s]+)").Match(results.Cookies);
+                if ((cookieDelete.Success) && (cookieDelete.Groups[2].Value.Length > 90))
+                    UpdateCookieHeader("", cookieDelete.Groups[1].Value + "=;");
+            }
 
             try
             {
