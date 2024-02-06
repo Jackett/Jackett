@@ -10,7 +10,7 @@ links:
   - https://torrentgalaxy.mx/
   - https://tgx.rs/
   - https://tgx.sb/
-  - https://torrentgalaxy.unblockninja.com/
+  - https://tgx.proxyninja.org/
 legacylinks:
   - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.pw/ # proxy list only
@@ -19,7 +19,7 @@ legacylinks:
   - https://torrentgalaxy.nocensor.work/
   - https://torrentgalaxy.nocensor.biz/
   - https://torrentgalaxy.nocensor.sbs/
-  - https://torrentgalaxy.nocensor.world/ # banned
+  - https://torrentgalaxy.nocensor.world/
   - https://torrentgalaxy.unblockit.cat/
   - https://torrentgalaxy.unblockit.nz/
   - https://torrentgalaxy.unblockit.page/
@@ -34,8 +34,9 @@ legacylinks:
   - https://torrentgalaxy.unblockit.vegas/
   - https://torrentgalaxy.unblockit.esq/
   - https://torrentgalaxy.unblockit.zip/
-  - https://torrentgalaxy.unblockit.foo/ # 504
-  - https://torrentgalaxy.unblockit.ing/ # 504
+  - https://torrentgalaxy.unblockit.foo/
+  - https://torrentgalaxy.unblockit.ing/
+  - https://torrentgalaxy.unblockninja.com/
 
 caps:
   categorymappings:
