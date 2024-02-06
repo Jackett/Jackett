@@ -120,7 +120,8 @@ search:
       default: other
       case:
         i[class="fa fa-video-camera"]: films
-        i[class="fa fa-tv"]: series
+        i[class="fa fa-tv"]: series # search by name
+        i[class="fa fa-desktop"]: series # keywordless search
         i[class="fa fa-music"]: musique
         i[class="fa fa-gamepad"]: jeux-pc
         i[class="fa fa-laptop"]: logiciels
