@@ -176,7 +176,7 @@ search:
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
   error:
-    - selector: div#show_error font
+    - selector: div#show_error:not(:contains("Δεν βρέθηκαν αποτελέσματα")) font
 
   rows:
     selector: "div#content > div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}, tr:has(a[href*=\"?p=torrents\"][href*=\"&action=details\"]){{ if .Config.freeleech }}:has(img[src$=\"torrent_free.png\"]){{ else }}{{ end }}"
