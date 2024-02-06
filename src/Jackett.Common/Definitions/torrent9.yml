@@ -10,21 +10,6 @@ testlinktorrent: false
 links:
   - https://www.torrent9.fm/
 legacylinks:
-  - http://www.torrent9.ec/
-  - http://www.torrent9.red/
-  - http://www.torrent9.bz/
-  - http://www.torrents9.pe/
-  - http://www.torrent9.cc/
-  - http://www.torrent9.pe/
-  - http://www.torrent9.blue/
-  - https://www.torrent9.blue/
-  - https://ww2.torrent9.blue/
-  - https://www.torrent9.rip/
-  - https://www.torrent9.ph/
-  - https://ww1.torrent9.ph/
-  - https://torrent9.ga/
-  - https://www.torrent9.uno/
-  - https://wvw.torrent9.uno/
   - https://ww1.torrent9.uno/
   - https://wvw.t9.pe/
   - https://www4.torrent9.to/
@@ -40,7 +25,7 @@ legacylinks:
   - https://ww1.torrent9.to/
   - https://www.torrent9.is/
   - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
-  - https://www.oxtorrent.me/ # http 522 Connection timed out
+  - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
   - https://torrent9.to/ # no response data
   - https://www.torrent9.fi/ # this is the torrent9clone domain
