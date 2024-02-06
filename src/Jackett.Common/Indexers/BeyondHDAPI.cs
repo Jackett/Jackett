@@ -202,6 +202,9 @@ namespace Jackett.Common.Indexers
             if (!string.IsNullOrEmpty(bhdResult.imdb_id))
                 releaseInfo.Imdb = ParseUtil.GetImdbId(bhdResult.imdb_id);
 
+            if (!string.IsNullOrEmpty(bhdResult.tmdb_id))
+                releaseInfo.TMDb = ParseUtil.CoerceLong(bhdResult.tmdb_id);
+
             releaseInfo.DownloadVolumeFactor = 1;
             releaseInfo.UploadVolumeFactor = 1;
 
