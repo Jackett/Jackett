@@ -8,8 +8,6 @@ encoding: UTF-8
 requestDelay: 5
 links:
   - https://badasstorrents.com/
-  - https://badasstorrents.mrunblock.bond/
-  - https://badasstorrents.nocensor.cloud/
 legacylinks:
   - https://badasstorrents.nocensor.work/
   - https://badasstorrents.nocensor.biz/
@@ -20,6 +18,8 @@ legacylinks:
   - https://badasstorrents.mrunblock.guru/
   - https://badasstorrents.mrunblock.life/
   - https://badasstorrents.nocensor.click/
+  - https://badasstorrents.mrunblock.bond/
+  - https://badasstorrents.nocensor.cloud/
 
 caps:
   categories:
