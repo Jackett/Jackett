@@ -8,7 +8,8 @@ encoding: UTF-8
 followredirect: true
 testlinktorrent: false
 links:
-  - https://www.torrent9.fm/
+  - https://torrent9.to/
+  - https://torrent9.ninjaproxy1.com/
 legacylinks:
   - https://ww1.torrent9.uno/
   - https://wvw.t9.pe/
@@ -27,7 +28,7 @@ legacylinks:
   - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
   - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
-  - https://torrent9.to/ # no response data
+  - https://www.torrent9.fm/ # no response data
   - https://www.torrent9.fi/ # this is the torrent9clone domain
   - https://torrent9.unblockninja.com/ # is a proxy for torrent9clone
 
