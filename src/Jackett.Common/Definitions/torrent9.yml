@@ -42,7 +42,6 @@ caps:
     - {id: ebook, cat: Books, desc: "Books"}
     - {id: logiciels, cat: PC, desc: "Software"}
     - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
-    - {id: jeux-consoles, cat: Console/XBox 360, desc: "Console Games"}
     - {id: other, cat: Other, desc: "Other"} # dummy cat for results missing icon
 
   modes:
@@ -105,6 +104,10 @@ search:
     - name: replace
       args: [" ", "-"]
 
+  headers:
+    # site blocks all Linux User-Agents, so use a slightly altered Windows Jackett UA here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
+
   rows:
     selector: table.table-striped > tbody > tr
     filters:
@@ -117,7 +120,6 @@ search:
       default: other
       case:
         i[class="fa fa-video-camera"]: films
-        i[class="fa fa-desktop"]: series
         i[class="fa fa-tv"]: series
         i[class="fa fa-music"]: musique
         i[class="fa fa-gamepad"]: jeux-pc
