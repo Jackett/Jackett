@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -291,9 +292,16 @@ namespace Jackett.Common.Indexers
                 searchQuery.Add($"+({query.Genre})");
             }
 
-            if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
+            var searchTerm = query.GetQueryString();
+
+            if (searchTerm.IsNotNullOrWhiteSpace())
             {
-                searchQuery.Add($"+({query.GetQueryString()})");
+                if (query.GetEpisodeSearchString().IsNotNullOrWhiteSpace() && query.Season > 0 && query.Episode.IsNullOrWhiteSpace())
+                {
+                    searchTerm += "*";
+                }
+
+                searchQuery.Add($"+({searchTerm})");
             }
 
             if (searchQuery.Any())
