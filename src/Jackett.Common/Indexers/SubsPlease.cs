@@ -25,12 +25,6 @@ namespace Jackett.Common.Indexers
         public override string Name => "SubsPlease";
         public override string Description => "SubsPlease - A better HorribleSubs/Erai replacement";
         public override string SiteLink { get; protected set; } = "https://subsplease.org/";
-        public override string[] AlternativeSiteLinks => new[]
-        {
-            "https://subsplease.org/",
-            "https://subsplease.mrunblock.bond/",
-            "https://subsplease.nocensor.cloud/"
-        };
         public override string[] LegacySiteLinks => new[]
         {
             "https://subsplease.nocensor.space/",
@@ -43,6 +37,8 @@ namespace Jackett.Common.Indexers
             "https://subsplease.mrunblock.guru/",
             "https://subsplease.mrunblock.life/",
             "https://subsplease.nocensor.click/",
+            "https://subsplease.mrunblock.bond/",
+            "https://subsplease.nocensor.cloud/"
         };
         public override string Language => "en-US";
         public override string Type => "public";

@@ -10,15 +10,9 @@ followredirect: true
 links:
   - https://www.torrent9.kim/
   - https://torrent9.unblockninja.com/
-  - https://torrent9.nocensor.cloud/
-  - https://torrent9.mrunblock.bond/
 legacylinks:
   - https://www.protege-liens.net/
   - https://www.rantop.org/
-  - https://torrent9.mrunblock.guru/ # redirects to 1337x
-  - https://torrent9.nocensor.art/
-  - https://torrent9.mrunblock.life/
-  - https://www.torrent9.fi/
   - https://www.torrent9.wtf/
   - https://www.torrent9.sc/
   - https://torrent9.nocensor.click/
@@ -35,6 +29,8 @@ legacylinks:
   - https://www.torrent9.pm/
   - https://www.torrent9.st/
   - https://www.torrent9.boo/
+  - https://torrent9.nocensor.cloud/
+  - https://torrent9.mrunblock.bond/
 
 caps:
   categorymappings:

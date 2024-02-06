@@ -8,11 +8,7 @@ encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Zetorrents
 links:
   - https://www.zetorrents.pw/
-  - https://zetorrents.mrunblock.bond/
-  - https://zetorrents.nocensor.cloud/
 legacylinks:
-  - https://www.zetorrents.co/
-  - https://www.zetorrents.io/
   - https://wvw.zetorrents.io/
   - https://vww.zetorrents.io/
   - https://wwv.zetorrents.io/
@@ -31,6 +27,8 @@ legacylinks:
   - https://zetorrents.mrunblock.guru/
   - https://zetorrents.mrunblock.life/
   - https://zetorrents.nocensor.click/
+  - https://zetorrents.mrunblock.bond/
+  - https://zetorrents.nocensor.cloud/
 
 caps:
   categories:

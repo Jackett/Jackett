@@ -8,16 +8,16 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://bitsearch.to/
-  - https://bitsearch.nocensor.cloud/
-  - https://bitsearch.mrunblock.bond/
 legacylinks:
   - https://bitsearch.nocensor.biz/
   - https://bitsearch.nocensor.sbs/
   - https://bitsearch.nocensor.world/
   - https://bitsearch.nocensor.lol/
   - https://bitsearch.mrunblock.guru/
-  - https://bitsearch.mrunblock.life/ # This web property is not accessible via this address.
+  - https://bitsearch.mrunblock.life/
   - https://bitsearch.nocensor.click/
+  - https://bitsearch.nocensor.cloud/
+  - https://bitsearch.mrunblock.bond/
 
 caps:
   categories:
