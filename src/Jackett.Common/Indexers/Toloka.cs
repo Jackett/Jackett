@@ -9,6 +9,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -229,6 +230,16 @@ namespace Jackett.Common.Indexers
             });
 
             return IndexerConfigurationStatus.RequiresTesting;
+        }
+
+        protected override string ResolveCookies(string incomingCookies = "")
+        {
+            var cookieDictionary = CookieUtil.CookieHeaderToDictionary(base.ResolveCookies(incomingCookies));
+
+            var badCookies = cookieDictionary.Where(x => x.Key.StartsWith("toloka_") && x.Key.EndsWith("_u")).ToList();
+            badCookies.ForEach(x => cookieDictionary.Remove(x.Key));
+
+            return CookieUtil.CookieDictionaryToHeader(cookieDictionary);
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
