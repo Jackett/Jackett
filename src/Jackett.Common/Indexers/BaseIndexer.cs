@@ -648,7 +648,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private string ResolveCookies(string incomingCookies = "")
+        protected virtual string ResolveCookies(string incomingCookies = "")
         {
             var redirRequestCookies = string.IsNullOrWhiteSpace(CookieHeader) ? incomingCookies : CookieHeader + " " + incomingCookies;
             var cookieDictionary = CookieUtil.CookieHeaderToDictionary(redirRequestCookies);
