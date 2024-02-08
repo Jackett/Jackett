@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Jackett.Common;
 using Jackett.Common.Exceptions;
+using Jackett.Common.Helpers;
 using Jackett.Common.Indexers;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
@@ -20,6 +21,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -176,6 +179,17 @@ namespace Jackett.Server.Controllers
         private readonly IServerService serverService;
         private readonly ICacheService cacheService;
         private readonly Common.Models.Config.ServerConfig serverConfig;
+        private static readonly JsonSerializerSettings _JsonSerializerSettings = new JsonSerializerSettings
+        {
+            Converters = new List<JsonConverter>
+            {
+                new StringEnumConverter
+                {
+                    NamingStrategy = new LowerCaseNamingStrategy()
+                }
+            },
+            NullValueHandling = NullValueHandling.Ignore
+        };
 
         public ResultsController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger, Common.Models.Config.ServerConfig sConfig)
         {
@@ -342,7 +356,7 @@ namespace Jackett.Server.Controllers
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return CurrentQuery.IsJson ?
-                    (IActionResult)Json(CurrentIndexer.TorznabCaps) :
+                    (IActionResult)Json(CurrentIndexer.TorznabCaps.ToJson(_JsonSerializerSettings)) :
                     Content(CurrentIndexer.TorznabCaps.ToXml(), "application/rss+xml", Encoding.UTF8);
             }
 

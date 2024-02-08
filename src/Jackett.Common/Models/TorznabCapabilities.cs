@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
+using Jackett.Common.Helpers;
+using Newtonsoft.Json;
 
 namespace Jackett.Common.Models
 {
@@ -351,6 +355,19 @@ namespace Jackett.Common.Models
 
         public string ToXml() =>
             GetXDocument().Declaration + Environment.NewLine + GetXDocument();
+
+        public string ToJson(JsonSerializerSettings serializerSettings = null)
+        {
+            var stringBuilder = new StringBuilder();
+            var serializer = JsonSerializer.Create(serializerSettings);
+
+            using var stringWriter = new StringWriter(stringBuilder);
+            using var jsonWriter = new XmlToJsonWriter(stringWriter);
+
+            serializer.Serialize(jsonWriter, GetXDocument().Root);
+
+            return stringBuilder.ToString();
+        }
 
         public static TorznabCapabilities Concat(TorznabCapabilities lhs, TorznabCapabilities rhs)
         {
