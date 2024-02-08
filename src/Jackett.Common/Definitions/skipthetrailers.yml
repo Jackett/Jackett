@@ -24,7 +24,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://skipthetrailers.xyz/\" target=\"_blank\">SkipTheTrailers</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://skipthetrailers.xyz/\" target=\"_blank\">SkipTheTrailers</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -149,12 +149,12 @@ search:
         100%: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
-      # api returns 0=false, 1=true
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
+        False: 1 # normal
+        True: 2 # double
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 6.5.0
+# json UNIT3D 7.2.5

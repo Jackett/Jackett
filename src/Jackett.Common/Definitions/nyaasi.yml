@@ -9,10 +9,8 @@ requestDelay: 2
 links:
   - https://nyaa.si/
   - https://nyaa.iss.ink/
-  - https://nyaa.mrunblock.bond/ # for magnets only
-  - https://nyaa.unblockninja.com/ # for magnets only
-  - https://nyaa.nocensor.cloud/
   - https://nyaa.land/
+  - https://nyaa.unblockninja.com/ # for magnets only
 legacylinks:
   - https://nyaa.black-mirror.xyz/
   - https://nyaa.unblocked.casa/
@@ -30,6 +28,8 @@ legacylinks:
   - https://nyaa.mrunblock.guru/
   - https://nyaa.mrunblock.life/
   - https://nyaa.nocensor.click/
+  - https://nyaa.mrunblock.bond/ # for magnets only
+  - https://nyaa.nocensor.cloud/
 
 caps:
   categorymappings:

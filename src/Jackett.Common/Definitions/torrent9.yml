@@ -8,23 +8,10 @@ encoding: UTF-8
 followredirect: true
 testlinktorrent: false
 links:
-  - https://www.torrent9.fm/
+  - https://torrent9.to/
+  - https://torrent9.ninjaproxy1.com/
+  - https://torrent9.proxyninja.org/
 legacylinks:
-  - http://www.torrent9.ec/
-  - http://www.torrent9.red/
-  - http://www.torrent9.bz/
-  - http://www.torrents9.pe/
-  - http://www.torrent9.cc/
-  - http://www.torrent9.pe/
-  - http://www.torrent9.blue/
-  - https://www.torrent9.blue/
-  - https://ww2.torrent9.blue/
-  - https://www.torrent9.rip/
-  - https://www.torrent9.ph/
-  - https://ww1.torrent9.ph/
-  - https://torrent9.ga/
-  - https://www.torrent9.uno/
-  - https://wvw.torrent9.uno/
   - https://ww1.torrent9.uno/
   - https://wvw.t9.pe/
   - https://www4.torrent9.to/
@@ -40,11 +27,11 @@ legacylinks:
   - https://ww1.torrent9.to/
   - https://www.torrent9.is/
   - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
-  - https://www.oxtorrent.me/ # http 522 Connection timed out
+  - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
-  - https://torrent9.to/ # no response data
   - https://www.torrent9.fi/ # this is the torrent9clone domain
   - https://torrent9.unblockninja.com/ # is a proxy for torrent9clone
+  - https://www.torrent9.fm/ # no response data
 
 caps:
   # dont forget to update the search fields category case block
@@ -55,7 +42,6 @@ caps:
     - {id: ebook, cat: Books, desc: "Books"}
     - {id: logiciels, cat: PC, desc: "Software"}
     - {id: jeux-pc, cat: PC/Games, desc: "PC Games"}
-    - {id: jeux-consoles, cat: Console/XBox 360, desc: "Console Games"}
     - {id: other, cat: Other, desc: "Other"} # dummy cat for results missing icon
 
   modes:
@@ -118,6 +104,10 @@ search:
     - name: replace
       args: [" ", "-"]
 
+  headers:
+    # site blocks all Linux User-Agents, so use a slightly altered Windows Jackett UA here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
+
   rows:
     selector: table.table-striped > tbody > tr
     filters:
@@ -130,8 +120,8 @@ search:
       default: other
       case:
         i[class="fa fa-video-camera"]: films
-        i[class="fa fa-desktop"]: series
-        i[class="fa fa-tv"]: series
+        i[class="fa fa-tv"]: series # search by name
+        i[class="fa fa-desktop"]: series # keywordless search
         i[class="fa fa-music"]: musique
         i[class="fa fa-gamepad"]: jeux-pc
         i[class="fa fa-laptop"]: logiciels

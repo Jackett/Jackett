@@ -16,13 +16,13 @@ caps:
     - {id: 15, cat: Movies/HD, desc: "HD 720p", default: true}
     - {id: 16, cat: Movies/HD, desc: "HD 1080p", default: true}
     - {id: 20, cat: Movies/WEB-DL, desc: "WEB/Rip", default: true}
-    - {id: 21, cat: Movies/WEB-DL, desc: "WEB-DL 720p", default: true}
+    - {id: 21, cat: Movies/WEB-DL, desc: "WEB 720p", default: true}
     - {id: 49, cat: Movies/UHD, desc: "HD 2160p", default: true}
     - {id: 50, cat: Movies/HD, desc: "BluRay 1080p", default: true}
     - {id: 51, cat: Movies/HD, desc: "720p H265", default: true}
     - {id: 52, cat: Movies/HD, desc: "1080p H265", default: true}
-    - {id: 55, cat: Movies/WEB-DL, desc: "WEB-DL 1080p", default: true}
-    - {id: 71, cat: Movies/WEB-DL, desc: "WEB-DL 2160p", default: true}
+    - {id: 55, cat: Movies/WEB-DL, desc: "WEB 1080p", default: true}
+    - {id: 71, cat: Movies/WEB-DL, desc: "WEB 2160p", default: true}
     - {id: 72, cat: Movies/HD, desc: "BluRay 720p", default: true}
     - {id: 73, cat: Movies/HD, desc: "BluRay Remux", default: true}
     - {id: 74, cat: Movies/UHD, desc: "UHD Remux", default: true}
@@ -60,13 +60,13 @@ caps:
     # Sport
     - {id: 37, cat: TV/Sport, desc: "Sport", default: true}
     # XXX
-    - {id: 60, cat: XXX/Other, desc: "Revije", default: false}
-    - {id: 61, cat: XXX/Pack, desc: "Packs", default: false}
-    - {id: 66, cat: XXX/SD, desc: "480p", default: false}
-    - {id: 67, cat: XXX/x264, desc: "720p", default: false}
-    - {id: 68, cat: XXX/x264, desc: "1080p", default: false}
-    - {id: 69, cat: XXX/UHD, desc: "2160p", default: false}
-    - {id: 84, cat: XXX/ImageSet, desc: "Slike", default: false}
+    - {id: 60, cat: XXX/Other, desc: "XXX Revije", default: false}
+    - {id: 61, cat: XXX/Pack, desc: "XXX Packs", default: false}
+    - {id: 66, cat: XXX/SD, desc: "XXX 480p", default: false}
+    - {id: 67, cat: XXX/x264, desc: "XXX 720p", default: false}
+    - {id: 68, cat: XXX/x264, desc: "XXX 1080p", default: false}
+    - {id: 69, cat: XXX/UHD, desc: "XXX 2160p", default: false}
+    - {id: 84, cat: XXX/ImageSet, desc: "XXX Slike", default: false}
     # Disc
     - {id: 85, cat: Movies/DVD, desc: "DVD 5", default: true}
     - {id: 86, cat: Movies/DVD, desc: "DVD 9", default: true}

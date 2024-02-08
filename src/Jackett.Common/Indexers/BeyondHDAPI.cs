@@ -199,20 +199,38 @@ namespace Jackett.Common.Indexers
                 Category = MapTrackerCatDescToNewznab(bhdResult.category)
             };
 
-            if (!string.IsNullOrEmpty(bhdResult.imdb_id))
+            if (bhdResult.imdb_id.IsNotNullOrWhiteSpace())
+            {
                 releaseInfo.Imdb = ParseUtil.GetImdbId(bhdResult.imdb_id);
+            }
+
+            if (bhdResult.tmdb_id.IsNotNullOrWhiteSpace() && ParseUtil.TryCoerceLong(bhdResult.tmdb_id.Split('/')[1], out var tmdbResult))
+            {
+                releaseInfo.TMDb = tmdbResult;
+            }
 
             releaseInfo.DownloadVolumeFactor = 1;
             releaseInfo.UploadVolumeFactor = 1;
 
             if (bhdResult.freeleech == 1 || bhdResult.limited == 1)
+            {
                 releaseInfo.DownloadVolumeFactor = 0;
+            }
+
             if (bhdResult.promo25 == 1)
+            {
                 releaseInfo.DownloadVolumeFactor = .75;
+            }
+
             if (bhdResult.promo50 == 1)
+            {
                 releaseInfo.DownloadVolumeFactor = .50;
+            }
+
             if (bhdResult.promo75 == 1)
+            {
                 releaseInfo.DownloadVolumeFactor = .25;
+            }
 
             return releaseInfo;
         }

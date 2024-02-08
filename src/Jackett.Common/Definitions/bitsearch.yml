@@ -8,16 +8,16 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://bitsearch.to/
-  - https://bitsearch.nocensor.cloud/
-  - https://bitsearch.mrunblock.bond/
 legacylinks:
   - https://bitsearch.nocensor.biz/
   - https://bitsearch.nocensor.sbs/
   - https://bitsearch.nocensor.world/
   - https://bitsearch.nocensor.lol/
   - https://bitsearch.mrunblock.guru/
-  - https://bitsearch.mrunblock.life/ # This web property is not accessible via this address.
+  - https://bitsearch.mrunblock.life/
   - https://bitsearch.nocensor.click/
+  - https://bitsearch.nocensor.cloud/
+  - https://bitsearch.mrunblock.bond/
 
 caps:
   categories:
@@ -58,6 +58,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: prefer_magnet_links
+    type: checkbox
+    label: Prefer Magnet Links
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -83,6 +87,7 @@ search:
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
     limit: 100
+    page: 1
 
   keywordsfilters:
     - name: re_replace
@@ -99,8 +104,15 @@ search:
     details:
       selector: h5 a
       attribute: href
-    download:
+    download_optional:
       selector: a.dl-torrent
+      attribute: href
+      optional: true
+    download:
+      text: "{{ if .Config.prefer_magnet_links }}{{ else }}{{ .Result.download_optional }}{{ end }}"
+      optional: true
+    magnet:
+      selector: a[href^="magnet:?xt"]
       attribute: href
     infohash:
       selector: a[href^="magnet:?xt"]

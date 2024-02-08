@@ -6,121 +6,161 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://cinematik.net/
+legacylinks:
   - https://www.cinematik.net/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Comedy"}
-    - {id: 4, cat: Movies, desc: "Action"}
-    - {id: 5, cat: Movies, desc: "Horror"}
-    - {id: 6, cat: Movies, desc: "Drama"}
-    - {id: 7, cat: Movies, desc: "Documentary"}
-    - {id: 9, cat: Movies, desc: "Crime"}
-    - {id: 12, cat: Movies, desc: "Sci-Fi"}
-    - {id: 17, cat: Movies, desc: "War"}
-    - {id: 21, cat: Movies, desc: "Silent Films"}
-    - {id: 23, cat: Movies, desc: "TV-Series"}
-    - {id: 24, cat: Movies, desc: "Animation"}
-    - {id: 25, cat: Movies, desc: "Exploitation"}
-    - {id: 26, cat: Movies, desc: "Experimental"}
-    - {id: 27, cat: Movies, desc: "Fantasy"}
-    - {id: 29, cat: Movies, desc: "Short"}
-    - {id: 30, cat: Movies, desc: "Western"}
-    - {id: 32, cat: Movies, desc: "Foreign Languages"}
-    - {id: 33, cat: Movies, desc: "Thriller"}
-    - {id: 34, cat: Movies, desc: "Opera and Musical"}
+    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 2, cat: TV, desc: "TV"}
 
   modes:
     search: [q]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: incldead
-    type: select
-    label: Status
-    default: 1
-    options:
-      0: Active
-      1: "Active and Inactive"
-      2: Inactive
-  - name: dropbumped
-    type: checkbox
-    label: Ignore Bumped Torrents
-    default: false
-  - name: info_results
+    label: APIKey
+  - name: info_key
     type: info
-    label: Results Per Page
-    default: "For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.<br>Default is <i>15</i>."
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://cinematik.net/\" target=\"_blank\">Cinematik</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
-  method: form
-  path: login.php
-  submitpath: takelogin.php
-  form: form[action="takelogin.php"]
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
+  path: /api/torrents
+  method: get
   error:
-    - selector: table:contains("Login failed!")
-  test:
-    path: my.php
-    selector: a[href="logout.php"]
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
-    - path: browse.php
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v7.0.0)
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L349
+    - path: "/api/torrents/filter"
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    incldead: "{{ .Config.incldead }}"
-    srchdtls: "{{ if .Query.IMDBID }}1{{ else }}0{{ end }}"
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
 
   rows:
-    selector: "table[border=\"1\"] tr:not(:first-child){{ if .Config.dropbumped }}:not(:has(span.bumped)){{ else }}{{ end }}"
+    selector: data
+    attribute: attributes
 
   fields:
     category:
-      text: 1
+      selector: category_id
     title:
-      selector: td:nth-child(2) a
+      selector: name
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      selector: details_link
     download:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      selector: download_link
+    infohash:
+      selector: info_hash
+    poster:
+      selector: meta.poster
       filters:
         - name: replace
-          args: ["details.php?id=", "download.php?id="]
-    files:
-      selector: td:nth-child(5)
-    size:
-      selector: td:nth-child(7)
-    grabs:
-      selector: td:nth-child(8)
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    genre:
+      selector: meta.genres
       filters:
-        - name: regexp
-          args: ([\d,]+)
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
+        - name: replace
+          args: [" & ", "_&_"]
+    description:
+      text: "{{ .Result.genre }}"
+    files:
+      selector: num_file
     seeders:
-      selector: td:nth-child(9)
+      selector: seeders
     leechers:
-      selector: td:nth-child(10)
+      selector: leechers
+    grabs:
+      selector: times_completed
     date:
-      selector: td:nth-child(11) div.addedtor
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
     downloadvolumefactor:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
       case:
-        img[title^="Golden Torrent"]: 0
-        img[title^="Silver Torrent"]: 0.25
-        img[title^="Platinum Torrent"]: 0
-        "*": 1
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
     uploadvolumefactor:
+      # api returns False, True
+      selector: double_upload
       case:
-        img[title^="Platinum Torrent"]: 2
-        "*": 1
-# Engine n/a
+        False: 1 # normal
+        True: 2 # double
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 7.2.5
