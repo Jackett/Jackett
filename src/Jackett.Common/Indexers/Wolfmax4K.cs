@@ -4,8 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
                     // Check if has more pages
                     var activePageElement = doc.QuerySelector(".btnpg.active");
                     var nextPageElement = activePageElement?.NextElementSibling;
-                    if (activePageElement == null || nextPageElement ==  null ||
+                    if (activePageElement == null || nextPageElement == null ||
                         activePageElement.GetAttribute("data-pg") == nextPageElement.GetAttribute("data-pg"))
                     {
                         break;
@@ -465,7 +465,7 @@ namespace Jackett.Common.Indexers
             {
                 // Create a RijndaelManaged object
                 // with the specified key and IV.
-                aesAlg = new RijndaelManaged {Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv};
+                aesAlg = new RijndaelManaged { Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv };
 
                 // Create a decrytor to perform the stream transform.
                 ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
