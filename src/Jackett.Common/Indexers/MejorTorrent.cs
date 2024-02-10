@@ -286,8 +286,7 @@ namespace Jackett.Common.Indexers
                     await ParseMovieRelease(releases, query, title, detailsStr, cat, publishDate, quality);
                 else
                 {
-                    const long size = 100.Megabytes();
-                    var release = GenerateRelease(title, detailsStr, detailsStr, cat, publishDate, size);
+                    var release = GenerateRelease(title, detailsStr, detailsStr, cat, publishDate, 100.Megabytes());
                     releases.Add(release);
                 }
             }
