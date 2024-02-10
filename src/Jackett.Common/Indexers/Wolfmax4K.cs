@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -27,28 +28,24 @@ namespace Jackett.Common.Indexers
         public override string Name => "Wolfmax 4k";
         public override string Description => "Wolfmax 4k is a SPANISH public tracker for MOVIES / TV";
         public override string SiteLink { get; protected set; } = "https://wolfmax4k.com/";
-        public override string[] AlternativeSiteLinks => new[]
-        {
-            "https://wolfmax4k.com/"
-        };
         public override string Language => "es-ES";
         public override string Type => "public";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private static class Wolfmax4KCatType
-        {
-            public static string Pelicula => "pelicula";
-            public static string Pelicula720 => "pelicula720";
-            public static string Pelicula1080 => "pelicula1080";
-            public static string Pelicula4K => "pelicula4k";
-            public static string Serie => "serie";
-            public static string Serie720 => "serie720";
-            public static string Serie1080 => "serie1080";
-            public static string Serie4K => "serie4k";
-        }
+        private const string TorrentLinkEncryptionKey = "fee631d2cffda38a78b96ee6d2dfb43a";
 
-        private const string Key = "fee631d2cffda38a78b96ee6d2dfb43a";
+        private static Dictionary<string, long> EstimatedSizeByCategory => new Dictionary<string, long>
+        {
+            { Wolfmax4KCatType.Pelicula, 2.Gigabytes() },
+            { Wolfmax4KCatType.Pelicula720, 5.Gigabytes() },
+            { Wolfmax4KCatType.Pelicula1080, 15.Gigabytes() },
+            { Wolfmax4KCatType.Pelicula4K, 30.Gigabytes() },
+            { Wolfmax4KCatType.Serie, 512.Megabytes() },
+            { Wolfmax4KCatType.Serie720, 1.Gigabytes() },
+            { Wolfmax4KCatType.Serie1080, 3.Gigabytes() },
+            { Wolfmax4KCatType.Serie4K, 8.Gigabytes() }
+        };
 
         public Wolfmax4K(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
                          ICacheService cs)
@@ -163,7 +160,7 @@ namespace Jackett.Common.Indexers
 
             var linkOut = v.Groups[1].ToString();
             var slink = Encoding.UTF8.GetString(Convert.FromBase64String(linkOut));
-            var ulink = OpenSSLDecrypt(slink, Key);
+            var ulink = OpenSSLDecrypt(slink, TorrentLinkEncryptionKey);
 
             var result = await RequestWithCookiesAndRetryAsync(ulink, emulateBrowser: false);
             return result.ContentBytes;
@@ -241,16 +238,31 @@ namespace Jackett.Common.Indexers
             // https://wolfmax4k.com/descargar/serie-en-hd/top-boy/temporada-3/capitulo-02/
             // https://wolfmax4k.com/descargar/programas-tv/la-isla-de-las-tentaciones/temporada-7/capitulo-10/
             // https://wolfmax4k.com/descargar/serie-1080p/historial-delictivo/temporada-1/capitulo-02/
+            // https://wolfmax4k.com/descargar-pelicula/avatar-v-extendida/bluray-1080p/
+
+            var quality = cardElement.QuerySelector(".quality")?.Text().Trim();
+            if (string.IsNullOrEmpty(quality))
+            {
+                // Some torrents has no quality.
+                // Ignored it because they are torrents that are not well categorized
+                // as this game https://wolfmax4k.com/juego/james-cameronavatar/
+                return null;
+            }
 
             var link = new Uri(new Uri(SiteLink), cardElement.GetAttribute("href"));
+            var title = ParseTitle(cardElement) + " SPANISH " + quality;
+            var episodes = GetEpisodesFromTitle(title);
+            var wolfmaxCategory = ParseCategory(cardElement);
+
             var releaseInfo = new ReleaseInfo
             {
-                Title = ParseTitle(cardElement),
+                Title = title,
                 Link = link,
                 Details = link,
                 Guid = link,
-                Category = ParseCategory(cardElement),
+                Category = MapTrackerCatToNewznab(wolfmaxCategory),
                 PublishDate = DateTime.Now,
+                Size = EstimatedSizeByCategory[wolfmaxCategory] * Math.Max(episodes.Count, 1),
                 Seeders = 1,
                 Peers = 2,
                 DownloadVolumeFactor = 0,
@@ -270,14 +282,9 @@ namespace Jackett.Common.Indexers
             }
 
             // Filter by Episode
-            var episode = 0;
-            if (int.TryParse(query.Episode, out episode))
+            if (int.TryParse(query.Episode, out var episode) && episodes.Any() && !episodes.Contains(episode))
             {
-                var episodes = GetEpisodesFromTitle(releaseInfo.Title);
-                if (episodes.Any() && !episodes.Contains(episode))
-                {
-                    return null;
-                }
+                return null;
             }
 
             return releaseInfo;
@@ -292,13 +299,11 @@ namespace Jackett.Common.Indexers
             {
                 title += " " + seasonEpisode;
             }
-            title += " SPANISH ";
-            title += cardElement.QuerySelector(".quality").Text();
 
             return title;
         }
 
-        private ICollection<int> ParseCategory(IElement cardElement)
+        private string ParseCategory(IElement cardElement)
         {
             // If the url contains "/serie" or contains "/temporada-" & "/capitulo-" it's a tv show
             // If not it's a movie
@@ -346,7 +351,7 @@ namespace Jackett.Common.Indexers
                 }
             }
 
-            return MapTrackerCatToNewznab(wolfmaxCat);
+            return wolfmaxCat;
         }
 
         private string ParseSeasonAndEpisode(IElement cardElement)
@@ -384,7 +389,7 @@ namespace Jackett.Common.Indexers
 
             if (vals.Count == 2)
             {
-                return Enumerable.Range(vals[0], vals[1] - vals[0]).ToList();
+                return Enumerable.Range(vals[0], vals[1] - vals[0] + 1).ToList();
             }
 
             return new List<int>();
@@ -493,6 +498,18 @@ namespace Jackett.Common.Indexers
 
             return plaintext;
         }
+    }
+
+    static class Wolfmax4KCatType
+    {
+        public static string Pelicula => "pelicula";
+        public static string Pelicula720 => "pelicula720";
+        public static string Pelicula1080 => "pelicula1080";
+        public static string Pelicula4K => "pelicula4k";
+        public static string Serie => "serie";
+        public static string Serie720 => "serie720";
+        public static string Serie1080 => "serie1080";
+        public static string Serie4K => "serie4k";
     }
 
 }
