@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -106,7 +107,7 @@ namespace Jackett.Common.Indexers
 
             query = SanitizeTorznabQuery(query);
 
-            var maxPages = string.IsNullOrEmpty(query.SearchTerm) ? 1 : 3;
+            var maxPages = query.SearchTerm.IsNullOrWhiteSpace() ? 1 : 3;
 
             for (var i = 1; i <= maxPages; i++)
             {
@@ -241,7 +242,7 @@ namespace Jackett.Common.Indexers
             // https://wolfmax4k.com/descargar-pelicula/avatar-v-extendida/bluray-1080p/
 
             var quality = cardElement.QuerySelector(".quality")?.Text().Trim();
-            if (string.IsNullOrEmpty(quality))
+            if (quality.IsNullOrWhiteSpace())
             {
                 // Some torrents has no quality.
                 // Ignored it because they are torrents that are not well categorized
@@ -295,7 +296,7 @@ namespace Jackett.Common.Indexers
             var title = cardElement.QuerySelector(".title")?.Text();
             title = Regex.Replace(title, @"(\- )?Temp\.\s+?\d+?", "").Trim();
             var seasonEpisode = ParseSeasonAndEpisode(cardElement);
-            if (!string.IsNullOrEmpty(seasonEpisode))
+            if (seasonEpisode.IsNotNullOrWhiteSpace))
             {
                 title += " " + seasonEpisode;
             }
@@ -369,7 +370,7 @@ namespace Jackett.Common.Indexers
             if (matchEpisode.Success)
             {
                 result += "E" + matchEpisode.Groups[1].Value.PadLeft(2, '0');
-                if (!string.IsNullOrEmpty(matchEpisode.Groups[3].Value))
+                if (matchEpisode.Groups[3].Value.IsNotNullOrWhiteSpace())
                 {
                     result += "-E" + matchEpisode.Groups[3].Value.PadLeft(2, '0');
                 }
@@ -399,34 +400,35 @@ namespace Jackett.Common.Indexers
         private string OpenSSLDecrypt(string encrypted, string passphrase)
         {
             // base 64 decode
-            byte[] encryptedBytesWithSalt = Convert.FromBase64String(encrypted);
-            // Console.WriteLine(Encoding.UTF8.GetString(encryptedBytesWithSalt));
+            var encryptedBytesWithSalt = Convert.FromBase64String(encrypted);
 
             // extract salt (first 8 bytes of encrypted)
-            byte[] salt = new byte[8];
-            byte[] encryptedBytes = new byte[encryptedBytesWithSalt.Length - salt.Length - 8];
+            var salt = new byte[8];
+            var encryptedBytes = new byte[encryptedBytesWithSalt.Length - salt.Length - 8];
             Buffer.BlockCopy(encryptedBytesWithSalt, 8, salt, 0, salt.Length);
             Buffer.BlockCopy(encryptedBytesWithSalt, salt.Length + 8, encryptedBytes, 0, encryptedBytes.Length);
+
             // get key and iv
-            byte[] key, iv;
-            DeriveKeyAndIV(passphrase, salt, out key, out iv);
+            DeriveKeyAndIV(passphrase, salt, out var key, out var iv);
+
             return DecryptStringFromBytesAes(encryptedBytes, key, iv);
         }
 
         private void DeriveKeyAndIV(string passphrase, byte[] salt, out byte[] key, out byte[] iv)
         {
             // generate key and iv
-            List<byte> concatenatedHashes = new List<byte>(48);
+            var concatenatedHashes = new List<byte>(48);
 
-            byte[] password = Encoding.UTF8.GetBytes(passphrase);
-            byte[] currentHash = new byte[0];
-            MD5 md5 = MD5.Create();
-            bool enoughBytesForKey = false;
+            var password = Encoding.UTF8.GetBytes(passphrase);
+            var currentHash = Array.Empty<byte>();
+            var md5 = MD5.Create();
+            var enoughBytesForKey = false;
+
             // See http://www.openssl.org/docs/crypto/EVP_BytesToKey.html#KEY_DERIVATION_ALGORITHM
             while (!enoughBytesForKey)
             {
-                int preHashLength = currentHash.Length + password.Length + salt.Length;
-                byte[] preHash = new byte[preHashLength];
+                var preHashLength = currentHash.Length + password.Length + salt.Length;
+                var preHash = new byte[preHashLength];
 
                 Buffer.BlockCopy(currentHash, 0, preHash, 0, currentHash.Length);
                 Buffer.BlockCopy(password, 0, preHash, currentHash.Length, password.Length);
@@ -436,7 +438,9 @@ namespace Jackett.Common.Indexers
                 concatenatedHashes.AddRange(currentHash);
 
                 if (concatenatedHashes.Count >= 48)
+                {
                     enoughBytesForKey = true;
+                }
             }
 
             key = new byte[32];
@@ -450,13 +454,20 @@ namespace Jackett.Common.Indexers
 
         private string DecryptStringFromBytesAes(byte[] cipherText, byte[] key, byte[] iv)
         {
-            // Check arguments.
             if (cipherText == null || cipherText.Length <= 0)
-                throw new ArgumentNullException("cipherText");
+            {
+                throw new ArgumentNullException(nameof(cipherText));
+            }
+
             if (key == null || key.Length <= 0)
-                throw new ArgumentNullException("key");
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             if (iv == null || iv.Length <= 0)
-                throw new ArgumentNullException("iv");
+            {
+                throw new ArgumentNullException(nameof(iv));
+            }
 
             // Declare the RijndaelManaged object
             // used to decrypt the data.
@@ -473,13 +484,13 @@ namespace Jackett.Common.Indexers
                 aesAlg = new RijndaelManaged { Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv };
 
                 // Create a decrytor to perform the stream transform.
-                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+                var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
                 // Create the streams used for decryption.
-                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                using (var msDecrypt = new MemoryStream(cipherText))
                 {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        using (var srDecrypt = new StreamReader(csDecrypt))
                         {
                             // Read the decrypted bytes from the decrypting stream
                             // and place them in a string.
@@ -492,15 +503,13 @@ namespace Jackett.Common.Indexers
             finally
             {
                 // Clear the RijndaelManaged object.
-                if (aesAlg != null)
-                    aesAlg.Clear();
+                aesAlg?.Clear();
             }
 
             return plaintext;
         }
-    }
 
-    static class Wolfmax4KCatType
+    internal static class Wolfmax4KCatType
     {
         public static string Pelicula => "pelicula";
         public static string Pelicula720 => "pelicula720";
