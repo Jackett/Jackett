@@ -296,7 +296,7 @@ namespace Jackett.Common.Indexers
             var title = cardElement.QuerySelector(".title")?.Text();
             title = Regex.Replace(title, @"(\- )?Temp\.\s+?\d+?", "").Trim();
             var seasonEpisode = ParseSeasonAndEpisode(cardElement);
-            if (seasonEpisode.IsNotNullOrWhiteSpace))
+            if (seasonEpisode.IsNotNullOrWhiteSpace())
             {
                 title += " " + seasonEpisode;
             }
