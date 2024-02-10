@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -435,11 +436,11 @@ namespace Jackett.Common.Indexers
                     continue;
 
                 // guess size
-                var size = 536870912L; // 512 MB
+                var size = 512.Megabytes();
                 if (episodeTitle.ToLower().Contains("720p"))
-                    size = 1073741824L; // 1 GB
+                    size = 1.Gigabytes();
                 if (episodeTitle.ToLower().Contains("1080p"))
-                    size = 4294967296L; // 4 GB
+                    size = 4.Gigabytes();
 
                 size *= GetEpisodeCountFromTitle(episodeTitle);
 
@@ -507,13 +508,13 @@ namespace Jackett.Common.Indexers
             if (moreinfo.Length == 2)
                 size = ParseUtil.GetBytes(moreinfo[1].QuerySelector("p").TextContent);
             else if (title.ToLower().Contains("4k"))
-                size = 53687091200L; // 50 GB
+                size = 50.Gigabytes();
             else if (title.ToLower().Contains("1080p"))
-                size = 4294967296L; // 4 GB
+                size = 4.Gigabytes();
             else if (title.ToLower().Contains("720p"))
-                size = 1073741824L; // 1 GB
+                size = 1.Gigabytes();
             else
-                size = 536870912L; // 512 MB
+                size = 512.Megabytes();
 
             var release = GenerateRelease(title, link, link, GetCategory(title, link), DateTime.Now, size);
             releases.Add(release);
