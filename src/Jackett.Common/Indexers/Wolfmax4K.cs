@@ -507,6 +507,7 @@ namespace Jackett.Common.Indexers
             }
 
             return plaintext;
+        }
     }
 
     internal static class Wolfmax4KCatType
