@@ -619,6 +619,7 @@ namespace Jackett.Updater
                 "Definitions/tjangto.yml",
                 "Definitions/tntfork.yml",
                 "Definitions/tntvillage.yml",
+                "Definitions/toonsforme.yml",
                 "Definitions/topnow.yml",
                 "Definitions/torlook.yml",
                 "Definitions/toros.yml", // renamed to bulltorrent
