@@ -51,7 +51,12 @@ namespace Jackett.Common.Indexers
             "http://logan.unusualperson.com/",
             "https://ipt.rocks/",
             "http://baywatch.workisboring.com/",
-            "https://iptorrents.eu/"
+            "https://iptorrents.eu/",
+            "https://ipt.getcrazy.me/",
+            "https://ipt.findnemo.net/",
+            "https://ipt.beelyrics.net/",
+            "https://ipt.venom.global/",
+            "https://ipt.workisboring.net/"
         };
         public override string Language => "en-US";
         public override string Type => "private";
