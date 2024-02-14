@@ -31,13 +31,12 @@ namespace Jackett.Common.Indexers
             "https://www.iptorrents.com/",
             "https://iptorrents.me/",
             "https://nemo.iptorrents.com/",
-            "https://ipt.getcrazy.me/",
-            "https://ipt.findnemo.net/",
-            "https://ipt.beelyrics.net/",
-            "https://ipt.venom.global/",
-            "https://ipt.workisboring.net/",
-            "https://ipt.lol/",
+            "https://ip.findnemo.net/",
+            "https://ip.venom.global/",
+            "https://ip.getcrazy.me/",
+            "https://ip.workisboring.net/",
             "https://ipt.cool/",
+            "https://ipt.lol/",
             "https://ipt.world/",
             "https://ipt.octopus.town/"
         };
@@ -51,7 +50,12 @@ namespace Jackett.Common.Indexers
             "http://logan.unusualperson.com/",
             "https://ipt.rocks/",
             "http://baywatch.workisboring.com/",
-            "https://iptorrents.eu/"
+            "https://iptorrents.eu/",
+            "https://ipt.getcrazy.me/",
+            "https://ipt.findnemo.net/",
+            "https://ipt.beelyrics.net/",
+            "https://ipt.venom.global/",
+            "https://ipt.workisboring.net/"
         };
         public override string Language => "en-US";
         public override string Type => "private";
