@@ -128,10 +128,12 @@ search:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: td:nth-child(1) a
-      attribute: href
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: (torrent/\d+)
     download:
-      selector: td:nth-child(1) a
-      attribute: href
+      text: "{{ .Result.details }}"
     date:
       text: now
     size:
