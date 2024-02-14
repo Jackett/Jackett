@@ -38,8 +38,7 @@ namespace Jackett.Common.Indexers
             "https://ipt.cool/",
             "https://ipt.lol/",
             "https://ipt.world/",
-            "https://ipt.octopus.town/",
-            "https://anyname.octopus.town/"
+            "https://ipt.octopus.town/"
         };
         public override string[] LegacySiteLinks => new[]
         {
