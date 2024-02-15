@@ -589,7 +589,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentLeech (TL)
  * TorrentLeech.pl
  * TorrentSeeds (TS)
- * TotallyKids (TK)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
  * TrackerMK
  * TranceTraffic

@@ -653,6 +653,7 @@ namespace Jackett.Updater
                 "Definitions/torrentz2k.yml",
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
+                "Definitions/totallykids.yml",
                 "Definitions/trackeros-api.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
                 "Definitions/tspate.yml",
