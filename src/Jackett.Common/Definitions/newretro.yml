@@ -133,6 +133,8 @@ search:
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
+      optional: true
+      default: 129
       filters:
         - name: querystring
           args: cat
