@@ -104,7 +104,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: "table[width=\"65%\"]:nth-child(3) > tbody > tr[onmouseover]{{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.png\"]){{ else }}{{ end }}"
+    selector: "table[width=\"70%\\\"\"]:nth-child(3) > tbody > tr[onmouseover]{{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
