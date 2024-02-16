@@ -100,6 +100,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrentów na stronę:</b> (Torrents per page) setting to <b>100</b> on your account profile.
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
 
 login:
   path: login.php
