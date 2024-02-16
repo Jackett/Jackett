@@ -162,6 +162,7 @@ search:
     - path: /?p=torrents&pid=10
       method: post
   keywordsfilters:
+    - name: toupper
     - name: re_replace # add brackets to year on searchquery if missing
       args: ["\\(*((19|20)\\d{2})\\)*", "($1)"]
     - name: replace # use this as a workaround till #893 is implemented
