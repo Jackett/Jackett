@@ -877,10 +877,11 @@ search:
     selector: li.row:has(a[href^="./download/file.php?id="])
 
   fields:
-    categorydesc:
+    categorydesc_optional:
       selector: dt a:last-of-type
       optional: true
-      default: Разное
+    categorydesc:
+      text: "{{ if .Result.categorydesc_optional }}{{ .Result.categorydesc_optional }}{{ else }}Разное{{ end }}"
     title:
       selector: a.topictitle
       filters:

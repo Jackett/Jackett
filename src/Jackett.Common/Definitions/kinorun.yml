@@ -113,14 +113,15 @@ search:
     selector: table.embedded > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="browse.php?cat="]
       attribute: href
       optional: true
-      default: 24
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}24{{ end }}"
     title:
       selector: a[href^="./torrent-"]
     details:

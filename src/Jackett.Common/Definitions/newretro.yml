@@ -130,7 +130,7 @@ search:
       - name: andmatch
 
   fields:
-    category_id:
+    category_optional:
       selector: a[href^="browse.php?cat="]
       attribute: href
       optional: true
@@ -138,7 +138,7 @@ search:
         - name: querystring
           args: cat
     category:
-      text: "{{ if .Result.category_id }}{{ .Result.category_id }}{{ else }}129{{ end }}"
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}129{{ end }}"
     title:
       selector: a[href^="details.php?id="]:has(b)
     details:

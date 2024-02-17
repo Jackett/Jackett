@@ -149,14 +149,15 @@ search:
     selector: table.ttable_headinner tr.t-row
 
   fields:
-    category:
+    category_optional:
       selector: a[href*="cat="]
       attribute: href
       optional: true
-      default: 56
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}56{{ end }}"
     title:
       selector: a[href^="torrents-details.php?id="]
       attribute: title

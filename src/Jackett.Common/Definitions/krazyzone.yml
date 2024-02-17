@@ -132,14 +132,15 @@ search:
       - name: andmatch
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="torrents.php?cat="]
       attribute: href
       optional: true
-      default: 95
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}95{{ end }}"
     title:
       selector: a[href^="torrents-details.php?id="]
       attribute: title

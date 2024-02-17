@@ -104,14 +104,15 @@ search:
     after: 1
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="/search.php?cat="]
       attribute: href
       optional: true
-      default: 33
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}33{{ end }}"
     title:
       selector: td:nth-child(2) a[title]
       attribute: title

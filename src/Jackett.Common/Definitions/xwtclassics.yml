@@ -92,14 +92,15 @@ search:
     selector: table[border="0"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="download.php?id="])
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="browse.php?cat="]
       attribute: href
       optional: true
-      default: 8
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}8{{ end }}"
     title:
       selector: a[href^="details.php?id="]
       attribute: title

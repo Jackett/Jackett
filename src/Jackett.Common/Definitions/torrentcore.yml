@@ -65,14 +65,15 @@ search:
     after: 3
 
   fields:
-    category:
+    category_optional:
       selector: img[src^="./cat/"]
       attribute: src
       optional: true
-      default: UNKNOWN
       filters:
         - name: regexp
           args: "cat/(.+?).png"
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}UNKNOWN{{ end }}"
     title:
       selector: a
     details:
