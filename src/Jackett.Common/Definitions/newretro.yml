@@ -125,15 +125,11 @@ search:
     # site does not support imdbid searching or display imdb links in results.
 
   rows:
-    selector: "table.tableinborder > tbody > tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
+    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"0\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
   fields:
-    category_href:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      optional: true
     category_id:
       selector: a[href^="browse.php?cat="]
       attribute: href
@@ -142,11 +138,11 @@ search:
         - name: querystring
           args: cat
     category:
-      text: "{{ if .Result.category_href }}{{ .Result.category_id }}{{ else }}129{{ end }}"
+      text: "{{ if .Result.category_id }}{{ .Result.category_id }}{{ else }}129{{ end }}"
     title:
       selector: a[href^="details.php?id="]:has(b)
     details:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(4) > a
+      selector: a[href^="details.php?id="]:has(b)
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
