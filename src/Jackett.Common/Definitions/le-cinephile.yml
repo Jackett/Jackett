@@ -44,6 +44,7 @@ caps:
     - {id: 14, cat: TV/WEB-DL, desc: "SERIE WEB.720p"}
     - {id: 12, cat: TV/WEB-DL, desc: "SERIE WEB"}
     - {id: 106, cat: TV/Anime, desc: "SERIE ANIME"}
+    - {id: 108, cat: TV/HD, desc: "SERIE BlueRay"}
     # LOGICIELS
     - {id: 56, cat: PC/ISO, desc: "LOGICIELS Linux"}
     - {id: 24, cat: PC/Mac, desc: "LOGICIELS Apple"}
