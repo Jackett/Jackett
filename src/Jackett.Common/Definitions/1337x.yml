@@ -236,7 +236,7 @@ search:
           args: ["(?i)WEB\\sDL", "WEB-DL"]
         - name: re_replace
           args: ["(?i)HDTVRIP", "HDTV"]
-    category_sub:
+    category_optional:
       optional: true
       selector: td[class^="coll-1"] a[href^="/sub/"]
       attribute: href
@@ -245,7 +245,7 @@ search:
         - name: split
           args: ["/", 2]
     category:
-      text: "{{ if .Result.category_sub }}{{ .Result.category_sub }}{{ else }}40{{ end }}"
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}40{{ end }}"
     details:
       selector: td[class^="coll-1"] a[href^="/torrent/"]
       attribute: href
