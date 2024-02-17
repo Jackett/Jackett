@@ -131,7 +131,7 @@ search:
       attribute: onclick
       filters:
         - name: regexp
-          args: (torrent/\d+)
+          args: (/torrent/\d+)
     download:
       text: "{{ .Result.details }}"
     date:
