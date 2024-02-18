@@ -13,6 +13,11 @@ links:
   - https://yts.am/
   - https://yts.ag/
   - https://yts.unblockit.dad/
+# unofficial proxies below; allowed as meeting requisite criterion.
+  - https://yts.unblockninja.com/
+  - https://yts.ninjaproxy1.com/
+  - https://yts.proxyninja.org/
+  - https://yts.torrentbay.st/
 # official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/
 legacylinks:
   - https://yts.nocensor.art/
@@ -33,10 +38,6 @@ legacylinks:
   - https://yts.mrunblock.bond/
   - https://yts.nocensor.cloud/
   - https://yts.unblockit.date/
-  - https://yts.unblockninja.com/
-  - https://yts.ninjaproxy1.com/
-  - https://yts.proxyninja.org/
-  - https://yts.torrentbay.st/
 
 caps:
   categorymappings:
