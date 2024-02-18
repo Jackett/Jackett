@@ -1,19 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.181
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE7B0C8A-6144-47CD-821E-B09BA1B7BADE}"
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
-		..\Installer.iss = ..\Installer.iss
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Service", "Jackett.Service\Jackett.Service.csproj", "{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Tray", "Jackett.Tray\Jackett.Tray.csproj", "{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jackett.Updater", "Jackett.Updater\Jackett.Updater.csproj", "{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}"
 EndProject
@@ -33,14 +28,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF611F7B-4658-4CB8-AA9E-0736FADAA3BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF9025B1-EC14-4AA9-8081-9F69C5E35B63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A61E311A-6F8B-4497-B5E4-2EA8994C7BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU

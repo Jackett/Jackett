@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net462</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <NoWarn />
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
@@ -43,12 +44,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj" />
     <ProjectReference Include="..\Jackett.Server\Jackett.Server.csproj" />
-  </ItemGroup>
-
-  <!-- Conditionally obtain references for the .NET462 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
-    <Reference Include="System.Web" />
   </ItemGroup>
 
   <ItemGroup>

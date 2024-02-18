@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <PackageId>$(MSBuildProjectName)</PackageId>
-    <TargetFrameworks>net6.0;net462</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
     <NoWarn></NoWarn>
     <ServerGarbageCollection>false</ServerGarbageCollection>
     <DefineConstants Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64' or '$(RuntimeIdentifier)' == 'linux-musl-arm' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">ISLINUXMUSL</DefineConstants>
+    <AssemblyName>JackettConsole</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
@@ -20,36 +22,10 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <Choose>
-    <When Condition="'$(TargetFramework)' != 'net462' and $(RuntimeIdentifier.Contains('win')) == 'false'">
-      <PropertyGroup>
-        <AssemblyName>jackett</AssemblyName>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <AssemblyName>JackettConsole</AssemblyName>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
-
-  <!-- Conditionally obtain references for the .NET 6.0 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="6.0.0" />
-  </ItemGroup>
-
-  <!-- Conditionally obtain references for the .NET462 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
