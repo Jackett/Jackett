@@ -20,6 +20,7 @@ caps:
     - {id: 8, cat: XXX/ImageSet, desc: "Fotos Adultas"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audio E-Book"}
     - {id: 10, cat: XXX, desc: "XXX"}
+    - {id: 11, cat: Audio/Video, desc: "Shows"}
 
   modes:
     search: [q]
