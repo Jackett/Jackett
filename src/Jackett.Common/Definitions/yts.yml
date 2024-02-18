@@ -9,15 +9,14 @@ requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
   # dont forget to update the details, download and poster replace args
   - https://yts.mx/
-  - https://yts.unblockit.dad/
-  - https://yts.unblockninja.com/
-  - https://yts.ninjaproxy1.com/
-  - https://yts.proxyninja.org/
-  - https://yts.torrentbay.st/
-legacylinks:
-  - https://yts.ag/
-  - https://yts.am/
   - https://yts.lt/
+  - https://yts.am/
+  - https://yts.ag/
+  - https://yts.unblockit.dad/
+status_proxylinks:
+  - https://yifystatus.com/
+  - https://ytsproxies.com/
+legacylinks:
   - https://yts.nocensor.art/
   - https://yts.unblockit.bio/
   - https://yts.unblockit.boo/
@@ -36,7 +35,10 @@ legacylinks:
   - https://yts.mrunblock.bond/
   - https://yts.nocensor.cloud/
   - https://yts.unblockit.date/
-
+  - https://yts.unblockninja.com/
+  - https://yts.ninjaproxy1.com/
+  - https://yts.proxyninja.org/
+  - https://yts.torrentbay.st/  
 caps:
   categorymappings:
     # note: the API does not support searching with categories, so these are dummy ones for torznab compatibility
