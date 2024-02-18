@@ -9,15 +9,17 @@ requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
   # dont forget to update the details, download and poster replace args
   - https://yts.mx/
+  - https://yts.lt/
+  - https://yts.am/
+  - https://yts.ag/
   - https://yts.unblockit.dad/
+# unofficial proxies below; allowed as meeting requisite criterion.
   - https://yts.unblockninja.com/
   - https://yts.ninjaproxy1.com/
   - https://yts.proxyninja.org/
   - https://yts.torrentbay.st/
+# official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/
 legacylinks:
-  - https://yts.ag/
-  - https://yts.am/
-  - https://yts.lt/
   - https://yts.nocensor.art/
   - https://yts.unblockit.bio/
   - https://yts.unblockit.boo/
