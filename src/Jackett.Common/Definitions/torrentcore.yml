@@ -57,7 +57,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search?s={{ .Keywords }}{{ else }}index{{ end }}"
+    - path: "search?s={{ if .Keywords }}{{ .Keywords }}{{ else }}+{{ end }}"
     # search is an exact match, there are no wild cards, or +word or AND/OR, and spaces and dots are treated uniquely
 
   rows:
