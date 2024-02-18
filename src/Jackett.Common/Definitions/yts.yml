@@ -38,7 +38,8 @@ legacylinks:
   - https://yts.unblockninja.com/
   - https://yts.ninjaproxy1.com/
   - https://yts.proxyninja.org/
-  - https://yts.torrentbay.st/  
+  - https://yts.torrentbay.st/
+
 caps:
   categorymappings:
     # note: the API does not support searching with categories, so these are dummy ones for torznab compatibility
