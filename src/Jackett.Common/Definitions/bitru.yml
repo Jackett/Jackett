@@ -33,7 +33,7 @@ caps:
 settings:
   - name: stripcyrillic
     type: checkbox
-    label: Strip Russian Letters
+    label: Strip Cyrillic Letters
     default: false
   - name: addrussiantotitle
     type: checkbox
