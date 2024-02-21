@@ -184,14 +184,14 @@ search:
     size:
       selector: size
     downloadvolumefactor:
-      # api returns 0%, 25%, 50%, 75%, 100%
+      # api returns 0, 25, 50, 75, 100
       selector: freeleech
       case:
-        0%: 1 # not free
-        25%: 0.75
-        50%: 0.5
-        75%: 0.25
-        100%: 0 # freeleech
+        0: 1 # not free
+        25: 0.75
+        50: 0.5
+        75: 0.25
+        100: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
       # api returns 0=false, 1=true
