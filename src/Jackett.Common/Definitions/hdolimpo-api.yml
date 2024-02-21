@@ -65,7 +65,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v7.0.0)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L349
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -73,7 +73,7 @@ search:
     Authorization: ["Bearer {{ .Config.apikey }}"]
 
   inputs:
-    # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
     seasonNumber: "{{ .Query.Season }}"
@@ -81,22 +81,18 @@ search:
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
-
-  keywordsfilters:
-    - name: re_replace
-      args: ["\\.", " "]
 
   rows:
     selector: data
     attribute: attributes
 
   fields:
-    category:
-      selector: category_id
+    categorydesc:
+      selector: category
     title:
       selector: name
       filters:
@@ -158,10 +154,8 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
-      selector: meta.poster
+      selector: poster
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
@@ -200,12 +194,12 @@ search:
         100%: 0 # freeleech
         "*": 0 # catch errors
     uploadvolumefactor:
-      # api returns False, True
+      # api returns 0=false, 1=true
       selector: double_upload
       case:
-        False: 1 # normal
-        True: 2 # double
+        0: 1 # normal
+        1: 2 # double
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# json UNIT3D 7.x.x
+# json UNIT3D 6.0.4
