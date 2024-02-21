@@ -77,8 +77,8 @@ search:
   paths:
     # http://rutor.info/search/0/0/010/0/tt10288566 # search title and descr for imdb
     # http://rutor.info/search/0/0/100/0/gotham%2004x01 # search title for query
-    # http://rutor.info/top/ # search keywordless
-    - path: "{{ if .Query.IMDBID }}search/0/0/010/{{ .Config.sort }}/{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}{{ end }}{{ if or .Keywords .Query.IMDBID }}{{ else }}top/{{ end }}"
+    # http://rutor.info/ # search keywordless
+    - path: "{{ if .Query.IMDBID }}search/0/0/010/{{ .Config.sort }}/{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}{{ end }}{{ if or .Keywords .Query.IMDBID }}{{ else }}/{{ end }}"
 
   rows:
     selector: tr:has(td:has(a[href^="magnet:?xt="]))
