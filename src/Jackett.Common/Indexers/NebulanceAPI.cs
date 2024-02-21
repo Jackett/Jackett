@@ -34,6 +34,8 @@ namespace Jackett.Common.Indexers
         protected virtual string APIUrl => SiteLink + "api.php";
         protected virtual int KeyLength => 32;
 
+        private readonly string[] _moveToTags = { "720p", "1080p", "2160p", "4k" };
+
         // TODO: remove ConfigurationDataAPIKey class and use ConfigurationDataPasskey instead
         private new ConfigurationDataAPIKey configData
         {
@@ -170,7 +172,16 @@ namespace Jackett.Common.Indexers
 
             var searchString = query.GetQueryString();
             if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                var searchTerms = Regex.Split(searchString, "\\s+").ToList();
+                var movingToTags = searchTerms.Intersect(_moveToTags, StringComparer.OrdinalIgnoreCase).ToList();
+                movingToTags.ForEach(
+                    tag => searchTerms.RemoveAll(searchTerm => searchTerm.Equals(tag, StringComparison.OrdinalIgnoreCase)));
+
+                searchString = searchTerms.Join(" ");
+                searchParam["tags"] = new JArray(movingToTags);
                 searchParam["name"] = "%" + Regex.Replace(searchString, "[\\W]+", "%").Trim() + "%";
+            }
 
             if (query.IsTvmazeQuery && query.TvmazeID.HasValue)
             {
