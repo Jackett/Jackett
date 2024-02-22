@@ -91,7 +91,7 @@ search:
     tmdbId: "{{ .Query.TMDBID }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    "free[0]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
