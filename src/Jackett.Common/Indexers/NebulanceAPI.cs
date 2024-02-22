@@ -246,7 +246,10 @@ namespace Jackett.Common.Indexers
                     }
                     var tags = string.Join(",", item.Value<JArray>("tags"));
                     var releaseGenres = validList.Intersect(tags.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
-                    descriptions.Add("Genre: " + string.Join(",", releaseGenres));
+                    if (releaseGenres.Count >= 1)
+                    {
+                        descriptions.Add("Genre: " + string.Join(",", releaseGenres));
+                    }
                     var releaseCats = validCats.Intersect(tags.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
 
                     var release = new ReleaseInfo
