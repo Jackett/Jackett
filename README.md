@@ -365,7 +365,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HappyFappy
  * Hares Club (白兔俱乐部) [![(invite needed)][inviteneeded]](#)
  * Hawke-uno
- * HD Dolby
  * HD-Club
  * HD-Forever (HDF)
  * HD-Olimpo
