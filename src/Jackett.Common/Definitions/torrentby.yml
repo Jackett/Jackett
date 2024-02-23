@@ -5,7 +5,7 @@ description: "torrent.by is a BELARUSIAN public Torrent Tracker"
 language: ru-RU
 type: public
 encoding: UTF-8
-requestDelay: 2
+requestDelay: 5
 links:
   - https://torrent.by/
 legacylinks:
