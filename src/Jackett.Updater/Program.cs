@@ -445,7 +445,6 @@ namespace Jackett.Updater
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
                 "Definitions/ihdbits.yml",
-                "Definitions/ilcorsaronero.yml",
                 "Definitions/ilcorsaroverde.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
