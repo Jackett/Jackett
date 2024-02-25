@@ -5,8 +5,6 @@ description: "Xider-Torrent is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
 encoding: UTF-8
-certificates:
-  - fc83260f70b3c8fb8f7c49e0ea2943d9e84cf95e # CN=beload.org
 links:
   - https://xider.eu/
 
