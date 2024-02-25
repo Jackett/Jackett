@@ -55,7 +55,6 @@ namespace Jackett.Common.Indexers
             "https://dontorrent.yokohama/",
             "https://dontorrent.makeup/",
             "https://dontorrent.band/",
-,
         };
         public override string Language => "es-ES";
         public override string Type => "public";
