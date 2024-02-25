@@ -372,3 +372,12 @@ input#searchquery {
 .tagify .tagify__tag-text {
     text-transform: lowercase;
 }
+
+#searchResults .indexers .error{
+    color: red;
+}
+
+#searchResults .indexers .no-results{
+    opacity: 0.5;
+}
+
