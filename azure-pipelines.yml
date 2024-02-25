@@ -2,12 +2,12 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 21
+  minorVersion: 22
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
-  netCoreFramework: net6.0
-  netCoreSdkVersion: 6.0.x
+  netCoreFramework: net8.0
+  netCoreSdkVersion: 8.0.x
   # system.debug: true
 
 trigger:
@@ -117,7 +117,7 @@ stages:
             displayName: Build DateTimeRoutines
             # this task is not mandatory since DateTimeRoutines is build in the next task, but the purpose is to fix:
             # error MSB4018: System.IO.IOException: The process cannot access the file
-            # '/home/vsts/work/1/net6.0-linux-musl-arm/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
+            # '/home/vsts/work/1/src/DateTimeRoutines/bin/Release/netstandard2.0/DateTimeRoutines.deps.json'
             # because it is being used by another process.
             inputs:
               command: build
