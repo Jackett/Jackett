@@ -106,6 +106,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_vip
+    type: info
+    label: VIP
+    default: "On 1st March 2024 this site became VIP only. You will not be able to access the Torrents page with this indexer if you do not have a subscription membership."
   - name: username
     type: text
     label: Username
