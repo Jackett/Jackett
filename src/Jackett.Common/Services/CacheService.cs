@@ -69,7 +69,7 @@ namespace Jackett.Common.Services
                 var trackerCacheQuery = new TrackerCacheQuery
                 {
                     Created = DateTime.Now,
-                    Results = releases
+                    Results = releases.Select(r => (ReleaseInfo)r.Clone()).ToList()
                 };
 
                 var trackerCache = _cache[indexer.Id];
@@ -123,27 +123,23 @@ namespace Jackett.Common.Services
 
                 PruneCacheByTtl(); // remove expired results
 
-                var results = new List<TrackerCacheResult>();
-                foreach (var trackerCache in _cache.Values)
-                {
-                    var trackerResults = new List<TrackerCacheResult>();
-                    foreach (var query in trackerCache.Queries.Values.OrderByDescending(q => q.Created)) // newest first
-                    {
-                        foreach (var release in query.Results)
-                        {
-                            var item = MapperUtil.Mapper.Map<TrackerCacheResult>(release);
-                            item.FirstSeen = query.Created;
-                            item.Tracker = trackerCache.TrackerName;
-                            item.TrackerId = trackerCache.TrackerId;
-                            item.TrackerType = trackerCache.TrackerType;
-                            item.Peers -= item.Seeders; // Use peers as leechers
-                            trackerResults.Add(item);
-                        }
-                    }
-                    trackerResults = trackerResults.GroupBy(r => r.Guid).Select(y => y.First()).Take(300).ToList();
-                    results.AddRange(trackerResults);
-                }
-                var result = results.OrderByDescending(i => i.PublishDate).Take(3000).ToList();
+                var result = _cache.Values.SelectMany(
+                                       trackerCache => trackerCache.Queries.Values
+                                                                   .OrderByDescending(q => q.Created)
+                                                                   .SelectMany(
+                                                                       query => query.Results.Select(release =>
+                                                                           new TrackerCacheResult(release)
+                                                                           {
+                                                                               FirstSeen = query.Created,
+                                                                               Tracker = trackerCache.TrackerName,
+                                                                               TrackerId = trackerCache.TrackerId,
+                                                                               TrackerType = trackerCache.TrackerType
+                                                                           }))
+                                                                   .GroupBy(r => r.Guid)
+                                                                   .Select(y => y.First())
+                                                                   .Take(300))
+                                   .OrderByDescending(i => i.PublishDate)
+                                   .Take(3000).ToList();
 
                 _logger.Debug($"CACHE GetCachedResults / Results: {result.Count} (cache may contain more results)");
                 PrintCacheStatus();

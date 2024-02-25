@@ -308,14 +308,11 @@ namespace Jackett.Server.Controllers
                 var searchResults = t.Result.Releases;
                 var indexer = t.Result.Indexer;
 
-                return searchResults.Select(result =>
+                return searchResults.Select(result => new TrackerCacheResult(result)
                 {
-                    var item = MapperUtil.Mapper.Map<TrackerCacheResult>(result);
-                    item.Tracker = indexer.Name;
-                    item.TrackerId = indexer.Id;
-                    item.TrackerType = indexer.Type;
-                    item.Peers = item.Peers - item.Seeders; // Use peers as leechers
-                    return item;
+                    Tracker = indexer.Name,
+                    TrackerId = indexer.Id,
+                    TrackerType = indexer.Type
                 });
             }).OrderByDescending(d => d.PublishDate).ToList();
 
@@ -447,7 +444,7 @@ namespace Jackett.Server.Controllers
                     Link = new Uri(CurrentIndexer.SiteLink)
                 });
 
-                var proxiedReleases = result.Releases.Select(r => MapperUtil.Mapper.Map<ReleaseInfo>(r)).Select(r =>
+                var proxiedReleases = result.Releases.Select(r =>
                 {
                     r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
                     r.Poster = serverService.ConvertToProxyLink(r.Poster, serverUrl, r.Origin.Id, "img", "poster");
@@ -568,9 +565,8 @@ namespace Jackett.Server.Controllers
                 logger.Info($"Potato search in {CurrentIndexer.Name} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr}");
 
             var serverUrl = serverService.GetServerUrl(Request);
-            var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(r =>
+            var potatoReleases = result.Releases.Where(r => r.Link != null || r.MagnetUri != null).Select(release =>
             {
-                var release = MapperUtil.Mapper.Map<ReleaseInfo>(r);
                 release.Link = serverService.ConvertToProxyLink(release.Link, serverUrl, CurrentIndexer.Id, "dl", release.Title);
                 // Poster is not used in Potato response
                 //release.Poster = serverService.ConvertToProxyLink(release.Poster, serverUrl, CurrentIndexer.Id, "img", "poster");
@@ -589,7 +585,7 @@ namespace Jackett.Server.Controllers
                     size = (long)release.Size / (1024 * 1024), // This is in MB
                     leechers = (release.Peers ?? -1) - (release.Seeders ?? 0),
                     seeders = release.Seeders ?? -1,
-                    publish_date = r.PublishDate == DateTime.MinValue ? null : release.PublishDate.ToUniversalTime().ToString("s")
+                    publish_date = release.PublishDate == DateTime.MinValue ? null : release.PublishDate.ToUniversalTime().ToString("s")
                 };
                 return item;
             });

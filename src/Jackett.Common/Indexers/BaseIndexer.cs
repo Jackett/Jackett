@@ -661,7 +661,7 @@ namespace Jackett.Common.Indexers
                     break;
                 }
 
-                await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
+                response = await DoFollowIfRedirect(response, referrer, overrideRedirectUrl, overrideCookies, accumulateCookies);
 
                 if (accumulateCookies)
                 {
@@ -701,7 +701,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        private async Task DoFollowIfRedirect(WebResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
+        private async Task<WebResult> DoFollowIfRedirect(WebResult incomingResponse, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false)
         {
             if (incomingResponse.IsRedirect)
             {
@@ -722,8 +722,11 @@ namespace Jackett.Common.Indexers
                     Cookies = redirRequestCookies,
                     Encoding = Encoding
                 });
-                MapperUtil.Mapper.Map(redirectedResponse, incomingResponse);
+
+                return redirectedResponse;
             }
+
+            return incomingResponse;
         }
 
         protected List<string> GetAllTrackerCategories() =>
