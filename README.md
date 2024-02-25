@@ -19,9 +19,9 @@ Developer note: The software implements the [Torznab](https://torznab.github.io/
 A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
 
 #### Supported Systems
-* Windows 7 SP1 or greater
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/6.0/supported-os.md#linux)
-* macOS 10.15+ or greater
+* Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#windows)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux)
+* macOS 12.0+ (Monterey) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos)
 
 <details> <summary> <b> Supported Public Trackers </b> </summary>
 
@@ -725,7 +725,7 @@ We recommend you install Jackett as a Windows service using the supplied install
 
 To get started with using the installer for Jackett, follow the steps below:
 
-1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net60#dependencies
+1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net80#dependencies
 2. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
 3. When prompted if you would like this app to make changes to your computer, select "yes".
 4. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
@@ -802,7 +802,7 @@ On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chri
 ## Installation on macOS
 
 ### Prerequisites
-macOS 10.15+ or greater
+macOS 12.0+ (Monterey) or greater
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Binaries.macOSARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
@@ -948,8 +948,8 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net6.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net6.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net8.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net8.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
@@ -961,8 +961,8 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net6.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net6.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net8.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net8.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots

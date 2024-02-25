@@ -481,7 +481,7 @@ namespace Jackett.Server.Controllers
 
                     if (retryAfter > 0)
                     {
-                        HttpContext.Response.Headers.Add("Retry-After", $"{retryAfter}");
+                        HttpContext.Response.Headers.Append("Retry-After", $"{retryAfter}");
                     }
                 }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Jackett.Common.Models.Config;
 using Jackett.Test.TestHelpers;
 using NUnit.Framework;
@@ -14,9 +15,12 @@ namespace Jackett.Test.Server.Services
             var runtimeSettings = new RuntimeSettings();
             var dataFolder = runtimeSettings.DataFolder;
 
-            if (System.Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                var expectedUnixPath = Environment.GetEnvironmentVariable("HOME") + "/.config/Jackett";
+                var expectedUnixPath = Environment.GetEnvironmentVariable("HOME") +
+                                       (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                                           ? "/Library/Application Support"
+                                           : "/.config") + "/Jackett";
                 Assert.AreEqual(expectedUnixPath, dataFolder);
             }
             else
