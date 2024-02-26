@@ -374,10 +374,10 @@ input#searchquery {
 }
 
 #searchResults .indexers .error{
-    color: red;
+    color: Tomato;
 }
 
 #searchResults .indexers .no-results{
-    opacity: 0.5;
+    color: Grey;
 }
 
