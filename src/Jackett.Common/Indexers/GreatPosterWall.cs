@@ -45,6 +45,7 @@ namespace Jackett.Common.Indexers
                    instructionMessageOptional: null)
         {
             configData.AddDynamic("showFilename", new BoolConfigurationItem("Use the first torrent filename as the title") { Value = false });
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To keep your account active, you should log in and browse the site at least once every 120 days. Simply seeding is not currently considered an active feature of your account, so to keep your account active you can only log in and browse the site. Some scripts or automated tools may help keep your account active, but it's best to log in via your browser from time to time to ensure your account isn't marked as inactive."));
         }
 
         private TorznabCapabilities SetCapabilities()
