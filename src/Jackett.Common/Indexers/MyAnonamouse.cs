@@ -13,6 +13,7 @@ using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -44,6 +45,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataMyAnonamouse())
         {
             webclient.EmulateBrowser = false;
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To prevent your account from being disabled for inactivity, you must log in on a regular basis. You must also use your account - if you do not, your account will be disabled. If you know that you will not be able to login for an extended period of time, you can park your account in your preferences and it will not be disabled."));
         }
 
         private TorznabCapabilities SetCapabilities()
