@@ -50,6 +50,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must log in to the Aither web site with your browser once every 120 days to prevent your account from getting disabled."
 
 login:
   path: /api/torrents
