@@ -104,6 +104,10 @@ settings:
     type: info
     label: Search results
     default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and read any new mail you may have received. You cannot browse torrents with unread mail outstanding."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must log in to the Drugari web site with your browser once every 60 days to prevent your account from getting disabled."
 
 login:
   path: login.php?
@@ -211,6 +215,6 @@ search:
     minimumratio:
       text: 1.1
     minimumseedtime:
-      # 60 hours (as seconds = 60 x 60 x 60)
-      text: 216000
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # TS Special Edition v.8.0
