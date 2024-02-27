@@ -65,6 +65,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactivity grace period is three months which means that if you do not log in to the 3Dtorrents web site for 90 days, your account will be deleted. If you are VIP your will stay until the VIP period is over."
 
 login:
   path: index.php?page=login
