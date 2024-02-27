@@ -323,7 +323,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * DiscFan
  * DivTeam
  * DocsPedia
- * Dream Tracker
+ * Dream Tracker [![(invite needed)][inviteneeded]](#)
  * Drugari
  * Ebooks-Shares
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
@@ -607,7 +607,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * UnionGang
  * Universal-Torrents
  * UnlimitZ
- * Upload.cx [![(invite needed)][inviteneeded]](#)
+ * upload.cx
  * UTOPIA
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * White Angel
