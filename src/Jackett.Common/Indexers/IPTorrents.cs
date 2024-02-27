@@ -88,6 +88,7 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("sort", sort);
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "All members are required to log into their account at least every 89 days or you will be deleted without warning."));
         }
 
         private TorznabCapabilities SetCapabilities()
