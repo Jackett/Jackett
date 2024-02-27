@@ -55,9 +55,12 @@ caps:
     - {id: 57, cat: TV/Foreign, desc: "مسلسلات آسيوية (Asian Series)"}
     - {id: 42, cat: Movies/Foreign, desc: "افلام اجنبيه (Foreign)"}
     - {id: 74, cat: Movies/HD, desc: "جودة عالية HD"}
-    - {id: 76, cat: Movies/3D, desc: "ثلاثي الابعاد (3D)"}
+    - {id: 113, cat: TV/Foreign, desc: "مسلسلات لاتينية مترجم.مدبلج(Latin Series"}
     - {id: 59, cat: Movies/Foreign, desc: "افلام آسيوية (Asian Movies)"}
     - {id: 86, cat: Movies/Foreign, desc: "افلام هنديه (Indian Movies)"}
+    - {id: 114, cat: Movies/Foreign, desc: "افلام لاتينية مترجم.مدبلج (Latin Movies)"}
+    - {id: 115, cat: TV/Foreign, desc: "مسلسلات تركية مترجم.مدبلج (Turkish Series)"}
+    - {id: 116, cat: Movies/Foreign, desc: "افلام تركية مترجم.مدبلج (Turkish Movies)"}
     # انمي مدبلج عربي Anime Arabic dubbed
     - {id: 98, cat: TV/Anime, desc: "افلام (Movies)"}
     - {id: 100, cat: TV/Anime, desc: "مسلسلات (Series)"}
