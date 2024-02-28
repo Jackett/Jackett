@@ -53,6 +53,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Your membership requires that you stay active at JPTVclub. In order to not be disabled, you are required to login to the site at least once every 90 days. If your account gets disabled, you will recive an email informing you about it, along with instructions on how to get enabled again."
 
 login:
   path: /api/torrents
