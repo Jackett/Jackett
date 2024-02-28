@@ -53,6 +53,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Not entering in a month leads to the account being deactivated or banned. If the account does not register downloads in a month, it will be banned with the User rank, the other ranks will be given a time determined by the staff."
 
 login:
   path: /api/torrents
