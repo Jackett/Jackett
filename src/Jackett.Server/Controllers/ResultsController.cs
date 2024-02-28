@@ -316,7 +316,7 @@ namespace Jackett.Server.Controllers
             ConfigureCacheResults(manualResult.Results);
 
             // Log info
-            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name));
+            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name).OrderBy(n => n, StringComparer.OrdinalIgnoreCase));
             var cacheStr = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Any(t => t.Result.IsFromCache) ? " (from cache)" : "";
 
             stopwatch.Stop();
