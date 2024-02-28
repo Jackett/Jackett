@@ -57,6 +57,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The inactivation system was created with the purpose of encouraging member participation. This way, after 7 days without accessing the website, 30 BONs will be deducted per day. If your account balance reaches 0 and you don't have any torrents being seeded, it will be automatically deactivated."
 
 login:
   path: /api/torrents
