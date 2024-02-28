@@ -52,6 +52,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Any accounts that are Not Active, Uploading/Downloading will be Pruned Without Warning."
 
 login:
   path: /api/torrents
