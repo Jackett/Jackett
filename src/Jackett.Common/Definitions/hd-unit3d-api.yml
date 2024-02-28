@@ -49,6 +49,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts will be deleted as scheduled by Staff."
 
 login:
   path: /api/torrents
