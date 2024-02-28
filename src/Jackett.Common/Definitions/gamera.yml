@@ -60,6 +60,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ul><li>.Veteran User or above would never be deleted.</li><li>Elite User or above would never be deleted if parked (at User CP).</li><li>Non-parked accounts would be deleted if users have not logged in for more than 365 days in a row.</li></ul>"
 
 login:
   method: cookie
