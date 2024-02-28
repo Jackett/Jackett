@@ -79,6 +79,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "After 6 months without any log in or usage of your account, it will be pruned and can only be reactivated by a staff member. Make sure to keep your account active and do not use programs to keep your account active, as your account may still get pruned."
 
 login:
   path: /api/torrents
