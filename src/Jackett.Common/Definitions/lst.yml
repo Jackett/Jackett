@@ -54,6 +54,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts get disabled after 90 days of no logins or any sort of activity. Accounts will also get soft deleted after 120 days."
 
 login:
   path: /api/torrents
