@@ -19,6 +19,8 @@ namespace Jackett.Common.Models.DTO
         public int Results { get; set; }
         [DataMember]
         public string Error { get; set; }
+        [DataMember]
+        public long ElapsedTime { get; set; }
     }
 
     [DataContract]

@@ -272,6 +272,7 @@ namespace Jackett.Server.Controllers
                 {
                     resultIndexer.Status = ManualSearchResultIndexerStatus.OK;
                     resultIndexer.Results = t.Result.Releases.Count();
+                    resultIndexer.ElapsedTime = t.Result.ElapsedTime;
                     resultIndexer.Error = null;
                     indexer = t.Result.Indexer;
                 }
@@ -279,6 +280,7 @@ namespace Jackett.Server.Controllers
                 {
                     resultIndexer.Status = ManualSearchResultIndexerStatus.Error;
                     resultIndexer.Results = 0;
+                    resultIndexer.ElapsedTime = 0;
                     resultIndexer.Error = ((IndexerException)t.Exception.InnerException).ToString();
                     indexer = ((IndexerException)t.Exception.InnerException).Indexer;
                 }
@@ -286,6 +288,7 @@ namespace Jackett.Server.Controllers
                 {
                     resultIndexer.Status = ManualSearchResultIndexerStatus.Unknown;
                     resultIndexer.Results = 0;
+                    resultIndexer.ElapsedTime = 0;
                     resultIndexer.Error = null;
                 }
 
