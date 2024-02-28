@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
@@ -48,14 +49,21 @@ namespace Jackett.Common.Indexers.Meta
             query = query.Clone();
 
             if (query.Offset > 0 || !CanHandleQuery(query) || !CanHandleCategories(query, true))
-                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), false);
+                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), 0, false);
 
             try
             {
+                var sw = new Stopwatch();
+
+                sw.Start();
+
                 var results = await PerformQuery(query);
+
+                sw.Stop();
+
                 // the results are already filtered and fixed by each indexer
                 // some results may come from cache, but we can't inform without refactor the code
-                return new IndexerResult(this, results, false);
+                return new IndexerResult(this, results, sw.ElapsedMilliseconds, false);
             }
             catch (Exception ex)
             {

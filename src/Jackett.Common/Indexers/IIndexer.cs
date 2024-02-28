@@ -13,12 +13,14 @@ namespace Jackett.Common.Indexers
     {
         public IIndexer Indexer { get; set; }
         public IEnumerable<ReleaseInfo> Releases { get; set; }
+        public long ElapsedTime { get; set; }
         public bool IsFromCache;
 
-        public IndexerResult(IIndexer indexer, IEnumerable<ReleaseInfo> releases, bool isFromCache)
+        public IndexerResult(IIndexer indexer, IEnumerable<ReleaseInfo> releases, long elapsedTime, bool isFromCache)
         {
             Indexer = indexer;
             Releases = releases;
+            ElapsedTime = elapsedTime;
             IsFromCache = isFromCache;
         }
     }

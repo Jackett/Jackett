@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -323,27 +324,34 @@ namespace Jackett.Common.Indexers
             var queryCopy = query.Clone();
 
             if (!CanHandleQuery(queryCopy) || !CanHandleCategories(queryCopy, isMetaIndexer))
-                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), false);
+                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), 0, false);
 
             if (!SupportsPagination && queryCopy.Offset > 0)
-                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), false);
+                return new IndexerResult(this, Array.Empty<ReleaseInfo>(), 0, false);
 
             if (queryCopy.Cache)
             {
                 var cachedReleases = cacheService.Search(this, queryCopy);
                 if (cachedReleases != null)
-                    return new IndexerResult(this, cachedReleases, true);
+                    return new IndexerResult(this, cachedReleases, 0, true);
             }
 
             try
             {
+                var sw = new Stopwatch();
+
+                sw.Start();
+
                 var results = await PerformQuery(queryCopy);
-                results = FilterResults(queryCopy, results);
-                results = FixResults(queryCopy, results);
+
+                sw.Stop();
+
+                results = FilterResults(queryCopy, results).ToList();
+                results = FixResults(queryCopy, results).ToList();
                 cacheService.CacheResults(this, queryCopy, results.ToList());
                 errorCount = 0;
                 expireAt = DateTime.Now.Add(HealthyStatusValidity);
-                return new IndexerResult(this, results, false);
+                return new IndexerResult(this, results, sw.ElapsedMilliseconds, false);
             }
             catch (TooManyRequestsException ex)
             {

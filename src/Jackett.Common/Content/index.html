@@ -580,9 +580,12 @@
             >
             {{Name}}
             {{#if Error}}
-                    (<span title="{{Error}}"<b>Error</b></span>)
-                {{~else~}}
-                    ({{~Results~}})
+                (<span title="{{Error}}"<b>Error</b></span>)
+            {{~else~}}
+                ({{~Results~}})
+                {{#if ElapsedTime}}
+                    <span title="Elapsed time">[{{~ElapsedTime~}}ms]</span>
+                {{~/if~}}
             {{~/if~}}
             {{~#if @last~}}
                     .
@@ -782,6 +785,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20240224v1"></script>
+    <script type="text/javascript" src="../custom.js?changed=20240229v1"></script>
 </body>
 </html>
