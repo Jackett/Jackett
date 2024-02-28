@@ -64,6 +64,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you have not logged in for 90 days, the user is automatically deleted."
 
 login:
   path: /api/torrents
