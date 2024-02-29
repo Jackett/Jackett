@@ -152,7 +152,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
  * AniDUB
- * Anime-Free
  * AnimeLayer
  * ArenaBG
  * BookTracker
