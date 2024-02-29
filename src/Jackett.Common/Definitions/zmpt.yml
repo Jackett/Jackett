@@ -66,7 +66,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Users with Dou Sheng and above levels will be retained forever</li><li>Dou Huang and above level users will not have their accounts deleted after parking their accounts (in the control panel)</li><li>Users who have parked their accounts will be deleted if they do not log in for 180 consecutive days</li><li>Users whose accounts have not been parked will have their accounts banned if they do not log in for 45 consecutive days</li><li>Users with no traffic (ie, upload/download data are both 0) will have their accounts banned if they do not log in for 7 consecutive days.</li></ol>"
+    default: "Account retention rules:<ol><li>Users with Dou Sheng and above will be retained forever</li><li>Dou Huang and above will not have their accounts deleted after parking their accounts (in the control panel)</li><li>Users who have parked their accounts will be deleted if they do not log in for 180 consecutive days</li><li>Users whose accounts have not been parked will have their accounts banned if they do not log in for 45 consecutive days</li><li>Users with no traffic (ie, upload/download data are both 0) will have their accounts banned if they do not log in for 7 consecutive days.</li></ol>"
 
 login:
   method: cookie
