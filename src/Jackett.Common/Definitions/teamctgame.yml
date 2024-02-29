@@ -118,6 +118,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Any account with an Uploaded and Downloaded amount of 0 will be deleted if users have not logged in for more than 30 days</li><li>Any account inactive for 60 days is automatically deleted</li><li>Any account On Vacation and inactive for 180 days is automatically deleted.</li></ol>"
 
 login:
   path: login.php

@@ -59,6 +59,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their accounts deleted after parking their accounts (in the control panel)</li><li>Users who have parked their accounts will be deleted if they do not log in for 180 consecutive days</li><li>Users whose accounts have not been parked will have their accounts deleted if they do not log in for 30 consecutive days</li><li>Users who have registered without traffic for 15 days (that is, the upload/download data are both 0) will be deleted directly.</li></ol>"
 
 login:
   path: takelogin.php

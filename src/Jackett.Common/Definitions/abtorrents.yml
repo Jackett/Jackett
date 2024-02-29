@@ -101,7 +101,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ul><li>Any account that has unread PMs older than 14 days or has not logged in for 30 days will be suspended.</li><li>Any account that has not been logged into for 90 days is deemed inactive and will thus be purged.</li><li>Any account that has not been logged into for 30 days is deemed inactive and will be put on suspension until User logs in again.</li><li>User’s stats, points, and history are irrevocably lost when purged.</li><li>Logging into the site is the ONLY way to keep an account active.</li><li>SEEDING ONLY does NOT constitute site activity.</li></ul>"
+    default: "Account retention rules:<ol><li>Any account that has unread PMs older than 14 days or has not logged in for 30 days will be suspended</li><li>Any account that has not been logged into for 90 days is deemed inactive and will thus be purged</li><li>Any account that has not been logged into for 30 days is deemed inactive and will be put on suspension until User logs in again</li><li>User’s stats, points, and history are irrevocably lost when purged</li><li>Logging into the site is the ONLY way to keep an account active</li><li>SEEDING ONLY does NOT constitute site activity.</li></ol>"
 
 login:
   method: cookie
