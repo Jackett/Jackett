@@ -74,6 +74,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts are automatically deactivated after 4 months of inactivity (no connection to the site)."
 
 login:
   method: form
