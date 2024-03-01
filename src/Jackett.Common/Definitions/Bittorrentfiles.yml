@@ -127,6 +127,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts of users, power users and mega users will be permanently deleted from the database after 125 days! Torrents in your share don't count as activity - only logging in again counts! You can extend this period to 250 days by setting your account to parking. You can find the option to do this under Edit Profile."
 
 login:
   path: signin.php
