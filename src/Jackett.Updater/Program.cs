@@ -665,6 +665,7 @@ namespace Jackett.Updater
                 "Definitions/turktracker.yml",
                 "Definitions/twilight.yml",
                 "Definitions/twilightszoom.yml",
+                "Definitions/twisted-music.yml",
                 "Definitions/u-torrents.yml",
                 "Definitions/uhd-heaven.yml",
                 "Definitions/ultimategamerclub.yml",
