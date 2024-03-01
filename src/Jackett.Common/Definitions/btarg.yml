@@ -65,6 +65,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Por página Torrents:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Those new accounts that do not register a transfer or have any movement in the forum after 4 weeks will be disabled."
 
 login:
   path: tracker/takelogin.php
