@@ -90,6 +90,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts with nothing uploaded/ downloaded will be disabled after 4 weeks."
 
 login:
   path: Main/?act=Login
