@@ -35,6 +35,8 @@ caps:
     - {id: 27, cat: Audio, desc: "Music: Pack"}
     - {id: 53, cat: PC/Games, desc: "Games: Pc"}
     - {id: 54, cat: Console, desc: "Games: PsP"}
+    - {id: 76, cat: Audio/Audiobook, desc: "Books: Audio"}
+    - {id: 77, cat: Books/EBook, desc: "Books: eBooks"}
 
   modes:
     search: [q]
