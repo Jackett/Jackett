@@ -62,6 +62,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The tracker has a system for deleting inactive accounts after 6 months from your last visit to the tracker."
 
 login:
   path: takelogin.php
