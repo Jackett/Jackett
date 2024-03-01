@@ -34,6 +34,10 @@ settings:
     options:
       2: desc
       1: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must log in periodically. If the member is absent from the website for a period of 3 months, the account will be deleted without prior warning."
 
 caps:
   categorymappings:
