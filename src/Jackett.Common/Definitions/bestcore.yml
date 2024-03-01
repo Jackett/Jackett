@@ -95,6 +95,10 @@ settings:
     type: info
     label: About login error
     default: If you get a <b>Login Failed, got redirected.</b> error during your config <i>save</i> then most likely you have used an incorrect username or password.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ol><li>Users who have not accessed the site for 180 days will be deleted!</li><li>If the vacation mode is set, the system will not delete the given user for 365 days.</li></ol>"
 
 login:
   path: takelogin.php
