@@ -84,6 +84,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You will be immediately banned if you have not logged in for more than 6 weeks."
 
 login:
   path: takelogin.php
