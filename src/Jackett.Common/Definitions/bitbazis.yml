@@ -73,6 +73,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrentek száma egy oldalon:</b> setting to <b>50</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If the user does not access the site for 1 month, he will receive an e-mail notification. If you stay away for 9 months, your account will be suspended and deleted. After the 9-month absence, the user cannot register again."
 
 login:
   method: cookie
