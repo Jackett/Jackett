@@ -82,6 +82,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Rules for deletion:<ol><li>Users who have registered at least 4 weeks ago and have uploaded 0 bytes will be deleted</li><li>Users who have not accessed the site for 1 year will be permanently deleted</li><li>Users who have not accessed the site for 4 weeks will be deleted.</li></ol>"
 
 login:
   path: login.php
