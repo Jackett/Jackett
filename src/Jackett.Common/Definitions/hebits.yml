@@ -55,6 +55,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "There is an automatic system for blocking inactive accounts. The system will block any account below Heb Prophet rank without activity for at least 90 days."
 
 login:
   method: cookie
