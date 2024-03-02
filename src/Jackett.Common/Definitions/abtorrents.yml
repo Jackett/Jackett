@@ -145,25 +145,23 @@ search:
       selector: a[href^="filelist.php?id="]
     date_day:
       # auto adjusted by site account profile
-      # Yesterday, 6:00 AM
-      selector: td:nth-last-child(5) > span[title*="day"]
-      attribute: title
+      # Yesterday 6:00 AM
+      selector: td:nth-last-child(2) > div:contains("day")
       optional: true
       filters:
         - name: fuzzytime
     date_year:
       # auto adjusted by site account profile
-      # Aug 6 2021, 7:25 PM
-      selector: td:nth-last-child(5) > span[title]:not([title*="day"])
-      attribute: title
+      # Aug 6 2021 7:25 PM
+      selector: td:nth-last-child(2) > div:not(:contains("day"))
       optional: true
       filters:
         - name: dateparse
-          args: "MMM d yyyy, h:mm tt"
+          args: "MMM d yyyy h:mm tt"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-last-child(4)
+      selector: td:nth-last-child(4) div:first-child
     grabs:
       selector: a[href^="snatches.php?id="]
     seeders:
