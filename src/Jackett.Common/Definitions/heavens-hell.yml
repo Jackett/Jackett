@@ -13,6 +13,7 @@ caps:
     - {id: 39, cat: Audio, desc: "Albums"}
     - {id: 40, cat: Audio, desc: "Alternative"}
     - {id: 4, cat: PC, desc: "Apps"}
+    - {id: 50, cat: PC, desc: "Apps -- Miscellaneous"}
     - {id: 11, cat: Audio, desc: "Billboard Top 100"}
     - {id: 7, cat: Audio, desc: "Blues"}
     - {id: 8, cat: Audio, desc: "Chillout"}
@@ -41,7 +42,8 @@ caps:
     - {id: 18, cat: Audio, desc: "Karaoke"}
     - {id: 26, cat: Audio, desc: "Mastermix"}
     - {id: 28, cat: Audio, desc: "Metal"}
-    - {id: 27, cat: Audio/MP3, desc: "MP3"}
+    - {id: 27, cat: Audio/MP3, desc: "MP3 NEW RELEASES"}
+    - {id: 51, cat: Audio/MP3, desc: "MP3 -- Other MP3"}
     - {id: 33, cat: Audio, desc: "Music Packs"}
     - {id: 32, cat: Audio/Video, desc: "Music Videos"}
     - {id: 29, cat: Audio, desc: "Oldies"}
