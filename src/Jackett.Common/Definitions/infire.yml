@@ -122,6 +122,10 @@ settings:
     options:
       DESC: desc
       ASC: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The period of inactivity after which we delete your account is 3 months. VIP users are not deleted."
 
 login:
   path: login.php
