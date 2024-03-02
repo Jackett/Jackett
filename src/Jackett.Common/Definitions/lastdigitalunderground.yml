@@ -10,29 +10,34 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Films: Movies"}
-    - {id: 18, cat: Movies/Other, desc: "Films: Silent"}
-    - {id: 8, cat: Movies/Other, desc: "Films: Anime"}
+    - {id: 1, cat: Movies, desc: "Films: General"}
     - {id: 21, cat: Movies/3D, desc: "Films: 3D"}
-    - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
-    - {id: 20, cat: TV/Other, desc: "Stand-up Specials"}
-    - {id: 24, cat: Movies/Other, desc: "Holiday: Films & Shorts"}
-    - {id: 25, cat: Movies/Other, desc: "Films: Musicals"}
+    - {id: 25, cat: Movies/Other, desc: "Films: Musical"}
+    - {id: 18, cat: Movies/Other, desc: "Films: Silent"}
+    - {id: 24, cat: Movies/Other, desc: "Films: Holiday"}
     - {id: 19, cat: Movies/Other, desc: "Films: Shorts"}
-    - {id: 12, cat: Movies/Other, desc: "Films: FanEdits"}
-    - {id: 22, cat: Movies/Other, desc: "Films: Needs Sub/Dub"}
-    - {id: 2, cat: TV, desc: "Series: TV"}
-    - {id: 9, cat: TV/Anime, desc: "Series: Anime"}
-    - {id: 6, cat: XXX, desc: "XXX: Standard"}
+    - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
+    - {id: 27, cat: Movies/Other, desc: "Films SP1: Dub or Vid issues"}
+    - {id: 22, cat: Movies/Foreign, desc: "Films SP2: No English"}
+    - {id: 28, cat: Movies/Other, desc: "Films SP3: Other"}
+    - {id: 9, cat: TV/Anime, desc: "Anime: OVAs/Series"}
+    - {id: 8, cat: Movies/Other, desc: "Anime: Films"}
+    - {id: 20, cat: TV/Other, desc: "Stand-up"}
+    - {id: 12, cat: Movies/Other, desc: "FanEdits"}
+    - {id: 2, cat: TV, desc: "Series/TV: General"}
+    - {id: 29, cat: TV/Foreign, desc: "Series/TV: No English"}
+    - {id: 7, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 3, cat: Audio, desc: "Music: Audio"}
+    - {id: 16, cat: Audio/Video, desc: "Music: Videos"}
+    - {id: 6, cat: XXX, desc: "XXX: Mainstream Smut [TMDB]"}
+    - {id: 30, cat: XXX, desc: "XXX: Filthy Smut [No TMDB]"}
     - {id: 15, cat: XXX/Pack, desc: "XXX: MegaPacks"}
     - {id: 10, cat: XXX, desc: "XXX: Hentai"}
     - {id: 14, cat: XXX/Other, desc: "XXX: Creators Corner"}
     - {id: 13, cat: XXX/Other, desc: "XXX: Other"}
     - {id: 11, cat: XXX/Other, desc: "XXX: Zoo"}
-    - {id: 7, cat: Books/EBook, desc: "Ebooks"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 16, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 23, cat: Other, desc: "Other or Not sure"}
+    - {id: 26, cat: Other, desc: "FuckedUpShit"}
+    - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
 
   modes:
     search: [q]
