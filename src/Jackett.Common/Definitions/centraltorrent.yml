@@ -72,6 +72,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "User accounts of the Power User class and lower, inactive for a period longer than 42 days, are deleted. Therefore, if for some reason you cannot access Central Torrent for some time, park your account. Although you won't be able to download torrents, you can be sure that you won't have to log in for 64 days. However, if after this time you do not log in to your account, it will be deleted."
 
 login:
   path: login.php
