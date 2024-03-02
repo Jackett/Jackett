@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Torrent911 and https://www.protege-torrent.com/T911 and https://www.protege-torrent.com/Oxtorrent
 links:
-  - https://www.torrent911.bz/
+  - https://www.torrent911.ac/
   - https://www.t911.ws/
   - https://www.oxtorrent.pm/
   - https://oxtorrent.unblockninja.com/
@@ -18,9 +18,6 @@ legacylinks:
   - https://www.protege-liens.com/
   - https://www.rantop.org/
   - https://www.t911.net/
-  - https://oxtorrent.unblockit.blue/ # proxy for *.co, a clone without derniers
-  - https://oxtorrent.nocensor.sbs/ # proxy for *.co, a clone without derniers
-  - https://www.torrent911.net/
   - https://www.torrent911.org/
   - https://www.torrent911.cc/
   - https://www.t911.me/
@@ -36,6 +33,7 @@ legacylinks:
   - https://www.torrent911.pw/
   - https://www.torrent911.cx/
   - https://www.torrent911.vc/
+  - https://www.torrent911.bz/
 
 caps:
   categorymappings:
