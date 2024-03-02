@@ -55,6 +55,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "To keep your account active, sign in and browse the site at least once every 120 days. Seeding torrents does not count as account activity, so in order to remain active you need to sign in and browse the site. Pornstar Trainee (and above) have a longer inactivity timer, but logging in regularly is recommended to learn about special events and new features."
 
 login:
   path: login
