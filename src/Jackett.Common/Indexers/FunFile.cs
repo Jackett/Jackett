@@ -45,6 +45,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "User accounts that are inactive for more than 42 days (ie haven't logged into the site) and NOT PARKED are automatically AND irretrievably deleted. Those with Donor VIP status are immune to the 42 day purging up to 1 year."));
         }
 
         private TorznabCapabilities SetCapabilities()
