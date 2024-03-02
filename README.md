@@ -297,7 +297,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * CeskeForum
  * CGPeers [![(invite needed)][inviteneeded]](#)
  * CHDBits [![(invite needed)][inviteneeded]](#)
- * cheggit
  * ChileBT
  * Cinemageddon [![(invite needed)][inviteneeded]](#)
  * CinemaMovieS_ZT

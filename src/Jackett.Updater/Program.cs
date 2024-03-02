@@ -329,6 +329,7 @@ namespace Jackett.Updater
                 "Definitions/casstudiotv.yml",
                 "Definitions/ccfbits.yml",
                 "Definitions/channelx.yml",
+                "Definitions/cheggit.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cilipro.yml",
                 "Definitions/cinefilhd.yml",
