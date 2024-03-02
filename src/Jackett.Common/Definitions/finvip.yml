@@ -82,7 +82,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "If you do not log into your account once for three months, i.e. your username is considered "dead", it will be automatically deleted from the system."
+    default: "If you do not log into your account once for three months, i.e. your username is considered 'dead', it will be automatically deleted from the system."
 
 login:
   path: index.php?page=login
