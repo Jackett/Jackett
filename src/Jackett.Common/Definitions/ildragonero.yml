@@ -215,9 +215,9 @@ search:
         - name: regexp
           args: "» (.*?) »"
         - name: re_replace
-          args: ["oggi", "today"]
+          args: ["(?i)\\boggi\\b", "today"]
         - name: re_replace
-          args: ["ieri", "yesterday"]
+          args: ["(?i)\\bieri\\b", "yesterday"]
         - name: fuzzytime
     date_time:
       # » 26 minuti fa »
@@ -228,7 +228,7 @@ search:
         - name: regexp
           args: "» (.*?) »"
         - name: re_replace
-          args: ["\\bminut[oi] fa\\b", "minutes ago"]
+          args: ["(?i)\\bminut[oi] fa\\b", "minutes ago"]
         - name: timeago
     date_year:
       # » 04/11/2023, 7:05 »
@@ -238,8 +238,6 @@ search:
       filters:
         - name: regexp
           args: "» (.*?) »"
-        - name: re_replace
-          args: ["\\bminut[oi] fa\\b", "minutes ago"]
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
