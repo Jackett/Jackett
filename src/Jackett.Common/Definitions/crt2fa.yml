@@ -52,6 +52,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "New members must generate some torrent activity (upload, download, or cross-seed) in their account within the first 30 days of joining, otherwise their account will be automatically disabled."
 
 login:
   method: cookie
