@@ -72,6 +72,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you don't log in, you will be deleted for inactivity after a few months."
 
 login:
   path: login.php
