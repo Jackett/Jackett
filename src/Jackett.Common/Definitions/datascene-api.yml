@@ -151,6 +151,8 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)^None$", ""]
+        - name: re_replace
           args: ["(?i)(All Sex)", "All_Sex"]
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]

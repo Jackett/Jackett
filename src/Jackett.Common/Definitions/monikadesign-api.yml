@@ -123,6 +123,8 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)^None$", ""]
+        - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: replace
           args: [" & ", "_&_"]

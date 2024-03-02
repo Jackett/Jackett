@@ -121,6 +121,8 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)^None$", ""]
+        - name: re_replace
           args: ["(?i)(Екшн і Пригоди)", "Екшн_і_Пригоди"]
         - name: re_replace
           args: ["(?i)(Мильна опера)", "Мильна_опера"]
