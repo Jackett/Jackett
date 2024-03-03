@@ -68,6 +68,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must login to the site at least every 119 days. If you get to the 120th day without logging in, your account will be Deleted/Pruned automatically by the system."
 
 login:
   path: loginproc/
