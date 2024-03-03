@@ -77,6 +77,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataBasicLoginWith2FA())
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Accounts are disabled for inactivity after twelve months. To prevent inactivity pruning, browse the site while being logged in. Seeding does not count as 'activity' (actively using site)."));
         }
 
         private TorznabCapabilities SetCapabilities()
