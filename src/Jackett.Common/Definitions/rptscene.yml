@@ -76,6 +76,10 @@ settings:
     type: info
     label: Search results
     default: "If you are not getting results, then access the site with your browser and mark as read all PMs."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Be active here, you must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). The accounts inactive for 3 months are deleted."
 
 login:
   path: account-login.php
