@@ -103,6 +103,10 @@ settings:
     options:
       DESC: desc
       ASC: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "After 8 weeks of inactivity, the account will be automatically deleted."
 
 login:
   path: login.php
