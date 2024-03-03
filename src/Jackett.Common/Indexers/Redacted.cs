@@ -7,6 +7,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -39,6 +40,7 @@ namespace Jackett.Common.Indexers
                 )
         {
             webclient.EmulateBrowser = false; // Issue #9751
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To keep your account active, sign in and browse the site at least once every 120 days. Seeding torrents does not count as account activity, so in order to remain active you need to sign in and browse the site. Some scripts or automated tools may be detected as activity on your account, but it is best to sign in with a browser from time to time just to make sure you will not be flagged as inactive. Donors and certain user classes (Power User+) are exempt from automatic account disabling due to inactivity. If you wish to always maintain an active account consider donating or reaching a higher user class."));
         }
 
         private TorznabCapabilities SetCapabilities()
