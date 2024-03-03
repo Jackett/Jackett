@@ -5,8 +5,6 @@ description: "RockBox Semi-Private site dedicated to HEAVY METAL/ROCK MUSIC. Thi
 language: en-US
 type: semi-private
 encoding: UTF-8
-certificates:
-  - 7d8307e7d5757945dd0119c83fbf07f8935c0227 # Expired 25 Feb 2024
 links:
   - https://rawkbawx.rocks/
 
