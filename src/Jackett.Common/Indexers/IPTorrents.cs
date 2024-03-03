@@ -193,7 +193,7 @@ namespace Jackett.Common.Indexers
         {
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
-            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "44E390F897BC01083CE3DB0E8266A210735470E3"); // for *.octopus.town  expired 02/Sep/23
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "1C54573353A97C17DD2344E9E7094848046A8CDA"); // for *.octopus.town  expired 01/Mar/24
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
