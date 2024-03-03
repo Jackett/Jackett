@@ -65,6 +65,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Covers per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactivity pruning is enabled. Your currently seeding torrents are not considered, only your page loads. Inactivity pruning is disabled for Merit+ user-classes. When enabled, your account will be automatically disabled if one page load is not made at least once every 120 days."
 
 login:
   path: login.php
