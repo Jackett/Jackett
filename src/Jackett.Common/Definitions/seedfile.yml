@@ -57,6 +57,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Typically, (unparked) accounts are deleted after one year from last access. With account parking, the maximum period of inactivity is 2 years, after which the account will be deleted."
 
 login:
   path: takelogin.php
