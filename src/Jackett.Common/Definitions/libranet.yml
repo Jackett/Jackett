@@ -27,6 +27,18 @@ caps:
     music-search: [q]
     book-search: [q]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you do not visit the site for 90 days, the system may delete it due to inactivity."
+
 login:
   path: takelogin.php
   method: post
