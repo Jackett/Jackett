@@ -63,6 +63,10 @@ settings:
     options:
       down: desc
       up: asc
+  - name: info_activity
+    type: info
+    label: How long does my account stay if it is inactive?
+    default: "12 weeks exactly. You will need to log in before that amount of time has elapsed to keep your account active."
 
 login:
   method: cookie
