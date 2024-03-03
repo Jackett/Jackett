@@ -7,6 +7,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -41,6 +42,7 @@ namespace Jackett.Common.Indexers
                    usePassKey: false,
                    instructionMessageOptional: "<ol><li>Go to Orpheus's site and open your account settings.</li><li>Under <b>Access Settings</b> click on 'Create a new token'</li><li>Give it a name you like and click <b>Generate</b>.</li><li>Copy the generated API Key and paste it in the above text field.</li></ol>")
         {
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To keep your account active, sign in and browse the site at least once every 120 days. Seeding torrents does not count as account activity, so in order to remain active you need to sign in and browse the site. Power Users (and above) are immune to the inactivity timer, but logging in regularly is recommended to learn about special events and new features. Donors are exempt from automatic account disabling due to inactivity. If you wish to always maintain an active account consider donating."));
         }
 
         private TorznabCapabilities SetCapabilities()
