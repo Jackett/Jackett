@@ -61,6 +61,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts are set as inactive by the system after 180 days. After 270 days in inactive status, the accounts are automatically deleted from the system."
 
 login:
   path: /api/torrents
