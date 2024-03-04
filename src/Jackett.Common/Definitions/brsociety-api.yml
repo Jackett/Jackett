@@ -51,6 +51,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Your account will be considered inactive if it exceeds 90 days without you logging in to the Website. After 90 days of inactivity (i.e., 180 days without login) it will be deleted from the tracker."
 
 login:
   path: /api/torrents
