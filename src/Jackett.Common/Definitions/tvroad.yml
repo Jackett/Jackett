@@ -151,6 +151,10 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Any inactive account will be permanently deleted depending on your rank:<ul><li>User : Deletion after three months of inactivity</li><li>PowerUser : Deletion after six months of inactivity<li>Uploader : Deletion after six months of inactivity</li><li>TvRoadien : Deletion after twelve months of inactivity.</li></ul>"
 
 login:
   path: TvRoad/Connexion
