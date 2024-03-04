@@ -32,6 +32,7 @@ caps:
     - {id: 7, cat: Books/EBook, desc: "Culture: Ebooks"}
     - {id: 3, cat: Audio, desc: "Culture: Music"}
     - {id: 16, cat: Audio/Video, desc: "Culture: Music Videos"}
+    - {id: 34, cat: Audio/Audiobook, desc: "Culture: Audio Books"}
     - {id: 6, cat: XXX, desc: "XXX: Mainstream Smut [TMDB]"}
     - {id: 30, cat: XXX, desc: "XXX: Filthy Smut [No TMDB]"}
     - {id: 15, cat: XXX/Pack, desc: "XXX: MegaPacks"}
