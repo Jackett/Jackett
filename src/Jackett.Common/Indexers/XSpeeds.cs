@@ -70,6 +70,7 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
 
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Filter freeleech only") { Value = false });
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Accounts with no activity for 30 days will automatically be deleted. Note: The activity has to be a login on site, meaning that download client, IRC and Discord are NOT counted as site activity. If you have to be away from site for a prolonged time, you can park your account up to 60 days in the User CP area."));
         }
 
         private TorznabCapabilities SetCapabilities()
