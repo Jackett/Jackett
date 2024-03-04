@@ -105,7 +105,7 @@ settings:
   - name: ip_filtering
     type: info
     label: "IP Filtering"
-    default: "Zamunda.net allows only Bulgarian IP addressess. A <b>FlareSolverr</b> error means your IP was not accepted."
+    default: "Zamunda occasionally blocks Non-Bulgarian IP addresses. A <b>FlareSolverr</b> error means your IP was not accepted."
 
 login:
   path: takelogin.php
