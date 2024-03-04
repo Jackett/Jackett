@@ -54,6 +54,10 @@ settings:
     type: info
     label: Thank you comment
     default: This site requires you to leave a Thank You comment before you can download. Enter your personalised comment above.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Your account will be deleted after 90 days of not logging in to the site."
 
 login:
   path: login.php
