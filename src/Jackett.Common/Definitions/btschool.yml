@@ -47,6 +47,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ul><li>Packed accounts would be deleted if users have not logged in for more than 365 days in a row.</li><li>Unpacked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 30 days in a row.</li></ul>"
 
 login:
   path: login.php
