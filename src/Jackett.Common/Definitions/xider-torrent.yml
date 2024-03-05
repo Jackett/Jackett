@@ -16,6 +16,8 @@ caps:
     - {id: 7, cat: Movies/DVD, desc: "Film/DVD/Hun"}
     - {id: 10, cat: Movies/DVD, desc: "Film/DVD9/Eng"}
     - {id: 9, cat: Movies/DVD, desc: "Film/DVD9/Hun"}
+    - {id: 37, cat: Movies/HD, desc: "Film/FHD/Eng"}
+    - {id: 36, cat: Movies/HD, desc: "Film/FHD/Hun"}
     - {id: 12, cat: Movies/HD, desc: "Film/HD/Eng"}
     - {id: 11, cat: Movies/HD, desc: "Film/HD/Hun"}
     - {id: 2, cat: Movies/SD, desc: "Film/SD/Eng"}
