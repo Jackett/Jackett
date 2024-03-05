@@ -60,6 +60,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ul><li>Temporarily locked accounts will be deleted if not logged in within 90 days.</li><li>Accounts that are not temporarily locked will be deleted if they do not log in within 60 days.</li><li>Accounts with no storage for uploads and downloads will be deleted if they do not log in within 30 days or have registered within 14 days.</li></ul>"
 
 login:
   path: login.php

@@ -74,6 +74,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>每页种子数:每页显示</b><i>(Torrents per page:)</i> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ul><li>Users who do not log in for 400 consecutive days will have their accounts disabled.</li><li>Users who do not have a blocked account will have their accounts disabled if they do not log in for 150 consecutive days.</li>"
 
 login:
   path: agsvpt

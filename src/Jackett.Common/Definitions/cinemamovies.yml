@@ -81,6 +81,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Failure to use an account for a period of 180 days will result in the removal of the account from the CMS_ZT community."
 
 login:
   method: cookie

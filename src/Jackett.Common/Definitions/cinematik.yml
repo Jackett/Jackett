@@ -48,6 +48,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "With 2FA enabled, there are no specific requirements for uploading, downloading, or posting. Your membership continues based on the staff's fair assessment of your overall activity and contributions."
 
 login:
   path: /api/torrents

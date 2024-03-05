@@ -62,6 +62,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ul><li>Users who have blocked their accounts will be banned if they do not log in for 360 consecutive days.</li><li>Users who do not have an unsealed account will be banned if they do not log in for 150 consecutive days.</li><li> Users with no traffic (i.e., upload/download data is 0) who do not log in for 60 consecutive days will be banned.</li></ul>"
 
 login:
   path: login.php
