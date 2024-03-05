@@ -14,7 +14,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -56,7 +55,6 @@ namespace Jackett.Common.Indexers
                     in your Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in 'Profile Settings > Torrents'."))
         {
-            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Accounts not being used for 3 months will be removed to make room for active members."));
         }
 
         private TorznabCapabilities SetCapabilities()
