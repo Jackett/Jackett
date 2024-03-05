@@ -14,7 +14,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         {
             Freeleech = new BoolConfigurationItem("Search freeleech only") { Value = false };
             ExcludeArchives = new BoolConfigurationItem("Exclude torrents with RAR files") { Value = false };
-            AccountActivity = new DisplayInfoConfigurationItem("Account Inactivity", "Account Inactivity", "Accounts not being used for 3 months will be removed to make room for active members.");
+            AccountActivity = new DisplayInfoConfigurationItem("Account Inactivity", "Accounts not being used for 3 months will be removed to make room for active members.");
         }
     }
 }
