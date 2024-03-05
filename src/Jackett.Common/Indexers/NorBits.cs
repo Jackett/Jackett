@@ -18,7 +18,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -50,8 +49,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataNorbits())
         {
-            configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
-            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Parasites are deactivated after 28 days. (7 days below 0.3 in ratio, 7 days with a warning, 14 days as a parasite). Accounts with nothing downloaded or uploaded will be deactivated after 28 days. This only applies to newly registered accounts without torrent activity (e.g. not passing the norbits test)."));
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -388,7 +385,7 @@ namespace Jackett.Common.Indexers
                 term = "all";
             }
 
-            if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            if (ConfigData.freeleech.Value)
             {
                 parameters.Add("FL", "1");
             }

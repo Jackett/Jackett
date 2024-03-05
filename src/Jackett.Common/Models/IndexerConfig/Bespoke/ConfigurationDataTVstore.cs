@@ -9,11 +9,13 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     {
         public StringConfigurationItem Username { get; private set; }
         public StringConfigurationItem Password { get; private set; }
+        public DisplayInfoConfigurationItem AccountActivity { get; private set; }
 
         public ConfigurationDataTVstore()
         {
             Username = new StringConfigurationItem("Username") { Value = "" };
             Password = new StringConfigurationItem("Password") { Value = "" };
+            AccountActivity = new DisplayInfoConfigurationItem("Account Inactivity", "If a user does not log in to the site for 100 days (Tag, Storekeeper for 1 year), it is automatically deleted.");
         }
 
         public ConfigurationDataTVstore(JToken json)
