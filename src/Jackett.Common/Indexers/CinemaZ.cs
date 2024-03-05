@@ -5,6 +5,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
