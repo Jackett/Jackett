@@ -385,7 +385,7 @@ namespace Jackett.Common.Indexers
                 term = "all";
             }
 
-            if (ConfigData.Freeleech.Value)
+            if (ConfigData.freeleech.Value)
             {
                 parameters.Add("FL", "1");
             }
