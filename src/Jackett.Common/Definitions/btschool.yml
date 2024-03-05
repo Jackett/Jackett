@@ -50,7 +50,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "<ul><li>Packed accounts would be deleted if users have not logged in for more than 365 days in a row.</li><li>Unpacked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 30 days in a row.</li></ul>"
+    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Extreme User or above would never be deleted.</li><li>Veteran User or above would never be deleted if packed (at User CP).</li><li>Packed accounts would be deleted if users have not logged in for more than 365 days in a row.</li><li>Unpacked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 30 days in a row.</li></ol>"
 
 login:
   path: login.php
