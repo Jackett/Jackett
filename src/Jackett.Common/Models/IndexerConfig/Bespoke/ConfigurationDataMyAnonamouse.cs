@@ -12,6 +12,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public BoolConfigurationItem SearchInDescription { get; private set; }
         public BoolConfigurationItem SearchInSeries { get; private set; }
         public BoolConfigurationItem SearchInFilenames { get; private set; }
+        public DisplayInfoConfigurationItem AccountActivity { get; private set; }
 
         public ConfigurationDataMyAnonamouse()
         {
@@ -32,6 +33,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             SearchInDescription = new BoolConfigurationItem("Also search text in the description") { Value = false };
             SearchInSeries = new BoolConfigurationItem("Also search text in the series") { Value = false };
             SearchInFilenames = new BoolConfigurationItem("Also search text in the filenames") { Value = false };
+            AccountActivity = new DisplayInfoConfigurationItem("Account Inactivity", "To prevent your account from being disabled for inactivity, you must log in on a regular basis. You must also use your account - if you do not, your account will be disabled. If you know that you will not be able to login for an extended period of time, you can park your account in your preferences and it will not be disabled.");
         }
     }
 }
