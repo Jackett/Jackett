@@ -16,7 +16,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -49,7 +48,6 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAnimeTorrents())
         {
-            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "You must login and download at least 1 torrent per year or your account will be deleted. There is no re-activation. AnimeTorrents do not send email reminders, it is your responsibility."));
         }
 
         private TorznabCapabilities SetCapabilities()
