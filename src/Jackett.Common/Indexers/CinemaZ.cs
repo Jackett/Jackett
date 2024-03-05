@@ -5,7 +5,6 @@ using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
-using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -28,7 +27,6 @@ namespace Jackett.Common.Indexers
                    cs: cs
                    )
         {
-            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To avoid account deletion you must login at least 1 time every 90 days, and you must download at least 1 torrent every 6 months. Simply keeping torrents seeding long term will not protect your account. Do not rely on inactivity emails, CinemaZ often do not send them."));
         }
 
         private TorznabCapabilities SetCapabilities()
