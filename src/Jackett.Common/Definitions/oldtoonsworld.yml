@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 1, cat: TV, desc: "TV"}
+    - {id: 2, cat: TV, desc: "TV"}
 
   modes:
     search: [q]
@@ -115,6 +115,12 @@ search:
       filters:
         - name: re_replace
           args: ["(?i)^None$", ""]
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
+        - name: replace
+          args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
     files:
