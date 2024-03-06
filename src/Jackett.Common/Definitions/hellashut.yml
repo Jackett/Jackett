@@ -38,7 +38,9 @@ caps:
     - {id: 1, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 2, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 42, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 78, cat: Movies/SD, desc: "Movies CAM"}
     - {id: 58, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: 84, cat: Movies, desc: "Movies Fake HD"}
     - {id: 4, cat: Movies/HD, desc: "Movies HD"}
     - {id: 69, cat: Movies/HD, desc: "Movies HD Packs"}
     - {id: 3, cat: Movies/SD, desc: "Movies SD"}
@@ -52,12 +54,16 @@ caps:
     - {id: 76, cat: Movies/UHD, desc: "NO SUBS IN Movies 4K"}
     - {id: 35, cat: TV/Sport, desc: "Sports HD"}
     - {id: 34, cat: TV/Sport, desc: "Sports SD"}
+    - {id: 80, cat: Books, desc: "Tutorials Books"}
+    - {id: 79, cat: TV/Other, desc: "Tutorials Video"}
     - {id: 5, cat: TV, desc: "TV Greek Movies"}
     - {id: 6, cat: TV, desc: "TV Greek Series"}
     - {id: 7, cat: TV, desc: "TV Greek Series Packs"}
     - {id: 60, cat: TV, desc: "TV Greek Shows"}
     - {id: 41, cat: TV/HD, desc: "TV HD"}
     - {id: 61, cat: TV, desc: "TV Series"}
+    - {id: 82, cat: TV/UHD, desc: "TV Series 4K}
+    - {id: 83, cat: TV/UHD, desc: "TV Series 4K Packs}
     - {id: 62, cat: TV, desc: "TV Series Emb"}
     - {id: 63, cat: TV, desc: "TV Series Emb Packs"}
     - {id: 64, cat: TV/HD, desc: "TV Series HD"}
