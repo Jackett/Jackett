@@ -70,6 +70,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account Retention Rules:<ol><li>Veteran Users and above are retained forever.</li><li> Insane User and above will not be deleted after the account is sealed (in the control panel).</li><li>Users who have blocked their accounts will have their accounts deleted if they do not log in for 150 consecutive days.</li><li>Users who do not have an archived account will have their account deleted if they do not log in for 60 consecutive days.</li><li> Newly registered users who have no traffic for 7 days (i.e., upload/download data is 0) will have their accounts deleted.</li></ol>"
 
 login:
   method: cookie
