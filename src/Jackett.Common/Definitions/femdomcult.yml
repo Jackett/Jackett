@@ -63,6 +63,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "User classes Beginner and Perv have to be inactive (= not logged in on the site, tracker activity/seeding does not count) for 4 months before getting disabled automatically. Member class and higher are exempt."
 
 login:
   path: login.php
