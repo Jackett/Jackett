@@ -77,7 +77,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Elite User and above will not have their account deleted after blocking their account (in the Control Panel).</li><li>Users who do not log in for 400 consecutive days will have their accounts disabled.</li><li>Users who do not have a blocked account will have their accounts disabled if they do not log in for 150 consecutive days.</li><li>Users who have no traffic (i.e., uploading/downloading data is 0) within 7 days of new registration will have their accounts disabled.</li><li>Users with no traffic (i.e. both upload/download data is 0) who do not log in for 30 consecutive days will have their accounts disabled.</li></ol>"
+    default: "Account retention rules:<ol><li>Elite User and above will not have their account deleted after parking (in the Control Panel)</li><li>Users who do not log in for 400 consecutive days will be disabled.</li><li>Users with a parked account will be disabled if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e., uploading/downloading data is 0) within 7 days of new registration will be disabled</li><li>Users with no traffic (i.e. both upload/download data is 0) who do not log in for 30 consecutive days will be disabled.</li></ol>"
 
 login:
   path: agsvpt

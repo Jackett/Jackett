@@ -67,7 +67,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Users with Extreme User and above will be retained forever</li><li>Users with Extreme User and above will not have their accounts deleted after parking their accounts</li><li>Users who have parked their accounts will be banned if they do not log in for 365 consecutive days</li><li>Users whose accounts have not been sealed will be banned if they do not log in for 180 consecutive days</li><li>Users with no traffic (that is, upload/download data are both 0) will have their accounts banned if they do not log in for 10 consecutive days.</li></ol>"
+    default: "Account retention rules:<ol><li>Extreme User and above will be retained forever</li><li>Users with a parked account will be banned if they do not log in for 365 consecutive days</li><li>Users with a non-parked account will be banned if they do not log in for 180 consecutive days</li><li>Users with no traffic (that is, upload/download data are both 0) will be banned if they do not log in for 10 consecutive days.</li></ol>"
 
 login:
   path: login.php

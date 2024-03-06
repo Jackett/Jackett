@@ -60,7 +60,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Users with Veteran User (Wen Chou) and above will be retained forever</li><li>Elite User (Wu Sheng) and above will have their accounts parked (under the control Panel)</li><li>Users who have parked their accounts and do not log in for 365 consecutive days will have their accounts deleted</li><li>Users who have not parked their accounts and have not logged in for 180 consecutive days will have their accounts deleted</li><li>Users who have no traffic (i.e. upload/download The data is all 0) If you do not log in for 90 consecutive days, your account will be deleted.</li></ol>"
+    default: "Account retention rules:<ol><li>Users with Veteran User (Wen Chou) and above will be retained forever</li><li>Elite User (Wu Sheng) and above will not be deleted after parking (in the control panel)</li><li>Users with a parked account who do not log in for 365 consecutive days will be deleted</li><li>Users with a non-parked account who have not logged in for 180 consecutive days be deleted</li><li>Users who have no traffic (i.e. upload/download The data is all 0) will be deleted If they do not log in for 90 consecutive days.</li></ol>"
 
 login:
   path: takelogin.php

@@ -63,7 +63,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Veteran User or above would never be deleted</li><li>Elite User or above would never be deleted if parked (at User CP)</li><li>Non-parked accounts would be deleted if users have not logged in for more than 365 days in a row.</li></ol>"
+    default: "Account retention rules:<ol><li>Veteran User or above will be retained forever</li><li>Elite User or above will not be deleted after parking (in the control panel)</li><li>Users with a non-parked account will be deleted if they have not logged in for more than 365 consecutive days.</li></ol>"
 
 login:
   method: cookie
