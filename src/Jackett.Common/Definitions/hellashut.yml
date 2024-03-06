@@ -62,8 +62,8 @@ caps:
     - {id: 60, cat: TV, desc: "TV Greek Shows"}
     - {id: 41, cat: TV/HD, desc: "TV HD"}
     - {id: 61, cat: TV, desc: "TV Series"}
-    - {id: 82, cat: TV/UHD, desc: "TV Series 4K}
-    - {id: 83, cat: TV/UHD, desc: "TV Series 4K Packs}
+    - {id: 82, cat: TV/UHD, desc: "TV Series 4K"}
+    - {id: 83, cat: TV/UHD, desc: "TV Series 4K Packs"}
     - {id: 62, cat: TV, desc: "TV Series Emb"}
     - {id: 63, cat: TV, desc: "TV Series Emb Packs"}
     - {id: 64, cat: TV/HD, desc: "TV Series HD"}
