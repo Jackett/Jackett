@@ -7,18 +7,17 @@ language: en-US
 encoding: UTF-8
 requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
-  # dont forget to update the details, download and poster replace args
+  # if the primary domain changes then don't forget to update the details, download and poster replace args
   - https://yts.mx/
+# official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/
   - https://yts.lt/
   - https://yts.am/
   - https://yts.ag/
-  - https://yts.unblockit.dad/
-# unofficial proxies below; allowed as meeting requisite criterion.
+  - https://yts.unblockit.africa/
   - https://yts.unblockninja.com/
   - https://yts.ninjaproxy1.com/
   - https://yts.proxyninja.org/
   - https://yts.torrentbay.st/
-# official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/
 legacylinks:
   - https://yts.nocensor.art/
   - https://yts.unblockit.bio/
@@ -38,6 +37,7 @@ legacylinks:
   - https://yts.mrunblock.bond/
   - https://yts.nocensor.cloud/
   - https://yts.unblockit.date/
+  - https://yts.unblockit.dad/
 
 caps:
   categorymappings:
