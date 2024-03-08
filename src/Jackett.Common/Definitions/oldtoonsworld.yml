@@ -51,6 +51,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ul><li>You must log in once every 60 days or seed at least 1 torrent to not get disabled</li><li>Once disabled, you have another 60 days to log back in and have your account re-activated. You may need to contact Helpdesk to do so</li><li>Disabled account will be deleted after 180 days of inactivity</li></ul>"
 
 login:
   path: /api/torrents
