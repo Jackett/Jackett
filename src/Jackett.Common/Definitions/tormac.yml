@@ -64,12 +64,13 @@ caps:
   allowrawsearch: true
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -104,18 +105,11 @@ settings:
     default: "Inactive accounts are automatically deleted after 90 days from the moment the system first detects inactivity."
 
 login:
-  path: login.php
-  method: form
-  form: form[action="login.php"]
+  method: cookie
   inputs:
-    login_username: "{{ .Config.username }}"
-    login_password: "{{ .Config.password }}"
-    redirect: index.php
-    login: Вход
-  error:
-    - selector: h4.warnColor1
+    cookie: "{{ .Config.cookie }}"
   test:
-    path: /
+    path: index.php
     selector: "a[onclick=\"return post2url('login.php', {logout: 1});\"]"
 
 search:
