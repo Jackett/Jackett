@@ -17,13 +17,13 @@ caps:
     - {id: 24, cat: Movies/Other, desc: "Films: Holiday"}
     - {id: 19, cat: Movies/Other, desc: "Films: Shorts"}
     - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
-    - {id: 12, cat: Movies/Other, desc: "Films: FanEdits"}
+    - {id: 12, cat: Movies/Other, desc: "Films: FanEdits/Restorations"}
     - {id: 33, cat: Movies/Other, desc: "Films: [No TMDB]"}
     - {id: 27, cat: Movies/Foreign, desc: "Films SP1: Dub or Vid issues"}
     - {id: 22, cat: Movies/Foreign, desc: "Films SP2: No English"}
     - {id: 28, cat: Movies/Other, desc: "Films SP3: Other"}
     - {id: 8, cat: Movies/Other, desc: "Anime: Films"}
-    - {id: 9, cat: TV/Anime, desc: "Anime: OVAs/Series"}
+    - {id: 9, cat: TV/Anime, desc: "Anime: Series/OVAs"}
     - {id: 2, cat: TV, desc: "Series/TV: General"}
     - {id: 31, cat: TV/Foreign, desc: "Series/TV SP1: Dub"}
     - {id: 29, cat: TV/Foreign, desc: "Series/TV SP2: No English"}
@@ -33,6 +33,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Culture: Music"}
     - {id: 16, cat: Audio/Video, desc: "Culture: Music Videos"}
     - {id: 34, cat: Audio/Audiobook, desc: "Culture: Audio Books"}
+    - {id: 35, cat: TV/Sport, desc: "Culture: Sports
     - {id: 6, cat: XXX, desc: "XXX: Mainstream Smut [TMDB]"}
     - {id: 30, cat: XXX, desc: "XXX: Filthy Smut [No TMDB]"}
     - {id: 15, cat: XXX/Pack, desc: "XXX: MegaPacks"}
