@@ -18,6 +18,7 @@ caps:
     - {id: 3, cat: PC/0day, desc: "APPZ"}
     - {id: 5, cat: Audio, desc: "MUSIC"}
     - {id: 8, cat: XXX, desc: "XXX"}
+    - {id: 12, cat: Books, desc: "EBOOKS"}
     - {id: 9, cat: PC/Games, desc: "GAMES"}
 
   modes:
@@ -25,6 +26,7 @@ caps:
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
