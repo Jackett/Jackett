@@ -258,6 +258,7 @@ namespace Jackett.Updater
                 "Definitions/32pages.yml",
                 "Definitions/3evils.yml",
                 "Definitions/3evils-api.yml",
+                "Definitions/3wmg.yml",
                 "Definitions/420files.yml",
                 "Definitions/7torrents.yml",
                 "Definitions/DasUnerwartete.yml",
