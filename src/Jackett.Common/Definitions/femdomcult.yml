@@ -33,6 +33,7 @@ caps:
     - {id: 66, cat: XXX, desc: "Transdom"}
     - {id: 77, cat: XXX, desc: "Unknown & Low Quality"}
     - {id: 75, cat: XXX, desc: "Virtual Reality"}
+    - {id: 0, cat: XXX/Other, desc: "Other"}
 
   modes:
     search: [q]
