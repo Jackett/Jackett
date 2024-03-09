@@ -80,6 +80,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrentų puslapyje</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive users will be deleted after 90 days. The newly created account with 0 sent data will be deleted after 28 days."
 
 login:
   path: takelogin.php
