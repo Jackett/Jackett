@@ -111,6 +111,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts will be permanently deleted from the database after 125 days! Seeding torrents does not count as activity - the only thing that counts is logging in again! You can extend this period to 250 days by setting your account to Parked. You can do this under Edit Profile."
 
 login:
   path: login.php
