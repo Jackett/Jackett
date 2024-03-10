@@ -97,6 +97,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts will be deactivated after 7 weeks and deleted after another 3 weeks."
 
 login:
   path: login.php
