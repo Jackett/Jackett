@@ -34,6 +34,10 @@ settings:
     options:
       2: desc
       1: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must log in periodically. If the member is absent from the website for a period of 3 months, the account will be deleted without prior warning."
 
 caps:
   categorymappings:
@@ -48,6 +52,7 @@ caps:
     - {id: 52, cat: TV, desc: "مسرحيات (Plays)"}
     - {id: 71, cat: TV, desc: "مسلسلات مدبلجه عربي (Arabic Dubbed Series)"}
     - {id: 90, cat: TV, desc: "برامج ومسابقات (Shows)"}
+    - {id: 117, cat: TV, desc: "رمضان 2024 (Ramadan)"}
     # المرئيات الاجنبية Foreign Movies
     - {id: 92, cat: TV/Foreign, desc: "تعليمي (Educational)"}
     - {id: 93, cat: TV/Documentary, desc: "وثائقي (Documentary)"}
@@ -55,9 +60,12 @@ caps:
     - {id: 57, cat: TV/Foreign, desc: "مسلسلات آسيوية (Asian Series)"}
     - {id: 42, cat: Movies/Foreign, desc: "افلام اجنبيه (Foreign)"}
     - {id: 74, cat: Movies/HD, desc: "جودة عالية HD"}
-    - {id: 76, cat: Movies/3D, desc: "ثلاثي الابعاد (3D)"}
+    - {id: 113, cat: TV/Foreign, desc: "مسلسلات لاتينية مترجم.مدبلج(Latin Series"}
     - {id: 59, cat: Movies/Foreign, desc: "افلام آسيوية (Asian Movies)"}
     - {id: 86, cat: Movies/Foreign, desc: "افلام هنديه (Indian Movies)"}
+    - {id: 114, cat: Movies/Foreign, desc: "افلام لاتينية مترجم.مدبلج (Latin Movies)"}
+    - {id: 115, cat: TV/Foreign, desc: "مسلسلات تركية مترجم.مدبلج (Turkish Series)"}
+    - {id: 116, cat: Movies/Foreign, desc: "افلام تركية مترجم.مدبلج (Turkish Movies)"}
     # انمي مدبلج عربي Anime Arabic dubbed
     - {id: 98, cat: TV/Anime, desc: "افلام (Movies)"}
     - {id: 100, cat: TV/Anime, desc: "مسلسلات (Series)"}

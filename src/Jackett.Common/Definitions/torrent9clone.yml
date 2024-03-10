@@ -8,15 +8,12 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
-  - https://www.torrent9.kim/
+  - https://www.torrent9.gy/
   - https://torrent9.unblockninja.com/
 legacylinks:
   - https://www.protege-liens.net/
   - https://www.rantop.org/
-  - https://www.torrent9.wtf/
-  - https://www.torrent9.sc/
   - https://torrent9.nocensor.click/
-  - https://www.torrent9.moe/
   - https://ww2.torrent9.moe/
   - https://wwv.torrent9.moe/
   - https://www.torrent9.pro/
@@ -31,6 +28,9 @@ legacylinks:
   - https://www.torrent9.boo/
   - https://torrent9.nocensor.cloud/
   - https://torrent9.mrunblock.bond/
+  - https://www.torrent9.kim/
+  - https://www.torrent9.mn/
+  - https://www.torrent9.city/
 
 caps:
   categorymappings:
@@ -47,6 +47,7 @@ caps:
     - {id: Porno, cat: XXX, desc: "Porno"}
     - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
     - {id: Sports, cat: TV/Sport, desc: "Sports"}
+    - {id: Formations, cat: Other, desc: "Formations"}
 
   modes:
     search: [q]
@@ -128,10 +129,12 @@ search:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: td:nth-child(1) a
-      attribute: href
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: (/?torrent/\d+)
     download:
-      selector: td:nth-child(1) a
-      attribute: href
+      text: "{{ .Result.details }}"
     date:
       text: now
     size:

@@ -1063,6 +1063,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     releaseDialog.on('hidden.bs.modal', function (e) {
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
         window.location.hash = currentFilter ? "indexers&filter=" + currentFilter : '';
+        document.title = "Jackett";
     });
 
     var setTrackers = function (filterId, trackers) {
@@ -1152,6 +1153,8 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
         $('#searchResults div.dataTables_filter input').val("");
         clearSearchResultTable($('#searchResults'));
 
+        document.title = "(...) " + searchString;
+
         var trackerId = filterId || "all";
         api.resultsForIndexer(trackerId, queryObj, function (data) {
             $('#jackett-search-perform').html($('#search-button-ready').html());
@@ -1159,9 +1162,11 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
             searchResults.empty();
             updateSearchResultTable(searchResults, data).search('').columns().search('').draw();
             searchResults.find('div.dataTables_filter input').focusWithoutScrolling();
+            document.title = "(" + data.Results.length +") " + searchString;
         }).fail(function () {
             $('#jackett-search-perform').html($('#search-button-ready').html());
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
+            document.title = "(err) " + searchString;
         });
     });
 

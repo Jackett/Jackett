@@ -56,6 +56,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts with ZERO activity (0 bytes downloaded and 0 bytes uploaded) will automatically be deleted after 90 days. Inactive accounts (Lower than VIP class) will be automatically deleted after 150 days."
 
 login:
   method: cookie

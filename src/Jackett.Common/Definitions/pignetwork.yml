@@ -75,6 +75,10 @@ settings:
     type: info
     label: Date Setting
     default: Access your <a href="https://piggo.me/usercp.php?action=tracker" target =_blank>个人中心 网站设定 (UserCP Website settings) </a> and set <b>时间显示类型 (Time Display Type)</b> to <b>发生时间 (Time of Occurence)</b>. <i>Elapsed Time</i> is not supported by this indexer and will see zero results.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ul><li>Nexus Master users and above will be retained forever</li><li>Elite User users and above will not have their accounts deleted after parking their accounts (in the control panel)</li><li>Users who have parked their accounts will be deleted if they do not log in for 180 consecutive days</li><li>Users whose accounts have not been parked will have their accounts deleted if they do not log in for 90 consecutive days</li><li>Users who have no traffic for 7 consecutive days or who have not logged in for 30 consecutive days (that is, the upload/download data are both 0) will be automatically banned by the system.</li></ul>"
 
 login:
   method: cookie

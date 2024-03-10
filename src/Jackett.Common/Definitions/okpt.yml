@@ -71,6 +71,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ul><li>Sixth degree burn (Extreme User) and above will be retained forever</li><li>Second degree burn (Elite User) and above have their accounts parked (in the control panel) for 60 consecutive days If you do not log in for 60 days, your account will be deleted</li><li>Users who have parked their accounts and do not log in for 60 consecutive days will have their accounts deleted</li><li>Users who have not parked their accounts will have their accounts deleted if they do not log in for 60 consecutive days</li><li>Users without traffic (i.e. upload / download data are all 0) If you do not log in for 14 consecutive days, your account will be deleted.</li></ul>"
 
 login:
   method: cookie

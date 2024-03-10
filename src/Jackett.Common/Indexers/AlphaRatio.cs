@@ -6,6 +6,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers
 {
@@ -32,6 +33,7 @@ namespace Jackett.Common.Indexers
                    supportsFreeleechOnly: true,
                    imdbInTags: true)
         {
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Users must login to the site at least once every 90 days. Failure to do so results in the user account being suspended and automatically demoted to Exiled user class."));
         }
 
         private TorznabCapabilities SetCapabilities()

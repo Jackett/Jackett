@@ -95,6 +95,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts are automatically deleted after 42 days."
 
 login:
   path: login.php
@@ -125,21 +129,24 @@ search:
     # site does not support imdbid searching or display imdb links in results.
 
   rows:
-    selector: "table.tableinborder > tbody > tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
+    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"0\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="browse.php?cat="]
       attribute: href
+      optional: true
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}129{{ end }}"
     title:
       selector: a[href^="details.php?id="]:has(b)
     details:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(4) > a
+      selector: a[href^="details.php?id="]:has(b)
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
@@ -171,4 +178,4 @@ search:
       case:
         img[src="pic/freeleech.gif"]: 0 # nothing is counted
         "*": 1
-# engine tbd
+# NetVision

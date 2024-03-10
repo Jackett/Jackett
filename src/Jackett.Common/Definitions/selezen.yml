@@ -121,7 +121,7 @@ search:
     resorder: "{{ .Config.type }}"
 
   rows:
-    selector: div.card:has(h4):not(:has(a[href*="/news/"]))
+    selector: div.card:has(h4):not(:has(a[href*="/news/"])):has(a:has(span.bx-download))
 
   fields:
     category:

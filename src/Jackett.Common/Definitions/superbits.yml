@@ -78,6 +78,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you have not logged in, via web browser, for 3 months, the account will be suspended. You can park your account in Settings which means that it will not be deleted for inactivity for at least 1 year."
 
 login:
   method: cookie

@@ -50,6 +50,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive users are deleted on a regular basis. If you haven't downloaded or given anything away during your 90-day stay on RM-HD, then you are an accidental guest on our resource. The resource needs active users who know exactly what they came here for. Therefore, automatic inactivity clean-ups are carried out on a regular basis. Users with a 1080p class are not deleted by the system."
 
 login:
   path: /

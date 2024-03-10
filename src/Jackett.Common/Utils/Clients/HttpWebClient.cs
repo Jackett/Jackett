@@ -84,6 +84,8 @@ namespace Jackett.Common.Utils.Clients
             {
                 clearanceHandlr.MaxTimeout = serverConfig.FlareSolverrMaxTimeout;
                 clearanceHandlr.ProxyUrl = serverConfig.GetProxyUrl(false);
+                clearanceHandlr.ProxyUsername = serverConfig.ProxyUsername;
+                clearanceHandlr.ProxyPassword = serverConfig.ProxyPassword;
                 using (var clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,

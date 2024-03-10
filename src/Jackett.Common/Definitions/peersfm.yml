@@ -65,6 +65,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "When are accounts automatically deleted?<ol><li>Activated accounts with zero download/share values ​​are deleted 30 days after registration</li><li>Unbanned accounts (active accounts) of the User class are deleted after 120 days have passed since the last recorded activity</li><li>Unbanned accounts (active accounts) of the Power User class are deleted after 180 days from the last recorded activity</li><li>You should also keep in mind that the administration regularly deletes accounts with very low ratings.</li></ol>"
 
 login:
   path: takelogin.php

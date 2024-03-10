@@ -1,9 +1,9 @@
 ---
 id: concen
 name: ConCen
-description: "ConCen (Conspiracy Central) is a Public conspiracy related torrent index"
+description: "ConCen (Conspiracy Central) is a Private conspiracy related torrent index"
 language: en-US
-type: public
+type: private
 encoding: UTF-8
 links:
   - https://concen.org/

@@ -95,6 +95,8 @@ caps:
     - {id: 166, cat: Audio, desc: "Закритий розділ Country, Country pop, Bluegrass, Southern rock"}
     - {id: 162, cat: Audio, desc: "Закритий розділ Electronic"}
     - {id: 164, cat: Audio, desc: "Закритий розділ Other Styles"}
+    # archive, not in tracker search category pulldown
+    - {id: 23, cat: Other, desc: "Архів"}
 
   modes:
     search: [q]

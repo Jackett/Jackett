@@ -48,6 +48,7 @@ namespace Jackett.Common.Indexers
                    configData: new ConfigurationDataCookie())
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "User: You must access the account at least once within 7 days, after this period the account will be considered inactive and automatically deactivated by the system. Member: You must access the account at least once every 90 days, after this period the account will be considered inactive and automatically deactivated by the system. Power User & Elite: Exempt."));
         }
 
         private TorznabCapabilities SetCapabilities()

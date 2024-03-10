@@ -5,6 +5,7 @@ description: "ilDraGoNeRo is an ITALIAN Semi-Private Torrent Tracker for MOVIES 
 language: it-IT
 type: semi-private
 encoding: UTF-8
+requestDelay: 5
 links:
   - https://ildragonero2.info/
 
@@ -14,6 +15,8 @@ caps:
     # - {id: 10, cat: Other, desc: "..: REGOLAMENTO :.."}
     # - {id: 2, cat: Other, desc: "..: PRESENTAZIONI :.."}
     # - {id: 15, cat: Other, desc: "..: CAVERNA DEL DRAGO :.."}
+    # - {id: 97, cat: Other, desc: "   ( AREA SONDAGGI )"}
+    # - {id: 44, cat: Other, desc: "..: SALA GIOCHI :.."}
     # - {id: 1, cat: Other, desc: "[ RELEASES ]"}
     # - {id: 35, cat: Other, desc: "..: GUIDE, ANNUNCI & REGOLE :.."}
     # - {id: 19, cat: Movies, desc: "..: FILM :.."}
@@ -39,6 +42,7 @@ caps:
     - {id: 79, cat: TV/Foreign, desc: "   ( SERIE TV SUB ITA )", default: true}
     # - {id: 74, cat: TV, desc: "   ( RICHIESTE )"}
     # - {id: 75, cat: TV, desc: "      ( RICHIESTE EVASE )"}
+    # - {id: 95, cat: Other, desc: "   ( COMMENTI FILM E SERIE )"}
     # - {id: 54, cat: TV/Documentary, desc: "..: DOCUMENTARI & SPETTACOLI :.."}
     - {id: 92, cat: TV/Documentary, desc: "   ( DOCUMENTARI )", default: true}
     - {id: 53, cat: Audio/Video, desc: "   ( CONCERTI )", default: true}
@@ -67,12 +71,12 @@ caps:
     # - {id: 68, cat: Books, desc: "   ( RICHIESTE )"}
     # - {id: 69, cat: Books, desc: "      ( RICHIESTE EVASE )"}
     # - {id: 9, cat: PC/0day, desc: "..: APPLICAZIONI :.."}
-    - {id: 20, cat: PC/0day, desc: "..:Software windows:..", default: true}
-    - {id: 21, cat: PC/Mac, desc: "..:Software mac:..", default: true}
-    - {id: 22, cat: PC/Mobile-Android, desc: "..:APK Android:..", default: true}
+    - {id: 20, cat: PC/0day, desc: "      ( SOFTWARE WINDOWS )", default: true}
+    - {id: 96, cat: PC/0day, desc: "      ( SISTEMI OPERATIVI WINDOWS )", default: true}
+    - {id: 21, cat: PC/Mac, desc: "      ( SOFTWARE MAC )", default: true}
+    - {id: 22, cat: PC/Mobile-Android, desc: "      ( APK ANDROID )", default: true}
     # - {id: 83, cat: PC/0day, desc: "   ( RICHIESTE )"}
     # - {id: 84, cat: PC/0day, desc: "      ( RICHIESTE EVASE )"}
-    # - {id: 95, cat: Other, desc: "   ( COMMENTI FILM E SERIE )"}
     # - {id: 30, cat: Other, desc: "..: RELEASES DA VERIFICARE :.."}
 
   modes:
@@ -81,6 +85,18 @@ caps:
     movie-search: [q]
     music-search: [q]
     book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_delay
+    type: info
+    label: Delay between searches
+    default: This forum enforces a 15s delay between searches. If no results are returned for a search, wait for 15s and try again.
 
 login:
   path: forum/ucp.php?mode=login
@@ -189,9 +205,45 @@ search:
       text: 1
     leechers:
       text: 1
+    date_day:
+      # » oggi, 00:12 »
+      # » ieri, 23:49 »
+      selector: div.responsive-hide.left-box:contains("oggi"), div.responsive-hide.left-box:contains("ieri")
+      remove: a
+      optional: true
+      filters:
+        - name: regexp
+          args: "» (.*?) »"
+        - name: re_replace
+          args: ["(?i)\\boggi\\b", "today"]
+        - name: re_replace
+          args: ["(?i)\\bieri\\b", "yesterday"]
+        - name: fuzzytime
+    date_time:
+      # » 26 minuti fa »
+      selector: div.responsive-hide.left-box:contains("fa")
+      remove: a
+      optional: true
+      filters:
+        - name: regexp
+          args: "» (.*?) »"
+        - name: re_replace
+          args: ["(?i)\\bminut[oi] fa\\b", "minutes ago"]
+        - name: timeago
+    date_year:
+      # » 04/11/2023, 7:05 »
+      selector: div.responsive-hide.left-box:contains("/")
+      remove: a
+      optional: true
+      filters:
+        - name: regexp
+          args: "» (.*?) »"
+        - name: append
+          args: " +00:00" # auto adjusted by site account profile
+        - name: dateparse
+          args: "dd/MM/yyyy, H:mm zzz"
     date:
-      selector: time[datetime]
-      attribute: datetime
+      text: "{{ if or .Result.date_time .Result.date_year .Result.date_day }}{{ or .Result.date_time .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

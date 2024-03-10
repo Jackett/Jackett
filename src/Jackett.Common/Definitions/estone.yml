@@ -68,6 +68,10 @@ settings:
     options:
       DESC: desc
       ASC: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Anyone who does not enter the site for 180 days will be automatically deleted!"
 
 login:
   path: login.php

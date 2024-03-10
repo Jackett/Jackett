@@ -57,6 +57,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If the account is not used regularly within 2 years, the system will automatically delete the account."
 
 login:
   path: takelogin.php

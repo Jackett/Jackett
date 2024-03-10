@@ -97,7 +97,7 @@ settings:
     default: false
   - name: exclude_archives
     type: checkbox
-    label: Exclude torrents with the tag RAR from results
+    label: Exclude torrents with the tag RAR from results (does not support IMDBID search)
     default: false
   - name: sort
     type: select

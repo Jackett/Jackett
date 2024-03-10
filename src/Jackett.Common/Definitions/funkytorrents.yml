@@ -68,6 +68,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive users will be removed in 180 days, users that haven't downloaded/uploaded anything will be removed in 90 days after registration. You can park your account in your Profile to prevent it from being deleted because of inactivity if you go away on for example a vacation. When the account has been parked limits are put on the account, for example you cannot use the tracker and browse some of the pages."
 
 login:
   path: takelogin.php

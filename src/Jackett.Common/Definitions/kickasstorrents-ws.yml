@@ -76,15 +76,16 @@ search:
     selector: table.data tr[id]
 
   fields:
-    category:
+    category_optional:
       selector: span[id^="cat_"] > strong > a
       attribute: href
       optional: true
-      default: other
       filters:
         - name: tolower
         - name: trim
           args: /
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}other{{ end }}"
     title:
       selector: a[class="cellMainLink"]
     details:

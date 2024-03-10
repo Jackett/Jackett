@@ -63,6 +63,10 @@ settings:
     type: info
     label: Alert
     default: HaiDan has switched to a <b>group</b> torrent list, which means this Indexer can only display the first item in each group.<br>This <b>yml</b> Indexer will eventually be re-written in c# as soon as a c# dev volunteers, to display all items in a group.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users with no traffic (ie, upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
 
 login:
   path: login.php

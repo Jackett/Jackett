@@ -19,6 +19,7 @@ caps:
     - {id: 8, cat: TV, desc: "Pictures"}
     - {id: 9, cat: TV/Anime, desc: "Anime"}
     - {id: 10, cat: Books/Comics, desc: "Comics"}
+    - {id: 24, cat: Audio/Other, desc: "Podcasts"}
     - {id: 11, cat: Books, desc: "Books"}
     - {id: 17, cat: Audio/Audiobook, desc: "Audio Books"}
     - {id: 20, cat: Books/EBook, desc: "E-Books"}

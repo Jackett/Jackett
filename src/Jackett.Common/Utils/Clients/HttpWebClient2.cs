@@ -60,7 +60,9 @@ namespace Jackett.Common.Utils.Clients
             clearanceHandlr = new ClearanceHandler(serverConfig.FlareSolverrUrl)
             {
                 MaxTimeout = serverConfig.FlareSolverrMaxTimeout,
-                ProxyUrl = serverConfig.GetProxyUrl(false)
+                ProxyUrl = serverConfig.GetProxyUrl(false),
+                ProxyUsername = serverConfig.ProxyUsername,
+                ProxyPassword = serverConfig.ProxyPassword
             };
             clientHandlr = new HttpClientHandler
             {

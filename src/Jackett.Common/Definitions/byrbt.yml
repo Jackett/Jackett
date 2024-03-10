@@ -62,6 +62,10 @@ settings:
     type: info
     label: IPv6 only
     default: This site only accepts IPv6 addresses. If you are using IPv4 you will get a DNS Lookup Error.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Newly registered users who have not generated any traffic within 14 days (that is, the upload/download data are both 0) will be deleted</li><li>Users with a user level of Peasant that have failed to successfully improve their sharing rate within 14 days will be deleted.</li></ol>"
 
 login:
   path: login.php

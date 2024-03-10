@@ -94,7 +94,7 @@ namespace Jackett.Common.Models.Config
                 url = $"{authString}@{url}";
 
             // add protocol
-            if (ProxyType == ProxyType.Socks4 || ProxyType == ProxyType.Socks5)
+            if (ProxyType == ProxyType.Socks4 || ProxyType == ProxyType.Socks5 || ProxyType == ProxyType.Http)
             {
                 var protocol = (Enum.GetName(typeof(ProxyType), ProxyType) ?? "").ToLower();
                 if (!string.IsNullOrEmpty(protocol))

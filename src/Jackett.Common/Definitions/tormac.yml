@@ -1,0 +1,244 @@
+---
+id: tormac
+name: Tormac
+description: "Tormac is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL for Apple products"
+language: ru-RU
+type: private
+encoding: windows-1251
+links:
+  - https://tormac.org/
+
+caps:
+  categorymappings:
+    # Apple Macintosh
+    - {id: 10, cat: PC/ISO, desc: "Mac OS на Macintosh"}
+    # OSX86 Hackintosh
+    - {id: 46, cat: PC/ISO, desc: "Mac OS на PC"}
+    # Программы для Мак
+    - {id: 2, cat: PC/Mac, desc: "Программы - Audio"}
+    - {id: 3, cat: PC/Mac, desc: "Программы - Video"}
+    - {id: 4, cat: PC/Mac, desc: "Программы - Graphics"}
+    - {id: 79, cat: PC/Mac, desc: " |- Архив Программы - Graphics"}
+    - {id: 5, cat: PC/Mac, desc: "Программы - System Utilities"}
+    - {id: 23, cat: PC/Mac, desc: " |- Средства разработки приложений"}
+    - {id: 78, cat: PC/Mac, desc: " |- Архив Программы - System & Utilities"}
+    - {id: 6, cat: PC/Mac, desc: "Программы - Office/PrePress/Database"}
+    - {id: 7, cat: PC/Mac, desc: "Программы - Network / WEB"}
+    - {id: 63, cat: PC/Mac, desc: " |- Веб-разработка, инструментарий"}
+    - {id: 8, cat: PC/Mac, desc: "Программы - 3D/CAD/Engineering"}
+    - {id: 9, cat: PC/Mac, desc: "Игры/Games"}
+    - {id: 64, cat: PC/Mac, desc: "Разное/Other"}
+    - {id: 91, cat: PC/Mac, desc: " |- Патчи и другой инструментарий"}
+    # Книги, руководства по Apple
+    - {id: 30, cat: Books, desc: "Книги, Журналы"}
+    - {id: 31, cat: Other, desc: "Видео Apple / Обучающее видео"}
+    # iPhone / iPod / iPad / Apple TV
+    - {id: 32, cat: PC/Mobile-iOS, desc: "Программы и игры из App Store"}
+    - {id: 33, cat: PC/Mobile-iOS, desc: "iOS. Анлок, джейлбрейк и т.п."}
+    # Apple Audio
+    - {id: 34, cat: Audio/Lossless, desc: "Музыка Lossless (ALAC)"}
+    - {id: 35, cat: Audio/MP3, desc: "Музыка Lossy (AAC)"}
+    - {id: 36, cat: Audio/Audiobook, desc: "Аудиокниги (AAC/ALAC)"}
+    # Видео для iPod / iPad / iPhone / AppleTV
+    - {id: 37, cat: Movies/SD, desc: "AppleTV - SD"}
+    - {id: 38, cat: Movies/SD, desc: " |- Фильмы для iPod, iPhone, iPad"}
+    - {id: 39, cat: TV/SD, desc: " |- Сериалы для iPod, iPhone, iPad"}
+    - {id: 40, cat: Audio/Video, desc: " |- Музыкальное видео для iPod, iPhone, iPad"}
+    - {id: 41, cat: TV/HD, desc: "AppleTV - HD"}
+    - {id: 42, cat: Movies/HD, desc: " |- Фильмы HD для Apple TV"}
+    - {id: 92, cat: TV/Other, desc: " |- Мультфильмы HD для Apple TV"}
+    - {id: 94, cat: TV/Other, desc: " |- Мультсериалы HD для Apple TV"}
+    - {id: 93, cat: TV/Anime, desc: " |- Аниме HD для Apple TV"}
+    - {id: 43, cat: TV/HD, desc: " |- Сериалы HD для Apple TV"}
+    - {id: 44, cat: Audio/Video, desc: " |- Музыкальное видео HD для Apple TV"}
+    # Разное
+    - {id: 55, cat: Other/Misc, desc: "Тестовый раздел"}
+    - {id: 56, cat: Other/Misc, desc: " |- Раздачи девелоперских релизов"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
+  - name: addrussiantotitle
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
+  - name: freeleech_50
+    type: checkbox
+    label: Search freeleech and 50% freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      10: seeders
+      7: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts are automatically deleted after 90 days from the moment the system first detects inactivity."
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: "a[onclick=\"return post2url('login.php', {logout: 1});\"]"
+
+search:
+  paths:
+    - path: tracker.php
+  inputs:
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
+    prev_my: 0
+    prev_new: 0
+    prev_oop: 0
+    prev_sg: 1
+    # sort by 1=registered 2=topicTitle 4=completed 10=seed 11=leech 12=up 13=down 5=replies 6=views 7=size 8=lastPost 9=seedLastSeen
+    o: "{{ .Config.sort }}"
+    # 1=asc 2=desc
+    s: "{{ .Config.type }}"
+    # -1=all time
+    tm: -1
+    nm: "{{ .Keywords }}"
+    sg: "{{ if .Config.freeleech_50 }}1{{ else }}{{ end }}"
+
+  keywordsfilters:
+    - name: diacritics
+      args: replace
+    - name: re_replace # S01 to сезон 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "сезон $1"]
+    - name: re_replace # E02 to сери 1
+      args: ["(?i)\\bE0*(\\d+)\\b", "сери $1"]
+    - name: re_replace # S01E02 to сезон 1 сери 2
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
+
+  rows:
+    selector: tr.tCenter
+
+  fields:
+    category:
+      selector: a[href^="tracker.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a[href^="./viewtopic.php?t="]
+      filters:
+        # normalize to SXXEYY format
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езоны?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1"]
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+        - name: re_replace
+          args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
+        - name: append
+          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
+    details:
+      selector: a[href^="./viewtopic.php?t="]
+      attribute: href
+    download:
+      selector: a[href^="./viewtopic.php?t="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["viewtopic", "dl"]
+    size:
+      selector: td:nth-child(6) > u
+    seeders:
+      selector: td > b.seedmed, span[title="сида не было"] > b
+    leechers:
+      selector: td.leechmed > b
+    grabs:
+      selector: td:nth-child(9)
+    date:
+      selector: td:last-child > u
+    downloadvolumefactor:
+      case:
+        img[src$="default/images/tor_gold.gif"]: 0
+        img[src$="default/images/tor_silver.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.31
+    description_verified:
+      case:
+        span.tor-approved: "Verified:"
+        span.tor-not-approved: "Unverified:"
+    description:
+      selector: a[href^="./viewtopic.php?t="]
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
+# TorrentPier II

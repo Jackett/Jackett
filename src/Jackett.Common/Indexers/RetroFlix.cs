@@ -4,6 +4,7 @@ using Jackett.Common.Indexers.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers
@@ -36,6 +37,7 @@ namespace Jackett.Common.Indexers
         {
             // requestDelay for API Limit (1 request per 2 seconds)
             webclient.requestDelay = 2.1;
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Any account not logged into after 150 days will be deleted. Parked accounts will be deleted after 150 days of inactivity."));
         }
 
         private TorznabCapabilities SetCapabilities()

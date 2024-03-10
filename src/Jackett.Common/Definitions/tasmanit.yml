@@ -81,6 +81,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "To keep records updated reguarly, all inactive accounts will be deleted after 60 days of inactivity."
 
 login:
   path: takelogin.php

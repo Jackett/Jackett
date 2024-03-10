@@ -68,6 +68,14 @@ settings:
     type: info
     label: Upload Speed Limit Rule
     default: The upload bandwidth shall not exceed 120Mbps, that is, the upload speed shall not exceed 15MB/s.
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not be deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users with no traffic (ie, upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
 
 login:
   path: login.php

@@ -64,6 +64,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Extreme User and above will be retained forever</li><li>Users with a parked account will be banned if they do not log in for 365 consecutive days</li><li>Users with a non-parked account will be banned if they do not log in for 180 consecutive days</li><li>Users with no traffic (that is, upload/download data are both 0) will be banned if they do not log in for 10 consecutive days.</li></ol>"
 
 login:
   path: login.php

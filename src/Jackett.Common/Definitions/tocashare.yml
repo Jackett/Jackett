@@ -20,6 +20,7 @@ caps:
     - {id: 8, cat: XXX/ImageSet, desc: "Fotos Adultas"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audio E-Book"}
     - {id: 10, cat: XXX, desc: "XXX"}
+    - {id: 11, cat: Audio/Video, desc: "Shows"}
 
   modes:
     search: [q]
@@ -56,6 +57,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The inactivation system was created with the purpose of encouraging member participation. This way, after 7 days without accessing the website, 30 BONs will be deducted per day. If your account balance reaches 0 and you don't have any torrents being seeded, it will be automatically deactivated."
 
 login:
   path: /api/torrents
@@ -124,6 +129,8 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)^None$", ""]
+        - name: re_replace
           args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: replace
           args: [" & ", "_&_"]
@@ -163,10 +170,10 @@ search:
       case:
         False: 1 # normal
         True: 2 # double
-# global MR is 0.4 but torrents must be seeded for 5 days regardless of ratio
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # json UNIT3D 7.2.0

@@ -87,6 +87,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Vacation mode is used to avoid deletion due to inactivity for 90 days. You can turn it on or off in the Profile menu, set the appropriate option and save your changes."
 
 login:
   method: cookie

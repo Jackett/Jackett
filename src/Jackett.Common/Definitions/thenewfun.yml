@@ -97,6 +97,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts are automatically deleted after 42 days and leechers are also kicked."
 
 login:
   path: takelogin.php
@@ -176,4 +180,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# engine n/a
+# NetVision

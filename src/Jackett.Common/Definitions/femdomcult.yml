@@ -33,6 +33,7 @@ caps:
     - {id: 66, cat: XXX, desc: "Transdom"}
     - {id: 77, cat: XXX, desc: "Unknown & Low Quality"}
     - {id: 75, cat: XXX, desc: "Virtual Reality"}
+    - {id: 0, cat: XXX/Other, desc: "Other"}
 
   modes:
     search: [q]
@@ -63,6 +64,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "User classes Beginner and Perv have to be inactive (= not logged in on the site, tracker activity/seeding does not count) for 4 months before getting disabled automatically. Member class and higher are exempt."
 
 login:
   path: login.php

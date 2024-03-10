@@ -8,7 +8,7 @@ encoding: UTF-8
 links:
   - https://glodls.to/
   - https://gtso.cc/
-  - https://glotorrents.unblockit.dad/
+  - https://glotorrents.unblockit.africa/
   - https://glodls.unblockninja.com/
   - https://glodls.ninjaproxy1.com/
 legacylinks:
@@ -33,6 +33,7 @@ legacylinks:
   - https://glotorrents.mrunblock.bond/
   - https://glotorrents.nocensor.cloud/
   - https://glotorrents.unblockit.date/
+  - https://glotorrents.unblockit.dad/
 
 caps:
   categorymappings:
@@ -104,14 +105,15 @@ search:
     after: 1
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="/search.php?cat="]
       attribute: href
       optional: true
-      default: 33
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}33{{ end }}"
     title:
       selector: td:nth-child(2) a[title]
       attribute: title

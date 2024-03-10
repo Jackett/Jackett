@@ -95,6 +95,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "All accounts up to the ultimate user that have been inactive for more than 8 weeks will be deleted!"
 
 login:
   path: sessioncheck.php?session=1

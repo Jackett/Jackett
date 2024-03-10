@@ -50,6 +50,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Your membership requires that you stay active at Blutopia. To not get disabled, you are required to login to the site at least once every 30 days or be actively seeding at least 1 torrent."
 
 login:
   path: /api/torrents
@@ -117,6 +121,8 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace

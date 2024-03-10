@@ -46,6 +46,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactivity on the SkipTheCommercials web site for more than 90 days will lead to account being disabled."
 
 login:
   path: /api/torrents
@@ -113,6 +117,8 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
         - name: re_replace
           args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace

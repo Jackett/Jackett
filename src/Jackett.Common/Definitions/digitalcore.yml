@@ -95,6 +95,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If your account is inactive (you do not sign in) for more than 60 days, your account is disabled. Park your account if you are going away for more than 60 days."
 
 login:
   method: cookie

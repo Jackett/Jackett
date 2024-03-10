@@ -68,8 +68,12 @@ download:
 
 search:
   paths:
-    - path: "torrents{{ if .Keywords }}/search/{{ .Keywords }}{{ else }}{{ end }}"
-    - path: "torrents{{ if .Keywords }}/search/{{ .Keywords }}{{ else }}{{ end }}/26"
+    # search has 10 torrents per page, latest has 100 torrents per page.
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}latest.html{{ end }}"
+    - path: "{{ if .Keywords }}/search/{{ .Keywords }}&page=10{{ else }}{{ end }}"
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "-"]
 
   rows:
     selector: table.table-hover > tbody > tr:has(a[href*="/torrent/"])
@@ -78,7 +82,7 @@ search:
 
   fields:
     category:
-      selector: a[href*="/cat/"]
+      selector: a[href*="/category/"]
     title:
       selector: a[href*="/torrent/"]
     details:
@@ -88,15 +92,15 @@ search:
       selector: a[href*="/torrent/"]
       attribute: href
     date:
-      selector: td:nth-child(4)
+      selector: td:nth-child(3)
       filters:
         - name: timeago
     size:
-      selector: td:nth-child(5)
+      selector: td:nth-child(4)
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

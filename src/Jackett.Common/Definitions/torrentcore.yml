@@ -65,14 +65,15 @@ search:
     after: 3
 
   fields:
-    category:
+    category_optional:
       selector: img[src^="./cat/"]
       attribute: src
       optional: true
-      default: UNKNOWN
       filters:
         - name: regexp
           args: "cat/(.+?).png"
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}UNKNOWN{{ end }}"
     title:
       selector: a
     details:
@@ -97,7 +98,7 @@ search:
         - name: regexp
           args: "\\[ (\\d{2} [A-Za-z]+ \\d{4} \\d{2}:\\d{2}:\\d{2}) \\]"
         - name: append
-          args: " -07:00" # PDT
+          args: " -00:00" # GMT
         - name: dateparse
           args: "dd MMMM yyyy HH:mm:ss zzz"
     seeders:

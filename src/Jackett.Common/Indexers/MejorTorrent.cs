@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -26,13 +27,10 @@ namespace Jackett.Common.Indexers
         public override string Id => "mejortorrent";
         public override string Name => "MejorTorrent";
         public override string Description => "MejorTorrent - Hay veces que un torrent viene mejor! :)";
-        public override string SiteLink { get; protected set; } = "https://www10.mejortorrent.rip/";
+        public override string SiteLink { get; protected set; } = "https://www13.mejortorrent.rip/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://www.mejortorrento.info/",
             "https://mejortorrent.nocensor.space/",
-            "https://www.mejortorrentes.com/",
-            "https://www.mejortorrento.info/",
             "https://mejortorrent.nocensor.work/",
             "https://www.mejortorrentes.net/",
             "https://mejortorrent.nocensor.biz/",
@@ -58,6 +56,9 @@ namespace Jackett.Common.Indexers
             "https://www7.mejortorrent.rip/",
             "https://www8.mejortorrent.rip/",
             "https://www9.mejortorrent.rip/",
+            "https://www10.mejortorrent.rip/",
+            "https://www11.mejortorrent.rip/",
+            "https://www12.mejortorrent.rip/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -285,8 +286,7 @@ namespace Jackett.Common.Indexers
                     await ParseMovieRelease(releases, query, title, detailsStr, cat, publishDate, quality);
                 else
                 {
-                    const long size = 104857600L; // 100 MB
-                    var release = GenerateRelease(title, detailsStr, detailsStr, cat, publishDate, size);
+                    var release = GenerateRelease(title, detailsStr, detailsStr, cat, publishDate, 100.Megabytes());
                     releases.Add(release);
                 }
             }
@@ -321,9 +321,9 @@ namespace Jackett.Common.Indexers
                     continue;
 
                 // guess size
-                var size = 536870912L; // 512 MB
+                var size = 512.Megabytes();
                 if (title.ToLower().Contains("720p"))
-                    size = 1073741824L; // 1 GB
+                    size = 1.Gigabytes();
 
                 var release = GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, episodePublish, size);
                 releases.Add(release);
@@ -594,13 +594,13 @@ namespace Jackett.Common.Indexers
         {
             var size = initialQuality;
             if (title.ToLower().Contains("microhd"))
-                size = 7516192768L; // 7 GB
+                size = 7.Gigabytes();
             else if (title.ToLower().Contains("complete bluray") || title.ToLower().Contains("2160p"))
-                size = 53687091200L; // 50 GB
+                size = 50.Gigabytes();
             else if (title.ToLower().Contains("bluray"))
-                size = 17179869184L; // 16 GB
+                size = 16.Gigabytes();
             else if (title.ToLower().Contains("bdremux"))
-                size = 21474836480L; // 20 GB
+                size = 20.Gigabytes();
 
             return size;
         }

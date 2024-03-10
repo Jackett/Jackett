@@ -55,6 +55,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account disabled: 30 days of inactivity and no torrent seeding. Pruned Account: Has been disabled for 30 days, which is 60 days of inactivity in total."
 
 login:
   path: /api/torrents
@@ -131,6 +135,8 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
         - name: re_replace
           args: ["(?i)(televisione film)", "televisione_film"]
         - name: replace

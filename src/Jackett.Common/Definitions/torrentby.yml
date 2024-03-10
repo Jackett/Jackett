@@ -5,6 +5,7 @@ description: "torrent.by is a BELARUSIAN public Torrent Tracker"
 language: ru-RU
 type: public
 encoding: UTF-8
+requestDelay: 5
 links:
   - https://torrent.by/
 legacylinks:
@@ -37,7 +38,7 @@ settings:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search/?search={{ .Keywords }}&cat=0&search_in=0{{ else }}today{{ end }}"
+    - path: "{{ if .Keywords }}search/?search={{ .Keywords }}&cat=0&search_in=0{{ else }}today/{{ end }}"
 
   keywordsfilters:
     # strip season and/or ep

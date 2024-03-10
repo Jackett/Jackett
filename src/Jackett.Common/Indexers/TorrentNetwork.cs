@@ -53,6 +53,7 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("token", new HiddenStringConfigurationItem("token"));
             configData.AddDynamic("passkey", new HiddenStringConfigurationItem("passkey"));
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Filter freeleech only") { Value = false });
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "After four weeks of inactivity (six weeks for power users) your account will be deleted (= finally and irrevocably removed from the database). To avoid deletion, you can park your account. Running torrents do not count as active, only logging in counts!!!"));
         }
 
         private TorznabCapabilities SetCapabilities()

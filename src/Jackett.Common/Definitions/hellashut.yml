@@ -38,7 +38,9 @@ caps:
     - {id: 1, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 2, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 42, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 78, cat: Movies/SD, desc: "Movies CAM"}
     - {id: 58, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: 84, cat: Movies, desc: "Movies Fake HD"}
     - {id: 4, cat: Movies/HD, desc: "Movies HD"}
     - {id: 69, cat: Movies/HD, desc: "Movies HD Packs"}
     - {id: 3, cat: Movies/SD, desc: "Movies SD"}
@@ -52,12 +54,16 @@ caps:
     - {id: 76, cat: Movies/UHD, desc: "NO SUBS IN Movies 4K"}
     - {id: 35, cat: TV/Sport, desc: "Sports HD"}
     - {id: 34, cat: TV/Sport, desc: "Sports SD"}
+    - {id: 80, cat: Books, desc: "Tutorials Books"}
+    - {id: 79, cat: TV/Other, desc: "Tutorials Video"}
     - {id: 5, cat: TV, desc: "TV Greek Movies"}
     - {id: 6, cat: TV, desc: "TV Greek Series"}
     - {id: 7, cat: TV, desc: "TV Greek Series Packs"}
     - {id: 60, cat: TV, desc: "TV Greek Shows"}
     - {id: 41, cat: TV/HD, desc: "TV HD"}
     - {id: 61, cat: TV, desc: "TV Series"}
+    - {id: 82, cat: TV/UHD, desc: "TV Series 4K"}
+    - {id: 83, cat: TV/UHD, desc: "TV Series 4K Packs"}
     - {id: 62, cat: TV, desc: "TV Series Emb"}
     - {id: 63, cat: TV, desc: "TV Series Emb Packs"}
     - {id: 64, cat: TV/HD, desc: "TV Series HD"}
@@ -100,6 +106,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts inactive for more than 45 days are automatically deleted."
 
 login:
   path: account-login.php
@@ -149,14 +159,15 @@ search:
     selector: table.ttable_headinner tr.t-row
 
   fields:
-    category:
+    category_optional:
       selector: a[href*="cat="]
       attribute: href
       optional: true
-      default: 56
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}56{{ end }}"
     title:
       selector: a[href^="torrents-details.php?id="]
       attribute: title
@@ -179,7 +190,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "dd-MM-yyyy HH:mm:ss"
+          args: "dd-MM-yyyyHH:mm:ss"
     grabs:
       selector: td:nth-last-child(5)
     seeders:

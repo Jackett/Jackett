@@ -89,6 +89,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must login regularly to maintain an active account. For User and Member, you must login once every 4 months. For Power User, Master and Elite you must login once per year. If you fail to do this your account will be disabled."
 
 login:
   path: login

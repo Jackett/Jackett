@@ -75,6 +75,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "After half a year of inactivity you will first be placed in a parked state which ensures that you can enter for another year and a half. If you don't log in by then, the system will permanently delete it."
 
 login:
   path: login.php

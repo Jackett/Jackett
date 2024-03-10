@@ -83,6 +83,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive users registered more than 6 weeks ago with a low ratio (below 0.4) will be deleted after a while. The conditions for the actual cancellation are always decided by the Staff."
 
 login:
   path: takelogin.php

@@ -95,6 +95,10 @@ settings:
     type: info
     label: About login error
     default: If you get a <b>Login Failed, got redirected.</b> error during your config <i>save</i> then most likely you have used an incorrect username or password.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ol><li>Users who have not accessed the site for 180 days will be deleted!</li><li>If the vacation mode is set, the system will not delete the given user for 365 days.</li></ol>"
 
 login:
   path: takelogin.php
@@ -123,14 +127,15 @@ search:
       - name: andmatch
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="browse.php?cat="]
       attribute: href
       optional: true
-      default: 38
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}38{{ end }}"
     title_default:
       # can be abbreviated
       selector: a[href^="details.php?id="]

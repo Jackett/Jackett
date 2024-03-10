@@ -1,32 +1,34 @@
 ---
-id: hddolby
-name: HDDolby
-description: "HD Dolby is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+id: ptgtk
+name: PT GTK
+description: "PT GTK is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://www.hddolby.com/
+  - https://pt.gtk.pw/
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies电影"}
-    - {id: 402, cat: TV, desc: "TV Series电视剧"}
-    - {id: 403, cat: TV, desc: "TV Shows综艺"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries纪录片"}
-    - {id: 405, cat: TV/Anime, desc: "Animations动漫"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 407, cat: TV/Sport, desc: "Sports体育"}
-    - {id: 408, cat: Audio, desc: "HQ Audio音乐"}
-    - {id: 409, cat: Other, desc: "Others其他"}
-    - {id: 410, cat: PC/Games, desc: "Games游戏"}
-    - {id: 411, cat: Other, desc: "Study学习"}
+    - {id: 401, cat: Movies, desc: "Movies(电影)"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries(纪录片)"}
+    - {id: 405, cat: TV/Anime, desc: "Animations(动画)"}
+    - {id: 402, cat: TV, desc: "TV Series(剧集)"}
+    - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos(MV)"}
+    - {id: 407, cat: TV/Sport, desc: "Sports(运动题材)"}
+    - {id: 409, cat: Other, desc: "Misc(其他)"}
+    - {id: 408, cat: Audio, desc: "HQ Audio(高清音频)"}
+    - {id: 410, cat: Books, desc: "Book(图书)"}
+    - {id: 411, cat: Audio, desc: "Music Album(音乐专辑)"}
+    - {id: 412, cat: Other, desc: "Education(资料)"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, doubanid]
-    movie-search: [q, imdbid, doubanid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -41,7 +43,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the HDDolby Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Uploads Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -62,14 +64,14 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: flaresolverr
-    type: info
-    label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
   - name: info_tpp
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted</li><li>Elite User or above would never be deleted if parked (at User CP)</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row</li><li>Un-parked accounts would be deleted if users have not logged in for more than 150 days in a row</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
 
 login:
   path: login.php
@@ -80,17 +82,16 @@ login:
     selector: img[alt="CAPTCHA"]
     input: imagestring
   inputs:
+    secret: ""
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    scode: "{{ .Config.2facode }}"
+    two_step_code: "{{ .Config.2facode }}"
     logout: ""
     securelogin: ""
     ssl: yes
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-      message:
-        selector: td.text
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -100,14 +101,14 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
-    # 0=incldead, 1=active, 2=dead
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 incldead, 1 active, 2 dead
     incldead: 0
-    # show promotions: 0=all, 1=normal, 2=free, 3=2x, 4=2xFree, 5=50%, 6=2x50%, 7=30%
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0=title, 1=descr, 3=uploader, 4=imdb URL
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
-    # 0=AND, 1=OR, 2=Exact
+    # 0 title, 1 descr, 3 uploader, 4 imdburl
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -136,10 +137,15 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
     imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
@@ -185,12 +191,7 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumratio:
-      text: 1.2
     description:
-      selector: td.rowfollow:nth-child(2)
+      selector: td:nth-child(2)
       remove: a, b, font, img, span
-      filters:
-        - name: replace
-          args: [" 剩余时间：", ""]
-# NexusPHP 985f0fc 2023-08-04
+# NexusPHP v1.7.20 2022-08-05

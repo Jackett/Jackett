@@ -324,7 +324,8 @@ namespace Jackett.Common.Indexers
                             title += $" [{string.Join(", ", tags)}]";
                         }
 
-                        var freeTorrent = torrent.Value<int>("FreeTorrent");
+                        var torrentFreeTorrent = torrent.Value<string>("FreeTorrent");
+                        var freeTorrent = torrentFreeTorrent.IsNotNullOrWhiteSpace() && int.TryParse(torrentFreeTorrent, out var freeValue) ? freeValue : 0;
 
                         var release = new ReleaseInfo
                         {

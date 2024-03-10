@@ -91,7 +91,7 @@ search:
     tmdbId: "{{ .Query.TMDBID }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    "free[0]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
@@ -107,10 +107,11 @@ search:
     selector: table > tbody > tr:has(a[href*="/download/"])
 
   fields:
-    categorydesc:
+    categorydesc_optional:
       selector: span[data-original-title="Categoria"]
       optional: true
-      default: Otros
+    categorydesc:
+      text: "{{ if .Result.categorydesc_optional }}{{ .Result.categorydesc_optional }}{{ else }}Otros{{ end }}"
     title_vose:
       selector: a.view-torrent:contains("VOSE")
       optional: true

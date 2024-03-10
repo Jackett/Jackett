@@ -53,6 +53,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "An account will be automatically disabled if there is no log-in activity for 1 year."
 
 login:
   path: login.php

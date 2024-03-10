@@ -120,6 +120,8 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)^None$", ""]
+        - name: re_replace
           args: ["(?i)(Ciencia ficción)", "Ciencia_ficción"]
         - name: re_replace
           args: ["(?i)(TV Movie)", "TV_Movie"]

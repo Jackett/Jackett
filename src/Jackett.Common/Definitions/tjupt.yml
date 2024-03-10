@@ -61,6 +61,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Banning rules for account inactivity:<ol><li>Within 180 days, an account is considered active if it meets any of the following conditions: has checked in for at least 1 day; has published at least 1 seed, fun box or new forum topic (non-reply); actually uploaded increments > 5TiB and the seeding integral increment is > 30W</li><li>Users of Megatron level and above ignore the inactivity rules and will keep their accounts forever</li><li>Users with Sword Down the Mountain and above will not be disabled due to inactivity after parking their accounts in the control panel</li><li>Un-parked accounts below the level of Megatron will be disabled if they have been 'inactive' for 180 consecutive days (Effective from 2024).</li><li>Accounts parked below the level of Down the Mountain with a Sword will be disabled if they are 'inactive' for 300 consecutive days (Effective from 2024).</li></ol>"
 
 login:
   path: takelogin.php

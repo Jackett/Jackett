@@ -99,6 +99,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Nexus Master or above would never be deleted</li><li>Insane User or above would never be deleted if parked (at User CP)</li><li>Parked accounts would be deleted if users have not logged in for more than 120 days in a row</li><li>Un-parked accounts would be deleted if users have not logged in for more than 60 days in a row</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 7 days in a row.</li></ol>"
 
 login:
   path: login.php

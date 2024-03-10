@@ -42,6 +42,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "To be on the safe side, you need to complete a new torrent every 60 days (either seed after publishing the torrent or download a torrent entirely), otherwise, your account will be locked and can be unlocked via the password recovery feature on the login page."
 
 login:
   path: https://api.fsm.name/Torrents/listTorrents

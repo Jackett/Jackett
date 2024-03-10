@@ -22,6 +22,7 @@ caps:
     - {id: 7, cat: PC/Games, desc: "Games"}
     - {id: 23, cat: PC, desc: "Software"}
     - {id: 24, cat: TV/Sport, desc: "EVENTI SPORTIVI"}
+    - {id: 25, cat: Other, desc: "Misc"}
 
   modes:
     search: [q]
@@ -58,6 +59,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "After 60 days of no activity, your account will be automatically deleted."
 
 login:
   path: /api/torrents
@@ -154,6 +159,8 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
         - name: re_replace
           args: ["(?i)(televisione film)", "televisione_film"]
         - name: replace

@@ -59,6 +59,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User (junior college) and above will be retained forever</li><li>Elite User (junior high school) and above will not be deleted after parking (in the control panel)</li><li>Users with a parked account who do not log in for 400 consecutive days will be deleted</li><li>Users with non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users with no traffic (that is, upload/download data are both 0) will be deleted if they do not log in for 15 consecutive days, or if the registration time reaches 60 days.</li></ol>"
 
 login:
   path: login.php

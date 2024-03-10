@@ -62,6 +62,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "No special action required for red ribbons and permanent sponsors and above regardless of time, for others after 1 year of zero activity on tracker and/or website account will be closed."
 
 login:
   path: login
@@ -91,11 +95,10 @@ search:
     selector: table.torrenttable_helper > tbody > tr:has(img)
 
   fields:
-    category:
+    category_optional:
       selector: img[class^="cat-"]
       attribute: class
       optional: true
-      default: 12
       case:
         img.cat-anime: 1
         img.cat-hk: 2
@@ -113,6 +116,8 @@ search:
         img.cat-pinku: 12
         img.cat-drama: 15
         img.cat-ost: 16
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}12{{ end }}"
     title:
       selector: span[id]
     details:

@@ -1,23 +1,32 @@
 ---
-id: anitoons
-name: AniToons
-description: "AniToons is a BRAZILIAN Private Torrent Tracker for ANIME / CARTOONS"
-language: pt-BR
+id: lilleskyorg
+name: LilleSky.org
+description: "LilleSky.org is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://anitoons.xyz/
+  - https://lillesky.org/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "MOVIES"}
+    - {id: 10, cat: Movies, desc: "MOVIES-PACKS"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 6, cat: XXX, desc: "Adult"}
+    - {id: 7, cat: TV, desc: "TV-PACKS"}
+    - {id: 11, cat: TV/Sport, desc: "TV-SPORTS"}
+    - {id: 3, cat: PC/0day, desc: "APPZ"}
+    - {id: 5, cat: Audio, desc: "MUSIC"}
+    - {id: 8, cat: XXX, desc: "XXX"}
+    - {id: 12, cat: Books, desc: "EBOOKS"}
+    - {id: 9, cat: PC/Games, desc: "GAMES"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -26,7 +35,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://anitoons.xyz/\" target=\"_blank\">AniToons</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://lillesky.org/\" target=\"_blank\">LilleSky.org</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -115,7 +124,9 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Ficção científica)", "Ficção_científica"]
+          args: ["(?i)^None$", ""]
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: replace
           args: [" & ", "_&_"]
     description:
@@ -154,10 +165,10 @@ search:
       case:
         False: 1 # normal
         True: 2 # double
-# global MR is 0.4 but torrents must be seeded for 5 days regardless of ratio
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 7.0.3
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 7.2.5

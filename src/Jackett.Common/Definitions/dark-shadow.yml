@@ -18,12 +18,12 @@ caps:
     - {id: 114, cat: Movies/UHD, desc: "Filme UHD"}
     - {id: 140, cat: Movies/BluRay, desc: "Filme BluRay"}
     - {id: 28, cat: Movies/SD, desc: "Filme SD"}
-    - {id: 138, cat: Movies, desc: "Filme Pack`s"}
+    - {id: 138, cat: Movies, desc: "Filme Pack's"}
     # Serien
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
     - {id: 139, cat: TV/UHD, desc: "Serien UHD"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
-    - {id: 59, cat: TV, desc: "Serien Pack`s"}
+    - {id: 59, cat: TV, desc: "Serien Pack's"}
     # Audio
     - {id: 110, cat: Audio/MP3, desc: "Audio MP3"}
     - {id: 48, cat: Audio/Lossless, desc: "Audio Flac"}
@@ -38,7 +38,7 @@ caps:
     # Doku
     - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
-    - {id: 123, cat: TV/Documentary, desc: "Doku Pack`s"}
+    - {id: 123, cat: TV/Documentary, desc: "Doku Pack's"}
     # Spiel
     - {id: 17, cat: PC/Games, desc: "Spiel PC"}
     - {id: 24, cat: Console, desc: "Spiel Konsole"}
@@ -97,6 +97,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts will be deactivated after 7 weeks and deleted after another 3 weeks."
 
 login:
   path: login.php
@@ -139,8 +143,6 @@ search:
       selector: div.kat_cat_pic_name_b
     categorydesc:
       text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
-      optional: true
-      default: Internal Sonstiges
     title:
       selector: a.selection_a
       filters:

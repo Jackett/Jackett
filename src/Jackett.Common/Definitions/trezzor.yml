@@ -77,6 +77,10 @@ settings:
     type: info
     label: XXX Results
     default: To include XXX in results, click <b>Kategoria XXX sa nezobrazuje!!!. povolit zobrazenie</b> on the tracker search page.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Park your account to protect it against deletion due to the fact that you have not logged in at least once every 3 months."
 
 login:
   path: prihlasenie.php

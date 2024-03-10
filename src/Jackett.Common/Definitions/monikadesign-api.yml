@@ -55,6 +55,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The account will be automatically deleted if you are a registered user who is more than 14 days old and has not uploaded or downloaded data."
 
 login:
   path: /api/torrents
@@ -123,6 +127,8 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)^None$", ""]
+        - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: replace
           args: [" & ", "_&_"]
@@ -150,4 +156,6 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.4
 # json UNIT3D 6.4.1 (Custom)

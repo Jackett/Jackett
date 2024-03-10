@@ -56,6 +56,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents por página (Torrents per Page):</b> setting to <b>100</b> on your Perfil (Profile). The default is <i>30</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts are automatically deleted."
 
 login:
   path: takelogin.php

@@ -66,6 +66,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "PolishSource account is not meant for 'collectors' or those who log in once a week. Using the account = downloading + seeding. Unused account = banned account.</br>Inactive accounts will be deleted:</br>User to Extreme User - 30 days | Legend User - 60 days | Veteran User+ - N/A"
 
 login:
   path: login.php

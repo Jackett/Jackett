@@ -55,6 +55,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "All users must log into their account at least once every 60 days, otherwise the account will be deactivated."
 
 login:
   path: /api/torrents
@@ -127,6 +131,8 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
         - name: re_replace
           args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: re_replace

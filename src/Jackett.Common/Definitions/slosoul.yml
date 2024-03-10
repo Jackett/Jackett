@@ -6,6 +6,8 @@ language: en-US
 type: private
 encoding: UTF-8
 testlinktorrent: false
+certificates:
+  - 1a44f7aa5a4fb9bb32a980f8e1394a6c3cf4285f  # Expired 9th March 2024
 links:
   - https://slosoul.net/
 legacylinks:
@@ -66,6 +68,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "To keep records updated regularly, all inactive accounts will be deleted after 60 days of inactivity"
 
 login:
   path: takelogin.php
@@ -78,7 +84,7 @@ login:
     - selector: table:has(td.thead:contains("An error has occured!"))
   test:
     path: /
-    selector: a[href*="logout.php?logouthash="]
+    selector: a[href*="user-profile-"]
 
 download:
   before:

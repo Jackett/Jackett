@@ -143,12 +143,22 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
-      selector: a[href^="details.php?id="]
-      attribute: title
     download_1:
       selector: a[href^="download.php"]
       attribute: href
+    title_default:
+      # title can be missing so we use the &name= from the DL as a standby
+      text: "{{ .Result.download_1 }}"
+      filters:
+        - name: querystring
+          args: name
+        - name: replace
+          args: [".torrent", ""]
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
     download_2:
       selector: a[href^="download2.php"]
       attribute: href

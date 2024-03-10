@@ -287,6 +287,7 @@ namespace Jackett.Server.Controllers
                 {
                     resultIndexer.Status = ManualSearchResultIndexerStatus.OK;
                     resultIndexer.Results = t.Result.Releases.Count();
+                    resultIndexer.ElapsedTime = t.Result.ElapsedTime;
                     resultIndexer.Error = null;
                     indexer = t.Result.Indexer;
                 }
@@ -294,6 +295,7 @@ namespace Jackett.Server.Controllers
                 {
                     resultIndexer.Status = ManualSearchResultIndexerStatus.Error;
                     resultIndexer.Results = 0;
+                    resultIndexer.ElapsedTime = 0;
                     resultIndexer.Error = ((IndexerException)t.Exception.InnerException).ToString();
                     indexer = ((IndexerException)t.Exception.InnerException).Indexer;
                 }
@@ -301,6 +303,7 @@ namespace Jackett.Server.Controllers
                 {
                     resultIndexer.Status = ManualSearchResultIndexerStatus.Unknown;
                     resultIndexer.Results = 0;
+                    resultIndexer.ElapsedTime = 0;
                     resultIndexer.Error = null;
                 }
 
@@ -331,7 +334,7 @@ namespace Jackett.Server.Controllers
             ConfigureCacheResults(manualResult.Results);
 
             // Log info
-            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name));
+            var indexersName = string.Join(", ", manualResult.Indexers.Select(i => i.Name).OrderBy(n => n, StringComparer.OrdinalIgnoreCase));
             var cacheStr = tasks.Where(t => t.Status == TaskStatus.RanToCompletion).Any(t => t.Result.IsFromCache) ? " (from cache)" : "";
 
             stopwatch.Stop();

@@ -227,6 +227,10 @@ settings:
     options:
       2: desc
       1: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must stay active on the site...<ol><li>Any New users that have no stats for one month will have their account deleted</li><li>Any disabled accounts will be deleted after 6 months</li><li>Any accounts inactive for more than 6 months will be deleted</li><li>Donor accounts will be left untouched.</li></ol>"
 
 login:
   path: login.php

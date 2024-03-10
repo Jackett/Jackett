@@ -96,6 +96,10 @@ settings:
     type: info
     label: Search results
     default: "If you are getting <b>0 results</b> then access the site with your browser and <b>mark as read</b> all PMs."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Be active here, you must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). Accounts that are inactive for 3 months are deleted."
 
 login:
   path: account-login.php
@@ -132,14 +136,15 @@ search:
       - name: andmatch
 
   fields:
-    category:
+    category_optional:
       selector: a[href^="torrents.php?cat="]
       attribute: href
       optional: true
-      default: 95
       filters:
         - name: querystring
           args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}95{{ end }}"
     title:
       selector: a[href^="torrents-details.php?id="]
       attribute: title

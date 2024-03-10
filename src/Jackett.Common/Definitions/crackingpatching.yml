@@ -65,14 +65,15 @@ search:
       - name: andmatch
 
   fields:
-    category:
+    category_optional:
       selector: article.post-entry
       attribute: class
       optional: true
-      default: other
       filters:
         - name: regexp
           args: "category-(.+?) "
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}other{{ end }}"
     title:
       selector: h2 > a
     details:

@@ -98,6 +98,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you do not log in, your account will be automatically deleted after 28 days."
 
 login:
   path: takelogin.php

@@ -144,6 +144,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account activity:<ol><li>Zero activity accounts (0 bytes download and 0 bytes upload) are automatically deleted after 30 days</li><li>Inactive accounts under VIP and without parked are automatically deleted after 40 days.</li></ol>"
 
 login:
   path: takelogin.php

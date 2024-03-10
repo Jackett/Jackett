@@ -9,7 +9,7 @@ requestDelay: 2
 links:
   - https://www.torlock.com/
   - https://www.torlock2.com/
-  - https://torlock.unblockit.dad/
+  - https://torlock.unblockit.africa/
 legacylinks:
   - https://torlock.com/
   - https://www.torlock.icu/
@@ -32,6 +32,7 @@ legacylinks:
   - https://torlock.nocensor.cloud/
   - https://torlock.mrunblock.bond/
   - https://torlock.unblockit.date/
+  - https://torlock.unblockit.dad/
 
 caps:
   # dont forget to update the search fields category case block

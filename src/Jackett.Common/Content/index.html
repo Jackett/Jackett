@@ -29,8 +29,8 @@
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20220721002" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20220721002" media="only screen and (max-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20240225001" media="only screen and (min-device-width: 480px)">
+    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20240225001" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=20230107001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
@@ -567,14 +567,35 @@
 
     <script id="jackett-search-results" type="text/x-handlebars-template">
         <hr />
-        <p>Your search was done using:
-            {{#each Indexers}}{{Name}}
+        <span class="indexers">Your search was done using:
+        {{#each Indexers}}
+            <span
             {{#if Error}}
-            (<span title="{{Error}}"><b>Error</b></span>)
+                class="error"
             {{else}}
-            ({{Results}})
+                {{#ifCond Results 0}}
+                class="no-results"
+                {{/ifCond}}
             {{/if}}
-            , {{/each}}
+            >
+            {{Name}}
+            {{#if Error}}
+                (<span title="{{Error}}"<b>Error</b></span>)
+            {{~else~}}
+                ({{~Results~}})
+                {{#if ElapsedTime}}
+                    <span title="Elapsed time">[{{~ElapsedTime~}}ms]</span>
+                {{~else~}}
+                    <span title="Elapsed time">[cache]</span>
+                {{~/if~}}
+            {{~/if~}}
+            {{~#if @last~}}
+                    .
+                {{~else~}}
+                    ,
+            {{~/if~}}
+            </span>
+        {{/each}}
         </p>
         <datalist id="jackett-search-saved-presets"></datalist>
         <table id="jackett-search-results-datatable" class="dataTable compact cell-border hover stripe">
@@ -766,6 +787,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20240126v1"></script>
+    <script type="text/javascript" src="../custom.js?changed=20240229v1"></script>
 </body>
 </html>

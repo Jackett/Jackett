@@ -77,10 +77,10 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_news
+  - name: info_activity
     type: info
-    label: Reminder from GF-Free Admin
-    default: "Attention users of third-party software like Jackett or Radarr, Sonarr or similar:<br>Despite your seed downloads you must physically connect to the web site with your browser or risk being <b>Banned for non-participation</b>...<br><ol>We ask :<li>Remain in seed at least 48 hours on the media to avoid H$R</li><li>And much more depending on your storage means</li><li>Participate in the life of the site shout forum...</li><li>Connect regularly to possibly read your private messages.</li></ol>"
+    label: Account Inactivity
+    default: "Accounts will be automatically deleted after 45 days of inactivity, regardless of class. To maintain an active account, all you have to do is authenticate yourself regularly and participate: In the life of the site, in the forum, in the shoot, in the games of the forum and not only in the downloads. Log in regularly to the site the Rules may change, view your messages."
 
 login:
   path: /api/torrents
@@ -169,6 +169,8 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
         - name: replace
           args: [" & ", "_&_"]
     description:

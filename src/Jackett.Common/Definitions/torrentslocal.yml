@@ -5,8 +5,6 @@ description: "Torrents-Local is a RUSSIAN Semi-Private Torrent Tracker"
 language: ru-RU
 type: semi-private
 encoding: UTF-8
-certificates:
-  - 53944aec4f57063b3ef6977abeef14364310a185 # expired 5/feb/2024
 links:
   - https://torrents-local.xyz/
 
@@ -312,9 +310,9 @@ settings:
     type: checkbox
     label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
     default: false
-  - name: freeleech
+  - name: freeleech_50
     type: checkbox
-    label: Search freeleech only
+    label: Search freeleech and 50% freeleech only
     default: false
   - name: sort
     type: select
@@ -390,7 +388,7 @@ search:
     nm: "{{ .Keywords }}"
     # all words
     allw: 1
-    tor_type: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    tor_type: "{{ if .Config.freeleech_50 }}1{{ else }}{{ end }}"
 
   keywordsfilters:
     # strip season and/or ep

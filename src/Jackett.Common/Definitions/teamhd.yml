@@ -51,6 +51,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive users are regularly deleted. If you haven’t downloaded or distributed anything, or haven’t visited the site for 90 days, then you are a random guest on our resource. The tracker needs active users who know exactly why they came here. That’s why we regularly conduct automatic inactivity sweeps. If you need to be away from the tracker for a long time (business trip, personal circumstances, etc.), use 'parking' your account."
 
 login:
   method: cookie

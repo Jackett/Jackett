@@ -79,6 +79,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "'Pruning' account<ul><li>Your membership requires that you remain active at TOS.</li><li>To not be disabled, you must log in to the tracker at least once every 90 days or continuously see at least 1 torrent. If you haven't logged in for more than 90 days and you don't have any seed torrents as of midnight UTC, your account will be deactivated.</li><li>To be reactivated, you also have 30 days to log in and show that your account is back to normal.</li><li>Disabled account: 90 days of inactivity and no seed torrent.</li><li>'Pruned' account: Has been deactivated for 30 days , and 90 days of inactivity.</li></ul>"
 
 login:
   path: /api/torrents
@@ -169,6 +173,8 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
         - name: replace
           args: [" & ", "_&_"]
     description:

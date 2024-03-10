@@ -32,6 +32,10 @@ settings:
     type: info
     label: About your API key
     default: "Find or Generate a new API Key by accessing your <a href=\"https://anthelion.me/\" target=\"_blank\">Anthelion</a> account <i>Settings</i> page and scrolling down to the <b>API Key</b> section.<br>Tick the <b>Search</b> and <b>Download</b> checkboxes and click the <b>save profile</b> button to generate the key."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Activity is defined as actually using your account, including the snatch/grab/seeding of torrents. You are also required to sign-in to the web frontend of Anthelion at least once per 3mo (90 days) (Note, using autodl/ARR does not satisfy this)."
 
 login:
   path: api.php

@@ -830,6 +830,10 @@ settings:
     options:
       d: desc
       a: asc
+  - name: flaresolverr
+    type: info
+    label: FlareSolverr
+    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
 
 login:
   path: ucp.php?mode=login
@@ -873,10 +877,11 @@ search:
     selector: li.row:has(a[href^="./download/file.php?id="])
 
   fields:
-    categorydesc:
+    categorydesc_optional:
       selector: dt a:last-of-type
       optional: true
-      default: Разное
+    categorydesc:
+      text: "{{ if .Result.categorydesc_optional }}{{ .Result.categorydesc_optional }}{{ else }}Разное{{ end }}"
     title:
       selector: a.topictitle
       filters:

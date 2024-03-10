@@ -74,6 +74,7 @@ namespace Jackett.Common.Indexers
                 })
             { Value = "desc" };
             configData.AddDynamic("orderrequestedfromsite", orderSelect);
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To keep records updated reguarly, all inactive accounts will be deleted after 60 days of inactivity."));
         }
 
         private TorznabCapabilities SetCapabilities()
