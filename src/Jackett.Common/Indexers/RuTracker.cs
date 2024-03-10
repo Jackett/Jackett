@@ -1519,7 +1519,7 @@ namespace Jackett.Common.Indexers
             //  replace any space, special char, etc. with % (wildcard)
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                searchString = new Regex("[^a-zA-Zа-яА-Я0-9]+").Replace(searchString, "%");
+                searchString = new Regex("[^a-zA-Zа-яА-ЯёЁ0-9]+").Replace(searchString, "%");
             }
 
             // if the search string is empty use the getnew view
