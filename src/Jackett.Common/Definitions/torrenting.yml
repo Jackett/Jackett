@@ -52,6 +52,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "All members are required to log into their account at least every 89 days or you will be deleted without warning."
 
 login:
   method: cookie

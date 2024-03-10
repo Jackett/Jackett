@@ -45,6 +45,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Unused accounts (both upload and download are zero) are disabled by the system after 60 days of no login. Used accounts with prior activity (upload and/or download) are disabled by the system after 240 days of no login."
 
 caps:
   categorymappings:

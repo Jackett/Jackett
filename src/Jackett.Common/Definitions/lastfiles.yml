@@ -82,6 +82,10 @@ settings:
     type: info
     label: FlareSolverr
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts inactive for more than 42 days are automatically deleted."
 #  - name: sort
 #    type: select
 #    label: Sort requested from site

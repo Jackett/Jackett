@@ -97,6 +97,10 @@ settings:
     type: info
     label: Search results
     default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then the most likely reason is that you have <b>Important news from the team</b> on the Web Site that must be read before you can proceed to the torrent search page."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts can use the park system for up to 180 days."
 
 login:
   path: takelogin.php

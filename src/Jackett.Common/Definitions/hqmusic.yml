@@ -42,6 +42,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "User and Member classes must access their accounts regularly. Power Users and above are immune to inactivity pruning."
 
 login:
   path: login.php

@@ -87,6 +87,10 @@ settings:
     type: info
     label: Search results
     default: "If you are getting the error <b>Login Failed, got redirected</b> then access the site with your browser and <b>mark as read</b> all PMs."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts inactive for more than 42 days are automatically deleted."
 
 login:
   path: login.php
