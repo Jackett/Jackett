@@ -106,6 +106,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts inactive for more than 45 days are automatically deleted."
 
 login:
   path: account-login.php
