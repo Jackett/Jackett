@@ -94,6 +94,10 @@ settings:
     type: info
     label: "IP Filtering"
     default: "Zelka occasionally blocks Non-Bulgarian IP addresses. A <b>FlareSolverr</b> error means your IP was not accepted."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "With the option for parking accounts you can prevent your user nickname from getting deleted by the system for deleting inactive accounts."
 
 login:
   path: takelogin.php
