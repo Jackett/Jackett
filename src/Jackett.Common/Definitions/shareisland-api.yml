@@ -59,6 +59,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "After 60 days of no activity, your account will be automatically deleted."
 
 login:
   path: /api/torrents
