@@ -359,7 +359,7 @@ namespace Jackett.Server.Controllers
             if (string.Equals(CurrentQuery.QueryType, "caps", StringComparison.InvariantCultureIgnoreCase))
             {
                 return CurrentQuery.IsJson ?
-                    (IActionResult)Json(CurrentIndexer.TorznabCaps.ToJson(_JsonSerializerSettings)) :
+                    Content(CurrentIndexer.TorznabCaps.ToJson(_JsonSerializerSettings), "application/json", Encoding.UTF8) :
                     Content(CurrentIndexer.TorznabCaps.ToXml(), "application/rss+xml", Encoding.UTF8);
             }
 
@@ -378,24 +378,6 @@ namespace Jackett.Server.Controllers
                 else if (string.Equals(request.configured, "false", StringComparison.InvariantCultureIgnoreCase))
                     indexers = indexers.Where(i => !i.IsConfigured);
 
-                if (CurrentQuery.IsJson)
-                {
-                    return Json(new JObject
-                    {
-                        ["indexers"] = JArray.FromObject(indexers.Select(i => new
-                        {
-                            id = i.Id,
-                            configured = i.IsConfigured,
-                            title = i.Name,
-                            description = i.Description,
-                            link = i.SiteLink,
-                            language = i.Language,
-                            type = i.Type,
-                            caps = i.TorznabCaps
-                        }))
-                    });
-                }
-
                 var xdoc = new XDocument(
                     new XDeclaration("1.0", "UTF-8", null),
                     new XElement("indexers",
@@ -412,6 +394,11 @@ namespace Jackett.Server.Controllers
                         )
                     )
                 );
+
+                if (CurrentQuery.IsJson)
+                {
+                    return Json(XmlToJsonConverter.XmlToJson(xdoc.Root), _JsonSerializerSettings);
+                }
 
                 return Content(xdoc.Declaration.ToString() + Environment.NewLine + xdoc.ToString(), "application/xml", Encoding.UTF8);
             }
@@ -502,12 +489,14 @@ namespace Jackett.Server.Controllers
                 else
                     logger.Info($"Torznab search in {CurrentIndexer.Name} for {CurrentQuery.GetQueryString()} => Found {result.Releases.Count()} releases{cacheStr} [{stopwatch.ElapsedMilliseconds:0}ms]");
 
+                var serverUri = new Uri(serverUrl);
                 if (CurrentQuery.IsJson)
                 {
-                    return Json(resultPage);
+                    var json = resultPage.ToJson(serverUri);
+                    return Content(json, "application/json", Encoding.UTF8);
                 }
 
-                var xml = resultPage.ToXml(new Uri(serverUrl));
+                var xml = resultPage.ToXml(serverUri);
 
                 // Force the return as XML
                 return Content(xml, "application/rss+xml", Encoding.UTF8);
