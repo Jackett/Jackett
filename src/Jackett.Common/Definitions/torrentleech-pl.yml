@@ -64,6 +64,10 @@ settings:
     type: info
     label: FlareSolverr
     default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Users of the Power User class and below who have been inactive for more than 62 days are deleted. Therefore, if for some reason you can't enter TorrentLeech.pl for a while, Park your account. You won't be able to download torrents, but you can be sure that you won't have to log in for 122 days. However, if you do not log in to your account after this time, it will be deleted."
 
 login:
   path: login.php

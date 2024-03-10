@@ -50,6 +50,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you stop visiting the site or downloading torrents your account will be automatically deactivated after 180 days."
 
 login:
   path: /api/torrents
