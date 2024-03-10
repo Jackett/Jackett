@@ -145,7 +145,7 @@ search:
 #    - name: diacritics # 8686
 #      args: replace
     - name: re_replace
-      args: ["[^a-zA-Zа-яА-Я0-9]+", " "]
+      args: ["[^a-zA-Zа-яА-ЯёЁ0-9]+", " "]
     - name: re_replace # S01 to 1
       args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
     - name: re_replace # S01E01 to 1 1
