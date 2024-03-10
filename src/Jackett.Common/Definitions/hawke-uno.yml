@@ -48,6 +48,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "SS and IF members must either login or register any seeding activity in a rolling window of 180 days to retain their account. Failure to do so will result in their account being disabled by the site automatically."
 
 login:
   path: /api/torrents
