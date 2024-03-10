@@ -81,6 +81,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrentek száma egy oldalon:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "User profiles are automatically deleted after a long period of inactivity."
 
 login:
   path: login.php
