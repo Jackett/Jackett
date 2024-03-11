@@ -122,8 +122,6 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)^None$", ""]
-        - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
           args: ["(?i)(TV Movie)", "TV_Movie"]
@@ -171,4 +169,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 7.1.3
+# json UNIT3D 8.0.0b
