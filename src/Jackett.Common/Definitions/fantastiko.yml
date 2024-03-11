@@ -69,6 +69,10 @@ settings:
     type: checkbox
     label: Filter freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Newcomers with zero offer and participation are deleted after 1 week. Those users who fall into a ratio below 1 or make 3 hit'n'runs (2 for newcomers) become a redshirt (this means limited access to the tracker, removal of invites and reset of forum statistics) and at 5, if they don't enter the seed and 15 days pass, they are banned to the nearest barren planet..."
 
 login:
   path: ?p=home&pid=1
