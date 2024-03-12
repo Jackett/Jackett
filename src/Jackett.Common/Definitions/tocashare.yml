@@ -131,6 +131,8 @@ search:
         - name: re_replace
           args: ["(?i)^None$", ""]
         - name: re_replace
+          args: ["(?i)(Cinema TV)", "Cinema_TV"]
+        - name: re_replace
           args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: replace
           args: [" & ", "_&_"]
