@@ -54,9 +54,17 @@ settings:
       s: size asc
 
 download:
-  selectors:
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
+  infohash:
+    hash:
+      selector: :root
+      filters:
+        - name: regexp
+          args: "\"info_hash\": \"([A-F|a-f|0-9]{40})\","
+    title:
+      selector: :root
+      filters:
+        - name: regexp
+          args: "\"name\": \"(.+?)\","
 
 search:
   paths:
@@ -83,7 +91,7 @@ search:
     details:
       text: "/post-detail/{{ .Result._id }}/{{ .Result.details_url }}/"
     download:
-      text: "{{ .Result.details }}"
+      text: "{{ .Result.details }}?format=json"
     poster:
       selector: t
     imdbid:
