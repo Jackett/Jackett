@@ -60,52 +60,47 @@ download:
 
 search:
   paths:
-    - path: "get-posts/order:{{ .Config.sort }}{{ range .Categories }}:category:{{.}}{{end}}{{ if or .Query.IMDBID .Keywords }}:keywords:{{ or .Query.IMDBID .Keywords }}{{ else }}{{ end }}:paginate_by:100/"
+    - path: "get-posts/order:{{ .Config.sort }}{{ range .Categories }}:category:{{.}}{{end}}{{ if or .Query.IMDBID .Keywords }}:keywords:{{ or .Query.IMDBID .Keywords }}{{ else }}{{ end }}:paginate_by:100:format:json/"
+      response:
+        type: json
 
   rows:
-    selector: table > tbody > tr
+    selector: results
 
   fields:
     category:
-      selector: a[href^="/get-posts/category:"]
+      selector: c
     title:
-      selector: a[href^="/post-detail/"]
-    details:
-      selector: a[href^="/post-detail/"]
-      attribute: href
-    download:
-      selector: a[href^="/post-detail/"]
-      attribute: href
-    poster_src:
-      selector: span#fade.tooltip img
-      attribute: src
-      optional: true
-    poster:
-      selector: span#fade.tooltip img
-      attribute: data-src
-      optional: true
-      default: "{{ .Result.poster_src }}"
+      selector: n
+    _id:
+      selector: pk
+    details_url:
+      selector: n
       filters:
+        - name: tolower
         - name: re_replace
-          args: ["https://i.therarbg.com/np.jpg", ""]
+          args: [" ", "-"]
+    details:
+      text: "/post-detail/{{ .Result._id }}/{{ .Result.details_url }}/"
+    download:
+      text: "{{ .Result.details }}"
+    poster:
+      selector: t
     imdbid:
-      selector: a[href^="/imdb-detail/tt"]
-      attribute: href
+      selector: i
       filters:
-        - name: regexp
-          args: "/imdb-detail/(.+?)/"
+        - name: replace
+          args: ["B", ""]
     date:
-      selector: td:nth-child(5)
-      filters:
-        - name: timeago
+      selector: a
     size:
-      selector: td.sizeCell
+      selector: s
     seeders:
-      selector: td:nth-child(7)
+      selector: se
     leechers:
-      selector: td:nth-child(8)
+      selector: le
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       text: 1
-# engine n/a
+# json
