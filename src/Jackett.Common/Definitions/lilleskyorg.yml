@@ -10,16 +10,13 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "MOVIES"}
-    - {id: 10, cat: Movies, desc: "MOVIES-PACKS"}
+    - {id: 10, cat: Movies, desc: "MOVIES"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 7, cat: TV, desc: "TV-PACKS"}
-    - {id: 11, cat: TV/Sport, desc: "TV-SPORTS"}
-    - {id: 3, cat: PC/0day, desc: "APPZ"}
+    - {id: 3, cat: PC, desc: "APPZ"}
     - {id: 5, cat: Audio, desc: "MUSIC"}
     - {id: 8, cat: XXX, desc: "XXX"}
     - {id: 12, cat: Books, desc: "EBOOKS"}
-    - {id: 9, cat: PC/Games, desc: "GAMES"}
+    - {id: 9, cat: Console, desc: "GAMES"}
 
   modes:
     search: [q]
