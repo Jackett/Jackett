@@ -106,7 +106,7 @@ search:
     # does not support imdbid search and does not return imdb link in results
 
   rows:
-    selector: "body > div[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src=\"pic/free.png\"]){{ else }}{{ end }}"
+    selector: "body > div[id=\"felsohatter2\"] > div[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src=\"pic/free.png\"]){{ else }}{{ end }}"
 
   fields:
     title:
