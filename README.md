@@ -305,6 +305,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Coastal-Crew
  * ConCen [![(invite needed)][inviteneeded]](#)
  * Concertos
+ * CrabPT (蟹黄堡)
  * CrazySpirits
  * CrnaBerza
  * Dajiao (打胶) [![(invite needed)][inviteneeded]](#)
