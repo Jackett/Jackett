@@ -335,6 +335,7 @@ caps:
     - {id: 1865, cat: TV, desc: " |- HDTVRip / HDTVRip-AVC"}
     - {id: 1864, cat: TV, desc: " |- WEB DL / HDTV 720"}
     - {id: 1863, cat: TV, desc: " |- WEB DL / HDTV 1080"}
+    - {id: 2059, cat: TV, desc: " |- WEB DL / HDTV 2160p"}
     - {id: 1855, cat: TV, desc: "Американские"}
     - {id: 1861, cat: TV, desc: " |- DVDRip"}
     - {id: 1860, cat: TV, desc: " |- SatRip"}
@@ -342,6 +343,7 @@ caps:
     - {id: 1858, cat: TV, desc: " |- HDTVRip / HDRip / AVC"}
     - {id: 1857, cat: TV, desc: " |- WEB DL / HD / BDRip 720"}
     - {id: 1856, cat: TV, desc: " |- WEB DL / HD / BDRip 1080"}
+    - {id: 2055, cat: TV, desc: " |- WEB DL / HDTV 2160p"}
     - {id: 1848, cat: TV, desc: "Европейские / Другие"}
     - {id: 1854, cat: TV, desc: " |- DVDRip"}
     - {id: 1853, cat: TV, desc: " |- SatRip"}
@@ -349,6 +351,7 @@ caps:
     - {id: 1851, cat: TV, desc: " |- HDTVRip / HDRip / AVC"}
     - {id: 1850, cat: TV, desc: " |- WEB DL / HD / BDRip 720"}
     - {id: 1849, cat: TV, desc: " |- WEB DL / HD / BDRip 1080"}
+    - {id: 2056, cat: TV, desc: " |- WEB DL / HDTV 2160p"}
     - {id: 1841, cat: TV, desc: "Российские"}
     - {id: 1847, cat: TV, desc: " |- DVDRip"}
     - {id: 1846, cat: TV, desc: " |- SatRip"}
@@ -356,6 +359,7 @@ caps:
     - {id: 1844, cat: TV, desc: " |- HDTVRip / HDRip / AVC"}
     - {id: 1843, cat: TV, desc: " |- WEB DL / HD / BDRip 720"}
     - {id: 1842, cat: TV, desc: " |- WEB DL / HD / BDRip 1080"}
+    - {id: 2057, cat: TV, desc: " |- WEB DL / HDTV 2160p"}
     - {id: 1871, cat: TV, desc: "Мультсериалы"}
     - {id: 1877, cat: TV, desc: " |- DVDRip"}
     - {id: 1876, cat: TV, desc: " |- SatRip"}
@@ -363,6 +367,7 @@ caps:
     - {id: 1874, cat: TV, desc: " |- HDTVRip / HDRip / AVC"}
     - {id: 1873, cat: TV, desc: " |- WEB DL / HD / BDRip 720"}
     - {id: 1872, cat: TV, desc: " |- WEB DL / HD / BDRip 1080"}
+    - {id: 2058, cat: TV, desc: " |- WEB DL / HDTV 2160p"}
     # Аниме
     # Anime
     - {id: 1879, cat: TV/Anime, desc: "Аниме"}
