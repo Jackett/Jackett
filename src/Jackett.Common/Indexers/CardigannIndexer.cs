@@ -1398,6 +1398,22 @@ namespace Jackett.Common.Indexers
             variables[".Query.Author"] = query.Author;
             variables[".Query.Title"] = query.Title;
             variables[".Query.Publisher"] = query.Publisher;
+            // boolean queries
+            variables[".Query.IsBookSearch"] = query.IsBookSearch ? "True" : null;
+            variables[".Query.IsDoubanQuery"] = query.IsDoubanQuery ? "True" : null;
+            variables[".Query.IsGenreQuery"] = query.IsGenreQuery ? "True" : null;
+            variables[".Query.IsIdSearch"] = query.IsIdSearch ? "True" : null;
+            variables[".Query.IsImdbQuery"] = query.IsImdbQuery ? "True" : null;
+            variables[".Query.IsMovieSearch"] = query.IsMovieSearch ? "True" : null;
+            variables[".Query.IsMusicSearch"] = query.IsMusicSearch ? "True" : null;
+            variables[".Query.IsRssSearch"] = query.IsRssSearch ? "True" : null;
+            variables[".Query.IsSearch"] = query.IsSearch ? "True" : null;
+            variables[".Query.IsTVRageQuery"] = query.IsTVRageQuery ? "True" : null;
+            variables[".Query.IsTVSearch"] = query.IsTVSearch ? "True" : null;
+            variables[".Query.IsTmdbQuery"] = query.IsTmdbQuery ? "True" : null;
+            variables[".Query.IsTraktQuery"] = query.IsTraktQuery ? "True" : null;
+            variables[".Query.IsTvdbQuery"] = query.IsTvdbQuery ? "True" : null;
+            variables[".Query.IsTvmazeQuery"] = query.IsTvmazeQuery ? "True" : null;
 
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
@@ -2349,6 +2365,18 @@ namespace Jackett.Common.Indexers
 
                             if (query.TvdbID != null && TorznabCaps.TvSearchTvdbAvailable)
                                 break; // skip andmatch filter for tvdb searches
+
+                            if (query.DoubanID != null && (TorznabCaps.MovieSearchImdbAvailable || TorznabCaps.TvSearchImdbAvailable))
+                                break; // skip andmatch filter for douban searches
+
+                            if (query.TraktID != null && (TorznabCaps.MovieSearchImdbAvailable || TorznabCaps.TvSearchImdbAvailable))
+                                break; // skip andmatch filter for trakt searches
+
+                            if (query.TvmazeID != null && TorznabCaps.TvSearchImdbAvailable)
+                                break; // skip andmatch filter for tvmaze searches
+
+                            if (query.RageID != null && TorznabCaps.TvSearchImdbAvailable)
+                                break; // skip andmatch filter for tvmaze searches
 
                             var queryKeywords = variables[".Keywords"] as string;
 
