@@ -1,0 +1,82 @@
+---
+id: bitmagnet
+name: BitMagnet
+description: "BitMagnet is a self-hosted BitTorrent DHT search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - http://127.0.0.1:3333/
+
+caps:
+  categorymappings:
+    - {id: 2000, cat: Movies, desc: "movie"}
+    - {id: 2030, cat: Movies/SD, desc: "movie_sd"} # unverified
+    - {id: 2040, cat: Movies/HD, desc: "movie_hd"} # unverified
+    - {id: 2045, cat: Movies/UHD, desc: "movie_uhd"} # unverified
+    - {id: 2060, cat: Movies/3D, desc: "movie_3d"} # unverified
+    - {id: 3000, cat: Audio, desc: "music"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "audiobook"}
+    - {id: 4000, cat: PC, desc: "software"}
+    - {id: 4050, cat: PC, desc: "game"} # unverified
+    - {id: 5000, cat: TV, desc: "tv_show"}
+    - {id: 5030, cat: TV/SD, desc: "tv_show_sd"} # unverified
+    - {id: 5040, cat: TV/HD, desc: "tv_show_hd"} # unverified
+    - {id: 5045, cat: TV/UHD, desc: "tv_show_uhd"} # unverified
+    - {id: 6000, cat: XXX, desc: "xxx"}
+    - {id: 6070, cat: XXX/Other, desc: "xxx_other"} # unverified
+    - {id: 7000, cat: Books, desc: "book"} # unverified
+    - {id: 7020, cat: Books/EBook, desc: "ebook"}
+    - {id: 7030, cat: Books/Comics, desc: "comic"}
+    - {id: 8000, cat: Other, desc: "Unknown"}
+
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    - path: torznab/api
+      response:
+        type: xml
+  inputs:
+    t: "{{ .Query.Type }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    categorydesc:
+      selector: category
+    title:
+      selector: title
+    details:
+      text: /
+    date:
+      selector: pubDate
+    infohash:
+      selector: guid
+    size:
+      selector: size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# torznab xml
