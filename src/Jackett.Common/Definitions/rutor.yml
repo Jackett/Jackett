@@ -6,11 +6,9 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
-  - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
-  - http://new-rutor.org/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://rutor.info/
+  - https://rutor.is/
 legacylinks:
-  - http://live-rutor.org/ # domain expired 9 Feb 2020
   - https://rutor.uk-unblock.xyz/
   - https://rutor.ind-unblock.xyz/
   - https://rutor.unblocked.bar/
@@ -30,6 +28,9 @@ legacylinks:
   - https://rutor.nocensor.click/
   - https://rutor.mrunblock.bond/ # for magnet only
   - https://rutor.nocensor.cloud/
+  - http://new-rutor.org/ # Oops. Something went wrong, try reloading the page
+  - http://rutor.info/
+  - http://rutor.is/
 
 caps:
   # unfortunately RuTor does not display categories anywhere in its search results page :-(
