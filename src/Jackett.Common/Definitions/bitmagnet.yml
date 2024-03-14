@@ -18,7 +18,7 @@ caps:
     - {id: 3000, cat: Audio, desc: "music"}
     - {id: 3030, cat: Audio/Audiobook, desc: "audiobook"}
     - {id: 4000, cat: PC, desc: "software"}
-    - {id: 4050, cat: PC, desc: "game"} # unverified
+    - {id: 4050, cat: PC/Games, desc: "game"} # unverified
     - {id: 5000, cat: TV, desc: "tv_show"}
     - {id: 5030, cat: TV/SD, desc: "tv_show_sd"} # unverified
     - {id: 5040, cat: TV/HD, desc: "tv_show_hd"} # unverified
