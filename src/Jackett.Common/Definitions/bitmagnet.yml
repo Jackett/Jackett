@@ -1,6 +1,6 @@
 ---
 id: bitmagnet
-name: BitMagnet
+name: BitMagnet (Local DHT)
 description: "BitMagnet is a self-hosted BitTorrent DHT search engine"
 language: en-US
 type: public
