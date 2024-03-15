@@ -265,6 +265,7 @@ namespace Jackett.Updater
                 "Definitions/academictorrents.yml",
                 "Definitions/acervos-api.yml",
                 "Definitions/acgsou.yml",
+                "Definitions/adbt.yml",
                 "Definitions/aither.yml", // switch to *-API #8682
                 "Definitions/alein.yml",
                 "Definitions/alexfilm.yml",

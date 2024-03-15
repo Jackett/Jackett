@@ -233,7 +233,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ABtorrents (ABT + RNS)
  * Acid Lounge (A-L)
  * AcrossTheTasman [![(invite needed)][inviteneeded]](#)
- * ADBT (Anime Datenbank Tracker)
  * Aftershock
  * AGSVPT (Artic Global Seed Vault)
  * Aidoru!Online
