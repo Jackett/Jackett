@@ -1,0 +1,207 @@
+---
+id: polishtorrent
+name: Polish Torrent
+description: "Polish Torrent (PTT) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-PL
+type: private
+encoding: UTF-8
+links:
+  - https://polishtorrent.top/
+
+caps:
+  categorymappings:
+    - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
+    - {id: 4, cat: TV/Anime, desc: "Bajki/Anime"}
+    - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
+    - {id: 13, cat: Movies/DVD, desc: "DVD5/9"}
+    - {id: 12, cat: Movies/BluRay, desc: "BD25/50_5/9"}
+    - {id: 14, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 16, cat: Movies/SD, desc: "Filmy SD"}
+    - {id: 17, cat: Movies/Other, desc: "Filmy inne"}
+    - {id: 15, cat: TV/Documentary, desc: "Dokumentalne"}
+    - {id: 5, cat: PC/Games, desc: "Gry pc"}
+    - {id: 24, cat: PC/Games, desc: "Gry dodatki"}
+    - {id: 18, cat: PC/Mobile-Android, desc: "Mobile"}
+    - {id: 10, cat: Console, desc: "Gry Konsole"}
+    - {id: 19, cat: Other, desc: "Inne"}
+    - {id: 8, cat: Audio, desc: "Muzyka"}
+    - {id: 11, cat: Movies, desc: "Paczki"}
+    - {id: 20, cat: Books, desc: "Book"}
+    - {id: 25, cat: Audio/Audioboot, desc: "Audiobook"}
+    - {id: 21, cat: TV/Sport, desc: "Sport"}
+    - {id: 9, cat: TV/HD, desc: "Seriale HD"}
+    - {id: 22, cat: TV/SD, desc: "Seriale SD"}
+    - {id: 23, cat: Movies/UHD, desc: "Filmy 4K"}
+    - {id: 2, cat: TV/UHD, desc: "TV 4K"}
+    - {id: 7, cat: XXX, desc: "XXX 18+"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://polishtorrent.top/\" target=\"_blank\">Polish Torrent</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTI by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTI by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTI POLISH: MULTI POLISH
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: /api/torrents
+  method: get
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v7.0.0)
+    # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L349
+    - path: "/api/torrents/filter"
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: data
+    attribute: attributes
+
+  fields:
+    category:
+      selector: category_id
+    title_phase1:
+      selector: name
+    title_multilang:
+      selector: name
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
+        - name: re_replace
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    infohash:
+      selector: info_hash
+    poster:
+      selector: meta.poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    genre:
+      selector: meta.genres
+      filters:
+        - name: re_replace
+          args: ["(?i)^None$", ""]
+        - name: re_replace
+          args: ["(?i)(Akcja i Przygoda)", "Akcja_i_Przygoda"]
+        - name: re_replace
+          args: ["(?i)(film TV)", "film_TV"]
+        - name: replace
+          args: [" & ", "_&_"]
+    description:
+      text: "{{ .Result.genre }}"
+    files:
+      selector: num_file
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    downloadvolumefactor:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
+      case:
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
+    uploadvolumefactor:
+      # api returns False, True
+      selector: double_upload
+      case:
+        False: 1 # normal
+        True: 2 # double
+    minimumseedtime:
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 7.2.5
