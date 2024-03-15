@@ -5,6 +5,7 @@ description: "torrent-pirat is a RUSSIAN Public Torrent Tracker for 3X"
 language: ru-RU
 type: public
 encoding: UTF-8
+requestDelay: 5.1
 links:
   - http://www.torrent-pirat.com/ # site does not support https ERR_CONNECTION_REFUSED
 
