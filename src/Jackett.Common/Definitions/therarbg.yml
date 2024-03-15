@@ -64,7 +64,7 @@ download:
       selector: :root
       filters:
         - name: regexp
-          args: "\"name\": \"(.+?)\","
+          args: "\"name\": \"(.+?)\", \"short_name"
 
 search:
   paths:
