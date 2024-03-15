@@ -43,6 +43,7 @@ caps:
     - {id: 62, cat: Console, desc: "RaspberryPi"}
     - {id: 56, cat: Console, desc: "Retro Minis"}
     - {id: 67, cat: Console, desc: "Retrobat"}
+    - {id: 76, cat: Console, desc: "RGS"}
     - {id: 27, cat: Console, desc: "Roms and Emulators"}
     - {id: 68, cat: Console, desc: "Schmoomer's"}
     - {id: 57, cat: Console, desc: "Sega"}
