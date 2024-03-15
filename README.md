@@ -859,7 +859,7 @@ configuration or even disable the cache. Keep in mind that you can be banned by 
 If you have enabled the Jackett internal cache, but have an indexer for which you would prefer to fetch fresh results (thus ignoring the internal cache) then add the **&cache=false** parameter to your torznab query.
 
 ## Configuring FlareSolverr
-Some indexers are protected by CloudFlare or similar services and Jackett is not able to solve the challenges.
+Some indexers are protected by Cloudflare or similar services and Jackett is not able to solve the challenges.
 For these cases, [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) has been integrated into Jackett. This service is in charge of solving the challenges and configuring Jackett with the necessary cookies.
 Setting up this service is optional, most indexers don't need it.
 * Install FlareSolverr service (following their instructions)
