@@ -27,7 +27,7 @@ caps:
     - {id: 8, cat: Audio, desc: "Muzyka"}
     - {id: 11, cat: Movies, desc: "Paczki"}
     - {id: 20, cat: Books, desc: "Book"}
-    - {id: 25, cat: Audio/Audioboot, desc: "Audiobook"}
+    - {id: 25, cat: Audio/Audiobook, desc: "Audiobook"}
     - {id: 21, cat: TV/Sport, desc: "Sport"}
     - {id: 9, cat: TV/HD, desc: "Seriale HD"}
     - {id: 22, cat: TV/SD, desc: "Seriale SD"}
