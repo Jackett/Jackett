@@ -72,6 +72,11 @@ search:
       response:
         type: json
 
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\W+", " "]
+    - name: trim
+
   rows:
     selector: results
 
