@@ -102,6 +102,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Anzahl der Torrents beim Durchsuchen:</b> setting to <b>60</b> on your Control Panel. The default is <i>15</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts will be deactivated after 7 weeks and deleted after another 3 weeks."
 
 login:
   path: login.php
