@@ -635,47 +635,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be missing features or be broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com or jacketttest -at- gmail.com to get them fixed/improved.
 
-### Aggregate indexers
+### Jackett Torznab query syntax
 
-A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab`.
-It will query all configured indexers and return the combined results.
-
-If your client supports multiple feeds it's recommended to add each indexer directly instead of using the all indexer.
-Using the all indexer has no advantages (besides reduced management overhead), the only disadvantages:
-* you lose control over indexer specific settings (categories, search modes, etc.)
-* mixing search modes (IMDB, query, etc.) might cause low-quality results
-* indexer specific categories (>= 100000) can't be used.
-* slow indexers will slow down the overall result
-* total results are limited to 1000
-
-To get all Jackett indexers including their capabilities you can use `t=indexers` on the all indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as a query parameter.
-
-### Filter indexers
-
-Another special "filter" indexer is available at `/api/v2.0/indexers/<filter>/results/torznab`
-It will query the configured indexers that match the `<filter>` expression criteria and return the combined results as "all".
-
-Supported filters
-Filter | Condition
--|-
-`type:<type>` | where the indexer type is equal to `<type>`
-`tag:<tag>` | where the indexer tags contains `<tag>`
-`lang:<tag>` | where the indexer language start with `<lang>`
-`test:{passed\|failed}` | where the last indexer test performed `passed` or `failed`
-`status:{healthy\|failing\|unknown}` | where the indexer state is `healthy` (successfully operates in the last minutes), `failing` (generates errors in the recent call) or `unknown` (unused for a while)
-
-Supported operators
-Operator | Condition
--|-
-`!<expr>` | where not `<expr>`
-`<expr1>+<expr2>[+<expr3>...]` | where `<expr1>` and `<expr2>` [and `<expr3>`...]
-`<expr1>,<expr2>[,<expr3>...]` | where `<expr1>` or `<expr2>` [or `<expr3>`...]
-
-Example 1:
-The "filter" indexer at `/api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab` will query all the configured indexers tagged with `group1` or all the indexers not private and with `en` language (`en-en`,`en-us`,...)
-
-Example 2:
-The "filter" indexer at `/api/v2.0/indexers/!status:failing,test:passed` will query all the configured indexers not `failing` or which `passed` its last test.
+Jackett accepts Torznab queries following the specifications described is the [Torznab document](https://torznab.github.io/spec-1.3-draft/index.html).
+For example, `.../api/v2.0/indexers/<aJackettIndexerName>/results/torznab/api?apikey=<yourJackettApiKey>&t=caps` would return the capabilities of the indexer, and `.../api/v2.0/indexers/<aJackettIndexerName>/results/torznab/api?apikey=<yourJackettApiKey>&t=search&q=keywords` would perform a free text search on that indexer.
 
 ### Search modes and parameters
 
@@ -709,6 +672,48 @@ Examples:
 
 .../api?apikey=APIKEY&t=book&cat=5,6&genre=horror&publisher=Stuff
 ```
+
+### Filter indexers
+
+A special "filter" indexer is available at `.../api/v2.0/indexers/<filter>/results/torznab`
+It will query the configured indexers that match the `<filter>` expression criteria and return the combined results as "all".
+
+Supported filters
+Filter | Condition
+-|-
+`type:<type>` | where the indexer type is equal to `<type>`
+`tag:<tag>` | where the indexer tags contains `<tag>`
+`lang:<tag>` | where the indexer language start with `<lang>`
+`test:{passed\|failed}` | where the last indexer test performed `passed` or `failed`
+`status:{healthy\|failing\|unknown}` | where the indexer state is `healthy` (successfully operates in the last minutes), `failing` (generates errors in the recent call) or `unknown` (unused for a while)
+
+Supported operators
+Operator | Condition
+-|-
+`!<expr>` | where not `<expr>`
+`<expr1>+<expr2>[+<expr3>...]` | where `<expr1>` and `<expr2>` [and `<expr3>`...]
+`<expr1>,<expr2>[,<expr3>...]` | where `<expr1>` or `<expr2>` [or `<expr3>`...]
+
+Example 1:
+The "filter" indexer at `.../api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab` will query all the configured indexers tagged with `group1` or all the indexers not private and with `en` language (`en-en`,`en-us`,...)
+
+Example 2:
+The "filter" indexer at `/api/v2.0/indexers/!status:failing,test:passed` will query all the configured indexers not `failing` or which `passed` its last test.
+
+### Aggregate indexers
+
+A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab`.
+It will query all configured indexers and return the combined results.
+
+If your client supports multiple feeds it's recommended to add each indexer directly instead of using the all indexer.
+Using the "all" indexer has no advantages (besides reduced management overhead), the only disadvantages:
+* you lose control over indexer specific settings (categories, search modes, etc.)
+* mixing search modes (IMDB, query, etc.) might cause low-quality results
+* indexer specific categories (>= 100000) can't be used.
+* slow indexers will slow down the overall result
+* total results are limited to 1000
+
+To get all Jackett indexers including their capabilities you can use `t=indexers` on the "all" indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as a query parameter.
 
 ## Installation on Windows
 We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
