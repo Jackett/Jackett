@@ -200,6 +200,8 @@ search:
         ":contains(\"Divers\"):contains(\"1080p\")": "5GB"
         ":contains(\"Divers\"):contains(\"720p\")": "4GB"
         "*": ""
+    date:
+      text: now
     download:
       selector: div.download-item > a
       attribute: href
