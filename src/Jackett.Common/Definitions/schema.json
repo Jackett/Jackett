@@ -708,7 +708,37 @@
             },
             "required": [
                 "seeders",
+                "size",
                 "title"
+            ],
+            "oneOf": [
+                {
+                    "required": [
+                        "category"
+                    ]
+                },
+                {
+                    "required": [
+                        "categorydesc"
+                    ]
+                }
+            ],
+            "anyOf": [
+                {
+                    "required": [
+                        "download"
+                    ]
+                },
+                {
+                    "required": [
+                        "infohash"
+                    ]
+                },
+                {
+                    "required": [
+                        "magnet"
+                    ]
+                }
             ],
             "title": "FieldsBlock"
         },
