@@ -261,7 +261,6 @@ namespace Jackett.Updater
                 "Definitions/3wmg.yml",
                 "Definitions/420files.yml",
                 "Definitions/7torrents.yml",
-                "Definitions/DasUnerwartete.yml",
                 "Definitions/academictorrents.yml",
                 "Definitions/acervos-api.yml",
                 "Definitions/acgsou.yml",
