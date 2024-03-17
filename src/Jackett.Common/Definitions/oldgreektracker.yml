@@ -6,6 +6,8 @@ language: el-GR
 type: private
 encoding: UTF-8
 links:
+  - https://oldgreektracker.xyz/
+legacylinks:
   - http://oldgreektracker.xyz/
 
 caps:
@@ -134,6 +136,16 @@ login:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
 
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+  selectors:
+    - selector: a[href*="download.php?id="]
+      attribute: href
+
 search:
   paths:
     - path: browse.php
@@ -154,28 +166,28 @@ search:
     order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
 
   rows:
-    selector: "table.sortable tr:has(a[href*=\"/download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table.sortable tr:has(a[href*=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="/torrent-category-"]
+      selector: a[href*="/browse.php?category="]
       attribute: href
       filters:
-        - name: regexp
-          args: /torrent-category-(.+?)/
+        - name: querystring
+          args: category
     title_default:
       # is usually abbreaviated
-      selector: a[href*="/torrent-details-"]
+      selector: a[href*="/details.php?id="]
     title:
       # while still abbreviated, is usually longer than the default
       selector: div.tooltip-content div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="/torrent-details-"]
+      selector: a[href*="/details.php?id="]
       attribute: href
     download:
-      selector: a[href*="/download-torrent-"]
+      selector: a[href*="/details.php?id="]
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
@@ -184,11 +196,15 @@ search:
       selector: img[src*="/torrents/images/"]
       attribute: src
     date:
-      selector: td:nth-child(2) > div:last-child
+      selector: td:nth-child(2)
       # auto adjusted by site account profile
       filters:
+        - name: regexp
+          args: "(\\d{1,2}(?:st|nd|rd|th):\\w{3,9}:\\d{4} \\d{2}:\\d{2})"
+        - name: re_replace
+          args: ["^(\\d{1,2})(?:st|nd|rd|th):", "$1:"]
         - name: dateparse
-          args: "dd-MM-yyyy HH:mm"
+          args: "d:MMMM:yyyy HH:mm"
     size:
       selector: td:nth-last-child(5)
     grabs:
