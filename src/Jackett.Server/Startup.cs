@@ -8,6 +8,7 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Server.Controllers;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -50,9 +51,9 @@ namespace Jackett.Server
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                         options =>
                         {
-                            options.LoginPath = new PathString("/UI/Login");
-                            options.AccessDeniedPath = new PathString("/UI/Login");
-                            options.LogoutPath = new PathString("/UI/Logout");
+                            options.LoginPath = new PathString($"/UI/{nameof(WebUIController.Login)}");
+                            options.AccessDeniedPath = new PathString($"/UI/{nameof(WebUIController.Login)}");
+                            options.LogoutPath = new PathString($"/UI/{nameof(WebUIController.Logout)}");
                             options.Cookie.Name = "Jackett";
                         });
 

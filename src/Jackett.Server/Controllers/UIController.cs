@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NLog;
 
 namespace Jackett.Server.Controllers
 {
@@ -17,35 +15,44 @@ namespace Jackett.Server.Controllers
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class WebUIController : Controller
     {
-        private readonly IConfigurationService config;
-        private readonly ServerConfig serverConfig;
-        private readonly ISecurityService securityService;
-        private readonly Logger logger;
+        private readonly IConfigurationService _config;
+        private readonly ISecurityService _securityService;
 
-        public WebUIController(IConfigurationService config, ISecurityService ss, ServerConfig s, Logger l)
+        public WebUIController(IConfigurationService config, ISecurityService ss)
         {
-            this.config = config;
-            serverConfig = s;
-            securityService = ss;
-            logger = l;
+            _config = config;
+            _securityService = ss;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromQuery] string cookiesChecked)
         {
-            if (string.IsNullOrEmpty(serverConfig.AdminPassword))
+            if (string.IsNullOrEmpty(cookiesChecked))
+            {
+                HttpContext.Response.Cookies.Append("TestCookie", "1");
+                return Redirect(nameof(TestCookie));
+            }
+
+            if (_securityService.CheckAuthorised(string.Empty))
             {
                 await MakeUserAuthenticated();
             }
 
-            if (User.Identity.IsAuthenticated)
-            {
-                return Redirect("Dashboard");
-            }
+            return User.Identity.IsAuthenticated
+                ? Redirect(nameof(Dashboard))
+                : (IActionResult)new PhysicalFileResult(_config.GetContentFolder() + "/login.html", "text/html");
+        }
 
-            return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html");
-            ;
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult TestCookie()
+        {
+            if (HttpContext.Request.Cookies.Any(x => x.Key == "TestCookie"))
+            {
+                return Redirect($"{nameof(Login)}?cookiesChecked=1");
+            }
+            return BadRequest("Cookies required");
         }
 
         [HttpGet]
@@ -53,17 +60,17 @@ namespace Jackett.Server.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect("Login");
+            return Redirect(nameof(Login));
         }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Dashboard([FromForm] string password)
         {
-            if (securityService.CheckAuthorised(password))
+            if (_securityService.CheckAuthorised(password))
                 await MakeUserAuthenticated();
 
-            return Redirect("Dashboard");
+            return Redirect(nameof(Dashboard));
         }
 
         [HttpGet]
@@ -74,10 +81,10 @@ namespace Jackett.Server.Controllers
 
             if (logout)
             {
-                return Redirect("Logout");
+                return Redirect(nameof(Logout));
             }
 
-            return new PhysicalFileResult(config.GetContentFolder() + "/index.html", "text/html");
+            return new PhysicalFileResult(_config.GetContentFolder() + "/index.html", "text/html");
         }
 
         //TODO: Move this to security service once off Mono
