@@ -8,8 +8,10 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Server.Authentication;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +41,8 @@ namespace Jackett.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IAuthorizationPolicyProvider, UiAuthorizationPolicyProvider>();
+
             services.AddResponseCompression()
                     .AddCors(
                         options =>
@@ -47,13 +51,16 @@ namespace Jackett.Server
 
                         })
                     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddScheme<AuthenticationSchemeOptions, NoAuthenticationHandler>("none", _ => { })
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                         options =>
                         {
                             options.LoginPath = new PathString("/UI/Login");
-                            options.AccessDeniedPath = new PathString("/UI/Login");
+                            options.AccessDeniedPath = new PathString("/UI/Login?loginFailed=true");
                             options.LogoutPath = new PathString("/UI/Logout");
                             options.Cookie.Name = "Jackett";
+                            options.SlidingExpiration = true;
+                            options.ReturnUrlParameter = "returnUrl";
                         });
 
 #if NET462
@@ -187,9 +194,10 @@ namespace Jackett.Server
 
             app.UseStaticFiles();
 
-            app.UseAuthentication();
-
             app.UseRouting();
+
+            app.UseAuthorization();
+            app.UseAuthentication();
 
             if (Helper.ServerConfiguration.AllowCORS)
                 app.UseCors(AllowAllOrigins);

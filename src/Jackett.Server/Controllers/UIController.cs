@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Jackett.Common.Models.Config;
@@ -13,6 +12,8 @@ using NLog;
 
 namespace Jackett.Server.Controllers
 {
+    [Authorize(Policy = "UI")]
+    [ApiController]
     [Route("UI/[action]")]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class WebUIController : Controller
@@ -39,13 +40,12 @@ namespace Jackett.Server.Controllers
                 await MakeUserAuthenticated();
             }
 
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity?.IsAuthenticated == true)
             {
                 return Redirect("Dashboard");
             }
 
             return new PhysicalFileResult(config.GetContentFolder() + "/login.html", "text/html");
-            ;
         }
 
         [HttpGet]
@@ -61,17 +61,16 @@ namespace Jackett.Server.Controllers
         public async Task<IActionResult> Dashboard([FromForm] string password)
         {
             if (securityService.CheckAuthorised(password))
+            {
                 await MakeUserAuthenticated();
+            }
 
             return Redirect("Dashboard");
         }
 
         [HttpGet]
-        public IActionResult Dashboard()
+        public IActionResult Dashboard([FromQuery] bool logout = false)
         {
-            var logout = HttpContext.Request.Query.Where(x => string.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
-                                                            && string.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
-
             if (logout)
             {
                 return Redirect("Logout");
