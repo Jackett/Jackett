@@ -156,5 +156,5 @@ search:
         False: 1 # normal
         True: 2 # double
     minimumratio:
-      text: 0.4
+      text: 1.0
 # json UNIT3D 7.0.3
