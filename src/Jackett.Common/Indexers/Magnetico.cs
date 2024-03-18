@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers
         public override string Description => "Magnetico is a self-hosted BitTorrent DHT search engine";
         public override string SiteLink { get; protected set; } = "http://127.0.0.1:8080/";
         public override string Language => "en-US";
-        public override string Type => "private";
+        public override string Type => "semi-private";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 

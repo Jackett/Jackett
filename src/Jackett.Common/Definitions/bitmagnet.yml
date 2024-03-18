@@ -3,7 +3,7 @@ id: bitmagnet
 name: BitMagnet (Local DHT)
 description: "BitMagnet is a self-hosted BitTorrent DHT search engine"
 language: en-US
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - http://127.0.0.1:3333/

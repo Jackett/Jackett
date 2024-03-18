@@ -153,6 +153,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AniDUB
  * AnimeLayer
  * ArenaBG
+ * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
  * BookTracker
  * BootyTape
  * Catorrent
@@ -179,6 +180,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Kinorun
  * Kinozal
  * LostFilm.tv
+ * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
  * Marine Tracker
  * Masters-TB
  * Mazepa
@@ -267,7 +269,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Bitded
  * Bithorlo (BHO)
  * BitHUmen [![(invite needed)][inviteneeded]](#)
- * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
  * BitPorn
  * Bitspyder
  * BitTorrentFiles
@@ -436,7 +437,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * LST
  * M-Team TP (MTTP)
  * MaDs Revolution
- * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
  * Majomparádé (TurkDepo)
  * Making Off
  * Mansão dos Animes (MDAN)
