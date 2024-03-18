@@ -31,16 +31,17 @@ namespace Jackett.Server.Controllers
             if (string.IsNullOrEmpty(cookiesChecked))
             {
                 HttpContext.Response.Cookies.Append("TestCookie", "1");
-                return Redirect(nameof(TestCookie));
+                return Redirect("TestCookie");
             }
 
             if (_securityService.CheckAuthorised(string.Empty))
             {
                 await MakeUserAuthenticated();
+                return Redirect("Dashboard");
             }
 
             return User.Identity.IsAuthenticated
-                ? Redirect(nameof(Dashboard))
+                ? Redirect("Dashboard")
                 : (IActionResult)new PhysicalFileResult(_config.GetContentFolder() + "/login.html", "text/html");
         }
 
@@ -50,7 +51,7 @@ namespace Jackett.Server.Controllers
         {
             if (HttpContext.Request.Cookies.Any(x => x.Key == "TestCookie"))
             {
-                return Redirect($"{nameof(Login)}?cookiesChecked=1");
+                return Redirect("Login?cookiesChecked=1");
             }
             return BadRequest("Cookies required");
         }
@@ -60,7 +61,7 @@ namespace Jackett.Server.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect(nameof(Login));
+            return Redirect("Login");
         }
 
         [HttpPost]
@@ -70,7 +71,7 @@ namespace Jackett.Server.Controllers
             if (_securityService.CheckAuthorised(password))
                 await MakeUserAuthenticated();
 
-            return Redirect(nameof(Dashboard));
+            return Redirect("Dashboard");
         }
 
         [HttpGet]
@@ -81,7 +82,7 @@ namespace Jackett.Server.Controllers
 
             if (logout)
             {
-                return Redirect(nameof(Logout));
+                return Redirect("Logout");
             }
 
             return new PhysicalFileResult(_config.GetContentFolder() + "/index.html", "text/html");
