@@ -144,6 +144,7 @@ caps:
     - {id: 252, cat: Books, desc: "Yachting, sailing, boating-Projects, design, construction"}
     - {id: 251, cat: Books, desc: "Diving"}
     - {id: 177, cat: Books, desc: "Shipmodeling"}
+    - {id: 352, cat: Books, desc: "Shipmodeling-Paper models"}
     - {id: 293, cat: Books, desc: "Shipmodeling-Radio controlled models"}
     - {id: 292, cat: Books, desc: "Shipmodeling-Marine Modelling Magazines"}
     - {id: 291, cat: Books, desc: "Shipmodeling-Drawings and models of ships (CAD, 3D)"}
