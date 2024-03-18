@@ -8,7 +8,6 @@ using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Server.Controllers;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
