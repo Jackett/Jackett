@@ -200,11 +200,9 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: regexp
-          args: "(\\d{1,2}(?:st|nd|rd|th):\\w{3,9}:\\d{4} \\d{2}:\\d{2})"
-        - name: re_replace
-          args: ["^(\\d{1,2})(?:st|nd|rd|th):", "$1:"]
+          args: "(\\d{2}-\\d{2}-\\d{2} \\d{2}:\\d{2})"
         - name: dateparse
-          args: "d:MMMM:yyyy HH:mm"
+          args: "dd:MM:yy HH:mm"
     size:
       selector: td:nth-last-child(5)
     grabs:
