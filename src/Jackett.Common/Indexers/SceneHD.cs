@@ -112,8 +112,12 @@ namespace Jackett.Common.Indexers
                 { "search", query.IsImdbQuery ? query.ImdbID : query.GetQueryString() }
             };
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-                qc.Add("categories[" + cat + "]", "1");
+            var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
+
+            if (categoryMapping.Count > 0)
+            {
+                qc.Add("cat", string.Join(",", categoryMapping));
+            }
 
             var searchUrl = SearchUrl + qc.GetQueryString();
             var response = await RequestWithCookiesAndRetryAsync(searchUrl);
