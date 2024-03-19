@@ -5,6 +5,7 @@ description: "Torrent[CORE] is a Public DHT Crawler"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 10.1
 links:
   - https://torrentcore.xyz/
 
