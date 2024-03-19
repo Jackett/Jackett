@@ -112,9 +112,9 @@ settings:
     default: "Accounts inactive for more than 45 days are automatically deleted."
 
 login:
-  path: account-login.php
+  path: login.php
   method: form
-  form: form[action="account-login.php"]
+  form: form[action="login.php"]
   captcha:
     type: image
     selector: img[src="captcha.php?ext=.gif"]
