@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net462</TargetFrameworks>
+    <TargetFrameworks>net8.0;net462</TargetFrameworks>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <AssemblyName>JackettUpdater</AssemblyName>
     <OutputType>Exe</OutputType>
