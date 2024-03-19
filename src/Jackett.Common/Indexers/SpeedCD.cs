@@ -37,8 +37,8 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private string LoginUrl1 => SiteLink + "checkpoint/API";
-        private string LoginUrl2 => SiteLink + "checkpoint/";
+        private string LoginUrl1 => SiteLink + "login";
+        private string LoginUrl2 => SiteLink + "login/API";
         private string SearchUrl => SiteLink + "browse/";
 
         private new ConfigurationDataSpeedCD configData => (ConfigurationDataSpeedCD)base.configData;
