@@ -11,6 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 6, cat: XXX/WEB-DL, desc: "OnlyFans"}
+    - {id: 9, cat: XXX/Other, desc: "Other"}
 
   modes:
     search: [q]
