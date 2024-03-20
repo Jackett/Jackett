@@ -212,6 +212,7 @@ caps:
     - {id: 1667, cat: Audio/Lossless, desc: " |- Джаз и блюз"}
     - {id: 1668, cat: Audio/Lossless, desc: " |- Электронная музыка"}
     - {id: 1670, cat: Audio/Lossless, desc: " |- Отечественная поп-музыка"}
+    - {id: 1746, cat: Audio/Lossless, desc: " |- Русский рок, метал"}
     - {id: 1669, cat: Audio/Lossless, desc: " |- Шансон, авторские, военные песни"}
     - {id: 1740, cat: Audio/Lossless, desc: " |- Музыка в формате (Hi-Res stereo)"}
     - {id: 1679, cat: Audio/Lossless, desc: " |- Зарубежная поп музыка (Lossless)"}
