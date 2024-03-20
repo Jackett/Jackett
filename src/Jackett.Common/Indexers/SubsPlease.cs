@@ -107,7 +107,13 @@ namespace Jackett.Common.Indexers
             {
                 searchTerm = searchTerm.Replace(resMatch.Value, string.Empty);
             }
-
+            // Bug Fix If the show title contains a season SX then query.Season is != 0 leading to different results season S0X
+            if (query.Season != 0 )
+            {
+                searchTerm = searchTerm + $" S{query.Season}";
+                query.Season = 0;
+            }
+            
             var queryParameters = new NameValueCollection
             {
                 { "f", "search" },
