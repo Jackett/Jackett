@@ -310,6 +310,7 @@ namespace Jackett.Updater
                 "Definitions/blutopia.yml", // switch to *-API #8682
                 "Definitions/brasiltracker.yml", // migrated to C#
                 "Definitions/breizhpeers.yml",
+                "Definitions/broadcity.yml",
                 "Definitions/brobits.yml",
                 "Definitions/brsociety.yml", // switch to *-API #8682
                 "Definitions/bt-scene.yml",
