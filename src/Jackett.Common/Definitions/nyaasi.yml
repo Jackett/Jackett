@@ -85,6 +85,10 @@ settings:
     type: checkbox
     label: Improve Sonarr compatibility by trying to add Season information into Release Titles
     default: false
+  - name: strip_s01
+    type: checkbox
+    label: Remove first season keywords (S1/S01/Season 1), as some results do not include this for first/single season releases
+    default: false
   - name: radarr_compatibility
     type: checkbox
     label: Improve Radarr compatibility by removing year information from keywords and adding it to Release Titles
@@ -161,6 +165,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: [" *\\b((?:19|20)\\d{2})\\b", "{{ if .Config.radarr_compatibility }}{{ else }} $1{{ end }}"]
+    - name: re_replace
+      args: ["(?i) *\\b(S(?:0|eason *)?1)\\b", "{{ if .Config.strip_s01 }}{{ else }} $1{{ end }}"]
 
   rows:
     selector: tr.default,tr.danger,tr.success
