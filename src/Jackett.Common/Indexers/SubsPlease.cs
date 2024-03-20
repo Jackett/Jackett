@@ -108,6 +108,13 @@ namespace Jackett.Common.Indexers
                 searchTerm = searchTerm.Replace(resMatch.Value, string.Empty);
             }
 
+            // Only include season > 1 in searchTerm, format as S2 rather than S02
+            if (query.Season != 0)
+            {
+                searchTerm = query.Season == 1 ? searchTerm : searchTerm + $" S{query.Season}";
+                query.Season = 0;
+            }
+
             var queryParameters = new NameValueCollection
             {
                 { "f", "search" },
