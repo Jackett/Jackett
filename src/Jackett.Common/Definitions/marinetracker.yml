@@ -161,6 +161,7 @@ caps:
     - {id: 279, cat: Books, desc: "Marine History-Marine vessels"}
     - {id: 278, cat: Books, desc: "Marine History-Warships"}
     - {id: 351, cat: Books, desc: "Marine History-Battleships"}
+    - {id: 353, cat: Books, desc: "Marine History-Cruisers"}
     - {id: 259, cat: Books, desc: "Marine History-Shipbuilding history"}
     - {id: 277, cat: Books, desc: "Marine History-Wars at Sea"}
     - {id: 276, cat: Books, desc: "Marine History-War at sea (World War I)"}
