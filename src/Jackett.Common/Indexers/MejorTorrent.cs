@@ -381,6 +381,10 @@ namespace Jackett.Common.Indexers
         private ReleaseInfo GenerateRelease(string title, string detailsStr, string downloadLink, string cat,
                                             DateTime publishDate, long size)
         {
+            if (downloadLink.StartsWith("/"))
+            {
+                downloadLink = SiteLink + downloadLink.Substring(1);
+            }
             var link = new Uri(downloadLink);
             var details = new Uri(detailsStr);
             var release = new ReleaseInfo
