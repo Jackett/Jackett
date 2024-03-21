@@ -246,14 +246,21 @@ search:
       text: "{{ .Result.title_phase3 }}"
       filters:
         - name: regexp
-          args: "\\b(.+? - ?)(\\d+) ([\\[\\(])\\b"
+          args: "\\b(.+? - ?)(\\d+(-\\d+)?) ([\\[\\(])\\b"
         - name: append
           args: "NULL"
+    title_has_movie_ova:
+      text: "{{ .Result.title_phase3 }}"
+      filters:
+        - name: regexp
+          args: "(?i)(?<![A-Za-z0-9])(Movies?|OVA|OAV)(?![A-Za-z0-9])"
+        - name: re_replace
+          args: ["(?i)(Movies?|OVA|OAV)", "YES"]
     title_optional:
       text: "{{ .Result.title_phase3 }}"
       filters:
-        - name: append
-          args: "{{ if and (eq .Result.category_group_id \"1\") (and (eq .Result.title_has_season \"NULL\") (eq .Result.title_has_episode \"NULL\")) }} S01{{ else }}{{ end }}"
+        - name: re_replace
+          args: ["^(\\[.+?].+?)\\s*(?<![\\]\\)])((?:\\[|\\(| - ).+)", "{{ if and (and (eq .Result.category_group_id \"1\") (ne .Result.title_has_movie_ova \"YES\")) (and (eq .Result.title_has_season \"NULL\") (eq .Result.title_has_episode \"NULL\")) }}$1 S01 $2{{ else }}$1 $2{{ end }}"]
     title:
       text: "{{ if .Config.sonarr_compatibility }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
