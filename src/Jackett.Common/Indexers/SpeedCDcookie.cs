@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers
         private string LoginUrl1 => SiteLink + "login";
         private string LoginUrl2 => SiteLink + "login/API";
         private string SearchUrl => SiteLink + "browse/";
-        private new ConfigurationDataCookie configData => (ConfigurationDataCookie)base.configData;
+        private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
 
         public SpeedCDcookie(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -52,7 +52,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataCookie(
+                   configData: new ConfigurationDataCookieUA(
                        @"Speed.Cd have increased their security. If you are having problems please check the security tab in your 
                     Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your
                     web browser.<br><br>For best results, change the 'Torrents per page' setting to 100 in<br>'Profile Settings > Torrents'.
@@ -145,6 +145,12 @@ namespace Jackett.Common.Indexers
         }
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var headers = new Dictionary<string, string>();
+            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
+            {
+                headers.Add("User-Agent", configData.UserAgent.Value);
+            }
+
             var releases = new List<ReleaseInfo>();
 
             // the order of the params is important!
@@ -196,7 +202,7 @@ namespace Jackett.Common.Indexers
             }
 
             var searchUrl = SearchUrl + string.Join("/", qc);
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl);
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
 
             try
             {
