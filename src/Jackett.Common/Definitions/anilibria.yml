@@ -23,9 +23,9 @@ settings:
     type: checkbox
     label: Strip Cyrillic Letters
     default: false
-  - name: compatibilitymod
+  - name: sonarr_compatibility
     type: checkbox
-    label: Remove Russian/alternative names and try to parse season numbers to ensure compatibility with Sonarr/Radarr.
+    label: Improve Sonarr compatibility by trying to better parse Season information in release titles.
     default: false
   - name: addrussiantotitle
     type: checkbox
@@ -229,7 +229,7 @@ search:
         - name: re_replace
           args: ["(?i)^h", "x"]
     title_parsed:
-      text: "{{ if .Config.stripcyrillic }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en_parsed }} {{ .Result._season_number}}E{{ .Result._episodes }} [{{ .Result._quality_type }}.{{ .Result._quality_resolution }}.{{ .Result._quality_encoder }}]"
+      text: "{{ if .Config.stripcyrillic }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en_parsed }} {{ .Result._season_number}}E{{ .Result._episodes }} [{{ .Result._quality_type }} {{ .Result._quality_resolution }} {{ .Result._quality_encoder }}]"
       filters:
         - name: re_replace
           args: ["\\bS\\d+EФильм\\b", "({{ .Result.year }}) MOVIE"]
@@ -247,7 +247,7 @@ search:
           args: ["\\bS\\d+ETV-Special\\b", "({{ .Result.year }}) SPECIAL"]
         - name: append
           args: "{{ if .Config.addrussiantotitle }} - RUS{{ else }}{{ end }}"
-    title_old:
+    title_original:
       text: "{{ if .Config.stripcyrillic }}{{ else }}{{ .Result.title_ru }} / {{ end }}{{ .Result.title_en }}{{ if .Result.title_alternative }} / AKA {{ .Result.title_alternative }}{{ else }}{{ end }} ({{ .Result.year }}) [{{ .Result._quality }}]{{ if .Result._episodes }} - E{{ .Result._episodes }}{{ else }}{{ end }}"
       filters:
         - name: re_replace
@@ -263,7 +263,7 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} - RUS{{ else }}{{ end }}"
     title:
-      text: "{{ if .Config.compatibilitymod }}{{ .Result.title_parsed }}{{ else }}{{ .Result.title_old }}{{ end }}"
+      text: "{{ if .Config.sonarr_compatibility }}{{ .Result.title_parsed }}{{ else }}{{ .Result.title_original }}{{ end }}"
     _code:
       selector: ..code
     details:
