@@ -134,7 +134,7 @@ search:
     details:
       text: "details.php?id={{ .Result._id }}"
     download:
-      selector: a[href^="download.php?torrent="]
+      selector: a.download-link
       attribute: href
     genre:
       selector: "span[style=\"font-size: 6pt; font-weight: bold;\"]"
