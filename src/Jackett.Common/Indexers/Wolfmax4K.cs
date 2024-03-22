@@ -145,7 +145,7 @@ namespace Jackett.Common.Indexers
         {
             var wmPage = await RequestWithCookiesAndRetryAsync(link.ToString(), emulateBrowser: false);
             var wmDoc = new HtmlParser().ParseDocument(wmPage.ContentString);
-            var enlacitoUrl = wmDoc.QuerySelectorAll(".app-message a").Last().GetAttribute("href");
+            var enlacitoUrl = wmDoc.QuerySelector(".app-message a:not(.buttonPassword)")?.GetAttribute("href");
 
             var enlacitoPage = await RequestWithCookiesAndRetryAsync(enlacitoUrl, emulateBrowser: false, referer: SiteLink);
             var enlacitoDoc = new HtmlParser().ParseDocument(enlacitoPage.ContentString);
