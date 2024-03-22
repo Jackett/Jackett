@@ -10,23 +10,23 @@ links:
 
 caps:
   categorymappings:
-    - {id: 18, cat: PC/0day, desc: "Apps: PC"}
-    - {id: 55, cat: TV/Documentary, desc: "Docs: Docs"}
-    - {id: 10, cat: PC/Games, desc: "Games: PC"}
-    - {id: 53, cat: Other, desc: "Miscellaneous: Miscellaneous"}
-    - {id: 58, cat: Movies/BluRay, desc: "Movies: 4K Blu-Ray"}
-    - {id: 2, cat: Movies/SD, desc: "Movies: Divx/Xvid"}
-    - {id: 52, cat: Movies/SD, desc: "Movies: Cam/TS/TC"}
-    - {id: 54, cat: Movies/UHD, desc: "Movies: 4K"}
-    - {id: 59, cat: Movies/BluRay, desc: "Movies: Blu-Ray"}
-    - {id: 60, cat: Movies/HD, desc: "Movies: HD"}
-    - {id: 62, cat: Movies/WEB-DL, desc: "Movies: WebDL/RIP"}
-    - {id: 64, cat: Movies/DVD, desc: "Movies: DVD"}
-    - {id: 65, cat: XXX, desc: "Movies: XXX"}
-    - {id: 66, cat: TV/Anime, desc: "Movies: Anime"}
-    - {id: 22, cat: Audio/MP3, desc: "Music: MP3"}
-    - {id: 63, cat: Audio/Lossless, desc: "Music: FLAC"}
-    - {id: 6, cat: TV, desc: "TV: TV Shows"}
+    - {id: 18, cat: PC/0day, desc: "Apps: PC", default: true}
+    - {id: 55, cat: TV/Documentary, desc: "Docs: Docs", default: true}
+    - {id: 10, cat: PC/Games, desc: "Games: PC", default: true}
+    - {id: 53, cat: Other, desc: "Miscellaneous: Miscellaneous", default: true}
+    - {id: 58, cat: Movies/BluRay, desc: "Movies: 4K Blu-Ray", default: true}
+    - {id: 2, cat: Movies/SD, desc: "Movies: Divx/Xvid", default: true}
+    - {id: 52, cat: Movies/SD, desc: "Movies: Cam/TS/TC", default: true}
+    - {id: 54, cat: Movies/UHD, desc: "Movies: 4K", default: true}
+    - {id: 59, cat: Movies/BluRay, desc: "Movies: Blu-Ray", default: true}
+    - {id: 60, cat: Movies/HD, desc: "Movies: HD", default: true}
+    - {id: 62, cat: Movies/WEB-DL, desc: "Movies: WebDL/RIP", default: true}
+    - {id: 64, cat: Movies/DVD, desc: "Movies: DVD", default: true}
+    - {id: 65, cat: XXX, desc: "Movies: XXX", default: false}
+    - {id: 66, cat: TV/Anime, desc: "Movies: Anime", default: true}
+    - {id: 22, cat: Audio/MP3, desc: "Music: MP3", default: true}
+    - {id: 63, cat: Audio/Lossless, desc: "Music: FLAC", default: true}
+    - {id: 6, cat: TV, desc: "TV: TV Shows", default: true}
 
   modes:
     search: [q]
@@ -77,17 +77,21 @@ login:
 search:
   paths:
     - path: torrents-search.php
+      categories: [18, 55, 10, 53, 58, 2, 52, 54, 59, 60, 62, 64, 66, 22, 63, 6]
+      inputs:
+        $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+        # 0 active, 1 incldead, 2 onlydead
+        incldead: 1
+        # 0 all, 1 nofree, 2 onlyfree
+        freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+        # 0 both, 1 local, 2 external
+        inclexternal: 0
+        # 0 all, 1 romanian, 2 english, 3 english and romanian
+        inclrosub: 0
+    - path: torrents-search1.php
+      categories: [65]
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if or .Query.IMDBID .Query.TMDBID }}{{ or .Query.IMDBID .Query.TMDBID }} {{ else }}{{ end }}{{ if .Query.Genre }}{{ .Query.Genre }} {{ else }}{{ end }}{{ .Keywords }}"
-    # 0 active, 1 incldead, 2 onlydead
-    incldead: 1
-    # 0 all, 1 nofree, 2 onlyfree
-    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 both, 1 local, 2 external
-    inclexternal: 0
-    # 0 all, 1 romanian, 2 english, 3 english and romanian
-    inclrosub: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
 
