@@ -167,6 +167,7 @@ search:
           args: ["(?i)^(?!S\\d+).*", ""]
     _season_number_alternative:
       selector: ..names.alternative
+      optional: true
       filters:
         - name: re_replace
           args: ["(?i)\\bPart\\s*\\d+\\s*$", ""]
