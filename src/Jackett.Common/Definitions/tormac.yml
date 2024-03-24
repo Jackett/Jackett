@@ -208,21 +208,21 @@ search:
       selector: a[href^="./viewtopic.php?t="]
       attribute: href
     download:
-      selector: a[href^="./viewtopic.php?t="]
+      selector: a[href^="dl.php?t="]
       attribute: href
+    size:
+      selector: td.tor-size > u
+    seeders:
+      selector: td[title="Сиды"] b
       filters:
         - name: replace
-          args: ["viewtopic", "dl"]
-    size:
-      selector: td:nth-child(6) > u
-    seeders:
-      selector: td > b.seedmed, span[title="сида не было"] > b
+          args: ["никогда", "0"]
     leechers:
       selector: td.leechmed > b
     grabs:
       selector: td:nth-child(9)
     date:
-      selector: td:last-child > u
+      selector: td[title="Добавлен"] > u
     downloadvolumefactor:
       case:
         img[src$="default/images/tor_gold.gif"]: 0
