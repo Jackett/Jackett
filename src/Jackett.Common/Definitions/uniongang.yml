@@ -4,33 +4,26 @@ name: UnionGang
 description: "UnionGang is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: ru-RU
 type: private
-encoding: windows-1251
+encoding: UTF-8
 links:
-  - http://www.uniongang.net/
+  - https://www.uniongang.net/
 legacylinks:
-  - https://www.uniongang.net/ # site is forcing to http
+  - http://www.uniongang.net/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies SATRip / DVDRip / HDRip"}
-    - {id: 21, cat: Movies/WEB-DL, desc: "Movies WEB-DLRip / WEB-DL"}
+    - {id: 1, cat: Movies, desc: "Movies / HDRip / BDRip"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "Movies WEB-DL / WEB-DLRip"}
     - {id: 2, cat: Movies/HD, desc: "Movies x264"}
-    - {id: 3, cat: Movies/DVD, desc: "Movies DVD5"}
-    - {id: 4, cat: Movies/DVD, desc: "Movies DVD9"}
-    - {id: 5, cat: Movies/HD, desc: "Movies BDRemux / 720p / 1080p / Bl"}
+    - {id: 5, cat: Movies/HD, desc: "Movies BDRemux / BDRip1080p"}
     - {id: 6, cat: TV, desc: "TV Сериал"}
     - {id: 7, cat: TV/Documentary, desc: "TV Документальный"}
-    - {id: 19, cat: TV/Sport, desc: "TV Спорт"}
-    - {id: 8, cat: XXX, desc: "XXX Эротика"}
     - {id: 9, cat: TV, desc: "Мультфильм"}
-    - {id: 10, cat: TV, desc: "КВН Юмор"}
-    - {id: 11, cat: PC, desc: "Игра PC"}
+    - {id: 10, cat: TV, desc: "ТВ / Выпуски / Шоу"}
+    - {id: 11, cat: PC, desc: "Игра / PC"}
     - {id: 13, cat: Audio, desc: "Музыка / Русская"}
     - {id: 14, cat: Audio, desc: "Музыка / Зарубежная"}
-    - {id: 15, cat: Audio/Video, desc: "Видеоклип"}
-    - {id: 16, cat: Audio/Audiobook, desc: "Аудиокнига"}
-    - {id: 20, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 23, cat: Movies/UHD, desc: "Movies 4K"}
+    - {id: 23, cat: Movies/UHD, desc: "Movies / 4K"}
 
   modes:
     search: [q]
@@ -57,6 +50,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   path: takelogin.php
@@ -74,10 +83,14 @@ search:
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    #  0 active, 1 incldead,  2 onlydead,  3 goldtorrents,  5 silvertorrents,  4 noseeds
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    shw_incl_cats: 0
+    #  0 default, 1 active, 1 inactive,  3 gold, 4 important, 5 unverified,  6 banned, 7 no tags, 8 my torrents, 9-31 lots of other choices
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # site does not support imdbid search or provide imdb links in results
 
   keywordsfilters:
     # strip season and/or ep
@@ -85,11 +98,18 @@ search:
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
 
   rows:
-    selector: table.embedded > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.brws.main > tbody > tr[class^="torcont"]
+    after: 1
 
   fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
-      selector: a[href^="/torrent-"]
+      selector: a[href^="details.php?id="]
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -147,49 +167,50 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a[href^="/torrent-"]
+      selector: a[href^="details.php?id="]
       attribute: href
-    category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    date:
-      selector: i
-      filters:
-        - name: append
-          args: " +03:00" # MSK
-        - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
-    files:
-      selector: td:nth-last-child(5)
     size:
-      selector: td:nth-last-child(3)
+      selector: a[href^="download.php?id="]
     seeders:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
       filters:
         - name: split
           args: ["|", 0]
     leechers:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
       filters:
         - name: split
           args: ["|", 1]
-    grabs:
-      selector: td:nth-last-child(1)
+    date:
+      selector: td:has(a[href^="userdetails.php?id="]) ~ td
+      remove: a
+      filters:
+        - name: re_replace
+          args: ["(?i)(назад)", "ago"]
+        - name: re_replace
+          args: ["(?i)(секунду|секунды|секунд)", "seconds"]
+        - name: re_replace
+          args: ["(?i)(минуты|минуту|минут)", "minutes"]
+        - name: re_replace
+          args: ["(?i)(часов|часа|час)", "hours"]
+        - name: re_replace
+          args: ["(?i)(день|дней|дня)", "days"]
+        - name: re_replace
+          args: ["(?i)(неделю|недели|недель)", "weeks"]
+        - name: re_replace
+          args: ["(?i)(месяц|месяца|месяцев)", "months"]
+        - name: re_replace
+          args: ["(?i)(года|год|лет)", "years"]
+        - name: timeago
     downloadvolumefactor:
       case:
-        img[src="pic/freedownload.gif"]: 0
-        img[src="pic/silverdownload.gif"]: 0.5
+        img[src="/pic/freedownload.gif"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 0.3
-    description:
-      selector: a[href^="/torrent-"]
-# engine tbd
+# Engine n/a
