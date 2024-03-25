@@ -499,6 +499,8 @@ namespace Jackett.Updater
                 "Definitions/moviesite.yml",
                 "Definitions/movietorrent.yml", // will need c# #11284
                 "Definitions/moviezone.yml", // migrated to teracod #9743
+                "Definitions/mteamtp.yml", // migrated to C# (API)
+                "Definitions/mteamtp2fa.yml", // migrated to C# (API)
                 "Definitions/music-master.yml",
                 "Definitions/muziekfabriek.yml",
                 "Definitions/nachtwerk.yml",

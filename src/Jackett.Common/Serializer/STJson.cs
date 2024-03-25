@@ -47,5 +47,10 @@ namespace Jackett.Common.Serializer
                 return false;
             }
         }
+
+        public static string ToJson(object obj)
+        {
+            return JsonSerializer.Serialize(obj, _SerializerSettings);
+        }
     }
 }
