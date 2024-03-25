@@ -52,6 +52,7 @@ namespace Jackett.Common.Services
             {"reelflix", "reelflix-api"},
             {"magico", "trellas"},
             {"metaliplayro", "romanianmetaltorrents"},
+            {"mteamtp2fa", "mteamtp"},
             {"nnm-club", "noname-club"},
             {"oxtorrent", "torrent911"},
             {"passtheheadphones", "redacted"},
