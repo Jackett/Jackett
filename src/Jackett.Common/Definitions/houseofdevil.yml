@@ -39,6 +39,7 @@ caps:
     - {id: 115, cat: PC/0day, desc: "Programme - Windows"}
     - {id: 116, cat: TV/Documentary, desc: "Serien - Dokus"}
     - {id: 118, cat: TV/Sport, desc: "Serien - Sport"}
+    - {id: 142, cat: TV, desc: "Serien - Pack"}
     - {id: 129, cat: Other, desc: "Sonstiges"}
     - {id: 109, cat: PC/Mobile-Other, desc: "Spiele - Handy"}
     - {id: 112, cat: Console, desc: "Spiele - Konsolen"}
