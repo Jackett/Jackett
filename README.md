@@ -333,7 +333,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ExtremeBits
  * Falkon Vision Team
  * FANO.IN [![(invite needed)][inviteneeded]](#)
- * Fantastiko
+ * Fantastiko [![(invite needed)][inviteneeded]](#)
  * Fappaizuri
  * FastScene
  * FearNoPeer
@@ -640,7 +640,7 @@ Trackers marked with [![(invite needed)][inviteneeded]](#) have no active mainta
 
 ### Jackett Torznab query syntax
 
-Jackett accepts Torznab queries following the specifications described is the [Torznab document](https://torznab.github.io/spec-1.3-draft/index.html).
+Jackett accepts Torznab queries following the specifications described in the [Torznab document](https://torznab.github.io/spec-1.3-draft/index.html).
 For example, `.../api/v2.0/indexers/<aJackettIndexerName>/results/torznab/api?apikey=<yourJackettApiKey>&t=caps` would return the capabilities of the indexer, and `.../api/v2.0/indexers/<aJackettIndexerName>/results/torznab/api?apikey=<yourJackettApiKey>&t=search&q=keywords` would perform a free text search on that indexer.
 
 ### Search modes and parameters
