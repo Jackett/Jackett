@@ -7,13 +7,9 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Torrent911 and https://www.protege-torrent.com/T911 and https://www.protege-torrent.com/Oxtorrent
 links:
-  - https://www.torrent911.pe/
   - https://www.t911.ws/
   - https://www.oxtorrent.nl/
-  - https://oxtorrent.unblockninja.com/
-  - https://torrent911.ninjaproxy1.com/
-  - https://oxtorrent.proxyninja.org/
-  - https://torrent9.torrentbay.st/
+  - https://oxtorrent.proxyninja.org/ # proxy for oxtorrent
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.rantop.org/
@@ -35,6 +31,10 @@ legacylinks:
   - https://www.torrent911.bz/
   - https://www.torrent911.ac/
   - https://www.oxtorrent.pm/
+  - https://www.torrent911.pe/ # now on poster layout
+  - https://oxtorrent.unblockninja.com/ # proxy for torrent911
+  - https://torrent911.ninjaproxy1.com/ # proxy for torrent911
+  - https://torrent9.torrentbay.st/ # proxy for torrent911
 
 caps:
   categorymappings:
@@ -102,16 +102,24 @@ search:
       args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
-    selector: table.table-hover > tbody > tr:has(a[onclick*="torrent/"])
+    selector: table.table-hover > tbody > tr
     filters:
       - name: andmatch
 
   fields:
     category:
-      selector: td:nth-child(1) i, td:nth-child(1) div i
+      selector: td:nth-child(1) i
       attribute: class
+    title_href:
+      # used by t911
+      selector: td:nth-child(1) a[href]
+      optional: true
+    title_onclick:
+      # used by oxtorrent
+      selector: td:nth-child(1) a[onclick]
+      optional: true
     title_phase1:
-      selector: td:nth-child(1) a
+      text: "{{ or .Result.title_href .Result.title_onclick }}"
       filters:
         - name: re_replace
           args: ["(?i)\\b(FRENCH|MULTI|TRUEFRENCH|VOSTFR|SUBFRENCH)\\b(.+?)(\\b(19|20\\d{2})\\b)$", "$3 $1$2"]
@@ -129,12 +137,22 @@ search:
           args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    details:
-      selector: td:nth-child(1) a
-      attribute: onclick
+    details_href:
+      selector: td:nth-child(1) a[href]
+      attribute: href
+      optional: true
       filters:
         - name: regexp
           args: (/?torrent/\d+)
+    details_onclick:
+      selector: td:nth-child(1) a[onclick]
+      attribute: onclick
+      optional: true
+      filters:
+        - name: regexp
+          args: (/?torrent/\d+)
+    details:
+      text: "{{ or .Result.details_href .Result.details_onclick }}"
     download:
       text: "{{ .Result.details }}"
     size:
