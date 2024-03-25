@@ -6,6 +6,8 @@ language: ru-RU
 type: public
 encoding: UTF-8
 requestDelay: 2
+certificates:
+  - 8234333a7822945bdbeefbd59e48056e9bf4d16c # expired 26 march 2024
 links:
   - https://newstudio.tv/
 legacylinks:
