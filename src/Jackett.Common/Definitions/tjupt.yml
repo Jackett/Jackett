@@ -31,12 +31,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -67,14 +68,9 @@ settings:
     default: "Banning rules for account inactivity:<ol><li>Within 180 days, an account is considered active if it meets any of the following conditions: has checked in for at least 1 day; has published at least 1 seed, fun box or new forum topic (non-reply); actually uploaded increments > 5TiB and the seeding integral increment is > 30W</li><li>Users of Megatron level and above ignore the inactivity rules and will keep their accounts forever</li><li>Users with Sword Down the Mountain and above will not be disabled due to inactivity after parking their accounts in the control panel</li><li>Un-parked accounts below the level of Megatron will be disabled if they have been 'inactive' for 180 consecutive days (Effective from 2024).</li><li>Accounts parked below the level of Down the Mountain with a Sword will be disabled if they are 'inactive' for 300 consecutive days (Effective from 2024).</li></ol>"
 
 login:
-  path: takelogin.php
-  method: post
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: 90days
-  error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]
