@@ -185,7 +185,7 @@ search:
         - name: split
           args: ["|", 1]
     date:
-      selector: td:has(a[href^="userdetails.php?id="]) ~ td
+      selector: td:has(a[href^="userdetails.php?id="]) ~ td, td:has(a[href^="browse.php?gr="]) ~ td
       remove: a
       filters:
         - name: re_replace
