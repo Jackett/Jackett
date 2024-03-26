@@ -5,7 +5,6 @@ description: "ilDraGoNeRo is an ITALIAN Semi-Private Torrent Tracker for MOVIES 
 language: it-IT
 type: semi-private
 encoding: UTF-8
-requestDelay: 15.1
 links:
   - https://ildragonero2.info/
 
