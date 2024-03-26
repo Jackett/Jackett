@@ -157,7 +157,7 @@ search:
       optional: true
       filters:
         - name: dateparse
-          args: "MMM d yyyy h:mm tt"
+          args: "MMM d yyyyh:mm tt"
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
