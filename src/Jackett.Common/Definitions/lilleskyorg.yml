@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "MOVIES"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: TV/Foreign, desc: "TV-FOREIGN"}
+    - {id: 19, cat: TV/Foreign, desc: "TV-FOREIGN"}
     - {id: 4, cat: PC, desc: "APPS"}
     - {id: 5, cat: Audio, desc: "MUSIC"}
     - {id: 6, cat: XXX, desc: "XXX"}
