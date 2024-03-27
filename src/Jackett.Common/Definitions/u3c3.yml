@@ -34,7 +34,10 @@ settings: []
 
 search:
   paths:
-    - path: "{{ if .Keywords }}?search2=eelja13lfea&search={{ .Keywords }}{{ else }}{{ end }}"
+    - path: /
+  inputs:
+    search2: "{{ if .Keywords }}eelja13lfea{{ else }}{{ end }}"
+    search: "{{ .Keywords }}"
 
   rows:
     selector: table.torrent-list > tbody > tr:has(a[href^="/view?id="])
