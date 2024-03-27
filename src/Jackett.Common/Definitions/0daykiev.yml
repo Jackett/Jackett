@@ -15,12 +15,12 @@ caps:
     - {id: 10, cat: Movies, desc: "Фильмы (Movies)"}
     - {id: 16, cat: Movies/HD, desc: "HD / Фильмы (HD / Movies)"}
     - {id: 30, cat: TV/HD, desc: "HD / Сериалы (HD / TV Shows)"}
-    - {id: 27, cat: TV/HD, desc: "HD / Мультфильмы (HD / Cartoons)"}
+    - {id: 27, cat: Movies/HD, desc: "HD / Мультфильмы (HD / Cartoons)"}
     - {id: 17, cat: PC/Games, desc: "Игры / ПК (Games / PC)"}
     - {id: 14, cat: Audio, desc: "Музыка / Аудио (Music / Audio)"}
     - {id: 29, cat: TV, desc: "Мультсериалы (TV Series)"}
-    - {id: 11, cat: TV, desc: "Мультфильмы (Cartoons)"}
-    - {id: 28, cat: TV/HD, desc: "HD / Документальное (HD / Documentary)"}
+    - {id: 11, cat: Movies, desc: "Мультфильмы (Cartoons)"}
+    - {id: 28, cat: TV/Documentary, desc: "HD / Документальное (HD / Documentary)"}
     - {id: 18, cat: PC/0day, desc: "Софт / Windows (Software / Windows)"}
     - {id: 19, cat: TV, desc: "TV / Сериалы (TV shows)"}
     - {id: 31, cat: Other, desc: "Прочее (Other)"}
