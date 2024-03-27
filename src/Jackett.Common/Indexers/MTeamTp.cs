@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
             }
 
             var response = await RequestWithCookiesAndRetryAsync(
-                $"{SiteLink.TrimEnd('/')}/api/torrent/search",
+                $"{SiteLink}api/torrent/search",
                 method: RequestType.POST,
                 rawbody: STJson.ToJson(searchQuery),
                 headers: new Dictionary<string, string>
@@ -241,8 +241,8 @@ namespace Jackett.Common.Indexers
             foreach (var torrent in jsonResponse.Data.Torrents)
             {
                 var torrentId = int.Parse(torrent.Id);
-                var infoUrl = new Uri($"{SiteLink.TrimEnd('/')}/detail/{torrentId}");
-                var downloadUrl = new Uri($"{SiteLink.TrimEnd('/')}/api/torrent/genDlToken?id={torrentId}");
+                var infoUrl = new Uri($"{SiteLink}detail/{torrentId}");
+                var downloadUrl = new Uri($"{SiteLink}api/torrent/genDlToken?id={torrentId}");
 
                 var release = new ReleaseInfo
                 {

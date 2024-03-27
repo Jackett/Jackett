@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Details = new Uri($"{SiteLink.TrimEnd('/')}/search/{title}"), // there is no details link
+                        Details = new Uri($"{SiteLink}search/{title}"), // there is no details link
                         Guid = new Uri($"magnet:?xt=urn:btih:{infoHash}"),
                         InfoHash = infoHash, // magnet link is auto generated from infohash
                         Category = new List<int> { TorznabCatType.Other.ID },
