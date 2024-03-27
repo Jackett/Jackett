@@ -60,6 +60,7 @@ namespace Jackett.Common.Services
             {"rstorrent", "redstartorrent"},
             {"scenefz", "speedapp"},
             {"seals", "greatposterwall"},
+            {"speedcdcookie", "speedcd"},
             {"tehconnectionme", "anthelion"},
             {"anthelion", "anthelion-api"},
             {"todotorrents", "dontorrent"},

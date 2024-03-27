@@ -126,7 +126,7 @@ namespace Jackett.Common.Indexers
         {
             // first request with username
             var result = await RequestLoginAndFollowRedirect(
-                $"{SiteLink.TrimEnd('/')}/checkpoint/API",
+                $"{SiteLink}checkpoint/API",
                 new Dictionary<string, string>
                 {
                     { "username", configData.Username.Value }
@@ -147,7 +147,7 @@ namespace Jackett.Common.Indexers
 
             // second request with token and password
             result = await RequestLoginAndFollowRedirect(
-                $"{SiteLink.TrimEnd('/')}/checkpoint/",
+                $"{SiteLink}checkpoint/",
                 new Dictionary<string, string>
                 {
                     { "pwd", configData.Password.Value },
