@@ -1,0 +1,95 @@
+---
+id: 52bt
+name: 52BT
+description: "52BT is a CHINESE Public tracker for TV / MOVIES / MUSIC / GENERAL"
+language: zh-CN
+type: public
+encoding: UTF-8
+links:
+  # Send any content to 52btbtbt@gmail.com to get the latest address
+  - https://529048.xyz/
+  - https://529049.xyz/
+  - https://529050.xyz/
+
+caps:
+  categorymappings:
+    - {id: 影视, cat: TV, desc: 影视}
+    - {id: 影视, cat: Movies, desc: 影视}
+    - {id: 音乐, cat: Audio, desc: 音乐}
+    - {id: 图像, cat: Other, desc: 图像}
+    - {id: 文档书籍, cat: Books, desc: 文档书籍}
+    - {id: 压缩文件, cat: Other, desc: 压缩文件}
+    - {id: 安装包, cat: PC, desc: 安装包}
+    - {id: 其他, cat: Other, desc: 其他}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cat-id
+    type: select
+    label: Category
+    default: 0
+    options:
+      0: All categories
+      1: Film and Television
+      2: Music
+      3: Images
+      4: Books
+      5: Zip Files
+      6: Software
+      7: Other
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 2
+    options:
+      2: created
+      1: size
+      0: relevance
+
+search:
+  paths:
+    - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-1.html"
+
+  rows:
+    selector: div.ssbox
+
+  fields:
+    categorydesc:
+      selector: div.title > h3 > span
+      filters:
+        - name: re_replace
+          args: ["([\\[\\]]+)", ""]
+    title:
+      selector: a[href^="/hash/"]
+    details:
+      selector: a[href^="/hash/"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: div.sbar > span:contains("添加时间:")
+      filters:
+        - name: replace
+          args: ["添加时间:", ""]
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-dd zzz"
+    size:
+      selector: div.sbar > span:contains("大小:")
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
