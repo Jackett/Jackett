@@ -20,7 +20,7 @@ caps:
     - {id: 14, cat: Audio, desc: "Музыка / Аудио (Music / Audio)"}
     - {id: 29, cat: TV, desc: "Мультсериалы (TV Series)"}
     - {id: 11, cat: Movies, desc: "Мультфильмы (Cartoons)"}
-    - {id: 28, cat: Movies/HD, desc: "HD / Документальное (HD / Documentary)"}
+    - {id: 28, cat: TV/Documentary, desc: "HD / Документальное (HD / Documentary)"}
     - {id: 18, cat: PC/0day, desc: "Софт / Windows (Software / Windows)"}
     - {id: 19, cat: TV, desc: "TV / Сериалы (TV shows)"}
     - {id: 31, cat: Other, desc: "Прочее (Other)"}
