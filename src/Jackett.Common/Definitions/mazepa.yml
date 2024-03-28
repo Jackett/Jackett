@@ -16,10 +16,10 @@ caps:
     - {id: 7, cat: Movies/SD, desc: "Українські фільми SD"}
     - {id: 38, cat: TV/UHD, desc: "Українські серіали HD, UHD"}
     - {id: 8, cat: TV/SD, desc: "Українські серіали SD"}
-    - {id: 35, cat: TV/Anime, desc: "Українські мультфільми HD, UHD"}
-    - {id: 5, cat: TV/Anime, desc: "Українські мультфільми SD"}
-    - {id: 36, cat: TV/Anime, desc: "Українські мультсеріали HD, UHD"}
-    - {id: 6, cat: TV/Anime, desc: "Українські мультсеріали SD"}
+    - {id: 35, cat: Movies/UHD, desc: "Українські мультфільми HD, UHD"}
+    - {id: 5, cat: Movies/SD, desc: "Українські мультфільми SD"}
+    - {id: 36, cat: TV/UHD, desc: "Українські мультсеріали HD, UHD"}
+    - {id: 6, cat: TV/SD, desc: "Українські мультсеріали SD"}
     - {id: 39, cat: TV/Documentary, desc: "Українські документальні HD, UHD"}
     - {id: 9, cat: TV/Documentary, desc: "Українські документальні SD"}
     # Озвучений контент
@@ -31,11 +31,11 @@ caps:
     - {id: 152, cat: TV/UHD, desc: "Озвучений контент Серіали UHD"}
     - {id: 44, cat: TV/HD, desc: "Озвучений контент Серіали HD"}
     - {id: 14, cat: TV/SD, desc: "Озвучений контент Серіали SD"}
-    - {id: 155, cat: TV/Anime, desc: "Озвучений контент Мультфільми UHD"}
-    - {id: 41, cat: TV/Anime, desc: "Озвучений контент Мультфільми HD"}
-    - {id: 10, cat: TV/Anime, desc: "Озвучений контент Мультфільми SD"}
-    - {id: 43, cat: TV/Anime, desc: "Озвучений контент Мультсеріали HD"}
-    - {id: 11, cat: TV/Anime, desc: "Озвучений контент Мультсеріали SD"}
+    - {id: 155, cat: Movies/UHD, desc: "Озвучений контент Мультфільми UHD"}
+    - {id: 41, cat: Movies/HD, desc: "Озвучений контент Мультфільми HD"}
+    - {id: 10, cat: Movies/SD, desc: "Озвучений контент Мультфільми SD"}
+    - {id: 43, cat: TV/HD, desc: "Озвучений контент Мультсеріали HD"}
+    - {id: 11, cat: TV/SD, desc: "Озвучений контент Мультсеріали SD"}
     - {id: 16, cat: TV/Anime, desc: "Аніме"}
     - {id: 157, cat: TV/Documentary, desc: "Озвучений Документальне UHD"}
     - {id: 42, cat: TV/Documentary, desc: "Озвучений Документальне HD"}
