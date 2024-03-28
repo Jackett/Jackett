@@ -136,6 +136,11 @@ search:
     download:
       selector: a.download-link
       attribute: href
+      filters:
+        - name: replace
+          args: ["please_wait=1&", ""]
+        - name: replace
+          args: ["&please_wait=1", ""]
     genre:
       selector: "span[style=\"font-size: 6pt; font-weight: bold;\"]"
     description:
