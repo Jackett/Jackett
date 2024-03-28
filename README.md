@@ -105,7 +105,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Seedoff
  * Sexy-Pics
  * Shana Project
- * ShizaProject
  * ShowRSS
  * SimpleAnime
  * Solid Torrents
