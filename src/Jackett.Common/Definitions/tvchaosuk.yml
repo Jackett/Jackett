@@ -91,6 +91,7 @@ search:
     direction: "{{ .Config.type }}"
     qty: 100
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    view: list
     # can search by genre but need range support. &genres[]=Action&genres[]=Comedy for Action and Comedy
   keywordsfilters:
     # if searching for season packs switch S01 to Series 1 #14369
@@ -208,7 +209,7 @@ search:
       case:
         i[class*="fa-gem text-green"]: 2 # Single Torrent Double Upload
         i[class*="fa-globe text-green"]: 2 # Global Double Upload
-        i[class*="fa-certificate text-pink"]: 2 # Featured Torrent
+        i[class*="fa-certificate text-pink"]: 2 # Featured Torrent Weekly Freeleech
         "*": 1
     minimumratio:
       text: 0.4
