@@ -5,6 +5,7 @@ description: "RoTorrent is a ROMANIAN Private Torrent Tracker for MOVIES / TV / 
 language: ro-RO
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://rotorrent.ro/
 
