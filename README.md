@@ -203,7 +203,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RockBox
  * RUDUB (ex-BaibaKoTV)
  * Rustorka
- * RuTracker
+ * RuTracker.org
  * seleZen
  * Sharewood
  * SkTorrent
