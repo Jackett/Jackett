@@ -6,9 +6,11 @@ language: zh-CN
 type: public
 encoding: UTF-8
 links:
-  # Send any content to 52btbtbt@gmail.com to get the latest address
+  # Send any content to 52btbtbt@gmail.com to get the latest address. or visit https://521.52btbt.cyou/
   - https://529048.xyz/
   - https://529049.xyz/
+  - https://www.529052.xyz/
+legacylinks:
   - https://529050.xyz/
 
 caps:
