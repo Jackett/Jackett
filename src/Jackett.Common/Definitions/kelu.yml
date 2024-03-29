@@ -1,0 +1,186 @@
+---
+id: kelu
+name: Kelu
+description: "Kelu is a CHINESE Private Torrent Tracker for GAY 3X"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://our.kelu.one/
+
+caps:
+  categorymappings:
+    - {id: 408, cat: XXX/Other, desc: "其他"}
+    - {id: 409, cat: XXX/Other, desc: "动漫/二次元"}
+    - {id: 403, cat: XXX, desc: "SM"}
+    - {id: 402, cat: XXX, desc: "日韩"}
+    - {id: 405, cat: XXX, desc: "欧美"}
+    - {id: 404, cat: XXX, desc: "国产"}
+    - {id: 401, cat: XXX/ImageSet, desc: "写真"}
+    - {id: 410, cat: XXX, desc: "影视"}
+    - {id: 411, cat: PC/Games, desc: "游戏"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2facode
+    type: text
+    label: 2FA code
+  - name: info_2fa
+    type: info
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Kelu Web Site. Otherwise just leave it empty."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts (i.e. not logged in for a long time) are automatically deleted."
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
+  inputs:
+    secret: ""
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    two_step_code: "{{ .Config.2facode }}"
+    logout: ""
+    securelogin: ""
+    ssl: yes
+    trackerssl: yes
+  error:
+    - selector: td.embedded:has(h2:contains("失败"))
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 incldead, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 imdburl
+    search_area: 0
+    # 0 AND, 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    notnewword: 1
+
+  rows:
+    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_default:
+      selector: a[href^="details.php?id="]
+    title:
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td.rowfollow:nth-child(4) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    date_added:
+      # time added
+      selector: td.rowfollow:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td.rowfollow:nth-child(5)
+    seeders:
+      selector: td.rowfollow:nth-child(6)
+    leechers:
+      selector: td.rowfollow:nth-child(7)
+    grabs:
+      selector: td.rowfollow:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        "*": 1
+    minimumseedtime:
+      case:
+        img.hitandrun: 86400
+        "*": 0
+    description:
+      selector: td.rowfollow:nth-child(2)
+      remove: a, b, font, img, span
+# NexusPHP v1.8.6 2023-08-18
