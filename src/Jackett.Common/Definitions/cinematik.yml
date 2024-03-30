@@ -15,7 +15,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Film"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Movies/Foreign, desc: "Foreign Film"}
-    - {id: 4, cat: Movies/Foreign, desc: "Foreign TV"}
+    - {id: 4, cat: TV/Foreign, desc: "Foreign TV"}
     - {id: 5, cat: Movies/Other, desc: "Opera & Musical"}
     - {id: 6, cat: Movies/Foreign, desc: "Asian Film"}
 
