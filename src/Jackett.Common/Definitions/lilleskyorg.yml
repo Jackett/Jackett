@@ -11,6 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "MOVIES"}
+    - {id: 20, cat: Movies/Foreign, desc: "MOVIES-FOREIGN"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 19, cat: TV/Foreign, desc: "TV-FOREIGN"}
     - {id: 4, cat: PC, desc: "APPS"}
