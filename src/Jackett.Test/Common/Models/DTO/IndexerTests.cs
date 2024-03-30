@@ -1,6 +1,7 @@
 using System.Linq;
 using Jackett.Common.Models.DTO;
 using Jackett.Test.TestHelpers;
+using NLog;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
@@ -9,10 +10,12 @@ namespace Jackett.Test.Common.Models.DTO
     [TestFixture]
     public class IndexerTests
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         [Test]
         public void TestConstructor()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
 
             var dto = new Indexer(indexer);
             Assert.AreEqual("test_id", dto.id);
@@ -31,7 +34,7 @@ namespace Jackett.Test.Common.Models.DTO
         [Test]
         public void TestConstructorWithCategories()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             indexer.AddTestCategories();
 
             // test Jackett UI categories (internal JSON)

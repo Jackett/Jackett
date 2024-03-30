@@ -246,6 +246,20 @@ namespace Jackett.Common.Indexers
                 return false;
             }
 
+            if (release.Size == null || release.Size == 0.0)
+            {
+                logger.Warn("Invalid Release: '{0}' from indexer: {1}. No size provided.", release.Title, Name);
+
+                return false;
+            }
+
+            if (release.Category == null || !release.Category.Any())
+            {
+                logger.Warn("Invalid Release: '{0}' from indexer: {1}. No categories provided.", release.Title, Name);
+
+                return false;
+            }
+
             return true;
         }
 

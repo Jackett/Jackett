@@ -2193,34 +2193,52 @@ namespace Jackett.Common.Indexers
                 case "category":
                     if (FieldModifiers.Contains("noappend"))
                     {
-                        logger.Warn($"CardigannIndexer ({Id}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
+                        logger.Warn("CardigannIndexer ({0}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.", Id);
                     }
 
                     var cats = MapTrackerCatToNewznab(value);
+
                     if (cats.Any())
                     {
-                        if (release.Category == null || FieldModifiers.Contains("noappend"))
-                            release.Category = cats;
-                        else
-                            release.Category = release.Category.Union(cats).ToList();
+                        release.Category = release.Category == null || FieldModifiers.Contains("noappend")
+                            ? cats
+                            : release.Category.Union(cats).ToList();
                     }
-                    value = release.Category.ToString();
+
+                    if (value.IsNotNullOrWhiteSpace() && !release.Category.Any())
+                    {
+                        logger.Warn("[{0}] Invalid category for value: '{1}'", Id, value);
+                    }
+                    else
+                    {
+                        value = release.Category.ToString();
+                    }
+
                     break;
                 case "categorydesc":
                     if (FieldModifiers.Contains("noappend"))
                     {
-                        logger.Warn($"CardigannIndexer ({Id}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.");
+                        logger.Warn("CardigannIndexer ({0}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.", Id);
                     }
 
                     var catsDesc = MapTrackerCatDescToNewznab(value);
+
                     if (catsDesc.Any())
                     {
-                        if (release.Category == null || FieldModifiers.Contains("noappend"))
-                            release.Category = catsDesc;
-                        else
-                            release.Category = release.Category.Union(catsDesc).ToList();
+                        release.Category = release.Category == null || FieldModifiers.Contains("noappend")
+                            ? catsDesc
+                            : release.Category.Union(catsDesc).ToList();
                     }
-                    value = release.Category.ToString();
+
+                    if (value.IsNotNullOrWhiteSpace() && !release.Category.Any())
+                    {
+                        logger.Warn("[{0}] Invalid category for value: '{1}'", Id, value);
+                    }
+                    else
+                    {
+                        value = release.Category.ToString();
+                    }
+
                     break;
                 case "size":
                     release.Size = ParseUtil.GetBytes(value);

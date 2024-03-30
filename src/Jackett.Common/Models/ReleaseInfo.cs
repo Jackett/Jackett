@@ -54,6 +54,7 @@ namespace Jackett.Common.Models
 
         public ReleaseInfo()
         {
+            Category = new List<int>();
             Languages = new List<string>();
             Subs = new List<string>();
         }
