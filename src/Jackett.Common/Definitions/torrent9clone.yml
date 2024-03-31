@@ -127,12 +127,22 @@ search:
           args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    details:
-      selector: td:nth-child(1) a
-      attribute: onclick
+    details_href:
+      selector: td:nth-child(1) a[href]
+      attribute: href
+      optional: true
       filters:
         - name: regexp
           args: (/?torrent/\d+)
+    details_onclick:
+      selector: td:nth-child(1) a[onclick]
+      attribute: onclick
+      optional: true
+      filters:
+        - name: regexp
+          args: (/?torrent/\d+)
+    details:
+      text: "{{ or .Result.details_href .Result.details_onclick }}"
     download:
       text: "{{ .Result.details }}"
     date:
