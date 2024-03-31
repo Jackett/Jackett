@@ -30,14 +30,14 @@ settings:
   - name: info_token
     type: info
     label: About your API Token
-    default: "Beta API Token applications have now closed. If you haven't already received one by private message, please wait for the official launch."
+    default: "Generate your API token on the <a href=\"https://fsm.name/API\" target=\"_blank\">FSM API</a> page."
   - name: passkey
     type: text
     label: Passkey
   - name: info_passkey
     type: info
     label: About your Passkey
-    default: "Find your Passkey by accessing the <a href=\"https://fsm.name/Rss\" target=\"_blank\">FSM RSS</a> page."
+    default: "Find your Passkey on the <a href=\"https://fsm.name/Rss\" target=\"_blank\">FSM RSS</a> page."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -88,8 +88,6 @@ search:
       selector: tags
     description:
       text: "{{ .Result.genre }}"
-    files:
-      selector: fileCount
     seeders:
       selector: peers.upload
     leechers:
