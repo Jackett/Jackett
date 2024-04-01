@@ -306,7 +306,7 @@ search:
         - name: querystring
           args: f
     size:
-      selector: td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0kB), td:contains(\00a0B)
+      selector: td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0KB), td:contains(\00a0B)
       optional: true
       default: 0
     seeders:
