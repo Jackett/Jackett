@@ -129,7 +129,7 @@ login:
     - selector: table.tableinborder:contains("Login fehlgeschlagen!")
   test:
     path: index.php
-    selector: a[href="logout.php"]
+    selector: a[href="logout.php"], title:contains("APRILSCHERZ")
 
 search:
   paths:
@@ -144,7 +144,7 @@ search:
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"4\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php\"]){{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
+    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"4\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php\"]):has(a[href^=\"browse.php?cat=\"]){{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
