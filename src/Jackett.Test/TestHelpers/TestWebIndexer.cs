@@ -6,6 +6,7 @@ using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace Jackett.Test.TestHelpers
 {
@@ -30,8 +31,8 @@ namespace Jackett.Test.TestHelpers
 
         public override TorznabCapabilities TorznabCaps { get; protected set; } = new TorznabCapabilities();
 
-        public TestWebIndexer()
-            : base(client: null, configService: null, logger: null, configData: new ConfigurationData(), p: null, cacheService: null)
+        public TestWebIndexer(Logger logger)
+            : base(client: null, configService: null, logger: logger, configData: new ConfigurationData(), p: null, cacheService: null)
         {
         }
 

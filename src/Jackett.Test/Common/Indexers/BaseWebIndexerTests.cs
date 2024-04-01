@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Test.TestHelpers;
+using NLog;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
@@ -11,10 +13,12 @@ namespace Jackett.Test.Common.Indexers
     [TestFixture]
     public class BaseWebIndexerTests
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         [Test]
         public void TestConstructor()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             var caps = indexer.TorznabCaps;
 
             Assert.True(caps.SearchAvailable);
@@ -45,7 +49,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestFilterResultsCategories()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             indexer.AddTestCategories();
 
             var results = new List<ReleaseInfo>
@@ -53,76 +57,81 @@ namespace Jackett.Test.Common.Indexers
                 new ReleaseInfo
                 {
                     Title = "Release 1",
-                    Category = new List<int> { TorznabCatType.Movies.ID }
+                    Category = new List<int> { TorznabCatType.Movies.ID },
+                    Size = 2.Gigabytes()
                 },
                 new ReleaseInfo
                 {
                     Title = "Release 2",
-                    Category = new List<int> { TorznabCatType.MoviesSD.ID }
+                    Category = new List<int> { TorznabCatType.MoviesSD.ID },
+                    Size = 2.Gigabytes()
                 },
                 new ReleaseInfo
                 {
                     Title = "Release 3",
-                    Category = new List<int> { TorznabCatType.BooksEBook.ID, 100004 } // torznab (mandatory) + custom cat
+                    Category = new List<int> { TorznabCatType.BooksEBook.ID, 100004 }, // torznab (mandatory) + custom cat
+                    Size = 2.Gigabytes()
                 },
                 new ReleaseInfo
                 {
                     Title = "Release 4",
-                    Category = new List<int> { TorznabCatType.AudioLossless.ID } // unsupported category in this indexer
+                    Category = new List<int> { TorznabCatType.AudioLossless.ID }, // unsupported category in this indexer
+                    Size = 2.Gigabytes()
                 },
                 new ReleaseInfo
                 {
-                    Title = "Release 5",
+                    Title = "Release 5"
                 }
             };
 
             var query = new TorznabQuery(); // without categories
             var filteredResults = indexer._FilterResults(query, results).ToList();
-            Assert.AreEqual(5, filteredResults.Count);
+            Assert.AreEqual(4, filteredResults.Count);
 
             query = new TorznabQuery // with child category
             {
                 Categories = new[] { TorznabCatType.MoviesSD.ID }
             };
             filteredResults = indexer._FilterResults(query, results).ToList();
-            Assert.AreEqual(2, filteredResults.Count);
+            Assert.AreEqual(1, filteredResults.Count);
             Assert.AreEqual(TorznabCatType.MoviesSD.ID, filteredResults[0].Category.First());
-            Assert.AreEqual(null, filteredResults[1].Category);
 
             query = new TorznabQuery // with parent category
             {
                 Categories = new[] { TorznabCatType.Movies.ID }
             };
             filteredResults = indexer._FilterResults(query, results).ToList();
-            Assert.AreEqual(3, filteredResults.Count);
+            Assert.AreEqual(2, filteredResults.Count);
             Assert.AreEqual(TorznabCatType.Movies.ID, filteredResults[0].Category.First());
             Assert.AreEqual(TorznabCatType.MoviesSD.ID, filteredResults[1].Category.First());
-            Assert.AreEqual(null, filteredResults[2].Category);
 
             query = new TorznabQuery // with custom category
             {
                 Categories = new[] { 100004 }
             };
             filteredResults = indexer._FilterResults(query, results).ToList();
-            Assert.AreEqual(2, filteredResults.Count);
+            Assert.AreEqual(1, filteredResults.Count);
             Assert.AreEqual(TorznabCatType.BooksEBook.ID, filteredResults[0].Category.First());
-            Assert.AreEqual(null, filteredResults[1].Category);
         }
 
         [Test]
         public void TestFilterResultsLimit()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
 
             var results = new List<ReleaseInfo>
             {
                 new ReleaseInfo
                 {
-                    Title = "Release 1"
+                    Title = "Release 1",
+                    Category = new List<int> { TorznabCatType.Movies.ID },
+                    Size = 2.Gigabytes()
                 },
                 new ReleaseInfo
                 {
-                    Title = "Release 2"
+                    Title = "Release 2",
+                    Category = new List<int> { TorznabCatType.Movies.ID },
+                    Size = 2.Gigabytes()
                 }
             };
 
@@ -141,7 +150,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestFixResultsOriginPublishDate()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             var query = new TorznabQuery();
             var results = new List<ReleaseInfo>
             {
@@ -163,7 +172,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestFixResultsMagnet()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             var query = new TorznabQuery();
 
             // get info_hash from magnet
@@ -202,7 +211,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestAddCategoryMapping()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
 
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs
             indexer._AddCategoryMapping("11", TorznabCatType.MoviesSD, "MoviesSD");
@@ -222,7 +231,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestAddMultiCategoryMapping()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
 
             indexer._AddMultiCategoryMapping(TorznabCatType.MoviesHD, 19, 18);
             Assert.AreEqual(1, indexer.TorznabCaps.Categories.GetTorznabCategoryTree().Count);
@@ -231,7 +240,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestMapTorznabCapsToTrackers()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             indexer.AddTestCategories();
 
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs
@@ -248,7 +257,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestMapTrackerCatToNewznab()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             indexer.AddTestCategories();
 
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs
@@ -260,7 +269,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestMapTrackerCatDescToNewznab()
         {
-            var indexer = new TestWebIndexer();
+            var indexer = new TestWebIndexer(_logger);
             indexer.AddTestCategories();
 
             // you can find more complex tests in TorznabCapabilitiesCategoriesTests.cs

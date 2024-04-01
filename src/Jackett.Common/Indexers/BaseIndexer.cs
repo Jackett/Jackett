@@ -241,7 +241,21 @@ namespace Jackett.Common.Indexers
         {
             if (release.Title.IsNullOrWhiteSpace())
             {
-                logger.Error("Invalid Release: '{0}' from indexer: {1}. No title provided.", release.Details, Name);
+                logger.Error("[{0}] Invalid Release: '{1}'. No title provided.", Id, release.Details);
+
+                return false;
+            }
+
+            if (release.Size == null)
+            {
+                logger.Warn("[{0}] Invalid Release: '{1}'. No size provided.", Id, release.Details);
+
+                return false;
+            }
+
+            if (release.Category == null || !release.Category.Any())
+            {
+                logger.Warn("[{0}] Invalid Release: '{1}'. No categories provided.", Id, release.Details);
 
                 return false;
             }
