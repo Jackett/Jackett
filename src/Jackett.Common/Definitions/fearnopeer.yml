@@ -175,4 +175,4 @@ search:
       optional: true
     title:
       text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-# json UNIT3D 8.0.0
+# json UNIT3D 8.0.1
