@@ -1,7 +1,7 @@
 ---
 id: uploadcx
 name: upload.cx
-description: "upload.cx is a Private Torrent Tracker for MOVIES / TV"
+description: "upload.cx (ULCX) is a Private Torrent Tracker for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
@@ -48,7 +49,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "All members of ULXC must engage with the site, through either logging in or navigating upload.cx. Any account that remains inactive for over four months will be deactivated and pruned after an additional four months of deactivation."
+    default: "All members of ULCX must engage with the site, through either logging in or navigating upload.cx. Any account that remains inactive for over four months will be deactivated and pruned after an additional four months of deactivation."
 
 login:
   path: /api/torrents
