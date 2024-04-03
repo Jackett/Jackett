@@ -14,7 +14,8 @@ caps:
     - {id: 2, cat: TV, desc: "TV"}
   modes:
     search: [q]
-    movie-search: [q, imdbid, tmdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]    
 
 settings:
   - name: apikey
