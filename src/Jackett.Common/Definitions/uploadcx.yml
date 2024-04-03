@@ -1,7 +1,7 @@
 ---
 id: uploadcx
 name: upload.cx
-description: "upload.cx is a Private Torrent Tracker for MOVIES"
+description: "upload.cx is a Private Torrent Tracker for MOVIES & TV"
 language: en-US
 type: private
 encoding: UTF-8
@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-
+    - {id: 2, cat: TV, desc: "TV"}
   modes:
     search: [q]
     movie-search: [q, imdbid, tmdbid]
