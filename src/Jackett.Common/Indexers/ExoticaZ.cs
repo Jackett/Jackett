@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers
             "https://torrents.yourexotic.com/"
         };
 
-        protected override string TimezoneOffset => "+01:00";
+        protected override string TimezoneOffset => "+02:00";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
