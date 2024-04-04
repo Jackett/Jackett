@@ -83,6 +83,7 @@ search:
     # 1 freeleech, 2 neutral, 3 50%, 4 2x, 5 3x, 9 75%, 11 only perks, 0 normal
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     action: browse
+    group_results: 0
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
 
   rows:
