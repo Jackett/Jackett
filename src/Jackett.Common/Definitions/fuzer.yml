@@ -61,7 +61,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
+    tv-search: [q, season, ep]
     movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
@@ -110,6 +110,7 @@ search:
     query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     order: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
+    # any (every word), phr (any match), all (exact match)
     matchquery: any
     freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
     # on, off, only_dead
