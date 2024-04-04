@@ -5,6 +5,7 @@ description: "RUDUB (ex-BaibaKoTV) is a RUSSIAN Semi-Private Torrent Tracker for
 language: ru-RU
 type: semi-private
 encoding: windows-1251
+followredirect: true
 links:
   - https://04april.rudub.online/
 legacylinks:
