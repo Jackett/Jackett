@@ -74,10 +74,11 @@ download:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     title:
-      selector: ul#breadcrumbs > li:nth-child(3) > h2
+      selector: div.tabs-title
       filters:
         - name: trim
         - name: validfilename
+
 search:
   paths:
     - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
@@ -96,10 +97,7 @@ search:
       text: Other
     title_phase1:
       selector: a[href^="/torrent/"]
-      attribute: title
       filters:
-        - name: replace
-          args: [" en Torrent", ""]
         - name: replace
           args: ["WEBRIP", "WEBDL"]
         - name: re_replace
