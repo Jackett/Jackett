@@ -6,6 +6,8 @@ language: pt-PT
 type: private
 encoding: UTF-8
 links:
+  - https://tocashare.biz/
+legacylinks:
   - https://tocashare.com/
 
 caps:
