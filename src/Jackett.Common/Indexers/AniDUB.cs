@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using AngleSharp.Io;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -180,6 +181,11 @@ namespace Jackett.Common.Indexers
         {
             const string ReleaseLinksSelector = "#dle-content > .story > .story_h > .lcol > h2 > a";
             var result = await RequestWithCookiesAndRetryAsync(SiteLink);
+            if (result.ContentString.Contains("Fatal error: Uncaught exception"))
+            {
+                logger.Error("[AniDUB]" + result.ContentString);
+                throw new Exception("There is a problem at the AniDUB WEB site, view the Jackett logs for more details.");
+            }
             var releases = new List<ReleaseInfo>();
 
             try
@@ -549,6 +555,11 @@ namespace Jackett.Common.Indexers
 
             var releases = new List<ReleaseInfo>();
             var response = await RequestWithCookiesAndRetryAsync(SearchUrl, method: RequestType.POST, data: PreparePostData(query));
+            if (response.ContentString.Contains("Fatal error: Uncaught exception"))
+            {
+                logger.Error("[AniDUB]" + response.ContentString);
+                throw new Exception("There is a problem at the AniDUB WEB site, view the Jackett logs for more details.");
+            }
 
             try
             {
