@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -23,8 +24,6 @@ namespace Jackett.Common.Indexers
         public override string Type => "private";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
-
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download" + (useTokens ? "&usetoken=1" : "") + "&id=";
 
         public Redacted(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
@@ -92,6 +91,11 @@ namespace Jackett.Common.Indexers
             }
 
             return base.ShouldSkipRelease(torrent);
+        }
+
+        protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
+        {
+            return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
         }
     }
 }

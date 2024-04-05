@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Abstract;
@@ -21,7 +22,6 @@ namespace Jackett.Common.Indexers
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download" + (useTokens ? "&usetoken=1" : "") + "&id=";
         protected override string AuthorizationFormat => "token {0}";
         protected override int ApiKeyLength => 118;
 
@@ -61,6 +61,11 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(8, TorznabCatType.Other, "Other");
 
             return caps;
+        }
+
+        protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
+        {
+            return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
         }
     }
 }

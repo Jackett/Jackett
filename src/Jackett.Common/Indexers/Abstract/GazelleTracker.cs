@@ -27,8 +27,6 @@ namespace Jackett.Common.Indexers.Abstract
 
         protected virtual string LoginUrl => SiteLink + "login.php";
         protected virtual string APIUrl => SiteLink + "ajax.php";
-        protected virtual string DownloadUrl => SiteLink + "torrents.php?action=download" + (useTokens ? "&usetoken=1" : "") + (usePassKey ? "&torrent_pass=" + configData.PassKey.Value : "") + (useAuthKey ? "&authkey=" + configData.AuthKey.Value : "") + "&id=";
-        protected virtual string DetailsUrl => SiteLink + "torrents.php?torrentid=";
         protected virtual string PosterUrl => SiteLink;
         protected virtual string AuthorizationName => "Authorization";
         protected virtual string AuthorizationFormat => "{0}";
@@ -398,13 +396,13 @@ namespace Jackett.Common.Indexers.Abstract
         {
             var isFreeleech = bool.TryParse((string)torrent["isFreeleech"], out var freeleech) && freeleech;
 
-            // skip non-freeload results when freeload only is set
+            // skip non-freeleech results when freeleech only is set
             return configData.FreeleechOnly != null && configData.FreeleechOnly.Value && !isFreeleech;
         }
 
         protected void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
         {
-            var torrentId = torrent["torrentId"];
+            var torrentId = (int)torrent["torrentId"];
 
             var time = (string)torrent["time"];
             if (!string.IsNullOrEmpty(time))
@@ -500,9 +498,10 @@ namespace Jackett.Common.Indexers.Abstract
             release.Size = (long)torrent["size"];
             release.Seeders = (int)torrent["seeders"];
             release.Peers = (int)torrent["leechers"] + release.Seeders;
-            release.Details = new Uri(DetailsUrl + torrentId);
+            release.Details = GetInfoUrl((int)torrent["groupId"], torrentId);
             release.Guid = release.Details;
-            release.Link = new Uri(DownloadUrl + torrentId);
+            release.Link = GetDownloadUrl(torrentId, release.DownloadVolumeFactor != 0);
+
             var category = (string)torrent["category"];
             if (category == null || category.Contains("Select Category"))
             {
@@ -564,6 +563,16 @@ namespace Jackett.Common.Indexers.Abstract
             }
 
             return content;
+        }
+
+        protected virtual Uri GetInfoUrl(int groupId, int torrentId)
+        {
+            return new Uri($"{SiteLink}torrents.php?id={groupId}&torrentid={torrentId}");
+        }
+
+        protected virtual Uri GetDownloadUrl(int torrentId, bool canUseToken)
+        {
+            return new Uri($"{SiteLink}torrents.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}{(usePassKey ? $"&torrent_pass={configData.PassKey.Value}" : "")}{(useAuthKey ? $"&authkey={configData.AuthKey.Value}" : "")}&id={torrentId}");
         }
     }
 }
