@@ -1,7 +1,7 @@
 ---
 id: qingwa
-name: Qingwa
-description: "Qingwa is a CHINESE Private torrent tracker for MOVIES / TV / GENERAL"
+name: Qingwa (青蛙)
+description: "Qingwa (青蛙) is a CHINESE Private torrent tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -41,7 +41,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the CrabPT Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Qingwa Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
