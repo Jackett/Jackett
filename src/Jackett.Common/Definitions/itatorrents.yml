@@ -187,4 +187,4 @@ search:
           args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
         - name: re_replace # Stagione XX --> SXX
           args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
-# json UNIT3D 8.0.2
+# json UNIT3D 8.0.2 (custom)

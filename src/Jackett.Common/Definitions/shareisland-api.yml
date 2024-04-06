@@ -214,4 +214,4 @@ search:
           args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
         - name: re_replace # rimozioni varie
           args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
-# json UNIT3D 8.0.0 (custom)
+# json UNIT3D 8.0.2 (custom)
