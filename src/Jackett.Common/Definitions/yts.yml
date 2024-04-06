@@ -9,10 +9,11 @@ requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
   # if the primary domain changes then don't forget to update the details, download and poster replace args
   - https://yts.mx/
-# official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/
+# official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/ (this site is off and shows account suspended)
   - https://yts.lt/
   - https://yts.am/
   - https://yts.ag/
+  - https://www3.yts.nz/
   - https://yts.unblockit.africa/
   - https://yts.unblockninja.com/
   - https://yts.ninjaproxy1.com/
