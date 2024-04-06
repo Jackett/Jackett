@@ -40,6 +40,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -101,7 +105,7 @@ search:
   fields:
     category:
       selector: category_id
-    title:
+    title_optional:
       selector: name
       filters:
         - name: re_replace
@@ -126,8 +130,6 @@ search:
     genre:
       selector: meta.genres
       filters:
-        - name: re_replace
-          args: ["(?i)^None$", ""]
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
@@ -173,4 +175,9 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 7.2.3
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+# json UNIT3D 8.0.2
