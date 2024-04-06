@@ -108,16 +108,16 @@ settings:
     default: "Inactive accounts will be deactivated after 7 weeks and deleted after another 3 weeks."
 
 login:
-  path: login.php
-  method: form
-  form: form[action="/login.php"]
+  path: logintracker.php
+  method: post
   inputs:
-    username: "{{ .Config.username }}"
+    login_identifier: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    loggiin: Login
   error:
-    - selector: div#login_error
+    - selector: div.error-message
   test:
-    path: /
+    path: index.php
     selector: a[href="logout.php"]
 
 search:

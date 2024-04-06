@@ -5,6 +5,7 @@ description: "BootyTape is a Semi-Private site for 3X"
 language: en-US
 type: semi-private
 encoding: UTF-8
+requestDelay: 3
 links:
   - https://ssl.bootytape.com/
 

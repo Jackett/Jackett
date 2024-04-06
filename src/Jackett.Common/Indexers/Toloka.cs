@@ -69,7 +69,7 @@ namespace Jackett.Common.Indexers
                     BookSearchParam.Q
                 }
             };
-
+            // movies
             caps.Categories.AddCategoryMapping(117, TorznabCatType.Movies, "Українське кіно");
             caps.Categories.AddCategoryMapping(84, TorznabCatType.Movies, "|-Мультфільми і казки");
             caps.Categories.AddCategoryMapping(42, TorznabCatType.Movies, "|-Художні фільми");
@@ -86,7 +86,6 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(55, TorznabCatType.Movies, "|-АртХаус");
             caps.Categories.AddCategoryMapping(94, TorznabCatType.MoviesOther, "|-Трейлери");
             caps.Categories.AddCategoryMapping(144, TorznabCatType.Movies, "|-Короткометражні");
-
             caps.Categories.AddCategoryMapping(190, TorznabCatType.Movies, "Українські субтитри");
             caps.Categories.AddCategoryMapping(70, TorznabCatType.Movies, "|-Фільми");
             caps.Categories.AddCategoryMapping(192, TorznabCatType.TV, "|-Телесеріали");
@@ -95,7 +94,6 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(194, TorznabCatType.TVAnime, "|-Аніме");
             caps.Categories.AddCategoryMapping(196, TorznabCatType.Movies, "|-АртХаус");
             caps.Categories.AddCategoryMapping(197, TorznabCatType.Movies, "|-Короткометражні");
-
             caps.Categories.AddCategoryMapping(225, TorznabCatType.TVDocumentary, "Документальні фільми українською");
             caps.Categories.AddCategoryMapping(21, TorznabCatType.TVDocumentary, "|-Українські наукові документальні фільми");
             caps.Categories.AddCategoryMapping(131, TorznabCatType.TVDocumentary, "|-Українські історичні документальні фільми");
@@ -104,11 +102,9 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(228, TorznabCatType.TVDocumentary, "|-National Geographic");
             caps.Categories.AddCategoryMapping(229, TorznabCatType.TVDocumentary, "|-History Channel");
             caps.Categories.AddCategoryMapping(230, TorznabCatType.TVDocumentary, "|-Інші іноземні документальні фільми");
-
             caps.Categories.AddCategoryMapping(119, TorznabCatType.TVOther, "Телепередачі українською");
             caps.Categories.AddCategoryMapping(18, TorznabCatType.TVOther, "|-Музичне відео");
             caps.Categories.AddCategoryMapping(132, TorznabCatType.TVOther, "|-Телевізійні шоу та програми");
-
             caps.Categories.AddCategoryMapping(157, TorznabCatType.TVSport, "Український спорт");
             caps.Categories.AddCategoryMapping(235, TorznabCatType.TVSport, "|-Олімпіада");
             caps.Categories.AddCategoryMapping(170, TorznabCatType.TVSport, "|-Чемпіонати Європи з футболу");
@@ -122,8 +118,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(159, TorznabCatType.TVSport, "|-Бокс, реслінг, бойові мистецтва");
             caps.Categories.AddCategoryMapping(160, TorznabCatType.TVSport, "|-Авто, мото");
             caps.Categories.AddCategoryMapping(161, TorznabCatType.TVSport, "|-Інший спорт, активний відпочинок");
-
-            // caps.Categories.AddCategoryMapping(136, TorznabCatType.Other, "HD українською");
+            caps.Categories.AddCategoryMapping(136, TorznabCatType.MoviesHD, "HD українською");
             caps.Categories.AddCategoryMapping(96, TorznabCatType.MoviesHD, "|-Фільми в HD");
             caps.Categories.AddCategoryMapping(173, TorznabCatType.TVHD, "|-Серіали в HD");
             caps.Categories.AddCategoryMapping(139, TorznabCatType.MoviesHD, "|-Мультфільми в HD");
@@ -134,11 +129,9 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(137, TorznabCatType.MoviesDVD, "|-Мультфільми та мультсеріали в DVD");
             caps.Categories.AddCategoryMapping(137, TorznabCatType.TV, "|-Мультфільми та мультсеріали в DVD");
             caps.Categories.AddCategoryMapping(138, TorznabCatType.MoviesDVD, "|-Документальні фільми в DVD");
-
             caps.Categories.AddCategoryMapping(237, TorznabCatType.Movies, "Відео для мобільних (iOS, Android, Windows Phone)");
-
             caps.Categories.AddCategoryMapping(33, TorznabCatType.AudioVideo, "Звукові доріжки та субтитри");
-
+            // music
             caps.Categories.AddCategoryMapping(8, TorznabCatType.Audio, "Українська музика (lossy)");
             caps.Categories.AddCategoryMapping(23, TorznabCatType.Audio, "|-Поп, Естрада");
             caps.Categories.AddCategoryMapping(24, TorznabCatType.Audio, "|-Джаз, Блюз");
@@ -148,7 +141,6 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(36, TorznabCatType.Audio, "|-Реп, Хіп-хоп, РнБ");
             caps.Categories.AddCategoryMapping(38, TorznabCatType.Audio, "|-Електронна музика");
             caps.Categories.AddCategoryMapping(56, TorznabCatType.Audio, "|-Невидане");
-
             caps.Categories.AddCategoryMapping(98, TorznabCatType.AudioLossless, "Українська музика (lossless)");
             caps.Categories.AddCategoryMapping(100, TorznabCatType.AudioLossless, "|-Поп, Естрада");
             caps.Categories.AddCategoryMapping(101, TorznabCatType.AudioLossless, "|-Джаз, Блюз");
@@ -157,7 +149,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(104, TorznabCatType.AudioLossless, "|-Рок, Метал, Альтернатива, Панк, СКА");
             caps.Categories.AddCategoryMapping(105, TorznabCatType.AudioLossless, "|-Реп, Хіп-хоп, РнБ");
             caps.Categories.AddCategoryMapping(106, TorznabCatType.AudioLossless, "|-Електронна музика");
-
+            // books
             caps.Categories.AddCategoryMapping(11, TorznabCatType.Books, "Друкована література");
             caps.Categories.AddCategoryMapping(134, TorznabCatType.Books, "|-Українська художня література (до 1991 р.)");
             caps.Categories.AddCategoryMapping(177, TorznabCatType.Books, "|-Українська художня література (після 1991 р.)");
@@ -168,13 +160,12 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(181, TorznabCatType.BooksMags, "|-Періодика");
             caps.Categories.AddCategoryMapping(182, TorznabCatType.Books, "|-Батькам та малятам");
             caps.Categories.AddCategoryMapping(184, TorznabCatType.BooksComics, "|-Графіка (комікси, манґа, BD та інше)");
-
             caps.Categories.AddCategoryMapping(185, TorznabCatType.AudioAudiobook, "Аудіокниги українською");
             caps.Categories.AddCategoryMapping(135, TorznabCatType.AudioAudiobook, "|-Українська художня література");
             caps.Categories.AddCategoryMapping(186, TorznabCatType.AudioAudiobook, "|-Зарубіжна художня література");
             caps.Categories.AddCategoryMapping(187, TorznabCatType.AudioAudiobook, "|-Історія, біографістика, спогади");
             caps.Categories.AddCategoryMapping(189, TorznabCatType.AudioAudiobook, "|-Сирий матеріал");
-
+            // software
             caps.Categories.AddCategoryMapping(9, TorznabCatType.PC, "Windows");
             caps.Categories.AddCategoryMapping(25, TorznabCatType.PC, "|-Windows");
             caps.Categories.AddCategoryMapping(199, TorznabCatType.PC, "|-Офіс");
@@ -184,15 +175,15 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(239, TorznabCatType.PC, "Linux, Mac OS");
             caps.Categories.AddCategoryMapping(26, TorznabCatType.PC, "|-Linux");
             caps.Categories.AddCategoryMapping(27, TorznabCatType.PCMac, "|-Mac OS");
-            // caps.Categories.AddCategoryMapping(240, TorznabCatType.PC, "Інші OS");
+            caps.Categories.AddCategoryMapping(240, TorznabCatType.PC, "Інші OS");
             caps.Categories.AddCategoryMapping(211, TorznabCatType.PCMobileAndroid, "|-Android");
             caps.Categories.AddCategoryMapping(122, TorznabCatType.PCMobileiOS, "|-iOS");
             caps.Categories.AddCategoryMapping(40, TorznabCatType.PCMobileOther, "|-Інші мобільні платформи");
-
-            // caps.Categories.AddCategoryMapping(241, TorznabCatType.Other, "Інше");
-            // caps.Categories.AddCategoryMapping(203, TorznabCatType.Other, "|-Інфодиски, електронні підручники, відеоуроки");
-            // caps.Categories.AddCategoryMapping(12, TorznabCatType.Other, "|-Шпалери, фотографії та зображення");
-            // caps.Categories.AddCategoryMapping(249, TorznabCatType.Other, "|-Веб-скрипти");
+            caps.Categories.AddCategoryMapping(241, TorznabCatType.Other, "Інше");
+            caps.Categories.AddCategoryMapping(203, TorznabCatType.Other, "|-Інфодиски, електронні підручники, відеоуроки");
+            caps.Categories.AddCategoryMapping(12, TorznabCatType.Other, "|-Шпалери, фотографії та зображення");
+            caps.Categories.AddCategoryMapping(249, TorznabCatType.Other, "|-Веб-скрипти");
+            // games
             caps.Categories.AddCategoryMapping(10, TorznabCatType.PCGames, "Ігри українською");
             caps.Categories.AddCategoryMapping(28, TorznabCatType.PCGames, "|-PC ігри");
             caps.Categories.AddCategoryMapping(259, TorznabCatType.PCGames, "|-Mac ігри");
@@ -201,6 +192,20 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(41, TorznabCatType.PCMobileiOS, "|-iOS");
             caps.Categories.AddCategoryMapping(212, TorznabCatType.PCMobileAndroid, "|-Android");
             caps.Categories.AddCategoryMapping(205, TorznabCatType.PCGames, "Переклад ігор українською");
+            // archive and trash
+            caps.Categories.AddCategoryMapping(236, TorznabCatType.Other, "Закритий розділ");
+            caps.Categories.AddCategoryMapping(71, TorznabCatType.Other, "Архіви");
+            caps.Categories.AddCategoryMapping(72, TorznabCatType.Other, "Архів відео");
+            caps.Categories.AddCategoryMapping(73, TorznabCatType.Other, "Архів музики");
+            caps.Categories.AddCategoryMapping(74, TorznabCatType.Other, "Архів програм");
+            caps.Categories.AddCategoryMapping(75, TorznabCatType.Other, "Архів ігор");
+            caps.Categories.AddCategoryMapping(76, TorznabCatType.Other, "Архів літератури");
+            caps.Categories.AddCategoryMapping(121, TorznabCatType.Other, "Неоформлені");
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.Other, "Неоформлене відео");
+            caps.Categories.AddCategoryMapping(46, TorznabCatType.Other, "Неоформлена музика");
+            caps.Categories.AddCategoryMapping(47, TorznabCatType.Other, "Неоформлене програмне забезпечення");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.Other, "Неоформлені ігри");
+            caps.Categories.AddCategoryMapping(208, TorznabCatType.Other, "Неоформлена література");
 
             return caps;
         }

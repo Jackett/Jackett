@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
-  - https://www.torrent9.sbs/
+  - https://www.torrent9.sb/
   - https://torrent9.unblockninja.com/
 legacylinks:
   - https://www.protege-liens.net/
@@ -31,6 +31,7 @@ legacylinks:
   - https://www.torrent9.mn/
   - https://www.torrent9.city/
   - https://www.torrent9.gy/
+  - https://www.torrent9.sbs/
 
 caps:
   categorymappings:

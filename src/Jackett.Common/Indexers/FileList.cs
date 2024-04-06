@@ -185,7 +185,7 @@ namespace Jackett.Common.Indexers
                         Seeders = row.Seeders,
                         Peers = row.Seeders + row.Leechers,
                         Imdb = imdbId,
-                        PublishDate = DateTime.Parse(row.UploadDate + " +0200", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
+                        PublishDate = DateTime.Parse(row.UploadDate + " +0300", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
                         DownloadVolumeFactor = isFreeleech ? 0 : 1,
                         UploadVolumeFactor = row.DoubleUp ? 2 : 1,
                         MinimumRatio = 1,

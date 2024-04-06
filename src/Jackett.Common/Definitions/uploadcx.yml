@@ -1,7 +1,7 @@
 ---
 id: uploadcx
 name: upload.cx
-description: "upload.cx is a Private Torrent Tracker for MOVIES"
+description: "upload.cx (ULCX) is a Private Torrent Tracker for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
@@ -11,9 +11,11 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
 
   modes:
     search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
 
 settings:
@@ -47,7 +49,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "All members of ULXC must engage with the site, through either logging in or navigating upload.cx. Any account that remains inactive for over four months will be deactivated and pruned after an additional four months of deactivation."
+    default: "All members of ULCX must engage with the site, through either logging in or navigating upload.cx. Any account that remains inactive for over four months will be deactivated and pruned after an additional four months of deactivation."
 
 login:
   path: /api/torrents
@@ -72,8 +74,11 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -107,6 +112,8 @@ search:
       selector: imdb_id
     tmdbid:
       selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
     genre:
       selector: meta.genres
       filters:
@@ -116,6 +123,8 @@ search:
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
           args: ["(?i)(TV Movie)", "TV_Movie"]
+        - name: replace
+          args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
     files:

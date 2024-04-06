@@ -13,6 +13,8 @@ caps:
     - {id: 6, cat: XXX/WEB-DL, desc: "OnlyFans"}
     - {id: 8, cat: XXX/WEB-DL, desc: "Privacy"}
     - {id: 9, cat: XXX/WEB-DL, desc: "Other"}
+    - {id: 10, cat: XXX/WEB-DL, desc: "Hentai"}
+    - {id: 11, cat: XXX/WEB-DL, desc: "JAV"}
 
   modes:
     search: [q]
