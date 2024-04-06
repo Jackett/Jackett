@@ -95,6 +95,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(113, TorznabCatType.TVAnime, "Anime Boxsets");
             caps.Categories.AddCategoryMapping(112, TorznabCatType.MoviesOther, "Anime Movies");
             caps.Categories.AddCategoryMapping(111, TorznabCatType.MoviesOther, "Anime TV");
+            caps.Categories.AddCategoryMapping(150, TorznabCatType.PC, "Apps");
             caps.Categories.AddCategoryMapping(80, TorznabCatType.AudioAudiobook, "Audiobooks");
             caps.Categories.AddCategoryMapping(48, TorznabCatType.Books, "Books Magazines");
             caps.Categories.AddCategoryMapping(68, TorznabCatType.MoviesOther, "Cams/TS");
@@ -129,7 +130,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(13, TorznabCatType.Audio, "Music");
             caps.Categories.AddCategoryMapping(135, TorznabCatType.AudioLossless, "Music/FLAC");
             caps.Categories.AddCategoryMapping(136, TorznabCatType.Audio, "Music Boxset");
-            caps.Categories.AddCategoryMapping(15, TorznabCatType.AudioVideo, "Music Videos");
+            caps.Categories.AddCategoryMapping(148, TorznabCatType.AudioVideo, "Music Videos");
             caps.Categories.AddCategoryMapping(9, TorznabCatType.Other, "Other");
             caps.Categories.AddCategoryMapping(125, TorznabCatType.Other, "Other/Pictures");
             caps.Categories.AddCategoryMapping(54, TorznabCatType.TVOther, "Soaps");
@@ -143,6 +144,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(86, TorznabCatType.TVSport, "Sports/MotorSports");
             caps.Categories.AddCategoryMapping(89, TorznabCatType.TVSport, "Sports/Olympics");
             caps.Categories.AddCategoryMapping(126, TorznabCatType.TV, "TV");
+            caps.Categories.AddCategoryMapping(149, TorznabCatType.TV, "TV Specials");
             caps.Categories.AddCategoryMapping(127, TorznabCatType.TVUHD, "TV 4K");
             caps.Categories.AddCategoryMapping(129, TorznabCatType.TVHD, "TV HD");
             caps.Categories.AddCategoryMapping(130, TorznabCatType.TVHD, "TV HEVC");
