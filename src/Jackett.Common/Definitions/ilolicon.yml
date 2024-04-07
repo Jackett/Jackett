@@ -167,6 +167,6 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: td.rowfollow:nth-child(2) td:nth-child(2) 
+      selector: td.rowfollow:nth-child(2) td:nth-child(2)
       remove: a, b, font, img
 # NexusPHP v1.8.8 2023-09-25
