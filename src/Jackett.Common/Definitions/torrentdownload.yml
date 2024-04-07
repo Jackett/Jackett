@@ -1,0 +1,160 @@
+---
+id: torrentdownload
+name: TorrentDownload
+description: "TorrentDownload is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.torrentdownload.info/
+  - https://torrentdownload.unblockit.africa/
+legacylinks:
+  - https://torrentdownload.nocensor.lol/
+  - https://torrentdownload.unblockit.ink/
+  - https://torrentdownload.unblockit.bio/
+  - https://torrentdownload.unblockit.boo/
+  - https://torrentdownload.mrunblock.guru/
+  - https://torrentdownload.unblockit.click/
+  - https://torrentdownload.unblockit.asia/
+  - https://torrentdownload.unblockit.mov/
+  - https://torrentdownload.mrunblock.life/
+  - https://torrentdownload.unblockit.rsvp/
+  - https://torrentdownload.nocensor.click/
+  - https://torrentdownload.unblockit.vegas/
+  - https://torrentdownload.unblockit.esq/
+  - https://torrentdownload.unblockit.zip/
+  - https://torrentdownload.unblockit.foo/
+  - https://torrentdownload.unblockit.ing/
+  - https://torrentdownload.mrunblock.bond/
+  - https://torrentdownload.nocensor.cloud/
+  - https://torrentdownload.unblockit.date/
+  - https://torrentdownload.unblockit.dad/
+
+caps:
+  categorymappings:
+    - {id: Adult, cat: XXX, desc: Adult}
+    - {id: AdultPornHDVideo, cat: XXX, desc: "Adult Porn HD Video"}
+    - {id: AdultPornPictures, cat: XXX, desc: "Adult Porn Pictures"}
+    - {id: AdultPornVideo, cat: XXX, desc: "Adult Porn Video"}
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: AnimeEnglishtranslated, cat: TV/Anime, desc: "Anime English translated"}
+    - {id: AnimeAnimeOther, cat: TV/Anime, desc: "Anime Other"}
+    - {id: Applications, cat: PC/0day, desc: Applications}
+    - {id: ApplicationsAndroid, cat: PC/Mobile-Android, desc: "Applications Android"}
+    - {id: ApplicationsWindows, cat: PC/0day, desc: "Applications Windows"}
+    - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: AudioAudiobooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
+    - {id: AudioMusic, cat: Audio/MP3, desc: "Audio Music"}
+    - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
+    - {id: BooksComics, cat: Books/Comics, desc: "Books Comics"}
+    - {id: BooksEbooks, cat: Books/EBook, desc: "Books Ebooks"}
+    - {id: BooksEducational, cat: Books, desc: "Books Educational"}
+    - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
+    - {id: BooksFiction, cat: Books, desc: "Books Fiction"}
+    - {id: BooksNonfiction, cat: Books, desc: "Books Nonfiction"}
+    - {id: BooksTextbooks, cat: Books, desc: "Books Textbooks"}
+    - {id: Ebooks, cat: Books/EBook, desc: "Books Ebooks"}
+    - {id: Games, cat: Console, desc: Games}
+    - {id: GamesWindows, cat: PC/Games, desc: "Games Windows"}
+    - {id: Movies, cat: Movies, desc: Movies}
+    - {id: MoviesAction, cat: Movies, desc: Movies Action}
+    - {id: MoviesConcerts, cat: Movies, desc: "Movies Concerts"}
+    - {id: MoviesCrime, cat: Movies, desc: "Movies Crime"}
+    - {id: MoviesDocumentary, cat: TV/Documentary, desc: "Movies Documentary"}
+    - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed Movies"}
+    - {id: MoviesHighresMovies, cat: Movies, desc: "Movies Highres Movies"}
+    - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Musicvideos"}
+    - {id: MoviesThriller, cat: Movies, desc: "Movies Thriller"}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: MusicHardrock, cat: Audio, desc: "Music Hardrock"}
+    - {id: MusicMp, cat: Audio/MP3, desc: "Music Mp3"}
+    - {id: MusicFLAC, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: MusicLossless, cat: Audio/Lossless, desc: "Music Lossless"}
+    - {id: MusicRB, cat: Audio, desc: "Music R&B"}
+    - {id: MusicTranceHouseDance, cat: Audio, desc: "Music Trance House Dance"}
+    - {id: Other, cat: Other, desc: Other}
+    - {id: OtherEbooks, cat: Books/EBook, desc: "Other Ebooks"}
+    - {id: OtherComics, cat: Other, desc: "Other Comics"}
+    - {id: OtherTutorials, cat: Other, desc: "Other Tutorials"}
+    - {id: OtherUnsorted, cat: Other, desc: "Other Unsorted"}
+    - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
+    - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
+    - {id: Software, cat: PC/0day, desc: "Software"}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: TVBBC, cat: TV, desc: "TV BBC"}
+    - {id: TVEllenDeGeneres, cat: TV, desc: "TV Ellen DeGeneres"}
+    - {id: TVOther, cat: TV/Other, desc: "TV Other"}
+    - {id: TVshows, cat: TV, desc: "TV shows"}
+    - {id: Television, cat: TV, desc: Television}
+    - {id: VideoMobile, cat: Movies, desc: "Movies Video Mobile"}
+    - {id: VideoMovies, cat: Movies, desc: "Video Movies"}
+    - {id: VideoMusic, cat: Audio/Video, desc: "Video Music"}
+    - {id: XXX, cat: XXX, desc: XXX}
+    - {id: XXXVideo, cat: XXX, desc: "XXX Video"}
+    - {id: XXXHDVideo, cat: XXX, desc: "XXX HD Video"}
+    - {id: XXXPictures, cat: XXX, desc: "XXX Pictures"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site (Applies only to Search with Keywords)
+    default: d
+    options:
+      d: created
+      _: seeders
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}search{{ re_replace .Config.sort \"_\" \"\" }}?q={{ .Keywords }}{{ else }}/{{ end }}"
+
+  rows:
+    selector: table.table2 > tbody > tr:has(span.smallish)
+
+  fields:
+    category:
+      selector: div.tt-name > span.smallish
+      filters:
+        - name: re_replace
+          args: ["[^A-Za-z]+", ""] # strip everything but letters
+    title:
+      selector: div.tt-name > a[href^="/"]
+    details:
+      selector: div.tt-name > a[href^="/"]
+      attribute: href
+    download:
+      selector: div.tt-name > a[href^="/"]
+      attribute: href
+    date:
+      selector: td:nth-child(2)
+      filters:
+        - name: replace
+          args: ["right ", ""]
+        - name: replace
+          args: ["Last Month", "1 month ago"]
+        - name: replace
+          args: ["+", " ago"]
+        - name: timeago
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td.tdseed
+    leechers:
+      selector: td.tdleech
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
