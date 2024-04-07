@@ -65,7 +65,7 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>80</b> on your account profile.</br>Choosing more may cause the web site to fail to deliver complete results.
   - name: info_activity
     type: info
     label: Account Inactivity
