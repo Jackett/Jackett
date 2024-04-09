@@ -480,6 +480,7 @@ namespace Jackett.Updater
                 "Definitions/leporno.yml",
                 "Definitions/liaorencili.yml", // renamed to cilipro
                 "Definitions/lightning-tor.yml",
+                "Definitions/limetorrentsclone.yml",
                 "Definitions/mactorrents.yml",
                 "Definitions/magicheaven.yml",
                 "Definitions/magico.yml", // renamed to trellas
