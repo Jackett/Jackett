@@ -338,7 +338,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FANO.IN [![(invite needed)][inviteneeded]](#)
  * Fantastiko [![(invite needed)][inviteneeded]](#)
  * Fappaizuri
- * FastScene
  * FearNoPeer
  * Femdomcult
  * FileList (FL)
