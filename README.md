@@ -252,7 +252,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ArabTorrents [![(invite needed)][inviteneeded]](#)
  * AsianCinema
  * AsianDVDClub
- * AT-12 Project
  * Audiences
  * AudioNews (AN)
  * Aussierul.es [![(invite needed)][inviteneeded]](#)
