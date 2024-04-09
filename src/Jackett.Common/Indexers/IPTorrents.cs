@@ -377,14 +377,14 @@ namespace Jackett.Common.Indexers
 
                     // Torrents - Category column == Text or Code
                     // release.Category = MapTrackerCatDescToNewznab(row.Cq().Find("td:eq(0)").Text()); // Works for "Text" but only contains the parent category
-                    var catIcon = row.QuerySelector("td:nth-of-type(1) a");
+                    var catIcon = row.QuerySelector("td:nth-of-type(1) a[href^=\"?\"]");
                     if (catIcon == null)
                     {
                         throw new Exception("Please, change the 'Torrents - Category column' option to 'Icons' in the website Settings. Wait a minute (cache) and then try again.");
                     }
 
                     // Torrents - Category column == Icons
-                    var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href").Substring(1));
+                    var cat = MapTrackerCatToNewznab(catIcon.GetAttribute("href")?.Substring(1));
 
                     var size = ParseUtil.GetBytes(row.Children[sizeIndex].TextContent);
 
