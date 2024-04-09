@@ -7,14 +7,11 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Torrent911 and https://www.protege-torrent.com/T911 and https://www.protege-torrent.com/Oxtorrent
 links:
-  - https://www.t911.pw/
-  - https://www.oxtorrent.nl/
+  - https://www.oxtorrent.sbs/
   - https://oxtorrent.proxyninja.org/ # proxy for oxtorrent
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.rantop.org/
-  - https://www.t911.net/
-  - https://www.torrent911.cc/
   - https://www.t911.me/
   - https://www.torrent911.tv/
   - https://www.t911.tv/
@@ -36,6 +33,8 @@ legacylinks:
   - https://torrent911.ninjaproxy1.com/ # proxy for torrent911
   - https://torrent9.torrentbay.st/ # proxy for torrent911
   - https://www.t911.ws/
+  - https://www.t911.pw/ # now on poster layout
+  - https://www.oxtorrent.nl/
 
 caps:
   categorymappings:
