@@ -573,7 +573,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * The-New-Fun
  * TheEmpire (TE)
  * TheLeachZone (TLZ)
- * TheRebels
  * TheScenePlace (TSP)
  * Thor's Land
  * TJUPT (北洋园PT)

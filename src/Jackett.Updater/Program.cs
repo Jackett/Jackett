@@ -620,6 +620,7 @@ namespace Jackett.Updater
                 "Definitions/thehorrorcharnel.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
+                "Definitions/therebels-api.yml",
                 "Definitions/theresurrection.yml",
                 "Definitions/theshinning.yml", // switch to *-API #13751
                 "Definitions/thespit.yml",
