@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataCookieUA("For best results, change the 'Torrents per page' option to 100 and check the 'Torrents - Show files count' option in the website Settings."))
+                   configData: new ConfigurationDataCookieUA("In the website Settings:<ul><li>change the <b>Torrents per page</b> option to <b>100</b></li><li><b>Tick</b> the <b>Torrents - Show files count</b> checkbox</li><li>Set the <b>torrents category column</b> to <b>Icons</b></li></ul>Otherwise the indexer may not return results."))
         {
             var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
                 {
