@@ -8,14 +8,12 @@ encoding: UTF-8
 # changes to this indexer should also be made to limetorrentsclone
 links:
   - https://www.limetorrents.lol/
-  - https://limetorrents.unblockit.africa/
+  - https://limetorrents.unblockit.casa/
   - https://limetorrents.unblockninja.com/
   - https://limetorrents.ninjaproxy1.com/
   - https://limetorrents.proxyninja.org/
   - https://limetorrents.torrentbay.st/
 legacylinks:
-  - https://limetorrents.nocensor.lol/
-  - https://limetorrents.unblockit.ink/
   - https://limetorrents.nocensor.art/
   - https://limetorrents.unblockit.bio/
   - https://limetorrents.unblockit.boo/
@@ -35,6 +33,7 @@ legacylinks:
   - https://limetorrents.nocensor.cloud/
   - https://limetorrents.unblockit.date/
   - https://limetorrents.unblockit.dad/
+  - https://limetorrents.unblockit.africa/
 
 caps:
   categorymappings:
