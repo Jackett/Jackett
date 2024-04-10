@@ -6,6 +6,8 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
+  - https://www.qingwapt.com/
+links:
   - https://new.qingwa.pro/
 
 caps:
