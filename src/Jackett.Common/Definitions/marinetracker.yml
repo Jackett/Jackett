@@ -176,6 +176,9 @@ caps:
     - {id: 278, cat: Books, desc: "History of Naval Shipbuilding-Warships"}
     - {id: 351, cat: Books, desc: "History of Naval Shipbuilding-Battleships"}
     - {id: 353, cat: Books, desc: "History of Naval Shipbuilding-Cruisers"}
+    - {id: 365, cat: Books, desc: "History of Naval Shipbuilding-Aircraft carriers"}
+    - {id: 366, cat: Books, desc: "History of Naval Shipbuilding-Destroyers"}
+    - {id: 367, cat: Books, desc: "History of Naval Shipbuilding-Frigates"}
     - {id: 262, cat: Books, desc: "History of Naval Shipbuilding-The history of sailing ships"}
     - {id: 323, cat: Books, desc: "History of Naval Shipbuilding-History of Submarines"}
     - {id: 198, cat: Books, desc: "Navy"}
