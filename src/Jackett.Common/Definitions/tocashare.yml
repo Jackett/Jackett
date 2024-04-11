@@ -180,8 +180,8 @@ search:
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
     title_filename:
       selector: "files[0].name"
       optional: true
