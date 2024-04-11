@@ -71,7 +71,8 @@ login:
   error:
     - selector: ul.auth-form__errors
   test:
-    path: "users/{{ .Config.username }}"
+    path: /
+    selector: "a[href$=\"/general-settings/edit\"]"
 
 search:
   paths:
