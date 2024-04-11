@@ -18,6 +18,12 @@ caps:
     movie-search: [q, imdbid, tmdbid]
 
 settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: apikey
     type: text
     label: APIKey
@@ -51,12 +57,21 @@ settings:
     default: "Inactivity on the SkipTheTrailers web site for more than 90 days will lead to account being disabled."
 
 login:
-  path: /api/torrents
-  method: get
+  path: login
+  method: form
+  form: form[action$="/login"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    remember: on
+  selectorinputs:
+    _token:
+      selector: input[name="_token"]
+      attribute: value
   error:
-    - selector: a[href*="/login"]
-      message:
-        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: ul.auth-form__errors
+  test:
+    path: "users/{{ .Config.username }}"
 
 search:
   paths:
@@ -99,7 +114,7 @@ search:
     details:
       selector: details_link
     download:
-      selector: download_link
+      text: "{{ re_replace .Result.details \"/torrents/\" \"/torrents/download/\" }}"
     infohash:
       selector: info_hash
     poster:
