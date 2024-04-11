@@ -7,7 +7,7 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://rudub.online/
+  - https://11april.rudub.online/
 legacylinks:
   - http://baibako.tv/
   - https://baibako.tv/
@@ -26,7 +26,7 @@ legacylinks:
   - https://08april.rudub.online/
   - https://09april.rudub.online/
   - https://10april.rudub.online/
-  - https://11april.rudub.online/
+  - https://rudub.online/
 
 caps:
   categorymappings:
@@ -82,7 +82,7 @@ login:
   error:
     - selector: div.login2
   test:
-    path: /
+    path: browse.php
     selector: a[href="logout.php"]
 
 search:
