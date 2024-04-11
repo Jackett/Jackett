@@ -518,6 +518,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * RetroFlix
  * RevolutionTT
  * RM-HD
+ * RocketHD
  * Romanian Metal Torrents (RMT)
  * RoTorrent
  * Rousi
