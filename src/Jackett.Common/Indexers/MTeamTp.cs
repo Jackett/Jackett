@@ -90,7 +90,9 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(407, TorznabCatType.TVSport, "Sports(運動)");
             caps.Categories.AddCategoryMapping(422, TorznabCatType.PC0day, "Software(軟體)");
             caps.Categories.AddCategoryMapping(423, TorznabCatType.PCGames, "PCGame(PC遊戲)");
-            caps.Categories.AddCategoryMapping(427, TorznabCatType.Books, "eBook(電子書)");
+            caps.Categories.AddCategoryMapping(427, TorznabCatType.BooksEBook, "Study/Edu ebook(教育書面)");
+            caps.Categories.AddCategoryMapping(441, TorznabCatType.BooksOther, "Study/Edu video(教育影片)");
+            caps.Categories.AddCategoryMapping(442, TorznabCatType.AudioAudiobook, "Study/Edu audio(教育音檔)");
             caps.Categories.AddCategoryMapping(409, TorznabCatType.Other, "Misc(其他)");
 
             // music
