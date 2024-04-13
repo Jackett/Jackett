@@ -236,8 +236,8 @@ namespace Jackett.Server.Controllers
 
             var manualResult = new ManualSearchResult();
 
-            var trackers = CurrentIndexer is BaseMetaIndexer
-                ? (CurrentIndexer as BaseMetaIndexer).ValidIndexers
+            var trackers = CurrentIndexer is BaseMetaIndexer metaIndexer
+                ? metaIndexer.ValidIndexers
                 : (new[] { CurrentIndexer });
 
             // Filter current trackers list on Tracker query parameter if available
@@ -245,8 +245,11 @@ namespace Jackett.Server.Controllers
                 trackers = trackers.Where(t => request.Tracker.Contains(t.Id));
             trackers = trackers.Where(t => t.CanHandleQuery(CurrentQuery));
 
+            CurrentQuery.InteractiveSearch = true;
+
             var isMetaIndexer = request.Tracker == null || request.Tracker.Length > 1;
             var tasks = trackers.ToList().Select(t => t.ResultsForQuery(CurrentQuery, isMetaIndexer)).ToList();
+
             try
             {
                 var aggregateTask = Task.WhenAll(tasks);
