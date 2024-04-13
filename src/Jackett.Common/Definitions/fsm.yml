@@ -95,21 +95,7 @@ search:
     grabs:
       selector: finish
     date:
-      selector: createdAt
-      filters:
-        - name: replace
-          args: ["年", "years"]
-        - name: replace
-          args: ["月", "months"]
-        - name: replace
-          args: ["天", "days"]
-        - name: re_replace
-          args: ["小?时", "hours"]
-        - name: replace
-          args: ["分", "minutes"]
-        - name: replace
-          args: ["前", " ago"]
-        - name: timeago
+      selector: createdTs
     size:
       selector: fileSize
     downloadvolumefactor:
