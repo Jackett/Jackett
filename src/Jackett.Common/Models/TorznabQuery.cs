@@ -13,6 +13,7 @@ namespace Jackett.Common.Models
         private static readonly Regex _StandardizeDashesRegex = new Regex(@"\p{Pd}+", RegexOptions.Compiled);
         private static readonly Regex _StandardizeSingleQuotesRegex = new Regex(@"[\u0060\u00B4\u2018\u2019]", RegexOptions.Compiled);
 
+        public bool InteractiveSearch { get; set; }
         public string QueryType { get; set; }
         public int[] Categories { get; set; }
         public int Extended { get; set; }
@@ -167,6 +168,7 @@ namespace Jackett.Common.Models
         {
             var ret = new TorznabQuery
             {
+                InteractiveSearch = InteractiveSearch,
                 QueryType = QueryType,
                 Extended = Extended,
                 ApiKey = ApiKey,
@@ -212,7 +214,7 @@ namespace Jackett.Common.Models
 
         // Some trackers don't support AND logic for search terms resulting in unwanted results.
         // Using this method we can AND filter it within jackett.
-        // With limit we can limit the amount of characters which should be compared (use it if a tracker doesn't return the full title).
+        // With "limit" we can limit the amount of characters which should be compared (use it if a tracker doesn't return the full title).
         public bool MatchQueryStringAND(string title, int? limit = null, string queryStringOverride = null)
         {
             var commonWords = new[] { "and", "the", "an" };

@@ -470,6 +470,10 @@ namespace Jackett.Common.Indexers
                         {
                             // Ignore these categories as they'll cause hell with the matcher
                             // TV Special, DVD Special, BD Special
+                            if (groupName == "TV Special" || groupName == "DVD Special" || groupName == "BD Special")
+                            {
+                                continue;
+                            }
 
                             if (groupName == "TV Series" || groupName == "OVA" || groupName == "ONA")
                             {
