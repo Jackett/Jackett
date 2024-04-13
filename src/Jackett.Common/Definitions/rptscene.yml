@@ -23,7 +23,7 @@ caps:
     - {id: 49, cat: Movies/UHD, desc: "Movies: 4k"}
     - {id: 46, cat: Movies/3D, desc: "Movies: 3D"}
     - {id: 24, cat: Movies, desc: "Movies: Packs"}
-    - {id: 28, cat: Movies, desc: "Movies: Cartoons"}
+    - {id: 28, cat: Movies/Other, desc: "Movies: Cartoons"}
     - {id: 47, cat: XXX, desc: "Movies: XXX"}
     - {id: 41, cat: TV/HD, desc: "TV: HD"}
     - {id: 52, cat: TV/WEB-DL, desc: "TV: WEB-DL"}
@@ -37,6 +37,7 @@ caps:
     - {id: 54, cat: Console, desc: "Games: PsP"}
     - {id: 76, cat: Audio/Audiobook, desc: "Books: Audio"}
     - {id: 77, cat: Books/EBook, desc: "Books: eBooks"}
+    - {id: 78, cat: TV/UHD, desc: "TV: 4k"}
 
   modes:
     search: [q]
