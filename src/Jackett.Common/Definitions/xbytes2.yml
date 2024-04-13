@@ -330,6 +330,7 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
+        img[src$="freeleech.gif"]: 0
         img[src$="gold.gif"]: 0
         img[src$="silver.gif"]: 0.5
         img[src$="bronze.gif"]: 0.25
