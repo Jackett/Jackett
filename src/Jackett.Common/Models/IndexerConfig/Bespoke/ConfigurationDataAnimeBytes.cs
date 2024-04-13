@@ -29,7 +29,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             AddJapaneseTitle = new BoolConfigurationItem("Add releases for Japanese Title") { Value = false };
             AddRomajiTitle = new BoolConfigurationItem("Add releases for Romaji Title") { Value = false };
             AddAlternativeTitles = new BoolConfigurationItem("Add releases for Alternative Title(s)") { Value = false };
-            AddFileNameTitles = new BoolConfigurationItem("Add releases based on single filename") { Value = false };
+            AddFileNameTitles = new BoolConfigurationItem("Add releases based on single filename") { Value = true };
             FilterSeasonEpisode = new BoolConfigurationItem("Filter results by season/episode") { Value = false };
         }
     }
