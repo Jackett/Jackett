@@ -96,7 +96,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
     type: select
@@ -152,13 +152,14 @@ search:
     # 15 results per page fetch 5 (site is slow, dont be greedy and fetch more)
     - path: index.php
   inputs:
+    page: torrents
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
-    page: torrents
+    # 0 name, 1 name&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
+    # note the options are exclusive, so searching for gold means the search keywords are ignored
+    options: 0
     # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 name, 1 name&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
-    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
   keywordsfilters:
@@ -171,7 +172,7 @@ search:
   # does not support imdbid search and does not return imdb link in results
 
   rows:
-    selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+    selector: "div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.freeleech }}:has(img[alt=\"Gold 100% Free\"]){{ else }}{{ end }}, div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.freeleech }}:has(img[alt=\"Free Leech\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
