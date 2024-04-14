@@ -61,7 +61,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
     type: select
@@ -142,13 +142,14 @@ search:
     # 0 all, 1 activeonly, 2 deadonly
     active: 0
     # 0 title, 1 title&desc, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze, 8 1x, 9 2x, 10 3x, 11 4x, 12 5x, 13 6x, 14 7x, 15 8x, 16 9x, 17 10x
-    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # note the options are exclusive, so searching for gold means the search keywords are ignored
+    options: 0
     search: "{{ .Keywords }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table.lista > tbody > tr:has(td[onMouseOut])
+    selector: "table.lista > tbody > tr:has(td[onMouseOut]){{ if .Config.freeleech }}:has(img[src$=\"gold.gif\"]){{ else }}{{ end }}, table.lista > tbody > tr:has(td[onMouseOut]){{ if .Config.freeleech }}:has(img[src$=\"freeleech.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
