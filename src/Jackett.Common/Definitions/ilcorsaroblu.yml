@@ -84,7 +84,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: flaresolverr
     type: info
@@ -140,7 +140,8 @@ search:
     search: "{{ .Keywords }}"
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
     # 0 title, 1 title & descr, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze
-    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # note the options are exclusive, so searching for gold means the search keywords are ignored
+    options: 0
     # 0 all, 1 activeonly, 2 deadonly
     active: 0
     order: "{{ .Config.sort }}"
@@ -148,7 +149,7 @@ search:
     # does not support imdbid searches and does not return imdb link in results
 
   rows:
-    selector: div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrents&category="])
+    selector: "div.b-content > table > tbody > tr > td > table.lista > tbody > tr:has(a[href^=\"index.php?page=torrents&category=\"]){{ if .Config.freeleech }}:has(img[src$=\"gold.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
 
