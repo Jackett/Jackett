@@ -65,9 +65,7 @@ namespace Jackett.Common.Indexers.Feeds
                 categoryids = new List<int> { int.Parse(categories.Last(e => !string.IsNullOrEmpty(e.Value)).Value) };
             else
                 categoryids = new List<int> { int.Parse(attributes.First(e => e.Attribute("name").Value == "category").Attribute("value").Value) };
-            var imdbId = long.TryParse(ReadAttribute(attributes, "imdbid"), out longVal) ? (long?)longVal : null;
-            var tvdbId = long.TryParse(ReadAttribute(attributes, "tvdbid"), out longVal) ? (long?)longVal : null;
-            var tvmazeId = long.TryParse(ReadAttribute(attributes, "tvmazeid"), out longVal) ? (long?)longVal : null;
+            var imdbId = long.TryParse(ReadAttribute(attributes, "imdb"), out longVal) ? (long?)longVal : null;
 
             var release = new ReleaseInfo
             {
@@ -86,16 +84,14 @@ namespace Jackett.Common.Indexers.Feeds
                 InfoHash = attributes.First(e => e.Attribute("name").Value == "infohash").Attribute("value").Value,
                 DownloadVolumeFactor = downloadvolumefactor,
                 UploadVolumeFactor = uploadvolumefactor,
-                Imdb = imdbId,
-                TVDBId = tvdbId,
-                TVMazeId = tvmazeId
+                Imdb = imdbId
             };
             if (magneturi != null)
                 release.MagnetUri = magneturi;
             return release;
         }
 
-        private string ReadAttribute(IEnumerable<XElement> attributes, string attributeName)
+        protected string ReadAttribute(IEnumerable<XElement> attributes, string attributeName)
         {
             var attribute = attributes.FirstOrDefault(e => e.Attribute("name").Value == attributeName);
             if (attribute == null)

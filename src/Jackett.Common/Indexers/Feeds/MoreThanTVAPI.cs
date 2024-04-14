@@ -138,6 +138,11 @@ namespace Jackett.Common.Indexers.Feeds
                 var enclosureUrl = enclosure.Attribute("url").Value;
                 release.Link = new Uri(enclosureUrl);
             }
+            // custom provider IDs
+            var attributes = item.Descendants().Where(e => e.Name.LocalName == "attr");
+            release.TVDBId = long.TryParse(ReadAttribute(attributes, "tvdbid"), out var longVal) ? (long?)longVal : null;
+            release.TVMazeId = long.TryParse(ReadAttribute(attributes, "tvmazeid"), out longVal) ? (long?)longVal : null;
+
             // add some default values if none returned by feed
             release.Seeders = release.Seeders > 0 ? release.Seeders : 0;
             release.Peers = release.Peers > 0 ? release.Peers : 0;
