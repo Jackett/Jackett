@@ -64,7 +64,7 @@ settings:
     default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
     type: select
@@ -107,16 +107,17 @@ search:
     page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
     search: "{{ .Keywords }}"
+    # 0 title, 1 title&desc, 2 descr, 3 uploaders, 5 gold, 6 silver, 9 2x, 10 3x, 11 4x, 12 5x
+    # note the options are exclusive, so searching for gold means the search keywords are ignored
+    options: 0
     # 0 all, 1 activeonly, 2 deadonly
     active: 0
-    # 0 title, 1 title&desc, 2 descr, 3 uploaders, 5 gold, 6 silver, 9 2x, 10 3x, 11 4x, 12 5x
-    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
     # does not support imdbid search and does not supply imdb link in results.
 
   rows:
-    selector: table.table.table-bordered > tbody > tr:has(a[href^="download.php?id="])
+    selector: "table.table.table-bordered > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"gold.gif\"]){{ else }}{{ end }}, table.table.table-bordered > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"freeleech.gif\"]){{ else }}{{ end }}"
 
   fields:
     download:
