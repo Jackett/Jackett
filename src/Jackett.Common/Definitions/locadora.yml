@@ -105,9 +105,6 @@ search:
       selector: category_id
     title:
       selector: name
-      filters:
-        - name: re_replace
-          args: ["\\.", " "]
     details:
       selector: details_link
     download:
