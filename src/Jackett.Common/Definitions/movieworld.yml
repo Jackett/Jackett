@@ -38,7 +38,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
     type: select
@@ -82,7 +82,8 @@ search:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
     # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 18 genre, 4 imdb, 5 gold, 6 silver, 7 bronze, 8-17 upload multiplier 1x-10x
-    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # note the options are exclusive, so searching for gold means the search keywords are ignored
+    options: 0
     # 0 all, 1 active only, 2 dead only
     active: 0
     order: "{{ .Config.sort }}"
@@ -94,7 +95,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]):not(:has(a[href^=\"index.php?page=userdetails\"]))"
+    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]):not(:has(a[href^=\"index.php?page=userdetails\"])){{ if .Config.freeleech }}:has(img[src$=\"gold.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
