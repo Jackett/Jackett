@@ -49,7 +49,7 @@ settings:
     label: Password
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Filter freeleech only
     default: false
   - name: sort
     type: select
@@ -100,7 +100,8 @@ search:
     page: torrents
     category: "{{ range .Categories }}{{.}};{{end}}"
     # 0 filename, 1 file & descr, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze
-    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # note the options are exclusive, so searching for gold means the search keywords are ignored
+    options: 0
     # 0 all, 1 active, 2 dead
     active: 0
     order: "{{ .Config.sort }}"
@@ -108,7 +109,7 @@ search:
     # while the site does have imdbid in some descriptions, we cannot support both searching with imdbid and freeleech at the same time.
 
   rows:
-    selector: table > tbody > tr > td > table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+    selector: "table > tbody > tr > td > table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.freeleech }}:has(img[src$=\"gold.gif\"]){{ else }}{{ end }}"
     filters:
       # searching freeleech and keywords returns unrelated hits
       - name: andmatch
