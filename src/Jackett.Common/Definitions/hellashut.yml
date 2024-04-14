@@ -13,6 +13,7 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 85, cat: TV/Anime, desc: "Anime/Cartoon 4K"}
     - {id: 28, cat: TV/Anime, desc: "Anime/Cartoon HD"}
     - {id: 47, cat: TV/Anime, desc: "Anime/Cartoon HDTV"}
     - {id: 48, cat: TV/Anime, desc: "Anime/Cartoon SD"}
