@@ -267,6 +267,7 @@ search:
       selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
+        ":root:has(ul#root > font:contains(\"FreeLeech : ON\"))": 0
         img[src="img/freeleech_star.gif"]: 0
         "*": 1
     uploadvolumefactor:
