@@ -22,11 +22,11 @@ caps:
     - {id: 195, cat: Books, desc: "Shipbuilding & Shiprepairing-Turnary"}
     - {id: 226, cat: Books, desc: "Mobile Apps for Seafarers"}
     - {id: 6, cat: PC, desc: "Maritime Software"}
-    - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
-    - {id: 19, cat: PC, desc: "Maritime Software-Training software"}
-    - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
-    - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
     - {id: 12, cat: PC, desc: "Maritime Software-Answers to tests"}
+    - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
+    - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
+    - {id: 19, cat: PC, desc: "Maritime Software-Training software"}
+    - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
     - {id: 20, cat: PC, desc: "Maritime Software-Calculation soft"}
     - {id: 179, cat: PC, desc: "Maritime Software-Programming and SDK software"}
     - {id: 317, cat: PC, desc: "Maritime Software-Shareware (demo, trial)"}
@@ -72,12 +72,12 @@ caps:
     - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
     - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
     - {id: 10, cat: Books, desc: "English for seamen"}
-    - {id: 265, cat: Books, desc: "English for seamen-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 266, cat: Books, desc: "English for seamen-English for Deck Officers"}
     - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
     - {id: 268, cat: Books, desc: "English for seamen-English for ETO's"}
     - {id: 269, cat: Books, desc: "English for seamen-English for Shipbuilders"}
     - {id: 270, cat: Books, desc: "English for seamen-RU↔EN dictionaries & phrasebooks"}
+    - {id: 265, cat: Books, desc: "English for seamen-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 271, cat: Books, desc: "English for seamen-Business English and Correspondence"}
     - {id: 205, cat: Books, desc: "General english"}
     - {id: 101, cat: Books, desc: "Electrical Technical Officer's Library"}
@@ -152,13 +152,13 @@ caps:
     - {id: 219, cat: Books, desc: "Marine History"}
     - {id: 347, cat: Books, desc: "Marine History-Sea Life"}
     - {id: 281, cat: Books, desc: "Marine History-History of Merchant Marine"}
-    - {id: 280, cat: Books, desc: "Marine History-Historic ships"}
     - {id: 259, cat: Books, desc: "Marine History-Shipbuilding history"}
     - {id: 273, cat: Books, desc: "Marine History-History of Seafaring"}
     - {id: 275, cat: Books, desc: "Marine History-Accidents and disasters at sea"}
     - {id: 264, cat: Books, desc: "Marine History-Marine cartography"}
     - {id: 274, cat: Books, desc: "Marine History-Pirates"}
     - {id: 282, cat: Books, desc: "Fleets history"}
+    - {id: 370, cat: Books, desc: "Fleets history-Maritime museums of the world"}
     - {id: 357, cat: Books, desc: "Fleets history-China"}
     - {id: 354, cat: Books, desc: "Fleets history-USA"}
     - {id: 356, cat: Books, desc: "Fleets history-Russia | USSR"}
@@ -167,11 +167,14 @@ caps:
     - {id: 364, cat: Books, desc: "Fleets history-The United Kingdom"}
     - {id: 359, cat: Books, desc: "Fleets history-Germany"}
     - {id: 360, cat: Books, desc: "Fleets history-France"}
+    - {id: 368, cat: Books, desc: "Fleets history-Netherlands"}
+    - {id: 369, cat: Books, desc: "Fleets history-Spain"}
     - {id: 277, cat: Books, desc: "Wars at Sea"}
     - {id: 276, cat: Books, desc: "Wars at Sea-War at sea (World War I)"}
     - {id: 261, cat: Books, desc: "Wars at Sea-War at sea (World War II)"}
     - {id: 363, cat: Books, desc: "Wars at Sea-Russo-Japanese War"}
     - {id: 362, cat: Books, desc: "History of Naval Shipbuilding"}
+    - {id: 280, cat: Books, desc: "History of Naval Shipbuilding-Historic ships"}
     - {id: 279, cat: Books, desc: "History of Naval Shipbuilding-Marine vessels"}
     - {id: 278, cat: Books, desc: "History of Naval Shipbuilding-Warships"}
     - {id: 351, cat: Books, desc: "History of Naval Shipbuilding-Battleships"}
