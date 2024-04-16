@@ -59,6 +59,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The system automatically makes an account inactive when not logged in for a period of 90 days. So just log in within this time so that it is not inactivated."
 
 login:
   path: /api/torrents
