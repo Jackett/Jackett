@@ -205,7 +205,7 @@ search:
       selector: div.selection_unter_aaa
     downloadvolumefactor:
       case:
-        ":root:has(div.onlyup)": 0
+        ":root:has(div.onlyup)": 0 # GLobal Freeleech event
         "*": 1
     uploadvolumefactor:
       text: 1
