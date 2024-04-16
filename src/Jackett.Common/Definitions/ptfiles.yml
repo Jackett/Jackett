@@ -156,10 +156,13 @@ search:
           args: ["Uploaded: ", ""]
     downloadvolumefactor:
       case:
+        ":root:has(div.rounded_colhead2:contains(\"w00t It's Crazyhour!\"))": 0 # Freeleech hour
         "span.tool:contains(\"[FREE]\")": 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        ":root:has(div.rounded_colhead2:contains(\"w00t It's Crazyhour!\"))": 3 # Freeleech hour
+        "*": 1
     genre:
       selector: td:nth-child(2) > span:has(span > small)
       remove: span:nth-child(1), span.tool, a[title^="Search all"], br ~ b > small
