@@ -143,6 +143,7 @@ search:
       remove: strong
     downloadvolumefactor:
       case:
+        ":root:has(div.justify-content-center:contains(\"Включен фрилич до\"))": 0 # Global Freeleech  event
         a[href^="/details/id"][style="color:#f2b101"]: 0
         a[href^="/details/id"][style="color:#828b8b"]: 0.5
         "*": 1
