@@ -501,6 +501,7 @@ namespace Jackett.Updater
                 "Definitions/movcr.yml",
                 "Definitions/moviesite.yml",
                 "Definitions/movietorrent.yml", // will need c# #11284
+                "Definitions/movieworld.yml",
                 "Definitions/moviezone.yml", // migrated to teracod #9743
                 "Definitions/mteamtp.yml", // migrated to C# (API)
                 "Definitions/mteamtp2fa.yml", // migrated to C# (API)
