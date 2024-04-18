@@ -18,6 +18,7 @@ caps:
     - {id: 2, cat: PC/Mac, desc: "Программы - Audio"}
     - {id: 3, cat: PC/Mac, desc: "Программы - Video"}
     - {id: 4, cat: PC/Mac, desc: "Программы - Graphics"}
+    - {id: 95, cat: PC/Mac, desc: " |- Вспомогательный инструментарий - presets, effects, brush.."}
     - {id: 79, cat: PC/Mac, desc: " |- Архив Программы - Graphics"}
     - {id: 5, cat: PC/Mac, desc: "Программы - System Utilities"}
     - {id: 23, cat: PC/Mac, desc: " |- Средства разработки приложений"}
