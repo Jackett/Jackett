@@ -39,20 +39,21 @@ caps:
     movie-search: [q]
     music-search: [q, album, artist]
     book-search: [q]
+
 settings:
   - name: downloadlink
     type: select
     label: Download link
     default: "magnet:?xt="
     options:
-      "/download/": ".torrent"
+      "/d/": ".torrent"
       "magnet:?xt=": "magnet"
   - name: downloadlink2
     type: select
     label: Download link (fallback)
-    default: "/download/"
+    default: "/d/"
     options:
-      "/download/": ".torrent"
+      "/d/": ".torrent"
       "magnet:?xt=": "magnet"
   - name: info_download
     type: info
@@ -69,32 +70,36 @@ download:
 search:
   paths:
     # search has 10 torrents per page, latest has 100 torrents per page.
-    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}latest.html{{ end }}"
-    - path: "{{ if .Keywords }}/search/{{ .Keywords }}&page=10{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}s/{{ .Keywords }}{{ else }}latest.html{{ end }}"
+    - path: "{{ if .Keywords }}s/{{ .Keywords }}&page=10{{ else }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "-"]
+    - name: tolower
 
   rows:
-    selector: table.table-hover > tbody > tr:has(a[href*="/torrent/"])
+    selector: table.table-hover > tbody > tr
     filters:
       - name: andmatch
 
   fields:
     category:
-      selector: a[href*="/category/"]
+      selector: a[href^="/c/"]
     title:
-      selector: a[href*="/torrent/"]
+      selector: a[href*="/v/"]
     details:
-      selector: a[href*="/torrent/"]
+      selector: a[href*="/v/"]
       attribute: href
     download:
-      selector: a[href*="/torrent/"]
+      selector: a[href*="/v/"]
       attribute: href
     date:
       selector: td:nth-child(3)
       filters:
-        - name: timeago
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
       selector: td:nth-child(4)
     seeders:
