@@ -108,12 +108,13 @@ namespace Jackett.Common.Indexers
             var searchToken = await GetSearchTokenAsync();
 
             query = SanitizeTorznabQuery(query);
+
+            var maxPages = query.SearchTerm.IsNullOrWhiteSpace() ? 1 : 3;
+
             if (query.SearchTerm.IsNullOrWhiteSpace())
             {
                 query.SearchTerm = "%";
             }
-
-            var maxPages = query.SearchTerm.IsNullOrWhiteSpace() ? 1 : 3;
 
             for (var i = 1; i <= maxPages; i++)
             {
