@@ -33,11 +33,16 @@ on:
       - '!src/Jackett.Test/**'
   schedule:
     - cron: '00 00 * * 5'
+  
+concurrency: 
+  group: ${{github.workflow}} - ${{github.ref}}
+  cancel-in-progress: true
 
 jobs:
   analyze:
     name: Analyze
     runs-on: windows-2022
+    if: ${{github.repository == 'jackett/jackett'}}
     permissions:
       actions: read
       contents: read

@@ -16,6 +16,7 @@ jobs:
   redeliver-failed-deliveries:
     name: Redeliver failed deliveries
     runs-on: ubuntu-latest
+    if: ${{github.repository == 'jackett/jackett'}}
     steps:
       # This workflow will run a script that is stored in the repository. This step checks out the repository contents so that the workflow can access the script.
       - name: Check out repo content
