@@ -1,7 +1,7 @@
 ---
 id: onlyencodes-api
-name: OnlyEncodes (API)
-description: "OnlyEncodes is a Private Tracker for MOVIES / TV"
+name: OnlyEncodes+ (API)
+description: "OnlyEncodes+ is a Private Tracker for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
@@ -25,7 +25,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://onlyencodes.cc/\" target=\"_blank\">OnlyEncodes</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://onlyencodes.cc/\" target=\"_blank\">OnlyEncodes+</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
