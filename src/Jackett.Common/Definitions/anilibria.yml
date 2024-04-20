@@ -90,6 +90,8 @@ search:
         - name: re_replace
           args: ["(?i)\\b(\\d+)(st|nd|rd|th)\\s*season[\\s\\.]*", ""]
         - name: re_replace
+          args: ["(?i)\\b(\\d+)(st|nd|rd|th)\\s*stage[\\s\\.]*", ""]
+        - name: re_replace
           args: ["(?i)\\b(\\d+)\\s*season\\b[\\s\\.]*", ""]
         - name: re_replace
           args: ["(?i)\\bseason\\s*([IVXLCDM]+)\\b", ""]
@@ -138,6 +140,8 @@ search:
         - name: re_replace
           args: ["(?i)(^.*\\b(\\d+)(st|nd|rd|th)\\s*season\\b.*$)", "S$2"]
         - name: re_replace
+          args: ["(?i)(^.*\\b(\\d+)(st|nd|rd|th)\\s*stage\\b.*$)", "S$2"]
+        - name: re_replace
           args: ["(?i)(^.*\\b(\\d+)\\s*season\\b.*$)", "S$2"]
         - name: re_replace
           args: ["(?i)(^.*\\bseason\\s*([IVXLCDM]+)\\b\\s*$)", "$1"]
@@ -175,6 +179,8 @@ search:
           args: ["(?i)(^.*\\bseason\\s*(\\d+)\\b\\s*$)", "S$2"]
         - name: re_replace
           args: ["(?i)(^.*\\b(\\d+)(st|nd|rd|th)\\s*season\\b\\s*$)", "S$2"]
+        - name: re_replace
+          args: ["(?i)(^.*\\b(\\d+)(st|nd|rd|th)\\s*stage\\b.*$)", "S$2"]
         - name: re_replace
           args: ["(?i)(^.*\\b(\\d+)\\s*season\\b\\s*$)", "S$2"]
         - name: re_replace
