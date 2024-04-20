@@ -147,7 +147,7 @@ function loadJackettSettings() {
             $("#can-upgrade-from-mono").show();
         }
 
-        if (data.external != null && data.external === true && data.password === '') {
+        if (data.external != null && data.external === true && data.password === '' && !localStorage.getItem('external-access-warning-hidden')) {
             $("#warning-external-access").show();
         }
 
@@ -1475,6 +1475,15 @@ function bindUIButtons() {
         });
         event.preventDefault();
         return false;
+    });
+
+    $('#remind-external-access-button').click(function () {
+      $("#warning-external-access").hide();
+    });
+
+    $('#dismiss-external-access-button').click(function () {
+      localStorage.setItem('external-access-warning-hidden', true);
+      $("#warning-external-access").hide();
     });
 
     $('#api-key-copy-button').click(function () {
