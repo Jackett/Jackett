@@ -93,6 +93,8 @@ search:
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sortby: "{{ .Config.sort }}"
     resorder: "{{ .Config.type }}"
+  error:
+    - selector: div:contains("MySQL Error!")
 
   rows:
     selector: div.post
