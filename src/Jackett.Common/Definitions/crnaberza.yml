@@ -17,6 +17,8 @@ caps:
     - {id: 79, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 37, cat: Movies, desc: "Deca"}
     - {id: 43, cat: TV/Documentary, desc: "Dokumentarci"}
+    - {id: 83, cat: Movies/BluRay, desc: "Film/BluRay Domaće"}
+    - {id: 84, cat: Movies/BluRay, desc: "Film/Digitalno Restaurisani"}
     - {id: 52, cat: Movies/DVD, desc: "Film/DVD Domaće"}
     - {id: 20, cat: Movies/DVD, desc: "Film/DVD Strano"}
     - {id: 73, cat: Movies/HD, desc: "Film/HD Domaće"}
