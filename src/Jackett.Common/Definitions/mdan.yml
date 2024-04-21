@@ -69,6 +69,7 @@ login:
     password: "{{ .Config.password }}"
   error:
     - selector: :contains("incorret")
+    - selector: :root:contains("Too many users. Please")
   test:
     path: index.php
     selector: a[href^="logout.php?hash_please="]
