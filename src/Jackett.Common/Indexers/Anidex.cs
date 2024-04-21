@@ -72,7 +72,7 @@ namespace Jackett.Common.Indexers
             {
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
                 },
                 MusicSearchParams = new List<MusicSearchParam>
                 {
@@ -180,7 +180,7 @@ namespace Jackett.Common.Indexers
                 { "s", GetSortBy },
                 { "o", GetOrder },
                 { "group_id", "0" }, // No group
-                { "q", query.SearchTerm ?? string.Empty }
+                { "q", query.GetQueryString() ?? string.Empty }
             };
 
             // Get specified categories
