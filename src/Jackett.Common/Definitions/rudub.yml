@@ -7,16 +7,8 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://20april.rudub.online/
+  - https://21april.rudub.online/
 legacylinks:
-  - http://baibako.tv/
-  - https://baibako.tv/
-  - http://bko.baibako.tv/
-  - http://rudub.tv/ # redirects to *.net
-  - http://rudub.co/
-  - https://rudub.net/
-  - https://rudub.pw/
-  - https://rudub.xyz/
   - https://rudub.online/
   - https://02april.rudub.online/
   - https://03april.rudub.online/
@@ -36,6 +28,7 @@ legacylinks:
   - https://17april.rudub.online/
   - https://18april.rudub.online/
   - https://19april.rudub.online/
+  - https://20april.rudub.online/
 
 caps:
   categorymappings:
