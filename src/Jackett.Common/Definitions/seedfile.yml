@@ -16,7 +16,6 @@ caps:
     - {id: 2, cat: Other, desc: "Desene SD"}
     - {id: 3, cat: Other, desc: "Diverse n/a"}
     - {id: 5, cat: Movies/BluRay, desc: "Filme Blu-Ray"}
-    - {id: 40, cat: Movies/BluRay, desc: "Filme Blu-Ray RO"}
     - {id: 6, cat: Movies/DVD, desc: "Filme DVD"}
     - {id: 7, cat: Movies/DVD, desc: "Filme DVD-RO"}
     - {id: 8, cat: Movies/HD, desc: "Filme HD"}
@@ -39,6 +38,8 @@ caps:
     - {id: 36, cat: Movies/3D, desc: "Video 3D"}
     - {id: 37, cat: Movies/UHD, desc: "Filme 4K"}
     - {id: 38, cat: Movies/UHD, desc: "Filme 4K RO"}
+    - {id: 40, cat: Movies/BluRay, desc: "Filme Blu-Ray RO"}
+    - {id: 41, cat: TV/UHD, desc: "Seriale 4K"}
 
   modes:
     search: [q]
