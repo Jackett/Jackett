@@ -543,6 +543,7 @@ namespace Jackett.Updater
                 "Definitions/pixelados.yml",
                 "Definitions/pixelados-html.yml",
                 "Definitions/pleasuredome.yml",
+                "Definitions/polishsource.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornbits.yml",
                 "Definitions/pornforall.yml",
