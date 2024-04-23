@@ -18,12 +18,6 @@ caps:
     movie-search: [q, imdbid, tmdbid]
 
 settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
   - name: apikey
     type: text
     label: APIKey
@@ -35,6 +29,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -57,22 +55,12 @@ settings:
     default: "Inactivity on the SkipTheTrailers web site for more than 90 days will lead to account being disabled."
 
 login:
-  path: login
-  method: form
-  form: form[action$="/login"]
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    remember: on
-  selectorinputs:
-    _token:
-      selector: input[name="_token"]
-      attribute: value
+  path: /api/torrents
+  method: get
   error:
-    - selector: ul.auth-form__errors
-  test:
-    path: /
-    selector: "a[href$=\"/general-settings/edit\"]"
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
@@ -110,12 +98,12 @@ search:
   fields:
     category:
       selector: category_id
-    title:
+    title_optional:
       selector: name
     details:
       selector: details_link
     download:
-      text: "{{ re_replace .Result.details \"/torrents/\" \"/torrents/download/\" }}"
+      selector: download_link
     infohash:
       selector: info_hash
     poster:
@@ -132,8 +120,6 @@ search:
     genre:
       selector: meta.genres
       filters:
-        - name: re_replace
-          args: ["(?i)^None$", ""]
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
@@ -179,4 +165,9 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 7.2.5
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+# json UNIT3D 8.0.1
