@@ -122,6 +122,8 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
           args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
@@ -169,4 +171,4 @@ search:
       optional: true
     title:
       text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-# json UNIT3D 8.0.1
+# json UNIT3D 8.0.2
