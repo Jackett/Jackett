@@ -117,6 +117,25 @@ namespace Jackett.Common.Indexers
             // Amstrad
             caps.Categories.AddCategoryMapping("Amstrad CPC", TorznabCatType.ConsoleOther, "Amstrad CPC");
 
+            // Bandai
+            caps.Categories.AddCategoryMapping("Bandai WonderSwan", TorznabCatType.ConsoleOther, "Bandai WonderSwan");
+            caps.Categories.AddCategoryMapping("Bandai WonderSwan Color", TorznabCatType.ConsoleOther, "Bandai WonderSwan Color");
+            // caps.Categories.AddCategoryMapping("Apple Bandai Pippin", TorznabCatType.ConsoleOther, "Apple Bandai Pippin");  // repeated
+
+            // Commodore
+            caps.Categories.AddCategoryMapping("Commodore 64", TorznabCatType.ConsoleOther, "Commodore 64");
+            caps.Categories.AddCategoryMapping("Commodore 128", TorznabCatType.ConsoleOther, "Commodore 128");
+            caps.Categories.AddCategoryMapping("Commodore Amiga", TorznabCatType.ConsoleOther, "Commodore Amiga");
+            caps.Categories.AddCategoryMapping("Amiga CD32", TorznabCatType.ConsoleOther, "Amiga CD32");
+            caps.Categories.AddCategoryMapping("Commodore Plus-4", TorznabCatType.ConsoleOther, "Commodore Plus-4");
+            caps.Categories.AddCategoryMapping("Commodore VIC-20", TorznabCatType.ConsoleOther, "Commodore VIC-20");
+
+            // NEC
+            caps.Categories.AddCategoryMapping("NEC PC-98", TorznabCatType.ConsoleOther, "NEC PC-98");
+            caps.Categories.AddCategoryMapping("NEC PC-FX", TorznabCatType.ConsoleOther, "NEC PC-FX");
+            caps.Categories.AddCategoryMapping("NEC SuperGrafx", TorznabCatType.ConsoleOther, "NEC SuperGrafx");
+            caps.Categories.AddCategoryMapping("NEC TurboGrafx-16", TorznabCatType.ConsoleOther, "NEC TurboGrafx-16");
+
             // Sinclair
             caps.Categories.AddCategoryMapping("ZX Spectrum", TorznabCatType.ConsoleOther, "ZX Spectrum");
 
@@ -140,16 +159,9 @@ namespace Jackett.Common.Indexers
 
             // Other
             caps.Categories.AddCategoryMapping("3DO", TorznabCatType.ConsoleOther, "3DO");
-            caps.Categories.AddCategoryMapping("Bandai WonderSwan", TorznabCatType.ConsoleOther, "Bandai WonderSwan");
-            caps.Categories.AddCategoryMapping("Bandai WonderSwan Color", TorznabCatType.ConsoleOther, "Bandai WonderSwan Color");
             caps.Categories.AddCategoryMapping("Casio Loopy", TorznabCatType.ConsoleOther, "Casio Loopy");
             caps.Categories.AddCategoryMapping("Casio PV-1000", TorznabCatType.ConsoleOther, "Casio PV-1000");
             caps.Categories.AddCategoryMapping("Colecovision", TorznabCatType.ConsoleOther, "Colecovision");
-            caps.Categories.AddCategoryMapping("Commodore 64", TorznabCatType.ConsoleOther, "Commodore 64");
-            caps.Categories.AddCategoryMapping("Commodore 128", TorznabCatType.ConsoleOther, "Commodore 128");
-            caps.Categories.AddCategoryMapping("Commodore Amiga", TorznabCatType.ConsoleOther, "Commodore Amiga");
-            caps.Categories.AddCategoryMapping("Commodore Plus-4", TorznabCatType.ConsoleOther, "Commodore Plus-4");
-            caps.Categories.AddCategoryMapping("Commodore VIC-20", TorznabCatType.ConsoleOther, "Commodore VIC-20");
             caps.Categories.AddCategoryMapping("Emerson Arcadia 2001", TorznabCatType.ConsoleOther, "Emerson Arcadia 2001");
             caps.Categories.AddCategoryMapping("Entex Adventure Vision", TorznabCatType.ConsoleOther, "Entex Adventure Vision");
             caps.Categories.AddCategoryMapping("Epoch Super Casette Vision", TorznabCatType.ConsoleOther, "Epoch Super Casette Vision");
@@ -164,13 +176,11 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping("Mattel Intellivision", TorznabCatType.ConsoleOther, "Mattel Intellivision");
             caps.Categories.AddCategoryMapping("Memotech MTX", TorznabCatType.ConsoleOther, "Memotech MTX");
             caps.Categories.AddCategoryMapping("Miles Gordon Sam Coupe", TorznabCatType.ConsoleOther, "Miles Gordon Sam Coupe");
-            caps.Categories.AddCategoryMapping("NEC PC-98", TorznabCatType.ConsoleOther, "NEC PC-98");
-            caps.Categories.AddCategoryMapping("NEC PC-FX", TorznabCatType.ConsoleOther, "NEC PC-FX");
-            caps.Categories.AddCategoryMapping("NEC SuperGrafx", TorznabCatType.ConsoleOther, "NEC SuperGrafx");
-            caps.Categories.AddCategoryMapping("NEC TurboGrafx-16", TorznabCatType.ConsoleOther, "NEC TurboGrafx-16");
             caps.Categories.AddCategoryMapping("Nokia N-Gage", TorznabCatType.ConsoleOther, "Nokia N-Gage");
+            caps.Categories.AddCategoryMapping("Oculus Quest", TorznabCatType.ConsoleOther, "Oculus Quest");
             caps.Categories.AddCategoryMapping("Ouya", TorznabCatType.ConsoleOther, "Ouya");
             caps.Categories.AddCategoryMapping("Philips Videopac+", TorznabCatType.ConsoleOther, "Philips Videopac+");
+            caps.Categories.AddCategoryMapping("Philips CD-i", TorznabCatType.ConsoleOther, "Philips CD-i");
             caps.Categories.AddCategoryMapping("Phone/PDA", TorznabCatType.ConsoleOther, "Phone/PDA");
             caps.Categories.AddCategoryMapping("RCA Studio II", TorznabCatType.ConsoleOther, "RCA Studio II");
             caps.Categories.AddCategoryMapping("Sharp X1", TorznabCatType.ConsoleOther, "Sharp X1");
