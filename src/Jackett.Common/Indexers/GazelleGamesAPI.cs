@@ -265,6 +265,7 @@ namespace Jackett.Common.Indexers
 
                 foreach (var gObj in JObject.FromObject(json["response"]))
                 {
+                    var groupId = int.Parse(gObj.Key);
                     var group = gObj.Value as JObject;
 
                     if (group["Torrents"].Type == JTokenType.Array && group["Torrents"] is JArray array && array.Count == 0)
@@ -280,15 +281,15 @@ namespace Jackett.Common.Indexers
                     foreach (var tObj in JObject.FromObject(group["Torrents"]))
                     {
                         var torrent = tObj.Value as JObject;
-                        var torrentId = torrent.Value<string>("ID");
+                        var torrentId = torrent.Value<int>("ID");
 
                         if (categories.Length == 0)
                         {
                             categories = MapTrackerCatToNewznab(torrent.Value<string>("CategoryID")).ToArray();
                         }
 
-                        var details = new Uri(DetailsUrl + torrentId);
-                        var link = new Uri(DownloadUrl + torrentId);
+                        var details = GetInfoUrl(groupId, torrentId);
+                        var link = GetDownloadUrl(torrentId, false);
 
                         var title = WebUtility.HtmlDecode(torrent.Value<string>("ReleaseTitle"));
                         var groupYear = group.Value<int>("year");

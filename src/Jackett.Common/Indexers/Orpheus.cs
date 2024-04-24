@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -24,7 +25,6 @@ namespace Jackett.Common.Indexers
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         // API Reference: https://github.com/OPSnet/Gazelle/wiki/JSON-API-Documentation
-        protected override string DownloadUrl => SiteLink + "ajax.php?action=download" + (useTokens ? "&usetoken=1" : "") + "&id=";
         protected override string AuthorizationFormat => "token {0}";
         protected override int ApiKeyLength => 116;
         protected override int ApiKeyLengthLegacy => 118;
@@ -68,6 +68,11 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(7, TorznabCatType.BooksComics, "Comics");
 
             return caps;
+        }
+
+        protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
+        {
+            return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
         }
     }
 }
