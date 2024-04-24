@@ -1,7 +1,7 @@
 ---
 id: f1carreras-api
 name: F1Carreras (API)
-description: "F1Carreras is a Spanish Private Torrent Tracker for Formula 1 / MotoGP / IndyCar / Formula 2 / Formula E / Nascar TV Releases"
+description: "F1Carreras is a Spanish Private Torrent Tracker for Motor Racing TV Releases"
 language: es-ES
 type: private
 encoding: UTF-8
@@ -10,6 +10,8 @@ links:
 
 caps:
   categorymappings:
+    - {id: 1, cat: TV/Sport, desc: "Movies"}
+    - {id: 2, cat: TV/Sport, desc: "TV"}
     - {id: 3, cat: TV/Sport, desc: "Formula 1"}
     - {id: 4, cat: TV/Sport, desc: "IndyCar Series"}
     - {id: 5, cat: TV/Sport, desc: "Formula 2"}
@@ -148,6 +150,6 @@ search:
         False: 1 # normal
         True: 2 # double
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      # 6 hours (as seconds = 6 x 60 x 60)
       text: 21600
 # json UNIT3D 7.2.5
