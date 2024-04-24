@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
@@ -110,8 +110,8 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var searchString = query.GetQueryString();
-            searchString = Regex.Replace(searchString, @"(?i)\bS0*(\d+)\b", "Season $1");
+            var searchTerm = query.SearchTerm ?? string.Empty;
+
             var btnResults = query.Limit;
             if (btnResults == 0)
             {
@@ -120,22 +120,47 @@ namespace Jackett.Common.Indexers
 
             var btnOffset = query.Offset;
             var releases = new List<ReleaseInfo>();
-            var searchParam = new Dictionary<string, string>();
+
+            var parameters = new Dictionary<string, object>();
 
             if (query.IsTvdbQuery)
             {
-                searchParam["tvdb"] = $"{query.TvdbID}";
+                parameters["tvdb"] = query.TvdbID;
             }
 
-            if (searchString.IsNotNullOrWhiteSpace())
+            if (searchTerm.IsNotNullOrWhiteSpace())
             {
-                searchParam["search"] = searchString.Replace(" ", "%");
+                parameters["search"] = searchTerm.Replace(" ", "%");
             }
 
-            var parameters = new JArray
+            // If only the season/episode is searched for then change format to match expected format
+            if (query.Season > 0 && query.Episode.IsNullOrWhiteSpace())
+            {
+                parameters["category"] = "Episode";
+                parameters["name"] = $"S{query.Season:00}E%";
+            }
+            else if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+            {
+                // Daily Episode
+                parameters["name"] = showDate.ToString("yyyy.MM.dd");
+                parameters["category"] = "Episode";
+            }
+            else if (query.Season > 0 && int.TryParse(query.Episode, out var episode) && episode > 0)
+            {
+                // Standard (S/E) Episode
+                parameters["name"] = $"S{query.Season:00}E{episode:00}%";
+                parameters["category"] = "Episode";
+            }
+            else if (searchTerm.IsNotNullOrWhiteSpace() && int.TryParse(searchTerm, out _) && query.TvdbID > 0)
+            {
+                // Disable ID-based searches for episodes with absolute episode number
+                return releases;
+            }
+
+            var requestPayload = new JArray
             {
                 new JValue(configData.Key.Value),
-                JObject.FromObject(searchParam),
+                JObject.FromObject(parameters),
                 new JValue(btnResults),
                 new JValue(btnOffset)
             };
@@ -146,99 +171,103 @@ namespace Jackett.Common.Indexers
                 {
                     {"Accept", "application/json-rpc, application/json"},
                     {"Content-Type", "application/json-rpc"}
-                }, rawbody: JsonRPCRequest("getTorrents", parameters), emulateBrowser: false);
+                }, rawbody: JsonRPCRequest("getTorrents", requestPayload), emulateBrowser: false);
 
             try
             {
                 var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.ContentString);
 
-                if (btnResponse?.Result?.Torrents != null)
+                if (btnResponse?.Result?.Torrents == null)
                 {
-                    foreach (var itemKey in btnResponse.Result.Torrents)
+                    return releases;
+                }
+
+                foreach (var itemKey in btnResponse.Result.Torrents)
+                {
+                    var btnResult = itemKey.Value;
+                    var descriptions = new List<string>();
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.Series))
                     {
-                        var btnResult = itemKey.Value;
-                        var descriptions = new List<string>();
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.Series))
-                        {
-                            descriptions.Add("Series: " + btnResult.Series);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.GroupName))
-                        {
-                            descriptions.Add("Group Name: " + btnResult.GroupName);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.Source))
-                        {
-                            descriptions.Add("Source: " + btnResult.Source);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.Container))
-                        {
-                            descriptions.Add("Container: " + btnResult.Container);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.Codec))
-                        {
-                            descriptions.Add("Codec: " + btnResult.Codec);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.Resolution))
-                        {
-                            descriptions.Add("Resolution: " + btnResult.Resolution);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.Origin))
-                        {
-                            descriptions.Add("Origin: " + btnResult.Origin);
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(btnResult.YoutubeTrailer))
-                        {
-                            descriptions.Add("Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer + "</a>");
-                        }
-
-                        var imdb = ParseUtil.GetImdbId(btnResult.ImdbID);
-                        var link = new Uri(btnResult.DownloadURL);
-                        var details = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
-                        var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
-
-                        var release = new ReleaseInfo
-                        {
-                            Guid = link,
-                            Details = details,
-                            Link = link,
-                            Title = btnResult.ReleaseName,
-                            Description = string.Join("<br />\n", descriptions),
-                            Category = MapTrackerCatToNewznab(btnResult.Resolution),
-                            InfoHash = btnResult.InfoHash,
-                            Size = btnResult.Size,
-                            Grabs = btnResult.Snatched,
-                            Seeders = btnResult.Seeders,
-                            Peers = btnResult.Seeders + btnResult.Leechers,
-                            PublishDate = publishDate,
-                            TVDBId = btnResult.TvdbID,
-                            RageID = btnResult.TvrageID,
-                            Imdb = imdb,
-                            DownloadVolumeFactor = 0, // ratioless
-                            UploadVolumeFactor = 1,
-                            MinimumRatio = 1,
-                            MinimumSeedTime = btnResult.Category.ToUpperInvariant() == "SEASON" ? 432000 : 86400 // 120 hours for seasons and 24 hours for episodes
-                        };
-
-                        if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
-                        {
-                            release.Poster = new Uri(btnResult.SeriesBanner);
-                        }
-
-                        if (!release.Category.Any()) // default to TV
-                        {
-                            release.Category.Add(TorznabCatType.TV.ID);
-                        }
-
-                        releases.Add(release);
+                        descriptions.Add("Series: " + btnResult.Series);
                     }
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.GroupName))
+                    {
+                        descriptions.Add("Group Name: " + btnResult.GroupName);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.Source))
+                    {
+                        descriptions.Add("Source: " + btnResult.Source);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.Container))
+                    {
+                        descriptions.Add("Container: " + btnResult.Container);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.Codec))
+                    {
+                        descriptions.Add("Codec: " + btnResult.Codec);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.Resolution))
+                    {
+                        descriptions.Add("Resolution: " + btnResult.Resolution);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.Origin))
+                    {
+                        descriptions.Add("Origin: " + btnResult.Origin);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(btnResult.YoutubeTrailer))
+                    {
+                        descriptions.Add(
+                            "Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer +
+                            "</a>");
+                    }
+
+                    var imdb = ParseUtil.GetImdbId(btnResult.ImdbID);
+                    var link = new Uri(btnResult.DownloadURL);
+                    var details = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
+                    var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
+
+                    var release = new ReleaseInfo
+                    {
+                        Guid = link,
+                        Details = details,
+                        Link = link,
+                        Title = btnResult.ReleaseName,
+                        Description = string.Join("<br />\n", descriptions),
+                        Category = MapTrackerCatToNewznab(btnResult.Resolution),
+                        InfoHash = btnResult.InfoHash,
+                        Size = btnResult.Size,
+                        Grabs = btnResult.Snatched,
+                        Seeders = btnResult.Seeders,
+                        Peers = btnResult.Seeders + btnResult.Leechers,
+                        PublishDate = publishDate,
+                        TVDBId = btnResult.TvdbID,
+                        RageID = btnResult.TvrageID,
+                        Imdb = imdb,
+                        DownloadVolumeFactor = 0, // ratioless
+                        UploadVolumeFactor = 1,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = btnResult.Category.ToUpperInvariant() == "SEASON" ? 432000 : 86400 // 120 hours for seasons and 24 hours for episodes
+                    };
+
+                    if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
+                    {
+                        release.Poster = new Uri(btnResult.SeriesBanner);
+                    }
+
+                    if (!release.Category.Any()) // default to TV
+                    {
+                        release.Category.Add(TorznabCatType.TV.ID);
+                    }
+
+                    releases.Add(release);
                 }
             }
             catch (Exception ex)
