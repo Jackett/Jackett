@@ -93,8 +93,7 @@ namespace Jackett.Common.Indexers
                 BookSearchParams = new List<BookSearchParam>
                 {
                     BookSearchParam.Q
-                },
-                SupportsRawSearch = true
+                }
             };
 
             caps.Categories.AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
