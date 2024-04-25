@@ -7,7 +7,7 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://25pril.rudub.online/
+  - https://25april.rudub.online/
 legacylinks:
   - https://rudub.online/
   - https://06april.rudub.online/
@@ -29,6 +29,7 @@ legacylinks:
   - https://22april.rudub.online/
   - https://23april.rudub.online/
   - https://24april.rudub.online/
+  - https://25pril.rudub.online/ # typo
 
 caps:
   categorymappings:
