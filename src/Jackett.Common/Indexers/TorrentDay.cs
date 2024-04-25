@@ -30,6 +30,7 @@ namespace Jackett.Common.Indexers
             "https://secure.torrentday.com/",
             "https://classic.torrentday.com/",
             "https://www.torrentday.com/",
+            "https://www.torrentday.me/",
             "https://torrentday.it/",
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
@@ -46,7 +47,6 @@ namespace Jackett.Common.Indexers
             "https://tdonline.org/", // redirect to https://www.torrentday.com/
             "https://torrentday.eu/", // redirect to https://www.torrentday.com/
             "https://td-update.com/", // redirect to https://www.torrentday.com/
-            "https://www.torrentday.me/",
             "https://www.torrentday.ru/",
             "https://www.td.af/"
         };
@@ -249,7 +249,7 @@ namespace Jackett.Common.Indexers
                         DownloadVolumeFactor = downloadMultiplier,
                         UploadVolumeFactor = 1,
                         MinimumRatio = 1,
-                        MinimumSeedTime = 172800 // 48 hours
+                        MinimumSeedTime = 259200 // 72 hours
                     };
 
                     releases.Add(release);
