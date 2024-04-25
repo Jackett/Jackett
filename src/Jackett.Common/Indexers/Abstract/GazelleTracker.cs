@@ -498,7 +498,7 @@ namespace Jackett.Common.Indexers.Abstract
             release.Size = (long)torrent["size"];
             release.Seeders = (int)torrent["seeders"];
             release.Peers = (int)torrent["leechers"] + release.Seeders;
-            release.Details = GetInfoUrl((int)torrent["groupId"], torrentId);
+            release.Details = GetInfoUrl(torrentId);
             release.Guid = release.Details;
             release.Link = GetDownloadUrl(torrentId, release.DownloadVolumeFactor != 0);
 
@@ -565,9 +565,9 @@ namespace Jackett.Common.Indexers.Abstract
             return content;
         }
 
-        protected virtual Uri GetInfoUrl(int groupId, int torrentId)
+        protected virtual Uri GetInfoUrl(int torrentId, int? groupId = null)
         {
-            return new Uri($"{SiteLink}torrents.php?id={groupId}&torrentid={torrentId}");
+            return new Uri($"{SiteLink}torrents.php?torrentid={torrentId}{(groupId > 0 ? $"&id={groupId}" : "")}");
         }
 
         protected virtual Uri GetDownloadUrl(int torrentId, bool canUseToken)

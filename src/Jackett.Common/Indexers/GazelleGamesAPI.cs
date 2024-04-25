@@ -306,7 +306,7 @@ namespace Jackett.Common.Indexers
                             categories = MapTrackerCatToNewznab(torrent.Value<string>("CategoryID")).ToArray();
                         }
 
-                        var details = GetInfoUrl(groupId, torrentId);
+                        var details = GetInfoUrl(torrentId, groupId);
                         var link = GetDownloadUrl(torrentId, false);
 
                         var title = WebUtility.HtmlDecode(torrent.Value<string>("ReleaseTitle"));
