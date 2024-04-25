@@ -422,7 +422,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Last Digital Underground (LDU)
  * LastFiles
  * LaidBackManor
- * Lat-Team [![(invite needed)][inviteneeded]](#)
+ * Lat-Team
  * Le Saloon [![(invite needed)][inviteneeded]](#)
  * Le-Cinephile
  * LearnBits
