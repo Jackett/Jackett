@@ -122,6 +122,8 @@ search:
     title_filename:
       selector: "files[0].name"
       optional: true
+    files:
+      selector: num_file
     title:
       text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
       filters:
@@ -174,8 +176,6 @@ search:
           args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
-    files:
-      selector: num_file
     seeders:
       selector: seeders
     leechers:

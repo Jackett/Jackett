@@ -121,6 +121,8 @@ search:
     title_vose:
       selector: name:contains(VOSE)
       optional: true
+    files:
+      selector: num_file
     title:
       text: "{{ .Result.title_phase1 }}{{ if .Result.title_vose }} ENGLiSH{{ else }} SPANiSH{{ end }}"
     details:
@@ -151,8 +153,6 @@ search:
           args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
-    files:
-      selector: num_file
     seeders:
       selector: seeders
     leechers:
