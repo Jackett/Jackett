@@ -6,8 +6,6 @@ language: es-ES
 type: public
 encoding: UTF-8
 requestDelay: 2
-certificates:
-  - b738ae9ae55c5553b1ff7d3004d807229be3a091  # Expired 4 Dec 2023
 links:
   - https://www.frozen-layer.com/
 
