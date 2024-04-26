@@ -42,7 +42,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: windows-2022
-    if: github.repository == 'jackett/jackett'
+    if: github.repository == 'Jackett/Jackett'
     permissions:
       actions: read
       contents: read
