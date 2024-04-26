@@ -39,10 +39,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: single_file_release_use_filename
-    type: checkbox
-    label: Use filename as title for single file releases
-    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -108,15 +104,10 @@ search:
   fields:
     category:
       selector: category_id
-    title_optional:
+    title:
       selector: name
-    title_filename:
-      selector: "files[0].name"
-      optional: true
     files:
       selector: num_file
-    title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -183,4 +174,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.0.2
+# json UNIT3D 8.0.2 (custom)
