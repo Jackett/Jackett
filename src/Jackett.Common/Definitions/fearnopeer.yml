@@ -105,6 +105,11 @@ search:
       selector: category_id
     title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -170,9 +175,4 @@ search:
 # Maintain global ratio above 0.5 or downloads will get disabled. No MST.
     minimumratio:
       text: 0.51
-    title_filename:
-      selector: "files[0].name"
-      optional: true
-    title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
 # json UNIT3D 8.0.2

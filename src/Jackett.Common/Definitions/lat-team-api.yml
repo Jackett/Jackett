@@ -113,6 +113,16 @@ search:
       selector: category_id
     title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    title_phase1:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+    title_vose:
+      selector: name:contains(VOSE)
+      optional: true
+    title:
+      text: "{{ .Result.title_phase1 }}{{ if .Result.title_vose }} ENGLiSH{{ else }} SPANiSH{{ end }}"
     details:
       selector: details_link
     download:
@@ -181,14 +191,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-    title_filename:
-      selector: "files[0].name"
-      optional: true
-    title_phase1:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-    title_vose:
-      selector: name:contains(VOSE)
-      optional: true
-    title:
-      text: "{{ .Result.title_phase1 }}{{ if .Result.title_vose }} ENGLiSH{{ else }} SPANiSH{{ end }}"
 # json UNIT3D 8.0.2 (custom)

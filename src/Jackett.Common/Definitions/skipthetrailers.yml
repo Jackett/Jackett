@@ -100,6 +100,11 @@ search:
       selector: category_id
     title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -165,9 +170,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-    title_filename:
-      selector: "files[0].name"
-      optional: true
-    title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-# json UNIT3D 8.0.1
+# json UNIT3D 8.0.2

@@ -103,6 +103,18 @@ search:
       selector: category_id
     title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+      filters:
+        - name: re_replace
+          args: ["\\.", " "]
+        - name: re_replace # Stagione X --> S0X
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+        - name: re_replace # Stagione XX --> SXX
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
     details:
       selector: details_link
     download:
@@ -166,16 +178,4 @@ search:
         False: 1 # normal
         True: 2 # double
 # as a pay site there is no MR or MST
-    title_filename:
-      selector: "files[0].name"
-      optional: true
-    title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-      filters:
-        - name: re_replace
-          args: ["\\.", " "]
-        - name: re_replace # Stagione X --> S0X
-          args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
-        - name: re_replace # Stagione XX --> SXX
-          args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
 # json UNIT3D 8.0.2 (custom)
