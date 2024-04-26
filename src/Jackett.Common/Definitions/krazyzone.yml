@@ -5,8 +5,6 @@ description: "KrazyZone is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
-certificates:
-  - 2e88b1a9031288c50f942201634b6d1484aca612 # expired 11 Apr 2024
 links:
   - https://krazyzone.net/
 legacylinks:
