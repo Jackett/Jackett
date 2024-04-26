@@ -11,15 +11,21 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "MOVIES"}
+    - {id: 20, cat: Movies/Foreign, desc: "MOVIES-FOREIGN"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "MUSIC"}
+    - {id: 19, cat: TV/Foreign, desc: "TV-FOREIGN"}
+    - {id: 4, cat: PC, desc: "APPS"}
+    - {id: 5, cat: Audio, desc: "MUSIC"}
+    - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 7, cat: Console, desc: "GAMES"}
+    - {id: 8, cat: Books, desc: "EBOOKS"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
-#    book-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
