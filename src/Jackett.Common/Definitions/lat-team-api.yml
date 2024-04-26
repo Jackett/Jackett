@@ -116,13 +116,13 @@ search:
     title_filename:
       selector: "files[0].name"
       optional: true
+    files:
+      selector: num_file
     title_phase1:
       text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     title_vose:
       selector: name:contains(VOSE)
       optional: true
-    files:
-      selector: num_file
     title:
       text: "{{ .Result.title_phase1 }}{{ if .Result.title_vose }} ENGLiSH{{ else }} SPANiSH{{ end }}"
     details:
