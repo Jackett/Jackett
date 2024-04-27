@@ -89,9 +89,6 @@ settings:
       asc: asc
 
 search:
-  # https://bigfangroup.org/browse.php?search=black+lightning&cat=0&incldead=0&year=0&format=0
-  headers:
-    Referer: ["{{ .Config.sitelink }}browse.php{{ if .Keywords }}?search={{ .Keywords }}&cat=0&incldead=1&year=0&format=0{{ else }}{{ end }}"]
   paths:
     # https://bigfangroup.org/browse.php?ajax=1&search=the+librarian&cat=0&incldead=0&year=0&format=0
     - path: browse.php
@@ -101,7 +98,7 @@ search:
     cat: "{{ if .Keywords }}0{{ else }}{{ end }}"
     # 0 active, 1 incldead, 2 onlydead, 3 gold, 4 noseed, 5 silver, 7 BFG
     incldead: "{{ if .Keywords }}1{{ else }}{{ end }}"
-    year: "{{ if .Keywords }}0{{ else }}{{ end }}"
+    year: "{{ if .Keywords }}0{{ else }}1{{ end }}"
     format: "{{ if .Keywords }}0{{ else }}{{ end }}"
     s: "{{ if .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
     d: "{{ if .Keywords }}{{ .Config.type }}{{ else }}{{ end }}"
