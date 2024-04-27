@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
-  - https://www3.yggtorrent.qa/
+  - https://www3.yggtorrent.cool/
 legacylinks:
   - https://ww3.yggtorrent.si/
   - https://yggtorrent.si/
@@ -25,6 +25,7 @@ legacylinks:
   - https://www6.yggtorrent.lol/
   - https://www3.yggtorrent.do/
   - https://www3.yggtorrent.wtf/
+  - https://www3.yggtorrent.qa/
 
 caps:
   # dont forget to update the search fields category case block
