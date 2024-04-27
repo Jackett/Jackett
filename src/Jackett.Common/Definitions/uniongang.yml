@@ -170,10 +170,10 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="download.php?id="], a[href^="magnet:?xt="]
       attribute: href
     size:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="download.php?id="], a[href^="magnet:?xt="]
     seeders:
       selector: td:nth-last-child(3)
       filters:
