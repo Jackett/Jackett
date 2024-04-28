@@ -142,7 +142,7 @@ search:
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: "div.selection_wrap{{ if .Config.freeleech }}:has(:root:has(div.onlyup)){{ else }}{{ end }}"
+    selector: "div.selection_wrap:has(a[href^=\"download_ssl.php?torrent=\"]){{ if .Config.freeleech }}:has(:root:has(div.onlyup)){{ else }}{{ end }}"
 
   fields:
     category_p1:
