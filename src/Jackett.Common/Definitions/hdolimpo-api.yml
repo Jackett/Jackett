@@ -93,63 +93,72 @@ search:
   fields:
     categorydesc:
       selector: category
-    title:
+    title_phase1:
       selector: name
       filters:
         - name: re_replace
-          args: ["\\[", " "]
+          args: ["(?i)\\b(full uhd|(uhd )?full\\s?(blu-?ray|uhd))\\b", "BRDISK"]
         - name: re_replace
-          args: ["\\]", " "]
+          args: ["\\bE-AC-3\\b", "EAC3"]
         - name: re_replace
-          args: ["(?i)(full(bluray)?)", "BRDISK"] # FULL(BR/UHD) -> BRDISK
-        - name: replace
-          args: ["HDOlimpo", ""] # Delete HDOlimpo
-        - name: replace
-          args: ["HD-Olimpo", ""] # Delete HD-Olimpo
-        - name: replace
-          args: ["E-AC-3", "EAC3"]
+          args: ["(?i)\\b(es-cat?-en|es-en-cat?|en-cat?-es|en-es-cat?|cat?-es-en|cat?-en-es)\\b", "MULTi SPANiSH CATALAN ENGLiSH"]
         - name: re_replace
-          args: ["[ -](?i)español[ -]", " SPANiSH "]
+          args: ["(?i)\\b(es-cat?-(ja|ja?p)|es-(ja|ja?p)-cat?|cat?-es-(ja|ja?p)|cat?-(ja|ja?p)-es|(ja|ja?p)-es-cat?|(ja|ja?p)-cat?-es)\\b", "MULTi SPANiSH CATALAN JAPANES"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: ["[ -](?i)castellano[ -]", " SPANiSH "]
+          args: ["(?i)\\b(es-en|en-es)\\b", "MULTi SPANiSH ENGLiSH"]
         - name: re_replace
-          args: ["[ -](?i)spa[ -]", " SPANiSH "]
+          args: ["(?i)\\b(es-cat?|cat?-es)\\b", "MULTi SPANiSH CATALAN"]
         - name: re_replace
-          args: ["[ -](?i)esp[ -]", " SPANiSH "]
+          args: ["(?i)\\b(es-(ja|ja?p)|(ja|ja?p)-es)\\b", "MULTi SPANiSH JAPANES"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: [" ES ", " SPANiSH "]
+          args: ["(?i)\\b(es-fr[ae]n?|fr[ae]n?-es)\\b", "MULTi SPANiSH FRENCHx"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: ["[ -](?i)ingl[eé]s[ -]", " English "]
+          args: ["(?i)\\b(es-ita?|ita?-es)\\b", "MULTi SPANiSH iTALiAN"]
         - name: re_replace
-          args: ["[ -](?i)[ei]ng[ -]", " English "]
+          args: ["(?i)\\b(es-rus?|rus?-es)\\b", "MULTi SPANiSH RUSSiAN"]
         - name: re_replace
-          args: ["[ -](?i)cat[ -]", " Catalan "]
+          args: ["(?i)\\b(es-(ger?|al(e|em)?)|(ger?|al(e|em)?)-es)\\b", "MULTi SPANiSH GERMANx"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: ["[ -](?i)vas[ -]", " Basque "]
+          args: ["(?i)\\btriaudio\\b", "MULTi SPANiSH"]
         - name: re_replace
-          args: ["[ -](?i)fr[ae][ -]", " French "]
+          args: ["(?i)\\b(espa[ñn]ol|castellano|esp)\\b", "SPANiSH"]
         - name: re_replace
-          args: ["[ -](?i)jap[ -]", " Japanese "]
+          args: ["(?i)\\b(ingl[ée]s|[ei]ng)\\b", "ENGLiSH"]
         - name: re_replace
-          args: ["[ -](?i)ita[ -]", " Italian "]
+          args: ["(?i)\\bcat\\b", "CATALAN"]
         - name: re_replace
-          args: ["[ -](?i)rus[ -]", " Russian "]
+          args: ["(?i)\\bfr[ae]n?\\b", "FRENCHx"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: ["[ -](?i)ger[ -]", " German "]
+          args: ["(?i)\\b(jap|jp)\\b", "JAPANES"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: ["(?i)(triaudio)", "MULTi SPANiSH English"]
+          args: ["(?i)\\bita\\b", "iTALiAN"]
         - name: re_replace
-          args: ["(?i)(dual)", " MULTi SPANiSH "]
+          args: ["(?i)\\brus?\\b", "RUSSiAN"]
         - name: re_replace
-          args: ["(?i)(es-en)", " MULTi SPANiSH "]
+          args: ["(?i)\\b(ger?|alem)\\b", "GERMANx"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: ["(?i)(en-es)", " MULTi SPANiSH "]
+          args: ["(\\s|\\.)+", "$1"]
+        # add MULTi SPANiSH if not preceded by another language or followed by SPANiSH
         - name: re_replace
-          args: ["\\.+", "."] # More than 1 dot -> .
+          args: ["(?<!(SPANiSH|ENGLiSH|CATALAN|FRENCHx|JAPANES|iTALiAN|RUSSiAN|GERMANx)[\\s.])\\b(ENGLiSH|CATALAN|FRENCHx|JAPANES|iTALiAN|RUSSiAN|GERMANx)\\b(?![\\s.]SPANiSH)", "MULTi SPANiSH $2"]
+        # correct purposefully misspelled languages
         - name: re_replace
-          args: ["^\\.", ""] # Delete first dot
+          args: ["\\bFRENCHx\\b", "FRENCH"]
         - name: re_replace
-          args: ["\\s+", " "] # More than 1 space to 1 space
+          args: ["\\bJAPANES\\b", "JAPANESE"]
+        - name: re_replace
+          args: ["\\bGERMANx\\b", "GERMAN"]
+    title_spanish:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: regexp
+          args: "(?i)spanish"
+    title:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        # append SPANiSH if title does not contain the word 'spanish'
+        - name: append
+          args: "{{ if .Result.title_spanish }}{{ else }} SPANiSH{{ end }}"
     details:
       selector: details_link
     download:
