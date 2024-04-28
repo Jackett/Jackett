@@ -14,6 +14,7 @@ caps:
     - {id: 2, cat: TV, desc: "Seriado"}
     - {id: 4, cat: PC/Games, desc: "Jogo"}
     - {id: 5, cat: PC/0day, desc: "Aplicativo"}
+    - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
