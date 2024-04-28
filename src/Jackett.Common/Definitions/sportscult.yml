@@ -24,7 +24,6 @@ caps:
     - {id: 23, cat: TV/Sport, desc: "Cycling"}
     - {id: 31, cat: TV/Sport, desc: "Documentary"}
     - {id: 1, cat: TV/Sport, desc: "European Basketball"}
-    - {id: 6, cat: TV/Sport, desc: "European Soccer"}
     - {id: 37, cat: TV/Sport, desc: "Extreme Sports"}
     - {id: 9, cat: TV/Sport, desc: "Fight Sports"}
     - {id: 32, cat: TV/Sport, desc: "Formula1"}
