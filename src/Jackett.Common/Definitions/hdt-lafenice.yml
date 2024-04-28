@@ -26,7 +26,8 @@ caps:
     - {id: 43, cat: PC/0day, desc: "App-Win"}
     - {id: 44, cat: PC/Mac, desc: "App-Mac"}
     - {id: 45, cat: PC/Mobile-Android, desc: "Android"}
-    - {id: 47, cat: Books, desc: "E-Book"}
+    - {id: 47, cat: Books/EBook, desc: "E-Book"}
+    - {id: 52, cat: Books/Mags, desc: "Edicola"}
     - {id: 49, cat: Other, desc: "Altro"}
 
   modes:
