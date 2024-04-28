@@ -20,6 +20,8 @@ caps:
     - {id: 8, cat: Audio/Audiobook, desc: "AudioLibri"}
     - {id: 12, cat: Other, desc: "Corsi"}
     - {id: 13, cat: Books/Comics, desc: "Fumetti"}
+    - {id: 14, cat: Audio/Video, desc: "Concerti"}
+    - {id: 15, cat: Audio, desc: "Discografie"}
 
   modes:
     search: [q]
