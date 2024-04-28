@@ -36,6 +36,7 @@ caps:
     - {id: 25, cat: TV/Sport, desc: "IceHockey"}
     - {id: 4, cat: TV/Sport, desc: "International Soccer"}
     - {id: 42, cat: TV/Sport, desc: "KHL"}
+    - {id: 55, cat: TV/Sport, desc: "MotoGP"}
     - {id: 35, cat: TV/Sport, desc: "KickBoxing/Muay Thai"}
     - {id: 43, cat: TV/Sport, desc: "La Liga"}
     - {id: 15, cat: TV/Sport, desc: "MotorSport"}
@@ -51,6 +52,7 @@ caps:
     - {id: 38, cat: TV/Sport, desc: "Snooker/Pool"}
     - {id: 30, cat: TV/Sport, desc: "Streetball"}
     - {id: 18, cat: TV/Sport, desc: "Swimming/Aquatics"}
+    - {id: 56, cat: TV/Sport, desc: "Ligue1"}
     - {id: 46, cat: TV/Sport, desc: "AFL(AustralianFB)"}
     - {id: 12, cat: TV/Sport, desc: "Tennis"}
     - {id: 20, cat: TV/Sport, desc: "Volleyball/Beach"}
@@ -59,6 +61,9 @@ caps:
     - {id: 33, cat: TV/Sport, desc: "Wrestling/Grapling"}
     - {id: 48, cat: TV/Sport, desc: "Uncategorised"}
     - {id: 53, cat: TV/Sport, desc: "Cricket"}
+    - {id: 6, cat: TV/Sport, desc: "European Soccer"}
+    - {id: 58, cat: TV/Sport, desc: "UFC"}
+    - {id: 57, cat: TV/Sport, desc: "NRL"}
 
   modes:
     search: [q]
