@@ -181,7 +181,7 @@ namespace Jackett.Common.Indexers
         {
             const string ReleaseLinksSelector = "#dle-content > .story > .story_h > .lcol > h2 > a";
             var result = await RequestWithCookiesAndRetryAsync(SiteLink);
-            if (result.ContentString.Contains("Fatal error: Uncaught exception"))
+            if (result.ContentString.Contains("Fatal error: Uncaught exception") || result.ContentString.Contains("MySQL Error!"))
             {
                 logger.Error("[AniDUB]" + result.ContentString);
                 throw new Exception("There is a problem at the AniDUB WEB site, view the Jackett logs for more details.");
@@ -555,7 +555,7 @@ namespace Jackett.Common.Indexers
 
             var releases = new List<ReleaseInfo>();
             var response = await RequestWithCookiesAndRetryAsync(SearchUrl, method: RequestType.POST, data: PreparePostData(query));
-            if (response.ContentString.Contains("Fatal error: Uncaught exception"))
+            if (response.ContentString.Contains("Fatal error: Uncaught exception") || response.ContentString.Contains("MySQL Error!"))
             {
                 logger.Error("[AniDUB]" + response.ContentString);
                 throw new Exception("There is a problem at the AniDUB WEB site, view the Jackett logs for more details.");
