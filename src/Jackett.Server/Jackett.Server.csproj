@@ -35,7 +35,7 @@
 
   <!-- Conditionally obtain references for the .NET 6.0 target -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.28" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.29" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="6.0.0" />
   </ItemGroup>
