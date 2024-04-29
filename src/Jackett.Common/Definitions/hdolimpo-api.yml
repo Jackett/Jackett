@@ -152,7 +152,7 @@ search:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: regexp
-          args: "(?i)spanish"
+          args: "(?i)(spanish)"
     title:
       text: "{{ .Result.title_phase1 }}"
       filters:
