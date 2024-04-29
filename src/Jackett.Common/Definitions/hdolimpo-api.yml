@@ -111,7 +111,7 @@ search:
         - name: re_replace
           args: ["(?i)\\b(es-(ja|ja?p)|(ja|ja?p)-es)\\b", "MULTi SPANiSH JAPANES"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
-          args: ["(?i)\\b(es-fr[ae]n?|fr[ae]n?-es)\\b", "MULTi SPANiSH FRENCHx"] # misspelled to accomodate negative lookback, corrected later
+          args: ["(?i)\\b(es-fr[ae]?n?|fr[ae]?n?-es)\\b", "MULTi SPANiSH FRENCHx"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
           args: ["(?i)\\b(es-ita?|ita?-es)\\b", "MULTi SPANiSH iTALiAN"]
         - name: re_replace
@@ -127,7 +127,7 @@ search:
         - name: re_replace
           args: ["(?i)\\bcat\\b", "CATALAN"]
         - name: re_replace
-          args: ["(?i)\\bfr[ae]n?\\b", "FRENCHx"] # misspelled to accomodate negative lookback, corrected later
+          args: ["(?i)\\bfr[ae]?n?\\b", "FRENCHx"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
           args: ["(?i)\\b(jap|jp)\\b", "JAPANES"] # misspelled to accomodate negative lookback, corrected later
         - name: re_replace
