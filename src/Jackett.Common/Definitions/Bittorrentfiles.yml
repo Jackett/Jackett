@@ -208,7 +208,7 @@ search:
         - name: replace
           args: ["Gestern", "Yesterday"]
         - name: append
-          args: " +01:00" # CET
+          args: "+01:00" # CET
     date_year:
       # 30.02.2018 23:12:50
       selector: td:nth-child(10):contains("."):contains(":")
@@ -217,7 +217,7 @@ search:
         - name: split
           args: ["b", 0]
         - name: append
-          args: " +01:00" # CET
+          args: "+01:00" # CET
         - name: dateparse
           args: "dd.MM.yyyy HH:mm:ss zzz"
     date:
