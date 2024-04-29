@@ -30,6 +30,7 @@ caps:
     - {id: 45, cat: TV/Sport, desc: "GAA (Gaelic)"}
     - {id: 8, cat: TV/Sport, desc: "Golf"}
     - {id: 22, cat: TV/Sport, desc: "Gymnastics"}
+    - {id: 59, cat: TV/Sport, desc: "UFL"}
     - {id: 39, cat: TV/Sport, desc: "Handball"}
     - {id: 2, cat: TV/Sport, desc: "International Basket"}
     - {id: 25, cat: TV/Sport, desc: "IceHockey"}
@@ -59,6 +60,14 @@ caps:
     - {id: 16, cat: TV/Sport, desc: "WinterSport"}
     - {id: 33, cat: TV/Sport, desc: "Wrestling/Grapling"}
     - {id: 48, cat: TV/Sport, desc: "Uncategorised"}
+    - {id: 60, cat: TV/Sport, desc: "Champions League"}
+    - {id: 61, cat: TV/Sport, desc: "Europa League"}
+    - {id: 63, cat: TV/Sport, desc: "WNBA"}
+    - {id: 64, cat: TV/Sport, desc: "NASCAR"}
+    - {id: 65, cat: TV/Sport, desc: "FIBA 3x3 Basketball"}
+    - {id: 66, cat: TV/Sport, desc: "FIBA Basketball"}
+    - {id: 67, cat: TV/Sport, desc: "Bundesliga"}
+    - {id: 68, cat: TV/Sport, desc: "MLS"}
     - {id: 53, cat: TV/Sport, desc: "Cricket"}
     - {id: 6, cat: TV/Sport, desc: "European Soccer"}
     - {id: 58, cat: TV/Sport, desc: "UFC"}
