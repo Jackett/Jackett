@@ -9,7 +9,6 @@ links:
   - https://finelite.org/
 
 settings:
-  - name: username
   - name: cookie
     type: text
     label: Cookie
