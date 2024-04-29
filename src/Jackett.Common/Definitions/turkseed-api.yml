@@ -175,7 +175,7 @@ search:
         False: 1 # normal
         True: 2 # double
     minimumratio:
-      text: 0.5
+      text: 0.6
     minimumseedtime:
       # 36 hours (as seconds = 36 x 60 x 60)
       text: 129600
