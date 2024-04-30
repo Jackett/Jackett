@@ -141,4 +141,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# custom 3.6.8
+# custom 4.0.0
