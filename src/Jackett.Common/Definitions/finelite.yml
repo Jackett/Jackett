@@ -36,6 +36,14 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Julkaisuja per sivu</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Unused IDs in the User and Power User categories are automatically deleted after 90 days. The account can be parked and stored on the site for 180 days."
 
 caps:
   categorymappings:
