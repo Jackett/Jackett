@@ -44,8 +44,7 @@ caps:
     - {id: 24, cat: Books/EBook, desc: "Ebooks"}
     - {id: 10, cat: Console, desc: "Games - Console"}
     - {id: 11, cat: PC/Games, desc: "Games - PC"}
-    - {id: 26, cat: Movies, desc: "Kids"}
-    - {id: 9, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 26, cat: Movies/Other, desc: "Kids"}
     - {id: 12, cat: Movies, desc: "Movie Pack"}
     - {id: 31, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 38, cat: Movies/BluRay, desc: "Movies BD"}
@@ -75,18 +74,18 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: /
-    selector: a[href="ulos.php"]
+    selector: a[href="/logout.php"]
 
 search:
   paths:
-    # https://finelite.org/selaa.php?c14=1&c15=1&c31=1&search=tt6591554&hae=2&type=desc&cat=0&incldead=1&sort=1
-    # https://finelite.org/selaa.php?search=&hae=0&type=desc&cat=0&incldead=1&freeleech=yes&sort=1
-    - path: selaa.php
+    # https://finelite.org/browse.php?c14=1&c15=1&c31=1&search=tt6591554&hae=2&type=desc&cat=0&incldead=1&sort=1
+    # https://finelite.org/browse.php?search=&hae=0&type=desc&cat=0&incldead=1&freeleech=yes&sort=1
+    - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 name&descr, 1 name, 2 descr, 3 tags, 4 imdb with rating
-    hae: "{{ if .Query.IMDBID }}2{{ else }}1{{ end }}"
+    hae: "{{ if .Query.IMDBID }}4{{ else }}1{{ end }}"
     # 0 active, 1 incldead, 2 deadonly
     incldead: 1
     freeleech: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
@@ -94,23 +93,26 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table.main > tbody >  tr:has(a[href^="/lataa.php/"])
+    selector: table.main > tbody >  tr:has(a[href^="/lataa/"])
 
   fields:
     category:
-      selector: a[href^="selaa.php?c"]
+      selector: a[href^="/browse.php?c"]
       attribute: href
       filters:
         - name: regexp
           args: c(\d+)=1
     title:
-      selector: a[href^="julkaisu.php?id="]
+      selector: a[href^="/details/"]
     details:
-      selector: a[href^="julkaisu.php?id="]
+      selector: a[href^="/details/"]
       attribute: href
     download:
-      selector: a[href^="/lataa.php/"]
+      selector: a[href^="/lataa/"]
       attribute: href
+    poster:
+      selector: a[href^="/details/"] img
+      attribute: src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
@@ -123,7 +125,7 @@ search:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "d.M.yyyy HH:mm zzz"
+          args: "d.M.yyyy  HH:mm zzz"
     size:
       selector: td:nth-last-child(3)
     seeders:
@@ -132,7 +134,7 @@ search:
       selector: td:nth-last-child(1)
     downloadvolumefactor:
       case:
-        span.label-free: 0
+        span[title="Freeleech"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
