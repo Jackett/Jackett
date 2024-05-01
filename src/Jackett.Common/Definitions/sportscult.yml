@@ -20,7 +20,6 @@ caps:
     - {id: 29, cat: TV/Sport, desc: "Boxing"}
     - {id: 19, cat: TV/Sport, desc: "BrainGames"}
     - {id: 36, cat: TV/Sport, desc: "BreakDance"}
-    - {id: 40, cat: TV/Sport, desc: "Golf"}
     - {id: 23, cat: TV/Sport, desc: "Cycling"}
     - {id: 31, cat: TV/Sport, desc: "Documentary"}
     - {id: 1, cat: TV/Sport, desc: "European Basketball"}
@@ -28,7 +27,6 @@ caps:
     - {id: 9, cat: TV/Sport, desc: "Fight Sports"}
     - {id: 32, cat: TV/Sport, desc: "Formula1"}
     - {id: 45, cat: TV/Sport, desc: "GAA (Gaelic)"}
-    - {id: 8, cat: TV/Sport, desc: "Golf"}
     - {id: 22, cat: TV/Sport, desc: "Gymnastics"}
     - {id: 59, cat: TV/Sport, desc: "UFL"}
     - {id: 39, cat: TV/Sport, desc: "Handball"}
@@ -65,9 +63,10 @@ caps:
     - {id: 63, cat: TV/Sport, desc: "WNBA"}
     - {id: 64, cat: TV/Sport, desc: "NASCAR"}
     - {id: 65, cat: TV/Sport, desc: "FIBA 3x3 Basketball"}
-    - {id: 66, cat: TV/Sport, desc: "FIBA Basketball"}
     - {id: 67, cat: TV/Sport, desc: "Bundesliga"}
     - {id: 68, cat: TV/Sport, desc: "MLS"}
+    - {id: 69, cat: TV/Sport, desc: "EuroLeague Basketbal"}
+    - {id: 70, cat: TV/Sport, desc: "ELC"}
     - {id: 53, cat: TV/Sport, desc: "Cricket"}
     - {id: 6, cat: TV/Sport, desc: "European Soccer"}
     - {id: 58, cat: TV/Sport, desc: "UFC"}
