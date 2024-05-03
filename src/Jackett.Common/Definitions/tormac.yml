@@ -237,6 +237,7 @@ search:
       case:
         span.tor-approved: "Verified:"
         span.tor-not-approved: "Unverified:"
+        span.tor-dup: "Temporary:"
     description:
       selector: a[href^="./viewtopic.php?t="]
       filters:
