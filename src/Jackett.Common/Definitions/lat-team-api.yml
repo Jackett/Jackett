@@ -25,7 +25,6 @@ caps:
     - {id: 11, cat: Audio/Audiobook, desc: "Audiolibros"}
     - {id: 4, cat: Console, desc: "Juegos"}
     - {id: 24, cat: Other, desc: "Cursos"}
-    - {id: 28, cat: TV/Documentary, desc: "Documental"}
 
   modes:
     search: [q]
