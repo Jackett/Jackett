@@ -6,6 +6,8 @@ language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
+certificates:
+  - 4e8054f48ef88df8fb2f73197afb0f9d983bf57b  # Expired 5th May 2024
 links:
   - https://nextjav.com/
 
