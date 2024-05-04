@@ -6,9 +6,10 @@ language: ru-RU
 type: private
 encoding: UTF-8
 links:
-  - https://www.uniongang.net/
+  - https://uniongang.net/
 legacylinks:
   - http://www.uniongang.net/
+  - https://www.uniongang.net/
 
 caps:
   categorymappings:
