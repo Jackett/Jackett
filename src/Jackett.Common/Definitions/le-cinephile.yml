@@ -12,6 +12,7 @@ caps:
   categorymappings:
     # FILM
     - {id: 2, cat: Movies/DVD, desc: "FILM DVD"}
+    - {id: 107, cat: Movies, desc: "FILM ANIME"}
     - {id: 104, cat: Movies, desc: "FILM DVDRip"}
     - {id: 101, cat: TV/Documentary, desc: "FILM Documentaire"}
     - {id: 75, cat: Movies/UHD, desc: "FILM 2160 P"}
@@ -27,9 +28,10 @@ caps:
     - {id: 26, cat: Movies/BluRay, desc: "FILM BluRay"}
     - {id: 25, cat: Movies/BluRay, desc: "FILM ISO"}
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
-    - {id: 107, cat: Movies, desc: "FILM ANIME"}
+    - {id: 111, cat: Movies, desc: "FILM Nouveautés 2024"}
     # SERIE
     - {id: 9, cat: TV/SD, desc: "SERIE DVD"}
+    - {id: 108, cat: TV/HD, desc: "SERIE BlueRay"}
     - {id: 106, cat: TV/Anime, desc: "SERIE ANIME"}
     - {id: 105, cat: TV, desc: "SERIE Pack"}
     - {id: 102, cat: TV/Documentary, desc: "SERIE Documentaire"}
@@ -43,7 +45,7 @@ caps:
     - {id: 15, cat: TV/WEB-DL, desc: "SERIE WEB.1080p"}
     - {id: 14, cat: TV/WEB-DL, desc: "SERIE WEB.720p"}
     - {id: 12, cat: TV/WEB-DL, desc: "SERIE WEB"}
-    - {id: 108, cat: TV/HD, desc: "SERIE BlueRay"}
+    - {id: 110, cat: TV, desc: "SERIE Nouveautés 2024"}
     # LOGICIELS
     - {id: 56, cat: PC/ISO, desc: "LOGICIELS Linux"}
     - {id: 24, cat: PC/Mac, desc: "LOGICIELS Apple"}
