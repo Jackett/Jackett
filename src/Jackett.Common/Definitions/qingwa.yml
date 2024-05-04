@@ -6,10 +6,10 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://qingwapt.com/
-legacylinks:
-  - https://new.qingwa.pro/
   - https://www.qingwapt.com/
+legacylinks:
+  - https://qingwapt.com/
+  - https://new.qingwa.pro/
 
 caps:
   categorymappings:
