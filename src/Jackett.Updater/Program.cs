@@ -439,6 +439,7 @@ namespace Jackett.Updater
                 "Definitions/hdspain.yml",
                 "Definitions/hdstreet.yml",
                 "Definitions/hdzone.yml", // renamed to hdfun
+                "Definitions/heavens-hell.yml",
                 "Definitions/hellastz.yml",
                 "Definitions/hidden-palace.yml",
                 "Definitions/homeporntorrents.yml",

@@ -389,7 +389,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDU
  * hdvbits
  * HDVIDEO
- * Heavens-Hell
  * Hebits
  * HellasHut
  * HHanClub
