@@ -6,8 +6,6 @@ language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
-certificates:
-  - 1fe945ddaa652aa3c5fd894a569873aa62cc6937 # expired 12 Apr 2024
 links:
   - https://www.torlock.com/
   - https://www.torlock2.com/
