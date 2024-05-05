@@ -953,6 +953,13 @@ cd Jackett/src
 dotnet publish Jackett.Server -f net6.0 --self-contained -r linux-x64 -c Debug # takes care of everything
 ./Jackett.Server/bin/Debug/net6.0/linux-x64/jackett # run jackett
 ```
+## Unistallation
+
+### on Linux
+```wget https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_service_systemd.sh --quiet -O -|sudo bash```
+
+### on macOS
+```curl -sSL https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_jackett_macos| bash```
 
 ## Screenshots
 
