@@ -37,6 +37,8 @@ namespace Jackett.Common.Indexers
             "https://www.lostfilm.win/", // 27/43 // 29/42
             "https://www.lostfilm.tw/", // 26/43 // 33/46
             "https://www.lostfilmtv.site/", // 18/43 // 17/45
+            "https://www.lostfilm.download/",
+            "https://www.lostfilm.today/",
         };
         public override string[] LegacySiteLinks => new[]
         {
