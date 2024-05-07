@@ -14,12 +14,17 @@ caps:
     - {id: 2, cat: TV, desc: "Seriado"}
     - {id: 4, cat: PC/Games, desc: "Jogo"}
     - {id: 5, cat: PC/0day, desc: "Aplicativo"}
-    - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 2, cat: Other, desc: "Cursos"}
+    - {id: 7, cat: XXX, desc: "XXX"}
+    - {id: 8, cat: Books/EBook, desc: "Livros"}
+    - {id: 9, cat: Books/Mags, desc: "História em Quadrinhos"}
+    - {id: 10, cat: TV, desc: "Shows"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    book-search: [q]
 
 settings:
   - name: apikey
