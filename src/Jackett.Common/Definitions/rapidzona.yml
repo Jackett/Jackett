@@ -102,6 +102,8 @@ search:
   fields:
     category:
       selector: p a:nth-child(3), p:has(a:nth-child(3):empty) a:nth-child(2)
+      optional: true
+      default: 71
       case:
         a[href$="/porno-xxx-adult-torrent/"]: 71
         a[href$="/porno-video-movies-torrent/"]: 73
@@ -166,6 +168,9 @@ search:
       text: 1
     description:
       selector: div.news
+      filters:
+        - name: re_replace
+          args: ["^...$", ""]
     date:
       selector: p.title-footer
       filters:
