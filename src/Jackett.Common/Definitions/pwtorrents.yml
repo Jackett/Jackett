@@ -110,6 +110,8 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
+      optional: true
+      default: No Title
     details:
       selector: a[href^="details.php?id="]
       attribute: href
