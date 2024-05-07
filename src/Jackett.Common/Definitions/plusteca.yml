@@ -14,7 +14,7 @@ caps:
     - {id: 2, cat: TV, desc: "Seriado"}
     - {id: 4, cat: PC/Games, desc: "Jogo"}
     - {id: 5, cat: PC/0day, desc: "Aplicativo"}
-    - {id: 2, cat: Other, desc: "Cursos"}
+    - {id: 6, cat: Other, desc: "Cursos"}
     - {id: 7, cat: XXX, desc: "XXX"}
     - {id: 8, cat: Books/EBook, desc: "Livros"}
     - {id: 9, cat: Books/Mags, desc: "História em Quadrinhos"}
