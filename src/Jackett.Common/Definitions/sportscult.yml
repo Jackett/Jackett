@@ -53,7 +53,7 @@ caps:
     - {id: 56, cat: TV/Sport, desc: "Ligue1"}
     - {id: 46, cat: TV/Sport, desc: "AFL(AustralianFB)"}
     - {id: 12, cat: TV/Sport, desc: "Tennis"}
-    - {id: 20, cat: TV/Sport, desc: "Volleyball/Beach"}
+    - {id: 20, cat: TV/Sport, desc: "Volleyball"}
     - {id: 21, cat: TV/Sport, desc: "Weightlifting"}
     - {id: 16, cat: TV/Sport, desc: "WinterSport"}
     - {id: 33, cat: TV/Sport, desc: "Wrestling/Grapling"}
@@ -67,8 +67,37 @@ caps:
     - {id: 68, cat: TV/Sport, desc: "MLS"}
     - {id: 69, cat: TV/Sport, desc: "EuroLeague Basketbal"}
     - {id: 70, cat: TV/Sport, desc: "ELC"}
+    - {id: 71, cat: TV/Sport, desc: "RhythmicGymnastics"}
+    - {id: 72, cat: TV/Sport, desc: "BeachVolleyball"}
+    - {id: 73, cat: TV/Sport, desc: "BeachSoccer"}
+    - {id: 74, cat: TV/Sport, desc: "Chess"}
+    - {id: 75, cat: TV/Sport, desc: "Bowling"}
+    - {id: 76, cat: TV/Sport, desc: "BelgianProLeague"}
+    - {id: 77, cat: TV/Sport, desc: "Bellator"}
+    - {id: 78, cat: TV/Sport, desc: "Billard"}
+    - {id: 79, cat: TV/Sport, desc: "Climbing"}
+    - {id: 80, cat: TV/Sport, desc: "CrossFit"}
+    - {id: 81, cat: TV/Sport, desc: "DutchEredivisie"}
+    - {id: 82, cat: TV/Sport, desc: "IndyCar"}
+    - {id: 83, cat: TV/Sport, desc: "NbaGLeague"}
+    - {id: 84, cat: TV/Sport, desc: "NCAABasketball"}
+    - {id: 85, cat: TV/Sport, desc: "NCAAFootball"}
+    - {id: 86, cat: TV/Sport, desc: "Sailing"}
+    - {id: 87, cat: TV/Sport, desc: "Surfing"}
+    - {id: 88, cat: TV/Sport, desc: "TableTennis"}
+    - {id: 89, cat: TV/Sport, desc: "TourDeFrance"}
+    - {id: 90, cat: TV/Sport, desc: "LaVuelta"}
+    - {id: 91, cat: TV/Sport, desc: "Girod'Italia"}
+    - {id: 92, cat: TV/Sport, desc: "UefaConferenceLeague"}
+    - {id: 93, cat: TV/Sport, desc: "UEFAEuro"}
+    - {id: 94, cat: TV/Sport, desc: "OlympicGamesParis24"}
+    - {id: 95, cat: TV/Sport, desc: "WRCRally"}
+    - {id: 96, cat: TV/Sport, desc: "CPL"}
+    - {id: 97, cat: TV/Sport, desc: "CFL"}
+    - {id: 98, cat: TV/Sport, desc: "PrimeiraPortugal"}
     - {id: 53, cat: TV/Sport, desc: "Cricket"}
     - {id: 6, cat: TV/Sport, desc: "European Soccer"}
+    - {id: 52, cat: TV/Sport, desc: "Field Hockey"}
     - {id: 58, cat: TV/Sport, desc: "UFC"}
     - {id: 57, cat: TV/Sport, desc: "NRL"}
 
