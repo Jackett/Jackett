@@ -143,7 +143,8 @@ search:
 
   fields:
     category:
-      selector: a[href^="viewno18sbx.php?cat="], a[href^="viewbrsb.php?cat="]
+      # the last selector is temporary as the site has apparently not yet updated their html for the cat links ;-)
+      selector: a[href^="viewno18sbx.php?cat="], a[href^="viewbrsb.php?cat="], a[href^="viewno18sb.php?cat="]
       attribute: href
       filters:
         - name: querystring
