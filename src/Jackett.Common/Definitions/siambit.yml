@@ -127,7 +127,7 @@ download:
 
 search:
   paths:
-    - path: viewno18sb.php
+    - path: viewno18sbx.php
       categories: [1, 75, 10, 9, 110, 7, 40, 16, 3, 70, 100, 85, 105, 8, 56, 19, 20, 55, 21, 2, 130, 60, 90, 91, 92, 89, 93, 4, 50, 18, 17, 11, 5, 54, 51, 52, 57, 53]
     - path: viewbrsb.php
       categories: [901, 902, 903, 904, 905, 906, 907, 908, 910, 911, 912]
@@ -143,7 +143,7 @@ search:
 
   fields:
     category:
-      selector: a[href^="viewno18sb.php?cat="], a[href^="viewbrsb.php?cat="]
+      selector: a[href^="viewno18sbx.php?cat="], a[href^="viewbrsb.php?cat="]
       attribute: href
       filters:
         - name: querystring
