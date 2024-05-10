@@ -5,6 +5,8 @@ description: "Crazy Spirits is a FRENCH Private Torrent Tracker for MOVIES / TV 
 language: fr-FR
 type: private
 encoding: UTF-8
+certificates:
+  - aa33cc2fa8bc5a594ded6657b57d234d6625f60a # Expired 10 May 2024
 links:
   - https://www.crazyspirits.com/
 
