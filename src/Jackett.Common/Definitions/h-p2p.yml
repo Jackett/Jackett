@@ -21,6 +21,8 @@ caps:
     - {id: 9, cat: XXX/WEB-DL, desc: "Paid Site"}
     - {id: 10, cat: XXX/WEB-DL, desc: "HomeMade"}
     - {id: 11, cat: XXX/WEB-DL, desc: "Other"}
+    - {id: 27, cat: XXX/WEB-DL, desc: "Gay"}
+    - {id: 28, cat: XXX/WEB-DL, desc: "XXX Movie"}
 
   modes:
     search: [q]
