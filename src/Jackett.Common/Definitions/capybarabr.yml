@@ -19,6 +19,7 @@ caps:
     - {id: 9, cat: PC, desc: "Programas"}
     - {id: 10, cat: Audio, desc: "HQs"}
     - {id: 11, cat: Books, desc: "Livros"}
+    - {id: 11, cat: Other, desc: "Cursos"}
 
   modes:
     search: [q]
