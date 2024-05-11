@@ -16,12 +16,13 @@ caps:
     - {id: 5, cat: TV/Foreign, desc: "Yabanci Dizi"}
     - {id: 3, cat: Console, desc: "Oyunlar"}
     - {id: 13, cat: TV, desc: "AMAZON"}
-    - {id: 14, cat: TV, desc: "NETFLİX"}
-    - {id: 15, cat: TV, desc: "DİSNEY+"}
+    - {id: 14, cat: TV, desc: "NETFLİX DIZI"}
+    - {id: 15, cat: TV, desc: ""DİSNEY+ MOVIE"}
     - {id: 16, cat: TV, desc: "TODD"}
     - {id: 17, cat: TV, desc: "TV+"}
     - {id: 18, cat: TV, desc: "BLUTV"}
     - {id: 19, cat: TV, desc: "EXXEN"}
+    - {id: 20, cat: TV, desc: "NETFLIX BELGESEL"}
 
   modes:
     search: [q]
