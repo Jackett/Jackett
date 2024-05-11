@@ -107,7 +107,6 @@ search:
     type: "{{ .Config.type }}"
     notnewword: 1
 
-
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
 
