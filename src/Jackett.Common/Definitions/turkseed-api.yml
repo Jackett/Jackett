@@ -17,7 +17,7 @@ caps:
     - {id: 3, cat: Console, desc: "Oyunlar"}
     - {id: 13, cat: TV, desc: "AMAZON"}
     - {id: 14, cat: TV, desc: "NETFLİX DIZI"}
-    - {id: 15, cat: TV, desc: ""DİSNEY+ MOVIE"}
+    - {id: 15, cat: TV, desc: "DİSNEY+ MOVIE"}
     - {id: 16, cat: TV, desc: "TODD"}
     - {id: 17, cat: TV, desc: "TV+"}
     - {id: 18, cat: TV, desc: "BLUTV"}
