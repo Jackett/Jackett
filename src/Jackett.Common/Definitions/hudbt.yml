@@ -81,7 +81,7 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    - selector: div#stderr:has(h2:contains("失败"))
   test:
     path: index.php
     selector: form[action$="logout.php"]
