@@ -97,7 +97,6 @@ login:
     selector: img[alt="CAPTCHA"]
     input: imagestring
   inputs:
-    secret: ""
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     logout: ""
@@ -106,7 +105,6 @@ login:
     trackerssl: yes
   error:
     - selector: div#stderr:has(h2:contains("失败"))
-    - selector: div#stderr:has(h2:contains("登录失败"))
   test:
     path: index.php
     selector: form[action$="logout.php"]
@@ -118,7 +116,6 @@ search:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     # currently supports only one query id at one time.
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
-    inclbookmarked: 0
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 no limit, 3 3days, 7 1week, 30 1month, 90 3months
