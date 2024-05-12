@@ -102,7 +102,6 @@ search:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     incldead: 1
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    inclbookmarked: 0
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     search_mode: 0
     notnewword: 1
