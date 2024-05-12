@@ -1,7 +1,7 @@
 ---
 id: hudbt
-name: HUDBT(蝴蝶)
-description: "HUDBT(蝴蝶) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+name: HUDBT (蝴蝶)
+description: "HUDBT (蝴蝶) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -10,23 +10,47 @@ links:
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies/电影"}
-    - {id: 402, cat: TV, desc: "TV Series/剧集"}
-    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
-    - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos/音乐"}
-    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
-    - {id: 408, cat: PC, desc: "Software/软件"}
-    - {id: 409, cat: PC/Games, desc: "Games/游戏"}
-    - {id: 411, cat: Books, desc: "Books/纪录片"}
-    - {id: 410, cat: Other, desc: "Other/其他"}
+    - {id: 401, cat: Movies, desc: "大陆电影"}
+    - {id: 413, cat: Movies, desc: "港台电影"}
+    - {id: 414, cat: Movies, desc: "亚洲电影"}
+    - {id: 415, cat: Movies, desc: "欧美电影"}
+    - {id: 430, cat: PC/Mobile-iOS, desc: "iPad"}
+    - {id: 433, cat: Movies, desc: "抢先视频"}
+    - {id: 402, cat: TV, desc: "大陆剧集"}
+    - {id: 417, cat: TV, desc: "港台剧集"}
+    - {id: 416, cat: TV, desc: "亚洲剧集"}
+    - {id: 418, cat: TV, desc: "欧美剧集"}
+    - {id: 404, cat: TV/Documentary, desc: "纪录片"}
+    - {id: 407, cat: TV/Sport, desc: "体育"}
+    - {id: 403, cat: TV, desc: "大陆综艺"}
+    - {id: 419, cat: TV, desc: "港台综艺"}
+    - {id: 420, cat: TV, desc: "亚洲综艺"}
+    - {id: 421, cat: TV, desc: "欧美综艺"}
+    - {id: 408, cat: Audio, desc: "华语音乐"}
+    - {id: 422, cat: Audio, desc: "日韩音乐"}
+    - {id: 423, cat: Audio, desc: "欧美音乐"}
+    - {id: 424, cat: Audio, desc: "古典音乐"}
+    - {id: 425, cat: Audio, desc: "原声音乐"}
+    - {id: 406, cat: Audio/Video, desc: "音乐MV"}
+    - {id: 409, cat: Other/Misc, desc: "其他"}
+    - {id: 432, cat: Books/EBook, desc: "电子书"}
+    - {id: 405, cat: TV/Anime, desc: "完结动漫"}
+    - {id: 427, cat: TV/Anime, desc: "连载动漫"}
+    - {id: 428, cat: TV/Anime, desc: "剧场OVA"}
+    - {id: 429, cat: TV/Anime, desc: "动漫周边"}
+    - {id: 410, cat: PC/Games, desc: "游戏"}
+    - {id: 431, cat: Console, desc: "游戏视频"}
+    - {id: 411, cat: PC/0day, desc: "软件"}
+    - {id: 412, cat: Books, desc: "学习"}
+    - {id: 426, cat: PC/Mac, desc: "MAC"}
+    - {id: 1037, cat: Other, desc: "HUST"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -73,6 +97,7 @@ login:
     selector: img[alt="CAPTCHA"]
     input: imagestring
   inputs:
+    secret: ""
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     logout: ""
@@ -80,7 +105,8 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: div#stderr:has(h2:contains("失败"))
+  - selector: div#stderr:has(h2:contains("失败"))
+  - selector: div#stderr:has(h2:contains("登录失败"))
   test:
     path: index.php
     selector: form[action$="logout.php"]
@@ -92,22 +118,21 @@ search:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     # currently supports only one query id at one time.
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
+    inclbookmarked: 0
     # 0 incldead, 1 active, 2 dead
     incldead: 0
-    # 0 all, 1 normal, 2 popular, 3 classic, 4 recomended, 5 0day, 6 imdb top 250
-    picktype: 0
+    # 0 no limit, 3 3days, 7 1week, 30 1month, 90 3months
+    indate: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 special offer, 9 all promotions
-    spstate: "{{ if .Config.freeleech }}9{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 2 subtitltes, 3 uploader, 4 imdburl
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 imdburl
     search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 exact
-    search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(div.torrent-title)
 
   fields:
     category:
@@ -117,23 +142,17 @@ search:
         - name: querystring
           args: cat
     title_default:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
-      filters:
-        - name: re_replace
-          args: ["^\\[([^\\]]+)\\]\\[([^\\]]+)\\]\\[([^\\]]+)\\](.*)$", "$3 [$1][$2]$4"]
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
-      attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+      selector: a[href*="download.php?id="]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
@@ -166,21 +185,20 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        font.free: 0
-        font.twoupfree: 0
-        font.halfdown: 0.5
-        font.twouphalfdown: 0.5
-        font.thirtypercent: 0.3
+        img.free: 0
+        img.twoupfree: 0
+        img.halfdown: 0.5
+        img.twouphalfdown: 0.5
+        img.thirtypercent: 0.3
         "*": 1
     uploadvolumefactor:
       case:
-        font.twouphalfdown: 2
-        font.twoupfree: 2
-        font.twoup: 2
+        img.twouphalfdown: 2
+        img.twoupfree: 2
+        img.twoup: 2
         "*": 1
     minimumratio:
       text: 0.8
     description:
-      selector: td:nth-child(2)
-      remove: a, b, font, img, span
+      selector: td:nth-child(2) div.torrent-title h3
 # NexusPHP HUDBT自优化版本 2013-05-13
