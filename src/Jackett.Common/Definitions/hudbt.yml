@@ -105,6 +105,7 @@ login:
     trackerssl: yes
   error:
     - selector: div#stderr:has(h2:contains("失败"))
+    - selector: div#stderr:has(h2:contains("登录失败"))
   test:
     path: index.php
     selector: form[action$="logout.php"]
@@ -194,8 +195,6 @@ search:
         img.twoupfree: 2
         img.twoup: 2
         "*": 1
-    minimumratio:
-      text: 0.8
     description:
       selector: td:nth-child(2) div.torrent-title h3
 # NexusPHP HUDBT自优化版本 2013-05-13
