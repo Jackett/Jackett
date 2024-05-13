@@ -105,7 +105,6 @@ login:
     trackerssl: yes
   error:
     - selector: div#stderr:has(h2:contains("失败"))
-    - selector: div#stderr:has(h2:contains("登录失败"))
   test:
     path: index.php
     selector: form[action$="logout.php"]
