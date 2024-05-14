@@ -74,6 +74,7 @@ namespace Jackett.Common.Indexers
 
         private const string NewTorrentsUrl = "ultimos";
         private const string SearchUrl = "buscar/";
+        private const string PageUrl = "/page/";
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
             {
@@ -275,60 +276,79 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> PerformQuerySearch(TorznabQuery query, bool matchWords)
         {
             var releases = new List<ReleaseInfo>();
-            // search only the longest word, we filter the results later
-            var searchTerm = GetLongestWord(query.SearchTerm);
-            var url = SiteLink + SearchUrl + searchTerm;
-            var result = await RequestWithCookiesAsync(url, referer: url);
-            if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            var searchTerm = query.SearchTerm;
+            var searchUrl = SearchUrl + searchTerm;
 
-            try
+            do
             {
-                var searchResultParser = new HtmlParser();
-                using var doc = searchResultParser.ParseDocument(result.ContentString);
+                var url = SiteLink + searchUrl;
+                var result = await RequestWithCookiesAsync(url, referer: url);
+                if (result.Status != HttpStatusCode.OK)
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
 
-                var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
-
-                if (rows.First().TextContent.Contains("Introduce alguna palabra para buscar con al menos 2 letras."))
+                try
                 {
-                    return releases; //no enough search terms
-                }
+                    var searchResultParser = new HtmlParser();
+                    using var doc = searchResultParser.ParseDocument(result.ContentString);
 
-                foreach (var row in rows.Skip(2))
-                {
-                    //href=/pelicula/6981/Saga-Spiderman
-                    var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), row.QuerySelector("p > span > a").GetAttribute("href"));
-                    var title = row.QuerySelector("p > span > a").TextContent;
-                    var cat = GetCategory(title, link);
-                    var quality = "";
+                    var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
 
-                    switch (GetCategoryFromURL(link))
+                    if (rows.First().TextContent.Contains("Introduce alguna palabra para buscar con al menos 2 letras."))
                     {
-                        case "pelicula":
-                        case "serie":
-                            quality = Regex.Replace(row.QuerySelector("p > span > span").TextContent, "([()])", "");
-
-                            break;
+                        return releases; //no enough search terms
                     }
 
-                    switch (cat)
+                    foreach (var row in rows.Skip(2))
                     {
-                        case "pelicula":
-                        case "pelicula4k":
-                        case "serie":
-                        case "seriehd":
-                        case "musica":
-                            await ParseRelease(releases, link, title, cat, quality, query, matchWords);
-                            break;
-                        default: //ignore different categories
-                            break;
+                        //href=/pelicula/6981/Saga-Spiderman
+                        var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), row.QuerySelector("p > span > a").GetAttribute("href"));
+                        var title = row.QuerySelector("p > span > a").TextContent;
+                        var cat = GetCategory(title, link);
+                        var quality = "";
+
+                        switch (GetCategoryFromURL(link))
+                        {
+                            case "pelicula":
+                            case "serie":
+                                quality = Regex.Replace(row.QuerySelector("p > span > span").TextContent, "([()])", "");
+
+                                break;
+                        }
+
+                        switch (cat)
+                        {
+                            case "pelicula":
+                            case "pelicula4k":
+                            case "serie":
+                            case "seriehd":
+                            case "musica":
+                                await ParseRelease(releases, link, title, cat, quality, query, matchWords);
+                                break;
+                            default: //ignore different categories
+                                break;
+                        }
                     }
+
+
+                    var nextPage = doc.QuerySelector("div.seccion#buscador > nav.page-navigator > ul.pagination > li.page-item:last-of-type:not(disabled) > a.page-link")?.GetAttribute("href");
+                    if (nextPage != null && nextPage != "#")
+                    {
+                        searchUrl = nextPage;
+                    }
+                    else
+                    {
+                        searchUrl = null;
+                    }
+
+
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(result.ContentString, ex);
-            }
+                catch (Exception ex)
+                {
+                    OnParseError(result.ContentString, ex);
+                }
+
+
+            } while (searchUrl != null);
 
             return releases;
         }
@@ -735,18 +755,6 @@ namespace Jackett.Common.Indexers
                 .Where(categoryMap => url.Contains(categoryMap.Key))
                 .Select(categoryMap => categoryMap.Value)
                 .FirstOrDefault();
-        }
-
-        private static string GetLongestWord(string text)
-        {
-            var words = text.Split(' ');
-            if (!words.Any())
-                return null;
-            var longestWord = words.First();
-            foreach (var word in words)
-                if (word.Length >= longestWord.Length)
-                    longestWord = word;
-            return longestWord;
         }
 
         private static DateTime TryToParseDate(string dateToParse, DateTime dateDefault)
