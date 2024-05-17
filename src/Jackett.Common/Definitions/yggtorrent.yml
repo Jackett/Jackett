@@ -1,17 +1,15 @@
 ---
 id: yggtorrent
 name: YGGtorrent
-description: "YGGTorrent is a FRENCH Semi-Private Torrent Tracker for 0DAY / GENERAL"
+description: "YGGTorrent is a FRENCH Private Torrent Tracker for 0DAY / GENERAL"
 language: fr-FR
-type: semi-private
+type: private
 encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
   - https://www.ygg.re/
 legacylinks:
-  - https://ww3.yggtorrent.si/
-  - https://yggtorrent.si/
   - http://www2.yggtorrent.si/
   - https://www2.yggtorrent.si/
   - https://www.yggtorrent.li/
