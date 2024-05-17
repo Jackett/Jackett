@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
-  - https://www3.yggtorrent.cool/
+  - https://www.ygg.re/
 legacylinks:
   - https://ww3.yggtorrent.si/
   - https://yggtorrent.si/
@@ -170,8 +170,8 @@ settings:
 
 login:
   method: form
-  path: /
-  form: "#user-login"
+  path: /auth/login
+  form: form[action="/auth/process_login"]
   inputs:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
