@@ -623,6 +623,7 @@ namespace Jackett.Updater
                 "Definitions/the-devils-lounge.yml",
                 "Definitions/thedarkcommunity-api.yml",
                 "Definitions/thehorrorcharnel.yml",
+                "Definitions/theleachzone.yml", // switch to *-API #11185
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
                 "Definitions/therebels-api.yml",
