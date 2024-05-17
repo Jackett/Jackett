@@ -177,7 +177,7 @@ login:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
   error:
-    - p.error-form
+    - selector: p.error-form
     - selector: a[href$="/user/disabled"]
       message:
         # Compte Inactif
