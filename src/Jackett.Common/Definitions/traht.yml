@@ -6,6 +6,8 @@ language: ru-RU
 type: public
 encoding: windows-1251
 links:
+  - https://traht.org/
+legacylinks:
   - http://traht.org/
 
 caps:

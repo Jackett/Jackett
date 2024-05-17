@@ -140,7 +140,13 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
+          args: ["(?i)(Bilim Kurgu)", "Bilim_Kurgu"]
+        - name: re_replace
           args: ["(?i)(Pembe Dizi)", "Pembe_Dizi"]
+        - name: re_replace
+          args: ["(?i)(TV film)", "TV_film"]
+        - name: re_replace
+          args: ["(?i)(Vahşi Batı)", "Vahşi_Batı"]
         - name: replace
           args: [" & ", "_&_"]
     description:

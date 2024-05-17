@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers
             // replace punctuation symbols with spaces
             // searchTerm = Marco Polo 2014
             searchTerm = Regex.Replace(searchTerm, @"[-._\(\)@/\\\[\]\+\%]", " ");
-            searchTerm = Regex.Replace(searchTerm, @"\s+", " ");
+            searchTerm = Regex.Replace(searchTerm, @"\s+", "+");
             searchTerm = searchTerm.Trim();
 
             // we parse the year and remove it from search
