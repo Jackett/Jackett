@@ -74,7 +74,6 @@ namespace Jackett.Common.Indexers
 
         private const string NewTorrentsUrl = "ultimos";
         private const string SearchUrl = "buscar/";
-        private const string PageUrl = "/page/";
 
         private static Dictionary<string, string> CategoriesMap => new Dictionary<string, string>
             {
@@ -277,78 +276,58 @@ namespace Jackett.Common.Indexers
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = query.SearchTerm;
-            var searchUrl = SearchUrl + searchTerm;
+            var url = SiteLink + SearchUrl + searchTerm;
+            var result = await RequestWithCookiesAsync(url, referer: url);
+            if (result.Status != HttpStatusCode.OK)
+                throw new ExceptionWithConfigData(result.ContentString, configData);
 
-            do
+            try
             {
-                var url = SiteLink + searchUrl;
-                var result = await RequestWithCookiesAsync(url, referer: url);
-                if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                var searchResultParser = new HtmlParser();
+                using var doc = searchResultParser.ParseDocument(result.ContentString);
 
-                try
+                var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
+
+                if (rows.First().TextContent.Contains("Introduce alguna palabra para buscar con al menos 2 letras."))
                 {
-                    var searchResultParser = new HtmlParser();
-                    using var doc = searchResultParser.ParseDocument(result.ContentString);
-
-                    var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
-
-                    if (rows.First().TextContent.Contains("Introduce alguna palabra para buscar con al menos 2 letras."))
-                    {
-                        return releases; //no enough search terms
-                    }
-
-                    foreach (var row in rows.Skip(2))
-                    {
-                        //href=/pelicula/6981/Saga-Spiderman
-                        var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), row.QuerySelector("p > span > a").GetAttribute("href"));
-                        var title = row.QuerySelector("p > span > a").TextContent;
-                        var cat = GetCategory(title, link);
-                        var quality = "";
-
-                        switch (GetCategoryFromURL(link))
-                        {
-                            case "pelicula":
-                            case "serie":
-                                quality = Regex.Replace(row.QuerySelector("p > span > span").TextContent, "([()])", "");
-
-                                break;
-                        }
-
-                        switch (cat)
-                        {
-                            case "pelicula":
-                            case "pelicula4k":
-                            case "serie":
-                            case "seriehd":
-                            case "musica":
-                                await ParseRelease(releases, link, title, cat, quality, query, matchWords);
-                                break;
-                            default: //ignore different categories
-                                break;
-                        }
-                    }
-
-
-                    var nextPage = doc.QuerySelector("div.seccion#buscador > nav.page-navigator > ul.pagination > li.page-item:last-of-type:not(disabled) > a.page-link")?.GetAttribute("href");
-                    if (nextPage != null && nextPage != "#")
-                    {
-                        searchUrl = nextPage;
-                    }
-                    else
-                    {
-                        searchUrl = null;
-                    }
-
-
-                }
-                catch (Exception ex)
-                {
-                    OnParseError(result.ContentString, ex);
+                    return releases; //no enough search terms
                 }
 
+                foreach (var row in rows.Skip(2))
+                {
+                    //href=/pelicula/6981/Saga-Spiderman
+                    var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), row.QuerySelector("p > span > a").GetAttribute("href"));
+                    var title = row.QuerySelector("p > span > a").TextContent;
+                    var cat = GetCategory(title, link);
+                    var quality = "";
 
-            } while (searchUrl != null);
+                    switch (GetCategoryFromURL(link))
+                    {
+                        case "pelicula":
+                        case "serie":
+                            quality = Regex.Replace(row.QuerySelector("p > span > span").TextContent, "([()])", "");
+
+                            break;
+                    }
+
+                    switch (cat)
+                    {
+                        case "pelicula":
+                        case "pelicula4k":
+                        case "serie":
+                        case "seriehd":
+                        case "musica":
+                            await ParseRelease(releases, link, title, cat, quality, query, matchWords);
+                            break;
+                        default: //ignore different categories
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(result.ContentString, ex);
+            }
 
             return releases;
         }
