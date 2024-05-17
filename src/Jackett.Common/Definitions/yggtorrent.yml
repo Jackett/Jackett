@@ -187,8 +187,8 @@ login:
             args: " - Dès que vous passez en dessous d'un ratio inférieur à 1, Votre compte devient inactif et le site vous coupe les téléchargements."
   test:
     path: /
-    selector: div#top_panel:contains("Déconnexion")
-
+    selector: a[href$="/user/logout"]
+    
 search:
   paths:
     # Tous
