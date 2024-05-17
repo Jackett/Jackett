@@ -428,7 +428,6 @@ namespace Jackett.Updater
                 "Definitions/hdcity.yml", // moved to pixelados
                 "Definitions/hdclub.yml",
                 "Definitions/hddisk.yml",
-                "Definitions/hddolby.yml",
                 "Definitions/hdhouse.yml",
                 "Definitions/hdme.yml",
                 "Definitions/hdmonkey.yml",
