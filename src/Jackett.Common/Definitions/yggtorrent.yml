@@ -188,7 +188,7 @@ login:
   test:
     path: /
     selector: a[href$="/user/logout"]
-    
+
 search:
   paths:
     # Tous
