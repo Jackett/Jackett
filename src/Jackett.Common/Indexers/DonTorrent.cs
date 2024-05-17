@@ -275,8 +275,7 @@ namespace Jackett.Common.Indexers
         private async Task<List<ReleaseInfo>> PerformQuerySearch(TorznabQuery query, bool matchWords)
         {
             var releases = new List<ReleaseInfo>();
-            // search only the longest word, we filter the results later
-            var searchTerm = GetLongestWord(query.SearchTerm);
+            var searchTerm = query.SearchTerm;
             var url = SiteLink + SearchUrl + searchTerm;
             var result = await RequestWithCookiesAsync(url, referer: url);
             if (result.Status != HttpStatusCode.OK)
@@ -735,18 +734,6 @@ namespace Jackett.Common.Indexers
                 .Where(categoryMap => url.Contains(categoryMap.Key))
                 .Select(categoryMap => categoryMap.Value)
                 .FirstOrDefault();
-        }
-
-        private static string GetLongestWord(string text)
-        {
-            var words = text.Split(' ');
-            if (!words.Any())
-                return null;
-            var longestWord = words.First();
-            foreach (var word in words)
-                if (word.Length >= longestWord.Length)
-                    longestWord = word;
-            return longestWord;
         }
 
         private static DateTime TryToParseDate(string dateToParse, DateTime dateDefault)
