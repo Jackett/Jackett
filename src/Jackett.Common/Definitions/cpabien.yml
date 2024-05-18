@@ -80,10 +80,15 @@ search:
   inputs:
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
   # does not support imdbid search and does not return imdb link in results.
+
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
       args: ["(?i)\\b(?:S0?)(\\d{1,3})\\b", "saison $1"]
+
+  headers:
+    # site blocks Linux UAs, so slightly alter the Windows UA here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
 
   rows:
     selector: div#gauche > table > tbody > tr:has(a), div#dle-content > a.cover2
