@@ -1,7 +1,7 @@
 ---
 id: yggtorrent
-name: YGGtorrent
-description: "YGGTorrent is a FRENCH Private Torrent Tracker for 0DAY / GENERAL"
+name: YggTorrent
+description: "YggTorrent (YGG) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
