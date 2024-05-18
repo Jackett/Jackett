@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using Jackett.Common.Models.Config;
@@ -11,7 +13,6 @@ using NLog;
 
 namespace Jackett.Common.Services
 {
-
     public class ConfigurationService : IConfigurationService
     {
         private readonly ISerializeService serializeService;
@@ -34,10 +35,23 @@ namespace Jackett.Common.Services
         {
             try
             {
+                // Migrate app data to 'Library/Application Support' on .NET 8 for OSX
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    var userAppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify), ".config", "Jackett");
+                    var appDataFolder = GetAppDataFolder();
+
+                    // Check for existing json configuration files due to LogManager creating log.txt early in Program.cs
+                    if (Directory.Exists(userAppDataFolder) && (!Directory.Exists(appDataFolder) || !Directory.EnumerateFiles(appDataFolder, "*.json", SearchOption.AllDirectories).Any()))
+                    {
+                        PerformMigration(userAppDataFolder);
+                    }
+                }
+
                 if (!Directory.Exists(GetAppDataFolder()))
                 {
                     var dir = Directory.CreateDirectory(GetAppDataFolder());
-                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                    if (Environment.OSVersion.Platform != PlatformID.Unix)
                     {
                         var access = dir.GetAccessControl();
                         var directorySecurity = new DirectorySecurity(GetAppDataFolder(), AccessControlSections.All);
@@ -112,7 +126,7 @@ namespace Jackett.Common.Services
                 if (!Directory.Exists(destFolder))
                 {
                     var dir = Directory.CreateDirectory(destFolder);
-                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                    if (Environment.OSVersion.Platform != PlatformID.Unix)
                     {
                         var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
                         directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
@@ -123,7 +137,7 @@ namespace Jackett.Common.Services
                 {
                     File.Copy(file, destPath);
                     // The old files were created when running as admin so make sure they are editable by normal users / services.
-                    if (System.Environment.OSVersion.Platform != PlatformID.Unix)
+                    if (Environment.OSVersion.Platform != PlatformID.Unix)
                     {
                         var fileInfo = new FileInfo(destFolder);
                         var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);
@@ -200,7 +214,7 @@ namespace Jackett.Common.Services
         {
             var dirs = new List<string>();
 
-            if (System.Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 dirs.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "cardigann/definitions/"));
                 dirs.Add("/etc/xdg/cardigan/definitions/");
