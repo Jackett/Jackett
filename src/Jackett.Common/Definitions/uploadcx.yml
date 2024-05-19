@@ -53,7 +53,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "All members of ULCX must engage with the site, through either logging in or navigating upload.cx. Any account that remains inactive for over four months will be deactivated and pruned after an additional four months of deactivation."
+    default: "All members must engage with the site, through either logging in or navigating upload.cx. Any account that remains inactive for over two months will be deactivated and pruned after an additional two months of deactivation."
 
 login:
   path: /api/torrents
