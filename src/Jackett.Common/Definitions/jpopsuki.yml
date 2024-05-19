@@ -86,6 +86,8 @@ search:
     searchtags: "{{ .Query.Genre }}"
     # 0 Any, 1 All
     tags_type: 1
+  error:
+    - selector: :root:contains("Database error.")
 
   rows:
     selector: table#torrent_table > tbody > tr[class^="torrent"]
