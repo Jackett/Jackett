@@ -62,6 +62,8 @@ settings:
 search:
   paths:
     - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-1.html"
+  error:
+    - selector: :root:contains("Internal Server Error")
 
   rows:
     selector: div.ssbox
