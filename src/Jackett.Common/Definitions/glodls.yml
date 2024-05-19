@@ -99,6 +99,10 @@ search:
     lang: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
+  error:
+    - selector: :root:not(:empty)
+      message:
+        text: Internal Server Error
 
   rows:
     selector: table.ttable_headinner tr.t-row
