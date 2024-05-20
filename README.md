@@ -258,7 +258,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Azusa (梓喵) [![(invite needed)][inviteneeded]](#)
  * Back-ups
  * BakaBT [![(invite needed)][inviteneeded]](#)
- * BeiTai (备胎)
  * Beload
  * Best-Core
  * BeyondHD (BHD)
