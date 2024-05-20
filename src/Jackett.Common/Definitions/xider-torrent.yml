@@ -142,7 +142,8 @@ search:
     files:
       selector: a[href$="filelist=1"]
     date:
-      selector: td:nth-child(7)
+      selector: td:nth-child(7) span
+      attribute: title
       filters:
         - name: append
           args: " +01:00" # CET
