@@ -1,14 +1,14 @@
 ---
 id: oshenpt
 name: OshenPT
-description: "OshenPT is a CHINESE Private Torrent Tracker for HD Movies, TV, Music"
+description: "OshenPT is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - http://www.oshen.win/
+  - https://www.oshen.win/
 legacylinks:
-  - https://www.oshen.win/ # forces http
+  - http://www.oshen.win/
 
 caps:
   categorymappings:
@@ -192,4 +192,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.11 2024-03-27
+# NexusPHP v1.8.12 2024-05-10
