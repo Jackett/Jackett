@@ -228,7 +228,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 2xFree
  * 3ChangTrai (3CT)
  * 3D Torrents (3DT)
- * 4thD (4th Dimension)
+ * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
  * 52PT
  * 720pier
  * Abnormal
@@ -261,7 +261,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Beload
  * Best-Core
  * BeyondHD (BHD)
- * Bibliotik
+ * Bibliotik [![(invite needed)][inviteneeded]](#)
  * Bit-Bázis
  * BIT-HDTV
  * Bitded
@@ -323,7 +323,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * DocsPedia
  * Dream Tracker [![(invite needed)][inviteneeded]](#)
  * Drugari
- * Ebooks-Shares
+ * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * Enthralled
  * eShareNet
@@ -339,7 +339,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FearNoPeer
  * Femdomcult
  * FileList (FL)
- * FinElite (FE) [![(invite needed)][inviteneeded]](#)
+ * FinElite (FE)
  * FinVip
  * Flux-Zone
  * Free Farm (自由农场)
@@ -367,10 +367,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HD Dolby
  * HD-Club [![(invite needed)][inviteneeded]](#)
  * HD-Forever (HDF) [![(invite needed)][inviteneeded]](#)
- * HD-Olimpo
+ * HD-Olimpo [![(invite needed)][inviteneeded]](#)
  * HD-Only (HDO)
  * HD-Space (HDS)
- * HD-Torrents (HDT)
+ * HD-Torrents (HDT) [![(invite needed)][inviteneeded]](#)
  * HD-UNiT3D
  * HD4FANS [![(invite needed)][inviteneeded]](#)
  * HDArea (HDA)
@@ -452,7 +452,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MNV (Max-New-Vision)
  * MOJBLiNK
  * MonikaDesign (MDU)
- * MoreThanTV (MTV)
+ * MoreThanTV (MTV) [![(invite needed)][inviteneeded]](#)
  * MouseBits
  * Movie-Torrentz
  * MyAnonamouse (MAM)
@@ -483,7 +483,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
  * Plusteca
  * Polish Torrent (PTT)
- * PolishTracker
+ * PolishTracker [![(invite needed)][inviteneeded]](#)
  * Pornbay [![(invite needed)][inviteneeded]](#)
  * Portugas
  * PotUK
@@ -502,7 +502,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PTtime
  * PTVicomo
  * Punk's Horror Tracker
- * PuntoTorrent
+ * PuntoTorrent [![(invite needed)][inviteneeded]](#)
  * PuTao (葡萄)
  * PWTorrents (PWT)
  * Qingwa (青蛙)
@@ -517,7 +517,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ReelFlix
  * Resurrect The Net [![(invite needed)][inviteneeded]](#)
  * RetroFlix
- * RevolutionTT
+ * RevolutionTT [![(invite needed)][inviteneeded]](#)
  * RocketHD
  * Romanian Metal Torrents (RMT)
  * RoTorrent
@@ -589,7 +589,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TOrrent-tuRK (TORK)
  * Torrent.LT
  * TorrentBD
- * TorrentBytes (TBy)
+ * TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
  * TorrentDD
@@ -627,7 +627,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * x-ite.me (XM)
  * Xider-Torrent
  * XSpeeds (XS)
- * Xthor
+ * Xthor [![(invite needed)][inviteneeded]](#)
  * XtremeBytes
  * XWT-Classics
  * XWTorrents (XWT)
@@ -636,10 +636,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Zamunda.net
  * Zelka.org
  * ZmPT (织梦)
- * ZonaQ
+ * ZonaQ [![(invite needed)][inviteneeded]](#)
 </details>
 
-Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be missing features or be broken. If you have an invite for them please send it to garfieldsixtynine -at- gmail.com or jacketttest -at- gmail.com to get them fixed/improved.
+Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be broken or missing features. If you have an invite please send it to jacketttest [at] gmail [dot] com or garfieldsixtynine [at] gmail [dot] com get them fixed/improved.
 
 ### Jackett Torznab query syntax
 
