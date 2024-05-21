@@ -6,6 +6,8 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://theldu.to/
+legacylinks:
   - https://theldu.net/
 
 caps:
@@ -42,6 +44,7 @@ caps:
     - {id: 15, cat: XXX/Pack, desc: "XXX: MegaPacks"}
     - {id: 10, cat: XXX, desc: "XXX: Hentai"}
     - {id: 14, cat: XXX/Other, desc: "XXX: Creators Corner"}
+    - {id: 39, cat: XXX/Other, desc: "XXX: Pain and Violence"}
     - {id: 13, cat: XXX/Other, desc: "XXX: Other"}
     - {id: 11, cat: XXX/Other, desc: "XXX: Zoo"}
     - {id: 26, cat: Other, desc: "FuckedUpShit"}
@@ -61,7 +64,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://theldu.net/\" target=\"_blank\">Last Digital Underground</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://theldu.to/\" target=\"_blank\">Last Digital Underground</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
