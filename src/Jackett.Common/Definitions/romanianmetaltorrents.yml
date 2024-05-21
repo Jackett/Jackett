@@ -5,6 +5,8 @@ description: "Romanian Metal Torrents (RMT) is a Private site dedicated to METAL
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 1b37ea969b40c0e18dbc2b5cda517fe176c900fc  # Expired 22 May 2024
 links:
   - https://metal.iplay.ro/
 legacylinks:
