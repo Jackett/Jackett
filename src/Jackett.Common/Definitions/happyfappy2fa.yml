@@ -1,0 +1,149 @@
+---
+id: happyfappy2fa
+name: HappyFappy2FA
+description: "HappyFappy is a Private Torrent Tracker for 3X. This indexer uses cookie login for 2FA."
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://www.happyfappy.org/
+
+caps:
+  categorymappings:
+    - {id: 11, cat: XXX, desc: "Asian"}
+    - {id: 6, cat: XXX, desc: "Fansite"}
+    - {id: 13, cat: XXX, desc: "Games"}
+    - {id: 3, cat: XXX, desc: "Gay"}
+    - {id: 4, cat: XXX, desc: "Interracial"}
+    - {id: 5, cat: XXX, desc: "Lesbian"}
+    - {id: 9, cat: XXX, desc: "Packs"}
+    - {id: 10, cat: XXX, desc: "Pics"}
+    - {id: 1, cat: XXX, desc: "Pron"}
+    - {id: 8, cat: XXX, desc: "Retro"}
+    - {id: 12, cat: XXX, desc: "Transsexual"}
+    - {id: 7, cat: XXX, desc: "VR"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: infocookie
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "To keep your account active, sign in and browse the site at least once every 120 days. Seeding torrents does not count as account activity, so in order to remain active you need to sign in and browse the site. Pornstar Trainee (and above) have a longer inactivity timer, but logging in regularly is recommended to learn about special events and new features."
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: "#nav_userinfo"
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    title: "{{ .Keywords }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: advanced
+    filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+
+  rows:
+    selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
+
+  fields:
+    category:
+      selector: a[href^="/torrents.php?filter_cat["]
+      attribute: href
+      filters:
+        - name: regexp
+          args: \[(\d+)\]
+    title:
+      selector: a[href^="/torrents.php?id="]
+    details:
+      selector: a[href^="/torrents.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    description_tags:
+      selector: div.tags
+    description:
+      case:
+        span.icon_okay: "Verified: {{ .Result.description_tags }}"
+        "*": "Unverified: {{ .Result.description_tags }}"
+    poster:
+      selector: td:nth-child(2) > script
+      filters:
+        - name: regexp
+          args: "src=\\\\\"(.*?)\\\\\""
+        - name: re_replace
+          args: ["\\\\(.)", "$1"]
+        - name: replace
+          args: ["/static/common/noartwork/noimage.png", ""]
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(5) > span
+      attribute: title
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "MMM dd yyyy, HH:mm"
+    size:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      case:
+        span.icon[title*="Freeleech"]: 0
+        "img[alt=\"Freeleech\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        span.icon[title*="DoubleSeed"]: 2
+        "img[alt=\"DoubleSeed\"]": 2
+        "*": 1
+    minimumratio:
+      text: 0.5
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# Luminance
