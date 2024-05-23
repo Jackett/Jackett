@@ -17,10 +17,8 @@ caps:
     search: [q]
 
 settings:
-  - name: flaresolverr-onejav
-    type: info
-    label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.<br><br>If you have issues downloading, perform a keyword search (e.g. <b>video</b>) so FlareSolverr can grab new cookies.
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 search:
   paths:

@@ -162,10 +162,8 @@ settings:
     type: info
     label: Categories
     default: To avoid unnecessary additional requests, it's recommended to only use indexer-specific categories (>=100000) when configuring this indexer in Sonarr, Radarr, and Lidarr, or when manually searching in TV, Movies, and Audio categories.
-  - name: flaresolverr
-    type: info
-    label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolverr</a> to access it.
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 login:
   method: form
