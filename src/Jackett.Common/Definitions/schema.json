@@ -222,7 +222,7 @@
                 },
                 "type":{
                     "type": "string",
-                    "enum": ["info", "text", "password", "checkbox", "select"]
+                    "enum": ["info", "text", "password", "checkbox", "select", "info_cookie", "info_flaresolverr", "info_useragent"]
                 },
                 "default": {
                     "oneOf": [
@@ -254,7 +254,6 @@
                 }
             },
             "required": [
-                "label",
                 "name",
                 "type"
             ],
