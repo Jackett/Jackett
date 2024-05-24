@@ -172,6 +172,15 @@ namespace Jackett.Common.Indexers
                         case "info":
                             item = new DisplayInfoConfigurationItem(itemName, Setting.Default);
                             break;
+                        case "info_cookie":
+                            item = new DisplayInfoConfigurationItem("How to get the Cookie", "<ol><li>Login to this tracker with your browser</li><li>If present in the login page, ensure you have the <b>Remember me</b> ticked and the <b>Log Me Out if IP Changes</b> unticked when you login</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>");
+                            break;
+                        case "info_flaresolverr":
+                            item = new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it.");
+                            break;
+                        case "info_useragent":
+                            item = new DisplayInfoConfigurationItem("How to get the User-Agent", "<ol><li>From the same place you fetched the cookie,</li><li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</li></ol>");
+                            break;
                         default:
                             throw new Exception($"Invalid setting type '{Setting.Type}' specified.");
                     }
