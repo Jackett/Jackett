@@ -27,10 +27,12 @@ caps:
     - {id: 8, cat: Movies/Other, desc: "Anime: Films"}
     - {id: 9, cat: TV/Anime, desc: "Anime: Series/OVAs"}
     - {id: 2, cat: TV, desc: "Series/TV: General"}
+    - {id: 41, cat: TV, desc: "Series/TV: Single Episodes"}
     - {id: 31, cat: TV/Foreign, desc: "Series/TV SP1: Dub"}
     - {id: 29, cat: TV/Foreign, desc: "Series/TV SP2: No English"}
     - {id: 32, cat: TV/Other, desc: "Series/TV SP3: Other"}
     - {id: 38, cat: TV/Other, desc: "Series/TV [TMDB unlisted]"}
+    - {id: 40, cat: TV/Documentary, desc: "Series: Documentary"}
     - {id: 20, cat: TV/Other, desc: "Culture: Stand-up"}
     - {id: 7, cat: Books/EBook, desc: "Culture: Ebooks"}
     - {id: 3, cat: Audio, desc: "Culture: Music"}
