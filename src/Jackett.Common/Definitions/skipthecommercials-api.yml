@@ -53,7 +53,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Inactivity on the SkipTheCommercials web site for more than 90 days will lead to account being disabled."
+    default: "You must be seeding at least 1 torrent or login once every 90 days to not get pruned. Once pruned, you will get additional 30 days to reactivate your account by logging in."
 
 login:
   path: /api/torrents
