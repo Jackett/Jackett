@@ -54,7 +54,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: " Inactive accounts will be disabled after 3 months of inactivity, 1 month for new accounts. Members must generate some download or upload activity at least once every 3 months."
+    default: "Inactive accounts will be disabled after 3 months of inactivity, 1 month for new accounts. Members must generate some download or upload activity at least once every 3 months."
 
 login:
   path: /api/torrents
