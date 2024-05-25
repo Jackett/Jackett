@@ -54,7 +54,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "<ul><li>Accounts are regarded as inactive when users fail to sign into their accounts for more than 3 months (90 days). Inactive accounts are automatically disabled by a script that runs once every day.</li><li>For new accounts, members must generate some activity by downloading or uploading torrents in the first month (30 days) of their memberships.</li><li>Donors are exempt from automatic account disabling due to inactivity. If you wish to always maintain an active account consider donating.</li></ul>"
+    default: " Inactive accounts will be disabled after 3 months of inactivity, 1 month for new accounts. Members must generate some download or upload activity at least once every 3 months."
 
 login:
   path: /api/torrents
