@@ -10,15 +10,15 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music of Movie"}
-    - {id: 4, cat: PC, desc: "Game"}
-    - {id: 5, cat: Movies, desc: "Action Live"}
-    - {id: 6, cat: Movies/Other, desc: "Anime Movie"}
-    - {id: 7, cat: Movies/Other, desc: "Anime Live"}
     - {id: 8, cat: TV/Anime, desc: "Anime TV"}
+    - {id: 6, cat: Movies/Other, desc: "Anime Movie"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 9, cat: Audio, desc: "Music of TV"}
+    - {id: 3, cat: Audio, desc: "Music of Movie"}
+    - {id: 7, cat: Movies/Other, desc: "Anime Live"}
+    - {id: 5, cat: Movies, desc: "Action Live"}
+    - {id: 4, cat: PC, desc: "Game"}
     - {id: 11, cat: TV/Anime, desc: "Airing Anime TV"}
 
   modes:
@@ -128,8 +128,6 @@ search:
       filters:
         - name: re_replace
           args: ["(?i)^None$", ""]
-        - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: replace
           args: [" & ", "_&_"]
     description:
