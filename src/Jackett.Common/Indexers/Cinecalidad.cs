@@ -26,7 +26,6 @@ namespace Jackett.Common.Indexers
         public override string Name => "Cinecalidad";
         public override string Description => "Películas Full UHD/HD en Latino Dual.";
         public override string SiteLink { get; protected set; } = "https://www.cinecalidad.vg/";
-        public override string SiteLink { get; protected set; } = "https://cinecalidad.fi/";
         public override string[] LegacySiteLinks => new[]
         {
             "https://wv.cinecalidad.foo/",
