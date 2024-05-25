@@ -91,6 +91,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You are required to log in once per month. We will be purging user accounts via automated script set at an undisclosed interval."
 
 login:
   path: /api/torrents
@@ -209,6 +213,6 @@ search:
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
 # json UNIT3D 8.0.1
