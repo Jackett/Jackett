@@ -5,15 +5,14 @@ description: "Torrent911 is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.protege-torrent.com/Torrent911 and https://www.protege-torrent.com/T911 and https://www.protege-torrent.com/Oxtorrent
+# to fetch current domain use https://www.protege-torrent.com/Oxtorrent
 links:
-  - https://www.oxtorrent.day/
+  - https://www.oxtorrent.zip/
   - https://oxtorrent.proxyninja.org/ # proxy for oxtorrent
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.rantop.org/
-  - https://www.t911.tv/
-  - https://torrent911.ws/
+  - https://www.torrent.ws/
   - http://www.torrent911.ws/
   - https://www.torrent911.ws/
   - https://t911.org/
@@ -35,6 +34,7 @@ legacylinks:
   - https://www.oxtorrent.sbs/
   - https://www.oxtorrent.wtf/
   - https://www.oxtorrent.tf/
+  - https://www.oxtorrent.day/
 
 caps:
   categorymappings:
