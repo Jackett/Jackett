@@ -98,6 +98,8 @@ search:
     attribute: attributes
 
   fields:
+    _id:
+      selector: ..id
     category:
       selector: category_id
     title_optional:
@@ -116,10 +118,7 @@ search:
     infohash:
       selector: info_hash
     poster:
-      selector: meta.poster
-      filters:
-        - name: replace
-          args: ["https://via.placeholder.com/90x135", ""]
+      text: "{{ .Config.sitelink }}files/img/torrent-cover_{{ .Result._id }}.jpg"
     genre:
       selector: meta.genres
       filters:
