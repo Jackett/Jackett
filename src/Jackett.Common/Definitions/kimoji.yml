@@ -1,7 +1,7 @@
 ---
 id: kimoji
 name: KIMOJI
-description: "KIMOJI is a CHINESE Private Torrent Tracker for MOVIES / TV / MUSIC"
+description: "KIMOJI is a CHINESE Private Torrent Tracker for MUSIC"
 language: en-US
 type: private
 encoding: UTF-8
@@ -10,15 +10,10 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "电影"}
-    - {id: 2, cat: TV, desc: "剧集"}
-    - {id: 3, cat: Audio, desc: "音乐"}
-    - {id: 4, cat: Audio/Audiobook, desc: "有声"}
+    - {id: 3, cat: Audio, desc: "Music"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
-    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
 
 settings:
@@ -73,11 +68,6 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    seasonNumber: "{{ .Query.Season }}"
-    episodeNumber: "{{ .Query.Ep }}"
-    imdbId: "{{ .Query.IMDBIDShort }}"
-    tmdbId: "{{ .Query.TMDBID }}"
-    tvdbId: "{{ .Query.TVDBID }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -92,6 +82,8 @@ search:
     attribute: attributes
 
   fields:
+    _id:
+      selector: ..id
     category:
       selector: category_id
     title:
@@ -103,33 +95,16 @@ search:
     infohash:
       selector: info_hash
     poster:
-      selector: meta.poster
-      filters:
-        - name: replace
-          args: ["https://via.placeholder.com/90x135", ""]
-    imdbid:
-      selector: imdb_id
-    tmdbid:
-      selector: tmdb_id
-    tvdbid:
-      selector: tvdb_id
+      text: "{{ .Config.sitelink }}files/img/torrent-cover_{{ .Result._id }}.jpg"
     genre:
-      selector: meta.genres
+      selector: distributor
       filters:
         - name: re_replace
-          args: ["(?i)^None$", ""]
+          args: ["(?i)(Hard Rock)", "Hard_Rock"]
         - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
-        - name: re_replace
-          args: ["(?i)(TV Movies)", "TV_Movies"]
-        - name: re_replace
-          args: ["(?i)(Reality TV)", "Reality_TV"]
-        - name: re_replace
-          args: ["(?i)(Soap Opera)", "Soap_Opera"]
-        - name: re_replace
-          args: ["(?i)(Talk Show)", "Talk_Show"]
+          args: ["(?i)(World Music)", "World_Music"]
         - name: replace
-          args: [" & ", "_&_"]
+          args: ["/", "_"]
     description:
       text: "{{ .Result.genre }}"
     files:
