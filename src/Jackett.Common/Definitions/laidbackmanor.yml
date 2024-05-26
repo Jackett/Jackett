@@ -16,6 +16,7 @@ caps:
     - {id: 4, cat: Console, desc: "Game"}
     - {id: 5, cat: PC, desc: "Application"}
     - {id: 6, cat: Books, desc: "Books"}
+    - {id: 8, cat: TV/Sport, desc: "Sports"}
 
   modes:
     search: [q]
