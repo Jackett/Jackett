@@ -472,14 +472,16 @@ stages:
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               targetType: inline
-              script: ./reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Test*/coverage.*.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura"
+              script: ./reportgenerator -reports:$(Build.SourcesDirectory)/src/*.Test*/coverage.*.cobertura.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports -reporttypes:"Cobertura" -verbosity:Verbose
+
+          - powershell: Get-ChildItem -Path $(Build.SourcesDirectory)/src/*.Test*/ –Recurse
 
           - task: PublishCodeCoverageResults@1
             displayName: Publish Code Coverage (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               codeCoverageTool: Cobertura
-              summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
+              summaryFileLocation: $(Build.SourcesDirectory)\coverlet\reports\Cobertura.xml
               failIfCoverageEmpty: true
 
   - stage: IntegrationTestJackett
