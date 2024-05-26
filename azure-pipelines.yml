@@ -480,6 +480,7 @@ stages:
             inputs:
               codeCoverageTool: Cobertura
               summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/Cobertura.xml
+              failIfCoverageEmpty: true
 
   - stage: IntegrationTestJackett
     displayName: Integration Tests
