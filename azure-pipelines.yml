@@ -180,7 +180,8 @@ stages:
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               targetType: inline
-              script: [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\Jackett.Test\coverage.net6.0.cobertura.xml' -Raw)"))
+              script: |
+                [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\Jackett.Test\coverage.net6.0.cobertura.xml' -Raw)"))
 
           - task: DotNetCoreCLI@2
             displayName: Install Coverage ReportGenerator Tool (Windows only)
@@ -202,7 +203,8 @@ stages:
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               targetType: inline
-              script: [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\coverlet\reports\Cobertura.xml' -Raw)"))
+              script: |
+                [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\coverlet\reports\Cobertura.xml' -Raw)"))
 
           - task: PublishCodeCoverageResults@1
             displayName: Publish Code Coverage (Windows only)
