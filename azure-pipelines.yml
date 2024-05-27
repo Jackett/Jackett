@@ -181,7 +181,7 @@ stages:
             inputs:
               targetType: inline
               script: |
-                [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\Jackett.Test\coverage.net6.0.cobertura.xml' -Raw)"))
+                [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\src\Jackett.Test\coverage.net6.0.cobertura.xml' -Raw)"))
 
           - task: DotNetCoreCLI@2
             displayName: Install Coverage ReportGenerator Tool (Windows only)
