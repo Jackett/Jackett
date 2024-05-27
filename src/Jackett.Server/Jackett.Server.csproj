@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <PackageId>$(MSBuildProjectName)</PackageId>
+    <RuntimeIdentifiers>win-x86;osx-x64;linux-x64</RuntimeIdentifiers>
     <TargetFrameworks>net6.0;net462</TargetFrameworks>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
