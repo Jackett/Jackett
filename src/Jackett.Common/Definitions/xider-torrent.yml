@@ -108,12 +108,15 @@ search:
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-    # does not support imdbid search
+    # does not support imdbid search or return imdbid in results.
 
   rows:
-    selector: "tr.torrentDataRow:has(a[href^=\"download.php?\"]){{ if .Config.freeleech }}:has(span[style^=\"font\"]:contains(\"0x\")){{ else }}{{ end }}"
+    selector: "tr.torrentDataRow{{ if .Config.freeleech }}:has(span[style^=\"font\"]:contains(\"0x\")){{ else }}{{ end }}"
 
   fields:
+    _id:
+      selector: a[data-torrent-id]
+      attribute: data-torrent-id
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
@@ -121,7 +124,7 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[data-torrent-id]
       attribute: title
       filters:
         - name: replace
@@ -131,18 +134,15 @@ search:
         - name: replace
           args: ["Második név: -", ""]
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      text: "details.php?id={{ .Result._id }}"
     download:
-      selector: a[href^="download.php?torrent="]
+      text: "download.php?torrent={{ .Result._id }}"
       attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+    poster:
+      selector: a[href^="kepek/"]
       attribute: href
-    files:
-      selector: a[href$="filelist=1"]
     date:
-      selector: td:nth-child(7) span
+      selector: td:nth-child(4) span
       attribute: title
       filters:
         - name: append
@@ -150,16 +150,16 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
-      selector: td:nth-child(8)
+      selector: td:nth-child(5)
     grabs:
-      selector: td:nth-child(9)
+      selector: td:nth-child(8)
     seeders:
-      selector: td:nth-child(10)
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-child(11)
+      selector: td:nth-child(7)
     description:
       case:
-        i.fa-check: Verified
+        span[style*="color:#ccc;"]: Verified
         i.fa-question: Unverified
     downloadvolumefactor:
       case:
