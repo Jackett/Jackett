@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
     <TargetFrameworks>net6.0;net462</TargetFrameworks>
     <NoWarn />
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
