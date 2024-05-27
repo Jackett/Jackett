@@ -175,6 +175,13 @@ stages:
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
+          - task: PowerShell@2
+            displayName: Print XML 1
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+            inputs:
+              targetType: inline
+              script: [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\Jackett.Test\coverage.net6.0.cobertura.xml' -Raw)"))
+
           - task: DotNetCoreCLI@2
             displayName: Install Coverage ReportGenerator Tool (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
@@ -190,12 +197,20 @@ stages:
               targetType: inline
               script: ./reportgenerator -reports:$(Build.SourcesDirectory)\src\*.Test*\coverage.*.cobertura.xml -targetdir:$(Build.SourcesDirectory)\coverlet\reports\ -reporttypes:"Cobertura"
 
+          - task: PowerShell@2
+            displayName: Print XML 2
+            condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
+            inputs:
+              targetType: inline
+              script: [Reflection.Assembly]::LoadWithpartialName("System.Xml.Linq") | Out-Null; Write-Host ([System.Xml.Linq.XDocument]::Parse("$(Get-Content -path '$(Build.SourcesDirectory)\coverlet\reports\Cobertura.xml' -Raw)"))
+
           - task: PublishCodeCoverageResults@1
             displayName: Publish Code Coverage (Windows only)
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
               codeCoverageTool: Cobertura
               summaryFileLocation: $(Build.SourcesDirectory)\coverlet\reports\Cobertura.xml
+              failIfCoverageEmpty: true
 
   - stage: BuildJackett
     displayName: Create Binaries
