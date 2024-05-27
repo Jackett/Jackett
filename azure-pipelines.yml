@@ -163,7 +163,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework)'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-build'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2
@@ -172,7 +172,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --framework $(framework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration $(buildConfiguration) --framework $(framework) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: DotNetCoreCLI@2
