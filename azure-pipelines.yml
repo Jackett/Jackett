@@ -155,7 +155,7 @@ stages:
             inputs:
               command: build
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained false'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained'
 
           - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
@@ -172,7 +172,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --no-build --verbosity diagnostic /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: PowerShell@2
