@@ -174,7 +174,7 @@ stages:
             inputs:
               command: test
               projects: '**/*.Test*/*.csproj'
-              arguments: '--configuration Debug --runtime $(runtime) --framework $(framework) --no-build --verbosity diagnostic /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+              arguments: '--configuration Debug --runtime $(runtime) --framework $(framework) --no-build --verbosity diagnostic /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Include="[*]*" /p:IncludeTestAssembly=true'
               testRunTitle: 'Unit - $(buildDescription) - $(Build.BuildId)'
 
           - task: PowerShell@2
