@@ -93,17 +93,13 @@ search:
       args: ["(\\w+)", "%$1"]
 
   rows:
-    selector: table#tor-tbl > tbody > tr.hl-tr
+    selector: tr.table_fon
 
   fields:
     category:
-      selector: a[href^="/cat/"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: (\d+)
+      text: 169
     title:
-      selector: a.tLink
+      selector: a[href^="/torrent/"]
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -161,60 +157,51 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.tLink
+      selector: a[href^="/torrent/"]
       attribute: href
     download:
-      selector: a.tr-dl
+      selector: a[href^="/download/"]
       attribute: href
-    poster:
-      selector: img.tor-icon
-      attribute: src
     size:
-      selector: a.tr-dl
+      selector: td:nth-child(4)
     seeders:
-      selector: span.seedmed
+      selector: td:last-child font:first-of-type
     leechers:
-      text: 1
+      selector: td:last-child font:last-of-type
     date:
-      # Добавлен: 5 октября 2021 в 06:56:08
-      selector: p
+      # 28 Мая 24
+      selector: td:first-child
       filters:
         - name: replace
-          args: ["Добавлен: ", ""]
+          args: ["Янв", "January"]
         - name: replace
-          args: [" в ", " "]
+          args: ["Фев", "February"]
         - name: replace
-          args: ["января", "January"]
+          args: ["Мар", "March"]
         - name: replace
-          args: ["февраля", "February"]
+          args: ["Апр", "Apr"]
         - name: replace
-          args: ["марта", "March"]
+          args: ["Мая", "May"]
         - name: replace
-          args: ["апреля", "April"]
+          args: ["Июн", "Jun"]
         - name: replace
-          args: ["мая", "May"]
+          args: ["Июл", "Jul"]
         - name: replace
-          args: ["июня", "June"]
+          args: ["Авг", "Aug"]
         - name: replace
-          args: ["июля", "July"]
+          args: ["Сен", "Sep"]
         - name: replace
-          args: ["августа", "August"]
+          args: ["Окт", "Oct"]
         - name: replace
-          args: ["сентября", "September"]
+          args: ["Ноя", "Nov"]
         - name: replace
-          args: ["октября", "October"]
-        - name: replace
-          args: ["ноября", "November"]
-        - name: replace
-          args: ["декабря", "December"]
+          args: ["Дек", "Dec"]
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "d MMMM yyyy HH:mm:ss zzz"
+          args: "d MMM yy zzz"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       text: 1
-    description:
-      selector: a.tLink
 # engine n/a
