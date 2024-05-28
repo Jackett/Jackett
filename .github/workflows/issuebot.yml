@@ -26,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '18.19.1'
 
       # This step installs the octokit library. The script that this workflow will run uses the octokit library.
       - name: Install dependencies
