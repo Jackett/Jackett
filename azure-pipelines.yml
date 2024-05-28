@@ -154,7 +154,7 @@ stages:
             displayName: Build Test Project
             inputs:
               command: build
-              projects: '**/*.csproj'
+              projects: '**/*.Server*/*.csproj'
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained'
 
           - task: DotNetCoreCLI@2
