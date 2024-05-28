@@ -155,8 +155,8 @@ stages:
             inputs:
               command: build
               projects: |
-                '**/*.Server*/*.csproj'
-                '**/*.Test*/*.csproj'
+                **/*.Server*/*.csproj
+                **/*.Test*/*.csproj
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained'
 
           - task: DotNetCoreCLI@2
