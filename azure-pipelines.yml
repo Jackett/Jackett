@@ -154,10 +154,10 @@ stages:
             displayName: Build Test Project
             inputs:
               command: build
-              projects: |
-                **/*.Server*/*.csproj
-                **/*.Test*/*.csproj
+              projects: '**/*.Test*/*.csproj'
               arguments: '--configuration $(buildConfiguration) --runtime $(runtime) --framework $(framework) --self-contained'
+
+          - powershell: Get-ChildItem -Path $(Build.SourcesDirectory)/src/*.Test*/ –Recurse
 
           - task: DotNetCoreCLI@2
             displayName: Unit Tests (Mono, Linux and macOS)
