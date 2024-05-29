@@ -27,6 +27,11 @@ pr:
     include:
       - master
       - test/*
+  paths:
+    exclude:
+      - .github
+      - README.md
+      - CONTRIBUTING.md
 
 stages:
   - stage: BuildJackett
