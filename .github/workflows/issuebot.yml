@@ -48,4 +48,4 @@ jobs:
           WORKFLOW_REPO: ${{ github.event.repository.name }}
           WORKFLOW_REPO_OWNER: ${{ github.repository_owner }}
         run: |
-          node .github/workflows/scripts/redeliver-failed-deliveries.js
+          node .github/workflows/scripts/redeliver-failed-deliveries.mjs
