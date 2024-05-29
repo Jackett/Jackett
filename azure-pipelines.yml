@@ -14,14 +14,19 @@ trigger:
   batch: true
   branches:
     include:
-      - '*'
+      - master
+      - test/*
+  paths:
     exclude:
-      - .github/*
+      - .github
+      - README.md
+      - CONTRIBUTING.md
 
 pr:
   branches:
     include:
-      - '*'
+      - master
+      - test/*
 
 stages:
   - stage: BuildJackett
