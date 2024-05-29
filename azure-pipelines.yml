@@ -16,7 +16,7 @@ trigger:
     include:
       - '*'
     exclude:
-      - .github
+      - .github/*
 
 pr:
   branches:
