@@ -64,6 +64,6 @@ body:
   id: screenshots
   attributes:
     label: Screenshots
-    description: Place any screenshots of the issue here if needed
+    description: Place any useful screenshots of the issue here, if needed (not a screenshot of the error textbox)
   validations:
     required: false
