@@ -96,20 +96,17 @@ login:
 
 search:
   paths:
+    # https://rptscene.xyz/torrents-search.php?c22=1&c23=1&c76=1&c77=1&search=&incldead=0&freeleech=0&inclrosub=0
     - path: torrents-search.php
   inputs:
-    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
-    # 0 both 1 local 2 external
-    inclexternal: 0
     # 0 only active 1 incl dead 2 only dead
     incldead: 1
     # 0 all 1 not freeleech 2 only freeleech
     freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 all 1 english 2 french 3 german 4 italian 5 japanese 6 spanish 7 russian 8 other
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-    # can search for only one at a time of name, genre or imdbid
 
   rows:
     selector: table.ttable_headinner > tbody > tr
