@@ -49,6 +49,7 @@ caps:
     - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
     - {id: Sports, cat: TV/Sport, desc: "Sports"}
     - {id: Formations, cat: Other, desc: "Formations"}
+    - {id: Vidéos, cat: TV, desc: "Vidéos"}
 
   modes:
     search: [q]
