@@ -35,6 +35,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_finelite
+    type: info
+    label: Login Requirement
+    default: "To successfully login, members must first <a href=\"https://finelite.org/staff.php\" target=\"_blank\">message FinElite staff</a>, asking that their account be whitelisted from captcha validation.</br></br>Onnistuakseen sisäänkirjautumisessa jäsenten on ensin lähetettävä <a href=\"https://finelite.org/staff.php\" target=\"_blank\">viesti FinElite henkilökunnalle</a> ja pyydettävä, että heidän tilinsä poistetaan captcha-varmennuksesta."
   - name: info_tpp
     type: info
     label: Results Per Page
