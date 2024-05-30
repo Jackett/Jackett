@@ -9,11 +9,12 @@ links:
   - https://finelite.org/
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info_cookie
-    type: info_cookie
+    label: Username
+  - name: password
+    type: text
+    label: Password
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -75,9 +76,14 @@ caps:
     book-search: [q]
 
 login:
-  method: cookie
+  path: login.php
+  method: form
+  form: form[action="/take_login.php"]
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.notice.notice-error
   test:
     path: /
     selector: a[href="/logout.php"]
@@ -149,4 +155,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# custom 4.0.0
+# FE v4.0.0
