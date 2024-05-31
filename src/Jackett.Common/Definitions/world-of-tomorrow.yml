@@ -154,16 +154,16 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="] > b
+      selector: a[href^="torrent.php?id="] > b
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="torrent.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
     poster:
-      selector: a[href^="details.php?id="]
-      attribute: onMouseOver
+      selector: a[href^="torrent.php?id="]
+      attribute: onmouseover
       filters:
         - name: regexp
           args: "src=(.+?) "
@@ -198,4 +198,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# WoT Reworked v8.2.1
+# WoT Reworked v8.3.7
