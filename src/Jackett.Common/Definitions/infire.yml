@@ -30,6 +30,7 @@ caps:
     - {id: 97, cat: Movies/UHD, desc: "BluRay 2160p", default: true}
     - {id: 99, cat: Movies/HD, desc: "BRRip 720p", default: true}
     - {id: 100, cat: Movies/HD, desc: "BRRip 1080p", default: true}
+    - {id: 101, cat: Movies/HD, desc: "BRRip", default: true}
     # TV
     - {id: 23, cat: TV, desc: "TV", default: true}
     - {id: 24, cat: TV/HD, desc: "HDTV 720p", default: true}
