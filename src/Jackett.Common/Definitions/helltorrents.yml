@@ -128,7 +128,7 @@ search:
     # does not support sorting results, or imdbid searching, or have imdb in results
 
   rows:
-    selector: table.header:has(a[href^="details.php?id="])
+    selector: table.header:has(a[href*="download.php?id="]), table.header:has(a[href*="piekielny.php"])
 
   fields:
     categorydesc:
