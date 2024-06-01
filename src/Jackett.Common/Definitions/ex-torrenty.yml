@@ -85,7 +85,7 @@ search:
     # does not support imdbid searching, or have imdb in results
 
   rows:
-    selector: table[width="100%"] > tbody > tr:has(a[href^="torrent/"])
+    selector: table[width="100%"] > tbody > tr:has(a[href*="torrent/"])
 
   fields:
     category:
@@ -117,9 +117,9 @@ search:
         ":contains(\"GSM/PDA\")": 31
         ":contains(\"Inne\")": 32
     title_phase1:
-      selector: a[href^="torrent/"]
+      selector: a[href*="torrent/"]
     title_multilang:
-      selector: a[href^="torrent/"]
+      selector: a[href*="torrent/"]
       filters:
         - name: re_replace
           args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
@@ -128,10 +128,10 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     details:
-      selector: a[href^="torrent/"]
+      selector: a[href*="torrent/"]
       attribute: href
     download:
-      selector: a[href^="torrent/"]
+      selector: a[href*="torrent/"]
       attribute: href
       filters:
         - name: replace
