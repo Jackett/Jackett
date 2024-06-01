@@ -18,6 +18,8 @@ caps:
     - {id: 6, cat: TV/Sport, desc: "Formula E"}
     - {id: 7, cat: TV/Sport, desc: "MotoGP"}
     - {id: 8, cat: TV/Sport, desc: "Nascar"}
+    - {id: 9, cat: TV/Sport, desc: "Formula 3"}
+    - {id: 10, cat: TV/Sport, desc: "DTM"}
 
   modes:
     search: [q]
