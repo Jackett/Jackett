@@ -13,7 +13,6 @@
     <PackageReference Include="AngleSharp" Version="1.1.2" />
     <PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
     <PackageReference Include="Autofac" Version="6.5.0" />
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="BencodeNET" Version="4.0.0" />
     <PackageReference Include="FlareSolverrSharp" Version="3.0.7" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
@@ -27,10 +26,10 @@
     <PackageReference Include="Polly" Version="8.4.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.1" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
-    <PackageReference Include="System.Text.Json" Version="6.0.9" />
-    <PackageReference Include="YamlDotNet" Version="13.1.1" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.3" />
+    <PackageReference Include="YamlDotNet" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
