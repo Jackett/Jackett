@@ -10,7 +10,6 @@ links:
   - https://torrentgalaxy.mx/
   - https://tgx.rs/
   - https://tgx.sb/
-  - https://tgx.proxyninja.org/
 legacylinks:
   - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.pw/ # proxy list only
@@ -31,6 +30,7 @@ legacylinks:
   - https://torrentgalaxy.unblockit.foo/
   - https://torrentgalaxy.unblockit.ing/
   - https://torrentgalaxy.unblockninja.com/
+  - https://tgx.proxyninja.org/ # breaks checkpoint
 
 caps:
   categorymappings:
@@ -79,6 +79,13 @@ caps:
     book-search: [q]
 
 settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie_tgx
+    type: info
+    label: How to get the Cookie
+    default: "<ol><li>Access the <a href=\"https://torrentgalaxy.to/galaxyfence.php?f\" target=\"_blank\">GalaxyFence page</a> with your browser</li><li>Complete the captcha and checkpoint</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>"
   - name: excludeads
     type: checkbox
     label: Exclude results which include advertisements
@@ -101,24 +108,15 @@ settings:
       asc: asc
 
 login:
-  # https://torrentgalaxy.to/galaxyfence.php?f&dropoff=%2Ftorrents.php%3Fsearch%3DHarry%2BPotter
-  path: galaxyfence.php?f
-  method: form
-  form: form[action="/galaxyfence.php"]
+  method: cookie
   inputs:
-    dropoff: /torrents.php
-  captcha:
-    type: image
-    selector: img#captcha
-    input: captcha
-  error:
-    - selector: span:contains("Captcha incorrect")
+    cookie: "{{ .Config.cookie }}"
   test:
-    path: /
-    selector: a[href="/account-login.php"]
+    path: torrents.php
+    selector: a[href^="magnet:?"]
 
 search:
-  # https://torrentgalaxy.org/torrents.php?c41=1&search=mercedes+s02e04&lang=0&sort=id&order=desc
+  # https://torrentgalaxy.to/torrents.php?c41=1&search=mercedes+s02e04&lang=0&sort=id&order=desc
   path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
