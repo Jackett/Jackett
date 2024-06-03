@@ -10,4 +10,8 @@
     <PropertyGroup Condition="'$(JackettProject)'=='true'">
         <PathMap>$(MSBuildProjectDirectory)=./$(MSBuildProjectName)/</PathMap>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    </PropertyGroup>
 </Project>
