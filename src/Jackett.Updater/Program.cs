@@ -316,6 +316,7 @@ namespace Jackett.Updater
                 "Definitions/broadcity.yml",
                 "Definitions/brobits.yml",
                 "Definitions/brsociety.yml", // switch to *-API #8682
+                "Definitions/brsociety-api.yml",
                 "Definitions/bt-scene.yml",
                 "Definitions/bt4g.yml",
                 "Definitions/btbit.yml",

@@ -278,7 +278,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Brasil Tracker
  * BroadcasTheNet (BTN) [![(invite needed)][inviteneeded]](#)
  * BrokenStones [![(invite needed)][inviteneeded]](#)
- * BrSociety
  * BTArg
  * BTNext (BTNT) [![(invite needed)][inviteneeded]](#)
  * BTSCHOOL
