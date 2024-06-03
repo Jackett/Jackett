@@ -11,6 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
+    - {id: 26, cat: Movies, desc: "iNTERNAL"}
     - {id: 4, cat: TV/Anime, desc: "Bajki/Anime"}
     - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 13, cat: Movies/DVD, desc: "DVD5/9"}
@@ -19,10 +20,10 @@ caps:
     - {id: 16, cat: Movies/SD, desc: "Filmy SD"}
     - {id: 17, cat: Movies/Other, desc: "Filmy inne"}
     - {id: 15, cat: TV/Documentary, desc: "Dokumentalne"}
-    - {id: 5, cat: PC/Games, desc: "Gry pc"}
     - {id: 24, cat: PC/Games, desc: "Gry dodatki"}
-    - {id: 18, cat: PC/Mobile-Android, desc: "Mobile"}
+    - {id: 5, cat: PC/Games, desc: "Gry pc"}
     - {id: 10, cat: Console, desc: "Gry Konsole"}
+    - {id: 18, cat: PC/Mobile-Android, desc: "Mobile"}
     - {id: 19, cat: Other, desc: "Inne"}
     - {id: 8, cat: Audio, desc: "Muzyka"}
     - {id: 11, cat: Movies, desc: "Paczki"}
