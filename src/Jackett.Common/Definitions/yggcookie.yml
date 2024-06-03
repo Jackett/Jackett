@@ -110,9 +110,7 @@ settings:
     type: text
     label: User-Agent
   - name: info_useragent
-    type: info
-    label: How to get the User-Agent
-    default: "<ol><li>From the same place you fetched the cookie,</li><li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</li></ol>"
+    type: info_useragent
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
