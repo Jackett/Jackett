@@ -98,6 +98,7 @@ namespace Jackett.Common.Models
             MinimumSeedTime = copyFrom.MinimumSeedTime;
             DownloadVolumeFactor = copyFrom.DownloadVolumeFactor;
             UploadVolumeFactor = copyFrom.UploadVolumeFactor;
+            Origin = copyFrom.Origin;
         }
 
         public virtual object Clone() => new ReleaseInfo(this);
