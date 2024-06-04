@@ -41,6 +41,8 @@ search:
 
   rows:
     selector: table.torrent-list > tbody > tr:has(a[href^="/view?id="])
+    filters:
+      - name: andmatch
 
   fields:
     category:
