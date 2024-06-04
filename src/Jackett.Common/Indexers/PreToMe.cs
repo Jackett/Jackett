@@ -174,7 +174,7 @@ namespace Jackett.Common.Indexers
 
             // Get result from redirect
             var loginCookies = result.Cookies;
-            await FollowIfRedirect(result, LoginUrl, null, loginCookies);
+            result = await FollowIfRedirect(result, LoginUrl, null, loginCookies);
 
             await ConfigureIfOK(loginCookies, result.ContentString?.Contains("logout.php") == true, () =>
             {

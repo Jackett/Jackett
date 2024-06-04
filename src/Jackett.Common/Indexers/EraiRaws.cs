@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers
             // Retrieve RSS feed
             var result = await RequestWithCookiesAndRetryAsync(RssFeedUri);
             if (result.IsRedirect)
-                await FollowIfRedirect(result);
+                result = await FollowIfRedirect(result);
 
             // Parse as XML document
             var xmlDocument = new XmlDocument();

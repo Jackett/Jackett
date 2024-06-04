@@ -861,7 +861,7 @@ namespace Jackett.Common.Indexers
             // Follow the redirect on login if the domain doesn't change
             if (testResult.IsRedirect && GetRedirectDomainHint(testResult) == null)
             {
-                await FollowIfRedirect(testResult, LoginTestUrl, overrideCookies: testResult.Cookies, accumulateCookies: true, maxRedirects: 1);
+                testResult = await FollowIfRedirect(testResult, LoginTestUrl, overrideCookies: testResult.Cookies, accumulateCookies: true, maxRedirects: 1);
             }
 
             if (testResult.IsRedirect)
@@ -977,7 +977,7 @@ namespace Jackett.Common.Indexers
             // Some sites have a temporary redirect before the login page, we need to process it.
             if (Definition.Followredirect)
             {
-                await FollowIfRedirect(landingResult, LoginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
+                landingResult = await FollowIfRedirect(landingResult, LoginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
             }
 
             var hasCaptcha = false;
@@ -1532,7 +1532,7 @@ namespace Jackett.Common.Indexers
 
                 if (response.IsRedirect && SearchPath.Followredirect)
                 {
-                    await FollowIfRedirect(response);
+                    response = await FollowIfRedirect(response);
                 }
 
                 var results = response.ContentString;
@@ -1559,7 +1559,7 @@ namespace Jackett.Common.Indexers
 
                         if (response.IsRedirect && SearchPath.Followredirect)
                         {
-                            await FollowIfRedirect(response);
+                            response = await FollowIfRedirect(response);
                         }
 
                         results = response.ContentString;
@@ -1750,7 +1750,7 @@ namespace Jackett.Common.Indexers
 
                                 if (response.IsRedirect && SearchPath.Followredirect)
                                 {
-                                    await FollowIfRedirect(response);
+                                    response = await FollowIfRedirect(response);
                                 }
 
                                 results = response.ContentString;

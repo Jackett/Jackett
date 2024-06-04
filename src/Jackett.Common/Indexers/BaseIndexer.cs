@@ -529,7 +529,7 @@ namespace Jackett.Common.Indexers
 
             if (response.IsRedirect)
             {
-                await FollowIfRedirect(response);
+                response = await FollowIfRedirect(response);
             }
 
             if (response.IsRedirect)
@@ -538,7 +538,7 @@ namespace Jackett.Common.Indexers
                 if (redirectingTo.Scheme == "magnet")
                     return Encoding.UTF8.GetBytes(redirectingTo.OriginalString);
 
-                await FollowIfRedirect(response);
+                response = await FollowIfRedirect(response);
             }
 
             if (response.Status != System.Net.HttpStatusCode.OK && response.Status != System.Net.HttpStatusCode.Continue && response.Status != System.Net.HttpStatusCode.PartialContent)
@@ -560,7 +560,7 @@ namespace Jackett.Common.Indexers
 
             var response = await RequestWithCookiesAsync(requestLink, null, RequestType.GET, referer);
             if (response.IsRedirect)
-                await FollowIfRedirect(response);
+                response = await FollowIfRedirect(response);
 
             return response;
         }
@@ -622,7 +622,7 @@ namespace Jackett.Common.Indexers
 
             if (response.IsRedirect)
             {
-                await FollowIfRedirect(response, request.Url, redirectUrlOverride, response.Cookies, accumulateCookies);
+                response = await FollowIfRedirect(response, request.Url, redirectUrlOverride, response.Cookies, accumulateCookies);
             }
 
             if (returnCookiesFromFirstCall)
@@ -646,7 +646,7 @@ namespace Jackett.Common.Indexers
             }
         }
 
-        protected async Task FollowIfRedirect(WebResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false, int maxRedirects = 5)
+        protected async Task<WebResult> FollowIfRedirect(WebResult response, string referrer = null, string overrideRedirectUrl = null, string overrideCookies = null, bool accumulateCookies = false, int maxRedirects = 5)
         {
             for (var i = 0; i < maxRedirects; i++)
             {
@@ -674,6 +674,8 @@ namespace Jackett.Common.Indexers
                     response.Cookies = overrideCookies;
                 }
             }
+
+            return response;
         }
 
         protected virtual string ResolveCookies(string incomingCookies = "")
