@@ -27,12 +27,12 @@ caps:
     - {id: 20, cat: Movies/DVD, desc: "Movies: DVD"}
     - {id: 21, cat: Movies/DVD, desc: "Movies: DVD-Ro"}
     - {id: 19, cat: TV/Documentary, desc: "Docs"}
-    - {id: 18, cat: Other, desc: "Wallpapers"}
-    - {id: 17, cat: Audio/Video, desc: "Videos"}
+    - {id: 18, cat: Other, desc: "Images"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 16, cat: Console, desc: "Games: Console"}
     - {id: 4, cat: PC/Games, desc: "Games PC"}
     - {id: 5, cat: PC, desc: "Application"}
+    - {id: 22, cat: TV/Sport, desc: "Sport"}
     - {id: 10, cat: XXX, desc: "XXX"}
 
   modes:
