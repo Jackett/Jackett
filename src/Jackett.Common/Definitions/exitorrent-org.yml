@@ -104,7 +104,7 @@ search:
       args: [" +(?:19|20)\\d{2} *$", ""]
 
   rows:
-    selector: table[class="text"][border="0"][cellspacing="0"][cellpadding="4"] > tbody > tr:has(a[href^="details.php?id="]):has(td[class*="tableBody1"])
+    selector: table[class="text"][border="0"][cellspacing="0"][cellpadding="4"] > tbody > tr:has(a[href^="details.php?id="]):has(td[class*="tableBody1"], td[class*="tableBody1B"])
     filters:
       - name: andmatch
 
@@ -116,9 +116,9 @@ search:
         - name: querystring
           args: cat
     title_raw:
-      selector: a[href^="details.php?id="]
+      selector: div[class="span_title"] > a[href^="details.php?id="]
     title_stripped:
-      selector: a[href^="details.php?id="]
+      selector: div[class="span_title"] > a[href^="details.php?id="]
       filters:
         - name: re_replace
           args: ["^(.*/)(.*)$", "$2"]
@@ -129,8 +129,11 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php/"], a[href^="downloadfl.php/"]
-      attribute: href
+      selector: div.span_icon > a[onclick^="return downloadTorrent"]
+      attribute: onclick
+      filters:
+        - name: re_replace
+          args: ["^return downloadTorrent\\('([^']+)', '([^']+)', ''\\);$", "download.php/$1/$2.torrent"]
     genre:
       selector: div.span_title span div
     _language:
