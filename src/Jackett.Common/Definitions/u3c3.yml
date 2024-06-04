@@ -36,7 +36,7 @@ search:
   paths:
     - path: /
   inputs:
-    search2: "{{ if .Keywords }}eelja13lfea{{ else }}{{ end }}"
+    search2: "{{ if .Keywords }}eelja3lfea{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
 
   rows:
