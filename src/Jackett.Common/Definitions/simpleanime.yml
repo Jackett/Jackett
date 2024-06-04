@@ -58,8 +58,9 @@ search:
     download:
       selector: a[href^="thread-"]
       attribute: href
-    date:
-      selector: span.date
+    date_elapsed:
+      selector: span.date:contains("前")
+      optional: true
       filters:
         - name: replace
           args: ["秒前", " seconds ago"]
@@ -74,6 +75,16 @@ search:
         - name: replace
           args: ["年前", " years ago"]
         - name: timeago
+    date_added:
+      selector: span.date:not(:contains("前"))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-M-d zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       text: 512MB
     seeders:
