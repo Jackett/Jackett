@@ -262,16 +262,16 @@ search:
           args: .
         - name: append
           args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
-    _filename:
+    title_filename:
       selector: "fileName"
       optional: true
       filters:
-        - name: replace
-          args: [".mkv", ""]
+        - name: re_replace
+          args: ["\\s÷$", ""]
         - name: append
           args: " {{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._hdr \"True\") }}[HDR]{{ else }}{{ end }}{{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._hdr10plus \"True\") }}[HDR10+]{{ else }}{{ end }}{{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._dovi \"True\") }}[DoVi]{{ else }}{{ end }}"
     title_phase1:
-      text: "{{ if and (eq .Result.files \"1\") (.Result._filename) }}{{ .Result._filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+      text: "{{ if and (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -287,7 +287,10 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     description:
-      text: "{{ .Result._filename }}"
+      text: "{{ .Result.title_filename }}"
+      filters:
+        - name: re_replace
+          args: ["\\s÷$", ""]
     _free:
       selector: isFreeleech
     downloadvolumefactor:
