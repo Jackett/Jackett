@@ -53,6 +53,7 @@ settings:
 search:
   paths:
     - path: /
+  allowEmptyInputs: true
   inputs:
     view: Main
     search: "{{ .Keywords }}"
