@@ -35,6 +35,7 @@ caps:
     - {id: "ani", cat: TV, desc: "동영상 (Video)"}
     - {id: "game", cat: Console, desc: "기타 (Games)"}
     - {id: "tv", cat: TV, desc: "시사/교양 (TV)"}
+    - {id: "netflix", cat: TV, desc: "넷플시리즈 (Netflix)"}
     - {id: "movie", cat: Movies, desc: "영화 (Movie)"}
     - {id: "drama", cat: TV, desc: "드라마 (Drama)"}
     - {id: "entertain", cat: TV, desc: "예능/오락 (Entertainment)"}
