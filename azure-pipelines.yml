@@ -15,7 +15,7 @@ trigger:
   branches:
     include:
       - master
-      - test/*
+      - test/**
   paths:
     exclude:
       - .github
@@ -26,7 +26,7 @@ pr:
   branches:
     include:
       - master
-      - test/*
+      - test/**
   paths:
     exclude:
       - .github
