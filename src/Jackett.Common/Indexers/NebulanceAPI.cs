@@ -221,6 +221,8 @@ namespace Jackett.Common.Indexers
 
             if (response.ContentString != null && response.ContentString.Contains("Invalid params"))
                 throw new Exception("Invalid API Key configured");
+            if (response.ContentString != null && response.ContentString.Contains("API is down"))
+                throw new Exception("NBL API is down at the moment");
 
             char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
 
