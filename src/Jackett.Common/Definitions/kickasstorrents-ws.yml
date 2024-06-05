@@ -73,7 +73,7 @@ search:
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?field={{ .Config.sort }}&sorder={{ .Config.type }}"
 
   rows:
-    selector: table.data tr[id]
+    selector: table.data tr[id]:has(a[data-download])
 
   fields:
     category_optional:
@@ -93,7 +93,7 @@ search:
       attribute: href
     download:
       # the official site delivers mylink so we skip to the magnet URI
-      selector: td:nth-child(1) > div > a[data-download=""]
+      selector: td:nth-child(1) > div > a[data-download]
       attribute: href
       filters:
         - name: querystring
