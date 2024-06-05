@@ -638,6 +638,7 @@ namespace Jackett.Updater
                 "Definitions/thespit.yml",
                 "Definitions/thetorrents.yml",
                 "Definitions/theunknown.yml", // became 3evils #9678
+                "Definitions/thorsland.yml",
                 "Definitions/tigers-dl.yml",
                 "Definitions/tjangto.yml",
                 "Definitions/tntfork.yml",
