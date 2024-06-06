@@ -1,9 +1,9 @@
 ---
 id: torrent9-tel
 name: Torrent9-tel
-description: "Torrent9-tel is a FRENCH Private tracker for TV / MOVIES / GENERAL"
+description: "Torrent9-tel is a FRENCH Semi-Private tracker for TV / MOVIES / GENERAL"
 language: fr-FR
-type: private
+type: semi-private
 encoding: UTF-8
 followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
