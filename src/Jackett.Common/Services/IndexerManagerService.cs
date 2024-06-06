@@ -64,6 +64,7 @@ namespace Jackett.Common.Services
             {"tehconnectionme", "anthelion"},
             {"anthelion", "anthelion-api"},
             {"todotorrents", "dontorrent"},
+            {"torrent9clone", "torrent9-tel"},
             {"torrentgalaxyorg", "torrentgalaxy"},
             {"torrentsurf", "xtremebytes"},
             {"transmithenet", "nebulance"},
