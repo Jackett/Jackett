@@ -20,6 +20,7 @@ caps:
     - {id: 8, cat: TV/Sport, desc: "Nascar"}
     - {id: 9, cat: TV/Sport, desc: "Formula 3"}
     - {id: 10, cat: TV/Sport, desc: "DTM"}
+    - {id: 11, cat: TV/Sport, desc: "Rally"}
 
   modes:
     search: [q]
