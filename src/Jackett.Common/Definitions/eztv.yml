@@ -11,18 +11,12 @@ links:
   - https://eztv.tf/
   - https://eztv.yt/
   - https://eztv1.xyz/
-  - https://eztv.abcproxy.org/
   - https://eztv.unblockit.ong/
-  - https://eztv.unblockninja.com/
-  - https://eztv.ninjaproxy1.com/
-  - https://eztv.proxyninja.org/
 legacylinks:
   - https://eztv.ag/ # redirects to .re
   - https://eztv.it/ # redirects to .re
   - https://eztv.ch/ # redirects to .re
   - https://eztv.io/
-  - https://eztv.mrunblock.guru/
-  - https://eztv.unblockit.click/
   - https://eztv.unblockit.asia/
   - https://eztv.unblockit.mov/
   - https://eztv.mrunblock.life/
@@ -41,6 +35,10 @@ legacylinks:
   - https://eztv.unblockit.africa/
   - https://eztv.unblockit.casa/
   - https://eztv.unblockit.sbs/
+  - https://eztv.unblockninja.com/ # layout=def_wlinks not working
+  - https://eztv.ninjaproxy1.com/ # layout=def_wlinks not working
+  - https://eztv.proxyninja.org/ # layout=def_wlinks not working
+  - https://eztv.abcproxy.org/
 
 caps:
   categories:
