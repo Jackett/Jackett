@@ -83,11 +83,11 @@ settings:
     label: Pin
   - name: freeleech
     type: checkbox
-    label: Filter FreeLeech only
+    label: Search FreeLeech
     default: false
   - name: onlyupload
     type: checkbox
-    label: Filter OnlyUpload only
+    label: Search OnlyUpload
     default: false
   - name: info_free
     type: info
@@ -133,6 +133,7 @@ login:
 
 search:
   paths:
+    # https://w-o-t.pro/browse.php?showsearch=1&search=&incldead=0&orderby=added&sort=desc&onlyupload=yes&freeleech=yes
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -142,9 +143,11 @@ search:
     incldead: 1
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
+    onlyupload: "{{ if .Config.onlyupload }}yes{{ else }}{{ end }}"
+    freeleech: "{{ if .Config.freeleech }}yes{{ else }}{{ end }}"
 
   rows:
-    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"4\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php\"]):has(a[href^=\"browse.php?cat=\"]){{ if .Config.freeleech }}:has(img[src=\"pic/freeleech.gif\"]){{ else }}{{ end }}{{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
+    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"4\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php\"]):has(a[href^=\"browse.php?cat=\"])"
 
   fields:
     category:
