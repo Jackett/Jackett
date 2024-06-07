@@ -444,14 +444,17 @@ namespace Jackett.Server.Controllers
                     Link = new Uri(CurrentIndexer.SiteLink)
                 });
 
-                var proxiedReleases = result.Releases.Select(r =>
-                {
-                    r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
-                    r.Poster = serverService.ConvertToProxyLink(r.Poster, serverUrl, r.Origin.Id, "img", "poster");
-                    return r;
-                });
+                var proxiedReleases = result.Releases
+                    .Select(r => (ReleaseInfo)r.Clone())
+                    .Select(r =>
+                    {
+                        r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);
+                        r.Poster = serverService.ConvertToProxyLink(r.Poster, serverUrl, r.Origin.Id, "img", "poster");
+                        return r;
+                    })
+                    .ToList();
 
-                resultPage.Releases = proxiedReleases.ToList();
+                resultPage.Releases = proxiedReleases;
 
                 stopwatch.Stop();
 
