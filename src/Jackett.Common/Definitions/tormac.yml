@@ -101,7 +101,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "A user is considered inactive if they meet one of the following conditions:<ul><li>Within 30 days of registration, they have not downloaded at least 1 torrent, resulting in Total Downloaded in their profile being 0</li><li>Their ratio is less than or equal to 0.3</li><li>They have fewer than 10 time bonuses</li></ul>Immunity from inactivity is automatically granted to users holding any title from the list or being a member of groups."
+    default: "Inactive accounts are automatically deleted after 90 days from the moment the system first detects inactivity.<br>A user is considered inactive if they meet one of the following conditions:<ul><li>Within 30 days of registration, they have not downloaded at least 1 torrent, resulting in Total Downloaded in their profile being 0</li><li>Their ratio is less than or equal to 0.3</li><li>They have fewer than 10 time bonuses</li></ul>Immunity from inactivity is automatically granted to users holding any title from the list or being a member of groups."
 
 login:
   method: cookie
