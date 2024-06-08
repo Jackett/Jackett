@@ -27,16 +27,6 @@ namespace Jackett.Common.Indexers
         public override string SiteLink { get; protected set; } = "https://subsplease.org/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://subsplease.nocensor.space/",
-            "https://subsplease.nocensor.work/",
-            "https://subsplease.nocensor.biz/",
-            "https://subsplease.nocensor.sbs/",
-            "https://subsplease.nocensor.world/",
-            "https://subsplease.nocensor.lol/",
-            "https://subsplease.nocensor.art/",
-            "https://subsplease.mrunblock.guru/",
-            "https://subsplease.mrunblock.life/",
-            "https://subsplease.nocensor.click/",
             "https://subsplease.mrunblock.bond/",
             "https://subsplease.nocensor.cloud/"
         };

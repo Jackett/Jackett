@@ -27,16 +27,6 @@ namespace Jackett.Common.Indexers
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://erairaws.nocensor.space/",
-            "https://erairaws.nocensor.work/",
-            "https://erairaws.nocensor.biz/",
-            "https://erairaws.nocensor.sbs/",
-            "https://erairaws.nocensor.world/",
-            "https://erairaws.nocensor.lol/",
-            "https://erairaws.nocensor.art/",
-            "https://erairaws.mrunblock.guru/",
-            "https://erairaws.mrunblock.life/",
-            "https://erairaws.nocensor.click/",
             "https://erairaws.mrunblock.bond/",
             "https://erairaws.nocensor.cloud/"
         };
