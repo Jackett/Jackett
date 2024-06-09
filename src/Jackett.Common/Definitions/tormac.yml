@@ -140,7 +140,7 @@ search:
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
   rows:
-    selector: tr.tCenter
+    selector: tr.tCenter:has(a[href^="dl.php?t="])
 
   fields:
     category:
