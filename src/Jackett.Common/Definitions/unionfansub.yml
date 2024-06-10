@@ -69,7 +69,7 @@ login:
     quick_username: "{{ .Config.username }}"
     quick_password: "{{ .Config.password }}"
     action: do_login
-    url: "https://torrent.unionfansub.com/"
+    url: "{{ .Config.sitelink }}"
     quick_login: 1
     quick_remember: yes
   error:
