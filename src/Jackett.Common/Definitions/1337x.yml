@@ -6,6 +6,7 @@ language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
+# get status and news on domains at the official site https://1337x-status.org/
 links:
   - https://1337x.to/
   - https://1337x.st/
