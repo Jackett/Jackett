@@ -7,12 +7,12 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://1337x.to/
-  - https://1337x.st/
+  - https://x1337x.cc/
   - https://x1337x.ws/
   - https://x1337x.eu/
   - https://x1337x.se/
-  - https://1337x.so/
+  - https://1337x.to/
+  - https://1337x.st/
   - https://1337x.unblockninja.com/
   - https://1337x.ninjaproxy1.com/
   - https://1337x.proxyninja.org/
@@ -20,6 +20,7 @@ links:
   - https://1337x.torrentbay.st/
   - https://1337x.torrentsbay.org/
 legacylinks:
+  - https://1337x.so/
   - https://1337x.is/
   - https://1337x.gd/
   - https://1337x.mrunblock.life/
