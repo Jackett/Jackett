@@ -106,7 +106,7 @@ search:
     # does not support imdbid searches
 
   rows:
-    selector: "table#torrenttable > tbody > tr:has(a[onclick]){{ if .Config.freeleech }}:has(img[src$=\"/freeicon.png\"]){{ else }}{{ end }}"
+    selector: "table#torrenttable > tbody > tr:has(a[onclick]):not(:contains(\"Törölt\")){{ if .Config.freeleech }}:has(img[src$=\"/freeicon.png\"]){{ else }}{{ end }}"
 
   fields:
     categorydesc:
