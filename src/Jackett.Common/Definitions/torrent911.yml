@@ -7,13 +7,11 @@ type: semi-private
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Oxtorrent
 links:
-  - https://www.oxtorrent.zip/
+  - https://www.oxtorrent.vip/
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.rantop.org/
   - https://www.torrent.ws/
-  - http://www.torrent911.ws/
-  - https://www.torrent911.ws/
   - https://t911.org/
   - https://www.torrent911.io/
   - https://www.torrent911.biz/
@@ -35,6 +33,7 @@ legacylinks:
   - https://www.oxtorrent.tf/
   - https://www.oxtorrent.day/
   - https://oxtorrent.proxyninja.org/ # currently proxies protege-torrent page
+  - https://www.oxtorrent.zip/
 
 caps:
   categorymappings:
