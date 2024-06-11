@@ -17,7 +17,7 @@ namespace Jackett.Common.Models.Config
             Port = 9117;
             LocalBindAddress = "127.0.0.1";
             AllowExternal = Environment.OSVersion.Platform == PlatformID.Unix;
-            CacheEnabled = true;
+            CacheType = CacheType.Memory;
             // Sonarr 15min, Radarr 60min, LazyLibrarian 20min, Readarr 15min, Lidarr = 15min
             CacheTtl = 2100; // 35 minutes is a reasonable value for all of them and to avoid race conditions
             CacheMaxResultsPerIndexer = 1000;
@@ -44,7 +44,8 @@ namespace Jackett.Common.Models.Config
         public bool UpdatePrerelease { get; set; }
         public string BasePathOverride { get; set; }
         public string BaseUrlOverride { get; set; }
-        public bool CacheEnabled { get; set; }
+        public CacheType CacheType { get; set; }
+        public string CacheConnectionString { get; set; }
         public long CacheTtl { get; set; }
         public long CacheMaxResultsPerIndexer { get; set; }
         public string FlareSolverrUrl { get; set; }

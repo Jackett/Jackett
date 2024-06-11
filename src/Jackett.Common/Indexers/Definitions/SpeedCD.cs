@@ -9,6 +9,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -43,12 +44,12 @@ namespace Jackett.Common.Indexers.Definitions
         private new ConfigurationDataSpeedCD configData => (ConfigurationDataSpeedCD)base.configData;
 
         public SpeedCD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataSpeedCD(
                        @"Speed.Cd have increased their security. If you are having problems please check the security tab in your
                     Speed.Cd profile. Eg. Geo Locking, your seedbox may be in a different country to the one where you login via your

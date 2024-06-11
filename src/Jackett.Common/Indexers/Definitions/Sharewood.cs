@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -40,12 +41,12 @@ namespace Jackett.Common.Indexers.Definitions
         private string SearchUrl => SiteLink + "api/" + configData.Passkey.Value;
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
-        public ShareWood(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+        public ShareWood(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataPasskey())
         {
             // requestDelay for API Limit (1 request per 4 seconds)

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -41,12 +42,12 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         public TorrentSyndikat(IIndexerConfigurationService configService, WebClient w, Logger l,
-            IProtectionService ps, ICacheService cs)
+            IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataAPIKey())
         {
             ConfigData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Generate a new key <a href=\"https://torrent-syndikat.org/keymgm/keys.php\" target=_blank>here</a>, set <i>download</i> and <i>browse</i> scopes."));

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -34,12 +35,12 @@ namespace Jackett.Common.Indexers.Definitions
         private new ConfigurationDataPasskey configData => (ConfigurationDataPasskey)base.configData;
 
         public SceneHD(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: c,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataPasskey("You can find the Passkey if you generate a RSS " +
                                                             "feed link. It's the last parameter in the URL."))
         {

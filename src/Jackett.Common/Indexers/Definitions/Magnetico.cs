@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -33,12 +34,12 @@ namespace Jackett.Common.Indexers.Definitions
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
         public Magnetico(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataBasicLogin("Configure the URL, username and password from your local magneticow.<br>" +
                                "Default credentials are: username=username, password=password.<br>" +
                                "If you have many torrents, it is recommended to use PostgreSQL database to make queries faster. With SQLite, timeouts may occur."))

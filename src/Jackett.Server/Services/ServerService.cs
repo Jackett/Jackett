@@ -140,6 +140,8 @@ namespace Jackett.Server.Services
 
                 logger.Info($"Using proxy: {config.ProxyType}");
 
+                logger.Info($"Cache Type: {config.CacheType}");
+
                 logger.Info("Using FlareSolverr: " + (string.IsNullOrEmpty(config.FlareSolverrUrl) ? "No" : config.FlareSolverrUrl));
 
                 var monotype = Type.GetType("Mono.Runtime");
