@@ -303,6 +303,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * CrabPT (蟹黄堡)
  * CrazySpirits
  * CrnaBerza
+ * cyanbug (大青虫)
  * Dajiao (打胶) [![(invite needed)][inviteneeded]](#)
  * DANISH BYTES
  * Darius Tracker
