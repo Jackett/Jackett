@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers
         public override string Id => "passthepopcorn";
         public override string Name => "PassThePopcorn";
         public override string Description => "PassThePopcorn (PTP) is a Private site for MOVIES / TV";
+        // Status: https://ptp.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://passthepopcorn.me/";
         public override string Language => "en-US";
         public override string Type => "private";

@@ -16,6 +16,7 @@ namespace Jackett.Common.Indexers
         public override string Id => "alpharatio";
         public override string Name => "AlphaRatio";
         public override string Description => "AlphaRatio (AR) is a Private Torrent Tracker for 0DAY / GENERAL";
+        // Status: https://ar.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://alpharatio.cc/";
         public override string Language => "en-US";
         public override string Type => "private";

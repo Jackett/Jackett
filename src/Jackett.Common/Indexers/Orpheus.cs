@@ -18,6 +18,7 @@ namespace Jackett.Common.Indexers
         public override string Id => "orpheus";
         public override string Name => "Orpheus";
         public override string Description => "A music tracker";
+        // Status: https://ops.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://orpheus.network/";
         public override string Language => "en-US";
         public override string Type => "private";
