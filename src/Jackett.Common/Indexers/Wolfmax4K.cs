@@ -143,7 +143,7 @@ namespace Jackett.Common.Indexers
             {
                 JObject jsonResponse = JObject.Parse(result.ContentString);
                 var data = jsonResponse.SelectToken("data.datafinds.0");
-                if(data == null)
+                if (data == null)
                     return new List<ReleaseInfo>();
 
                 return data.Values().Select(item => ExtractReleaseInfo(item as JObject, query)).ToList()
@@ -308,6 +308,9 @@ namespace Jackett.Common.Indexers
 
         private string ParseCategory(string guid, string quality)
         {
+            // TODO new categories
+            // ej: https://wolfmax4k.com/descargar/programas-tv/091-alerta-policia/hdtv-720p-ac3-5-1/
+            //     https://wolfmax4k.com/descargar/telenovelas/karagul/hdtv/karagul-tierra-de-secretos/2024-06-12/
             // If the url contains "/serie" or contains "/temporada-" & "/capitulo-" it's a tv show
             // If not it's a movie
             var isTvShow = guid.Contains("/serie") || (guid.Contains("/temporada-") && guid.Contains("/capitulo-"));
