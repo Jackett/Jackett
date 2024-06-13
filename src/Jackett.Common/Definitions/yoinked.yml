@@ -52,6 +52,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you do not log into the site or seed torrents, your account will be automatically pruned within 60 days."
 
 login:
   path: /api/torrents
@@ -164,4 +168,10 @@ search:
       case:
         False: 1 # normal
         True: 2 # double
+# global MR is 0.5 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.5
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 # json UNIT3D 8.1.3
